@@ -23,10 +23,15 @@ Replace the URL below if necessary (e.g. if using SSH or a different repo name).
 
 ```bash
 # Add your remote repository
-git remote add origin https://github.com/StartToFinish-App/python_exercises_pro_iphone.git
+git remote add origin https://github.com/llomj/python_app.git
 
 # Push changes
-git push -u origin main
+# If this is a new repo you want to overwrite, use force push:
+git push -u origin main --force
+
+# OR if you want to keep existing files on GitHub:
+# git pull origin main --rebase
+# git push -u origin main
 ```
 
 ## Troubleshooting "Repository not found"
