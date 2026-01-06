@@ -86,6 +86,78 @@ lst_dic = [{"name": "Jon", "age": 67}, {"name": "mike", "age": 55}]
 nested_lst = [[1,2,3], [4,5,6], [7,8,9]]
 `;
 
+const CHEAT_SHEET_PY = `# Python Cheat Sheet - Templates & Examples
+import collections
+from collections import Counter
+import datetime
+from functools import reduce
+import math
+import os
+from pathlib import Path
+import random
+import string
+import re
+import time
+from urllib.parse import parse_qs
+
+# Dictionary Example
+def main(dic):
+    return len(dic)
+    
+dic = {"apple": 1, "orange": 33}
+print(main(dic))
+
+# List Comprehension
+squares = [x**2 for x in range(10)]
+print(squares)
+
+# Dictionary with target
+def main(dic, target):
+    return dic.get(target)
+
+dic = {"apple": 1, "orange": 33, "mango": 5}
+target = "orange"
+main(dic, target)
+
+# Two dictionaries
+def main(dic1, dic2):
+    return {**dic1, **dic2}
+
+dic1 = {"apple": 1, "orange": 33}
+dic2 = {"storm": 11, "sky": 36}
+main(dic1, dic2)
+
+# List of dictionaries
+lst_dic = [
+    {"name": "Jon", "age": 67},
+    {"name": "mike", "age": 55},
+    {"name": "dilly", "age": 23}
+]
+
+# Nested list
+nested_lst = [[1,2,3], [4,5,6], [7,8,9]]
+
+# List of tuples
+lst_tuples = [(55,7), (2,4), (27,23)]
+
+# Keyword arguments
+def main(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+main(a=1, b=2, c="hot", d="cold")
+
+# Helper function pattern
+def helper(x):
+    return x * 2
+
+def main():
+    result = helper(5)
+    return result
+
+main()
+`;
+
 const GLOSSARY_CONTENT = `# Python Glossary
 
 **all()** - Returns True if all elements are truthy
@@ -534,7 +606,7 @@ sys.stdout = io.StringIO()
                                     {modalTab === 'cheat' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
                                             <CodeMirror
-                                                value={CHEAT_SHEET_CONTENT}
+                                                value={CHEAT_SHEET_PY}
                                                 height="400px"
                                                 readOnly={true}
                                                 extensions={[python(), ...customPythonTheme]}
@@ -542,8 +614,28 @@ sys.stdout = io.StringIO()
                                             />
                                         </div>
                                     )}
-                                    {modalTab === 'glossary' && <pre className="bg-[#050c18] p-3 rounded-xl border border-[#1d2d44] whitespace-pre-wrap select-text text-gray-200">{GLOSSARY_CONTENT}</pre>}
-                                    {modalTab === 'regex' && <pre className="bg-[#050c18] p-3 rounded-xl border border-[#1d2d44] whitespace-pre-wrap select-text text-gray-200">{REGEX_CONTENT}</pre>}
+                                    {modalTab === 'glossary' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
+                                            <CodeMirror
+                                                value={CHEAT_SHEET_PY}
+                                                height="400px"
+                                                readOnly={true}
+                                                extensions={[python(), ...customPythonTheme]}
+                                                basicSetup={{ lineNumbers: false, foldGutter: false }}
+                                            />
+                                        </div>
+                                    )}
+                                    {modalTab === 'regex' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
+                                            <CodeMirror
+                                                value={CHEAT_SHEET_PY}
+                                                height="400px"
+                                                readOnly={true}
+                                                extensions={[python(), ...customPythonTheme]}
+                                                basicSetup={{ lineNumbers: false, foldGutter: false }}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
