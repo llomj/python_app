@@ -50,10 +50,19 @@ interface ProjectFile {
     content: string;
 }
 
-const CHEAT_SHEET_CONTENT = `# Python Core Templates
+const CHEAT_SHEET_CONTENT = `# Python Templates & Examples
+import collections
+from collections import Counter
+import datetime
+from functools import reduce
 import math
+import os
+from pathlib import Path
 import random
+import string
 import re
+import time
+from urllib.parse import parse_qs
 
 # Dictionary Example
 def main(dic):
@@ -65,7 +74,80 @@ print(main(dic))
 # List Comprehension
 squares = [x**2 for x in range(10)]
 print(squares)
+
+# Dictionary with target
+def main(dic, target):
+    return dic.get(target)
+
+# List of dictionaries
+lst_dic = [{"name": "Jon", "age": 67}, {"name": "mike", "age": 55}]
+
+# Nested list
+nested_lst = [[1,2,3], [4,5,6], [7,8,9]]
 `;
+
+const GLOSSARY_CONTENT = `# Python Glossary
+
+**all()** - Returns True if all elements are truthy
+**any()** - Returns True if any element is truthy
+**Argument** - Value passed to a function
+**Assert** - Tests a condition, raises AssertionError if False
+**Class** - Blueprint for creating objects
+**Closure** - Function that remembers its enclosing scope
+**Comprehension** - Concise way to create collections
+**Decorator** - Modifies function behavior
+**Dictionary** - Key-value pairs collection
+**Filter** - Returns elements where function returns True
+**Generator** - Yields values on-the-fly
+**Global** - Module-level variable
+**Immutable** - Cannot be changed (int, str, tuple)
+**Import** - Brings code from another module
+**isinstance()** - Checks if object is instance of class
+**Iterable** - Can be used in for loop
+**Iterator** - Accesses elements one at a time
+**Lambda** - Anonymous function: lambda x: x * 2
+**List** - Ordered, mutable collection
+**Map** - Applies function to every item
+**Max/Min** - Largest/smallest item
+**Method** - Function belonging to object
+**Module** - File with Python code
+**Mutable** - Can be changed (list, dict, set)
+**None** - Absence of value
+**Object** - Instance of a class
+**Parameter** - Input variable in function definition
+**Range** - Generates sequence of numbers
+**Return** - Exits function, returns value
+**Set** - Unordered unique elements
+**Sorted** - Returns new sorted list
+**String** - Immutable sequence of characters
+**Tuple** - Ordered, immutable collection
+**Type** - Category of value (int, str, list)
+**Variable** - Container holding a value
+**Zip** - Combines iterables element-wise
+
+## LEGB Rule
+Python finds names in this order:
+• L = Local (function)
+• E = Enclosing (outer function)
+• G = Global (module)
+• B = Built-in (print, len, etc.)
+`;
+
+const REGEX_CONTENT = `# Regular Expressions
+
+**Character Classes**
+a-z, A-Z, 0-9, \\d (digit), \\w (word), \\s (space)
+
+**Special Characters**
+. (any char), ^ (start), $ (end)
+* (0+), + (1+), ? (0 or 1)
+{n,m} (n to m times)
+
+**Examples**
+\\d{4}-\\d{2}-\\d{2} - Date (YYYY-MM-DD)
+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,} - Email
+`;
+
 
 const pythonSnippets = (context: CompletionContext) => {
     const word = context.matchBefore(/\w*/);
@@ -96,7 +178,7 @@ const App: React.FC = () => {
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
     const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'restart_confirm'>('none');
-    const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary'>('how');
+    const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [aiHintText, setAiHintText] = useState<string>('');
     const [copyFeedback, setCopyFeedback] = useState(false);
 
@@ -222,12 +304,35 @@ const App: React.FC = () => {
         setIsRunning(true);
         setOutput('Executing...');
         try {
+            // Write all files to the virtual filesystem
             files.forEach(file => {
                 pyodide.FS.writeFile(file.name, file.content);
             });
-            pyodide.runPython(`import sys, io; sys.stdout = io.StringIO()`);
+
+            // Clear user-defined modules from sys.modules to ensure fresh imports
+            const userModules = files.map(f => f.name.replace('.py', ''));
+            const clearModulesCode = `
+import sys
+import importlib
+import io
+
+# Ensure current directory is in path (crucial for imports)
+if '.' not in sys.path:
+    sys.path.insert(0, '.')
+
+for mod in ${JSON.stringify(userModules)}:
+    if mod in sys.modules:
+        del sys.modules[mod]
+
+importlib.invalidate_caches()
+sys.stdout = io.StringIO()
+`;
+            pyodide.runPython(clearModulesCode);
+
             const activeFile = files[activeFileIndex];
-            await pyodide.runPythonAsync(activeFile.content);
+            // CRITICAL FIX: Use exec with filename context so imports work
+            const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
+            await pyodide.runPythonAsync(code);
             const stdout = pyodide.runPython("sys.stdout.getvalue()");
             setOutput(stdout || 'Success (No output).');
         } catch (err: any) {
@@ -346,10 +451,10 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#040b16] text-white flex flex-col p-4 max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700">
+        <div className="min-h-screen bg-[#040b16] text-white flex flex-col p-4 max-w-md mx-auto overflow-hidden animate-in fade-in duration-700">
             <div className="relative flex items-center justify-center mb-4 flex-shrink-0">
                 <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
-                    <div className="flex items-center"><span className="text-gray-400 mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
+                    <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
                     <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Win:</span><span>{stats.success}</span></div>
                     <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
                     <div className="flex items-center border-l border-[#1d2d44] pl-4 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
@@ -364,7 +469,7 @@ const App: React.FC = () => {
                 <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
                 <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
                 <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Loss" onClick={handleMarkFailed} />
+                <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
                 <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
             </div>
 
@@ -393,7 +498,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="flex bg-[#0a1628] border-b border-[#1d2d44] overflow-x-auto no-scrollbar">
                     {files.map((f, idx) => (
-                        <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
+                        <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
                             {f.name}
                         </button>
                     ))}
@@ -405,8 +510,9 @@ const App: React.FC = () => {
                     />
                 </div>
                 <div className="border-t border-[#1d2d44] p-2 bg-[#0a1628] flex-shrink-0">
-                    <div ref={outputRef} className="h-[50px] overflow-y-auto">
-                        <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap">{output}</pre>
+                    <div ref={outputRef} className="h-24 overflow-y-auto">
+                        <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text">{output}</pre>
+
                     </div>
                 </div>
             </div>
@@ -420,9 +526,24 @@ const App: React.FC = () => {
                                 <div className="flex gap-4 mb-4 border-b border-[#1d2d44]">
                                     <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Guide" />
                                     <TabButton active={modalTab === 'cheat'} onClick={() => setModalTab('cheat')} label="Cheat" />
+                                    <TabButton active={modalTab === 'glossary'} onClick={() => setModalTab('glossary')} label="Glossary" />
+                                    <TabButton active={modalTab === 'regex'} onClick={() => setModalTab('regex')} label="Regex" />
                                 </div>
-                                <div className="overflow-y-auto text-xs text-gray-300 space-y-4">
-                                    {modalTab === 'how' ? <p>For full offline mode, add to <b>Home Screen</b>. Python logic is executed locally.</p> : <pre className="bg-[#050c18] p-3 rounded-xl border border-[#1d2d44]">{CHEAT_SHEET_CONTENT}</pre>}
+                                <div className="overflow-y-auto text-xs text-gray-300 space-y-4 flex-grow">
+                                    {modalTab === 'how' && <p className="select-text">For full offline mode, add to <b>Home Screen</b>. Python logic is executed locally.</p>}
+                                    {modalTab === 'cheat' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
+                                            <CodeMirror
+                                                value={CHEAT_SHEET_CONTENT}
+                                                height="400px"
+                                                readOnly={true}
+                                                extensions={[python(), ...customPythonTheme]}
+                                                basicSetup={{ lineNumbers: false, foldGutter: false }}
+                                            />
+                                        </div>
+                                    )}
+                                    {modalTab === 'glossary' && <pre className="bg-[#050c18] p-3 rounded-xl border border-[#1d2d44] whitespace-pre-wrap select-text text-gray-200">{GLOSSARY_CONTENT}</pre>}
+                                    {modalTab === 'regex' && <pre className="bg-[#050c18] p-3 rounded-xl border border-[#1d2d44] whitespace-pre-wrap select-text text-gray-200">{REGEX_CONTENT}</pre>}
                                 </div>
                             </div>
                         )}
