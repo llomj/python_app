@@ -961,20 +961,14 @@ sys.stdout = io.StringIO()
                                         </div>
                                     )}
                                     {modalTab === 'glossary' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
-                                            <CodeMirror
-                                                value={CHEAT_CONTENT}
-                                                height="400px"
-                                                readOnly={true}
-                                                extensions={[python(), ...customPythonTheme]}
-                                                basicSetup={{ lineNumbers: false, foldGutter: false }}
-                                            />
+                                        <div className="bg-[#050c18] rounded-xl overflow-auto h-[400px] p-4 border border-[#1d2d44]">
+                                            <pre className="text-[#4ade80] font-mono text-xs whitespace-pre-wrap select-text m-0">{GLOSSARY_CONTENT}</pre>
                                         </div>
                                     )}
                                     {modalTab === 'regex' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
                                             <CodeMirror
-                                                value={CHEAT_CONTENT}
+                                                value={REGEX_CONTENT}
                                                 height="400px"
                                                 readOnly={true}
                                                 extensions={[python(), ...customPythonTheme]}
