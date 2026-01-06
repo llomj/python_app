@@ -642,7 +642,7 @@ sys.stdout = io.StringIO()
                                     {modalTab === 'cheat' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
                                             <CodeMirror
-                                                value={CHEAT_SHEET_PY}
+                                                value={CHEAT_SHEET_FULL}
                                                 height="400px"
                                                 readOnly={true}
                                                 extensions={[python(), ...customPythonTheme]}
@@ -653,7 +653,7 @@ sys.stdout = io.StringIO()
                                     {modalTab === 'glossary' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
                                             <CodeMirror
-                                                value={CHEAT_SHEET_PY}
+                                                value={CHEAT_SHEET_FULL}
                                                 height="400px"
                                                 readOnly={true}
                                                 extensions={[python(), ...customPythonTheme]}
@@ -664,7 +664,7 @@ sys.stdout = io.StringIO()
                                     {modalTab === 'regex' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
                                             <CodeMirror
-                                                value={CHEAT_SHEET_PY}
+                                                value={CHEAT_SHEET_FULL}
                                                 height="400px"
                                                 readOnly={true}
                                                 extensions={[python(), ...customPythonTheme]}
