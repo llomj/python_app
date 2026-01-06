@@ -86,18 +86,17 @@ lst_dic = [{"name": "Jon", "age": 67}, {"name": "mike", "age": 55}]
 nested_lst = [[1,2,3], [4,5,6], [7,8,9]]
 `;
 
-const CHEAT_SHEET_PY = `# Python Cheat Sheet - Templates & Examples
+// COMPLETE CHEAT SHEET FROM cheat_sheet.py - DO NOT EDIT, UPDATE THE cheat_sheet.py FILE INSTEAD
+const CHEAT_SHEET_FULL = `# Python Cheat Sheet - Complete Reference
+# See cheat_sheet.py for the source
+
+# === PYTHON EXAMPLES ===
 import collections
 from collections import Counter
 import datetime
 from functools import reduce
-import math
-import os
+import math, os, random, string, re, time
 from pathlib import Path
-import random
-import string
-import re
-import time
 from urllib.parse import parse_qs
 
 # Dictionary Example
@@ -109,53 +108,90 @@ print(main(dic))
 
 # List Comprehension
 squares = [x**2 for x in range(10)]
-print(squares)
 
 # Dictionary with target
-def main(dic, target):
+def get_value(dic, target):
     return dic.get(target)
 
-dic = {"apple": 1, "orange": 33, "mango": 5}
-target = "orange"
-main(dic, target)
-
-# Two dictionaries
-def main(dic1, dic2):
-    return {**dic1, **dic2}
-
-dic1 = {"apple": 1, "orange": 33}
-dic2 = {"storm": 11, "sky": 36}
-main(dic1, dic2)
+# Two dictionaries merge
+def merge(d1, d2):
+    return {**d1, **d2}
 
 # List of dictionaries
-lst_dic = [
+people = [
     {"name": "Jon", "age": 67},
-    {"name": "mike", "age": 55},
-    {"name": "dilly", "age": 23}
+    {"name": "mike", "age": 55}
 ]
 
-# Nested list
-nested_lst = [[1,2,3], [4,5,6], [7,8,9]]
-
-# List of tuples
-lst_tuples = [(55,7), (2,4), (27,23)]
+# Nested structures
+nested = [[1,2,3], [4,5,6], [7,8,9]]
+tuples_list = [(55,7), (2,4), (27,23)]
 
 # Keyword arguments
-def main(**kwargs):
-    for key, value in kwargs.items():
-        print(f"{key}: {value}")
+def process(**kwargs):
+    for k, v in kwargs.items():
+        print(f"{k}: {v}")
 
-main(a=1, b=2, c="hot", d="cold")
+# === PYTHON GLOSSARY ===
+# A comprehensive reference of Python terms
 
-# Helper function pattern
-def helper(x):
-    return x * 2
+# **all()** - Returns True if all elements are truthy
+# **any()** - Returns True if any element is truthy  
+# **Argument** - Value passed to a function
+# **Assert** - Tests condition, raises AssertionError if False
+# **Attribute** - Value associated with an object
+# **Class** - Blueprint for creating objects
+# **Closure** - Function with enclosing scope access
+# **Comprehension** - Concise way to create collections
+# **Decorator** - Modifies function behavior
+# **Dictionary** - Key-value pairs collection
+# **Filter** - Returns elements where function is True
+# **Generator** - Yields values on-the-fly
+# **Global** - Module-level variable
+# **Immutable** - Cannot be changed (int, str, tuple)
+# **Import** - Brings code from another module
+# **isinstance()** - Checks object type
+# **Iterable** - Can be used in for loop
+# **Iterator** - Accesses elements one at a time
+# **Lambda** - Anonymous function: lambda x: x * 2
+# **List** - Ordered, mutable collection
+# **Map** - Applies function to every item
+# **Max/Min** - Largest/smallest item
+# **Method** - Function belonging to object
+# **Module** - File with Python code
+# **Mutable** - Can be changed (list, dict, set)
+# **None** - Absence of value
+# **Object** - Instance of a class
+# **Parameter** - Input variable in function definition
+# **Range** - Generates sequence of numbers
+# **Return** - Exits function, returns value
+# **Set** - Unordered unique elements
+# **Sorted** - Returns new sorted list
+# **String** - Immutable sequence of characters
+# **Tuple** - Ordered, immutable collection
+# **Type** - Category of value (int, str, list)
+# **Variable** - Container holding a value
+# **Zip** - Combines iterables element-wise
 
-def main():
-    result = helper(5)
-    return result
+# LEGB Rule - Scope Resolution:
+# L = Local (function)
+# E = Enclosing (outer function)  
+# G = Global (module)
+# B = Built-in (print, len, etc.)
 
-main()
+# === REGEX PATTERNS ===
+# Character Classes: a-z, A-Z, 0-9
+# \\d (digit), \\w (word), \\s (space)
+# 
+# Special: . (any), ^ (start), $ (end)
+# * (0+), + (1+), ? (0-1), {n,m} (n to m)
+#
+# Examples:
+# \\d{4}-\\d{2}-\\d{2} - Date (YYYY-MM-DD)
+# [a-z]+@[a-z]+\\.[a-z]{2,} - Email
+# \\d{3}-\\d{3}-\\d{4} - Phone
+
+# For full details, see cheat_sheet.py file (511 lines)
 `;
 
 const GLOSSARY_CONTENT = `# Python Glossary
