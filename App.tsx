@@ -599,6 +599,9 @@ const App: React.FC = () => {
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [aiHintText, setAiHintText] = useState<string>('');
     const [copyFeedback, setCopyFeedback] = useState(false);
+    const [apiKey, setApiKey] = useState<string>(() => {
+        return localStorage.getItem('gemini_api_key') || '';
+    });
 
     const outputRef = useRef<HTMLDivElement>(null);
 
@@ -803,17 +806,14 @@ sys.stdout = io.StringIO()
     };
 
     const handleAiHint = async () => {
-        // Rely on window.aistudio which is assumed to be globally available per instructions.
-        // @ts-ignore
-        const hasKey = window.aistudio ? await window.aistudio.hasSelectedApiKey() : true;
-        if (!hasKey) {
+        if (!apiKey || apiKey.trim() === '') {
             setShowModal('settings');
             return;
         }
         setShowModal('hint');
         if (!aiHintText) {
             setAiHintText('Asking Gemini...');
-            const hint = await getAiHint(exercise.description, files[activeFileIndex].content);
+            const hint = await getAiHint(exercise.description, files[activeFileIndex].content, apiKey);
             setAiHintText(hint);
         }
     };
@@ -994,22 +994,39 @@ sys.stdout = io.StringIO()
                             </div>
                         )}
                         {showModal === 'settings' && (
-                            <div className="py-2 text-center">
-                                <h2 className="text-lg font-bold mb-4">Settings</h2>
-                                <button onClick={async () => {
-                                    // @ts-ignore
-                                    window.aistudio?.openSelectKey();
-                                    setShowModal('none');
-                                }} className="w-full bg-[#3b82f6] text-white font-bold py-4 rounded-xl mb-2 flex items-center justify-center gap-2">
-                                    <Key size={18} /> Select API Key
+                            <div className="py-2">
+                                <h2 className="text-lg font-bold mb-4 text-center">Settings</h2>
+
+                                <div className="mb-6">
+                                    <label className="block text-sm font-bold mb-2 text-gray-300">
+                                        <Key size={14} className="inline mr-1" /> Gemini API Key
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={apiKey}
+                                        onChange={(e) => setApiKey(e.target.value)}
+                                        placeholder="Paste your API key here..."
+                                        className="w-full bg-[#0d1b2a] border border-[#1d2d44] text-white px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-[#3b82f6] transition-colors"
+                                    />
+                                    <p className="text-[10px] text-gray-400 mt-2 leading-relaxed">
+                                        Get your API key from{' '}
+                                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-[#3b82f6] underline inline-flex items-center gap-0.5">
+                                            Google AI Studio <ExternalLink size={10} />
+                                        </a>
+                                    </p>
+                                </div>
+
+                                <button
+                                    onClick={() => {
+                                        localStorage.setItem('gemini_api_key', apiKey);
+                                        setShowModal('none');
+                                    }}
+                                    className="w-full bg-[#3b82f6] text-white font-bold py-4 rounded-xl mb-3 flex items-center justify-center gap-2 hover:bg-[#3b82f6]/90 transition-colors"
+                                >
+                                    <Check size={18} /> Save API Key
                                 </button>
-                                <p className="text-[10px] text-gray-400 mb-6 leading-relaxed">
-                                    Note: You must select an API key from a <b>paid GCP project</b>.
-                                    <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noreferrer" className="text-[#3b82f6] ml-1 inline-flex items-center gap-0.5 underline">
-                                        Billing Docs <ExternalLink size={10} />
-                                    </a>
-                                </p>
-                                <button onClick={() => setShowModal('restart_confirm')} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl">Reset Progress</button>
+
+                                <button onClick={() => setShowModal('restart_confirm')} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
                             </div>
                         )}
                         {showModal === 'restart_confirm' && (
