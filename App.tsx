@@ -630,8 +630,9 @@ const App: React.FC = () => {
         const updateHeaderHeight = () => {
             if (headerRef.current) {
                 // Use getBoundingClientRect for more accurate measurement
-                const height = headerRef.current.getBoundingClientRect().height;
-                setHeaderHeight(height);
+                // This includes padding and border, which is what we want for positioning
+                const rect = headerRef.current.getBoundingClientRect();
+                setHeaderHeight(rect.bottom);
             }
         };
         const updateProblemPanelHeight = () => {
