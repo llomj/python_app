@@ -941,6 +941,7 @@ sys.stdout = io.StringIO()
                 backgroundColor: '#040b16',
                 padding: '0 1rem',
                 paddingTop: `${headerHeight}px`,
+                marginTop: '-0.5rem',
                 maxHeight: 'none',
                 height: 'auto',
                 overflow: 'visible'
@@ -1012,26 +1013,6 @@ sys.stdout = io.StringIO()
                     >
                         {exercise.description}
                     </pre>
-                    <button 
-                        onClick={() => {
-                            console.log('View Full button clicked, setting modal to problem_full');
-                            setShowModal('problem_full');
-                        }}
-                        style={{
-                            width: '100%',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            border: '1px solid rgba(59, 130, 246, 0.3)',
-                            borderRadius: '0.5rem',
-                            padding: '0.5rem',
-                            color: '#3b82f6',
-                            cursor: 'pointer',
-                            fontSize: '0.875rem',
-                            fontWeight: 'bold',
-                            marginTop: '0.5rem'
-                        }}
-                    >
-                        View Full Problem Description
-                    </button>
                 </div>
             </div>
 
