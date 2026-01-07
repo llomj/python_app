@@ -610,7 +610,7 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
-    const [headerHeight, setHeaderHeight] = useState(280);
+    const [headerHeight, setHeaderHeight] = useState(140);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const [problemDescriptionHeight, setProblemDescriptionHeight] = useState<number | 'auto'>('auto');
 
