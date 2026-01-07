@@ -72,6 +72,23 @@
     </div>
     <script type="module" src="./index.tsx"></script>
     <script type="module">
+        // Version check - force reload if version mismatch
+        const CURRENT_VERSION = 'v54';
+        const storedVersion = localStorage.getItem('app_version');
+        if (storedVersion && storedVersion !== CURRENT_VERSION) {
+            // Version changed, clear everything and reload
+            localStorage.clear();
+            caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
+                navigator.serviceWorker.getRegistrations().then(regs => {
+                    Promise.all(regs.map(r => r.unregister())).then(() => {
+                        window.location.reload(true);
+                    });
+                });
+            });
+        } else {
+            localStorage.setItem('app_version', CURRENT_VERSION);
+        }
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
@@ -83,8 +100,11 @@
                     const cacheNames = await caches.keys();
                     await Promise.all(cacheNames.map(name => caches.delete(name)));
                     
-                    // Register new service worker with update check
-                    const registration = await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
+                    // Register new service worker with update check and cache-busting
+                    const registration = await navigator.serviceWorker.register('./sw.js?v=' + CURRENT_VERSION, { 
+                        updateViaCache: 'none',
+                        scope: './'
+                    });
                     
                     // Force update check immediately
                     registration.update();
@@ -94,19 +114,21 @@
                         const newWorker = registration.installing;
                         if (newWorker) {
                             newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                if (newWorker.state === 'installed') {
                                     // New service worker available, force it to activate
                                     newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                    window.location.reload();
+                                    if (navigator.serviceWorker.controller) {
+                                        window.location.reload();
+                                    }
                                 }
                             });
                         }
                     });
                     
-                    // Check for updates every 5 seconds
+                    // Check for updates every 3 seconds (more frequent)
                     setInterval(() => {
                         registration.update();
-                    }, 5000);
+                    }, 3000);
                 } catch (err) {
                     console.error('Service worker registration failed:', err);
                 }
