@@ -629,21 +629,29 @@ const App: React.FC = () => {
     useEffect(() => {
         const updateHeaderHeight = () => {
             if (headerRef.current) {
-                setHeaderHeight(headerRef.current.offsetHeight);
+                // Use getBoundingClientRect for more accurate measurement
+                const height = headerRef.current.getBoundingClientRect().height;
+                setHeaderHeight(height);
             }
         };
         const updateProblemPanelHeight = () => {
             if (problemPanelRef.current) {
-                setProblemPanelHeight(problemPanelRef.current.offsetHeight);
+                const height = problemPanelRef.current.getBoundingClientRect().height;
+                setProblemPanelHeight(height);
             }
         };
+        // Immediate update
         updateHeaderHeight();
         updateProblemPanelHeight();
-        // Update height when exercise changes
-        const timeoutId = setTimeout(() => {
+        // Update after a short delay to ensure DOM is ready
+        const timeoutId1 = setTimeout(() => {
             updateHeaderHeight();
             updateProblemPanelHeight();
-        }, 100);
+        }, 50);
+        const timeoutId2 = setTimeout(() => {
+            updateHeaderHeight();
+            updateProblemPanelHeight();
+        }, 200);
         window.addEventListener('resize', () => {
             updateHeaderHeight();
             updateProblemPanelHeight();
@@ -666,7 +674,8 @@ const App: React.FC = () => {
         }
         
         return () => {
-            clearTimeout(timeoutId);
+            clearTimeout(timeoutId1);
+            clearTimeout(timeoutId2);
             window.removeEventListener('resize', updateHeaderHeight);
             if (headerObserver) {
                 headerObserver.disconnect();
@@ -934,7 +943,7 @@ sys.stdout = io.StringIO()
     return (
         <div className="h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative">
             {/* Fixed Header Section */}
-            <div ref={headerRef} className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] pt-4 px-4 pb-2" style={{ height: 'auto', maxHeight: 'none', overflow: 'visible' }}>
+            <div ref={headerRef} className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] pt-4 px-4 pb-2" style={{ height: 'auto', maxHeight: 'none', overflow: 'visible', paddingBottom: '0.5rem' }}>
                 <div className="relative flex items-center justify-center mb-4">
                 <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
                     <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
