@@ -933,24 +933,15 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            {/* Problem Panel - Outside Fixed Header */}
-            <div style={{ 
-                position: 'sticky',
-                top: '0',
-                zIndex: 15,
-                backgroundColor: '#040b16',
-                padding: '0 1rem',
-                paddingTop: `${headerHeight}px`,
-                marginTop: '-0.5rem',
-                maxHeight: 'none',
-                height: 'auto',
-                overflow: 'visible'
-            }}>
+            {/* Scrollable Content Section - Problem Panel + Editor Together */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight}px` }}>
+                {/* Problem Panel */}
                 <div style={{ 
                     backgroundColor: '#0a1628', 
                     borderRadius: '0.75rem', 
                     padding: '1.5rem', 
-                    marginBottom: '0.75rem', 
+                    marginBottom: '0.75rem',
+                    marginTop: '0.5rem',
                     boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
                     border: '1px solid #1d2d44',
                     maxHeight: 'none',
@@ -1014,11 +1005,9 @@ sys.stdout = io.StringIO()
                         {exercise.description}
                     </pre>
                 </div>
-            </div>
 
-            {/* Scrollable Editor Section */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight}px` }}>
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ marginTop: `-${headerHeight}px`, minHeight: `calc(100vh)` }}>
+                {/* Editor Section */}
+                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44]" style={{ minHeight: '600px' }}>
                 <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                     <div className="flex items-center gap-2 overflow-hidden">
                         <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
@@ -1043,9 +1032,9 @@ sys.stdout = io.StringIO()
                         </button>
                     ))}
                 </div>
-                <div className="flex-grow overflow-hidden bg-[#050c18] relative">
+                <div className="flex-grow bg-[#050c18] relative" style={{ minHeight: '500px' }}>
                     <CodeMirror
-                        value={files[activeFileIndex].content} height="100%" extensions={editorExtensions} onChange={updateActiveContent}
+                        value={files[activeFileIndex].content} height="500px" extensions={editorExtensions} onChange={updateActiveContent}
                         basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                     />
                 </div>
