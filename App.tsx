@@ -957,7 +957,7 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            {/* Fixed Problem Panel */}
+            {/* Fixed Problem Panel - Directly below score panel */}
             <div 
                 ref={problemPanelRef}
                 style={{ 
@@ -970,7 +970,7 @@ sys.stdout = io.StringIO()
                     zIndex: 15,
                     backgroundColor: '#040b16',
                     padding: '0 1rem',
-                    paddingTop: '0.5rem',
+                    paddingTop: '0',
                     paddingBottom: '0.75rem'
                 }}
             >
