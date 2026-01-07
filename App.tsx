@@ -605,6 +605,7 @@ const App: React.FC = () => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [isProblemExpanded, setIsProblemExpanded] = useState(false);
+    const [isOutputExpanded, setIsOutputExpanded] = useState(false);
 
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -693,6 +694,13 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_mastery_stats', JSON.stringify(stats));
     }, [stats]);
+
+    // Auto-scroll output to bottom when new output is added
+    useEffect(() => {
+        if (outputRef.current && output !== 'Run code to see output...') {
+            outputRef.current.scrollTop = outputRef.current.scrollHeight;
+        }
+    }, [output]);
 
     useEffect(() => {
         let interval: any;
@@ -1086,12 +1094,30 @@ sys.stdout = io.StringIO()
                         basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                     />
                 </div>
-                <div className="border-t border-[#1d2d44] p-2 bg-[#0a1628] flex-shrink-0">
-                    <div ref={outputRef} className="h-24 overflow-y-auto">
-                        <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text">{output}</pre>
-
+                <div className="border-t border-[#1d2d44] bg-[#0a1628] flex-shrink-0">
+                    <div className="flex items-center justify-between px-2 py-1 border-b border-[#1d2d44]">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
+                        <button 
+                            onClick={() => setIsOutputExpanded(!isOutputExpanded)}
+                            className="text-gray-400 hover:text-[#3b82f6] transition-all p-1"
+                            title={isOutputExpanded ? "Collapse" : "Expand"}
+                        >
+                            {isOutputExpanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+                        </button>
                     </div>
+                    <div 
+                        ref={outputRef} 
+                        className="overflow-y-auto px-2 py-2"
+                        style={{
+                            height: isOutputExpanded ? '300px' : 'auto',
+                            minHeight: '96px',
+                            maxHeight: isOutputExpanded ? '400px' : '200px',
+                            transition: 'max-height 0.2s ease, height 0.2s ease'
+                        }}
+                    >
+                        <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
                     </div>
+                </div>
                 </div>
             </div>
 
