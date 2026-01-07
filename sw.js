@@ -1,10 +1,10 @@
-const CACHE_NAME = 'python-pro-v40';
+const CACHE_NAME = 'python-pro-v52';
 const CORE_ASSETS = [
     './',
     './index.html',
     './manifest.json',
     './index.tsx',
-    './App.tsx',
+    // './App.tsx', // REMOVED: Don't cache App.tsx to always get fresh version
     './types.ts',
     './exercises.ts',
     './services/geminiService.ts',
@@ -43,6 +43,25 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
     const url = new URL(e.request.url);
+    const isJavaScript = e.request.url.endsWith('.js') || e.request.url.endsWith('.mjs') || e.request.url.includes('/assets/');
+    const isAppTsx = e.request.url.includes('/App.tsx') || e.request.url.endsWith('App.tsx');
+    
+    // NETWORK-FIRST strategy for ALL JavaScript files (always get fresh version)
+    // This includes bundled App.js, index.js, and all other JS files from Vite build
+    if (isJavaScript || isAppTsx) {
+        e.respondWith(
+            fetch(e.request).then(nr => {
+                // Don't cache JavaScript files - always get fresh version
+                return nr;
+            }).catch(() => {
+                // Fallback to cache only if network fails
+                return caches.match(e.request);
+            })
+        );
+        return;
+    }
+    
+    // CACHE-FIRST strategy for other assets (HTML, CSS, images, etc.)
     if (url.origin === location.origin || CORE_ASSETS.includes(e.request.url) || CORE_ASSETS.some(a => e.request.url.startsWith(a))) {
         e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(nr => {
             if (nr.status === 200 && e.request.method === 'GET') {

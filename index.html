@@ -18,6 +18,29 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         #root:not(:empty) + .boot-screen { opacity: 0; pointer-events: none; }
         .rescue-link { position: fixed; bottom: calc(30px + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; font-size: 11px; color: #3b82f6; text-decoration: underline; z-index: 10000; font-weight: bold; letter-spacing: 0.5px; }
+        /* Solution 37: Remove ALL constraints - let content expand naturally */
+        div[data-problem-description],
+        div.problem-description-scroll,
+        div[data-problem-description].problem-description-scroll,
+        #root div[data-problem-description],
+        body #root div[data-problem-description],
+        body #root div[style*="maxHeight"] div[data-problem-description] {
+            text-overflow: clip !important;
+            overflow-y: visible !important;
+            overflow-x: hidden !important;
+            max-height: none !important;
+            min-height: auto !important;
+            height: auto !important;
+            -webkit-line-clamp: unset !important;
+            line-clamp: unset !important;
+            display: block !important;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            -webkit-box-orient: unset !important;
+            box-orient: unset !important;
+            overflow: visible !important;
+        }
     </style>
 <script type="importmap">
 {
