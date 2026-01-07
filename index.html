@@ -73,7 +73,44 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
+            window.addEventListener('load', async () => {
+                try {
+                    // Unregister ALL existing service workers first
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(reg => reg.unregister()));
+                    
+                    // Clear all caches
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                    
+                    // Register new service worker with update check
+                    const registration = await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
+                    
+                    // Force update check immediately
+                    registration.update();
+                    
+                    // Listen for updates and force activation
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker available, force it to activate
+                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Check for updates every 5 seconds
+                    setInterval(() => {
+                        registration.update();
+                    }, 5000);
+                } catch (err) {
+                    console.error('Service worker registration failed:', err);
+                }
+            });
         }
     </script>
 </body>

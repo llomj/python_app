@@ -1,4 +1,4 @@
-const CACHE_NAME = 'python-pro-v52';
+const CACHE_NAME = 'python-pro-v53';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -32,8 +32,21 @@ const CORE_ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+    // Force immediate activation, don't wait for other tabs to close
     self.skipWaiting();
-    e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(CORE_ASSETS)));
+    e.waitUntil(
+        caches.open(CACHE_NAME).then(c => c.addAll(CORE_ASSETS)).then(() => {
+            // Force activation immediately
+            return self.skipWaiting();
+        })
+    );
+});
+
+// Listen for skip waiting message from main thread
+self.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
 });
 
 self.addEventListener('activate', (e) => {
