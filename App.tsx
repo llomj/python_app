@@ -608,8 +608,10 @@ const App: React.FC = () => {
 
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
+    const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(280);
+    const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const [problemDescriptionHeight, setProblemDescriptionHeight] = useState<number | 'auto'>('auto');
 
     useEffect(() => {
@@ -630,25 +632,47 @@ const App: React.FC = () => {
                 setHeaderHeight(headerRef.current.offsetHeight);
             }
         };
+        const updateProblemPanelHeight = () => {
+            if (problemPanelRef.current) {
+                setProblemPanelHeight(problemPanelRef.current.offsetHeight);
+            }
+        };
         updateHeaderHeight();
+        updateProblemPanelHeight();
         // Update height when exercise changes
-        const timeoutId = setTimeout(updateHeaderHeight, 100);
-        window.addEventListener('resize', updateHeaderHeight);
+        const timeoutId = setTimeout(() => {
+            updateHeaderHeight();
+            updateProblemPanelHeight();
+        }, 100);
+        window.addEventListener('resize', () => {
+            updateHeaderHeight();
+            updateProblemPanelHeight();
+        });
         
         // Use ResizeObserver to watch for content changes
-        let resizeObserver: ResizeObserver | null = null;
+        let headerObserver: ResizeObserver | null = null;
+        let problemObserver: ResizeObserver | null = null;
         if (headerRef.current && typeof ResizeObserver !== 'undefined') {
-            resizeObserver = new ResizeObserver(() => {
+            headerObserver = new ResizeObserver(() => {
                 updateHeaderHeight();
             });
-            resizeObserver.observe(headerRef.current);
+            headerObserver.observe(headerRef.current);
+        }
+        if (problemPanelRef.current && typeof ResizeObserver !== 'undefined') {
+            problemObserver = new ResizeObserver(() => {
+                updateProblemPanelHeight();
+            });
+            problemObserver.observe(problemPanelRef.current);
         }
         
         return () => {
             clearTimeout(timeoutId);
             window.removeEventListener('resize', updateHeaderHeight);
-            if (resizeObserver) {
-                resizeObserver.disconnect();
+            if (headerObserver) {
+                headerObserver.disconnect();
+            }
+            if (problemObserver) {
+                problemObserver.disconnect();
             }
         };
     }, [exercise]);
@@ -912,37 +936,44 @@ sys.stdout = io.StringIO()
             {/* Fixed Header Section */}
             <div ref={headerRef} className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] pt-4 px-4 pb-2" style={{ height: 'auto', maxHeight: 'none', overflow: 'visible' }}>
                 <div className="relative flex items-center justify-center mb-4">
-                    <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
-                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
+                <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
+                    <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
                         <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{stats.success}</span></div>
-                        <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
-                        <div className="flex items-center border-l border-[#1d2d44] pl-4 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
-                    </div>
-                    <div className="absolute right-4">
-                        <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
-                    </div>
+                    <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
+                    <div className="flex items-center border-l border-[#1d2d44] pl-4 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
                 </div>
+                    <div className="absolute right-4">
+                    <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
+                </div>
+            </div>
 
                 <div className="flex justify-center gap-2 sm:gap-3 mb-4">
-                    <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                    <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
-                    <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
-                    <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                    <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
-                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
+                <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
+                <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
+                <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
+                <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
+                <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
                 </div>
             </div>
 
             {/* Fixed Problem Panel */}
-            <div style={{ 
-                position: 'sticky',
-                top: `${headerHeight}px`,
-                zIndex: 15,
-                backgroundColor: '#040b16',
-                padding: '0 1rem',
-                paddingTop: '0.5rem',
-                paddingBottom: '0.75rem'
-            }}>
+            <div 
+                ref={problemPanelRef}
+                style={{ 
+                    position: 'fixed',
+                    top: `${headerHeight}px`,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '100%',
+                    maxWidth: '42rem',
+                    zIndex: 15,
+                    backgroundColor: '#040b16',
+                    padding: '0 1rem',
+                    paddingTop: '0.5rem',
+                    paddingBottom: '0.75rem'
+                }}
+            >
                 <div style={{ 
                     backgroundColor: '#0a1628', 
                     borderRadius: '0.75rem', 
@@ -1013,8 +1044,8 @@ sys.stdout = io.StringIO()
             </div>
 
             {/* Scrollable Editor Section - Scrolls behind problem panel */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: '0', marginTop: '0' }}>
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh)` }}>
+            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight + problemPanelHeight}px` }}>
+                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh - ${headerHeight + problemPanelHeight}px)` }}>
                 <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                     <div className="flex items-center gap-2 overflow-hidden">
                         <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
@@ -1050,7 +1081,7 @@ sys.stdout = io.StringIO()
                         <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text">{output}</pre>
 
                     </div>
-                </div>
+                    </div>
                 </div>
             </div>
 
