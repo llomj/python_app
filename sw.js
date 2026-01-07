@@ -1,4 +1,4 @@
-const CACHE_NAME = 'python-pro-v53';
+const CACHE_NAME = 'python-pro-v54';
 const CORE_ASSETS = [
     './',
     './index.html',

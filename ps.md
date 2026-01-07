@@ -112,10 +112,15 @@ setInterval(() => {
 
 1. **Check service worker registration** in `index.html` - ensure it unregisters old workers
 2. **Check JavaScript caching** in `sw.js` - ensure JavaScript uses NETWORK-FIRST
-3. **Check cache version** in `sw.js` - update CACHE_NAME to force new cache
+3. **Check cache version** in `sw.js` - update CACHE_NAME to force new cache ⚠️ **DO THIS FIRST**
 4. **Verify GitHub Pages deployment** - check Actions tab for deployment status
 5. **Check phone browser** - ensure it's opening correct GitHub Pages URL
 6. **Force clear on phone** - use "Force Clear Cache & Reload" link on boot screen
+
+**🚨 CURRENT ISSUE (Latest):**
+- User reports: "i dont see the changes being made to the iphone app"
+- **Action Taken**: Updated CACHE_NAME from 'python-pro-v53' to 'python-pro-v54' to force service worker update
+- **Next Steps**: Push changes and wait for deployment, then test on phone
 
 ### Key Takeaways
 
