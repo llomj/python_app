@@ -933,15 +933,20 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            {/* Scrollable Content Section - Problem Panel + Editor Together */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight}px` }}>
-                {/* Problem Panel */}
+            {/* Fixed Problem Panel */}
+            <div style={{ 
+                position: 'sticky',
+                top: `${headerHeight}px`,
+                zIndex: 15,
+                backgroundColor: '#040b16',
+                padding: '0 1rem',
+                paddingTop: '0.5rem',
+                paddingBottom: '0.75rem'
+            }}>
                 <div style={{ 
                     backgroundColor: '#0a1628', 
                     borderRadius: '0.75rem', 
                     padding: '1.5rem', 
-                    marginBottom: '0.75rem',
-                    marginTop: '0.5rem',
                     boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
                     border: '1px solid #1d2d44',
                     maxHeight: 'none',
@@ -1005,9 +1010,11 @@ sys.stdout = io.StringIO()
                         {exercise.description}
                     </pre>
                 </div>
+            </div>
 
-                {/* Editor Section */}
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44]" style={{ minHeight: '600px' }}>
+            {/* Scrollable Editor Section - Scrolls behind problem panel */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: '0', marginTop: '0' }}>
+                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh)` }}>
                 <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                     <div className="flex items-center gap-2 overflow-hidden">
                         <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
