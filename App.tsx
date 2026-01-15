@@ -599,6 +599,7 @@ const App: React.FC = () => {
     const [isInFrame, setIsInFrame] = useState(false);
     const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'restart_confirm' | 'problem_full'>('none');
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
+    const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements'>('code');
     const [aiHintText, setAiHintText] = useState<string>('');
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
@@ -606,6 +607,8 @@ const App: React.FC = () => {
     });
     const [isProblemExpanded, setIsProblemExpanded] = useState(false);
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
+    const [logicContent, setLogicContent] = useState<string>('');
+    const [requirementsContent, setRequirementsContent] = useState<string>('');
 
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -658,7 +661,7 @@ const App: React.FC = () => {
             updateHeaderHeight();
             updateProblemPanelHeight();
         });
-        
+
         // Use ResizeObserver to watch for content changes
         let headerObserver: ResizeObserver | null = null;
         let problemObserver: ResizeObserver | null = null;
@@ -674,7 +677,7 @@ const App: React.FC = () => {
             });
             problemObserver.observe(problemPanelRef.current);
         }
-        
+
         return () => {
             clearTimeout(timeoutId1);
             clearTimeout(timeoutId2);
@@ -899,6 +902,110 @@ sys.stdout = io.StringIO()
         }
     };
 
+    // Helper function to extract a specific problem's content from file text
+    const extractProblemContent = (fileContent: string, problemId: number): string => {
+        // Pattern to match: """ \nProblem: X  (note the colon after "Problem", not after the number)
+        const problemMarker = new RegExp(`"""\\s*Problem:\\s+${problemId}\\s`, 'm');
+        const match = fileContent.match(problemMarker);
+
+        if (!match) {
+            return '';
+        }
+
+        const startIndex = match.index || 0;
+
+        // Find the end - look for the next problem marker
+        const remainingContent = fileContent.substring(startIndex);
+        const nextProblemPattern = new RegExp(`"""\\s*Problem:\\s+\\d+\\s`, 'm');
+
+        // Find all potential next problems, but skip the current one
+        let endIndex = remainingContent.length;
+        let searchStart = match[0].length;
+
+        // Look for next problem after the current one
+        while (searchStart < remainingContent.length) {
+            const nextMatch = remainingContent.substring(searchStart).match(nextProblemPattern);
+            if (!nextMatch) {
+                break;
+            }
+
+            const nextProblemNum = nextMatch[0].match(/\d+/);
+            if (nextProblemNum && parseInt(nextProblemNum[0]) !== problemId) {
+                endIndex = searchStart + (nextMatch.index || 0);
+                break;
+            }
+
+            searchStart += (nextMatch.index || 0) + nextMatch[0].length;
+        }
+
+        return remainingContent.substring(0, endIndex).trim();
+    };
+
+    const loadSolutionFiles = useCallback(async (exerciseId: number) => {
+        // Determine which file set contains this problem
+        let filePrefix: number;
+        if (exerciseId <= 500) {
+            filePrefix = 500;
+        } else if (exerciseId <= 1000) {
+            filePrefix = 1000;
+        } else if (exerciseId <= 1500) {
+            filePrefix = 1500;
+        } else if (exerciseId <= 2000) {
+            filePrefix = 2000;
+        } else {
+            setLogicContent('');
+            setRequirementsContent('');
+            return;
+        }
+
+        try {
+            const logicFile = `level1_${filePrefix}_codelogic.py`;
+            const reqFile1 = `level1_${filePrefix}_requirements.py`;
+            const reqFile2 = `level1_${filePrefix}_requirements..py`;
+
+            // Fetch and parse logic file
+            try {
+                const logicResponse = await fetch(`/${logicFile}`);
+                if (logicResponse.ok) {
+                    const logicText = await logicResponse.text();
+                    const problemLogic = extractProblemContent(logicText, exerciseId);
+                    setLogicContent(problemLogic || '');
+                } else {
+                    setLogicContent('');
+                }
+            } catch (err) {
+                setLogicContent('');
+            }
+
+            // Fetch and parse requirements file (try both variations)
+            try {
+                let reqResponse = await fetch(`/${reqFile1}`);
+                if (!reqResponse.ok) {
+                    reqResponse = await fetch(`/${reqFile2}`);
+                }
+                if (reqResponse.ok) {
+                    const reqText = await reqResponse.text();
+                    const problemReq = extractProblemContent(reqText, exerciseId);
+                    setRequirementsContent(problemReq || '');
+                } else {
+                    setRequirementsContent('');
+                }
+            } catch (err) {
+                setRequirementsContent('');
+            }
+        } catch (err) {
+            console.error('Error loading solution files:', err);
+            setLogicContent('');
+            setRequirementsContent('');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (showModal === 'solution') {
+            loadSolutionFiles(exercise.id);
+        }
+    }, [showModal, exercise.id, loadSolutionFiles]);
+
     const rate = stats.shots > 0 ? ((stats.success / stats.shots) * 100).toFixed(2) : '0.00';
 
     const editorExtensions = useMemo(() => [
@@ -954,31 +1061,31 @@ sys.stdout = io.StringIO()
             {/* Fixed Header Section */}
             <div ref={headerRef} className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] pt-4 px-4 pb-2" style={{ height: 'auto', maxHeight: 'none', overflow: 'visible', paddingBottom: '0.5rem' }}>
                 <div className="relative flex items-center justify-center mb-4">
-                <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
-                    <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
+                    <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
+                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
                         <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{stats.success}</span></div>
-                    <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
-                    <div className="flex items-center border-l border-[#1d2d44] pl-4 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
-                </div>
+                        <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
+                        <div className="flex items-center border-l border-[#1d2d44] pl-4 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
+                    </div>
                     <div className="absolute right-4">
-                    <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
+                        <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
+                    </div>
                 </div>
-            </div>
 
                 <div className="flex justify-center gap-2 sm:gap-3 mb-4">
-                <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
-                <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
-                <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
-                <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
+                    <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                    <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
+                    <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
+                    <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
+                    <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
+                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
                 </div>
             </div>
 
             {/* Fixed Problem Panel - Directly below score panel */}
-            <div 
+            <div
                 ref={problemPanelRef}
-                style={{ 
+                style={{
                     position: 'fixed',
                     top: `${headerHeight}px`,
                     left: '50%',
@@ -992,11 +1099,11 @@ sys.stdout = io.StringIO()
                     paddingBottom: '0.75rem'
                 }}
             >
-                <div style={{ 
-                    backgroundColor: '#0a1628', 
-                    borderRadius: '0.75rem', 
-                    padding: '1.5rem', 
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', 
+                <div style={{
+                    backgroundColor: '#0a1628',
+                    borderRadius: '0.75rem',
+                    padding: '1.5rem',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                     border: '1px solid #1d2d44',
                     maxHeight: 'none',
                     height: 'auto',
@@ -1006,7 +1113,7 @@ sys.stdout = io.StringIO()
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
                         <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'white', margin: 0 }}>Problem {exercise.id}</h2>
-                        <button 
+                        <button
                             onClick={() => setShowModal('problem_full')}
                             style={{
                                 backgroundColor: 'transparent',
@@ -1025,12 +1132,12 @@ sys.stdout = io.StringIO()
                             <span>View Full</span>
                         </button>
                     </div>
-                    <pre 
+                    <pre
                         data-problem-description
                         className="problem-description-scroll"
                         id={`problem-desc-${exercise.id}`}
                         ref={problemDescriptionRef}
-                        style={{ 
+                        style={{
                             color: '#d1d5db',
                             fontSize: '0.875rem',
                             lineHeight: '1.75',
@@ -1064,60 +1171,60 @@ sys.stdout = io.StringIO()
             {/* Scrollable Editor Section - Scrolls behind problem panel */}
             <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight + problemPanelHeight}px` }}>
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh - ${headerHeight + problemPanelHeight}px)` }}>
-                <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
-                    <div className="flex items-center gap-2 overflow-hidden">
-                        <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
-                        {isEditingFileName ? (
-                            <input autoFocus value={newName} onChange={(e) => setNewName(e.target.value)} onBlur={finishRenaming} onKeyDown={(e) => e.key === 'Enter' && finishRenaming()} className="bg-[#112240] text-sm border border-[#3b82f6] rounded px-2 py-0.5 outline-none text-white w-24" />
-                        ) : (
-                            <span className="text-sm font-bold text-gray-300 font-mono truncate max-w-[100px]">{files[activeFileIndex].name}</span>
-                        )}
+                    <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
+                        <div className="flex items-center gap-2 overflow-hidden">
+                            <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
+                            {isEditingFileName ? (
+                                <input autoFocus value={newName} onChange={(e) => setNewName(e.target.value)} onBlur={finishRenaming} onKeyDown={(e) => e.key === 'Enter' && finishRenaming()} className="bg-[#112240] text-sm border border-[#3b82f6] rounded px-2 py-0.5 outline-none text-white w-24" />
+                            ) : (
+                                <span className="text-sm font-bold text-gray-300 font-mono truncate max-w-[100px]">{files[activeFileIndex].name}</span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <button onClick={addFile} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#22c55e]"><Plus size={18} /></button>
+                            <button onClick={removeFile} disabled={files.length <= 1} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#ef4444] disabled:opacity-30"><Minus size={18} /></button>
+                            <button onClick={runCode} disabled={isRunning} className="ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]">
+                                {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} RUN
+                            </button>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                        <button onClick={addFile} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#22c55e]"><Plus size={18} /></button>
-                        <button onClick={removeFile} disabled={files.length <= 1} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#ef4444] disabled:opacity-30"><Minus size={18} /></button>
-                        <button onClick={runCode} disabled={isRunning} className="ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]">
-                            {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} RUN
-                        </button>
+                    <div className="flex bg-[#0a1628] border-b border-[#1d2d44] overflow-x-auto no-scrollbar">
+                        {files.map((f, idx) => (
+                            <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
+                                {f.name}
+                            </button>
+                        ))}
                     </div>
-                </div>
-                <div className="flex bg-[#0a1628] border-b border-[#1d2d44] overflow-x-auto no-scrollbar">
-                    {files.map((f, idx) => (
-                        <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
-                            {f.name}
-                        </button>
-                    ))}
-                </div>
-                <div className="flex-grow bg-[#050c18] relative" style={{ minHeight: '500px' }}>
-                    <CodeMirror
-                        value={files[activeFileIndex].content} height="500px" extensions={editorExtensions} onChange={updateActiveContent}
-                        basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
-                    />
-                </div>
-                <div className="border-t border-[#1d2d44] bg-[#0a1628] flex-shrink-0">
-                    <div className="flex items-center justify-between px-2 py-1 border-b border-[#1d2d44]">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
-                        <button 
-                            onClick={() => setIsOutputExpanded(!isOutputExpanded)}
-                            className="text-gray-400 hover:text-[#3b82f6] transition-all p-1"
-                            title={isOutputExpanded ? "Collapse" : "Expand"}
+                    <div className="flex-grow bg-[#050c18] relative" style={{ minHeight: '500px' }}>
+                        <CodeMirror
+                            value={files[activeFileIndex].content} height="500px" extensions={editorExtensions} onChange={updateActiveContent}
+                            basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
+                        />
+                    </div>
+                    <div className="border-t border-[#1d2d44] bg-[#0a1628] flex-shrink-0">
+                        <div className="flex items-center justify-between px-2 py-1 border-b border-[#1d2d44]">
+                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
+                            <button
+                                onClick={() => setIsOutputExpanded(!isOutputExpanded)}
+                                className="text-gray-400 hover:text-[#3b82f6] transition-all p-1"
+                                title={isOutputExpanded ? "Collapse" : "Expand"}
+                            >
+                                {isOutputExpanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+                            </button>
+                        </div>
+                        <div
+                            ref={outputRef}
+                            className="overflow-y-auto px-2 py-2"
+                            style={{
+                                height: isOutputExpanded ? '300px' : 'auto',
+                                minHeight: '96px',
+                                maxHeight: isOutputExpanded ? '400px' : '200px',
+                                transition: 'max-height 0.2s ease, height 0.2s ease'
+                            }}
                         >
-                            {isOutputExpanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
-                        </button>
+                            <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
+                        </div>
                     </div>
-                    <div 
-                        ref={outputRef} 
-                        className="overflow-y-auto px-2 py-2"
-                        style={{
-                            height: isOutputExpanded ? '300px' : 'auto',
-                            minHeight: '96px',
-                            maxHeight: isOutputExpanded ? '400px' : '200px',
-                            transition: 'max-height 0.2s ease, height 0.2s ease'
-                        }}
-                    >
-                        <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
-                    </div>
-                </div>
                 </div>
             </div>
 
@@ -1167,9 +1274,39 @@ sys.stdout = io.StringIO()
                         )}
                         {showModal === 'solution' && (
                             <div className="flex flex-col h-full overflow-hidden">
-                                <h2 className="text-lg font-bold mb-3 text-[#3b82f6]">Solution</h2>
-                                <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] flex-grow">
-                                    <CodeMirror value={exercise.solution} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
+                                <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
+                                    <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label="Solution" />
+                                    <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label="Logic" />
+                                    <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label="Requirements" />
+                                </div>
+                                <div className="flex-grow overflow-y-auto">
+                                    {solutionTab === 'code' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full">
+                                            <CodeMirror value={exercise.solution} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
+                                        </div>
+                                    )}
+                                    {solutionTab === 'logic' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full">
+                                            {logicContent ? (
+                                                <CodeMirror value={logicContent} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
+                                            ) : (
+                                                <div className="p-8 text-center text-gray-500 text-sm">
+                                                    Searching logic documentation...
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                    {solutionTab === 'requirements' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full">
+                                            {requirementsContent ? (
+                                                <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
+                                            ) : (
+                                                <div className="p-8 text-center text-gray-500 text-sm">
+                                                    Searching requirements...
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -1225,18 +1362,18 @@ sys.stdout = io.StringIO()
                         {showModal === 'problem_full' && (
                             <div className="flex flex-col h-full overflow-hidden">
                                 <h2 className="text-lg font-bold mb-3 text-[#3b82f6]">Problem {exercise.id} - Full Description</h2>
-                                <div 
-                                    className="bg-[#0d1b2a] p-4 rounded-xl border border-[#1d2d44] text-gray-200 text-sm leading-relaxed whitespace-pre-wrap break-words overflow-y-auto flex-grow" 
-                                    style={{ 
+                                <div
+                                    className="bg-[#0d1b2a] p-4 rounded-xl border border-[#1d2d44] text-gray-200 text-sm leading-relaxed whitespace-pre-wrap break-words overflow-y-auto flex-grow"
+                                    style={{
                                         maxHeight: '60vh',
                                         minHeight: '200px',
                                         overflowY: 'auto',
                                         overflowX: 'hidden'
                                     }}
                                 >
-                                    <pre style={{ 
-                                        margin: 0, 
-                                        padding: 0, 
+                                    <pre style={{
+                                        margin: 0,
+                                        padding: 0,
                                         fontFamily: 'inherit',
                                         whiteSpace: 'pre-wrap',
                                         wordWrap: 'break-word',
