@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Python Mastery Pro</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,12 +14,74 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
     <style>
-        body { background-color: #040b16; color: white; margin: 0; font-family: -apple-system; overflow-x: hidden; -webkit-tap-highlight-color: transparent; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
-        .boot-screen { position: fixed; inset: 0; background: #040b16; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease; }
-        .boot-loader { width: 40px; height: 40px; border: 3px solid rgba(59, 130, 246, 0.1); border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #root:not(:empty) + .boot-screen { opacity: 0; pointer-events: none; }
-        .rescue-link { position: fixed; bottom: calc(30px + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; font-size: 11px; color: #3b82f6; text-decoration: underline; z-index: 10000; font-weight: bold; letter-spacing: 0.5px; }
+        body {
+            background-color: #040b16;
+            color: white;
+            margin: 0;
+            font-family: -apple-system;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Reduce mobile browser text selection toolbar interference */
+        .cm-editor,
+        .cm-content {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        .cm-editor * {
+            -webkit-touch-callout: default;
+        }
+
+        .boot-screen {
+            position: fixed;
+            inset: 0;
+            background: #040b16;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .boot-loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #root:not(:empty)+.boot-screen {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .rescue-link {
+            position: fixed;
+            bottom: calc(30px + env(safe-area-inset-bottom));
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            color: #3b82f6;
+            text-decoration: underline;
+            z-index: 10000;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
         /* Solution 37: Remove ALL constraints - let content expand naturally */
         div[data-problem-description],
         div.problem-description-scroll,
@@ -42,7 +106,7 @@
             overflow: visible !important;
         }
     </style>
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@19.0.0",
@@ -62,18 +126,21 @@
 }
 </script>
 </head>
+
 <body>
     <div id="root"></div>
     <div class="boot-screen" id="boot">
         <div class="boot-loader"></div>
-        <p style="margin-top: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; color: #3b82f6;">CONNECTING TO EDITOR...</p>
+        <p style="margin-top: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; color: #3b82f6;">CONNECTING
+            TO EDITOR...</p>
         <p style="margin-top: 8px; font-size: 10px; color: #4b5563;">Please wait for Python engine</p>
-        <a href="javascript:localStorage.clear(); caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))).then(() => location.reload()));" class="rescue-link">Force Clear Cache & Reload</a>
+        <a href="javascript:localStorage.clear(); caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))).then(() => location.reload()));"
+            class="rescue-link">Force Clear Cache & Reload</a>
     </div>
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v54';
+        const CURRENT_VERSION = 'v55';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
@@ -95,20 +162,20 @@
                     // Unregister ALL existing service workers first
                     const registrations = await navigator.serviceWorker.getRegistrations();
                     await Promise.all(registrations.map(reg => reg.unregister()));
-                    
+
                     // Clear all caches
                     const cacheNames = await caches.keys();
                     await Promise.all(cacheNames.map(name => caches.delete(name)));
-                    
+
                     // Register new service worker with update check and cache-busting
-                    const registration = await navigator.serviceWorker.register('./sw.js?v=' + CURRENT_VERSION, { 
+                    const registration = await navigator.serviceWorker.register('./sw.js?v=' + CURRENT_VERSION, {
                         updateViaCache: 'none',
                         scope: './'
                     });
-                    
+
                     // Force update check immediately
                     registration.update();
-                    
+
                     // Listen for updates and force activation
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
@@ -124,7 +191,7 @@
                             });
                         }
                     });
-                    
+
                     // Check for updates every 3 seconds (more frequent)
                     setInterval(() => {
                         registration.update();
@@ -136,4 +203,5 @@
         }
     </script>
 </body>
+
 </html>

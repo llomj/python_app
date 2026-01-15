@@ -1,4 +1,4 @@
-const CACHE_NAME = 'python-pro-v54';
+const CACHE_NAME = 'python-pro-v55';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -58,7 +58,7 @@ self.addEventListener('fetch', (e) => {
     const url = new URL(e.request.url);
     const isJavaScript = e.request.url.endsWith('.js') || e.request.url.endsWith('.mjs') || e.request.url.includes('/assets/');
     const isAppTsx = e.request.url.includes('/App.tsx') || e.request.url.endsWith('App.tsx');
-    
+
     // NETWORK-FIRST strategy for ALL JavaScript files (always get fresh version)
     // This includes bundled App.js, index.js, and all other JS files from Vite build
     if (isJavaScript || isAppTsx) {
@@ -73,7 +73,7 @@ self.addEventListener('fetch', (e) => {
         );
         return;
     }
-    
+
     // CACHE-FIRST strategy for other assets (HTML, CSS, images, etc.)
     if (url.origin === location.origin || CORE_ASSETS.includes(e.request.url) || CORE_ASSETS.some(a => e.request.url.startsWith(a))) {
         e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(nr => {
