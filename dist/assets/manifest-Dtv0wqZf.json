@@ -1,0 +1,15 @@
+{
+  "name": "Python Mastery Pro",
+  "short_name": "Python Pro",
+  "start_url": "/python_app/",
+  "display": "standalone",
+  "background_color": "#040b16",
+  "theme_color": "#040b16",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
