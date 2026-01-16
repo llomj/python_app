@@ -972,9 +972,11 @@ sys.stdout = io.StringIO()
                     setLogicContent(problemLogic || '');
                 } else {
                     setLogicContent('');
+                    console.warn(`Logic file not found: ${logicFile}`);
                 }
             } catch (err) {
                 setLogicContent('');
+                console.warn(`Error loading logic file: ${err.message}`);
             }
 
             // Fetch and parse requirements file (try both variations)
@@ -989,9 +991,11 @@ sys.stdout = io.StringIO()
                     setRequirementsContent(problemReq || '');
                 } else {
                     setRequirementsContent('');
+                    console.warn(`Requirements file not found: ${reqFile1} or ${reqFile2}`);
                 }
             } catch (err) {
                 setRequirementsContent('');
+                console.warn(`Error loading requirements file: ${err.message}`);
             }
         } catch (err) {
             console.error('Error loading solution files:', err);
