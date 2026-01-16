@@ -32,15 +32,13 @@ const CORE_ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
-    // Force immediate activation, don't wait for other tabs to close
-    self.skipWaiting();
-    e.waitUntil(
-        caches.open(CACHE_NAME).then(c => c.addAll(CORE_ASSETS)).then(() => {
-            // Force activation immediately
-            return self.skipWaiting();
-        })
-    );
-});
+        // Force immediate activation, don't wait for other tabs to close
+        self.skipWaiting();
+        e.waitUntil(
+            caches.open(fullCacheName).then(c => c.addAll(CORE_ASSETS)).then(() => {
+                console.log('✅ Core assets cached:', CORE_ASSETS.length);
+                return self.skipWaiting();
+            });
 
 // Listen for skip waiting message from main thread
 self.addEventListener('message', (e) => {
