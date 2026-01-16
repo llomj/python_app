@@ -965,7 +965,10 @@ sys.stdout = io.StringIO()
 
             // Fetch and parse logic file
             try {
-                const logicResponse = await fetch(`/${logicFile}`);
+                // Handle GitHub Pages subdirectory
+                const isGitHubPages = window.location.hostname === 'llomj.github.io';
+                const basePath = isGitHubPages ? '/python_app' : '';
+                const logicResponse = await fetch(`${basePath}/${logicFile}`);
                 if (logicResponse.ok) {
                     const logicText = await logicResponse.text();
                     const problemLogic = extractProblemContent(logicText, exerciseId);
@@ -981,9 +984,12 @@ sys.stdout = io.StringIO()
 
             // Fetch and parse requirements file (try both variations)
             try {
-                let reqResponse = await fetch(`/${reqFile1}`);
+                // Handle GitHub Pages subdirectory
+                const isGitHubPages = window.location.hostname === 'llomj.github.io';
+                const basePath = isGitHubPages ? '/python_app' : '';
+                let reqResponse = await fetch(`${basePath}/${reqFile1}`);
                 if (!reqResponse.ok) {
-                    reqResponse = await fetch(`/${reqFile2}`);
+                    reqResponse = await fetch(`${basePath}/${reqFile2}`);
                 }
                 if (reqResponse.ok) {
                     const reqText = await reqResponse.text();

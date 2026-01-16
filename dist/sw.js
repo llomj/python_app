@@ -38,12 +38,12 @@ self.addEventListener('install', (e) => {
     self.skipWaiting();
 
     // Safari-specific service worker registration conflict resolution
-    if (event.target && event.target.client && !event.target.controller) {
+    if (e.target && e.target.client && !e.target.controller) {
         console.log('🔧 Safari SW Conflict - unregistering old worker');
-        event.target.addEventListener('controllerchange', () => {
-            console.log('🔧 Safari SW Conflict - old controller found:', event.target.controller);
-            event.target.controller.postMessage({ type: 'UNREGISTER' });
-            event.target.controller.unregister();
+        e.target.addEventListener('controllerchange', () => {
+            console.log('🔧 Safari SW Conflict - old controller found:', e.target.controller);
+            e.target.controller.postMessage({ type: 'UNREGISTER' });
+            e.target.controller.unregister();
         });
     }
 
