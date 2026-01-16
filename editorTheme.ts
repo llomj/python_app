@@ -5,7 +5,6 @@ export const editorUiTheme = EditorView.theme({ "&": { backgroundColor: "#050c18
 export const pythonHighlightStyle = HighlightStyle.define([
   { tag: t.comment, color: "#858585" },        // Gray comments
   { tag: t.keyword, color: "#389EDB" },        // Blue keywords (if, for, def, etc.)
-  { tag: t.standard(t.variableName), color: "#FF9700" }, // Orange for built-in function names
   { tag: t.variableName, color: "#FF1900" },   // Red variables only
   { tag: t.name, color: "#ffffff" },           // White for other names
   { tag: t.number, color: "#FF00FF" },         // Magenta numbers
