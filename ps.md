@@ -929,3 +929,24 @@ After trying 12 different solutions, the issue appears to be:
 4. **Test in Browser**: Inspect element to see actual computed styles
 5. **Debug**: Add console.log to verify description text is complete
 
+---
+
+## 📱 Mobile Browser Text Selection Toolbar
+
+**User Question**: "I when press on the screen in editor there is a extra bar with a key icon a card icon a location icon and a tick icon what is the purpose of this"
+
+**Answer**: This is the **mobile browser's native text selection toolbar** (iOS Safari/Chrome). It appears when you select text in the editor and provides:
+- **Key icon**: Usually "Look Up" or "Define" - looks up word definition
+- **Card icon**: Usually "Share" - shares selected text
+- **Location icon**: Usually "Copy" - copies selected text
+- **Tick/Check icon**: Usually "Select All" or "Paste" - additional text actions**Purpose**: 
+- This is a **browser feature**, not part of the app
+- It helps users copy, paste, look up words, and share text on mobile
+- It's **normal and expected behavior** on mobile browsers
+
+**Can it be disabled?**
+- **Partially**: We can reduce interference with CSS (`-webkit-touch-callout`)
+- **Fully disabled**: Not possible - it's a core mobile browser feature for accessibility
+- **Recommendation**: Keep it enabled - it's useful for users who want to copy code or look up Python terms
+
+**Note**: This toolbar is standard on mobile browsers and helps with text selection, copying, and accessibility. It's not a bug or issue with the app.

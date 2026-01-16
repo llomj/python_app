@@ -904,8 +904,8 @@ sys.stdout = io.StringIO()
 
     // Helper function to extract a specific problem's content from file text
     const extractProblemContent = (fileContent: string, problemId: number): string => {
-        // Pattern to match: """ \nProblem: X  (note the colon after "Problem", not after the number)
-        const problemMarker = new RegExp(`"""\\s*Problem:\\s+${problemId}\\s`, 'm');
+        // Pattern to match both formats: """ \nProblem: X (requirements) and """ \nProblem X: (codelogic)
+        const problemMarker = new RegExp(`"""\\s*Problem\\s*:?\\s*${problemId}\\b`, 'm');
         const match = fileContent.match(problemMarker);
 
         if (!match) {
@@ -916,7 +916,7 @@ sys.stdout = io.StringIO()
 
         // Find the end - look for the next problem marker
         const remainingContent = fileContent.substring(startIndex);
-        const nextProblemPattern = new RegExp(`"""\\s*Problem:\\s+\\d+\\s`, 'm');
+        const nextProblemPattern = new RegExp(`"""\\s*Problem\\s*:?\\s*\\d+\\b`, 'm');
 
         // Find all potential next problems, but skip the current one
         let endIndex = remainingContent.length;
