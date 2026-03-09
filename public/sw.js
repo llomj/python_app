@@ -1,36 +1,16 @@
-const CACHE_VERSION = "v56";
+const CACHE_VERSION = "v58";
+// Pre-cache core shell + CDN deps for offline. Bundled JS/assets cached at runtime.
 const CORE_ASSETS = [
     './',
     './index.html',
     './manifest.json',
-    './index.tsx',
-    // './App.tsx', // REMOVED: Don't cache App.tsx to always get fresh version
-    './types.ts',
-    './exercises.ts',
-    './services/geminiService.ts',
-    './editorTheme.ts',
     'https://cdn.tailwindcss.com',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.asm.js',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.asm.wasm',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/python_stdlib.zip',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/repodata.json',
-    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    'https://esm.sh/react@19.0.0',
-    'https://esm.sh/react-dom@19.0.0',
-    'https://esm.sh/react-dom@19.0.0/client',
-    'https://esm.sh/@codemirror/autocomplete@6.20.0',
-    'https://esm.sh/@codemirror/lang-python@6.2.1',
-    'https://esm.sh/@codemirror/language@6.12.1',
-    'https://esm.sh/@codemirror/state@6.5.3',
-    'https://esm.sh/@codemirror/theme-one-dark@6.1.3',
-    'https://esm.sh/@codemirror/view@6.39.8',
-    'https://esm.sh/@codemirror/language@6.12.1',
-    'https://esm.sh/@codemirror/autocomplete@6.20.0',
-    'https://esm.sh/@codemirror/state@6.5.3',
-    'https://esm.sh/@codemirror/view@6.39.8',
-    'https://esm.sh/@lezer/highlight@1.2.3',
-    'https://esm.sh/lucide-react@0.294.0'
+    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
 ];
 
 self.addEventListener('install', (e) => {
@@ -58,7 +38,6 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
     console.log('🚀 Service Worker Activated:', CACHE_VERSION);
 
-    // Clear old caches
     e.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
@@ -69,62 +48,29 @@ self.addEventListener('activate', (e) => {
                     }
                 })
             );
+        }).then(() => {
+            if (self.registration) self.registration.update();
+            return self.clients.claim();
         })
     );
-
-    // Force update immediately on activation
-    if (self.registration) {
-        self.registration.update();
-
-        // Also force immediate cache invalidation
-        const cacheNames = await caches.keys();
-        await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.log('🧹 FORCE CACHE INVALIDATION:', cacheNames.length);
-    }
-
-    // Take control of all clients
-    self.clients.claim();
 });
 
+// Network-first with cache fallback: try network, on failure serve from cache. Enables FULL OFFLINE support.
 self.addEventListener('fetch', (e) => {
     const request = e.request;
-    const url = request.url;
-
-    // Use NETWORK-FIRST for ALL JavaScript files and exercise files (NEVER CACHE)
-    if (request.url.endsWith('.js') || request.url.endsWith('.mjs') || request.url.endsWith('/assets/')) {
-        console.log('🌐 Network-first for JS file:', request.url);
-        e.respondWith(fetch(request));
-        return;
-    }
-
-    // Use NETWORK-FIRST for App.tsx and other source files (NEVER CACHE)
-    if (request.url.endsWith('.tsx') || request.url.endsWith('.ts') || request.url.endsWith('/level1_')) {
-        console.log('📄 NEVER CACHE for source file:', request.url);
-        e.respondWith(fetch(request));
-        return;
-    }
-
-    // Cache-first for all other requests (HTML, CSS, images, etc.)
-    console.log('💾 Cache-first for:', request.url);
     e.respondWith(
-        caches.open(CACHE_VERSION).then(cache => {
-            return cache.match(request).then(response => {
-                // If found in cache, return it
-                if (response) {
-                    return response;
+        fetch(request)
+            .then(networkResponse => {
+                if (networkResponse.ok && request.method === 'GET') {
+                    caches.open(CACHE_VERSION).then(cache => cache.put(request, networkResponse.clone()));
                 }
-
-                // If not in cache, fetch from network and cache the response
-                return fetch(request).then(networkResponse => {
-                    // Don't cache exercise files - they change too frequently
-                    const shouldCache = !request.url.includes('level1_') && !request.url.includes('requirements') && !request.url.includes('codelogic');
-                    return cache.put(request, networkResponse.clone()).then(() => {
-                        return networkResponse;
-                    });
-                });
-            });
-        });
-    })
+                return networkResponse;
+            })
+            .catch(() =>
+                caches.open(CACHE_VERSION).then(cache =>
+                    cache.match(request).then(cached => cached || new Response('', { status: 503, statusText: 'Offline' }))
+            )
+    );
 });
 
 self.addEventListener('message', (event) => {

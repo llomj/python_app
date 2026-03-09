@@ -43,7 +43,7 @@ declare global {
         __PYODIDE_INSTANCE__: any;
         __PYODIDE_INIT_LOCK__: boolean;
         loadPyodide: any;
-        // Fixed: Removed aistudio declaration to resolve redeclaration conflict with identical modifiers/types.
+        APP_VERSION?: string;
     }
 }
 
@@ -776,6 +776,18 @@ const App: React.FC = () => {
         window.location.reload();
     };
 
+    const forceRefreshToNewest = async () => {
+        if (navigator.serviceWorker) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map(r => r.unregister()));
+        }
+        if (window.caches) {
+            const keys = await window.caches.keys();
+            await Promise.all(keys.map(k => window.caches.delete(k)));
+        }
+        window.location.reload(true);
+    };
+
     const handleCopyLink = () => {
         const url = window.location.href;
         navigator.clipboard.writeText(url);
@@ -1236,6 +1248,15 @@ sys.stdout = io.StringIO()
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Fixed footer - Settings (centre) + Refresh with version */}
+            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4 flex items-center justify-center gap-6" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+                <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-colors p-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Settings"><Settings size={20} /></button>
+                <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
+                    <RefreshCw size={18} />
+                    <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
+                </button>
             </div>
 
             {showModal !== 'none' && (
