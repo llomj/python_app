@@ -50,6 +50,24 @@
             -webkit-touch-callout: default;
         }
 
+        .output-resize-handle {
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: row-resize;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .output-resize-handle::before {
+            content: "";
+            width: 64px;
+            height: 4px;
+            border-radius: 999px;
+            background: #1d2d44;
+        }
+
         .boot-screen {
             position: fixed;
             inset: 0;
@@ -154,7 +172,7 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v59';
+        const CURRENT_VERSION = 'v60';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
@@ -199,6 +217,61 @@
                 }
             });
         }
+
+        const clampOutputHeight = (height) => {
+            const maxHeight = Math.max(220, Math.floor(window.innerHeight * 0.5));
+            return Math.min(maxHeight, Math.max(96, height));
+        };
+
+        const enhanceOutputPanels = () => {
+            const labels = Array.from(document.querySelectorAll('span')).filter(
+                (node) => node.textContent && node.textContent.trim() === 'Output'
+            );
+
+            for (const label of labels) {
+                const header = label.closest('div');
+                const output = header?.nextElementSibling;
+
+                if (!(output instanceof HTMLElement) || output.dataset.resizableOutput === 'true') continue;
+
+                output.dataset.resizableOutput = 'true';
+                output.style.height = output.style.height || '140px';
+                output.style.minHeight = '96px';
+                output.style.maxHeight = '50vh';
+                output.style.overflowY = 'auto';
+
+                const handle = document.createElement('div');
+                handle.className = 'output-resize-handle';
+
+                handle.addEventListener('pointerdown', (event) => {
+                    event.preventDefault();
+                    const startY = event.clientY;
+                    const startHeight = output.getBoundingClientRect().height;
+
+                    const handleMove = (moveEvent) => {
+                        const nextHeight = clampOutputHeight(startHeight + (startY - moveEvent.clientY));
+                        output.style.height = `${nextHeight}px`;
+                    };
+
+                    const stopResize = () => {
+                        window.removeEventListener('pointermove', handleMove);
+                        window.removeEventListener('pointerup', stopResize);
+                    };
+
+                    window.addEventListener('pointermove', handleMove);
+                    window.addEventListener('pointerup', stopResize);
+                });
+
+                output.parentElement?.insertBefore(handle, output);
+            }
+        };
+
+        const outputObserver = new MutationObserver(() => enhanceOutputPanels());
+        outputObserver.observe(document.body, { childList: true, subtree: true });
+        window.addEventListener('load', () => {
+            enhanceOutputPanels();
+            setTimeout(enhanceOutputPanels, 800);
+        });
     </script>
 </body>
 
