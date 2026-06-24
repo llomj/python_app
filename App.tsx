@@ -1169,8 +1169,9 @@ sys.stdout = io.StringIO()
         >
             <div
                 ref={headerRef}
-                className="sticky top-0 z-20 bg-[#040b16]"
+                className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2 bg-[#040b16]"
                 style={{
+                    top: 0,
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
@@ -1259,7 +1260,12 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            <div className="px-4 pt-3 pb-4">
+            <div
+                className="px-4 pb-4"
+                style={{
+                    paddingTop: `${Math.max(headerHeight + 12, 260)}px`
+                }}
+            >
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
                     <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                         <div className="flex items-center gap-2 overflow-hidden">
