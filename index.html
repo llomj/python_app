@@ -154,7 +154,7 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v62';
+        const CURRENT_VERSION = 'v63';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
@@ -199,6 +199,39 @@
                 }
             });
         }
+
+        const makeOutputScrollable = () => {
+            const labels = Array.from(document.querySelectorAll('span')).filter(
+                (node) => node.textContent && node.textContent.trim() === 'Output'
+            );
+
+            for (const label of labels) {
+                const header = label.closest('div');
+                const output = header?.nextElementSibling;
+
+                if (!(output instanceof HTMLElement) || output.dataset.outputScrollable === 'true') continue;
+
+                output.dataset.outputScrollable = 'true';
+                output.style.height = '220px';
+                output.style.minHeight = '140px';
+                output.style.maxHeight = '50vh';
+                output.style.overflowY = 'auto';
+                output.style.webkitOverflowScrolling = 'touch';
+                output.style.touchAction = 'pan-y';
+                output.style.resize = 'vertical';
+            }
+        };
+
+        window.addEventListener('load', () => {
+            let attempts = 0;
+            const intervalId = window.setInterval(() => {
+                makeOutputScrollable();
+                attempts += 1;
+                if (document.querySelector('[data-output-scrollable="true"]') || attempts > 20) {
+                    window.clearInterval(intervalId);
+                }
+            }, 500);
+        });
     </script>
 </body>
 
