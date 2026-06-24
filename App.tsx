@@ -1265,7 +1265,13 @@ sys.stdout = io.StringIO()
                 <div
                     ref={problemPanelRef}
                     className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
-                    style={{ minHeight: '120px' }}
+                    style={{
+                        minHeight: '120px',
+                        backgroundColor: 'rgba(8, 18, 34, 0.96)',
+                        backdropFilter: 'blur(14px)',
+                        WebkitBackdropFilter: 'blur(14px)',
+                        borderColor: 'rgba(39, 58, 84, 0.95)'
+                    }}
                 >
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
                         <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
@@ -1396,13 +1402,15 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            {/* Fixed footer - Settings (centre) + Refresh with version */}
+            {/* Fixed footer - centered version button with settings on the right */}
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4 flex items-center justify-center gap-6" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
-                <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-colors p-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Settings"><Settings size={20} /></button>
-                <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
-                    <RefreshCw size={18} />
-                    <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
-                </button>
+                <div className="mx-auto flex items-center justify-center gap-3">
+                    <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
+                        <RefreshCw size={18} />
+                        <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
+                    </button>
+                    <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-colors p-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Settings"><Settings size={20} /></button>
+                </div>
             </div>
 
             {showModal !== 'none' && (
