@@ -88,7 +88,7 @@ def __auto_grader_normalize(value):
     if isinstance(value, set):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, dict):
-        return {key: __auto_grader_normalize(item) for key, item in value.items()}
+        return {str(key): __auto_grader_normalize(item) for key, item in value.items()}
     return value
 
 def __auto_grader_numbers(value):

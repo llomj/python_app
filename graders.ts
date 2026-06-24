@@ -1689,5 +1689,175 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [5], expected: '1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5' },
             { args: [3], expected: '1 2 3\n1 2 3\n1 2 3' }
         ]
+    },
+    226: {
+        functionNames: ['print_hollow_right_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*\n**\n* *\n*  *\n*****' },
+            { args: [3], expected: '*\n**\n***' }
+        ]
+    },
+    228: {
+        functionNames: ['print_cross'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*   *\n * * \n  *  \n * * \n*   *' },
+            { args: [3], expected: '* *\n * \n* *' }
+        ]
+    },
+    229: {
+        functionNames: ['print_hourglass'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*****\n ***\n  *\n ***\n*****' },
+            { args: [3], expected: '***\n *\n***' }
+        ]
+    },
+    230: {
+        functionNames: ['count_occurrences'],
+        tests: [
+            { args: [['tom', 'bob', 'tom']], expected: { tom: 2, bob: 1 } },
+            { args: [[1, 2, 1, 3, 2, 1]], expected: { 1: 3, 2: 2, 3: 1 } }
+        ]
+    },
+    231: {
+        functionNames: ['sum_of_odd'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['1 2 3 4 5'], expected: '9' },
+            { args: [], inputValues: ['2 4 6'], expected: '0' }
+        ]
+    },
+    232: {
+        functionNames: ['remove_vowels'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['Jonathan'], expected: 'Jnthn' },
+            { args: [], inputValues: ['AEIOUxyz'], expected: 'xyz' }
+        ]
+    },
+    233: {
+        functionNames: ['find_min'],
+        tests: [
+            { args: [[13, 566, 1]], expected: 1 },
+            { args: [[-5, -2, -9]], expected: -9 },
+            { args: [[7]], expected: 7 }
+        ]
+    },
+    235: {
+        functionNames: ['increasing_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: '*\n**\n***\n****\n*****' }
+        ]
+    },
+    236: {
+        functionNames: ['decreasing_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: '*****\n****\n***\n**\n*' }
+        ]
+    },
+    237: {
+        functionNames: ['right_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*\n**\n***\n****\n*****' },
+            { args: [3], expected: '*\n**\n***' }
+        ]
+    },
+    238: {
+        functionNames: ['left_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: '    *\n   **\n  ***\n ****\n*****' }
+        ]
+    },
+    239: {
+        functionNames: ['print_hill_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '    *\n   ***\n  *****\n *******\n*********' },
+            { args: [3], expected: '  *\n ***\n*****' }
+        ]
+    },
+    240: {
+        functionNames: ['print_reverse_hill_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*********\n *******\n  *****\n   ***\n    *' },
+            { args: [3], expected: '*****\n ***\n  *' }
+        ]
+    },
+    241: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: 'index 0 name Jon\nindex 1 name Chris\nindex 2 name Nathan' }
+        ]
+    },
+    242: {
+        functionNames: ['enumerate_lst'],
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: [[0, 'Jon'], [1, 'Chris'], [2, 'Nathan']] },
+            { args: [['a']], expected: [[0, 'a']] }
+        ]
+    },
+    243: {
+        functionNames: ['enumerate_lst'],
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan'], 'Chris'], expected: ['Chris', 1] },
+            { args: [['a', 'b'], 'x'], expected: -1 }
+        ]
+    },
+    244: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: 'Index 1, Name Jon\nIndex 2, Name Chris\nIndex 3, Name Nathan' }
+        ]
+    },
+    245: {
+        functionNames: ['enumerate_lst'],
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: { 0: 'Jon', 1: 'Chris', 2: 'Nathan' } },
+            { args: [['a']], expected: { 0: 'a' } }
+        ]
+    },
+    246: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan', 'Moll']], expected: '0 Jon\n2 Nathan' }
+        ]
+    },
+    247: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris']], expected: 'index 0 name Jon\nindex 1 name Chris' }
+        ]
+    },
+    248: {
+        functionNames: ['replace_with_index'],
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: [0, 1, 2] },
+            { args: [['a']], expected: [0] }
+        ]
+    },
+    249: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris'], ['Moll', 'Smith']], expected: 'index 0: Jon and Moll\nindex 1: Chris and Smith' }
+        ]
+    },
+    250: {
+        functionNames: ['sum_odd_indexed_elements'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5, 6]], expected: 12 },
+            { args: [[10, 20, 30]], expected: 20 }
+        ]
     }
 };
