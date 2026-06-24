@@ -734,6 +734,25 @@ const App: React.FC = () => {
     }, [output]);
 
     useEffect(() => {
+        if (bootStage !== 'launched') return;
+        const mainScroller = mainScrollRef.current;
+        if (!mainScroller) return;
+
+        const resetScroll = () => {
+            mainScroller.scrollTop = 0;
+        };
+
+        resetScroll();
+        const frameId = window.requestAnimationFrame(resetScroll);
+        const timeoutId = window.setTimeout(resetScroll, 120);
+
+        return () => {
+            window.cancelAnimationFrame(frameId);
+            window.clearTimeout(timeoutId);
+        };
+    }, [bootStage, exercise.id]);
+
+    useEffect(() => {
         const mainScroller = mainScrollRef.current;
         const editorShell = editorShellRef.current;
         if (!mainScroller || !editorShell) return;
@@ -1267,10 +1286,10 @@ sys.stdout = io.StringIO()
                     className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
                     style={{
                         minHeight: '120px',
-                        backgroundColor: 'rgba(8, 18, 34, 0.96)',
-                        backdropFilter: 'blur(14px)',
-                        WebkitBackdropFilter: 'blur(14px)',
-                        borderColor: 'rgba(39, 58, 84, 0.95)'
+                        backgroundColor: 'rgba(8, 18, 34, 0.30)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        borderColor: 'rgba(88, 118, 160, 0.45)'
                     }}
                 >
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
