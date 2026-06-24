@@ -30,7 +30,7 @@ import {
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { indentUnit } from '@codemirror/language';
-import { autocompletion, snippetCompletion, CompletionContext } from '@codemirror/autocomplete';
+import { autocompletion, snippetCompletion, CompletionContext, Completion } from '@codemirror/autocomplete';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { getAiHint } from './services/geminiService';
@@ -568,6 +568,33 @@ Do you have a specific problem you'd like me to help you solve using regex?
 """
 `;
 
+const PYTHON_KEYWORDS = [
+    'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del',
+    'elif', 'else', 'except', 'False', 'finally', 'for', 'from', 'global', 'if', 'import',
+    'in', 'is', 'lambda', 'None', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return',
+    'True', 'try', 'while', 'with', 'yield'
+];
+
+const PYTHON_BUILTINS = [
+    'abs', 'all', 'any', 'append', 'bool', 'breakpoint', 'callable', 'chr', 'classmethod',
+    'clear', 'copy', 'count', 'dict', 'dir', 'divmod', 'enumerate', 'extend', 'filter',
+    'float', 'format', 'get', 'hasattr', 'hex', 'index', 'input', 'insert', 'int', 'isinstance',
+    'issubclass', 'items', 'join', 'keys', 'len', 'list', 'lower', 'map', 'max', 'min',
+    'next', 'open', 'ord', 'pop', 'pow', 'print', 'property', 'range', 'remove', 'replace',
+    'reverse', 'reversed', 'round', 'set', 'slice', 'sorted', 'split', 'staticmethod', 'str',
+    'sum', 'super', 'tuple', 'type', 'upper', 'update', 'values', 'zip'
+];
+
+const BASE_PYTHON_COMPLETIONS: Completion[] = [
+    snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
+    snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
+    snippetCompletion("for ${item} in ${iterable}:\n    ${0}", { label: "for", detail: "for loop", type: "keyword" }),
+    snippetCompletion("if ${condition}:\n    ${0}", { label: "if", detail: "if statement", type: "keyword" }),
+    snippetCompletion("class ${Name}:\n    def __init__(self${args}):\n        ${0}", { label: "class", detail: "define class", type: "keyword" }),
+    ...PYTHON_KEYWORDS.map((label) => ({ label, type: 'keyword' as const })),
+    ...PYTHON_BUILTINS.map((label) => ({ label, type: 'function' as const, detail: 'built-in' }))
+];
+
 
 const pythonSnippets = (context: CompletionContext) => {
     const word = context.matchBefore(/\w*/);
@@ -607,10 +634,12 @@ const App: React.FC = () => {
     });
     const [isProblemExpanded, setIsProblemExpanded] = useState(false);
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
+    const [outputHeight, setOutputHeight] = useState(140);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
 
     const outputRef = useRef<HTMLDivElement>(null);
+    const outputResizeRef = useRef<{ startY: number; startHeight: number } | null>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
@@ -1029,13 +1058,103 @@ sys.stdout = io.StringIO()
     }, [showModal, exercise.id, loadSolutionFiles]);
 
     const rate = stats.shots > 0 ? ((stats.success / stats.shots) * 100).toFixed(2) : '0.00';
+    const problemPanelGap = 12;
+
+    const pythonCompletionSource = useMemo(() => {
+        const symbolMap = new Map<string, Completion>();
+
+        for (const completion of BASE_PYTHON_COMPLETIONS) {
+            symbolMap.set(completion.label, completion);
+        }
+
+        const addSymbol = (label: string, detail: string, type: Completion['type']) => {
+            if (!label || symbolMap.has(label)) return;
+            symbolMap.set(label, { label, detail, type });
+        };
+
+        for (const file of files) {
+            const matches = file.content.match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g) || [];
+            for (const match of matches) {
+                if (!PYTHON_KEYWORDS.includes(match)) {
+                    addSymbol(match, 'file symbol', 'variable');
+                }
+            }
+
+            const defMatches = file.content.matchAll(/\bdef\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)/g);
+            for (const [, fnName, rawArgs] of defMatches) {
+                addSymbol(fnName, 'function in project', 'function');
+                for (const arg of rawArgs.split(',')) {
+                    const cleanedArg = arg.trim().replace(/=.*/, '').replace(/:.*/, '');
+                    if (cleanedArg && cleanedArg !== 'self' && cleanedArg !== 'cls') {
+                        addSymbol(cleanedArg, 'parameter', 'variable');
+                    }
+                }
+            }
+
+            const classMatches = file.content.matchAll(/\bclass\s+([A-Za-z_][A-Za-z0-9_]*)/g);
+            for (const [, className] of classMatches) {
+                addSymbol(className, 'class in project', 'class');
+            }
+        }
+
+        const completions = Array.from(symbolMap.values()).sort((a, b) => a.label.localeCompare(b.label));
+
+        return (context: CompletionContext) => {
+            const word = context.matchBefore(/[A-Za-z_][A-Za-z0-9_]*/);
+            if (!word && !context.explicit) return null;
+
+            const currentText = word?.text ?? '';
+            const from = word?.from ?? context.pos;
+            const options = completions
+                .filter((completion) => completion.label.toLowerCase().startsWith(currentText.toLowerCase()))
+                .slice(0, 200);
+
+            return { from, options };
+        };
+    }, [files]);
+    const clampOutputHeight = (height: number) => {
+        const maxHeight = typeof window !== 'undefined' ? Math.max(220, Math.floor(window.innerHeight * 0.5)) : 420;
+        return Math.min(maxHeight, Math.max(96, height));
+    };
+
+    const toggleOutputHeight = () => {
+        const nextExpanded = !isOutputExpanded;
+        setIsOutputExpanded(nextExpanded);
+        setOutputHeight(nextExpanded ? 320 : 140);
+    };
+
+    const handleOutputResizeStart = (event: React.PointerEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        outputResizeRef.current = {
+            startY: event.clientY,
+            startHeight: outputHeight
+        };
+
+        const handlePointerMove = (moveEvent: PointerEvent) => {
+            const resizeState = outputResizeRef.current;
+            if (!resizeState) return;
+
+            const nextHeight = clampOutputHeight(resizeState.startHeight + (resizeState.startY - moveEvent.clientY));
+            setOutputHeight(nextHeight);
+            setIsOutputExpanded(nextHeight > 180);
+        };
+
+        const stopResize = () => {
+            outputResizeRef.current = null;
+            window.removeEventListener('pointermove', handlePointerMove);
+            window.removeEventListener('pointerup', stopResize);
+        };
+
+        window.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', stopResize);
+    };
 
     const editorExtensions = useMemo(() => [
         python(),
         indentUnit.of("    "),
-        autocompletion({ override: [pythonSnippets] }),
+        autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
         ...customPythonTheme
-    ], []);
+    ], [pythonCompletionSource]);
 
     if (bootStage !== 'launched') {
         return (
@@ -1079,9 +1198,25 @@ sys.stdout = io.StringIO()
     }
 
     return (
-        <div className="h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative">
+        <div
+            className="min-h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
+            style={{ paddingBottom: 'max(4.5rem, calc(env(safe-area-inset-bottom) + 4.5rem))' }}
+        >
             {/* Fixed Header Section */}
-            <div ref={headerRef} className="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] pt-4 px-4 pb-2" style={{ height: 'auto', maxHeight: 'none', overflow: 'visible', paddingBottom: '0.5rem' }}>
+            <div
+                ref={headerRef}
+                className="fixed left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] px-4 pb-2"
+                style={{
+                    top: 'var(--safe-area-inset-top, 0px)',
+                    height: 'auto',
+                    maxHeight: 'none',
+                    overflow: 'visible',
+                    paddingTop: '1rem',
+                    paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
+                    paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
+                    paddingBottom: '0.5rem'
+                }}
+            >
                 <div className="relative flex items-center justify-center mb-4">
                     <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
                         <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
@@ -1109,7 +1244,7 @@ sys.stdout = io.StringIO()
                 ref={problemPanelRef}
                 style={{
                     position: 'fixed',
-                    top: `${headerHeight}px`,
+                    top: `${headerHeight + problemPanelGap}px`,
                     left: '50%',
                     transform: 'translateX(-50%)',
                     width: '100%',
@@ -1117,8 +1252,10 @@ sys.stdout = io.StringIO()
                     zIndex: 15,
                     backgroundColor: '#040b16',
                     padding: '0 1rem',
-                    paddingTop: '0',
-                    paddingBottom: '0.75rem'
+                    paddingTop: '0.25rem',
+                    paddingBottom: '0.75rem',
+                    paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
+                    paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))'
                 }}
             >
                 <div style={{
@@ -1127,9 +1264,9 @@ sys.stdout = io.StringIO()
                     padding: '1.5rem',
                     boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                     border: '1px solid #1d2d44',
-                    maxHeight: 'none',
-                    height: 'auto',
-                    overflow: 'visible',
+                    maxHeight: '34vh',
+                    minHeight: '140px',
+                    overflow: 'hidden',
                     width: '100%',
                     minWidth: '100%'
                 }}>
@@ -1166,9 +1303,9 @@ sys.stdout = io.StringIO()
                             whiteSpace: 'pre-wrap',
                             wordWrap: 'break-word',
                             overflowWrap: 'break-word',
-                            maxHeight: 'none',
-                            height: 'auto',
-                            overflowY: 'visible',
+                            maxHeight: 'calc(34vh - 3.5rem)',
+                            minHeight: '72px',
+                            overflowY: 'auto',
                             overflowX: 'hidden',
                             paddingRight: '12px',
                             paddingLeft: '4px',
@@ -1182,7 +1319,8 @@ sys.stdout = io.StringIO()
                             WebkitLineClamp: 'unset',
                             lineClamp: 'unset',
                             width: '100%',
-                            minWidth: '100%'
+                            minWidth: '100%',
+                            WebkitOverflowScrolling: 'touch'
                         }}
                     >
                         {exercise.description}
@@ -1191,8 +1329,8 @@ sys.stdout = io.StringIO()
             </div>
 
             {/* Scrollable Editor Section - Scrolls behind problem panel */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight + problemPanelHeight}px` }}>
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh - ${headerHeight + problemPanelHeight}px)` }}>
+            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight + problemPanelHeight + problemPanelGap}px` }}>
+                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh - ${headerHeight + problemPanelHeight + problemPanelGap}px)` }}>
                     <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                         <div className="flex items-center gap-2 overflow-hidden">
                             <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
@@ -1217,9 +1355,9 @@ sys.stdout = io.StringIO()
                             </button>
                         ))}
                     </div>
-                    <div className="flex-grow bg-[#050c18] relative" style={{ minHeight: '500px' }}>
+                    <div className="flex-grow bg-[#050c18] relative" style={{ minHeight: '320px' }}>
                         <CodeMirror
-                            value={files[activeFileIndex].content} height="500px" extensions={editorExtensions} onChange={updateActiveContent}
+                            value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                         />
                     </div>
@@ -1227,7 +1365,7 @@ sys.stdout = io.StringIO()
                         <div className="flex items-center justify-between px-2 py-1 border-b border-[#1d2d44]">
                             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
                             <button
-                                onClick={() => setIsOutputExpanded(!isOutputExpanded)}
+                                onClick={toggleOutputHeight}
                                 className="text-gray-400 hover:text-[#3b82f6] transition-all p-1"
                                 title={isOutputExpanded ? "Collapse" : "Expand"}
                             >
@@ -1235,12 +1373,19 @@ sys.stdout = io.StringIO()
                             </button>
                         </div>
                         <div
+                            onPointerDown={handleOutputResizeStart}
+                            className="h-4 flex items-center justify-center cursor-row-resize touch-none"
+                            title="Drag to resize output"
+                        >
+                            <div className="w-16 h-1 rounded-full bg-[#1d2d44]" />
+                        </div>
+                        <div
                             ref={outputRef}
                             className="overflow-y-auto px-2 py-2"
                             style={{
-                                height: isOutputExpanded ? '300px' : 'auto',
+                                height: `${outputHeight}px`,
                                 minHeight: '96px',
-                                maxHeight: isOutputExpanded ? '400px' : '200px',
+                                maxHeight: '50vh',
                                 transition: 'max-height 0.2s ease, height 0.2s ease'
                             }}
                         >
@@ -1260,7 +1405,15 @@ sys.stdout = io.StringIO()
             </div>
 
             {showModal !== 'none' && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+                <div
+                    className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+                    style={{
+                        paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 1rem))',
+                        paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 1rem))',
+                        paddingLeft: 'max(1rem, calc(env(safe-area-inset-left) + 1rem))',
+                        paddingRight: 'max(1rem, calc(env(safe-area-inset-right) + 1rem))'
+                    }}
+                >
                     <div className="bg-[#112240] rounded-3xl p-6 max-w-lg w-full border border-[#1d2d44] shadow-2xl relative max-h-[80vh] flex flex-col overflow-hidden">
                         <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10"><X size={24} /></button>
                         {showModal === 'instructions' && (
