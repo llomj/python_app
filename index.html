@@ -50,24 +50,6 @@
             -webkit-touch-callout: default;
         }
 
-        .output-resize-handle {
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: row-resize;
-            touch-action: none;
-            user-select: none;
-        }
-
-        .output-resize-handle::before {
-            content: "";
-            width: 64px;
-            height: 4px;
-            border-radius: 999px;
-            background: #1d2d44;
-        }
-
         .boot-screen {
             position: fixed;
             inset: 0;
@@ -172,7 +154,7 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v60';
+        const CURRENT_VERSION = 'v61';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
@@ -239,21 +221,31 @@
                 output.style.minHeight = '96px';
                 output.style.maxHeight = '50vh';
                 output.style.overflowY = 'auto';
+                output.style.resize = 'vertical';
+                output.style.borderTop = '12px solid #0a1628';
+                output.style.touchAction = 'pan-x pan-down';
 
-                const handle = document.createElement('div');
-                handle.className = 'output-resize-handle';
+                let resizeState = null;
 
-                handle.addEventListener('pointerdown', (event) => {
+                output.addEventListener('pointerdown', (event) => {
+                    const rect = output.getBoundingClientRect();
+                    const nearTopEdge = event.clientY - rect.top <= 18;
+                    if (!nearTopEdge) return;
+
                     event.preventDefault();
-                    const startY = event.clientY;
-                    const startHeight = output.getBoundingClientRect().height;
+                    resizeState = {
+                        startY: event.clientY,
+                        startHeight: rect.height
+                    };
 
                     const handleMove = (moveEvent) => {
-                        const nextHeight = clampOutputHeight(startHeight + (startY - moveEvent.clientY));
+                        if (!resizeState) return;
+                        const nextHeight = clampOutputHeight(resizeState.startHeight + (resizeState.startY - moveEvent.clientY));
                         output.style.height = `${nextHeight}px`;
                     };
 
                     const stopResize = () => {
+                        resizeState = null;
                         window.removeEventListener('pointermove', handleMove);
                         window.removeEventListener('pointerup', stopResize);
                     };
@@ -261,16 +253,18 @@
                     window.addEventListener('pointermove', handleMove);
                     window.addEventListener('pointerup', stopResize);
                 });
-
-                output.parentElement?.insertBefore(handle, output);
             }
         };
 
-        const outputObserver = new MutationObserver(() => enhanceOutputPanels());
-        outputObserver.observe(document.body, { childList: true, subtree: true });
         window.addEventListener('load', () => {
-            enhanceOutputPanels();
-            setTimeout(enhanceOutputPanels, 800);
+            let attempts = 0;
+            const intervalId = window.setInterval(() => {
+                enhanceOutputPanels();
+                attempts += 1;
+                if (document.querySelector('[data-resizable-output="true"]') || attempts > 20) {
+                    window.clearInterval(intervalId);
+                }
+            }, 500);
         });
     </script>
 </body>
