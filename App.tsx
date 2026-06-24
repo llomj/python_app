@@ -1038,6 +1038,9 @@ const App: React.FC = () => {
 
     const mainScrollRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
+    const activeEditorViewRef = useRef<EditorView | null>(null);
+    const deleteHoldDelayRef = useRef<number | null>(null);
+    const deleteHoldTimerRef = useRef<number | null>(null);
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
@@ -1142,6 +1145,12 @@ const App: React.FC = () => {
             outputRef.current.scrollTop = outputRef.current.scrollHeight;
         }
     }, [output]);
+
+    useEffect(() => {
+        return () => {
+            stopEditorDeleteHold();
+        };
+    }, []);
 
     useEffect(() => {
         if (bootStage !== 'launched') return;
@@ -1699,6 +1708,34 @@ sys.stdout = io.StringIO()
         setOutputHeight(nextExpanded ? 320 : 85);
     };
 
+    const stopEditorDeleteHold = () => {
+        if (deleteHoldDelayRef.current !== null) {
+            window.clearTimeout(deleteHoldDelayRef.current);
+            deleteHoldDelayRef.current = null;
+        }
+        if (deleteHoldTimerRef.current !== null) {
+            window.clearInterval(deleteHoldTimerRef.current);
+            deleteHoldTimerRef.current = null;
+        }
+    };
+
+    const deleteFromActiveEditor = () => {
+        const view = activeEditorViewRef.current;
+        if (!view) return;
+        deleteBackwardOnce(view);
+        view.focus();
+        if (pendingNextProblem) setPendingNextProblem(false);
+    };
+
+    const startEditorDeleteHold = (event: React.PointerEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        stopEditorDeleteHold();
+        deleteFromActiveEditor();
+        deleteHoldDelayRef.current = window.setTimeout(() => {
+            deleteHoldTimerRef.current = window.setInterval(deleteFromActiveEditor, 55);
+        }, 240);
+    };
+
     const editorExtensions = useMemo(() => [
         python(),
         indentUnit.of("    "),
@@ -1867,6 +1904,17 @@ sys.stdout = io.StringIO()
                     <div className="flex items-center gap-1">
                         <button onClick={addFile} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#22c55e]"><Plus size={18} /></button>
                         <button onClick={removeFile} disabled={files.length <= 1} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#ef4444] disabled:opacity-30"><Minus size={18} /></button>
+                        <button
+                            onPointerDown={startEditorDeleteHold}
+                            onPointerUp={stopEditorDeleteHold}
+                            onPointerCancel={stopEditorDeleteHold}
+                            onPointerLeave={stopEditorDeleteHold}
+                            onContextMenu={(event) => event.preventDefault()}
+                            className="select-none px-2 py-1 rounded-lg border border-[#ef4444]/40 bg-[#ef4444]/10 text-[#fca5a5] text-sm font-black active:scale-95"
+                            title="Hold to delete"
+                        >
+                            ⌫
+                        </button>
                         <button onClick={runCode} disabled={isRunning} className={runButtonClass}>
                             {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} {runButtonLabel}
                         </button>
@@ -1914,6 +1962,7 @@ sys.stdout = io.StringIO()
                     <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative border-b border-[#5f7fa6]" style={{ minHeight: '320px' }}>
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
+                            onCreateEditor={(view) => { activeEditorViewRef.current = view; }}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                         />
                     </div>
