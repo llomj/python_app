@@ -154,7 +154,7 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v63';
+        const CURRENT_VERSION = 'v64';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
@@ -200,6 +200,19 @@
             });
         }
 
+        const makeEditorCompact = () => {
+            const editors = Array.from(document.querySelectorAll('.cm-editor'));
+            for (const editor of editors) {
+                const wrapper = editor.parentElement;
+                if (!(editor instanceof HTMLElement) || !(wrapper instanceof HTMLElement)) continue;
+                if (editor.dataset.compactEditor === 'true') continue;
+
+                editor.dataset.compactEditor = 'true';
+                wrapper.style.minHeight = '320px';
+                editor.style.height = '320px';
+            }
+        };
+
         const makeOutputScrollable = () => {
             const labels = Array.from(document.querySelectorAll('span')).filter(
                 (node) => node.textContent && node.textContent.trim() === 'Output'
@@ -225,9 +238,10 @@
         window.addEventListener('load', () => {
             let attempts = 0;
             const intervalId = window.setInterval(() => {
+                makeEditorCompact();
                 makeOutputScrollable();
                 attempts += 1;
-                if (document.querySelector('[data-output-scrollable="true"]') || attempts > 20) {
+                if ((document.querySelector('[data-output-scrollable="true"]') && document.querySelector('[data-compact-editor="true"]')) || attempts > 20) {
                     window.clearInterval(intervalId);
                 }
             }, 500);
