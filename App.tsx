@@ -633,7 +633,7 @@ const App: React.FC = () => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
-    const [outputHeight, setOutputHeight] = useState(145);
+    const [outputHeight, setOutputHeight] = useState(125);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
 
@@ -1230,7 +1230,7 @@ sys.stdout = io.StringIO()
     const toggleOutputHeight = () => {
         const nextExpanded = !isOutputExpanded;
         setIsOutputExpanded(nextExpanded);
-        setOutputHeight(nextExpanded ? 320 : 145);
+        setOutputHeight(nextExpanded ? 320 : 125);
     };
 
     const editorExtensions = useMemo(() => [
@@ -1427,7 +1427,7 @@ sys.stdout = io.StringIO()
                     overscrollBehaviorY: 'contain'
                 }}
             >
-                <div className="mb-10 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#36506f] border-b-2 overflow-hidden">
+                <div className="mb-14 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden">
                     <div
                         className="hidden"
                     >
@@ -1477,7 +1477,7 @@ sys.stdout = io.StringIO()
                             className="overflow-y-auto px-2 py-2"
                             style={{
                                 height: `${outputHeight}px`,
-                                minHeight: '145px',
+                                minHeight: '125px',
                                 maxHeight: '55vh',
                                 transition: 'max-height 0.2s ease, height 0.2s ease',
                                 WebkitOverflowScrolling: 'touch',
@@ -1488,6 +1488,7 @@ sys.stdout = io.StringIO()
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
                         </div>
+                        <div className="h-2 flex-shrink-0 border-t border-[#5f7fa6] bg-[#13233a]" />
                     </div>
                 </div>
             </div>
