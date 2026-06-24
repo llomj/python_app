@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -1351,6 +1351,196 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{ a: 1, b: 2 }, { b: 2, a: 1 }], expected: true },
             { args: [{ a: 1 }, { a: 2 }], expected: false },
             { args: [{ a: 1 }, { a: 1, b: 2 }], expected: false }
+        ]
+    },
+    176: {
+        functionNames: ['word_frequency'],
+        tests: [
+            { args: ['gore why are you here you are gore'], expected: { gore: 2, why: 1, are: 2, you: 2, here: 1 } },
+            { args: ['one two one'], expected: { one: 2, two: 1 } }
+        ]
+    },
+    177: {
+        functionNames: ['merge_list_of_dicts'],
+        tests: [
+            { args: [[{ a: 1, b: 2 }, { b: 3, c: 4 }, { a: 5 }]], expected: { a: 5, b: 3, c: 4 } },
+            { args: [[{ x: 1 }, { y: 2 }]], expected: { x: 1, y: 2 } }
+        ]
+    },
+    178: {
+        functionNames: ['remove_duplicates_from_values'],
+        compare: 'dictUnorderedLists',
+        tests: [
+            { args: [{ a: [1, 2, 2, 3], b: [3, 4, 4, 5], c: [1, 1] }], expected: { a: [1, 2, 3], b: [3, 4, 5], c: [1] } },
+            { args: [{ x: ['a', 'a', 'b'] }], expected: { x: ['a', 'b'] } }
+        ]
+    },
+    179: {
+        functionNames: ['common_keys_max_values'],
+        tests: [
+            { args: [{ a: 1, b: 2, c: 3 }, { b: 3, c: 1, d: 4 }], expected: { b: 3, c: 3 } },
+            { args: [{ x: 10 }, { y: 5 }], expected: {} }
+        ]
+    },
+    180: {
+        functionNames: ['average_values'],
+        tests: [
+            { args: [[{ a: 1, b: 2 }, { a: 3, b: 4 }, { a: 5, b: 6 }]], expected: { a: 3, b: 4 } },
+            { args: [[{ a: 2 }, { a: 4, b: 10 }]], expected: { a: 3, b: 10 } }
+        ]
+    },
+    181: {
+        functionNames: ['merge_dicts_with_lists'],
+        compare: 'dictUnorderedLists',
+        tests: [
+            { args: [[{ a: [1, 2, 3], b: [2, 3] }, { a: [3, 4], b: [4, 5], c: [6] }]], expected: { a: [1, 2, 3, 4], b: [2, 3, 4, 5], c: [6] } },
+            { args: [[{ x: [1, 1] }, { x: [2] }]], expected: { x: [1, 2] } }
+        ]
+    },
+    182: {
+        functionNames: ['group_by_first_letter', 'main'],
+        tests: [
+            { args: [['apple', 'ant', 'banana', 'boat']], expected: { a: ['apple', 'ant'], b: ['banana', 'boat'] } },
+            { args: [['cat', 'dog']], expected: { c: ['cat'], d: ['dog'] } }
+        ]
+    },
+    183: {
+        functionNames: ['is_anagram'],
+        tests: [
+            { args: ['listen', 'silent'], expected: true },
+            { args: ['dormitory', 'dirty room'], expected: true },
+            { args: ['hello', 'world'], expected: false }
+        ]
+    },
+    184: {
+        functionNames: ['int'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [123], expected: '2' },
+            { args: [987], expected: '8' }
+        ]
+    },
+    185: {
+        functionNames: ['int'],
+        tests: [
+            { args: [12345678], expected: ['2', '4', '8'] },
+            { args: [98765432], expected: ['8', '6', '2'] }
+        ]
+    },
+    186: {
+        functionNames: ['get_digits'],
+        tests: [
+            { args: [12345678910, [1, 3, 7]], expected: ['2', '4', '8'] },
+            { args: [98765432, [1, 3, 7]], expected: ['8', '6', '2'] }
+        ]
+    },
+    187: {
+        functionNames: ['double_elements'],
+        tests: [
+            { args: [['tree', 'road', 'slow']], expected: ['tree', 'tree', 'road', 'road', 'slow', 'slow'] },
+            { args: [['a', 'b']], expected: ['a', 'a', 'b', 'b'] }
+        ]
+    },
+    188: {
+        functionNames: ['get_initials'],
+        tests: [
+            { args: ['jonathan moll'], expected: 'joNathAn moLL' }
+        ]
+    },
+    189: {
+        functionNames: ['sum_digits', 'digits_string'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['1234'], expected: '10' },
+            { args: [], inputValues: ['908'], expected: '17' }
+        ]
+    },
+    190: {
+        functionNames: ['remove_duplicate'],
+        tests: [
+            { args: [], inputValues: ['banana'], expected: ['b', 'a', 'n'] },
+            { args: [], inputValues: ['abc'], expected: ['a', 'b', 'c'] }
+        ]
+    },
+    191: {
+        functionNames: ['find_min'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5 2 9 -1'], expected: '-1' },
+            { args: [], inputValues: ['10 3 7'], expected: '3' }
+        ]
+    },
+    192: {
+        functionNames: ['count_occurrences'],
+        tests: [
+            { args: [[1, 2, 3, 1, 1], 1], expected: 3 },
+            { args: [['a', 'b', 'a'], 'a'], expected: 2 },
+            { args: [[1, 2], 9], expected: 0 }
+        ]
+    },
+    193: {
+        functionNames: ['find_min_num'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5 2 9 -1'], expected: '-1' },
+            { args: [], inputValues: ['10 3 7'], expected: '3' }
+        ]
+    },
+    194: {
+        functionNames: ['largest_element'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['tree mountain sky'], expected: 'mountain' },
+            { args: [], inputValues: ['a ab abc'], expected: 'abc' }
+        ]
+    },
+    195: {
+        functionNames: ['second_largest_element'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['tree mountain sky river'], expected: 'river' },
+            { args: [], inputValues: ['a ab abc abcd'], expected: 'abc' }
+        ]
+    },
+    196: {
+        functionNames: ['max_of_three'],
+        tests: [
+            { args: [[567, 56, 6]], expected: 567 },
+            { args: [[-5, -2, -9]], expected: -2 },
+            { args: [[3, 9, 1]], expected: 9 }
+        ]
+    },
+    197: {
+        functionNames: ['max_of_three'],
+        tests: [
+            { args: [[567, 56, 6]], expected: 567 },
+            { args: [[-5, -2, -9]], expected: -2 },
+            { args: [[3, 9, 1]], expected: 9 }
+        ]
+    },
+    198: {
+        functionNames: ['centimeters_inches'],
+        compare: 'numberRange',
+        tests: [
+            { args: [], inputValues: ['10'], expected: [3.936, 3.938] },
+            { args: [], inputValues: ['5'], expected: [1.967, 1.969] }
+        ]
+    },
+    199: {
+        functionNames: ['find_min_max'],
+        compare: 'numberList',
+        tests: [
+            { args: [], inputValues: ['5 2 9 -1'], expected: [-1, 9] },
+            { args: [], inputValues: ['10 3 7'], expected: [3, 10] }
+        ]
+    },
+    200: {
+        functionNames: ['common_numbers'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [[43, 2, 45, 567, 666, 2, 45]], expected: [2, 45] },
+            { args: [[1, 2, 3]], expected: [] },
+            { args: [[5, 5, 5]], expected: [5] }
         ]
     }
 };

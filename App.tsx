@@ -153,6 +153,20 @@ def __auto_grader_same(actual, expected, compare):
             return actual_numbers == expected_numbers
         except Exception:
             return False
+    if compare == "dictUnorderedLists":
+        actual = __auto_grader_maybe_literal(actual)
+        expected = __auto_grader_maybe_literal(expected)
+        if not isinstance(actual, dict) or not isinstance(expected, dict):
+            return False
+        if set(actual.keys()) != set(expected.keys()):
+            return False
+        try:
+            for key in expected:
+                if sorted(list(actual[key])) != sorted(list(expected[key])):
+                    return False
+            return True
+        except Exception:
+            return False
     if compare == "letterCounts":
         if isinstance(actual, dict):
             upper = actual.get("upper", actual.get("uppercase"))
