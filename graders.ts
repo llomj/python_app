@@ -1859,5 +1859,167 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2, 3, 4, 5, 6]], expected: 12 },
             { args: [[10, 20, 30]], expected: 20 }
         ]
+    },
+    251: {
+        functionNames: ['pair_elements'],
+        tests: [
+            { args: [['Jon', 'Chris'], ['Moll', 'Smith']], expected: [['Jon', 'Moll'], ['Chris', 'Smith']] },
+            { args: [[1, 2], ['a', 'b']], expected: [[1, 'a'], [2, 'b']] }
+        ]
+    },
+    252: {
+        functionNames: ['sum_of_2_lst'],
+        tests: [
+            { args: [[2, 4, 6, 8], [2, 4, 6, 8]], expected: [4, 8, 12, 16] },
+            { args: [[1, -2], [3, 4]], expected: [4, 2] }
+        ]
+    },
+    253: {
+        functionNames: ['sort_tuples_by_second'],
+        tests: [
+            { args: [[['a', 3], ['b', 1], ['c', 2]]], expected: [['b', 1], ['c', 2], ['a', 3]] },
+            { args: [[['x', -1], ['y', -3]]], expected: [['y', -3], ['x', -1]] }
+        ]
+    },
+    254: {
+        functionNames: ['dic_lst'],
+        tests: [
+            { args: [[1, 2, 3], ['one', 'two', 'three']], expected: { 1: 'one', 2: 'two', 3: 'three' } },
+            { args: [['a', 'b'], [10, 20]], expected: { a: 10, b: 20 } }
+        ]
+    },
+    255: {
+        functionNames: ['combine_3_lst'],
+        tests: [
+            { args: [['Sam', 'Ron'], [1, 2], ['x', 'y']], expected: [['Sam', 1, 'x'], ['Ron', 2, 'y']] },
+            { args: [[1], [2], [3]], expected: [[1, 2, 3]] }
+        ]
+    },
+    256: {
+        functionNames: ['transpose_matrix'],
+        tests: [
+            { args: [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], expected: [[1, 4, 7], [2, 5, 8], [3, 6, 9]] },
+            { args: [[[1, 2], [3, 4]]], expected: [[1, 3], [2, 4]] }
+        ]
+    },
+    257: {
+        functionNames: ['list_tuples'],
+        tests: [
+            { args: [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], expected: [[1, 4, 7], [2, 5, 8], [3, 6, 9]] },
+            { args: [[['a', 'b'], ['c', 'd']]], expected: [['a', 'c'], ['b', 'd']] }
+        ]
+    },
+    258: {
+        functionNames: ['individualists'],
+        tests: [
+            { args: [[[1, 2, 3], [4, 5, 6]]], expected: [[1, 4], [2, 5], [3, 6]] },
+            { args: [[['a', 'b'], ['c', 'd']]], expected: [['a', 'c'], ['b', 'd']] }
+        ]
+    },
+    259: {
+        functionNames: ['maxium_element_wise', 'maximum_element_wise'],
+        tests: [
+            { args: [[2, 4, 6], [7, 8, 9]], expected: [7, 8, 9] },
+            { args: [[10, 1], [3, 9]], expected: [10, 9] }
+        ]
+    },
+    260: {
+        functionNames: ['concatenate'],
+        tests: [
+            { args: [['fruit', 'blue'], ['orange', 'sky']], expected: ['fruit orange', 'blue sky'] },
+            { args: [['a'], ['b']], expected: ['a b'] }
+        ]
+    },
+    261: {
+        functionNames: ['combine_to_dict'],
+        tests: [
+            { args: [[1, 2, 3], ['one', 'two', 'three']], expected: [{ a: 1, b: 'one' }, { a: 2, b: 'two' }, { a: 3, b: 'three' }] },
+            { args: [['x'], [9]], expected: [{ a: 'x', b: 9 }] }
+        ]
+    },
+    262: {
+        functionNames: ['filter_pairs'],
+        tests: [
+            { args: [[5, 8, 3, 10], [4, 7, 6, 2]], expected: [[5, 4], [8, 7], [10, 2]] },
+            { args: [[1, 2], [3, 1]], expected: [[2, 1]] }
+        ]
+    },
+    263: {
+        functionNames: ['filter_pairs'],
+        tests: [
+            { args: [[5, 8, 3, 10], [4, 7, 6, 2]], expected: [[3, 6]] },
+            { args: [[1, 2], [3, 1]], expected: [[1, 3]] }
+        ]
+    },
+    264: {
+        functionNames: ['add_nested_lists'],
+        tests: [
+            { args: [[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]], expected: [[8, 10, 12], [14, 16, 18]] },
+            { args: [[[1], [2]], [[3], [4]]], expected: [[4], [6]] }
+        ]
+    },
+    265: {
+        functionNames: ['euclidean_distance'],
+        compare: 'float',
+        tests: [
+            { args: [[3, 4], [6, 8]], expected: 5 },
+            { args: [[0, 0], [3, 4]], expected: 5 }
+        ]
+    },
+    266: {
+        functionNames: ['interleave'],
+        tests: [
+            { args: [['a', 'b'], [1, 2]], expected: ['a', 1, 'b', 2] },
+            { args: [['x'], ['y']], expected: ['x', 'y'] }
+        ]
+    },
+    267: {
+        functionNames: ['multiply_2_lst'],
+        tests: [
+            { args: [[2, 4, 6], [3, 6, 9]], expected: [6, 24, 54] },
+            { args: [[-2, 5], [3, 0]], expected: [-6, 0] }
+        ]
+    },
+    268: {
+        functionNames: ['dot_product'],
+        tests: [
+            { args: [[1, 2, 3], [4, 5, 6]], expected: 32 },
+            { args: [[-1, 2], [3, 4]], expected: 5 }
+        ]
+    },
+    269: {
+        functionNames: ['filter_even_numbers'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5, 6]], expected: [1, 3, 5] },
+            { args: [[2, 4]], expected: [] }
+        ]
+    },
+    270: {
+        functionNames: ['filter_odd_numbers'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] },
+            { args: [[1, 3]], expected: [] }
+        ]
+    },
+    271: {
+        functionNames: ['filter_positive_numbers'],
+        tests: [
+            { args: [[-2, -1, 0, 1, 2, 3]], expected: [-2, -1, 0] },
+            { args: [[1, 2]], expected: [] }
+        ]
+    },
+    272: {
+        functionNames: ['filter_negative_numbers'],
+        tests: [
+            { args: [[-2, -1, 0, 1, 2, 3]], expected: [0, 1, 2, 3] },
+            { args: [[-1, -2]], expected: [] }
+        ]
+    },
+    274: {
+        functionNames: ['filter_palindromes'],
+        tests: [
+            { args: [['madam', 'hello', 'racecar', 'world', 'level']], expected: ['madam', 'racecar', 'level'] },
+            { args: [['abc', 'noon']], expected: ['noon'] }
+        ]
     }
 };
