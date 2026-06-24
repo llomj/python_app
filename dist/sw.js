@@ -1,130 +1,72 @@
-const CACHE_VERSION = "v56";
+const CACHE_VERSION = "v94";
+// Pre-cache stable runtime deps. The app shell and bundles are cached after a
+// successful network fetch so phones do not get stuck on old UI code.
 const CORE_ASSETS = [
-    './',
-    './index.html',
     './manifest.json',
-    './index.tsx',
-    // './App.tsx', // REMOVED: Don't cache App.tsx to always get fresh version
-    './types.ts',
-    './exercises.ts',
-    './services/geminiService.ts',
-    './editorTheme.ts',
     'https://cdn.tailwindcss.com',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.asm.js',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.asm.wasm',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/python_stdlib.zip',
     'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/repodata.json',
-    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    'https://esm.sh/react@19.0.0',
-    'https://esm.sh/react-dom@19.0.0',
-    'https://esm.sh/react-dom@19.0.0/client',
-    'https://esm.sh/@codemirror/autocomplete@6.20.0',
-    'https://esm.sh/@codemirror/lang-python@6.2.1',
-    'https://esm.sh/@codemirror/language@6.12.1',
-    'https://esm.sh/@codemirror/state@6.5.3',
-    'https://esm.sh/@codemirror/theme-one-dark@6.1.3',
-    'https://esm.sh/@codemirror/view@6.39.8',
-    'https://esm.sh/@codemirror/language@6.12.1',
-    'https://esm.sh/@codemirror/autocomplete@6.20.0',
-    'https://esm.sh/@codemirror/state@6.5.3',
-    'https://esm.sh/@codemirror/view@6.39.8',
-    'https://esm.sh/@lezer/highlight@1.2.3',
-    'https://esm.sh/lucide-react@0.294.0'
+    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
 ];
 
-self.addEventListener('install', (e) => {
-    console.log('🔧 Service Worker Installing:', CACHE_VERSION);
-    self.skipWaiting();
+self.addEventListener('install', event => {
+    console.log('Service Worker Installing:', CACHE_VERSION);
 
-    // Safari-specific service worker registration conflict resolution
-    if (event.target && event.target.client && !event.target.controller) {
-        console.log('🔧 Safari SW Conflict - unregistering old worker');
-        event.target.addEventListener('controllerchange', () => {
-            console.log('🔧 Safari SW Conflict - old controller found:', event.target.controller);
-            event.target.controller.postMessage({ type: 'UNREGISTER' });
-            event.target.controller.unregister();
-        });
-    }
-
-    e.waitUntil(
-        caches.open(CACHE_VERSION).then(c => c.addAll(CORE_ASSETS)).then(() => {
-            console.log('✅ Core assets cached:', CORE_ASSETS.length);
-                return self.skipWaiting();
-            });
-    });
+    event.waitUntil(
+        caches.open(CACHE_VERSION)
+            .then(cache => cache.addAll(CORE_ASSETS))
+            .catch(error => {
+                console.warn('Core pre-cache failed; continuing with runtime cache.', error);
+            })
+            .then(() => self.skipWaiting())
+    );
 });
 
-self.addEventListener('activate', (e) => {
-    console.log('🚀 Service Worker Activated:', CACHE_VERSION);
+self.addEventListener('activate', event => {
+    console.log('Service Worker Activated:', CACHE_VERSION);
 
-    // Clear old caches
-    e.waitUntil(
+    event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_VERSION) {
-                        console.log('🗑️ Deleting old cache:', cacheName);
+                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
+        }).then(() => {
+            return self.clients.claim();
         })
     );
-
-    // Force update immediately on activation
-    if (self.registration) {
-        self.registration.update();
-
-        // Also force immediate cache invalidation
-        const cacheNames = await caches.keys();
-        await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.log('🧹 FORCE CACHE INVALIDATION:', cacheNames.length);
-    }
-
-    // Take control of all clients
-    self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-    const request = e.request;
-    const url = request.url;
+// Network-first with cache fallback: try network, on failure serve from cache. Enables FULL OFFLINE support.
+self.addEventListener('fetch', event => {
+    const request = event.request;
 
-    // Use NETWORK-FIRST for ALL JavaScript files and exercise files (NEVER CACHE)
-    if (request.url.endsWith('.js') || request.url.endsWith('.mjs') || request.url.endsWith('/assets/')) {
-        console.log('🌐 Network-first for JS file:', request.url);
-        e.respondWith(fetch(request));
+    if (request.method !== 'GET') {
+        event.respondWith(fetch(request));
         return;
     }
 
-    // Use NETWORK-FIRST for App.tsx and other source files (NEVER CACHE)
-    if (request.url.endsWith('.tsx') || request.url.endsWith('.ts') || request.url.endsWith('/level1_')) {
-        console.log('📄 NEVER CACHE for source file:', request.url);
-        e.respondWith(fetch(request));
-        return;
-    }
-
-    // Cache-first for all other requests (HTML, CSS, images, etc.)
-    console.log('💾 Cache-first for:', request.url);
-    e.respondWith(
-        caches.open(CACHE_VERSION).then(cache => {
-            return cache.match(request).then(response => {
-                // If found in cache, return it
-                if (response) {
-                    return response;
+    event.respondWith(
+        fetch(request)
+            .then(networkResponse => {
+                if (networkResponse.ok) {
+                    caches.open(CACHE_VERSION).then(cache => cache.put(request, networkResponse.clone()));
                 }
-
-                // If not in cache, fetch from network and cache the response
-                return fetch(request).then(networkResponse => {
-                    // Don't cache exercise files - they change too frequently
-                    const shouldCache = !request.url.includes('level1_') && !request.url.includes('requirements') && !request.url.includes('codelogic');
-                    return cache.put(request, networkResponse.clone()).then(() => {
-                        return networkResponse;
-                    });
-                });
-            });
-        });
-    })
+                return networkResponse;
+            })
+            .catch(() =>
+                caches.open(CACHE_VERSION).then(cache =>
+                    cache.match(request).then(cached => cached || new Response('', { status: 503, statusText: 'Offline' }))
+                )
+            )
+    );
 });
 
 self.addEventListener('message', (event) => {
@@ -139,4 +81,4 @@ self.addEventListener('message', (event) => {
     }
 });
 
-console.log('🔧 Service Worker loaded, version:', CACHE_VERSION);
+console.log('Service Worker loaded, version:', CACHE_VERSION);

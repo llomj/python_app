@@ -10,10 +10,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#040b16">
     <link rel="manifest" href="./assets/manifest-Dtv0wqZf.json">
+    <script>window.APP_VERSION = 'PythonV2';</script>
     <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
     <style>
+        :root {
+            --safe-area-inset-top: env(safe-area-inset-top, 0px);
+            --safe-area-inset-right: env(safe-area-inset-right, 0px);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-area-inset-left: env(safe-area-inset-left, 0px);
+        }
+
         body {
             background-color: #040b16;
             color: white;
@@ -21,8 +29,14 @@
             font-family: -apple-system;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: var(--safe-area-inset-bottom);
+        }
+
+        #root > div > div:first-child {
+            top: var(--safe-area-inset-top, 0px) !important;
+            padding-top: 1rem !important;
+            padding-left: max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem)) !important;
+            padding-right: max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem)) !important;
         }
 
         /* Reduce mobile browser text selection toolbar interference */
@@ -126,7 +140,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="./assets/index-25Yx8tdZ.js"></script>
+  <script type="module" crossorigin src="./assets/index-BKAv48jo.js"></script>
 </head>
 
 <body>
