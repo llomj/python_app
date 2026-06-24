@@ -1264,7 +1264,7 @@ sys.stdout = io.StringIO()
                 className="px-4 pb-4"
                 style={{
                     paddingTop: `${Math.max(headerHeight + 12, 260)}px`,
-                    paddingBottom: `${Math.max(headerHeight + 120, 320)}px`
+                    paddingBottom: 'max(8rem, calc(env(safe-area-inset-bottom) + 8rem))'
                 }}
             >
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
@@ -1328,6 +1328,10 @@ sys.stdout = io.StringIO()
                         </div>
                     </div>
                 </div>
+                <div
+                    aria-hidden="true"
+                    style={{ height: `${Math.max(headerHeight + problemPanelHeight + 220, 520)}px` }}
+                />
             </div>
 
             {/* Fixed footer - Settings (centre) + Refresh with version */}
