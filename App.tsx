@@ -35,6 +35,7 @@ import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { getAiHint } from './services/geminiService';
 import { customPythonTheme } from './editorTheme';
+import { AUTO_GRADERS, AutoGrader } from './graders';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -51,6 +52,95 @@ interface ProjectFile {
     name: string;
     content: string;
 }
+
+interface AutoGradeResult {
+    passed: boolean;
+    message: string;
+    functionName?: string;
+}
+
+const buildAutoGradeScript = (grader: AutoGrader) => `
+import json
+import math
+import sys
+import io
+
+__auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
+
+def __auto_grader_jsonable(value):
+    try:
+        json.dumps(value)
+        return value
+    except Exception:
+        return repr(value)
+
+def __auto_grader_same(actual, expected, compare):
+    if compare == "float":
+        try:
+            return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
+        except Exception:
+            return False
+    return actual == expected
+
+def __auto_grader_run():
+    function_names = __auto_grader_spec.get("functionNames", [])
+    compare = __auto_grader_spec.get("compare", "exact")
+    target = None
+    target_name = None
+
+    for name in function_names:
+        candidate = globals().get(name)
+        if callable(candidate):
+            target = candidate
+            target_name = name
+            break
+
+    if target is None:
+        return {
+            "passed": False,
+            "message": "Missing function. Expected one of: " + ", ".join(function_names)
+        }
+
+    for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
+        args = case.get("args", [])
+        expected = case.get("expected")
+        label = case.get("label") or ("test " + str(index))
+        old_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        try:
+            returned = target(*args)
+            printed = sys.stdout.getvalue().strip()
+        except Exception as exc:
+            return {
+                "passed": False,
+                "functionName": target_name,
+                "message": f"{label} raised {type(exc).__name__}: {exc}"
+            }
+        finally:
+            sys.stdout = old_stdout
+
+        returned_ok = __auto_grader_same(returned, expected, compare)
+        printed_ok = compare == "printedOrReturn" and __auto_grader_same(printed, expected, "exact")
+        if not returned_ok and not printed_ok:
+            actual = printed if printed else returned
+            return {
+                "passed": False,
+                "functionName": target_name,
+                "message": (
+                    f"{label} failed for args={args}. "
+                    f"Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
+                )
+            }
+
+    return {
+        "passed": True,
+        "functionName": target_name,
+        "message": f"All {len(__auto_grader_spec.get('tests', []))} tests passed using {target_name}()."
+    }
+
+__auto_grader_result = __auto_grader_run()
+__auto_grader_json = json.dumps(__auto_grader_result)
+`;
 
 // CHEAT TAB - Python Examples Only
 const CHEAT_CONTENT = `# Python Cheat Sheet - Templates & Examples
@@ -963,6 +1053,7 @@ const App: React.FC = () => {
 
     const runCode = async () => {
         if (!pyodide || isRunning) return;
+        const autoGrader = AUTO_GRADERS[exercise.id];
         setIsRunning(true);
         setOutput('Executing...');
         try {
@@ -996,9 +1087,32 @@ sys.stdout = io.StringIO()
             const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
             await pyodide.runPythonAsync(code);
             const stdout = pyodide.runPython("sys.stdout.getvalue()");
-            setOutput(stdout || 'Success (No output).');
+            const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+
+            if (autoGrader) {
+                pyodide.runPython(buildAutoGradeScript(autoGrader));
+                const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
+
+                if (gradeResult.passed) {
+                    setStats(prev => ({ ...prev, shots: prev.shots + 1, success: prev.success + 1 }));
+                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nLoading next problem...`);
+                    window.setTimeout(() => {
+                        loadRandomExercise();
+                    }, 900);
+                } else {
+                    setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}`);
+                }
+            } else {
+                setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Use WIN/FAILED manually.`);
+            }
         } catch (err: any) {
-            setOutput(err.message);
+            if (autoGrader) {
+                setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+                setOutput(`AUTO FAILED\n${err.message}`);
+            } else {
+                setOutput(err.message);
+            }
         } finally {
             setIsRunning(false);
         }
