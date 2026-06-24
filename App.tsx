@@ -1164,8 +1164,7 @@ sys.stdout = io.StringIO()
 
     return (
         <div
-            className="min-h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-x-hidden animate-in fade-in duration-700 relative"
-            style={{ paddingBottom: 'max(4.5rem, calc(env(safe-area-inset-bottom) + 4.5rem))' }}
+            className="h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
         >
             <div
                 ref={headerRef}
@@ -1261,10 +1260,12 @@ sys.stdout = io.StringIO()
             </div>
 
             <div
-                className="px-4 pb-4"
+                className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
                     paddingTop: `${Math.max(headerHeight + 12, 260)}px`,
-                    paddingBottom: 'max(8rem, calc(env(safe-area-inset-bottom) + 8rem))'
+                    paddingBottom: `max(12rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 220, 520)}px))`,
+                    WebkitOverflowScrolling: 'touch',
+                    overscrollBehaviorY: 'contain'
                 }}
             >
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
@@ -1328,10 +1329,6 @@ sys.stdout = io.StringIO()
                         </div>
                     </div>
                 </div>
-                <div
-                    aria-hidden="true"
-                    style={{ height: `${Math.max(headerHeight + problemPanelHeight + 220, 520)}px` }}
-                />
             </div>
 
             {/* Fixed footer - Settings (centre) + Refresh with version */}
