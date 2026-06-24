@@ -59,6 +59,8 @@ interface AutoGradeResult {
     functionName?: string;
 }
 
+type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
+
 const buildAutoGradeScript = (grader: AutoGrader) => `
 import json
 import math
@@ -718,6 +720,8 @@ const App: React.FC = () => {
     const [newName, setNewName] = useState('');
 
     const [output, setOutput] = useState('Run code to see output...');
+    const [outputStatus, setOutputStatus] = useState<OutputStatus>('idle');
+    const [pendingNextProblem, setPendingNextProblem] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
     const [stats, setStats] = useState<Stats>({ shots: 0, success: 0, failed: 0 });
     const [pyodide, setPyodide] = useState<any>(null);
@@ -748,6 +752,10 @@ const App: React.FC = () => {
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
+    const runButtonLabel = pendingNextProblem ? 'NEXT' : 'RUN';
+    const runButtonClass = pendingNextProblem
+        ? 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#3b82f61a] border border-[#3b82f64d] text-[#60a5fa]'
+        : 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1048,6 +1056,8 @@ const App: React.FC = () => {
         setFiles([{ name: 'main.py', content: ex.initialCode }]);
         setActiveFileIndex(0);
         setOutput('Run code to see output...');
+        setOutputStatus('idle');
+        setPendingNextProblem(false);
         setAiHintText('');
     };
 
@@ -1063,9 +1073,16 @@ const App: React.FC = () => {
     };
 
     const runCode = async () => {
-        if (!pyodide || isRunning) return;
+        if (isRunning) return;
+        if (pendingNextProblem) {
+            setPendingNextProblem(false);
+            loadRandomExercise();
+            return;
+        }
+        if (!pyodide) return;
         const autoGrader = AUTO_GRADERS[exercise.id];
         setIsRunning(true);
+        setOutputStatus('running');
         setOutput('Executing...');
         try {
             // Write all files to the virtual filesystem
@@ -1106,22 +1123,27 @@ sys.stdout = io.StringIO()
 
                 if (gradeResult.passed) {
                     setStats(prev => ({ ...prev, shots: prev.shots + 1, success: prev.success + 1 }));
-                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nLoading next problem...`);
-                    window.setTimeout(() => {
-                        loadRandomExercise();
-                    }, 900);
+                    setOutputStatus('win');
+                    setPendingNextProblem(true);
+                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nPress RUN again to load the next problem.`);
                 } else {
                     setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+                    setOutputStatus('fail');
+                    setPendingNextProblem(false);
                     setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}`);
                 }
             } else {
+                setOutputStatus('info');
                 setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Use WIN/FAILED manually.`);
             }
         } catch (err: any) {
             if (autoGrader) {
                 setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+                setOutputStatus('fail');
+                setPendingNextProblem(false);
                 setOutput(`AUTO FAILED\n${err.message}`);
             } else {
+                setOutputStatus('fail');
                 setOutput(err.message);
             }
         } finally {
@@ -1159,6 +1181,7 @@ sys.stdout = io.StringIO()
         const updatedFiles = [...files];
         updatedFiles[activeFileIndex].content = val;
         setFiles(updatedFiles);
+        if (pendingNextProblem) setPendingNextProblem(false);
     };
 
     const handleMarkSuccess = () => {
@@ -1535,8 +1558,8 @@ sys.stdout = io.StringIO()
                     <div className="flex items-center gap-1">
                         <button onClick={addFile} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#22c55e]"><Plus size={18} /></button>
                         <button onClick={removeFile} disabled={files.length <= 1} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#ef4444] disabled:opacity-30"><Minus size={18} /></button>
-                        <button onClick={runCode} disabled={isRunning} className="ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]">
-                            {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} RUN
+                        <button onClick={runCode} disabled={isRunning} className={runButtonClass}>
+                            {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} {runButtonLabel}
                         </button>
                     </div>
                 </div>
@@ -1567,8 +1590,8 @@ sys.stdout = io.StringIO()
                         <div className="flex items-center gap-1">
                             <button onClick={addFile} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#22c55e]"><Plus size={18} /></button>
                             <button onClick={removeFile} disabled={files.length <= 1} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#ef4444] disabled:opacity-30"><Minus size={18} /></button>
-                            <button onClick={runCode} disabled={isRunning} className="ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]">
-                                {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} RUN
+                            <button onClick={runCode} disabled={isRunning} className={runButtonClass}>
+                                {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} {runButtonLabel}
                             </button>
                         </div>
                     </div>
@@ -1604,6 +1627,26 @@ sys.stdout = io.StringIO()
                                 height: `${outputHeight}px`,
                                 minHeight: '125px',
                                 maxHeight: '55vh',
+                                border: outputStatus === 'win'
+                                    ? '2px solid rgba(34, 197, 94, 0.75)'
+                                    : outputStatus === 'fail'
+                                        ? '2px solid rgba(239, 68, 68, 0.75)'
+                                        : outputStatus === 'info'
+                                            ? '1px solid rgba(59, 130, 246, 0.55)'
+                                            : '1px solid rgba(95, 127, 166, 0.25)',
+                                borderRadius: '0.75rem',
+                                backgroundColor: outputStatus === 'win'
+                                    ? 'rgba(12, 45, 28, 0.45)'
+                                    : outputStatus === 'fail'
+                                        ? 'rgba(64, 15, 20, 0.45)'
+                                        : outputStatus === 'running'
+                                            ? 'rgba(30, 41, 59, 0.45)'
+                                            : 'rgba(5, 12, 24, 0.45)',
+                                boxShadow: outputStatus === 'win'
+                                    ? '0 0 22px rgba(34, 197, 94, 0.18)'
+                                    : outputStatus === 'fail'
+                                        ? '0 0 22px rgba(239, 68, 68, 0.18)'
+                                        : 'none',
                                 transition: 'max-height 0.2s ease, height 0.2s ease',
                                 WebkitOverflowScrolling: 'touch',
                                 touchAction: 'pan-y',
