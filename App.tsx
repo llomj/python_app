@@ -923,6 +923,7 @@ const App: React.FC = () => {
     const [outputHeight, setOutputHeight] = useState(85);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
+    const [resetConfirmArmed, setResetConfirmArmed] = useState(false);
 
     const mainScrollRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
@@ -1260,6 +1261,7 @@ const App: React.FC = () => {
     const handleRestartProgress = () => {
         setStats({ shots: 0, success: 0, failed: 0 });
         loadRandomExercise();
+        setResetConfirmArmed(false);
         setShowModal('none');
     };
 
@@ -1320,8 +1322,8 @@ sys.stdout = io.StringIO()
                 } else {
                     setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
                     setOutputStatus('fail');
-                    setPendingNextProblem(false);
-                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}`);
+                    setPendingNextProblem(true);
+                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
                 }
             } else {
                 setOutputStatus('info');
@@ -1331,8 +1333,8 @@ sys.stdout = io.StringIO()
             if (autoGrader) {
                 setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
                 setOutputStatus('fail');
-                setPendingNextProblem(false);
-                setOutput(`AUTO FAILED\n${err.message}`);
+                setPendingNextProblem(true);
+                setOutput(`AUTO FAILED\n${err.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
             } else {
                 setOutputStatus('fail');
                 setOutput(err.message);
@@ -1852,7 +1854,7 @@ sys.stdout = io.StringIO()
                                     <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
                                     <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
                                     <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
-                                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
+                                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
                                 </div>
                             )}
                         </div>
@@ -2038,14 +2040,30 @@ sys.stdout = io.StringIO()
                                     <Check size={18} /> Save API Key
                                 </button>
 
-                                <button onClick={() => setShowModal('restart_confirm')} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
+                                    <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
                             </div>
                         )}
                         {showModal === 'restart_confirm' && (
                             <div className="text-center py-4">
-                                <h2 className="text-lg font-bold mb-2">Clear Stats?</h2>
-                                <button onClick={handleRestartProgress} className="w-full bg-red-500 py-4 rounded-xl font-bold mb-3">Reset Now</button>
-                                <button onClick={() => setShowModal('none')} className="w-full bg-[#1d2d44] py-4 rounded-xl">Cancel</button>
+                                <h2 className="text-lg font-bold mb-2">{resetConfirmArmed ? 'Final Warning' : 'Clear Stats?'}</h2>
+                                <p className="text-xs text-gray-300 mb-4 leading-relaxed">
+                                    {resetConfirmArmed
+                                        ? 'This will permanently reset shots, wins, fails, and rate. This cannot be undone.'
+                                        : 'Resetting clears your progress stats. Press Reset Now once more to confirm.'}
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        if (resetConfirmArmed) {
+                                            handleRestartProgress();
+                                            return;
+                                        }
+                                        setResetConfirmArmed(true);
+                                    }}
+                                    className={`w-full py-4 rounded-xl font-bold mb-3 ${resetConfirmArmed ? 'bg-red-600 text-white' : 'bg-red-500/20 text-red-300 border border-red-500/40'}`}
+                                >
+                                    {resetConfirmArmed ? 'Yes, Reset Everything' : 'Reset Now'}
+                                </button>
+                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('none'); }} className="w-full bg-[#1d2d44] py-4 rounded-xl">Cancel</button>
                             </div>
                         )}
                         {showModal === 'problem_full' && (
