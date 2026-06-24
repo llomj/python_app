@@ -32,6 +32,8 @@ import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { indentUnit } from '@codemirror/language';
 import { autocompletion, snippetCompletion, CompletionContext, Completion } from '@codemirror/autocomplete';
+import { EditorView } from '@codemirror/view';
+import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { getAiHint } from './services/geminiService';
@@ -73,6 +75,76 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
 ];
 
 const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
+
+const deleteBackwardOnce = (view: EditorView) => {
+    const changes = view.state.changeByRange((range) => {
+        if (!range.empty) {
+            return {
+                changes: { from: range.from, to: range.to, insert: '' },
+                range: EditorSelection.cursor(range.from)
+            };
+        }
+
+        if (range.from === 0) {
+            return { changes: [], range };
+        }
+
+        const previous = view.state.doc.lineAt(range.from).from === range.from ? range.from - 1 : range.from - 1;
+        return {
+            changes: { from: previous, to: range.from, insert: '' },
+            range: EditorSelection.cursor(previous)
+        };
+    });
+
+    if (!changes.changes.empty) {
+        view.dispatch(changes, { scrollIntoView: true, userEvent: 'delete.backward' });
+    }
+};
+
+const holdBackspaceExtension = EditorView.domEventHandlers({
+    keydown(event, view) {
+        if (event.key !== 'Backspace' || event.metaKey || event.ctrlKey || event.altKey) return false;
+        const dom = view.dom as HTMLElement & { __backspaceHoldTimer?: number; __backspaceHoldDelay?: number };
+
+        if (dom.__backspaceHoldDelay || dom.__backspaceHoldTimer) return false;
+
+        dom.__backspaceHoldDelay = window.setTimeout(() => {
+            deleteBackwardOnce(view);
+            dom.__backspaceHoldTimer = window.setInterval(() => deleteBackwardOnce(view), 55);
+        }, 260);
+
+        return false;
+    },
+    keyup(event, view) {
+        if (event.key !== 'Backspace') return false;
+        const dom = view.dom as HTMLElement & { __backspaceHoldTimer?: number; __backspaceHoldDelay?: number };
+
+        if (dom.__backspaceHoldDelay) {
+            window.clearTimeout(dom.__backspaceHoldDelay);
+            dom.__backspaceHoldDelay = undefined;
+        }
+        if (dom.__backspaceHoldTimer) {
+            window.clearInterval(dom.__backspaceHoldTimer);
+            dom.__backspaceHoldTimer = undefined;
+        }
+
+        return false;
+    },
+    blur(_event, view) {
+        const dom = view.dom as HTMLElement & { __backspaceHoldTimer?: number; __backspaceHoldDelay?: number };
+
+        if (dom.__backspaceHoldDelay) {
+            window.clearTimeout(dom.__backspaceHoldDelay);
+            dom.__backspaceHoldDelay = undefined;
+        }
+        if (dom.__backspaceHoldTimer) {
+            window.clearInterval(dom.__backspaceHoldTimer);
+            dom.__backspaceHoldTimer = undefined;
+        }
+
+        return false;
+    }
+});
 
 const EMPTY_STATS: Stats = { shots: 0, success: 0, failed: 0 };
 
@@ -1630,6 +1702,7 @@ sys.stdout = io.StringIO()
     const editorExtensions = useMemo(() => [
         python(),
         indentUnit.of("    "),
+        holdBackspaceExtension,
         autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
         ...customPythonTheme
     ], [pythonCompletionSource]);
