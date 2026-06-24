@@ -2021,5 +2021,188 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['madam', 'hello', 'racecar', 'world', 'level']], expected: ['madam', 'racecar', 'level'] },
             { args: [['abc', 'noon']], expected: ['noon'] }
         ]
+    },
+    276: {
+        functionNames: ['filter_divisible'],
+        tests: [
+            { args: [[10, 15, 20, 22], 5], expected: [10, 15, 20] },
+            { args: [[1, 2, 3, 4, 5, 6], 2], expected: [2, 4, 6] }
+        ]
+    },
+    277: {
+        functionNames: ['is_not_divisible'],
+        tests: [
+            { args: [4, 3], expected: true },
+            { args: [6, 3], expected: false },
+            { args: [10, 5], expected: false }
+        ]
+    },
+    278: {
+        functionNames: ['filter_non_empty'],
+        tests: [
+            { args: [['apple', '', 'banana', '']], expected: ['apple', 'banana'] },
+            { args: [['']], expected: [] }
+        ]
+    },
+    279: {
+        functionNames: ['filter_prime'],
+        tests: [
+            { args: [[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17]], expected: [2, 3, 5, 7, 11, 13, 17] },
+            { args: [[1, 4, 6]], expected: [] }
+        ]
+    },
+    280: {
+        functionNames: ['filter_floats'],
+        tests: [
+            { args: [[1, 2.5, 'apple', 3.0]], expected: [1, 'apple'] },
+            { args: [[1.1, 2.2]], expected: [] }
+        ]
+    },
+    281: {
+        functionNames: ['filter_uppercase'],
+        tests: [
+            { args: [['HELLO', 'world', 'PYTHON', 'code']], expected: ['world', 'code'] },
+            { args: [['ABC']], expected: [] }
+        ]
+    },
+    282: {
+        functionNames: ['filter_uppercase_again'],
+        tests: [
+            { args: [['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai']], expected: ['python', 'openai'] },
+            { args: [['UP', 'DOWN']], expected: [] }
+        ]
+    },
+    283: {
+        functionNames: ['filter_non_none'],
+        tests: [
+            { args: [[1, null, 'x', null, 0]], expected: [1, 'x', 0] },
+            { args: [[null]], expected: [] }
+        ]
+    },
+    284: {
+        functionNames: ['filter_by_substring'],
+        tests: [
+            { args: [['apple', 'banana', 'grape'], 'ap'], expected: ['banana'] },
+            { args: [['one', 'two'], 'z'], expected: ['one', 'two'] }
+        ]
+    },
+    285: {
+        functionNames: ['print_1_to_10'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: '1\n2\n3\n4\n5\n6\n7\n8\n9\n10' }
+        ]
+    },
+    286: {
+        functionNames: ['sum_first_10_natural_numbers'],
+        tests: [
+            { args: [], expected: 55 }
+        ]
+    },
+    287: {
+        functionNames: ['print_even_numbers'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: '2\n4\n6\n8\n10\n12\n14\n16\n18\n20' }
+        ]
+    },
+    288: {
+        functionNames: ['print_odd_numbers'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: '1\n3\n5\n7\n9\n11\n13\n15\n17\n19' }
+        ]
+    },
+    289: {
+        functionNames: ['sum_of_digits'],
+        tests: [
+            { args: [12345], expected: 15 },
+            { args: [908], expected: 17 }
+        ]
+    },
+    290: {
+        functionNames: ['reverse_number'],
+        tests: [
+            { args: [12345], expected: 54321 },
+            { args: [1200], expected: 21 },
+            { args: [7], expected: 7 }
+        ]
+    },
+    291: {
+        functionNames: ['factorial'],
+        tests: [
+            { args: [0], expected: 1 },
+            { args: [5], expected: 120 },
+            { args: [6], expected: 720 }
+        ]
+    },
+    292: {
+        functionNames: ['multiplication_table'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50' }
+        ]
+    },
+    293: {
+        functionNames: ['is_prime'],
+        tests: [
+            { args: [2], expected: true },
+            { args: [17], expected: true },
+            { args: [1], expected: false },
+            { args: [9], expected: false }
+        ]
+    },
+    294: {
+        functionNames: ['count_digits'],
+        tests: [
+            { args: [12345], expected: 5 },
+            { args: [7], expected: 1 },
+            { args: [987654321], expected: 9 }
+        ]
+    },
+    295: {
+        functionNames: ['gcd'],
+        tests: [
+            { args: [48, 18], expected: 6 },
+            { args: [101, 103], expected: 1 },
+            { args: [56, 0], expected: 56 }
+        ]
+    },
+    296: {
+        functionNames: ['fibonacci_sequence'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '0\n1\n1\n2\n3' },
+            { args: [1], expected: '0' }
+        ]
+    },
+    297: {
+        functionNames: ['sum_elements'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], expected: 15 },
+            { args: [[]], expected: 0 },
+            { args: [[-2, 5]], expected: 3 }
+        ]
+    },
+    298: {
+        functionNames: ['find_largest_element', 'main'],
+        tests: [
+            { args: [[5, 9, 1]], expected: 9 },
+            { args: [[-5, -2, -9]], expected: -2 }
+        ]
+    },
+    299: {
+        functionNames: ['smallest_element'],
+        tests: [
+            { args: [[13, 566, 1]], expected: 1 },
+            { args: [[-5, -2, -9]], expected: -9 }
+        ]
+    },
+    300: {
+        functionNames: ['remove_all_occurrences'],
+        tests: [
+            { args: [[1, 2, 3, 3, 4], 3], expected: [1, 2, 4] },
+            { args: [['apple', 'banana', 'banana'], 'banana'], expected: ['apple'] }
+        ]
     }
 };
