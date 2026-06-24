@@ -4726,13 +4726,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     709: {
         functionNames: ['negate_bool'],
         tests: [
-            { args: [[True, False, True, False]], expected: [False, True, False, True] }
+            { args: [[true, false, true, false]], expected: [false, true, false, true] }
         ]
     },
     710: {
         functionNames: ['negate_booleans'],
         tests: [
-            { args: [['racecar', 'hello', 'level']], expected: [True, False, True] }
+            { args: [['racecar', 'hello', 'level']], expected: [true, false, true] }
         ]
     },
     711: {
@@ -4792,7 +4792,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     720: {
         functionNames: ['lst_strings'],
         tests: [
-            { args: [['hello', 'world123']], expected: [True, False] }
+            { args: [['hello', 'world123']], expected: [true, false] }
         ]
     },
     721: {
