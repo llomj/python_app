@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'numberList' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -986,6 +986,180 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [[4, 2, 1]], expected: '****\n**\n*' },
             { args: [[1, 3]], expected: '*\n***' }
+        ]
+    },
+    126: {
+        functionNames: ['map_words_to_lengths'],
+        tests: [
+            { args: [['apple', 'banana', 'kiwi']], expected: [5, 6, 4] },
+            { args: [['a', '', 'three']], expected: [1, 0, 5] }
+        ]
+    },
+    127: {
+        functionNames: ['find_longest_word'],
+        tests: [
+            { args: [['jo', 'banana', 'cat']], expected: 6 },
+            { args: [['a', 'abcd', 'xy']], expected: 4 },
+            { args: [['same', 'size']], expected: 4 }
+        ]
+    },
+    128: {
+        functionNames: ['filter_long_words'],
+        tests: [
+            { args: [['one', 'three', 'seventeen', 'two'], 3], expected: ['three', 'seventeen'] },
+            { args: [['a', 'ab', 'abc'], 2], expected: ['abc'] },
+            { args: [['hi'], 5], expected: [] }
+        ]
+    },
+    129: {
+        functionNames: ['is_pangram'],
+        tests: [
+            { args: ['The quick brown fox jumps over the lazy dog'], expected: true },
+            { args: ['hello world'], expected: false },
+            { args: ['Sphinx of black quartz, judge my vow'], expected: true }
+        ]
+    },
+    130: {
+        functionNames: ['correct'],
+        tests: [
+            { args: ['This  is very funny  and cool.Indeed!'], expected: 'This is very funny and cool. Indeed!' },
+            { args: ['Hello.World'], expected: 'Hello. World' },
+            { args: ['Already ok. Fine'], expected: 'Already ok. Fine' }
+        ]
+    },
+    131: {
+        functionNames: ['max_func', 'max_in_list'],
+        tests: [
+            { functionName: 'max_func', args: [3, 5], expected: 5 },
+            { functionName: 'max_func', args: [-2, -9], expected: -2 },
+            { functionName: 'max_in_list', args: [[1, 5, 3, 9, 2]], expected: 9 },
+            { functionName: 'max_in_list', args: [[-10, -2, -7]], expected: -2 }
+        ]
+    },
+    134: {
+        functionNames: ['sum_of_all_numbers'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['1 2 3 4'], expected: '10' },
+            { args: [], inputValues: ['-2 5 0'], expected: '3' }
+        ]
+    },
+    135: {
+        functionNames: ['split_number'],
+        tests: [
+            { args: ['123'], expected: ['1', '2', '3'] },
+            { args: ['908'], expected: ['9', '0', '8'] }
+        ]
+    },
+    136: {
+        functionNames: ['alphabetically_ordered'],
+        tests: [
+            { args: ['hello caca face'], expected: 'caca face hello' },
+            { args: ['banana apple cherry'], expected: 'apple banana cherry' }
+        ]
+    },
+    137: {
+        functionNames: ['smallest_largest'],
+        tests: [
+            { args: [[2, 76, 466, 3, 23]], expected: [2, 3, 23, 76, 466] },
+            { args: [[5, -1, 0]], expected: [-1, 0, 5] }
+        ]
+    },
+    138: {
+        functionNames: ['largest_smallest'],
+        tests: [
+            { args: [[2, 76, 466, 3, 23]], expected: [466, 76, 23, 3, 2] },
+            { args: [[5, -1, 0]], expected: [5, 0, -1] }
+        ]
+    },
+    139: {
+        functionNames: ['seconded_largest_number'],
+        tests: [
+            { args: [[2, 76, 466, 3, 23]], expected: 76 },
+            { args: [[5, -1, 0]], expected: 0 },
+            { args: [[7, 7, 3]], expected: 7 }
+        ]
+    },
+    140: {
+        functionNames: ['fourth_largest_number'],
+        tests: [
+            { args: [[2, 76, 466, 3, 23]], expected: 3 },
+            { args: [[10, 9, 8, 7, 6]], expected: 7 }
+        ]
+    },
+    141: {
+        functionNames: ['smallest_and_third'],
+        tests: [
+            { args: [[2, 76, 466, 3, 23]], expected: [2, 23] },
+            { args: [[10, 9, 8, 7, 6]], expected: [6, 8] }
+        ]
+    },
+    142: {
+        functionNames: ['largest_smallest', 'smallest_biggest'],
+        tests: [
+            { args: [[2, 76, 466, 3, 23]], expected: [2, 3, 23, 76, 466] },
+            { args: [[5, -1, 0]], expected: [-1, 0, 5] }
+        ]
+    },
+    143: {
+        functionNames: ['int_str'],
+        tests: [
+            { args: [], inputValues: ['1 2 3'], expected: ['1', '2', '3'] },
+            { args: [], inputValues: ['10 20'], expected: ['10', '20'] }
+        ]
+    },
+    144: {
+        functionNames: ['int_to_str_list'],
+        tests: [
+            { args: [123], expected: ['1', '2', '3'] },
+            { args: [908], expected: ['9', '0', '8'] }
+        ]
+    },
+    145: {
+        functionNames: ['common_numbers'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [[2, 24, 23, 27, 2], [56, 2, 27, 455, 1]], expected: [2, 27] },
+            { args: [[1, 2], [3, 4]], expected: [] },
+            { args: [[5, 5, 6], [5, 7]], expected: [5] }
+        ]
+    },
+    146: {
+        functionNames: ['big_small'],
+        tests: [
+            { args: [['4', '10', '2']], expected: ['10', '4', '2'] },
+            { args: [['1', '9', '3']], expected: ['9', '3', '1'] }
+        ]
+    },
+    147: {
+        functionNames: ['type_smallest_biggest', 'small_big'],
+        compare: 'numberList',
+        tests: [
+            { args: [], inputValues: ['10 2 1'], expected: [1, 2, 10] },
+            { args: [], inputValues: ['5 -1 0'], expected: [-1, 0, 5] }
+        ]
+    },
+    148: {
+        functionNames: ['double_elements'],
+        tests: [
+            { args: [[1, 2, 3]], expected: [1, 2, 3, 1, 2, 3] },
+            { args: [['a', 'b']], expected: ['a', 'b', 'a', 'b'] }
+        ]
+    },
+    149: {
+        functionNames: ['common'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [], inputValues: ['1 2 3', '3 4 2'], expected: ['2', '3'] },
+            { args: [], inputValues: ['a b', 'c d'], expected: [] }
+        ]
+    },
+    150: {
+        functionNames: ['common'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [], inputValues: ['1 2 3', '3 4 2'], expected: ['2', '3'] },
+            { args: [], inputValues: ['a b', 'c d'], expected: [] }
         ]
     }
 };

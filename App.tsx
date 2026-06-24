@@ -69,6 +69,7 @@ import io
 import builtins
 import inspect
 import re
+import ast
 
 __auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
 
@@ -93,9 +94,22 @@ def __auto_grader_normalize(value):
 def __auto_grader_numbers(value):
     return [float(match) for match in re.findall(r"-?\\d+(?:\\.\\d+)?", str(value))]
 
+def __auto_grader_maybe_literal(value):
+    if not isinstance(value, str):
+        return value
+    text = value.strip()
+    if not text:
+        return value
+    try:
+        return ast.literal_eval(text)
+    except Exception:
+        return value
+
 def __auto_grader_same(actual, expected, compare):
     actual = __auto_grader_normalize(actual)
     expected = __auto_grader_normalize(expected)
+    if isinstance(actual, str) and isinstance(expected, (list, dict, tuple, set)):
+        actual = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
     if compare == "float":
         try:
             return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
@@ -116,7 +130,16 @@ def __auto_grader_same(actual, expected, compare):
             return False
     if compare == "unorderedList":
         try:
+            actual = __auto_grader_maybe_literal(actual)
+            expected = __auto_grader_maybe_literal(expected)
             return sorted(list(actual)) == sorted(list(expected))
+        except Exception:
+            return False
+    if compare == "numberList":
+        try:
+            actual_numbers = __auto_grader_numbers(actual)
+            expected_numbers = [float(item) for item in expected]
+            return actual_numbers == expected_numbers
         except Exception:
             return False
     if compare == "letterCounts":
