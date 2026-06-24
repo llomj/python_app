@@ -135,6 +135,17 @@ def __auto_grader_same(actual, expected, compare):
             return sorted(list(actual)) == sorted(list(expected))
         except Exception:
             return False
+    if compare == "unorderedWords":
+        try:
+            actual = __auto_grader_maybe_literal(actual)
+            expected = __auto_grader_maybe_literal(expected)
+            if isinstance(actual, str):
+                actual = actual.split()
+            if isinstance(expected, str):
+                expected = expected.split()
+            return sorted(list(actual)) == sorted(list(expected))
+        except Exception:
+            return False
     if compare == "numberList":
         try:
             actual_numbers = __auto_grader_numbers(actual)

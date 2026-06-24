@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'numberList' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -1160,6 +1160,197 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [], inputValues: ['1 2 3', '3 4 2'], expected: ['2', '3'] },
             { args: [], inputValues: ['a b', 'c d'], expected: [] }
+        ]
+    },
+    151: {
+        functionNames: ['find_longest_word'],
+        tests: [
+            { args: [['tree', 'mountain', 'sky']], expected: 'mountain' },
+            { args: [['same', 'size', 'tiny']], expected: 'same' },
+            { args: [['a']], expected: 'a' }
+        ]
+    },
+    152: {
+        functionNames: ['average', 'calculate_average'],
+        compare: 'float',
+        tests: [
+            { args: [[4, 667, 68, 766]], expected: 376.25 },
+            { args: [[2, 4, 6]], expected: 4 },
+            { args: [[-2, 2, 6]], expected: 2 }
+        ]
+    },
+    153: {
+        functionNames: ['second_smallest_element'],
+        tests: [
+            { args: [[4, 1, 3, 2]], expected: 2 },
+            { args: [[5, 5, 4, 3]], expected: 4 },
+            { args: [[-1, -5, 0]], expected: -1 }
+        ]
+    },
+    154: {
+        functionNames: ['find_last_element', 'find_second_last_element'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['1 2 3 4'], expected: '3' },
+            { args: [], inputValues: ['apple banana cherry'], expected: 'banana' }
+        ]
+    },
+    155: {
+        functionNames: ['reverse_number'],
+        tests: [
+            { args: [123], expected: 321 },
+            { args: [9080], expected: 809 },
+            { args: [7], expected: 7 }
+        ]
+    },
+    156: {
+        functionNames: ['remove_duplicates'],
+        compare: 'unorderedList',
+        tests: [
+            { args: ['banana'], expected: ['b', 'a', 'n'] },
+            { args: ['abc'], expected: ['a', 'b', 'c'] }
+        ]
+    },
+    157: {
+        functionNames: ['remove_duplicates', 'main'],
+        compare: 'unorderedWords',
+        tests: [
+            { args: ['and here is was and in the'], expected: ['and'] },
+            { args: ['hot cold hot warm cold'], expected: ['hot', 'cold'] }
+        ]
+    },
+    158: {
+        functionNames: ['largest_element', 'main'],
+        tests: [
+            { args: [[2, 56, 75, 4566, 3]], expected: 4566 },
+            { args: [[-5, -2, -9]], expected: -2 },
+            { args: [[7]], expected: 7 }
+        ]
+    },
+    159: {
+        functionNames: ['largest_element'],
+        tests: [
+            { args: [[2, 56, 75, 4566, 3]], expected: 4566 },
+            { args: [[-5, -2, -9]], expected: -2 },
+            { args: [[7]], expected: 7 }
+        ]
+    },
+    160: {
+        functionNames: ['find_length'],
+        tests: [
+            { args: ['hello'], expected: 5 },
+            { args: [[1, 2, 3]], expected: 3 },
+            { args: [''], expected: 0 }
+        ]
+    },
+    161: {
+        functionNames: ['intersection_two_list', 'intersection'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [['tree', 'sky', 'tree'], ['sky', 'road']], expected: ['sky'] },
+            { args: [[1, 2, 3], [2, 3, 4]], expected: [2, 3] },
+            { args: [[1], [2]], expected: [] }
+        ]
+    },
+    162: {
+        functionNames: ['third_largest'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['10 5 20 15 8'], expected: '10' },
+            { args: [], inputValues: ['1 2 3 4'], expected: '2' }
+        ]
+    },
+    163: {
+        functionNames: ['count_vowels'],
+        tests: [
+            { args: ['JOnathAn is the best'], expected: { a: 2, e: 2, i: 1, o: 1, u: 0 } },
+            { args: ['AEIOU xyz'], expected: { a: 1, e: 1, i: 1, o: 1, u: 1 } }
+        ]
+    },
+    164: {
+        functionNames: ['count_vowels'],
+        tests: [
+            { args: ['Jonathan is the best'], expected: { a: 2, e: 2, i: 1, o: 1, u: 0 } },
+            { args: ['rhythm'], expected: { a: 0, e: 0, i: 0, o: 0, u: 0 } }
+        ]
+    },
+    165: {
+        functionNames: ['intiger_string', 'split_number_int'],
+        tests: [
+            { args: [123], expected: ['1', '2', '3'] },
+            { args: [908], expected: ['9', '0', '8'] }
+        ]
+    },
+    166: {
+        functionNames: ['double_elements'],
+        tests: [
+            { args: [['tree', 'sky']], expected: ['tree', 'sky', 'tree', 'sky'] },
+            { args: [['a']], expected: ['a', 'a'] },
+            { args: [[]], expected: [] }
+        ]
+    },
+    167: {
+        functionNames: ['l_s', 'main'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], expected: [5, 1] },
+            { args: [[-5, -2, -9]], expected: [-2, -9] }
+        ]
+    },
+    168: {
+        functionNames: ['count_words'],
+        tests: [
+            { args: ['This is a test this test'], expected: { a: 1, is: 1, test: 2, this: 2 } },
+            { args: ['Apple apple banana'], expected: { apple: 2, banana: 1 } }
+        ]
+    },
+    169: {
+        functionNames: ['merge_dictionaries'],
+        tests: [
+            { args: [{ a: 1, b: 2 }, { b: 9, c: 3 }], expected: { a: 1, b: 9, c: 3 } },
+            { args: [{}, { x: 1 }], expected: { x: 1 } }
+        ]
+    },
+    170: {
+        functionNames: ['count_characters'],
+        tests: [
+            { args: ['hello'], expected: { h: 1, e: 1, l: 2, o: 1 } },
+            { args: ['aba'], expected: { a: 2, b: 1 } }
+        ]
+    },
+    171: {
+        functionNames: ['invert_dictionary'],
+        tests: [
+            { args: [{ a: 'red', b: 'blue', c: 'red' }], expected: { red: ['a', 'c'], blue: ['b'] } },
+            { args: [{ x: 'yes', y: 'yes' }], expected: { yes: ['x', 'y'] } }
+        ]
+    },
+    172: {
+        functionNames: ['filter_by_value'],
+        tests: [
+            { args: [{ a: 1, b: 5, c: 3 }, 2], expected: { b: 5, c: 3 } },
+            { args: [{ a: 1 }, 10], expected: {} }
+        ]
+    },
+    173: {
+        functionNames: ['combine_lists_to_dict'],
+        tests: [
+            { args: [['a', 'b'], [1, 2]], expected: { a: 1, b: 2 } },
+            { args: [['x'], ['red']], expected: { x: 'red' } }
+        ]
+    },
+    174: {
+        functionNames: ['max_value_key'],
+        tests: [
+            { args: [{ a: 1, b: 5, c: 3 }], expected: 'b' },
+            { args: [{}], expected: null }
+        ]
+    },
+    175: {
+        functionNames: ['dict_equal'],
+        tests: [
+            { args: [{ a: 1, b: 2 }, { b: 2, a: 1 }], expected: true },
+            { args: [{ a: 1 }, { a: 2 }], expected: false },
+            { args: [{ a: 1 }, { a: 1, b: 2 }], expected: false }
         ]
     }
 };
