@@ -1396,7 +1396,13 @@ sys.stdout = io.StringIO()
                 }}
             >
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
-                    <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
+                    <div
+                        className="sticky flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0"
+                        style={{
+                            top: `${Math.max(headerHeight + 8, 274)}px`,
+                            zIndex: 30
+                        }}
+                    >
                         <div className="flex items-center gap-2 overflow-hidden">
                             <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
                             {isEditingFileName ? (
