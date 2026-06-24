@@ -105,6 +105,12 @@ def __auto_grader_maybe_literal(value):
     except Exception:
         return value
 
+def __auto_grader_clean_text(value):
+    return "\\n".join(line.rstrip() for line in str(value).strip().splitlines())
+
+def __auto_grader_compact_pattern(value):
+    return "\\n".join(re.sub(r"[ \\t]+", "", line) for line in __auto_grader_clean_text(value).splitlines())
+
 def __auto_grader_same(actual, expected, compare):
     actual = __auto_grader_normalize(actual)
     expected = __auto_grader_normalize(expected)
@@ -116,7 +122,14 @@ def __auto_grader_same(actual, expected, compare):
         except Exception:
             return False
     if compare == "printedOrReturn":
-        return actual == expected or str(actual) == str(expected) or str(expected) in str(actual)
+        actual_text = __auto_grader_clean_text(actual)
+        expected_text = __auto_grader_clean_text(expected)
+        return (
+            actual == expected
+            or actual_text == expected_text
+            or expected_text in actual_text
+            or __auto_grader_compact_pattern(actual_text) == __auto_grader_compact_pattern(expected_text)
+        )
     if compare == "numberRange":
         numbers = __auto_grader_numbers(actual)
         if not numbers or not isinstance(expected, list) or len(expected) != 2:

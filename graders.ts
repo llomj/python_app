@@ -1542,5 +1542,152 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2, 3]], expected: [] },
             { args: [[5, 5, 5]], expected: [5] }
         ]
+    },
+    201: {
+        functionNames: ['common_num', 'common_numbers'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [[2, 5, 6, 2, 4, 5]], expected: [2, 5] },
+            { args: [[43, 2, 45, 567, 666, 2, 45, 43]], expected: [2, 45, 43] },
+            { args: [[1, 2, 3]], expected: [] }
+        ]
+    },
+    202: {
+        functionNames: ['word_frequency'],
+        tests: [
+            { args: ['banana'], expected: { a: 3, b: 1, n: 2 } },
+            { args: ['a b a'], expected: { a: 2, b: 1 } }
+        ]
+    },
+    203: {
+        functionNames: ['total'],
+        tests: [
+            { args: [[1, 2, 3, 4]], expected: [10, 24] },
+            { args: [[-2, 5, 3]], expected: [6, -30] }
+        ]
+    },
+    204: {
+        functionNames: ['list_integers'],
+        tests: [
+            { args: [['join', 'horse', 'today']], expected: ['join', 4, 'horse', 5, 'today', 5] },
+            { args: [['a', 'abc']], expected: ['a', 1, 'abc', 3] }
+        ]
+    },
+    205: {
+        functionNames: ['average', 'calculate_average'],
+        compare: 'float',
+        tests: [
+            { args: [[2666, 566, 6777]], expected: 3336.3333333333335 },
+            { args: [[2, 4, 6]], expected: 4 }
+        ]
+    },
+    206: {
+        functionNames: ['max_of_three'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['567 56 6'], expected: '567' },
+            { args: [], inputValues: ['-5 -2 -9'], expected: '-2' }
+        ]
+    },
+    207: {
+        functionNames: ['max_of_list'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5 2 9'], expected: '9' },
+            { args: [], inputValues: ['-5 -2 -9'], expected: '-2' }
+        ]
+    },
+    208: {
+        functionNames: ['max_of_list'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5 2 9'], expected: '9' },
+            { args: [], inputValues: ['-5 -2 -9'], expected: '-2' }
+        ]
+    },
+    209: {
+        functionNames: ['list_words'],
+        tests: [
+            { args: [['jonathan', 'horse', 'today']], expected: ['jonathan', 8, 'horse', 5, 'today', 5] },
+            { args: [['a', 'abc']], expected: ['a', 1, 'abc', 3] }
+        ]
+    },
+    210: {
+        functionNames: ['list_words'],
+        tests: [
+            { args: [['jonathan', 'horse', 'today']], expected: ['jonathan', 8, 'horse', 5, 'today', 5] },
+            { args: [['a', 'abc']], expected: ['a', 1, 'abc', 3] }
+        ]
+    },
+    211: {
+        functionNames: ['length_words'],
+        tests: [
+            { args: [['jonathan', 'horse', 'today']], expected: [8, 5, 5] },
+            { args: [['a', 'abc']], expected: [1, 3] }
+        ]
+    },
+    212: {
+        functionNames: ['intersection'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [], inputValues: ['1 2 3', '3 4 2'], expected: ['2', '3'] },
+            { args: [], inputValues: ['a b', 'c d'], expected: [] }
+        ]
+    },
+    215: {
+        functionNames: ['square_pattern', 'print_square_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [3], expected: '***\n***\n***' },
+            { args: [2], expected: '**\n**' }
+        ]
+    },
+    218: {
+        functionNames: ['print_checkerboard'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [2], expected: '*\n *' },
+            { args: [3], expected: '* *\n * \n* *' }
+        ]
+    },
+    219: {
+        functionNames: ['print_floyds_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [4], expected: '1\n2 3\n4 5 6\n7 8 9 10' },
+            { args: [2], expected: '1\n2 3' }
+        ]
+    },
+    221: {
+        functionNames: ['print_hollow_square'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*****\n*   *\n*   *\n*   *\n*****' },
+            { args: [3], expected: '***\n* *\n***' }
+        ]
+    },
+    222: {
+        functionNames: ['print_reverse_pyramid'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1' },
+            { args: [3], expected: '1 2 3\n1 2\n1' }
+        ]
+    },
+    224: {
+        functionNames: ['triangle_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: 'A\nB B\nC C C\nD D D D\nE E E E E' },
+            { args: [3], expected: 'A\nB B\nC C C' }
+        ]
+    },
+    225: {
+        functionNames: ['print_square_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5' },
+            { args: [3], expected: '1 2 3\n1 2 3\n1 2 3' }
+        ]
     }
 };
