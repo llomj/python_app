@@ -1,9 +1,10 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'letterCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
     expected: unknown;
     inputValues?: string[];
+    functionName?: string;
     label?: string;
 }
 
@@ -805,6 +806,186 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [1, 10], expected: 17 },
             { args: [10, 20], expected: 60 },
             { args: [1, 2], expected: 2 }
+        ]
+    },
+    101: {
+        functionNames: ['power'],
+        tests: [
+            { args: [2, 3], expected: 8 },
+            { args: [5, 0], expected: 1 },
+            { args: [3, 4], expected: 81 }
+        ]
+    },
+    102: {
+        functionNames: ['is_anagram'],
+        tests: [
+            { args: ['listen', 'silent'], expected: true },
+            { args: ['dormitory', 'dirty room'], expected: true },
+            { args: ['hello', 'world'], expected: false }
+        ]
+    },
+    104: {
+        functionNames: ['is_perfect_square'],
+        tests: [
+            { args: [16], expected: true },
+            { args: [14], expected: false },
+            { args: [0], expected: true }
+        ]
+    },
+    105: {
+        functionNames: ['all_odd_numbers'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], expected: 9 },
+            { args: [[2, 4, 6]], expected: 0 },
+            { args: [[-3, 5, 6]], expected: 2 }
+        ]
+    },
+    106: {
+        functionNames: ['sum_of_odd_numbers', 'sum_of_all_odd'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['1 2 3 4 5'], expected: '9' },
+            { args: [], inputValues: ['2 4 6'], expected: '0' },
+            { args: [], inputValues: ['-3 5 6'], expected: '2' }
+        ]
+    },
+    107: {
+        functionNames: ['common_char'],
+        compare: 'unorderedList',
+        tests: [
+            { args: ['abc', 'bcd'], expected: ['b', 'c'] },
+            { args: ['hello', 'world'], expected: ['l', 'o'] },
+            { args: ['abc', 'xyz'], expected: [] }
+        ]
+    },
+    108: {
+        functionNames: ['remove_duplicates'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [], inputValues: ['banana'], expected: ['b', 'a', 'n'] },
+            { args: [], inputValues: ['abc'], expected: ['a', 'b', 'c'] }
+        ]
+    },
+    109: {
+        functionNames: ['is_armstrong'],
+        tests: [
+            { args: [153], expected: true },
+            { args: [9474], expected: true },
+            { args: [123], expected: false }
+        ]
+    },
+    110: {
+        functionNames: ['vowels_consonates'],
+        compare: 'vowelConsonantCounts',
+        tests: [
+            { args: ['Hello World'], expected: { vowels: 3, consonants: 7 } },
+            { args: ['AEIOU xyz'], expected: { vowels: 5, consonants: 3 } },
+            { args: ['rhythm'], expected: { vowels: 0, consonants: 6 } }
+        ]
+    },
+    111: {
+        functionNames: ['second_smallest_element'],
+        tests: [
+            { args: [[4, 1, 3, 2]], expected: 2 },
+            { args: [[5, 5, 4, 3]], expected: 4 },
+            { args: [[-1, -5, 0]], expected: -1 }
+        ]
+    },
+    112: {
+        functionNames: ['generate_permutations'],
+        compare: 'unorderedList',
+        tests: [
+            { args: ['ab'], expected: ['ab', 'ba'] },
+            { args: ['abc'], expected: ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'] }
+        ]
+    },
+    114: {
+        functionNames: ['max_of_three', 'main'],
+        tests: [
+            { args: [1, 5, 3], expected: 5 },
+            { args: [-10, -2, -5], expected: -2 },
+            { args: [7, 7, 1], expected: 7 }
+        ]
+    },
+    115: {
+        functionNames: ['length_string', 'length_list'],
+        tests: [
+            { args: ['hello'], expected: 5 },
+            { args: [[1, 2, 3]], expected: 3 },
+            { args: [''], expected: 0 }
+        ]
+    },
+    117: {
+        functionNames: ['translate'],
+        tests: [
+            { args: ['this is fun'], expected: 'tothohisos isos fofunon' },
+            { args: ['abc'], expected: 'abobcoc' },
+            { args: ['aeiou'], expected: 'aeiou' }
+        ]
+    },
+    118: {
+        functionNames: ['sum', 'multiply'],
+        tests: [
+            { functionName: 'sum', args: [[1, 2, 3, 4]], expected: 10 },
+            { functionName: 'sum', args: [[-2, 5, 0]], expected: 3 },
+            { functionName: 'multiply', args: [[1, 2, 3, 4]], expected: 24 },
+            { functionName: 'multiply', args: [[-2, 5, 3]], expected: -30 }
+        ]
+    },
+    119: {
+        functionNames: ['reverse'],
+        tests: [
+            { args: ['I am testing'], expected: 'gnitset ma I' },
+            { args: ['abc'], expected: 'cba' },
+            { args: [''], expected: '' }
+        ]
+    },
+    120: {
+        functionNames: ['palindromes'],
+        tests: [
+            { args: ['radar'], expected: true },
+            { args: ['hello'], expected: false },
+            { args: ['level'], expected: true }
+        ]
+    },
+    121: {
+        functionNames: ['is_palindrome'],
+        tests: [
+            { args: ['radar'], expected: true },
+            { args: ['hello'], expected: false },
+            { args: ['level'], expected: true }
+        ]
+    },
+    122: {
+        functionNames: ['is_member'],
+        tests: [
+            { args: ['a', ['b', 'a']], expected: true },
+            { args: [3, [1, 2]], expected: false },
+            { args: ['x', []], expected: false }
+        ]
+    },
+    123: {
+        functionNames: ['overlapping'],
+        tests: [
+            { args: [[1, 2, 3], [4, 3, 5]], expected: true },
+            { args: [['a', 'b'], ['c', 'd']], expected: false },
+            { args: [[], [1]], expected: false }
+        ]
+    },
+    124: {
+        functionNames: ['overlapping'],
+        tests: [
+            { args: [[1, 2, 3], [4, 3, 5]], expected: true },
+            { args: [['a', 'b'], ['c', 'd']], expected: false },
+            { args: [[], [1]], expected: false }
+        ]
+    },
+    125: {
+        functionNames: ['histogram', 'histrogram'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [[4, 2, 1]], expected: '****\n**\n*' },
+            { args: [[1, 3]], expected: '*\n***' }
         ]
     }
 };

@@ -130,6 +130,17 @@ def __auto_grader_same(actual, expected, compare):
         lower_match = re.search(r"lower\\D+(\\d+)", text)
         upper_match = re.search(r"upper\\D+(\\d+)", text)
         return bool(lower_match and upper_match and int(lower_match.group(1)) == expected.get("lower") and int(upper_match.group(1)) == expected.get("upper"))
+    if compare == "vowelConsonantCounts":
+        if isinstance(actual, dict):
+            vowels = actual.get("vowels", actual.get("vowel"))
+            consonants = actual.get("consonants", actual.get("consonant"))
+            return vowels == expected.get("vowels") and consonants == expected.get("consonants")
+        if isinstance(actual, (list, tuple)) and len(actual) == 2:
+            return list(actual) == [expected.get("vowels"), expected.get("consonants")]
+        text = str(actual).lower()
+        vowel_match = re.search(r"vowels?\\D+(\\d+)", text)
+        consonant_match = re.search(r"consonants?\\D+(\\d+)", text)
+        return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
     return actual == expected
 
 def __auto_grader_accepts_args(candidate, args):
@@ -139,20 +150,20 @@ def __auto_grader_accepts_args(candidate, args):
     except Exception:
         return False
 
+def __auto_grader_find_callable(function_names, args, required_name=None):
+    names = [required_name] if required_name else function_names
+    for name in names:
+        candidate = globals().get(name)
+        if callable(candidate) and __auto_grader_accepts_args(candidate, args):
+            return name, candidate
+    return None, None
+
 def __auto_grader_run():
     function_names = __auto_grader_spec.get("functionNames", [])
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
     first_args = tests[0].get("args", []) if tests else []
-    target = None
-    target_name = None
-
-    for name in function_names:
-        candidate = globals().get(name)
-        if callable(candidate) and __auto_grader_accepts_args(candidate, first_args):
-            target = candidate
-            target_name = name
-            break
+    target_name, target = __auto_grader_find_callable(function_names, first_args)
 
     if target is None:
         return {
@@ -165,18 +176,28 @@ def __auto_grader_run():
         expected = case.get("expected")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
+        required_name = case.get("functionName")
+        case_target_name = target_name
+        case_target = target
+        if required_name:
+            case_target_name, case_target = __auto_grader_find_callable(function_names, args, required_name)
+            if case_target is None:
+                return {
+                    "passed": False,
+                    "message": f"{label} missing required function {required_name}()."
+                }
         old_stdout = sys.stdout
         old_input = builtins.input
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
         try:
-            returned = target(*args)
+            returned = case_target(*args)
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
             return {
                 "passed": False,
-                "functionName": target_name,
+                "functionName": case_target_name,
                 "message": f"{label} raised {type(exc).__name__}: {exc}"
             }
         finally:
@@ -184,12 +205,14 @@ def __auto_grader_run():
             builtins.input = old_input
 
         returned_ok = __auto_grader_same(returned, expected, compare)
-        printed_ok = compare == "printedOrReturn" and __auto_grader_same(printed, expected, "printedOrReturn")
+        printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)
+        if not printed_ok and compare == "printedOrReturn":
+            printed_ok = __auto_grader_same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok:
             actual = printed if printed else returned
             return {
                 "passed": False,
-                "functionName": target_name,
+                "functionName": case_target_name,
                 "message": (
                     f"{label} failed for args={args}. "
                     f"Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
