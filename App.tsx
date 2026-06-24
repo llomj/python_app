@@ -637,6 +637,8 @@ const App: React.FC = () => {
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
 
+    const mainScrollRef = useRef<HTMLDivElement>(null);
+    const editorShellRef = useRef<HTMLDivElement>(null);
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
@@ -730,6 +732,68 @@ const App: React.FC = () => {
             outputRef.current.scrollTop = outputRef.current.scrollHeight;
         }
     }, [output]);
+
+    useEffect(() => {
+        const mainScroller = mainScrollRef.current;
+        const editorShell = editorShellRef.current;
+        if (!mainScroller || !editorShell) return;
+
+        let editorScroller: HTMLElement | null = null;
+        let lastTouchY = 0;
+
+        const attachTouchBridge = () => {
+            const candidate = editorShell.querySelector('.cm-scroller');
+            if (!(candidate instanceof HTMLElement)) return;
+            editorScroller = candidate;
+
+            const handleTouchStart = (event: TouchEvent) => {
+                if (event.touches.length !== 1) return;
+                lastTouchY = event.touches[0].clientY;
+            };
+
+            const handleTouchMove = (event: TouchEvent) => {
+                if (!editorScroller || event.touches.length !== 1) return;
+
+                const currentY = event.touches[0].clientY;
+                const deltaY = currentY - lastTouchY;
+                lastTouchY = currentY;
+
+                const editorMaxScroll = editorScroller.scrollHeight - editorScroller.clientHeight;
+                const editorCannotScroll = editorMaxScroll <= 1;
+                const atTop = editorScroller.scrollTop <= 0;
+                const atBottom = editorScroller.scrollTop >= editorMaxScroll - 1;
+
+                if (editorCannotScroll || (deltaY > 0 && atTop) || (deltaY < 0 && atBottom)) {
+                    mainScroller.scrollTop -= deltaY;
+                    event.preventDefault();
+                }
+            };
+
+            editorScroller.addEventListener('touchstart', handleTouchStart, { passive: true });
+            editorScroller.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+            return () => {
+                editorScroller?.removeEventListener('touchstart', handleTouchStart);
+                editorScroller?.removeEventListener('touchmove', handleTouchMove);
+            };
+        };
+
+        const detach = attachTouchBridge();
+        if (detach) return detach;
+
+        const retryId = window.setTimeout(() => {
+            const lateDetach = attachTouchBridge();
+            if (lateDetach) {
+                cleanup = lateDetach;
+            }
+        }, 50);
+
+        let cleanup = () => {};
+        return () => {
+            window.clearTimeout(retryId);
+            cleanup();
+        };
+    }, [activeFileIndex, files.length, bootStage]);
 
     useEffect(() => {
         let interval: any;
@@ -1260,6 +1324,7 @@ sys.stdout = io.StringIO()
             </div>
 
             <div
+                ref={mainScrollRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
                     paddingTop: `${Math.max(headerHeight + 28, 288)}px`,
@@ -1293,7 +1358,7 @@ sys.stdout = io.StringIO()
                             </button>
                         ))}
                     </div>
-                    <div className="flex-grow bg-[#050c18] relative" style={{ minHeight: '320px' }}>
+                    <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative" style={{ minHeight: '320px' }}>
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
