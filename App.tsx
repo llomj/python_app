@@ -1263,7 +1263,8 @@ sys.stdout = io.StringIO()
             <div
                 className="px-4 pb-4"
                 style={{
-                    paddingTop: `${Math.max(headerHeight + 12, 260)}px`
+                    paddingTop: `${Math.max(headerHeight + 12, 260)}px`,
+                    paddingBottom: `${Math.max(headerHeight + 120, 320)}px`
                 }}
             >
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
