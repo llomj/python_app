@@ -3,6 +3,7 @@ export type CompareMode = 'exact' | 'float' | 'printedOrReturn';
 export interface AutoTestCase {
     args: unknown[];
     expected: unknown;
+    inputValues?: string[];
     label?: string;
 }
 
@@ -407,6 +408,199 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['racecar'], expected: true },
             { args: ['hello'], expected: false },
             { args: [''], expected: true }
+        ]
+    },
+    51: {
+        functionNames: ['factorial'],
+        tests: [
+            { args: [0], expected: 1 },
+            { args: [5], expected: 120 },
+            { args: [7], expected: 5040 }
+        ]
+    },
+    52: {
+        functionNames: ['is_anagram'],
+        tests: [
+            { args: ['listen', 'silent'], expected: true },
+            { args: ['Triangle', 'Integral'], expected: true },
+            { args: ['hello', 'world'], expected: false }
+        ]
+    },
+    53: {
+        functionNames: ['count_words'],
+        tests: [
+            { args: ['This is this'], expected: { this: 2, is: 1 } },
+            { args: ['one two one'], expected: { one: 2, two: 1 } },
+            { args: ['Hello hello'], expected: { hello: 2 } }
+        ]
+    },
+    54: {
+        functionNames: ['fibonacci'],
+        tests: [
+            { args: [0], expected: [] },
+            { args: [1], expected: [0] },
+            { args: [7], expected: [0, 1, 1, 2, 3, 5, 8] }
+        ]
+    },
+    55: {
+        functionNames: ['area_rectangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5', '3'], expected: '15.0' },
+            { args: [], inputValues: ['4', '2'], expected: '8.0' }
+        ]
+    },
+    56: {
+        functionNames: ['even_odd'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['4'], expected: 'Number is even' },
+            { args: [], inputValues: ['7'], expected: 'Number is odd' }
+        ]
+    },
+    57: {
+        functionNames: ['fibonacci_series'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['10'], expected: '0 1 1 2 3 5 8' },
+            { args: [], inputValues: ['1'], expected: '0 1' }
+        ]
+    },
+    58: {
+        functionNames: ['max_number'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['10 20 15'], expected: '20' },
+            { args: [], inputValues: ['-2 -9 -1'], expected: '-1' }
+        ]
+    },
+    59: {
+        functionNames: ['reverse_string'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: ['Jonathan'], expected: 'nahtanoJ' },
+            { args: ['hello'], expected: 'olleh' }
+        ]
+    },
+    60: {
+        functionNames: ['is_palindrome'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['racecar'], expected: true },
+            { args: [], inputValues: ['hello'], expected: false }
+        ]
+    },
+    61: {
+        functionNames: ['count_vowels'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['Hello'], expected: '2' },
+            { args: [], inputValues: ['rhythm'], expected: '0' }
+        ]
+    },
+    62: {
+        functionNames: ['factorial'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5'], expected: '120' },
+            { args: [], inputValues: ['0'], expected: '1' }
+        ]
+    },
+    63: {
+        functionNames: ['sum_of_all_numbers'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5'], expected: '15' },
+            { args: [], inputValues: ['3'], expected: '6' }
+        ]
+    },
+    64: {
+        functionNames: ['largest_element', 'find_largest'],
+        tests: [
+            { args: [[2, 56, 75, 4566, 3]], expected: 4566 },
+            { args: [[-5, -2, -9]], expected: -2 },
+            { args: [[7]], expected: 7 }
+        ]
+    },
+    65: {
+        functionNames: ['largest_elememt', 'main'],
+        tests: [
+            { args: [['tree', 'cliff', 'mountain', 'grassy']], expected: 'mountain' },
+            { args: [['house', 'counter', 'if']], expected: 'counter' },
+            { args: [['same', 'size']], expected: 'same' }
+        ]
+    },
+    66: {
+        functionNames: ['remove_duplicates'],
+        tests: [
+            { args: [['tree', 'kiss', 'tree']], expected: ['tree', 'kiss'] },
+            { args: [[1, 2, 1, 3]], expected: [1, 2, 3] },
+            { args: [[]], expected: [] }
+        ]
+    },
+    67: {
+        functionNames: ['is_leap_year'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['2000'], expected: true },
+            { args: [], inputValues: ['1900'], expected: false },
+            { args: [], inputValues: ['2024'], expected: true }
+        ]
+    },
+    68: {
+        functionNames: ['length_string'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['hello'], expected: '5' },
+            { args: [], inputValues: ['hello world'], expected: '11' }
+        ]
+    },
+    70: {
+        functionNames: ['count_each_word'],
+        tests: [
+            { args: ['this is this'], expected: { this: 2, is: 1 } },
+            { args: ['one two one'], expected: { one: 2, two: 1 } }
+        ]
+    },
+    71: {
+        functionNames: ['second_largest_number', 'sec_lar'],
+        tests: [
+            { args: [[10, 90, 45, 55, 222, 2]], expected: 90 },
+            { args: [[5, 5, 4, 3]], expected: 4 },
+            { args: [[-5, -1, -9]], expected: -5 }
+        ]
+    },
+    72: {
+        functionNames: ['is_valid_email'],
+        tests: [
+            { args: ['test@example.com'], expected: true },
+            { args: ['bad-email'], expected: false },
+            { args: ['name@site'], expected: false }
+        ]
+    },
+    73: {
+        functionNames: ['factorial'],
+        tests: [
+            { args: [0], expected: 1 },
+            { args: [5], expected: 120 },
+            { args: [6], expected: 720 }
+        ]
+    },
+    74: {
+        functionNames: ['are_anagrams', 'pal'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['listen', 'silent'], expected: true },
+            { args: [], inputValues: ['hello', 'world'], expected: false }
+        ]
+    },
+    75: {
+        functionNames: ['is_prime'],
+        tests: [
+            { args: [2], expected: true },
+            { args: [17], expected: true },
+            { args: [1], expected: false },
+            { args: [9], expected: false }
         ]
     }
 };

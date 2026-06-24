@@ -66,6 +66,8 @@ import json
 import math
 import sys
 import io
+import builtins
+import inspect
 
 __auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
 
@@ -93,17 +95,28 @@ def __auto_grader_same(actual, expected, compare):
             return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
         except Exception:
             return False
+    if compare == "printedOrReturn":
+        return actual == expected or str(actual) == str(expected)
     return actual == expected
+
+def __auto_grader_accepts_args(candidate, args):
+    try:
+        inspect.signature(candidate).bind(*args)
+        return True
+    except Exception:
+        return False
 
 def __auto_grader_run():
     function_names = __auto_grader_spec.get("functionNames", [])
     compare = __auto_grader_spec.get("compare", "exact")
+    tests = __auto_grader_spec.get("tests", [])
+    first_args = tests[0].get("args", []) if tests else []
     target = None
     target_name = None
 
     for name in function_names:
         candidate = globals().get(name)
-        if callable(candidate):
+        if callable(candidate) and __auto_grader_accepts_args(candidate, first_args):
             target = candidate
             target_name = name
             break
@@ -117,9 +130,13 @@ def __auto_grader_run():
     for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
         args = case.get("args", [])
         expected = case.get("expected")
+        input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
         old_stdout = sys.stdout
+        old_input = builtins.input
         sys.stdout = io.StringIO()
+        input_iter = iter(input_values)
+        builtins.input = lambda prompt='': next(input_iter)
         try:
             returned = target(*args)
             printed = sys.stdout.getvalue().strip()
@@ -131,9 +148,10 @@ def __auto_grader_run():
             }
         finally:
             sys.stdout = old_stdout
+            builtins.input = old_input
 
         returned_ok = __auto_grader_same(returned, expected, compare)
-        printed_ok = compare == "printedOrReturn" and __auto_grader_same(printed, expected, "exact")
+        printed_ok = compare == "printedOrReturn" and __auto_grader_same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok:
             actual = printed if printed else returned
             return {
