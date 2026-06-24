@@ -815,6 +815,39 @@ const App: React.FC = () => {
     }, [activeFileIndex, files.length, bootStage]);
 
     useEffect(() => {
+        if (bootStage !== 'launched') return;
+        const mainScroller = mainScrollRef.current;
+        const overlay = headerRef.current;
+        if (!mainScroller || !overlay) return;
+
+        let lastTouchY = 0;
+
+        const handleTouchStart = (event: TouchEvent) => {
+            if (event.touches.length !== 1) return;
+            lastTouchY = event.touches[0].clientY;
+        };
+
+        const handleTouchMove = (event: TouchEvent) => {
+            if (event.touches.length !== 1) return;
+
+            const currentY = event.touches[0].clientY;
+            const deltaY = currentY - lastTouchY;
+            lastTouchY = currentY;
+
+            mainScroller.scrollTop -= deltaY;
+            event.preventDefault();
+        };
+
+        overlay.addEventListener('touchstart', handleTouchStart, { passive: true });
+        overlay.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+        return () => {
+            overlay.removeEventListener('touchstart', handleTouchStart);
+            overlay.removeEventListener('touchmove', handleTouchMove);
+        };
+    }, [bootStage]);
+
+    useEffect(() => {
         let interval: any;
         if (bootStage === 'loading') {
             interval = setInterval(() => {
@@ -1254,6 +1287,7 @@ sys.stdout = io.StringIO()
                 className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2 bg-[#040b16]"
                 style={{
                     top: 0,
+                    backgroundColor: 'rgba(4, 11, 22, 0.18)',
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
@@ -1287,9 +1321,9 @@ sys.stdout = io.StringIO()
                     style={{
                         minHeight: '120px',
                         backgroundColor: 'rgba(8, 18, 34, 0.30)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
-                        borderColor: 'rgba(88, 118, 160, 0.45)'
+                        backdropFilter: 'blur(6px)',
+                        WebkitBackdropFilter: 'blur(6px)',
+                        borderColor: 'rgba(88, 118, 160, 0.35)'
                     }}
                 >
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
