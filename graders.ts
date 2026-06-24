@@ -210,5 +210,203 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 5, -3]], expected: -15 },
             { args: [[7]], expected: 7 }
         ]
+    },
+    26: {
+        functionNames: ['has_duplicates'],
+        tests: [
+            { args: [[1, 2, 3, 2]], expected: true },
+            { args: [['it', 'was', 'itt']], expected: false },
+            { args: [[5, 5]], expected: true }
+        ]
+    },
+    27: {
+        functionNames: ['count_occurrences'],
+        tests: [
+            { args: [[1, 2, 2, 3, 2], 2], expected: 3 },
+            { args: [['tree', 'house', 'tree'], 'tree'], expected: 2 },
+            { args: [[1, 2, 3], 9], expected: 0 }
+        ]
+    },
+    28: {
+        functionNames: ['remove_vowels'],
+        tests: [
+            { args: ['Jonathan'], expected: 'Jnthn' },
+            { args: ['AEIOUxyz'], expected: 'xyz' },
+            { args: ['rhythm'], expected: 'rhythm' }
+        ]
+    },
+    29: {
+        functionNames: ['capitalize_words'],
+        tests: [
+            { args: ['hello world! this is a test.'], expected: 'Hello World! This Is A Test.' },
+            { args: ['jonathan moll'], expected: 'Jonathan Moll' },
+            { args: ['a b c'], expected: 'A B C' }
+        ]
+    },
+    30: {
+        functionNames: ['remove_spaces', 'remove_space'],
+        tests: [
+            { args: ['suck me duck Jonathan'], expected: 'suckmeduckJonathan' },
+            { args: ['what just happened'], expected: 'whatjusthappened' },
+            { args: [' no spaces '], expected: 'nospaces' }
+        ]
+    },
+    31: {
+        functionNames: ['get_initials'],
+        tests: [
+            { args: ['John Doe'], expected: 'J.D.' },
+            { args: ['jonathan moll'], expected: 'J.M.' },
+            { args: ['Ada Lovelace'], expected: 'A.L.' }
+        ]
+    },
+    32: {
+        functionNames: ['reverse_words', 'reverse_word'],
+        tests: [
+            { args: ['hello world'], expected: 'world hello' },
+            { args: ['one two three'], expected: 'three two one' },
+            { args: ['single'], expected: 'single' }
+        ]
+    },
+    33: {
+        functionNames: ['remove_duplicates'],
+        tests: [
+            { args: [[1, 2, 3, 1, 4, 2, 5]], expected: [1, 2, 3, 4, 5] },
+            { args: [['a', 'b', 'a', 'c']], expected: ['a', 'b', 'c'] },
+            { args: [[]], expected: [] }
+        ]
+    },
+    34: {
+        functionNames: ['find_longest_word'],
+        tests: [
+            { args: ['why dont you call Jonathan'], expected: 'Jonathan' },
+            { args: ['tree cliff mountain grassy'], expected: 'mountain' },
+            { args: ['same size test'], expected: 'same' }
+        ]
+    },
+    35: {
+        functionNames: ['find_vowels'],
+        tests: [
+            { args: ['Jonathan'], expected: ['o', 'a', 'a'] },
+            { args: ['AEIOUxyz'], expected: ['A', 'E', 'I', 'O', 'U'] },
+            { args: ['rhythm'], expected: [] }
+        ]
+    },
+    36: {
+        functionNames: ['reverse_number'],
+        tests: [
+            { args: [123], expected: 321 },
+            { args: [900], expected: 9 },
+            { args: [5], expected: 5 }
+        ]
+    },
+    37: {
+        functionNames: ['remove_duplicates', 'remove_duplicate'],
+        tests: [
+            { args: ['Jonathan'], expected: 'Jonath' },
+            { args: ['banana'], expected: 'ban' },
+            { args: ['abc'], expected: 'abc' }
+        ]
+    },
+    38: {
+        functionNames: ['sum_of_list'],
+        tests: [
+            { args: [[1, 2, 3]], expected: 6 },
+            { args: [[-5, 5, 10]], expected: 10 },
+            { args: [[]], expected: 0 }
+        ]
+    },
+    39: {
+        functionNames: ['sum_of_list'],
+        tests: [
+            { args: [[2, 2, 2]], expected: 6 },
+            { args: [[-1, 1, 9]], expected: 9 },
+            { args: [[]], expected: 0 }
+        ]
+    },
+    40: {
+        functionNames: ['find_min_max'],
+        tests: [
+            { args: [[10, 90, 45, 55, 222, 2]], expected: [2, 222] },
+            { args: [[-5, -1, -9]], expected: [-9, -1] },
+            { args: [[7]], expected: [7, 7] }
+        ]
+    },
+    41: {
+        functionNames: ['count_occurrences'],
+        tests: [
+            { args: [['Tom', 'Jerry', 'Tom'], 'Tom'], expected: 2 },
+            { args: [[1, 2, 2, 2], 2], expected: 3 },
+            { args: [['a', 'b'], 'z'], expected: 0 }
+        ]
+    },
+    42: {
+        functionNames: ['table'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [3], expected: '3 * 0 = 0\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30' }
+        ]
+    },
+    43: {
+        functionNames: ['square_elements'],
+        tests: [
+            { args: [[2, 3, 4]], expected: [4, 9, 16] },
+            { args: [[-2, 0, 5]], expected: [4, 0, 25] }
+        ]
+    },
+    44: {
+        functionNames: ['count_uppercase'],
+        tests: [
+            { args: ['Jonathan Moll'], expected: 2 },
+            { args: ['ABC xyz!'], expected: 3 },
+            { args: ['no uppercase'], expected: 0 }
+        ]
+    },
+    45: {
+        functionNames: ['remove_spaces'],
+        tests: [
+            { args: ['what happening boss man'], expected: 'whathappeningbossman' },
+            { args: [' a b c '], expected: 'abc' },
+            { args: ['none'], expected: 'none' }
+        ]
+    },
+    46: {
+        functionNames: ['merge_lists'],
+        tests: [
+            { args: [[1, 3, 5], [2, 4, 6]], expected: [1, 2, 3, 4, 5, 6] },
+            { args: [[-3, 7], [-5, 0, 10]], expected: [-5, -3, 0, 7, 10] },
+            { args: [[], [1, 2]], expected: [1, 2] }
+        ]
+    },
+    47: {
+        functionNames: ['find_index'],
+        tests: [
+            { args: [[10, 20, 30], 20], expected: 1 },
+            { args: [[10, 20, 30], 99], expected: -1 },
+            { args: [['a', 'b', 'a'], 'a'], expected: 0 }
+        ]
+    },
+    48: {
+        functionNames: ['sum_even_indices'],
+        tests: [
+            { args: [[10, 20, 30, 40]], expected: 40 },
+            { args: [[1, 2, 3, 4, 5]], expected: 9 },
+            { args: [[]], expected: 0 }
+        ]
+    },
+    49: {
+        functionNames: ['remove_duplicates_case_insensitive', 'remove_duplicates'],
+        tests: [
+            { args: [['Hello', 'HELLO', 'world', 'World', 'Python', 'python']], expected: ['Hello', 'world', 'Python'] },
+            { args: [['not', 'not', 'hot', 'HOT', 'cold']], expected: ['not', 'hot', 'cold'] },
+            { args: [[]], expected: [] }
+        ]
+    },
+    50: {
+        functionNames: ['is_palindrome'],
+        tests: [
+            { args: ['racecar'], expected: true },
+            { args: ['hello'], expected: false },
+            { args: [''], expected: true }
+        ]
     }
 };

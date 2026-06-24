@@ -74,7 +74,18 @@ def __auto_grader_jsonable(value):
     except Exception:
         return repr(value)
 
+def __auto_grader_normalize(value):
+    if isinstance(value, tuple):
+        return [__auto_grader_normalize(item) for item in value]
+    if isinstance(value, list):
+        return [__auto_grader_normalize(item) for item in value]
+    if isinstance(value, dict):
+        return {key: __auto_grader_normalize(item) for key, item in value.items()}
+    return value
+
 def __auto_grader_same(actual, expected, compare):
+    actual = __auto_grader_normalize(actual)
+    expected = __auto_grader_normalize(expected)
     if compare == "float":
         try:
             return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
