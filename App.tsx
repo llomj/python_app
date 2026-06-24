@@ -1262,7 +1262,7 @@ sys.stdout = io.StringIO()
             <div
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
-                    paddingTop: `${Math.max(headerHeight + 12, 260)}px`,
+                    paddingTop: `${Math.max(headerHeight + 28, 288)}px`,
                     paddingBottom: `max(12rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 220, 520)}px))`,
                     WebkitOverflowScrolling: 'touch',
                     overscrollBehaviorY: 'contain'
