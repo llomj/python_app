@@ -789,6 +789,7 @@ const App: React.FC = () => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
+    const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
@@ -1697,13 +1698,24 @@ sys.stdout = io.StringIO()
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
                         </div>
-                        <div className="flex justify-center gap-2 sm:gap-3 px-2 py-3 border-t border-[#1d2d44] bg-[#071225]">
-                            <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                            <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
-                            <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
-                            <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                            <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
-                            <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
+                        <div className="border-t border-[#1d2d44] bg-[#071225]">
+                            <button
+                                onClick={() => setShowActionPanel(prev => !prev)}
+                                className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-gray-300 hover:text-[#3b82f6] transition-colors"
+                            >
+                                <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
+                                {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+                            </button>
+                            {showActionPanel && (
+                                <div className="flex justify-center gap-2 sm:gap-3 px-2 pb-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                                    <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                                    <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
+                                    <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
+                                    <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
+                                    <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
+                                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
+                                </div>
+                            )}
                         </div>
                         <div className="h-2 flex-shrink-0 border-t border-[#5f7fa6] bg-[#13233a]" />
                     </div>
