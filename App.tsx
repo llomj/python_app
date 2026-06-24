@@ -1386,6 +1386,35 @@ sys.stdout = io.StringIO()
             </div>
 
             <div
+                className="fixed left-1/2 z-30 w-full max-w-2xl -translate-x-1/2 px-4"
+                style={{
+                    top: `${Math.max(headerHeight + 8, 274)}px`,
+                    pointerEvents: 'none'
+                }}
+            >
+                <div
+                    className="flex items-center justify-between rounded-t-xl border border-[#1d2d44] border-b-0 bg-[#0d1b2a] p-2 shadow-2xl"
+                    style={{ pointerEvents: 'auto' }}
+                >
+                    <div className="flex items-center gap-2 overflow-hidden">
+                        <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
+                        {isEditingFileName ? (
+                            <input autoFocus value={newName} onChange={(e) => setNewName(e.target.value)} onBlur={finishRenaming} onKeyDown={(e) => e.key === 'Enter' && finishRenaming()} className="bg-[#112240] text-sm border border-[#3b82f6] rounded px-2 py-0.5 outline-none text-white w-24" />
+                        ) : (
+                            <span className="text-sm font-bold text-gray-300 font-mono truncate max-w-[100px]">{files[activeFileIndex].name}</span>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <button onClick={addFile} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#22c55e]"><Plus size={18} /></button>
+                        <button onClick={removeFile} disabled={files.length <= 1} className="p-1.5 hover:bg-[#1d2d44] rounded-full text-[#ef4444] disabled:opacity-30"><Minus size={18} /></button>
+                        <button onClick={runCode} disabled={isRunning} className="ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]">
+                            {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} RUN
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
                 ref={mainScrollRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
@@ -1397,11 +1426,7 @@ sys.stdout = io.StringIO()
             >
                 <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
                     <div
-                        className="sticky flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0"
-                        style={{
-                            top: `${Math.max(headerHeight + 8, 274)}px`,
-                            zIndex: 30
-                        }}
+                        className="hidden"
                     >
                         <div className="flex items-center gap-2 overflow-hidden">
                             <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
