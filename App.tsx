@@ -756,7 +756,7 @@ const App: React.FC = () => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
-    const [outputHeight, setOutputHeight] = useState(125);
+    const [outputHeight, setOutputHeight] = useState(85);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
 
@@ -1396,7 +1396,7 @@ sys.stdout = io.StringIO()
     const toggleOutputHeight = () => {
         const nextExpanded = !isOutputExpanded;
         setIsOutputExpanded(nextExpanded);
-        setOutputHeight(nextExpanded ? 320 : 125);
+        setOutputHeight(nextExpanded ? 320 : 85);
     };
 
     const editorExtensions = useMemo(() => [
@@ -1464,25 +1464,14 @@ sys.stdout = io.StringIO()
                     paddingBottom: '0.75rem'
                 }}
             >
-                <div className="relative flex items-center justify-center mb-3">
-                    <div className="flex gap-3 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
+                <div className="flex items-center justify-center mb-3">
+                    <div className="flex gap-3 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight" style={{ pointerEvents: 'auto' }}>
+                        <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="API key settings"><Key size={14} /></button>
                         <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
                         <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{stats.success}</span></div>
                         <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
                         <div className="flex items-center border-l border-[#1d2d44] pl-3 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
                     </div>
-                    <div className="absolute right-0">
-                        <button onClick={() => setShowModal('settings')} style={{ pointerEvents: 'auto' }} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
-                    </div>
-                </div>
-
-                <div className="flex justify-center gap-2 sm:gap-3 mb-3">
-                    <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                    <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
-                    <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
-                    <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                    <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
-                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
                 </div>
 
                 <div
@@ -1588,12 +1577,12 @@ sys.stdout = io.StringIO()
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
                     paddingTop: `${editorContentTop}px`,
-                    paddingBottom: `max(12rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 220, 520)}px))`,
+                    paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 300, 620)}px))`,
                     WebkitOverflowScrolling: 'touch',
                     overscrollBehaviorY: 'contain'
                 }}
             >
-                <div className="mb-14 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden">
+                <div className="mb-28 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden">
                     <div
                         className="hidden"
                     >
@@ -1643,7 +1632,7 @@ sys.stdout = io.StringIO()
                             className="overflow-y-auto px-2 py-2"
                             style={{
                                 height: `${outputHeight}px`,
-                                minHeight: '125px',
+                                minHeight: '85px',
                                 maxHeight: '55vh',
                                 border: outputStatus === 'win'
                                     ? '2px solid rgba(34, 197, 94, 0.75)'
@@ -1674,19 +1663,27 @@ sys.stdout = io.StringIO()
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
                         </div>
+                        <div className="flex justify-center gap-2 sm:gap-3 px-2 py-3 border-t border-[#1d2d44] bg-[#071225]">
+                            <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                            <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
+                            <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
+                            <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
+                            <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
+                            <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
+                        </div>
                         <div className="h-2 flex-shrink-0 border-t border-[#5f7fa6] bg-[#13233a]" />
                     </div>
                 </div>
             </div>
 
-            {/* Fixed footer - centered version button with settings on the right */}
-            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4 flex items-center justify-center gap-6" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
-                <div className="mx-auto flex items-center justify-center gap-3">
+            {/* Fixed footer - centered version button with settings on the bottom-right */}
+            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+                <div className="relative flex items-center justify-center">
                     <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
                         <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
                     </button>
-                    <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-colors p-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Settings"><Settings size={20} /></button>
+                    <button onClick={() => setShowModal('settings')} className="absolute right-0 text-gray-400 hover:text-[#3b82f6] transition-colors p-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Settings"><Settings size={20} /></button>
                 </div>
             </div>
 

@@ -154,7 +154,7 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v76';
+        const CURRENT_VERSION = 'v77';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
@@ -225,8 +225,8 @@
                 if (!(output instanceof HTMLElement) || output.dataset.outputScrollable === 'true') continue;
 
                 output.dataset.outputScrollable = 'true';
-                output.style.height = '125px';
-                output.style.minHeight = '125px';
+                output.style.height = '85px';
+                output.style.minHeight = '85px';
                 output.style.maxHeight = '50vh';
                 output.style.overflowY = 'auto';
                 output.style.webkitOverflowScrolling = 'touch';
