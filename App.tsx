@@ -838,12 +838,12 @@ const App: React.FC = () => {
             event.preventDefault();
         };
 
-        overlay.addEventListener('touchstart', handleTouchStart, { passive: true });
-        overlay.addEventListener('touchmove', handleTouchMove, { passive: false });
+        overlay.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+        overlay.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
 
         return () => {
-            overlay.removeEventListener('touchstart', handleTouchStart);
-            overlay.removeEventListener('touchmove', handleTouchMove);
+            overlay.removeEventListener('touchstart', handleTouchStart, true);
+            overlay.removeEventListener('touchmove', handleTouchMove, true);
         };
     }, [bootStage]);
 
@@ -1386,7 +1386,7 @@ sys.stdout = io.StringIO()
                 ref={mainScrollRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
-                    paddingTop: `${Math.max(headerHeight + 28, 288)}px`,
+                    paddingTop: `${Math.max(headerHeight + 64, 340)}px`,
                     paddingBottom: `max(12rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 220, 520)}px))`,
                     WebkitOverflowScrolling: 'touch',
                     overscrollBehaviorY: 'contain'
