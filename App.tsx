@@ -1058,7 +1058,6 @@ sys.stdout = io.StringIO()
     }, [showModal, exercise.id, loadSolutionFiles]);
 
     const rate = stats.shots > 0 ? ((stats.success / stats.shots) * 100).toFixed(2) : '0.00';
-    const problemPanelGap = 12;
 
     const pythonCompletionSource = useMemo(() => {
         const symbolMap = new Map<string, Completion>();
@@ -1199,37 +1198,32 @@ sys.stdout = io.StringIO()
 
     return (
         <div
-            className="min-h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
+            className="min-h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-x-hidden animate-in fade-in duration-700 relative"
             style={{ paddingBottom: 'max(4.5rem, calc(env(safe-area-inset-bottom) + 4.5rem))' }}
         >
-            {/* Fixed Header Section */}
             <div
                 ref={headerRef}
-                className="fixed left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] px-4 pb-2"
+                className="sticky top-0 z-20 bg-[#040b16]"
                 style={{
-                    top: 'var(--safe-area-inset-top, 0px)',
-                    height: 'auto',
-                    maxHeight: 'none',
-                    overflow: 'visible',
-                    paddingTop: '1rem',
+                    paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
-                    paddingBottom: '0.5rem'
+                    paddingBottom: '0.75rem'
                 }}
             >
-                <div className="relative flex items-center justify-center mb-4">
-                    <div className="flex gap-4 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
+                <div className="relative flex items-center justify-center mb-3">
+                    <div className="flex gap-3 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-4 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight">
                         <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
                         <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{stats.success}</span></div>
                         <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
-                        <div className="flex items-center border-l border-[#1d2d44] pl-4 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
+                        <div className="flex items-center border-l border-[#1d2d44] pl-3 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
                     </div>
-                    <div className="absolute right-4">
+                    <div className="absolute right-0">
                         <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
                     </div>
                 </div>
 
-                <div className="flex justify-center gap-2 sm:gap-3 mb-4">
+                <div className="flex justify-center gap-2 sm:gap-3 mb-3">
                     <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
                     <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
                     <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
@@ -1237,41 +1231,14 @@ sys.stdout = io.StringIO()
                     <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
                     <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => setShowModal('restart_confirm')} />
                 </div>
-            </div>
 
-            {/* Fixed Problem Panel - Directly below score panel */}
-            <div
-                ref={problemPanelRef}
-                style={{
-                    position: 'fixed',
-                    top: `${headerHeight + problemPanelGap}px`,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '100%',
-                    maxWidth: '42rem',
-                    zIndex: 15,
-                    backgroundColor: '#040b16',
-                    padding: '0 1rem',
-                    paddingTop: '0.25rem',
-                    paddingBottom: '0.75rem',
-                    paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
-                    paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))'
-                }}
-            >
-                <div style={{
-                    backgroundColor: '#0a1628',
-                    borderRadius: '0.75rem',
-                    padding: '1.5rem',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                    border: '1px solid #1d2d44',
-                    maxHeight: '34vh',
-                    minHeight: '140px',
-                    overflow: 'hidden',
-                    width: '100%',
-                    minWidth: '100%'
-                }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                        <h2 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'white', margin: 0 }}>Problem {exercise.id}</h2>
+                <div
+                    ref={problemPanelRef}
+                    className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
+                    style={{ minHeight: '120px' }}
+                >
+                    <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
+                        <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
                         <button
                             onClick={() => setShowModal('problem_full')}
                             style={{
@@ -1284,7 +1251,8 @@ sys.stdout = io.StringIO()
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.25rem',
-                                fontSize: '0.75rem'
+                                fontSize: '0.75rem',
+                                flexShrink: 0
                             }}
                         >
                             <ExternalLink size={14} />
@@ -1303,24 +1271,21 @@ sys.stdout = io.StringIO()
                             whiteSpace: 'pre-wrap',
                             wordWrap: 'break-word',
                             overflowWrap: 'break-word',
-                            maxHeight: 'calc(34vh - 3.5rem)',
-                            minHeight: '72px',
+                            maxHeight: '28vh',
+                            minHeight: '84px',
                             overflowY: 'auto',
                             overflowX: 'hidden',
-                            paddingRight: '12px',
-                            paddingLeft: '4px',
-                            marginBottom: '0.5rem',
+                            padding: '0.5rem 1rem 1rem',
                             margin: 0,
-                            paddingTop: '8px',
-                            paddingBottom: '8px',
                             fontFamily: 'inherit',
                             textOverflow: 'clip',
                             display: 'block',
                             WebkitLineClamp: 'unset',
                             lineClamp: 'unset',
                             width: '100%',
-                            minWidth: '100%',
-                            WebkitOverflowScrolling: 'touch'
+                            WebkitOverflowScrolling: 'touch',
+                            touchAction: 'pan-y',
+                            overscrollBehavior: 'contain'
                         }}
                     >
                         {exercise.description}
@@ -1328,9 +1293,8 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            {/* Scrollable Editor Section - Scrolls behind problem panel */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ paddingTop: `${headerHeight + problemPanelHeight + problemPanelGap}px` }}>
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: `calc(100vh - ${headerHeight + problemPanelHeight + problemPanelGap}px)` }}>
+            <div className="flex-1 overflow-y-auto px-4 pt-3 pb-4">
+                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: 'calc(100vh - 17rem)' }}>
                     <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                         <div className="flex items-center gap-2 overflow-hidden">
                             <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
@@ -1384,9 +1348,12 @@ sys.stdout = io.StringIO()
                             className="overflow-y-auto px-2 py-2"
                             style={{
                                 height: `${outputHeight}px`,
-                                minHeight: '96px',
+                                minHeight: '120px',
                                 maxHeight: '50vh',
-                                transition: 'max-height 0.2s ease, height 0.2s ease'
+                                transition: 'max-height 0.2s ease, height 0.2s ease',
+                                WebkitOverflowScrolling: 'touch',
+                                touchAction: 'pan-y',
+                                overscrollBehavior: 'contain'
                             }}
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
