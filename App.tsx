@@ -645,8 +645,8 @@ const App: React.FC = () => {
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(265);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
-    const editorToolbarTop = Math.max(headerHeight + 8, 276);
-    const editorContentTop = editorToolbarTop + 58;
+    const editorToolbarTop = Math.max(headerHeight + 4, 270);
+    const editorContentTop = editorToolbarTop + 54;
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1396,7 +1396,7 @@ sys.stdout = io.StringIO()
                 }}
             >
                 <div
-                    className="flex items-center justify-between rounded-t-xl border border-[#1d2d44] border-b-0 bg-[#0d1b2a] p-2 shadow-2xl"
+                    className="flex items-center justify-between rounded-xl border border-[#5f7fa6] bg-[#0d1b2a] p-2 shadow-2xl shadow-black/40"
                     style={{ pointerEvents: 'auto' }}
                 >
                     <div className="flex items-center gap-2 overflow-hidden">
@@ -1454,13 +1454,13 @@ sys.stdout = io.StringIO()
                             </button>
                         ))}
                     </div>
-                    <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative" style={{ minHeight: '320px' }}>
+                    <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative border-b border-[#5f7fa6]" style={{ minHeight: '320px' }}>
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                         />
                     </div>
-                    <div className="border-t border-[#1d2d44] bg-[#0a1628] flex-shrink-0">
+                    <div className="bg-[#0a1628] flex-shrink-0">
                         <div className="flex items-center justify-between px-2 py-1 border-b border-[#1d2d44]">
                             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
                             <button
