@@ -632,20 +632,17 @@ const App: React.FC = () => {
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
-    const [isProblemExpanded, setIsProblemExpanded] = useState(false);
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
-    const [outputHeight, setOutputHeight] = useState(140);
+    const [outputHeight, setOutputHeight] = useState(180);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
 
     const outputRef = useRef<HTMLDivElement>(null);
-    const outputResizeRef = useRef<{ startY: number; startHeight: number } | null>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(140);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
-    const [problemDescriptionHeight, setProblemDescriptionHeight] = useState<number | 'auto'>('auto');
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1111,41 +1108,10 @@ sys.stdout = io.StringIO()
             return { from, options };
         };
     }, [files]);
-    const clampOutputHeight = (height: number) => {
-        const maxHeight = typeof window !== 'undefined' ? Math.max(220, Math.floor(window.innerHeight * 0.5)) : 420;
-        return Math.min(maxHeight, Math.max(96, height));
-    };
-
     const toggleOutputHeight = () => {
         const nextExpanded = !isOutputExpanded;
         setIsOutputExpanded(nextExpanded);
-        setOutputHeight(nextExpanded ? 320 : 140);
-    };
-
-    const handleOutputResizeStart = (event: React.PointerEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        outputResizeRef.current = {
-            startY: event.clientY,
-            startHeight: outputHeight
-        };
-
-        const handlePointerMove = (moveEvent: PointerEvent) => {
-            const resizeState = outputResizeRef.current;
-            if (!resizeState) return;
-
-            const nextHeight = clampOutputHeight(resizeState.startHeight + (resizeState.startY - moveEvent.clientY));
-            setOutputHeight(nextHeight);
-            setIsOutputExpanded(nextHeight > 180);
-        };
-
-        const stopResize = () => {
-            outputResizeRef.current = null;
-            window.removeEventListener('pointermove', handlePointerMove);
-            window.removeEventListener('pointerup', stopResize);
-        };
-
-        window.addEventListener('pointermove', handlePointerMove);
-        window.addEventListener('pointerup', stopResize);
+        setOutputHeight(nextExpanded ? 320 : 180);
     };
 
     const editorExtensions = useMemo(() => [
@@ -1293,8 +1259,8 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 pt-3 pb-4">
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden" style={{ minHeight: 'calc(100vh - 17rem)' }}>
+            <div className="px-4 pt-3 pb-4">
+                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
                     <div className="flex items-center justify-between p-2 bg-[#0d1b2a] border-b border-[#1d2d44] flex-shrink-0">
                         <div className="flex items-center gap-2 overflow-hidden">
                             <button onClick={startRenaming} className="p-1 hover:bg-[#1d2d44] rounded-full text-gray-400"><Pencil size={14} /></button>
@@ -1330,30 +1296,25 @@ sys.stdout = io.StringIO()
                             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
                             <button
                                 onClick={toggleOutputHeight}
-                                className="text-gray-400 hover:text-[#3b82f6] transition-all p-1"
+                                className="text-gray-400 hover:text-[#3b82f6] transition-all px-2 py-1 flex items-center gap-1 text-[11px] font-bold"
                                 title={isOutputExpanded ? "Collapse" : "Expand"}
                             >
+                                <span>{isOutputExpanded ? 'Smaller' : 'Larger'}</span>
                                 {isOutputExpanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
                             </button>
-                        </div>
-                        <div
-                            onPointerDown={handleOutputResizeStart}
-                            className="h-4 flex items-center justify-center cursor-row-resize touch-none"
-                            title="Drag to resize output"
-                        >
-                            <div className="w-16 h-1 rounded-full bg-[#1d2d44]" />
                         </div>
                         <div
                             ref={outputRef}
                             className="overflow-y-auto px-2 py-2"
                             style={{
                                 height: `${outputHeight}px`,
-                                minHeight: '120px',
-                                maxHeight: '50vh',
+                                minHeight: '180px',
+                                maxHeight: '55vh',
                                 transition: 'max-height 0.2s ease, height 0.2s ease',
                                 WebkitOverflowScrolling: 'touch',
                                 touchAction: 'pan-y',
-                                overscrollBehavior: 'contain'
+                                overscrollBehavior: 'contain',
+                                overflowY: 'scroll'
                             }}
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
