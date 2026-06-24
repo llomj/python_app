@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'letterCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -601,6 +601,210 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [17], expected: true },
             { args: [1], expected: false },
             { args: [9], expected: false }
+        ]
+    },
+    76: {
+        functionNames: ['common_elements', 'find_common_elements'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [[1, 2, 3], [2, 3, 4]], expected: [2, 3] },
+            { args: [['a', 'b'], ['c', 'a']], expected: ['a'] },
+            { args: [[1, 2], [3, 4]], expected: [] }
+        ]
+    },
+    77: {
+        functionNames: ['uppercase', 'count_uppercase'],
+        tests: [
+            { args: ['Jonathan Moll'], expected: 2 },
+            { args: ['ABC xyz!'], expected: 3 },
+            { args: ['no uppercase'], expected: 0 }
+        ]
+    },
+    78: {
+        functionNames: ['decimal_to_binary'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['10'], expected: '1010' },
+            { args: [], inputValues: ['5'], expected: '101' }
+        ]
+    },
+    79: {
+        functionNames: ['ascending_order_numbers'],
+        tests: [
+            { args: [[3, 1, 2]], expected: [1, 2, 3] },
+            { args: [[-1, 5, 0]], expected: [-1, 0, 5] },
+            { args: [[]], expected: [] }
+        ]
+    },
+    80: {
+        functionNames: ['generate_random_number'],
+        compare: 'numberRange',
+        tests: [
+            { args: [], inputValues: ['1', '10'], expected: [1, 10] },
+            { args: [], inputValues: ['20', '25'], expected: [20, 25] }
+        ]
+    },
+    81: {
+        functionNames: ['square_root'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['9'], expected: '3' },
+            { args: [], inputValues: ['16'], expected: '4' }
+        ]
+    },
+    82: {
+        functionNames: ['calculate_circle_area', 'circle'],
+        compare: 'float',
+        tests: [
+            { args: [1], expected: 3.141592653589793 },
+            { args: [2], expected: 12.566370614359172 }
+        ]
+    },
+    83: {
+        functionNames: ['is_palindrome'],
+        tests: [
+            { args: ['racecar'], expected: true },
+            { args: ['hello'], expected: false },
+            { args: [''], expected: true }
+        ]
+    },
+    84: {
+        functionNames: ['is_pangram', 'pangram'],
+        tests: [
+            { args: ['The quick brown fox jumps over the lazy dog'], expected: true },
+            { args: ['hello world'], expected: false },
+            { args: ['abcdefghijklmnopqrstuvwxyz'], expected: true }
+        ]
+    },
+    85: {
+        functionNames: ['gcd'],
+        tests: [
+            { args: [12, 18], expected: 6 },
+            { args: [17, 13], expected: 1 },
+            { args: [20, 5], expected: 5 }
+        ]
+    },
+    86: {
+        functionNames: ['lcm'],
+        tests: [
+            { args: [4, 6], expected: 12 },
+            { args: [5, 7], expected: 35 },
+            { args: [3, 9], expected: 9 }
+        ]
+    },
+    87: {
+        functionNames: ['reverse_list', 'reverse_lst'],
+        tests: [
+            { args: [[1, 2, 3]], expected: [3, 2, 1] },
+            { args: [['a', 'b']], expected: ['b', 'a'] },
+            { args: [[]], expected: [] }
+        ]
+    },
+    88: {
+        functionNames: ['prime_factors'],
+        tests: [
+            { args: [12], expected: [2, 2, 3] },
+            { args: [13], expected: [13] },
+            { args: [60], expected: [2, 2, 3, 5] }
+        ]
+    },
+    89: {
+        functionNames: ['generate_password'],
+        compare: 'length',
+        tests: [
+            { args: [8], expected: 8 },
+            { args: [12], expected: 12 }
+        ]
+    },
+    90: {
+        functionNames: ['count_words'],
+        tests: [
+            { args: ['hello world'], expected: 2 },
+            { args: ['  extra   spaces here  '], expected: 3 },
+            { args: ['one'], expected: 1 }
+        ]
+    },
+    91: {
+        functionNames: ['largest_smallest'],
+        tests: [
+            { args: [[4, 5, 100, 6, 1, 10]], expected: [1, 100] },
+            { args: [[-5, -1, -9]], expected: [-9, -1] },
+            { args: [[7]], expected: [7, 7] }
+        ]
+    },
+    92: {
+        functionNames: ['is_perfect_number', 'is_perfect_square'],
+        tests: [
+            { args: [6], expected: true },
+            { args: [28], expected: true },
+            { args: [12], expected: false }
+        ]
+    },
+    93: {
+        functionNames: ['factorial'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5'], expected: '120' },
+            { args: [], inputValues: ['0'], expected: '1' }
+        ]
+    },
+    94: {
+        functionNames: ['is_power_of_two'],
+        tests: [
+            { args: [1], expected: true },
+            { args: [16], expected: true },
+            { args: [18], expected: false },
+            { args: [0], expected: false }
+        ]
+    },
+    95: {
+        functionNames: ['find_intersection'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [[1, 2, 3], [2, 3, 4]], expected: [2, 3] },
+            { args: [['a', 'b'], ['c', 'a']], expected: ['a'] },
+            { args: [[1], [2]], expected: [] }
+        ]
+    },
+    96: {
+        functionNames: ['remove_vowels'],
+        tests: [
+            { args: ['Jonathan'], expected: 'Jnthn' },
+            { args: ['AEIOUxyz'], expected: 'xyz' },
+            { args: ['rhythm'], expected: 'rhythm' }
+        ]
+    },
+    97: {
+        functionNames: ['binary_to_decimal'],
+        tests: [
+            { args: ['1010'], expected: 10 },
+            { args: ['111'], expected: 7 },
+            { args: ['0'], expected: 0 }
+        ]
+    },
+    98: {
+        functionNames: ['digits_string'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['2 8'], expected: '10' },
+            { args: [], inputValues: ['1 2 3'], expected: '6' }
+        ]
+    },
+    99: {
+        functionNames: ['upper_lower'],
+        compare: 'letterCounts',
+        tests: [
+            { args: ['Jonathan Moll'], expected: { upper: 2, lower: 10 } },
+            { args: ['ABC xyz'], expected: { upper: 3, lower: 3 } },
+            { args: ['no uppercase'], expected: { upper: 0, lower: 11 } }
+        ]
+    },
+    100: {
+        functionNames: ['sum_of_primes'],
+        tests: [
+            { args: [1, 10], expected: 17 },
+            { args: [10, 20], expected: 60 },
+            { args: [1, 2], expected: 2 }
         ]
     }
 };

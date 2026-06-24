@@ -68,6 +68,7 @@ import sys
 import io
 import builtins
 import inspect
+import re
 
 __auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
 
@@ -83,9 +84,14 @@ def __auto_grader_normalize(value):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, list):
         return [__auto_grader_normalize(item) for item in value]
+    if isinstance(value, set):
+        return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, dict):
         return {key: __auto_grader_normalize(item) for key, item in value.items()}
     return value
+
+def __auto_grader_numbers(value):
+    return [float(match) for match in re.findall(r"-?\\d+(?:\\.\\d+)?", str(value))]
 
 def __auto_grader_same(actual, expected, compare):
     actual = __auto_grader_normalize(actual)
@@ -96,7 +102,34 @@ def __auto_grader_same(actual, expected, compare):
         except Exception:
             return False
     if compare == "printedOrReturn":
-        return actual == expected or str(actual) == str(expected)
+        return actual == expected or str(actual) == str(expected) or str(expected) in str(actual)
+    if compare == "numberRange":
+        numbers = __auto_grader_numbers(actual)
+        if not numbers or not isinstance(expected, list) or len(expected) != 2:
+            return False
+        value = numbers[-1]
+        return float(expected[0]) <= value <= float(expected[1])
+    if compare == "length":
+        try:
+            return len(str(actual)) == int(expected)
+        except Exception:
+            return False
+    if compare == "unorderedList":
+        try:
+            return sorted(list(actual)) == sorted(list(expected))
+        except Exception:
+            return False
+    if compare == "letterCounts":
+        if isinstance(actual, dict):
+            upper = actual.get("upper", actual.get("uppercase"))
+            lower = actual.get("lower", actual.get("lowercase"))
+            return upper == expected.get("upper") and lower == expected.get("lower")
+        if isinstance(actual, (list, tuple)) and len(actual) == 2:
+            return list(actual) in ([expected.get("upper"), expected.get("lower")], [expected.get("lower"), expected.get("upper")])
+        text = str(actual).lower()
+        lower_match = re.search(r"lower\\D+(\\d+)", text)
+        upper_match = re.search(r"upper\\D+(\\d+)", text)
+        return bool(lower_match and upper_match and int(lower_match.group(1)) == expected.get("lower") and int(upper_match.group(1)) == expected.get("upper"))
     return actual == expected
 
 def __auto_grader_accepts_args(candidate, args):
