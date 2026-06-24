@@ -643,8 +643,10 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
-    const [headerHeight, setHeaderHeight] = useState(140);
+    const [headerHeight, setHeaderHeight] = useState(320);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
+    const editorToolbarTop = Math.max(headerHeight + 12, 320);
+    const editorContentTop = editorToolbarTop + 64;
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -685,10 +687,11 @@ const App: React.FC = () => {
             updateHeaderHeight();
             updateProblemPanelHeight();
         }, 200);
-        window.addEventListener('resize', () => {
+        const handleResize = () => {
             updateHeaderHeight();
             updateProblemPanelHeight();
-        });
+        };
+        window.addEventListener('resize', handleResize);
 
         // Use ResizeObserver to watch for content changes
         let headerObserver: ResizeObserver | null = null;
@@ -709,7 +712,7 @@ const App: React.FC = () => {
         return () => {
             clearTimeout(timeoutId1);
             clearTimeout(timeoutId2);
-            window.removeEventListener('resize', updateHeaderHeight);
+            window.removeEventListener('resize', handleResize);
             if (headerObserver) {
                 headerObserver.disconnect();
             }
@@ -717,7 +720,7 @@ const App: React.FC = () => {
                 problemObserver.disconnect();
             }
         };
-    }, [exercise]);
+    }, [exercise, bootStage]);
 
     // Removed problematic useEffect - inline styles now properly set in JSX to allow scrolling
     // maxHeight: '300px' and overflowY: 'auto' are set directly in the style prop
@@ -1388,7 +1391,7 @@ sys.stdout = io.StringIO()
             <div
                 className="fixed left-1/2 z-30 w-full max-w-2xl -translate-x-1/2 px-4"
                 style={{
-                    top: `${Math.max(headerHeight + 8, 274)}px`,
+                    top: `${editorToolbarTop}px`,
                     pointerEvents: 'none'
                 }}
             >
@@ -1418,7 +1421,7 @@ sys.stdout = io.StringIO()
                 ref={mainScrollRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
-                    paddingTop: `${Math.max(headerHeight + 64, 340)}px`,
+                    paddingTop: `${editorContentTop}px`,
                     paddingBottom: `max(12rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 220, 520)}px))`,
                     WebkitOverflowScrolling: 'touch',
                     overscrollBehaviorY: 'contain'
