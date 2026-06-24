@@ -1288,6 +1288,7 @@ sys.stdout = io.StringIO()
                 style={{
                     top: 0,
                     backgroundColor: 'rgba(4, 11, 22, 0.18)',
+                    pointerEvents: 'none',
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
@@ -1302,7 +1303,7 @@ sys.stdout = io.StringIO()
                         <div className="flex items-center border-l border-[#1d2d44] pl-3 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
                     </div>
                     <div className="absolute right-0">
-                        <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
+                        <button onClick={() => setShowModal('settings')} style={{ pointerEvents: 'auto' }} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#0a1628] p-2 rounded-full border border-[#1d2d44]"><Key size={16} /></button>
                     </div>
                 </div>
 
@@ -1323,7 +1324,8 @@ sys.stdout = io.StringIO()
                         backgroundColor: 'rgba(8, 18, 34, 0.30)',
                         backdropFilter: 'blur(6px)',
                         WebkitBackdropFilter: 'blur(6px)',
-                        borderColor: 'rgba(88, 118, 160, 0.35)'
+                        borderColor: 'rgba(88, 118, 160, 0.35)',
+                        pointerEvents: 'none'
                     }}
                 >
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
@@ -1341,7 +1343,8 @@ sys.stdout = io.StringIO()
                                 alignItems: 'center',
                                 gap: '0.25rem',
                                 fontSize: '0.75rem',
-                                flexShrink: 0
+                                flexShrink: 0,
+                                pointerEvents: 'auto'
                             }}
                         >
                             <ExternalLink size={14} />
@@ -1638,7 +1641,7 @@ sys.stdout = io.StringIO()
 };
 
 const ActionButton: React.FC<{ icon: React.ReactNode, color: string, borderColor: string, iconColor: string, description: string, onClick: () => void }> = ({ icon, color, borderColor, iconColor, description, onClick }) => (
-    <button onClick={onClick} style={{ backgroundColor: color, borderColor: borderColor, color: iconColor }} className="w-[42px] h-[42px] rounded-full flex flex-col items-center justify-center shadow-lg active:scale-90 transition-all border border-white/5">
+    <button onClick={onClick} style={{ backgroundColor: color, borderColor: borderColor, color: iconColor, pointerEvents: 'auto' }} className="w-[42px] h-[42px] rounded-full flex flex-col items-center justify-center shadow-lg active:scale-90 transition-all border border-white/5">
         {icon}
         <span className="text-[6px] font-bold mt-0.5 uppercase tracking-tighter">{description}</span>
     </button>
