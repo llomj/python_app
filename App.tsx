@@ -24,6 +24,7 @@ import {
     ArrowUpRight,
     RefreshCw,
     Info,
+    X,
     ChevronDown,
     ChevronUp
 } from 'lucide-react';
@@ -60,6 +61,47 @@ interface AutoGradeResult {
 }
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
+type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
+
+const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
+    { id: 'normal', label: 'Normal', description: 'All problems mixed' },
+    { id: 'beginner', label: 'Beginner', description: 'Simple functions, strings, lists' },
+    { id: 'intermediate', label: 'Intermediate', description: 'Loops, dictionaries, patterns' },
+    { id: 'expert', label: 'Expert', description: 'Nested data, constraints, algorithms' },
+    { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
+];
+
+const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
+
+const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
+    const text = `${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
+    let score = 0;
+
+    const addIf = (pattern: RegExp, value: number) => {
+        if (pattern.test(text)) score += value;
+    };
+
+    addIf(/\b(recursion|recursive|memoization|backtracking|permutation|combinations?)\b/, 4);
+    addIf(/\b(class|object|inheritance|decorator|generator|yield|async|await|thread|subprocess)\b/, 4);
+    addIf(/\b(file|csv|json|configparser|sqlite|database|api|request|beautifulsoup|pandas|numpy)\b/, 4);
+    addIf(/\b(regex|regular expression|re\.|lambda|partial|reduce|map\(|filter\(|zip\()\b/, 3);
+    addIf(/\b(nested|matrix|dictionary of|list of dictionaries|dicts|merge dictionaries|invert dictionary)\b/, 2);
+    addIf(/\b(dictionary|dict|set|tuple|enumerate|intersection|anagram|pangram|palindrome)\b/, 1);
+    addIf(/\b(without|do not use|don't use|no built[- ]?in|not use)\b/, 1);
+    addIf(/\b(pattern|pyramid|triangle|hourglass|checkerboard|hollow)\b/, 1);
+    addIf(/\b(user input|prompt the user|input\()\b/, 1);
+    addIf(/\b(sort|sorted|max|min|average|factorial|prime|fibonacci|gcd|lcm)\b/, 1);
+
+    const functionCount = (exercise.initialCode.match(/\bdef\s+/g) || []).length;
+    if (functionCount >= 2) score += 1;
+    if (exercise.solution.length > 900) score += 1;
+    if (exercise.description.length > 220) score += 1;
+
+    if (score >= 7) return 'legend';
+    if (score >= 5) return 'expert';
+    if (score >= 3) return 'intermediate';
+    return 'beginner';
+};
 
 const buildAutoGradeScript = (grader: AutoGrader) => `
 import json
@@ -872,6 +914,10 @@ const App: React.FC = () => {
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
+    const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => {
+        const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
+        return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
+    });
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
     const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
@@ -892,6 +938,11 @@ const App: React.FC = () => {
     const runButtonClass = pendingNextProblem
         ? 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#3b82f61a] border border-[#3b82f64d] text-[#60a5fa]'
         : 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
+    const selectedModeLabel = getDifficultyLabel(difficultyMode);
+    const modeExerciseCount = useMemo(() => {
+        if (difficultyMode === 'normal') return EXERCISES.length;
+        return EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode).length;
+    }, [difficultyMode]);
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1198,9 +1249,13 @@ const App: React.FC = () => {
     };
 
     const loadRandomExercise = useCallback(() => {
-        const randomIndex = Math.floor(Math.random() * EXERCISES.length);
-        setProblemById(randomIndex + 1);
-    }, []);
+        const pool = difficultyMode === 'normal'
+            ? EXERCISES
+            : EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode);
+        const safePool = pool.length > 0 ? pool : EXERCISES;
+        const randomExercise = safePool[Math.floor(Math.random() * safePool.length)];
+        setProblemById(randomExercise.id);
+    }, [difficultyMode]);
 
     const handleRestartProgress = () => {
         setStats({ shots: 0, success: 0, failed: 0 });
@@ -1806,14 +1861,14 @@ sys.stdout = io.StringIO()
                 </div>
             </div>
 
-            {/* Fixed footer - centered version button with settings on the bottom-right */}
+            {/* Fixed footer - centered version button */}
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
                 <div className="relative flex items-center justify-center">
                     <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
                         <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
+                        <span className="rounded-full border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#93c5fd]">{selectedModeLabel}</span>
                     </button>
-                    <button onClick={() => setShowModal('settings')} className="absolute right-0 text-gray-400 hover:text-[#3b82f6] transition-colors p-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Settings"><Settings size={20} /></button>
                 </div>
             </div>
 
@@ -1827,7 +1882,14 @@ sys.stdout = io.StringIO()
                         paddingRight: 'max(1rem, calc(env(safe-area-inset-right) + 1rem))'
                     }}
                 >
-                    <div className="bg-[#112240] rounded-3xl p-6 max-w-lg w-full border border-[#1d2d44] shadow-2xl relative max-h-[80vh] flex flex-col overflow-hidden">
+                    <div
+                        className="rounded-3xl p-6 max-w-lg w-full border border-[#1d2d44] shadow-2xl relative max-h-[80vh] flex flex-col overflow-hidden"
+                        style={{
+                            backgroundColor: showModal === 'settings' ? 'rgba(17, 34, 64, 0.20)' : '#112240',
+                            backdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
+                            WebkitBackdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined
+                        }}
+                    >
                         <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10"><X size={24} /></button>
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full">
@@ -1916,6 +1978,36 @@ sys.stdout = io.StringIO()
                         {showModal === 'settings' && (
                             <div className="py-2">
                                 <h2 className="text-lg font-bold mb-4 text-center">Settings</h2>
+
+                                <div className="mb-6">
+                                    <label className="block text-sm font-bold mb-2 text-gray-200">
+                                        Problem Mode
+                                    </label>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {DIFFICULTY_MODES.map(mode => {
+                                            const isSelected = difficultyMode === mode.id;
+                                            return (
+                                                <button
+                                                    key={mode.id}
+                                                    onClick={() => {
+                                                        setDifficultyMode(mode.id);
+                                                        localStorage.setItem('python_difficulty_mode', mode.id);
+                                                    }}
+                                                    className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${isSelected ? 'border-[#3b82f6] bg-[#3b82f6]/25 text-white' : 'border-[#1d2d44] bg-[#071225]/70 text-gray-300 hover:border-[#3b82f6]/50'}`}
+                                                >
+                                                    <span className="flex items-center justify-between gap-3">
+                                                        <span className="text-xs font-black uppercase tracking-[0.16em]">{mode.label}</span>
+                                                        {isSelected && <Check size={14} className="text-[#93c5fd]" />}
+                                                    </span>
+                                                    <span className="mt-1 block text-[10px] text-gray-400">{mode.description}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    <p className="mt-2 text-[10px] text-gray-300">
+                                        Current mode has {modeExerciseCount} matching problems. Normal mode uses all problems.
+                                    </p>
+                                </div>
 
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-300">
