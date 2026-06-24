@@ -633,7 +633,7 @@ const App: React.FC = () => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
-    const [outputHeight, setOutputHeight] = useState(180);
+    const [outputHeight, setOutputHeight] = useState(145);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
 
@@ -643,10 +643,10 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
-    const [headerHeight, setHeaderHeight] = useState(320);
+    const [headerHeight, setHeaderHeight] = useState(265);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
-    const editorToolbarTop = Math.max(headerHeight + 12, 320);
-    const editorContentTop = editorToolbarTop + 64;
+    const editorToolbarTop = Math.max(headerHeight + 8, 276);
+    const editorContentTop = editorToolbarTop + 58;
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1230,7 +1230,7 @@ sys.stdout = io.StringIO()
     const toggleOutputHeight = () => {
         const nextExpanded = !isOutputExpanded;
         setIsOutputExpanded(nextExpanded);
-        setOutputHeight(nextExpanded ? 320 : 180);
+        setOutputHeight(nextExpanded ? 320 : 145);
     };
 
     const editorExtensions = useMemo(() => [
@@ -1427,7 +1427,7 @@ sys.stdout = io.StringIO()
                     overscrollBehaviorY: 'contain'
                 }}
             >
-                <div className="bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#1d2d44] overflow-hidden">
+                <div className="mb-10 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#36506f] border-b-2 overflow-hidden">
                     <div
                         className="hidden"
                     >
@@ -1477,7 +1477,7 @@ sys.stdout = io.StringIO()
                             className="overflow-y-auto px-2 py-2"
                             style={{
                                 height: `${outputHeight}px`,
-                                minHeight: '180px',
+                                minHeight: '145px',
                                 maxHeight: '55vh',
                                 transition: 'max-height 0.2s ease, height 0.2s ease',
                                 WebkitOverflowScrolling: 'touch',
