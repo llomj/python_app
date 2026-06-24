@@ -15,6 +15,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
     <style>
+        :root {
+            --safe-area-inset-top: env(safe-area-inset-top, 0px);
+            --safe-area-inset-right: env(safe-area-inset-right, 0px);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-area-inset-left: env(safe-area-inset-left, 0px);
+        }
+
         body {
             background-color: #040b16;
             color: white;
@@ -22,8 +29,7 @@
             font-family: -apple-system;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: var(--safe-area-inset-bottom);
         }
 
         /* Reduce mobile browser text selection toolbar interference */
@@ -141,7 +147,7 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v58';
+        const CURRENT_VERSION = 'v59';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
             // Version changed, clear everything and reload
