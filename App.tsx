@@ -62,6 +62,7 @@ interface AutoGradeResult {
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
+type StatsByMode = Record<DifficultyMode, Stats>;
 
 const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
     { id: 'normal', label: 'Normal', description: 'All problems mixed' },
@@ -72,6 +73,44 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
 ];
 
 const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
+
+const EMPTY_STATS: Stats = { shots: 0, success: 0, failed: 0 };
+
+const createEmptyStatsByMode = (): StatsByMode => ({
+    normal: { ...EMPTY_STATS },
+    beginner: { ...EMPTY_STATS },
+    intermediate: { ...EMPTY_STATS },
+    expert: { ...EMPTY_STATS },
+    legend: { ...EMPTY_STATS }
+});
+
+const isStats = (value: unknown): value is Stats => {
+    const item = value as Stats;
+    return Boolean(item && typeof item.shots === 'number' && typeof item.success === 'number' && typeof item.failed === 'number');
+};
+
+const loadStatsByMode = (): StatsByMode => {
+    const emptyStats = createEmptyStatsByMode();
+    const savedStats = localStorage.getItem('python_mastery_stats');
+    if (!savedStats) return emptyStats;
+
+    try {
+        const parsed = JSON.parse(savedStats);
+        if (isStats(parsed)) {
+            return { ...emptyStats, normal: parsed };
+        }
+
+        const merged = { ...emptyStats };
+        for (const mode of DIFFICULTY_MODES) {
+            if (isStats(parsed?.[mode.id])) {
+                merged[mode.id] = parsed[mode.id];
+            }
+        }
+        return merged;
+    } catch {
+        return emptyStats;
+    }
+};
 
 const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
     const text = `${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
@@ -900,13 +939,13 @@ const App: React.FC = () => {
     const [outputStatus, setOutputStatus] = useState<OutputStatus>('idle');
     const [pendingNextProblem, setPendingNextProblem] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
-    const [stats, setStats] = useState<Stats>({ shots: 0, success: 0, failed: 0 });
+    const [statsByMode, setStatsByMode] = useState<StatsByMode>(() => loadStatsByMode());
     const [pyodide, setPyodide] = useState<any>(null);
     const [bootStage, setBootStage] = useState<'loading' | 'ready' | 'launched'>('loading');
     const [bootLog, setBootLog] = useState<string>('Handshaking...');
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'restart_confirm' | 'problem_full'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'problem_full'>('none');
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements'>('code');
     const [aiHintText, setAiHintText] = useState<string>('');
@@ -940,6 +979,7 @@ const App: React.FC = () => {
         ? 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#3b82f61a] border border-[#3b82f64d] text-[#60a5fa]'
         : 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
     const selectedModeLabel = getDifficultyLabel(difficultyMode);
+    const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const modeExerciseCount = useMemo(() => {
         if (difficultyMode === 'normal') return EXERCISES.length;
         return EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode).length;
@@ -947,8 +987,6 @@ const App: React.FC = () => {
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
-        const savedStats = localStorage.getItem('python_mastery_stats');
-        if (savedStats) setStats(JSON.parse(savedStats));
 
         const bootEl = document.getElementById('boot');
         if (bootEl) {
@@ -1023,8 +1061,8 @@ const App: React.FC = () => {
     // maxHeight: '300px' and overflowY: 'auto' are set directly in the style prop
 
     useEffect(() => {
-        localStorage.setItem('python_mastery_stats', JSON.stringify(stats));
-    }, [stats]);
+        localStorage.setItem('python_mastery_stats', JSON.stringify(statsByMode));
+    }, [statsByMode]);
 
     // Auto-scroll output to bottom when new output is added
     useEffect(() => {
@@ -1258,8 +1296,23 @@ const App: React.FC = () => {
         setProblemById(randomExercise.id);
     }, [difficultyMode]);
 
+    const updateCurrentModeStats = (result: 'success' | 'failed') => {
+        setStatsByMode(prev => {
+            const modeStats = prev[difficultyMode] ?? EMPTY_STATS;
+            return {
+                ...prev,
+                [difficultyMode]: {
+                    ...modeStats,
+                    shots: modeStats.shots + 1,
+                    success: modeStats.success + (result === 'success' ? 1 : 0),
+                    failed: modeStats.failed + (result === 'failed' ? 1 : 0)
+                }
+            };
+        });
+    };
+
     const handleRestartProgress = () => {
-        setStats({ shots: 0, success: 0, failed: 0 });
+        setStatsByMode(createEmptyStatsByMode());
         loadRandomExercise();
         setResetConfirmArmed(false);
         setShowModal('none');
@@ -1315,12 +1368,12 @@ sys.stdout = io.StringIO()
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
 
                 if (gradeResult.passed) {
-                    setStats(prev => ({ ...prev, shots: prev.shots + 1, success: prev.success + 1 }));
+                    updateCurrentModeStats('success');
                     setOutputStatus('win');
                     setPendingNextProblem(true);
                     setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nPress RUN again to load the next problem.`);
                 } else {
-                    setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+                    updateCurrentModeStats('failed');
                     setOutputStatus('fail');
                     setPendingNextProblem(true);
                     setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
@@ -1331,7 +1384,7 @@ sys.stdout = io.StringIO()
             }
         } catch (err: any) {
             if (autoGrader) {
-                setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+                updateCurrentModeStats('failed');
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
                 setOutput(`AUTO FAILED\n${err.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
@@ -1378,18 +1431,18 @@ sys.stdout = io.StringIO()
     };
 
     const handleMarkSuccess = () => {
-        setStats(prev => ({ ...prev, shots: prev.shots + 1, success: prev.success + 1 }));
+        updateCurrentModeStats('success');
         loadRandomExercise();
     };
 
     const handleMarkFailed = () => {
-        setStats(prev => ({ ...prev, shots: prev.shots + 1, failed: prev.failed + 1 }));
+        updateCurrentModeStats('failed');
         loadRandomExercise();
     };
 
     const handleAiHint = async () => {
         if (!apiKey || apiKey.trim() === '') {
-            setShowModal('settings');
+            setShowModal('api_key');
             return;
         }
         setShowModal('hint');
@@ -1514,7 +1567,7 @@ sys.stdout = io.StringIO()
         }
     }, [showModal, exercise.id, loadSolutionFiles]);
 
-    const rate = stats.shots > 0 ? ((stats.success / stats.shots) * 100).toFixed(2) : '0.00';
+    const rate = currentStats.shots > 0 ? ((currentStats.success / currentStats.shots) * 100).toFixed(2) : '0.00';
 
     const pythonCompletionSource = useMemo(() => {
         const symbolMap = new Map<string, Completion>();
@@ -1641,10 +1694,10 @@ sys.stdout = io.StringIO()
             >
                 <div className="flex items-center justify-center mb-3">
                     <div className="flex gap-3 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight" style={{ pointerEvents: 'auto' }}>
-                        <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="API key settings"><Key size={14} /></button>
-                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{stats.shots}</span></div>
-                        <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{stats.success}</span></div>
-                        <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{stats.failed}</span></div>
+                        <button onClick={() => setShowModal('api_key')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="API key settings"><Key size={14} /></button>
+                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{currentStats.shots}</span></div>
+                        <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{currentStats.success}</span></div>
+                        <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{currentStats.failed}</span></div>
                         <div className="flex items-center border-l border-[#1d2d44] pl-3 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
                         <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="Settings"><Settings size={14} /></button>
                     </div>
@@ -2011,6 +2064,28 @@ sys.stdout = io.StringIO()
                                     </p>
                                 </div>
 
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
+                                    <div className="space-y-2">
+                                        {DIFFICULTY_MODES.map(mode => {
+                                            const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
+                                            const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
+                                            return (
+                                                <div key={mode.id} className="flex items-center justify-between gap-3 text-[11px] text-gray-300">
+                                                    <span className="font-bold uppercase tracking-[0.12em] text-gray-200">{mode.label}</span>
+                                                    <span className="font-mono">S:{modeStats.shots} W:{modeStats.success} F:{modeStats.failed} R:{modeRate}%</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
+                            </div>
+                        )}
+                        {showModal === 'api_key' && (
+                            <div className="py-2">
+                                <h2 className="text-lg font-bold mb-4 text-center">API Key</h2>
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-300">
                                         <Key size={14} className="inline mr-1" /> Gemini API Key
@@ -2029,18 +2104,15 @@ sys.stdout = io.StringIO()
                                         </a>
                                     </p>
                                 </div>
-
                                 <button
                                     onClick={() => {
                                         localStorage.setItem('gemini_api_key', apiKey);
                                         setShowModal('none');
                                     }}
-                                    className="w-full bg-[#3b82f6] text-white font-bold py-4 rounded-xl mb-3 flex items-center justify-center gap-2 hover:bg-[#3b82f6]/90 transition-colors"
+                                    className="w-full bg-[#3b82f6] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[#3b82f6]/90 transition-colors"
                                 >
                                     <Check size={18} /> Save API Key
                                 </button>
-
-                                    <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
                             </div>
                         )}
                         {showModal === 'restart_confirm' && (
@@ -2048,8 +2120,8 @@ sys.stdout = io.StringIO()
                                 <h2 className="text-lg font-bold mb-2">{resetConfirmArmed ? 'Final Warning' : 'Clear Stats?'}</h2>
                                 <p className="text-xs text-gray-300 mb-4 leading-relaxed">
                                     {resetConfirmArmed
-                                        ? 'This will permanently reset shots, wins, fails, and rate. This cannot be undone.'
-                                        : 'Resetting clears your progress stats. Press Reset Now once more to confirm.'}
+                                        ? 'This will permanently reset shots, wins, fails, and rate for every mode. This cannot be undone.'
+                                        : 'Resetting clears progress stats for Normal, Beginner, Intermediate, Expert, and Legend. Press Reset Now once more to confirm.'}
                                 </p>
                                 <button
                                     onClick={() => {
