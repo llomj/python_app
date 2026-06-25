@@ -239,6 +239,8 @@ def __auto_grader_normalize(value):
             return value.isoformat()
         except Exception:
             pass
+    if type(value).__name__ in ("dict_keys", "dict_values", "dict_items"):
+        return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, tuple):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, list):

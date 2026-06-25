@@ -5134,196 +5134,340 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { functionName: "remove_duplicates", args: [[1, 2, 1, 3]], expected: [1, 2, 3] }
     ]
   },
+  751: {
+    functionNames: ["main", "lst_of_lists", "flatten_list"],
+    tests: [
+      { functionName: "flatten_list", args: [[[1, 2], [3], [4, 5]]], expected: [1, 2, 3, 4, 5] },
+      { functionName: "lst_of_lists", args: [[["a"], ["b", "c"]]], expected: ["a", "b", "c"] }
+    ]
+  },
+  752: {
+    functionNames: ["filter_primes", "is_prime"],
+    tests: [
+      { functionName: "filter_primes", args: [[1, 2, 3, 4, 5, 9, 11]], expected: [2, 3, 5, 11] },
+      { functionName: "is_prime", args: [9], expected: false }
+    ]
+  },
   753: {
-    functionNames: ["main"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: [1, 2, 6, 24, 120]
-    }]
+    functionNames: ["main", "lst_of_numbers", "calculate_factorial"],
+    tests: [
+      { functionName: "lst_of_numbers", args: [[2, 4, 5]], expected: [2, 24, 120] },
+      { functionName: "calculate_factorial", args: [6], expected: 720 }
+    ]
+  },
+  754: {
+    functionNames: ["main", "sort_dict_by_value", "get_value"],
+    tests: [
+      { functionName: "sort_dict_by_value", args: [{"name": 2, "age": 5, "city": 1}], expected: {"city": 1, "name": 2, "age": 5} },
+      { functionName: "get_value", args: [["key", 9]], expected: 9 }
+    ]
+  },
+  755: {
+    functionNames: ["main", "get_unique_elements"],
+    compare: "unorderedList",
+    tests: [
+      { functionName: "get_unique_elements", args: [["apple", "banana", "apple", "kiwi"]], expected: ["apple", "banana", "kiwi"] }
+    ]
+  },
+  756: {
+    functionNames: ["main", "check_anagram"],
+    tests: [
+      { functionName: "check_anagram", args: ["evil", "vile"], expected: true },
+      { functionName: "main", args: ["hello", "world"], expected: false }
+    ]
+  },
+  757: {
+    functionNames: ["find_index", "main"],
+    tests: [
+      { functionName: "find_index", args: [["apple", "banana", "date"], "date"], expected: 2 },
+      { functionName: "find_index", args: [[10, 20, 30], 20], expected: 1 }
+    ]
+  },
+  758: {
+    functionNames: ["main", "generate_fibonacci"],
+    tests: [
+      { functionName: "generate_fibonacci", args: [7], expected: [0, 1, 1, 2, 3, 5, 8] },
+      { functionName: "main", args: [3], expected: [0, 1, 1] }
+    ]
   },
   759: {
-    functionNames: ["calculate_average"],
+    functionNames: ["main", "calculate_average"],
     tests: [
-      { args: [[10,20,30]], expected: 20 }
+      { functionName: "calculate_average", args: [[10, 20, 30]], expected: 20 },
+      { functionName: "main", args: [[10, 20], [2, 4, 6]], expected: [15, 4] }
+    ]
+  },
+  760: {
+    functionNames: ["main", "convert_to_kilometers"],
+    tests: [
+      { functionName: "convert_to_kilometers", args: [10], expected: 16.0934 },
+      { functionName: "main", args: [[1, 2]], expected: [1.60934, 3.21868] }
+    ]
+  },
+  761: {
+    functionNames: ["main", "get_last_n_elements"],
+    tests: [
+      { functionName: "get_last_n_elements", args: [[1, 2, 3, 4, 5], 3], expected: [1, 2, 3] },
+      { functionName: "main", args: [["a", "b", "c"], 2], expected: ["a", "b"] }
     ]
   },
   762: {
-    functionNames: ["remove_whitespace"],
+    functionNames: ["main", "remove_whitespace"],
     tests: [
-      { args: ["hello world"], expected: "helloworld" }
+      { functionName: "remove_whitespace", args: ["hello world"], expected: "helloworld" },
+      { functionName: "main", args: ["a b c"], expected: "abc" }
+    ]
+  },
+  763: {
+    functionNames: ["main", "get_positive_numbers"],
+    tests: [
+      { functionName: "main", args: [[1, -2, 2, -3, 3]], expected: [1, 2, 3] },
+      { functionName: "get_positive_numbers", args: [-1], expected: false }
     ]
   },
   764: {
-    functionNames: ["get_common_elements"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: [1, 2, 3, 4, 5]
-    }]
+    functionNames: ["get_common_elements", "main"],
+    tests: [
+      { functionName: "get_common_elements", args: [["tree", "boat", "sea"], ["boat", "cat", "sea"]], expected: ["boat", "sea"] },
+      { functionName: "main", args: [[1, 2, 2, 3], [2, 3]], expected: [2, 3] }
+    ]
+  },
+  765: {
+    functionNames: ["main", "check_even_odd"],
+    tests: [
+      { functionName: "main", args: [[45, 7, 2, 3]], expected: ["Odd", "Odd", "Even", "Odd"] },
+      { functionName: "check_even_odd", args: [8], expected: "Even" }
+    ]
   },
   766: {
-    functionNames: ["convert_to_uppercase"],
+    functionNames: ["main", "convert_to_uppercase"],
     tests: [
-      { args: ["hello"], expected: "HELLO" }
+      { functionName: "main", args: [["hello", "world"]], expected: ["HELLO", "WORLD"] },
+      { functionName: "convert_to_uppercase", args: ["python"], expected: "PYTHON" }
     ]
   },
   767: {
-    functionNames: ["count_characters"],
+    functionNames: ["main", "count_characters"],
     tests: [
-      { args: ["hello"], expected: {"h":1,"e":1,"l":2,"o":1} }
+      { functionName: "main", args: [["eorl", "sitting", "mountain"]], expected: [4, 7, 8] },
+      { functionName: "count_characters", args: ["hello"], expected: 5 }
+    ]
+  },
+  768: {
+    functionNames: ["main", "remove_special_characters"],
+    tests: [
+      { functionName: "main", args: [["eor?@l", "s@itting?", "@mountain?"]], expected: ["eorl", "sitting", "mountain"] },
+      { functionName: "remove_special_characters", args: ["a?@b"], expected: "ab" }
+    ]
+  },
+  769: {
+    functionNames: ["main", "is_substring"],
+    tests: [
+      { functionName: "main", args: [[["apple", "pineapple"], ["cat", "dog"]]], expected: [true, false] },
+      { functionName: "is_substring", args: ["dog", "doghouse"], expected: true }
     ]
   },
   770: {
-    functionNames: ["sum_of_list"],
+    functionNames: ["main", "sum_of_list"],
     tests: [
-      { args: [[1,2,3,4,5]], expected: 15 }
+      { functionName: "main", args: [[2, 2, 2, 2, 2]], expected: 10 }
+    ]
+  },
+  771: {
+    functionNames: ["main", "get_even_numbers"],
+    tests: [
+      { functionName: "main", args: [[46, 22, 7, 4, 8, 13]], expected: [46, 22, 4, 8] },
+      { functionName: "get_even_numbers", args: [7], expected: false }
+    ]
+  },
+  772: {
+    functionNames: ["main", "merge_sorted_lists"],
+    compare: "unorderedList",
+    tests: [
+      { functionName: "merge_sorted_lists", args: [[3, 1], [2, 4]], expected: [1, 2, 3, 4] },
+      { functionName: "main", args: [[1, 33, 8], [9, 2, 7]], expected: [1, 2, 7, 8, 9, 33] }
     ]
   },
   773: {
     functionNames: ["lst_to_dic"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-    }]
+    tests: [
+      { args: [[1, 2, 3], ["start", "middle", "end"]], expected: {"1": "start", "2": "middle", "3": "end"} }
+    ]
+  },
+  774: {
+    functionNames: ["main", "value_of_specific_key"],
+    tests: [
+      { functionName: "main", args: [{"name": 777, "job": 1}, "job"], expected: 1 },
+      { functionName: "value_of_specific_key", args: [{"age": 30}, "age"], expected: 30 }
+    ]
   },
   775: {
-    functionNames: ["merge_dicts"],
+    functionNames: ["main", "merge_dicts"],
     tests: [
-      { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} }
+      { functionName: "merge_dicts", args: [{"a": 1}, {"b": 2}], expected: {"a": 1, "b": 2} },
+      { functionName: "main", args: [{"a": 1}, {"b": 3}], expected: {"a": 1, "b": 3} }
     ]
   },
   776: {
-    functionNames: ["remove_key"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, "a"],
-      expected: {"b": 2}
-    }]
+    functionNames: ["remove_key", "main"],
+    tests: [
+      { functionName: "remove_key", args: [{"a": 1, "b": 2}, "a"], expected: {"b": 2} },
+      { functionName: "main", args: [{"x": 1, "y": 2}, "z"], expected: {"x": 1, "y": 2} }
+    ]
   },
   777: {
-    functionNames: ["print_dict_items"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "a: 1\nb: 2"
-    }]
+    functionNames: ["print_dict_items", "main"],
+    compare: "printedOrReturn",
+    tests: [
+      { functionName: "print_dict_items", args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" }
+    ]
+  },
+  778: {
+    functionNames: ["main", "does_key_exist"],
+    tests: [
+      { functionName: "does_key_exist", args: [{"name": "Steven", "age": 56}, "name"], expected: "key exists" },
+      { functionName: "does_key_exist", args: [{"name": "Steven", "age": 56}, "job"], expected: "key does not exist" }
+    ]
   },
   779: {
     functionNames: ["sort_dic"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"b": 2, "a": 1}], expected: {"a": 1, "b": 2} }
+    ]
   },
   780: {
-    functionNames: ["main"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    functionNames: ["main", "sort_values", "sort_key"],
+    tests: [
+      { functionName: "main", args: [{"name": 777, "age": 56, "city": 34, "job": 1}], expected: {"job": 1, "city": 34, "age": 56, "name": 777} },
+      { functionName: "sort_key", args: [["cat", 34]], expected: 34 }
+    ]
   },
   781: {
     functionNames: ["frequency_elements"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: {"1": 1, "2": 1, "3": 1, "4": 1, "5": 1}
-    }]
+    tests: [
+      { args: [["tree", "tree", "flower", "flower", "tree"]], expected: {"tree": 3, "flower": 2} }
+    ]
   },
   782: {
     functionNames: ["square_dic"],
-    tests: [{
-      args: [],
-      expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25}
-    }]
+    tests: [
+      { args: [], expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25} }
+    ]
+  },
+  783: {
+    functionNames: ["main", "update_value"],
+    tests: [
+      { functionName: "main", args: [{"name": 777, "city": 34}, ["city", 78]], expected: {"name": 777, "city": 78} },
+      { functionName: "update_value", args: [{"age": 30}, "age", 60], expected: {"age": 60} }
+    ]
+  },
+  784: {
+    functionNames: ["get_keys"],
+    compare: "unorderedList",
+    tests: [
+      { args: [{"name": "Steven", "age": 56}], expected: ["name", "age"] }
+    ]
+  },
+  785: {
+    functionNames: ["get_keys"],
+    compare: "unorderedList",
+    tests: [
+      { args: [{"name": "Steven", "age": 56}], expected: ["Steven", 56] }
+    ]
+  },
+  786: {
+    functionNames: ["get_keys"],
+    compare: "unorderedList",
+    tests: [
+      { args: [{"city": "New York", "job": "Engineer"}], expected: ["New York", "Engineer"] }
+    ]
   },
   787: {
     functionNames: ["largest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 2
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: 777 }
+    ]
   },
   788: {
     functionNames: ["largest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 1
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: 34 }
+    ]
   },
   789: {
     functionNames: ["lst_dic"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-    }]
+    tests: [
+      { args: [[1, 2, 3], ["sand", "rock", "beach", "sea"]], expected: {"1": "sand", "2": "rock", "3": "beach"} }
+    ]
   },
   790: {
     functionNames: ["combine_dictionaries"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
-      expected: {"a": 2, "b": 4}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2, "c": 3}, {"b": 3, "c": 4, "d": 5}], expected: {"a": 1, "b": 5, "c": 7, "d": 5} }
+    ]
   },
   791: {
     functionNames: ["invert_dictionary"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"1": "a", "2": "b"}
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30}], expected: {"Alice": "name", "30": "age"} }
+    ]
   },
   792: {
     functionNames: ["remove_duplicates_values"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30, "nickname": "Alice"}], expected: {"name": "Alice", "age": 30} }
+    ]
   },
   793: {
     functionNames: ["same_keys"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
-      expected: true
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30}, {"age": 40, "name": "Bob"}], expected: true },
+      { args: [{"name": "Alice"}, {"age": 30}], expected: false }
+    ]
   },
   794: {
     functionNames: ["multiply_by2"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 2, "b": 4}
-    }]
+    tests: [
+      { args: [{"a": 2, "b": 8}], expected: {"a": 4, "b": 16} }
+    ]
   },
   795: {
     functionNames: ["len_key_value_pair"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 2
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30, "job": "Engineer"}], expected: 3 }
+    ]
+  },
+  796: {
+    functionNames: ["map_lst_string_dic", "len_dic"],
+    tests: [
+      { functionName: "map_lst_string_dic", args: [["it", "shop", "jonny"]], expected: {"it": 2, "shop": 4, "jonny": 5} },
+      { functionName: "len_dic", args: [["not", "house"]], expected: {"not": 3, "house": 5} }
+    ]
   },
   797: {
     functionNames: ["add_key_value_pair"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2, "new_key": "new_value"}
-    }]
+    tests: [
+      { args: [{"name": "Alice"}], expected: {"name": "Alice", "new_key": "new_value"} }
+    ]
   },
   798: {
     functionNames: ["value_cubes"],
-    tests: [{
-      args: [],
-      expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125}
-    }]
+    tests: [
+      { args: [], expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125} }
+    ]
   },
   799: {
     functionNames: ["check_if_empty"],
-    tests: [{
-      args: [1],
-      expected: "Dictionary is not empty"
-    }]
+    tests: [
+      { args: [{}], expected: "Dictionary is empty" },
+      { args: [{"name": "Alice"}], expected: "Dictionary is not empty" }
+    ]
   },
   800: {
     functionNames: ["remove_set_keys"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, "{1, 2, 3}"],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30, "city": "New York", "job": "Engineer"}, ["age", "city"]], expected: {"name": "Alice", "job": "Engineer"} }
+    ]
   },
   801: {
     functionNames: ["dic_lst_tuples"],
