@@ -4,23 +4,14 @@ export interface AutoTestCase {
     args: unknown[];
     expected: unknown;
     inputValues?: string[];
+    callReturnedWith?: unknown[];
+    callMethod?: string;
+    callMethodArgs?: unknown[];
+    getAttrs?: string[];
+    argFunctionNames?: string[];
+    functionListArgNames?: string[];
     functionName?: string;
-    label?: string;
-}
-
-export interface AutoGrader {
-    functionNames: string[];
-    compare?: CompareMode;
-    tests: AutoTestCase[];
-}
-
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'length' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
-
-export interface AutoTestCase {
-    args: unknown[];
-    expected: unknown;
-    inputValues?: string[];
-    functionName?: string;
+    expectedException?: string;
     label?: string;
 }
 
@@ -31,7 +22,7 @@ export interface AutoGrader {
 }
 
 export const AUTO_GRADERS: Record<number, AutoGrader> = {
-  1: {
+    1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
         tests: [
             { args: [2, 3], expected: 5 },
@@ -39,7 +30,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [1.5, 2.25], expected: 3.75 }
         ]
     },
-  2: {
+    2: {
         functionNames: ['multiply_numbers'],
         tests: [
             { args: [4, 5], expected: 20 },
@@ -47,7 +38,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [0, 99], expected: 0 }
         ]
     },
-  3: {
+    3: {
         functionNames: ['find_max'],
         tests: [
             { args: [[2, 67, 300]], expected: 300 },
@@ -55,7 +46,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[5]], expected: 5 }
         ]
     },
-  4: {
+    4: {
         functionNames: ['calculate_average', 'cal_average'],
         compare: 'float',
         tests: [
@@ -64,7 +55,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-3, 3, 6]], expected: 2 }
         ]
     },
-  5: {
+    5: {
         functionNames: ['count_vowels'],
         tests: [
             { args: ['Jonathan'], expected: 3 },
@@ -72,7 +63,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['rhythm'], expected: 0 }
         ]
     },
-  6: {
+    6: {
         functionNames: ['reverse_string'],
         tests: [
             { args: ['Jonathan'], expected: 'nahtanoJ' },
@@ -80,7 +71,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['x'], expected: 'x' }
         ]
     },
-  7: {
+    7: {
         functionNames: ['is_even'],
         tests: [
             { args: [10], expected: true },
@@ -88,7 +79,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [0], expected: true }
         ]
     },
-  8: {
+    8: {
         functionNames: ['calculate_square', 'calculate_sqaure', 'cal_square'],
         tests: [
             { args: [6], expected: 36 },
@@ -96,28 +87,29 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [0], expected: 0 }
         ]
     },
-  9: {
-    functionNames: ["greet_user"],
-    tests: [{
-      args: ["hello"],
-      expected: "hello hello"
-    }]
-  },
-  10: {
+    9: {
+        functionNames: ['greet_user'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: ['Ada'], expected: 'Hello, Ada!' },
+            { args: ['Jonathan'], expected: 'Hello, Jonathan!' }
+        ]
+    },
+    10: {
         functionNames: ['square_list', 'square_lst'],
         tests: [
             { args: [[2, 4, 5, 6]], expected: [4, 16, 25, 36] },
             { args: [[-2, 0, 3]], expected: [4, 0, 9] }
         ]
     },
-  11: {
+    11: {
         functionNames: ['convert_to_uppercase', 'covert_uppercase'],
         tests: [
             { args: ['Jonathan'], expected: 'JONATHAN' },
             { args: ['Hi there!'], expected: 'HI THERE!' }
         ]
     },
-  12: {
+    12: {
         functionNames: ['calculate_sum', 'cal_sum'],
         tests: [
             { args: [[1, 56, 778]], expected: 835 },
@@ -125,7 +117,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: 0 }
         ]
     },
-  13: {
+    13: {
         functionNames: ['is_odd'],
         tests: [
             { args: [10], expected: false },
@@ -133,14 +125,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [0], expected: false }
         ]
     },
-  14: {
+    14: {
         functionNames: ['concatenate_strings', 'concatenate_string'],
         tests: [
             { args: ['Jonathan', 'moll'], expected: 'Jonathanmoll' },
             { args: ['hello ', 'world'], expected: 'hello world' }
         ]
     },
-  15: {
+    15: {
         functionNames: ['find_length', 'find_len'],
         tests: [
             { args: ['Jonathan'], expected: 8 },
@@ -148,7 +140,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['hi there'], expected: 8 }
         ]
     },
-  16: {
+    16: {
         functionNames: ['is_palindrome'],
         tests: [
             { args: ['racecar'], expected: true },
@@ -156,7 +148,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['tom'], expected: false }
         ]
     },
-  17: {
+    17: {
         functionNames: ['count_words'],
         tests: [
             { args: ['This is an example sentence.'], expected: 5 },
@@ -164,7 +156,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['  extra   spaces here  '], expected: 3 }
         ]
     },
-  18: {
+    18: {
         functionNames: ['find_min', 'find_minimum'],
         tests: [
             { args: [[45, 6, 1]], expected: 1 },
@@ -172,7 +164,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[5]], expected: 5 }
         ]
     },
-  19: {
+    19: {
         functionNames: ['is_even_index_sum'],
         tests: [
             { args: [[100, 200, 300, 400]], expected: true },
@@ -180,14 +172,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[2, 1, 4]], expected: true }
         ]
     },
-  20: {
+    20: {
         functionNames: ['double_elements'],
         tests: [
             { args: [[1, 2, 3]], expected: [2, 4, 6] },
             { args: [[-1, 0, 5]], expected: [-2, 0, 10] }
         ]
     },
-  21: {
+    21: {
         functionNames: ['is_all_positive'],
         tests: [
             { args: [[1, 6, 8]], expected: true },
@@ -195,7 +187,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-1, 2]], expected: false }
         ]
     },
-  22: {
+    22: {
         functionNames: ['find_average', 'find_average_lst'],
         compare: 'float',
         tests: [
@@ -204,7 +196,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-2, 2, 6]], expected: 2 }
         ]
     },
-  23: {
+    23: {
         functionNames: ['contains_negative'],
         tests: [
             { args: [[5, -9]], expected: true },
@@ -212,7 +204,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2, 3]], expected: false }
         ]
     },
-  24: {
+    24: {
         functionNames: ['find_last_element', 'find_element'],
         tests: [
             { args: [[1, 45, 66]], expected: 66 },
@@ -220,7 +212,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[5]], expected: 5 }
         ]
     },
-  25: {
+    25: {
         functionNames: ['multiply_elements'],
         tests: [
             { args: [[2, 4, 2]], expected: 16 },
@@ -228,7 +220,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[7]], expected: 7 }
         ]
     },
-  26: {
+    26: {
         functionNames: ['has_duplicates'],
         tests: [
             { args: [[1, 2, 3, 2]], expected: true },
@@ -236,7 +228,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[5, 5]], expected: true }
         ]
     },
-  27: {
+    27: {
         functionNames: ['count_occurrences'],
         tests: [
             { args: [[1, 2, 2, 3, 2], 2], expected: 3 },
@@ -244,7 +236,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2, 3], 9], expected: 0 }
         ]
     },
-  28: {
+    28: {
         functionNames: ['remove_vowels'],
         tests: [
             { args: ['Jonathan'], expected: 'Jnthn' },
@@ -252,7 +244,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['rhythm'], expected: 'rhythm' }
         ]
     },
-  29: {
+    29: {
         functionNames: ['capitalize_words'],
         tests: [
             { args: ['hello world! this is a test.'], expected: 'Hello World! This Is A Test.' },
@@ -260,7 +252,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['a b c'], expected: 'A B C' }
         ]
     },
-  30: {
+    30: {
         functionNames: ['remove_spaces', 'remove_space'],
         tests: [
             { args: ['suck me duck Jonathan'], expected: 'suckmeduckJonathan' },
@@ -268,7 +260,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [' no spaces '], expected: 'nospaces' }
         ]
     },
-  31: {
+    31: {
         functionNames: ['get_initials'],
         tests: [
             { args: ['John Doe'], expected: 'J.D.' },
@@ -276,7 +268,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['Ada Lovelace'], expected: 'A.L.' }
         ]
     },
-  32: {
+    32: {
         functionNames: ['reverse_words', 'reverse_word'],
         tests: [
             { args: ['hello world'], expected: 'world hello' },
@@ -284,7 +276,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['single'], expected: 'single' }
         ]
     },
-  33: {
+    33: {
         functionNames: ['remove_duplicates'],
         tests: [
             { args: [[1, 2, 3, 1, 4, 2, 5]], expected: [1, 2, 3, 4, 5] },
@@ -292,7 +284,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: [] }
         ]
     },
-  34: {
+    34: {
         functionNames: ['find_longest_word'],
         tests: [
             { args: ['why dont you call Jonathan'], expected: 'Jonathan' },
@@ -300,7 +292,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['same size test'], expected: 'same' }
         ]
     },
-  35: {
+    35: {
         functionNames: ['find_vowels'],
         tests: [
             { args: ['Jonathan'], expected: ['o', 'a', 'a'] },
@@ -308,7 +300,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['rhythm'], expected: [] }
         ]
     },
-  36: {
+    36: {
         functionNames: ['reverse_number'],
         tests: [
             { args: [123], expected: 321 },
@@ -316,7 +308,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [5], expected: 5 }
         ]
     },
-  37: {
+    37: {
         functionNames: ['remove_duplicates', 'remove_duplicate'],
         tests: [
             { args: ['Jonathan'], expected: 'Jonath' },
@@ -324,7 +316,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['abc'], expected: 'abc' }
         ]
     },
-  38: {
+    38: {
         functionNames: ['sum_of_list'],
         tests: [
             { args: [[1, 2, 3]], expected: 6 },
@@ -332,7 +324,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: 0 }
         ]
     },
-  39: {
+    39: {
         functionNames: ['sum_of_list'],
         tests: [
             { args: [[2, 2, 2]], expected: 6 },
@@ -340,7 +332,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: 0 }
         ]
     },
-  40: {
+    40: {
         functionNames: ['find_min_max'],
         tests: [
             { args: [[10, 90, 45, 55, 222, 2]], expected: [2, 222] },
@@ -348,7 +340,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[7]], expected: [7, 7] }
         ]
     },
-  41: {
+    41: {
         functionNames: ['count_occurrences'],
         tests: [
             { args: [['Tom', 'Jerry', 'Tom'], 'Tom'], expected: 2 },
@@ -356,22 +348,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a', 'b'], 'z'], expected: 0 }
         ]
     },
-  42: {
-    functionNames: ["table"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1 x 5 = 5\n2 x 5 = 10\n3 x 5 = 15\n4 x 5 = 20\n5 x 5 = 25\n6 x 5 = 30\n7 x 5 = 35\n8 x 5 = 40\n9 x 5 = 45\n10 x 5 = 50\n"
-    }]
-  },
-  43: {
+    42: {
+        functionNames: ['table'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [3], expected: '3 * 0 = 0\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30' }
+        ]
+    },
+    43: {
         functionNames: ['square_elements'],
         tests: [
             { args: [[2, 3, 4]], expected: [4, 9, 16] },
             { args: [[-2, 0, 5]], expected: [4, 0, 25] }
         ]
     },
-  44: {
+    44: {
         functionNames: ['count_uppercase'],
         tests: [
             { args: ['Jonathan Moll'], expected: 2 },
@@ -379,7 +370,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['no uppercase'], expected: 0 }
         ]
     },
-  45: {
+    45: {
         functionNames: ['remove_spaces'],
         tests: [
             { args: ['what happening boss man'], expected: 'whathappeningbossman' },
@@ -387,7 +378,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['none'], expected: 'none' }
         ]
     },
-  46: {
+    46: {
         functionNames: ['merge_lists'],
         tests: [
             { args: [[1, 3, 5], [2, 4, 6]], expected: [1, 2, 3, 4, 5, 6] },
@@ -395,7 +386,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[], [1, 2]], expected: [1, 2] }
         ]
     },
-  47: {
+    47: {
         functionNames: ['find_index'],
         tests: [
             { args: [[10, 20, 30], 20], expected: 1 },
@@ -403,7 +394,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a', 'b', 'a'], 'a'], expected: 0 }
         ]
     },
-  48: {
+    48: {
         functionNames: ['sum_even_indices'],
         tests: [
             { args: [[10, 20, 30, 40]], expected: 40 },
@@ -411,7 +402,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: 0 }
         ]
     },
-  49: {
+    49: {
         functionNames: ['remove_duplicates_case_insensitive', 'remove_duplicates'],
         tests: [
             { args: [['Hello', 'HELLO', 'world', 'World', 'Python', 'python']], expected: ['Hello', 'world', 'Python'] },
@@ -419,7 +410,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: [] }
         ]
     },
-  50: {
+    50: {
         functionNames: ['is_palindrome'],
         tests: [
             { args: ['racecar'], expected: true },
@@ -427,7 +418,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [''], expected: true }
         ]
     },
-  51: {
+    51: {
         functionNames: ['factorial'],
         tests: [
             { args: [0], expected: 1 },
@@ -435,7 +426,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [7], expected: 5040 }
         ]
     },
-  52: {
+    52: {
         functionNames: ['is_anagram'],
         tests: [
             { args: ['listen', 'silent'], expected: true },
@@ -443,7 +434,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['hello', 'world'], expected: false }
         ]
     },
-  53: {
+    53: {
         functionNames: ['count_words'],
         tests: [
             { args: ['This is this'], expected: { this: 2, is: 1 } },
@@ -451,7 +442,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['Hello hello'], expected: { hello: 2 } }
         ]
     },
-  54: {
+    54: {
         functionNames: ['fibonacci'],
         tests: [
             { args: [0], expected: [] },
@@ -459,79 +450,79 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [7], expected: [0, 1, 1, 2, 3, 5, 8] }
         ]
     },
-  55: {
-        functionNames: ["area_rectangle"],
+    55: {
+        functionNames: ['area_rectangle'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5', '3'], expected: '15.0' },
             { args: [], inputValues: ['4', '2'], expected: '8.0' }
         ]
     },
-  56: {
-        functionNames: ["even_odd"],
+    56: {
+        functionNames: ['even_odd'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['4'], expected: 'Number is even' },
             { args: [], inputValues: ['7'], expected: 'Number is odd' }
         ]
     },
-  57: {
-        functionNames: ["fibonacci_series"],
+    57: {
+        functionNames: ['fibonacci_series'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['10'], expected: '0 1 1 2 3 5 8' },
             { args: [], inputValues: ['1'], expected: '0 1' }
         ]
     },
-  58: {
-        functionNames: ["max_number"],
+    58: {
+        functionNames: ['max_number'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['10 20 15'], expected: '20' },
             { args: [], inputValues: ['-2 -9 -1'], expected: '-1' }
         ]
     },
-  59: {
-        functionNames: ["reverse_string"],
+    59: {
+        functionNames: ['reverse_string'],
         compare: 'printedOrReturn',
         tests: [
             { args: ['Jonathan'], expected: 'nahtanoJ' },
             { args: ['hello'], expected: 'olleh' }
         ]
     },
-  60: {
-        functionNames: ["is_palindrome"],
+    60: {
+        functionNames: ['is_palindrome'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['racecar'], expected: true },
             { args: [], inputValues: ['hello'], expected: false }
         ]
     },
-  61: {
-        functionNames: ["count_vowels"],
+    61: {
+        functionNames: ['count_vowels'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['Hello'], expected: '2' },
             { args: [], inputValues: ['rhythm'], expected: '0' }
         ]
     },
-  62: {
-        functionNames: ["factorial"],
+    62: {
+        functionNames: ['factorial'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5'], expected: '120' },
             { args: [], inputValues: ['0'], expected: '1' }
         ]
     },
-  63: {
-        functionNames: ["sum_of_all_numbers"],
+    63: {
+        functionNames: ['sum_of_all_numbers'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5'], expected: '15' },
             { args: [], inputValues: ['3'], expected: '6' }
         ]
     },
-  64: {
+    64: {
         functionNames: ['largest_element', 'find_largest'],
         tests: [
             { args: [[2, 56, 75, 4566, 3]], expected: 4566 },
@@ -539,12 +530,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[7]], expected: 7 }
         ]
     },
-  65: {
-    functionNames: ["largest_elememt"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  66: {
+    65: {
+        functionNames: ['largest_elememt', 'main'],
+        tests: [
+            { args: [['tree', 'cliff', 'mountain', 'grassy']], expected: 'mountain' },
+            { args: [['house', 'counter', 'if']], expected: 'counter' },
+            { args: [['same', 'size']], expected: 'same' }
+        ]
+    },
+    66: {
         functionNames: ['remove_duplicates'],
         tests: [
             { args: [['tree', 'kiss', 'tree']], expected: ['tree', 'kiss'] },
@@ -552,8 +546,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: [] }
         ]
     },
-  67: {
-        functionNames: ["is_leap_year"],
+    67: {
+        functionNames: ['is_leap_year'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['2000'], expected: true },
@@ -561,22 +555,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['2024'], expected: true }
         ]
     },
-  68: {
-        functionNames: ["length_string"],
+    68: {
+        functionNames: ['length_string'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['hello'], expected: '5' },
             { args: [], inputValues: ['hello world'], expected: '11' }
         ]
     },
-  70: {
+    70: {
         functionNames: ['count_each_word'],
         tests: [
             { args: ['this is this'], expected: { this: 2, is: 1 } },
             { args: ['one two one'], expected: { one: 2, two: 1 } }
         ]
     },
-  71: {
+    71: {
         functionNames: ['second_largest_number', 'sec_lar'],
         tests: [
             { args: [[10, 90, 45, 55, 222, 2]], expected: 90 },
@@ -584,7 +578,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-5, -1, -9]], expected: -5 }
         ]
     },
-  72: {
+    72: {
         functionNames: ['is_valid_email'],
         tests: [
             { args: ['test@example.com'], expected: true },
@@ -592,7 +586,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['name@site'], expected: false }
         ]
     },
-  73: {
+    73: {
         functionNames: ['factorial'],
         tests: [
             { args: [0], expected: 1 },
@@ -600,15 +594,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [6], expected: 720 }
         ]
     },
-  74: {
-        functionNames: ["are_anagrams","pal"],
+    74: {
+        functionNames: ['are_anagrams', 'pal'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['listen', 'silent'], expected: true },
             { args: [], inputValues: ['hello', 'world'], expected: false }
         ]
     },
-  75: {
+    75: {
         functionNames: ['is_prime'],
         tests: [
             { args: [2], expected: true },
@@ -617,7 +611,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [9], expected: false }
         ]
     },
-  76: {
+    76: {
         functionNames: ['common_elements', 'find_common_elements'],
         compare: 'unorderedList',
         tests: [
@@ -626,7 +620,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2], [3, 4]], expected: [] }
         ]
     },
-  77: {
+    77: {
         functionNames: ['uppercase', 'count_uppercase'],
         tests: [
             { args: ['Jonathan Moll'], expected: 2 },
@@ -634,15 +628,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['no uppercase'], expected: 0 }
         ]
     },
-  78: {
-        functionNames: ["decimal_to_binary"],
+    78: {
+        functionNames: ['decimal_to_binary'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['10'], expected: '1010' },
             { args: [], inputValues: ['5'], expected: '101' }
         ]
     },
-  79: {
+    79: {
         functionNames: ['ascending_order_numbers'],
         tests: [
             { args: [[3, 1, 2]], expected: [1, 2, 3] },
@@ -650,7 +644,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: [] }
         ]
     },
-  80: {
+    80: {
         functionNames: ['generate_random_number'],
         compare: 'numberRange',
         tests: [
@@ -658,15 +652,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['20', '25'], expected: [20, 25] }
         ]
     },
-  81: {
-        functionNames: ["square_root"],
+    81: {
+        functionNames: ['square_root'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['9'], expected: '3' },
             { args: [], inputValues: ['16'], expected: '4' }
         ]
     },
-  82: {
+    82: {
         functionNames: ['calculate_circle_area', 'circle'],
         compare: 'float',
         tests: [
@@ -674,7 +668,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [2], expected: 12.566370614359172 }
         ]
     },
-  83: {
+    83: {
         functionNames: ['is_palindrome'],
         tests: [
             { args: ['racecar'], expected: true },
@@ -682,7 +676,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [''], expected: true }
         ]
     },
-  84: {
+    84: {
         functionNames: ['is_pangram', 'pangram'],
         tests: [
             { args: ['The quick brown fox jumps over the lazy dog'], expected: true },
@@ -690,7 +684,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['abcdefghijklmnopqrstuvwxyz'], expected: true }
         ]
     },
-  85: {
+    85: {
         functionNames: ['gcd'],
         tests: [
             { args: [12, 18], expected: 6 },
@@ -698,7 +692,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [20, 5], expected: 5 }
         ]
     },
-  86: {
+    86: {
         functionNames: ['lcm'],
         tests: [
             { args: [4, 6], expected: 12 },
@@ -706,7 +700,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [3, 9], expected: 9 }
         ]
     },
-  87: {
+    87: {
         functionNames: ['reverse_list', 'reverse_lst'],
         tests: [
             { args: [[1, 2, 3]], expected: [3, 2, 1] },
@@ -714,7 +708,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: [] }
         ]
     },
-  88: {
+    88: {
         functionNames: ['prime_factors'],
         tests: [
             { args: [12], expected: [2, 2, 3] },
@@ -722,7 +716,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [60], expected: [2, 2, 3, 5] }
         ]
     },
-  89: {
+    89: {
         functionNames: ['generate_password'],
         compare: 'length',
         tests: [
@@ -730,7 +724,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [12], expected: 12 }
         ]
     },
-  90: {
+    90: {
         functionNames: ['count_words'],
         tests: [
             { args: ['hello world'], expected: 2 },
@@ -738,7 +732,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['one'], expected: 1 }
         ]
     },
-  91: {
+    91: {
         functionNames: ['largest_smallest'],
         tests: [
             { args: [[4, 5, 100, 6, 1, 10]], expected: [1, 100] },
@@ -746,7 +740,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[7]], expected: [7, 7] }
         ]
     },
-  92: {
+    92: {
         functionNames: ['is_perfect_number', 'is_perfect_square'],
         tests: [
             { args: [6], expected: true },
@@ -754,15 +748,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [12], expected: false }
         ]
     },
-  93: {
-        functionNames: ["factorial"],
+    93: {
+        functionNames: ['factorial'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5'], expected: '120' },
             { args: [], inputValues: ['0'], expected: '1' }
         ]
     },
-  94: {
+    94: {
         functionNames: ['is_power_of_two'],
         tests: [
             { args: [1], expected: true },
@@ -771,7 +765,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [0], expected: false }
         ]
     },
-  95: {
+    95: {
         functionNames: ['find_intersection'],
         compare: 'unorderedList',
         tests: [
@@ -780,7 +774,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1], [2]], expected: [] }
         ]
     },
-  96: {
+    96: {
         functionNames: ['remove_vowels'],
         tests: [
             { args: ['Jonathan'], expected: 'Jnthn' },
@@ -788,7 +782,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['rhythm'], expected: 'rhythm' }
         ]
     },
-  97: {
+    97: {
         functionNames: ['binary_to_decimal'],
         tests: [
             { args: ['1010'], expected: 10 },
@@ -796,15 +790,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['0'], expected: 0 }
         ]
     },
-  98: {
-        functionNames: ["digits_string"],
+    98: {
+        functionNames: ['digits_string'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['2 8'], expected: '10' },
             { args: [], inputValues: ['1 2 3'], expected: '6' }
         ]
     },
-  99: {
+    99: {
         functionNames: ['upper_lower'],
         compare: 'letterCounts',
         tests: [
@@ -813,7 +807,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['no uppercase'], expected: { upper: 0, lower: 11 } }
         ]
     },
-  100: {
+    100: {
         functionNames: ['sum_of_primes'],
         tests: [
             { args: [1, 10], expected: 17 },
@@ -821,7 +815,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [1, 2], expected: 2 }
         ]
     },
-  101: {
+    101: {
         functionNames: ['power'],
         tests: [
             { args: [2, 3], expected: 8 },
@@ -829,7 +823,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [3, 4], expected: 81 }
         ]
     },
-  102: {
+    102: {
         functionNames: ['is_anagram'],
         tests: [
             { args: ['listen', 'silent'], expected: true },
@@ -837,7 +831,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['hello', 'world'], expected: false }
         ]
     },
-  104: {
+    104: {
         functionNames: ['is_perfect_square'],
         tests: [
             { args: [16], expected: true },
@@ -845,7 +839,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [0], expected: true }
         ]
     },
-  105: {
+    105: {
         functionNames: ['all_odd_numbers'],
         tests: [
             { args: [[1, 2, 3, 4, 5]], expected: 9 },
@@ -853,8 +847,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-3, 5, 6]], expected: 2 }
         ]
     },
-  106: {
-        functionNames: ["sum_of_odd_numbers","sum_of_all_odd"],
+    106: {
+        functionNames: ['sum_of_odd_numbers', 'sum_of_all_odd'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['1 2 3 4 5'], expected: '9' },
@@ -862,7 +856,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['-3 5 6'], expected: '2' }
         ]
     },
-  107: {
+    107: {
         functionNames: ['common_char'],
         compare: 'unorderedList',
         tests: [
@@ -871,7 +865,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['abc', 'xyz'], expected: [] }
         ]
     },
-  108: {
+    108: {
         functionNames: ['remove_duplicates'],
         compare: 'unorderedList',
         tests: [
@@ -879,7 +873,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['abc'], expected: ['a', 'b', 'c'] }
         ]
     },
-  109: {
+    109: {
         functionNames: ['is_armstrong'],
         tests: [
             { args: [153], expected: true },
@@ -887,7 +881,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [123], expected: false }
         ]
     },
-  110: {
+    110: {
         functionNames: ['vowels_consonates'],
         compare: 'vowelConsonantCounts',
         tests: [
@@ -896,7 +890,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['rhythm'], expected: { vowels: 0, consonants: 6 } }
         ]
     },
-  111: {
+    111: {
         functionNames: ['second_smallest_element'],
         tests: [
             { args: [[4, 1, 3, 2]], expected: 2 },
@@ -904,7 +898,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-1, -5, 0]], expected: -1 }
         ]
     },
-  112: {
+    112: {
         functionNames: ['generate_permutations'],
         compare: 'unorderedList',
         tests: [
@@ -912,13 +906,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['abc'], expected: ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'] }
         ]
     },
-  114: {
-    functionNames: ["max_of_three"],
-    tests: [
-      { args: [3,7,5], expected: 7 }
-    ]
-  },
-  115: {
+    114: {
+        functionNames: ['max_of_three', 'main'],
+        tests: [
+            { args: [1, 5, 3], expected: 5 },
+            { args: [-10, -2, -5], expected: -2 },
+            { args: [7, 7, 1], expected: 7 }
+        ]
+    },
+    115: {
         functionNames: ['length_string', 'length_list'],
         tests: [
             { args: ['hello'], expected: 5 },
@@ -926,7 +922,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [''], expected: 0 }
         ]
     },
-  117: {
+    117: {
         functionNames: ['translate'],
         tests: [
             { args: ['this is fun'], expected: 'tothohisos isos fofunon' },
@@ -934,7 +930,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['aeiou'], expected: 'aeiou' }
         ]
     },
-  118: {
+    118: {
         functionNames: ['sum', 'multiply'],
         tests: [
             { functionName: 'sum', args: [[1, 2, 3, 4]], expected: 10 },
@@ -943,7 +939,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { functionName: 'multiply', args: [[-2, 5, 3]], expected: -30 }
         ]
     },
-  119: {
+    119: {
         functionNames: ['reverse'],
         tests: [
             { args: ['I am testing'], expected: 'gnitset ma I' },
@@ -951,7 +947,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [''], expected: '' }
         ]
     },
-  120: {
+    120: {
         functionNames: ['palindromes'],
         tests: [
             { args: ['radar'], expected: true },
@@ -959,7 +955,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['level'], expected: true }
         ]
     },
-  121: {
+    121: {
         functionNames: ['is_palindrome'],
         tests: [
             { args: ['radar'], expected: true },
@@ -967,7 +963,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['level'], expected: true }
         ]
     },
-  122: {
+    122: {
         functionNames: ['is_member'],
         tests: [
             { args: ['a', ['b', 'a']], expected: true },
@@ -975,7 +971,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['x', []], expected: false }
         ]
     },
-  123: {
+    123: {
         functionNames: ['overlapping'],
         tests: [
             { args: [[1, 2, 3], [4, 3, 5]], expected: true },
@@ -983,7 +979,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[], [1]], expected: false }
         ]
     },
-  124: {
+    124: {
         functionNames: ['overlapping'],
         tests: [
             { args: [[1, 2, 3], [4, 3, 5]], expected: true },
@@ -991,22 +987,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[], [1]], expected: false }
         ]
     },
-  125: {
-    functionNames: ["histogram"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: "*\n**\n***\n****\n*****"
-    }]
-  },
-  126: {
+    125: {
+        functionNames: ['histogram', 'histrogram'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [[4, 2, 1]], expected: '****\n**\n*' },
+            { args: [[1, 3]], expected: '*\n***' }
+        ]
+    },
+    126: {
         functionNames: ['map_words_to_lengths'],
         tests: [
             { args: [['apple', 'banana', 'kiwi']], expected: [5, 6, 4] },
             { args: [['a', '', 'three']], expected: [1, 0, 5] }
         ]
     },
-  127: {
+    127: {
         functionNames: ['find_longest_word'],
         tests: [
             { args: [['jo', 'banana', 'cat']], expected: 6 },
@@ -1014,7 +1010,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['same', 'size']], expected: 4 }
         ]
     },
-  128: {
+    128: {
         functionNames: ['filter_long_words'],
         tests: [
             { args: [['one', 'three', 'seventeen', 'two'], 3], expected: ['three', 'seventeen'] },
@@ -1022,7 +1018,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['hi'], 5], expected: [] }
         ]
     },
-  129: {
+    129: {
         functionNames: ['is_pangram'],
         tests: [
             { args: ['The quick brown fox jumps over the lazy dog'], expected: true },
@@ -1030,7 +1026,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['Sphinx of black quartz, judge my vow'], expected: true }
         ]
     },
-  130: {
+    130: {
         functionNames: ['correct'],
         tests: [
             { args: ['This  is very funny  and cool.Indeed!'], expected: 'This is very funny and cool. Indeed!' },
@@ -1038,7 +1034,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['Already ok. Fine'], expected: 'Already ok. Fine' }
         ]
     },
-  131: {
+    131: {
         functionNames: ['max_func', 'max_in_list'],
         tests: [
             { functionName: 'max_func', args: [3, 5], expected: 5 },
@@ -1052,43 +1048,43 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [{ args: [], expected: '1 x 1 = 1\n1 x 2 = 2\n1 x 3 = 3\n1 x 4 = 4\n1 x 5 = 5\n1 x 6 = 6\n1 x 7 = 7\n1 x 8 = 8\n1 x 9 = 9\n1 x 10 = 10\n2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30\n4 x 1 = 4\n4 x 2 = 8\n4 x 3 = 12\n4 x 4 = 16\n4 x 5 = 20\n4 x 6 = 24\n4 x 7 = 28\n4 x 8 = 32\n4 x 9 = 36\n4 x 10 = 40\n5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50\n6 x 1 = 6\n6 x 2 = 12\n6 x 3 = 18\n6 x 4 = 24\n6 x 5 = 30\n6 x 6 = 36\n6 x 7 = 42\n6 x 8 = 48\n6 x 9 = 54\n6 x 10 = 60\n7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63\n7 x 10 = 70\n8 x 1 = 8\n8 x 2 = 16\n8 x 3 = 24\n8 x 4 = 32\n8 x 5 = 40\n8 x 6 = 48\n8 x 7 = 56\n8 x 8 = 64\n8 x 9 = 72\n8 x 10 = 80\n9 x 1 = 9\n9 x 2 = 18\n9 x 3 = 27\n9 x 4 = 36\n9 x 5 = 45\n9 x 6 = 54\n9 x 7 = 63\n9 x 8 = 72\n9 x 9 = 81\n9 x 10 = 90\n10 x 1 = 10\n10 x 2 = 20\n10 x 3 = 30\n10 x 4 = 40\n10 x 5 = 50\n10 x 6 = 60\n10 x 7 = 70\n10 x 8 = 80\n10 x 9 = 90\n10 x 10 = 100' }]
   },
-  134: {
-        functionNames: ["sum_of_all_numbers"],
+    134: {
+        functionNames: ['sum_of_all_numbers'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['1 2 3 4'], expected: '10' },
             { args: [], inputValues: ['-2 5 0'], expected: '3' }
         ]
     },
-  135: {
+    135: {
         functionNames: ['split_number'],
         tests: [
             { args: ['123'], expected: ['1', '2', '3'] },
             { args: ['908'], expected: ['9', '0', '8'] }
         ]
     },
-  136: {
+    136: {
         functionNames: ['alphabetically_ordered'],
         tests: [
             { args: ['hello caca face'], expected: 'caca face hello' },
             { args: ['banana apple cherry'], expected: 'apple banana cherry' }
         ]
     },
-  137: {
+    137: {
         functionNames: ['smallest_largest'],
         tests: [
             { args: [[2, 76, 466, 3, 23]], expected: [2, 3, 23, 76, 466] },
             { args: [[5, -1, 0]], expected: [-1, 0, 5] }
         ]
     },
-  138: {
+    138: {
         functionNames: ['largest_smallest'],
         tests: [
             { args: [[2, 76, 466, 3, 23]], expected: [466, 76, 23, 3, 2] },
             { args: [[5, -1, 0]], expected: [5, 0, -1] }
         ]
     },
-  139: {
+    139: {
         functionNames: ['seconded_largest_number'],
         tests: [
             { args: [[2, 76, 466, 3, 23]], expected: 76 },
@@ -1096,42 +1092,42 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[7, 7, 3]], expected: 7 }
         ]
     },
-  140: {
+    140: {
         functionNames: ['fourth_largest_number'],
         tests: [
             { args: [[2, 76, 466, 3, 23]], expected: 3 },
             { args: [[10, 9, 8, 7, 6]], expected: 7 }
         ]
     },
-  141: {
+    141: {
         functionNames: ['smallest_and_third'],
         tests: [
             { args: [[2, 76, 466, 3, 23]], expected: [2, 23] },
             { args: [[10, 9, 8, 7, 6]], expected: [6, 8] }
         ]
     },
-  142: {
+    142: {
         functionNames: ['largest_smallest', 'smallest_biggest'],
         tests: [
             { args: [[2, 76, 466, 3, 23]], expected: [2, 3, 23, 76, 466] },
             { args: [[5, -1, 0]], expected: [-1, 0, 5] }
         ]
     },
-  143: {
+    143: {
         functionNames: ['int_str'],
         tests: [
             { args: [], inputValues: ['1 2 3'], expected: ['1', '2', '3'] },
             { args: [], inputValues: ['10 20'], expected: ['10', '20'] }
         ]
     },
-  144: {
+    144: {
         functionNames: ['int_to_str_list'],
         tests: [
             { args: [123], expected: ['1', '2', '3'] },
             { args: [908], expected: ['9', '0', '8'] }
         ]
     },
-  145: {
+    145: {
         functionNames: ['common_numbers'],
         compare: 'unorderedList',
         tests: [
@@ -1140,14 +1136,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[5, 5, 6], [5, 7]], expected: [5] }
         ]
     },
-  146: {
+    146: {
         functionNames: ['big_small'],
         tests: [
             { args: [['4', '10', '2']], expected: ['10', '4', '2'] },
             { args: [['1', '9', '3']], expected: ['9', '3', '1'] }
         ]
     },
-  147: {
+    147: {
         functionNames: ['type_smallest_biggest', 'small_big'],
         compare: 'numberList',
         tests: [
@@ -1155,14 +1151,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['5 -1 0'], expected: [-1, 0, 5] }
         ]
     },
-  148: {
+    148: {
         functionNames: ['double_elements'],
         tests: [
             { args: [[1, 2, 3]], expected: [1, 2, 3, 1, 2, 3] },
             { args: [['a', 'b']], expected: ['a', 'b', 'a', 'b'] }
         ]
     },
-  149: {
+    149: {
         functionNames: ['common'],
         compare: 'unorderedList',
         tests: [
@@ -1170,7 +1166,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['a b', 'c d'], expected: [] }
         ]
     },
-  150: {
+    150: {
         functionNames: ['common'],
         compare: 'unorderedList',
         tests: [
@@ -1178,7 +1174,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['a b', 'c d'], expected: [] }
         ]
     },
-  151: {
+    151: {
         functionNames: ['find_longest_word'],
         tests: [
             { args: [['tree', 'mountain', 'sky']], expected: 'mountain' },
@@ -1186,7 +1182,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a']], expected: 'a' }
         ]
     },
-  152: {
+    152: {
         functionNames: ['average', 'calculate_average'],
         compare: 'float',
         tests: [
@@ -1195,7 +1191,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-2, 2, 6]], expected: 2 }
         ]
     },
-  153: {
+    153: {
         functionNames: ['second_smallest_element'],
         tests: [
             { args: [[4, 1, 3, 2]], expected: 2 },
@@ -1203,15 +1199,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-1, -5, 0]], expected: -1 }
         ]
     },
-  154: {
-        functionNames: ["find_second_last_element","find_last_element"],
+    154: {
+        functionNames: ['find_last_element', 'find_second_last_element'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['1 2 3 4'], expected: '3' },
             { args: [], inputValues: ['apple banana cherry'], expected: 'banana' }
         ]
     },
-  155: {
+    155: {
         functionNames: ['reverse_number'],
         tests: [
             { args: [123], expected: 321 },
@@ -1219,7 +1215,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [7], expected: 7 }
         ]
     },
-  156: {
+    156: {
         functionNames: ['remove_duplicates'],
         compare: 'unorderedList',
         tests: [
@@ -1227,18 +1223,23 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['abc'], expected: ['a', 'b', 'c'] }
         ]
     },
-  157: {
-    functionNames: ["remove_duplicates"],
-    tests: [
-      { args: [[1,2,2,3,4,4,5]], expected: [1,2,3,4,5] }
-    ]
-  },
-  158: {
-    functionNames: ["largest_element","main"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
-  159: {
+    157: {
+        functionNames: ['remove_duplicates', 'main'],
+        compare: 'unorderedWords',
+        tests: [
+            { args: ['and here is was and in the'], expected: ['and'] },
+            { args: ['hot cold hot warm cold'], expected: ['hot', 'cold'] }
+        ]
+    },
+    158: {
+        functionNames: ['largest_element', 'main'],
+        tests: [
+            { args: [[2, 56, 75, 4566, 3]], expected: 4566 },
+            { args: [[-5, -2, -9]], expected: -2 },
+            { args: [[7]], expected: 7 }
+        ]
+    },
+    159: {
         functionNames: ['largest_element'],
         tests: [
             { args: [[2, 56, 75, 4566, 3]], expected: 4566 },
@@ -1246,7 +1247,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[7]], expected: 7 }
         ]
     },
-  160: {
+    160: {
         functionNames: ['find_length'],
         tests: [
             { args: ['hello'], expected: 5 },
@@ -1254,7 +1255,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [''], expected: 0 }
         ]
     },
-  161: {
+    161: {
         functionNames: ['intersection_two_list', 'intersection'],
         compare: 'unorderedList',
         tests: [
@@ -1263,36 +1264,36 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1], [2]], expected: [] }
         ]
     },
-  162: {
-        functionNames: ["third_largest"],
+    162: {
+        functionNames: ['third_largest'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['10 5 20 15 8'], expected: '10' },
             { args: [], inputValues: ['1 2 3 4'], expected: '2' }
         ]
     },
-  163: {
+    163: {
         functionNames: ['count_vowels'],
         tests: [
             { args: ['JOnathAn is the best'], expected: { a: 2, e: 2, i: 1, o: 1, u: 0 } },
             { args: ['AEIOU xyz'], expected: { a: 1, e: 1, i: 1, o: 1, u: 1 } }
         ]
     },
-  164: {
+    164: {
         functionNames: ['count_vowels'],
         tests: [
             { args: ['Jonathan is the best'], expected: { a: 2, e: 2, i: 1, o: 1, u: 0 } },
             { args: ['rhythm'], expected: { a: 0, e: 0, i: 0, o: 0, u: 0 } }
         ]
     },
-  165: {
+    165: {
         functionNames: ['intiger_string', 'split_number_int'],
         tests: [
             { args: [123], expected: ['1', '2', '3'] },
             { args: [908], expected: ['9', '0', '8'] }
         ]
     },
-  166: {
+    166: {
         functionNames: ['double_elements'],
         tests: [
             { args: [['tree', 'sky']], expected: ['tree', 'sky', 'tree', 'sky'] },
@@ -1300,61 +1301,63 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[]], expected: [] }
         ]
     },
-  167: {
-    functionNames: ["main","l_s"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
-  168: {
+    167: {
+        functionNames: ['l_s', 'main'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], expected: [5, 1] },
+            { args: [[-5, -2, -9]], expected: [-2, -9] }
+        ]
+    },
+    168: {
         functionNames: ['count_words'],
         tests: [
             { args: ['This is a test this test'], expected: { a: 1, is: 1, test: 2, this: 2 } },
             { args: ['Apple apple banana'], expected: { apple: 2, banana: 1 } }
         ]
     },
-  169: {
+    169: {
         functionNames: ['merge_dictionaries'],
         tests: [
             { args: [{ a: 1, b: 2 }, { b: 9, c: 3 }], expected: { a: 1, b: 9, c: 3 } },
             { args: [{}, { x: 1 }], expected: { x: 1 } }
         ]
     },
-  170: {
+    170: {
         functionNames: ['count_characters'],
         tests: [
             { args: ['hello'], expected: { h: 1, e: 1, l: 2, o: 1 } },
             { args: ['aba'], expected: { a: 2, b: 1 } }
         ]
     },
-  171: {
+    171: {
         functionNames: ['invert_dictionary'],
         tests: [
             { args: [{ a: 'red', b: 'blue', c: 'red' }], expected: { red: ['a', 'c'], blue: ['b'] } },
             { args: [{ x: 'yes', y: 'yes' }], expected: { yes: ['x', 'y'] } }
         ]
     },
-  172: {
+    172: {
         functionNames: ['filter_by_value'],
         tests: [
             { args: [{ a: 1, b: 5, c: 3 }, 2], expected: { b: 5, c: 3 } },
             { args: [{ a: 1 }, 10], expected: {} }
         ]
     },
-  173: {
+    173: {
         functionNames: ['combine_lists_to_dict'],
         tests: [
             { args: [['a', 'b'], [1, 2]], expected: { a: 1, b: 2 } },
             { args: [['x'], ['red']], expected: { x: 'red' } }
         ]
     },
-  174: {
+    174: {
         functionNames: ['max_value_key'],
         tests: [
             { args: [{ a: 1, b: 5, c: 3 }], expected: 'b' },
             { args: [{}], expected: null }
         ]
     },
-  175: {
+    175: {
         functionNames: ['dict_equal'],
         tests: [
             { args: [{ a: 1, b: 2 }, { b: 2, a: 1 }], expected: true },
@@ -1362,21 +1365,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{ a: 1 }, { a: 1, b: 2 }], expected: false }
         ]
     },
-  176: {
+    176: {
         functionNames: ['word_frequency'],
         tests: [
             { args: ['gore why are you here you are gore'], expected: { gore: 2, why: 1, are: 2, you: 2, here: 1 } },
             { args: ['one two one'], expected: { one: 2, two: 1 } }
         ]
     },
-  177: {
+    177: {
         functionNames: ['merge_list_of_dicts'],
         tests: [
             { args: [[{ a: 1, b: 2 }, { b: 3, c: 4 }, { a: 5 }]], expected: { a: 5, b: 3, c: 4 } },
             { args: [[{ x: 1 }, { y: 2 }]], expected: { x: 1, y: 2 } }
         ]
     },
-  178: {
+    178: {
         functionNames: ['remove_duplicates_from_values'],
         compare: 'dictUnorderedLists',
         tests: [
@@ -1384,21 +1387,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{ x: ['a', 'a', 'b'] }], expected: { x: ['a', 'b'] } }
         ]
     },
-  179: {
+    179: {
         functionNames: ['common_keys_max_values'],
         tests: [
             { args: [{ a: 1, b: 2, c: 3 }, { b: 3, c: 1, d: 4 }], expected: { b: 3, c: 3 } },
             { args: [{ x: 10 }, { y: 5 }], expected: {} }
         ]
     },
-  180: {
+    180: {
         functionNames: ['average_values'],
         tests: [
             { args: [[{ a: 1, b: 2 }, { a: 3, b: 4 }, { a: 5, b: 6 }]], expected: { a: 3, b: 4 } },
             { args: [[{ a: 2 }, { a: 4, b: 10 }]], expected: { a: 3, b: 10 } }
         ]
     },
-  181: {
+    181: {
         functionNames: ['merge_dicts_with_lists'],
         compare: 'dictUnorderedLists',
         tests: [
@@ -1406,11 +1409,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[{ x: [1, 1] }, { x: [2] }]], expected: { x: [1, 2] } }
         ]
     },
-  182: {
-    functionNames: ['group_by_first_letter'],
-    tests: [{ args: [['apple', 'banana', 'avocado', 'cherry']], expected: { a: ['apple', 'avocado'], b: ['banana'], c: ['cherry'] } }]
-  },
-  183: {
+    182: {
+        functionNames: ['group_by_first_letter', 'main'],
+        tests: [
+            { args: [['apple', 'ant', 'banana', 'boat']], expected: { a: ['apple', 'ant'], b: ['banana', 'boat'] } },
+            { args: [['cat', 'dog']], expected: { c: ['cat'], d: ['dog'] } }
+        ]
+    },
+    183: {
         functionNames: ['is_anagram'],
         tests: [
             { args: ['listen', 'silent'], expected: true },
@@ -1418,61 +1424,65 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['hello', 'world'], expected: false }
         ]
     },
-  184: {
-    functionNames: ['int'],
-    tests: [{ args: [123], expected: '2' }]
-  },
-  185: {
+    184: {
+        functionNames: ['int'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [123], expected: '2' },
+            { args: [987], expected: '8' }
+        ]
+    },
+    185: {
         functionNames: ['int'],
         tests: [
             { args: [12345678], expected: ['2', '4', '8'] },
             { args: [98765432], expected: ['8', '6', '2'] }
         ]
     },
-  186: {
+    186: {
         functionNames: ['get_digits'],
         tests: [
             { args: [12345678910, [1, 3, 7]], expected: ['2', '4', '8'] },
             { args: [98765432, [1, 3, 7]], expected: ['8', '6', '2'] }
         ]
     },
-  187: {
+    187: {
         functionNames: ['double_elements'],
         tests: [
             { args: [['tree', 'road', 'slow']], expected: ['tree', 'tree', 'road', 'road', 'slow', 'slow'] },
             { args: [['a', 'b']], expected: ['a', 'a', 'b', 'b'] }
         ]
     },
-  188: {
+    188: {
         functionNames: ['get_initials'],
         tests: [
             { args: ['jonathan moll'], expected: 'joNathAn moLL' }
         ]
     },
-  189: {
-        functionNames: ["sum_digits","digits_string"],
+    189: {
+        functionNames: ['sum_digits', 'digits_string'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['1234'], expected: '10' },
             { args: [], inputValues: ['908'], expected: '17' }
         ]
     },
-  190: {
+    190: {
         functionNames: ['remove_duplicate'],
         tests: [
             { args: [], inputValues: ['banana'], expected: ['b', 'a', 'n'] },
             { args: [], inputValues: ['abc'], expected: ['a', 'b', 'c'] }
         ]
     },
-  191: {
-        functionNames: ["find_min"],
+    191: {
+        functionNames: ['find_min'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5 2 9 -1'], expected: '-1' },
             { args: [], inputValues: ['10 3 7'], expected: '3' }
         ]
     },
-  192: {
+    192: {
         functionNames: ['count_occurrences'],
         tests: [
             { args: [[1, 2, 3, 1, 1], 1], expected: 3 },
@@ -1480,31 +1490,31 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2], 9], expected: 0 }
         ]
     },
-  193: {
-        functionNames: ["find_min","find_min_num"],
+    193: {
+        functionNames: ['find_min_num'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5 2 9 -1'], expected: '-1' },
             { args: [], inputValues: ['10 3 7'], expected: '3' }
         ]
     },
-  194: {
-        functionNames: ["largest_element"],
+    194: {
+        functionNames: ['largest_element'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['tree mountain sky'], expected: 'mountain' },
             { args: [], inputValues: ['a ab abc'], expected: 'abc' }
         ]
     },
-  195: {
-        functionNames: ["second_largest_element"],
+    195: {
+        functionNames: ['second_largest_element'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['tree mountain sky river'], expected: 'river' },
             { args: [], inputValues: ['a ab abc abcd'], expected: 'abc' }
         ]
     },
-  196: {
+    196: {
         functionNames: ['max_of_three'],
         tests: [
             { args: [[567, 56, 6]], expected: 567 },
@@ -1512,7 +1522,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[3, 9, 1]], expected: 9 }
         ]
     },
-  197: {
+    197: {
         functionNames: ['max_of_three'],
         tests: [
             { args: [[567, 56, 6]], expected: 567 },
@@ -1520,7 +1530,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[3, 9, 1]], expected: 9 }
         ]
     },
-  198: {
+    198: {
         functionNames: ['centimeters_inches'],
         compare: 'numberRange',
         tests: [
@@ -1528,7 +1538,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['5'], expected: [1.967, 1.969] }
         ]
     },
-  199: {
+    199: {
         functionNames: ['find_min_max'],
         compare: 'numberList',
         tests: [
@@ -1536,7 +1546,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], inputValues: ['10 3 7'], expected: [3, 10] }
         ]
     },
-  200: {
+    200: {
         functionNames: ['common_numbers'],
         compare: 'unorderedList',
         tests: [
@@ -1545,7 +1555,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[5, 5, 5]], expected: [5] }
         ]
     },
-  201: {
+    201: {
         functionNames: ['common_num', 'common_numbers'],
         compare: 'unorderedList',
         tests: [
@@ -1554,28 +1564,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1, 2, 3]], expected: [] }
         ]
     },
-  202: {
+    202: {
         functionNames: ['word_frequency'],
         tests: [
             { args: ['banana'], expected: { a: 3, b: 1, n: 2 } },
             { args: ['a b a'], expected: { a: 2, b: 1 } }
         ]
     },
-  203: {
+    203: {
         functionNames: ['total'],
         tests: [
             { args: [[1, 2, 3, 4]], expected: [10, 24] },
             { args: [[-2, 5, 3]], expected: [6, -30] }
         ]
     },
-  204: {
+    204: {
         functionNames: ['list_integers'],
         tests: [
             { args: [['join', 'horse', 'today']], expected: ['join', 4, 'horse', 5, 'today', 5] },
             { args: [['a', 'abc']], expected: ['a', 1, 'abc', 3] }
         ]
     },
-  205: {
+    205: {
         functionNames: ['average', 'calculate_average'],
         compare: 'float',
         tests: [
@@ -1583,52 +1593,52 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[2, 4, 6]], expected: 4 }
         ]
     },
-  206: {
-        functionNames: ["max_of_three"],
+    206: {
+        functionNames: ['max_of_three'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['567 56 6'], expected: '567' },
             { args: [], inputValues: ['-5 -2 -9'], expected: '-2' }
         ]
     },
-  207: {
-        functionNames: ["max_of_list"],
+    207: {
+        functionNames: ['max_of_list'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5 2 9'], expected: '9' },
             { args: [], inputValues: ['-5 -2 -9'], expected: '-2' }
         ]
     },
-  208: {
-        functionNames: ["max_of_list"],
+    208: {
+        functionNames: ['max_of_list'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['5 2 9'], expected: '9' },
             { args: [], inputValues: ['-5 -2 -9'], expected: '-2' }
         ]
     },
-  209: {
+    209: {
         functionNames: ['list_words'],
         tests: [
             { args: [['jonathan', 'horse', 'today']], expected: ['jonathan', 8, 'horse', 5, 'today', 5] },
             { args: [['a', 'abc']], expected: ['a', 1, 'abc', 3] }
         ]
     },
-  210: {
+    210: {
         functionNames: ['list_words'],
         tests: [
             { args: [['jonathan', 'horse', 'today']], expected: ['jonathan', 8, 'horse', 5, 'today', 5] },
             { args: [['a', 'abc']], expected: ['a', 1, 'abc', 3] }
         ]
     },
-  211: {
+    211: {
         functionNames: ['length_words'],
         tests: [
             { args: [['jonathan', 'horse', 'today']], expected: [8, 5, 5] },
             { args: [['a', 'abc']], expected: [1, 3] }
         ]
     },
-  212: {
+    212: {
         functionNames: ['intersection'],
         compare: 'unorderedList',
         tests: [
@@ -1646,8 +1656,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [{ args: [], expected: '1\n2 2\n3 3 3\n4 4 4 4\n5 5 5 5 5' }]
   },
-  215: {
-        functionNames: ["square_pattern","print_square_pattern"],
+    215: {
+        functionNames: ['square_pattern', 'print_square_pattern'],
         compare: 'printedOrReturn',
         tests: [
             { args: [3], expected: '***\n***\n***' },
@@ -1664,59 +1674,62 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [{ args: [], expected: '* * * * *\n* * * *\n* * *\n* *\n*' }]
   },
-  218: {
-        functionNames: ["print_checkerboard"],
+    218: {
+        functionNames: ['print_checkerboard'],
         compare: 'printedOrReturn',
         tests: [
             { args: [2], expected: '*\n *' },
             { args: [3], expected: '* *\n * \n* *' }
         ]
     },
-  219: {
-    functionNames: ["print_floyds_triangle"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1 \n2 3 \n4 5 6 \n7 8 9 10 \n11 12 13 14 15"
-    }]
-  },
-  221: {
-    functionNames: ['print_hollow_square'],
-    compare: 'printedOrReturn',
-    tests: [{ args: [5], expected: '*****\n*   *\n*   *\n*   *\n*****' }]
-  },
-  222: {
-    functionNames: ["print_reverse_pyramid"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1 2 3 4 5 \n1 2 3 4 \n1 2 3 \n1 2 \n1"
-    }]
-  },
-  224: {
-    functionNames: ["triangle_pattern"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "A \nB B \nC C C \nD D D D \nE E E E E"
-    }]
-  },
-  225: {
-    functionNames: ["print_square_pattern"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1 2 3 4 5 \n1 2 3 4 5 \n1 2 3 4 5 \n1 2 3 4 5 \n1 2 3 4 5"
-    }]
-  },
-  226: {
-    functionNames: ["print_hollow_right_triangle"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "**\n* *\n*  *\n*   *\n*****"
-    }]
-  },
+    219: {
+        functionNames: ['print_floyds_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [4], expected: '1\n2 3\n4 5 6\n7 8 9 10' },
+            { args: [2], expected: '1\n2 3' }
+        ]
+    },
+    221: {
+        functionNames: ['print_hollow_square'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*****\n*   *\n*   *\n*   *\n*****' },
+            { args: [3], expected: '***\n* *\n***' }
+        ]
+    },
+    222: {
+        functionNames: ['print_reverse_pyramid'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1' },
+            { args: [3], expected: '1 2 3\n1 2\n1' }
+        ]
+    },
+    224: {
+        functionNames: ['triangle_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: 'A\nB B\nC C C\nD D D D\nE E E E E' },
+            { args: [3], expected: 'A\nB B\nC C C' }
+        ]
+    },
+    225: {
+        functionNames: ['print_square_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5' },
+            { args: [3], expected: '1 2 3\n1 2 3\n1 2 3' }
+        ]
+    },
+    226: {
+        functionNames: ['print_hollow_right_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*\n**\n* *\n*  *\n*****' },
+            { args: [3], expected: '*\n**\n***' }
+        ]
+    },
   227: {
     functionNames: ["print_zigzag"],
     compare: 'printedOrReturn',
@@ -1725,46 +1738,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "*       * \n  *       \n*       * \n  *       \n*       *"
     }]
   },
-  228: {
-    functionNames: ["print_cross"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*   *\n * * \n  *  \n * * \n*   *"
-    }]
-  },
-  229: {
-    functionNames: ["print_hourglass"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*****\n ***\n  *"
-    }]
-  },
-  230: {
+    228: {
+        functionNames: ['print_cross'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*   *\n * * \n  *  \n * * \n*   *' },
+            { args: [3], expected: '* *\n * \n* *' }
+        ]
+    },
+    229: {
+        functionNames: ['print_hourglass'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*****\n ***\n  *\n ***\n*****' },
+            { args: [3], expected: '***\n *\n***' }
+        ]
+    },
+    230: {
         functionNames: ['count_occurrences'],
         tests: [
             { args: [['tom', 'bob', 'tom']], expected: { tom: 2, bob: 1 } },
             { args: [[1, 2, 1, 3, 2, 1]], expected: { 1: 3, 2: 2, 3: 1 } }
         ]
     },
-  231: {
-        functionNames: ["sum_of_odd"],
+    231: {
+        functionNames: ['sum_of_odd'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['1 2 3 4 5'], expected: '9' },
             { args: [], inputValues: ['2 4 6'], expected: '0' }
         ]
     },
-  232: {
-        functionNames: ["remove_vowels"],
+    232: {
+        functionNames: ['remove_vowels'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], inputValues: ['Jonathan'], expected: 'Jnthn' },
             { args: [], inputValues: ['AEIOUxyz'], expected: 'xyz' }
         ]
     },
-  233: {
+    233: {
         functionNames: ['find_min'],
         tests: [
             { args: [[13, 566, 1]], expected: 1 },
@@ -1777,223 +1790,220 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [{ args: [], expected: '* * * * *\n* * * * *\n* * * * *\n* * * * *\n* * * * *' }]
   },
-  235: {
+    235: {
         functionNames: ['increasing_triangle'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], expected: '*\n* *\n* * *\n* * * *\n* * * * *' }
+            { args: [], expected: '*\n**\n***\n****\n*****' }
         ]
     },
-  236: {
+    236: {
         functionNames: ['decreasing_triangle'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], expected: '* * * * *\n* * * *\n* * *\n* *\n*' }
+            { args: [], expected: '*****\n****\n***\n**\n*' }
         ]
     },
-  237: {
-    functionNames: ["right_triangle"],
-    tests: [
-      { args: [3], expected: "*\\n**\\n***" }
-    ]
-  },
-  238: {
-        functionNames: ["left_triangle"],
+    237: {
+        functionNames: ['right_triangle'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*\n**\n***\n****\n*****' },
+            { args: [3], expected: '*\n**\n***' }
+        ]
+    },
+    238: {
+        functionNames: ['left_triangle'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: '    *\n   **\n  ***\n ****\n*****' }
         ]
     },
-  239: {
-    functionNames: ["print_hill_pattern"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*\n   ***\n  *****\n *******\n*********"
-    }]
-  },
-  240: {
-    functionNames: ["print_reverse_hill_pattern"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*********\n *******\n  *****\n   ***\n    *"
-    }]
-  },
-  241: {
-    functionNames: ["enumerate_lst"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: "index 0 name 1\nindex 1 name 2\nindex 2 name 3\nindex 3 name 4\nindex 4 name 5"
-    }]
-  },
-  242: {
+    239: {
+        functionNames: ['print_hill_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '    *\n   ***\n  *****\n *******\n*********' },
+            { args: [3], expected: '  *\n ***\n*****' }
+        ]
+    },
+    240: {
+        functionNames: ['print_reverse_hill_pattern'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '*********\n *******\n  *****\n   ***\n    *' },
+            { args: [3], expected: '*****\n ***\n  *' }
+        ]
+    },
+    241: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: 'index 0 name Jon\nindex 1 name Chris\nindex 2 name Nathan' }
+        ]
+    },
+    242: {
         functionNames: ['enumerate_lst'],
         tests: [
             { args: [['Jon', 'Chris', 'Nathan']], expected: [[0, 'Jon'], [1, 'Chris'], [2, 'Nathan']] },
             { args: [['a']], expected: [[0, 'a']] }
         ]
     },
-  243: {
+    243: {
         functionNames: ['enumerate_lst'],
         tests: [
             { args: [['Jon', 'Chris', 'Nathan'], 'Chris'], expected: ['Chris', 1] },
             { args: [['a', 'b'], 'x'], expected: -1 }
         ]
     },
-  244: {
-    functionNames: ["enumerate_lst"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: "Index 1, Name 1\nIndex 2, Name 2\nIndex 3, Name 3\nIndex 4, Name 4\nIndex 5, Name 5"
-    }]
-  },
-  245: {
+    244: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan']], expected: 'Index 1, Name Jon\nIndex 2, Name Chris\nIndex 3, Name Nathan' }
+        ]
+    },
+    245: {
         functionNames: ['enumerate_lst'],
         tests: [
             { args: [['Jon', 'Chris', 'Nathan']], expected: { 0: 'Jon', 1: 'Chris', 2: 'Nathan' } },
             { args: [['a']], expected: { 0: 'a' } }
         ]
     },
-  246: {
-    functionNames: ["enumerate_lst"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: "1 2\n3 4"
-    }]
-  },
-  247: {
-    functionNames: ["enumerate_lst"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: "index 0 name 1\nindex 1 name 2\nindex 2 name 3\nindex 3 name 4\nindex 4 name 5"
-    }]
-  },
-  248: {
+    246: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris', 'Nathan', 'Moll']], expected: '0 Jon\n2 Nathan' }
+        ]
+    },
+    247: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris']], expected: 'index 0 name Jon\nindex 1 name Chris' }
+        ]
+    },
+    248: {
         functionNames: ['replace_with_index'],
         tests: [
             { args: [['Jon', 'Chris', 'Nathan']], expected: [0, 1, 2] },
             { args: [['a']], expected: [0] }
         ]
     },
-  249: {
-    functionNames: ["enumerate_lst"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: "index 0: 1 and 1\nindex 1: 2 and 2\nindex 2: 3 and 3\nindex 3: 4 and 4\nindex 4: 5 and 5"
-    }]
-  },
-  250: {
+    249: {
+        functionNames: ['enumerate_lst'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['Jon', 'Chris'], ['Moll', 'Smith']], expected: 'index 0: Jon and Moll\nindex 1: Chris and Smith' }
+        ]
+    },
+    250: {
         functionNames: ['sum_odd_indexed_elements'],
         tests: [
             { args: [[1, 2, 3, 4, 5, 6]], expected: 12 },
             { args: [[10, 20, 30]], expected: 20 }
         ]
     },
-  251: {
+    251: {
         functionNames: ['pair_elements'],
         tests: [
             { args: [['Jon', 'Chris'], ['Moll', 'Smith']], expected: [['Jon', 'Moll'], ['Chris', 'Smith']] },
             { args: [[1, 2], ['a', 'b']], expected: [[1, 'a'], [2, 'b']] }
         ]
     },
-  252: {
+    252: {
         functionNames: ['sum_of_2_lst'],
         tests: [
             { args: [[2, 4, 6, 8], [2, 4, 6, 8]], expected: [4, 8, 12, 16] },
             { args: [[1, -2], [3, 4]], expected: [4, 2] }
         ]
     },
-  253: {
+    253: {
         functionNames: ['sort_tuples_by_second'],
         tests: [
             { args: [[['a', 3], ['b', 1], ['c', 2]]], expected: [['b', 1], ['c', 2], ['a', 3]] },
             { args: [[['x', -1], ['y', -3]]], expected: [['y', -3], ['x', -1]] }
         ]
     },
-  254: {
+    254: {
         functionNames: ['dic_lst'],
         tests: [
             { args: [[1, 2, 3], ['one', 'two', 'three']], expected: { 1: 'one', 2: 'two', 3: 'three' } },
             { args: [['a', 'b'], [10, 20]], expected: { a: 10, b: 20 } }
         ]
     },
-  255: {
+    255: {
         functionNames: ['combine_3_lst'],
         tests: [
             { args: [['Sam', 'Ron'], [1, 2], ['x', 'y']], expected: [['Sam', 1, 'x'], ['Ron', 2, 'y']] },
             { args: [[1], [2], [3]], expected: [[1, 2, 3]] }
         ]
     },
-  256: {
+    256: {
         functionNames: ['transpose_matrix'],
         tests: [
             { args: [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], expected: [[1, 4, 7], [2, 5, 8], [3, 6, 9]] },
             { args: [[[1, 2], [3, 4]]], expected: [[1, 3], [2, 4]] }
         ]
     },
-  257: {
+    257: {
         functionNames: ['list_tuples'],
         tests: [
             { args: [[[1, 2, 3], [4, 5, 6], [7, 8, 9]]], expected: [[1, 4, 7], [2, 5, 8], [3, 6, 9]] },
             { args: [[['a', 'b'], ['c', 'd']]], expected: [['a', 'c'], ['b', 'd']] }
         ]
     },
-  258: {
+    258: {
         functionNames: ['individualists'],
         tests: [
             { args: [[[1, 2, 3], [4, 5, 6]]], expected: [[1, 4], [2, 5], [3, 6]] },
             { args: [[['a', 'b'], ['c', 'd']]], expected: [['a', 'c'], ['b', 'd']] }
         ]
     },
-  259: {
+    259: {
         functionNames: ['maxium_element_wise', 'maximum_element_wise'],
         tests: [
             { args: [[2, 4, 6], [7, 8, 9]], expected: [7, 8, 9] },
             { args: [[10, 1], [3, 9]], expected: [10, 9] }
         ]
     },
-  260: {
+    260: {
         functionNames: ['concatenate'],
         tests: [
             { args: [['fruit', 'blue'], ['orange', 'sky']], expected: ['fruit orange', 'blue sky'] },
             { args: [['a'], ['b']], expected: ['a b'] }
         ]
     },
-  261: {
+    261: {
         functionNames: ['combine_to_dict'],
         tests: [
             { args: [[1, 2, 3], ['one', 'two', 'three']], expected: [{ a: 1, b: 'one' }, { a: 2, b: 'two' }, { a: 3, b: 'three' }] },
             { args: [['x'], [9]], expected: [{ a: 'x', b: 9 }] }
         ]
     },
-  262: {
+    262: {
         functionNames: ['filter_pairs'],
         tests: [
             { args: [[5, 8, 3, 10], [4, 7, 6, 2]], expected: [[5, 4], [8, 7], [10, 2]] },
             { args: [[1, 2], [3, 1]], expected: [[2, 1]] }
         ]
     },
-  263: {
+    263: {
         functionNames: ['filter_pairs'],
         tests: [
             { args: [[5, 8, 3, 10], [4, 7, 6, 2]], expected: [[3, 6]] },
             { args: [[1, 2], [3, 1]], expected: [[1, 3]] }
         ]
     },
-  264: {
+    264: {
         functionNames: ['add_nested_lists'],
         tests: [
             { args: [[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]], expected: [[8, 10, 12], [14, 16, 18]] },
             { args: [[[1], [2]], [[3], [4]]], expected: [[4], [6]] }
         ]
     },
-  265: {
+    265: {
         functionNames: ['euclidean_distance'],
         compare: 'float',
         tests: [
@@ -2001,70 +2011,70 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[0, 0], [3, 4]], expected: 5 }
         ]
     },
-  266: {
+    266: {
         functionNames: ['interleave'],
         tests: [
             { args: [['a', 'b'], [1, 2]], expected: ['a', 1, 'b', 2] },
             { args: [['x'], ['y']], expected: ['x', 'y'] }
         ]
     },
-  267: {
+    267: {
         functionNames: ['multiply_2_lst'],
         tests: [
             { args: [[2, 4, 6], [3, 6, 9]], expected: [6, 24, 54] },
             { args: [[-2, 5], [3, 0]], expected: [-6, 0] }
         ]
     },
-  268: {
+    268: {
         functionNames: ['dot_product'],
         tests: [
             { args: [[1, 2, 3], [4, 5, 6]], expected: 32 },
             { args: [[-1, 2], [3, 4]], expected: 5 }
         ]
     },
-  269: {
+    269: {
         functionNames: ['filter_even_numbers'],
         tests: [
             { args: [[1, 2, 3, 4, 5, 6]], expected: [1, 3, 5] },
             { args: [[2, 4]], expected: [] }
         ]
     },
-  270: {
+    270: {
         functionNames: ['filter_odd_numbers'],
         tests: [
             { args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] },
             { args: [[1, 3]], expected: [] }
         ]
     },
-  271: {
+    271: {
         functionNames: ['filter_positive_numbers'],
         tests: [
             { args: [[-2, -1, 0, 1, 2, 3]], expected: [-2, -1, 0] },
             { args: [[1, 2]], expected: [] }
         ]
     },
-  272: {
+    272: {
         functionNames: ['filter_negative_numbers'],
         tests: [
             { args: [[-2, -1, 0, 1, 2, 3]], expected: [0, 1, 2, 3] },
             { args: [[-1, -2]], expected: [] }
         ]
     },
-  274: {
+    274: {
         functionNames: ['filter_palindromes'],
         tests: [
             { args: [['madam', 'hello', 'racecar', 'world', 'level']], expected: ['madam', 'racecar', 'level'] },
             { args: [['abc', 'noon']], expected: ['noon'] }
         ]
     },
-  276: {
+    276: {
         functionNames: ['filter_divisible'],
         tests: [
             { args: [[10, 15, 20, 22], 5], expected: [10, 15, 20] },
             { args: [[1, 2, 3, 4, 5, 6], 2], expected: [2, 4, 6] }
         ]
     },
-  277: {
+    277: {
         functionNames: ['is_not_divisible'],
         tests: [
             { args: [4, 3], expected: true },
@@ -2072,90 +2082,90 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [10, 5], expected: false }
         ]
     },
-  278: {
+    278: {
         functionNames: ['filter_non_empty'],
         tests: [
             { args: [['apple', '', 'banana', '']], expected: ['apple', 'banana'] },
             { args: [['']], expected: [] }
         ]
     },
-  279: {
+    279: {
         functionNames: ['filter_prime'],
         tests: [
             { args: [[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17]], expected: [2, 3, 5, 7, 11, 13, 17] },
             { args: [[1, 4, 6]], expected: [] }
         ]
     },
-  280: {
+    280: {
         functionNames: ['filter_floats'],
         tests: [
             { args: [[1, 2.5, 'apple', 3.0]], expected: [1, 'apple'] },
             { args: [[1.1, 2.2]], expected: [] }
         ]
     },
-  281: {
+    281: {
         functionNames: ['filter_uppercase'],
         tests: [
             { args: [['HELLO', 'world', 'PYTHON', 'code']], expected: ['world', 'code'] },
             { args: [['ABC']], expected: [] }
         ]
     },
-  282: {
+    282: {
         functionNames: ['filter_uppercase_again'],
         tests: [
             { args: [['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai']], expected: ['python', 'openai'] },
             { args: [['UP', 'DOWN']], expected: [] }
         ]
     },
-  283: {
+    283: {
         functionNames: ['filter_non_none'],
         tests: [
             { args: [[1, null, 'x', null, 0]], expected: [1, 'x', 0] },
             { args: [[null]], expected: [] }
         ]
     },
-  284: {
+    284: {
         functionNames: ['filter_by_substring'],
         tests: [
             { args: [['apple', 'banana', 'grape'], 'ap'], expected: ['banana'] },
             { args: [['one', 'two'], 'z'], expected: ['one', 'two'] }
         ]
     },
-  285: {
-        functionNames: ["print_1_to_10"],
+    285: {
+        functionNames: ['print_1_to_10'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: '1\n2\n3\n4\n5\n6\n7\n8\n9\n10' }
         ]
     },
-  286: {
+    286: {
         functionNames: ['sum_first_10_natural_numbers'],
         tests: [
             { args: [], expected: 55 }
         ]
     },
-  287: {
-        functionNames: ["print_even_numbers"],
+    287: {
+        functionNames: ['print_even_numbers'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: '2\n4\n6\n8\n10\n12\n14\n16\n18\n20' }
         ]
     },
-  288: {
-        functionNames: ["print_odd_numbers"],
+    288: {
+        functionNames: ['print_odd_numbers'],
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: '1\n3\n5\n7\n9\n11\n13\n15\n17\n19' }
         ]
     },
-  289: {
+    289: {
         functionNames: ['sum_of_digits'],
         tests: [
             { args: [12345], expected: 15 },
             { args: [908], expected: 17 }
         ]
     },
-  290: {
+    290: {
         functionNames: ['reverse_number'],
         tests: [
             { args: [12345], expected: 54321 },
@@ -2163,7 +2173,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [7], expected: 7 }
         ]
     },
-  291: {
+    291: {
         functionNames: ['factorial'],
         tests: [
             { args: [0], expected: 1 },
@@ -2171,13 +2181,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [6], expected: 720 }
         ]
     },
-  292: {
-    functionNames: ["multiplication_table"],
-    tests: [
-      { args: [5], expected: [] }
-    ]
-  },
-  293: {
+    292: {
+        functionNames: ['multiplication_table'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50' }
+        ]
+    },
+    293: {
         functionNames: ['is_prime'],
         tests: [
             { args: [2], expected: true },
@@ -2186,7 +2197,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [9], expected: false }
         ]
     },
-  294: {
+    294: {
         functionNames: ['count_digits'],
         tests: [
             { args: [12345], expected: 5 },
@@ -2194,7 +2205,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [987654321], expected: 9 }
         ]
     },
-  295: {
+    295: {
         functionNames: ['gcd'],
         tests: [
             { args: [48, 18], expected: 6 },
@@ -2202,15 +2213,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [56, 0], expected: 56 }
         ]
     },
-  296: {
-    functionNames: ["fibonacci_sequence"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "0\n1\n1\n2\n3"
-    }]
-  },
-  297: {
+    296: {
+        functionNames: ['fibonacci_sequence'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [5], expected: '0\n1\n1\n2\n3' },
+            { args: [1], expected: '0' }
+        ]
+    },
+    297: {
         functionNames: ['sum_elements'],
         tests: [
             { args: [[1, 2, 3, 4, 5]], expected: 15 },
@@ -2218,19 +2229,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[-2, 5]], expected: 3 }
         ]
     },
-  298: {
-    functionNames: ["find_largest_element"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [[1,2,3,4,5]], expected: undefined }]
-  },
-  299: {
+    298: {
+        functionNames: ['find_largest_element', 'main'],
+        tests: [
+            { args: [[5, 9, 1]], expected: 9 },
+            { args: [[-5, -2, -9]], expected: -2 }
+        ]
+    },
+    299: {
         functionNames: ['smallest_element'],
         tests: [
             { args: [[13, 566, 1]], expected: 1 },
             { args: [[-5, -2, -9]], expected: -9 }
         ]
     },
-  300: {
+    300: {
         functionNames: ['remove_all_occurrences'],
         tests: [
             { args: [[1, 2, 3, 3, 4], 3], expected: [1, 2, 4] },
@@ -2255,36 +2268,42 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   303: {
         functionNames: ['print_each_character'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: ['abc'], expected: undefined }
+            { args: ['abc'], expected: 'a\nb\nc' },
+            { args: ['Hi'], expected: 'H\ni' }
         ]
     },
   304: {
-        functionNames: ["ask_until_condition"],
-        compare: 'printedOrReturn',
+        functionNames: ['ask_until_condition'],
         tests: [
-            { args: [], expected: undefined }
+            { args: [], inputValues: ['11'], expected: null },
+            { args: [], inputValues: ['5', '12'], expected: null }
         ]
     },
   307: {
-        functionNames: ["find_min_max"],
-        compare: 'printedOrReturn',
+        functionNames: ['find_min_max'],
+        compare: 'numberList',
         tests: [
-            { args: [], expected: undefined }
+            { args: [], inputValues: ['10 2 7'], expected: [2, 10] },
+            { args: [], inputValues: ['-5 3 9'], expected: [-5, 9] }
         ]
     },
   308: {
-        functionNames: ["group_by_first_letter"],
+        functionNames: ['group_by_first_letter'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], expected: undefined }
+            { args: [], inputValues: ['apple ape bat'], expected: "{'a': ['apple', 'ape'], 'b': ['bat']}" },
+            { args: [], inputValues: ['cat cow dog'], expected: "{'c': ['cat', 'cow'], 'd': ['dog']}" }
         ]
     },
   310: {
-    functionNames: ["find_longest_word"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
+        functionNames: ['find_longest_word', 'main'],
+        tests: [
+            { args: [['Jonathan', 'noll', 'it']], expected: 'Jonathan' },
+            { args: [['a', 'abc', 'def']], expected: 'abc' }
+        ]
+    },
   311: {
         functionNames: ['find_longest_word'],
         tests: [
@@ -2293,10 +2312,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   312: {
-        functionNames: ["second_largest_number"],
+        functionNames: ['second_largest_number'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], expected: undefined }
+            { args: [], inputValues: ['5 2 9 1'], expected: '5' },
+            { args: [], inputValues: ['10 7 3'], expected: '7' }
         ]
     },
   313: {
@@ -2329,7 +2349,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   317: {
         functionNames: ['fahrenheit_to_celsius'],
-        compare: 'float',
         tests: [
             { args: [[32, 68, 100, 212]], expected: [0, 20, 37.77777777777778, 100] },
             { args: [[-40]], expected: [-40] }
@@ -2343,11 +2362,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   320: {
-    functionNames: ["main"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: [1, 4, 9, 16, 25]
-    }]
+        functionNames: ['square_roots', 'main'],
+        tests: [
+            { args: [[4, 9, 16]], expected: [2, 3, 4] },
+            { args: [[1, 25]], expected: [1, 5] }
+        ]
   },
   321: {
         functionNames: ['lengths_of_strings'],
@@ -2398,13 +2417,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a b c']], expected: ['A B C'] }
         ]
     },
-  328: {
-        functionNames: ["second_largest_number"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined }
-        ]
-    },
   329: {
         functionNames: ['list_string', 'type_smallest_biggest'],
         tests: [
@@ -2420,9 +2432,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   331: {
-        functionNames: ['print_index_and_element', 'print_with_index'],
+        functionNames: ['print_index_and_element'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: [['apple', 'banana', 'cherry']], expected: undefined }
+            { args: [['apple', 'banana']], expected: 'Index: 0, Element: apple\nIndex: 1, Element: banana' }
         ]
     },
   332: {
@@ -2433,12 +2446,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   333: {
-    functionNames: ["print_with_index"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: ["hello"],
-      expected: "0 h\n1 e\n2 l\n3 l\n4 o"
-    }]
+        functionNames: ['print_with_index'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['apple', 'banana']], expected: '0 apple\n1 banana' },
+            { args: [['x']], expected: '0 x' }
+        ]
   },
   334: {
         functionNames: ['list_to_dict'],
@@ -2456,8 +2469,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   336: {
         functionNames: ['print_index_and_element_with_colon'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: [['apple', 'banana', 'cherry']], expected: undefined }
+            { args: [['apple', 'banana']], expected: '0: apple\n1: banana' }
         ]
     },
   337: {
@@ -2476,8 +2490,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   340: {
         functionNames: ['print_odd_index_elements'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: undefined }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: 'banana\ndate' },
+            { args: [['x', 'y']], expected: 'y' }
         ]
     },
   341: {
@@ -2503,8 +2519,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   344: {
         functionNames: ['print_index_squared'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: undefined }
+            { args: [[1, 2, 3]], expected: 'Index: 0, Squared: 1\nIndex: 1, Squared: 4\nIndex: 2, Squared: 9' }
         ]
     },
   345: {
@@ -2522,10 +2539,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   347: {
-        functionNames: ["greet","get_name"],
+        functionNames: ['greet'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], expected: undefined }
+            { args: [], inputValues: ['Ada'], expected: 'Hello, Ada!' },
+            { args: [], inputValues: ['Jonathan'], expected: 'Hello, Jonathan!' }
         ]
     },
   348: {
@@ -2538,9 +2556,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   349: {
         functionNames: ['add_prefix'],
-        compare: 'length',
         tests: [
-            { args: ['pre-'], expected: 'function' }
+            { args: ['pre-'], callReturnedWith: ['fix'], expected: 'pre-fix' },
+            { args: ['un'], callReturnedWith: ['known'], expected: 'unknown' }
         ]
     },
   350: {
@@ -2673,8 +2691,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   367: {
         functionNames: ['even_or_odd'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: [10], expected: undefined }
+            { args: [10], expected: '10 is even' },
+            { args: [7], expected: '7 is odd' }
         ]
     },
   368: {
@@ -2810,11 +2830,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   388: {
-    functionNames: ["sort_strings_by_last_character"],
-    tests: [{
-      args: ["hello"],
-      expected: ["e", "h", "l", "l", "o"]
-    }]
+        functionNames: ['sort_strings_by_last_character', 'main'],
+        tests: [
+            { args: [['banana', 'apple', 'grape', 'kiwi']], expected: ['banana', 'apple', 'grape', 'kiwi'] },
+            { args: [['treez', 'cliff', 'grassya']], expected: ['grassya', 'cliff', 'treez'] }
+        ]
   },
   389: {
         functionNames: ['earliest_date'],
@@ -2847,26 +2867,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   393: {
         functionNames: ['sort_complex_numbers'],
         tests: [
-            { args: [[]], expected: [] }
-        ]
-    },
-  394: {
-        functionNames: ['find_largest_file'],
-        tests: [
-            { args: [[]], expected: undefined }
+            { args: [[3, 1, 2]], expected: [1, 2, 3] },
+            { args: [[5, -1, 0]], expected: [0, -1, 5] }
         ]
     },
   395: {
         functionNames: ['sort_fractions'],
         tests: [
-            { args: [[]], expected: [] }
+            { args: [[0.5, 0.3333333333333333, 0.6666666666666666, 0.25]], expected: [0.25, 0.3333333333333333, 0.5, 0.6666666666666666] },
+            { args: [[0.75, 0.125]], expected: [0.125, 0.75] }
         ]
     },
   396: {
-    functionNames: ["sort_tuples_by_sum","get_sum","inner"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [[1,2,3]], expected: undefined }]
-  },
+        functionNames: ['sort_tuples_by_sum', 'main'],
+        tests: [
+            { args: [[[1, 2], [3, 4], [1, 1], [2, 2]]], expected: [[1, 1], [1, 2], [2, 2], [3, 4]] },
+            { args: [[[1, 64], [7, 3], [2, 9]]], expected: [[7, 3], [2, 9], [1, 64]] }
+        ]
+    },
   397: {
         functionNames: ['closest_to_zero'],
         tests: [
@@ -2889,10 +2907,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   400: {
-    functionNames: ["ascii_value","find_highest_ascii_word","inner"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test"], expected: undefined }]
-  },
+        functionNames: ['find_highest_ascii_word', 'main'],
+        tests: [
+            { args: [['hello', 'world', 'python', 'scrabble']], expected: 'scrabble' },
+            { args: [['aa', 'bb', 'cc', 'uu']], expected: 'uu' }
+        ]
+    },
   401: {
         functionNames: ['sort_by_vowel_count'],
         tests: [
@@ -2915,10 +2935,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   404: {
-    functionNames: ["find_min","main"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
+        functionNames: ['find_min', 'main'],
+        tests: [
+            { args: [[2, 6, 1, 189]], expected: 1 },
+            { args: [[5, -3, 10]], expected: -3 }
+        ]
+    },
   405: {
         functionNames: ['converts'],
         compare: 'float',
@@ -3099,9 +3121,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   429: {
         functionNames: ['multiply_by_n'],
-        compare: 'length',
         tests: [
-            { args: [3], expected: 'function' }
+            { args: [3], callReturnedWith: [5], expected: 15 },
+            { args: [10], callReturnedWith: [2], expected: 20 }
         ]
     },
   430: {
@@ -3275,8 +3297,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   453: {
         functionNames: ['calculate_integers'],
         tests: [
-            { args: [3, 5], expected: 15 },
-            { args: [10, 2], expected: 20 }
+            { args: [10, 5], expected: [50, 15, 2] },
+            { args: [6, 3], expected: [18, 9, 2] }
         ]
     },
   455: {
@@ -3386,7 +3408,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   472: {
         functionNames: ['find_person'],
         tests: [
-            { args: [[{name: 'Alice'}, {name: 'Jonathan'}, {name: 'Bob'}]], expected: {name: 'Jonathan'} }
+            { args: [[{name: 'Beth'}, {name: 'Brett'}, {name: 'Jhonivan'}, {name: 'Jonathan'}], 'name'], expected: {name: 'Jonathan'} },
+            { args: [[{name: 'Ann'}, {name: 'Christopher'}], 'name'], expected: {name: 'Christopher'} }
         ]
     },
   473: {
@@ -3508,7 +3531,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   492: {
         functionNames: ['sort_keys_by_value'],
         tests: [
-            { args: [[{name: 'Alice'}, {name: 'Jonathan'}, {name: 'Bob'}]], expected: {name: 'Bob'} }
+            { args: [{Sam: 27, Tommy: 56, Chantelle: 18}], expected: ['Chantelle', 'Sam', 'Tommy'] },
+            { args: [{a: 3, b: 1, c: 2}], expected: ['b', 'c', 'a'] }
         ]
     },
   493: {
@@ -3524,205 +3548,263 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   495: {
-        functionNames: ["speak"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Dog', 'Cat'],
+        tests: [
+            { args: [], functionName: 'Dog', callMethod: 'speak', expected: 'Bark' },
+            { args: [], functionName: 'Cat', callMethod: 'speak', expected: 'Meow' }
+        ]
     },
   496: {
-        functionNames: ['Car', 'Vehicle'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Car'],
+        tests: [
+            { args: [120, 'Red', 'Toyota'], getAttrs: ['speed', 'color', 'model'], expected: {speed: 120, color: 'Red', model: 'Toyota'} },
+            { args: [80, 'Blue', 'Honda'], getAttrs: ['speed', 'color', 'model'], expected: {speed: 80, color: 'Blue', model: 'Honda'} }
+        ]
     },
   497: {
-        functionNames: ["introduce"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Person', 'Student'],
+        tests: [
+            { args: ['Alice'], functionName: 'Person', callMethod: 'introduce', expected: 'Hello, my name is Alice.' },
+            { args: ['Bob', 10], functionName: 'Student', callMethod: 'introduce', expected: 'Hello, my name is Bob and I am in grade 10.' }
+        ]
     },
   498: {
-        functionNames: ["area"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Rectangle'],
+        tests: [
+            { args: [5, 3], callMethod: 'area', expected: 15 },
+            { args: [4, 7], callMethod: 'area', expected: 28 }
+        ]
     },
   499: {
-        functionNames: ["wash_clothes"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['WashingMachine'],
+        tests: [
+            { args: ['LG', 1500], callMethod: 'wash_clothes', expected: 'The LG washing machine is washing clothes with 1500 watts of power.' },
+            { args: ['Samsung', 1200], callMethod: 'wash_clothes', expected: 'The Samsung washing machine is washing clothes with 1200 watts of power.' }
+        ]
     },
   500: {
-        functionNames: ["assign_task"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Manager'],
+        tests: [
+            { args: ['John Doe', 75000], callMethod: 'assign_task', callMethodArgs: ['Prepare a project report'], expected: 'Manager John Doe has assigned the task: Prepare a project report.' },
+            { args: ['Ada', 90000], callMethod: 'assign_task', callMethodArgs: ['Review code'], expected: 'Manager Ada has assigned the task: Review code.' }
+        ]
     },
   501: {
-        functionNames: ["fly"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Penguin', 'Bird'],
+        tests: [
+            { args: [], functionName: 'Penguin', callMethod: 'fly', expected: 'Cannot fly' },
+            { args: [], functionName: 'Bird', callMethod: 'fly', expected: 'I can fly!' }
+        ]
     },
   502: {
-        functionNames: ['EBook', 'Book'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['EBook'],
+        tests: [
+            { args: ['Python Programming', 'John Doe', 2.5], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Python Programming', author: 'John Doe', file_size: 2.5} }
+        ]
     },
   503: {
-        functionNames: ["play"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Guitar', 'Instrument'],
+        tests: [
+            { args: [], functionName: 'Guitar', callMethod: 'play', expected: 'Strum' },
+            { args: [], functionName: 'Instrument', callMethod: 'play', expected: 'Playing an instrument.' }
+        ]
     },
   504: {
-        functionNames: ["start"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Chess', 'Game'],
+        tests: [
+            { args: [], functionName: 'Chess', callMethod: 'start', expected: 'Start Chess' },
+            { args: [], functionName: 'Game', callMethod: 'start', expected: 'Starting the game.' }
+        ]
     },
   505: {
-        functionNames: ["drive"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Bicycle'],
+        tests: [
+            { args: [], callMethod: 'drive', expected: 'Pedal' }
+        ]
     },
   506: {
-        functionNames: ['Laptop', 'Computer'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Laptop'],
+        tests: [
+            { args: ['Dell', 'Intel i7', 2.3], getAttrs: ['brand', 'processor', 'weight'], expected: {brand: 'Dell', processor: 'Intel i7', weight: 2.3} }
+        ]
     },
   507: {
-        functionNames: ["turn_on"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Smartphone'],
+        tests: [
+            { args: [['WhatsApp', 'Instagram']], callMethod: 'turn_on', expected: 'Device is now on.' },
+            { args: [['WhatsApp', 'Instagram']], getAttrs: ['apps'], expected: {apps: ['WhatsApp', 'Instagram']} }
+        ]
     },
   508: {
-        functionNames: ["display"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Child', 'Parent'],
+        tests: [
+            { args: [], functionName: 'Child', callMethod: 'display', expected: 'This is a child' },
+            { args: [], functionName: 'Parent', callMethod: 'display', expected: 'This is the parent.' }
+        ]
     },
   509: {
-        functionNames: ['Skyscraper', 'Building'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Skyscraper'],
+        tests: [
+            { args: [50, '123 High Street', 200], getAttrs: ['floors', 'address', 'height'], expected: {floors: 50, address: '123 High Street', height: 200} }
+        ]
     },
   510: {
-        functionNames: ["grow"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Flower', 'Plant'],
+        tests: [
+            { args: [], functionName: 'Flower', callMethod: 'grow', expected: 'Bloom' },
+            { args: [], functionName: 'Plant', callMethod: 'grow', expected: 'The plant is growing.' }
+        ]
     },
   511: {
-        functionNames: ["teach_math"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['MathTeacher'],
+        tests: [
+            { args: ['Alice Smith'], getAttrs: ['name', 'subject'], expected: {name: 'Alice Smith', subject: 'Math'} },
+            { args: ['Alice Smith'], callMethod: 'teach_math', expected: 'Teaching math concepts.' }
+        ]
     },
   512: {
-        functionNames: ['Poet', 'Writer'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Poet'],
+        tests: [
+            { args: ['William Wordsworth'], getAttrs: ['name', 'genre'], expected: {name: 'William Wordsworth', genre: 'Poetry'} }
+        ]
     },
   513: {
-        functionNames: ["use"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Oven', 'Appliance'],
+        tests: [
+            { args: [], functionName: 'Oven', callMethod: 'use', expected: 'Bake' },
+            { args: [], functionName: 'Appliance', callMethod: 'use', expected: 'Using the appliance.' }
+        ]
     },
   514: {
-        functionNames: ["paint"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Painter'],
+        tests: [
+            { args: ['Vincent van Gogh', 'Oil Paint'], callMethod: 'paint', expected: 'Painting with Oil Paint' }
+        ]
     },
   515: {
-        functionNames: ["work"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Electrician'],
+        tests: [
+            { args: [], callMethod: 'work', expected: 'Fix wires' }
+        ]
     },
   516: {
-        functionNames: ["eat"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Lion'],
+        tests: [
+            { args: [], callMethod: 'eat', expected: 'Eat meat' }
+        ]
     },
   517: {
-        functionNames: ["run"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Fan'],
+        tests: [
+            { args: [], callMethod: 'run', expected: 'Spin blades' }
+        ]
     },
   518: {
-        functionNames: ['get_salary'],
+        functionNames: ['Intern', 'Employee'],
         tests: [
-            { args: [50000], expected: 30000 }
+            { args: [], functionName: 'Intern', callMethod: 'get_salary', expected: 2000 },
+            { args: [], functionName: 'Employee', callMethod: 'get_salary', expected: 5000 }
         ]
     },
   519: {
-        functionNames: ['Motorcycle', 'Vehicle'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Motorcycle'],
+        tests: [
+            { args: [], getAttrs: ['wheels'], expected: {wheels: 2} }
+        ]
     },
   520: {
-        functionNames: ["use"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Hammer'],
+        tests: [
+            { args: [], callMethod: 'use', expected: 'Hammer nails' }
+        ]
     },
   521: {
-        functionNames: ['SavingsAccount', 'BankAccount'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['SavingsAccount'],
+        tests: [
+            { args: [1500, 'Bob', 2.5], getAttrs: ['balance', 'owner', 'interest_rate'], expected: {balance: 1500, owner: 'Bob', interest_rate: 2.5} }
+        ]
     },
   522: {
-        functionNames: ["attack"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Sword'],
+        tests: [
+            { args: [], callMethod: 'attack', expected: 'Slash' }
+        ]
     },
   523: {
-        functionNames: ["heat_food"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Microwave'],
+        tests: [
+            { args: [1200], getAttrs: ['power'], expected: {power: 1200} },
+            { args: [1200], callMethod: 'heat_food', expected: 'Heating food' }
+        ]
     },
   524: {
-        functionNames: ["start"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['ElectricCar'],
+        tests: [
+            { args: [], callMethod: 'start', expected: 'Silent start' }
+        ]
     },
   525: {
-        functionNames: ["make_sound"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Cat'],
+        tests: [
+            { args: [], callMethod: 'make_sound', expected: 'Meow' }
+        ]
     },
   526: {
-        functionNames: ["cook"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['PastryChef'],
+        tests: [
+            { args: [], callMethod: 'cook', expected: 'Bake cake' }
+        ]
     },
   527: {
-        functionNames: ["create_chair"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['create_chair'],
+        tests: [
+            { args: ['wood', 'brown', 4], getAttrs: ['material', 'color', 'legs'], expected: {material: 'wood', color: 'brown', legs: 4} }
+        ]
     },
   528: {
-        functionNames: ['Soccer', 'Game'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Soccer'],
+        tests: [
+            { args: [], getAttrs: ['players'], expected: {players: 22} }
+        ]
     },
   529: {
-        functionNames: ["play_instrument"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Pianist'],
+        tests: [
+            { args: [], callMethod: 'play_instrument', expected: 'Play piano' }
+        ]
     },
   530: {
-        functionNames: ['TechCompany', 'Company'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['TechCompany'],
+        tests: [
+            { args: ['Tech Innovators', 'San Francisco', ['Smartphone', 'Laptop']], getAttrs: ['name', 'location', 'products'], expected: {name: 'Tech Innovators', location: 'San Francisco', products: ['Smartphone', 'Laptop']} }
+        ]
     },
   531: {
-        functionNames: ["operate"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['Smartwatch'],
+        tests: [
+            { args: [true], callMethod: 'operate', expected: 'Operate gadget' },
+            { args: [true], getAttrs: ['heart_rate_monitor'], expected: {heart_rate_monitor: true} }
+        ]
     },
   532: {
-        functionNames: ["train"],
+        functionNames: ['FitnessTrainer'],
         compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        tests: [
+            { args: [], callMethod: 'train', expected: 'Train body' }
+        ]
     },
   533: {
-        functionNames: ["read"],
+        functionNames: ['ComicBook'],
         compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        tests: [
+            { args: [], callMethod: 'read', expected: 'Read with pictures' }
+        ]
     },
   534: {
-        functionNames: ['GameSoftware', 'Software'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['GameSoftware'],
+        tests: [
+            { args: ['EpicQuest', '2.5', 'RPG'], getAttrs: ['name', 'version', 'genre'], expected: {name: 'EpicQuest', version: '2.5', genre: 'RPG'} }
+        ]
     },
   535: {
         functionNames: ['count_letter'],
@@ -3773,11 +3855,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['nospaces'], expected: 0 }
         ]
     },
-  542: {
-        functionNames: ["count_occurrences"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   543: {
         functionNames: ['count_word_in_file'],
         tests: [
@@ -3809,7 +3886,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   548: {
-        functionNames: ['count_floating_numbers'],
+        functionNames: ['count_vowels'],
         tests: [
             { args: ['hello world'], expected: 3 }
         ]
@@ -3828,10 +3905,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   551: {
-    functionNames: ["count_letters"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
+        functionNames: ['count_letters'],
+        tests: [
+            { args: ['banana'], expected: {b: 1, a: 3, n: 2} },
+            { args: ['AaB'], expected: {a: 2, b: 1} }
+        ]
+    },
   552: {
         functionNames: ['count_text'],
         tests: [
@@ -4112,7 +4191,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   598: {
         functionNames: ['compose'],
         tests: [
-            { args: [], expected: undefined }
+            { args: [], argFunctionNames: ['add_one', 'multiply_by_two'], callReturnedWith: [5], expected: 12 },
+            { args: [], argFunctionNames: ['multiply_by_two', 'add_one'], callReturnedWith: [5], expected: 11 }
         ]
     },
   599: {
@@ -4122,9 +4202,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   600: {
-        functionNames: ['is_prime'],
+        functionNames: ['filter_primes'],
         tests: [
-            { args: [[1, 2, 3, 4, 5, 6, 7]], expected: [2, 3, 5, 7] }
+            { args: [[1, 2, 3, 4, 5, 6, 7]], expected: [2, 3, 5, 7] },
+            { args: [[8, 9, 10, 11, 12, 13]], expected: [11, 13] }
         ]
     },
   601: {
@@ -4140,21 +4221,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   603: {
-        functionNames: ['add'],
+        functionNames: ['average'],
         compare: 'float',
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: 3 }
+            { args: [[1, 2, 3, 4, 5]], expected: 3 },
+            { args: [[]], expected: 0 }
         ]
     },
   604: {
-    functionNames: ["compose_functions","add_one","multiply_by_two","apply_functions"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
+        functionNames: ['compose_functions'],
+        tests: [
+            { args: [5], functionListArgNames: ['add_one', 'multiply_by_two', 'add_one'], expected: 13 },
+            { args: [3], functionListArgNames: ['multiply_by_two', 'add_one'], expected: 7 }
+        ]
+    },
   605: {
         functionNames: ['get_keys'],
         tests: [
-            { args: [{a: 1, b: 2, c: 3}, {d: 4}], expected: ['a', 'b', 'c', 'd'] }
+            { args: [{a: 1, b: 2, c: 3}], expected: ['a', 'b', 'c'] }
         ]
     },
   606: {
@@ -4208,7 +4292,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   614: {
         functionNames: ['lst_integers'],
         tests: [
-            { args: [[123, 45, 7, 89, 100]], expected: [100, 7, 45, 123, 89] }
+            { args: [[123, 45, 7, 89, 100]], expected: [100, 123, 7, 45, 89] },
+            { args: [[5666, 566, 56, 6]], expected: [6, 56, 566, 5666] }
         ]
     },
   615: {
@@ -4344,10 +4429,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   637: {
-    functionNames: ["print_fruit_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
+        functionNames: ['print_fruit_keys'],
+        tests: [
+            { args: [{apple: 1.2, banana: 0.5, orange: 0.75}], expected: ['apple', 'banana', 'orange'] }
+        ]
+    },
   638: {
         functionNames: ['max_key'],
         tests: [
@@ -4411,10 +4497,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   648: {
-    functionNames: ["shopping_cart_items"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
+        functionNames: ['shopping_cart_items'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{apple: 3, banana: 6, orange: 4, milk: 1}], expected: 'apple\nbanana\norange\nmilk' }
+        ]
+    },
   649: {
         functionNames: ['check_key_exists'],
         tests: [
@@ -4423,10 +4511,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   650: {
-    functionNames: ["print_keys_greater_than_five"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
+        functionNames: ['print_keys_greater_than_five'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{apple: 3, banana: 6, orange: 4, milk: 8, bread: 2, eggs: 12}], expected: 'banana\nmilk\neggs' }
+        ]
+    },
   651: {
         functionNames: ['returns_strings'],
         tests: [
@@ -4477,11 +4567,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{Inception: 2010, 'The Matrix': 1999, Gladiator: 2000}], expected: ['Gladiator', 'Inception', 'The Matrix'] }
         ]
     },
-  659: {
-    functionNames: ["keys_with_list_values"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   660: {
     functionNames: ["print_car_brands"],
     compare: 'printedOrReturn',
@@ -4508,11 +4593,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{a: 1, b: 2, c: 3}, ['b', 'd']], expected: ['b'] }
         ]
     },
-  664: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   665: {
         functionNames: ['keys_with_values_greater_than_10', 'get_dict_keys'],
         tests: [
@@ -4520,10 +4600,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   666: {
-    functionNames: ["print_fruit_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
+        functionNames: ['print_fruit_keys'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{Apple: 3, Banana: 1, Mango: 2, Orange: 4}], expected: 'Apple\nBanana\nMango\nOrange' }
+        ]
+    },
   667: {
         functionNames: ['name_age'],
         tests: [
@@ -4583,10 +4665,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   676: {
-    functionNames: ["print_cart_items"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
+        functionNames: ['print_cart_items'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{apple: 3, banana: 2, bread: 1, milk: 2}], expected: 'apple\nbanana\nbread\nmilk' }
+        ]
+    },
   677: {
         functionNames: ['check_key_exists'],
         tests: [
@@ -4757,7 +4841,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   705: {
         functionNames: ['euclidean_distances'],
-        compare: 'float',
         tests: [
             { args: [[[3, 4], [1, 1], [0, 0], [6, 8]]], expected: [5.0, 1.4142135623730951, 0.0, 10.0] }
         ]
@@ -4777,7 +4860,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   708: {
         functionNames: ['negate_bool'],
         tests: [
-            { args: [['1', '2', '3']], expected: [1, 2, 3] }
+            { args: [true], expected: false },
+            { args: [false], expected: true }
         ]
     },
   709: {
@@ -4789,7 +4873,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   710: {
         functionNames: ['negate_booleans'],
         tests: [
-            { args: [['racecar', 'hello', 'level']], expected: [true, false, true] }
+            { args: [[true, false, true, false]], expected: [false, true, false, true] }
         ]
     },
   711: {
@@ -4825,7 +4909,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   716: {
         functionNames: ['pair_elements'],
         tests: [
-            { args: [[1, 2, 3], ['a', 'b', 'c']], expected: [(1, 'a'), (2, 'b'), (3, 'c')] }
+            { args: [[1, 2, 3], ['a', 'b', 'c']], expected: [[1, 'a'], [2, 'b'], [3, 'c']] }
         ]
     },
   717: {
@@ -4854,15 +4938,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   721: {
         functionNames: ['square_floats'],
-        compare: 'float',
         tests: [
-            { args: [[2.0, 3.0, 4.0]], expected: [4.0, 9.0, 16.0] }
+            { args: [[2.5, 3.0, 4.0]], expected: [6.25, 9.0, 16.0] }
         ]
     },
   722: {
         functionNames: ['format_phone_numbers'],
         tests: [
-            { args: [['1234567890', '9876543210']], expected: ['+11234567890', '+19876543210'] }
+            { args: [['1234567890', '9876543210']], expected: ['+1-1234567890', '+1-9876543210'] }
         ]
     },
   723: {
@@ -4874,14 +4957,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   724: {
         functionNames: ['pair_lists'],
         tests: [
-            { args: [[1, 2, 3], [4, 5, 6]], expected: [(1, 4), (2, 5), (3, 6)] }
+            { args: [[1, 2, 3], [4, 5, 6]], expected: [[1, 4], [2, 5], [3, 6]] }
         ]
     },
   725: {
         functionNames: ['cartesian_to_polar'],
-        compare: 'float',
         tests: [
-            { args: [[[3, 4], [1, 1]]], expected: [5.0, 1.4142135623730951] }
+            { args: [[[3, 4], [1, 1]]], expected: [[5.0, 0.9272952180016122], [1.4142135623730951, 0.7853981633974483]] }
         ]
     },
   726: {
@@ -4893,849 +4975,693 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   727: {
         functionNames: ['lst_squares_and_cubes'],
         tests: [
-            { args: [[1, 2, 3]], expected: [(1, 1), (4, 8), (9, 27)] }
+            { args: [[1, 2, 3]], expected: [[1, 1], [4, 8], [9, 27]] }
         ]
     },
   728: {
         functionNames: ['rgb_to_hex'],
         tests: [
-            { args: [[[255, 0, 0], [0, 255, 0]]], expected: ['#FF0000', '#00FF00'] }
+            { args: [[[255, 0, 0], [0, 255, 0]]], expected: ['#ff0000', '#00ff00'] }
         ]
     },
   729: {
         functionNames: ['mixed_case_string'],
         tests: [
-            { args: [['hello', 'world', 'python', 'code']], expected: ['hello', 'WORLD', 'python', 'CODE'] }
+            { args: [['first', 'second', 'third', 'fourth']], expected: ['fIrst', 'sEcond', 'tHird', 'fOurth'] }
         ]
     },
   730: {
-        functionNames: ["convert_dates","parse_date"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
+        functionNames: ['convert_dates'],
+        tests: [
+            { args: [['2024-01-01', '2023-12-25']], expected: ['2024-01-01T00:00:00', '2023-12-25T00:00:00'] }
+        ]
     },
   731: {
         functionNames: ['calculate_square_roots'],
-        compare: 'float',
         tests: [
             { args: [[1, 4, 9, 16]], expected: [1.0, 2.0, 3.0, 4.0] }
         ]
     },
   732: {
         functionNames: ['calculate_percentage'],
-        compare: 'float',
         tests: [
             { args: [[50, 75, 100], 100], expected: [50.0, 75.0, 100.0] }
         ]
     },
   733: {
-    functionNames: ["add"],
-    tests: [{
-      args: [1, 2],
-      expected: 3
-    }]
+    functionNames: ["sum_list", "add"],
+    tests: [
+      { functionName: "sum_list", args: [[1, 2, 3, 4, 5]], expected: 15 },
+      { functionName: "add", args: [7, 8], expected: 15 }
+    ]
   },
   734: {
     functionNames: ["is_even","filter_even_numbers"],
     tests: [
-      { args: [4], expected: true },
-      { args: [5], expected: false }
+      { functionName: "filter_even_numbers", args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] },
+      { functionName: "is_even", args: [5], expected: false }
     ]
   },
   735: {
-    functionNames: ["capitalize_first_letter"],
-    tests: [{
-      args: ["hello"],
-      expected: "Hello"
-    }]
+    functionNames: ["word_list", "capitalize_first_letter"],
+    tests: [
+      { functionName: "word_list", args: [["first", "letter", "word"]], expected: ["First", "Letter", "Word"] },
+      { functionName: "capitalize_first_letter", args: ["hello"], expected: "Hello" }
+    ]
   },
   736: {
-    functionNames: ["lst_numbers","find_max"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_numbers", "find_max"],
+    tests: [
+      { functionName: "lst_numbers", args: [[2, 4, 6, 1]], expected: 6 },
+      { functionName: "find_max", args: [[-5, -2, -9]], expected: -2 }
+    ]
   },
   737: {
-    functionNames: ["lst_tempertures","convert_to_celsius"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_tempertures", "convert_to_celsius"],
+    tests: [
+      { functionName: "lst_tempertures", args: [[32, 50, 68]], expected: [0, 10, 20] },
+      { functionName: "convert_to_celsius", args: [212], expected: 100 }
+    ]
   },
   738: {
-    functionNames: ["string_lst","reverse_string"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["string_lst", "reverse_string"],
+    tests: [
+      { functionName: "string_lst", args: [["hello", "twice"]], expected: ["olleh", "eciwt"] },
+      { functionName: "reverse_string", args: ["python"], expected: "nohtyp" }
+    ]
   },
   739: {
-    functionNames: ["lst_words","count_vowels"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_words", "count_vowels"],
+    tests: [
+      { functionName: "lst_words", args: [["word", "eerie", "education"]], expected: "education" },
+      { functionName: "count_vowels", args: ["Queue"], expected: 4 }
+    ]
   },
   740: {
-    functionNames: ["lst_of_word","is_palindrome"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_of_word", "is_palindrome"],
+    tests: [
+      { functionName: "lst_of_word", args: [["radar", "words", "level", "deed"]], expected: ["radar", "level", "deed"] },
+      { functionName: "is_palindrome", args: ["python"], expected: false }
+    ]
   },
   741: {
-    functionNames: ["lst_of_radii","calculate_area"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_of_radii", "calculate_area"],
+    tests: [
+      { functionName: "lst_of_radii", args: [[1, 2, 3]], expected: [3.14159, 12.56636, 28.27431] },
+      { functionName: "calculate_area", args: [4], expected: 50.26544 }
+    ]
   },
   742: {
-    functionNames: ["lst_numbers","sqaure_number"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_numbers", "sqaure_number"],
+    tests: [
+      { functionName: "lst_numbers", args: [[2, 5, 7]], expected: [4, 25, 49] },
+      { functionName: "sqaure_number", args: [9], expected: 81 }
+    ]
   },
   743: {
     functionNames: ["get_first_n_elements"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], 5],
-      expected: [1, 2, 3, 4, 5]
-    }]
+    tests: [
+      { args: [[1, 2, 3, 4, 5], 3], expected: [1, 2, 3] },
+      { args: [[1, 2, 3, 4, 5], 5], expected: [1, 2, 3, 4, 5] }
+    ]
   },
   744: {
     functionNames: ["merge_dicts","combine_dicts"],
     tests: [
-      { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} }
+      { functionName: "merge_dicts", args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
+      { functionName: "combine_dicts", args: [[{"a":1},{"b":2},{"a":3}]], expected: {"a":3,"b":2} }
     ]
   },
   745: {
-    functionNames: ["format_name"],
-    tests: [{
-      args: ["hello", "hello"],
-      expected: "hello hello"
-    }]
+    functionNames: ["format_name", "format_names"],
+    tests: [
+      { functionName: "format_name", args: ["John", "Doe"], expected: "John Doe" },
+      { functionName: "format_names", args: [[["Jane", "Smith"], ["Alice", "Johnson"]]], expected: ["Jane Smith", "Alice Johnson"] }
+    ]
   },
   746: {
     functionNames: ["find_gcd","gcd_of_pairs","gcd_pair"],
     tests: [
-      { args: [12,8], expected: 4 }
+      { functionName: "find_gcd", args: [48, 18], expected: 6 },
+      { functionName: "gcd_of_pairs", args: [[[48, 18], [56, 98], [100, 10]]], expected: [6, 14, 10] }
     ]
   },
   747: {
-    functionNames: ["lst_elements","count_occurrences"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_elements", "count_occurrences"],
+    tests: [
+      { functionName: "lst_elements", args: [["tree", "tree", "tree", "sand"]], expected: 3 },
+      { functionName: "count_occurrences", args: [["a", "b", "a"], "a"], expected: 2 }
+    ]
   },
   748: {
-    functionNames: ["lst_words","sort_lst"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["lst_words", "sort_lst"],
+    tests: [
+      { functionName: "lst_words", args: [["zebra", "frog", "anaconda"], ["ktm", "Honda", "Suzuki"]], expected: [["anaconda", "frog", "zebra"], ["Honda", "Suzuki", "ktm"]] },
+      { functionName: "sort_lst", args: [[3, 1, 2]], expected: [1, 2, 3] }
+    ]
   },
   749: {
-    functionNames: ["domain_names","extract_URL"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["domain_names", "extract_URL"],
+    tests: [
+      { functionName: "domain_names", args: [["http://google.com", "http://github.com"]], expected: ["google.com", "github.com"] },
+      { functionName: "extract_URL", args: ["http://stackoverflow.com"], expected: "stackoverflow.com" }
+    ]
   },
   750: {
-    functionNames: ["lst_sites","remove_duplicates"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["lst_sites", "remove_duplicates"],
+    compare: "unorderedList",
+    tests: [
+      { functionName: "lst_sites", args: [["google", "twitter", "google", "apple"]], expected: ["google", "twitter", "apple"] },
+      { functionName: "remove_duplicates", args: [[1, 2, 1, 3]], expected: [1, 2, 3] }
+    ]
   },
   751: {
-    functionNames: ["lst_of_lists","flatten_list"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [[1,2,3,4,5]], expected: undefined }]
+    functionNames: ["main", "lst_of_lists", "flatten_list"],
+    tests: [
+      { functionName: "flatten_list", args: [[[1, 2], [3], [4, 5]]], expected: [1, 2, 3, 4, 5] },
+      { functionName: "lst_of_lists", args: [[["a"], ["b", "c"]]], expected: ["a", "b", "c"] }
+    ]
   },
   752: {
-    functionNames: ["filter_primes","is_prime"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["filter_primes", "is_prime"],
+    tests: [
+      { functionName: "filter_primes", args: [[1, 2, 3, 4, 5, 9, 11]], expected: [2, 3, 5, 11] },
+      { functionName: "is_prime", args: [9], expected: false }
+    ]
   },
   753: {
-    functionNames: ["main"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: [1, 2, 6, 24, 120]
-    }]
+    functionNames: ["main", "lst_of_numbers", "calculate_factorial"],
+    tests: [
+      { functionName: "lst_of_numbers", args: [[2, 4, 5]], expected: [2, 24, 120] },
+      { functionName: "calculate_factorial", args: [6], expected: 720 }
+    ]
   },
   754: {
-    functionNames: ["sort_dict_by_value","get_value"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "sort_dict_by_value", "get_value"],
+    tests: [
+      { functionName: "sort_dict_by_value", args: [{"name": 2, "age": 5, "city": 1}], expected: {"city": 1, "name": 2, "age": 5} },
+      { functionName: "get_value", args: [["key", 9]], expected: 9 }
+    ]
   },
   755: {
-    functionNames: ["get_unique_elements"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test"], expected: undefined }]
+    functionNames: ["main", "get_unique_elements"],
+    compare: "unorderedList",
+    tests: [
+      { functionName: "get_unique_elements", args: [["apple", "banana", "apple", "kiwi"]], expected: ["apple", "banana", "kiwi"] }
+    ]
   },
   756: {
-    functionNames: ["check_anagram"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["main", "check_anagram"],
+    tests: [
+      { functionName: "check_anagram", args: ["evil", "vile"], expected: true },
+      { functionName: "main", args: ["hello", "world"], expected: false }
+    ]
   },
   757: {
-    functionNames: ["find_index"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["find_index", "main"],
+    tests: [
+      { functionName: "find_index", args: [["apple", "banana", "date"], "date"], expected: 2 },
+      { functionName: "find_index", args: [[10, 20, 30], 20], expected: 1 }
+    ]
   },
   758: {
-    functionNames: ["generate_fibonacci"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "generate_fibonacci"],
+    tests: [
+      { functionName: "generate_fibonacci", args: [7], expected: [0, 1, 1, 2, 3, 5, 8] },
+      { functionName: "main", args: [3], expected: [0, 1, 1] }
+    ]
   },
   759: {
-    functionNames: ["calculate_average"],
+    functionNames: ["main", "calculate_average"],
     tests: [
-      { args: [[10,20,30]], expected: 20 }
+      { functionName: "calculate_average", args: [[10, 20, 30]], expected: 20 },
+      { functionName: "main", args: [[10, 20], [2, 4, 6]], expected: [15, 4] }
     ]
   },
   760: {
-    functionNames: ["convert_to_kilometers"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "convert_to_kilometers"],
+    tests: [
+      { functionName: "convert_to_kilometers", args: [10], expected: 16.0934 },
+      { functionName: "main", args: [[1, 2]], expected: [1.60934, 3.21868] }
+    ]
   },
   761: {
-    functionNames: ["get_last_n_elements"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["main", "get_last_n_elements"],
+    tests: [
+      { functionName: "get_last_n_elements", args: [[1, 2, 3, 4, 5], 3], expected: [1, 2, 3] },
+      { functionName: "main", args: [["a", "b", "c"], 2], expected: ["a", "b"] }
+    ]
   },
   762: {
-    functionNames: ["remove_whitespace"],
+    functionNames: ["main", "remove_whitespace"],
     tests: [
-      { args: ["hello world"], expected: "helloworld" }
+      { functionName: "remove_whitespace", args: ["hello world"], expected: "helloworld" },
+      { functionName: "main", args: ["a b c"], expected: "abc" }
     ]
   },
   763: {
-    functionNames: ["get_positive_numbers"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "get_positive_numbers"],
+    tests: [
+      { functionName: "main", args: [[1, -2, 2, -3, 3]], expected: [1, 2, 3] },
+      { functionName: "get_positive_numbers", args: [-1], expected: false }
+    ]
   },
   764: {
-    functionNames: ["get_common_elements"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: [1, 2, 3, 4, 5]
-    }]
+    functionNames: ["get_common_elements", "main"],
+    tests: [
+      { functionName: "get_common_elements", args: [["tree", "boat", "sea"], ["boat", "cat", "sea"]], expected: ["boat", "sea"] },
+      { functionName: "main", args: [[1, 2, 2, 3], [2, 3]], expected: [2, 3] }
+    ]
   },
   765: {
-    functionNames: ["check_even_odd"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "check_even_odd"],
+    tests: [
+      { functionName: "main", args: [[45, 7, 2, 3]], expected: ["Odd", "Odd", "Even", "Odd"] },
+      { functionName: "check_even_odd", args: [8], expected: "Even" }
+    ]
   },
   766: {
-    functionNames: ["convert_to_uppercase"],
+    functionNames: ["main", "convert_to_uppercase"],
     tests: [
-      { args: ["hello"], expected: "HELLO" }
+      { functionName: "main", args: [["hello", "world"]], expected: ["HELLO", "WORLD"] },
+      { functionName: "convert_to_uppercase", args: ["python"], expected: "PYTHON" }
     ]
   },
   767: {
-    functionNames: ["count_characters"],
+    functionNames: ["main", "count_characters"],
     tests: [
-      { args: ["hello"], expected: {"h":1,"e":1,"l":2,"o":1} }
+      { functionName: "main", args: [["eorl", "sitting", "mountain"]], expected: [4, 7, 8] },
+      { functionName: "count_characters", args: ["hello"], expected: 5 }
     ]
   },
   768: {
-    functionNames: ["remove_special_characters"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "remove_special_characters"],
+    tests: [
+      { functionName: "main", args: [["eor?@l", "s@itting?", "@mountain?"]], expected: ["eorl", "sitting", "mountain"] },
+      { functionName: "remove_special_characters", args: ["a?@b"], expected: "ab" }
+    ]
   },
   769: {
-    functionNames: ["is_substring"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["main", "is_substring"],
+    tests: [
+      { functionName: "main", args: [[["apple", "pineapple"], ["cat", "dog"]]], expected: [true, false] },
+      { functionName: "is_substring", args: ["dog", "doghouse"], expected: true }
+    ]
   },
   770: {
-    functionNames: ["sum_of_list"],
+    functionNames: ["main", "sum_of_list"],
     tests: [
-      { args: [[1,2,3,4,5]], expected: 15 }
+      { functionName: "main", args: [[2, 2, 2, 2, 2]], expected: 10 }
     ]
   },
   771: {
-    functionNames: ["get_even_numbers"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["main", "get_even_numbers"],
+    tests: [
+      { functionName: "main", args: [[46, 22, 7, 4, 8, 13]], expected: [46, 22, 4, 8] },
+      { functionName: "get_even_numbers", args: [7], expected: false }
+    ]
   },
   772: {
-    functionNames: ["merge_sorted_lists"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["main", "merge_sorted_lists"],
+    compare: "unorderedList",
+    tests: [
+      { functionName: "merge_sorted_lists", args: [[3, 1], [2, 4]], expected: [1, 2, 3, 4] },
+      { functionName: "main", args: [[1, 33, 8], [9, 2, 7]], expected: [1, 2, 7, 8, 9, 33] }
+    ]
   },
   773: {
     functionNames: ["lst_to_dic"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-    }]
+    tests: [
+      { args: [[1, 2, 3], ["start", "middle", "end"]], expected: {"1": "start", "2": "middle", "3": "end"} }
+    ]
   },
   774: {
-    functionNames: ["value_of_specific_key"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["main", "value_of_specific_key"],
+    tests: [
+      { functionName: "main", args: [{"name": 777, "job": 1}, "job"], expected: 1 },
+      { functionName: "value_of_specific_key", args: [{"age": 30}, "age"], expected: 30 }
+    ]
   },
   775: {
-    functionNames: ["merge_dicts"],
+    functionNames: ["main", "merge_dicts"],
     tests: [
-      { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} }
+      { functionName: "merge_dicts", args: [{"a": 1}, {"b": 2}], expected: {"a": 1, "b": 2} },
+      { functionName: "main", args: [{"a": 1}, {"b": 3}], expected: {"a": 1, "b": 3} }
     ]
   },
   776: {
-    functionNames: ["remove_key"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, "a"],
-      expected: {"b": 2}
-    }]
+    functionNames: ["remove_key", "main"],
+    tests: [
+      { functionName: "remove_key", args: [{"a": 1, "b": 2}, "a"], expected: {"b": 2} },
+      { functionName: "main", args: [{"x": 1, "y": 2}, "z"], expected: {"x": 1, "y": 2} }
+    ]
   },
   777: {
-    functionNames: ["print_dict_items"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "a: 1\nb: 2"
-    }]
+    functionNames: ["print_dict_items", "main"],
+    compare: "printedOrReturn",
+    tests: [
+      { functionName: "print_dict_items", args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" }
+    ]
   },
   778: {
-    functionNames: ["does_key_exist"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    functionNames: ["main", "does_key_exist"],
+    tests: [
+      { functionName: "does_key_exist", args: [{"name": "Steven", "age": 56}, "name"], expected: "key exists" },
+      { functionName: "does_key_exist", args: [{"name": "Steven", "age": 56}, "job"], expected: "key does not exist" }
+    ]
   },
   779: {
     functionNames: ["sort_dic"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"b": 2, "a": 1}], expected: {"a": 1, "b": 2} }
+    ]
   },
   780: {
-    functionNames: ["main"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    functionNames: ["main", "sort_values", "sort_key"],
+    tests: [
+      { functionName: "main", args: [{"name": 777, "age": 56, "city": 34, "job": 1}], expected: {"job": 1, "city": 34, "age": 56, "name": 777} },
+      { functionName: "sort_key", args: [["cat", 34]], expected: 34 }
+    ]
   },
   781: {
     functionNames: ["frequency_elements"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: {"1": 1, "2": 1, "3": 1, "4": 1, "5": 1}
-    }]
+    tests: [
+      { args: [["tree", "tree", "flower", "flower", "tree"]], expected: {"tree": 3, "flower": 2} }
+    ]
   },
   782: {
     functionNames: ["square_dic"],
-    tests: [{
-      args: [],
-      expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25}
-    }]
+    tests: [
+      { args: [], expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25} }
+    ]
   },
   783: {
-    functionNames: ["update_value"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2,3], expected: undefined }]
+    functionNames: ["main", "update_value"],
+    tests: [
+      { functionName: "main", args: [{"name": 777, "city": 34}, ["city", 78]], expected: {"name": 777, "city": 78} },
+      { functionName: "update_value", args: [{"age": 30}, "age", 60], expected: {"age": 60} }
+    ]
   },
   784: {
     functionNames: ["get_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    compare: "unorderedList",
+    tests: [
+      { args: [{"name": "Steven", "age": 56}], expected: ["name", "age"] }
+    ]
   },
   785: {
     functionNames: ["get_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    compare: "unorderedList",
+    tests: [
+      { args: [{"name": "Steven", "age": 56}], expected: ["Steven", 56] }
+    ]
   },
   786: {
     functionNames: ["get_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    compare: "unorderedList",
+    tests: [
+      { args: [{"city": "New York", "job": "Engineer"}], expected: ["New York", "Engineer"] }
+    ]
   },
   787: {
     functionNames: ["largest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 2
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: 777 }
+    ]
   },
   788: {
     functionNames: ["largest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 1
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: 34 }
+    ]
   },
   789: {
     functionNames: ["lst_dic"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-      expected: {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}
-    }]
+    tests: [
+      { args: [[1, 2, 3], ["sand", "rock", "beach", "sea"]], expected: {"1": "sand", "2": "rock", "3": "beach"} }
+    ]
   },
   790: {
     functionNames: ["combine_dictionaries"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
-      expected: {"a": 2, "b": 4}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2, "c": 3}, {"b": 3, "c": 4, "d": 5}], expected: {"a": 1, "b": 5, "c": 7, "d": 5} }
+    ]
   },
   791: {
     functionNames: ["invert_dictionary"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"1": "a", "2": "b"}
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30}], expected: {"Alice": "name", "30": "age"} }
+    ]
   },
   792: {
     functionNames: ["remove_duplicates_values"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30, "nickname": "Alice"}], expected: {"name": "Alice", "age": 30} }
+    ]
   },
   793: {
     functionNames: ["same_keys"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, {"a": 1, "b": 2}],
-      expected: true
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30}, {"age": 40, "name": "Bob"}], expected: true },
+      { args: [{"name": "Alice"}, {"age": 30}], expected: false }
+    ]
   },
   794: {
     functionNames: ["multiply_by2"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 2, "b": 4}
-    }]
+    tests: [
+      { args: [{"a": 2, "b": 8}], expected: {"a": 4, "b": 16} }
+    ]
   },
   795: {
     functionNames: ["len_key_value_pair"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 2
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30, "job": "Engineer"}], expected: 3 }
+    ]
   },
   796: {
-    functionNames: ["map_lst_string_dic","len_dic"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    functionNames: ["map_lst_string_dic", "len_dic"],
+    tests: [
+      { functionName: "map_lst_string_dic", args: [["it", "shop", "jonny"]], expected: {"it": 2, "shop": 4, "jonny": 5} },
+      { functionName: "len_dic", args: [["not", "house"]], expected: {"not": 3, "house": 5} }
+    ]
   },
   797: {
     functionNames: ["add_key_value_pair"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2, "new_key": "new_value"}
-    }]
+    tests: [
+      { args: [{"name": "Alice"}], expected: {"name": "Alice", "new_key": "new_value"} }
+    ]
   },
   798: {
     functionNames: ["value_cubes"],
-    tests: [{
-      args: [],
-      expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125}
-    }]
+    tests: [
+      { args: [], expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125} }
+    ]
   },
   799: {
     functionNames: ["check_if_empty"],
-    tests: [{
-      args: [1],
-      expected: "Dictionary is not empty"
-    }]
+    tests: [
+      { args: [{}], expected: "Dictionary is empty" },
+      { args: [{"name": "Alice"}], expected: "Dictionary is not empty" }
+    ]
   },
   800: {
     functionNames: ["remove_set_keys"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, "{1, 2, 3}"],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"name": "Alice", "age": 30, "city": "New York", "job": "Engineer"}, ["age", "city"]], expected: {"name": "Alice", "job": "Engineer"} }
+    ]
   },
   801: {
     functionNames: ["dic_lst_tuples"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: [["a", 1], ["b", 2]]
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2}], expected: [["a", 1], ["b", 2]] }
+    ]
   },
   802: {
-    functionNames: ["main"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: ["a"]
-    }]
+    functionNames: ["main", "map_value"],
+    tests: [
+      { functionName: "main", args: [{"name": 1, "age": 56, "job": 1}], expected: ["name", "job"] },
+      { functionName: "map_value", args: [{"name": "Alice", "age": 30, "nickname": "Alice"}, "Alice"], expected: {"name": "Alice", "nickname": "Alice"} }
+    ]
   },
   803: {
     functionNames: ["replace_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, [1, 2, 3, 4, 5]],
-      expected: {"a": [1, 2, 3, 4, 5], "b": [1, 2, 3, 4, 5]}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": [2]}, [1, 2, 3]], expected: {"a": [1, 2, 3], "b": [2]} }
+    ]
   },
   804: {
     functionNames: ["nested_dic"],
-    tests: [{
-      args: [],
-      expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}, "4": {"square": 16, "cube": 64}, "5": {"square": 25, "cube": 125}}
-    }]
+    tests: [
+      { args: [], expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}, "4": {"square": 16, "cube": 64}, "5": {"square": 25, "cube": 125}} }
+    ]
   },
   805: {
     functionNames: ["string_dic"],
-    tests: [{
-      args: ["hello"],
-      expected: {"h": 1, "e": 1, "l": 2, "o": 1}
-    }]
+    tests: [
+      { args: ["hello"], expected: {"h": 1, "e": 1, "l": 2, "o": 1} },
+      { args: ["banana"], expected: {"b": 1, "a": 3, "n": 2} }
+    ]
   },
   806: {
     functionNames: ["sort_dic"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"b": 2, "a": 1}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2, "c": 0}], expected: {"b": 2, "a": 1, "c": 0} }
+    ]
   },
   807: {
     functionNames: ["lst_tuples"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [[["a", 1], ["b", 2], ["c", 3]]], expected: {"a": 1, "b": 2, "c": 3} }
+    ]
   },
   808: {
     functionNames: ["less_then_10"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {}
-    }]
+    tests: [
+      { args: [{"low": 1, "ten": 10, "high": 12}], expected: {"ten": 10, "high": 12} }
+    ]
   },
   809: {
     functionNames: ["print_readable"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "a: 1\nb: 2\n"
-    }]
+    compare: "printedOrReturn",
+    tests: [
+      { args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" }
+    ]
   },
   810: {
     functionNames: ["students_grades"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: []
-    }]
+    tests: [
+      { args: [{"Bob": 50, "Alex": 72, "Fred": 87, "Liz": 90}], expected: ["Alex", "Fred", "Liz"] }
+    ]
   },
   811: {
     functionNames: ["word_len"],
-    tests: [{
-      args: ["hello"],
-      expected: {"hello": 5}
-    }]
+    tests: [
+      { args: ["today we code"], expected: {"today": 5, "we": 2, "code": 4} }
+    ]
   },
   812: {
     functionNames: ["word_len"],
-    tests: [{
-      args: ["hello"],
-      expected: {"hello": 5}
-    }]
+    tests: [
+      { args: ["python is fun"], expected: {"python": 6, "is": 2, "fun": 3} }
+    ]
   },
   813: {
-    functionNames: ["starting_letter"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": ["a"], "b": ["b"]}
-    }]
+    functionNames: ["starting_letter", "main"],
+    tests: [
+      { functionName: "starting_letter", args: [{"Bob": 50, "Alex": 72, "Fred": 87, "Ben": 90}], expected: {"B": ["Bob", "Ben"], "A": ["Alex"], "F": ["Fred"]} },
+      { functionName: "main", args: [{"name": 777, "age": 56}], expected: {"n": "name", "a": "age"} }
+    ]
   },
   814: {
     functionNames: ["upper_keys"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"A": 1, "B": 2}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2}], expected: {"A": 1, "B": 2} }
+    ]
   },
   815: {
     functionNames: ["intersection"],
     tests: [
-      { args: [[1,2,3],[2,3,4]], expected: [2,3] }
+      { args: [{"Bob": 500, "Alex": 72, "Liz": 90}, {"Bob": 50, "Liz": 90}], expected: {"Bob": 500, "Liz": 90} }
     ]
   },
   816: {
     functionNames: ["count_vowels"],
     tests: [
-      { args: ["hello"], expected: 2 }
+      { args: ["hello"], expected: {"a": 0, "e": 1, "i": 0, "o": 1, "u": 0} }
     ]
   },
   817: {
     functionNames: ["remove_value_is_none"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"Bob": null, "Fred": 89, "Liz": 90}], expected: {"Fred": 89, "Liz": 90} }
+    ]
   },
   818: {
     functionNames: ["check_key_value"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    tests: [
+      { args: [{"Bob": 500, "Liz": 90}, {"Liz": 90}], expected: true },
+      { args: [{"Bob": 500, "Liz": 90}, {"Liz": 91}], expected: false }
+    ]
   },
   819: {
     functionNames: ["dict_to_json"],
-    tests: [{
-      args: [1],
-      expected: "1"
-    }]
+    tests: [
+      { args: [{"Bob": 500, "Alex": 72}], expected: "{\"Bob\": 500, \"Alex\": 72}" }
+    ]
   },
   820: {
     functionNames: ["merge_dicts"],
     tests: [
-      { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} }
+      { args: [{"name": "Steven"}, {"named": "Alice"}], expected: {"name": "Steven", "named": "Alice"} }
     ]
   },
   821: {
     functionNames: ["product_values"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 2
-    }]
+    tests: [
+      { args: [{"a": 2, "b": 3, "c": 4}], expected: 24 }
+    ]
   },
   822: {
     functionNames: ["average_values"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 1.5
-    }]
+    tests: [
+      { args: [{"a": 10, "b": 20, "c": 30}], expected: 20 }
+    ]
   },
   823: {
-    functionNames: ["swap_values"],
+    functionNames: ["swap_values", "main"],
     tests: [
-      { args: [5,10], expected: [10,5] }
+      { functionName: "swap_values", args: [{"a": 1, "b": 2, "c": 3}, "a", "c"], expected: {"a": 3, "b": 2, "c": 1} },
+      { functionName: "main", args: [{"name": 777, "age": 56, "city": 34, "job": 1}], expected: {"name": 777, "age": 56, "city": 1, "job": 34} }
     ]
   },
   824: {
     functionNames: ["largest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "b"
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: "name" }
+    ]
   },
   825: {
     functionNames: ["smallest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "a"
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: "city" }
+    ]
   },
   826: {
-    functionNames: ["main"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2, "first": 1, "second": 2}
-    }]
+    functionNames: ["main", "add_multiple_pairs"],
+    tests: [
+      { functionName: "main", args: [{"a": 1}], expected: {"a": 1, "first": 1, "second": 2} },
+      { functionName: "add_multiple_pairs", args: [{"name": 777}, {"status": "unemployed", "country": "USA"}], expected: {"name": 777, "status": "unemployed", "country": "USA"} }
+    ]
   },
-  827: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  828: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  829: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  830: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  831: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  832: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  833: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  834: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  835: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  836: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  837: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  838: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  839: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  840: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  841: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  842: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  843: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  844: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  845: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  846: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  847: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  848: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  849: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   850: {
-        functionNames: ["is_prime"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  851: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  852: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  853: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  854: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  855: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  856: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  857: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  858: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  859: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  860: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  861: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  862: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  863: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  864: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  865: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
+    functionNames: ["is_prime"],
+    tests: [
+      { args: [2], expected: true },
+      { args: [9], expected: false },
+      { args: [17], expected: true }
+    ]
+  },
   866: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
+    functionNames: ["main"],
+    tests: [
+      { args: [[1, 3, 8], ["9", "2", "7"]], expected: {"1": "9", "3": "2", "8": "7"} },
+      { args: [["a", "b"], [10, 20]], expected: {"a": 10, "b": 20} }
+    ]
+  },
   867: {
     functionNames: ["create_dictionary"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    tests: [
+      { args: [["apple", "banana", "cherry"], [1, 2, 3]], expected: {"apple": 1, "banana": 2, "cherry": 3} },
+      { args: [[1, 2], ["one", "two"]], expected: {"1": "one", "2": "two"} }
+    ]
   },
   868: {
     functionNames: ["capitalize_words","capitalize"],
     tests: [
-      { args: ["hello world"], expected: "Hello World" }
+      { args: [["jonathan", "sam", "mimi"]], expected: ["Jonathan", "Sam", "Mimi"] },
+      { args: [["python", "code"]], expected: ["Python", "Code"] }
     ]
   },
-  869: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  870: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  871: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  872: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   873: {
     functionNames: ["get_coordinates"],
     tests: [{
@@ -5743,52 +5669,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [5, 10]
     }]
   },
-  874: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  875: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  876: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  877: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  878: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   879: {
     functionNames: ["greet"],
+    compare: "printedOrReturn",
     tests: [
-      { args: ["Alice"], expected: "Hello, Alice!" }
+      { args: ["Alice", 30], expected: "Hello, Alice. You are 30 years old." },
+      { args: ["Bob", 41], expected: "Hello, Bob. You are 41 years old." }
     ]
   },
-  880: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  881: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  882: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   883: {
     functionNames: ["add"],
     tests: [{
@@ -5799,25 +5687,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   884: {
     functionNames: ["describe"],
     tests: [{
-      args: ["hello", 2, 3],
-      expected: "hello is 2 years old and lives in 3."
+      args: ["Emma", 28, "London"],
+      expected: "Emma is 28 years old and lives in London."
     }]
   },
-  885: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  886: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  887: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   888: {
     functionNames: ["get_user"],
     tests: [{
@@ -5825,61 +5698,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: ["Alice", 25]
     }]
   },
-  889: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  890: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  891: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  892: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  893: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  894: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  895: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  896: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  897: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  898: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  899: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   900: {
     functionNames: ["min_max"],
     tests: [{
@@ -5887,696 +5705,38 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [1, 5]
     }]
   },
-  901: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   902: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  903: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  904: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  905: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  906: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  907: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  908: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  909: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  910: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  911: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  912: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  913: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  914: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  915: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  916: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  917: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  918: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  919: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  920: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  921: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  922: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  923: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  924: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  925: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  926: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  927: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  928: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  929: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  930: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  931: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  932: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  933: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  934: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  935: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  936: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  937: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  938: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  939: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  940: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  941: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  942: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  943: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
+    functionNames: ["main"],
+    tests: [
+      { args: [[{"name": "jon", "age": 55}, {"name": "sam", "age": 8}]], expected: [55, 8] },
+      { args: [[{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]], expected: [25, 30] }
+    ]
+  },
   944: {
-        functionNames: ["check_number"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  945: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  946: {
-        functionNames: ['check_assertion'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  947: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
+    functionNames: ["check_number"],
+    tests: [
+      { args: [5], expected: null },
+      { args: [-5], expected: null, expectedException: "NegativeNumberError" }
+    ]
+  },
   948: {
-        functionNames: ["infinite_recursion"],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  949: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  950: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  951: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  952: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  953: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  954: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  955: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  956: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  957: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  958: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  959: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  960: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  961: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  962: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  963: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  964: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  965: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  966: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  967: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  968: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  969: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  970: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  971: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  972: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  973: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  974: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  975: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  976: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  977: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  978: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  979: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  980: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  981: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  982: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  983: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  984: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  985: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  986: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  987: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  988: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  989: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  990: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  991: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  992: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  993: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  994: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  995: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  996: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  997: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  998: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  999: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1000: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1001: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1002: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1003: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1004: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1005: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1006: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1007: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1008: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1009: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1010: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1011: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1012: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1013: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
+    functionNames: ["infinite_recursion"],
+    tests: [
+      { args: [], expected: null, expectedException: "RecursionError" }
+    ]
+  },
   1014: {
         functionNames: ['is_palindrome'],
         tests: [
-            { args: ["radar"], expected: true },
+            { args: ["madam"], expected: true },
             { args: ["hello"], expected: false },
+            { args: ["level"], expected: true },
         ]
-    },
-  1015: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1016: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1017: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1018: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1019: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1020: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1021: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1022: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1023: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1024: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1025: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1026: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1027: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1028: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1029: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1030: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1031: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1032: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1033: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1034: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1035: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1036: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1037: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1038: {
         functionNames: ['factorial'],
         tests: [
+            { args: [0], expected: 1 },
             { args: [5], expected: 120 },
         ]
     },
@@ -6584,11 +5744,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sum_n'],
         tests: [
             { args: [5], expected: 15 },
+            { args: [10], expected: 55 },
         ]
     },
   1040: {
         functionNames: ['fibonacci'],
         tests: [
+            { args: [0], expected: 0 },
+            { args: [6], expected: 8 },
             { args: [7], expected: 13 },
         ]
     },
@@ -6596,42 +5759,49 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['reverse_string'],
         tests: [
             { args: ["hello"], expected: "olleh" },
+            { args: ["python"], expected: "nohtyp" },
         ]
     },
   1042: {
         functionNames: ['count_digits'],
         tests: [
+            { args: [7], expected: 1 },
             { args: [12345], expected: 5 },
         ]
     },
   1043: {
         functionNames: ['gcd'],
         tests: [
-            { args: [12,8], expected: 4 },
+            { args: [12, 8], expected: 4 },
+            { args: [48, 18], expected: 6 },
         ]
     },
   1044: {
         functionNames: ['list_sum'],
         tests: [
+            { args: [[]], expected: 0 },
             { args: [[1,2,3,4,5]], expected: 15 },
         ]
     },
   1045: {
         functionNames: ['is_palindrome'],
         tests: [
-            { args: ["radar"], expected: true },
-            { args: ["hello"], expected: false },
+            { args: [121], expected: true },
+            { args: [123], expected: false },
+            { args: [1221], expected: true },
         ]
     },
   1046: {
         functionNames: ['power'],
         tests: [
+            { args: [5, 0], expected: 1 },
             { args: [2,3], expected: 8 },
         ]
     },
   1047: {
         functionNames: ['multiply'],
         tests: [
+            { args: [5, 0], expected: 0 },
             { args: [4,5], expected: 20 },
         ]
     },
@@ -6656,23 +5826,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [[1,2,3,4,5]], expected: true },
             { args: [[1,3,2,4,5]], expected: false },
+            { args: [[]], expected: true },
         ]
     },
   1051: {
         functionNames: ['char_count'],
         tests: [
             { args: ["hello","l"], expected: 2 },
+            { args: ["banana", "a"], expected: 3 },
         ]
     },
   1052: {
     functionNames: ["binary_strings"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    compare: "printedOrReturn",
+    tests: [
+      { args: [2], expected: "00\n01\n10\n11" }
+    ]
   },
   1053: {
         functionNames: ['sum_of_digits'],
         tests: [
             { args: [123], expected: 6 },
+            { args: [1244], expected: 11 },
         ]
     },
   1054: {
@@ -6684,13 +5859,16 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1055: {
         functionNames: ['remove_duplicates'],
         tests: [
-            { args: [[1,2,2,3,3,4]], expected: [1,2,3,4] },
+            { args: ["banana"], expected: "ban" },
+            { args: ["mississippi"], expected: "misp" },
         ]
     },
   1056: {
     functionNames: ["permutations"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
+    compare: "printedOrReturn",
+    tests: [
+      { args: ["ab"], expected: "ab\nba" }
+    ]
   },
   1057: {
         functionNames: ['longest_string'],
@@ -6698,21 +5876,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [["a","abc","ab"]], expected: "abc" },
         ]
     },
-  1058: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1059: {
         functionNames: ['square_roots'],
         tests: [
             { args: [[1,4,9]], expected: [1,2,3] },
         ]
-    },
-  1060: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1061: {
         functionNames: ['sort_by_first_element_desc'],
@@ -6732,16 +5900,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3,4]], expected: [2,4,6,8] },
         ]
     },
-  1064: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1065: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1066: {
         functionNames: ['cube_elements'],
         tests: [
@@ -6754,31 +5912,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [["abc","a","ab"]], expected: ["a","ab","abc"] },
         ]
     },
-  1068: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1069: {
         functionNames: ['sum_of_elements'],
         tests: [
             { args: [[1,2,3,4,5]], expected: 15 },
         ]
-    },
-  1070: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1071: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1072: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1073: {
         functionNames: ['convert_to_strings'],
@@ -6792,36 +5930,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3,4,5,6]], expected: 12 },
         ]
     },
-  1075: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1076: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1077: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1078: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1079: {
         functionNames: ['create_square_root_tuples'],
         tests: [
             { args: [[1,4,9]], expected: [[1,1],[4,2],[9,3]] },
         ]
-    },
-  1080: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1081: {
         functionNames: ['average_of_odds'],
@@ -6835,11 +5948,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3,4,5]], expected: [1,9,25] },
         ]
     },
-  1083: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1084: {
         functionNames: ['create_cube_tuples'],
         tests: [
@@ -6849,7 +5957,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1085: {
         functionNames: ['filter_greater_than'],
         tests: [
-            { args: [[1,5,3,8,2],3], expected: [5,8] },
+            { args: [[1,5,3,8,2],3], expected: [1,3,2] },
         ]
     },
   1086: {
@@ -6857,11 +5965,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [["hi","hello","a"]], expected: [2,5,1] },
         ]
-    },
-  1087: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1088: {
         functionNames: ['sum_of_cubes'],
@@ -6875,157 +5978,65 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,5,3,8,2],4], expected: [1,3,2] },
         ]
     },
-  1090: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1091: {
     functionNames: ["square_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [5], expected: [0, 1, 4, 9, 16] }
+    ]
   },
   1092: {
     functionNames: ["fibonacci_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [20], expected: [0, 1, 1, 2, 3, 5, 8, 13] }
+    ]
   },
   1093: {
     functionNames: ["char_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: ["hello"], expected: ["h", "e", "l", "l", "o"] }
+    ]
   },
   1094: {
     functionNames: ["step_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [10], expected: [1, 3, 5, 7, 9] }
+    ]
   },
   1095: {
     functionNames: ["even_number_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [10], expected: [2, 4, 6, 8, 10] }
+    ]
   },
   1096: {
     functionNames: ["square_even_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [10], expected: [4, 16, 36, 64, 100] }
+    ]
   },
   1097: {
     functionNames: ["prime_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [5], expected: [2, 3, 5, 7, 11] }
+    ]
   },
   1098: {
     functionNames: ["consecutive_pair_sum"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
+    tests: [
+      { args: [[1, 2, 3, 4, 5]], expected: [3, 5, 7, 9] }
+    ]
   },
   1099: {
     functionNames: ["factorial_generator"],
-    tests: [{
-      args: [5],
-      expected: "<generator object factorial_generator at 0x100a007c0>"
-    }]
+    tests: [
+      { args: [5], expected: [1, 2, 6, 24, 120] }
+    ]
   },
   1100: {
     functionNames: ["divisible_by_3_and_5_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1101: {
-    functionNames: ["odd_filter_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1102: {
-    functionNames: ["cumulative_sum_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1103: {
-    functionNames: ["power_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
-  1104: {
-    functionNames: ["word_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test"], expected: undefined }]
-  },
-  1105: {
-    functionNames: ["square_number_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1106: {
-    functionNames: ["square_odd_number_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1107: {
-    functionNames: ["reverse_list_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1108: {
-    functionNames: ["multiple_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
-  1109: {
-    functionNames: ["uppercase_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1110: {
-    functionNames: ["consecutive_diff_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1111: {
-    functionNames: ["greater_than_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
-  1112: {
-    functionNames: ["sum_with_index_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1113: {
-    functionNames: ["palindrome_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1114: {
-    functionNames: ["pair_product_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1115: {
-    functionNames: ["greater_than_previous_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1116: {
-    functionNames: ["divisible_by_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
-  1117: {
-    functionNames: ["even_fibonacci_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1118: {
-    functionNames: ["even_index_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1119: {
-    functionNames: ["even_length_word_generator"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test"], expected: undefined }]
+    tests: [
+      { args: [50], expected: [15, 30, 45] }
+    ]
   },
   1120: {
     functionNames: ["check_number"],
@@ -7163,21 +6174,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [10], expected: false },
         ]
     },
-  1140: {
-    functionNames: ["fibonacci_up_to_n"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   1141: {
     functionNames: ["count_occurrences"],
     tests: [
       { args: [[1,2,2,3],2], expected: 2 }
     ]
-  },
-  1142: {
-    functionNames: ["is_perfect_square_and_armstrong"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
   },
   1143: {
     functionNames: ["divisible_by_7_and_11"],
@@ -7213,41 +6214,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
-  1148: {
-        functionNames: ["outer_function","inner_function"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1149: {
-        functionNames: ["test_scope"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1150: {
-        functionNames: ["modify_global_variable"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1151: {
-        functionNames: ["outer_function","inner_function"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1152: {
-        functionNames: ["shadowing_example"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1153: {
     functionNames: ["example_function"],
     compare: 'printedOrReturn',
@@ -7270,27 +6236,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Modified list: [1, 2, 3, 4, 5, 4]"
     }]
   },
-  1156: {
-        functionNames: ["loop_scope"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1157: {
-        functionNames: ["check_variable"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1158: {
-        functionNames: ["outer_function","inner_function"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1159: {
         functionNames: ['add_numbers'],
         tests: [
@@ -7311,34 +6256,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [1, 4, 9, 16, 25]
     }]
   },
-  1162: {
-        functionNames: ["reuse_variable"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1163: {
-        functionNames: ["function_one","function_two"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1164: {
-        functionNames: ["function_one","function_two"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1165: {
-        functionNames: ["outer_function","inner_function"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1166: {
     functionNames: ["print_arguments"],
     compare: 'printedOrReturn',
@@ -7347,34 +6264,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "{1, 2, 3}"
     }]
   },
-  1167: {
-        functionNames: ["loop_variable_scope"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1168: {
-        functionNames: ["global_inside_function"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1169: {
-        functionNames: ["test_mutability"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1170: {
-        functionNames: ["list_comprehension_variable_scope"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1171: {
     functionNames: ["print_variable_in_function"],
     compare: 'printedOrReturn',
@@ -7383,27 +6272,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Function variable y: 10"
     }]
   },
-  1172: {
-        functionNames: ["for_loop_variable_scope"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1173: {
-        functionNames: ["change_global_variable"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1174: {
-        functionNames: ["outer_function","middle_function","inner_function"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1175: {
     functionNames: ["print_global_variable"],
     compare: 'printedOrReturn',
@@ -7424,34 +6292,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [16], expected: 4 },
         ]
     },
-  1178: {
-        functionNames: ["generate_random_number"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1179: {
-        functionNames: ["current_datetime"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1180: {
-        functionNames: ["current_working_directory"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1181: {
-        functionNames: ["python_version"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1182: {
     functionNames: ["dict_to_json"],
     tests: [{
@@ -7466,11 +6306,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ["abc"], expected: false },
         ]
     },
-  1184: {
-    functionNames: ["list_files"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   1185: {
         functionNames: ['calculate_factorial'],
         tests: [
@@ -7498,13 +6333,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], expected: 3.141592653589793 },
         ]
     },
-  1189: {
-        functionNames: ["shuffle_list"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [[1,2,3,4,5]], expected: undefined },
-        ]
-    },
   1190: {
     functionNames: ["count_occurrences"],
     tests: [
@@ -7515,30 +6343,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['calculate_gcd'],
         tests: [
             { args: [12,8], expected: 4 },
-        ]
-    },
-  1192: {
-    functionNames: ["rename_file"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
-  1193: {
-        functionNames: ["format_current_date"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1194: {
-    functionNames: ["json_to_dict"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test"], expected: undefined }]
-  },
-  1195: {
-        functionNames: ["select_random_element"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [[1,2,3]], expected: undefined },
         ]
     },
   1196: {
@@ -7608,13 +6412,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['merge_dicts'],
         tests: [
             { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
-        ]
-    },
-  1207: {
-        functionNames: ["iterate_dict"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
         ]
     },
   1208: {
@@ -7757,20 +6554,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: ".txt"
     }]
   },
-  1229: {
-        functionNames: ["get_file_size"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1230: {
-        functionNames: ["rename_file"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1231: {
     functionNames: ["create_directory"],
     tests: [{
@@ -7785,13 +6568,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Directory new_directory removed"
     }]
   },
-  1233: {
-        functionNames: ["remove_file"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1234: {
     functionNames: ["get_absolute_path"],
     tests: [{
@@ -7806,13 +6582,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
-  1236: {
-        functionNames: ["create_symlink"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1237: {
     functionNames: ["check_directory_and_files"],
     tests: [{
@@ -7820,13 +6589,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: []
     }]
   },
-  1238: {
-        functionNames: ["get_last_modified_time"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1239: {
     functionNames: ["get_directory_name"],
     tests: [{
@@ -7834,20 +6596,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "example_directory"
     }]
   },
-  1240: {
-        functionNames: ["check_if_empty"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1241: {
-        functionNames: ["iterate_files"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1242: {
     functionNames: ["get_parent_directory"],
     tests: [{
@@ -7862,20 +6610,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
-  1244: {
-        functionNames: ["get_human_readable_size"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1245: {
-        functionNames: ["change_working_directory"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1246: {
     functionNames: ["check_conditions"],
     tests: [{
@@ -8226,256 +6960,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
-  1296: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1297: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1298: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1299: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1300: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1301: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1302: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1303: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1304: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1305: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1306: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1307: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1308: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1309: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1310: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1311: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1312: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1313: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1314: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1315: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1316: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1317: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1318: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1319: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1320: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1321: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1322: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1323: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1324: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1325: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1326: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1327: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1328: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1329: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1330: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1331: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1332: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1333: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1334: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1335: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1336: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1337: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1338: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1339: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1340: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1341: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1342: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1343: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
         ]
-    },
-  1344: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1345: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1346: {
         functionNames: ['multiply'],
@@ -8483,610 +6972,23 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [4,5], expected: 20 },
         ]
     },
-  1347: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1348: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1349: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1350: {
-        functionNames: ["read"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1351: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1352: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1353: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1354: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1355: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1356: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1357: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1358: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1359: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1360: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1361: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1362: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1363: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1364: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1365: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1366: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1367: {
         functionNames: ['remove_key'],
         tests: [
             { args: [{"a":1,"b":2},"a"], expected: {"b":2} },
         ]
     },
-  1368: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1369: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1370: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1371: {
-    functionNames: ["print_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1372: {
-    functionNames: ["display_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1373: {
-    functionNames: ["count_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1374: {
-    functionNames: ["kwargs_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1375: {
-    functionNames: ["kwargs_values"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1376: {
-    functionNames: ["has_id"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1377: {
-    functionNames: ["get_name"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1378: {
-    functionNames: ["sum_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1379: {
-    functionNames: ["string_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   1380: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
         ]
     },
-  1381: {
-    functionNames: ["update_dict"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
   1382: {
         functionNames: ['merge_dicts'],
         tests: [
             { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
         ]
-    },
-  1383: {
-    functionNames: ["even_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1384: {
-    functionNames: ["sorted_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1385: {
-    functionNames: ["count_strings"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1386: {
-    functionNames: ["check_truthy"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1387: {
-    functionNames: ["starts_with_a"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1388: {
-    functionNames: ["reverse_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1389: {
-    functionNames: ["longest_key"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1390: {
-    functionNames: ["stringify_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1391: {
-    functionNames: ["all_ints"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1392: {
-    functionNames: ["max_numeric"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1393: {
-    functionNames: ["count_none"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1394: {
-    functionNames: ["print_types"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1395: {
-    functionNames: ["kv_pairs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1396: {
-    functionNames: ["remove_falsy"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1397: {
-    functionNames: ["has_list"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1398: {
-    functionNames: ["even_or_odd_kwargs"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1399: {
-    functionNames: ["clean_temp_keys"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1400: {
-    functionNames: ["uppercase_keys_only"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1402: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1403: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1404: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1405: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1406: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1407: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1408: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1409: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1410: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1411: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1412: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1413: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1414: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1415: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1416: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1417: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1418: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1419: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1420: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1421: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1422: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1423: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1424: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1425: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1426: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1427: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1428: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1429: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1430: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1431: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1432: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1433: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1434: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1435: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1436: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1437: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1438: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1439: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1440: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1441: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1442: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1443: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1444: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1445: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1446: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1447: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1448: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1449: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1450: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1451: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1452: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1453: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1454: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1455: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1456: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1457: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1458: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1459: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1460: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1461: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1462: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1463: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1464: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1465: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1466: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1467: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1468: {
         functionNames: ['is_prime'],
@@ -9095,324 +6997,17 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [4], expected: false },
         ]
     },
-  1469: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1470: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1471: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1472: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1473: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1474: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1475: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1476: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1477: {
-        functionNames: ["do_nothing"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1478: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1479: {
         functionNames: ['identity'],
         tests: [
             { args: [5], expected: 5 },
         ]
     },
-  1480: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1481: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1482: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1483: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1484: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1485: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
         ]
-    },
-  1486: {
-    functionNames: ["check"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1487: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1488: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1489: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1490: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1491: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1492: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1493: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1494: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1495: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1496: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1497: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1498: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1499: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1500: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1501: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1502: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1503: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1504: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1505: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1506: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1507: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1508: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1509: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1510: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1511: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1512: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1513: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1514: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1515: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1516: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1517: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1518: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1519: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1520: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1521: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1522: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1523: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1524: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1525: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1526: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1527: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1528: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1529: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1530: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1531: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1532: {
         functionNames: ['is_prime'],
@@ -9421,88 +7016,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [4], expected: false },
         ]
     },
-  1533: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1534: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1535: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1536: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1537: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1538: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1539: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1540: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1541: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1542: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1543: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1544: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1545: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1546: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1547: {
-        functionNames: ["number_gen"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1548: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1549: {
     functionNames: ["create_list"],
     tests: [{
@@ -9510,71 +7023,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: []
     }]
   },
-  1550: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1551: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1552: {
         functionNames: ['fibonacci'],
         tests: [
             { args: [7], expected: 13 },
         ]
-    },
-  1553: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1554: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1555: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1556: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1557: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1558: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1559: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1560: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1561: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1562: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1563: {
         functionNames: ['sum_numbers'],
@@ -9587,16 +7040,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
         ]
-    },
-  1565: {
-    functionNames: ["process_value"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,"test"], expected: undefined }]
-  },
-  1566: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1567: {
     functionNames: ["expensive_function"],
@@ -9612,201 +7055,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown command"
     }]
   },
-  1569: {
-    functionNames: ["process_point"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1570: {
-    functionNames: ["area"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
-  1571: {
-    functionNames: ["celsius"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
-  1572: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1573: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1574: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1575: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1576: {
-    functionNames: ["push"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
-  1577: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1578: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1579: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1580: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1581: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1582: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1583: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1584: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1585: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1586: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1587: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1588: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1589: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1590: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1591: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1592: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1593: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1594: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
         ]
-    },
-  1595: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1596: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1597: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1598: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1599: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1600: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1601: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1602: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1603: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1604: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1605: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1606: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1607: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1608: {
     functionNames: ["my_decorator"],
@@ -9815,31 +7068,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "<function my_decorator.<locals>.wrapper at 0x109c8b740>"
     }]
   },
-  1609: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1610: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1611: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1612: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1613: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1614: {
         functionNames: ['compare'],
         tests: [
@@ -9855,13 +7083,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown type: int"
     }]
   },
-  1616: {
-        functionNames: ["parameter","process_scores"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1617: {
     functionNames: ["get_name_age"],
     tests: [{
@@ -9869,13 +7090,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: ["Alice", 30]
     }]
   },
-  1618: {
-        functionNames: ["parameter","apply_operation"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
   1619: {
     functionNames: ["categorize"],
     tests: [{
@@ -9890,153 +7104,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown Status"
     }]
   },
-  1621: {
-    functionNames: ["name"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [], expected: undefined }]
-  },
-  1622: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1623: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1624: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1625: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1626: {
-        functionNames: ["my_context"],
-        compare: 'printedOrReturn',
-        tests: [
-            { args: [], expected: undefined },
-        ]
-    },
-  1627: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1628: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1629: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1630: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1631: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1632: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1633: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1634: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1635: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1636: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1637: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1638: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1639: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1640: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1641: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1642: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1643: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1644: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1645: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1646: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1647: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1648: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1649: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
   1650: {
         functionNames: ['subtract_numbers'],
         tests: [
@@ -10227,76 +7294,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [[1,2,3]], expected: [2,3,4] },
         ]
-    },
-  1681: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1682: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1683: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1684: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1685: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1686: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1687: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1688: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1689: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1690: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1691: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1692: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1693: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
-    },
-  1694: {
-        functionNames: ['main'],
-        compare: 'printedOrReturn',
-        tests: [{ args: [], expected: undefined }]
     },
   1695: {
         functionNames: ['check_greater'],
@@ -10737,21 +7734,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3],[2,3]], expected: [1] },
         ]
     },
-  1764: {
-    functionNames: ["read_file_content"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
-  1765: {
-    functionNames: ["write_to_file"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
-  1766: {
-    functionNames: ["append_to_file"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
   1767: {
         functionNames: ['safe_divide'],
         tests: [
@@ -11520,11 +8502,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [12], expected: [1,2,3,4,6,12] },
         ]
     },
-  1891: {
-    functionNames: ["check_perfect_square"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   1892: {
         functionNames: ['format_time'],
         tests: [
@@ -12004,32 +8981,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5]]
     }]
   },
-  1969: {
-    functionNames: ["calculate_quadratic_roots"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2,3], expected: undefined }]
-  },
-  1970: {
-    functionNames: ["get_strings_matching_pattern"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test",2], expected: undefined }]
-  },
   1971: {
         functionNames: ['format_name_initials'],
         tests: [
             { args: ["John","F","Kennedy"], expected: "JFK" },
         ]
     },
-  1972: {
-    functionNames: ["get_elements_with_condition"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [[1,2,3,4,5],2], expected: undefined }]
-  },
-  1973: {
-    functionNames: ["calculate_total_area"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   1974: {
         functionNames: ['get_words_with_repeated_chars'],
         tests: [
@@ -12061,11 +9018,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [3.14159,2], expected: "3.14" },
         ]
     },
-  1979: {
-    functionNames: ["get_elements_satisfying_all"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [[1,2,3,4,5],2], expected: undefined }]
-  },
   1980: {
         functionNames: ['calculate_net_price'],
         tests: [
@@ -12129,11 +9081,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Item 1: 1, Item 2: 2, Item 3: 3, Item 4: 4, Item 5: 5"
     }]
   },
-  1990: {
-    functionNames: ["get_strings_with_pattern_count"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test",2,3], expected: undefined }]
-  },
   1991: {
     functionNames: ["calculate_compound_growth"],
     tests: [{
@@ -12148,22 +9095,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: []
     }]
   },
-  1993: {
-    functionNames: ["format_table_data"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1], expected: undefined }]
-  },
   1994: {
         functionNames: ['get_words_with_unique_chars'],
         tests: [
             { args: [["hello","world","abc"]], expected: ["abc"] },
         ]
     },
-  1995: {
-    functionNames: ["calculate_total_with_multiple_discounts"],
-    compare: 'printedOrReturn',
-    tests: [{ args: [1,2], expected: undefined }]
-  },
   1996: {
     functionNames: ["format_multi_line_address"],
     compare: 'printedOrReturn',
@@ -12171,11 +9108,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       args: ["hello", "hello", 3, "{1, 2, 3}", {"a": 1, "b": 2}],
       expected: "hello\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}"
     }]
-  },
-  1997: {
-    functionNames: ["get_elements_matching_multiple_patterns"],
-    compare: 'printedOrReturn',
-    tests: [{ args: ["test",2], expected: undefined }]
   },
   1998: {
     functionNames: ["calculate_statistical_summary"],

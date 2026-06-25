@@ -234,6 +234,15 @@ def __auto_grader_jsonable(value):
         return repr(value)
 
 def __auto_grader_normalize(value):
+    if hasattr(value, "isoformat") and callable(value.isoformat):
+        try:
+            return value.isoformat()
+        except Exception:
+            pass
+    if type(value).__name__ in ("dict_keys", "dict_values", "dict_items"):
+        return [__auto_grader_normalize(item) for item in value]
+    if hasattr(value, "__iter__") and hasattr(value, "__next__"):
+        return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, tuple):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, list):
@@ -377,6 +386,10 @@ def __auto_grader_run():
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
     first_args = tests[0].get("args", []) if tests else []
+    if tests and tests[0].get("argFunctionNames"):
+        first_args = first_args + [None] * len(tests[0].get("argFunctionNames", []))
+    if tests and tests[0].get("functionListArgNames"):
+        first_args = [None] + first_args
     target_name, target = __auto_grader_find_callable(function_names, first_args)
 
     if target is None:
@@ -387,14 +400,43 @@ def __auto_grader_run():
 
     for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
         args = case.get("args", [])
+        arg_function_names = case.get("argFunctionNames", [])
+        function_list_arg_names = case.get("functionListArgNames")
         expected = case.get("expected")
+        call_returned_with = case.get("callReturnedWith")
+        call_method = case.get("callMethod")
+        call_method_args = case.get("callMethodArgs", [])
+        get_attrs = case.get("getAttrs")
+        expected_exception = case.get("expectedException")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
         required_name = case.get("functionName")
         case_target_name = target_name
         case_target = target
+        resolved_args = list(args)
+        if function_list_arg_names is not None:
+            function_list = []
+            for function_name in function_list_arg_names:
+                function = globals().get(function_name)
+                if not callable(function):
+                    return {
+                        "passed": False,
+                        "functionName": case_target_name,
+                        "message": f"{label} missing helper function {function_name}()."
+                    }
+                function_list.append(function)
+            resolved_args = [function_list] + resolved_args
+        for arg_function_name in arg_function_names:
+            arg_function = globals().get(arg_function_name)
+            if not callable(arg_function):
+                return {
+                    "passed": False,
+                    "functionName": case_target_name,
+                    "message": f"{label} missing helper function {arg_function_name}()."
+                }
+            resolved_args.append(arg_function)
         if required_name:
-            case_target_name, case_target = __auto_grader_find_callable(function_names, args, required_name)
+            case_target_name, case_target = __auto_grader_find_callable(function_names, resolved_args, required_name)
             if case_target is None:
                 return {
                     "passed": False,
@@ -406,9 +448,30 @@ def __auto_grader_run():
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
         try:
-            returned = case_target(*args)
+            returned = case_target(*resolved_args)
+            if call_returned_with is not None:
+                if not callable(returned):
+                    return {
+                        "passed": False,
+                        "functionName": case_target_name,
+                        "message": f"{label} expected {case_target_name}() to return a callable function."
+                    }
+                returned = returned(*call_returned_with)
+            if call_method is not None:
+                method = getattr(returned, call_method, None)
+                if not callable(method):
+                    return {
+                        "passed": False,
+                        "functionName": case_target_name,
+                        "message": f"{label} expected returned object to have method {call_method}()."
+                    }
+                returned = method(*call_method_args)
+            if get_attrs is not None:
+                returned = {name: getattr(returned, name, None) for name in get_attrs}
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
+            if expected_exception and type(exc).__name__ == expected_exception:
+                continue
             return {
                 "passed": False,
                 "functionName": case_target_name,
@@ -417,6 +480,13 @@ def __auto_grader_run():
         finally:
             sys.stdout = old_stdout
             builtins.input = old_input
+
+        if expected_exception:
+            return {
+                "passed": False,
+                "functionName": case_target_name,
+                "message": f"{label} expected {expected_exception} to be raised."
+            }
 
         returned_ok = __auto_grader_same(returned, expected, compare)
         printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)
