@@ -1311,7 +1311,7 @@ const App: React.FC = () => {
     };
 
     const loadSavedProblem = (problem: SavedProblem) => {
-        const ex = EXERCISES[problem.exerciseId - 1];
+        const ex = EXERCISES.find(e => e.id === problem.exerciseId);
         if (ex) {
             setExercise(ex);
             setFiles([{ name: 'main.py', content: problem.initialCode }]);
