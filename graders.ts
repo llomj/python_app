@@ -4840,7 +4840,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   705: {
         functionNames: ['euclidean_distances'],
-        compare: 'float',
         tests: [
             { args: [[[3, 4], [1, 1], [0, 0], [6, 8]]], expected: [5.0, 1.4142135623730951, 0.0, 10.0] }
         ]
@@ -4860,7 +4859,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   708: {
         functionNames: ['negate_bool'],
         tests: [
-            { args: [['1', '2', '3']], expected: [1, 2, 3] }
+            { args: [true], expected: false },
+            { args: [false], expected: true }
         ]
     },
   709: {
@@ -4872,7 +4872,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   710: {
         functionNames: ['negate_booleans'],
         tests: [
-            { args: [['racecar', 'hello', 'level']], expected: [true, false, true] }
+            { args: [[true, false, true, false]], expected: [false, true, false, true] }
         ]
     },
   711: {
@@ -4908,7 +4908,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   716: {
         functionNames: ['pair_elements'],
         tests: [
-            { args: [[1, 2, 3], ['a', 'b', 'c']], expected: [(1, 'a'), (2, 'b'), (3, 'c')] }
+            { args: [[1, 2, 3], ['a', 'b', 'c']], expected: [[1, 'a'], [2, 'b'], [3, 'c']] }
         ]
     },
   717: {
@@ -4937,15 +4937,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   721: {
         functionNames: ['square_floats'],
-        compare: 'float',
         tests: [
-            { args: [[2.0, 3.0, 4.0]], expected: [4.0, 9.0, 16.0] }
+            { args: [[2.5, 3.0, 4.0]], expected: [6.25, 9.0, 16.0] }
         ]
     },
   722: {
         functionNames: ['format_phone_numbers'],
         tests: [
-            { args: [['1234567890', '9876543210']], expected: ['+11234567890', '+19876543210'] }
+            { args: [['1234567890', '9876543210']], expected: ['+1-1234567890', '+1-9876543210'] }
         ]
     },
   723: {
@@ -4957,14 +4956,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   724: {
         functionNames: ['pair_lists'],
         tests: [
-            { args: [[1, 2, 3], [4, 5, 6]], expected: [(1, 4), (2, 5), (3, 6)] }
+            { args: [[1, 2, 3], [4, 5, 6]], expected: [[1, 4], [2, 5], [3, 6]] }
         ]
     },
   725: {
         functionNames: ['cartesian_to_polar'],
-        compare: 'float',
         tests: [
-            { args: [[[3, 4], [1, 1]]], expected: [5.0, 1.4142135623730951] }
+            { args: [[[3, 4], [1, 1]]], expected: [[5.0, 0.9272952180016122], [1.4142135623730951, 0.7853981633974483]] }
         ]
     },
   726: {
@@ -4976,80 +4974,164 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   727: {
         functionNames: ['lst_squares_and_cubes'],
         tests: [
-            { args: [[1, 2, 3]], expected: [(1, 1), (4, 8), (9, 27)] }
+            { args: [[1, 2, 3]], expected: [[1, 1], [4, 8], [9, 27]] }
         ]
     },
   728: {
         functionNames: ['rgb_to_hex'],
         tests: [
-            { args: [[[255, 0, 0], [0, 255, 0]]], expected: ['#FF0000', '#00FF00'] }
+            { args: [[[255, 0, 0], [0, 255, 0]]], expected: ['#ff0000', '#00ff00'] }
         ]
     },
   729: {
         functionNames: ['mixed_case_string'],
         tests: [
-            { args: [['hello', 'world', 'python', 'code']], expected: ['hello', 'WORLD', 'python', 'CODE'] }
+            { args: [['first', 'second', 'third', 'fourth']], expected: ['fIrst', 'sEcond', 'tHird', 'fOurth'] }
+        ]
+    },
+  730: {
+        functionNames: ['convert_dates'],
+        tests: [
+            { args: [['2024-01-01', '2023-12-25']], expected: ['2024-01-01T00:00:00', '2023-12-25T00:00:00'] }
         ]
     },
   731: {
         functionNames: ['calculate_square_roots'],
-        compare: 'float',
         tests: [
             { args: [[1, 4, 9, 16]], expected: [1.0, 2.0, 3.0, 4.0] }
         ]
     },
   732: {
         functionNames: ['calculate_percentage'],
-        compare: 'float',
         tests: [
             { args: [[50, 75, 100], 100], expected: [50.0, 75.0, 100.0] }
         ]
     },
   733: {
-    functionNames: ["add"],
-    tests: [{
-      args: [1, 2],
-      expected: 3
-    }]
+    functionNames: ["sum_list", "add"],
+    tests: [
+      { functionName: "sum_list", args: [[1, 2, 3, 4, 5]], expected: 15 },
+      { functionName: "add", args: [7, 8], expected: 15 }
+    ]
   },
   734: {
     functionNames: ["is_even","filter_even_numbers"],
     tests: [
-      { args: [4], expected: true },
-      { args: [5], expected: false }
+      { functionName: "filter_even_numbers", args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] },
+      { functionName: "is_even", args: [5], expected: false }
     ]
   },
   735: {
-    functionNames: ["capitalize_first_letter"],
-    tests: [{
-      args: ["hello"],
-      expected: "Hello"
-    }]
+    functionNames: ["word_list", "capitalize_first_letter"],
+    tests: [
+      { functionName: "word_list", args: [["first", "letter", "word"]], expected: ["First", "Letter", "Word"] },
+      { functionName: "capitalize_first_letter", args: ["hello"], expected: "Hello" }
+    ]
+  },
+  736: {
+    functionNames: ["lst_numbers", "find_max"],
+    tests: [
+      { functionName: "lst_numbers", args: [[2, 4, 6, 1]], expected: 6 },
+      { functionName: "find_max", args: [[-5, -2, -9]], expected: -2 }
+    ]
+  },
+  737: {
+    functionNames: ["lst_tempertures", "convert_to_celsius"],
+    tests: [
+      { functionName: "lst_tempertures", args: [[32, 50, 68]], expected: [0, 10, 20] },
+      { functionName: "convert_to_celsius", args: [212], expected: 100 }
+    ]
+  },
+  738: {
+    functionNames: ["string_lst", "reverse_string"],
+    tests: [
+      { functionName: "string_lst", args: [["hello", "twice"]], expected: ["olleh", "eciwt"] },
+      { functionName: "reverse_string", args: ["python"], expected: "nohtyp" }
+    ]
+  },
+  739: {
+    functionNames: ["lst_words", "count_vowels"],
+    tests: [
+      { functionName: "lst_words", args: [["word", "eerie", "education"]], expected: "education" },
+      { functionName: "count_vowels", args: ["Queue"], expected: 4 }
+    ]
+  },
+  740: {
+    functionNames: ["lst_of_word", "is_palindrome"],
+    tests: [
+      { functionName: "lst_of_word", args: [["radar", "words", "level", "deed"]], expected: ["radar", "level", "deed"] },
+      { functionName: "is_palindrome", args: ["python"], expected: false }
+    ]
+  },
+  741: {
+    functionNames: ["lst_of_radii", "calculate_area"],
+    tests: [
+      { functionName: "lst_of_radii", args: [[1, 2, 3]], expected: [3.14159, 12.56636, 28.27431] },
+      { functionName: "calculate_area", args: [4], expected: 50.26544 }
+    ]
+  },
+  742: {
+    functionNames: ["lst_numbers", "sqaure_number"],
+    tests: [
+      { functionName: "lst_numbers", args: [[2, 5, 7]], expected: [4, 25, 49] },
+      { functionName: "sqaure_number", args: [9], expected: 81 }
+    ]
   },
   743: {
     functionNames: ["get_first_n_elements"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], 5],
-      expected: [1, 2, 3, 4, 5]
-    }]
+    tests: [
+      { args: [[1, 2, 3, 4, 5], 3], expected: [1, 2, 3] },
+      { args: [[1, 2, 3, 4, 5], 5], expected: [1, 2, 3, 4, 5] }
+    ]
   },
   744: {
     functionNames: ["merge_dicts","combine_dicts"],
     tests: [
-      { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} }
+      { functionName: "merge_dicts", args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
+      { functionName: "combine_dicts", args: [[{"a":1},{"b":2},{"a":3}]], expected: {"a":3,"b":2} }
     ]
   },
   745: {
-    functionNames: ["format_name"],
-    tests: [{
-      args: ["hello", "hello"],
-      expected: "hello hello"
-    }]
+    functionNames: ["format_name", "format_names"],
+    tests: [
+      { functionName: "format_name", args: ["John", "Doe"], expected: "John Doe" },
+      { functionName: "format_names", args: [[["Jane", "Smith"], ["Alice", "Johnson"]]], expected: ["Jane Smith", "Alice Johnson"] }
+    ]
   },
   746: {
     functionNames: ["find_gcd","gcd_of_pairs","gcd_pair"],
     tests: [
-      { args: [12,8], expected: 4 }
+      { functionName: "find_gcd", args: [48, 18], expected: 6 },
+      { functionName: "gcd_of_pairs", args: [[[48, 18], [56, 98], [100, 10]]], expected: [6, 14, 10] }
+    ]
+  },
+  747: {
+    functionNames: ["lst_elements", "count_occurrences"],
+    tests: [
+      { functionName: "lst_elements", args: [["tree", "tree", "tree", "sand"]], expected: 3 },
+      { functionName: "count_occurrences", args: [["a", "b", "a"], "a"], expected: 2 }
+    ]
+  },
+  748: {
+    functionNames: ["lst_words", "sort_lst"],
+    tests: [
+      { functionName: "lst_words", args: [["zebra", "frog", "anaconda"], ["ktm", "Honda", "Suzuki"]], expected: [["anaconda", "frog", "zebra"], ["Honda", "Suzuki", "ktm"]] },
+      { functionName: "sort_lst", args: [[3, 1, 2]], expected: [1, 2, 3] }
+    ]
+  },
+  749: {
+    functionNames: ["domain_names", "extract_URL"],
+    tests: [
+      { functionName: "domain_names", args: [["http://google.com", "http://github.com"]], expected: ["google.com", "github.com"] },
+      { functionName: "extract_URL", args: ["http://stackoverflow.com"], expected: "stackoverflow.com" }
+    ]
+  },
+  750: {
+    functionNames: ["lst_sites", "remove_duplicates"],
+    compare: "unorderedList",
+    tests: [
+      { functionName: "lst_sites", args: [["google", "twitter", "google", "apple"]], expected: ["google", "twitter", "apple"] },
+      { functionName: "remove_duplicates", args: [[1, 2, 1, 3]], expected: [1, 2, 3] }
     ]
   },
   753: {

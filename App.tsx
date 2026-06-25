@@ -234,6 +234,11 @@ def __auto_grader_jsonable(value):
         return repr(value)
 
 def __auto_grader_normalize(value):
+    if hasattr(value, "isoformat") and callable(value.isoformat):
+        try:
+            return value.isoformat()
+        except Exception:
+            pass
     if isinstance(value, tuple):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, list):
