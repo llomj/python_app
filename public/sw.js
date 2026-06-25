@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v114";
+const CACHE_VERSION = "v115";
 // Pre-cache stable runtime deps. The app shell and bundles are cached after a
 // successful network fetch so phones do not get stuck on old UI code.
 const CORE_ASSETS = [

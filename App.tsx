@@ -1149,10 +1149,8 @@ const App: React.FC = () => {
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
-    const runButtonLabel = pendingNextProblem ? 'NEXT' : 'RUN';
-    const runButtonClass = pendingNextProblem
-        ? 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#3b82f61a] border border-[#3b82f64d] text-[#60a5fa]'
-        : 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
+    const runButtonLabel = 'RUN';
+    const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
     const selectedModeLabel = getDifficultyLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const modeExerciseCount = useMemo(() => {
@@ -1577,11 +1575,6 @@ const App: React.FC = () => {
 
     const runCode = async () => {
         if (isRunning) return;
-        if (pendingNextProblem) {
-            setPendingNextProblem(false);
-            loadRandomExercise();
-            return;
-        }
         if (!pyodide) return;
         const autoGrader = AUTO_GRADERS[exercise.id];
         setIsRunning(true);
@@ -1589,6 +1582,7 @@ const App: React.FC = () => {
         setOutput('Executing...');
         setWaitingForInput(false);
         setInputPrompt('');
+        setPendingNextProblem(false);
         try {
             // Write all files to the virtual filesystem
             files.forEach(file => {
@@ -1647,6 +1641,10 @@ builtins.input = __app_input
             setStdinValues([]);
 
             if (autoGrader) {
+                pyodide.runPython(`
+import builtins
+builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADER_INPUT_UNAVAILABLE__" + str(prompt)))
+`);
                 pyodide.runPython(buildAutoGradeScript(autoGrader));
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
 
@@ -1654,12 +1652,12 @@ builtins.input = __app_input
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
                     setPendingNextProblem(true);
-                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nPress RUN again to load the next problem.`);
+                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
                     updateCurrentModeStats('failed');
                     setOutputStatus('fail');
                     setPendingNextProblem(true);
-                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
+                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
                 }
             } else {
                 setOutputStatus('info');
@@ -1685,7 +1683,7 @@ builtins.input = __app_input
                 updateCurrentModeStats('failed');
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
-                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
+                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
             } else {
                 setOutputStatus('fail');
                 setOutput(`${userOutput}${errorMessage}`);
