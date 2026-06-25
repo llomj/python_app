@@ -389,6 +389,9 @@ def __auto_grader_run():
         args = case.get("args", [])
         expected = case.get("expected")
         call_returned_with = case.get("callReturnedWith")
+        call_method = case.get("callMethod")
+        call_method_args = case.get("callMethodArgs", [])
+        get_attrs = case.get("getAttrs")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
         required_name = case.get("functionName")
@@ -416,6 +419,17 @@ def __auto_grader_run():
                         "message": f"{label} expected {case_target_name}() to return a callable function."
                     }
                 returned = returned(*call_returned_with)
+            if call_method is not None:
+                method = getattr(returned, call_method, None)
+                if not callable(method):
+                    return {
+                        "passed": False,
+                        "functionName": case_target_name,
+                        "message": f"{label} expected returned object to have method {call_method}()."
+                    }
+                returned = method(*call_method_args)
+            if get_attrs is not None:
+                returned = {name: getattr(returned, name, None) for name in get_attrs}
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
             return {

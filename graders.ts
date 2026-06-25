@@ -5,6 +5,9 @@ export interface AutoTestCase {
     expected: unknown;
     inputValues?: string[];
     callReturnedWith?: unknown[];
+    callMethod?: string;
+    callMethodArgs?: unknown[];
+    getAttrs?: string[];
     functionName?: string;
     label?: string;
 }
@@ -3291,8 +3294,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   453: {
         functionNames: ['calculate_integers'],
         tests: [
-            { args: [3, 5], expected: 15 },
-            { args: [10, 2], expected: 20 }
+            { args: [10, 5], expected: [50, 15, 2] },
+            { args: [6, 3], expected: [18, 9, 2] }
         ]
     },
   455: {
@@ -3402,7 +3405,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   472: {
         functionNames: ['find_person'],
         tests: [
-            { args: [[{name: 'Alice'}, {name: 'Jonathan'}, {name: 'Bob'}]], expected: {name: 'Jonathan'} }
+            { args: [[{name: 'Beth'}, {name: 'Brett'}, {name: 'Jhonivan'}, {name: 'Jonathan'}], 'name'], expected: {name: 'Jonathan'} },
+            { args: [[{name: 'Ann'}, {name: 'Christopher'}], 'name'], expected: {name: 'Christopher'} }
         ]
     },
   473: {
@@ -3524,7 +3528,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   492: {
         functionNames: ['sort_keys_by_value'],
         tests: [
-            { args: [[{name: 'Alice'}, {name: 'Jonathan'}, {name: 'Bob'}]], expected: {name: 'Bob'} }
+            { args: [{Sam: 27, Tommy: 56, Chantelle: 18}], expected: ['Chantelle', 'Sam', 'Tommy'] },
+            { args: [{a: 3, b: 1, c: 2}], expected: ['b', 'c', 'a'] }
         ]
     },
   493: {
@@ -3537,6 +3542,48 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['longest_string_letter'],
         tests: [
             { args: [['apple', 'grape', 'date', 'cherry'], 'e'], expected: 'apple' }
+        ]
+    },
+  495: {
+        functionNames: ['Dog', 'Cat'],
+        tests: [
+            { args: [], functionName: 'Dog', callMethod: 'speak', expected: 'Bark' },
+            { args: [], functionName: 'Cat', callMethod: 'speak', expected: 'Meow' }
+        ]
+    },
+  496: {
+        functionNames: ['Car'],
+        tests: [
+            { args: [120, 'Red', 'Toyota'], getAttrs: ['speed', 'color', 'model'], expected: {speed: 120, color: 'Red', model: 'Toyota'} },
+            { args: [80, 'Blue', 'Honda'], getAttrs: ['speed', 'color', 'model'], expected: {speed: 80, color: 'Blue', model: 'Honda'} }
+        ]
+    },
+  497: {
+        functionNames: ['Person', 'Student'],
+        tests: [
+            { args: ['Alice'], functionName: 'Person', callMethod: 'introduce', expected: 'Hello, my name is Alice.' },
+            { args: ['Bob', 10], functionName: 'Student', callMethod: 'introduce', expected: 'Hello, my name is Bob and I am in grade 10.' }
+        ]
+    },
+  498: {
+        functionNames: ['Rectangle'],
+        tests: [
+            { args: [5, 3], callMethod: 'area', expected: 15 },
+            { args: [4, 7], callMethod: 'area', expected: 28 }
+        ]
+    },
+  499: {
+        functionNames: ['WashingMachine'],
+        tests: [
+            { args: ['LG', 1500], callMethod: 'wash_clothes', expected: 'The LG washing machine is washing clothes with 1500 watts of power.' },
+            { args: ['Samsung', 1200], callMethod: 'wash_clothes', expected: 'The Samsung washing machine is washing clothes with 1200 watts of power.' }
+        ]
+    },
+  500: {
+        functionNames: ['Manager'],
+        tests: [
+            { args: ['John Doe', 75000], callMethod: 'assign_task', callMethodArgs: ['Prepare a project report'], expected: 'Manager John Doe has assigned the task: Prepare a project report.' },
+            { args: ['Ada', 90000], callMethod: 'assign_task', callMethodArgs: ['Review code'], expected: 'Manager Ada has assigned the task: Review code.' }
         ]
     },
   518: {
