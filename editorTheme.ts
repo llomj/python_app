@@ -14,7 +14,7 @@ const PYTHON_BUILTINS = new Set([
   'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', '__import__',
 ]);
 
-const builtinMark = Decoration.mark({ attributes: { style: 'color:#FF9700' } });
+const builtinMark = Decoration.mark({ attributes: { style: 'color:#FF9700 !important' } });
 
 const builtinHighlightField = StateField.define<DecorationSet>({
   create(state) {
