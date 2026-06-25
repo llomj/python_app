@@ -68,8 +68,8 @@ export const EXERCISES: Exercise[] = [
         "id": 8,
         "title": "Problem 8",
         "description": "Write a Python function called `calculate_square` that takes a number as input and returns the square of that number.",
-        "initialCode": "def cal_square(number):\n    pass\n\ndef calculate_sqaure(number):\n    pass",
-        "solution": "def cal_square(number):\n    return number ** 2\n       \nlst = 9\nprint(cal_square(lst))  # Output: 81\n\ndef calculate_sqaure(number):\n    square = number ** 2\n    \n    return square  # Return the squared value\n    \nprint(calculate_sqaure(6))  # Output: 36",
+        "initialCode": "def cal_square(number):\n    pass\n\ndef calculate_square(number):\n    pass",
+        "solution": "def cal_square(number):\n    return number ** 2\n       \nlst = 9\nprint(cal_square(lst))  # Output: 81\n\ndef calculate_square(number):\n    square = number ** 2\n    \n    return square  # Return the squared value\n    \nprint(calculate_square(6))  # Output: 36",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -150,7 +150,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 17",
         "description": "Write a Python function called `count_words` that takes a string as input and returns the number of words in the string. Assume that words are separated by spaces.",
         "initialCode": "def count_words(string):\n    pass\n\ndef count_words(string):\n    pass\n\ndef count_words(string):\n    pass",
-        "solution": "def count_words(string):\n    words = string.split()\n    word_count = 0  # Initialize counter\n    \n    for word in words:\n        word_count += 1  # Count each word\n    \n    return word_count\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    words = string.split()  # Split string into list of words\n    return len(words)  # Return the length of the list (word count)\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    count = 0  # Initialize counter\n    for char in string:\n        if char == char.replace(\" \",\"\"):  # This condition is always True\n            count += 1  # Increments for every character\n    return count  # Returns character count, not word count (WRONG!)\n               \narg = \"hello my friend\"\nprint(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)",
+        "solution": "def count_words(string):\n    words = string.split()\n    word_count = 0  # Initialize counter\n    \n    for word in words:\n        word_count += 1  # Count each word\n    \n    return word_count\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    words = string.split()  # Split string into list of words\n    return len(words)  # Return the length of the list (word count)\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    words = string.split()\n    return len(words)\n               \narg = \"hello my friend\"\nprint(count_words(arg))  # Output: 3",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -267,7 +267,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 30",
         "description": "Write a Python function called remove_spaces that takes a string as input and returns a new string with all spaces removed.",
         "initialCode": "def remove_spaces(sentence):\n    pass\n\ndef remove_space(string):\n    pass\n\ndef remove_spaces(sentence):\n    pass",
-        "solution": "def remove_spaces(sentence):\n    return sentence.replace(\" \", \"\")  # Returns string with spaces removed\n    \narg = \"suck me duck Jonathan\"\nprint(remove_spaces(arg))  # Output: suckmeduckJonathan\n\ndef remove_space(string):\n    space_removed = string.replace(\" \", \"\")\n    return space_removed  # Return string without spaces\n    \nlst = \"what just happened\" \nprint(remove_space(lst))  # Output: whatjusthappened\n\ndef remove_spaces(sentence):\n    split_word = sentence.split()\n    result = []  # List to store words\n    \n    for word in split_word:\n        result.append(word)  # Add word to list\n    return \"\".join(result)  # Join words with no separator\n    \narg = \"suck me duck Jonathan\"\nprint(remove_spaces(arg))  # Output: suckmeduckJonathan",
+        "solution": "def remove_spaces(sentence):\n    return sentence.replace(\" \", \"\")  # Returns string with spaces removed\n    \narg = \"remove spaces sample Jonathan\"\nprint(remove_spaces(arg))  # Output: removespacessampleJonathan\n\ndef remove_space(string):\n    space_removed = string.replace(\" \", \"\")\n    return space_removed  # Return string without spaces\n    \nlst = \"what just happened\" \nprint(remove_space(lst))  # Output: whatjusthappened\n\ndef remove_spaces(sentence):\n    split_word = sentence.split()\n    result = []  # List to store words\n    \n    for word in split_word:\n        result.append(word)  # Add word to list\n    return \"\".join(result)  # Join words with no separator\n    \narg = \"remove spaces sample Jonathan\"\nprint(remove_spaces(arg))  # Output: removespacessampleJonathan",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -276,7 +276,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 31",
         "description": "Write a Python function called get_initials that takes a full name (first and last name) as input and returns the initials of the name in uppercase. For example, if the input is \u201cJohn Doe\u201d, the function should return \u201cJ.D.\u201d.",
         "initialCode": "def get_initials(full_name):\n    pass\n\ndef get_initials(fullname):\n    pass",
-        "solution": "def get_initials(full_name):\n    parts = full_name.split()\n    \n    initials = []\n    \n    for part in parts:\n        initials.append(part[0].upper())  # Add uppercase first letter to list\n        \n    return '.'.join(initials) \n\nlst = \"Jonathan noll\"\nprint(get_initials(lst))  # Output: \"J.M.\"\n\ndef get_initials(fullname):\n    string = fullname.split()\n    \n    initials = f\"{string[0][0].upper()}.{string[1][0].upper()}\"\n    return initials\n\nstring = \"jonathan koll\"\nprint(get_initials(string))  # Output: J.K",
+        "solution": "def get_initials(full_name):\n    parts = full_name.split()\n    \n    initials = []\n    \n    for part in parts:\n        initials.append(part[0].upper())  # Add uppercase first letter to list\n        \n    return '.'.join(initials) \n\nlst = \"Jonathan noll\"\nprint(get_initials(lst))  # Output: \"J.N.\"\n\ndef get_initials(fullname):\n    string = fullname.split()\n    \n    initials = f\"{string[0][0].upper()}.{string[1][0].upper()}\"\n    return initials\n\nstring = \"jonathan koll\"\nprint(get_initials(string))  # Output: J.K",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7438,7 +7438,7 @@ export const EXERCISES: Exercise[] = [
     {
         "id": 845,
         "title": "Problem 845",
-        "description": "Write a Python program that multiplies a number by itself until it exceeds 10,000 using a while loop.",
+        "description": "Write a Python program that repeatedly squares a number until it exceeds 10,000 using a while loop.",
         "initialCode": "# Write your solution here",
         "solution": "num = 2\nwhile num <= 10000:\n    print(num)\n    num *= num",
         "hint": "Check the description for requirements.",

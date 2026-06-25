@@ -812,7 +812,7 @@ Write a Python program to count how many times the word “hello” appears in a
 def count_hello(string):
     return string.count("hello")
     
-string = "hello, you cunt"
+string = "hello, you pal"
 print(count_hello(string))
 
 """
@@ -823,7 +823,7 @@ Write a function that counts how many times the character # appears in a string.
 def count(string):
     return string.count("#")
     
-string = "hello, you cunt ###"
+string = "hello, you pal ###"
 print(count(string))
 
 """
@@ -6740,7 +6740,7 @@ while password != "python":
 
 """
 Problem: 845
-Write a Python program that multiplies a number by itself until it exceeds 10,000 using a while loop.
+Write a Python program that repeatedly squares a number until it exceeds 10,000 using a while loop.
 """
 
 num = 2
@@ -8564,7 +8564,6 @@ Write a Python program to reverse a string using slicing.
 text = "abcdef"
 reversed_text = text[::-1]
 print(reversed_text)  # Expected output: fedcba
-
 
 
 

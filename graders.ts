@@ -87,7 +87,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
     8: {
-        functionNames: ['calculate_square', 'calculate_sqaure', 'cal_square'],
+        functionNames: ['calculate_square', 'cal_square'],
         tests: [
             { args: [6], expected: 36 },
             { args: [-4], expected: 16 },
@@ -135,7 +135,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     14: {
         functionNames: ['concatenate_strings', 'concatenate_string'],
         tests: [
-            { args: ['Jonathan', 'moll'], expected: 'Jonathanmoll' },
+            { args: ['Jonathan', 'noll'], expected: 'Jonathannoll' },
             { args: ['hello ', 'world'], expected: 'hello world' }
         ]
     },
@@ -255,14 +255,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['capitalize_words'],
         tests: [
             { args: ['hello world! this is a test.'], expected: 'Hello World! This Is A Test.' },
-            { args: ['jonathan moll'], expected: 'Jonathan Moll' },
+            { args: ['jonathan noll'], expected: 'Jonathan Noll' },
             { args: ['a b c'], expected: 'A B C' }
         ]
     },
     30: {
         functionNames: ['remove_spaces', 'remove_space'],
         tests: [
-            { args: ['suck me duck Jonathan'], expected: 'suckmeduckJonathan' },
+            { args: ['remove spaces sample Jonathan'], expected: 'removespacessampleJonathan' },
             { args: ['what just happened'], expected: 'whatjusthappened' },
             { args: [' no spaces '], expected: 'nospaces' }
         ]
@@ -271,7 +271,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_initials'],
         tests: [
             { args: ['John Doe'], expected: 'J.D.' },
-            { args: ['jonathan moll'], expected: 'J.M.' },
+            { args: ['jonathan noll'], expected: 'J.N.' },
             { args: ['Ada Lovelace'], expected: 'A.L.' }
         ]
     },
@@ -372,7 +372,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     44: {
         functionNames: ['count_uppercase'],
         tests: [
-            { args: ['Jonathan Moll'], expected: 2 },
+            { args: ['Jonathan Noll'], expected: 2 },
             { args: ['ABC xyz!'], expected: 3 },
             { args: ['no uppercase'], expected: 0 }
         ]
@@ -630,7 +630,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     77: {
         functionNames: ['uppercase', 'count_uppercase'],
         tests: [
-            { args: ['Jonathan Moll'], expected: 2 },
+            { args: ['Jonathan Noll'], expected: 2 },
             { args: ['ABC xyz!'], expected: 3 },
             { args: ['no uppercase'], expected: 0 }
         ]
@@ -809,7 +809,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['upper_lower'],
         compare: 'letterCounts',
         tests: [
-            { args: ['Jonathan Moll'], expected: { upper: 2, lower: 10 } },
+            { args: ['Jonathan Noll'], expected: { upper: 2, lower: 10 } },
             { args: ['ABC xyz'], expected: { upper: 3, lower: 3 } },
             { args: ['no uppercase'], expected: { upper: 0, lower: 11 } }
         ]
@@ -1463,7 +1463,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     188: {
         functionNames: ['get_initials'],
         tests: [
-            { args: ['jonathan moll'], expected: 'joNathAn moLL' }
+            { args: ['jonathan noll'], expected: 'joNathAn noLL' }
         ]
     },
     189: {
@@ -1881,7 +1881,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['enumerate_lst'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [['Jon', 'Chris', 'Nathan', 'Moll']], expected: '0 Jon\n2 Nathan' }
+            { args: [['Jon', 'Chris', 'Nathan', 'Noll']], expected: '0 Jon\n2 Nathan' }
         ]
     },
     247: {
@@ -1902,7 +1902,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['enumerate_lst'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [['Jon', 'Chris'], ['Moll', 'Smith']], expected: 'index 0: Jon and Moll\nindex 1: Chris and Smith' }
+            { args: [['Jon', 'Chris'], ['Noll', 'Smith']], expected: 'index 0: Jon and Noll\nindex 1: Chris and Smith' }
         ]
     },
     250: {
@@ -1915,7 +1915,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     251: {
         functionNames: ['pair_elements'],
         tests: [
-            { args: [['Jon', 'Chris'], ['Moll', 'Smith']], expected: [['Jon', 'Moll'], ['Chris', 'Smith']] },
+            { args: [['Jon', 'Chris'], ['Noll', 'Smith']], expected: [['Jon', 'Noll'], ['Chris', 'Smith']] },
             { args: [[1, 2], ['a', 'b']], expected: [[1, 'a'], [2, 'b']] }
         ]
     },
@@ -8559,7 +8559,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["get_absolute_path"],
     tests: [{
       args: [],
-      expected: "/Users/moll/Desktop/python_app/example_file.txt"
+      expected: "/Users/noll/Desktop/python_app/example_file.txt"
     }]
   },
   1235: {

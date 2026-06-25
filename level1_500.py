@@ -1,4 +1,4 @@
-#function problems level 1 (chatGPT￼) 
+#function problems level 1 (chatGPT￼)
 
 """
 Problem 1:
@@ -7,13 +7,13 @@ Write a Python function called `add_numbers` that takes two numbers as parameter
 
 def add_number(a, b):
     return a + b
-    
+
 print(add_number(5, 5))  # Output: 10
-    
+
 def add_num(a, b):
     result = a + b
     return result
-    
+
 print(add_num(5, 5))  # Output: 10
 
 """
@@ -23,7 +23,7 @@ Write a Python function called `multiply_numbers` that takes two numbers as para
 
 def multiply_numbers(a, b):
     return a * b
-    
+
 print(multiply_numbers(5, 5))  # Output: 25
 
 """
@@ -34,17 +34,17 @@ Write a Python function called `find_max` that takes a list of numbers as input 
 def find_max(number):
     return max(number)
 
-result = [2, 67, 300]    
+result = [2, 67, 300]
 print(find_max(result))  # Output: 300
-        
+
 def find_max(numbers):
     max_number = numbers[0]
-    
+
     for num in numbers:
         if num > max_number:
             max_number = num  # Update max_number to the new maximum
     return max_number
-    
+
 numbers_list = [5, 100, 3, 8, 15]
 print("The maximum number in the list is:", find_max(numbers_list))  # Output: The maximum number in the list is: 100
 
@@ -56,16 +56,16 @@ Write a Python function called `calculate_average` that takes a list of numbers 
 def calculate_average(number):
     result = sum(number) / len(number)
     return result
-    
+
 lst = [1, 67, 888]
 print(calculate_average(lst))  # Output: 318.6666666666667
-    
+
 def cal_average(number):
     result = sum(number) / len(number)
-    
+
     return result  # Return the average
-    
-lst = [44,67,54]    
+
+lst = [44,67,54]
 print(cal_average(lst))  # Output: 55.0
 
 """
@@ -75,12 +75,12 @@ Write a Python function called `count_vowels` that takes a string as input and r
 
 def count_vowels(string):
     count = 0
-    
+
     for char in string:
         if char in "aeiou":
             count += 1  # Increment counter if vowel found
     return count
-    
+
 result = "Jonathan"
 print(count_vowels(result))  # Output: 3
 
@@ -88,15 +88,15 @@ print(count_vowels(result))  # Output: 3
 Problem 6:
 Write a Python function called `reverse_string` that takes a string as input and returns the reverse of that string.
 """
-    
+
 def reverse_string(string):
     string = string[::-1]
-    
+
     return string  # Return the reversed string
-    
+
 result = "Jonathan"
 print(reverse_string(result))  # Output: nahtanoJ
-    
+
 """
 Problem 7:
 Write a Python function called `is_even` that takes an integer as input and returns True if the number is even, and False otherwise.
@@ -104,8 +104,8 @@ Write a Python function called `is_even` that takes an integer as input and retu
 
 def is_even(number):
     return number % 2 == 0
-               
-result = 10        
+
+result = 10
 print(is_even(result))  # Output: True
 
 """
@@ -114,17 +114,17 @@ Write a Python function called `calculate_square` that takes a number as input a
 """
 
 def cal_square(number):
-    return number ** number
-       
-lst = 9
-print(cal_square(lst))  # Output: 387420489 (incorrect - should be 81)
+    return number ** 2
 
-def calculate_sqaure(number):
-    square = number * number
-    
+lst = 9
+print(cal_square(lst))  # Output: 81
+
+def calculate_square(number):
+    square = number ** 2
+
     return square  # Return the squared value
-    
-print(calculate_sqaure(6))  # Output: 36
+
+print(calculate_square(6))  # Output: 36
 
 """
 Problem 9:
@@ -133,7 +133,7 @@ Write a Python function called `greet_user` that takes a string `name` as input 
 
 def greet_user(string):
     return f"hello {string}"  # Returns formatted greeting string
-        
+
 print(greet_user("Jonathan"))  # Output: hello Jonathan
 
 """
@@ -143,11 +143,11 @@ Write a Python function called `square_list` that takes a list of numbers as inp
 
 def square_lst(numbers):
     squared_numbers = []
-    
+
     for number in numbers:
         squared_numbers.append(number ** 2)
     return squared_numbers
-    
+
 result = [2, 4, 5, 6]
 print(square_lst(result))  # Output: [4, 16, 25, 36]
 
@@ -158,7 +158,7 @@ Write a Python function called `convert_to_uppercase` that takes a string as inp
 
 def covert_uppercase(string):
     return string.upper()  # Returns uppercase version of the string
-    
+
 print(covert_uppercase("Jonathan"))  # Output: JONATHAN
 
 """
@@ -169,16 +169,16 @@ Write a Python function called `calculate_sum` that takes a list of numbers as i
 def calculate_sum(number):
     return sum(number)
 
-lst = [1, 56, 778]    
+lst = [1, 56, 778]
 print(calculate_sum(lst))  # Output: 835
 
 def cal_sum(numbers):
     count = 0
-    
+
     for number in numbers:
         count += number  # Add current number to the running total
     return count  # Return the final sum
-    
+
 lst = [1, 56, 778]
 print(cal_sum(lst))  # Output: 835
 
@@ -200,15 +200,15 @@ Write a Python function called `concatenate_strings` that takes two strings as i
 def concatenate_strings(string1, string2):
     concatenate = string1 + string2  # Join string1 and string2
     return concatenate  # Return the concatenated string
-       
+
 lst1 = "Jonathan"
-lst2 = "moll"
-print(concatenate_strings(lst1, lst2))  # Output: Jonathanmoll
+lst2 = "noll"
+print(concatenate_strings(lst1, lst2))  # Output: Jonathannoll
 
 def concatenate_string(string1, string2):
     return string1 + string2  # Returns string1 followed by string2
-    
-print(concatenate_string("Jonathan", "moll"))  # Output: Jonathanmoll
+
+print(concatenate_string("Jonathan", "noll"))  # Output: Jonathannoll
 
 """
 Problem 15:
@@ -222,11 +222,11 @@ print(find_length("Jonathan"))  # Output: 8
 
 def find_len(string):
     count = 0
-    
+
     for char in string:
         count += 1  # Increment counter for each character found
     return count
-        
+
 print(find_len("Jonathan"))  # Output: 8
 
 """
@@ -236,9 +236,9 @@ Write a Python function called `is_palindrome` that takes a string as input and 
 
 def is_palindrome(string):
     string = string.replace(" ", "").lower()  # Remove spaces, convert to lowercase
-    
+
     return string == string[::-1]  # Returns True if palindrome, False otherwise
-    
+
 # Normalized: "tom", Reversed: "mot"
 print(is_palindrome("tom"))  # Output: False
 
@@ -250,10 +250,10 @@ Write a Python function called `count_words` that takes a string as input and re
 def count_words(string):
     words = string.split()
     word_count = 0  # Initialize counter
-    
+
     for word in words:
         word_count += 1  # Count each word
-    
+
     return word_count
 
 example_string = "This is an example sentence."
@@ -267,14 +267,11 @@ example_string = "This is an example sentence."
 print(count_words(example_string))  # Output: 5
 
 def count_words(string):
-    count = 0  # Initialize counter
-    for char in string:
-        if char == char.replace(" ",""):  # This condition is always True
-            count += 1  # Increments for every character
-    return count  # Returns character count, not word count (WRONG!)
-               
-arg = "hello you cunt"
-print(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)
+    words = string.split()
+    return len(words)
+
+arg = "hello you pal"
+print(count_words(arg))  # Output: 3
 
 """
 Problem 18:
@@ -286,13 +283,13 @@ def find_min():
     int_number = []  # List to store converted integers
     for number in user:
         int_number.append(int(number))
-        
+
     min_num = sorted(int_number)[0]
     for number in int_number:
         if min_num < 0:  # BUG: This condition is wrong
             min_num = number
     print(min_num)  # Print the result
-    
+
 find_min()  # Call the function
 
 def find_min(numbers):
@@ -303,15 +300,15 @@ print(find_min(lst))  # Output: 1
 
 def find_minimum(numbers):
     min_number = numbers[0]
-    
+
     for number in numbers:
         if number < min_number:
             min_number = number  # Update min_number to the new minimum
     return min_number  # Return the minimum value found
-    
+
 min_number = [45, 6, 1]
 print(find_minimum(min_number))  # Output: 1
-        
+
 """
 Problem 19:
 Write a Python function called `is_even_index_sum` that takes a list of numbers as input and returns True if the sum of the numbers at even indices is even, and False otherwise. Assume that the first index is considered as index 0.
@@ -319,11 +316,11 @@ Write a Python function called `is_even_index_sum` that takes a list of numbers 
 
 def is_even_index_sum(numbers):
     even_index_sum = 0
-    
+
     for i in range(len(numbers)):
         if i % 2 == 0:
             even_index_sum += numbers[i]  # Add element at even index to sum
-    
+
     return even_index_sum % 2 == 0  # Returns True if sum is even, False if odd
 
 # Even indices: 0 (100), 2 (300)
@@ -338,11 +335,11 @@ Write a Python function called `double_elements` that takes a list of numbers as
 
 def double_elements(elements):
     doubled = []
-    
+
     for element in elements:
         doubled.append(element)  # Add element once
         doubled.append(element)  # Add element again (duplication, not doubling!)
-        
+
     return doubled  # Returns list with duplicated elements
 
 lst = ["tree", "shop", "car"]
@@ -350,15 +347,15 @@ print(double_elements(lst))  # Output: ['tree', 'tree', 'shop', 'shop', 'car', '
 
 def double_elements(numbers):
     doubled_numbers = []
-    
+
     for num in numbers:
         doubled_numbers.append(num * 2)  # Multiply by 2 and append
-    
+
     return doubled_numbers  # Return list with doubled values
 
 numbers_list = [1, 2, 3, 4, 5]
 print("The list with doubled elements is:", double_elements(numbers_list))  # Output: [2, 4, 6, 8, 10]
-    
+
 """
 Problem 21:
 Write a Python function called `is_all_positive` that takes a list of numbers as input and returns True if all the numbers in the list are positive (greater than zero), and False otherwise.
@@ -369,7 +366,7 @@ def is_all_positive(numbers):
         if number <= 0:
             return False  # Found a non-positive number, return False immediately
     return True  # All numbers passed the positive check
-              
+
 lst = [0, 6, 8]
 print(is_all_positive(lst))  # Output: False
 
@@ -381,36 +378,36 @@ Write a Python function called `find_average` that takes a list of numbers as in
 def find_average(numbers):
     total_average = sum(numbers) / len(numbers)
     return total_average
-    
+
 lst = [4, 67, 77,]
 print(find_average(lst))  # Output: 49.333333333333336
 
 def find_average_lst(numbers):
     total = 0
     count = 0  # Initialize counter
-    
+
     for number in numbers:
         total += number  # Add to running total
         count += 1  # Increment counter
-        
+
     if count > 0:
         average = total / count  # Calculate average
     return average  # BUG: 'average' might not be defined if count == 0
-        
+
 lst = [1, 56, 66]
 print(find_average_lst(lst))  # Output: 41.0
 
 def find_average_lst(numbers):
     total = 0
     count = 0  # Initialize counter
-    
+
     for number in numbers:
         total += number  # Add to running total
         count += 1  # Increment counter
-        
+
     average = total / count  # Could cause ZeroDivisionError if list is empty
     return average  # Return the average
-        
+
 lst = [1, 56, 66]
 print(find_average_lst(lst))  # Output: 41.0
 
@@ -425,7 +422,7 @@ def contains_negative(numbers):
             return True  # Return True immediately if found
     return False  # Return False if no negative numbers found
 
-lst = [5, -9]    
+lst = [5, -9]
 print(contains_negative(lst))  # Output: True (correct for this case, but buggy logic)
 
 """
@@ -435,17 +432,17 @@ Write a Python function called `find_last_element` that takes a list if numbers 
 
 def find_last_element(string):
     return string[-1]
-    
+
 lst = [1, 45, 66]
 print(find_last_element(lst))  # Output: 66
 
 def find_element(elements):
     last = elements[-1]
-    
+
     for element in elements:
         if element == last:
             return last  # Return the last element
-    
+
 lst = [1,5]
 print(find_element(lst))  # Output: 5
 
@@ -456,38 +453,38 @@ Write a Python function called `multiply_elements` that takes a list of numbers 
 
 def multiply_elements(numbers):
     count = 1
-    
+
     for i in range(len(numbers)):
         count *= numbers[i]  # Multiply current element with running product
     return count  # Return the final product
-        
+
 arg = [2, 4, 2]
 print(multiply_elements(arg))  # Output: 16
 
 def multiply_elements(numbers):
     count = 1
-    
+
     for number in numbers:
         count *= number  # Multiply each number with running product
     return count  # Return the final product
-    
+
 lst = [100, 200, 900]
 print(multiply_elements(lst))  # Output: 18000000
 
 def multiply_elements(numbers):
     count = 1  # Initialize to 1
-    
+
     for number in numbers:
         count *= number
-    
+
     for number in numbers:
         count *= number
-    
+
     return count  # Returns squared product (INCORRECT!)
 
 arg = [2, 4, 2]
 print(multiply_elements(arg))  # Output: 256 (INCORRECT - should be 16)
-        
+
 """
 Problem 26:
 Write a Python function called `has_duplicates` that takes a list as input and returns True if the list contains any duplicate elements, and False otherwise.
@@ -496,7 +493,7 @@ Write a Python function called `has_duplicates` that takes a list as input and r
 def has_duplicates(lst):
     unique = set()  # Set to track elements we've seen
     common = []
-    
+
     for word in lst:
         if word in unique:
             common.append(word)  # Add to common list (optional)
@@ -504,7 +501,7 @@ def has_duplicates(lst):
         else:
             unique.add(word)  # Add to set of seen elements
     return False  # No duplicates found, return False
-                
+
 lst = ["it", "was", "itt"]
 print(has_duplicates(lst))  # Output: False
 
@@ -515,10 +512,10 @@ def has_duplicates():
         if word in unique:
             print("True")
             return True
-            
+
         unique.add(word)
-        
-    print("False")    
+
+    print("False")
     return False
 has_duplicates()
 
@@ -530,14 +527,14 @@ def has_duplicates():
         if word in unique:
             return True
         unique.add(word)
-    
-    return False 
+
+    return False
 
 print(has_duplicates())
 
 def has_duplicates(elements):
     duplicate = set()
-    
+
     for element in elements:
         if element in duplicate:
             return True
@@ -556,20 +553,20 @@ Write a Python function called `count_occurrences` that takes a list and an elem
 def count_occurrences(elements, target):
     count = 0  # Initialize counter
     word = ""  # Variable to store the target word
-    
+
     for element in elements:
         if element == target:
             word = element  # Store the matching element
             count += 1  # Increment counter
     return f"The word {word} occures {count} times"
-               
+
 elements = ["tree", "house", "tree", "car"]
 target = "tree"
 print(count_occurrences(elements, target))  # Output: The word tree occures 2 times
 
 def count_occurrences(elements, target):
     count = 0  # Initialize counter
-    
+
     for element in elements:
         if element == target:
             count += 1  # Increment for each match
@@ -579,7 +576,7 @@ list_elements = [1, 2, 3, 4, 5, 2, 2, 3]
 target_element = 2
 
 print(f"The element {target_element} appears {count_occurrences(list_elements, target_element)} times in the list.")  # Output: The element 2 appears 3 times in the list.
-    
+
 """
 Problem 28:
 Write a Python function called `remove_vowels` that takes a string as input and returns a new string with all the vowels (a, e, i, o, u) removed.
@@ -588,7 +585,7 @@ Write a Python function called `remove_vowels` that takes a string as input and 
 def remove_vowels(string):
     vowels = "aeiouAEIOU"  # Define vowels (both cases)
     result = ""
-    
+
     for char in string:
         if char not in vowels:
             result += char  # Append non-vowel character
@@ -602,12 +599,12 @@ print(remove_vowels(lst))  # Output: Jnthn
 def remove_vowels(string):
     vowels = "aeiou"  # Only lowercase vowels (missing uppercase)
     vowels_removed = []  # List to collect non-vowel characters
-    
+
     for char in string:
         if char not in vowels:
             vowels_removed.append(char)  # Add to list
     return "".join(vowels_removed)  # Join list into string
-            
+
 lst = "Jonathan"
 print(remove_vowels(lst))  # Output: Jnthn
 
@@ -617,13 +614,13 @@ Write a Python function called `capitalize_words` that takes a string as input a
 """
 
 def capitalize_words(sentence):
-    words = sentence.split()  
+    words = sentence.split()
     capitalized_words = []  # List to store capitalized words
-    
+
     for word in words:
-        capitalized_words.append(word.capitalize())  
-    
-    return ' '.join(capitalized_words) 
+        capitalized_words.append(word.capitalize())
+
+    return ' '.join(capitalized_words)
 
 input_sentence = "hello world! this is a test."
 print("Capitalized sentence:", capitalize_words(input_sentence))  # Hello World! This Is A Test.
@@ -635,27 +632,27 @@ Write a Python function called remove_spaces that takes a string as input and re
 
 def remove_spaces(sentence):
     return sentence.replace(" ", "")  # Returns string with spaces removed
-    
-arg = "suck me duck Jonathan"
-print(remove_spaces(arg))  # Output: suckmeduckJonathan
+
+arg = "remove spaces sample Jonathan"
+print(remove_spaces(arg))  # Output: removespacessampleJonathan
 
 def remove_space(string):
     space_removed = string.replace(" ", "")
     return space_removed  # Return string without spaces
-    
-lst = "what just happened" 
+
+lst = "what just happened"
 print(remove_space(lst))  # Output: whatjusthappened
 
 def remove_spaces(sentence):
     split_word = sentence.split()
     result = []  # List to store words
-    
+
     for word in split_word:
         result.append(word)  # Add word to list
     return "".join(result)  # Join words with no separator
-    
-arg = "suck me duck Jonathan"
-print(remove_spaces(arg))  # Output: suckmeduckJonathan
+
+arg = "remove spaces sample Jonathan"
+print(remove_spaces(arg))  # Output: removespacessampleJonathan
 
 """
 Problem 31:
@@ -664,20 +661,20 @@ Write a Python function called get_initials that takes a full name (first and la
 
 def get_initials(full_name):
     parts = full_name.split()
-    
+
     initials = []
-    
+
     for part in parts:
         initials.append(part[0].upper())  # Add uppercase first letter to list
-        
-    return '.'.join(initials) 
 
-lst = "Jonathan moll"
-print(get_initials(lst))  # Output: "J.M."
+    return '.'.join(initials)
+
+lst = "Jonathan noll"
+print(get_initials(lst))  # Output: "J.N."
 
 def get_initials(fullname):
     string = fullname.split()
-    
+
     initials = f"{string[0][0].upper()}.{string[1][0].upper()}"
     return initials
 
@@ -691,21 +688,21 @@ Write a Python function called reverse_words that takes a string as input and re
 def reverse_word(string):
     seperate = string.split()
     return seperate[::-1]
-    
+
 lst = "hello world"
 print(reverse_word(lst))
 
 def reverse_words(words):
     words = words.split()
-    
+
     reversed_words = words[::-1]
-    
+
     reversed_sentence = " ".join(reversed_words)
-    
+
     return reversed_sentence
 
-lst = "Jonathan moll"
-print(reverse_words(lst))  # Output: moll Jonathan 
+lst = "Jonathan noll"
+print(reverse_words(lst))  # Output: noll Jonathan
 
 """
 Problem 33:
@@ -720,7 +717,7 @@ print("List with duplicates removed:", remove_duplicates(input_list))  # Output:
 
 def remove_duplicates(input_list):
     unique_elements = []  # List to store unique elements in order
-    
+
     for element in input_list:
         if element not in unique_elements:
             unique_elements.append(element)  # Add first occurrence
@@ -728,7 +725,7 @@ def remove_duplicates(input_list):
 
 input_list = [1, 2, 3, 1, 4, 2, 5]
 print("List with duplicates removed:", remove_duplicates(input_list))  # Output: [1, 2, 3, 4, 5]
-    
+
 """
 Problem 34:
 Write a Python function called find_longest_word that takes a string of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.
@@ -736,20 +733,20 @@ Write a Python function called find_longest_word that takes a string of words as
 
 def main(lst):
     return max(lst, key=len)
-    
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)  # Returns: "mountain"
 
 def main(lst):
     largest_len = 0  # Track the length of the longest word found
     largest_word = ""  # Track the longest word itself
-    
+
     for word in lst:
         if len(word) > largest_len:
             largest_len = len(word)  # Update the length
             largest_word = word  # Update the word
     return largest_word  # Return the longest word
-        
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)  # Returns: "mountain"
 
@@ -765,7 +762,7 @@ def find_longest_word(words):
     split_word = words.split()  # e.g., ["why", "dont", "Jonathanthebest", "finds", "top"]
     count = 0  # Track the length of the longest word
     longest_word = ""  # Track the longest word itself
-    
+
     for word in split_word:
         if len(word) > count:
             count = len(word)  # Update length
@@ -783,19 +780,19 @@ Write a Python function called find_vowels that takes a string as input and retu
 def find_vowels(string):
     vowels = "aeiou"  # Only lowercase vowels (missing uppercase)
     return_vowels = []  # List to store found vowels
-    
+
     for char in string:
         if char in vowels:
             return_vowels += char  # Add vowel to list
     return return_vowels  # Return list of vowels found
-            
+
 lst = "Jonathan"
 print(find_vowels(lst))  # Output: ['o', 'a', 'a']
 
 def find_vowels(string):
     vowels = "aeiouAEIOU"  # Both lowercase and uppercase vowels
     vowel_list = []  # List to store found vowels
-    
+
     for char in string:
         if char in vowels:
             vowel_list.append(char)  # Add vowel to list
@@ -811,7 +808,7 @@ Write a Python function called `reverse_number` that takes an integer as input a
 
 def reverse_number(number):
     return int(str(number)[::-1])  # Returns reversed number
-    
+
 number = 123
 print(reverse_number(number))  # Output: 321
 
@@ -822,13 +819,13 @@ Write a Python function called remove_duplicates that takes a string as input an
 
 def remove_duplicate(strings):
     return list(set(strings))  # Returns list, not string, and order may be lost
-       
+
 lst = "Jonathan"
 print(remove_duplicate(lst))  # Output: ['J', 'o', 'n', 'a', 't', 'h'] (order may vary)
 
 def remove_duplicates(string):
     unique_chars = []  # List to store unique characters in order
-    
+
     for char in string:
         if char not in unique_chars:
             unique_chars.append(char)  # Add first occurrence
@@ -839,12 +836,12 @@ print(remove_duplicates(input_string))  # Output: Jonath
 
 def remove_dupicates(numbers):
     duplicates = []  # List to store unique elements (note: variable name is misleading)
-    
+
     for number in numbers:
         if number not in duplicates:
             duplicates.append(number)  # Add first occurrence
     return duplicates  # Return list with duplicates removed, order preserved
-                 
+
 lst = [3, 2, 2]
 print(remove_dupicates(lst))  # Output: [3, 2]
 
@@ -856,25 +853,25 @@ Write a Python function called `sum_of_list` that takes a list of numbers as inp
 def sum_of_list():
     user = input("type numbers: ").split()  # e.g., "1 2 3" → ["1", "2", "3"]
     int_number = []  # List to store converted integers
-    
+
     for number in user:
         int_number.append(int(number))  # Convert "1" → 1, etc.
-    
+
     count = 0
     for number in int_number:
         count += number  # Add current number to running total
     print(count)  # Print the result
-    
+
 sum_of_list()  # Call the function
 
 """
 Problem 39:
 Write a Python function called sum_of_list that takes a list of numbers as input and returns the sum of all the numbers in the list.
-"""        
+"""
 
 def sum_of_list(numbers):
     count = 0
-    
+
     for number in numbers:
         count += number  # Add current number to running total
     return count  # Return the final sum
@@ -890,14 +887,14 @@ Write a Python function called find_min_max that takes a list of numbers as inpu
 def find_min_max(numbers):
     min_number = numbers[0]  # Start with first element as minimum
     max_number = numbers[0]  # Start with first element as maximum
-    
+
     for number in numbers:
         if number < min_number:
             min_number = number  # Found a new minimum
         if number > max_number:
             max_number = number  # Found a new maximum
     return min_number, max_number  # Returns (min, max)
-       
+
 # Minimum: 2, Maximum: 222
 lst = [10, 90, 45, 55, 222, 2]
 print(find_min_max(lst))  # Output: (2, 222)
@@ -911,22 +908,22 @@ Did you complete the exercise? (y/n)
 def count_occurrences():
     user = input("type lst: ").split()  # e.g., ["Tom", "Jerry", "Tom"]
     count = 0  # Initialize counter
-    
+
     for word in user:
         if word == "Tom":  # Only counts "Tom", not a general element
             count += 1  # Increment counter
     return count  # Return count
-            
+
 count_occurrences()  # Prompts user for input
 
 """
 Problem 42:
-Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`." 
+Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`."
 """
 
 def table(x):
     result = ""
-    
+
     for i in range(1, 11):  # Should be range(11) to include 0
         result += f"{i} x {x} = {i*x}\n"  # e.g., "1 x 6 = 6\n"
     return result  # Return the complete table as a string
@@ -937,12 +934,12 @@ print(table(6))  # Prints the multiplication table
 def table(x):
     for i in range(1, 11):  # Should be range(11) to include 0
         print(f"{i} x {x} = {i*x}")  # Directly prints each line
-        
+
 table(6)  # Calls function and prints table
 
 def table(x):
     result = []  # List to store formatted lines
-    
+
     for number in range(11):  # range(11) = 0, 1, 2, ..., 10
         total = number * x  # Calculate product
         result.append(f"{x} x {number} = {total}")  # e.g., "9 x 0 = 0"
@@ -963,13 +960,13 @@ Write a Python function called square_elements that takes a list of numbers as i
 
 def square_elements(numbers):
     squared_list = []
-    
+
     for number in numbers:
-        squared_list.append(number ** number)
-    return squared_list  # Returns incorrect results
-               
+        squared_list.append(number ** 2)
+    return squared_list  # Returns squared values
+
 lst = [2, 3, 4, 5, 6]
-print(square_elements(lst))  # Output: [4, 27, 256, 3125, 46656] (INCORRECT!)
+print(square_elements(lst))  # Output: [4, 9, 16, 25, 36]
 
 """
 Problem 44:
@@ -978,27 +975,27 @@ Write a Python function called count_uppercase that takes a string as input and 
 
 def count_uppercase(string):
     count = 0  # Initialize counter
-    
+
     for char in string:
         if char.isupper():
             count += 1  # Increment counter for uppercase letter
     return count
-                   
-lst = "Jonathan Moll"
+
+lst = "Jonathan Noll"
 print(count_uppercase(lst))  # Output: 2
 
 def count_uppercase(string):
     count = 0  # Initialize counter
     string = string.replace(" ", "")
-    
+
     for char in string:
         if char == char.upper():
             count += 1  # Increments for uppercase, numbers, and symbols
     return count  # May return incorrect count if string has numbers/symbols
-    
+
 string = "Jonah Is Tbe Best"
 print(count_uppercase(string))  # Output: 4
-    
+
 """
 Problem 45:
 Write a Python function called remove_spaces that takes a string as input and returns the string with all spaces removed.
@@ -1006,18 +1003,18 @@ Write a Python function called remove_spaces that takes a string as input and re
 
 def remove_spaces(string):
     return string.replace(" ", "")  # Returns string with spaces removed
-    
+
 lst = "what happening boss man"
 print(remove_spaces(lst))  # Output: whathappeningbossman
-    
+
 def remove_spaces(string):
     string_removed = []  # List to collect non-space characters
-    
+
     for char in string:
         if char != " ":  # Check if character is not a space
             string_removed.append(char)  # Add non-space character to list
     return "".join(string_removed)  # Return string without spaces
-                
+
 lst = "what happening boss man"
 print(remove_spaces(lst))  # Output: whathappeningbossman
 
@@ -1029,9 +1026,9 @@ Write a Python function called merge_lists that takes two sorted lists as input 
 def merge_lists():
     lst1 = sorted(input("Type the first sorted list: ").split())  # Sorts again
     lst2 = sorted(input("Type the second sorted list: ").split())  # Sorts again
-    
+
     merged_list = sorted(lst1 + lst2)  # Concatenate and sort
-    
+
     print(merged_list)  # Print the merged and sorted list
 
 merge_lists()  # Call the function
@@ -1061,7 +1058,7 @@ Write a Python function called sum_even_indices that takes a list of numbers as 
 
 def sum_even_indices(nums):
     total = 0
-    
+
     for i in range(len(nums)):
         if i % 2 == 0:  # i % 2 == 0 means index is even
             total += nums[i]  # Add element at even index to sum
@@ -1091,7 +1088,7 @@ def remove_duplicates(lst):
             common.append(word_lower)
             unique.add(word_lower)
     return common
-            
+
 lst = ["not", "not", "hot", "hot"]
 print(remove_duplicates(lst))
 
@@ -1102,7 +1099,7 @@ def remove_duplicates(lst):
         if word_lower not in unique:
             unique.add(word_lower)
     return unique
-            
+
 lst = ["not", "not", "hot", "hot", "cold"]
 print(remove_duplicates(lst))
 
@@ -1163,7 +1160,7 @@ def factorial(n):
             result *= i  # Multiply: result = n × (n-1) × ... × 2 × 1
         return result  # Return the factorial
 
-print(factorial(5))  # Output: 120 
+print(factorial(5))  # Output: 120
 
 """
 Problem 52:
@@ -1173,10 +1170,10 @@ Write a Python function called is_anagram that takes two strings as input and re
 def main():
     string1 = input("type string: ").lower()  # e.g., "Listen" → "listen"
     string2 = input("type string: ").lower()  # e.g., "Silent" → "silent"
-    
+
     sorted1 = sorted(string1)
     sorted2 = sorted(string2)
-    
+
     if sorted1 == sorted2:
         return True  # Strings are anagrams
     return False  # Strings are not anagrams
@@ -1186,7 +1183,7 @@ main()
 def is_anagram(str1, str2):
     str1 = str1.lower()  # "Listen" → "listen"
     str2 = str2.lower()  # "Silent" → "silent"
-    
+
     return sorted(str1) == sorted(str2)  # Returns True if anagrams, False otherwise
 
 print(is_anagram("listen", "silent"))  # Output: True
@@ -1198,11 +1195,11 @@ print(is_anagram("Triangle", "Integral"))  # Output: True
 def is_anagram(lst1, lst2):
     sorted_lst1 = sorted(lst1)  # "qwer" → ['e', 'q', 'r', 'w']
     sorted_lst2 = sorted(lst2)  # "rewq" → ['e', 'q', 'r', 'w']
-    
+
     if sorted_lst1 == sorted_lst2:
         return True  # Strings are anagrams
     return False  # Strings are not anagrams
-           
+
 lst1 = "qwer"
 lst2 = "rewq"
 print(is_anagram(lst1, lst2))  # Output: True
@@ -1216,7 +1213,7 @@ def count_words(s):
     s = s.lower()
     words = s.split()  # ["this", "is", "a", "test", "this", "test", ...]
     word_count = {}  # Dictionary to store word frequencies
-    
+
     for word in words:
         if word in word_count:
             word_count[word] += 1  # Increment count if word exists
@@ -1259,9 +1256,9 @@ def area_rectangle():
     length = float(input("type length: "))  # e.g., 5.0
     width = float(input("type width: "))  # e.g., 3.0
     area = length * width  # e.g., 5.0 × 3.0 = 15.0
-    
+
     print(area)  # Prints the area
-    
+
 area_rectangle()  # Call the function
 
 """
@@ -1271,12 +1268,12 @@ Write a Python program to check if a given number is even or odd. Prompt the use
 
 def even_odd():
     user = int(input("type number: "))  # e.g., 4 or 7
-    
+
     if user % 2 == 0:  # If remainder is 0, number is even
         print("Number is even")  # Display even message
     else:  # If remainder is not 0 (i.e., 1), number is odd
         print("Number is odd")  # Display odd message
-   
+
 even_odd()  # Call the function
 
 """
@@ -1287,11 +1284,11 @@ Write a Python program to print the Fibonacci series up to a given number. Promp
 def fibonacci_series():
     limit = int(input("Enter the limit: "))  # e.g., 10
     a, b = 0, 1  # a=0 (first), b=1 (second)
-    
+
     while a <= limit:  # Loop until a exceeds limit
         print(a, end=' ')  # Prints: 0, then 1, then 1, then 2, etc.
         a, b = b, a + b  # Tuple assignment: a=1,b=1 → a=1,b=2 → a=2,b=3, etc.
-        
+
 fibonacci_series()  # Call the function
 
 """
@@ -1302,17 +1299,17 @@ Write a Python program to find the maximum of three numbers. Prompt the user to 
 def max_number():
     user = input("type 3 numbers: ").split()  # e.g., "10 20 15" → ["10", "20", "15"]
     int_number = []  # List to store converted integers
-    
+
     for number in user:
         int_number.append(int(number))  # ["10", "20", "15"] → [10, 20, 15]
-    
+
     max_num = int_number[0]  # Assume first number is maximum (10)
-    
+
     for number in int_number:
         if number > max_num:  # 20 > 10, so max_num = 20; 15 > 20? No
             max_num = number  # Update maximum
     print(max_num)  # Print the maximum number (20)
-           
+
 max_number()  # Call the function
 
 """
@@ -1323,14 +1320,14 @@ Write a Python program to reverse a string. Prompt the user to enter a string.
 def reverse_string():
     user = input("type string: ")  # e.g., "hello"
     user = user[::-1]  # "hello" → "olleh"
-    
+
     print(user)  # Prints: olleh
-    
+
 reverse_string()  # Call the function
 
 def reverse_string(string):
     return string[::-1]  # Returns reversed string
-            
+
 lst = "Jonathan"
 print(reverse_string(lst))  # Output: nahtanoJ
 
@@ -1341,9 +1338,9 @@ Write a Python program to check if a given string is a palindrome. Prompt the us
 
 def is_palindrome():
     user = input("type word: ").lower().replace(" ", "")  # "Race Car" → "racecar"
-    
+
     return user == user[::-1]  # "racecar" == "racecar" → True
-        
+
 print(is_palindrome())  # Call function and print result
 
 """
@@ -1355,12 +1352,12 @@ def count_vowels():
     user = input("type string: ").lower()  # "Hello" → "hello"
     vowels = "aeiou"  # String containing all vowels
     count = 0
-    
+
     for char in user:
         if char in vowels:  # If char is 'a', 'e', 'i', 'o', or 'u'
             count += 1  # Increment counter
     print(count)  # Display the total count
-    
+
 count_vowels()  # Call the function
 
 """
@@ -1372,18 +1369,18 @@ def factorial():
     result = 1  # Initialize result
     for i in range(1, 6):
         result *= i  # Multiply: 1 × 2 × 3 × 4 × 5 = 120
-        
+
     print(f"{result}")  # Always prints 120
 
 factorial()  # Call the function
- 
+
 def factorial():
     number = int(input("Enter a number: "))  # e.g., 5
     result = 1
-    
+
     for i in range(1, number + 1):  # range(1, 6) = 1, 2, 3, 4, 5
         result *= i  # Multiply: 1 × 2 × 3 × 4 × 5 = 120
-        
+
     print(f"The factorial of {number} is {result}")  # Prints: The factorial of 5 is 120
 
 factorial()  # Call the function
@@ -1396,12 +1393,12 @@ Write a Python program to calculate the sum of all numbers from 1 to a given num
 def sum_of_all_numbers():
     user = input("type numbers: ").split()  # "1 2 3 4 5" → ["1", "2", "3", "4", "5"]
     int_user = []  # List to store converted integers
-    
+
     for number in user:
         int_user.append(int(number))  # ["1", "2", ...] → [1, 2, 3, 4, 5]
-        
+
     count = 0
-    
+
     for number in int_user:
         count += number  # Add each number: 1+2+3+4+5 = 15
     print(count)  # Display the sum
@@ -1416,13 +1413,13 @@ Write a Python program to find the largest element in a list. Prompt the user to
 def find_largest():
     user = input("type number: ").split()  # "2 56 75 4566 3" → ["2", "56", ...]
     int_number = []  # List to store converted integers
-    
+
     for number in user:
         int_number.append(int(number))  # [2, 56, 75, 4566, 3]
-    
+
     sort = sorted(int_number)  # [2, 3, 56, 75, 4566]
     largest = sort[-1]  # 4566
-    
+
     print(largest)  # Display the largest number
 
 find_largest()  # Call the function
@@ -1432,28 +1429,28 @@ def find_largest():
     int_number = []
     for number in user:
         int_number.append(int(number))
-    
+
     sort = sorted(int_number, reverse=True)  # [4566, 75, 56, 3, 2]
     largest = sort[0]  # 4566
-    
+
     print(largest)  # Display the largest number
-    
+
 find_largest()  # Call the function
 
 def largest_element(numbers):
     return max(numbers)
-                
+
 numbers = [2, 56, 75, 4566, 3]
 print(largest_element(numbers))  # Output: 4566
 
 def largest_element(numbers):
     largest = numbers[0]  # Assume first is largest
-    
+
     for number in numbers:
         if number > largest:  # 56 > 2, so largest = 56; 75 > 56, so largest = 75, etc.
             largest = number  # Update maximum
     return largest  # Return the largest number
-                
+
 numbers = [2, 56, 75, 4566, 3]
 print(largest_element(numbers))  # Output: 4566
 
@@ -1464,31 +1461,31 @@ Write a Python program to find the largest element in a list (do not use numbers
 
 def main(lst):
     return max(lst, key=len)
-    
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)  # Returns: "mountain"
 
 def largest_elememt(lst):
     count = 0  # Track the length of the longest string found
     largest = ""  # Track the longest string itself
-    
+
     for word in lst:
         if len(word) > count:  # Compare lengths
             count = len(word)  # Update the length
             largest = word  # Update the word
     return largest  # Return the longest string
-            
+
 lst = ["house", "counter", "if"]
 print(largest_elememt(lst))  # Output: counter
 
 def largest_elememt(lst):
     lst = sorted(lst, key=len)  # ["if", "house", "counter"]
-     
+
     return lst[-1]  # Returns "counter"
-    
+
 lst = ["house", "counter", "if"]
 print(largest_elememt(lst))  # Output: counter
-    
+
 """
 Problem 66:
 Write a Python program to remove duplicates from a list. Prompt the user to enter a list of elements.
@@ -1496,13 +1493,13 @@ Write a Python program to remove duplicates from a list. Prompt the user to ente
 
 def remove_duplicates(elements):
     duplicates = []  # List to store unique elements (misleading variable name)
-    
+
     for element in elements:
         if element in duplicates:
             return duplicates  # Returns partial list with first duplicate found
         duplicates.append(element)  # Add first occurrence
     return None  # Returns None if no duplicates found
-            
+
 lst = ["tree", "kiss", "tree"]
 print(remove_duplicates(lst))  # Output: ['tree'] (INCORRECT!)
 
@@ -1513,7 +1510,7 @@ Write a Python program to check if a given year is a leap year. Prompt the user 
 
 def is_leap_year():
     year = int(input("Enter a year: "))  # e.g., 2000
-    
+
     # Check leap year conditions:
     if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
         return True  # Return True for leap year
@@ -1534,7 +1531,7 @@ def length_string():
     for char in user:
         count += 1  # Increment counter for each character
     print(count)  # Display the total count
-             
+
 length_string()  # Call the function
 
 """
@@ -1546,7 +1543,7 @@ def palindrome(string):
     if string == string[::-1]:  # "juju" == "ujuj"? No
         return True  # Return True if palindrome
     return False  # Return False if not palindrome
-       
+
 word = "juju"
 print(palindrome(word))  # Output: False
 
@@ -1558,11 +1555,11 @@ Write a Python program to count the occurrences of each word in a given sentence
 def count_each_word(sentence):
     count = 0  # Counter for total words (WRONG - should count per word)
     split_word = sentence.split()  # "Jonathan is the best" → ["Jonathan", "is", "the", "best"]
-    
+
     for word in split_word:
         count += 1  # Increments for each word: 1, 2, 3, 4
     return count  # Returns 4 (total words, not per-word occurrences)
-       
+
 lst = "Jonathan is the best"
 print(count_each_word(lst))  # Output: 4 (WRONG - should be a dictionary!)
 
@@ -1575,39 +1572,39 @@ def sec_lar():
     numbers = list(map(int, input("type: ").split()))  # "56 700 1 57 78 787 5 88" → [56, 700, ...]
     unique_numbers = list(set(numbers))  # Removes duplicates
     unique_numbers.sort()  # Sorts the unique numbers
-    
+
     print(unique_numbers[-2])  # Prints the second largest
 
 sec_lar()  # Call the function
 
 def second_largest_number(numbers):
     sorted_numbers = sorted(numbers, reverse=True)  # [787, 700, 88, 78, 57, 56, 5, 1]
-    
+
     if len(sorted_numbers) > 1:
         return sorted_numbers[1]  # Return second element (700)
     else:
         return None  # Return None if list too short
-        
+
 arg = [56, 700, 1, 57, 78, 787, 5, 88]
 print(second_largest_number(arg))  # Output: 700
 
 def second_largest_number(numbers):
     sorted_numbers = sorted(numbers, reverse=True)  # Sort descending
-    
+
     for number in sorted_numbers:
         return sorted_numbers[1]  # Always returns second element immediately
     return None  # Unreachable if list is non-empty
-        
+
 arg = [56, 700, 1, 57, 78, 787, 5, 88]
 print(second_largest_number(arg))  # Output: 700
 
 def second_largest_number(numbers):
     sorted_numbers = sorted(numbers)  # [1, 5, 56, 57, 78, 88, 700, 787]
-    
+
     for number in sorted_numbers:
         return sorted_numbers[-2]  # Returns 700
     return None  # Unreachable
-        
+
 arg = [56, 700, 1, 57, 78, 787, 5, 88]
 print(second_largest_number(arg))  # Output: 700
 
@@ -1621,15 +1618,15 @@ import re
 def is_valid_email(email):
     """
     Checks if the given email address is valid.
-    
+
     Args:
         email (str): The email address to be validated.
-    
+
     Returns:
         bool: True if the email address is valid, False otherwise.
     """
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    
+
     if re.match(pattern, email):  # re.match checks from start of string
         return True  # Email matches pattern
     else:
@@ -1637,7 +1634,7 @@ def is_valid_email(email):
 
 def main():
     email = input("Enter an email address: ")  # e.g., "user@example.com"
-    
+
     if is_valid_email(email):
         print("Email address is valid.")  # Display success message
     else:
@@ -1647,22 +1644,22 @@ main()  # Call the main function
 
 def is_valid_email():
     email = input("Enter an email address: ")
-    
+
     if '@' not in email or '.' not in email:
         return False  # Missing required symbols
-    
+
     local, domain = email.split('@', 1)  # Split at first @ only
-    
+
     if not local:
         return False  # Local part is empty
-    
+
     if '.' not in domain or domain.startswith('.') or domain.endswith('.'):
         return False  # Domain must have dot, not start/end with dot
-    
+
     domain_parts = domain.split('.')  # Split domain by dots
     if any(not part for part in domain_parts):  # Check if any part is empty
         return False  # Empty domain part found
-    
+
     return True  # All validations passed
 
 print(is_valid_email())  # Call function and print result
@@ -1684,7 +1681,7 @@ def factorial(n):
 def main():
     try:
         number = int(input("Enter a number: "))  # e.g., 5
-        
+
         if number < 0:
             print("Factorial is not defined for negative numbers.")  # Error message
         else:
@@ -1702,10 +1699,10 @@ Write a Python program to check if two strings are anagrams of each other. Promp
 def are_anagrams():
     str1 = input("Enter the first string: ")  # e.g., "listen"
     str2 = input("Enter the second string: ")  # e.g., "silent"
-    
+
     str1 = str1.replace(" ", "").lower()  # "Listen" → "listen"
     str2 = str2.replace(" ", "").lower()  # "Silent" → "silent"
-    
+
     if sorted(str1) == sorted(str2):  # sorted("listen") == sorted("silent") → True
         print(f"'{str1}' and '{str2}' are anagrams.")  # Display success message
     else:
@@ -1715,11 +1712,11 @@ are_anagrams()  # Call the function
 
 def pal():
     user = input("type: ")  # Get string from user
-  
+
     if user == user[::-1]:  # Compare with reversed string
         return True  # Is palindrome
     return False  # Not palindrome
- 
+
 print(pal())  # Call function and print result
 
 """
@@ -1730,13 +1727,13 @@ Write a Python program to check if a number is a prime number. Prompt the user t
 def is_prime(n):
     if n <= 1:
         return False  # 1 and negative numbers are not prime
-    
+
     if n <= 3:
         return True  # 2 and 3 are prime numbers
-    
+
     if n % 2 == 0 or n % 3 == 0:
         return False  # Even numbers (except 2) and multiples of 3 are not prime
-    
+
     i = 5  # Start from 5 (first number of form 6k-1)
     while i * i <= n:  # Check up to sqrt(n)
         if n % i == 0 or n % (i + 2) == 0:
@@ -1747,7 +1744,7 @@ def is_prime(n):
 def main():
     try:
         number = int(input("Enter a number: "))  # e.g., 17
-        
+
         if is_prime(number):
             print(f"{number} is a prime number.")  # Display success message
         else:
@@ -1764,13 +1761,13 @@ Write a Python program to find the common elements between two lists. Prompt the
 
 def common_elements(lst1, lst2):
     result = []  # List to store common elements
-    
+
     for i in lst1:
         for j in lst2:
             if i == j and i not in result:  # Check for match and uniqueness
                 result.append(i)  # Add to result
     return result  # Return list of common elements
-    
+
 lst1 = ["tree", "house", "car", "rose"]
 lst2 = ["house", "street", "sky", "tree"]
 print(common_elements(lst1, lst2))  # Output: ['tree', 'house']
@@ -1781,22 +1778,22 @@ def common_elements(lst1, lst2):
     elements_commmon = set1.intersection(set2)  # {"tree", "house"}
 
     return elements_commmon  # Return set of common elements
-        
+
 arg1 = ["tree", "grass", "flower"]
 arg2 = ["grass", "flower", "river"]
 print(common_elements(arg1, arg2))  # Output: {'grass', 'flower'}
-    
+
 def find_common_elements():
     input1 = input("Enter elements of the first list, separated by spaces: ")
     list1 = input1.split()  # Split into list of strings
-    
+
     input2 = input("Enter elements of the second list, separated by spaces: ")
     list2 = input2.split()  # Split into list of strings
-    
+
     set1 = set(list1)  # Convert to set
     set2 = set(list2)  # Convert to set
     common_elements = set1.intersection(set2)  # Find common elements
-    
+
     if common_elements:
         print(f"Common elements between the two lists: {list(common_elements)}")  # Show common elements
     else:
@@ -1812,12 +1809,12 @@ Write a Python function called `count_uppercase` that takes a string as input an
 def uppercase(string):
     count = 0
     string = string.replace(" ", "")  # "Hello World" → "HelloWorld"
-    
+
     for word in string:  # 'word' is actually a character (misleading variable name)
         if word == word.upper():  # 'H' == 'H'? Yes; 'e' == 'E'? No
             count += 1  # Increment counter
     return count  # Return total count
-        
+
 sentence = "whAtT healin Gmanbe LLike"
 print(uppercase(sentence))  # Output: count of uppercase letters
 
@@ -1828,9 +1825,9 @@ Write a Python program to convert a decimal number to binary. Prompt the user to
 
 def decimal_to_binary():
     decimal_number = int(input("Enter a decimal number: "))  # e.g., 5
-    
+
     binary_number = bin(decimal_number)[2:]  # "0b101"[2:] → "101"
-    
+
     print(f"The binary representation of {decimal_number} is {binary_number}")  # Prints: "The binary representation of 5 is 101"
 
 decimal_to_binary()  # Call the function
@@ -1844,18 +1841,18 @@ def main():
     result = []  # List to store converted integers
     user = input("enter list of numbers: ")  # e.g., "56 23 677 6 1"
     user = user.split()  # Split into list: ["56", "23", "677", "6", "1"]
-    
+
     for num in user:
         result.append(int(num))  # [56, 23, 677, 6, 1]
     return sorted(result)  # Return sorted list: [1, 6, 23, 56, 677]
-    
+
 main()  # Call function (return value not printed)
 
 def ascending_order_numbers(numbers):
     sort_numbers = sorted(numbers)  # [56, 23, 677, 6, 1] → [1, 6, 23, 56, 677]
-    
+
     return sort_numbers  # Return sorted list
-    
+
 numbers = [56, 23, 677, 6, 1]
 print(ascending_order_numbers(numbers))  # Output: [1, 6, 23, 56, 677]
 
@@ -1869,13 +1866,13 @@ import random
 def generate_random_number():
     lower_limit = int(input("Enter the lower limit: "))  # e.g., 1
     upper_limit = int(input("Enter the upper limit: "))  # e.g., 10
-    
+
     random_number = random.randint(lower_limit, upper_limit)  # e.g., 7
-    
+
     print(f"The random number between {lower_limit} and {upper_limit} is: {random_number}")  # Prints: "The random number between 1 and 10 is: 7"
 
 generate_random_number()  # Call the function
-    
+
 """
 Problem: 81
 Write a Python program to find the square root of a number. Prompt the user to enter a number.
@@ -1884,13 +1881,13 @@ Write a Python program to find the square root of a number. Prompt the user to e
 def square_root():
     num = float(input("type num: "))  # e.g., 9.0
     return num ** 0.5  # 9.0 ** 0.5 = 3.0
-    
+
 print(square_root())  # Call function and print result
 
 def square_root():
     num = float(input("type num: "))  # e.g., 16.0
     print(num ** 0.5)  # Prints: 4.0
-    
+
 square_root()  # Call the function
 
 """
@@ -1904,7 +1901,7 @@ def circle():
     radius = float(input("type number: "))  # e.g., 5.0
     area = math.pi * radius ** 2  # math.pi × 5² = 25π ≈ 78.54
     print(area)  # Display the area
-    
+
 circle()  # Call the function
 
 def calculate_circle_area():
@@ -1938,7 +1935,7 @@ def is_palindrome(s):
 
 def main():
     user_input = input("Enter a string: ")  # e.g., "racecar"
-    
+
     if is_palindrome(user_input):
         print(f"{user_input} is a palindrome.")  # Display success message
     else:
@@ -1959,7 +1956,7 @@ def is_pangram(sentence):
         if char not in sentence:  # If any letter is missing, not a pangram
             return "not pangram"
     return "is pangram"  # All letters found
-   
+
 sentence = input("Enter a sentence: ")
 print(is_pangram(sentence))
 
@@ -1970,7 +1967,7 @@ def pangram(sentence):
         if char not in sentence:
             return "not pangram"
     return "pangram"
-            
+
 sentence = "abcdefghijklmnopqrstuvwxyz"
 print(pangram(sentence))
 
@@ -1987,7 +1984,7 @@ def gcd(a, b):
 def main():
     num1 = int(input("Enter the first number: "))
     num2 = int(input("Enter the second number: "))
-    
+
     result = gcd(num1, num2)
     print(f"The GCD of {num1} and {num2} is: {result}")
 
@@ -2010,9 +2007,9 @@ def lcm(a, b):
 def main():
     num1 = int(input("Enter the first number: "))
     num2 = int(input("Enter the second number: "))
-    
+
     result_lcm = lcm(num1, num2)
-    
+
     print(f"The LCM of {num1} and {num2} is: {result_lcm}")
 
 if __name__ == "__main__":
@@ -2025,9 +2022,9 @@ Write a Python program to reverse a list without using the reverse() function. P
 
 def reverse_lst():
     user = input("Type a list: ")
-    split_lst = user.split()    
+    split_lst = user.split()
     reversed_lst = []
-    
+
     for item in split_lst[::-1]:  # [::-1] reverses the list
         reversed_lst.append(item)
     return " ".join(reversed_lst)
@@ -2038,7 +2035,7 @@ def reverse_list():
     user_input = input("Enter a list: ")
     elements = user_input.split()
     reversed_elements = []
-    
+
     for i in range(len(elements) - 1, -1, -1):
         reversed_elements.append(elements[i])
 
@@ -2050,7 +2047,7 @@ def reverse_list():
     user_input = input("Enter list: ")
     elements = user_input.split()
     reversed_elements = []
-    
+
     for i in range(len(elements) - 1, -1, -1):
         reversed_elements.append(elements[i])
 
@@ -2060,12 +2057,12 @@ reverse_list()
 
 def reverse_list(items):
     reverse_items = []
-    
+
     for item in range(len(items)-1,-1,-1):
         reverse_items.append(items[item])
     return reverse_items
-        
-lst = ["apple", "banana", "cunt"]
+
+lst = ["apple", "banana", "friend"]
 print(reverse_list(lst))
 
 """
@@ -2081,7 +2078,7 @@ def prime_factors(n):
             factors.append(divisor)
             n //= divisor  # Integer division: divide n by divisor
         divisor += 1  # Try next divisor
-    
+
     return factors
 
 def main():
@@ -2106,7 +2103,7 @@ import string
 def generate_password(length):
     characters = string.ascii_letters + string.digits + string.punctuation  # All printable ASCII chars
     password = ''.join(random.choice(characters) for i in range(length))
-    
+
     return password
 
 length = int(input("Enter the length of the password: "))
@@ -2119,12 +2116,12 @@ Write a Python program to count the number of words in a sentence. Prompt the us
 
 def count_words(sentence):
     split_words = sentence.split()  # split() splits on whitespace by default
-    
+
     count = 0
     for word in split_words:
         count += 1  # Count each word
     return count  # Return total word count
-                   
+
 words = "Jonathan is the best ever"
 print(count_words(words))  # Output: 5
 
@@ -2136,15 +2133,15 @@ Write a Python program to find the largest and smallest elements in a list. Prom
 def largest_smallest(elements):
     smallest = elements[0]  # Start with first element as minimum
     largest = elements[0]   # Start with first element as maximum
-    
+
     for element in elements:
         if element < smallest:
             smallest = element  # Found a new minimum
         if element > largest:
             largest = element  # Found a new maximum
-    
+
     return smallest, largest  # Returns tuple (smallest, largest)
-    
+
 # Smallest: 1, Largest: 100
 lst = [4, 5, 100, 6, 1, 10]
 print(largest_smallest(lst))  # Output: (1, 100)
@@ -2169,17 +2166,17 @@ is_perfect_square(6)
 def is_perfect_number(n):
     if n <= 0:
         return False
-    
+
     sum_of_divisors = 0
     for i in range(1, n):  # Only check divisors less than n (proper divisors)
         if n % i == 0:
             sum_of_divisors += i
-    
+
     return sum_of_divisors == n  # Check if sum equals the number
 
 def main():
     number = int(input("Enter a number: "))
-    
+
     if is_perfect_number(number):
         print(f"{number} is a perfect number.")
     else:
@@ -2198,9 +2195,9 @@ def factorial():
     result = 1  # Start with 1 (multiplicative identity)
     for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n
         result *= number  # Multiply: 1 × 2 × 3 × ... × n
-    
+
     print(result)
-           
+
 factorial()
 
 def factorial():
@@ -2258,7 +2255,7 @@ def find_intersection():
     intersection = list(set(list1) & set(list2))
 
     print(f"The intersection of the two lists is: {intersection}")
-    
+
 print(find_intersection())
 
 """
@@ -2271,7 +2268,7 @@ def remove_vowels():
     for char in user:
         if char not in "aeiou":  # Only checks lowercase vowels
             print(char, end= "")  # end="" prevents newline after each char
-            
+
 remove_vowels()
 
 def remove_vowels(string):
@@ -2280,8 +2277,8 @@ def remove_vowels(string):
         if char not in "aeiou":
             new_name.append(char)
     return "\n".join(new_name)  # Joins with newlines instead of empty string
-               
-name = "Jonathan" 
+
+name = "Jonathan"
 print(remove_vowels(name))
 
 """
@@ -2296,7 +2293,7 @@ def binary_to_decimal(binary):
         if digit == '1':
             decimal += 2 ** power  # Add 2^power for each '1' bit
         power -= 1  # Decrease power for next position
-    
+
     return decimal
 
 def main():
@@ -2320,9 +2317,9 @@ def digits_string():
     total = 0
     for number in user:
         total += int(number)  # Convert to int and add
-        
+
     print(total)
-    
+
 digits_string()
 
 def digits_string():
@@ -2333,9 +2330,9 @@ def digits_string():
         int_number.append(int(number))
     for number in int_number:
         total += number
-        
+
     print(total)
-    
+
 digits_string()
 
 """
@@ -2352,8 +2349,8 @@ def upper_lower(string):
         else:  # Note: counts non-uppercase (including digits, spaces, punctuation) as lowercase
             count_lower += 1
     return f"lower = {count_lower} and upper = {count_upper}"
-            
-string = "Jonathan Moll is the Best"
+
+string = "Jonathan Noll is the Best"
 print(upper_lower(string))
 
 """
@@ -2411,20 +2408,20 @@ def is_anagram():
     string2 = input("type string: ").replace(" ", "")
     sort1 = sorted(string1)  # sorted() returns list of characters
     sort2 = sorted(string2)
-    
+
     if sort1 == sort2:  # If sorted lists are equal, strings are anagrams
         print("this is anagram")
     else:
         print("this is not anagram")
-    
+
 is_anagram()
-        
+
 def is_anagram(string1, string2):
     string1 = string1.replace(" ", "")
     string2 = string2.replace(" ", "")
-    
+
     return sorted(string1) == sorted(string2)
-    
+
 string1 = "listen"
 string2 = "silent"
 
@@ -2440,11 +2437,11 @@ def largest_smallest():
     int_num = []
     for number in user:
         int_num.append(int(number))
-        
+
     max_num = max(int_num)  # Built-in max() function
     min_num = min(int_num)  # Built-in min() function
     print(max_num, min_num)
-        
+
 largest_smallest()
 
 """
@@ -2469,7 +2466,7 @@ if is_perfect_square(num):
     print(f"{num} is a perfect square.")
 else:
     print(f"{num} is not a perfect square.")
- 
+
 """
 Problem 105:
 Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.
@@ -2482,7 +2479,7 @@ def all_odd_numbers(numbers):
             count += number  # Add odd number to sum
     return count
 
-lst = [2, 10, 3, 7]    
+lst = [2, 10, 3, 7]
 print(all_odd_numbers(lst))
 
 """
@@ -2494,15 +2491,15 @@ def sum_of_odd_numbers():
     user_input = input("Enter a list of numbers separated by spaces: ")
     split_numbers = user_input.split()
     int_numbers = []
-    
+
     for num in split_numbers:
         int_numbers.append(int(num))
-    
+
     odd_sum = 0
     for num in int_numbers:
         if num % 2 != 0:  # Check if odd
             odd_sum += num
-    
+
     print("The sum of all odd numbers is:", odd_sum)
 
 sum_of_odd_numbers()
@@ -2514,9 +2511,9 @@ def sum_of_all_odd():
         number = int(number)  # Convert to int
         if number % 2 != 0:
             total += number
-    
+
     print(total)
-            
+
 sum_of_all_odd()
 
 """
@@ -2529,14 +2526,14 @@ def common_char():
     if len(user_input) != 2:
         print("Please enter exactly two strings.")
         return
-    
+
     str1, str2 = user_input  # Tuple unpacking: assigns first two elements
-    
+
     common = []
     for char in str1:
         if char in str2 and char not in common:  # Check if in both strings and not already added
             common.append(char)
-    
+
     return common
 
 print(common_char())
@@ -2546,41 +2543,41 @@ def common_char(string1, string2):
     for char in string1:
         if char in string2 and char not in characters:
             characters.append(char)
-    
+
     return characters
-    
+
 name1 = input("Enter the first string: ")
 name2 = input("Enter the second string: ")
 print(common_char(name1, name2))
 
 """
 Problem: 108
-Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string 
+Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string
 """
 def remove_duplicates():
     user = input("type string: ")
     unique_user = set()  # Set to track unique characters
-    
+
     for char in user:
         if char not in unique_user:
             unique_user.add(char)
-            
+
     print("".join(unique_user))  # join() converts set to string (order may vary)
-            
+
 remove_duplicates()
 
 def remove_duplicates():
     user = input("type string: ")
     unique_user = set()  # For fast lookup
     result = []  # For maintaining order
-    
+
     for char in user:
         if char not in unique_user:
             unique_user.add(char)
             result.append(char)  # Add to list to preserve order
-            
+
     print("".join(result))  # Join list to get ordered string
-            
+
 remove_duplicates()
 
 """
@@ -2592,12 +2589,12 @@ def is_armstrong(number):
     digits = []
     for digit in str(number):  # Convert to string to iterate over digits
         digits.append(int(digit))  # Convert each digit back to int
-    
+
     power = len(digits)  # Power is number of digits
     total = 0
     for digit in digits:
         total += digit ** power  # Add digit raised to power
-        
+
     return total == number  # Check if sum equals original number
 
 number = int(input("Enter a number: "))
@@ -2619,14 +2616,14 @@ def vowels_consonates(string):
     vowels = "aeiou"  # Only lowercase vowels (case-sensitive)
     count_vowels = 0
     consonates = 0
-    
+
     for char in string:
         if char in vowels:
             count_vowels += 1
         if char not in vowels:  # Note: counts digits, punctuation as consonants
             consonates += 1
     return f"vowels = {count_vowels}\nconsonates = {consonates}"
-            
+
 lst = "Jonathan is there next best thing"
 print(vowels_consonates(lst))
 
@@ -2641,7 +2638,7 @@ def second_smallest_element():
         int_numbers.append(int(num_str))
 
     sorted_numbers = sorted(int_numbers)  # Sort ascending
-    
+
     if len(sorted_numbers) >= 2:
         return sorted_numbers[1]  # Second element (index 1)
     else:
@@ -2652,9 +2649,9 @@ print(second_smallest_element())
 def second_smallest_element(elements):
     if len(elements) < 2:
         return None
-        
+
     sorted_elements = sorted(elements, key=len)  # key=len sorts by length, not value
-    
+
     return sorted_elements[1]  # Returns second shortest, not second smallest
 
 arg = ["Jonathan", "hot", "sand"]
@@ -2693,7 +2690,7 @@ def max_num(num1, num2):
         return f"This is max number:  {num1}"  # Returns string, not number
     else:
         return f"This is max number: {num2}"
-    
+
 num1 = 10
 num2 = 20
 print(max_num(num1, num2))
@@ -2724,7 +2721,7 @@ def max_of_three(a, b, c):
         return b
     else:  # Otherwise c is largest
         return c
-        
+
 max_of_three()
 
 """
@@ -2737,7 +2734,7 @@ def length_string(string):
     for char in string:  # Iterate over characters
         count += 1
     return count
-    
+
 name = "Jonathan"
 print(length_string(name))
 
@@ -2746,7 +2743,7 @@ def length_list(string):  # Misleading name - works for lists too
     for char in string:  # Iterates over elements (works for both strings and lists)
         count += 1
     return count
-    
+
 lst = ["list", "it", "all"]
 print(length_list(lst))
 
@@ -2771,13 +2768,13 @@ def is_vowel(char):
         return char.lower() in vowels  # Convert to lowercase for case-insensitive check
     else:
         return False
-        
-print(is_vowel('a'))  
-print(is_vowel('E')) 
-print(is_vowel('x')) 
-print(is_vowel('9')) 
-print(is_vowel(''))  
-print(is_vowel('aa')) 
+
+print(is_vowel('a'))
+print(is_vowel('E'))
+print(is_vowel('x'))
+print(is_vowel('9'))
+print(is_vowel(''))
+print(is_vowel('aa'))
 
 """
 Problem: 117
@@ -2816,7 +2813,7 @@ def multiply(numbers):
     return result
 
 numbers = [1, 2, 3, 4]
-print("Sum:", sum(numbers)) 
+print("Sum:", sum(numbers))
 print("Multiply:", multiply(numbers))
 
 """
@@ -2856,7 +2853,7 @@ def is_palindrome(string):
     if string == string[::-1]:  # [::-1] reverses the string
         return True
     return False
-     
+
 name = "jojj"
 print(is_palindrome(name))
 
@@ -2895,15 +2892,15 @@ def overlapping(list1, list2):
             if item1 == item2:  # Compare each pair
                 return True  # Found common element
     return False  # No common elements
-    
+
 list1 = [1, 2, 3, 4]
 list2 = [4, 5, 6, 7]
-print(overlapping(list1, list2))  
+print(overlapping(list1, list2))
 
 list1 = ['apple', 'banana', 'cherry']
 list2 = ['date', 'elderberry', 'fig']
-print(overlapping(list1, list2)) 
- 
+print(overlapping(list1, list2))
+
 def is_member(element, lst):
     for item in lst:
         if element == item:
@@ -2934,7 +2931,7 @@ def overlapping(lst1, lst2):
         if element in lst2:  # in operator checks membership
             return True
     return False
-    
+
 lst1 = [2, 4, 6, 8, 10]
 lst2 = [99, 66, 66, 16]
 print(overlapping(lst1, lst2))
@@ -2945,7 +2942,7 @@ def overlapping(lst1, lst2):
             if i == j:  # Compare each pair
                 return True
     return False
-    
+
 lst1 = [2, 4, 6, 8, 10]
 lst2 = [99, 66, 66, 16]
 print(overlapping(lst1, lst2))
@@ -2964,7 +2961,7 @@ histogram([4, 9, 7])
 def histogram(numbers):
     for number in numbers:
         print('*' * number)
-        
+
 numbers = [4, 9, 7]
 histogram(numbers)
 
@@ -2973,7 +2970,7 @@ def histrogram(numbers):
     for number in numbers:
         result += "*" * number + "\n"  # Build string with newlines
     return result
-    
+
 numbers = [2, 4, 8]
 print(histrogram(numbers))
 
@@ -2990,7 +2987,7 @@ def map_words_to_lengths(words):
 
 words = ["apple", "banana", "cherry", "date"]
 lengths = map_words_to_lengths(words)
-print(lengths) 
+print(lengths)
 
 """
 Problem 127:
@@ -3003,8 +3000,8 @@ def find_longest_word(elements):
         if element > longest_element:  # String comparison, not length comparison
             longest_element = element
     return len(element)  # BUG: Returns len of last element in loop, not longest
-               
-lst = ["jo", "tre", "Jonny", "abracadabr"] 
+
+lst = ["jo", "tre", "Jonny", "abracadabr"]
 print(find_longest_word(lst))
 
 """
@@ -3018,8 +3015,8 @@ def filter_long_words(lst, n):
         if len(word) > n:  # Check if word length > n
             longest_words.append(word)
     return longest_words
-           
-lst = ["three", "threebesthorses" "hours", "Jonathanmollthebestintheworld"]  # Note: missing comma between strings
+
+lst = ["three", "threebesthorses" "hours", "Jonathannollthebestintheworld"]  # Note: missing comma between strings
 n = 6
 print(filter_long_words(lst, n))
 
@@ -3069,7 +3066,7 @@ def max_func(a, b):
 
 def max_in_list(numbers):
     return reduce(max_func, numbers)  # reduce(function, iterable) reduces list to single value
-    
+
 numbers = [1, 5, 3, 9, 2]
 print(max_in_list(numbers))
 
@@ -3084,7 +3081,7 @@ def time_table(number):
         total = number * i
         result += f"{i} x {number} = {total}\n"  # f-string formatting
     return result
-        
+
 lst = 6
 print(time_table(lst))
 
@@ -3106,11 +3103,11 @@ def sum_of_all_numbers():
     user_input = input("Enter a list of numbers separated by spaces: ")
     split_numbers = user_input.split()
     int_numbers = []
-    
+
     for num in split_numbers:
         int_numbers.append(int(num))  # Convert strings to integers
     total_sum = sum(int_numbers)  # Built-in sum() function
-    
+
     print(total_sum)
 
 sum_of_all_numbers()
@@ -3126,7 +3123,7 @@ def split_number(numbers):
     for number in numbers:  # Iterates over characters in string "123"
         number_lst.append(number)  # Appends each character: "1", "2", "3"
     return number_lst  # Returns ["1", "2", "3"] (works but split() is unnecessary)
-        
+
 arg = "123"
 print(split_number(arg))
 
@@ -3148,9 +3145,9 @@ Write a function that sorts numbers (int) from smallest number to biggest number
 
 def smallest_largest(numbers):
     return sorted(numbers)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(smallest_largest(numbers)) 
+print(smallest_largest(numbers))
 
 """
 Problem 138:
@@ -3159,9 +3156,9 @@ Write a function that sorts number (int) from biggest number to smallest number.
 
 def largest_smallest(numbers):  # Function name misleading
     return sorted(numbers)[::-1]  # [::-1] reverses the sorted list (descending order)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(largest_smallest(numbers)) 
+print(largest_smallest(numbers))
 
 """
 Problem 139:
@@ -3170,9 +3167,9 @@ Write a function using sorted() number int) returning the seconded largest numbe
 
 def seconded_largest_number(numbers):  # Typo: "seconded" should be "second"
     return sorted(numbers)[-2]  # [-2] is second-to-last element (second largest)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(seconded_largest_number(numbers)) 
+print(seconded_largest_number(numbers))
 
 """
 Problem 140:
@@ -3181,9 +3178,9 @@ Write a function using sorted() number int) returning the fourth largest number 
 
 def fourth_largest_number(numbers):
     return sorted(numbers)[-4]  # [-4] is fourth-to-last element (fourth largest)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(fourth_largest_number(numbers)) 
+print(fourth_largest_number(numbers))
 
 """
 Problem 141:
@@ -3196,7 +3193,7 @@ def smallest_and_third(numbers):
     return smallest, third_largest  # Returns tuple
 
 numbers = [2, 76, 466, 3, 23]
-print(smallest_and_third(numbers)) 
+print(smallest_and_third(numbers))
 
 """
 Problem 142:
@@ -3205,13 +3202,13 @@ Write a function that sorts number from smallest number to biggest number using 
 
 def largest_smallest(numbers):  # Function name misleading
     return sorted(numbers)[::]  # [::] is same as sorted(numbers)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(largest_smallest(numbers)) 
+print(largest_smallest(numbers))
 
 def smallest_biggest(numbers):
     return sorted(numbers)  # Returns sorted list
-    
+
 lst = [2, 24, 23, 27, 2]
 print(smallest_biggest(lst))
 
@@ -3227,7 +3224,7 @@ def int_str():
     for word in split_str:
         user_lst.append(word)  # Appends strings (no conversion)
     print(user_lst)  # Prints list of strings
-    
+
 int_str()
 
 """
@@ -3243,7 +3240,7 @@ def int_to_str_list(number):
     return digits_as_strings  # Returns ["1", "2", "3"]
 
 number = 123
-print(int_to_str_list(number)) 
+print(int_to_str_list(number))
 
 """
 Problem 145:
@@ -3270,14 +3267,14 @@ def big_small(numbers):
     number_lst = []
     for number in numbers:
         number_lst.append(int(number))  # Convert string to int for proper numeric sort
-              
+
     number_lst = sorted(number_lst)[::-1]  # Sort descending
     shorted_str = []  # Typo: "shorted" should be "sorted"
-    
+
     for number in number_lst:
         shorted_str.append(str(number))  # Convert back to strings
     return shorted_str
-           
+
 lst = ["4", "67", "6"]
 print(big_small(lst))
 
@@ -3289,9 +3286,9 @@ Write a function where user types a list of numbers in string and returns a list
 def type_smallest_biggest():
     user = input("type number list: ").split()
     sort_number = sorted(user)  # String sort: "10" comes before "2"
-       
+
     print(sort_number)
-    
+
 type_smallest_biggest()
 
 def small_big():
@@ -3300,13 +3297,13 @@ def small_big():
     int_list = []
     for number in user_split:
         int_list.append(int(number))  # Convert to int
-    
+
     int_list.sort()  # Sort numerically
     sorted_str = []
     for number in int_list:
         sorted_str.append(str(number))  # Convert back to strings
     return " ".join(sorted_str)  # Join with spaces
-    
+
 print(small_big())
 
 """
@@ -3316,7 +3313,7 @@ Write a Python function called `double_elements` that takes a list of numbers as
 
 def double_elements(numbers):
     doubled = numbers + numbers  # List concatenation: [1,2,3] + [1,2,3] = [1,2,3,1,2,3]
-    
+
     return doubled
 
 lst = [2, 4, 6, 8]
@@ -3336,7 +3333,7 @@ def common():
             if i == j and i not in result:
                 result.append(i)
     return result
-    
+
 common()
 
 """
@@ -3350,9 +3347,9 @@ def common():
     set1 = set(lst1)  # Convert to set
     set2 = set(lst2)
     common_element = set1.intersection(set2)  # Set intersection operator finds common elements
-        
+
     print(common_element)
-    
+
 common()
 
 """
@@ -3369,8 +3366,8 @@ def find_longest_word(words):
             longest_word = word  # Update word
     return longest_word
 
-words = ["tree", "mountain", "do", "Jonathanmollfrency"]
-    
+words = ["tree", "mountain", "do", "Jonathannollfrency"]
+
 print(find_longest_word(words))
 
 """
@@ -3386,7 +3383,7 @@ def average(numbers):
         total += number  # Sum elements
         result = total / length
     return result
-    
+
 numbers = [4, 667, 68, 766]
 print(average(numbers))
 
@@ -3401,7 +3398,7 @@ def second_smallest_element(lst):
         return sorted_lst[1]  # Returns second shortest, not second smallest
     else:
         return None
-           
+
 lst = ["t", "hope", "Jonathan", "it"]
 print(second_smallest_element(lst))
 
@@ -3413,7 +3410,7 @@ Write a Python function called `find_second_last_element` that takes a list as i
 def find_last_element():  # Function name should be find_second_last_element
     user_input = input("Type list (elements separated by spaces): ").split()
     if not user_input:  # Check if list is empty
-        return None  
+        return None
     return user_input[-2]  # [-2] is second-to-last element
 
 print(find_last_element())
@@ -3433,18 +3430,18 @@ def reverse_number(number):
     str_number = str(number)  # Convert to string
     reversed_str_number = str_number[::-1]  # Reverse string
     reversed_number = int(reversed_str_number)  # Convert back to int
-   
+
     return reversed_number
-    
+
 number = 123
-print(reverse_number(number)) 
+print(reverse_number(number))
 
 def reverse_number(number):
     str_number = str(number)[::-1]  # Reversed string
     int_number = str_number  # Still a string (misleading variable name)
-    
+
     return int_number  # Returns string, not int
-             
+
 lst = 1234
 print(reverse_number(lst))
 
@@ -3456,9 +3453,9 @@ Write a Python function called remove_duplicates that takes a string as input an
 def remove_duplicates(string):
     split_word = string.split()  # Splits into words (not characters)
     set_word = set(split_word)  # Set removes duplicates (order not preserved)
-    
+
     return " ".join(set_word)  # Join set (order may vary)
-    
+
 lst = "and here is was and in the"
 print(remove_duplicates(lst))
 
@@ -3477,7 +3474,7 @@ def main(string):
         else:
             duplicates.append(word)  # Add to duplicates if seen before
     return duplicates  # Returns duplicates, not string with duplicates removed
-        
+
 string = "so what's happening duplicates duplicates today? It's hot duplicates duplicates."
 main(string)
 
@@ -3490,9 +3487,9 @@ def remove_duplicates(string):
             duplicates.add(word)  # Add to duplicates
         else:
             seen.add(word)  # Mark as seen
-    
+
     return ' '.join(duplicates)  # Returns duplicates, not string with duplicates removed
-    
+
 lst = "and here is was and in the"
 print(remove_duplicates(lst))
 
@@ -3500,15 +3497,15 @@ print(remove_duplicates(lst))
 Problem: 158
 Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers using sorted.
 """
-    
+
 def largest_element(numbers):
    sorted_numbers = sorted(numbers)  # Sort ascending
    largest_number = sorted_numbers[-1]  # Last element is largest
-   
+
    return largest_number
-                
+
 numbers = [2, 56, 75, 4566, 3]
-print(largest_element(numbers))      
+print(largest_element(numbers))
 
 def main():
     result = []
@@ -3527,9 +3524,9 @@ Write a Python program to find the largest element in a list. Prompt the user to
 
 def largest_element(numbers):
    return max(numbers)
-                
+
 numbers = [2, 56, 75, 4566, 3]
-print(largest_element(numbers))   
+print(largest_element(numbers))
 
 """
 Problem 160:
@@ -3541,7 +3538,7 @@ def find_length(string):  # Works for both strings and lists (iterable)
     for char in string:  # Iterate over elements
         count += 1
     return count
-    
+
 arg = "Jonathan"
 print(find_length(arg))
 
@@ -3560,7 +3557,7 @@ def intersection():
         if word in sort2:
             common.append(word)
     print(common)
-    
+
 intersection()
 
 def intersection():
@@ -3569,18 +3566,18 @@ def intersection():
     set1 = set(lst1)
     set2 = set(lst2)
     common = set1.intersection(set2)
-    
+
     print(common)
-    
+
 intersection()
 
 def intersection_two_list(lst1, lst2):
     set1 = set(lst1)
     set2 = set(lst2)
     result = set1.intersection(set2)
-    
+
     return result
-                   
+
 lst1 = ["tree", "car", "house", "garden"]
 lst2 = ["car", "boat", "toilet", "tree"]
 print(intersection_two_list(lst1, lst2))
@@ -3596,12 +3593,12 @@ def third_largest():
     int_list = []
     for number in user_split:
         int_list.append(int(number))  # Convert strings to integers
-    
+
     int_list.sort()  # Sort ascending: [5, 8, 10, 15, 20]
     result = int_list[-3]  # [-3] is third-to-last (third largest)
-    
+
     print(result)
-    
+
 third_largest()
 
 """
@@ -3614,12 +3611,12 @@ def count_vowels(string):
     result = {}  # Dictionary to store vowel counts
     for vowel in vowels:
         result[vowel] = 0  # Set initial count for each vowel
-    
+
     string = string.lower()  # Convert to lowercase for case-insensitive counting
     for char in string:
         if char in vowels:
             result[char] += 1  # Increment count for found vowel
-    
+
     return result
 
 string = "JOnathAn is the best"
@@ -3629,13 +3626,13 @@ def count_vowels(sentence):
     sentence = sentence.lower()
     vowels = "aeiou"
     vowel_counts = {number: 0 for number in vowels}  # {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
-    
+
     for char in sentence:
         if char in vowels:
             vowel_counts[char] += 1
     return vowel_counts
-    
-string = "Jonathan is the best"    
+
+string = "Jonathan is the best"
 print(count_vowels(string))
 
 """
@@ -3649,11 +3646,11 @@ def count_vowels(sentence):
     vowel_counts = {}
     for number in vowels:
         vowel_counts[number] = 0
-    
+
     for char in sentence:
         if char in vowels:
             vowel_counts[char] += 1
-    
+
     return vowel_counts
 
 string = "Jonathan is the best"
@@ -3666,14 +3663,14 @@ Write a function that takes numbers integer 123 and splits the numbers into a st
 
 def intiger_string(number):  # Typo: "intiger" should be "integer"
     return list(str(number))  # str(123) → "123", list("123") → ["1", "2", "3"]
-    
+
 number = 123
 print(intiger_string(number))
 
 def split_number_int(number):
     number_str = str(number)  # Convert int to string: 123 → "123"
     result = tuple(number_str)  # tuple() constructor converts string to tuple of characters
-    
+
     return result
 
 number = 123
@@ -3691,7 +3688,7 @@ def double_elements(lst):
     for word in lst:
         doubled.append(word)
     return doubled  # Returns list with all elements duplicated: [a, b, c, a, b, c]
-    
+
 lst = ["tree", "house", "car"]
 print(double_elements(lst))
 
@@ -3706,15 +3703,15 @@ def main():
     smallest_num = min(lst)  # Could use lst[0] since it's sorted
     largest_num = max(lst)  # Could use lst[-1] since it's sorted
     return smallest_num, largest_num  # Returns tuple
-    
+
 main()
 
 def l_s(numbers):
     sort_number_largest = sorted(numbers)[-1]  # Last element after sorting (largest)
     sort_number_smallest = sorted(numbers)[0]  # First element after sorting (smallest)
-    
+
     return sort_number_largest, sort_number_smallest  # Returns tuple
-       
+
 numbers = [1, 2, 3, 4, 5]
 print(l_s(numbers))
 
@@ -3734,7 +3731,7 @@ def count_words():
         else:
             result[word] = 1
     print(result)
-    
+
 count_words()
 
 def count_words(string):
@@ -3746,7 +3743,7 @@ def count_words(string):
             word_count[word] += 1  # Increment existing count
         else:
             word_count[word] = 1
-    
+
     sorted_word_count = dict(sorted(word_count.items()))  # Sort dictionary by keys
     return sorted_word_count
 
@@ -3863,9 +3860,9 @@ Write a function max_value_key that takes a dictionary as input and returns the 
 def max_value_key(input_dict):
     if not input_dict:  # Empty dict is falsy in Python
         return None  # Return None for empty dictionary
-    
+
     max_value = max(input_dict.values())  # Find maximum value in dictionary
-    
+
     for key, value in input_dict.items():
         if value == max_value:  # Found key with maximum value
             return key  # Return first key found with max value
@@ -3903,7 +3900,7 @@ def word_frequency(string):
         else:  # First occurrence of word
             result[word] = 1
     return result
-            
+
 string = "gore why are you here you are gore"
 print(word_frequency(string))  # Result: {'gore': 2, 'why': 1, 'are': 2, 'you': 2, 'here': 1}
 
@@ -3969,10 +3966,10 @@ def average_values(dicts):
             else:  # First occurrence of key
                 averages[key] = value  # Initialize sum
                 counts[key] = 1  # Initialize count
-    
+
     for key in averages:
         averages[key] /= counts[key]  # Divide sum by count to get average
-    
+
     return averages
 
 dicts = [{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}]
@@ -3992,10 +3989,10 @@ def merge_dicts_with_lists(dicts):
                 merged[key].update(value)  # Add elements from value list to set (removes duplicates)
             else:  # First occurrence of key
                 merged[key] = set(value)  # Convert list to set (removes duplicates, allows efficient merging)
-    
+
     for key in merged:
         merged[key] = list(merged[key])  # Convert set to list (order may vary)
-    
+
     return merged
 
 dicts = [{'a': [1, 2, 3], 'b': [2, 3]}, {'a': [3, 4], 'b': [4, 5], 'c': [6]}, {'c': [7, 8, 6]}]
@@ -4027,7 +4024,7 @@ def main(lst):
         value = word  # Entire word
         result[key] = value  # BUG: Overwrites previous value instead of appending to list
     return result  # Returns only last word for each letter
-        
+
 lst = ["tree", "cliff", "mountain", "zoo","dodo", "grassy"]
 main(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd': 'dodo', 'g': 'grassy'}
 
@@ -4035,13 +4032,13 @@ main(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd
 Problem 183:
 Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().
 """
-        
+
 def is_anagram(string1, string2):
     string1 = string1.replace(" ", "").lower()
     string2 = string2.replace(" ", "").lower()
     if len(string1) != len(string2):
         return False
-        
+
     char_count1 = {}
     char_count2 = {}
     for char in string1:
@@ -4070,9 +4067,9 @@ Write a function that takes numbers integer 123 and return 2.
 def int(number):  # Should use different name like get_digit or extract_digit
     number = str(number)  # Convert to string: 123 → "123"
     list_number = list(number)[1]  # Convert to list and get index 1: ["1","2","3"][1] → "2"
-    
+
     return list_number  # Returns string "2", not integer 2
-        
+
 number = 123
 print(int(number))  # Output: "2" (string)
 
@@ -4086,9 +4083,9 @@ def int(number):  # Should use different name
     num2 = number[1]  # Index 1: second digit "2"
     num4 = number[3]  # Index 3: fourth digit "4"
     num8 = number[-1]  # Index -1: last digit "8" (negative indexing from end)
-    
+
     return num2, num4, num8  # Returns tuple of strings: ("2", "4", "8")
-        
+
 number = 12345678
 print(int(number))  # Output: ("2", "4", "8")
 
@@ -4107,7 +4104,7 @@ def get_digits(number, indices):
 
 number = 12345678910
 indices = [1, 3, 7]  # Indices to extract
-print(get_digits(number, indices))  # Output: ("2", "4", "8")  
+print(get_digits(number, indices))  # Output: ("2", "4", "8")
 
 """
 Problem: 187
@@ -4119,15 +4116,15 @@ def double_elements(string1):
     for word in string1:
         double.append(word)
         double.append(word)
-    
+
     return double
-            
+
 string1 = ["tree", "road", "slow"]
-print(double_elements(string1))    
+print(double_elements(string1))
 
 """
 Problem 188:
-Write a Python function called get_initials that takes a full name (first and last name jonathan moll) as input and returns  "joNathAn moLL"" of the name in uppercase (NALL in jonathan moll).
+Write a Python function called get_initials that takes a full name (first and last name jonathan noll) as input and returns  "joNathAn noLL"" of the name in uppercase (NALL in jonathan noll).
 """
 
 def get_initials(name):
@@ -4136,11 +4133,11 @@ def get_initials(name):
     name_list[6] = name_list[6].upper()  # 'a' → 'A' (index 6)
     name_list[11] = name_list[11].upper()  # 'l' → 'L' (index 11)
     name_list[12] = name_list[12].upper()  # 'l' → 'L' (index 12)
-    
+
     return ''.join(name_list)  # join() combines list back into string
 
-name = "jonathan moll"
-print(get_initials(name))  # Output: "joNathAn moLL"
+name = "jonathan noll"
+print(get_initials(name))  # Output: "joNathAn noLL"
 
 def get_initials(name):
     initials = []
@@ -4151,8 +4148,8 @@ def get_initials(name):
             initials.append(char)  # Keep as-is
     return ''.join(initials)  # Join list into string
 
-name = "jonathan moll"
-print(get_initials(name))  # Output: "joNathAn moLL" (uppercases all n, a, l characters)
+name = "jonathan noll"
+print(get_initials(name))  # Output: "joNathAn noLL" (uppercases all n, a, l characters)
 
 """
 Problem: 189
@@ -4165,7 +4162,7 @@ def sum_digits():
     for number in user:  # 'number' is actually a character (misleading name)
         count += int(number)  # Convert char to int and add: "1"→1, "2"→2, etc.
     print(count)
-                
+
 sum_digits()
 
 def digits_string():
@@ -4174,9 +4171,9 @@ def digits_string():
     for char in user:
         if char.isdigit():  # isdigit() checks if character is a digit (0-9)
             total += int(char)  # Convert digit char to int and add
-            
+
     print(total)
-    
+
 digits_string()
 
 """
@@ -4191,7 +4188,7 @@ def remove_duplicate():
         if char not in duplicate:  # Check if character already seen
             duplicate.append(char)  # Add first occurrence only (preserves order)
     print(duplicate)  # Prints list, not string (could use ''.join(duplicate))
-    
+
 remove_duplicate()
 
 """
@@ -4204,13 +4201,13 @@ def find_min():
     user_int = []
     for number in user:
         user_int.append(int(number))  # Convert strings to integers
-    
+
     min_number = user_int[0]
     for number in user_int:
         if number < min_number:  # If smaller number found
             min_number = number  # Update minimum
     print(min_number)
-    
+
 find_min()
 
 """
@@ -4235,12 +4232,12 @@ def main():
     for word in lst:  # lst must be defined outside function (global variable)
         if word.lower() == user:  # Case-insensitive comparison
             count += 1
-            
+
     if count == 0:
         return "not in lst"  # Return string if not found
     else:
         return count  # Return count
-               
+
 lst = ["Jonathan", "Christopher", "Jeremy", "Jonathan", "bad"]
 print(main())
 
@@ -4254,10 +4251,10 @@ def find_min_num():
     int_number = []
     for number in user:
         int_number.append(int(number))
-    
+
     min_num = sorted(int_number)[0]
     print(min_num)
-                  
+
 find_min_num()
 
 """
@@ -4268,9 +4265,9 @@ Write a Python program to find the largest element in a list. Prompt the user to
 def largest_element():
     user = input("type list: ").split()
     largest_word = max(user, key=len)  # key=len compares by length, not alphabetically
-    
+
     print(largest_word)
-           
+
 largest_element()
 
 """
@@ -4305,12 +4302,12 @@ def second_largest_element():
     if len(user_input) < 2:
         print("less then 2")  # Less descriptive error message
         return
-        
+
     sort = sorted(user_input, key=len)  # Sort ascending
     second_largest = sort[-2]  # Second-to-last element
-    
+
     print(second_largest)
-        
+
 second_largest_element()
 
 """
@@ -4321,8 +4318,8 @@ Write a Python program to find the maximum of three numbers. Prompt the user to 
 def max_of_three(numbers):
      result = max(list(numbers))  # list() is unnecessary if numbers is already a list
      return result
-        
-three_numbers = [567, 56, 6]    
+
+three_numbers = [567, 56, 6]
 print(max_of_three(three_numbers))
 
 """
@@ -4334,10 +4331,10 @@ def max_of_three(numbers):
     max_number = numbers[0]
     if numbers[1] > max_number:
         max_number = numbers[1]
-        
+
     if numbers[2] > max_number:
         max_number = numbers[2]
-        
+
     return max_number
 
 three_numbers = [567, 56, 6]
@@ -4352,7 +4349,7 @@ def centimeters_inches():
     cm = int(input("type centimeters: "))
     inches = cm * 0.3937  # Conversion factor: multiply centimeters by 0.3937
     print(f"{cm} cm = {inches} inches")  # Displays conversion result
-    
+
 centimeters_inches()
 
 """
@@ -4365,12 +4362,12 @@ def find_min_max():
     int_num = []
     for number in user:
         int_num.append(int(number))
-    
+
     min_num = min(int_num)
     max_num = max(int_num)
-    
+
     print(min_num, max_num)
-       
+
 find_min_max()
 
 def find_min_max():
@@ -4381,7 +4378,7 @@ def find_min_max():
 
     min_number = int_number[0]
     max_number = int_number[0]
-    
+
     for number in int_number:
         if number < min_number:
             min_number = number
@@ -4405,7 +4402,7 @@ def common_numbers(lst):
             common.append(number)  # Add to common (duplicates)
         else:
             seen.append(number)  # Mark as seen (first occurrence)
-    
+
     return common  # Returns list of numbers that appear more than once
 
 lst = [43, 2, 45, 567, 666, 2, 45]  # Duplicates: 2 and 45
@@ -4425,7 +4422,7 @@ def common_num(lst):
         else:
             unique.add(number)  # Mark as seen (add to set)
     return commom  # Returns list of duplicate numbers
-    
+
 lst = [2, 5, 6, 2, 4, 5]
 print(common_num(lst))  # Output: [2, 5] (duplicates)
 
@@ -4457,7 +4454,7 @@ def word_frequency(string):  # Function name says "word" but counts characters
         else:
             result[word] = 1  # Initialize count
     return result
-            
+
 string = "gore why are you here you are gore"
 print(word_frequency(string))  # Counts characters, not words
 
@@ -4473,7 +4470,7 @@ def total(numbers):
         total_numbers += number  # Accumulate sum
         multiply_numbers *= number  # Accumulate product
     return total_numbers, multiply_numbers  # Returns tuple (sum, product)
-            
+
 lst_numbers = [1, 2, 3, 4]
 print(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product
 
@@ -4488,7 +4485,7 @@ def list_integers(lst):
         result.append(word)  # Add word itself (string)
         result.append(len(word))  # Add length of word (integer)
     return result
-    
+
 lst = ["join", "Jonathan", "tree"]
 print(list_integers(lst))  # Output: ["join", 4, "Jonathan", 8, "tree", 4]
 
@@ -4501,12 +4498,12 @@ def average(lst):
     sum_lst = sum(lst)  # Built-in sum() adds all numbers
     length = len(lst)  # Built-in len() counts elements
     total = sum_lst / length  # Divide sum by count to get average
-    
+
     return total
-               
+
 lst = [2666, 566, 6777]
 print(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...
-    
+
 """
 Problem: 206
 Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().
@@ -4520,15 +4517,15 @@ def max_of_three():
     if len(number) != 3:  # Should be len(int_numbers) != 3
         print("not enough numbers")
         return
-        
+
     max_number = int_numbers[0]
     if int_numbers[1] > max_number:  # If second is larger
         max_number = int_numbers[1]  # Update maximum
     if int_numbers[2] > max_number:  # If third is larger
         max_number = int_numbers[2]  # Update maximum
-        
+
     print(max_number)
-    
+
 max_of_three()
 
 """
@@ -4541,7 +4538,7 @@ def max_of_list():
     if len(user) != 3:  # Validation check
         print("type more numbers")
         return
-    
+
     int_numbers = []
     for number in user:
         int_numbers.append(int(number))
@@ -4549,9 +4546,9 @@ def max_of_list():
     for number in int_numbers:
         if number > max_number:  # If current number is larger
             max_number = number  # Update maximum
-            
+
     print(max_number)
-           
+
 max_of_list()
 
 """
@@ -4564,11 +4561,11 @@ def max_of_list():
     int_numbers = []
     for number in user:
         int_numbers.append(int(number))
-    
+
     max_number = max(int_numbers)  # Built-in max() finds maximum element
-                   
+
     print(max_number)
-           
+
 max_of_list()
 
 """
@@ -4582,7 +4579,7 @@ def list_words(lst):
         words_lengths.append(word)  # Add word (string)
         words_lengths.append(len(word))  # Add length (integer) using built-in len()
     return words_lengths
-        
+
 lst = ["Jonathan", "horse", "today"]
 print(list_words(lst))
 
@@ -4599,7 +4596,7 @@ def list_words(lst):
             count += 1  # Increment for each character
         words_with_lengths.append(word)  # Add word
         words_with_lengths.append(count)
-    
+
     return words_with_lengths
 
 lst = ["Jonathan", "horse", "today"]
@@ -4617,9 +4614,9 @@ def length_words(lst):
         for char in word:
             count += 1
         length.append(count)
-    
+
     return length
-    
+
 lst = ["Jonathan", "chris", "mountain"]
 print(length_words(lst))
 
@@ -4636,7 +4633,7 @@ def intersection():
         if word in lst2:  # Check if word exists in second list (membership test)
             common.append(word)  # Add to common if found
     print(common)
-    
+
 intersection()
 
 """
@@ -4646,7 +4643,7 @@ Write a Python program to print the following pattern:\n*\n* *\n* * *\n* * * *\n
 
 for i in range(1, 6):  # i = 1, 2, 3, 4, 5
     print('* ' * i)  # String multiplication: '*' * 3 = '***'
-    
+
 """
 Problem: 214
 Write a Python program to print the following number pyramid:\n1\n2 2\n3 3 3\n4 4 4 4\n5 5 5 5 5
@@ -4666,7 +4663,7 @@ def square_pattern(n):
         for j in range(n):  # Inner loop: columns
             print("*", end=" ")  # Print star with space, end="" prevents newline
         print()  # Print newline after each row
-n = 5    
+n = 5
 print(square_pattern(n))  # Prints square, then prints None
 
 def print_square_pattern(side_length):
@@ -4694,7 +4691,7 @@ Write a Python program to print an inverted pyramid pattern:\n* * * * *\n* * * *
 for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)
     for j in range(i):  # Print i stars in this row
         print('*', end=' ')  # Print star with space
-    print()  # Newline after each row 
+    print()  # Newline after each row
 
 """
 Problem: 218
@@ -4731,14 +4728,14 @@ print_floyds_triangle(rows)
 
 """
 220
-Write a Python program to print a diamond pattern of stars for a given number of rows.\nFor example, for 3 rows:\n  *\n ***\n*****\n ***\n  
+Write a Python program to print a diamond pattern of stars for a given number of rows.\nFor example, for 3 rows:\n  *\n ***\n*****\n ***\n
 """
 
 def print_diamond(rows):
     for i in range(rows):  # i = 0, 1, 2, ..., rows-1
         for j in range(rows - i - 1):  # Spaces: rows-1, rows-2, ..., 0
             print(" ", end="")  # Print space without newline
-        
+
         for k in range(2 * i + 1):  # 2*0+1=1, 2*1+1=3, 2*2+1=5
             print("*", end="")
         print()  # Newline after row
@@ -4746,7 +4743,7 @@ def print_diamond(rows):
     for i in range(rows - 2, -1, -1):  # i = rows-2, rows-3, ..., 0 (backwards)
         for j in range(rows - i - 1):  # Leading spaces
             print(" ", end="")
-            
+
         for k in range(2 * i + 1):  # Should have closing )
             print("*", end="")  # Syntax error: missing closing parenthesis
         print()
@@ -4793,7 +4790,7 @@ def mirrored_right_angled_triangle(rows):
     for i in range(1, rows+1):  # i = 1, 2, 3, 4, 5
         for j in range(rows-i):  # Spaces: 4, 3, 2, 1, 0
             print(" ", end="")  # Print space without newline
-            
+
         for k in range(i):
             print("*", end=" ")  # Print star with space
         print()  # Newline after row
@@ -4817,15 +4814,15 @@ rows = 5
 triangle_pattern(rows)
 
 def triangle_pattern(rows):
-    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    
+
     for i in range(rows):
         letter = letters[i]
         for j in range(i + 1):
-            
+
             print(letter, end=" ")
-            
+
         print()
 
 rows = 5
@@ -4960,7 +4957,7 @@ def sum_of_odd():
         if number % 2 != 0:  # Check if odd
             count += number  # Add odd number to sum
     print(count)
-            
+
 sum_of_odd()
 
 """
@@ -4973,7 +4970,7 @@ def remove_vowels():
     for char in user:
         if char not in "aeiou":  # Only checks lowercase vowels (case-sensitive)
             print(char, end= "")  # Print char without newline (end="" prevents newline)
-            
+
 remove_vowels()
 
 """
@@ -4987,7 +4984,7 @@ def find_min(lst):
         if number < min_num:
             min_num = number
     return min_num
-            
+
 lst = [13, 566, 1]
 print(find_min(lst))
 
@@ -5009,7 +5006,7 @@ Write a Python program that prints a increasing triangle pattern of stars.
 
 def increasing_triangle():
     n = 5
-    
+
     for i in range(n):
         for i in range(i+1):
             print("*", end=" ")
@@ -5039,7 +5036,7 @@ Write a Python program that prints a right triangle pattern of stars.
 for i in range(1, 6):  # i = 1, 2, 3, 4, 5
     print((("*") + " ")* i)  # Prints: "* ", "* * ", "* * * ", etc.
 
-def right_triangle(n): 
+def right_triangle(n):
     for i in range(1, n + 1):  # Rows: 1 to n
         for j in range(i):  # Print i stars
             print("*", end=" ")  # Print star with space
@@ -5096,10 +5093,10 @@ Write a Python program to print the index and value of each element in a list us
 def enumerate_lst(lst):
     for index, word in enumerate(lst):  # enumerate() provides index-value pairs
         print(f"index {index} name {word}")  # Prints: "index 0 name Jon", etc.
-    
-    
+
+
 lst = ["Jon", "Chris", "Nathan"]
-print(enumerate_lst(lst))  # Prints indices/values, then prints None 
+print(enumerate_lst(lst))  # Prints indices/values, then prints None
 
 """
 Problem: 242
@@ -5111,9 +5108,9 @@ def enumerate_lst(lst):
     for index, word in enumerate(lst):
         result.append((index, word))  # Append tuple (index, word) to list
     return result  # Returns: [(0, "Jon"), (1, "Chris"), (2, "Nathan")]
-    
+
 lst = ("Jon", "Chris", "Nathan")  # Note: tuple input (works with any iterable)
-print(enumerate_lst(lst)) 
+print(enumerate_lst(lst))
 
 """
 Problem: 243
@@ -5123,12 +5120,12 @@ Write a Python program to find the index of the first occurrence of a specific v
 def enumerate_lst(lst, target):
     for index, word in enumerate(lst):
         if word == target:
-            return word, index 
+            return word, index
     return -1
-        
-target = "Chris"    
+
+target = "Chris"
 lst = ["Jon", "Chris", "Nathan"]
-print(enumerate_lst(lst, target)) 
+print(enumerate_lst(lst, target))
 
 """
 Problem: 244
@@ -5152,7 +5149,7 @@ def enumerate_lst(lst):
     for index, word in enumerate(lst):
         result[index] = word  # Assign value to index key
     print(result)
-    
+
 lst = ["Jon", "Chris", "Nathan"]
 enumerate_lst(lst)
 
@@ -5165,7 +5162,7 @@ def enumerate_lst(lst):
     for index, word in enumerate(lst):
         if index % 2 != 0:  # This filters odd indexes (1, 3, 5, ...)
             print(index, word)  # Prints elements at odd positions
-        
+
 lst = ["Jon", "Chris", "Nathan", "hot", "class", "shirt", "beach", "app", " board", "hit"]
 enumerate_lst(lst)  # Prints: 1 Chris, 3 hot, 5 shirt, 7 app, 9 hit (odd indexes)
 
@@ -5177,7 +5174,7 @@ Write a Python program to print the index and value of each element in a list us
 def enumerate_lst(lst):
     for index, word in enumerate(lst):
         print(f"index {index} name {word}")
-    
+
 lst = ["Jon", "Chris", "Nathan", "Sam", "Rachel"]
 enumerate_lst(lst)
 
@@ -5192,7 +5189,7 @@ def replace_with_index(lst):
     return lst  # Returns modified list: [0, 1, 2, 3, 4]
 
 lst = ["Jon", "Chris", "Nathan", "Sam", "Rachel"]
-print(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4] 
+print(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]
 
 """
 Problem: 249
@@ -5202,7 +5199,7 @@ Write a Python program to print the index and values from two lists of equal len
 def enumerate_lst(lst1, lst2):
     for index, word in enumerate(lst1):  # Get index and value from lst1
         print(f"index {index}: {word} and {lst2[index]}")  # Prints both values side by side
-    
+
 lst1 = ["Jon", "Chris", "Nathan", "Tom", "Sam", "Rose", "Bliss", "Hurt"]
 lst2 = ["Jonny", "Christopher", "Jhovian", "Tom", "Zack", "Rose", "Brad", "Michael"]
 
@@ -5276,7 +5273,7 @@ def dic_lst(lst1, lst2):
     for x, y in zip(lst1, lst2):  # x from lst1 (key), y from lst2 (value)
         result[x] = y  # Assign value y to key x
     return result  # Returns: {1: "Ron", 2: "break", 3: "tree", 4: "son"}
-    
+
 lst1 = [1, 2, 3, 4]
 lst2 = ["Ron", "break", "tree", "son"]
 print(dic_lst(lst1, lst2))
@@ -5289,9 +5286,9 @@ def combine_3_lst(lst1, lst2, lst3):
     result = []
     for x, y, z in zip(lst1, lst2, lst3):  # Unpack three elements from zip()
          result.append((x, y, z))  # Append tuple of three elements
-         
+
     return result  # Returns: [("Sam", "Sammy", "Son"), ("Nike", "Mikey", "monkey"), ...]
-     
+
 lst1 = ["Sam", "Nike", "system"]
 lst2 = ["Sammy", "Mikey", "Steven"]
 lst3 = ["Son", "monkey", "star"]
@@ -5307,7 +5304,7 @@ def transpose_matrix(matrix):
     result = []
     for row in transposed:  # Each row is a tuple from zip()
         result.append(list(row))  # Convert tuple to list
-    
+
     return result  # Returns: [[1,4,7], [2,5,8], [3,6,9]]
 matrix = [
     [1, 2, 3],
@@ -5327,8 +5324,8 @@ def list_tuples(lst):
     result = []
     for x in unzipped:  # Each x is a tuple of elements at same position
         result.append(list(x))  # Convert tuple to list
-    
-    
+
+
 lst = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
 print(list_tuples(lst))  # Prints None (function doesn't return)
 
@@ -5341,7 +5338,7 @@ def individualists(lst):
     result = []
     for num in zip(*lst):
         result.append(list(num))
-        
+
     return result
 
 lst = [(1, 2, 3), (4, 5, 6)]
@@ -5357,7 +5354,7 @@ def maxium_element_wise(lst1, lst2):  # Typo: "maxium" should be "maximum"
     for x, y in zip(lst1, lst2):
         result.append(max(x, y))  # max() compares two values, returns larger
     return result  # Returns: [7, 8, 9] (maximum of each pair)
-    
+
 lst1 = [2, 4, 6]
 lst2 = [7, 8, 9]
 print(maxium_element_wise(lst1, lst2))
@@ -5372,7 +5369,7 @@ def concatenate(lst1, lst2):
     for x, y in zip(lst1, lst2):
         result.append(f"{x} {y}")
     return result  # Returns: ["fruite orange", "apple banana", "tomato carrot"]
-    
+
 lst1 = ["fruite", "apple", "tomato"]  # Typo: "fruite" should be "fruit"
 lst2 = ["orange", "banana", "carrot"]
 print(concatenate(lst1, lst2))
@@ -5386,7 +5383,7 @@ def combine_to_dict(lst1, lst2):
     result = []
     for x, y in zip(lst1, lst2):
         result.append({'a': x, 'b': y})  # Append dictionary to list
-    
+
     return result  # Returns: [{'a':1, 'b':'one'}, {'a':2, 'b':'two'}, {'a':3, 'b':'three'}]
 
 lst1 = [1, 2, 3]
@@ -5403,7 +5400,7 @@ def filter_pairs(lst1, lst2):
     for x, y in zip(lst1, lst2):
         if x > y:  # Condition: first element greater than second
             result.append((x, y))  # Append tuple if condition met
-    
+
     return result  # Returns: [(5,4), (8,7), (10,2)] (pairs where x > y)
 
 lst1 = [5, 8, 3, 10]
@@ -5420,7 +5417,7 @@ def filter_pairs(lst1, lst2):
     for x, y in zip(lst1, lst2):
         if x < y:  # Check if first element is less than second
             result.append((x, y))  # Add tuple if condition met
-    
+
     return result  # Returns: [(3,6)] - only pair where x < y
 
 lst1 = [5, 8, 3, 10]
@@ -5429,7 +5426,7 @@ print(filter_pairs(lst1, lst2))
 
 """
 Problem: 264
-Write a Python program to add corresponding elements of nested lists using `zip()`. 
+Write a Python program to add corresponding elements of nested lists using `zip()`.
 lst1 = [[1, 2, 3], [4, 5, 6]]
 lst2 = [[7, 8, 9], [10, 11, 12]]
 result:
@@ -5444,7 +5441,7 @@ def add_nested_lists(lst1, lst2):
             added_sublist.append(x + y)  # Add corresponding elements
         result.append(added_sublist)  # Append summed sublist
     return result  # Returns: [[8,10,12], [14,16,18]]
-    
+
     return result
 
 lst1 = [[1, 2, 3], [4, 5, 6]]
@@ -5462,7 +5459,7 @@ def euclidean_distance(point1, point2):
     distance_squared = 0
     for x1, x2 in zip(point1, point2):
         distance_squared += (x1 - x2) ** 2  # (x1-x2)², sum all dimensions
-        
+
     return math.sqrt(distance_squared)  # sqrt((3-6)² + (4-8)²) = sqrt(9+16) = 5
 
 point1 = (3, 4)
@@ -5480,7 +5477,7 @@ def interleave(lst1, lst2):
         result.append(x)  # Add element from first list
         result.append(y)  # Add element from second list (alternating)
     return result  # Returns: ["crissy", "spotty", "missy", "motty", "sissy", "hotty"]
-        
+
 lst1 = ["crissy", "missy", "sissy"]
 lst2 = ["spotty", "motty", "hotty"]
 print(interleave(lst1, lst2))
@@ -5495,7 +5492,7 @@ def multiply_2_lst(lst1, lst2):
     for x, y in zip(lst1, lst2):
         result.append(x * y)  # 2*3=6, 4*6=24, 6*9=54
     return result  # Returns: [6, 24, 54]
-            
+
 lst1 = [2, 4, 6]
 lst2 = [3, 6, 9]
 print(multiply_2_lst(lst1, lst2))  # Output: [6, 24, 54]
@@ -5510,7 +5507,7 @@ def dot_product(vector1, vector2):
     for x, y in zip(vector1, vector2):
         result += x * y  # Multiply and accumulate: 1*4 + 2*5 + 3*6
     return result  # Returns: 4 + 10 + 18 = 32
-    
+
 vector1 = [1, 2, 3]
 vector2 = [4, 5, 6]
 print(dot_product(vector1, vector2))  # Output: 32
@@ -5623,7 +5620,7 @@ result = filter_by_length(strings, length)
 print(result)
 
 def filter_by_length(strings, length):
-    
+
     def has_length(s):
         return len(s) == length
 
@@ -5635,7 +5632,7 @@ strings = ["apple", "banana", "cherry", "date", "fig"]
 length = 5
 result = filter_by_length(strings, length)
 
-print(result) 
+print(result)
 
 """
 Problem: 276
@@ -5780,7 +5777,7 @@ def print_1_to_10():
     while i <= 10:  # Loop executes while i is less than or equal to 10
         print(i)  # Print current value of i
         i += 1  # Increment i by 1 (equivalent to i = i + 1)
-        
+
 print_1_to_10()  # Output: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (each on new line)
 
 """
@@ -5920,7 +5917,7 @@ for num in test_numbers:
         print(f"{num} is a prime number.")
     else:
         print(f"{num} is not a prime number.")
-    
+
 """
 Problem: 294
 Write a Python program to count the number of digits in a given number using a `while` loop.
@@ -5994,11 +5991,11 @@ description": "Write a Python program to find the sum of all elements in a list 
 def sum_elements(lst):
     total = 0
     index = 0
-    
+
     while index < len(lst):
         total += lst[index]
         index += 1
-        
+
     return total
 
 lst = [1, 2, 3, 4, 5]
@@ -6014,7 +6011,7 @@ def main(lst):
     while i < len(lst):
         return max(lst, key=len)
         i += 1
-        
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)
 
@@ -6045,12 +6042,12 @@ def smallest_element(lst):
         return None
 
     smallest_word = lst[0]
-    i = 1 
+    i = 1
 
     while i < len(lst):
         if lst[i] < smallest_word:
-            smallest_word = lst[i] 
-        i += 1  
+            smallest_word = lst[i]
+        i += 1
 
     return smallest_word
 
@@ -6175,7 +6172,7 @@ def ask_until_condition():
         user_input = input("Enter a number greater than 10: ")
         if int(user_input) > 10:
             break
-            
+
 ask_until_condition()
 
 """
@@ -6213,7 +6210,7 @@ Write a Python program to sort a list of integers by the sum of their digits usi
 
 def sum_of_digits(n):
     total = 0
-    for digit in str(n): 
+    for digit in str(n):
         total += int(digit)
     return total
 
@@ -6235,12 +6232,12 @@ def find_min_max():
     int_num = []
     for number in user:
         int_num.append(int(number))
-    
+
     min_num = int_num[-1]
     max_num = int_num[0]
-    
+
     print(min_num, max_num)
-           
+
 find_min_max()
 
 """
@@ -6250,7 +6247,7 @@ Write a function group_by_first_letter that takes a list of strings as input and
 
 def group_by_first_letter():
     lst = input("type word list: ").split()
-    
+
     result = {}
     for word in lst:
         first_letter = word[0]
@@ -6258,9 +6255,9 @@ def group_by_first_letter():
             result[first_letter] = [word]
         else:
             result[first_letter].append(word)
-            
+
     print(result)
-        
+
 group_by_first_letter()
 
 """
@@ -6273,7 +6270,7 @@ def increasing_triangle(n):
         for j in range(i+1):
             print("*", end=" ")
         print()
-            
+
 rows = 5
 increasing_triangle(rows)
 
@@ -6285,19 +6282,19 @@ Write a Python function called find_longest_word that takes a list of words as i
 def find_longest_word(lst):
     longest_word = ""
     count = 0
-    
+
     for word in lst:
         if len(word) > count:
             count = len(word)
             longest_word = word
     return longest_word
 
-lst = ["Jonathan", "noll"]    
+lst = ["Jonathan", "noll"]
 print(find_longest_word(lst))
 
 def main(lst):
     return max(lst, key=len)
-    
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)
 
@@ -6309,18 +6306,18 @@ Write a Python function called find_longest_word that takes a list of words as i
 def find_longest_word(lst):
     longest_word = ""
     max_length = 0
-    
+
     for word in lst:
         current_length = 0
         for char in word:
             current_length += 1
         if current_length > max_length:
-            max_length = current_length 
+            max_length = current_length
             longest_word = word
-            
+
     return longest_word
-    
-lst = ["Jonathan", "noll", "it"]    
+
+lst = ["Jonathan", "noll", "it"]
 print(find_longest_word(lst))
 
 """
@@ -6331,8 +6328,8 @@ Write a Python program to find the second largest number in a list. Prompt the u
 def second_largest_number():
     user = input("Type numbers separated by spaces: ").split()
     user_int = list(map(int, user))
-    user_int.sort()  
-    second_largest = user_int[-2]  
+    user_int.sort()
+    second_largest = user_int[-2]
 
     print(second_largest)
 
@@ -6436,7 +6433,7 @@ def main(lst):
     def sqaure_root(num):
         return num ** 2
     return list(map(sqaure_root, lst))
-    
+
 lst = [567, 4, 1, 57]
 main(lst)
 
@@ -6526,7 +6523,7 @@ string_list = ["  Hello  ", "  World  ", "  Python  ", "  Programming  "]
 stripped_strings = strip_whitespace(string_list)
 print("Original strings:", string_list)
 print("Stripped strings:", stripped_strings)
-    
+
 """
 Problem: 326
 Write a Python program to create a list of tuples where each tuple contains a number and its square using `map()`.
@@ -6588,16 +6585,16 @@ Write a function where user types a list of numbers in string and returns a list
 def list_string(numbers):
     sort = sorted(numbers, key=int)
     return sort
-   
+
 lst = ["377", "55", "44"]
 print(list_string(lst))
 
 def type_smallest_biggest():
     user = input("type number list: ").split()
     sort_number = sorted(user, key=int)
-       
+
     print(sort_number)
-    
+
 type_smallest_biggest()
 
 """
@@ -6607,9 +6604,9 @@ Write a function where user types a list of numbers in string and returns a list
 
 def list_of_string_numbers(n):
     sort = sorted(n, key=int)[::-1]
-    
+
     return sort
-        
+
 numbers = ["44", "66", "3", "477"]
 print(list_of_string_numbers(numbers))
 
@@ -6617,7 +6614,7 @@ def type_biggest_smallest():
     user = input("Type numbers: ").split()
     int_list = list(map(int, user))
     sorted_list = sorted(int_list, reverse=True)
-    
+
     print(sorted_list)
 
 type_biggest_smallest()
@@ -6748,9 +6745,9 @@ Write a Python program to compute the sum of elements in a list where each eleme
 
 def sum_of_elements(lst):
     total_sum = 0
-    
+
     for i, num in enumerate(lst):
-        total_sum += i * num  
+        total_sum += i * num
     return total_sum
 
 lst = [2, 4, 6, 8]
@@ -6902,23 +6899,23 @@ Write a Python program that defines a function `add_prefix()` which contains a n
 """
 
 def add_prefix(prefix):
-    
+
     def prefix_string(string):
-    
+
         return prefix + string
-    
+
 
     return prefix_string
 
 prefix_func = add_prefix("pre-")
-result = prefix_func("fix") 
+result = prefix_func("fix")
 print(result)
 
 def add_prefix(prefix):
-    
+
     def prefix_string(string):
         return prefix + string
-    
+
     return prefix_string
 
 prefix_func = add_prefix("pre-")
@@ -7164,7 +7161,7 @@ def reverse_string():
     return reverse
 
 reverse_func = reverse_string()
-print(reverse_func("Hello, World!"))  
+print(reverse_func("Hello, World!"))
 
 def reverse_string(string):
     def reverse(s):
@@ -7195,7 +7192,7 @@ print(result)
 
 def is_sorted():
     return compare_elements(lst)
-    
+
 def compare_elements(lst):
     if lst == sorted(lst):
         return True
@@ -7362,26 +7359,26 @@ Write a Python program that defines a main function `find_largest()` and a helpe
 """
 
 def max_in_list(lst):
-    return max(lst)  
+    return max(lst)
 
 def find_largest():
     largest = max_in_list(lst)
     return largest
 
 lst = [12, 45, 7, 23, 67756, 89, 34]
-print(find_largest())  
+print(find_largest())
 
 def max_in_list(lst):
     if not lst:
         return None
-    return max(lst)  
+    return max(lst)
 
 def find_largest():
     numbers = [12, 45, 7, 23, 56, 89, 34]
     largest = max_in_list(numbers)
     return largest
 
-print(find_largest())  
+print(find_largest())
 
 """
 Problem: 376
@@ -7470,7 +7467,7 @@ Write a function where user types a list of numbers in string and returns a list
 user = input("type numbers: ").split()
 
 print(list(map(int, user)))
-    
+
 
 def convert_to_integers(strings):
     return list(map(int, strings))
@@ -7499,7 +7496,7 @@ Write a Python program to sort a list of strings by their length using the `key`
 def length_strings(lst):
     sort = sorted(lst, key=len)
     return sort
-    
+
 lst = ["Jonathan", "chris", "mimi"]
 print(length_strings(lst))
 
@@ -7570,7 +7567,7 @@ def main(lst):
     def inner(word):
         return word[-1]
     return list(sorted(lst, key=inner))
-    
+
 lst = ["treez", "cliff", "mountain", "tree","tree", "grassya"]
 main(lst)
 
@@ -7711,7 +7708,7 @@ def main(lst_tuples):
     def inner(tup):
         return tup[0] + tup[1]
     return list(sorted(lst_tuples, key=inner))
-    
+
 lst_tuples = [(1,64),(7,3),(2,9)]
 print(main(lst_tuples))
 
@@ -7794,8 +7791,8 @@ Write a Python program to sort a list of strings by the number of vowels in each
 def count_vowels(s):
     vowels = "aeiou"
     count = 0
-    s = s.lower() 
-    
+    s = s.lower()
+
     for char in s:
         if char in vowels:
             count += 1
@@ -7826,7 +7823,7 @@ Write a Python program to add 5 to each number in a list. Do not use map().
 
 def add_five(lst):
     result = []
-    
+
     for number in lst:
         result.append(number + 5)
     return result
@@ -7841,12 +7838,12 @@ Write a Python function called `find_min` that takes a list of numbers as input 
 
 def find_min(numbers):
     min_num = numbers[0]
-    
+
     for number in numbers:
         if number < min_num:
             min_num = number
     return min_num
-    
+
 lst = [2, 6, 1, 189]
 print(find_min(lst))
 
@@ -7869,7 +7866,7 @@ Write a function that converts centimetets to inches. Type a integer as argument
 """
 
 def converts(cm):
-    
+
     inch = cm * 0.39
     print(inch)
 
@@ -7884,7 +7881,7 @@ Write a Python program to reverse a list use the reverse() function. Prompt the 
 def reverse(lst):
     lst.reverse()
     return lst
-    
+
 lst = [1, 2, 3, 4]
 print(reverse(lst))
 
@@ -7897,14 +7894,14 @@ def calculate_average(lst):
     length_num = 0
     for number in lst:
         length_num += 1
-        
+
     add_num = 0
     for number in lst:
         add_num += number
-        
+
     total = add_num / length_num
     return total
-           
+
 lst = [23, 56, 33]
 print(calculate_average(lst))
 
@@ -7917,14 +7914,14 @@ def remove_duplicates(lst):
     lst = lst.split()
     unique = []
     commom = []
-    
+
     for word in lst:
         if word in unique:
             commom.append(word)
         else:
             unique.append(word)
     return unique
-    
+
 lst = " what is you is going is to do"
 print(remove_duplicates(lst))
 
@@ -7935,14 +7932,14 @@ Write a program that maps a list of words into a list of integers representing t
 
 def len_words(lst):
     result = {}
-    
+
     for word in lst:
         count = 0
         for char in word:
             count += 1
         result[word] = count
     return result
-               
+
 lst = ["Jonathan", "Chris", "Jeremy"]
 print(len_words(lst))
 
@@ -7953,10 +7950,10 @@ Write a Python program to determine the len of a string in a list. Do not use fi
 def filter_string(lst):
     result = []
     for word in lst:
-        if len(word) == 3: 
+        if len(word) == 3:
             result.append(word)
     return result
-                    
+
 lst = ["jon", "chris", "tom", "Jeremy"]
 print(filter_string(lst))
 
@@ -7965,10 +7962,10 @@ Problem: 411
 Write a Python function called calculate_sum that takes two numbers as arguments. Inside this function, define a nested function that returns their sum."
 """
 def calculate_sum(a, b):
-    
+
     def inner_sum(x, y):
         return x + y
-    
+
     return inner_sum(a, b)
 
 result = calculate_sum(7, 3)
@@ -8471,15 +8468,15 @@ Write a Python function string_contains_digit that checks if a string contains a
 """
 
 def string_contains_digit(string):
-    
+
     def contains_digit(x):
         for char in x:
             if char.isdigit():
                 return True
         return False
-        
+
     return contains_digit(string)
-        
+
 string = "jonathan5"
 print(string_contains_digit(string))
 
@@ -8489,15 +8486,15 @@ Write a Python function string_contains_letter that checks if a string contains 
 """
 
 def string_contains_letter(string):
-    
+
     def contains_letter(x):
         for char in x:
             if char.isalpha():
                 return True
         return False
-        
+
     return contains_letter(string)
-        
+
 string = "123455g"
 print(string_contains_letter(string))
 
@@ -8507,15 +8504,15 @@ Write a Python function calculate_average that takes three numbers and returns t
 """
 
 def average_of_list(lst):
-    
+
     def average(x):
         for number in x:
             count_len = len(x)
             add_num = sum(x)
             total = add_num / count_len
-            
+
         return total
-        
+
     return average(lst)
 
 lst = [34, 67, 667]
@@ -8527,14 +8524,14 @@ Write a Python function check_multiple_of_n that takes two numbers and checks if
 """
 
 def check_multiple_of_n(num1, num2):
-    
+
     def is_multiple(x, y):
-        return x % y == 0 
-    
+        return x % y == 0
+
     return is_multiple(num1, num2)
 
 print(check_multiple_of_n(10, 2))
-print(check_multiple_of_n(10, 3)) 
+print(check_multiple_of_n(10, 3))
 
 """
 Problem: 448
@@ -8542,16 +8539,16 @@ Write a Python function longest_string that takes a list of strings and returns 
 """
 
 def longest_string(lst):
-    
+
     def longest(x):
         longest_word = x[0]
         for word in x:
             if word > longest_word:
                 longest_word = word
         return longest_word
-            
+
     return longest(lst)
-                    
+
 lst = ["jon", "zonathan", "mimi"]
 print(longest_string(lst))
 
@@ -8559,9 +8556,9 @@ def longest_string(lst):
 
     def find_longest(strings):
         return max(strings, key=len)
-    
+
     return find_longest(lst)
-    
+
 lst = ["jon", "zonathan", "mimi"]
 print(longest_string(lst))
 
@@ -8571,12 +8568,12 @@ Write a Python function shortest_string that takes a list of strings and returns
 """
 
 def shortest_string(lst):
-    
+
     def shortest(x):
         return min(x, key=len)
-        
+
     return shortest(lst)
-        
+
 lst = ["chris", "tit", "mountain"]
 print(shortest_string(lst))
 
@@ -8586,14 +8583,14 @@ Write a Python function remove_duplicates that takes a list and removes duplicat
 """
 
 def remove_duplicates(lst):
-    
+
     def duplicates_removed(x):
         unique = set()
-        
+
         for word in x:
             unique.add(word)
         return unique
-        
+
     return duplicates_removed(lst)
 
 lst = ["not", "not", "today", "today"]
@@ -8611,10 +8608,10 @@ def fibonacci(n):
             return n
         else:
             return fib_recursive(n - 1) + fib_recursive(n - 2)
-    
+
     return fib_recursive(n)
 
-n = 10 
+n = 10
 print(fibonacci(n))
 
 """
@@ -8622,13 +8619,13 @@ Problem: 452
 Write a Python function called calculate_sum that takes two numbers as arguments. Inside this function, define a nested function that returns their sum and another function that returns the multiplication."
 """
 def calculate_sum(a, b):
-    
+
     def inner_sum(x, y):
         return x + y
-    
+
     def inner_mult(x, y):
         return x * y
-    
+
     return inner_sum(a, b), inner_mult(a, b)
 
 print(calculate_sum(7, 3))
@@ -8639,18 +8636,18 @@ Write a Python function called calculate_integers that takes two numbers as argu
 """
 
 def calculate_integers(a, b):
-    
+
     def product(x, y):
         return x * y
-        
+
     def sum_int(x, y):
         return x + y
-        
+
     def division(x, y):
         return x / y
-        
+
     return product(a, b), sum_int(a, b), division(a, b)
-    
+
 print(calculate_integers(10, 5))
 
 """
@@ -8659,15 +8656,15 @@ Write a Python function average_of_list that calculates the average of a list of
 """
 
 def average_of_list(lst):
-    
+
     def average(x):
         for number in x:
             count_len = len(x)
             add_num = sum(x)
             total = add_num / count_len
-            
+
         return total
-        
+
     return average(lst)
 
 lst = [34, 67, 667]
@@ -8680,9 +8677,9 @@ Write a Python function that sorts a list of strings by their length using the k
 
 def len_lst(lst):
     sort = sorted(lst, key=len)
-    
+
     return sort
-    
+
 lst = ["Jonathan", "chris", "Jeremy"]
 print(len_lst(lst))
 
@@ -8693,9 +8690,9 @@ Write a Python function to find the minimum string by its length using the min()
 
 def min_len(lst):
     min_string = min(lst, key=len)
-    
+
     return min_string
-    
+
 lst = ["truck", "is", "Bethany"]
 print(min_len(lst))
 
@@ -8704,10 +8701,10 @@ Problem: 458
 Write a Python function to find the maximum string alphabetically using the key parameter.
 """
 def max_string_alpha(lst):
-    
+
     def max_string(x):
         return len(x)
-        
+
     return max(lst, key=max_string)
 
 lst = ["hippopotamus", "giraffe", "monkey"]
@@ -8750,7 +8747,7 @@ Write a Python function that sorts a list of words by the number of vowels they 
 """
 
 def sort_words_by_vowel_count(lst):
-    
+
     def count_vowels(word):
         vowels = 'aeiou'
         count = 0
@@ -8758,7 +8755,7 @@ def sort_words_by_vowel_count(lst):
             if char in vowels:
                 count += 1
         return count
-    
+
     return sorted(lst, key=count_vowels)
 
 lst = ["apple", "banana", "cherry", "date"]
@@ -8771,21 +8768,21 @@ Write a Python function to find the longest word in a list using the max() funct
 
 def longest_word(lst):
     longest_w = max(lst, key=len)
-    
+
     return longest_w
-    
+
 lst = ["cheater", "lepard", "lion"]
 print(longest_word(lst))
-    
+
 """
 Problem: 463
 Write a Python function to sort a list of tuples by the sum of the elements in each tuple using the key parameter.
 """
 
 def sum_of_tuple(lst):
-    
+
     return sorted(lst, key=sum)
-    
+
 lst = [(9, 9, 9), (5, 5, 5), (8, 8, 8)]
 print(sum_of_tuple(lst))
 
@@ -8795,10 +8792,10 @@ Write a Python function to sort a list of strings by the last character of each 
 """
 
 def list_of_strings_lst(lst):
-    
+
     def last_char(s):
         return s[-1]
-    
+
     return sorted(lst, key=last_char)
 
 lst = ["car", "side", "beach"]
@@ -8810,14 +8807,14 @@ Write a Python function to sort a list of strings by the number of uppercase let
 """
 
 def sort_number_uppercases(lst):
-    
+
     def uppercase_count(x):
         count = 0
         for char in x:
             if char.isupper():
                 count += 1
         return count
-                
+
     return sorted(lst,
     key=uppercase_count)
 
@@ -8830,13 +8827,13 @@ Write a Python function to find the tuple with the largest product of its elemen
 """
 
 def tuple_largest_product(lst):
-    
+
     def product(x):
         count = 1
         for number in x:
             count *= number
         return count
-    
+
     return max(lst, key=product)
 
 lst = [(2, 2, 2), (4, 4, 4)]
@@ -8849,7 +8846,7 @@ Write a Python function to sort a list of floating-point numbers by their rounde
 
 def floating_point(numbers):
     return sorted(numbers, key=round)
-    
+
 numbers = [3.7, 3.3, 2.7, 1.2, 35.4, 677.9]
 print(floating_point(numbers))
 
@@ -8860,8 +8857,8 @@ Write a Python function to sort a list of tuples based on the first element in d
 
 def first_element_decending_order(lst):
     def first_element(x):
-        return x[0] 
-    
+        return x[0]
+
     return sorted(lst, key=first_element, reverse=True)
 
 lst = [("see", "sea", "saw"), ("zoat", "zite", "zank")]
@@ -8873,11 +8870,11 @@ Write a Python function that sorts a list of words by the number of consonants u
 """
 
 def number_of_consonants(lst):
-    
+
     def consonants(word):
-    
+
         consonants_set = "bcdfghjklmnpqrstvwxyz"
-        
+
         count = 0
 
         for char in word.lower():
@@ -8886,7 +8883,7 @@ def number_of_consonants(lst):
         return count
 
     return sorted(lst, key=consonants)
-    
+
 lst = ["zzzzzzzzz", "yyyyyy", "bbb"]
 print(number_of_consonants(lst))
 
@@ -8897,7 +8894,7 @@ Write a Python function to find the shortest string in a list using the min() fu
 
 def min_string(lst):
     return min(lst, key=len)
-    
+
 lst = ["down", "up"]
 print(min_string(lst))
 
@@ -8907,10 +8904,10 @@ Write a Python function to sort a list of dictionaries by the length of the valu
 """
 
 def length_of_value(lst, key):
-    
+
     def length_function(x):
         return len(x.get(key, ""))
-        
+
     return sorted(lst, key=length_function)
 
 lst = [{"a": "tree", "b": "bushen"}, {"a": "tin", "b": "bash"}, {"a": "tumb", "b": "bat"}]
@@ -8940,7 +8937,7 @@ Write a Python function that sorts a list of integers by their remainder when di
 """
 
 def main(lst, divisor):
-    
+
     def inner(num):
         return num % divisor
     return sorted(lst, key=inner)
@@ -8956,7 +8953,7 @@ def sort_by_remainder(lst, divisor):
 
     def key_func(x):
         return remainder_key(x, divisor)
-    
+
     return sorted(lst, key=key_func)
 
 lst = [10, 23, 4, 7, 15]
@@ -8976,16 +8973,16 @@ def year_key(date):
 def sort_by_year(dates):
 
     date_objects = []
-    
+
     for date in dates:
         date_objects.append(datetime.strptime(date, "%d.%m.%Y"))
-    
+
     sorted_dates = sorted(date_objects, key=year_key)
 
     sorted_date_strings = []
     for date in sorted_dates:
         sorted_date_strings.append(date.strftime("%d.%m.%Y"))
-    
+
     return sorted_date_strings
 
 dates = ["01.02.1908", "12.11.1955", "23.04.1989", "07.07.1967"]
@@ -8998,11 +8995,11 @@ Write a Python function to sort a list of names by the number of times the lette
 """
 
 def sort_by_a_count(names):
-    
+
     def count_a(name):
-        
+
         return name.lower().count('a')
-    
+
     return sorted(names, key=count_a)
 
 names = ["Anna", "Alice", "Bob", "Amanda", "Ava"]
@@ -9015,13 +9012,13 @@ Write a Python function to sort a list of numbers by their square using the key 
 """
 
 def sort_sqaure(lst):
-    
+
     def sqaured(x):
         return x * x
-        
+
     return sorted(lst, key=sqaured)
-        
-    
+
+
 lst = [9, 5, 4, 1 ]
 print(sort_sqaure(lst))
 
@@ -9034,7 +9031,7 @@ def closest_to_target(lst, target):
 
     def difference_from_target(x):
         return abs(x - target)
-    
+
     return min(lst, key=difference_from_target)
 
 lst = [10, 22, 14, 3, 8]
@@ -9048,10 +9045,10 @@ Write a Python function that sorts a list of tuples based on the length of the f
 """
 
 def length_of_first_element(lst):
-    
+
     def length_of_first(x):
         return len(x[0])
-        
+
     return sorted(lst, key=length_of_first)
 
 lst = [("initiate", "love", "seat"), ("sweet", "beat", "hell")]
@@ -9064,12 +9061,12 @@ Write a Python function to sort a list of strings by the number of spaces they c
 """
 
 def number_of_spaces(lst):
-    
+
     def spaces_count(x):
         return x.count(" ")
-        
+
     return sorted(lst, key=spaces_count)
-    
+
 lst = ["what is happening", "why all the hate in your brain", "stop it"]
 print(number_of_spaces(lst))
 
@@ -9079,18 +9076,18 @@ Write a Python function that finds the word with the most vowels in a list using
 """
 
 def most_vowels(lst):
-    
+
     def count_vowels(word):
         vowels = "aeiou"
-        
+
         count = 0
         for char in word:
             if char in vowels:
                 count += 1
         return count
-            
+
     return max(lst, key=count_vowels)
-    
+
 lst = ["aamost", "Aaron", "bible", "buttom", "aeiouthian"]
 print(most_vowels(lst))
 
@@ -9100,11 +9097,11 @@ Write a Python function to sort a list of integers by the number of digits they 
 """
 
 def sort_lst_integers(lst):
-    
+
     def count_digits(n):
         return len(str(abs(n)))
     return sorted(lst, key=count_digits)
-        
+
 lst = [456, 56, 8, 788, 89, 1]
 print(sort_lst_integers(lst))
 
@@ -9116,8 +9113,8 @@ Write a Python function that sorts a list of tuples by the difference between th
 def sort_tuples_by_difference(lst):
 
     def difference(tup):
-        return abs(tup[0] - tup[1]) 
-    
+        return abs(tup[0] - tup[1])
+
     return sorted(lst, key=difference)
 
 lst = [(3, 8), (1, 7), (5, 5), (9, 2), (6, 10)]
@@ -9130,10 +9127,10 @@ Write a Python function to sort a list of strings by the ASCII value of their fi
 """
 
 def sort_strings_by_ascii(lst):
-    
+
     def ascii_value(s):
         return ord(s[0])
-        
+
     return sorted(lst, key=ascii_value)
 
 lst = ["banana", "apple", "cherry", "date", "elderberry"]
@@ -9148,7 +9145,7 @@ def sort_lists_by_sum(lst):
 
     def sum_of_elements(sublist):
         return sum(sublist)
-        
+
     return sorted(lst, key=sum_of_elements)
 
 lst = [[3, 4], [1, 2, 3], [10], [5, 1, 1]]
@@ -9161,11 +9158,11 @@ Write a Python function to find the word with the fewest consonants in a list us
 """
 
 def number_of_consonants(lst):
-    
+
     def consonants(word):
-    
+
         consonants_set = "bcdfghjklmnpqrstvwxyz"
-        
+
         count = 0
 
         for char in word.lower():
@@ -9174,7 +9171,7 @@ def number_of_consonants(lst):
         return count
 
     return min(lst, key=consonants)
-    
+
 lst = ["zzzzzzzzz", "yyyyyy", "bbb"]
 print(number_of_consonants(lst))
 
@@ -9184,10 +9181,10 @@ Write a Python function that sorts a list of file names by their file extension 
 """
 
 def sort_files_by_extension(lst):
-    
+
     def file_extension(filename):
         return filename.split('.')[-1]
-        
+
     return sorted(lst, key=file_extension)
 
 lst = ["document.txt", "photo.jpeg", "music.mp3", "video.mp4", "archive.zip"]
@@ -9200,12 +9197,12 @@ Write a Python function to sort a list of numbers by the square root of each num
 """
 
 def sqaure_numbers_lst(lst):
-    
+
     def sqaure(n):
         return n * n
-        
+
     return sorted(lst, key=sqaure)
-    
+
 lst = [12, 46, 2, 10]
 print(sqaure_numbers_lst(lst))
 
@@ -9218,7 +9215,7 @@ def sort_words_by_distinct_letters(words):
 
     def distinct_letter_count(word):
         return len(set(word))
-        
+
     return sorted(words, key=distinct_letter_count)
 
 words = ["apple", "banana", "cherry", "orange"]
@@ -9230,12 +9227,12 @@ Write a Python function that sorts a list of strings by the second letter in eac
 """
 
 def sort_second_letter(lst):
-    
+
     def second_letter(x):
         return x[1]
-        
+
     return sorted(lst, key=second_letter)
-    
+
 lst = ["mountain", "law", "lebany"]
 print(sort_second_letter(lst))
 
@@ -9245,12 +9242,12 @@ Write a Python function to sort a list of people by their age stored in a dictio
 """
 
 def people_age(dic):
-    
+
     def sort_age(person):
         return dic[person]
-        
+
     return sorted(dic, key=sort_age)
-    
+
 dic = {"Sam": 27, "Tom": 56, "Chantelle": 18}
 print(people_age(dic))
 
@@ -9260,10 +9257,10 @@ Write a Python function that sorts a list of numbers by their binary representat
 """
 
 def sort_by_binary_representation(lst):
-    
+
     def binary_representation(x):
         return bin(x)
-        
+
     return sorted(lst, key=binary_representation)
 
 lst = [5, 3, 8, 1, 12]
@@ -9279,9 +9276,9 @@ def sort_keys_by_value(dic):
 
     def get_value(key):
         return dic[key]
-        
+
     return sorted(dic.keys(), key=get_value)
-   
+
 dic = {"Sam": 27, "Tommy": 56, "Chantelle": 18}
 print(sort_keys_by_value(dic))
 
@@ -9296,7 +9293,7 @@ def sort_fractions_by_decimal(fractions):
 
     def decimal_value(fraction):
         return float(fraction)
-        
+
     return sorted(fractions, key=decimal_value)
 
 fractions = [Fraction(1, 3), Fraction(3, 4), Fraction(2, 5), Fraction(7, 10)]
@@ -9309,10 +9306,10 @@ Write a Python function to find the longest string that ends with a specific let
 """
 
 def longest_string_letter(lst, letter):
-    
+
     def longest_letter(s):
         return len(s) if s.endswith(letter) else -1
-    
+
     return max(lst, key=longest_letter)
 
 lst = ["Jonathan", "Nathan", "Sarah", "Martha"]
@@ -9321,7 +9318,7 @@ print(longest_string_letter(lst, 'n'))
 print(longest_string_letter(lst, 'a'))
 
 def longest_string(string, letter):
-    
+
     words = string.split()
 
     def letter_ends(word):
@@ -9329,16 +9326,16 @@ def longest_string(string, letter):
             return len(word)
         else:
             return 0
-    
-    longest = None  
-    max_length = 0 
+
+    longest = None
+    max_length = 0
 
     for word in words:
         length = letter_ends(word)
         if length > max_length:
             max_length = length
             longest = word
-    
+
     return longest
 
 input_string = "Jonathan nathan Natas"
@@ -9357,11 +9354,11 @@ class Animal:
 class Dog(Animal):
     def speak(self):
         return "Bark"
-        
+
 class Cat(Animal):
     def speak(self):
         return "Meow"
-        
+
 dog = Dog()
 cat = Cat()
 print(dog.speak())
@@ -9381,7 +9378,7 @@ class Car(Vehicle):
     def __init__(self, speed, color, model):
 
         super().__init__(speed, color)
-        
+
         self.model = model
 
 my_car = Car(120, "Red", "Toyota")
@@ -9400,19 +9397,19 @@ class Person:
 
 class Student(Person):
     def __init__(self, name, grade):
-    
+
         super().__init__(name)
-    
+
         self.grade = grade
-        
+
     def introduce(self):
         return f"Hello, my name is {self.name} and I am in grade {self.grade}."
 
 person = Person("Alice")
-print(person.introduce()) 
+print(person.introduce())
 
 student = Student("Bob", 10)
-print(student.introduce()) 
+print(student.introduce())
 
 """
 Problem: 498
@@ -9433,7 +9430,7 @@ class Rectangle(Shape):
         return self.length * self.width
 
 rectangle = Rectangle(5, 3)
-print(f"Area of the rectangle: {rectangle.area()}") 
+print(f"Area of the rectangle: {rectangle.area()}")
 
 """
 Problem: 499
@@ -9467,7 +9464,7 @@ class Employee:
 
 class Manager(Employee):
     def __init__(self, name, salary):
-    
+
         super().__init__(name, salary)
 
     def assign_task(self, task):
@@ -9475,4 +9472,3 @@ class Manager(Employee):
 
 manager = Manager("John Doe", 75000)
 print(manager.assign_task("Prepare a project report"))
-
