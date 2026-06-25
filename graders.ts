@@ -2928,6 +2928,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[0, -5]], expected: [5, 0] }
         ]
     },
+  404: {
+        functionNames: ['find_min', 'main'],
+        tests: [
+            { args: [[2, 6, 1, 189]], expected: 1 },
+            { args: [[5, -3, 10]], expected: -3 }
+        ]
+    },
   405: {
         functionNames: ['converts'],
         compare: 'float',
@@ -3108,9 +3115,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   429: {
         functionNames: ['multiply_by_n'],
-        compare: 'length',
         tests: [
-            { args: [3], expected: 'function' }
+            { args: [3], callReturnedWith: [5], expected: 15 },
+            { args: [10], callReturnedWith: [2], expected: 20 }
         ]
     },
   430: {
