@@ -69,7 +69,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 8",
         "description": "Write a Python function called `calculate_square` that takes a number as input and returns the square of that number.",
         "initialCode": "def cal_square(number):\n    pass\n\ndef calculate_sqaure(number):\n    pass",
-        "solution": "def cal_square(number):\n    return number ** number\n       \nlst = 9\nprint(cal_square(lst))  # Output: 387420489 (incorrect - should be 81)\n\ndef calculate_sqaure(number):\n    square = number * number\n    \n    return square  # Return the squared value\n    \nprint(calculate_sqaure(6))  # Output: 36",
+        "solution": "def cal_square(number):\n    return number ** 2\n       \nlst = 9\nprint(cal_square(lst))  # Output: 81\n\ndef calculate_sqaure(number):\n    square = number ** 2\n    \n    return square  # Return the squared value\n    \nprint(calculate_sqaure(6))  # Output: 36",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -123,7 +123,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 14",
         "description": "Write a Python function called `concatenate_strings` that takes two strings as input and returns a new string that is the concatenation of the two input strings.",
         "initialCode": "def concatenate_strings(string1, string2):\n    pass\n\ndef concatenate_string(string1, string2):\n    pass",
-        "solution": "def concatenate_strings(string1, string2):\n    concatenate = string1 + string2  # Join string1 and string2\n    return concatenate  # Return the concatenated string\n       \nlst1 = \"Jonathan\"\nlst2 = \"moll\"\nprint(concatenate_strings(lst1, lst2))  # Output: Jonathanmoll\n\ndef concatenate_string(string1, string2):\n    return string1 + string2  # Returns string1 followed by string2\n    \nprint(concatenate_string(\"Jonathan\", \"moll\"))  # Output: Jonathanmoll",
+        "solution": "def concatenate_strings(string1, string2):\n    concatenate = string1 + string2  # Join string1 and string2\n    return concatenate  # Return the concatenated string\n       \nlst1 = \"Jonathan\"\nlst2 = \"noll\"\nprint(concatenate_strings(lst1, lst2))  # Output: Jonathannoll\n\ndef concatenate_string(string1, string2):\n    return string1 + string2  # Returns string1 followed by string2\n    \nprint(concatenate_string(\"Jonathan\", \"noll\"))  # Output: Jonathannoll",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -150,7 +150,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 17",
         "description": "Write a Python function called `count_words` that takes a string as input and returns the number of words in the string. Assume that words are separated by spaces.",
         "initialCode": "def count_words(string):\n    pass\n\ndef count_words(string):\n    pass\n\ndef count_words(string):\n    pass",
-        "solution": "def count_words(string):\n    words = string.split()\n    word_count = 0  # Initialize counter\n    \n    for word in words:\n        word_count += 1  # Count each word\n    \n    return word_count\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    words = string.split()  # Split string into list of words\n    return len(words)  # Return the length of the list (word count)\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    count = 0  # Initialize counter\n    for char in string:\n        if char == char.replace(\" \",\"\"):  # This condition is always True\n            count += 1  # Increments for every character\n    return count  # Returns character count, not word count (WRONG!)\n               \narg = \"hello you cunt\"\nprint(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)",
+        "solution": "def count_words(string):\n    words = string.split()\n    word_count = 0  # Initialize counter\n    \n    for word in words:\n        word_count += 1  # Count each word\n    \n    return word_count\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    words = string.split()  # Split string into list of words\n    return len(words)  # Return the length of the list (word count)\n\nexample_string = \"This is an example sentence.\"\nprint(count_words(example_string))  # Output: 5\n\ndef count_words(string):\n    count = 0  # Initialize counter\n    for char in string:\n        if char == char.replace(\" \",\"\"):  # This condition is always True\n            count += 1  # Increments for every character\n    return count  # Returns character count, not word count (WRONG!)\n               \narg = \"hello my friend\"\nprint(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -276,7 +276,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 31",
         "description": "Write a Python function called get_initials that takes a full name (first and last name) as input and returns the initials of the name in uppercase. For example, if the input is \u201cJohn Doe\u201d, the function should return \u201cJ.D.\u201d.",
         "initialCode": "def get_initials(full_name):\n    pass\n\ndef get_initials(fullname):\n    pass",
-        "solution": "def get_initials(full_name):\n    parts = full_name.split()\n    \n    initials = []\n    \n    for part in parts:\n        initials.append(part[0].upper())  # Add uppercase first letter to list\n        \n    return '.'.join(initials) \n\nlst = \"Jonathan moll\"\nprint(get_initials(lst))  # Output: \"J.M.\"\n\ndef get_initials(fullname):\n    string = fullname.split()\n    \n    initials = f\"{string[0][0].upper()}.{string[1][0].upper()}\"\n    return initials\n\nstring = \"jonathan koll\"\nprint(get_initials(string))  # Output: J.K",
+        "solution": "def get_initials(full_name):\n    parts = full_name.split()\n    \n    initials = []\n    \n    for part in parts:\n        initials.append(part[0].upper())  # Add uppercase first letter to list\n        \n    return '.'.join(initials) \n\nlst = \"Jonathan noll\"\nprint(get_initials(lst))  # Output: \"J.M.\"\n\ndef get_initials(fullname):\n    string = fullname.split()\n    \n    initials = f\"{string[0][0].upper()}.{string[1][0].upper()}\"\n    return initials\n\nstring = \"jonathan koll\"\nprint(get_initials(string))  # Output: J.K",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -285,7 +285,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 32",
         "description": "Write a Python function called reverse_words that takes a string as input and returns a new string with the words reversed. For example, if the input is \u201chello world\u201d, the function should return \u201cworld hello\u201d.",
         "initialCode": "def reverse_word(string):\n    pass\n\ndef reverse_words(words):\n    pass",
-        "solution": "def reverse_word(string):\n    seperate = string.split()\n    return seperate[::-1]\n    \nlst = \"hello world\"\nprint(reverse_word(lst))\n\ndef reverse_words(words):\n    words = words.split()\n    \n    reversed_words = words[::-1]\n    \n    reversed_sentence = \" \".join(reversed_words)\n    \n    return reversed_sentence\n\nlst = \"Jonathan moll\"\nprint(reverse_words(lst))  # Output: moll Jonathan",
+        "solution": "def reverse_word(string):\n    seperate = string.split()\n    return seperate[::-1]\n    \nlst = \"hello world\"\nprint(reverse_word(lst))\n\ndef reverse_words(words):\n    words = words.split()\n    \n    reversed_words = words[::-1]\n    \n    reversed_sentence = \" \".join(reversed_words)\n    \n    return reversed_sentence\n\nlst = \"Jonathan noll\"\nprint(reverse_words(lst))  # Output: noll Jonathan",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -384,7 +384,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 43",
         "description": "Write a Python function called square_elements that takes a list of numbers as input and returns a new list with each element squared.",
         "initialCode": "def square_elements(numbers):\n    pass",
-        "solution": "def square_elements(numbers):\n    squared_list = []\n    \n    for number in numbers:\n        squared_list.append(number ** number)\n    return squared_list  # Returns incorrect results\n               \nlst = [2, 3, 4, 5, 6]\nprint(square_elements(lst))  # Output: [4, 27, 256, 3125, 46656] (INCORRECT!)",
+        "solution": "def square_elements(numbers):\n    squared_list = []\n    \n    for number in numbers:\n        squared_list.append(number ** 2)\n    return squared_list  # Returns squared values\n               \nlst = [2, 3, 4, 5, 6]\nprint(square_elements(lst))  # Output: [4, 9, 16, 25, 36]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -393,7 +393,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 44",
         "description": "Write a Python function called count_uppercase that takes a string as input and returns the number of uppercase letters in the string.",
         "initialCode": "def count_uppercase(string):\n    pass\n\ndef count_uppercase(string):\n    pass",
-        "solution": "def count_uppercase(string):\n    count = 0  # Initialize counter\n    \n    for char in string:\n        if char.isupper():\n            count += 1  # Increment counter for uppercase letter\n    return count\n                   \nlst = \"Jonathan Moll\"\nprint(count_uppercase(lst))  # Output: 2\n\ndef count_uppercase(string):\n    count = 0  # Initialize counter\n    string = string.replace(\" \", \"\")\n    \n    for char in string:\n        if char == char.upper():\n            count += 1  # Increments for uppercase, numbers, and symbols\n    return count  # May return incorrect count if string has numbers/symbols\n    \nstring = \"Jonah Is Tbe Best\"\nprint(count_uppercase(string))  # Output: 4",
+        "solution": "def count_uppercase(string):\n    count = 0  # Initialize counter\n    \n    for char in string:\n        if char.isupper():\n            count += 1  # Increment counter for uppercase letter\n    return count\n                   \nlst = \"Jonathan Noll\"\nprint(count_uppercase(lst))  # Output: 2\n\ndef count_uppercase(string):\n    count = 0  # Initialize counter\n    string = string.replace(\" \", \"\")\n    \n    for char in string:\n        if char == char.upper():\n            count += 1  # Increments for uppercase, numbers, and symbols\n    return count  # May return incorrect count if string has numbers/symbols\n    \nstring = \"Jonah Is Tbe Best\"\nprint(count_uppercase(string))  # Output: 4",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -771,7 +771,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 87",
         "description": "Write a Python program to reverse a list without using the reverse() function. Prompt the user to enter a list of elements.",
         "initialCode": "def reverse_lst():\n    pass\n\ndef reverse_list():\n    pass\n\ndef reverse_list():\n    pass\n\ndef reverse_list(items):\n    pass",
-        "solution": "def reverse_lst():\n    user = input(\"Type a list: \")\n    split_lst = user.split()    \n    reversed_lst = []\n    \n    for item in split_lst[::-1]:  # [::-1] reverses the list\n        reversed_lst.append(item)\n    return \" \".join(reversed_lst)\n\nprint(reverse_lst())\n\ndef reverse_list():\n    user_input = input(\"Enter a list: \")\n    elements = user_input.split()\n    reversed_elements = []\n    \n    for i in range(len(elements) - 1, -1, -1):\n        reversed_elements.append(elements[i])\n\n    return f\"Reversed list: {reversed_elements}\"\n\nprint(reverse_list())\n\ndef reverse_list():\n    user_input = input(\"Enter list: \")\n    elements = user_input.split()\n    reversed_elements = []\n    \n    for i in range(len(elements) - 1, -1, -1):\n        reversed_elements.append(elements[i])\n\n    print(\"Reversed list:\", reversed_elements)\n\nreverse_list()\n\ndef reverse_list(items):\n    reverse_items = []\n    \n    for item in range(len(items)-1,-1,-1):\n        reverse_items.append(items[item])\n    return reverse_items\n        \nlst = [\"apple\", \"banana\", \"cunt\"]\nprint(reverse_list(lst))",
+        "solution": "def reverse_lst():\n    user = input(\"Type a list: \")\n    split_lst = user.split()    \n    reversed_lst = []\n    \n    for item in split_lst[::-1]:  # [::-1] reverses the list\n        reversed_lst.append(item)\n    return \" \".join(reversed_lst)\n\nprint(reverse_lst())\n\ndef reverse_list():\n    user_input = input(\"Enter a list: \")\n    elements = user_input.split()\n    reversed_elements = []\n    \n    for i in range(len(elements) - 1, -1, -1):\n        reversed_elements.append(elements[i])\n\n    return f\"Reversed list: {reversed_elements}\"\n\nprint(reverse_list())\n\ndef reverse_list():\n    user_input = input(\"Enter list: \")\n    elements = user_input.split()\n    reversed_elements = []\n    \n    for i in range(len(elements) - 1, -1, -1):\n        reversed_elements.append(elements[i])\n\n    print(\"Reversed list:\", reversed_elements)\n\nreverse_list()\n\ndef reverse_list(items):\n    reverse_items = []\n    \n    for item in range(len(items)-1,-1,-1):\n        reverse_items.append(items[item])\n    return reverse_items\n        \nlst = [\"apple\", \"banana\", \"cherry\"]\nprint(reverse_list(lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -879,7 +879,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 99",
         "description": "Write a Python program to count the number of uppercase and lowercase letters in a string. Prompt the user to enter a string.",
         "initialCode": "def upper_lower(string):\n    pass",
-        "solution": "def upper_lower(string):\n    count_upper = 0\n    count_lower = 0\n    for char in string:\n        if char.isupper():  # isupper() returns True for uppercase letters\n            count_upper += 1\n        else:  # Note: counts non-uppercase (including digits, spaces, punctuation) as lowercase\n            count_lower += 1\n    return f\"lower = {count_lower} and upper = {count_upper}\"\n            \nstring = \"Jonathan Moll is the Best\"\nprint(upper_lower(string))",
+        "solution": "def upper_lower(string):\n    count_upper = 0\n    count_lower = 0\n    for char in string:\n        if char.isupper():  # isupper() returns True for uppercase letters\n            count_upper += 1\n        else:  # Note: counts non-uppercase (including digits, spaces, punctuation) as lowercase\n            count_lower += 1\n    return f\"lower = {count_lower} and upper = {count_upper}\"\n            \nstring = \"Jonathan Noll is the Best\"\nprint(upper_lower(string))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1113,7 +1113,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 128",
         "description": "Write a function filter_long_words() that takes a list of words and an integer n and returns the list of words that are longer than n.",
         "initialCode": "def filter_long_words(lst, n):\n    pass",
-        "solution": "def filter_long_words(lst, n):\n    longest_words = []\n    for word in lst:\n        if len(word) > n:  # Check if word length > n\n            longest_words.append(word)\n    return longest_words\n           \nlst = [\"three\", \"threebesthorses\" \"hours\", \"Jonathanmollthebestintheworld\"]  # Note: missing comma between strings\nn = 6\nprint(filter_long_words(lst, n))",
+        "solution": "def filter_long_words(lst, n):\n    longest_words = []\n    for word in lst:\n        if len(word) > n:  # Check if word length > n\n            longest_words.append(word)\n    return longest_words\n           \nlst = [\"three\", \"threebesthorses\" \"hours\", \"Jonathannollthebestintheworld\"]  # Note: missing comma between strings\nn = 6\nprint(filter_long_words(lst, n))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1311,7 +1311,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 151",
         "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.",
         "initialCode": "def find_longest_word(words):\n    pass",
-        "solution": "def find_longest_word(words):\n    count = 0  # Tracks length of longest word found\n    longest_word = \"\"\n    for word in words:\n        if len(word) > count:  # If current word is longer\n            count = len(word)  # Update length\n            longest_word = word  # Update word\n    return longest_word\n\nwords = [\"tree\", \"mountain\", \"do\", \"Jonathanmollfrency\"]\n    \nprint(find_longest_word(words))",
+        "solution": "def find_longest_word(words):\n    count = 0  # Tracks length of longest word found\n    longest_word = \"\"\n    for word in words:\n        if len(word) > count:  # If current word is longer\n            count = len(word)  # Update length\n            longest_word = word  # Update word\n    return longest_word\n\nwords = [\"tree\", \"mountain\", \"do\", \"Jonathannollfrency\"]\n    \nprint(find_longest_word(words))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1642,9 +1642,9 @@ export const EXERCISES: Exercise[] = [
     {
         "id": 188,
         "title": "Problem 188",
-        "description": "Write a Python function called get_initials that takes a full name (first and last name jonathan moll) as input and returns  \"joNathAn moLL\"\" of the name in uppercase (NALL in jonathan moll).",
+        "description": "Write a Python function called get_initials that takes a full name (first and last name jonathan noll) as input and returns  \"joNathAn noLL\"\" of the name in uppercase (NALL in jonathan noll).",
         "initialCode": "def get_initials(name):\n    pass\n\ndef get_initials(name):\n    pass",
-        "solution": "def get_initials(name):\n    name_list = list(name)  # Convert string to list of characters (mutable)\n    name_list[2] = name_list[2].upper()  # 'n' \u2192 'N' (index 2)\n    name_list[6] = name_list[6].upper()  # 'a' \u2192 'A' (index 6)\n    name_list[11] = name_list[11].upper()  # 'l' \u2192 'L' (index 11)\n    name_list[12] = name_list[12].upper()  # 'l' \u2192 'L' (index 12)\n    \n    return ''.join(name_list)  # join() combines list back into string\n\nname = \"jonathan moll\"\nprint(get_initials(name))  # Output: \"joNathAn moLL\"\n\ndef get_initials(name):\n    initials = []\n    for char in name:\n        if char in \"nall\":  # Check if character is 'n', 'a', or 'l' (case-sensitive)\n            initials.append(char.upper())  # Convert to uppercase\n        else:\n            initials.append(char)  # Keep as-is\n    return ''.join(initials)  # Join list into string\n\nname = \"jonathan moll\"\nprint(get_initials(name))  # Output: \"joNathAn moLL\" (uppercases all n, a, l characters)",
+        "solution": "def get_initials(name):\n    name_list = list(name)  # Convert string to list of characters (mutable)\n    name_list[2] = name_list[2].upper()  # 'n' \u2192 'N' (index 2)\n    name_list[6] = name_list[6].upper()  # 'a' \u2192 'A' (index 6)\n    name_list[11] = name_list[11].upper()  # 'l' \u2192 'L' (index 11)\n    name_list[12] = name_list[12].upper()  # 'l' \u2192 'L' (index 12)\n    \n    return ''.join(name_list)  # join() combines list back into string\n\nname = \"jonathan noll\"\nprint(get_initials(name))  # Output: \"joNathAn noLL\"\n\ndef get_initials(name):\n    initials = []\n    for char in name:\n        if char in \"nall\":  # Check if character is 'n', 'a', or 'l' (case-sensitive)\n            initials.append(char.upper())  # Convert to uppercase\n        else:\n            initials.append(char)  # Keep as-is\n    return ''.join(initials)  # Join list into string\n\nname = \"jonathan noll\"\nprint(get_initials(name))  # Output: \"joNathAn noLL\" (uppercases all n, a, l characters)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4677,7 +4677,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 537",
         "description": "Write a Python program to count how many times the word \u201chello\u201d appears in a sentence. Use count().",
         "initialCode": "def count_hello(string):\n    pass",
-        "solution": "def count_hello(string):\n    return string.count(\"hello\")\n    \nstring = \"hello, you cunt\"\nprint(count_hello(string))",
+        "solution": "def count_hello(string):\n    return string.count(\"hello\")\n    \nstring = \"hello, my friend\"\nprint(count_hello(string))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4686,7 +4686,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 538",
         "description": "Write a function that counts how many times the character # appears in a string.  Use count().",
         "initialCode": "def count(string):\n    pass",
-        "solution": "def count(string):\n    return string.count(\"#\")\n    \nstring = \"hello, you cunt ###\"\nprint(count(string))",
+        "solution": "def count(string):\n    return string.count(\"#\")\n    \nstring = \"hello, my friend ###\"\nprint(count(string))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
