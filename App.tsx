@@ -241,6 +241,8 @@ def __auto_grader_normalize(value):
             pass
     if type(value).__name__ in ("dict_keys", "dict_values", "dict_items"):
         return [__auto_grader_normalize(item) for item in value]
+    if hasattr(value, "__iter__") and hasattr(value, "__next__"):
+        return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, tuple):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, list):

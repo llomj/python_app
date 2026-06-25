@@ -5833,12 +5833,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['char_count'],
         tests: [
             { args: ["hello","l"], expected: 2 },
+            { args: ["banana", "a"], expected: 3 },
         ]
     },
+  1052: {
+    functionNames: ["binary_strings"],
+    compare: "printedOrReturn",
+    tests: [
+      { args: [2], expected: "00\n01\n10\n11" }
+    ]
+  },
   1053: {
         functionNames: ['sum_of_digits'],
         tests: [
             { args: [123], expected: 6 },
+            { args: [1244], expected: 11 },
         ]
     },
   1054: {
@@ -5850,9 +5859,17 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1055: {
         functionNames: ['remove_duplicates'],
         tests: [
-            { args: [[1,2,2,3,3,4]], expected: [1,2,3,4] },
+            { args: ["banana"], expected: "ban" },
+            { args: ["mississippi"], expected: "misp" },
         ]
     },
+  1056: {
+    functionNames: ["permutations"],
+    compare: "printedOrReturn",
+    tests: [
+      { args: ["ab"], expected: "ab\nba" }
+    ]
+  },
   1057: {
         functionNames: ['longest_string'],
         tests: [
@@ -5940,7 +5957,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1085: {
         functionNames: ['filter_greater_than'],
         tests: [
-            { args: [[1,5,3,8,2],3], expected: [5,8] },
+            { args: [[1,5,3,8,2],3], expected: [1,3,2] },
         ]
     },
   1086: {
@@ -5961,12 +5978,65 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,5,3,8,2],4], expected: [1,3,2] },
         ]
     },
+  1091: {
+    functionNames: ["square_generator"],
+    tests: [
+      { args: [5], expected: [0, 1, 4, 9, 16] }
+    ]
+  },
+  1092: {
+    functionNames: ["fibonacci_generator"],
+    tests: [
+      { args: [20], expected: [0, 1, 1, 2, 3, 5, 8, 13] }
+    ]
+  },
+  1093: {
+    functionNames: ["char_generator"],
+    tests: [
+      { args: ["hello"], expected: ["h", "e", "l", "l", "o"] }
+    ]
+  },
+  1094: {
+    functionNames: ["step_generator"],
+    tests: [
+      { args: [10], expected: [1, 3, 5, 7, 9] }
+    ]
+  },
+  1095: {
+    functionNames: ["even_number_generator"],
+    tests: [
+      { args: [10], expected: [2, 4, 6, 8, 10] }
+    ]
+  },
+  1096: {
+    functionNames: ["square_even_generator"],
+    tests: [
+      { args: [10], expected: [4, 16, 36, 64, 100] }
+    ]
+  },
+  1097: {
+    functionNames: ["prime_generator"],
+    tests: [
+      { args: [5], expected: [2, 3, 5, 7, 11] }
+    ]
+  },
+  1098: {
+    functionNames: ["consecutive_pair_sum"],
+    tests: [
+      { args: [[1, 2, 3, 4, 5]], expected: [3, 5, 7, 9] }
+    ]
+  },
   1099: {
     functionNames: ["factorial_generator"],
-    tests: [{
-      args: [5],
-      expected: "<generator object factorial_generator at 0x100a007c0>"
-    }]
+    tests: [
+      { args: [5], expected: [1, 2, 6, 24, 120] }
+    ]
+  },
+  1100: {
+    functionNames: ["divisible_by_3_and_5_generator"],
+    tests: [
+      { args: [50], expected: [15, 30, 45] }
+    ]
   },
   1120: {
     functionNames: ["check_number"],
