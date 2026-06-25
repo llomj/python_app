@@ -2361,7 +2361,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
                     style={{
                         minHeight: '120px',
-                        backgroundColor: 'rgba(8, 18, 34, 0.40)',
+                        backgroundColor: 'rgba(8, 18, 34, 0.15)',
                         backdropFilter: 'blur(8px)',
                         WebkitBackdropFilter: 'blur(8px)',
                         borderColor: 'rgba(88, 118, 160, 0.25)',
@@ -2465,7 +2465,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     className="flex items-center justify-between rounded-xl border border-[#5f7fa6] p-2 shadow-2xl shadow-black/40"
                     style={{
                         pointerEvents: 'auto',
-                        backgroundColor: 'rgba(8, 18, 34, 0.40)',
+                        backgroundColor: 'rgba(8, 18, 34, 0.15)',
                         backdropFilter: 'blur(8px)',
                         WebkitBackdropFilter: 'blur(8px)',
                         borderColor: 'rgba(95, 127, 166, 0.35)'
