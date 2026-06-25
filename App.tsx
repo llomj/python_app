@@ -8,6 +8,7 @@ import {
     XCircle,
     RotateCcw,
     Play,
+    SkipForward,
     Plus,
     Minus,
     Pencil,
@@ -1100,6 +1101,10 @@ const App: React.FC = () => {
     const [output, setOutput] = useState('Run code to see output...');
     const [outputStatus, setOutputStatus] = useState<OutputStatus>('idle');
     const [pendingNextProblem, setPendingNextProblem] = useState(false);
+    const [stdinValues, setStdinValues] = useState<string[]>([]);
+    const [stdinDraft, setStdinDraft] = useState('');
+    const [waitingForInput, setWaitingForInput] = useState(false);
+    const [inputPrompt, setInputPrompt] = useState('');
     const [isRunning, setIsRunning] = useState(false);
     const [statsByMode, setStatsByMode] = useState<StatsByMode>(() => loadStatsByMode());
     const [pyodide, setPyodide] = useState<any>(null);
@@ -1130,6 +1135,7 @@ const App: React.FC = () => {
     const mainScrollRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
+    const stdinValuesRef = useRef<string[]>([]);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
     const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1470,6 +1476,11 @@ const App: React.FC = () => {
         setOutput('Run code to see output...');
         setOutputStatus('idle');
         setPendingNextProblem(false);
+        setStdinValues([]);
+        stdinValuesRef.current = [];
+        setStdinDraft('');
+        setWaitingForInput(false);
+        setInputPrompt('');
         setAiHintText('');
     };
 
@@ -1516,9 +1527,23 @@ const App: React.FC = () => {
         setIsRunning(true);
         setOutputStatus('running');
         setOutput('Executing...');
+        setWaitingForInput(false);
+        setInputPrompt('');
         try {
             // Write all files to the virtual filesystem
             files.forEach(file => {
+                const pathParts = file.name.split('/').filter(Boolean);
+                if (pathParts.length > 1) {
+                    let currentPath = '';
+                    pathParts.slice(0, -1).forEach(part => {
+                        currentPath = currentPath ? `${currentPath}/${part}` : part;
+                        try {
+                            pyodide.FS.mkdir(currentPath);
+                        } catch {
+                            // Directory already exists.
+                        }
+                    });
+                }
                 pyodide.FS.writeFile(file.name, file.content);
             });
 
@@ -1528,6 +1553,7 @@ const App: React.FC = () => {
 import sys
 import importlib
 import io
+import builtins
 
 # Ensure current directory is in path (crucial for imports)
 if '.' not in sys.path:
@@ -1539,6 +1565,15 @@ for mod in ${JSON.stringify(userModules)}:
 
 importlib.invalidate_caches()
 sys.stdout = io.StringIO()
+__app_input_values = list(${JSON.stringify(stdinValuesRef.current)})
+def __app_input(prompt=""):
+    print(prompt, end="")
+    if not __app_input_values:
+        raise Exception("__PY_INPUT_REQUIRED__" + str(prompt))
+    value = __app_input_values.pop(0)
+    print(value)
+    return value
+builtins.input = __app_input
 `;
             pyodide.runPython(clearModulesCode);
 
@@ -1569,18 +1604,42 @@ sys.stdout = io.StringIO()
                 setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Use WIN/FAILED manually.`);
             }
         } catch (err: any) {
+            const errorMessage = String(err?.message || err || '');
+            const inputMarker = '__PY_INPUT_REQUIRED__';
+            if (errorMessage.includes(inputMarker)) {
+                const prompt = errorMessage.split(inputMarker).pop()?.trim() || 'Input required';
+                const stdout = pyodide.runPython("sys.stdout.getvalue()");
+                setOutputStatus('info');
+                setWaitingForInput(true);
+                setInputPrompt(prompt);
+                setOutput(`${stdout || ''}\nWaiting for input${prompt ? `: ${prompt}` : ''}`);
+                return;
+            }
             if (autoGrader) {
                 updateCurrentModeStats('failed');
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
-                setOutput(`AUTO FAILED\n${err.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
+                setOutput(`AUTO FAILED\n${errorMessage}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
             } else {
                 setOutputStatus('fail');
-                setOutput(err.message);
+                setOutput(errorMessage);
             }
         } finally {
             setIsRunning(false);
         }
+    };
+
+    const submitInputValue = () => {
+        const nextValues = [...stdinValuesRef.current, stdinDraft];
+        stdinValuesRef.current = nextValues;
+        setStdinValues(nextValues);
+        setStdinDraft('');
+        setWaitingForInput(false);
+        setInputPrompt('');
+        setOutput(prev => `${prev}\n${stdinDraft}`);
+        setTimeout(() => {
+            runCode();
+        }, 0);
     };
 
     const addFile = () => {
@@ -1934,7 +1993,10 @@ sys.stdout = io.StringIO()
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
                         <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
                         <button
-                            onClick={() => setShowModal('problem_full')}
+                            onClick={() => {
+                                setPendingNextProblem(false);
+                                loadRandomExercise();
+                            }}
                             style={{
                                 backgroundColor: 'transparent',
                                 border: '1px solid #1d2d44',
@@ -1949,9 +2011,10 @@ sys.stdout = io.StringIO()
                                 flexShrink: 0,
                                 pointerEvents: 'auto'
                             }}
+                            title="Load next problem"
                         >
-                            <ExternalLink size={14} />
-                            <span>View Full</span>
+                            <SkipForward size={14} />
+                            <span>Next</span>
                         </button>
                     </div>
                     <pre
@@ -2161,6 +2224,32 @@ sys.stdout = io.StringIO()
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
                         </div>
+                        {waitingForInput && (
+                            <div className="mt-2 flex items-center gap-2 rounded-xl border border-[#3b82f6]/40 bg-[#071225]/90 px-2 py-2">
+                                <span className="min-w-0 flex-1 truncate text-[10px] font-bold uppercase tracking-[0.12em] text-[#93c5fd]">
+                                    {inputPrompt || 'Input'}
+                                </span>
+                                <input
+                                    value={stdinDraft}
+                                    onChange={(event) => setStdinDraft(event.target.value)}
+                                    onKeyDown={(event) => {
+                                        if (event.key === 'Enter') {
+                                            event.preventDefault();
+                                            submitInputValue();
+                                        }
+                                    }}
+                                    autoFocus
+                                    className="min-w-0 flex-[2] rounded-lg border border-[#1d2d44] bg-[#050c18] px-2 py-1 text-xs text-white outline-none focus:border-[#3b82f6]"
+                                    placeholder="Type input value..."
+                                />
+                                <button
+                                    onClick={submitInputValue}
+                                    className="rounded-lg border border-[#22c55e]/40 bg-[#22c55e]/10 px-3 py-1 text-xs font-black text-[#22c55e]"
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        )}
                         <div className="border-t border-[#1d2d44] bg-[#071225]">
                             <button
                                 onClick={() => setShowActionPanel(prev => !prev)}
