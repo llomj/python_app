@@ -5836,6 +5836,133 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [17], expected: true }
     ]
   },
+  851: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["Education"], expected: "dctn" },
+      { args: [], inputValues: ["rhythm"], expected: "rhythm" }
+    ]
+  },
+  852: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["12345"], expected: "5" },
+      { args: [], inputValues: ["7"], expected: "1" }
+    ]
+  },
+  853: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" }
+    ]
+  },
+  854: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["8"], expected: "8\n4.0\n2.0\n1.0" },
+      { args: [], inputValues: ["1"], expected: "1" }
+    ]
+  },
+  855: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["red", "blue", "stop"], expected: "['red', 'blue']" },
+      { args: [], inputValues: ["stop"], expected: "[]" }
+    ]
+  },
+  856: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["30"], expected: "900\n961" },
+      { args: [], inputValues: ["32"], expected: "" }
+    ]
+  },
+  857: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'numberList',
+    tests: [
+      { args: [], expected: [1, 2, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19, 20, 22, 23, 25, 26, 28, 29, 31, 32, 34, 35, 37, 38, 40, 41, 43, 44, 46, 47, 49, 50] }
+    ]
+  },
+  858: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'numberList',
+    tests: [
+      { args: [], expected: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100] }
+    ]
+  },
+  859: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1\n2\n3\n4\n5" }
+    ]
+  },
+  860: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "2500" }
+    ]
+  },
+  861: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "9" }
+    ]
+  },
+  862: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["121", "quit", "121", "12", "quit"], expected: "121 is a palindrome\n12 is not a palindrome" }
+    ]
+  },
+  863: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nLift off!" }
+    ]
+  },
+  864: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["hello", "Python", "exit"], expected: "5\n6" },
+      { args: [], inputValues: ["exit"], expected: "" }
+    ]
+  },
+  865: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["1", "2", "3", "4", "5"], expected: "120" },
+      { args: [], inputValues: ["2", "3", "4", "5", "6"], expected: "720" }
+    ]
+  },
   866: {
     functionNames: ["main"],
     tests: [
@@ -5857,6 +5984,38 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [["python", "code"]], expected: ["Python", "Code"] }
     ]
   },
+  869: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 2 3" }
+    ]
+  },
+  870: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10 [20, 30, 40] 50" }
+    ]
+  },
+  871: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10 5" }
+    ]
+  },
+  872: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "('name', 'age', 'city') ('Alice', 25, 'New York')" }
+    ]
+  },
   873: {
     functionNames: ["get_coordinates"],
     tests: [{
@@ -5864,12 +6023,76 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [5, 10]
     }]
   },
+  874: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "P y thon" }
+    ]
+  },
+  875: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "100 500" }
+    ]
+  },
+  876: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 2 3 4" }
+    ]
+  },
+  877: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "0 1 2" }
+    ]
+  },
+  878: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "John Doe" }
+    ]
+  },
   879: {
     functionNames: ["greet"],
     compare: "printedOrReturn",
     tests: [
       { args: ["Alice", 30], expected: "Hello, Alice. You are 30 years old." },
       { args: ["Bob", 41], expected: "Hello, Bob. You are 41 years old." }
+    ]
+  },
+  880: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3, 4, 5, 6]" }
+    ]
+  },
+  881: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'a': 1, 'b': 2, 'c': 3, 'd': 4}" }
+    ]
+  },
+  882: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 3 5" }
     ]
   },
   883: {
@@ -5886,12 +6109,124 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Emma is 28 years old and lives in London."
     }]
   },
+  885: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "A B C" }
+    ]
+  },
+  886: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 [2, 3, 4, 5, 6, 7, 8] 9" }
+    ]
+  },
+  887: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 a\n2 b\n3 c" }
+    ]
+  },
   888: {
     functionNames: ["get_user"],
     tests: [{
       args: [],
       expected: ["Alice", 25]
     }]
+  },
+  889: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[12, 15, 18]" }
+    ]
+  },
+  890: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['name: Alice', 'age: 25', 'city: New York']" }
+    ]
+  },
+  891: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Python ['is', 'a', 'powerful', 'programming'] language" }
+    ]
+  },
+  892: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['u', 'a', 'i']" }
+    ]
+  },
+  893: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Alice 30 5.8 True" }
+    ]
+  },
+  894: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[(4, 1), (2, 2), (1, 3)]" }
+    ]
+  },
+  895: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[2, 4, 6]" }
+    ]
+  },
+  896: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3 1 2" }
+    ]
+  },
+  897: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "0 1 [2, 3, 4, 5, 6, 7, 8, 9]" }
+    ]
+  },
+  898: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "15" }
+    ]
+  },
+  899: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['5', '4', '3', '2', '1']\n['6', '5', '4', '3', '2', '1']" }
+    ]
   },
   900: {
     functionNames: ["min_max"],
@@ -5900,11 +6235,139 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [1, 5]
     }]
   },
+  901: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[10, 20, 30]" }
+    ]
+  },
   902: {
     functionNames: ["main"],
     tests: [
       { args: [[{"name": "jon", "age": 55}, {"name": "sam", "age": 8}]], expected: [55, 8] },
       { args: [[{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]], expected: [25, 30] }
+    ]
+  },
+  903: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3 + 5 - 2 * 4" }
+    ]
+  },
+  904: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "30 10 20" }
+    ]
+  },
+  905: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "john.doe example.com" }
+    ]
+  },
+  906: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 2 3\n4 5 6" }
+    ]
+  },
+  907: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3 2" }
+    ]
+  },
+  933: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Cannot divide by zero" }
+    ]
+  },
+  934: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Index out of range" }
+    ]
+  },
+  935: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Key not found" }
+    ]
+  },
+  936: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Invalid integer conversion" }
+    ]
+  },
+  937: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Type mismatch error" }
+    ]
+  },
+  938: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "File not found" }
+    ]
+  },
+  939: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Attribute not found" }
+    ]
+  },
+  940: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Variable not defined" }
+    ]
+  },
+  942: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Division successful: 5.0" }
+    ]
+  },
+  943: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Execution completed\nCannot divide by zero" }
     ]
   },
   944: {
