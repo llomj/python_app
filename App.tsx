@@ -1932,10 +1932,10 @@ sys.stdout = io.StringIO()
                             onPointerCancel={stopEditorDeleteHold}
                             onPointerLeave={stopEditorDeleteHold}
                             onContextMenu={(event) => event.preventDefault()}
-                            className="select-none px-2 py-1 rounded-lg border border-[#ef4444]/40 bg-[#ef4444]/10 text-[#fca5a5] text-sm font-black active:scale-95"
+                            className="select-none px-2 py-1 rounded-lg border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-sm font-black active:scale-95"
                             title="Hold to delete"
                         >
-                            ⌫
+                            &lt;
                         </button>
                         <button onClick={runCode} disabled={isRunning} className={runButtonClass}>
                             {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} {runButtonLabel}
