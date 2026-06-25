@@ -2,6 +2,7 @@ export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' 
 
 export interface AutoTestCase {
     args: unknown[];
+    kwargs?: Record<string, unknown>;
     expected: unknown;
     inputValues?: string[];
     randomValues?: number[];
@@ -9350,24 +9351,363 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "True" }
     ]
   },
+  1351: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'a': 1, 'c': 3}" }
+    ]
+  },
+  1352: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10" }
+    ]
+  },
+  1353: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3]" }
+    ]
+  },
+  1354: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[10, 30, 40]" }
+    ]
+  },
+  1355: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "7" }
+    ]
+  },
+  1356: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3\n2\n1" }
+    ]
+  },
+  1357: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "List is empty" }
+    ]
+  },
+  1358: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Not Found" }
+    ]
+  },
+  1359: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Key not found" }
+    ]
+  },
+  1360: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "('k2', 2)\n('k1', 1)" }
+    ]
+  },
+  1361: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3" }
+    ]
+  },
+  1362: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10" }
+    ]
+  },
+  1363: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "6" }
+    ]
+  },
+  1364: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Alice" }
+    ]
+  },
+  1365: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2]" }
+    ]
+  },
+  1366: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "500" }
+    ]
+  },
   1367: {
         functionNames: ['remove_key'],
         tests: [
-            { args: [{"a":1,"b":2},"a"], expected: {"b":2} },
+            { args: [{"a":1,"b":2},"a"], expected: 1 },
+            { args: [{"a":1},"missing"], expected: null },
         ]
     },
+  1368: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[7]" }
+    ]
+  },
+  1369: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "save" }
+    ]
+  },
+  1370: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[5, 6]" }
+    ]
+  },
+  1371: {
+    functionNames: ['print_kwargs'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2 }, expected: "{'a': 1, 'b': 2}" }
+    ]
+  },
+  1372: {
+    functionNames: ['display_kwargs'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { name: 'Alice', age: 30 }, expected: "name: Alice\nage: 30" }
+    ]
+  },
+  1373: {
+    functionNames: ['count_kwargs'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2, c: 3 }, expected: "3" }
+    ]
+  },
+  1374: {
+    functionNames: ['kwargs_keys'],
+    tests: [
+      { args: [], kwargs: { x: 10, y: 20 }, expected: ['x', 'y'] }
+    ]
+  },
+  1375: {
+    functionNames: ['kwargs_values'],
+    tests: [
+      { args: [], kwargs: { x: 10, y: 20 }, expected: [10, 20] }
+    ]
+  },
+  1376: {
+    functionNames: ['has_id'],
+    tests: [
+      { args: [], kwargs: { name: 'A', id: 123 }, expected: true },
+      { args: [], kwargs: { name: 'A' }, expected: false }
+    ]
+  },
+  1377: {
+    functionNames: ['get_name'],
+    tests: [
+      { args: [], kwargs: { age: 22 }, expected: 'Unknown' },
+      { args: [], kwargs: { name: 'Dana' }, expected: 'Dana' }
+    ]
+  },
+  1378: {
+    functionNames: ['sum_kwargs'],
+    compare: 'float',
+    tests: [
+      { args: [], kwargs: { a: 10, b: 5.5, c: 'x' }, expected: 15.5 }
+    ]
+  },
+  1379: {
+    functionNames: ['string_kwargs'],
+    tests: [
+      { args: [], kwargs: { a: 'hi', b: 2, c: 'hello' }, expected: { a: 'hi', c: 'hello' } }
+    ]
+  },
   1380: {
         functionNames: ['greet'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: [], kwargs: { name: 'Bob', age: 40 }, expected: "Hello Bob, age 40" },
         ]
     },
+  1381: {
+    functionNames: ['update_dict'],
+    tests: [
+      { args: [{ x: 1 }], kwargs: { y: 2, z: 3 }, expected: { x: 1, y: 2, z: 3 } }
+    ]
+  },
   1382: {
         functionNames: ['merge_dicts'],
         tests: [
-            { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
+            { args: [{ a: 1 }], kwargs: { b: 2 }, expected: { a: 1, b: 2 } },
         ]
     },
+  1383: {
+    functionNames: ['even_kwargs'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2, c: 4 }, expected: "b: 2\nc: 4" }
+    ]
+  },
+  1384: {
+    functionNames: ['sorted_kwargs'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { z: 9, a: 1, m: 5 }, expected: "a: 1\nm: 5\nz: 9" }
+    ]
+  },
+  1385: {
+    functionNames: ['count_strings'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 'one', b: 2, c: 'three' }, expected: "2" }
+    ]
+  },
+  1386: {
+    functionNames: ['check_truthy'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 0, b: 'hello', c: [] }, expected: "a: Falsy\nb: Truthy\nc: Falsy" }
+    ]
+  },
+  1387: {
+    functionNames: ['starts_with_a'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { apple: 1, banana: 2, ant: 3 }, expected: "apple: 1\nant: 3" }
+    ]
+  },
+  1388: {
+    functionNames: ['reverse_kwargs'],
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2 }, expected: { 1: 'a', 2: 'b' } }
+    ]
+  },
+  1389: {
+    functionNames: ['longest_key'],
+    tests: [
+      { args: [], kwargs: { short: 1, muchlonger: 2 }, expected: 'muchlonger' }
+    ]
+  },
+  1390: {
+    functionNames: ['stringify_kwargs'],
+    tests: [
+      { args: [], kwargs: { x: 10, y: 20 }, expected: 'x=10, y=20' }
+    ]
+  },
+  1391: {
+    functionNames: ['all_ints'],
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2 }, expected: true },
+      { args: [], kwargs: { a: 1, b: '2' }, expected: false }
+    ]
+  },
+  1392: {
+    functionNames: ['max_numeric'],
+    compare: 'float',
+    tests: [
+      { args: [], kwargs: { a: 1, b: 3.5, c: 'x' }, expected: 3.5 }
+    ]
+  },
+  1393: {
+    functionNames: ['count_none'],
+    tests: [
+      { args: [], kwargs: { a: null, b: 1, c: null }, expected: 2 }
+    ]
+  },
+  1394: {
+    functionNames: ['print_types'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 1, b: 'str', c: 3.14 }, expected: "a: int\nb: str\nc: float" }
+    ]
+  },
+  1395: {
+    functionNames: ['kv_pairs'],
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2 }, expected: [['a', 1], ['b', 2]] }
+    ]
+  },
+  1396: {
+    functionNames: ['remove_falsy'],
+    tests: [
+      { args: [], kwargs: { a: 0, b: 1, c: '' }, expected: { b: 1 } }
+    ]
+  },
+  1397: {
+    functionNames: ['has_list'],
+    tests: [
+      { args: [], kwargs: { a: [1, 2], b: 'x' }, expected: true },
+      { args: [], kwargs: { a: 1, b: 'x' }, expected: false }
+    ]
+  },
+  1398: {
+    functionNames: ['even_or_odd_kwargs'],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], kwargs: { a: 1, b: 2, c: 3 }, expected: "Odd" },
+      { args: [], kwargs: { a: 1, b: 2 }, expected: "Even" }
+    ]
+  },
+  1399: {
+    functionNames: ['clean_temp_keys'],
+    tests: [
+      { args: [], kwargs: { temp_x: 1, y: 2 }, expected: { x: 1, y: 2 } }
+    ]
+  },
+  1400: {
+    functionNames: ['uppercase_keys_only'],
+    tests: [
+      { args: [], kwargs: { AGE: 30, name: 'Ann' }, expected: { AGE: 30 } }
+    ]
+  },
   1468: {
         functionNames: ['is_prime'],
         tests: [
