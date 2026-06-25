@@ -660,7 +660,7 @@ def __auto_grader_run_script():
                     return values
                 random.choices = __script_choices
 
-            namespace = {"__name__": "__main__"}
+            namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:

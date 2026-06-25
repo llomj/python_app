@@ -8946,6 +8946,198 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
+  1296: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['Hello', 'World', 'Python']" }
+    ]
+  },
+  1297: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['apple', 'banana', 'cherry', 'grape']" }
+    ]
+  },
+  1298: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1299: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['alice@example.com', 'bob99@domain.co.uk']" }
+    ]
+  },
+  1300: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['#Python', '#coding']" }
+    ]
+  },
+  1301: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['example.com', 'test.org']" }
+    ]
+  },
+  1303: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Hello world Python is great" }
+    ]
+  },
+  1304: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1305: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['2024-06-01', '2025-07-04']" }
+    ]
+  },
+  1306: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1307: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['running', 'jumping', 'singing']" }
+    ]
+  },
+  1308: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "pdf" }
+    ]
+  },
+  1309: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['is', 'test']" }
+    ]
+  },
+  1310: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['Alice', 'Bob', 'New', 'York', 'City', 'Monday']" }
+    ]
+  },
+  1311: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1312: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['21.5', '60', '0.25']" }
+    ]
+  },
+  1313: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "192.168.1.1" }
+    ]
+  },
+  1314: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1315: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['with content', 'another one']" }
+    ]
+  },
+  1316: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['<div>', '<p>', '</p>', '</div>']" }
+    ]
+  },
+  1317: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1318: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['U.S.A.', 'E.U.']" }
+    ]
+  },
+  1319: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3" }
+    ]
+  },
+  1320: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "This is a spaced sentence." }
+    ]
+  },
   1343: {
         functionNames: ['greet'],
         tests: [
