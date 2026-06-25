@@ -4598,6 +4598,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{Sam: 5, Chris: 34, Simon: 12, Anna: 9}], expected: ['Chris', 'Simon'] }
         ]
     },
+  666: {
+        functionNames: ['print_fruit_keys'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{Apple: 3, Banana: 1, Mango: 2, Orange: 4}], expected: 'Apple\nBanana\nMango\nOrange' }
+        ]
+    },
   667: {
         functionNames: ['name_age'],
         tests: [
@@ -4654,6 +4661,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['first_key'],
         tests: [
             { args: [{apple: 1, banana: 2, cherry: 3}], expected: 'apple' }
+        ]
+    },
+  676: {
+        functionNames: ['print_cart_items'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{apple: 3, banana: 2, bread: 1, milk: 2}], expected: 'apple\nbanana\nbread\nmilk' }
         ]
     },
   677: {
