@@ -3586,10 +3586,221 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['Ada', 90000], callMethod: 'assign_task', callMethodArgs: ['Review code'], expected: 'Manager Ada has assigned the task: Review code.' }
         ]
     },
-  518: {
-        functionNames: ['get_salary'],
+  501: {
+        functionNames: ['Penguin', 'Bird'],
         tests: [
-            { args: [50000], expected: 30000 }
+            { args: [], functionName: 'Penguin', callMethod: 'fly', expected: 'Cannot fly' },
+            { args: [], functionName: 'Bird', callMethod: 'fly', expected: 'I can fly!' }
+        ]
+    },
+  502: {
+        functionNames: ['EBook'],
+        tests: [
+            { args: ['Python Programming', 'John Doe', 2.5], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Python Programming', author: 'John Doe', file_size: 2.5} }
+        ]
+    },
+  503: {
+        functionNames: ['Guitar', 'Instrument'],
+        tests: [
+            { args: [], functionName: 'Guitar', callMethod: 'play', expected: 'Strum' },
+            { args: [], functionName: 'Instrument', callMethod: 'play', expected: 'Playing an instrument.' }
+        ]
+    },
+  504: {
+        functionNames: ['Chess', 'Game'],
+        tests: [
+            { args: [], functionName: 'Chess', callMethod: 'start', expected: 'Start Chess' },
+            { args: [], functionName: 'Game', callMethod: 'start', expected: 'Starting the game.' }
+        ]
+    },
+  505: {
+        functionNames: ['Bicycle'],
+        tests: [
+            { args: [], callMethod: 'drive', expected: 'Pedal' }
+        ]
+    },
+  506: {
+        functionNames: ['Laptop'],
+        tests: [
+            { args: ['Dell', 'Intel i7', 2.3], getAttrs: ['brand', 'processor', 'weight'], expected: {brand: 'Dell', processor: 'Intel i7', weight: 2.3} }
+        ]
+    },
+  507: {
+        functionNames: ['Smartphone'],
+        tests: [
+            { args: [['WhatsApp', 'Instagram']], callMethod: 'turn_on', expected: 'Device is now on.' },
+            { args: [['WhatsApp', 'Instagram']], getAttrs: ['apps'], expected: {apps: ['WhatsApp', 'Instagram']} }
+        ]
+    },
+  508: {
+        functionNames: ['Child', 'Parent'],
+        tests: [
+            { args: [], functionName: 'Child', callMethod: 'display', expected: 'This is a child' },
+            { args: [], functionName: 'Parent', callMethod: 'display', expected: 'This is the parent.' }
+        ]
+    },
+  509: {
+        functionNames: ['Skyscraper'],
+        tests: [
+            { args: [50, '123 High Street', 200], getAttrs: ['floors', 'address', 'height'], expected: {floors: 50, address: '123 High Street', height: 200} }
+        ]
+    },
+  510: {
+        functionNames: ['Flower', 'Plant'],
+        tests: [
+            { args: [], functionName: 'Flower', callMethod: 'grow', expected: 'Bloom' },
+            { args: [], functionName: 'Plant', callMethod: 'grow', expected: 'The plant is growing.' }
+        ]
+    },
+  511: {
+        functionNames: ['MathTeacher'],
+        tests: [
+            { args: ['Alice Smith'], getAttrs: ['name', 'subject'], expected: {name: 'Alice Smith', subject: 'Math'} },
+            { args: ['Alice Smith'], callMethod: 'teach_math', expected: 'Teaching math concepts.' }
+        ]
+    },
+  512: {
+        functionNames: ['Poet'],
+        tests: [
+            { args: ['William Wordsworth'], getAttrs: ['name', 'genre'], expected: {name: 'William Wordsworth', genre: 'Poetry'} }
+        ]
+    },
+  513: {
+        functionNames: ['Oven', 'Appliance'],
+        tests: [
+            { args: [], functionName: 'Oven', callMethod: 'use', expected: 'Bake' },
+            { args: [], functionName: 'Appliance', callMethod: 'use', expected: 'Using the appliance.' }
+        ]
+    },
+  514: {
+        functionNames: ['Painter'],
+        tests: [
+            { args: ['Vincent van Gogh', 'Oil Paint'], callMethod: 'paint', expected: 'Painting with Oil Paint' }
+        ]
+    },
+  515: {
+        functionNames: ['Electrician'],
+        tests: [
+            { args: [], callMethod: 'work', expected: 'Fix wires' }
+        ]
+    },
+  516: {
+        functionNames: ['Lion'],
+        tests: [
+            { args: [], callMethod: 'eat', expected: 'Eat meat' }
+        ]
+    },
+  517: {
+        functionNames: ['Fan'],
+        tests: [
+            { args: [], callMethod: 'run', expected: 'Spin blades' }
+        ]
+    },
+  518: {
+        functionNames: ['Intern', 'Employee'],
+        tests: [
+            { args: [], functionName: 'Intern', callMethod: 'get_salary', expected: 2000 },
+            { args: [], functionName: 'Employee', callMethod: 'get_salary', expected: 5000 }
+        ]
+    },
+  519: {
+        functionNames: ['Motorcycle'],
+        tests: [
+            { args: [], getAttrs: ['wheels'], expected: {wheels: 2} }
+        ]
+    },
+  520: {
+        functionNames: ['Hammer'],
+        tests: [
+            { args: [], callMethod: 'use', expected: 'Hammer nails' }
+        ]
+    },
+  521: {
+        functionNames: ['SavingsAccount'],
+        tests: [
+            { args: [1500, 'Bob', 2.5], getAttrs: ['balance', 'owner', 'interest_rate'], expected: {balance: 1500, owner: 'Bob', interest_rate: 2.5} }
+        ]
+    },
+  522: {
+        functionNames: ['Sword'],
+        tests: [
+            { args: [], callMethod: 'attack', expected: 'Slash' }
+        ]
+    },
+  523: {
+        functionNames: ['Microwave'],
+        tests: [
+            { args: [1200], getAttrs: ['power'], expected: {power: 1200} },
+            { args: [1200], callMethod: 'heat_food', expected: 'Heating food' }
+        ]
+    },
+  524: {
+        functionNames: ['ElectricCar'],
+        tests: [
+            { args: [], callMethod: 'start', expected: 'Silent start' }
+        ]
+    },
+  525: {
+        functionNames: ['Cat'],
+        tests: [
+            { args: [], callMethod: 'make_sound', expected: 'Meow' }
+        ]
+    },
+  526: {
+        functionNames: ['PastryChef'],
+        tests: [
+            { args: [], callMethod: 'cook', expected: 'Bake cake' }
+        ]
+    },
+  527: {
+        functionNames: ['create_chair'],
+        tests: [
+            { args: ['wood', 'brown', 4], getAttrs: ['material', 'color', 'legs'], expected: {material: 'wood', color: 'brown', legs: 4} }
+        ]
+    },
+  528: {
+        functionNames: ['Soccer'],
+        tests: [
+            { args: [], getAttrs: ['players'], expected: {players: 22} }
+        ]
+    },
+  529: {
+        functionNames: ['Pianist'],
+        tests: [
+            { args: [], callMethod: 'play_instrument', expected: 'Play piano' }
+        ]
+    },
+  530: {
+        functionNames: ['TechCompany'],
+        tests: [
+            { args: ['Tech Innovators', 'San Francisco', ['Smartphone', 'Laptop']], getAttrs: ['name', 'location', 'products'], expected: {name: 'Tech Innovators', location: 'San Francisco', products: ['Smartphone', 'Laptop']} }
+        ]
+    },
+  531: {
+        functionNames: ['Smartwatch'],
+        tests: [
+            { args: [true], callMethod: 'operate', expected: 'Operate gadget' },
+            { args: [true], getAttrs: ['heart_rate_monitor'], expected: {heart_rate_monitor: true} }
+        ]
+    },
+  532: {
+        functionNames: ['FitnessTrainer'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], callMethod: 'train', expected: 'Train body' }
+        ]
+    },
+  533: {
+        functionNames: ['ComicBook'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], callMethod: 'read', expected: 'Read with pictures' }
+        ]
+    },
+  534: {
+        functionNames: ['GameSoftware'],
+        tests: [
+            { args: ['EpicQuest', '2.5', 'RPG'], getAttrs: ['name', 'version', 'genre'], expected: {name: 'EpicQuest', version: '2.5', genre: 'RPG'} }
         ]
     },
   535: {
@@ -3672,7 +3883,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   548: {
-        functionNames: ['count_floating_numbers'],
+        functionNames: ['count_vowels'],
         tests: [
             { args: ['hello world'], expected: 3 }
         ]
