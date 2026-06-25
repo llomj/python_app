@@ -14,30 +14,35 @@ const PYTHON_BUILTINS = new Set([
   'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', '__import__',
 ]);
 
-const builtinMark = Decoration.mark({ attributes: { style: 'color:#FF9700 !important' } });
+const orangeMark = Decoration.mark({ attributes: { style: 'color:#FF9700' } });
+const redMark = Decoration.mark({ attributes: { style: 'color:#FF1900' } });
 
-const builtinHighlightField = StateField.define<DecorationSet>({
+const varHighlightField = StateField.define<DecorationSet>({
   create(state) {
-    return computeBuiltinDecorations(state);
+    return computeVarDecorations(state);
   },
   update(deco, tr) {
     if (!tr.docChanged) return deco;
-    return computeBuiltinDecorations(tr.state);
+    return computeVarDecorations(tr.state);
   },
   provide: f => EditorView.decorations.from(f),
 });
 
-function computeBuiltinDecorations(state) {
+function computeVarDecorations(state) {
   const decos = [];
   syntaxTree(state).iterate({
     enter(node) {
-      if (node.name === 'CallExpression') {
-        const varName = node.node.getChild('VariableName');
-        if (varName) {
-          const name = state.sliceDoc(varName.from, varName.to);
+      if (node.name === 'VariableName') {
+        const parent = node.node.parent;
+        if (parent && parent.name === 'CallExpression') {
+          const name = state.sliceDoc(node.from, node.to);
           if (PYTHON_BUILTINS.has(name)) {
-            decos.push(builtinMark.range(varName.from, varName.to));
+            decos.push(orangeMark.range(node.from, node.to));
+          } else {
+            decos.push(redMark.range(node.from, node.to));
           }
+        } else {
+          decos.push(redMark.range(node.from, node.to));
         }
       }
     },
@@ -62,8 +67,6 @@ export const editorUiTheme = EditorView.theme({
 export const pythonHighlightStyle = HighlightStyle.define([
   { tag: t.comment, color: "#858585" },
   { tag: t.keyword, color: "#389EDB" },
-  { tag: t.variableName, color: "#FF1900" },
-  { tag: t.name, color: "#ffffff" },
   { tag: t.number, color: "#FF00FF" },
   { tag: t.string, color: "#00AD89" },
 ]);
@@ -71,5 +74,5 @@ export const pythonHighlightStyle = HighlightStyle.define([
 export const customPythonTheme = [
   editorUiTheme,
   syntaxHighlighting(pythonHighlightStyle),
-  builtinHighlightField,
+  varHighlightField,
 ];
