@@ -15,7 +15,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 2",
         "description": "Write a Python function called `multiply_numbers` that takes two numbers as parameters and returns their product.",
         "initialCode": "def multiply_numbers(a, b):\n    pass",
-        "solution": "def multiply_numbers(a, b):\n    return a * b\n    \nprint(multiply_numbers(5, 5))  # Output: 25",
+        "solution": "def multiply_numbers(a, b):\n    return a * b\n    \nprint(multiply_numbers(5, 5))  # Output: 25\n\ndef multiply_numbers(a, b):\n    result = a * b\n    return result\n    \nprint(multiply_numbers(3, 7))  # Output: 21\n\ndef multiply_numbers(a, b):\n    # Using repeated addition\n    result = 0\n    for _ in range(abs(b)):\n        result += a\n    return result if b >= 0 else -result\n    \nprint(multiply_numbers(4, 6))  # Output: 24",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -42,7 +42,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 5",
         "description": "Write a Python function called `count_vowels` that takes a string as input and returns the count of vowels (a, e, i, o, u) in the string. Ignore case sensitivity.",
         "initialCode": "def count_vowels(string):\n    pass",
-        "solution": "def count_vowels(string):\n    count = 0\n    \n    for char in string:\n        if char in \"aeiou\":\n            count += 1  # Increment counter if vowel found\n    return count\n    \nresult = \"Jonathan\"\nprint(count_vowels(result))  # Output: 3",
+        "solution": "def count_vowels(string):\n    count = 0\n    \n    for char in string:\n        if char in \"aeiou\":\n            count += 1  # Increment counter if vowel found\n    return count\n    \nresult = \"Jonathan\"\nprint(count_vowels(result))  # Output: 3\n\ndef count_vowels(string):\n    # Using list comprehension\n    return len([char for char in string.lower() if char in \"aeiou\"])\n    \nprint(count_vowels(\"Jonathan\"))  # Output: 3\n\ndef count_vowels(string):\n    # Using sum with generator\n    return sum(1 for char in string.lower() if char in \"aeiou\")\n    \nprint(count_vowels(\"Python\"))  # Output: 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -51,7 +51,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 6",
         "description": "Write a Python function called `reverse_string` that takes a string as input and returns the reverse of that string.",
         "initialCode": "def reverse_string(string):\n    pass",
-        "solution": "def reverse_string(string):\n    string = string[::-1]\n    \n    return string  # Return the reversed string\n    \nresult = \"Jonathan\"\nprint(reverse_string(result))  # Output: nahtanoJ",
+        "solution": "def reverse_string(string):\n    string = string[::-1]\n    \n    return string  # Return the reversed string\n    \nresult = \"Jonathan\"\nprint(reverse_string(result))  # Output: nahtanoJ\n\ndef reverse_string(string):\n    # Using reversed() and join\n    return \"\".join(reversed(string))\n    \nprint(reverse_string(\"hello\"))  # Output: olleh\n\ndef reverse_string(string):\n    # Using loop\n    result = \"\"\n    for char in string:\n        result = char + result\n    return result\n    \nprint(reverse_string(\"Python\"))  # Output: nohtyP",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -60,7 +60,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 7",
         "description": "Write a Python function called `is_even` that takes an integer as input and returns True if the number is even, and False otherwise.",
         "initialCode": "def is_even(number):\n    pass",
-        "solution": "def is_even(number):\n    return number % 2 == 0\n               \nresult = 10        \nprint(is_even(result))  # Output: True",
+        "solution": "def is_even(number):\n    return number % 2 == 0\n               \nresult = 10        \nprint(is_even(result))  # Output: True\n\ndef is_even(number):\n    # Using bitwise AND\n    return (number & 1) == 0\n    \nprint(is_even(8))  # Output: True\n\ndef is_even(number):\n    # Using division\n    return (number // 2) * 2 == number\n    \nprint(is_even(12))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -78,7 +78,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 9",
         "description": "Write a Python function called `greet_user` that takes a string `name` as input and prints a greeting message in the format \"Hello, [name]!\".",
         "initialCode": "def greet_user(string):\n    pass",
-        "solution": "def greet_user(string):\n    return f\"hello {string}\"  # Returns formatted greeting string\n        \nprint(greet_user(\"Jonathan\"))  # Output: hello Jonathan",
+        "solution": "def greet_user(string):\n    return f\"hello {string}\"  # Returns formatted greeting string\n        \nprint(greet_user(\"Jonathan\"))  # Output: hello Jonathan\n\ndef greet_user(name):\n    # Using string concatenation\n    return \"Hello, \" + name + \"!\"\n    \nprint(greet_user(\"Alice\"))  # Output: Hello, Alice!\n\ndef greet_user(name):\n    # Using format method\n    return \"Hello, {}!\".format(name)\n    \nprint(greet_user(\"Bob\"))  # Output: Hello, Bob!",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -87,7 +87,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 10",
         "description": "Write a Python function called `square_list` that takes a list of numbers as input and returns a new list with each number squared.",
         "initialCode": "def square_lst(numbers):\n    pass",
-        "solution": "def square_lst(numbers):\n    squared_numbers = []\n    \n    for number in numbers:\n        squared_numbers.append(number ** 2)\n    return squared_numbers\n    \nresult = [2, 4, 5, 6]\nprint(square_lst(result))  # Output: [4, 16, 25, 36]",
+        "solution": "def square_lst(numbers):\n    squared_numbers = []\n    \n    for number in numbers:\n        squared_numbers.append(number ** 2)\n    return squared_numbers\n    \nresult = [2, 4, 5, 6]\nprint(square_lst(result))  # Output: [4, 16, 25, 36]\n\ndef square_lst(numbers):\n    # Using list comprehension\n    return [n ** 2 for n in numbers]\n    \nprint(square_lst([1, 2, 3]))  # Output: [1, 4, 9]\n\ndef square_lst(numbers):\n    # Using map with lambda\n    return list(map(lambda x: x ** 2, numbers))\n    \nprint(square_lst([3, 4, 5]))  # Output: [9, 16, 25]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -96,7 +96,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 11",
         "description": "Write a Python function called `convert_to_uppercase` that takes a string as input and returns the string with all its characters converted to uppercase.",
         "initialCode": "def covert_uppercase(string):\n    pass",
-        "solution": "def covert_uppercase(string):\n    return string.upper()  # Returns uppercase version of the string\n    \nprint(covert_uppercase(\"Jonathan\"))  # Output: JONATHAN",
+        "solution": "def covert_uppercase(string):\n    return string.upper()  # Returns uppercase version of the string\n    \nprint(covert_uppercase(\"Jonathan\"))  # Output: JONATHAN\n\ndef covert_uppercase(string):\n    # Using loop and chr/ord\n    result = \"\"\n    for char in string:\n        if \"a\" <= char <= \"z\":\n            result += chr(ord(char) - 32)\n        else:\n            result += char\n    return result\n    \nprint(covert_uppercase(\"hello\"))  # Output: HELLO",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -114,7 +114,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 13",
         "description": "Write a Python function called `is_odd` that takes an integer as input and returns True if the number is odd, and False otherwise.",
         "initialCode": "def is_odd(number):\n    pass",
-        "solution": "def is_odd(number):\n    return number % 2 == 0  # This returns True for even numbers (WRONG!)\n\nprint(is_odd(10))  # Output: True (INCORRECT - 10 is even, not odd!)",
+        "solution": "def is_odd(number):\n    return number % 2 != 0  # Returns True if number is odd\n\nprint(is_odd(10))  # Output: False (10 is even)\nprint(is_odd(7))   # Output: True (7 is odd)\n\ndef is_odd(number):\n    # Using bitwise AND\n    return (number & 1) == 1\n    \nprint(is_odd(5))  # Output: True\n\ndef is_odd(number):\n    # Check if not even\n    return not (number % 2 == 0)\n    \nprint(is_odd(9))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -141,7 +141,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 16",
         "description": "Write a Python function called `is_palindrome` that takes a string as input and returns True if the string is a palindrome (reads the same forwards and backwards), and False otherwise.",
         "initialCode": "def is_palindrome(string):\n    pass",
-        "solution": "def is_palindrome(string):\n    string = string.replace(\" \", \"\").lower()  # Remove spaces, convert to lowercase\n    \n    return string == string[::-1]  # Returns True if palindrome, False otherwise\n    \n# Normalized: \"tom\", Reversed: \"mot\"\nprint(is_palindrome(\"tom\"))  # Output: False",
+        "solution": "def is_palindrome(string):\n    string = string.replace(\" \", \"\").lower()  # Remove spaces, convert to lowercase\n    \n    return string == string[::-1]  # Returns True if palindrome, False otherwise\n    \n# Normalized: \"tom\", Reversed: \"mot\"\nprint(is_palindrome(\"tom\"))  # Output: False\nprint(is_palindrome(\"racecar\"))  # Output: True\n\ndef is_palindrome(string):\n    # Using loop to compare characters\n    string = string.replace(\" \", \"\").lower()\n    for i in range(len(string) // 2):\n        if string[i] != string[-(i+1)]:\n            return False\n    return True\n    \nprint(is_palindrome(\"madam\"))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -168,7 +168,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 19",
         "description": "Write a Python function called `is_even_index_sum` that takes a list of numbers as input and returns True if the sum of the numbers at even indices is even, and False otherwise. Assume that the first index is considered as index 0.",
         "initialCode": "def is_even_index_sum(numbers):\n    pass",
-        "solution": "def is_even_index_sum(numbers):\n    even_index_sum = 0\n    \n    for i in range(len(numbers)):\n        if i % 2 == 0:\n            even_index_sum += numbers[i]  # Add element at even index to sum\n    \n    return even_index_sum % 2 == 0  # Returns True if sum is even, False if odd\n\n# Even indices: 0 (100), 2 (300)\n# Sum: 100 + 300 = 400\nlst = [100, 200, 300, 400]\nprint(is_even_index_sum(lst))  # Output: True",
+        "solution": "def is_even_index_sum(numbers):\n    even_index_sum = 0\n    \n    for i in range(len(numbers)):\n        if i % 2 == 0:\n            even_index_sum += numbers[i]  # Add element at even index to sum\n    \n    return even_index_sum % 2 == 0  # Returns True if sum is even, False if odd\n\n# Even indices: 0 (100), 2 (300)\n# Sum: 100 + 300 = 400\nlst = [100, 200, 300, 400]\nprint(is_even_index_sum(lst))  # Output: True\n\ndef is_even_index_sum(numbers):\n    # Using slicing to get even indices\n    even_index_sum = sum(numbers[::2])\n    return even_index_sum % 2 == 0\n    \nprint(is_even_index_sum([1, 2, 3, 4, 5]))  # Output: True (1+3+5=9, odd)\nprint(is_even_index_sum([2, 4, 6, 8]))     # Output: True (2+6=8, even)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -186,7 +186,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 21",
         "description": "Write a Python function called `is_all_positive` that takes a list of numbers as input and returns True if all the numbers in the list are positive (greater than zero), and False otherwise.",
         "initialCode": "def is_all_positive(numbers):\n    pass",
-        "solution": "def is_all_positive(numbers):\n    for number in numbers:\n        if number <= 0:\n            return False  # Found a non-positive number, return False immediately\n    return True  # All numbers passed the positive check\n              \nlst = [0, 6, 8]\nprint(is_all_positive(lst))  # Output: False",
+        "solution": "def is_all_positive(numbers):\n    for number in numbers:\n        if number <= 0:\n            return False  # Found a non-positive number, return False immediately\n    return True  # All numbers passed the positive check\n              \nlst = [0, 6, 8]\nprint(is_all_positive(lst))  # Output: False\n\ndef is_all_positive(numbers):\n    # Using all() with generator\n    return all(n > 0 for n in numbers)\n    \nprint(is_all_positive([1, 2, 3]))  # Output: True\nprint(is_all_positive([1, -2, 3])) # Output: False\n\ndef is_all_positive(numbers):\n    # Using min()\n    return len(numbers) > 0 and min(numbers) > 0\n    \nprint(is_all_positive([5, 10, 15]))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -204,7 +204,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 23",
         "description": "Write a Python function called `contains_negative` that takes a list of numbers as input and returns True if the list contains any negative number, and False otherwise.",
         "initialCode": "def contains_negative(numbers):\n    pass",
-        "solution": "def contains_negative(numbers):\n    for number in numbers:\n        if number <= 0:  # This incorrectly treats 0 as negative\n            return True  # Return True immediately if found\n    return False  # Return False if no negative numbers found\n\nlst = [5, -9]    \nprint(contains_negative(lst))  # Output: True (correct for this case, but buggy logic)",
+        "solution": "def contains_negative(numbers):\n    for number in numbers:\n        if number < 0:  # Check if strictly negative\n            return True\n    return False\n\nlst = [5, -9]\nprint(contains_negative(lst))  # Output: True\nprint(contains_negative([0, 1, 2]))  # Output: False (0 is not negative)\n\ndef contains_negative(numbers):\n    # Using any() with generator\n    return any(n < 0 for n in numbers)\n    \nprint(contains_negative([1, 2, -3]))  # Output: True\nprint(contains_negative([1, 2, 3]))   # Output: False\n\ndef contains_negative(numbers):\n    # Using min()\n    return len(numbers) > 0 and min(numbers) < 0\n    \nprint(contains_negative([-1, 0, 1]))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
