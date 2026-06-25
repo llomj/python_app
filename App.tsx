@@ -1763,6 +1763,7 @@ sys.stdout = io.StringIO()
         indentUnit.of("    "),
         holdBackspaceExtension,
         autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
+        EditorView.lineWrapping,
         ...customPythonTheme
     ], [pythonCompletionSource]);
 
