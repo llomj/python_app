@@ -272,7 +272,7 @@ const getInitialExercise = (): Exercise => {
     return getRandomExerciseForMode(savedMode);
 };
 
-const buildAutoGradeScript = (grader: AutoGrader) => `
+const buildAutoGradeScript = (grader: AutoGrader, sourceCode = '', sourceName = 'main.py') => `
 import json
 import math
 import sys
@@ -281,8 +281,11 @@ import builtins
 import inspect
 import re
 import ast
+import types
 
 __auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
+__auto_grader_source = ${JSON.stringify(sourceCode)}
+__auto_grader_source_name = ${JSON.stringify(sourceName)}
 
 def __auto_grader_jsonable(value):
     try:
@@ -440,6 +443,9 @@ def __auto_grader_find_callable(function_names, args, required_name=None):
     return None, None
 
 def __auto_grader_run():
+    if __auto_grader_spec.get("mode") == "script":
+        return __auto_grader_run_script()
+
     function_names = __auto_grader_spec.get("functionNames", [])
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
@@ -565,6 +571,74 @@ def __auto_grader_run():
         "passed": True,
         "functionName": target_name,
         "message": f"All {len(__auto_grader_spec.get('tests', []))} tests passed using {target_name}()."
+    }
+
+def __auto_grader_run_script():
+    compare = __auto_grader_spec.get("compare", "printedOrReturn")
+    tests = __auto_grader_spec.get("tests", [])
+    compiled = compile(__auto_grader_source, __auto_grader_source_name, "exec")
+
+    for index, case in enumerate(tests, start=1):
+        expected = case.get("expected")
+        input_values = list(case.get("inputValues", []))
+        random_values = list(case.get("randomValues", []))
+        label = case.get("label") or ("test " + str(index))
+
+        old_stdout = sys.stdout
+        old_input = builtins.input
+        old_random = None
+        sys.stdout = io.StringIO()
+        input_iter = iter(input_values)
+        random_iter = iter(random_values)
+
+        def __script_input(prompt=""):
+            try:
+                return next(input_iter)
+            except StopIteration:
+                raise Exception("No test input left for input().")
+
+        builtins.input = __script_input
+        try:
+            import random
+            old_random = random.randint
+            if random_values:
+                def __script_randint(_start, _end):
+                    try:
+                        return next(random_iter)
+                    except StopIteration:
+                        return random_values[-1]
+                random.randint = __script_randint
+
+            namespace = {"__name__": "__main__"}
+            exec(compiled, namespace)
+            printed = sys.stdout.getvalue().strip()
+        except Exception as exc:
+            return {
+                "passed": False,
+                "message": f"{label} raised {type(exc).__name__}: {exc}"
+            }
+        finally:
+            if old_random is not None:
+                try:
+                    import random
+                    random.randint = old_random
+                except Exception:
+                    pass
+            sys.stdout = old_stdout
+            builtins.input = old_input
+
+        if not __auto_grader_same(printed, expected, compare):
+            return {
+                "passed": False,
+                "message": (
+                    f"{label} failed. "
+                    f"Expected output {expected!r}, got {__auto_grader_jsonable(printed)!r}."
+                )
+            }
+
+    return {
+        "passed": True,
+        "message": f"All {len(tests)} script tests passed."
     }
 
 __auto_grader_result = __auto_grader_run()
@@ -1802,10 +1876,13 @@ builtins.input = __app_input
             pyodide.runPython(clearModulesCode);
 
             const activeFile = files[activeFileIndex];
-            // CRITICAL FIX: Use exec with filename context so imports work
-            const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
-            await pyodide.runPythonAsync(code);
-            const stdout = pyodide.runPython("sys.stdout.getvalue()");
+            let stdout = '';
+            if (autoGrader?.mode !== 'script') {
+                // CRITICAL FIX: Use exec with filename context so imports work
+                const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
+                await pyodide.runPythonAsync(code);
+                stdout = pyodide.runPython("sys.stdout.getvalue()");
+            }
             const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
             stdinValuesRef.current = [];
             setStdinValues([]);
@@ -1815,7 +1892,7 @@ builtins.input = __app_input
 import builtins
 builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADER_INPUT_UNAVAILABLE__" + str(prompt)))
 `);
-                pyodide.runPython(buildAutoGradeScript(autoGrader));
+                pyodide.runPython(buildAutoGradeScript(autoGrader, activeFile.content, activeFile.name));
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
 
                 if (gradeResult.passed) {

@@ -4,6 +4,7 @@ export interface AutoTestCase {
     args: unknown[];
     expected: unknown;
     inputValues?: string[];
+    randomValues?: number[];
     callReturnedWith?: unknown[];
     callMethod?: string;
     callMethodArgs?: unknown[];
@@ -17,6 +18,7 @@ export interface AutoTestCase {
 
 export interface AutoGrader {
     functionNames: string[];
+    mode?: 'function' | 'script';
     compare?: CompareMode;
     tests: AutoTestCase[];
 }
@@ -5631,6 +5633,199 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [
       { functionName: "main", args: [{"a": 1}], expected: {"a": 1, "first": 1, "second": 2} },
       { functionName: "add_multiple_pairs", args: [{"name": 777}, {"status": "unemployed", "country": "USA"}], expected: {"name": 777, "status": "unemployed", "country": "USA"} }
+    ]
+  },
+  827: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10" }
+    ]
+  },
+  828: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "2\n4\n6\n8\n10\n12\n14\n16\n18\n20" }
+    ]
+  },
+  829: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1" }
+    ]
+  },
+  830: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["3"], expected: "Hello\nHello\nHello" },
+      { args: [], inputValues: ["1"], expected: "Hello" }
+    ]
+  },
+  831: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["hello", "again", "exit"], expected: "" }
+    ]
+  },
+  832: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1\n2\n4\n8\n16\n32\n64\n128\n256\n512" }
+    ]
+  },
+  833: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "5\n10\n15\n20\n25\n30\n35\n40\n45\n50" }
+    ]
+  },
+  834: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["20", "15", "18"], expected: "53" },
+      { args: [], inputValues: ["51"], expected: "51" }
+    ]
+  },
+  835: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["3", "5", "8"], expected: "" }
+    ]
+  },
+  836: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["5", "7", "0"], expected: "12" },
+      { args: [], inputValues: ["0"], expected: "0" }
+    ]
+  },
+  837: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "0\n1\n1\n2\n3\n5\n8\n13\n21\n34" }
+    ]
+  },
+  838: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["1", "9", "7"], expected: "" }
+    ]
+  },
+  839: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["Education"], expected: "5" },
+      { args: [], inputValues: ["rhythm"], expected: "0" }
+    ]
+  },
+  840: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["code"], expected: "code\ncod\nco\nc" }
+    ]
+  },
+  841: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["4"], expected: "4\n3\n2\n1\n0" }
+    ]
+  },
+  842: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["4", "6", "2", "-1"], expected: "12" },
+      { args: [], inputValues: ["-5"], expected: "0" }
+    ]
+  },
+  843: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["3", "9", "4", "stop"], expected: "9" },
+      { args: [], inputValues: ["-2", "-5", "stop"], expected: "-2" }
+    ]
+  },
+  844: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["wrong", "python"], expected: "" }
+    ]
+  },
+  845: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "2\n4\n16\n256" }
+    ]
+  },
+  846: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["12345"], expected: "54321" },
+      { args: [], inputValues: ["900"], expected: "9" }
+    ]
+  },
+  847: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["10", "20", "30", "done"], expected: "20.0" },
+      { args: [], inputValues: ["5", "done"], expected: "5.0" }
+    ]
+  },
+  848: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], inputValues: ["4"], expected: "4\n3\n2\n1" }
+    ]
+  },
+  849: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [5, 8, 14], expected: "5\n8" },
+      { args: [], randomValues: [21], expected: "" }
     ]
   },
   850: {
