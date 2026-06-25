@@ -7,6 +7,7 @@ export const pythonHighlightStyle = HighlightStyle.define([
   { tag: t.keyword, color: "#389EDB" },        // Blue keywords (if, for, def, etc.)
   { tag: t.variableName, color: "#FF1900" },   // Red variables only
   { tag: t.name, color: "#ffffff" },           // White for other names
+  { tag: t.standard(t.name), color: "#FF9700" }, // Orange built-ins (print, len, range, etc.)
   { tag: t.number, color: "#FF00FF" },         // Magenta numbers
   { tag: t.string, color: "#00AD89" }          // Teal strings
 ]);
