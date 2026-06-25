@@ -1238,6 +1238,19 @@ const App: React.FC = () => {
         }
     }, [output]);
 
+    // After run completes, ensure editor is visible (not stuck behind toolbar)
+    useEffect(() => {
+        if (!isRunning && mainScrollRef.current && output !== 'Run code to see output...') {
+            // Gentle scroll to ensure editor stays visible below fixed toolbar
+            const scrollContainer = mainScrollRef.current;
+            const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+            const safeScrollTop = Math.min(scrollContainer.scrollTop, maxScroll * 0.3);
+            if (scrollContainer.scrollTop > safeScrollTop) {
+                scrollContainer.scrollTo({ top: safeScrollTop, behavior: 'smooth' });
+            }
+        }
+    }, [isRunning]);
+
     useEffect(() => {
         return () => {
             stopEditorDeleteHold();
@@ -2021,6 +2034,7 @@ sys.stdout = io.StringIO()
                 style={{
                     paddingTop: `${editorContentTop}px`,
                     paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 300, 620)}px))`,
+                    scrollPaddingTop: `${editorContentTop}px`,
                     WebkitOverflowScrolling: 'touch',
                     overscrollBehaviorY: 'contain'
                 }}
@@ -2045,14 +2059,17 @@ sys.stdout = io.StringIO()
                             </button>
                         </div>
                     </div>
-                    <div className="flex bg-[#0a1628] border-b border-[#1d2d44] overflow-x-auto no-scrollbar">
+                    <div
+                        className="flex bg-[#0a1628] border-b border-[#1d2d44] overflow-x-auto no-scrollbar"
+                        style={{ position: 'sticky', top: 0, zIndex: 50 }}
+                    >
                         {files.map((f, idx) => (
                             <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
                                 {f.name}
                             </button>
                         ))}
                     </div>
-                    <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative border-b border-[#5f7fa6]" style={{ minHeight: '320px' }}>
+                    <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative border-b border-[#5f7fa6]" style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px` }}>
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
                             onCreateEditor={(view) => {
