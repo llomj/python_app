@@ -9138,18 +9138,218 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "This is a spaced sentence." }
     ]
   },
+  1321: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1322: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "john.doe" }
+    ]
+  },
+  1323: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1,000,000" }
+    ]
+  },
+  1324: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['@python', '@realpython', '@openai']" }
+    ]
+  },
+  1326: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['02:30 PM', '07:45 AM']" }
+    ]
+  },
+  1329: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1330: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['Hello', 'How are you?']" }
+    ]
+  },
+  1331: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1332: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1333: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1334: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1335: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1336: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1337: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1338: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 4]" }
+    ]
+  },
+  1339: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['apple', 'banana']" }
+    ]
+  },
+  1340: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1341: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1342: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1343: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
         ]
     },
+  1344: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1345: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3]\n['one', 'two', 'three']" }
+    ]
+  },
   1346: {
         functionNames: ['multiply'],
         tests: [
             { args: [4,5], expected: 20 },
         ]
     },
+  1347: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1348: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1349: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1350: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1367: {
         functionNames: ['remove_key'],
         tests: [
