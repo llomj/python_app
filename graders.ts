@@ -8,6 +8,7 @@ export interface AutoTestCase {
     callMethod?: string;
     callMethodArgs?: unknown[];
     getAttrs?: string[];
+    argFunctionNames?: string[];
     functionName?: string;
     label?: string;
 }
@@ -3901,6 +3902,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [11111, 1], expected: 5 }
         ]
     },
+  551: {
+        functionNames: ['count_letters'],
+        tests: [
+            { args: ['banana'], expected: {b: 1, a: 3, n: 2} },
+            { args: ['AaB'], expected: {a: 2, b: 1} }
+        ]
+    },
   552: {
         functionNames: ['count_text'],
         tests: [
@@ -4178,6 +4186,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['listen', 'silent', 'hello', 'world'], 'listen'], expected: ['silent'] }
         ]
     },
+  598: {
+        functionNames: ['compose'],
+        tests: [
+            { args: [], argFunctionNames: ['add_one', 'multiply_by_two'], callReturnedWith: [5], expected: 12 },
+            { args: [], argFunctionNames: ['multiply_by_two', 'add_one'], callReturnedWith: [5], expected: 11 }
+        ]
+    },
   599: {
         functionNames: ['word_string'],
         tests: [
@@ -4185,9 +4200,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   600: {
-        functionNames: ['is_prime'],
+        functionNames: ['filter_primes'],
         tests: [
-            { args: [[1, 2, 3, 4, 5, 6, 7]], expected: [2, 3, 5, 7] }
+            { args: [[1, 2, 3, 4, 5, 6, 7]], expected: [2, 3, 5, 7] },
+            { args: [[8, 9, 10, 11, 12, 13]], expected: [11, 13] }
         ]
     },
   601: {

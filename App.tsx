@@ -377,6 +377,8 @@ def __auto_grader_run():
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
     first_args = tests[0].get("args", []) if tests else []
+    if tests and tests[0].get("argFunctionNames"):
+        first_args = first_args + [None] * len(tests[0].get("argFunctionNames", []))
     target_name, target = __auto_grader_find_callable(function_names, first_args)
 
     if target is None:
@@ -387,6 +389,7 @@ def __auto_grader_run():
 
     for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
         args = case.get("args", [])
+        arg_function_names = case.get("argFunctionNames", [])
         expected = case.get("expected")
         call_returned_with = case.get("callReturnedWith")
         call_method = case.get("callMethod")
@@ -397,8 +400,18 @@ def __auto_grader_run():
         required_name = case.get("functionName")
         case_target_name = target_name
         case_target = target
+        resolved_args = list(args)
+        for arg_function_name in arg_function_names:
+            arg_function = globals().get(arg_function_name)
+            if not callable(arg_function):
+                return {
+                    "passed": False,
+                    "functionName": case_target_name,
+                    "message": f"{label} missing helper function {arg_function_name}()."
+                }
+            resolved_args.append(arg_function)
         if required_name:
-            case_target_name, case_target = __auto_grader_find_callable(function_names, args, required_name)
+            case_target_name, case_target = __auto_grader_find_callable(function_names, resolved_args, required_name)
             if case_target is None:
                 return {
                     "passed": False,
@@ -410,7 +423,7 @@ def __auto_grader_run():
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
         try:
-            returned = case_target(*args)
+            returned = case_target(*resolved_args)
             if call_returned_with is not None:
                 if not callable(returned):
                     return {
