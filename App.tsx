@@ -2496,11 +2496,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     }}
                 >
                     <div
-                        className="rounded-3xl p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative max-h-[90vh] h-[90vh] flex flex-col overflow-hidden"
+                        className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
                         style={{
                             backgroundColor: showModal === 'settings' ? 'rgba(17, 34, 64, 0.20)' : '#112240',
                             backdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
-                            WebkitBackdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined
+                            WebkitBackdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
+                            height: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+                            maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
                     >
                         <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10"><X size={24} /></button>
@@ -2604,8 +2606,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </div>
                         )}
                         {showModal === 'settings' && (
-                            <div className="py-2">
-                                <h2 className="text-lg font-bold mb-4 text-center">Settings</h2>
+                            <div className="flex h-full min-h-0 flex-col py-2">
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Settings</h2>
+                                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
 
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-200">
@@ -2682,6 +2685,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </div>
 
                                 <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
+                                </div>
                             </div>
                         )}
                         {showModal === 'api_key' && (
