@@ -1583,6 +1583,8 @@ builtins.input = __app_input
             await pyodide.runPythonAsync(code);
             const stdout = pyodide.runPython("sys.stdout.getvalue()");
             const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+            stdinValuesRef.current = [];
+            setStdinValues([]);
 
             if (autoGrader) {
                 pyodide.runPython(buildAutoGradeScript(autoGrader));
@@ -1615,14 +1617,18 @@ builtins.input = __app_input
                 setOutput(`${stdout || ''}\nWaiting for input${prompt ? `: ${prompt}` : ''}`);
                 return;
             }
+            const stdout = pyodide.runPython("sys.stdout.getvalue()");
+            const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+            stdinValuesRef.current = [];
+            setStdinValues([]);
             if (autoGrader) {
                 updateCurrentModeStats('failed');
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
-                setOutput(`AUTO FAILED\n${errorMessage}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
+                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
             } else {
                 setOutputStatus('fail');
-                setOutput(errorMessage);
+                setOutput(`${userOutput}${errorMessage}`);
             }
         } finally {
             setIsRunning(false);
@@ -1886,13 +1892,29 @@ builtins.input = __app_input
     const deleteFromActiveEditor = () => {
         const view = activeEditorViewRef.current;
         if (!view) return;
+        const mainScrollTop = mainScrollRef.current?.scrollTop ?? 0;
+        const editorScrollTop = view.scrollDOM.scrollTop;
+        const editorScrollLeft = view.scrollDOM.scrollLeft;
         deleteBackwardOnce(view);
-        view.focus();
+        view.scrollDOM.scrollTop = editorScrollTop;
+        view.scrollDOM.scrollLeft = editorScrollLeft;
+        if (mainScrollRef.current) mainScrollRef.current.scrollTop = mainScrollTop;
+        window.requestAnimationFrame(() => {
+            view.scrollDOM.scrollTop = editorScrollTop;
+            view.scrollDOM.scrollLeft = editorScrollLeft;
+            if (mainScrollRef.current) mainScrollRef.current.scrollTop = mainScrollTop;
+        });
         if (pendingNextProblem) setPendingNextProblem(false);
     };
 
     const startEditorDeleteHold = (event: React.PointerEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        event.currentTarget.blur();
+        try {
+            event.currentTarget.setPointerCapture(event.pointerId);
+        } catch {
+            // Some browsers do not allow pointer capture after preventDefault.
+        }
         stopEditorDeleteHold();
         deleteFromActiveEditor();
         deleteHoldDelayRef.current = window.setTimeout(() => {
@@ -2080,6 +2102,7 @@ builtins.input = __app_input
                             onPointerLeave={stopEditorDeleteHold}
                             onContextMenu={(event) => event.preventDefault()}
                             className="select-none px-2 py-1 rounded-lg border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-sm font-black active:scale-95"
+                            style={{ touchAction: 'none' }}
                             title="Hold to delete"
                         >
                             &lt;
