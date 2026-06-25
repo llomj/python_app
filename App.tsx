@@ -976,6 +976,26 @@ const PYTHON_BUILTINS = [
     'sum', 'super', 'tuple', 'type', 'upper', 'update', 'values', 'zip'
 ];
 
+function CopyButton({ text }: { text: string }) {
+    const [copied, setCopied] = useState(false);
+    return (
+        <button
+            onClick={async () => {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                } catch { /* ignore */ }
+            }}
+            className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#4ade80] transition-colors"
+            title="Copy to clipboard"
+        >
+            {copied ? <Check size={12} className="text-[#4ade80]" /> : <Copy size={12} />}
+            {copied ? 'Copied' : 'Copy'}
+        </button>
+    );
+}
+
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
@@ -2060,7 +2080,7 @@ sys.stdout = io.StringIO()
                     }}
                 >
                     <div
-                        className="rounded-3xl p-6 max-w-lg w-full border border-[#1d2d44] shadow-2xl relative max-h-[80vh] flex flex-col overflow-hidden"
+                        className="rounded-3xl p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative max-h-[90vh] h-[90vh] flex flex-col overflow-hidden"
                         style={{
                             backgroundColor: showModal === 'settings' ? 'rgba(17, 34, 64, 0.20)' : '#112240',
                             backdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
@@ -2117,30 +2137,45 @@ sys.stdout = io.StringIO()
                                 </div>
                                 <div className="flex-grow overflow-y-auto">
                                     {solutionTab === 'code' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full">
-                                            <CodeMirror value={exercise.solution} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={exercise.solution} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={exercise.solution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
                                         </div>
                                     )}
                                     {solutionTab === 'logic' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full">
-                                            {logicContent ? (
-                                                <CodeMirror value={logicContent} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
-                                            ) : (
-                                                <div className="p-8 text-center text-gray-500 text-sm">
-                                                    Searching logic documentation...
-                                                </div>
-                                            )}
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={logicContent || ''} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                {logicContent ? (
+                                                    <CodeMirror value={logicContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                ) : (
+                                                    <div className="p-8 text-center text-gray-500 text-sm">
+                                                        Searching logic documentation...
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     )}
                                     {solutionTab === 'requirements' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full">
-                                            {requirementsContent ? (
-                                                <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), ...customPythonTheme]} />
-                                            ) : (
-                                                <div className="p-8 text-center text-gray-500 text-sm">
-                                                    Searching requirements...
-                                                </div>
-                                            )}
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={requirementsContent || ''} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                {requirementsContent ? (
+                                                    <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                ) : (
+                                                    <div className="p-8 text-center text-gray-500 text-sm">
+                                                        Searching requirements...
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     )}
                                 </div>
