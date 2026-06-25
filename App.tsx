@@ -26,7 +26,8 @@ import {
     Info,
     X,
     ChevronDown,
-    ChevronUp
+    ChevronUp,
+    Bookmark
 } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
@@ -1127,6 +1128,67 @@ const App: React.FC = () => {
     const [resetConfirmArmed, setResetConfirmArmed] = useState(false);
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
+    // Saved problems state
+    interface SavedProblem {
+        exerciseId: number;
+        description: string;
+        initialCode: string;
+        solution: string;
+        savedAt: string;
+        mastered: boolean;
+    }
+    const [savedProblems, setSavedProblems] = useState<SavedProblem[]>(() => {
+        try {
+            const raw = localStorage.getItem('python_mastery_saved_problems');
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    useEffect(() => {
+        localStorage.setItem('python_mastery_saved_problems', JSON.stringify(savedProblems));
+    }, [savedProblems]);
+
+    const isProblemSaved = (id: number) => savedProblems.some(p => p.exerciseId === id);
+
+    const saveCurrentProblem = () => {
+        if (isProblemSaved(exercise.id)) return;
+        const newProblem: SavedProblem = {
+            exerciseId: exercise.id,
+            description: exercise.description,
+            initialCode: exercise.initialCode,
+            solution: exercise.solution,
+            savedAt: new Date().toISOString(),
+            mastered: false,
+        };
+        setSavedProblems(prev => [...prev, newProblem]);
+    };
+
+    const deleteSavedProblem = (id: number) => {
+        setSavedProblems(prev => prev.filter(p => p.exerciseId !== id));
+    };
+
+    const markSavedProblemMastered = (id: number) => {
+        setSavedProblems(prev =>
+            prev.map(p => (p.exerciseId === id ? { ...p, mastered: true } : p))
+        );
+    };
+
+    const loadSavedProblem = (problem: SavedProblem) => {
+        const ex = EXERCISES[problem.exerciseId - 1];
+        if (ex) {
+            setExercise(ex);
+            setFiles([{ name: 'main.py', content: problem.initialCode }]);
+            setActiveFileIndex(0);
+            setOutput('Run code to see output...');
+            setOutputStatus('idle');
+            setPendingNextProblem(false);
+            setAiHintText('');
+            setShowModal('none');
+        }
+    };
+
     const mainScrollRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
@@ -1933,26 +1995,51 @@ sys.stdout = io.StringIO()
                 >
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
                         <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
-                        <button
-                            onClick={() => setShowModal('problem_full')}
-                            style={{
-                                backgroundColor: 'transparent',
-                                border: '1px solid #1d2d44',
-                                borderRadius: '0.5rem',
-                                padding: '0.25rem 0.5rem',
-                                color: '#3b82f6',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.25rem',
-                                fontSize: '0.75rem',
-                                flexShrink: 0,
-                                pointerEvents: 'auto'
-                            }}
-                        >
-                            <ExternalLink size={14} />
-                            <span>View Full</span>
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={saveCurrentProblem}
+                                title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'}
+                                style={{
+                                    backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+                                    border: '1px solid #1d2d44',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.25rem 0.5rem',
+                                    color: isProblemSaved(exercise.id) ? '#3b82f6' : '#3b82f6',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    fontSize: '0.75rem',
+                                    flexShrink: 0,
+                                    pointerEvents: 'auto',
+                                    opacity: isProblemSaved(exercise.id) ? 1 : 0.7,
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
+                                <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
+                            </button>
+                            <button
+                                onClick={() => setShowModal('problem_full')}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    border: '1px solid #1d2d44',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.25rem 0.5rem',
+                                    color: '#3b82f6',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    fontSize: '0.75rem',
+                                    flexShrink: 0,
+                                    pointerEvents: 'auto'
+                                }}
+                            >
+                                <ExternalLink size={14} />
+                                <span>View Full</span>
+                            </button>
+                        </div>
                     </div>
                     <pre
                         data-problem-description
@@ -2362,6 +2449,57 @@ sys.stdout = io.StringIO()
                                             );
                                         })}
                                     </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
+                                        <Bookmark size={14} className="text-[#3b82f6]" /> Saved Problems
+                                    </h3>
+                                    {savedProblems.length === 0 ? (
+                                        <p className="text-[11px] text-gray-400 italic">No saved problems yet. Press Save on any problem to add it here.</p>
+                                    ) : (
+                                        <div className="space-y-2 max-h-[240px] overflow-y-auto pr-1">
+                                            {savedProblems.map(problem => (
+                                                <div
+                                                    key={problem.exerciseId}
+                                                    className="flex items-center justify-between gap-2 rounded-lg border border-[#1d2d44] bg-[#050c18] px-3 py-2"
+                                                >
+                                                    <button
+                                                        onClick={() => loadSavedProblem(problem)}
+                                                        className="flex-1 text-left min-w-0"
+                                                    >
+                                                        <span className="text-[11px] font-bold text-gray-200 block truncate">
+                                                            Problem {problem.exerciseId}
+                                                            {problem.mastered && (
+                                                                <span className="ml-2 text-[10px] text-[#22c55e] font-black uppercase tracking-wider">Mastered</span>
+                                                            )}
+                                                        </span>
+                                                        <span className="text-[10px] text-gray-400 block truncate">
+                                                            {problem.description.split('\n')[0]}
+                                                        </span>
+                                                    </button>
+                                                    <div className="flex items-center gap-1 flex-shrink-0">
+                                                        {!problem.mastered && (
+                                                            <button
+                                                                onClick={() => markSavedProblemMastered(problem.exerciseId)}
+                                                                title="Mark as mastered"
+                                                                className="p-1.5 rounded-md hover:bg-[#22c55e]/20 text-[#22c55e] transition-colors"
+                                                            >
+                                                                <CheckCircle size={14} />
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            onClick={() => deleteSavedProblem(problem.exerciseId)}
+                                                            title="Remove"
+                                                            className="p-1.5 rounded-md hover:bg-red-500/20 text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
