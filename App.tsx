@@ -80,6 +80,51 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
 
 const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
 
+const getSavedDifficultyMode = (): DifficultyMode => {
+    const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
+    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
+};
+
+const scoreExerciseDifficulty = (exercise: Exercise): number => {
+    const text = `${exercise.title} ${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
+    let score = 0;
+
+    const addIf = (pattern: RegExp, value: number) => {
+        if (pattern.test(text)) score += value;
+    };
+
+    addIf(/\b(add|sum|subtract|multiply|divide|square|cube|even|odd|positive|negative|uppercase|lowercase|capitalize|reverse string|greet|hello)\b/, -2);
+    addIf(/\b(return their sum|returns their sum|two numbers|single number|one number|string as input|integer as input)\b/, -1);
+    addIf(/\b(list|array|string|loop|for each|iterate|count|filter|map|sort|search)\b/, 2);
+    addIf(/\b(dictionary|dict|set|tuple|key-value|frequency|histogram|group|unique|duplicate)\b/, 4);
+    addIf(/\b(nested|matrix|2d|grid|list of lists|dictionary of|list of dictionaries|flatten|transpose)\b/, 6);
+    addIf(/\b(recursion|recursive|memoization|dynamic programming|backtracking|permutation|combination|graph|tree|binary search|shortest path)\b/, 10);
+    addIf(/\b(class|object|inheritance|polymorphism|encapsulation|dataclass|decorator|generator|yield|context manager|async|await|thread|subprocess)\b/, 9);
+    addIf(/\b(file|csv|json|configparser|sqlite|database|api|request|beautifulsoup|pandas|numpy|regex|regular expression|re\.)\b/, 8);
+    addIf(/\b(lambda|partial|reduce|zip\(|enumerate\(|comprehension)\b/, 4);
+    addIf(/\b(without|do not use|don't use|no built[- ]?in|not use|constraint|efficient|optimize|performance|large)\b/, 4);
+    addIf(/\b(pattern|pyramid|triangle|hourglass|checkerboard|hollow)\b/, 3);
+    addIf(/\b(factorial|prime|fibonacci|gcd|lcm|palindrome|anagram|pangram)\b/, 3);
+
+    const functionCount = (exercise.initialCode.match(/\bdef\s+/g) || []).length;
+    const solutionLines = exercise.solution.split('\n').filter(line => line.trim()).length;
+    const loopCount = (exercise.solution.match(/\b(for|while)\b/g) || []).length;
+    const branchCount = (exercise.solution.match(/\b(if|elif|else)\b/g) || []).length;
+    const importCount = (exercise.solution.match(/^\s*import\s+|^\s*from\s+/gm) || []).length;
+    const classCount = (exercise.solution.match(/\bclass\s+/g) || []).length;
+
+    score += Math.max(0, functionCount - 1) * 2;
+    score += Math.min(10, Math.floor(solutionLines / 8));
+    score += loopCount * 2;
+    score += branchCount;
+    score += importCount * 3;
+    score += classCount * 8;
+    if (exercise.description.length > 180) score += 2;
+    if (exercise.description.length > 320) score += 3;
+
+    return Math.max(0, score);
+};
+
 const deleteBackwardOnce = (view: EditorView) => {
     const changes = view.state.changeByRange((range) => {
         if (!range.empty) {
@@ -189,33 +234,41 @@ const loadStatsByMode = (): StatsByMode => {
 };
 
 const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
-    const text = `${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
-    let score = 0;
+    const score = scoreExerciseDifficulty(exercise);
 
-    const addIf = (pattern: RegExp, value: number) => {
-        if (pattern.test(text)) score += value;
-    };
-
-    addIf(/\b(recursion|recursive|memoization|backtracking|permutation|combinations?)\b/, 4);
-    addIf(/\b(class|object|inheritance|decorator|generator|yield|async|await|thread|subprocess)\b/, 4);
-    addIf(/\b(file|csv|json|configparser|sqlite|database|api|request|beautifulsoup|pandas|numpy)\b/, 4);
-    addIf(/\b(regex|regular expression|re\.|lambda|partial|reduce|map\(|filter\(|zip\()\b/, 3);
-    addIf(/\b(nested|matrix|dictionary of|list of dictionaries|dicts|merge dictionaries|invert dictionary)\b/, 2);
-    addIf(/\b(dictionary|dict|set|tuple|enumerate|intersection|anagram|pangram|palindrome)\b/, 1);
-    addIf(/\b(without|do not use|don't use|no built[- ]?in|not use)\b/, 1);
-    addIf(/\b(pattern|pyramid|triangle|hourglass|checkerboard|hollow)\b/, 1);
-    addIf(/\b(user input|prompt the user|input\()\b/, 1);
-    addIf(/\b(sort|sorted|max|min|average|factorial|prime|fibonacci|gcd|lcm)\b/, 1);
-
-    const functionCount = (exercise.initialCode.match(/\bdef\s+/g) || []).length;
-    if (functionCount >= 2) score += 1;
-    if (exercise.solution.length > 900) score += 1;
-    if (exercise.description.length > 220) score += 1;
-
-    if (score >= 7) return 'legend';
-    if (score >= 5) return 'expert';
-    if (score >= 3) return 'intermediate';
+    if (score > 24) return 'legend';
+    if (score > 13) return 'expert';
+    if (score > 5) return 'intermediate';
     return 'beginner';
+};
+
+const getExerciseById = (id: number | null): Exercise | null => {
+    if (!id) return null;
+    return EXERCISES.find(item => item.id === id) ?? null;
+};
+
+const getExercisePoolForMode = (mode: DifficultyMode): Exercise[] => {
+    if (mode === 'normal') return EXERCISES;
+    const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
+    return pool.length > 0 ? pool : EXERCISES;
+};
+
+const getRandomExerciseForMode = (mode: DifficultyMode, excludeId?: number): Exercise => {
+    const pool = getExercisePoolForMode(mode);
+    const candidates = pool.length > 1 && excludeId ? pool.filter(item => item.id !== excludeId) : pool;
+    return candidates[Math.floor(Math.random() * candidates.length)] ?? EXERCISES[0];
+};
+
+const getInitialExercise = (): Exercise => {
+    const savedMode = getSavedDifficultyMode();
+    const savedId = Number(localStorage.getItem('python_current_problem_id'));
+    const savedExercise = getExerciseById(Number.isFinite(savedId) ? savedId : null);
+
+    if (savedExercise && (savedMode === 'normal' || classifyExerciseDifficulty(savedExercise) === savedMode)) {
+        return savedExercise;
+    }
+
+    return getRandomExerciseForMode(savedMode);
 };
 
 const buildAutoGradeScript = (grader: AutoGrader) => `
@@ -1095,8 +1148,9 @@ const pythonSnippets = (context: CompletionContext) => {
 };
 
 const App: React.FC = () => {
-    const [exercise, setExercise] = useState<Exercise>(EXERCISES[0]);
-    const [files, setFiles] = useState<ProjectFile[]>([{ name: 'main.py', content: EXERCISES[0].initialCode }]);
+    const initialExercise = useMemo(() => getInitialExercise(), []);
+    const [exercise, setExercise] = useState<Exercise>(initialExercise);
+    const [files, setFiles] = useState<ProjectFile[]>([{ name: 'main.py', content: initialExercise.initialCode }]);
     const [activeFileIndex, setActiveFileIndex] = useState(0);
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [newName, setNewName] = useState('');
@@ -1123,10 +1177,7 @@ const App: React.FC = () => {
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
-    const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => {
-        const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
-        return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
-    });
+    const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => getSavedDifficultyMode());
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
@@ -1163,8 +1214,7 @@ const App: React.FC = () => {
     const selectedModeLabel = getDifficultyLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const modeExerciseCount = useMemo(() => {
-        if (difficultyMode === 'normal') return EXERCISES.length;
-        return EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode).length;
+        return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
 
     useEffect(() => {
@@ -1343,6 +1393,10 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_mastery_stats', JSON.stringify(statsByMode));
     }, [statsByMode]);
+
+    useEffect(() => {
+        localStorage.setItem('python_current_problem_id', String(exercise.id));
+    }, [exercise.id]);
 
     // Auto-scroll output to bottom when new output is added
     useEffect(() => {
@@ -1577,9 +1631,9 @@ const App: React.FC = () => {
     };
 
     const setProblemById = (id: number) => {
-        const targetId = Math.min(Math.max(1, id), 2000);
-        const ex = EXERCISES[targetId - 1];
+        const ex = getExerciseById(id) ?? EXERCISES[0];
         setExercise(ex);
+        localStorage.setItem('python_current_problem_id', String(ex.id));
         setFiles([{ name: 'main.py', content: ex.initialCode }]);
         setActiveFileIndex(0);
         setOutput('Run code to see output...');
@@ -1593,14 +1647,17 @@ const App: React.FC = () => {
         setAiHintText('');
     };
 
-    const loadRandomExercise = useCallback(() => {
-        const pool = difficultyMode === 'normal'
-            ? EXERCISES
-            : EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode);
-        const safePool = pool.length > 0 ? pool : EXERCISES;
-        const randomExercise = safePool[Math.floor(Math.random() * safePool.length)];
+    const loadRandomExercise = useCallback((mode: DifficultyMode = difficultyMode) => {
+        const randomExercise = getRandomExerciseForMode(mode, exercise.id);
         setProblemById(randomExercise.id);
-    }, [difficultyMode]);
+    }, [difficultyMode, exercise.id]);
+
+    const handleDifficultyModeSelect = (mode: DifficultyMode) => {
+        setDifficultyMode(mode);
+        localStorage.setItem('python_difficulty_mode', mode);
+        const nextExercise = getRandomExerciseForMode(mode, exercise.id);
+        setProblemById(nextExercise.id);
+    };
 
     const updateCurrentModeStats = (result: 'success' | 'failed') => {
         setStatsByMode(prev => {
@@ -2560,10 +2617,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             return (
                                                 <button
                                                     key={mode.id}
-                                                    onClick={() => {
-                                                        setDifficultyMode(mode.id);
-                                                        localStorage.setItem('python_difficulty_mode', mode.id);
-                                                    }}
+                                                    onClick={() => handleDifficultyModeSelect(mode.id)}
                                                     className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${isSelected ? 'border-[#3b82f6] bg-[#3b82f6]/25 text-white' : 'border-[#1d2d44] bg-[#071225]/70 text-gray-300 hover:border-[#3b82f6]/50'}`}
                                                 >
                                                     <span className="flex items-center justify-between gap-3">
