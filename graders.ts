@@ -5471,168 +5471,174 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   801: {
     functionNames: ["dic_lst_tuples"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: [["a", 1], ["b", 2]]
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2}], expected: [["a", 1], ["b", 2]] }
+    ]
   },
   802: {
-    functionNames: ["main"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: ["a"]
-    }]
+    functionNames: ["main", "map_value"],
+    tests: [
+      { functionName: "main", args: [{"name": 1, "age": 56, "job": 1}], expected: ["name", "job"] },
+      { functionName: "map_value", args: [{"name": "Alice", "age": 30, "nickname": "Alice"}, "Alice"], expected: {"name": "Alice", "nickname": "Alice"} }
+    ]
   },
   803: {
     functionNames: ["replace_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}, [1, 2, 3, 4, 5]],
-      expected: {"a": [1, 2, 3, 4, 5], "b": [1, 2, 3, 4, 5]}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": [2]}, [1, 2, 3]], expected: {"a": [1, 2, 3], "b": [2]} }
+    ]
   },
   804: {
     functionNames: ["nested_dic"],
-    tests: [{
-      args: [],
-      expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}, "4": {"square": 16, "cube": 64}, "5": {"square": 25, "cube": 125}}
-    }]
+    tests: [
+      { args: [], expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}, "4": {"square": 16, "cube": 64}, "5": {"square": 25, "cube": 125}} }
+    ]
   },
   805: {
     functionNames: ["string_dic"],
-    tests: [{
-      args: ["hello"],
-      expected: {"h": 1, "e": 1, "l": 2, "o": 1}
-    }]
+    tests: [
+      { args: ["hello"], expected: {"h": 1, "e": 1, "l": 2, "o": 1} },
+      { args: ["banana"], expected: {"b": 1, "a": 3, "n": 2} }
+    ]
   },
   806: {
     functionNames: ["sort_dic"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"b": 2, "a": 1}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2, "c": 0}], expected: {"b": 2, "a": 1, "c": 0} }
+    ]
+  },
+  807: {
+    functionNames: ["lst_tuples"],
+    tests: [
+      { args: [[["a", 1], ["b", 2], ["c", 3]]], expected: {"a": 1, "b": 2, "c": 3} }
+    ]
   },
   808: {
     functionNames: ["less_then_10"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {}
-    }]
+    tests: [
+      { args: [{"low": 1, "ten": 10, "high": 12}], expected: {"ten": 10, "high": 12} }
+    ]
   },
   809: {
     functionNames: ["print_readable"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "a: 1\nb: 2\n"
-    }]
+    compare: "printedOrReturn",
+    tests: [
+      { args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" }
+    ]
   },
   810: {
     functionNames: ["students_grades"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: []
-    }]
+    tests: [
+      { args: [{"Bob": 50, "Alex": 72, "Fred": 87, "Liz": 90}], expected: ["Alex", "Fred", "Liz"] }
+    ]
   },
   811: {
     functionNames: ["word_len"],
-    tests: [{
-      args: ["hello"],
-      expected: {"hello": 5}
-    }]
+    tests: [
+      { args: ["today we code"], expected: {"today": 5, "we": 2, "code": 4} }
+    ]
   },
   812: {
     functionNames: ["word_len"],
-    tests: [{
-      args: ["hello"],
-      expected: {"hello": 5}
-    }]
+    tests: [
+      { args: ["python is fun"], expected: {"python": 6, "is": 2, "fun": 3} }
+    ]
   },
   813: {
-    functionNames: ["starting_letter"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": ["a"], "b": ["b"]}
-    }]
+    functionNames: ["starting_letter", "main"],
+    tests: [
+      { functionName: "starting_letter", args: [{"Bob": 50, "Alex": 72, "Fred": 87, "Ben": 90}], expected: {"B": ["Bob", "Ben"], "A": ["Alex"], "F": ["Fred"]} },
+      { functionName: "main", args: [{"name": 777, "age": 56}], expected: {"n": "name", "a": "age"} }
+    ]
   },
   814: {
     functionNames: ["upper_keys"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"A": 1, "B": 2}
-    }]
+    tests: [
+      { args: [{"a": 1, "b": 2}], expected: {"A": 1, "B": 2} }
+    ]
   },
   815: {
     functionNames: ["intersection"],
     tests: [
-      { args: [[1,2,3],[2,3,4]], expected: [2,3] }
+      { args: [{"Bob": 500, "Alex": 72, "Liz": 90}, {"Bob": 50, "Liz": 90}], expected: {"Bob": 500, "Liz": 90} }
     ]
   },
   816: {
     functionNames: ["count_vowels"],
     tests: [
-      { args: ["hello"], expected: 2 }
+      { args: ["hello"], expected: {"a": 0, "e": 1, "i": 0, "o": 1, "u": 0} }
     ]
   },
   817: {
     functionNames: ["remove_value_is_none"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2}
-    }]
+    tests: [
+      { args: [{"Bob": null, "Fred": 89, "Liz": 90}], expected: {"Fred": 89, "Liz": 90} }
+    ]
+  },
+  818: {
+    functionNames: ["check_key_value"],
+    tests: [
+      { args: [{"Bob": 500, "Liz": 90}, {"Liz": 90}], expected: true },
+      { args: [{"Bob": 500, "Liz": 90}, {"Liz": 91}], expected: false }
+    ]
   },
   819: {
     functionNames: ["dict_to_json"],
-    tests: [{
-      args: [1],
-      expected: "1"
-    }]
+    tests: [
+      { args: [{"Bob": 500, "Alex": 72}], expected: "{\"Bob\": 500, \"Alex\": 72}" }
+    ]
   },
   820: {
     functionNames: ["merge_dicts"],
     tests: [
-      { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} }
+      { args: [{"name": "Steven"}, {"named": "Alice"}], expected: {"name": "Steven", "named": "Alice"} }
     ]
   },
   821: {
     functionNames: ["product_values"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 2
-    }]
+    tests: [
+      { args: [{"a": 2, "b": 3, "c": 4}], expected: 24 }
+    ]
   },
   822: {
     functionNames: ["average_values"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: 1.5
-    }]
+    tests: [
+      { args: [{"a": 10, "b": 20, "c": 30}], expected: 20 }
+    ]
   },
   823: {
-    functionNames: ["swap_values"],
+    functionNames: ["swap_values", "main"],
     tests: [
-      { args: [5,10], expected: [10,5] }
+      { functionName: "swap_values", args: [{"a": 1, "b": 2, "c": 3}, "a", "c"], expected: {"a": 3, "b": 2, "c": 1} },
+      { functionName: "main", args: [{"name": 777, "age": 56, "city": 34, "job": 1}], expected: {"name": 777, "age": 56, "city": 1, "job": 34} }
     ]
   },
   824: {
     functionNames: ["largest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "b"
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: "name" }
+    ]
   },
   825: {
     functionNames: ["smallest_value"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: "a"
-    }]
+    tests: [
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: "city" }
+    ]
   },
   826: {
-    functionNames: ["main"],
-    tests: [{
-      args: [{"a": 1, "b": 2}],
-      expected: {"a": 1, "b": 2, "first": 1, "second": 2}
-    }]
+    functionNames: ["main", "add_multiple_pairs"],
+    tests: [
+      { functionName: "main", args: [{"a": 1}], expected: {"a": 1, "first": 1, "second": 2} },
+      { functionName: "add_multiple_pairs", args: [{"name": 777}, {"status": "unemployed", "country": "USA"}], expected: {"name": 777, "status": "unemployed", "country": "USA"} }
+    ]
+  },
+  850: {
+    functionNames: ["is_prime"],
+    tests: [
+      { args: [2], expected: true },
+      { args: [9], expected: false },
+      { args: [17], expected: true }
+    ]
   },
   868: {
     functionNames: ["capitalize_words","capitalize"],
