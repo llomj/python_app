@@ -154,11 +154,11 @@
     <script type="module" src="./index.tsx"></script>
     <script type="module">
         // Version check - force reload if version mismatch
-        const CURRENT_VERSION = 'v110';
+        const CURRENT_VERSION = 'v118';
         const storedVersion = localStorage.getItem('app_version');
         if (storedVersion && storedVersion !== CURRENT_VERSION) {
-            // Version changed, clear everything and reload
-            localStorage.clear();
+            // Version changed: clear app shell caches without deleting user progress/settings.
+            localStorage.setItem('app_version', CURRENT_VERSION);
             caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
                 navigator.serviceWorker.getRegistrations().then(regs => {
                     Promise.all(regs.map(r => r.unregister())).then(() => {

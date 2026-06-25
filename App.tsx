@@ -8,6 +8,7 @@ import {
     XCircle,
     RotateCcw,
     Play,
+    SkipForward,
     Plus,
     Minus,
     Pencil,
@@ -24,6 +25,9 @@ import {
     ArrowUpRight,
     RefreshCw,
     Info,
+    SlidersHorizontal,
+    Volume2,
+    Vibrate,
     X,
     ChevronDown,
     ChevronUp,
@@ -76,6 +80,51 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
 ];
 
 const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
+
+const getSavedDifficultyMode = (): DifficultyMode => {
+    const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
+    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
+};
+
+const scoreExerciseDifficulty = (exercise: Exercise): number => {
+    const text = `${exercise.title} ${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
+    let score = 0;
+
+    const addIf = (pattern: RegExp, value: number) => {
+        if (pattern.test(text)) score += value;
+    };
+
+    addIf(/\b(add|sum|subtract|multiply|divide|square|cube|even|odd|positive|negative|uppercase|lowercase|capitalize|reverse string|greet|hello)\b/, -2);
+    addIf(/\b(return their sum|returns their sum|two numbers|single number|one number|string as input|integer as input)\b/, -1);
+    addIf(/\b(list|array|string|loop|for each|iterate|count|filter|map|sort|search)\b/, 2);
+    addIf(/\b(dictionary|dict|set|tuple|key-value|frequency|histogram|group|unique|duplicate)\b/, 4);
+    addIf(/\b(nested|matrix|2d|grid|list of lists|dictionary of|list of dictionaries|flatten|transpose)\b/, 6);
+    addIf(/\b(recursion|recursive|memoization|dynamic programming|backtracking|permutation|combination|graph|tree|binary search|shortest path)\b/, 10);
+    addIf(/\b(class|object|inheritance|polymorphism|encapsulation|dataclass|decorator|generator|yield|context manager|async|await|thread|subprocess)\b/, 9);
+    addIf(/\b(file|csv|json|configparser|sqlite|database|api|request|beautifulsoup|pandas|numpy|regex|regular expression|re\.)\b/, 8);
+    addIf(/\b(lambda|partial|reduce|zip\(|enumerate\(|comprehension)\b/, 4);
+    addIf(/\b(without|do not use|don't use|no built[- ]?in|not use|constraint|efficient|optimize|performance|large)\b/, 4);
+    addIf(/\b(pattern|pyramid|triangle|hourglass|checkerboard|hollow)\b/, 3);
+    addIf(/\b(factorial|prime|fibonacci|gcd|lcm|palindrome|anagram|pangram)\b/, 3);
+
+    const functionCount = (exercise.initialCode.match(/\bdef\s+/g) || []).length;
+    const solutionLines = exercise.solution.split('\n').filter(line => line.trim()).length;
+    const loopCount = (exercise.solution.match(/\b(for|while)\b/g) || []).length;
+    const branchCount = (exercise.solution.match(/\b(if|elif|else)\b/g) || []).length;
+    const importCount = (exercise.solution.match(/^\s*import\s+|^\s*from\s+/gm) || []).length;
+    const classCount = (exercise.solution.match(/\bclass\s+/g) || []).length;
+
+    score += Math.max(0, functionCount - 1) * 2;
+    score += Math.min(10, Math.floor(solutionLines / 8));
+    score += loopCount * 2;
+    score += branchCount;
+    score += importCount * 3;
+    score += classCount * 8;
+    if (exercise.description.length > 180) score += 2;
+    if (exercise.description.length > 320) score += 3;
+
+    return Math.max(0, score);
+};
 
 const deleteBackwardOnce = (view: EditorView) => {
     const changes = view.state.changeByRange((range) => {
@@ -186,33 +235,41 @@ const loadStatsByMode = (): StatsByMode => {
 };
 
 const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
-    const text = `${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
-    let score = 0;
+    const score = scoreExerciseDifficulty(exercise);
 
-    const addIf = (pattern: RegExp, value: number) => {
-        if (pattern.test(text)) score += value;
-    };
-
-    addIf(/\b(recursion|recursive|memoization|backtracking|permutation|combinations?)\b/, 4);
-    addIf(/\b(class|object|inheritance|decorator|generator|yield|async|await|thread|subprocess)\b/, 4);
-    addIf(/\b(file|csv|json|configparser|sqlite|database|api|request|beautifulsoup|pandas|numpy)\b/, 4);
-    addIf(/\b(regex|regular expression|re\.|lambda|partial|reduce|map\(|filter\(|zip\()\b/, 3);
-    addIf(/\b(nested|matrix|dictionary of|list of dictionaries|dicts|merge dictionaries|invert dictionary)\b/, 2);
-    addIf(/\b(dictionary|dict|set|tuple|enumerate|intersection|anagram|pangram|palindrome)\b/, 1);
-    addIf(/\b(without|do not use|don't use|no built[- ]?in|not use)\b/, 1);
-    addIf(/\b(pattern|pyramid|triangle|hourglass|checkerboard|hollow)\b/, 1);
-    addIf(/\b(user input|prompt the user|input\()\b/, 1);
-    addIf(/\b(sort|sorted|max|min|average|factorial|prime|fibonacci|gcd|lcm)\b/, 1);
-
-    const functionCount = (exercise.initialCode.match(/\bdef\s+/g) || []).length;
-    if (functionCount >= 2) score += 1;
-    if (exercise.solution.length > 900) score += 1;
-    if (exercise.description.length > 220) score += 1;
-
-    if (score >= 7) return 'legend';
-    if (score >= 5) return 'expert';
-    if (score >= 3) return 'intermediate';
+    if (score > 24) return 'legend';
+    if (score > 13) return 'expert';
+    if (score > 5) return 'intermediate';
     return 'beginner';
+};
+
+const getExerciseById = (id: number | null): Exercise | null => {
+    if (!id) return null;
+    return EXERCISES.find(item => item.id === id) ?? null;
+};
+
+const getExercisePoolForMode = (mode: DifficultyMode): Exercise[] => {
+    if (mode === 'normal') return EXERCISES;
+    const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
+    return pool.length > 0 ? pool : EXERCISES;
+};
+
+const getRandomExerciseForMode = (mode: DifficultyMode, excludeId?: number): Exercise => {
+    const pool = getExercisePoolForMode(mode);
+    const candidates = pool.length > 1 && excludeId ? pool.filter(item => item.id !== excludeId) : pool;
+    return candidates[Math.floor(Math.random() * candidates.length)] ?? EXERCISES[0];
+};
+
+const getInitialExercise = (): Exercise => {
+    const savedMode = getSavedDifficultyMode();
+    const savedId = Number(localStorage.getItem('python_current_problem_id'));
+    const savedExercise = getExerciseById(Number.isFinite(savedId) ? savedId : null);
+
+    if (savedExercise && (savedMode === 'normal' || classifyExerciseDifficulty(savedExercise) === savedMode)) {
+        return savedExercise;
+    }
+
+    return getRandomExerciseForMode(savedMode);
 };
 
 const buildAutoGradeScript = (grader: AutoGrader) => `
@@ -1092,8 +1149,9 @@ const pythonSnippets = (context: CompletionContext) => {
 };
 
 const App: React.FC = () => {
-    const [exercise, setExercise] = useState<Exercise>(EXERCISES[0]);
-    const [files, setFiles] = useState<ProjectFile[]>([{ name: 'main.py', content: EXERCISES[0].initialCode }]);
+    const initialExercise = useMemo(() => getInitialExercise(), []);
+    const [exercise, setExercise] = useState<Exercise>(initialExercise);
+    const [files, setFiles] = useState<ProjectFile[]>([{ name: 'main.py', content: initialExercise.initialCode }]);
     const [activeFileIndex, setActiveFileIndex] = useState(0);
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [newName, setNewName] = useState('');
@@ -1101,6 +1159,10 @@ const App: React.FC = () => {
     const [output, setOutput] = useState('Run code to see output...');
     const [outputStatus, setOutputStatus] = useState<OutputStatus>('idle');
     const [pendingNextProblem, setPendingNextProblem] = useState(false);
+    const [stdinValues, setStdinValues] = useState<string[]>([]);
+    const [stdinDraft, setStdinDraft] = useState('');
+    const [waitingForInput, setWaitingForInput] = useState(false);
+    const [inputPrompt, setInputPrompt] = useState('');
     const [isRunning, setIsRunning] = useState(false);
     const [statsByMode, setStatsByMode] = useState<StatsByMode>(() => loadStatsByMode());
     const [pyodide, setPyodide] = useState<any>(null);
@@ -1116,10 +1178,9 @@ const App: React.FC = () => {
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
-    const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => {
-        const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
-        return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
-    });
+    const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => getSavedDifficultyMode());
+    const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
+    const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
     const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
@@ -1192,6 +1253,13 @@ const App: React.FC = () => {
     const mainScrollRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
+    const stdinValuesRef = useRef<string[]>([]);
+    const keyboardHapticsRef = useRef(keyboardHaptics);
+    const keyboardSoundRef = useRef(keyboardSound);
+    const keyboardAudioRef = useRef<AudioContext | null>(null);
+    const lastKeyboardFeedbackRef = useRef(0);
+    const keyboardMainScrollRef = useRef<number | null>(null);
+    const keyboardRestoreTimersRef = useRef<number[]>([]);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
     const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1203,16 +1271,75 @@ const App: React.FC = () => {
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
-    const runButtonLabel = pendingNextProblem ? 'NEXT' : 'RUN';
-    const runButtonClass = pendingNextProblem
-        ? 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#3b82f61a] border border-[#3b82f64d] text-[#60a5fa]'
-        : 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
+    const runButtonLabel = 'RUN';
+    const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
     const selectedModeLabel = getDifficultyLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const modeExerciseCount = useMemo(() => {
-        if (difficultyMode === 'normal') return EXERCISES.length;
-        return EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode).length;
+        return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
+
+    useEffect(() => {
+        keyboardHapticsRef.current = keyboardHaptics;
+        localStorage.setItem('python_keyboard_haptics', String(keyboardHaptics));
+    }, [keyboardHaptics]);
+
+    useEffect(() => {
+        keyboardSoundRef.current = keyboardSound;
+        localStorage.setItem('python_keyboard_sound', String(keyboardSound));
+    }, [keyboardSound]);
+
+    const playKeyboardFeedback = useCallback(() => {
+        const now = performance.now();
+        if (now - lastKeyboardFeedbackRef.current < 28) return;
+        lastKeyboardFeedbackRef.current = now;
+
+        if (keyboardHapticsRef.current && 'vibrate' in navigator) {
+            navigator.vibrate(8);
+        }
+
+        if (!keyboardSoundRef.current) return;
+        try {
+            const AudioCtor = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioCtor) return;
+            const audio = keyboardAudioRef.current ?? new AudioCtor();
+            keyboardAudioRef.current = audio;
+            if (audio.state === 'suspended') audio.resume();
+            const oscillator = audio.createOscillator();
+            const gain = audio.createGain();
+            oscillator.type = 'triangle';
+            oscillator.frequency.value = 880;
+            gain.gain.setValueAtTime(0.0001, audio.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.035, audio.currentTime + 0.006);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.035);
+            oscillator.connect(gain);
+            gain.connect(audio.destination);
+            oscillator.start();
+            oscillator.stop(audio.currentTime + 0.04);
+        } catch {
+            // Audio feedback is optional and may be blocked by the browser.
+        }
+    }, []);
+
+    const preserveEditorKeyboardPosition = useCallback(() => {
+        const mainScroller = mainScrollRef.current;
+        if (!mainScroller) return;
+
+        if (keyboardMainScrollRef.current === null) {
+            keyboardMainScrollRef.current = mainScroller.scrollTop;
+        }
+
+        const targetScrollTop = keyboardMainScrollRef.current;
+        const restore = () => {
+            mainScroller.scrollTop = targetScrollTop;
+            if (window.scrollY !== 0) window.scrollTo(0, 0);
+        };
+
+        restore();
+        window.requestAnimationFrame(restore);
+        keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
+        keyboardRestoreTimersRef.current = [60, 140, 280, 520].map(delay => window.setTimeout(restore, delay));
+    }, []);
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1290,8 +1417,48 @@ const App: React.FC = () => {
     // maxHeight: '300px' and overflowY: 'auto' are set directly in the style prop
 
     useEffect(() => {
+        if (bootStage !== 'launched') return;
+        const editorShell = editorShellRef.current;
+        if (!editorShell) return;
+
+        const handleEditorFocus = () => {
+            keyboardMainScrollRef.current = mainScrollRef.current?.scrollTop ?? 0;
+            preserveEditorKeyboardPosition();
+        };
+
+        const handleEditorBlur = () => {
+            window.setTimeout(() => {
+                keyboardMainScrollRef.current = null;
+            }, 650);
+        };
+
+        const handleViewportChange = () => {
+            if (!editorShell.contains(document.activeElement)) return;
+            preserveEditorKeyboardPosition();
+        };
+
+        editorShell.addEventListener('focusin', handleEditorFocus);
+        editorShell.addEventListener('focusout', handleEditorBlur);
+        window.visualViewport?.addEventListener('resize', handleViewportChange);
+        window.visualViewport?.addEventListener('scroll', handleViewportChange);
+
+        return () => {
+            editorShell.removeEventListener('focusin', handleEditorFocus);
+            editorShell.removeEventListener('focusout', handleEditorBlur);
+            window.visualViewport?.removeEventListener('resize', handleViewportChange);
+            window.visualViewport?.removeEventListener('scroll', handleViewportChange);
+            keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
+            keyboardRestoreTimersRef.current = [];
+        };
+    }, [bootStage, preserveEditorKeyboardPosition]);
+
+    useEffect(() => {
         localStorage.setItem('python_mastery_stats', JSON.stringify(statsByMode));
     }, [statsByMode]);
+
+    useEffect(() => {
+        localStorage.setItem('python_current_problem_id', String(exercise.id));
+    }, [exercise.id]);
 
     // Auto-scroll output to bottom when new output is added
     useEffect(() => {
@@ -1300,18 +1467,20 @@ const App: React.FC = () => {
         }
     }, [output]);
 
-    // After run completes, ensure editor is visible (not stuck behind toolbar)
+    // After run completes, keep the editor below the fixed file toolbar.
     useEffect(() => {
         if (!isRunning && mainScrollRef.current && output !== 'Run code to see output...') {
-            // Gentle scroll to ensure editor stays visible below fixed toolbar
             const scrollContainer = mainScrollRef.current;
-            const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-            const safeScrollTop = Math.min(scrollContainer.scrollTop, maxScroll * 0.3);
-            if (scrollContainer.scrollTop > safeScrollTop) {
-                scrollContainer.scrollTo({ top: safeScrollTop, behavior: 'smooth' });
+            const editorPanel = editorShellRef.current?.closest('[data-editor-panel]');
+            if (!(editorPanel instanceof HTMLElement)) return;
+
+            const toolbarBottom = editorToolbarTop + 54;
+            const panelTop = editorPanel.getBoundingClientRect().top;
+            if (panelTop < toolbarBottom + 8) {
+                scrollContainer.scrollTop -= toolbarBottom + 8 - panelTop;
             }
         }
-    }, [isRunning]);
+    }, [isRunning, output, editorToolbarTop]);
 
     useEffect(() => {
         return () => {
@@ -1524,25 +1693,33 @@ const App: React.FC = () => {
     };
 
     const setProblemById = (id: number) => {
-        const targetId = Math.min(Math.max(1, id), 2000);
-        const ex = EXERCISES[targetId - 1];
+        const ex = getExerciseById(id) ?? EXERCISES[0];
         setExercise(ex);
+        localStorage.setItem('python_current_problem_id', String(ex.id));
         setFiles([{ name: 'main.py', content: ex.initialCode }]);
         setActiveFileIndex(0);
         setOutput('Run code to see output...');
         setOutputStatus('idle');
         setPendingNextProblem(false);
+        setStdinValues([]);
+        stdinValuesRef.current = [];
+        setStdinDraft('');
+        setWaitingForInput(false);
+        setInputPrompt('');
         setAiHintText('');
     };
 
-    const loadRandomExercise = useCallback(() => {
-        const pool = difficultyMode === 'normal'
-            ? EXERCISES
-            : EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode);
-        const safePool = pool.length > 0 ? pool : EXERCISES;
-        const randomExercise = safePool[Math.floor(Math.random() * safePool.length)];
+    const loadRandomExercise = useCallback((mode: DifficultyMode = difficultyMode) => {
+        const randomExercise = getRandomExerciseForMode(mode, exercise.id);
         setProblemById(randomExercise.id);
-    }, [difficultyMode]);
+    }, [difficultyMode, exercise.id]);
+
+    const handleDifficultyModeSelect = (mode: DifficultyMode) => {
+        setDifficultyMode(mode);
+        localStorage.setItem('python_difficulty_mode', mode);
+        const nextExercise = getRandomExerciseForMode(mode, exercise.id);
+        setProblemById(nextExercise.id);
+    };
 
     const updateCurrentModeStats = (result: 'success' | 'failed') => {
         setStatsByMode(prev => {
@@ -1568,19 +1745,29 @@ const App: React.FC = () => {
 
     const runCode = async () => {
         if (isRunning) return;
-        if (pendingNextProblem) {
-            setPendingNextProblem(false);
-            loadRandomExercise();
-            return;
-        }
         if (!pyodide) return;
         const autoGrader = AUTO_GRADERS[exercise.id];
         setIsRunning(true);
         setOutputStatus('running');
         setOutput('Executing...');
+        setWaitingForInput(false);
+        setInputPrompt('');
+        setPendingNextProblem(false);
         try {
             // Write all files to the virtual filesystem
             files.forEach(file => {
+                const pathParts = file.name.split('/').filter(Boolean);
+                if (pathParts.length > 1) {
+                    let currentPath = '';
+                    pathParts.slice(0, -1).forEach(part => {
+                        currentPath = currentPath ? `${currentPath}/${part}` : part;
+                        try {
+                            pyodide.FS.mkdir(currentPath);
+                        } catch {
+                            // Directory already exists.
+                        }
+                    });
+                }
                 pyodide.FS.writeFile(file.name, file.content);
             });
 
@@ -1590,6 +1777,7 @@ const App: React.FC = () => {
 import sys
 import importlib
 import io
+import builtins
 
 # Ensure current directory is in path (crucial for imports)
 if '.' not in sys.path:
@@ -1601,6 +1789,15 @@ for mod in ${JSON.stringify(userModules)}:
 
 importlib.invalidate_caches()
 sys.stdout = io.StringIO()
+__app_input_values = list(${JSON.stringify(stdinValuesRef.current)})
+def __app_input(prompt=""):
+    print(prompt, end="")
+    if not __app_input_values:
+        raise Exception("__PY_INPUT_REQUIRED__" + str(prompt))
+    value = __app_input_values.pop(0)
+    print(value)
+    return value
+builtins.input = __app_input
 `;
             pyodide.runPython(clearModulesCode);
 
@@ -1610,8 +1807,14 @@ sys.stdout = io.StringIO()
             await pyodide.runPythonAsync(code);
             const stdout = pyodide.runPython("sys.stdout.getvalue()");
             const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+            stdinValuesRef.current = [];
+            setStdinValues([]);
 
             if (autoGrader) {
+                pyodide.runPython(`
+import builtins
+builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADER_INPUT_UNAVAILABLE__" + str(prompt)))
+`);
                 pyodide.runPython(buildAutoGradeScript(autoGrader));
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
 
@@ -1619,30 +1822,58 @@ sys.stdout = io.StringIO()
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
                     setPendingNextProblem(true);
-                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nPress RUN again to load the next problem.`);
+                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
                     updateCurrentModeStats('failed');
                     setOutputStatus('fail');
                     setPendingNextProblem(true);
-                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
+                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
                 }
             } else {
                 setOutputStatus('info');
                 setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Use WIN/FAILED manually.`);
             }
         } catch (err: any) {
+            const errorMessage = String(err?.message || err || '');
+            const inputMarker = '__PY_INPUT_REQUIRED__';
+            if (errorMessage.includes(inputMarker)) {
+                const prompt = errorMessage.split(inputMarker).pop()?.trim() || 'Input required';
+                const stdout = pyodide.runPython("sys.stdout.getvalue()");
+                setOutputStatus('info');
+                setWaitingForInput(true);
+                setInputPrompt(prompt);
+                setOutput(`${stdout || ''}\nWaiting for input${prompt ? `: ${prompt}` : ''}`);
+                return;
+            }
+            const stdout = pyodide.runPython("sys.stdout.getvalue()");
+            const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+            stdinValuesRef.current = [];
+            setStdinValues([]);
             if (autoGrader) {
                 updateCurrentModeStats('failed');
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
-                setOutput(`AUTO FAILED\n${err.message}\n\nFix your code and run again, or press NEXT to skip to another problem.`);
+                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
             } else {
                 setOutputStatus('fail');
-                setOutput(err.message);
+                setOutput(`${userOutput}${errorMessage}`);
             }
         } finally {
             setIsRunning(false);
         }
+    };
+
+    const submitInputValue = () => {
+        const nextValues = [...stdinValuesRef.current, stdinDraft];
+        stdinValuesRef.current = nextValues;
+        setStdinValues(nextValues);
+        setStdinDraft('');
+        setWaitingForInput(false);
+        setInputPrompt('');
+        setOutput(prev => `${prev}\n${stdinDraft}`);
+        setTimeout(() => {
+            runCode();
+        }, 0);
     };
 
     const addFile = () => {
@@ -1889,13 +2120,29 @@ sys.stdout = io.StringIO()
     const deleteFromActiveEditor = () => {
         const view = activeEditorViewRef.current;
         if (!view) return;
+        const mainScrollTop = mainScrollRef.current?.scrollTop ?? 0;
+        const editorScrollTop = view.scrollDOM.scrollTop;
+        const editorScrollLeft = view.scrollDOM.scrollLeft;
         deleteBackwardOnce(view);
-        view.focus();
+        view.scrollDOM.scrollTop = editorScrollTop;
+        view.scrollDOM.scrollLeft = editorScrollLeft;
+        if (mainScrollRef.current) mainScrollRef.current.scrollTop = mainScrollTop;
+        window.requestAnimationFrame(() => {
+            view.scrollDOM.scrollTop = editorScrollTop;
+            view.scrollDOM.scrollLeft = editorScrollLeft;
+            if (mainScrollRef.current) mainScrollRef.current.scrollTop = mainScrollTop;
+        });
         if (pendingNextProblem) setPendingNextProblem(false);
     };
 
     const startEditorDeleteHold = (event: React.PointerEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        event.currentTarget.blur();
+        try {
+            event.currentTarget.setPointerCapture(event.pointerId);
+        } catch {
+            // Some browsers do not allow pointer capture after preventDefault.
+        }
         stopEditorDeleteHold();
         deleteFromActiveEditor();
         deleteHoldDelayRef.current = window.setTimeout(() => {
@@ -2004,7 +2251,7 @@ sys.stdout = io.StringIO()
                                     border: '1px solid #1d2d44',
                                     borderRadius: '0.5rem',
                                     padding: '0.25rem 0.5rem',
-                                    color: isProblemSaved(exercise.id) ? '#3b82f6' : '#3b82f6',
+                                    color: '#3b82f6',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -2018,6 +2265,30 @@ sys.stdout = io.StringIO()
                             >
                                 <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                 <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setPendingNextProblem(false);
+                                    loadRandomExercise();
+                                }}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    border: '1px solid #1d2d44',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.25rem 0.5rem',
+                                    color: '#3b82f6',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    fontSize: '0.75rem',
+                                    flexShrink: 0,
+                                    pointerEvents: 'auto'
+                                }}
+                                title="Load next problem"
+                            >
+                                <SkipForward size={14} />
+                                <span>Next</span>
                             </button>
                             <button
                                 onClick={() => setShowModal('problem_full')}
@@ -2104,6 +2375,7 @@ sys.stdout = io.StringIO()
                             onPointerLeave={stopEditorDeleteHold}
                             onContextMenu={(event) => event.preventDefault()}
                             className="select-none px-2 py-1 rounded-lg border border-[#22c55e]/40 bg-[#22c55e]/10 text-[#22c55e] text-sm font-black active:scale-95"
+                            style={{ touchAction: 'none' }}
                             title="Hold to delete"
                         >
                             &lt;
@@ -2126,7 +2398,11 @@ sys.stdout = io.StringIO()
                     overscrollBehaviorY: 'contain'
                 }}
             >
-                <div className="mb-28 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden">
+                <div
+                    data-editor-panel
+                    className="mb-28 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden"
+                    style={{ scrollMarginTop: `${editorContentTop + 12}px` }}
+                >
                     <div
                         className="hidden"
                     >
@@ -2174,12 +2450,19 @@ sys.stdout = io.StringIO()
                                         longPressTimerRef.current = null;
                                     }
                                 };
+                                const handleKeyboardFeedback = (event: KeyboardEvent) => {
+                                    if (event.metaKey || event.ctrlKey || event.altKey) return;
+                                    if (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Tab') {
+                                        playKeyboardFeedback();
+                                    }
+                                };
                                 dom.addEventListener('mousedown', startLongPress);
                                 dom.addEventListener('touchstart', startLongPress, { passive: true });
                                 dom.addEventListener('mouseup', cancelLongPress);
                                 dom.addEventListener('touchend', cancelLongPress);
                                 dom.addEventListener('touchmove', cancelLongPress);
                                 dom.addEventListener('mousemove', cancelLongPress);
+                                dom.addEventListener('keydown', handleKeyboardFeedback);
                             }}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                         />
@@ -2248,6 +2531,32 @@ sys.stdout = io.StringIO()
                         >
                             <pre className="text-[10px] font-mono text-[#4ade80] whitespace-pre-wrap select-text break-words">{output}</pre>
                         </div>
+                        {waitingForInput && (
+                            <div className="mt-2 flex items-center gap-2 rounded-xl border border-[#3b82f6]/40 bg-[#071225]/90 px-2 py-2">
+                                <span className="min-w-0 flex-1 truncate text-[10px] font-bold uppercase tracking-[0.12em] text-[#93c5fd]">
+                                    {inputPrompt || 'Input'}
+                                </span>
+                                <input
+                                    value={stdinDraft}
+                                    onChange={(event) => setStdinDraft(event.target.value)}
+                                    onKeyDown={(event) => {
+                                        if (event.key === 'Enter') {
+                                            event.preventDefault();
+                                            submitInputValue();
+                                        }
+                                    }}
+                                    autoFocus
+                                    className="min-w-0 flex-[2] rounded-lg border border-[#1d2d44] bg-[#050c18] px-2 py-1 text-xs text-white outline-none focus:border-[#3b82f6]"
+                                    placeholder="Type input value..."
+                                />
+                                <button
+                                    onClick={submitInputValue}
+                                    className="rounded-lg border border-[#22c55e]/40 bg-[#22c55e]/10 px-3 py-1 text-xs font-black text-[#22c55e]"
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        )}
                         <div className="border-t border-[#1d2d44] bg-[#071225]">
                             <button
                                 onClick={() => setShowActionPanel(prev => !prev)}
@@ -2294,11 +2603,13 @@ sys.stdout = io.StringIO()
                     }}
                 >
                     <div
-                        className="rounded-3xl p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative max-h-[90vh] h-[90vh] flex flex-col overflow-hidden"
+                        className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
                         style={{
                             backgroundColor: showModal === 'settings' ? 'rgba(17, 34, 64, 0.20)' : '#112240',
                             backdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
-                            WebkitBackdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined
+                            WebkitBackdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
+                            height: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+                            maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
                     >
                         <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10"><X size={24} /></button>
@@ -2402,8 +2713,9 @@ sys.stdout = io.StringIO()
                             </div>
                         )}
                         {showModal === 'settings' && (
-                            <div className="py-2">
-                                <h2 className="text-lg font-bold mb-4 text-center">Settings</h2>
+                            <div className="flex h-full min-h-0 flex-col py-2">
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Settings</h2>
+                                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
 
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-200">
@@ -2415,10 +2727,7 @@ sys.stdout = io.StringIO()
                                             return (
                                                 <button
                                                     key={mode.id}
-                                                    onClick={() => {
-                                                        setDifficultyMode(mode.id);
-                                                        localStorage.setItem('python_difficulty_mode', mode.id);
-                                                    }}
+                                                    onClick={() => handleDifficultyModeSelect(mode.id)}
                                                     className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${isSelected ? 'border-[#3b82f6] bg-[#3b82f6]/25 text-white' : 'border-[#1d2d44] bg-[#071225]/70 text-gray-300 hover:border-[#3b82f6]/50'}`}
                                                 >
                                                     <span className="flex items-center justify-between gap-3">
@@ -2448,6 +2757,37 @@ sys.stdout = io.StringIO()
                                                 </div>
                                             );
                                         })}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                        <SlidersHorizontal size={14} className="text-[#3b82f6]" />
+                                        Customize
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => setKeyboardHaptics(prev => !prev)}
+                                            className={`rounded-xl border px-3 py-3 text-left transition-all ${keyboardHaptics ? 'border-[#22c55e]/60 bg-[#22c55e]/15 text-white' : 'border-[#1d2d44] bg-[#050c18]/70 text-gray-400'}`}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Vibrate size={15} className={keyboardHaptics ? 'text-[#22c55e]' : 'text-gray-500'} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Haptic</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setKeyboardSound(prev => !prev)}
+                                            className={`rounded-xl border px-3 py-3 text-left transition-all ${keyboardSound ? 'border-[#22c55e]/60 bg-[#22c55e]/15 text-white' : 'border-[#1d2d44] bg-[#050c18]/70 text-gray-400'}`}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Volume2 size={15} className={keyboardSound ? 'text-[#22c55e]' : 'text-gray-500'} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Sound</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -2502,7 +2842,8 @@ sys.stdout = io.StringIO()
                                     )}
                                 </div>
 
-                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
+                                </div>
+                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
                             </div>
                         )}
                         {showModal === 'api_key' && (
