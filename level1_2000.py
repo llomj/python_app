@@ -5993,4 +5993,3 @@ def get_comprehensive_statistics(numbers):
 
 result = get_comprehensive_statistics([10, 20, 30, 40, 50])
 print(result)  # Expected: {'sum': 150, 'average': 30.0, 'min': 10, 'max': 50, 'count': 5, 'standard_deviation': ~14.14}
-

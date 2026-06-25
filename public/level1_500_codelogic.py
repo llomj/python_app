@@ -33,13 +33,13 @@ Enhancements:
 # - List operations: Creating, accessing, and modifying lists
 # - Object-oriented concepts: Classes, inheritance, and methods
 # - Algorithm implementation: Manual implementations of common algorithms
-# 
+#
 # PROGRAM FLOW:
 # 1. Each exercise defines one or more functions to solve a specific problem
 # 2. Functions are tested with example inputs using print() statements
 # 3. Some exercises show multiple solution approaches (built-in vs manual)
 # 4. The code progresses from basic operations to more complex problems
-# 
+#
 # LEARNING PATH:
 # - Start with simple arithmetic operations (addition, multiplication)
 # - Progress to list operations (finding max, calculating averages)
@@ -48,7 +48,7 @@ Enhancements:
 # - Advance to more complex algorithms and data structures
 #===============================================================================
 
-#function problems level 1 (chatGPT￼) 
+#function problems level 1 (chatGPT￼)
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -56,12 +56,12 @@ Enhancements:
 # The function should accept two numeric parameters (integers or floats) and
 # return their sum. This is a fundamental arithmetic operation that demonstrates
 # function definition, parameters, and return statements in Python.
-# 
+#
 # Key Requirements:
 # - Function must take exactly two numeric parameters
 # - Function must return the sum of the two parameters
 # - Should work with both integers and floating-point numbers
-# 
+#
 # Example Input/Output:
 # - add_numbers(5, 5) should return 10
 # - add_numbers(3.5, 2.5) should return 6.0
@@ -101,7 +101,7 @@ def add_number(a, b):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
     return a + b  # Returns the sum of parameters a and b
-    
+
 # TEST CASE:
 # This demonstrates the function with two positive integers (5 and 5).
 # The expected result is 10, which will be printed to the console.
@@ -114,7 +114,7 @@ def add_number(a, b):
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(add_number(5, 5))  # Output: 10
-    
+
 # ALTERNATIVE SOLUTION EXPLANATION:
 # This solution uses an intermediate variable to store the result before returning.
 # While functionally identical to the previous solution, this approach can be
@@ -151,7 +151,7 @@ def add_num(a, b):
 # Returning: result   # Return the stored result
 #------------------------------------------------------------------------------
     return result   # Return the stored result
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating that both solutions produce the same output.
 #------------------------------------------------------------------------------
@@ -170,12 +170,12 @@ print(add_num(5, 5))  # Output: 10
 # The function should accept two numeric parameters and return their product
 # (the result of multiplying them together). This demonstrates the use of
 # the multiplication operator (*) in Python functions.
-# 
+#
 # Key Requirements:
 # - Function must take exactly two numeric parameters
 # - Function must return the product (multiplication result)
 # - Should handle integers, floats, and negative numbers correctly
-# 
+#
 # Example Input/Output:
 # - multiply_numbers(5, 5) should return 25
 # - multiply_numbers(3.5, 2) should return 7.0
@@ -215,7 +215,7 @@ def multiply_numbers(a, b):
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
     return a * b  # Returns the product of a multiplied by b
-    
+
 # TEST CASE:
 # This test multiplies 5 by 5, which should result in 25.
 #------------------------------------------------------------------------------
@@ -234,18 +234,18 @@ print(multiply_numbers(5, 5))  # Output: 25
 # The function should accept a list containing numeric values and return the
 # highest value among them. This is a common operation in data analysis and
 # algorithm design.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must return the maximum value from the list
 # - Should handle both positive and negative numbers
 # - Should work with integers and floats
-# 
+#
 # Example Input/Output:
 # - find_max([2, 67, 300]) should return 300
 # - find_max([5, 100, 3, 8, 15]) should return 100
 # - find_max([-10, -5, -20]) should return -5 (least negative is maximum)
-# 
+#
 # Edge Cases:
 # - Empty list would cause an error (not handled in these solutions)
 # - Single-element list should return that element
@@ -301,7 +301,7 @@ def find_max(number):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-result = [2, 67, 300]    
+result = [2, 67, 300]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -312,7 +312,7 @@ result = [2, 67, 300]
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
 print(find_max(result))  # Output: 300
-        
+
 # ALTERNATIVE SOLUTION EXPLANATION (Manual Implementation):
 # This solution manually implements the max-finding algorithm without using
 # the built-in max() function. It demonstrates how to find the maximum using
@@ -346,7 +346,7 @@ def find_max(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     max_number = numbers[0]
-    
+
     # Iterate through each number in the list
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -390,7 +390,7 @@ def find_max(numbers):
 # Returning: max_number  # Return the maximum value found
 #------------------------------------------------------------------------------
     return max_number  # Return the maximum value found
-    
+
 # TEST CASE:
 # This test uses a list with five numbers and includes a formatted output message.
 #------------------------------------------------------------------------------
@@ -422,20 +422,20 @@ print("The maximum number in the list is:", find_max(numbers_list))  # Output: T
 # of numbers. The average is calculated by summing all numbers and dividing
 # by the count of numbers. The problem specifically asks to use sum() and len()
 # functions, which are built-in Python functions.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the average (mean) of all numbers
 # - Must use sum() to calculate the total
 # - Must use len() to get the count of numbers
-# 
+#
 # Formula: average = sum(numbers) / len(numbers)
-# 
+#
 # Example Input/Output:
 # - calculate_average([1, 67, 888]) should return (1+67+888)/3 = 318.67...
 # - calculate_average([44, 67, 54]) should return (44+67+54)/3 = 55.0
 # - calculate_average([10, 20, 30, 40]) should return 25.0
-# 
+#
 # Edge Cases:
 # - Empty list would cause division by zero error (not handled)
 # - Single-element list returns that element
@@ -488,7 +488,7 @@ def calculate_average(number):
 # Returning: result  # Return the calculated average
 #------------------------------------------------------------------------------
     return result  # Return the calculated average
-    
+
 # TEST CASE:
 # This test calculates the average of [1, 67, 888].
 # Sum = 956, Count = 3, Average = 956/3 = 318.666...
@@ -511,7 +511,7 @@ lst = [1, 67, 888]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(calculate_average(lst))  # Output: 318.6666666666667
-    
+
 # ALTERNATIVE SOLUTION EXPLANATION:
 # This is essentially the same solution with a different function name.
 # The logic is identical: sum all numbers and divide by the count.
@@ -545,7 +545,7 @@ def cal_average(number):
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
 # Built-in function 'sum()' adds all numbers in an iterable and returns the total.
     result = sum(number) / len(number)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -553,7 +553,7 @@ def cal_average(number):
 # Returning: result  # Return the average
 #------------------------------------------------------------------------------
     return result  # Return the average
-    
+
 # TEST CASE:
 # This test calculates the average of [44, 67, 54].
 # Sum = 165, Count = 3, Average = 165/3 = 55.0
@@ -566,7 +566,7 @@ def cal_average(number):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = [44,67,54]    
+lst = [44,67,54]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -583,18 +583,18 @@ print(cal_average(lst))  # Output: 55.0
 # Vowels are defined as the letters: a, e, i, o, u (both lowercase and uppercase).
 # The problem specifies to ignore case sensitivity, meaning 'A' and 'a' should
 # both be counted as vowels. This is a common string processing task.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must count vowels: a, e, i, o, u (case-insensitive)
 # - Must return the total count of vowels found
-# 
+#
 # Example Input/Output:
 # - count_vowels("Jonathan") should return 3 (o, a, a)
 # - count_vowels("Hello") should return 2 (e, o)
 # - count_vowels("AEIOU") should return 5 (all vowels)
 # - count_vowels("xyz") should return 0 (no vowels)
-# 
+#
 # Note: The current solution only checks lowercase vowels, which may not
 # fully satisfy the case-insensitive requirement. A better solution would
 # convert the string to lowercase first.
@@ -633,7 +633,7 @@ def count_vowels(string):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter to zero
-    
+
     # Iterate through each character in the string
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -677,7 +677,7 @@ def count_vowels(string):
 # Returning: count  # Return the total count of vowels
 #------------------------------------------------------------------------------
     return count  # Return the total count of vowels
-    
+
 # TEST CASE:
 # This test counts vowels in "Jonathan". The vowels are: o, a, a (3 total).
 # However, if the string contained uppercase vowels, they wouldn't be counted
@@ -708,18 +708,18 @@ print(count_vowels(result))  # Output: 3
 # characters appear in the opposite order. For example, "hello" becomes "olleh".
 # This is a common string manipulation task that can be solved using Python's
 # slicing syntax or by iterating through the string.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with characters in reverse order
 # - Original string should remain unchanged (though this solution modifies it)
-# 
+#
 # Example Input/Output:
 # - reverse_string("Jonathan") should return "nahtanoJ"
 # - reverse_string("hello") should return "olleh"
 # - reverse_string("a") should return "a" (single character)
 # - reverse_string("") should return "" (empty string)
-# 
+#
 # Note: The solution uses string slicing [::-1], which is the most Pythonic
 # and efficient way to reverse a string in Python.
 # ============================================================================
@@ -727,7 +727,7 @@ print(count_vowels(result))  # Output: 3
 Problem 6:
 Write a Python function called `reverse_string` that takes a string as input and returns the reverse of that string.
 """
-    
+
 # SOLUTION EXPLANATION:
 # This solution uses Python's extended slicing syntax [::-1] to reverse the string.
 # The syntax [start:stop:step] with step=-1 means:
@@ -759,7 +759,7 @@ def reverse_string(string):
 # Variable name: 'string' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     string = string[::-1]
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -767,7 +767,7 @@ def reverse_string(string):
 # Returning: string  # Return the reversed string
 #------------------------------------------------------------------------------
     return string  # Return the reversed string
-    
+
 # TEST CASE:
 # This test reverses "Jonathan" to "nahtanoJ".
 # Each character is placed in the opposite position.
@@ -790,29 +790,29 @@ result = "Jonathan"
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(reverse_string(result))  # Output: nahtanoJ
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem asks us to determine if a number is even. An even number is
 # any integer that is divisible by 2 with no remainder. This is a fundamental
 # mathematical operation that's commonly used in programming for conditional
 # logic and loops.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return True if the number is even
 # - Function must return False if the number is odd
-# 
+#
 # Mathematical Definition:
 # - Even number: divisible by 2 (remainder is 0 when divided by 2)
 # - Odd number: not divisible by 2 (remainder is 1 when divided by 2)
-# 
+#
 # Example Input/Output:
 # - is_even(10) should return True (10 ÷ 2 = 5 with remainder 0)
 # - is_even(7) should return False (7 ÷ 2 = 3 with remainder 1)
 # - is_even(0) should return True (0 is considered even)
 # - is_even(-4) should return True (negative even numbers are still even)
-# 
+#
 # The modulo operator (%) is used to check the remainder after division.
 # ============================================================================
 """
@@ -850,7 +850,7 @@ def is_even(number):
 # Returning: number % 2 == 0
 #------------------------------------------------------------------------------
     return number % 2 == 0
-               
+
 # TEST CASE:
 # This test checks if 10 is even. Since 10 ÷ 2 = 5 with remainder 0,
 # the function should return True.
@@ -863,7 +863,7 @@ def is_even(number):
 # Integers are whole numbers, floats are decimal numbers.
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
-result = 10        
+result = 10
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -877,25 +877,25 @@ print(is_even(result))  # Output: True
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires calculating the square of a number. The square of a
-# number is the result of multiplying that number by itself. For example,
+# number is the result of multiplying that number to the power of 2. For example,
 # the square of 5 is 25 (5 × 5 = 25). This is a basic mathematical operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a number (integer or float) as input
 # - Function must return the square (number × number)
 # - Should work with both positive and negative numbers
-# 
+#
 # Mathematical Definition:
 # - Square of n = n × n = n²
 # - Square of -5 = (-5) × (-5) = 25 (squares are always positive or zero)
-# 
+#
 # Example Input/Output:
-# - calculate_square(6) should return 36 (6 × 6)
-# - calculate_square(9) should return 81 (9 × 9)
-# - calculate_square(-4) should return 16 ((-4) × (-4))
-# - calculate_square(3.5) should return 12.25 (3.5 × 3.5)
-# 
-# Note: The first solution has a bug - it uses number ** number (power operation)
+# - calculate_square(6) should return 36 (6 ** 2)
+# - calculate_square(9) should return 81 (9 ** 2)
+# - calculate_square(-4) should return 16 ((-4) ** 2)
+# - calculate_square(3.5) should return 12.25 (3.5 ** 2)
+#
+# Note: The first solution has a bug - it uses number ** 2 (power operation)
 # instead of number ** 2, which would calculate number to the power of itself
 # rather than the square. For example, 9 ** 9 = 387,420,489, not 81.
 # ============================================================================
@@ -905,8 +905,8 @@ Write a Python function called `calculate_square` that takes a number as input a
 """
 
 # SOLUTION EXPLANATION (BUGGY VERSION):
-# WARNING: This solution has a bug! It uses number ** number instead of number ** 2.
-# The ** operator is Python's exponentiation operator. number ** number means
+# WARNING: This solution has a bug! It uses number ** 2 instead of number ** 2.
+# The ** operator is Python's exponentiation operator. number ** 2 means
 # "number raised to the power of number", not "number squared".
 # For example: 9 ** 9 = 387,420,489 (not 81, which is 9²).
 # The correct syntax should be: number ** 2
@@ -925,18 +925,18 @@ Write a Python function called `calculate_square` that takes a number as input a
 def cal_square(number):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    # BUG: This calculates number^number, not number²
+    # BUG: This calculates number**2, not number squared
     # Should be: return number ** 2
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
-# Returning: number ** number
+# Returning: number ** 2
 # The '*' operator performs multiplication for numbers.
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
-    return number ** number
-       
+    return number ** 2
+
 # TEST CASE:
 # This test attempts to square 9, but due to the bug, it calculates 9^9 instead.
 # Expected: 81, Actual: 387,420,489
@@ -958,15 +958,15 @@ lst = 9
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(cal_square(lst))  # Output: 387420489 (incorrect - should be 81)
+print(cal_square(lst))  # Output: 81
 
 # CORRECT SOLUTION EXPLANATION:
-# This solution correctly calculates the square by multiplying the number by itself.
+# This solution correctly calculates the square by multiplying the number to the power of 2.
 # This is the most straightforward approach and clearly shows what "square" means.
 #==============================================================================
-# FUNCTION DEFINITION: 'calculate_sqaure'
+# FUNCTION DEFINITION: 'calculate_square'
 #------------------------------------------------------------------------------
-# Purpose: This line defines a reusable function named 'calculate_sqaure'.
+# Purpose: This line defines a reusable function named 'calculate_square'.
 # In Python, functions are defined using the 'def' keyword followed by the function name.
 # Functions allow us to organize code into reusable blocks that can be called multiple times.
 # Parameters: This function accepts 1 parameter(s): number
@@ -975,18 +975,18 @@ print(cal_square(lst))  # Output: 387420489 (incorrect - should be 81)
 # The colon (:) at the end is REQUIRED - it tells Python that the function body follows.
 # The function body must be indented (typically 4 spaces) to show it belongs to this function.
 #==============================================================================
-def calculate_sqaure(number):
+def calculate_square(number):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    # Multiply number by itself to get the square
+    # Multiply number to the power of 2 to get the square
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'square'
 # Purpose: This creates a new variable or updates an existing one with a value.
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'square' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-    square = number * number
-    
+    square = number ** 2
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -994,18 +994,18 @@ def calculate_sqaure(number):
 # Returning: square  # Return the squared value
 #------------------------------------------------------------------------------
     return square  # Return the squared value
-    
+
 # TEST CASE:
-# This test correctly squares 6: 6 × 6 = 36
+# This test correctly squares 6: 6 ** 2 = 36
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: calculate_sqaure(6
+# Printing: calculate_square(6
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(calculate_sqaure(6))  # Output: 36
+print(calculate_square(6))  # Output: 36
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -1013,16 +1013,16 @@ print(calculate_sqaure(6))  # Output: 36
 # and returns a personalized greeting message. The function should format the
 # message as "Hello, [name]!" where [name] is replaced with the actual name
 # provided as input. This demonstrates string formatting and function usage.
-# 
+#
 # Key Requirements:
 # - Function must accept a string parameter (the name)
 # - Function must return or print a greeting message
 # - Message format should be "Hello, [name]!"
-# 
+#
 # Example Input/Output:
 # - greet_user("Jonathan") should return "Hello, Jonathan!"
 # - greet_user("Alice") should return "Hello, Alice!"
-# 
+#
 # Note: The solution uses f-string formatting, which is a modern Python feature
 # for string interpolation. The actual output format may vary slightly.
 # ============================================================================
@@ -1062,7 +1062,7 @@ def greet_user(string):
 # Returning: f"hello {string}"  # Returns formatted greeting string
 #------------------------------------------------------------------------------
     return f"hello {string}"  # Returns formatted greeting string
-        
+
 # TEST CASE:
 # This test greets "Jonathan" with the message "hello Jonathan"
 #------------------------------------------------------------------------------
@@ -1081,17 +1081,17 @@ print(greet_user("Jonathan"))  # Output: hello Jonathan
 # The function should take a list of numbers as input and return a new list
 # where each element is the square of the corresponding element in the input list.
 # This demonstrates list comprehension, iteration, and mathematical operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a NEW list (not modify the original)
 # - Each element in the new list should be the square of the corresponding element
-# 
+#
 # Example Input/Output:
 # - square_list([2, 4, 5, 6]) should return [4, 16, 25, 36]
 # - square_list([1, 3, 5]) should return [1, 9, 25]
 # - square_list([-2, 0, 2]) should return [4, 0, 4]
-# 
+#
 # The square of a number n is n × n or n².
 # ============================================================================
 """
@@ -1126,7 +1126,7 @@ def square_lst(numbers):
 # Variable name: 'squared_numbers' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     squared_numbers = []  # Initialize empty list to store squared values
-    
+
     # Iterate through each number in the input list
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -1140,7 +1140,7 @@ def square_lst(numbers):
 # LEARNING NOTE: The loop variable is created fresh in each iteration - you don't need to declare it.
 #==============================================================================
     for number in numbers:
-        # Calculate square using ** operator (number ** 2 = number²)
+        # Calculate square using ** operator (number ** 2 = number squared)
         # and append to the new list
 #------------------------------------------------------------------------------
 # METHOD CALL: 'squared_numbers.append()'
@@ -1160,7 +1160,7 @@ def square_lst(numbers):
 # Returning: squared_numbers  # Return the new list with squared values
 #------------------------------------------------------------------------------
     return squared_numbers  # Return the new list with squared values
-    
+
 # TEST CASE:
 # This test squares each number in [2, 4, 5, 6]:
 # 2² = 4, 4² = 16, 5² = 25, 6² = 36
@@ -1191,17 +1191,17 @@ print(square_lst(result))  # Output: [4, 16, 25, 36]
 # The function should take a string as input and return a new string where
 # all lowercase letters are converted to their uppercase equivalents, while
 # uppercase letters and non-letter characters remain unchanged.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a string with all characters in uppercase
 # - Non-letter characters (numbers, symbols, spaces) remain unchanged
-# 
+#
 # Example Input/Output:
 # - convert_to_uppercase("Jonathan") should return "JONATHAN"
 # - convert_to_uppercase("Hello World") should return "HELLO WORLD"
 # - convert_to_uppercase("abc123") should return "ABC123"
-# 
+#
 # Python's built-in .upper() method handles this conversion efficiently.
 # ============================================================================
 """
@@ -1239,7 +1239,7 @@ def covert_uppercase(string):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return string.upper()  # Returns uppercase version of the string
-    
+
 # TEST CASE:
 # This test converts "Jonathan" to "JONATHAN"
 # All lowercase letters (o, a, t, h, a, n) are converted to uppercase
@@ -1259,17 +1259,17 @@ print(covert_uppercase("Jonathan"))  # Output: JONATHAN
 # function should take a list of numbers as input and return the total sum
 # of all elements. This is a fundamental list operation that's commonly used
 # in data processing and mathematical calculations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the sum of all numbers in the list
 # - Should work with integers, floats, and mixed numeric types
-# 
+#
 # Example Input/Output:
 # - calculate_sum([1, 56, 778]) should return 835 (1 + 56 + 778)
 # - calculate_sum([10, 20, 30]) should return 60
 # - calculate_sum([-5, 10, -3]) should return 2
-# 
+#
 # Python provides a built-in sum() function, but the problem can also be
 # solved manually using a loop to demonstrate the algorithm.
 # ============================================================================
@@ -1323,7 +1323,7 @@ def calculate_sum(number):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = [1, 56, 778]    
+lst = [1, 56, 778]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -1366,7 +1366,7 @@ def cal_sum(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter to zero (will accumulate the sum)
-    
+
     # Iterate through each number in the list
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -1394,7 +1394,7 @@ def cal_sum(numbers):
 # Returning: count  # Return the final sum
 #------------------------------------------------------------------------------
     return count  # Return the final sum
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating that both solutions produce
 # the same result: 1 + 56 + 778 = 835
@@ -1424,22 +1424,22 @@ print(cal_sum(lst))  # Output: 835
 # This problem asks us to determine if a number is odd. An odd number is any
 # integer that is NOT divisible by 2, meaning it has a remainder of 1 when
 # divided by 2. This is the opposite of an even number check.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return True if the number is odd
 # - Function must return False if the number is even
-# 
+#
 # Mathematical Definition:
 # - Odd number: NOT divisible by 2 (remainder is 1 when divided by 2)
 # - Even number: divisible by 2 (remainder is 0 when divided by 2)
-# 
+#
 # Example Input/Output:
 # - is_odd(7) should return True (7 ÷ 2 = 3 with remainder 1)
 # - is_odd(10) should return False (10 ÷ 2 = 5 with remainder 0)
 # - is_odd(0) should return False (0 is even)
 # - is_odd(-3) should return True (negative odd numbers are still odd)
-# 
+#
 # WARNING: The current solution has a bug! It checks if number % 2 == 0,
 # which actually checks if the number is EVEN, not odd. The correct check
 # should be number % 2 != 0 or number % 2 == 1.
@@ -1498,17 +1498,17 @@ print(is_odd(10))  # Output: True (INCORRECT - 10 is even, not odd!)
 # single string. The function should take two string parameters and return a
 # new string that contains the first string followed by the second string.
 # This is a fundamental string operation in programming.
-# 
+#
 # Key Requirements:
 # - Function must accept two string parameters
 # - Function must return a new string (concatenation of both inputs)
 # - The first string should come before the second string in the result
-# 
+#
 # Example Input/Output:
-# - concatenate_strings("Jonathan", "moll") should return "Jonathanmoll"
+# - concatenate_strings("Jonathan", "noll") should return "Jonathannoll"
 # - concatenate_strings("Hello", "World") should return "HelloWorld"
 # - concatenate_strings("", "test") should return "test" (empty string + string)
-# 
+#
 # In Python, the + operator is used for string concatenation.
 # ============================================================================
 """
@@ -1552,9 +1552,9 @@ def concatenate_strings(string1, string2):
 # Returning: concatenate  # Return the concatenated string
 #------------------------------------------------------------------------------
     return concatenate  # Return the concatenated string
-       
+
 # TEST CASE:
-# This test concatenates "Jonathan" and "moll" to produce "Jonathanmoll"
+# This test concatenates "Jonathan" and "noll" to produce "Jonathannoll"
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -1574,7 +1574,7 @@ lst1 = "Jonathan"
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-lst2 = "moll"
+lst2 = "noll"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -1583,7 +1583,7 @@ lst2 = "moll"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(concatenate_strings(lst1, lst2))  # Output: Jonathanmoll
+print(concatenate_strings(lst1, lst2))  # Output: Jonathannoll
 
 # ALTERNATIVE SOLUTION EXPLANATION:
 # This is a more concise version that directly returns the concatenated string
@@ -1614,18 +1614,18 @@ def concatenate_string(string1, string2):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
     return string1 + string2  # Returns string1 followed by string2
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: concatenate_string("Jonathan", "moll"
+# Printing: concatenate_string("Jonathan", "noll"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(concatenate_string("Jonathan", "moll"))  # Output: Jonathanmoll
+print(concatenate_string("Jonathan", "noll"))  # Output: Jonathannoll
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -1633,17 +1633,17 @@ print(concatenate_string("Jonathan", "moll"))  # Output: Jonathanmoll
 # The function should take a string as input and return the total count of
 # characters in that string. This is a basic string operation that's used
 # frequently in programming for validation, formatting, and processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return the number of characters in the string
 # - Should count all characters including spaces, punctuation, and numbers
-# 
+#
 # Example Input/Output:
 # - find_length("Jonathan") should return 8 (8 characters)
 # - find_length("Hello World") should return 11 (including the space)
 # - find_length("") should return 0 (empty string has zero length)
-# 
+#
 # Python provides a built-in len() function, but the problem can also be
 # solved manually to demonstrate the counting algorithm.
 # ============================================================================
@@ -1723,7 +1723,7 @@ def find_len(string):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter to zero
-    
+
     # Iterate through each character in the string
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -1751,7 +1751,7 @@ def find_len(string):
 # Returning: count  # Return the total count (length)
 #------------------------------------------------------------------------------
     return count  # Return the total count (length)
-        
+
 # TEST CASE:
 # Same test case as above, demonstrating that both solutions produce
 # the same result: "Jonathan" has 8 characters
@@ -1772,19 +1772,19 @@ print(find_len("Jonathan"))  # Output: 8
 # is a word, phrase, or sequence that reads the same forwards and backwards.
 # Examples include "racecar", "level", and "madam". The function should handle
 # case-insensitivity and ignore spaces for phrases like "A man a plan a canal Panama".
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return True if the string is a palindrome, False otherwise
 # - Should handle case-insensitivity (treat 'A' and 'a' as the same)
 # - Should ignore spaces (for multi-word palindromes)
-# 
+#
 # Example Input/Output:
 # - is_palindrome("racecar") should return True (reads same forwards/backwards)
 # - is_palindrome("level") should return True
 # - is_palindrome("tom") should return False (tom != mot)
 # - is_palindrome("A man a plan a canal Panama") should return True (ignoring case/spaces)
-# 
+#
 # Algorithm: Compare the string with its reverse after normalizing (lowercase, no spaces).
 # ============================================================================
 """
@@ -1823,7 +1823,7 @@ def is_palindrome(string):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     string = string.replace(" ", "").lower()  # Remove spaces, convert to lowercase
-    
+
     # Compare the normalized string with its reverse
     # [::-1] creates a reversed copy of the string
     # If string == string[::-1], it reads the same forwards and backwards
@@ -1834,7 +1834,7 @@ def is_palindrome(string):
 # Returning: string == string[::-1]  # Returns True if palindrome, False otherwise
 #------------------------------------------------------------------------------
     return string == string[::-1]  # Returns True if palindrome, False otherwise
-    
+
 # TEST CASE:
 # This test checks if "tom" is a palindrome.
 # Normalized: "tom", Reversed: "mot"
@@ -1856,18 +1856,18 @@ print(is_palindrome("tom"))  # Output: False
 # split the string by spaces and count how many word segments exist. This is
 # a common text processing task used in word counting, text analysis, and
 # natural language processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return the number of words (space-separated segments)
 # - Words are separated by spaces (single or multiple spaces)
-# 
+#
 # Example Input/Output:
 # - count_words("This is an example sentence.") should return 5
 # - count_words("Hello World") should return 2
 # - count_words("  multiple   spaces  ") should return 2 (leading/trailing spaces ignored)
 # - count_words("") should return 0 (empty string has no words)
-# 
+#
 # Python's split() method automatically handles multiple spaces and trims whitespace.
 # ============================================================================
 """
@@ -1915,7 +1915,7 @@ def count_words(string):
 # Variable name: 'word_count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     word_count = 0  # Initialize counter
-    
+
     # Iterate through each word and increment counter
 #==============================================================================
 # FOR LOOP: Iterating over 'words'
@@ -1936,7 +1936,7 @@ def count_words(string):
 # Variable name: 'word_count +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         word_count += 1  # Count each word
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -2050,59 +2050,21 @@ def count_words(string):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
 #------------------------------------------------------------------------------
-# VARIABLE ASSIGNMENT: 'count'
-# Purpose: This creates a new variable or updates an existing one with a value.
-# In Python, variables are created when you first assign a value to them (no declaration needed).
-# Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
+# VARIABLE ASSIGNMENT: 'words'
+# Purpose: This stores the list of words created from the input string.
+# split() separates the string anywhere whitespace appears.
 #------------------------------------------------------------------------------
-    count = 0  # Initialize counter
-    # Iterate through each character (not words!)
-#==============================================================================
-# FOR LOOP: Iterating over 'string'
-#------------------------------------------------------------------------------
-# Purpose: This loop will execute the indented code block once for each item in the iterable.
-# FOR loops are used when you know how many times you want to repeat an action.
-# Loop variable: 'char' - this variable holds the current item in each iteration.
-# Iterable: 'string' - the collection we're looping through (list, string, range, etc.).
-# The colon (:) is REQUIRED - it indicates the start of the loop body.
-# The loop body (next indented lines) will execute for each item.
-# LEARNING NOTE: The loop variable is created fresh in each iteration - you don't need to declare it.
-#==============================================================================
-    for char in string:
-        # BUG: char == char.replace(" ","") is always True for non-space chars
-        # This counts all characters, not words
-#==============================================================================
-# IF STATEMENT: Conditional execution
-#------------------------------------------------------------------------------
-# Purpose: This code block will only execute if the condition evaluates to True.
-# IF statements allow your program to make decisions and execute code conditionally.
-# Condition: char == char.replace(" ",""):  # This condition is always True
-# Python evaluates this condition as either True or False (boolean values).
-# Comparison operators: == (equal), != (not equal), < (less than), > (greater than), <=, >=
-# Logical operators: 'and' (both true), 'or' (either true), 'not' (inverse)
-# The colon (:) is REQUIRED - it indicates the start of the conditional block.
-# The indented code below will only run if the condition is True.
-# LEARNING NOTE: In Python, empty collections (empty list, string, etc.) are considered False.
-#==============================================================================
-        if char == char.replace(" ",""):  # This condition is always True
-#------------------------------------------------------------------------------
-# VARIABLE ASSIGNMENT: 'count +'
-# Purpose: This creates a new variable or updates an existing one with a value.
-# In Python, variables are created when you first assign a value to them (no declaration needed).
-# Variable name: 'count +' - follows Python naming conventions (lowercase with underscores).
-#------------------------------------------------------------------------------
-            count += 1  # Increments for every character
+    words = string.split()
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
-# Returning: count  # Returns character count, not word count (WRONG!)
+# Returning: len(words)
 #------------------------------------------------------------------------------
-    return count  # Returns character count, not word count (WRONG!)
-               
+    return len(words)
+
 # TEST CASE:
-# This test incorrectly counts characters instead of words
-# "hello you cunt" has 15 characters, not 3 words
+# "hello you pal" has 3 words
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'arg'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -2112,7 +2074,7 @@ def count_words(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-arg = "hello you cunt"
+arg = "hello you pal"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -2121,7 +2083,7 @@ arg = "hello you cunt"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)
+print(count_words(arg))  # Output: 3
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -2129,19 +2091,19 @@ print(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)
 # The function should accept a list containing numeric values and return the
 # lowest value among them. This is the opposite of finding the maximum and is
 # a fundamental operation in data analysis and algorithm design.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must return the minimum value from the list
 # - Should handle both positive and negative numbers
 # - Should work with integers and floats
-# 
+#
 # Example Input/Output:
 # - find_min([1, 56, 68]) should return 1
 # - find_min([45, 6, 1]) should return 1
 # - find_min([-10, -5, -20]) should return -20 (most negative is minimum)
 # - find_min([3.5, 1.2, 4.8]) should return 1.2
-# 
+#
 # Edge Cases:
 # - Empty list would cause an error (not handled in these solutions)
 # - Single-element list should return that element
@@ -2214,7 +2176,7 @@ def find_min():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_number.append(int(number))
-        
+
     # Sort and get first element (minimum)
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'min_num'
@@ -2270,7 +2232,7 @@ def find_min():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(min_num)  # Print the result
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'find_min()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -2369,7 +2331,7 @@ def find_minimum(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     min_number = numbers[0]
-    
+
     # Iterate through each number in the list
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -2413,7 +2375,7 @@ def find_minimum(numbers):
 # Returning: min_number  # Return the minimum value found
 #------------------------------------------------------------------------------
     return min_number  # Return the minimum value found
-    
+
 # TEST CASE:
 # This test finds the minimum in [45, 6, 1], which is 1
 #------------------------------------------------------------------------------
@@ -2435,26 +2397,26 @@ min_number = [45, 6, 1]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(find_minimum(min_number))  # Output: 1
-        
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires checking if the sum of numbers at even indices (0, 2, 4, ...)
 # results in an even number. The function should sum all elements at positions where
 # the index is even (divisible by 2), then check if that sum is even. This combines
 # index-based selection with parity checking.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must sum numbers at even indices (0, 2, 4, 6, ...)
 # - Must return True if the sum is even, False if odd
 # - First index (0) is considered even
-# 
+#
 # Example Input/Output:
 # - is_even_index_sum([100, 200, 300, 400]) sums indices 0,2: 100+300=400 (even) → True
 # - is_even_index_sum([1, 2, 3, 4]) sums indices 0,2: 1+3=4 (even) → True
 # - is_even_index_sum([1, 2, 3]) sums indices 0,2: 1+3=4 (even) → True
 # - is_even_index_sum([1, 2, 2]) sums indices 0,2: 1+2=3 (odd) → False
-# 
+#
 # Note: Even indices are 0, 2, 4, 6, ... (positions divisible by 2)
 # ============================================================================
 """
@@ -2489,7 +2451,7 @@ def is_even_index_sum(numbers):
 # Variable name: 'even_index_sum' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     even_index_sum = 0  # Initialize sum accumulator for even-indexed elements
-    
+
     # Iterate through all indices of the list
 #==============================================================================
 # FOR LOOP: Iterating over 'range(len(numbers))'
@@ -2527,7 +2489,7 @@ def is_even_index_sum(numbers):
 # Variable name: 'even_index_sum +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             even_index_sum += numbers[i]  # Add element at even index to sum
-    
+
     # Check if the sum is even (remainder when divided by 2 is 0)
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -2569,17 +2531,17 @@ print(is_even_index_sum(lst))  # Output: True
 # is multiplied by 2 (doubled). The function should take a list of numbers and
 # return a new list with each element's value doubled. This is a common list
 # transformation operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a NEW list (not modify original)
 # - Each element in the new list should be double the corresponding element
-# 
+#
 # Example Input/Output:
 # - double_elements([1, 2, 3, 4, 5]) should return [2, 4, 6, 8, 10]
 # - double_elements([10, 20, 30]) should return [20, 40, 60]
 # - double_elements([-5, 0, 5]) should return [-10, 0, 10]
-# 
+#
 # Note: The first solution incorrectly duplicates elements instead of doubling
 # their values. The second solution correctly doubles numeric values.
 # ============================================================================
@@ -2614,7 +2576,7 @@ def double_elements(elements):
 # Variable name: 'doubled' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     doubled = []  # Initialize empty list
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
@@ -2652,7 +2614,7 @@ def double_elements(elements):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
         doubled.append(element)  # Add element again (duplication, not doubling!)
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -2710,7 +2672,7 @@ def double_elements(numbers):
 # Variable name: 'doubled_numbers' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     doubled_numbers = []  # Initialize empty list for doubled values
-    
+
     # Iterate through each number
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -2735,7 +2697,7 @@ def double_elements(numbers):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         doubled_numbers.append(num * 2)  # Multiply by 2 and append
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -2765,26 +2727,26 @@ numbers_list = [1, 2, 3, 4, 5]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print("The list with doubled elements is:", double_elements(numbers_list))  # Output: [2, 4, 6, 8, 10]
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires checking if ALL numbers in a list are positive (greater
 # than zero). The function should return True only if every single number in the
 # list is positive, and False if any number is zero or negative. This is a
 # validation operation commonly used in data processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must return True if ALL numbers are positive (> 0)
 # - Must return False if ANY number is zero or negative (<= 0)
 # - Zero is NOT considered positive
-# 
+#
 # Example Input/Output:
 # - is_all_positive([1, 2, 3]) should return True (all positive)
 # - is_all_positive([0, 6, 8]) should return False (0 is not positive)
 # - is_all_positive([-1, 2, 3]) should return False (-1 is negative)
 # - is_all_positive([5, 10, 15]) should return True (all positive)
-# 
+#
 # Algorithm: Use early return - if any number fails the condition, return False immediately.
 # ============================================================================
 """
@@ -2858,7 +2820,7 @@ def is_all_positive(numbers):
 # Returning: True  # All numbers passed the positive check
 #------------------------------------------------------------------------------
     return True  # All numbers passed the positive check
-              
+
 # TEST CASE:
 # This test checks [0, 6, 8]. Since 0 is not positive (0 <= 0),
 # the function returns False immediately when it encounters 0
@@ -2887,17 +2849,17 @@ print(is_all_positive(lst))  # Output: False
 # This problem requires calculating the average (arithmetic mean) of a list
 # of numbers. The average is calculated by summing all numbers and dividing
 # by the count of numbers. This is a fundamental statistical operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the average (mean) of all numbers
 # - Formula: average = sum(numbers) / len(numbers)
-# 
+#
 # Example Input/Output:
 # - find_average([4, 67, 77]) should return (4+67+77)/3 = 148/3 = 49.33...
 # - find_average([1, 56, 66]) should return (1+56+66)/3 = 123/3 = 41.0
 # - find_average([10, 20, 30, 40]) should return 25.0
-# 
+#
 # Edge Cases:
 # - Empty list would cause division by zero error (not handled)
 # - Single-element list returns that element
@@ -2946,7 +2908,7 @@ def find_average(numbers):
 # Returning: total_average  # Return the calculated average
 #------------------------------------------------------------------------------
     return total_average  # Return the calculated average
-    
+
 # TEST CASE:
 # This test calculates the average of [4, 67, 77]
 # Sum = 148, Count = 3, Average = 148/3 = 49.333...
@@ -3003,7 +2965,7 @@ def find_average_lst(numbers):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter
-    
+
     # Iterate through each number
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -3031,7 +2993,7 @@ def find_average_lst(numbers):
 # Variable name: 'count +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         count += 1  # Increment counter
-        
+
     # Check if count is greater than 0 before dividing
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -3061,7 +3023,7 @@ def find_average_lst(numbers):
 # Returning: average  # BUG: 'average' might not be defined if count == 0
 #------------------------------------------------------------------------------
     return average  # BUG: 'average' might not be defined if count == 0
-        
+
 # TEST CASE:
 # This test calculates the average of [1, 56, 66]
 # Sum = 123, Count = 3, Average = 123/3 = 41.0
@@ -3117,7 +3079,7 @@ def find_average_lst(numbers):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter
-    
+
     # Iterate through each number
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -3145,7 +3107,7 @@ def find_average_lst(numbers):
 # Variable name: 'count +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         count += 1  # Increment counter
-        
+
     # Calculate average (no check for count == 0)
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'average'
@@ -3161,7 +3123,7 @@ def find_average_lst(numbers):
 # Returning: average  # Return the average
 #------------------------------------------------------------------------------
     return average  # Return the average
-        
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 #------------------------------------------------------------------------------
@@ -3190,19 +3152,19 @@ print(find_average_lst(lst))  # Output: 41.0
 # The function should return True if at least one number in the list is negative,
 # and False only if all numbers are zero or positive. This is a validation
 # operation used to detect negative values in data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must return True if ANY number is negative (< 0)
 # - Must return False if ALL numbers are zero or positive (>= 0)
 # - Zero is NOT considered negative
-# 
+#
 # Example Input/Output:
 # - contains_negative([5, -9]) should return True (contains -9)
 # - contains_negative([1, 2, 3]) should return False (all positive)
 # - contains_negative([0, 1, 2]) should return False (zero and positive)
 # - contains_negative([-1, 0, 1]) should return True (contains -1)
-# 
+#
 # Note: The current solution has a bug - it checks for <= 0 instead of < 0,
 # which means it treats zero as negative, which is incorrect.
 # ============================================================================
@@ -3287,7 +3249,7 @@ def contains_negative(numbers):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = [5, -9]    
+lst = [5, -9]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -3303,17 +3265,17 @@ print(contains_negative(lst))  # Output: True (correct for this case, but buggy 
 # This problem requires finding the last element in a list. The function should
 # take a list and return the element at the final position. This is a simple
 # list access operation that can be done using negative indexing in Python.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must return the last element in the list
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - find_last_element([1, 45, 66]) should return 66
 # - find_last_element([1, 5]) should return 5
 # - find_last_element(["a", "b", "c"]) should return "c"
-# 
+#
 # Python's negative indexing allows accessing elements from the end: [-1] is the last element.
 # ============================================================================
 """
@@ -3349,7 +3311,7 @@ def find_last_element(string):
 # Returning: string[-1]  # Returns the last element
 #------------------------------------------------------------------------------
     return string[-1]  # Returns the last element
-    
+
 # TEST CASE:
 # This test finds the last element in [1, 45, 66], which is 66
 #------------------------------------------------------------------------------
@@ -3399,7 +3361,7 @@ def find_element(elements):
 # Variable name: 'last' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     last = elements[-1]
-    
+
     # Unnecessarily iterate through all elements
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
@@ -3435,7 +3397,7 @@ def find_element(elements):
 # Returning: last  # Return the last element
 #------------------------------------------------------------------------------
             return last  # Return the last element
-    
+
 # TEST CASE:
 # This test finds the last element in [1, 5], which is 5
 # The function works but is inefficient compared to the first solution
@@ -3464,18 +3426,18 @@ print(find_element(lst))  # Output: 5
 # This problem requires calculating the product (multiplication result) of all
 # numbers in a list. The function should multiply all elements together and
 # return the total product. This is similar to sum, but uses multiplication.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the product of all numbers
 # - Product of [a, b, c] = a × b × c
-# 
+#
 # Example Input/Output:
 # - multiply_elements([2, 4, 2]) should return 16 (2 × 4 × 2)
 # - multiply_elements([100, 200, 900]) should return 18,000,000
 # - multiply_elements([1, 2, 3, 4]) should return 24
 # - multiply_elements([5]) should return 5 (single element)
-# 
+#
 # Edge Cases:
 # - Empty list would need special handling (product of empty list is typically 1)
 # - Product with zero results in zero
@@ -3516,7 +3478,7 @@ def multiply_elements(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     count = 1  # Initialize to 1 (multiplicative identity: 1 × n = n)
-    
+
     # Iterate through indices
 #==============================================================================
 # FOR LOOP: Iterating over 'range(len(numbers))'
@@ -3546,7 +3508,7 @@ def multiply_elements(numbers):
 # Returning: count  # Return the final product
 #------------------------------------------------------------------------------
     return count  # Return the final product
-        
+
 # TEST CASE:
 # This test multiplies [2, 4, 2]: 2 × 4 × 2 = 16
 #------------------------------------------------------------------------------
@@ -3597,7 +3559,7 @@ def multiply_elements(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     count = 1  # Initialize to 1 (multiplicative identity)
-    
+
     # Iterate directly over elements (more Pythonic)
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -3625,7 +3587,7 @@ def multiply_elements(numbers):
 # Returning: count  # Return the final product
 #------------------------------------------------------------------------------
     return count  # Return the final product
-    
+
 # TEST CASE:
 # This test multiplies [100, 200, 900]: 100 × 200 × 900 = 18,000,000
 #------------------------------------------------------------------------------
@@ -3674,7 +3636,7 @@ def multiply_elements(numbers):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 1  # Initialize to 1
-    
+
     # First loop: multiply all elements
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -3695,7 +3657,7 @@ def multiply_elements(numbers):
 # Variable name: 'count *' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         count *= number
-    
+
     # BUG: Second loop multiplies again, squaring the product!
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -3716,7 +3678,7 @@ def multiply_elements(numbers):
 # Variable name: 'count *' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         count *= number  # This multiplies the already-calculated product again
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -3747,26 +3709,26 @@ arg = [2, 4, 2]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(multiply_elements(arg))  # Output: 256 (INCORRECT - should be 16)
-        
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires checking if a list contains any duplicate elements.
 # The function should return True if at least one element appears more than
 # once in the list, and False if all elements are unique. This is a common
 # validation operation used in data processing and algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Must return True if ANY element appears more than once
 # - Must return False if ALL elements are unique
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - has_duplicates([1, 2, 3, 2]) should return True (2 appears twice)
 # - has_duplicates([1, 2, 3, 4]) should return False (all unique)
 # - has_duplicates(["it", "was", "itt"]) should return False (all unique)
 # - has_duplicates(["a", "a", "b"]) should return True (a appears twice)
-# 
+#
 # Algorithm: Use a set to track seen elements, return True if element already in set.
 # ============================================================================
 """
@@ -3816,7 +3778,7 @@ def has_duplicates(lst):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     common = []  # List to store duplicates (not used in this solution)
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
@@ -3888,7 +3850,7 @@ def has_duplicates(lst):
 # Returning: False  # No duplicates found, return False
 #------------------------------------------------------------------------------
     return False  # No duplicates found, return False
-                
+
 # TEST CASE:
 # This test checks ["it", "was", "itt"]. All elements are unique, so returns False
 #------------------------------------------------------------------------------
@@ -3986,7 +3948,7 @@ def has_duplicates():
 # Returning: True
 #------------------------------------------------------------------------------
             return True
-            
+
 #------------------------------------------------------------------------------
 # METHOD CALL: 'unique.add()'
 # Purpose: This calls a method (a function that belongs to an object) on an object.
@@ -3998,7 +3960,7 @@ def has_duplicates():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         unique.add(word)
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -4007,7 +3969,7 @@ def has_duplicates():
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-    print("False")    
+    print("False")
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -4103,14 +4065,14 @@ def has_duplicates():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         unique.add(word)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
 # Returning: False
 #------------------------------------------------------------------------------
-    return False 
+    return False
 
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -4147,7 +4109,7 @@ def has_duplicates(elements):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     duplicate = set()
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
 #------------------------------------------------------------------------------
@@ -4236,17 +4198,17 @@ print("Does the list have duplicates?", has_duplicates(list_with_duplicates))
 # a list. The function should take a list and a target element, then return
 # the count of occurrences of that element. This is a common operation in
 # data analysis and text processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element
 # - Function must return the count of how many times target appears
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - count_occurrences(["tree", "house", "tree", "car"], "tree") should return 2
 # - count_occurrences([1, 2, 3, 4, 5, 2, 2, 3], 2) should return 3
 # - count_occurrences([1, 2, 3], 5) should return 0 (not found)
-# 
+#
 # Algorithm: Iterate through list, increment counter when element matches target.
 # ============================================================================
 """
@@ -4292,7 +4254,7 @@ def count_occurrences(elements, target):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     word = ""  # Variable to store the target word
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
@@ -4343,7 +4305,7 @@ def count_occurrences(elements, target):
 # Returning: f"The word {word} occures {count} times"
 #------------------------------------------------------------------------------
     return f"The word {word} occures {count} times"
-               
+
 # TEST CASE:
 # This test counts occurrences of "tree" in ["tree", "house", "tree", "car"]
 # "tree" appears twice, so returns "The word tree occures 2 times"
@@ -4402,7 +4364,7 @@ def count_occurrences(elements, target):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
@@ -4481,20 +4443,20 @@ target_element = 2
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
 print(f"The element {target_element} appears {count_occurrences(list_elements, target_element)} times in the list.")  # Output: The element 2 appears 3 times in the list.
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires removing all vowels (a, e, i, o, u) from a string.
 # The function should take a string and return a new string with all vowel
 # characters removed, keeping only consonants and other characters. This is
 # a common text processing operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with vowels removed
 # - Should handle both uppercase and lowercase vowels (case-insensitive)
 # - Non-vowel characters (consonants, numbers, symbols) should remain
-# 
+#
 # Example Input/Output:
 # - remove_vowels("Jonathan") should return "Jnthn" (removes o, a, a)
 # - remove_vowels("Hello World") should return "Hll Wrld"
@@ -4545,7 +4507,7 @@ def remove_vowels(string):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     result = ""  # Initialize empty result string
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -4650,7 +4612,7 @@ def remove_vowels(string):
 # Variable name: 'vowels_removed' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     vowels_removed = []  # List to collect non-vowel characters
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -4700,7 +4662,7 @@ def remove_vowels(string):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     return "".join(vowels_removed)  # Join list into string
-            
+
 # TEST CASE:
 # This test removes vowels from "Jonathan"
 # Since it only checks lowercase vowels, it works for this case
@@ -4731,18 +4693,18 @@ print(remove_vowels(lst))  # Output: Jnthn
 # The function should take a string, split it into words, capitalize the first
 # letter of each word, and join them back together. This is a common text
 # formatting operation used in titles and headings.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with first letter of each word capitalized
 # - Words are separated by spaces
 # - Only the first letter of each word should be capitalized (rest lowercase)
-# 
+#
 # Example Input/Output:
 # - capitalize_words("hello world! this is a test.") should return "Hello World! This Is A Test."
 # - capitalize_words("python programming") should return "Python Programming"
 # - capitalize_words("HELLO WORLD") should return "Hello World"
-# 
+#
 # Python's capitalize() method capitalizes first letter and lowercases the rest.
 # ============================================================================
 """
@@ -4779,7 +4741,7 @@ def capitalize_words(sentence):
 # The function executes first, and its return value is stored in the variable.
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
-    words = sentence.split()  
+    words = sentence.split()
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'capitalized_words'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -4787,7 +4749,7 @@ def capitalize_words(sentence):
 # Variable name: 'capitalized_words' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     capitalized_words = []  # List to store capitalized words
-    
+
     # Iterate through each word
 #==============================================================================
 # FOR LOOP: Iterating over 'words'
@@ -4812,8 +4774,8 @@ def capitalize_words(sentence):
 # Common list methods: .append(), .remove(), .pop(), .sort(), .reverse()
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
-        capitalized_words.append(word.capitalize())  
-    
+        capitalized_words.append(word.capitalize())
+
     # Join words back together with spaces
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -4822,7 +4784,7 @@ def capitalize_words(sentence):
 # Returning: ' '.join(capitalized_words)
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
-    return ' '.join(capitalized_words) 
+    return ' '.join(capitalized_words)
 
 # TEST CASE:
 # This test capitalizes "hello world! this is a test."
@@ -4853,19 +4815,19 @@ print("Capitalized sentence:", capitalize_words(input_sentence))  # Output: Hell
 # take a string and return a new string with all space characters removed,
 # effectively concatenating all words together. This is useful for formatting
 # and text processing operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with all spaces removed
 # - Only space characters should be removed (not tabs, newlines, etc.)
 # - All other characters should remain in their original positions
-# 
+#
 # Example Input/Output:
 # - remove_spaces("hello world") should return "helloworld"
 # - remove_spaces("what just happened") should return "whatjusthappened"
 # - remove_spaces("no spaces") should return "nospaces"
 # - remove_spaces("") should return "" (empty string)
-# 
+#
 # Python's replace() method is the most straightforward approach.
 # ============================================================================
 """
@@ -4901,10 +4863,10 @@ def remove_spaces(sentence):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return sentence.replace(" ", "")  # Returns string with spaces removed
-    
+
 # TEST CASE:
-# This test removes spaces from "suck me duck Jonathan"
-# Result: "suckmeduckJonathan"
+# This test removes spaces from "remove spaces sample Jonathan"
+# Result: "removespacessampleJonathan"
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'arg'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -4914,7 +4876,7 @@ def remove_spaces(sentence):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-arg = "suck me duck Jonathan"
+arg = "remove spaces sample Jonathan"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -4923,7 +4885,7 @@ arg = "suck me duck Jonathan"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(remove_spaces(arg))  # Output: suckmeduckJonathan
+print(remove_spaces(arg))  # Output: removespacessampleJonathan
 
 # ALTERNATIVE SOLUTION EXPLANATION (Same Approach):
 # This is essentially the same solution with a different function name and
@@ -4961,7 +4923,7 @@ def remove_space(string):
 # Returning: space_removed  # Return string without spaces
 #------------------------------------------------------------------------------
     return space_removed  # Return string without spaces
-    
+
 # TEST CASE:
 # Same functionality as above
 #------------------------------------------------------------------------------
@@ -4973,7 +4935,7 @@ def remove_space(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-lst = "what just happened" 
+lst = "what just happened"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -5020,7 +4982,7 @@ def remove_spaces(sentence):
 # Variable name: 'result' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     result = []  # List to store words
-    
+
     # Iterate through words (spaces already removed by split)
 #==============================================================================
 # FOR LOOP: Iterating over 'split_word'
@@ -5055,10 +5017,10 @@ def remove_spaces(sentence):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     return "".join(result)  # Join words with no separator
-    
+
 # TEST CASE:
 # This test removes spaces using split/join approach
-# "suck me duck Jonathan" → ["suck", "me", "duck", "Jonathan"] → "suckmeduckJonathan"
+# "remove spaces sample Jonathan" → ["remove", "spaces", "sample", "Jonathan"] → "removespacessampleJonathan"
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'arg'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5068,7 +5030,7 @@ def remove_spaces(sentence):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-arg = "suck me duck Jonathan"
+arg = "remove spaces sample Jonathan"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -5077,7 +5039,7 @@ arg = "suck me duck Jonathan"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(remove_spaces(arg))  # Output: suckmeduckJonathan
+print(remove_spaces(arg))  # Output: removespacessampleJonathan
 
 """
 Problem 31:
@@ -5102,7 +5064,7 @@ def get_initials(full_name):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
     # split() divides the string into a list of words based on whitespace
-    # e.g., "Jonathan moll" → ["Jonathan", "moll"]
+    # e.g., "Jonathan noll" → ["Jonathan", "noll"]
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'parts'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5113,7 +5075,7 @@ def get_initials(full_name):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     parts = full_name.split()
-    
+
     # Initialize empty list to store uppercase initials
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'initials'
@@ -5125,7 +5087,7 @@ def get_initials(full_name):
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     initials = []
-    
+
     # Iterate through each word in the name
 #==============================================================================
 # FOR LOOP: Iterating over 'parts'
@@ -5141,7 +5103,7 @@ def get_initials(full_name):
     for part in parts:
         # part[0] gets the first character of the word
         # .upper() converts it to uppercase (handles lowercase input)
-        # e.g., "Jonathan"[0] = "J", "moll"[0] = "m" → "M"
+        # e.g., "Jonathan"[0] = "J", "noll"[0] = "m" → "M"
 #------------------------------------------------------------------------------
 # METHOD CALL: 'initials.append()'
 # Purpose: This calls a method (a function that belongs to an object) on an object.
@@ -5156,9 +5118,9 @@ def get_initials(full_name):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         initials.append(part[0].upper())  # Add uppercase first letter to list
-        
+
     # '.'.join() combines all initials with periods as separators
-    # e.g., ["J", "M"] → "J.M."
+    # e.g., ["J", "M"] → "J.N."
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -5166,11 +5128,11 @@ def get_initials(full_name):
 # Returning: '.'.join(initials)
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
-    return '.'.join(initials) 
+    return '.'.join(initials)
 
 # TEST CASE:
-# This test extracts initials from "Jonathan moll"
-# Process: "Jonathan moll" → ["Jonathan", "moll"] → ["J", "M"] → "J.M."
+# This test extracts initials from "Jonathan noll"
+# Process: "Jonathan noll" → ["Jonathan", "noll"] → ["J", "M"] → "J.N."
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5180,7 +5142,7 @@ def get_initials(full_name):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-lst = "Jonathan moll"
+lst = "Jonathan noll"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -5189,7 +5151,7 @@ lst = "Jonathan moll"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(get_initials(lst))  # Output: "J.M."
+print(get_initials(lst))  # Output: "J.N."
 
 # ALTERNATIVE SOLUTION EXPLANATION (Two-Word Assumption):
 # This solution assumes exactly two words (first and last name). It uses
@@ -5222,7 +5184,7 @@ def get_initials(fullname):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     string = fullname.split()
-    
+
     # f-string creates formatted string with initials
     # string[0][0] = first char of first word, string[1][0] = first char of second word
     # .upper() ensures uppercase, periods separate them
@@ -5278,20 +5240,20 @@ print(get_initials(string))  # Output: J.K
 # should take a sentence and return a new string where the words appear in
 # reverse order. For example, "hello world" becomes "world hello". This is
 # useful for text processing and string manipulation exercises.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must reverse the order of words (not characters within words)
 # - Words are separated by spaces
 # - Should return a new string (not modify original)
 # - Original word order should be reversed
-# 
+#
 # Example Input/Output:
 # - reverse_words("hello world") should return "world hello"
-# - reverse_words("Jonathan moll") should return "moll Jonathan"
+# - reverse_words("Jonathan noll") should return "noll Jonathan"
 # - reverse_words("the quick brown fox") should return "fox brown quick the"
 # - reverse_words("single") should return "single" (one word, no change)
-# 
+#
 # Algorithm: Split string into words, reverse the list, join back with spaces.
 # ============================================================================
 """
@@ -5330,7 +5292,7 @@ def reverse_word(string):
 # Returning: seperate[::-1]
 #------------------------------------------------------------------------------
     return seperate[::-1]
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5368,7 +5330,7 @@ def reverse_words(words):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
     # split() divides the string into a list of words
-    # e.g., "Jonathan moll" → ["Jonathan", "moll"]
+    # e.g., "Jonathan noll" → ["Jonathan", "noll"]
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'words'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5379,9 +5341,9 @@ def reverse_words(words):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     words = words.split()
-    
+
     # [::-1] reverses the list of words
-    # e.g., ["Jonathan", "moll"] → ["moll", "Jonathan"]
+    # e.g., ["Jonathan", "noll"] → ["noll", "Jonathan"]
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'reversed_words'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5389,9 +5351,9 @@ def reverse_words(words):
 # Variable name: 'reversed_words' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     reversed_words = words[::-1]
-    
+
     # " ".join() combines the reversed words back into a string with spaces
-    # e.g., ["moll", "Jonathan"] → "moll Jonathan"
+    # e.g., ["noll", "Jonathan"] → "noll Jonathan"
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'reversed_sentence'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5402,7 +5364,7 @@ def reverse_words(words):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     reversed_sentence = " ".join(reversed_words)
-    
+
     # Return the reversed string
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -5413,8 +5375,8 @@ def reverse_words(words):
     return reversed_sentence
 
 # TEST CASE:
-# This test reverses words in "Jonathan moll"
-# Process: "Jonathan moll" → ["Jonathan", "moll"] → ["moll", "Jonathan"] → "moll Jonathan"
+# This test reverses words in "Jonathan noll"
+# Process: "Jonathan noll" → ["Jonathan", "noll"] → ["noll", "Jonathan"] → "noll Jonathan"
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -5424,7 +5386,7 @@ def reverse_words(words):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-lst = "Jonathan moll"
+lst = "Jonathan noll"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -5433,7 +5395,7 @@ lst = "Jonathan moll"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(reverse_words(lst))  # Output: moll Jonathan 
+print(reverse_words(lst))  # Output: noll Jonathan
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -5441,18 +5403,18 @@ print(reverse_words(lst))  # Output: moll Jonathan
 # preserving the order of first occurrence. The function should return a
 # new list containing only unique elements in the order they first appeared.
 # This is a common data cleaning operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must return a NEW list (not modify original)
 # - Duplicate elements should be removed
 # - Original order of first occurrence should be maintained
-# 
+#
 # Example Input/Output:
 # - remove_duplicates([1, 2, 3, 1, 4, 2, 5]) should return [1, 2, 3, 4, 5]
 # - remove_duplicates(["a", "b", "a", "c"]) should return ["a", "b", "c"]
 # - remove_duplicates([1, 1, 1, 1]) should return [1]
-# 
+#
 # Note: Using set() loses order. Manual approach preserves order.
 # ============================================================================
 """
@@ -5541,7 +5503,7 @@ def remove_duplicates(input_list):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     unique_elements = []  # List to store unique elements in order
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'input_list'
@@ -5611,25 +5573,25 @@ input_list = [1, 2, 3, 1, 4, 2, 5]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print("List with duplicates removed:", remove_duplicates(input_list))  # Output: [1, 2, 3, 4, 5]
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires finding the longest word in a string or list of words.
 # The function should take a string (or list) of words and return the word
 # with the maximum length. If multiple words have the same maximum length,
 # return the first one encountered. This is a common text processing operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string of words (or list of words)
 # - Function must return the longest word
 # - If multiple words have same length, return the first one
 # - Words are typically separated by spaces in strings
-# 
+#
 # Example Input/Output:
 # - find_longest_word("why dont you call Jonathan") should return "Jonathan" (8 chars)
 # - find_longest_word(["tree", "cliff", "mountain"]) should return "mountain" (8 chars)
 # - find_longest_word(["a", "bb", "ccc"]) should return "ccc" (3 chars)
-# 
+#
 # Algorithm: Compare word lengths, track the longest word found.
 # ============================================================================
 """
@@ -5668,7 +5630,7 @@ def main(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     return max(lst, key=len)  # Returns the longest word
-    
+
 # TEST CASE:
 # This test finds the longest word in the list
 # "mountain" and "grassy" both have 8 characters, but "mountain" appears first
@@ -5727,7 +5689,7 @@ def main(lst):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     largest_word = ""  # Track the longest word itself
-    
+
     # Iterate through each word
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
@@ -5782,7 +5744,7 @@ def main(lst):
 # Returning: largest_word  # Return the longest word
 #------------------------------------------------------------------------------
     return largest_word  # Return the longest word
-        
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 #------------------------------------------------------------------------------
@@ -5915,7 +5877,7 @@ def find_longest_word(words):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     longest_word = ""  # Track the longest word itself
-    
+
     # Iterate through each word
 #==============================================================================
 # FOR LOOP: Iterating over 'split_word'
@@ -6000,13 +5962,13 @@ print("Longest word:", find_longest_word(input_string))  # Output: Longest word:
 # them as a list. The function should identify all vowel characters (a, e, i, o, u)
 # in both uppercase and lowercase, and return them in the order they appear.
 # This is useful for text analysis and vowel extraction operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a list of vowels found in the string
 # - Should handle both uppercase and lowercase vowels (case-insensitive)
 # - Vowels should be returned in the order they appear in the string
-# 
+#
 # Example Input/Output:
 # - find_vowels("Jonathan") should return ['o', 'a', 'a'] (vowels found)
 # - find_vowels("Hello") should return ['e', 'o']
@@ -6056,7 +6018,7 @@ def find_vowels(string):
 # Variable name: 'return_vowels' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     return_vowels = []  # List to store found vowels
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -6100,7 +6062,7 @@ def find_vowels(string):
 # Returning: return_vowels  # Return list of vowels found
 #------------------------------------------------------------------------------
     return return_vowels  # Return list of vowels found
-            
+
 # TEST CASE:
 # This test finds vowels in "Jonathan"
 # Lowercase vowels found: o, a, a
@@ -6161,7 +6123,7 @@ def find_vowels(string):
 # Variable name: 'vowel_list' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     vowel_list = []  # List to store found vowels
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -6238,18 +6200,18 @@ print(find_vowels(lst))  # Output: ['o', 'a', 'a']
 # take a number like 123 and return 321 (digits in reverse order). This is
 # achieved by converting the number to a string, reversing it, then converting
 # back to an integer. This is a common number manipulation operation.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return an integer with digits reversed
 # - Leading zeros in the result are dropped (e.g., 100 → 1, not 001)
-# 
+#
 # Example Input/Output:
 # - reverse_number(123) should return 321
 # - reverse_number(100) should return 1 (leading zeros dropped)
 # - reverse_number(4567) should return 7654
 # - reverse_number(-123) should return -321 (negative sign preserved)
-# 
+#
 # Algorithm: Convert to string, reverse using slicing, convert back to int.
 # ============================================================================
 """
@@ -6286,7 +6248,7 @@ def reverse_number(number):
 # Returning: int(str(number)[::-1])  # Returns reversed number
 #------------------------------------------------------------------------------
     return int(str(number)[::-1])  # Returns reversed number
-    
+
 # TEST CASE:
 # This test reverses 123 to 321
 # Process: 123 → "123" → "321" → 321
@@ -6316,18 +6278,18 @@ print(reverse_number(number))  # Output: 321
 # preserving the order of first occurrence. The function should take a string
 # and return a new string containing only unique characters in the order they
 # first appeared. This is a common text processing operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a NEW string (not modify original)
 # - Duplicate characters should be removed
 # - Original order of first occurrence should be maintained
-# 
+#
 # Example Input/Output:
 # - remove_duplicates("Jonathan") should return "Jonath" (removes duplicate 'a', 'n')
 # - remove_duplicates("hello") should return "helo" (removes duplicate 'l')
 # - remove_duplicates("abc") should return "abc" (no duplicates)
-# 
+#
 # Note: Using set() loses order. Manual approach preserves order.
 # ============================================================================
 """
@@ -6364,7 +6326,7 @@ def remove_duplicate(strings):
 # Returning: list(set(strings))  # Returns list, not string, and order may be lost
 #------------------------------------------------------------------------------
     return list(set(strings))  # Returns list, not string, and order may be lost
-       
+
 # TEST CASE:
 # This test removes duplicates but loses order
 # "Jonathan" → set → list (order not preserved)
@@ -6416,7 +6378,7 @@ def remove_duplicates(string):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     unique_chars = []  # List to store unique characters in order
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -6518,7 +6480,7 @@ def remove_dupicates(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     duplicates = []  # List to store unique elements (note: variable name is misleading)
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -6565,7 +6527,7 @@ def remove_dupicates(numbers):
 # Returning: duplicates  # Return list with duplicates removed, order preserved
 #------------------------------------------------------------------------------
     return duplicates  # Return list with duplicates removed, order preserved
-                 
+
 # TEST CASE:
 # This test removes duplicates from a list
 # [3, 2, 2] → [3, 2] (removes duplicate 2)
@@ -6596,17 +6558,17 @@ print(remove_dupicates(lst))  # Output: [3, 2]
 # a fundamental list operation that's commonly used in data processing and
 # mathematical calculations. The problem appears twice (38 and 39) with
 # different implementations - one with user input, one with direct list input.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the sum of all numbers
 # - Should work with integers, floats, and mixed numeric types
-# 
+#
 # Example Input/Output:
 # - sum_of_list([2, 2, 2]) should return 6
 # - sum_of_list([1, 2, 3, 4]) should return 10
 # - sum_of_list([10, 20, 30]) should return 60
-# 
+#
 # Python provides a built-in sum() function, but the problem can also be
 # solved manually using a loop to demonstrate the algorithm.
 # ============================================================================
@@ -6652,7 +6614,7 @@ def sum_of_list():
 # Variable name: 'int_number' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     int_number = []  # List to store converted integers
-    
+
     # Convert each string to integer
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -6677,7 +6639,7 @@ def sum_of_list():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_number.append(int(number))  # Convert "1" → 1, etc.
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'count'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -6714,7 +6676,7 @@ def sum_of_list():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(count)  # Print the result
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'sum_of_list()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -6736,7 +6698,7 @@ Problem 39:
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
 Write a Python function called sum_of_list that takes a list of numbers as input and returns the sum of all the numbers in the list.
-"""        
+"""
 
 # SOLUTION EXPLANATION (Direct List Input):
 # This solution accepts a list directly as a parameter and calculates the sum
@@ -6764,7 +6726,7 @@ def sum_of_list(numbers):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize sum accumulator
-    
+
     # Iterate through each number in the list
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -6821,18 +6783,18 @@ print(sum_of_list(lst))  # Output: 6
 # and returning them as a tuple. The function should scan through the list once
 # and identify both the smallest and largest values. This is more efficient than
 # calling min() and max() separately, as it only requires one pass through the list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a tuple (min, max)
 # - Should find both minimum and maximum in a single pass
 # - Should work with integers, floats, and mixed numeric types
-# 
+#
 # Example Input/Output:
 # - find_min_max([10, 90, 45, 55, 222, 2]) should return (2, 222)
 # - find_min_max([1, 2, 3]) should return (1, 3)
 # - find_min_max([-5, 0, 5]) should return (-5, 5)
-# 
+#
 # Algorithm: Initialize min and max with first element, then update as we iterate.
 # ============================================================================
 """
@@ -6885,7 +6847,7 @@ def find_min_max(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     max_number = numbers[0]  # Start with first element as maximum
-    
+
     # Iterate through each number
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -6951,7 +6913,7 @@ def find_min_max(numbers):
 # Returning: min_number, max_number  # Returns (min, max)
 #------------------------------------------------------------------------------
     return min_number, max_number  # Returns (min, max)
-       
+
 # TEST CASE:
 # This test finds min and max in [10, 90, 45, 55, 222, 2]
 # Minimum: 2, Maximum: 222
@@ -6982,17 +6944,17 @@ print(find_min_max(lst))  # Output: (2, 222)
 # This problem requires counting how many times a specific element appears in
 # a list. The function should take a list and a target element, then return
 # the count of occurrences. This is a common operation in data analysis.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element
 # - Function must return the count of how many times target appears
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - count_occurrences([1, 2, 3, 2, 2], 2) should return 3
 # - count_occurrences(["a", "b", "a"], "a") should return 2
 # - count_occurrences([1, 2, 3], 5) should return 0 (not found)
-# 
+#
 # Note: The current solution is hardcoded to only count "Tom", which doesn't
 # match the general problem requirement. It should accept the target as a parameter.
 # ============================================================================
@@ -7040,7 +7002,7 @@ def count_occurrences():
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter
-    
+
     # Iterate through each word
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -7084,7 +7046,7 @@ def count_occurrences():
 # Returning: count  # Return count
 #------------------------------------------------------------------------------
     return count  # Return count
-            
+
 # TEST CASE:
 # This test only works for counting "Tom" in user input
 # It doesn't work as a general count_occurrences function
@@ -7105,17 +7067,17 @@ count_occurrences()  # Prompts user for input
 # by numbers from 0 to 10 (inclusive). Each line should display the multiplication
 # in the format "x * number = total". This is a common educational exercise
 # for learning loops and string formatting.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer x as input
 # - Must generate multiplication table from 0 to 10 (inclusive)
 # - Each line format: "x * number = total"
 # - Should display or return the table
-# 
+#
 # Example Input/Output:
 # - table(6) should show: 1 x 6 = 6, 2 x 6 = 12, ..., 10 x 6 = 60
 # - table(9) should show: 0 x 9 = 0, 1 x 9 = 9, ..., 10 x 9 = 90
-# 
+#
 # Note: The problem says "from 0 to 10 (inclusive)", but some solutions start
 # from 1. The correct range should be range(11) to include 0.
 # ============================================================================
@@ -7127,7 +7089,7 @@ Problem 42:
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`." 
+Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`."
 """
 
 # SOLUTION EXPLANATION (Returns String):
@@ -7159,7 +7121,7 @@ def table(x):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     result = ""  # Initialize empty string to accumulate results
-    
+
     # Iterate from 1 to 10 (missing 0!)
 #==============================================================================
 # FOR LOOP: Iterating over 'range(1, 11)'
@@ -7243,7 +7205,7 @@ def table(x):
 # Variable name: 'print(f"{i} x {x}' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         print(f"{i} x {x} = {i*x}")  # Directly prints each line
-        
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'table()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -7279,7 +7241,7 @@ def table(x):
 # Variable name: 'result' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     result = []  # List to store formatted lines
-    
+
     # Iterate from 0 to 10 (inclusive)
 #==============================================================================
 # FOR LOOP: Iterating over 'range(11)'
@@ -7391,19 +7353,19 @@ for j in range(1, 11):  # Outer loop: multiplier (1 to 10)
 # list is squared (multiplied by itself). The function should take a list of
 # numbers and return a new list with each element's value squared. This is
 # a common list transformation operation used in mathematical computations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a NEW list (not modify original)
 # - Each element in the new list should be the square of the corresponding element
 # - Square of n = n × n = n²
-# 
+#
 # Example Input/Output:
 # - square_elements([2, 3, 4, 5, 6]) should return [4, 9, 16, 25, 36]
 # - square_elements([1, 2, 3]) should return [1, 4, 9]
 # - square_elements([-2, 0, 2]) should return [4, 0, 4]
-# 
-# WARNING: The current solution has a bug! It uses number ** number instead
+#
+# WARNING: The current solution has a bug! It uses number ** 2 instead
 # of number ** 2, which calculates number to the power of itself, not squared.
 # ============================================================================
 """
@@ -7412,8 +7374,8 @@ Write a Python function called square_elements that takes a list of numbers as i
 """
 
 # SOLUTION EXPLANATION (BUGGY VERSION):
-# WARNING: This solution has a critical bug! It uses number ** number instead
-# of number ** 2. The ** operator is exponentiation, so number ** number means
+# WARNING: This solution has a critical bug! It uses number ** 2 instead
+# of number ** 2. The ** operator is exponentiation, so number ** 2 means
 # "number raised to the power of number", not "number squared".
 # For example: 2 ** 2 = 4 (correct), but 2 ** 2 = 4, while 3 ** 3 = 27 (not 9!).
 #==============================================================================
@@ -7438,7 +7400,7 @@ def square_elements(numbers):
 # Variable name: 'squared_list' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     squared_list = []  # Initialize empty list
-    
+
     # Iterate through each number
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -7452,7 +7414,7 @@ def square_elements(numbers):
 # LEARNING NOTE: The loop variable is created fresh in each iteration - you don't need to declare it.
 #==============================================================================
     for number in numbers:
-        # BUG: number ** number calculates number^number, not number²
+        # BUG: number ** 2 calculates number**2, not number squared
         # Should be: squared_list.append(number ** 2)
 #------------------------------------------------------------------------------
 # METHOD CALL: 'squared_list.append()'
@@ -7464,15 +7426,15 @@ def square_elements(numbers):
 # Common list methods: .append(), .remove(), .pop(), .sort(), .reverse()
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
-        squared_list.append(number ** number)  # WRONG! This is number^number
+        squared_list.append(number ** 2)  # WRONG! This is number**2
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
-# Returning: squared_list  # Returns incorrect results
+# Returning: squared_list  # Returns squared values
 #------------------------------------------------------------------------------
-    return squared_list  # Returns incorrect results
-               
+    return squared_list  # Returns squared values
+
 # TEST CASE:
 # This test attempts to square [2, 3, 4, 5, 6]
 # Expected: [4, 9, 16, 25, 36]
@@ -7496,26 +7458,26 @@ lst = [2, 3, 4, 5, 6]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(square_elements(lst))  # Output: [4, 27, 256, 3125, 46656] (INCORRECT!)
+print(square_elements(lst))  # Output: [4, 9, 16, 25, 36]
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires counting the number of uppercase letters in a string.
 # The function should iterate through each character and count how many are
 # uppercase (capital letters). This is useful for text analysis and validation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return the count of uppercase letters
 # - Only letters should be counted (not numbers, symbols, spaces)
 # - Uppercase letters: A-Z
-# 
+#
 # Example Input/Output:
-# - count_uppercase("Jonathan Moll") should return 2 (J, M)
+# - count_uppercase("Jonathan Noll") should return 2 (J, M)
 # - count_uppercase("HELLO") should return 5 (all uppercase)
 # - count_uppercase("hello") should return 0 (no uppercase)
 # - count_uppercase("Hello World!") should return 2 (H, W)
-# 
+#
 # Python's isupper() method is the most reliable way to check for uppercase.
 # ============================================================================
 """
@@ -7551,7 +7513,7 @@ def count_uppercase(string):
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize counter
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -7594,9 +7556,9 @@ def count_uppercase(string):
 # Returning: count  # Return the total count
 #------------------------------------------------------------------------------
     return count  # Return the total count
-                   
+
 # TEST CASE:
-# This test counts uppercase letters in "Jonathan Moll"
+# This test counts uppercase letters in "Jonathan Noll"
 # Uppercase letters: J, M (2 total)
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
@@ -7607,7 +7569,7 @@ def count_uppercase(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-lst = "Jonathan Moll"
+lst = "Jonathan Noll"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -7656,7 +7618,7 @@ def count_uppercase(string):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     string = string.replace(" ", "")
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -7703,7 +7665,7 @@ def count_uppercase(string):
 # LEARNING NOTE: Use '//' for integer division (floor division) if you need an integer result.
 #------------------------------------------------------------------------------
     return count  # May return incorrect count if string has numbers/symbols
-    
+
 # TEST CASE:
 # This test counts uppercase in "Jonah Is Tbe Best"
 # Uppercase: J, I, T, B (4 total)
@@ -7727,25 +7689,25 @@ string = "Jonah Is Tbe Best"
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(count_uppercase(string))  # Output: 4
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires removing all space characters from a string. The
 # function should take a string and return a new string with all space
 # characters removed, effectively concatenating all words together. This is
 # useful for formatting and text processing operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with all spaces removed
 # - Only space characters should be removed (not tabs, newlines, etc.)
 # - All other characters should remain in their original positions
-# 
+#
 # Example Input/Output:
 # - remove_spaces("what happening boss man") should return "whathappeningbossman"
 # - remove_spaces("hello world") should return "helloworld"
 # - remove_spaces("no spaces") should return "nospaces"
-# 
+#
 # Python's replace() method is the most straightforward approach.
 # ============================================================================
 """
@@ -7781,7 +7743,7 @@ def remove_spaces(string):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return string.replace(" ", "")  # Returns string with spaces removed
-    
+
 # TEST CASE:
 # This test removes spaces from "what happening boss man"
 # Result: "whathappeningbossman"
@@ -7804,7 +7766,7 @@ lst = "what happening boss man"
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(remove_spaces(lst))  # Output: whathappeningbossman
-    
+
 # ALTERNATIVE SOLUTION EXPLANATION (Using Loop):
 # This solution manually iterates through each character and builds a new
 # string without spaces. It's more verbose but demonstrates the algorithm
@@ -7831,7 +7793,7 @@ def remove_spaces(string):
 # Variable name: 'string_removed' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     string_removed = []  # List to collect non-space characters
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -7880,7 +7842,7 @@ def remove_spaces(string):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return "".join(string_removed)  # Return string without spaces
-                
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 #------------------------------------------------------------------------------
@@ -7909,18 +7871,18 @@ print(remove_spaces(lst))  # Output: whathappeningbossman
 # The function should take two lists that are already sorted, combine all
 # elements from both lists, and return a new list that is also sorted. This
 # is a fundamental operation in merge sort and other algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept two sorted lists as input
 # - Function must return a NEW sorted list containing all elements
 # - Input lists are assumed to be already sorted
 # - Output list should be sorted (ascending order typically)
-# 
+#
 # Example Input/Output:
 # - merge_lists([1, 3, 5], [2, 4, 6]) should return [1, 2, 3, 4, 5, 6]
 # - merge_lists([1, 2], [3, 4]) should return [1, 2, 3, 4]
 # - merge_lists([], [1, 2]) should return [1, 2]
-# 
+#
 # Note: The current solution re-sorts the input lists, which is unnecessary
 # if they're already sorted. A proper merge would use a two-pointer approach.
 # ============================================================================
@@ -7969,7 +7931,7 @@ def merge_lists():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     lst2 = sorted(input("Type the second sorted list: ").split())  # Sorts again
-    
+
     # Combine lists and sort the result
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'merged_list'
@@ -7981,7 +7943,7 @@ def merge_lists():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     merged_list = sorted(lst1 + lst2)  # Concatenate and sort
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -8008,18 +7970,18 @@ merge_lists()  # Call the function
 # The function should search through the list and return the position (index)
 # where the target is found. If the target is not found, it should return -1
 # as a sentinel value. This is a fundamental search operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element
 # - Function must return the index if target is found
 # - Function must return -1 if target is not found
 # - Should return the first occurrence if duplicates exist
-# 
+#
 # Example Input/Output:
 # - find_index([1, 3, 5, 7, 9], 5) should return 2 (5 is at index 2)
 # - find_index([1, 3, 5, 7, 9], 6) should return -1 (6 not found)
 # - find_index([1, 2, 2, 3], 2) should return 1 (first occurrence)
-# 
+#
 # Algorithm: Linear search - iterate through list, return index when found.
 # ============================================================================
 """
@@ -8148,18 +8110,18 @@ print("Index of", target, "in nums:", find_index(numbers, target))  # Output: In
 # a list. The function should iterate through the list, check if each index
 # is even, and accumulate the sum of elements at those positions. This is
 # useful for processing alternating elements or specific index patterns.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must sum elements at even indices (0, 2, 4, 6, ...)
 # - Index 0 is considered even
 # - Should return the total sum
-# 
+#
 # Example Input/Output:
 # - sum_even_indices([1, 2, 3, 4, 5, 6]) sums indices 0,2,4: 1+3+5 = 9
 # - sum_even_indices([10, 20, 30, 40]) sums indices 0,2: 10+30 = 40
 # - sum_even_indices([5]) sums index 0: 5
-# 
+#
 # Algorithm: Iterate through indices, check if even (i % 2 == 0), sum those elements.
 # ============================================================================
 """
@@ -8195,7 +8157,7 @@ def sum_even_indices(nums):
 # Variable name: 'total' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     total = 0  # Initialize sum accumulator
-    
+
     # Iterate through all indices of the list
 #==============================================================================
 # FOR LOOP: Iterating over 'range(len(nums))'
@@ -8423,7 +8385,7 @@ def remove_duplicates(lst):
 # Returning: common
 #------------------------------------------------------------------------------
     return common
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -8523,7 +8485,7 @@ def remove_duplicates(lst):
 # Returning: unique
 #------------------------------------------------------------------------------
     return unique
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -8640,19 +8602,19 @@ print("List with case-insensitive duplicates removed:", remove_duplicates(input_
 # reads the same forwards and backwards (e.g., "racecar", "level", "madam").
 # The function should compare the string with its reverse to check if they're
 # identical. This is a common string manipulation and validation task.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return True if palindrome, False otherwise
 # - Should check if string == reversed string
 # - Case-sensitive by default (unless specified otherwise)
-# 
+#
 # Example Input/Output:
 # - is_palindrome("racecar") should return True (reads same forwards/backwards)
 # - is_palindrome("hello") should return False (hello != olleh)
 # - is_palindrome("level") should return True
 # - is_palindrome("Racecar") should return False (case-sensitive: R != r)
-# 
+#
 # Algorithm: Compare string with its reverse using slicing [::-1].
 # ============================================================================
 """
@@ -8742,19 +8704,19 @@ print("Is", input_string, "a palindrome?", is_palindrome(input_string))  # Outpu
 # The factorial of n (denoted as n!) is the product of all positive integers
 # from 1 to n. By definition, 0! = 1. Factorials grow very quickly and are
 # used in combinatorics, probability, and mathematical analysis.
-# 
+#
 # Key Requirements:
 # - Function must accept a non-negative integer n
 # - Function must return n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Special case: 0! = 1 (by mathematical definition)
 # - Should handle edge cases (0, 1)
-# 
+#
 # Example Input/Output:
 # - factorial(0) should return 1 (0! = 1 by definition)
 # - factorial(5) should return 120 (5 × 4 × 3 × 2 × 1 = 120)
 # - factorial(1) should return 1 (1! = 1)
 # - factorial(3) should return 6 (3 × 2 × 1 = 6)
-# 
+#
 # Algorithm: Can be implemented iteratively (loop) or recursively.
 # ============================================================================
 """
@@ -9036,7 +8998,7 @@ def factorial(n):
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(factorial(5))  # Output: 120 
+print(factorial(5))  # Output: 120
 
 """
 Problem 52:
@@ -9078,7 +9040,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     string2 = input("type string: ").lower()  # e.g., "Silent" → "silent"
-    
+
     # sorted() converts string to list of sorted characters
     # e.g., "listen" → ['e', 'i', 'l', 'n', 's', 't']
 #------------------------------------------------------------------------------
@@ -9101,7 +9063,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted2 = sorted(string2)
-    
+
     # Compare sorted lists - if equal, strings are anagrams
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -9183,7 +9145,7 @@ def is_anagram(str1, str2):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     str2 = str2.lower()  # "Silent" → "silent"
-    
+
     # sorted() returns a list of sorted characters
     # Compare sorted lists - if equal, strings contain same letters (anagrams)
 #------------------------------------------------------------------------------
@@ -9269,7 +9231,7 @@ def is_anagram(lst1, lst2):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_lst2 = sorted(lst2)  # "rewq" → ['e', 'q', 'r', 'w']
-    
+
     # Compare sorted lists
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -9299,7 +9261,7 @@ def is_anagram(lst1, lst2):
 # Returning: False  # Strings are not anagrams
 #------------------------------------------------------------------------------
     return False  # Strings are not anagrams
-           
+
 # TEST CASE:
 # "qwer" and "rewq" are anagrams (reversed order, same letters)
 #------------------------------------------------------------------------------
@@ -9339,18 +9301,18 @@ print(is_anagram(lst1, lst2))  # Output: True
 # treating words case-insensitively (so "This" and "this" are the same word).
 # This is a fundamental text analysis operation used in natural language
 # processing and data analysis.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a dictionary with words as keys and counts as values
 # - Words are separated by spaces
 # - Case-insensitive (treat "Hello" and "hello" as the same word)
-# 
+#
 # Example Input/Output:
 # - count_words("This is a test. This test is only a test.") should return
 #   {'this': 2, 'is': 2, 'a': 2, 'test.': 1, 'test': 1, 'only': 1}
 # - count_words("hello Hello HELLO") should return {'hello': 3}
-# 
+#
 # Algorithm: Convert to lowercase, split into words, count occurrences in dictionary.
 # ============================================================================
 """
@@ -9409,7 +9371,7 @@ def count_words(s):
 # Variable name: 'word_count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     word_count = {}  # Dictionary to store word frequencies
-    
+
     # Iterate through each word
 #==============================================================================
 # FOR LOOP: Iterating over 'words'
@@ -9499,20 +9461,20 @@ print(count_words(input_string))  # Output: {'this': 2, 'is': 2, 'a': 2, 'test.'
 # the sum of the two preceding ones, starting from 0 and 1. The sequence goes:
 # 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... This sequence appears in nature and
 # has many applications in mathematics and computer science.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer n
 # - Function must return a list of the first n Fibonacci numbers
 # - Sequence starts with 0 and 1
 # - Each subsequent number = sum of previous two numbers
 # - Handle edge cases: n <= 0, n == 1, n == 2
-# 
+#
 # Example Input/Output:
 # - fibonacci(0) should return [] (empty list)
 # - fibonacci(1) should return [0]
 # - fibonacci(2) should return [0, 1]
 # - fibonacci(10) should return [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
-# 
+#
 # Algorithm: Start with [0, 1], then generate next numbers by summing last two.
 # ============================================================================
 """
@@ -9665,17 +9627,17 @@ print(fibonacci(10))  # Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 # rectangle is calculated by multiplying its length by its width. The function
 # should prompt the user for both dimensions, perform the calculation, and
 # display the result. This is a basic geometric calculation exercise.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for length and width
 # - Must calculate area = length × width
 # - Should handle floating-point numbers (decimals)
 # - Should display the result
-# 
+#
 # Example Input/Output:
 # - If user enters length=5, width=3, area should be 15
 # - If user enters length=10.5, width=2.5, area should be 26.25
-# 
+#
 # Formula: Area = length × width
 # ============================================================================
 """
@@ -9730,7 +9692,7 @@ def area_rectangle():
 # Variable name: 'area' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     area = length * width  # e.g., 5.0 × 3.0 = 15.0
-    
+
     # Display the result
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -9741,7 +9703,7 @@ def area_rectangle():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(area)  # Prints the area
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'area_rectangle()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -9758,17 +9720,17 @@ area_rectangle()  # Call the function
 # is divisible by 2 (remainder 0 when divided by 2), while an odd number has
 # a remainder of 1 when divided by 2. The program should prompt the user for
 # a number and display whether it's even or odd.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must check if number is even (divisible by 2) or odd
 # - Should display appropriate message
-# 
+#
 # Example Input/Output:
 # - If user enters 4, output: "Number is even"
 # - If user enters 7, output: "Number is odd"
 # - If user enters 0, output: "Number is even"
-# 
+#
 # Algorithm: Use modulo operator (%) - if number % 2 == 0, it's even; else odd.
 # ============================================================================
 """
@@ -9804,7 +9766,7 @@ def even_odd():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     user = int(input("type number: "))  # e.g., 4 or 7
-    
+
     # Check if number is even (remainder when divided by 2 is 0)
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -9845,7 +9807,7 @@ def even_odd():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
         print("Number is odd")  # Display odd message
-   
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'even_odd()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -9862,17 +9824,17 @@ even_odd()  # Call the function
 # a given limit. The Fibonacci sequence starts with 0 and 1, and each
 # subsequent number is the sum of the previous two. The program should use
 # a while loop to generate numbers until they exceed the limit.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a limit
 # - Must use a while loop (as specified)
 # - Should print Fibonacci numbers up to (and including) the limit
 # - Sequence: 0, 1, 1, 2, 3, 5, 8, 13, ...
-# 
+#
 # Example Input/Output:
 # - If user enters limit=10, output: "0 1 1 2 3 5 8"
 # - If user enters limit=20, output: "0 1 1 2 3 5 8 13"
-# 
+#
 # Algorithm: Start with a=0, b=1. While a <= limit, print a, then update a=b, b=a+b.
 # ============================================================================
 """
@@ -9919,7 +9881,7 @@ def fibonacci_series():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     a, b = 0, 1  # a=0 (first), b=1 (second)
-    
+
     # Continue while current number (a) is <= limit
     while a <= limit:  # Loop until a exceeds limit
         # Print current Fibonacci number (end=' ' keeps on same line)
@@ -9941,7 +9903,7 @@ def fibonacci_series():
 # Variable name: 'a, b' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         a, b = b, a + b  # Tuple assignment: a=1,b=1 → a=1,b=2 → a=2,b=3, etc.
-        
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'fibonacci_series()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -9957,17 +9919,17 @@ fibonacci_series()  # Call the function
 # This problem requires finding the maximum (largest) of three numbers. The
 # program should prompt the user for three numbers, then determine and display
 # which one is the largest. This is a common comparison operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for three numbers
 # - Must find the maximum among the three
 # - Should display the maximum number
-# 
+#
 # Example Input/Output:
 # - If user enters "10 20 15", output: 20
 # - If user enters "5 3 8", output: 8
 # - If user enters "100 100 100", output: 100
-# 
+#
 # Algorithm: Compare numbers sequentially, track the largest found so far.
 # ============================================================================
 """
@@ -10010,7 +9972,7 @@ def max_number():
 # Variable name: 'int_number' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     int_number = []  # List to store converted integers
-    
+
     # Convert each string to integer
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -10035,7 +9997,7 @@ def max_number():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_number.append(int(number))  # ["10", "20", "15"] → [10, 20, 15]
-    
+
     # Initialize max_num with first number
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'max_num'
@@ -10050,7 +10012,7 @@ def max_number():
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     max_num = int_number[0]  # Assume first number is maximum (10)
-    
+
     # Compare each number with current maximum
 #==============================================================================
 # FOR LOOP: Iterating over 'int_number'
@@ -10095,7 +10057,7 @@ def max_number():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(max_num)  # Print the maximum number (20)
-           
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'max_number()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -10111,17 +10073,17 @@ max_number()  # Call the function
 # This problem requires reversing a string. The program should take a string
 # and return a new string with all characters in reverse order. For example,
 # "hello" becomes "olleh". This is a common string manipulation operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must reverse the string (last character becomes first, etc.)
 # - Should display the reversed string
-# 
+#
 # Example Input/Output:
 # - If user enters "hello", output: "olleh"
 # - If user enters "Jonathan", output: "nahtanoJ"
 # - If user enters "abc", output: "cba"
-# 
+#
 # Algorithm: Use string slicing [::-1] to create reversed copy.
 # ============================================================================
 """
@@ -10164,7 +10126,7 @@ def reverse_string():
 # Variable name: 'user' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     user = user[::-1]  # "hello" → "olleh"
-    
+
     # Display the reversed string
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -10175,7 +10137,7 @@ def reverse_string():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(user)  # Prints: olleh
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'reverse_string()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -10213,7 +10175,7 @@ def reverse_string(string):
 # Returning: string[::-1]  # Returns reversed string
 #------------------------------------------------------------------------------
     return string[::-1]  # Returns reversed string
-            
+
 # TEST CASE:
 # This test reverses "Jonathan" to "nahtanoJ"
 #------------------------------------------------------------------------------
@@ -10242,18 +10204,18 @@ print(reverse_string(lst))  # Output: nahtanoJ
 # reads the same forwards and backwards (e.g., "racecar", "level", "madam").
 # The program should handle case-insensitivity and ignore spaces, then check
 # if the normalized string equals its reverse.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Should handle case-insensitivity (treat "Racecar" same as "racecar")
 # - Should ignore spaces (treat "a man a plan" same as "amanaplan")
 # - Must return True if palindrome, False otherwise
-# 
+#
 # Example Input/Output:
 # - If user enters "racecar", output: True
 # - If user enters "hello", output: False
 # - If user enters "A man a plan", output: True (after normalization)
-# 
+#
 # Algorithm: Normalize string (lowercase, remove spaces), compare with reverse.
 # ============================================================================
 """
@@ -10289,7 +10251,7 @@ def is_palindrome():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     user = input("type word: ").lower().replace(" ", "")  # "Race Car" → "racecar"
-    
+
     # Compare normalized string with its reverse
     # If equal, it's a palindrome
 #------------------------------------------------------------------------------
@@ -10299,7 +10261,7 @@ def is_palindrome():
 # Returning: user == user[::-1]  # "racecar" == "racecar" → True
 #------------------------------------------------------------------------------
     return user == user[::-1]  # "racecar" == "racecar" → True
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -10316,18 +10278,18 @@ print(is_palindrome())  # Call function and print result
 # the letters a, e, i, o, u (and sometimes y, but typically just aeiou). The
 # program should iterate through the string and count how many characters are
 # vowels. This is useful for text analysis and language processing.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must count vowels (a, e, i, o, u)
 # - Should handle case-insensitivity (convert to lowercase)
 # - Should display the count
-# 
+#
 # Example Input/Output:
 # - If user enters "hello", output: 2 (e, o)
 # - If user enters "Jonathan", output: 3 (o, a, a)
 # - If user enters "xyz", output: 0 (no vowels)
-# 
+#
 # Algorithm: Convert to lowercase, iterate through characters, count vowels.
 # ============================================================================
 """
@@ -10383,7 +10345,7 @@ def count_vowels():
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize vowel counter
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -10428,7 +10390,7 @@ def count_vowels():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(count)  # Display the total count
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'count_vowels()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -10445,17 +10407,17 @@ count_vowels()  # Call the function
 # of n (n!) is the product of all positive integers from 1 to n. By definition,
 # 0! = 1. The program should prompt the user for a number and calculate its
 # factorial. This is a fundamental mathematical operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must calculate n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Should display the result
-# 
+#
 # Example Input/Output:
 # - If user enters 5, output: 120 (5 × 4 × 3 × 2 × 1 = 120)
 # - If user enters 3, output: 6 (3 × 2 × 1 = 6)
 # - If user enters 0, output: 1 (0! = 1 by definition)
-# 
+#
 # Algorithm: Initialize result=1, multiply by each number from 1 to n.
 # ============================================================================
 """
@@ -10508,7 +10470,7 @@ def factorial():
 # Variable name: 'result *' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         result *= i  # Multiply: 1 × 2 × 3 × 4 × 5 = 120
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -10528,7 +10490,7 @@ def factorial():
 # Arguments (if any) go inside the parentheses, separated by commas.
 #------------------------------------------------------------------------------
 factorial()  # Call the function
- 
+
 # CORRECT SOLUTION EXPLANATION:
 # This solution properly prompts the user for input, then calculates the
 # factorial of that number. It uses a loop to multiply all numbers from 1
@@ -10567,7 +10529,7 @@ def factorial():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     result = 1  # Initialize result to 1 (multiplicative identity)
-    
+
     # Multiply all numbers from 1 to number
 #==============================================================================
 # FOR LOOP: Iterating over 'range(1, number + 1)'
@@ -10589,7 +10551,7 @@ def factorial():
 # Variable name: 'result *' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         result *= i  # Multiply: 1 × 2 × 3 × 4 × 5 = 120
-        
+
     # Display the result with a descriptive message
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -10618,16 +10580,16 @@ factorial()  # Call the function
 # solution appears to sum a list of numbers provided by the user, not the
 # sum from 1 to n. The problem statement suggests summing 1 to n, but the
 # implementation sums user-provided numbers.
-# 
+#
 # Key Requirements:
 # - Program should calculate sum from 1 to n (or sum user-provided numbers)
 # - Must prompt user for input
 # - Should display the total sum
-# 
+#
 # Example Input/Output:
 # - If problem means sum 1 to n: user enters 5, output: 15 (1+2+3+4+5)
 # - If problem means sum list: user enters "1 2 3 4 5", output: 15
-# 
+#
 # Note: The current implementation sums a list of numbers, not 1 to n.
 # ============================================================================
 """
@@ -10671,7 +10633,7 @@ def sum_of_all_numbers():
 # Variable name: 'int_user' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     int_user = []  # List to store converted integers
-    
+
     # Convert each string to integer
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -10696,7 +10658,7 @@ def sum_of_all_numbers():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_user.append(int(number))  # ["1", "2", ...] → [1, 2, 3, 4, 5]
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'count'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -10704,7 +10666,7 @@ def sum_of_all_numbers():
 # Variable name: 'count' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     count = 0  # Initialize sum accumulator
-    
+
     # Sum all numbers in the list
 #==============================================================================
 # FOR LOOP: Iterating over 'int_user'
@@ -10750,17 +10712,17 @@ sum_of_all_numbers()  # Call the function
 # This problem requires finding the largest (maximum) element in a list of
 # numbers. The program should prompt the user for a list of numbers, then
 # determine and return the maximum value. This is a fundamental list operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must find the largest number in the list
 # - Should display the largest number
-# 
+#
 # Example Input/Output:
 # - If user enters "2 56 75 4566 3", output: 4566
 # - If user enters "10 20 15", output: 20
 # - If user enters "5", output: 5
-# 
+#
 # Algorithm: Can use sorted() and take last element, or max(), or manual loop.
 # ============================================================================
 """
@@ -10805,7 +10767,7 @@ def find_largest():
 # Variable name: 'int_number' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     int_number = []  # List to store converted integers
-    
+
     # Convert each string to integer
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -10830,7 +10792,7 @@ def find_largest():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_number.append(int(number))  # [2, 56, 75, 4566, 3]
-    
+
     # Sort in ascending order
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sort'
@@ -10850,7 +10812,7 @@ def find_largest():
 # Variable name: 'largest' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     largest = sort[-1]  # 4566
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -10931,7 +10893,7 @@ def find_largest():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_number.append(int(number))
-    
+
     # Sort in descending order
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sort'
@@ -10954,7 +10916,7 @@ def find_largest():
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     largest = sort[0]  # 4566
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -10964,7 +10926,7 @@ def find_largest():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(largest)  # Display the largest number
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'find_largest()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -11003,7 +10965,7 @@ def largest_element(numbers):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     return max(numbers)  # Returns the largest number
-                
+
 # TEST CASE:
 # This test finds the largest in [2, 56, 75, 4566, 3]
 #------------------------------------------------------------------------------
@@ -11056,7 +11018,7 @@ def largest_element(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     largest = numbers[0]  # Assume first is largest
-    
+
     # Compare each number with current largest
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
@@ -11099,7 +11061,7 @@ def largest_element(numbers):
 # Returning: largest  # Return the largest number
 #------------------------------------------------------------------------------
     return largest  # Return the largest number
-                
+
 # TEST CASE:
 # Same test case as above, demonstrating manual approach
 #------------------------------------------------------------------------------
@@ -11128,17 +11090,17 @@ print(largest_element(numbers))  # Output: 4566
 # numbers). "Largest" here means the longest string (most characters). The
 # program should find the string with the maximum length. This is useful for
 # text processing and finding the longest word in a list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings
 # - Must find the string with maximum length
 # - Should not use numeric comparisons (compare by length instead)
-# 
+#
 # Example Input/Output:
 # - largest_element(["tree", "cliff", "mountain"]) should return "mountain" (8 chars)
 # - largest_element(["house", "counter", "if"]) should return "counter" (7 chars)
 # - largest_element(["a", "bb", "ccc"]) should return "ccc" (3 chars)
-# 
+#
 # Algorithm: Compare strings by their length, track the longest one.
 # ============================================================================
 """
@@ -11176,7 +11138,7 @@ def main(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     return max(lst, key=len)  # Returns the longest string
-    
+
 # TEST CASE:
 # This test finds the longest string in the list
 # "mountain" and "grassy" both have 8 characters, but "mountain" appears first
@@ -11236,7 +11198,7 @@ def largest_elememt(lst):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
     largest = ""  # Track the longest string itself
-    
+
     # Iterate through each word
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
@@ -11291,7 +11253,7 @@ def largest_elememt(lst):
 # Returning: largest  # Return the longest string
 #------------------------------------------------------------------------------
     return largest  # Return the longest string
-            
+
 # TEST CASE:
 # This test finds the longest string manually
 # "house"=5, "counter"=7, "if"=2 → "counter" is longest
@@ -11345,7 +11307,7 @@ def largest_elememt(lst):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     lst = sorted(lst, key=len)  # ["if", "house", "counter"]
-     
+
     # Return the last element (longest)
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -11354,7 +11316,7 @@ def largest_elememt(lst):
 # Returning: lst[-1]  # Returns "counter"
 #------------------------------------------------------------------------------
     return lst[-1]  # Returns "counter"
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating sorted approach
 #------------------------------------------------------------------------------
@@ -11376,7 +11338,7 @@ lst = ["house", "counter", "if"]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(largest_elememt(lst))  # Output: counter
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires removing duplicate elements from a list while
@@ -11384,16 +11346,16 @@ print(largest_elememt(lst))  # Output: counter
 # and return a new list containing only unique elements. However, the current
 # solution has a bug - it returns early when it finds the first duplicate,
 # which doesn't fully remove all duplicates from the list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must return a list with duplicates removed
 # - Original order of first occurrence should be maintained
-# 
+#
 # Example Input/Output:
 # - remove_duplicates(["tree", "kiss", "tree"]) should return ["tree", "kiss"]
 # - remove_duplicates([1, 2, 2, 3, 1]) should return [1, 2, 3]
-# 
+#
 # Note: The current solution has a bug - it returns early on first duplicate.
 # ============================================================================
 """
@@ -11430,7 +11392,7 @@ def remove_duplicates(elements):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     duplicates = []  # List to store unique elements (misleading variable name)
-    
+
     # Iterate through each element
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
@@ -11488,7 +11450,7 @@ def remove_duplicates(elements):
 # Returning: None  # Returns None if no duplicates found
 #------------------------------------------------------------------------------
     return None  # Returns None if no duplicates found
-            
+
 # TEST CASE:
 # This test attempts to remove duplicates from ["tree", "kiss", "tree"]
 # Expected: ["tree", "kiss"]
@@ -11518,20 +11480,20 @@ print(remove_duplicates(lst))  # Output: ['tree'] (INCORRECT!)
 # This problem requires determining if a year is a leap year. A leap year
 # occurs every 4 years, except for years divisible by 100, unless they're
 # also divisible by 400. This is the Gregorian calendar rule for leap years.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a year
 # - Must check leap year rules:
 #   1. Divisible by 4 AND not divisible by 100, OR
 #   2. Divisible by 400
 # - Should return True if leap year, False otherwise
-# 
+#
 # Example Input/Output:
 # - 2000 is a leap year (divisible by 400)
 # - 1900 is NOT a leap year (divisible by 100 but not 400)
 # - 2004 is a leap year (divisible by 4, not by 100)
 # - 2001 is NOT a leap year (not divisible by 4)
-# 
+#
 # Algorithm: Check (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
 # ============================================================================
 """
@@ -11567,7 +11529,7 @@ def is_leap_year():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     year = int(input("Enter a year: "))  # e.g., 2000
-    
+
     # Check leap year conditions:
     # 1. Divisible by 4 AND not divisible by 100, OR
     # 2. Divisible by 400
@@ -11628,18 +11590,18 @@ print(is_leap_year())  # Prompts user and prints result
 # Python's built-in len() function. The program should manually count
 # characters by iterating through the string and incrementing a counter.
 # This demonstrates how len() works internally.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must calculate length without using len()
 # - Should count each character in the string
 # - Should display the count
-# 
+#
 # Example Input/Output:
 # - If user enters "hello", output: 5
 # - If user enters "Jonathan", output: 8
 # - If user enters "", output: 0
-# 
+#
 # Note: The current solution removes spaces first, which may not match
 # the problem requirement (should count all characters including spaces).
 # ============================================================================
@@ -11716,7 +11678,7 @@ def length_string():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(count)  # Display the total count
-             
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'length_string()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -11734,17 +11696,17 @@ length_string()  # Call the function
 # which is technically a built-in operation. A truly manual approach would
 # compare characters from both ends without using slicing. A palindrome reads
 # the same forwards and backwards (e.g., "racecar", "level").
-# 
+#
 # Key Requirements:
 # - Program must check if string is a palindrome
 # - Should not use built-in functions (ideally)
 # - Should return True if palindrome, False otherwise
-# 
+#
 # Example Input/Output:
 # - palindrome("racecar") should return True
 # - palindrome("juju") should return False (juju != ujuj)
 # - palindrome("level") should return True
-# 
+#
 # Note: The current solution uses [::-1] which is a built-in operation.
 # A truly manual approach would compare characters from start and end.
 # ============================================================================
@@ -11802,7 +11764,7 @@ def palindrome(string):
 # Returning: False  # Return False if not palindrome
 #------------------------------------------------------------------------------
     return False  # Return False if not palindrome
-       
+
 # TEST CASE:
 # This test checks if "juju" is a palindrome
 # "juju" == "ujuj"? No → False
@@ -11833,16 +11795,16 @@ print(palindrome(word))  # Output: False
 # times each word appears. However, the current solution only counts the total
 # number of words, not the occurrences of each individual word. This doesn't
 # match the problem requirement.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a sentence
 # - Must count occurrences of EACH word (not total word count)
 # - Should return word frequencies (e.g., {"Jonathan": 1, "is": 1, "the": 1, "best": 1})
-# 
+#
 # Example Input/Output:
 # - count_each_word("Jonathan is the best") should return {"Jonathan": 1, "is": 1, "the": 1, "best": 1}
 # - count_each_word("hello hello world") should return {"hello": 2, "world": 1}
-# 
+#
 # Note: The current solution only counts total words, not per-word occurrences.
 # ============================================================================
 """
@@ -11893,7 +11855,7 @@ def count_each_word(sentence):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     split_word = sentence.split()  # "Jonathan is the best" → ["Jonathan", "is", "the", "best"]
-    
+
     # Count total number of words
 #==============================================================================
 # FOR LOOP: Iterating over 'split_word'
@@ -11921,7 +11883,7 @@ def count_each_word(sentence):
 # Returning: count  # Returns 4 (total words, not per-word occurrences)
 #------------------------------------------------------------------------------
     return count  # Returns 4 (total words, not per-word occurrences)
-       
+
 # TEST CASE:
 # This test counts words in "Jonathan is the best"
 # Expected: Dictionary with word counts
@@ -11952,18 +11914,18 @@ print(count_each_word(lst))  # Output: 4 (WRONG - should be a dictionary!)
 # function should sort the list (or remove duplicates first), then return
 # the second largest value. This is useful for finding runner-up values and
 # statistical analysis.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must find the second largest number
 # - Should handle duplicates (typically, duplicates are considered)
 # - Should handle edge cases (lists with < 2 elements)
-# 
+#
 # Example Input/Output:
 # - second_largest([56, 700, 1, 57, 78, 787, 5, 88]) should return 700
 # - second_largest([1, 2, 3, 4, 5]) should return 4
 # - second_largest([5, 5, 5]) should return 5 (if duplicates allowed) or handle appropriately
-# 
+#
 # Algorithm: Sort list, return second element (or handle duplicates first).
 # ============================================================================
 """
@@ -12024,7 +11986,7 @@ def sec_lar():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
     unique_numbers.sort()  # Sorts the unique numbers
-    
+
     # Return second largest (second from end)
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -12076,7 +12038,7 @@ def second_largest_number(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_numbers = sorted(numbers, reverse=True)  # [787, 700, 88, 78, 57, 56, 5, 1]
-    
+
     # Check if list has at least 2 elements
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12117,7 +12079,7 @@ def second_largest_number(numbers):
 # Returning: None  # Return None if list too short
 #------------------------------------------------------------------------------
         return None  # Return None if list too short
-        
+
 # TEST CASE:
 # This test finds second largest in [56, 700, 1, 57, 78, 787, 5, 88]
 # Sorted descending: [787, 700, 88, 78, 57, 56, 5, 1]
@@ -12170,7 +12132,7 @@ def second_largest_number(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_numbers = sorted(numbers, reverse=True)  # Sort descending
-    
+
     # BUG: Loop always returns on first iteration - unnecessary!
 #==============================================================================
 # FOR LOOP: Iterating over 'sorted_numbers'
@@ -12201,7 +12163,7 @@ def second_largest_number(numbers):
 # Returning: None  # Unreachable if list is non-empty
 #------------------------------------------------------------------------------
     return None  # Unreachable if list is non-empty
-        
+
 # TEST CASE:
 # Same test case, demonstrating inefficient but functional approach
 #------------------------------------------------------------------------------
@@ -12253,7 +12215,7 @@ def second_largest_number(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_numbers = sorted(numbers)  # [1, 5, 56, 57, 78, 88, 700, 787]
-    
+
     # Unnecessary loop (always returns immediately)
 #==============================================================================
 # FOR LOOP: Iterating over 'sorted_numbers'
@@ -12282,7 +12244,7 @@ def second_largest_number(numbers):
 # Returning: None  # Unreachable
 #------------------------------------------------------------------------------
     return None  # Unreachable
-        
+
 # TEST CASE:
 # Same test case, demonstrating ascending sort approach
 #------------------------------------------------------------------------------
@@ -12313,19 +12275,19 @@ print(second_largest_number(arg))  # Output: 700
 # and domain must have at least one dot separating the domain name from the
 # extension (TLD). The program should use validation rules to check if the
 # email format is correct.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for an email address
 # - Must validate email format (local@domain.extension)
 # - Should check for required components (@ symbol, domain, TLD)
 # - Should return True if valid, False otherwise
-# 
+#
 # Example Input/Output:
 # - "user@example.com" → True (valid email)
 # - "invalid.email" → False (missing @)
 # - "@example.com" → False (missing local part)
 # - "user@.com" → False (invalid domain)
-# 
+#
 # Algorithm: Use regex pattern matching or manual validation of components.
 # ============================================================================
 """
@@ -12356,10 +12318,10 @@ def is_valid_email(email):
 # To use it, call the function name followed by parentheses with any required arguments.
     """
     Checks if the given email address is valid.
-    
+
     Args:
         email (str): The email address to be validated.
-    
+
     Returns:
         bool: True if the email address is valid, False otherwise.
     """
@@ -12377,7 +12339,7 @@ def is_valid_email(email):
 # Variable name: 'pattern' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    
+
     # Check if the email matches the pattern
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12439,7 +12401,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     email = input("Enter an email address: ")  # e.g., "user@example.com"
-    
+
     # Check if the email is valid
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12522,7 +12484,7 @@ def is_valid_email():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     email = input("Enter an email address: ")
-    
+
     # Check for basic requirements: @ and . must be present
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12545,7 +12507,7 @@ def is_valid_email():
 # Returning: False  # Missing required symbols
 #------------------------------------------------------------------------------
         return False  # Missing required symbols
-    
+
     # Split email into local and domain parts
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'local, domain'
@@ -12559,7 +12521,7 @@ def is_valid_email():
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     local, domain = email.split('@', 1)  # Split at first @ only
-    
+
     # Validate local part (must not be empty)
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12582,7 +12544,7 @@ def is_valid_email():
 # Returning: False  # Local part is empty
 #------------------------------------------------------------------------------
         return False  # Local part is empty
-    
+
     # Validate domain part
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12609,7 +12571,7 @@ def is_valid_email():
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
         return False  # Domain must have dot, not start/end with dot
-    
+
     # Split domain into parts and check each part
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'domain_parts'
@@ -12646,7 +12608,7 @@ def is_valid_email():
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
         return False  # Empty domain part found
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -12671,18 +12633,18 @@ print(is_valid_email())  # Call function and print result
 # The factorial of n (n!) is the product of all positive integers from 1 to n.
 # By definition, 0! = 1 and 1! = 1. The recursive approach breaks down the
 # problem: n! = n × (n-1)!, with base cases for n=0 and n=1.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must use recursion (function calls itself)
 # - Should calculate n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Should handle edge cases (0, 1, negative numbers)
-# 
+#
 # Example Input/Output:
 # - factorial(5) = 5 × 4 × 3 × 2 × 1 = 120
 # - factorial(3) = 3 × 2 × 1 = 6
 # - factorial(0) = 1 (base case)
-# 
+#
 # Algorithm: Base case: if n <= 1, return 1. Otherwise: return n × factorial(n-1)
 # ============================================================================
 """
@@ -12780,7 +12742,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
         number = int(input("Enter a number: "))  # e.g., 5
-        
+
         # Check for negative numbers
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -12853,19 +12815,19 @@ main()  # Call the main function
 # word or phrase, using all the original letters exactly once. For example,
 # "listen" and "silent" are anagrams. The program should ignore case and
 # spaces when comparing.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two strings
 # - Must check if strings are anagrams (same letters, different order)
 # - Should ignore case (treat 'A' same as 'a')
 # - Should ignore spaces
 # - Should display whether strings are anagrams
-# 
+#
 # Example Input/Output:
 # - "listen" and "silent" → anagrams
 # - "hello" and "world" → not anagrams
 # - "The Morse Code" and "Here come dots" → anagrams (after normalization)
-# 
+#
 # Algorithm: Normalize strings (lowercase, remove spaces), sort both, compare.
 # ============================================================================
 """
@@ -12912,7 +12874,7 @@ def are_anagrams():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     str2 = input("Enter the second string: ")  # e.g., "silent"
-    
+
     # Normalize strings: remove spaces and convert to lowercase
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'str1'
@@ -12934,7 +12896,7 @@ def are_anagrams():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     str2 = str2.replace(" ", "").lower()  # "Silent" → "silent"
-    
+
     # Sort characters and compare
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -13012,7 +12974,7 @@ def pal():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     user = input("type: ")  # Get string from user
-  
+
     # Check if string equals its reverse
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -13042,7 +13004,7 @@ def pal():
 # Returning: False  # Not palindrome
 #------------------------------------------------------------------------------
     return False  # Not palindrome
- 
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -13059,18 +13021,18 @@ print(pal())  # Call function and print result
 # a positive integer greater than 1 that has no positive divisors other than
 # 1 and itself. The program should efficiently check for primality using an
 # optimized algorithm that avoids checking all divisors.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must check if number is prime (only divisible by 1 and itself)
 # - Should handle edge cases (1, 2, 3, even numbers, etc.)
 # - Should display whether number is prime
-# 
+#
 # Example Input/Output:
 # - 2, 3, 5, 7, 11, 13 → prime numbers
 # - 4, 6, 8, 9, 10 → not prime (divisible by numbers other than 1 and itself)
 # - 1 → not prime (by definition)
-# 
+#
 # Algorithm: Use optimized trial division (check up to sqrt(n), skip even numbers).
 # ============================================================================
 """
@@ -13121,7 +13083,7 @@ def is_prime(n):
 # Returning: False  # 1 and negative numbers are not prime
 #------------------------------------------------------------------------------
         return False  # 1 and negative numbers are not prime
-    
+
     # Edge case: 2 and 3 are prime
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -13144,7 +13106,7 @@ def is_prime(n):
 # Returning: True  # 2 and 3 are prime numbers
 #------------------------------------------------------------------------------
         return True  # 2 and 3 are prime numbers
-    
+
     # Quick check: if divisible by 2 or 3, not prime
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -13167,7 +13129,7 @@ def is_prime(n):
 # Returning: False  # Even numbers (except 2) and multiples of 3 are not prime
 #------------------------------------------------------------------------------
         return False  # Even numbers (except 2) and multiples of 3 are not prime
-    
+
     # Check divisors using 6k±1 pattern (all primes > 3 are of form 6k±1)
     # Only need to check up to sqrt(n)
 #------------------------------------------------------------------------------
@@ -13243,7 +13205,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
         number = int(input("Enter a number: "))  # e.g., 17
-        
+
         # Check if number is prime
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -13314,18 +13276,18 @@ main()  # Call the main function
 # The program should identify all elements that are present in both input lists,
 # regardless of their positions. Duplicates should be handled appropriately
 # (typically, each common element appears once in the result).
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two lists
 # - Must find elements present in both lists
 # - Should handle duplicates appropriately
 # - Should display the common elements
-# 
+#
 # Example Input/Output:
 # - common_elements(["tree", "house", "car"], ["house", "tree", "sky"]) → ["tree", "house"]
 # - common_elements([1, 2, 3], [4, 5, 6]) → [] (no common elements)
 # - common_elements([1, 2, 2, 3], [2, 2, 4]) → [2] (duplicates handled)
-# 
+#
 # Algorithm: Can use nested loops, set intersection, or list comprehension.
 # ============================================================================
 """
@@ -13360,7 +13322,7 @@ def common_elements(lst1, lst2):
 # Variable name: 'result' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     result = []  # List to store common elements
-    
+
     # Compare each element in first list with each element in second list
 #==============================================================================
 # FOR LOOP: Iterating over 'lst1'
@@ -13419,7 +13381,7 @@ def common_elements(lst1, lst2):
 # Returning: result  # Return list of common elements
 #------------------------------------------------------------------------------
     return result  # Return list of common elements
-    
+
 # TEST CASE:
 # This test finds common elements between two lists
 # Common: "tree" and "house"
@@ -13512,7 +13474,7 @@ def common_elements(lst1, lst2):
 # Returning: elements_commmon  # Return set of common elements
 #------------------------------------------------------------------------------
     return elements_commmon  # Return set of common elements
-        
+
 # TEST CASE:
 # Same approach with different test data
 #------------------------------------------------------------------------------
@@ -13544,7 +13506,7 @@ arg2 = ["grass", "flower", "river"]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(common_elements(arg1, arg2))  # Output: {'grass', 'flower'}
-    
+
 # INTERACTIVE SOLUTION EXPLANATION:
 # This solution prompts the user for input, converts to sets, and finds
 # intersection. It provides user-friendly output messages.
@@ -13582,7 +13544,7 @@ def find_common_elements():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     list1 = input1.split()  # Split into list of strings
-    
+
     # Get second list from user
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'input2'
@@ -13604,7 +13566,7 @@ def find_common_elements():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     list2 = input2.split()  # Split into list of strings
-    
+
     # Convert to sets and find intersection
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'set1'
@@ -13636,7 +13598,7 @@ def find_common_elements():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     common_elements = set1.intersection(set2)  # Find common elements
-    
+
     # Display results
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -13694,18 +13656,18 @@ find_common_elements()  # Call the function
 # The function should iterate through each character in the string and count
 # how many are uppercase letters (A-Z). This is useful for text analysis and
 # validation tasks.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must count uppercase letters (A-Z)
 # - Should return the count as an integer
 # - Should handle mixed case strings
-# 
+#
 # Example Input/Output:
 # - count_uppercase("Hello World") → 2 (H, W)
 # - count_uppercase("HELLO") → 5 (all uppercase)
 # - count_uppercase("hello") → 0 (no uppercase)
-# 
+#
 # Algorithm: Iterate through characters, check if uppercase, increment counter.
 # ============================================================================
 """
@@ -13754,7 +13716,7 @@ def uppercase(string):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     string = string.replace(" ", "")  # "Hello World" → "HelloWorld"
-    
+
     # Iterate through each character
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
@@ -13797,7 +13759,7 @@ def uppercase(string):
 # Returning: count  # Return total count
 #------------------------------------------------------------------------------
     return count  # Return total count
-        
+
 # TEST CASE:
 # This test counts uppercase letters in "whAtT healin Gmanbe LLike"
 # Expected: 4 (A, T, G, L)
@@ -13830,17 +13792,17 @@ print(uppercase(sentence))  # Output: count of uppercase letters
 # Binary numbers use only 0s and 1s. The program should take a decimal number
 # and convert it to its binary representation. For example, 5 in decimal is
 # 101 in binary (1×2² + 0×2¹ + 1×2⁰ = 4 + 0 + 1 = 5).
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a decimal number
 # - Must convert decimal to binary representation
 # - Should display the binary number
-# 
+#
 # Example Input/Output:
 # - decimal_to_binary(5) → "101"
 # - decimal_to_binary(10) → "1010"
 # - decimal_to_binary(0) → "0"
-# 
+#
 # Algorithm: Use built-in bin() function or manual division-by-2 method.
 # ============================================================================
 """
@@ -13876,7 +13838,7 @@ def decimal_to_binary():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     decimal_number = int(input("Enter a decimal number: "))  # e.g., 5
-    
+
     # Convert to binary using built-in function
     # bin() returns string like "0b101", so slice from index 2 to remove "0b"
 #------------------------------------------------------------------------------
@@ -13889,7 +13851,7 @@ def decimal_to_binary():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     binary_number = bin(decimal_number)[2:]  # "0b101"[2:] → "101"
-    
+
     # Display the result
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -13917,17 +13879,17 @@ decimal_to_binary()  # Call the function
 # smallest to largest). The program should prompt the user for a list of
 # numbers, convert them to integers, sort them, and display the sorted result.
 # This is a fundamental list operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must sort numbers in ascending order (smallest to largest)
 # - Should convert string input to integers
 # - Should display the sorted list
-# 
+#
 # Example Input/Output:
 # - sort([56, 23, 677, 6, 1]) → [1, 6, 23, 56, 677]
 # - sort([10, 5, 8, 2]) → [2, 5, 8, 10]
-# 
+#
 # Algorithm: Use Python's sorted() function or list.sort() method.
 # ============================================================================
 """
@@ -13982,7 +13944,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     user = user.split()  # Split into list: ["56", "23", "677", "6", "1"]
-    
+
     # Convert each string to integer
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
@@ -14014,7 +13976,7 @@ def main():
 # Returning: sorted(result)  # Return sorted list: [1, 6, 23, 56, 677]
 #------------------------------------------------------------------------------
     return sorted(result)  # Return sorted list: [1, 6, 23, 56, 677]
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'main()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -14055,7 +14017,7 @@ def ascending_order_numbers(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort_numbers = sorted(numbers)  # [56, 23, 677, 6, 1] → [1, 6, 23, 56, 677]
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -14063,7 +14025,7 @@ def ascending_order_numbers(numbers):
 # Returning: sort_numbers  # Return sorted list
 #------------------------------------------------------------------------------
     return sort_numbers  # Return sorted list
-    
+
 # TEST CASE:
 # This test sorts the list [56, 23, 677, 6, 1]
 #------------------------------------------------------------------------------
@@ -14092,16 +14054,16 @@ print(ascending_order_numbers(numbers))  # Output: [1, 6, 23, 56, 677]
 # The program should prompt the user for a lower limit and an upper limit,
 # then generate and display a random number between those limits (inclusive).
 # This is useful for games, simulations, and random sampling.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for lower and upper limits
 # - Must generate a random number within the range [lower, upper] (inclusive)
 # - Should display the generated random number
-# 
+#
 # Example Input/Output:
 # - If user enters lower=1, upper=10, output: random number between 1 and 10
 # - If user enters lower=100, upper=200, output: random number between 100 and 200
-# 
+#
 # Algorithm: Use random.randint(lower, upper) which includes both endpoints.
 # ============================================================================
 """
@@ -14151,7 +14113,7 @@ def generate_random_number():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     upper_limit = int(input("Enter the upper limit: "))  # e.g., 10
-    
+
     # Generate random integer between lower and upper (inclusive)
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'random_number'
@@ -14163,7 +14125,7 @@ def generate_random_number():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     random_number = random.randint(lower_limit, upper_limit)  # e.g., 7
-    
+
     # Display the result
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -14184,25 +14146,25 @@ def generate_random_number():
 # Arguments (if any) go inside the parentheses, separated by commas.
 #------------------------------------------------------------------------------
 generate_random_number()  # Call the function
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires calculating the square root of a number. The square
 # root of a number n is a value that, when multiplied by itself, equals n.
 # For example, the square root of 9 is 3 (3 × 3 = 9). The program should
 # prompt the user for a number and calculate its square root.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must calculate the square root
 # - Should handle floating-point numbers (decimals)
 # - Should display the result
-# 
+#
 # Example Input/Output:
 # - square_root(9) → 3.0
 # - square_root(16) → 4.0
 # - square_root(2) → 1.414... (approximate)
-# 
+#
 # Algorithm: Use exponentiation (num ** 0.5) or math.sqrt() function.
 # ============================================================================
 """
@@ -14248,7 +14210,7 @@ def square_root():
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
     return num ** 0.5  # 9.0 ** 0.5 = 3.0
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -14296,7 +14258,7 @@ def square_root():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(num ** 0.5)  # Prints: 4.0
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'square_root()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -14313,17 +14275,17 @@ square_root()  # Call the function
 # is calculated using the formula: Area = π × r², where π (pi) is approximately
 # 3.14159 and r is the radius. The program should prompt the user for the radius
 # and calculate the area.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for the radius
 # - Must calculate area using formula: π × r²
 # - Should handle floating-point numbers (decimals)
 # - Should display the area
-# 
+#
 # Example Input/Output:
 # - If user enters radius=5, area ≈ 78.54 (π × 5² = 25π ≈ 78.54)
 # - If user enters radius=10, area ≈ 314.16 (π × 10² = 100π ≈ 314.16)
-# 
+#
 # Formula: Area = π × radius²
 # ============================================================================
 """
@@ -14377,7 +14339,7 @@ def circle():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(area)  # Display the area
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'circle()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -14557,18 +14519,18 @@ if __name__ == "__main__":
 # uses string slicing. A true recursive approach would compare the first and
 # last characters, then recursively check the substring. A palindrome reads
 # the same forwards and backwards (e.g., "racecar", "level").
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Should check if string is a palindrome (ideally using recursion)
 # - Should handle case-insensitivity and spaces
 # - Should display whether string is a palindrome
-# 
+#
 # Example Input/Output:
 # - "racecar" → palindrome
 # - "hello" → not palindrome
 # - "A man a plan" → palindrome (after normalization)
-# 
+#
 # Note: Current solution uses slicing, not true recursion.
 # ============================================================================
 """
@@ -14640,7 +14602,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     user_input = input("Enter a string: ")  # e.g., "racecar"
-    
+
     # Check if palindrome
 #==============================================================================
 # IF STATEMENT: Conditional execution
@@ -14790,7 +14752,7 @@ def is_pangram(sentence):
 # Returning: "is pangram"  # All letters found
 #------------------------------------------------------------------------------
     return "is pangram"  # All letters found
-   
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sentence'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -14887,7 +14849,7 @@ def pangram(sentence):
 # Returning: "pangram"
 #------------------------------------------------------------------------------
     return "pangram"
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sentence'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -14978,7 +14940,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     num2 = int(input("Enter the second number: "))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'result'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -15118,7 +15080,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     num2 = int(input("Enter the second number: "))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'result_lcm'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -15129,7 +15091,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     result_lcm = lcm(num1, num2)
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -15202,7 +15164,7 @@ def reverse_lst():
 # The function executes first, and its return value is stored in the variable.
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
-    split_lst = user.split()    
+    split_lst = user.split()
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'reversed_lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -15213,7 +15175,7 @@ def reverse_lst():
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     reversed_lst = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'split_lst['
 #------------------------------------------------------------------------------
@@ -15300,7 +15262,7 @@ def reverse_list():
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     reversed_elements = []
-    
+
     # range(start, stop, step): start from last index, go to -1 (exclusive), step -1
 #==============================================================================
 # FOR LOOP: Iterating over 'range(len(elements) - 1, -1, -1)'
@@ -15390,7 +15352,7 @@ def reverse_list():
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     reversed_elements = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'range(len(elements) - 1, -1, -1)'
 #------------------------------------------------------------------------------
@@ -15463,7 +15425,7 @@ def reverse_list(items):
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     reverse_items = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'range(len(items)-1,-1,-1)'
 #------------------------------------------------------------------------------
@@ -15496,7 +15458,7 @@ def reverse_list(items):
 # Returning: reverse_items
 #------------------------------------------------------------------------------
     return reverse_items
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -15506,7 +15468,7 @@ def reverse_list(items):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = ["apple", "banana", "cunt"]
+lst = ["apple", "banana", "friend"]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -15582,7 +15544,7 @@ def prime_factors(n):
 # Variable name: 'divisor +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         divisor += 1  # Try next divisor
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -15731,7 +15693,7 @@ def generate_password(length):
 #------------------------------------------------------------------------------
 # Built-in function 'range()' generates a sequence of numbers, commonly used in for loops.
     password = ''.join(random.choice(characters) for i in range(length))
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -15766,18 +15728,18 @@ print("Generated password:", generate_password(length))
 # should prompt the user for a sentence, then count how many words it contains.
 # Words are typically separated by whitespace (spaces, tabs, newlines). This is
 # a fundamental text processing operation used in many applications.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a sentence
 # - Must count words (separated by whitespace)
 # - Should return or display the word count
 # - Should handle multiple spaces correctly
-# 
+#
 # Example Input/Output:
 # - Input: "Jonathan is the best ever" → Output: 5 words
 # - Input: "Hello   world" → Output: 2 words (multiple spaces handled)
 # - Input: "Python" → Output: 1 word
-# 
+#
 # Algorithm: Split sentence by whitespace, count the resulting list elements.
 # ============================================================================
 """
@@ -15820,7 +15782,7 @@ def count_words(sentence):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     split_words = sentence.split()  # split() splits on whitespace by default
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'count'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -15856,7 +15818,7 @@ def count_words(sentence):
 #------------------------------------------------------------------------------
     return count  # Return total word count
     # Note: Could also use len(split_words) instead of loop for efficiency
-                   
+
 # TEST CASE:
 # This test counts words in "Jonathan is the best ever"
 # After split: ["Jonathan", "is", "the", "best", "ever"] → 5 words
@@ -15887,18 +15849,18 @@ print(count_words(words))  # Output: 5
 # for a list of numbers, then identify both values. The problem specifies not
 # to use sorted(), so we need to find them manually. This is more efficient
 # than sorting the entire list when we only need the extremes.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must find both minimum and maximum values
 # - Should NOT use sorted() (as specified)
 # - Should return or display both values
-# 
+#
 # Example Input/Output:
 # - Input: [4, 5, 100, 6, 1, 10] → Output: (1, 100) or smallest=1, largest=100
 # - Input: [10, 20, 30] → Output: (10, 30)
 # - Input: [-5, 0, 5] → Output: (-5, 5)
-# 
+#
 # Algorithm: Single-pass iteration - track min and max as we go through the list.
 # ============================================================================
 """
@@ -15951,7 +15913,7 @@ def largest_smallest(elements):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     largest = elements[0]   # Start with first element as maximum
-    
+
     # Iterate through each element in the list
 #==============================================================================
 # FOR LOOP: Iterating over 'elements'
@@ -16009,7 +15971,7 @@ def largest_smallest(elements):
 # Variable name: 'largest' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             largest = element  # Found a new maximum
-    
+
     # Return both values as a tuple
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -16018,7 +15980,7 @@ def largest_smallest(elements):
 # Returning: smallest, largest  # Returns tuple (smallest, largest)
 #------------------------------------------------------------------------------
     return smallest, largest  # Returns tuple (smallest, largest)
-    
+
 # TEST CASE:
 # This test finds min and max in [4, 5, 100, 6, 1, 10]
 # Smallest: 1, Largest: 100
@@ -16050,18 +16012,18 @@ print(largest_smallest(lst))  # Output: (1, 100)
 # (all positive divisors except the number itself). For example, 6 is perfect
 # because its proper divisors are 1, 2, 3, and 1 + 2 + 3 = 6. This is a
 # mathematical problem that demonstrates loops, conditionals, and arithmetic.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must check if number is perfect (sum of proper divisors = number)
 # - Proper divisors exclude the number itself
 # - Should handle edge cases (negative numbers, zero)
-# 
+#
 # Example Input/Output:
 # - Input: 6 → Output: True (1 + 2 + 3 = 6)
 # - Input: 28 → Output: True (1 + 2 + 4 + 7 + 14 = 28)
 # - Input: 10 → Output: False (1 + 2 + 5 = 8 ≠ 10)
-# 
+#
 # Algorithm: Find all proper divisors, sum them, compare with original number.
 # ============================================================================
 """
@@ -16229,7 +16191,7 @@ def is_perfect_number(n):
 # Returning: False
 #------------------------------------------------------------------------------
         return False
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sum_of_divisors'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -16274,7 +16236,7 @@ def is_perfect_number(n):
 # Variable name: 'sum_of_divisors +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             sum_of_divisors += i
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -16306,7 +16268,7 @@ def main():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     number = int(input("Enter a number: "))
-    
+
 #==============================================================================
 # IF STATEMENT: Conditional execution
 #------------------------------------------------------------------------------
@@ -16378,18 +16340,18 @@ if __name__ == "__main__":
 # from 1 to n. For example, 5! = 5 × 4 × 3 × 2 × 1 = 120. The program should
 # prompt the user for a number and calculate its factorial iteratively (using
 # a loop) rather than recursively. This demonstrates iteration and accumulation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must use a loop (as specified)
 # - Must calculate factorial: n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Should handle edge cases (0! = 1 by definition)
-# 
+#
 # Example Input/Output:
 # - Input: 5 → Output: 120 (5 × 4 × 3 × 2 × 1)
 # - Input: 0 → Output: 1 (0! = 1 by definition)
 # - Input: 3 → Output: 6 (3 × 2 × 1)
-# 
+#
 # Algorithm: Initialize result to 1, multiply by each number from 1 to n.
 # ============================================================================
 """
@@ -16455,7 +16417,7 @@ def factorial():
 # Variable name: 'result *' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         result *= number  # Multiply: 1 × 2 × 3 × ... × n
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -16465,7 +16427,7 @@ def factorial():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(result)
-           
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'factorial()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -16554,18 +16516,18 @@ print(factorial())
 # a power of two if it can be written as 2^n for some integer n. For example,
 # 1 (2^0), 2 (2^1), 4 (2^2), 8 (2^3), 16 (2^4), etc. are all powers of two.
 # This is useful in computer science for bit manipulation and algorithm design.
-# 
+#
 # Key Requirements:
 # - Program must check if number is a power of two
 # - Should handle edge cases (0, negative numbers)
 # - Should return True or False
-# 
+#
 # Example Input/Output:
 # - Input: 8 → Output: True (8 = 2^3)
 # - Input: 16 → Output: True (16 = 2^4)
 # - Input: 10 → Output: False (10 is not a power of two)
 # - Input: 1 → Output: True (1 = 2^0)
-# 
+#
 # Algorithm: Repeatedly divide by 2 until reaching 1, or use bit manipulation.
 # ============================================================================
 """
@@ -16871,7 +16833,7 @@ def find_intersection():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(f"The intersection of the two lists is: {intersection}")
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -16888,18 +16850,18 @@ print(find_intersection())
 # The program should prompt the user for a string, then return a new string
 # with all vowel characters removed. This is a common text processing operation
 # used in data cleaning and string manipulation tasks.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must remove all vowels (a, e, i, o, u)
 # - Should handle both uppercase and lowercase vowels
 # - Should return a new string (not modify original)
-# 
+#
 # Example Input/Output:
 # - Input: "Hello World" → Output: "Hll Wrld"
 # - Input: "Python Programming" → Output: "Pythn Prgrmmng"
 # - Input: "aeiou" → Output: "" (all vowels removed)
-# 
+#
 # Algorithm: Iterate through string, keep only non-vowel characters.
 # ============================================================================
 """
@@ -16967,7 +16929,7 @@ def remove_vowels():
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
             print(char, end= "")  # end="" prevents newline after each char
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'remove_vowels()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -17049,7 +17011,7 @@ def remove_vowels(string):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return "\n".join(new_name)  # Joins with newlines instead of empty string
-               
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'name'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -17059,7 +17021,7 @@ def remove_vowels(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-name = "Jonathan" 
+name = "Jonathan"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -17152,7 +17114,7 @@ def binary_to_decimal(binary):
 # Variable name: 'power -' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         power -= 1  # Decrease power for next position
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -17322,7 +17284,7 @@ def digits_string():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
         total += int(number)  # Convert to int and add
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -17332,7 +17294,7 @@ def digits_string():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(total)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'digits_string()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -17429,7 +17391,7 @@ def digits_string():
 # Variable name: 'total +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         total += number
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -17439,7 +17401,7 @@ def digits_string():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(total)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'digits_string()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -17553,7 +17515,7 @@ def upper_lower(string):
 # Returning: f"lower = {count_lower} and upper = {count_upper}"
 #------------------------------------------------------------------------------
     return f"lower = {count_lower} and upper = {count_upper}"
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -17563,7 +17525,7 @@ def upper_lower(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-string = "Jonathan Moll is the Best"
+string = "Jonathan Noll is the Best"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -17905,19 +17867,19 @@ print(f"{base} to the power of {exp} is: {result}")
 # the letters of another, using all the original letters exactly once. The
 # program should prompt the user for two strings and determine if they contain
 # the same letters (ignoring spaces and case differences).
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two strings
 # - Must check if strings are anagrams
 # - Should ignore whitespace
 # - Should handle case-insensitivity (typically)
 # - All letters from one string must be present in the other
-# 
+#
 # Example Input/Output:
 # - Input: "listen", "silent" → Output: True (same letters)
 # - Input: "The Morse Code", "Here come dots" → Output: True (anagram, ignoring spaces)
 # - Input: "hello", "world" → Output: False (different letters)
-# 
+#
 # Algorithm: Remove whitespace, sort both strings, compare sorted versions.
 # ============================================================================
 """
@@ -17979,7 +17941,7 @@ def is_anagram():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort2 = sorted(string2)
-    
+
 #==============================================================================
 # IF STATEMENT: Conditional execution
 #------------------------------------------------------------------------------
@@ -18019,7 +17981,7 @@ def is_anagram():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
         print("this is not anagram")
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'is_anagram()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -18029,7 +17991,7 @@ def is_anagram():
 # Arguments (if any) go inside the parentheses, separated by commas.
 #------------------------------------------------------------------------------
 is_anagram()
-        
+
 # Function version that returns boolean
 #==============================================================================
 # FUNCTION DEFINITION: 'is_anagram'
@@ -18066,7 +18028,7 @@ def is_anagram(string1, string2):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     string2 = string2.replace(" ", "")
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -18074,7 +18036,7 @@ def is_anagram(string1, string2):
 # Returning: sorted(string1) == sorted(string2)
 #------------------------------------------------------------------------------
     return sorted(string1) == sorted(string2)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -18170,7 +18132,7 @@ def largest_smallest():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_num.append(int(number))
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'max_num'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -18206,7 +18168,7 @@ def largest_smallest():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(max_num, min_num)
-        
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'largest_smallest()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -18340,7 +18302,7 @@ else:
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(f"{num} is not a perfect square.")
- 
+
 """
 Problem 105:
 # The 'in' operator checks if a value exists in a sequence (membership test).
@@ -18421,7 +18383,7 @@ def all_odd_numbers(numbers):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = [2, 10, 3, 7]    
+lst = [2, 10, 3, 7]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -18438,17 +18400,17 @@ print(all_odd_numbers(lst))
 # all odd numbers in a list. The program should prompt the user for a list of
 # numbers, then calculate the total sum of only the odd numbers. This may be
 # a duplicate problem or may have a different implementation approach.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must identify odd numbers (not divisible by 2)
 # - Must sum only the odd numbers
 # - Should return or display the sum
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3, 4, 5] → Output: 9 (1 + 3 + 5)
 # - Input: [10, 20, 30] → Output: 0 (no odd numbers)
-# 
+#
 # Algorithm: Filter odd numbers (n % 2 != 0), then sum them.
 # ============================================================================
 """
@@ -18502,7 +18464,7 @@ def sum_of_odd_numbers():
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     int_numbers = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'split_numbers'
 #------------------------------------------------------------------------------
@@ -18526,7 +18488,7 @@ def sum_of_odd_numbers():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_numbers.append(int(num))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'odd_sum'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -18570,7 +18532,7 @@ def sum_of_odd_numbers():
 # Variable name: 'odd_sum +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             odd_sum += num
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -18668,7 +18630,7 @@ def sum_of_all_odd():
 # Variable name: 'total +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             total += number
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -18678,7 +18640,7 @@ def sum_of_all_odd():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(total)
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'sum_of_all_odd()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -18695,18 +18657,18 @@ sum_of_all_odd()
 # program should prompt the user for two strings, then identify and return
 # the characters that are common to both strings. This is useful for text
 # analysis and comparison operations.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two strings
 # - Must find characters present in both strings
 # - Should handle duplicates appropriately
 # - May need to handle case sensitivity
-# 
+#
 # Example Input/Output:
 # - Input: "hello", "world" → Output: ['l', 'o'] (common characters)
 # - Input: "python", "programming" → Output: ['p', 'r', 'o', 'g', 'n']
 # - Input: "abc", "xyz" → Output: [] (no common characters)
-# 
+#
 # Algorithm: Find intersection of character sets from both strings.
 # ============================================================================
 """
@@ -18770,7 +18732,7 @@ def common_char():
 # LEARNING NOTE: If a function doesn't explicitly return a value, it returns None by default.
 #------------------------------------------------------------------------------
         return
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'str1, str2'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -18778,7 +18740,7 @@ def common_char():
 # Variable name: 'str1, str2' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     str1, str2 = user_input  # Tuple unpacking: assigns first two elements
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'common'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -18826,7 +18788,7 @@ def common_char():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             common.append(char)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -18908,7 +18870,7 @@ def common_char(string1, string2):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             characters.append(char)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -18916,7 +18878,7 @@ def common_char(string1, string2):
 # Returning: characters
 #------------------------------------------------------------------------------
     return characters
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'name1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -18949,7 +18911,7 @@ print(common_char(name1, name2))
 
 """
 Problem: 108
-Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string 
+Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string
 """
 # Uses set to track seen characters, but order not preserved (set is unordered)
 #==============================================================================
@@ -18985,7 +18947,7 @@ def remove_duplicates():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     unique_user = set()  # Set to track unique characters
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
 #------------------------------------------------------------------------------
@@ -19023,7 +18985,7 @@ def remove_duplicates():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             unique_user.add(char)
-            
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -19033,7 +18995,7 @@ def remove_duplicates():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print("".join(unique_user))  # join() converts set to string (order may vary)
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'remove_duplicates()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -19085,7 +19047,7 @@ def remove_duplicates():
 # Variable name: 'result' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     result = []  # For maintaining order
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'user'
 #------------------------------------------------------------------------------
@@ -19134,7 +19096,7 @@ def remove_duplicates():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             result.append(char)  # Add to list to preserve order
-            
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -19146,7 +19108,7 @@ def remove_duplicates():
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     print("".join(result))  # Join list to get ordered string
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'remove_duplicates()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -19213,7 +19175,7 @@ def is_armstrong(number):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         digits.append(int(digit))  # Convert each digit back to int
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'power'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -19254,7 +19216,7 @@ def is_armstrong(number):
 # Variable name: 'total +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         total += digit ** power  # Add digit raised to power
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -19331,18 +19293,18 @@ print(number)
 # all other letters. The program should prompt the user for a string, then
 # count and display both the number of vowels and consonants separately.
 # This demonstrates character classification and counting operations.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must count vowels (a, e, i, o, u)
 # - Must count consonants (all other letters)
 # - Should ignore non-letter characters (numbers, spaces, punctuation)
 # - Should handle case-insensitivity
-# 
+#
 # Example Input/Output:
 # - Input: "Hello World" → Output: Vowels: 3, Consonants: 7
 # - Input: "Python" → Output: Vowels: 1, Consonants: 5
-# 
+#
 # Algorithm: Iterate through string, classify each letter as vowel or consonant.
 # ============================================================================
 """
@@ -19408,7 +19370,7 @@ def vowels_consonates(string):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
     consonates = 0
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'string'
 #------------------------------------------------------------------------------
@@ -19476,7 +19438,7 @@ def vowels_consonates(string):
 # Returning: f"vowels = {count_vowels}\nconsonates = {consonates}"
 #------------------------------------------------------------------------------
     return f"vowels = {count_vowels}\nconsonates = {consonates}"
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -19504,18 +19466,18 @@ print(vowels_consonates(lst))
 # smallest value. This is useful for ranking and statistical operations. If
 # there are duplicate smallest values, the second smallest might be the same
 # as the smallest, or the next distinct value, depending on interpretation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must find the second smallest value
 # - Should handle duplicates appropriately
 # - Should handle edge cases (list with < 2 elements)
-# 
+#
 # Example Input/Output:
 # - Input: [3, 1, 4, 1, 5] → Output: 1 or 3 (depending on interpretation)
 # - Input: [10, 20, 30] → Output: 20
 # - Input: [5, 5, 5] → Output: 5 (all same, second smallest is same)
-# 
+#
 # Algorithm: Sort list and take second element, or find min, remove it, find min again.
 # ============================================================================
 """
@@ -19592,7 +19554,7 @@ def second_smallest_element():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_numbers = sorted(int_numbers)  # Sort ascending
-    
+
 #==============================================================================
 # IF STATEMENT: Conditional execution
 #------------------------------------------------------------------------------
@@ -19683,7 +19645,7 @@ def second_smallest_element(elements):
 # Returning: None
 #------------------------------------------------------------------------------
         return None
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sorted_elements'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -19694,7 +19656,7 @@ def second_smallest_element(elements):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_elements = sorted(elements, key=len)  # key=len sorts by length, not value
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -19911,7 +19873,7 @@ def max_num(num1, num2):
 # Returning: f"This is max number: {num2}"
 #------------------------------------------------------------------------------
         return f"This is max number: {num2}"
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'num1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -20139,7 +20101,7 @@ def max_of_three(a, b, c):
 # Returning: c
 #------------------------------------------------------------------------------
         return c
-        
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'max_of_three()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -20211,7 +20173,7 @@ def length_string(string):
 # Returning: count
 #------------------------------------------------------------------------------
     return count
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'name'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -20287,7 +20249,7 @@ def length_list(string):  # Misleading name - works for lists too
 # Returning: count
 #------------------------------------------------------------------------------
     return count
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -20460,7 +20422,7 @@ def is_vowel(char):
 # Returning: False
 #------------------------------------------------------------------------------
         return False
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20469,7 +20431,7 @@ def is_vowel(char):
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(is_vowel('a'))  
+print(is_vowel('a'))
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20478,7 +20440,7 @@ print(is_vowel('a'))
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(is_vowel('E')) 
+print(is_vowel('E'))
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20487,7 +20449,7 @@ print(is_vowel('E'))
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(is_vowel('x')) 
+print(is_vowel('x'))
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20496,7 +20458,7 @@ print(is_vowel('x'))
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(is_vowel('9')) 
+print(is_vowel('9'))
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20505,7 +20467,7 @@ print(is_vowel('9'))
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(is_vowel(''))  
+print(is_vowel(''))
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20514,7 +20476,7 @@ print(is_vowel(''))
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(is_vowel('aa')) 
+print(is_vowel('aa'))
 
 """
 Problem: 117
@@ -20778,7 +20740,7 @@ numbers = [1, 2, 3, 4]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 # Built-in function 'sum()' adds all numbers in an iterable and returns the total.
-print("Sum:", sum(numbers)) 
+print("Sum:", sum(numbers))
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -20969,18 +20931,18 @@ print(palindromes(string))
 # "level", "madam"). The function should return True if the string is a
 # palindrome, False otherwise. This is a common string manipulation and
 # validation problem.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must check if string reads same forwards and backwards
 # - Should return True if palindrome, False otherwise
 # - May need to handle case sensitivity and spaces
-# 
+#
 # Example Input/Output:
 # - is_palindrome("radar") → True (reads same both ways)
 # - is_palindrome("hello") → False (hello ≠ olleh)
 # - is_palindrome("level") → True
-# 
+#
 # Algorithm: Compare string with its reverse using slicing [::-1].
 # ============================================================================
 """
@@ -21031,7 +20993,7 @@ def is_palindrome(string):
 # Returning: False
 #------------------------------------------------------------------------------
     return False
-     
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'name'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -21284,7 +21246,7 @@ def overlapping(list1, list2):
 # Returning: False  # No common elements
 #------------------------------------------------------------------------------
     return False  # No common elements
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'list1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -21313,7 +21275,7 @@ list2 = [4, 5, 6, 7]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(overlapping(list1, list2))  
+print(overlapping(list1, list2))
 
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'list1'
@@ -21343,8 +21305,8 @@ list2 = ['date', 'elderberry', 'fig']
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(overlapping(list1, list2)) 
- 
+print(overlapping(list1, list2))
+
 # Alternative: uses helper function is_member()
 #==============================================================================
 # FUNCTION DEFINITION: 'is_member'
@@ -21525,18 +21487,18 @@ print(overlapping(list1, list2))
 # one element, False otherwise. The problem suggests using nested loops as
 # an exercise, though using the 'in' operator would be more Pythonic. This
 # demonstrates list comparison and nested iteration.
-# 
+#
 # Key Requirements:
 # - Function must accept two lists as input
 # - Must check if any element appears in both lists
 # - Should return True if at least one common element exists
 # - Should use nested loops (as exercise requirement)
-# 
+#
 # Example Input/Output:
 # - overlapping([1, 2, 3], [3, 4, 5]) → True (3 is common)
 # - overlapping([1, 2, 3], [4, 5, 6]) → False (no common elements)
 # - overlapping(["a", "b"], ["b", "c"]) → True ("b" is common)
-# 
+#
 # Algorithm: Nested loops - check each element of first list against each
 # element of second list, return True if any match found.
 # ============================================================================
@@ -21601,7 +21563,7 @@ def overlapping(lst1, lst2):
 # Returning: False
 #------------------------------------------------------------------------------
     return False
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -21700,7 +21662,7 @@ def overlapping(lst1, lst2):
 # Returning: False
 #------------------------------------------------------------------------------
     return False
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -21822,7 +21784,7 @@ def histogram(numbers):
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
         print('*' * number)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -21898,7 +21860,7 @@ def histrogram(numbers):
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -21925,17 +21887,17 @@ print(histrogram(numbers))
 # The function should take a list of strings and return a new list where each
 # element is the length (number of characters) of the corresponding word. This
 # demonstrates the map operation and list comprehensions in Python.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings)
 # - Must return a list of integers (word lengths)
 # - Each integer corresponds to the length of the word at the same index
-# 
+#
 # Example Input/Output:
 # - Input: ["hello", "world", "python"] → Output: [5, 5, 6]
 # - Input: ["a", "bb", "ccc"] → Output: [1, 2, 3]
 # - Input: ["test"] → Output: [4]
-# 
+#
 # Algorithm: Apply len() function to each word in the list (map operation).
 # ============================================================================
 # ============================================================================
@@ -21944,17 +21906,17 @@ print(histrogram(numbers))
 # The function should take a list of strings and return a new list where each
 # element is the length (number of characters) of the corresponding word. This
 # demonstrates the map operation and list comprehensions in Python.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings)
 # - Must return a list of integers (word lengths)
 # - Each integer corresponds to the length of the word at the same index
-# 
+#
 # Example Input/Output:
 # - Input: ["hello", "world", "python"] → Output: [5, 5, 6]
 # - Input: ["a", "bb", "ccc"] → Output: [1, 2, 3]
 # - Input: ["test"] → Output: [4]
-# 
+#
 # Algorithm: Apply len() function to each word in the list (map operation).
 # ============================================================================
 """
@@ -22052,7 +22014,7 @@ lengths = map_words_to_lengths(words)
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(lengths) 
+print(lengths)
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -22060,17 +22022,17 @@ print(lengths)
 # The function should take a list of words and return an integer representing
 # the length of the longest word. This is useful for text analysis and
 # formatting operations where you need to know the maximum word length.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings)
 # - Must return the length (integer) of the longest word
 # - Should handle empty lists (edge case)
-# 
+#
 # Example Input/Output:
 # - Input: ["hello", "world", "python"] → Output: 6 (length of "python")
 # - Input: ["a", "bb", "ccc"] → Output: 3 (length of "ccc")
 # - Input: ["short", "verylongword", "medium"] → Output: 12
-# 
+#
 # Algorithm: Find maximum length using max() with key=len, or iterate and track max.
 # ============================================================================
 """
@@ -22147,7 +22109,7 @@ def find_longest_word(elements):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     return len(element)  # BUG: Returns len of last element in loop, not longest
-               
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -22157,7 +22119,7 @@ def find_longest_word(elements):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = ["jo", "tre", "Jonny", "abracadabr"] 
+lst = ["jo", "tre", "Jonny", "abracadabr"]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -22174,17 +22136,17 @@ print(find_longest_word(lst))
 # The function should take a list of words and an integer n, then return a
 # new list containing only words that are longer than n characters. This
 # demonstrates the filter operation and conditional list building.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words and an integer n
 # - Must return a new list with words longer than n
 # - Should preserve order of words in the result
-# 
+#
 # Example Input/Output:
 # - Input: ["hello", "hi", "world", "python"], n=4 → Output: ["hello", "world", "python"]
 # - Input: ["a", "bb", "ccc", "dddd"], n=2 → Output: ["ccc", "dddd"]
 # - Input: ["test"], n=10 → Output: [] (no words longer than 10)
-# 
+#
 # Algorithm: Iterate through words, keep only those where len(word) > n.
 # ============================================================================
 """
@@ -22260,14 +22222,14 @@ def filter_long_words(lst, n):
 # Returning: longest_words
 #------------------------------------------------------------------------------
     return longest_words
-           
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'lst' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-lst = ["three", "threebesthorses" "hours", "Jonathanmollthebestintheworld"]  # Note: missing comma between strings
+lst = ["three", "threebesthorses" "hours", "Jonathannollthebestintheworld"]  # Note: missing comma between strings
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'n'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -22294,18 +22256,18 @@ print(filter_long_words(lst, n))
 # sentence that contains all 26 letters of the English alphabet at least once.
 # The classic example is "The quick brown fox jumps over the lazy dog." This
 # is useful for testing fonts, keyboards, and text processing systems.
-# 
+#
 # Key Requirements:
 # - Function must accept a sentence (string)
 # - Must check if all 26 letters (a-z) appear at least once
 # - Should handle case-insensitivity (treat 'A' and 'a' as same)
 # - Should return True if pangram, False otherwise
-# 
+#
 # Example Input/Output:
 # - Input: "The quick brown fox jumps over the lazy dog" → Output: True
 # - Input: "Hello world" → Output: False (missing many letters)
 # - Input: "Pack my box with five dozen liquor jugs" → Output: True
-# 
+#
 # Algorithm: Check if each letter of alphabet appears in the sentence.
 # ============================================================================
 """
@@ -22431,18 +22393,18 @@ print(result)
 # and 2) adds a space after a period if it's directly followed by a letter
 # (no space). This is useful for cleaning and formatting text. The problem
 # suggests using regular expressions for efficient pattern matching.
-# 
+#
 # Key Requirements:
 # - Function must accept a string
 # - Must compress multiple spaces into one space
 # - Must add space after period if followed directly by a letter
 # - Should use regular expressions (as suggested)
-# 
+#
 # Example Input/Output:
 # - Input: "This is very funny and cool.Indeed!" → Output: "This is very funny and cool. Indeed!"
 # - Input: "Hello    world" → Output: "Hello world" (compressed spaces)
 # - Input: "Text.  More text" → Output: "Text. More text" (compressed spaces)
-# 
+#
 # Algorithm: Use regex to replace multiple spaces with one, add space after period+letter.
 # ============================================================================
 """
@@ -22540,18 +22502,18 @@ print(result)
 # demonstrates functional programming concepts in Python. The problem also
 # asks you to consider why we might wrap reduce() in a function rather than
 # calling it directly.
-# 
+#
 # Key Requirements:
 # - Function must use reduce() from functools
 # - Must find the maximum value in a list
 # - Should take a list of numbers as input
 # - Should return the largest number
-# 
+#
 # Example Input/Output:
 # - Input: [1, 5, 3, 9, 2] → Output: 9
 # - Input: [10, 20, 30] → Output: 30
 # - Input: [-5, -1, -10] → Output: -1
-# 
+#
 # Algorithm: Use reduce() with a max function that compares two values at a time.
 # ============================================================================
 """
@@ -22636,7 +22598,7 @@ def max_in_list(numbers):
 # Returning: reduce(max_func, numbers)  # reduce(function, iterable) reduces list to single value
 #------------------------------------------------------------------------------
     return reduce(max_func, numbers)  # reduce(function, iterable) reduces list to single value
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -22722,7 +22684,7 @@ def time_table(number):
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -22789,18 +22751,18 @@ for i in range(1, 11):
 # program should prompt the user to enter a list of numbers (typically as
 # space-separated input), then calculate and display the total sum. This is
 # a fundamental list operation that demonstrates input parsing and accumulation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must parse the input (typically space-separated)
 # - Must calculate the sum of all numbers
 # - Should display the result
-# 
+#
 # Example Input/Output:
-# - Input: "1 2 3 4 5" → Output: 15
+# - Input: "1 2 3 4 5" → Output: 3
 # - Input: "10 20 30" → Output: 60
 # - Input: "5" → Output: 5
-# 
+#
 # Algorithm: Parse input, convert to numbers, sum them using sum() or loop.
 # ============================================================================
 """
@@ -22854,7 +22816,7 @@ def sum_of_all_numbers():
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     int_numbers = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'split_numbers'
 #------------------------------------------------------------------------------
@@ -22891,7 +22853,7 @@ def sum_of_all_numbers():
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     total_sum = sum(int_numbers)  # Built-in sum() function
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -22918,17 +22880,17 @@ sum_of_all_numbers()
 # strings. The function should take a string like "123" and convert it into
 # a list of strings like ["1", "2", "3"], where each element is a single
 # digit character. This is useful for processing numeric strings digit by digit.
-# 
+#
 # Key Requirements:
 # - Function must accept a string of digits
 # - Must split into individual digit strings
 # - Should return a list of single-character strings
-# 
+#
 # Example Input/Output:
 # - Input: "123" → Output: ["1", "2", "3"]
 # - Input: "4567" → Output: ["4", "5", "6", "7"]
 # - Input: "0" → Output: ["0"]
-# 
+#
 # Algorithm: Convert string to list of characters, or iterate and create list.
 # ============================================================================
 """
@@ -23002,7 +22964,7 @@ def split_number(numbers):
 # Returning: number_lst  # Returns ["1", "2", "3"] (works but split() is unnecessary)
 #------------------------------------------------------------------------------
     return number_lst  # Returns ["1", "2", "3"] (works but split() is unnecessary)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'arg'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23029,17 +22991,17 @@ print(split_number(arg))
 # function should take a sentence (string of words), split it into individual
 # words, sort them alphabetically, and return the sorted result. This is useful
 # for text processing and organizing word lists.
-# 
+#
 # Key Requirements:
 # - Function must accept a sentence (string)
 # - Must split sentence into words
 # - Must sort words alphabetically
 # - Should return sorted list of words or joined string
-# 
+#
 # Example Input/Output:
 # - Input: "hello world python" → Output: ["hello", "python", "world"]
 # - Input: "zebra apple banana" → Output: ["apple", "banana", "zebra"]
-# 
+#
 # Algorithm: Split sentence, sort the word list, return sorted list or join back.
 # ============================================================================
 """
@@ -23100,17 +23062,17 @@ print(alphabetically_ordered(sentence))
 # smallest to largest). The function should take a list of numbers and return
 # a new list with the numbers sorted from smallest to biggest. This is a
 # fundamental sorting operation used in many algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of integers
 # - Must sort numbers in ascending order (smallest to largest)
 # - Should return a sorted list
-# 
+#
 # Example Input/Output:
 # - Input: [3, 1, 4, 1, 5] → Output: [1, 1, 3, 4, 5]
 # - Input: [10, 5, 20, 15] → Output: [5, 10, 15, 20]
 # - Input: [-5, 0, 5] → Output: [-5, 0, 5]
-# 
+#
 # Algorithm: Use sorted() function or list.sort() method for ascending order.
 # ============================================================================
 """
@@ -23140,7 +23102,7 @@ def smallest_largest(numbers):
 # Returning: sorted(numbers)
 #------------------------------------------------------------------------------
     return sorted(numbers)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23159,7 +23121,7 @@ numbers = [2, 76, 466, 3, 23]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(smallest_largest(numbers)) 
+print(smallest_largest(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -23167,17 +23129,17 @@ print(smallest_largest(numbers))
 # largest to smallest). The function should take a list of numbers and return
 # a new list with the numbers sorted from biggest to smallest. This is the
 # reverse of ascending order sorting.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of integers
 # - Must sort numbers in descending order (largest to smallest)
 # - Should return a sorted list
-# 
+#
 # Example Input/Output:
 # - Input: [3, 1, 4, 1, 5] → Output: [5, 4, 3, 1, 1]
 # - Input: [10, 5, 20, 15] → Output: [20, 15, 10, 5]
 # - Input: [-5, 0, 5] → Output: [5, 0, -5]
-# 
+#
 # Algorithm: Use sorted() with reverse=True, or sort ascending then reverse.
 # ============================================================================
 """
@@ -23208,7 +23170,7 @@ def largest_smallest(numbers):  # Function name misleading
 # Returning: sorted(numbers)[::-1]  # [::-1] reverses the sorted list (descending order)
 #------------------------------------------------------------------------------
     return sorted(numbers)[::-1]  # [::-1] reverses the sorted list (descending order)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23227,7 +23189,7 @@ numbers = [2, 76, 466, 3, 23]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(largest_smallest(numbers)) 
+print(largest_smallest(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -23235,18 +23197,18 @@ print(largest_smallest(numbers))
 # the sorted() function. The function should take a list of integers, sort
 # them, and return the second largest value. This is useful for ranking and
 # statistical operations where you need the runner-up value.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of integers
 # - Must use sorted() function
 # - Must return the second largest number
 # - Should handle duplicates appropriately
-# 
+#
 # Example Input/Output:
 # - Input: [3, 1, 4, 1, 5] → Output: 4 (second largest after 5)
 # - Input: [10, 20, 30] → Output: 20
 # - Input: [5, 5, 5] → Output: 5 (all same, second largest is same)
-# 
+#
 # Algorithm: Sort list in descending order, return element at index 1.
 # ============================================================================
 """
@@ -23277,7 +23239,7 @@ def seconded_largest_number(numbers):  # Typo: "seconded" should be "second"
 # Returning: sorted(numbers)[-2]  # [-2] is second-to-last element (second largest)
 #------------------------------------------------------------------------------
     return sorted(numbers)[-2]  # [-2] is second-to-last element (second largest)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23296,7 +23258,7 @@ numbers = [2, 76, 466, 3, 23]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(seconded_largest_number(numbers)) 
+print(seconded_largest_number(numbers))
 
 
 # ============================================================================
@@ -23305,17 +23267,17 @@ print(seconded_largest_number(numbers))
 # the sorted() function. The function should take a list of integers, sort
 # them, and return the fourth largest value. This extends the concept of
 # finding nth largest values in a list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of integers
 # - Must use sorted() function
 # - Must return the fourth largest number
 # - Should handle lists with fewer than 4 elements (edge case)
-# 
+#
 # Example Input/Output:
-# - Input: [10, 5, 20, 15, 30, 25] → Output: 15 (4th largest)
+# - Input: [10, 5, 20, 15, 30, 25] → Output: 3 (4th largest)
 # - Input: [1, 2, 3, 4, 5] → Output: 2
-# 
+#
 # Algorithm: Sort list in descending order, return element at index 3.
 # ============================================================================
 """
@@ -23346,7 +23308,7 @@ def fourth_largest_number(numbers):
 # Returning: sorted(numbers)[-4]  # [-4] is fourth-to-last element (fourth largest)
 #------------------------------------------------------------------------------
     return sorted(numbers)[-4]  # [-4] is fourth-to-last element (fourth largest)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23365,25 +23327,25 @@ numbers = [2, 76, 466, 3, 23]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(fourth_largest_number(numbers)) 
+print(fourth_largest_number(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires finding both the smallest and third largest numbers
 # in a list using sorted(). The function should return both values, typically
 # as a tuple. This combines finding minimum and nth maximum operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of integers
 # - Must use sorted() function
 # - Must return smallest number
 # - Must return third largest number
 # - Should return both as a tuple or separate values
-# 
+#
 # Example Input/Output:
 # - Input: [10, 5, 20, 15, 30, 25] → Output: (5, 20) (smallest=5, 3rd largest=20)
 # - Input: [1, 2, 3, 4, 5] → Output: (1, 3)
-# 
+#
 # Algorithm: Sort list, return first element (smallest) and element at index 2 (3rd largest).
 # ============================================================================
 """
@@ -23453,7 +23415,7 @@ numbers = [2, 76, 466, 3, 23]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(smallest_and_third(numbers)) 
+print(smallest_and_third(numbers))
 
 """
 Problem 142:
@@ -23483,7 +23445,7 @@ def largest_smallest(numbers):  # Function name misleading
 # Returning: sorted(numbers)[::]  # [::] is same as sorted(numbers)
 #------------------------------------------------------------------------------
     return sorted(numbers)[::]  # [::] is same as sorted(numbers)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23502,7 +23464,7 @@ numbers = [2, 76, 466, 3, 23]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(largest_smallest(numbers)) 
+print(largest_smallest(numbers))
 
 # Simpler version without unnecessary slice
 #==============================================================================
@@ -23527,7 +23489,7 @@ def smallest_biggest(numbers):
 # Returning: sorted(numbers)  # Returns sorted list
 #------------------------------------------------------------------------------
     return sorted(numbers)  # Returns sorted list
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23629,7 +23591,7 @@ def int_str():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(user_lst)  # Prints list of strings
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'int_str()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -23730,7 +23692,7 @@ number = 123
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(int_to_str_list(number)) 
+print(int_to_str_list(number))
 
 """
 Problem 145:
@@ -23903,7 +23865,7 @@ def big_small(numbers):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         number_lst.append(int(number))  # Convert string to int for proper numeric sort
-              
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'number_lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -23921,7 +23883,7 @@ def big_small(numbers):
 # Variable name: 'shorted_str' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     shorted_str = []  # Typo: "shorted" should be "sorted"
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'number_lst'
 #------------------------------------------------------------------------------
@@ -23952,7 +23914,7 @@ def big_small(numbers):
 # Returning: shorted_str
 #------------------------------------------------------------------------------
     return shorted_str
-           
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -24014,7 +23976,7 @@ def type_smallest_biggest():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort_number = sorted(user)  # String sort: "10" comes before "2"
-       
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -24024,7 +23986,7 @@ def type_smallest_biggest():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(sort_number)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'type_smallest_biggest()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -24102,7 +24064,7 @@ def small_big():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_list.append(int(number))  # Convert to int
-    
+
 #------------------------------------------------------------------------------
 # METHOD CALL: 'int_list.sort()'
 # Purpose: This calls a method (a function that belongs to an object) on an object.
@@ -24157,7 +24119,7 @@ def small_big():
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     return " ".join(sorted_str)  # Join with spaces
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -24175,16 +24137,16 @@ print(small_big())
 # appear twice in sequence. For example, [1, 2, 3] becomes [1, 2, 3, 1, 2, 3].
 # Note: The problem says "doubled" but means duplicated/concatenated, not
 # each number multiplied by 2.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must return a new list with all elements duplicated
 # - Elements should appear in original order, then repeat
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3] → Output: [1, 2, 3, 1, 2, 3]
 # - Input: [2, 4, 6, 8] → Output: [2, 4, 6, 8, 2, 4, 6, 8]
-# 
+#
 # Algorithm: Concatenate list with itself using + operator.
 # ============================================================================
 """
@@ -24219,7 +24181,7 @@ def double_elements(numbers):
 # Variable name: 'doubled' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     doubled = numbers + numbers  # List concatenation: [1,2,3] + [1,2,3] = [1,2,3,1,2,3]
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -24255,17 +24217,17 @@ print(double_elements(lst))
 # common elements. The requirement to use 2 for loops (nested) means we need
 # to compare each element of the first list with each element of the second
 # list. This is less efficient than using sets but demonstrates nested iteration.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two lists
 # - Must use nested for loops (as specified)
 # - Must find elements common to both lists
 # - Should return list of common elements
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3], [2, 3, 4] → Output: [2, 3]
 # - Input: ["a", "b"], ["b", "c"] → Output: ["b"]
-# 
+#
 # Algorithm: Outer loop iterates first list, inner loop checks against second list.
 # ============================================================================
 """
@@ -24377,7 +24339,7 @@ def common():
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'common()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -24457,7 +24419,7 @@ def common():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     common_element = set1.intersection(set2)  # Set intersection operator finds common elements
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -24467,7 +24429,7 @@ def common():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(common_element)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'common()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -24485,18 +24447,18 @@ common()
 # words have the same maximum length, the function should return the first one
 # encountered (the one that appears earliest in the list). This is useful for
 # text processing and formatting operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings)
 # - Must return the longest word
 # - If multiple words have same length, return the first one
 # - Should handle empty lists (edge case)
-# 
+#
 # Example Input/Output:
-# - Input: ["tree", "mountain", "do", "Jonathanmollfrency"] → Output: "Jonathanmollfrency"
+# - Input: ["tree", "mountain", "do", "Jonathannollfrency"] → Output: "Jonathannollfrency"
 # - Input: ["hello", "world", "python"] → Output: "python" (6 chars)
 # - Input: ["a", "bb", "ccc"] → Output: "ccc" (3 chars)
-# 
+#
 # Algorithm: Iterate through words, track longest word found, return first maximum.
 # ============================================================================
 """
@@ -24606,8 +24568,8 @@ def find_longest_word(words):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-words = ["tree", "mountain", "do", "Jonathanmollfrency"]
-    
+words = ["tree", "mountain", "do", "Jonathannollfrency"]
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -24698,7 +24660,7 @@ def average(numbers):
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -24726,18 +24688,18 @@ print(average(numbers))
 # smallest value. This is useful for ranking and statistical operations. If
 # there are duplicate smallest values, the second smallest might be the same
 # as the smallest, or the next distinct value, depending on interpretation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must find the second smallest value
 # - Should handle duplicates appropriately
 # - Should handle edge cases (list with < 2 elements)
-# 
+#
 # Example Input/Output:
 # - Input: [3, 1, 4, 1, 5] → Output: 1 or 3 (depending on duplicate handling)
 # - Input: [10, 20, 30] → Output: 20
 # - Input: [5, 5, 5] → Output: 5 (all same, second smallest is same)
-# 
+#
 # Algorithm: Sort list, return element at index 1, or remove min, find min again.
 # ============================================================================
 """
@@ -24816,7 +24778,7 @@ def second_smallest_element(lst):
 # Returning: None
 #------------------------------------------------------------------------------
         return None
-           
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -24843,17 +24805,17 @@ print(second_smallest_element(lst))
 # function should take a list and return the element at the second-to-last
 # position (index -2). This demonstrates negative indexing in Python, which
 # allows accessing elements from the end of a sequence.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Must return the second-to-last element
 # - Should handle edge cases (list with < 2 elements)
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3, 4, 5] → Output: 4 (second-to-last)
 # - Input: ["a", "b", "c"] → Output: "b"
 # - Input: [10, 20] → Output: 10
-# 
+#
 # Algorithm: Use negative indexing [-2] to access second-to-last element.
 # ============================================================================
 """
@@ -24909,7 +24871,7 @@ def find_last_element():  # Function name should be find_second_last_element
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
 # Returning: None
 #------------------------------------------------------------------------------
-        return None  
+        return None
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -24934,17 +24896,17 @@ print(find_last_element())
 # take a number like 123 and return 321 (digits in reverse order). This is
 # achieved by converting the number to a string, reversing it, then converting
 # back to an integer. This is a common number manipulation operation.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return an integer with digits reversed
 # - Leading zeros in the result are dropped (e.g., 100 → 1, not 001)
-# 
+#
 # Example Input/Output:
 # - Input: 123 → Output: 321
 # - Input: 456 → Output: 654
 # - Input: 100 → Output: 1 (leading zeros dropped)
-# 
+#
 # Algorithm: Convert to string, reverse using slicing [::-1], convert back to int.
 # ============================================================================
 """
@@ -25045,7 +25007,7 @@ def reverse_number(number):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     reversed_number = int(reversed_str_number)  # Convert back to int
-   
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -25053,7 +25015,7 @@ def reverse_number(number):
 # Returning: reversed_number
 #------------------------------------------------------------------------------
     return reversed_number
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25072,7 +25034,7 @@ number = 123
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(reverse_number(number)) 
+print(reverse_number(number))
 
 # BUGGY: Returns string instead of int
 #==============================================================================
@@ -25110,7 +25072,7 @@ def reverse_number(number):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     int_number = str_number  # Still a string (misleading variable name)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -25118,7 +25080,7 @@ def reverse_number(number):
 # Returning: int_number  # Returns string, not int
 #------------------------------------------------------------------------------
     return int_number  # Returns string, not int
-             
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25146,17 +25108,17 @@ print(reverse_number(lst))
 # containing only unique characters. Since order doesn't need to be maintained,
 # we can use a set to efficiently remove duplicates. This is useful for
 # character analysis and text processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must remove duplicate characters
 # - Order does NOT need to be preserved (as specified)
 # - Should return a new string
-# 
+#
 # Example Input/Output:
 # - Input: "hello" → Output: "helo" or "lohe" (order may vary)
 # - Input: "programming" → Output: "progamin" (unique chars, order may vary)
-# 
+#
 # Algorithm: Convert to set (removes duplicates, loses order), join back to string.
 # ============================================================================
 """
@@ -25204,7 +25166,7 @@ def remove_duplicates(string):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     set_word = set(split_word)  # Set removes duplicates (order not preserved)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -25215,7 +25177,7 @@ def remove_duplicates(string):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     return " ".join(set_word)  # Join set (order may vary)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25245,17 +25207,17 @@ print(remove_duplicates(lst))
 # new string with duplicate words removed. This is useful for text cleaning
 # and deduplication operations. The problem is similar to Problem 156 but
 # focuses on word-level rather than character-level deduplication.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must remove duplicate words
 # - Should return a string (not a list)
 # - May or may not preserve order (depending on interpretation)
-# 
+#
 # Example Input/Output:
-# - Input: "so what's happening duplicates duplicates today?" 
+# - Input: "so what's happening duplicates duplicates today?"
 #   → Output: "so what's happening duplicates today?" (duplicates removed)
-# 
+#
 # Algorithm: Split into words, track seen words, keep only first occurrence.
 # ============================================================================
 """
@@ -25374,7 +25336,7 @@ def main(string):
 # Returning: duplicates  # Returns duplicates, not string with duplicates removed
 #------------------------------------------------------------------------------
     return duplicates  # Returns duplicates, not string with duplicates removed
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25496,7 +25458,7 @@ def remove_duplicates(string):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             seen.add(word)  # Mark as seen
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -25505,7 +25467,7 @@ def remove_duplicates(string):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return ' '.join(duplicates)  # Returns duplicates, not string with duplicates removed
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25534,7 +25496,7 @@ Problem: 158
 # Returns True if found, False otherwise.
 Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers using sorted.
 """
-    
+
 # Sorts list and returns last element (largest)
 #==============================================================================
 # FUNCTION DEFINITION: 'largest_element'
@@ -25568,7 +25530,7 @@ def largest_element(numbers):
 # Variable name: 'largest_number' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
    largest_number = sorted_numbers[-1]  # Last element is largest
-   
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -25576,7 +25538,7 @@ def largest_element(numbers):
 # Returning: largest_number
 #------------------------------------------------------------------------------
    return largest_number
-                
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25595,7 +25557,7 @@ numbers = [2, 56, 75, 4566, 3]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(largest_element(numbers))      
+print(largest_element(numbers))
 
 # INEFFICIENT: Sorts list in each iteration
 #==============================================================================
@@ -25688,17 +25650,17 @@ main()
 # function. The program should prompt the user for a list of numbers and return
 # the maximum value. This is the most efficient and Pythonic way to find the
 # largest element, as max() has O(n) time complexity and is built-in.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must use max() function (as specified)
 # - Must find the largest element
 # - Should return or display the result
-# 
+#
 # Example Input/Output:
 # - Input: [2, 56, 75, 4566, 3] → Output: 4566
 # - Input: [10, 20, 30] → Output: 30
-# 
+#
 # Algorithm: Use built-in max() function to find maximum value.
 # ============================================================================
 """
@@ -25737,7 +25699,7 @@ def largest_element(numbers):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
    return max(numbers)
-                
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25756,7 +25718,7 @@ numbers = [2, 56, 75, 4566, 3]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(largest_element(numbers))   
+print(largest_element(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -25764,18 +25726,18 @@ print(largest_element(numbers))
 # strings. While Python has the built-in len() function, this exercise asks
 # you to implement it yourself to understand how length calculation works
 # internally. This demonstrates iteration and counting operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list or string
 # - Must calculate length manually (without using len())
 # - Should return the number of elements/characters
 # - Should work for both strings and lists
-# 
+#
 # Example Input/Output:
 # - Input: "Jonathan" → Output: 8
 # - Input: [1, 2, 3, 4, 5] → Output: 5
 # - Input: [] → Output: 0
-# 
+#
 # Algorithm: Iterate through the sequence, count elements/characters.
 # ============================================================================
 """
@@ -25843,7 +25805,7 @@ def find_length(string):  # Works for both strings and lists (iterable)
 # Returning: count
 #------------------------------------------------------------------------------
     return count
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'arg'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -25870,17 +25832,17 @@ print(find_length(arg))
 # using set operations. The program should prompt the user for two lists, then
 # identify elements that appear in both lists. Using sets makes this operation
 # efficient and straightforward, as sets provide optimized intersection operations.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two lists
 # - Must use set operations (as specified)
 # - Must find elements common to both lists
 # - Should return list of common elements
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3], [2, 3, 4] → Output: [2, 3]
 # - Input: ["a", "b"], ["b", "c"] → Output: ["b"]
-# 
+#
 # Algorithm: Convert lists to sets, use intersection operation, convert back to list.
 # ============================================================================
 """
@@ -26002,7 +25964,7 @@ def intersection():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(common)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'intersection()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -26076,7 +26038,7 @@ def intersection():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     common = set1.intersection(set2)
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -26086,7 +26048,7 @@ def intersection():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(common)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'intersection()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -26142,7 +26104,7 @@ def intersection_two_list(lst1, lst2):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     result = set1.intersection(set2)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -26150,7 +26112,7 @@ def intersection_two_list(lst1, lst2):
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-                   
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -26255,7 +26217,7 @@ def third_largest():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_list.append(int(number))  # Convert strings to integers
-    
+
 #------------------------------------------------------------------------------
 # METHOD CALL: 'int_list.sort()'
 # Purpose: This calls a method (a function that belongs to an object) on an object.
@@ -26277,7 +26239,7 @@ def third_largest():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     result = int_list[-3]  # [-3] is third-to-last (third largest)
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -26287,7 +26249,7 @@ def third_largest():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(result)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'third_largest()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -26305,7 +26267,7 @@ third_largest()
 # dictionary where keys are vowels ('a', 'e', 'i', 'o', 'u') and values are
 # their counts. The problem specifies using list comprehension, and case should
 # be ignored (treat 'A' and 'a' as the same).
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must return a dictionary with vowel counts
@@ -26313,11 +26275,11 @@ third_largest()
 # - Values should be counts of each vowel
 # - Should be case-insensitive
 # - Should use list comprehension (as specified)
-# 
+#
 # Example Input/Output:
 # - Input: "JOnathAn is the best" → Output: {'a': 2, 'e': 2, 'i': 1, 'o': 1, 'u': 0}
 # - Input: "Hello World" → Output: {'a': 0, 'e': 1, 'i': 0, 'o': 2, 'u': 0}
-# 
+#
 # Algorithm: Use list/dict comprehension to count vowels, or iterate and count.
 # ============================================================================
 """
@@ -26384,7 +26346,7 @@ def count_vowels(string):
 # Variable name: 'result[vowel]' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         result[vowel] = 0  # Set initial count for each vowel
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -26428,7 +26390,7 @@ def count_vowels(string):
 # Variable name: 'result[char] +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             result[char] += 1  # Increment count for found vowel
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -26502,7 +26464,7 @@ def count_vowels(sentence):
 # Variable name: 'vowel_counts' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     vowel_counts = {number: 0 for number in vowels}  # {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'sentence'
 #------------------------------------------------------------------------------
@@ -26546,7 +26508,7 @@ def count_vowels(sentence):
 # Returning: vowel_counts
 #------------------------------------------------------------------------------
     return vowel_counts
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -26556,7 +26518,7 @@ def count_vowels(sentence):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-string = "Jonathan is the best"    
+string = "Jonathan is the best"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -26638,7 +26600,7 @@ def count_vowels(sentence):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
         vowel_counts[number] = 0
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'sentence'
 #------------------------------------------------------------------------------
@@ -26675,7 +26637,7 @@ def count_vowels(sentence):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
             vowel_counts[char] += 1
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -26710,17 +26672,17 @@ print(count_vowels(string))
 # The function should take an integer like 123 and convert it into a list of
 # strings like ["1", "2", "3"], where each string represents a single digit.
 # This is useful for processing numbers digit by digit or formatting operations.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer
 # - Must convert integer to individual digit strings
 # - Should return a list of single-character strings
-# 
+#
 # Example Input/Output:
 # - Input: 123 → Output: ["1", "2", "3"]
 # - Input: 4567 → Output: ["4", "5", "6", "7"]
 # - Input: 0 → Output: ["0"]
-# 
+#
 # Algorithm: Convert int to string, then convert string to list of characters.
 # ============================================================================
 """
@@ -26752,7 +26714,7 @@ def intiger_string(number):  # Typo: "intiger" should be "integer"
 #------------------------------------------------------------------------------
     return list(str(number))  # str(123) → "123", list("123") → ["1", "2", "3"]
     # list() constructor converts string (iterable) into list of characters
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -26810,7 +26772,7 @@ def split_number_int(number):
 #------------------------------------------------------------------------------
     result = tuple(number_str)  # tuple() constructor converts string to tuple of characters
     # tuple("123") → ("1", "2", "3") - immutable sequence
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -26846,16 +26808,16 @@ print(split_number_int(number))
 # twice in sequence. For example, ["tree", "house", "car"] becomes
 # ["tree", "house", "car", "tree", "house", "car"]. This is similar to
 # Problem 148 but works with strings instead of numbers.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings
 # - Must return a new list with all elements duplicated
 # - Elements should appear in original order, then repeat
-# 
+#
 # Example Input/Output:
 # - Input: ["tree", "house", "car"] → Output: ["tree", "house", "car", "tree", "house", "car"]
 # - Input: ["a", "b"] → Output: ["a", "b", "a", "b"]
-# 
+#
 # Algorithm: Append all elements twice, or concatenate list with itself.
 # ============================================================================
 """
@@ -26949,7 +26911,7 @@ def double_elements(lst):
 #------------------------------------------------------------------------------
     return doubled  # Returns list with all elements duplicated: [a, b, c, a, b, c]
     # Note: Could also use lst + lst or lst * 2
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -27045,7 +27007,7 @@ def main():
 # Returning: smallest_num, largest_num  # Returns tuple
 #------------------------------------------------------------------------------
     return smallest_num, largest_num  # Returns tuple
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'main()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -27092,7 +27054,7 @@ def l_s(numbers):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort_number_smallest = sorted(numbers)[0]  # First element after sorting (smallest)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -27100,7 +27062,7 @@ def l_s(numbers):
 # Returning: sort_number_largest, sort_number_smallest  # Returns tuple
 #------------------------------------------------------------------------------
     return sort_number_largest, sort_number_smallest  # Returns tuple
-       
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -27128,18 +27090,18 @@ print(l_s(numbers))
 # appears, treating words case-insensitively (so "This" and "this" are the same),
 # and return a dictionary with words sorted alphabetically as keys. This combines
 # word counting, case normalization, and dictionary sorting operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must return a dictionary with words as keys and counts as values
 # - Words are separated by spaces
 # - Must be case-insensitive
 # - Keys must be in alphabetical order
-# 
+#
 # Example Input/Output:
 # - Input: "This is a test. This test is only a test."
 #   → Output: {'a': 2, 'is': 2, 'only': 1, 'test.': 2, 'this': 2}
-# 
+#
 # Algorithm: Convert to lowercase, split into words, count occurrences, sort dictionary by keys.
 # ============================================================================
 """
@@ -27261,7 +27223,7 @@ def count_words():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(result)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'count_words()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -27362,7 +27324,7 @@ def count_words(string):
 # Variable name: 'word_count[word]' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             word_count[word] = 1  # Initialize new word count
-    
+
     # dict(sorted(...)) creates new dictionary from sorted key-value pairs
     # sorted(word_count.items()) sorts (key, value) tuples by key (alphabetically)
     # dict() converts sorted list of tuples back to dictionary
@@ -28065,7 +28027,7 @@ def max_value_key(input_dict):
 # Returning: None  # Return None for empty dictionary
 #------------------------------------------------------------------------------
         return None  # Return None for empty dictionary
-    
+
     # input_dict.values() returns view of all values
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'max_value'
@@ -28080,7 +28042,7 @@ def max_value_key(input_dict):
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
     max_value = max(input_dict.values())  # Find maximum value in dictionary
-    
+
     # Search for key that has this maximum value
 #------------------------------------------------------------------------------
 # METHOD CALL: 'input_dict.items()'
@@ -28315,7 +28277,7 @@ def word_frequency(string):
 #------------------------------------------------------------------------------
     return result
     # Note: collections.Counter(words) provides more efficient word counting
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -28618,17 +28580,17 @@ print(result)
 # all unique keys, and for each key, calculate the average of all values
 # associated with that key across all dictionaries. This is useful for
 # aggregating data from multiple sources.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of dictionaries
 # - Must find all keys present in any dictionary
 # - Must calculate average of values for each key
 # - Should return a new dictionary with averaged values
-# 
+#
 # Example Input/Output:
 # - Input: [{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}]
 #   → Output: {'a': 3.0, 'b': 4.0} (averages)
-# 
+#
 # Algorithm: Sum values for each key, count occurrences, divide sum by count.
 # ============================================================================
 """
@@ -28745,7 +28707,7 @@ def average_values(dicts):
 # Variable name: 'counts[key]' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
                 counts[key] = 1  # Initialize count
-    
+
     # Second pass: calculate averages by dividing sum by count
 #==============================================================================
 # FOR LOOP: Iterating over 'averages'
@@ -28766,7 +28728,7 @@ def average_values(dicts):
 # Variable name: 'averages[key] /' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         averages[key] /= counts[key]  # Divide sum by count to get average
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -28891,7 +28853,7 @@ def merge_dicts_with_lists(dicts):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
                 merged[key] = set(value)  # Convert list to set (removes duplicates, allows efficient merging)
-    
+
     # Convert sets back to lists
 #==============================================================================
 # FOR LOOP: Iterating over 'merged'
@@ -28915,7 +28877,7 @@ def merge_dicts_with_lists(dicts):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
         merged[key] = list(merged[key])  # Convert set to list (order may vary)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -28961,17 +28923,17 @@ print(result)
 # should take a list of strings and create a dictionary where keys are first
 # letters and values are lists of all strings starting with that letter. This
 # is useful for organizing and categorizing text data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings
 # - Must group strings by their first character
 # - Keys should be first letters
 # - Values should be lists of strings starting with that letter
-# 
+#
 # Example Input/Output:
 # - Input: ["apple", "banana", "orange", "cake"]
 #   → Output: {'a': ['apple'], 'b': ['banana'], 'o': ['orange'], 'c': ['cake']}
-# 
+#
 # Algorithm: Iterate through strings, use first character as key, append to list.
 # ============================================================================
 """
@@ -29154,7 +29116,7 @@ def main(lst):
 # Returning: result  # Returns only last word for each letter
 #------------------------------------------------------------------------------
     return result  # Returns only last word for each letter
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -29183,25 +29145,25 @@ main(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd
 # remove whitespace, and determine if they contain the same letters. Since
 # sorted() is not allowed, we need an alternative approach like counting
 # character frequencies.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two strings
 # - Must check if strings are anagrams
 # - Should ignore whitespace
 # - Should NOT use sorted() (as specified)
 # - Should handle case-insensitivity (typically)
-# 
+#
 # Example Input/Output:
 # - Input: "listen", "silent" → Output: True
 # - Input: "The Morse Code", "Here come dots" → Output: True (anagram, ignoring spaces)
-# 
+#
 # Algorithm: Count character frequencies in both strings, compare counts.
 # ============================================================================
 """
 Problem 183:
 Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().
 """
-        
+
 # SOLUTION EXPLANATION:
 # This solution removes whitespace and converts to lowercase, then compares
 # character frequencies. Without sorted(), we need to count how many times
@@ -29264,7 +29226,7 @@ def is_anagram(string1, string2):
 # Returning: False
 #------------------------------------------------------------------------------
         return False
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'char_count1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -29467,7 +29429,7 @@ def int(number):  # Should use different name like get_digit or extract_digit
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     list_number = list(number)[1]  # Convert to list and get index 1: ["1","2","3"][1] → "2"
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -29475,7 +29437,7 @@ def int(number):  # Should use different name like get_digit or extract_digit
 # Returning: list_number  # Returns string "2", not integer 2
 #------------------------------------------------------------------------------
     return list_number  # Returns string "2", not integer 2
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -29558,7 +29520,7 @@ def int(number):  # Should use different name
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     num8 = number[-1]  # Index -1: last digit "8" (negative indexing from end)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -29567,7 +29529,7 @@ def int(number):  # Should use different name
 #------------------------------------------------------------------------------
     return num2, num4, num8  # Returns tuple of strings: ("2", "4", "8")
     # String indexing: positive indices from start (0-based), negative from end (-1 is last)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -29688,7 +29650,7 @@ indices = [1, 3, 7]  # Indices to extract
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(get_digits(number, indices))  # Output: ("2", "4", "8")  
+print(get_digits(number, indices))  # Output: ("2", "4", "8")
 
 """
 Problem: 187
@@ -29754,7 +29716,7 @@ def double_elements(string1):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         double.append(word)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -29762,7 +29724,7 @@ def double_elements(string1):
 # Returning: double
 #------------------------------------------------------------------------------
     return double
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -29781,13 +29743,13 @@ string1 = ["tree", "road", "slow"]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(double_elements(string1))    
+print(double_elements(string1))
 
 """
 Problem 188:
 # The 'in' operator checks if a value exists in a sequence (membership test).
 # Returns True if found, False otherwise.
-Write a Python function called get_initials that takes a full name (first and last name jonathan moll) as input and returns  "joNathAn moLL"" of the name in uppercase (NALL in jonathan moll).
+Write a Python function called get_initials that takes a full name (first and last name jonathan noll) as input and returns  "joNathAn noLL"" of the name in uppercase (NALL in jonathan noll).
 """
 
 # Uppercases specific characters at hardcoded indices (fragile - assumes fixed name length)
@@ -29817,7 +29779,7 @@ def get_initials(name):
 #------------------------------------------------------------------------------
     name_list = list(name)  # Convert string to list of characters (mutable)
     # Hardcoded indices: uppercase characters at positions 2, 6, 11, 12
-    # "jonathan moll" → indices: j(0), o(1), n(2), a(3), t(4), h(5), a(6), n(7), ...
+    # "jonathan noll" → indices: j(0), o(1), n(2), a(3), t(4), h(5), a(6), n(7), ...
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'name_list[2]'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -29870,7 +29832,7 @@ def get_initials(name):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     name_list[12] = name_list[12].upper()  # 'l' → 'L' (index 12)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -29890,7 +29852,7 @@ def get_initials(name):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-name = "jonathan moll"
+name = "jonathan noll"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -29899,7 +29861,7 @@ name = "jonathan moll"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(get_initials(name))  # Output: "joNathAn moLL"
+print(get_initials(name))  # Output: "joNathAn noLL"
 
 # More flexible: uppercases any character in "nall" regardless of position
 #==============================================================================
@@ -30002,7 +29964,7 @@ def get_initials(name):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-name = "jonathan moll"
+name = "jonathan noll"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -30011,7 +29973,7 @@ name = "jonathan moll"
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(get_initials(name))  # Output: "joNathAn moLL" (uppercases all n, a, l characters)
+print(get_initials(name))  # Output: "joNathAn noLL" (uppercases all n, a, l characters)
 
 """
 Problem: 189
@@ -30082,7 +30044,7 @@ def sum_digits():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(count)
-                
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'sum_digits()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -30164,7 +30126,7 @@ def digits_string():
 #------------------------------------------------------------------------------
             total += int(char)  # Convert digit char to int and add
             # isdigit() returns True for '0'-'9', False for letters, spaces, etc.
-            
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -30174,7 +30136,7 @@ def digits_string():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(total)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'digits_string()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -30270,7 +30232,7 @@ def remove_duplicate():
 #------------------------------------------------------------------------------
     print(duplicate)  # Prints list, not string (could use ''.join(duplicate))
     # Note: Using list maintains order; set() would be faster but loses order
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'remove_duplicate()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -30346,7 +30308,7 @@ def find_min():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         user_int.append(int(number))  # Convert strings to integers
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'min_number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -30400,7 +30362,7 @@ def find_min():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(min_number)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'find_min()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -30587,7 +30549,7 @@ def main():
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
             count += 1
-            
+
 #==============================================================================
 # IF STATEMENT: Conditional execution
 #------------------------------------------------------------------------------
@@ -30625,7 +30587,7 @@ def main():
 # Returning: count  # Return count
 #------------------------------------------------------------------------------
         return count  # Return count
-               
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -30709,7 +30671,7 @@ def find_min_num():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_number.append(int(number))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'min_num'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -30729,7 +30691,7 @@ def find_min_num():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(min_num)
-                  
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'find_min_num()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -30785,7 +30747,7 @@ def largest_element():
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     largest_word = max(user, key=len)  # key=len compares by length, not alphabetically
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -30795,7 +30757,7 @@ def largest_element():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(largest_word)
-           
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'largest_element()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -31051,7 +31013,7 @@ def second_largest_element():
 # LEARNING NOTE: If a function doesn't explicitly return a value, it returns None by default.
 #------------------------------------------------------------------------------
         return
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sort'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -31069,7 +31031,7 @@ def second_largest_element():
 # Variable name: 'second_largest' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     second_largest = sort[-2]  # Second-to-last element
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -31079,7 +31041,7 @@ def second_largest_element():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(second_largest)
-        
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'second_largest_element()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -31131,7 +31093,7 @@ def max_of_three(numbers):
 #------------------------------------------------------------------------------
      return result
      # Note: max() can take multiple arguments: max(567, 56, 6) or max(numbers)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'three_numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -31141,7 +31103,7 @@ def max_of_three(numbers):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-three_numbers = [567, 56, 6]    
+three_numbers = [567, 56, 6]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -31211,7 +31173,7 @@ def max_of_three(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         max_number = numbers[1]
-        
+
 #==============================================================================
 # IF STATEMENT: Conditional execution
 #------------------------------------------------------------------------------
@@ -31239,7 +31201,7 @@ def max_of_three(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         max_number = numbers[2]
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -31312,7 +31274,7 @@ def centimeters_inches():
 # Variable name: 'print(f"{cm} cm' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     print(f"{cm} cm = {inches} inches")  # Displays conversion result
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'centimeters_inches()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -31387,7 +31349,7 @@ def find_min_max():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_num.append(int(number))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'min_num'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -31410,7 +31372,7 @@ def find_min_max():
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     max_num = max(int_num)
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -31420,7 +31382,7 @@ def find_min_max():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(min_num, max_num)
-       
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'find_min_max()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -31510,7 +31472,7 @@ def find_min_max():
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     max_number = int_number[0]
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'int_number'
 #------------------------------------------------------------------------------
@@ -31685,7 +31647,7 @@ def common_numbers(lst):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             seen.append(number)  # Mark as seen (first occurrence)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -31718,17 +31680,17 @@ print(common_numbers(lst))  # Output: [2, 45]
 # The function should take two lists and identify numbers that appear in both.
 # Using set() makes this operation efficient with O(1) average-case lookup
 # and optimized intersection operations.
-# 
+#
 # Key Requirements:
 # - Function must accept two lists of numbers
 # - Must find numbers common to both lists
 # - Should use set() (as specified)
 # - Should return list of common numbers
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3], [2, 3, 4] → Output: [2, 3]
 # - Input: [1, 2, 3], [4, 5, 6] → Output: [] (no common numbers)
-# 
+#
 # Algorithm: Convert lists to sets, use intersection operation, convert back to list.
 # ============================================================================
 """
@@ -31833,7 +31795,7 @@ def common_num(lst):
 # Returning: commom  # Returns list of duplicate numbers
 #------------------------------------------------------------------------------
     return commom  # Returns list of duplicate numbers
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32083,7 +32045,7 @@ def word_frequency(string):  # Function name says "word" but counts characters
 #------------------------------------------------------------------------------
     return result
     # Note: Python 3.7+ preserves insertion order, so sorting first ensures alphabetical keys
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32182,7 +32144,7 @@ def total(numbers):
 #------------------------------------------------------------------------------
     return total_numbers, multiply_numbers  # Returns tuple (sum, product)
     # Single-pass algorithm: O(n) time complexity, calculates both simultaneously
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst_numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32279,7 +32241,7 @@ def list_integers(lst):
 #------------------------------------------------------------------------------
     return result
     # Note: Result contains both strings and integers (mixed types)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32306,17 +32268,17 @@ print(list_integers(lst))  # Output: ["join", 4, "Jonathan", 8, "tree", 4]
 # numbers using the built-in sum() and len() functions. The function should
 # take a list of numbers, sum them, divide by the count, and return the result.
 # This is a fundamental statistical operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must use sum() function (as specified)
 # - Must use len() function (as specified)
 # - Must return the average (mean)
-# 
+#
 # Example Input/Output:
 # - Input: [10, 20, 30, 40] → Output: 25.0
 # - Input: [1, 2, 3, 4, 5] → Output: 3.0
-# 
+#
 # Algorithm: Calculate sum(numbers) / len(numbers).
 # ============================================================================
 """
@@ -32376,7 +32338,7 @@ def average(lst):
 #------------------------------------------------------------------------------
     total = sum_lst / length  # Divide sum by count to get average
     # Note: / operator performs floating-point division (returns float even if inputs are int)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -32385,7 +32347,7 @@ def average(lst):
 #------------------------------------------------------------------------------
     return total
     # Formula: average = sum(numbers) / len(numbers)
-               
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32403,7 +32365,7 @@ lst = [2666, 566, 6777]
 # Variable name: 'print(average(lst))  # Output: (2666 + 566 + 6777) / 3' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
 print(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...
-    
+
 """
 Problem: 206
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
@@ -32500,7 +32462,7 @@ def max_of_three():
 # LEARNING NOTE: If a function doesn't explicitly return a value, it returns None by default.
 #------------------------------------------------------------------------------
         return
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'max_number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32567,7 +32529,7 @@ def max_of_three():
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         max_number = int_numbers[2]  # Update maximum
-        
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -32578,7 +32540,7 @@ def max_of_three():
 #------------------------------------------------------------------------------
     print(max_number)
     # Note: Assumes exactly 3 numbers (will error if list has different length)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'max_of_three()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -32595,17 +32557,17 @@ max_of_three()
 # using the built-in max() function. The program should prompt the user for
 # numbers and find the largest value using a loop and comparisons. While the
 # problem mentions "three numbers", the solution should work for any list length.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must NOT use max() function (as specified)
 # - Must find the largest number
 # - Should work for any list length
-# 
+#
 # Example Input/Output:
 # - Input: [10, 20, 15, 30] → Output: 30
 # - Input: [5, 3, 8] → Output: 8
-# 
+#
 # Algorithm: Linear search - iterate through list, track maximum found so far.
 # ============================================================================
 """
@@ -32674,7 +32636,7 @@ def max_of_list():
 # LEARNING NOTE: If a function doesn't explicitly return a value, it returns None by default.
 #------------------------------------------------------------------------------
         return
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'int_numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32753,7 +32715,7 @@ def max_of_list():
 #------------------------------------------------------------------------------
             max_number = number  # Update maximum
     # Single-pass algorithm: O(n) time complexity
-            
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -32763,7 +32725,7 @@ def max_of_list():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(max_number)
-           
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'max_of_list()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -32837,7 +32799,7 @@ def max_of_list():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_numbers.append(int(number))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'max_number'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -32852,7 +32814,7 @@ def max_of_list():
 # Returns True if found, False otherwise.
     max_number = max(int_numbers)  # Built-in max() finds maximum element
     # max() can take any iterable and returns the largest element
-                   
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -32862,7 +32824,7 @@ def max_of_list():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(max_number)
-           
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'max_of_list()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -32879,15 +32841,15 @@ max_of_list()
 # lengths. The function should take a list of words and return a new list
 # where each word is followed by its length. For example, ["jonathan", "horse"]
 # becomes ["jonathan", 8, "horse", 5]. This is identical to Problem 204.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings)
 # - Must return a list with words and their lengths interleaved
 # - Pattern: word, length, word, length, ...
-# 
+#
 # Example Input/Output:
 # - Input: ["jonathan", "horse", "today"] → Output: ["jonathan", 8, "horse", 5, "today", 5]
-# 
+#
 # Algorithm: Iterate through words, append word then its length to result list.
 # ============================================================================
 """
@@ -32969,7 +32931,7 @@ def list_words(lst):
 # Returning: words_lengths
 #------------------------------------------------------------------------------
     return words_lengths
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -33083,7 +33045,7 @@ def list_words(lst):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         words_with_lengths.append(count)  # Add manually calculated length
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -33118,16 +33080,16 @@ print(list_words(lst))
 # without using the built-in len() function. The function should take a list of
 # words and return a list containing only the lengths (integers), not the words
 # themselves. This is similar to Problem 126 but requires manual length calculation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings)
 # - Must return a list of integers (word lengths only)
 # - Must NOT use len() function (as specified)
 # - Must calculate lengths manually
-# 
+#
 # Example Input/Output:
 # - Input: ["hello", "world", "python"] → Output: [5, 5, 6]
-# 
+#
 # Algorithm: Manually count characters in each word, append count to result list.
 # ============================================================================
 """
@@ -33220,7 +33182,7 @@ def length_words(lst):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         length.append(count)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -33228,7 +33190,7 @@ def length_words(lst):
 # Returning: length
 #------------------------------------------------------------------------------
     return length
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -33346,7 +33308,7 @@ def intersection():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(common)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'intersection()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -33387,7 +33349,7 @@ for i in range(1, 6):  # i = 1, 2, 3, 4, 5
 #------------------------------------------------------------------------------
     print('* ' * i)  # String multiplication: '*' * 3 = '***'
     # Prints: "* " (1 time), "* * " (2 times), "* * * " (3 times), etc.
-    
+
 """
 Problem: 214
 Write a Python program to print the following number pyramid:\n1\n2 2\n3 3 3\n4 4 4 4\n5 5 5 5 5
@@ -33480,7 +33442,7 @@ def square_pattern(n):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -33495,7 +33457,7 @@ def square_pattern(n):
 # Integers are whole numbers, floats are decimal numbers.
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
-n = 5    
+n = 5
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -33562,7 +33524,7 @@ def print_square_pattern(side_length):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -33660,11 +33622,11 @@ for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-    print()  # Newline after each row 
+    print()  # Newline after each row
 
 """
 Problem: 218
@@ -33760,7 +33722,7 @@ def print_checkerboard(size):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -33853,7 +33815,7 @@ def print_floyds_triangle(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -33874,7 +33836,7 @@ print_floyds_triangle(rows)
 
 """
 220
-Write a Python program to print a diamond pattern of stars for a given number of rows.\nFor example, for 3 rows:\n  *\n ***\n*****\n ***\n  
+Write a Python program to print a diamond pattern of stars for a given number of rows.\nFor example, for 3 rows:\n  *\n ***\n*****\n ***\n
 """
 
 # Prints diamond: upper triangle + lower triangle (inverted)
@@ -33931,7 +33893,7 @@ def print_diamond(rows):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
             print(" ", end="")  # Print space without newline
-        
+
         # Print stars: 1, 3, 5, 7, ... (2*i + 1 stars)
 #==============================================================================
 # FOR LOOP: Iterating over 'range(2 * i + 1)'
@@ -33960,7 +33922,7 @@ def print_diamond(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34003,7 +33965,7 @@ def print_diamond(rows):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
             print(" ", end="")
-            
+
         # BUG: Missing closing parenthesis in range()
 #==============================================================================
 # FOR LOOP: Iterating over 'range(2 * i + 1)'
@@ -34032,7 +33994,7 @@ def print_diamond(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34199,7 +34161,7 @@ def print_reverse_pyramid(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34276,7 +34238,7 @@ def mirrored_right_angled_triangle(rows):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
             print(" ", end="")  # Print space without newline
-            
+
         # Print stars: 1, 2, 3, 4, 5 stars
 #==============================================================================
 # FOR LOOP: Iterating over 'range(i)'
@@ -34305,7 +34267,7 @@ def mirrored_right_angled_triangle(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34404,7 +34366,7 @@ def triangle_pattern(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34451,9 +34413,9 @@ def triangle_pattern(rows):
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'letters' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'range(rows)'
 #------------------------------------------------------------------------------
@@ -34487,7 +34449,7 @@ def triangle_pattern(rows):
 #==============================================================================
 # Built-in function 'range()' generates a sequence of numbers, commonly used in for loops.
         for j in range(i + 1):
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'print(letter, end'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -34498,12 +34460,12 @@ def triangle_pattern(rows):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
             print(letter, end=" ")
-            
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34591,7 +34553,7 @@ for n in range(r): # n = number (outer loop: rows)
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34653,7 +34615,7 @@ def print_square_pattern(size):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -34940,7 +34902,7 @@ def print_zigzag(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -35052,7 +35014,7 @@ def print_cross(rows):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -35244,16 +35206,16 @@ print(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}
 # program should prompt the user for a list of numbers, filter out the odd
 # numbers (numbers not divisible by 2), and sum them. The problem asks for
 # the shortest possible solution, suggesting a concise, Pythonic approach.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must identify odd numbers (not divisible by 2)
 # - Must sum only the odd numbers
 # - Should be as concise as possible (as specified)
-# 
+#
 # Example Input/Output:
 # - Input: [1, 2, 3, 4, 5] → Output: 9 (1 + 3 + 5)
-# 
+#
 # Algorithm: Filter odd numbers (n % 2 != 0), then sum them (can use list comprehension).
 # ============================================================================
 """
@@ -35349,7 +35311,7 @@ def sum_of_odd():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(count)
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'sum_of_odd()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -35426,7 +35388,7 @@ def remove_vowels():
 #------------------------------------------------------------------------------
             print(char, end= "")  # Print char without newline (end="" prevents newline)
     # Note: Doesn't return string, just prints (could build string with += instead of append)
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'remove_vowels()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -35443,17 +35405,17 @@ remove_vowels()
 # using the built-in min() function. The function should take a list of numbers
 # and return the smallest value using manual comparison logic. This demonstrates
 # how min() works internally and helps understand comparison algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must find the minimum value
 # - Must NOT use min() function (as specified)
 # - Should handle edge cases (empty list)
-# 
+#
 # Example Input/Output:
 # - Input: [3, 1, 4, 1, 5] → Output: 1
 # - Input: [10, 20, 30] → Output: 10
-# 
+#
 # Algorithm: Linear search - iterate through list, track minimum found so far.
 # ============================================================================
 """
@@ -35535,7 +35497,7 @@ def find_min(lst):
 # Returning: min_num
 #------------------------------------------------------------------------------
     return min_num
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -35618,7 +35580,7 @@ def increasing_triangle():
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
     n = 5
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'range(n)'
 #------------------------------------------------------------------------------
@@ -35659,7 +35621,7 @@ def increasing_triangle():
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -35746,7 +35708,7 @@ def decreasing_triangle():
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -35805,7 +35767,7 @@ for i in range(1, 6):  # i = 1, 2, 3, 4, 5
 # The colon (:) at the end is REQUIRED - it tells Python that the function body follows.
 # The function body must be indented (typically 4 spaces) to show it belongs to this function.
 #==============================================================================
-def right_triangle(n): 
+def right_triangle(n):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
 #==============================================================================
@@ -35848,7 +35810,7 @@ def right_triangle(n):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -35979,7 +35941,7 @@ def left_triangle():
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
@@ -36157,8 +36119,8 @@ def enumerate_lst(lst):
 #------------------------------------------------------------------------------
         print(f"index {index} name {word}")  # Prints: "index 0 name Jon", etc.
     # Note: Function returns None (prints but doesn't return value)
-    
-    
+
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36177,7 +36139,7 @@ lst = ["Jon", "Chris", "Nathan"]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(enumerate_lst(lst))  # Prints indices/values, then prints None 
+print(enumerate_lst(lst))  # Prints indices/values, then prints None
 
 """
 Problem: 242
@@ -36231,7 +36193,7 @@ def enumerate_lst(lst):
 # Returning: result  # Returns: [(0, "Jon"), (1, "Chris"), (2, "Nathan")]
 #------------------------------------------------------------------------------
     return result  # Returns: [(0, "Jon"), (1, "Chris"), (2, "Nathan")]
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36250,7 +36212,7 @@ lst = ("Jon", "Chris", "Nathan")  # Note: tuple input (works with any iterable)
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(enumerate_lst(lst)) 
+print(enumerate_lst(lst))
 
 """
 Problem: 243
@@ -36295,7 +36257,7 @@ def enumerate_lst(lst, target):
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
 # Returning: word, index
 #------------------------------------------------------------------------------
-            return word, index 
+            return word, index
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -36303,7 +36265,7 @@ def enumerate_lst(lst, target):
 # Returning: -1
 #------------------------------------------------------------------------------
     return -1
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'target'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36313,7 +36275,7 @@ def enumerate_lst(lst, target):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-target = "Chris"    
+target = "Chris"
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36332,7 +36294,7 @@ lst = ["Jon", "Chris", "Nathan"]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(enumerate_lst(lst, target)) 
+print(enumerate_lst(lst, target))
 
 """
 Problem: 244
@@ -36448,7 +36410,7 @@ def enumerate_lst(lst):
 #------------------------------------------------------------------------------
     print(result)
     # Note: dict(enumerate(lst)) is more concise alternative
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36524,7 +36486,7 @@ def enumerate_lst(lst):
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
             print(index, word)  # Prints elements at odd positions
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36577,7 +36539,7 @@ def enumerate_lst(lst):
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
         print(f"index {index} name {word}")
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -36666,7 +36628,7 @@ lst = ["Jon", "Chris", "Nathan", "Sam", "Rachel"]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4] 
+print(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]
 
 """
 Problem: 249
@@ -36702,7 +36664,7 @@ def enumerate_lst(lst1, lst2):
 #------------------------------------------------------------------------------
         print(f"index {index}: {word} and {lst2[index]}")  # Prints both values side by side
     # Note: Assumes lists have same length (will error if lst2 is shorter)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -37097,7 +37059,7 @@ def dic_lst(lst1, lst2):
 #------------------------------------------------------------------------------
     return result  # Returns: {1: "Ron", 2: "break", 3: "tree", 4: "son"}
     # Note: dict(zip(lst1, lst2)) is more concise alternative
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -37172,7 +37134,7 @@ def combine_3_lst(lst1, lst2, lst3):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
          result.append((x, y, z))  # Append tuple of three elements
-         
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -37181,7 +37143,7 @@ def combine_3_lst(lst1, lst2, lst3):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return result  # Returns: [("Sam", "Sammy", "Son"), ("Nike", "Mikey", "monkey"), ...]
-     
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -37289,7 +37251,7 @@ def transpose_matrix(matrix):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         result.append(list(row))  # Convert tuple to list
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -37389,8 +37351,8 @@ def list_tuples(lst):
         result.append(list(x))  # Convert tuple to list
     # Returns: [[1,4,7], [2,5,8], [3,6,9]] - transposed/unzipped
     # Note: Function doesn't return result (missing return statement)
-    
-    
+
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -37464,7 +37426,7 @@ def individualists(lst):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         result.append(list(num))
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -37545,7 +37507,7 @@ def maxium_element_wise(lst1, lst2):  # Typo: "maxium" should be "maximum"
 # Returning: result  # Returns: [7, 8, 9] (maximum of each pair)
 #------------------------------------------------------------------------------
     return result  # Returns: [7, 8, 9] (maximum of each pair)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -37636,7 +37598,7 @@ def concatenate(lst1, lst2):
 # Returning: result  # Returns: ["fruite orange", "apple banana", "tomato carrot"]
 #------------------------------------------------------------------------------
     return result  # Returns: ["fruite orange", "apple banana", "tomato carrot"]
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -37709,7 +37671,7 @@ def combine_to_dict(lst1, lst2):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         result.append({'a': x, 'b': y})  # Append dictionary to list
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -37807,7 +37769,7 @@ def filter_pairs(lst1, lst2):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             result.append((x, y))  # Append tuple if condition met
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -37904,7 +37866,7 @@ def filter_pairs(lst1, lst2):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
             result.append((x, y))  # Add tuple if condition met
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -37945,7 +37907,7 @@ print(filter_pairs(lst1, lst2))
 
 """
 Problem: 264
-Write a Python program to add corresponding elements of nested lists using `zip()`. 
+Write a Python program to add corresponding elements of nested lists using `zip()`.
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -38041,7 +38003,7 @@ def add_nested_lists(lst1, lst2):
 # Returning: result  # Returns: [[8,10,12], [14,16,18]]
 #------------------------------------------------------------------------------
     return result  # Returns: [[8,10,12], [14,16,18]]
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -38128,7 +38090,7 @@ def euclidean_distance(point1, point2):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
         distance_squared += (x1 - x2) ** 2  # (x1-x2)², sum all dimensions
-        
+
     # Square root of sum of squared differences
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -38232,7 +38194,7 @@ def interleave(lst1, lst2):
 #------------------------------------------------------------------------------
     return result  # Returns: ["crissy", "spotty", "missy", "motty", "sissy", "hotty"]
     # Pattern: [lst1[0], lst2[0], lst1[1], lst2[1], ...]
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -38313,7 +38275,7 @@ def multiply_2_lst(lst1, lst2):
 #------------------------------------------------------------------------------
     return result  # Returns: [6, 24, 54]
     # zip() stops when the shortest list is exhausted
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -38391,7 +38353,7 @@ def dot_product(vector1, vector2):
 #------------------------------------------------------------------------------
     return result  # Returns: 4 + 10 + 18 = 32
     # Dot product formula: Σ(xᵢ × yᵢ) for all i
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'vector1'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -39030,7 +38992,7 @@ print(result)
 def filter_by_length(strings, length):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def has_length(s):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -39101,7 +39063,7 @@ result = filter_by_length(strings, length)
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(result) 
+print(result)
 
 """
 Problem: 276
@@ -39878,7 +39840,7 @@ def print_1_to_10():
         i += 1  # Increment i by 1 (equivalent to i = i + 1)
         # Loop continues: i=1, print 1, i=2, print 2, ..., i=10, print 10, i=11, exit loop
     # After loop, i = 11 (condition i <= 10 is False)
-        
+
 print_1_to_10()  # Output: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (each on new line)
 
 """
@@ -40669,7 +40631,7 @@ for num in test_numbers:
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
         print(f"{num} is not a prime number.")
-    
+
 """
 Problem: 294
 # The 'in' operator checks if a value exists in a sequence (membership test).
@@ -41112,7 +41074,7 @@ def sum_elements(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
     index = 0
-    
+
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
     while index < len(lst):
 #------------------------------------------------------------------------------
@@ -41132,7 +41094,7 @@ def sum_elements(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
         index += 1
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -41213,7 +41175,7 @@ def main(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
         i += 1
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -41439,7 +41401,7 @@ def smallest_element(lst):
 # Integers are whole numbers, floats are decimal numbers.
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
-    i = 1 
+    i = 1
 
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
     while i < len(lst):
@@ -41463,7 +41425,7 @@ def smallest_element(lst):
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'smallest_word' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-            smallest_word = lst[i] 
+            smallest_word = lst[i]
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'i +'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -41473,7 +41435,7 @@ def smallest_element(lst):
 # Integers are whole numbers, floats are decimal numbers.
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
-        i += 1  
+        i += 1
 
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -42269,7 +42231,7 @@ def ask_until_condition():
 #==============================================================================
         if int(user_input) > 10:
             break
-            
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'ask_until_condition()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -42479,7 +42441,7 @@ def sum_of_digits(n):
 # The loop body (next indented lines) will execute for each item.
 # LEARNING NOTE: The loop variable is created fresh in each iteration - you don't need to declare it.
 #==============================================================================
-    for digit in str(n): 
+    for digit in str(n):
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'total +'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -42557,7 +42519,7 @@ print(integers_lst(lst))
 # without using sort(), max(), or min() functions. The function should take a
 # list of numbers and return a tuple containing both values. This requires
 # manual comparison logic to find both extremes in a single pass through the list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must find both minimum and maximum values
@@ -42565,10 +42527,10 @@ print(integers_lst(lst))
 # - Must NOT use max() (as specified)
 # - Must NOT use min() (as specified)
 # - Should return a tuple (min, max)
-# 
+#
 # Example Input/Output:
 # - Input: [10, 90, 45, 55, 222, 2] → Output: (2, 222)
-# 
+#
 # Algorithm: Single-pass iteration - track min and max as we go through the list.
 # ============================================================================
 """
@@ -42638,7 +42600,7 @@ def find_min_max():
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         int_num.append(int(number))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'min_num'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -42656,7 +42618,7 @@ def find_min_max():
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     max_num = int_num[0]
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -42666,7 +42628,7 @@ def find_min_max():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(min_num, max_num)
-           
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'find_min_max()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -42708,7 +42670,7 @@ def group_by_first_letter():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     lst = input("type word list: ").split()
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'result'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -42770,7 +42732,7 @@ def group_by_first_letter():
 #------------------------------------------------------------------------------
         else:
             result[first_letter].append(word)
-            
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -42780,7 +42742,7 @@ def group_by_first_letter():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(result)
-        
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'group_by_first_letter()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -42851,12 +42813,12 @@ def increasing_triangle(n):
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
 # The print() function is one of the most commonly used functions for debugging and user interaction.
-# Printing: 
+# Printing:
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
         print()
-            
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'rows'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -42919,7 +42881,7 @@ def find_longest_word(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
     count = 0
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
 #------------------------------------------------------------------------------
@@ -42982,7 +42944,7 @@ def find_longest_word(lst):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = ["Jonathan", "noll"]    
+lst = ["Jonathan", "noll"]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -43016,7 +42978,7 @@ def main(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     return max(lst, key=len)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -43080,7 +43042,7 @@ def find_longest_word(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
     max_length = 0
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
 #------------------------------------------------------------------------------
@@ -43145,7 +43107,7 @@ def find_longest_word(lst):
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'max_length' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-            max_length = current_length 
+            max_length = current_length
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'longest_word'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -43153,7 +43115,7 @@ def find_longest_word(lst):
 # Variable name: 'longest_word' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             longest_word = word
-            
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -43161,7 +43123,7 @@ def find_longest_word(lst):
 # Returning: longest_word
 #------------------------------------------------------------------------------
     return longest_word
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -43171,7 +43133,7 @@ def find_longest_word(lst):
 # Lists are created with square brackets [] and can contain any data types.
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
-lst = ["Jonathan", "noll", "it"]    
+lst = ["Jonathan", "noll", "it"]
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -43230,14 +43192,14 @@ def second_largest_number():
 # Common list methods: .append(), .remove(), .pop(), .sort(), .reverse()
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
-    user_int.sort()  
+    user_int.sort()
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'second_largest'
 # Purpose: This creates a new variable or updates an existing one with a value.
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'second_largest' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-    second_largest = user_int[-2]  
+    second_largest = user_int[-2]
 
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
@@ -43779,7 +43741,7 @@ def main(lst):
 # Returning: list(map(sqaure_root, lst))
 #------------------------------------------------------------------------------
     return list(map(sqaure_root, lst))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -44297,7 +44259,7 @@ print("Original strings:", string_list)
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print("Stripped strings:", stripped_strings)
-    
+
 """
 Problem: 326
 Write a Python program to create a list of tuples where each tuple contains a number and its square using `map()`.
@@ -44631,7 +44593,7 @@ def list_string(numbers):
 # Returning: sort
 #------------------------------------------------------------------------------
     return sort
-   
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -44685,7 +44647,7 @@ def type_smallest_biggest():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort_number = sorted(user, key=int)
-       
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -44695,7 +44657,7 @@ def type_smallest_biggest():
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
     print(sort_number)
-    
+
 #------------------------------------------------------------------------------
 # FUNCTION CALL: 'type_smallest_biggest()'
 # Purpose: This executes a function that was defined earlier in the code.
@@ -44736,7 +44698,7 @@ def list_of_string_numbers(n):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort = sorted(n, key=int)[::-1]
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -44744,7 +44706,7 @@ def list_of_string_numbers(n):
 # Returning: sort
 #------------------------------------------------------------------------------
     return sort
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -44808,7 +44770,7 @@ def type_biggest_smallest():
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sorted_list = sorted(int_list, reverse=True)
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -45409,7 +45371,7 @@ def sum_of_elements(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
     total_sum = 0
-    
+
     for i, num in enumerate(lst):
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'total_sum +'
@@ -45417,7 +45379,7 @@ def sum_of_elements(lst):
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'total_sum +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-        total_sum += i * num  
+        total_sum += i * num
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -46204,11 +46166,11 @@ Write a Python program that defines a function `add_prefix()` which contains a n
 def add_prefix(prefix):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def prefix_string(string):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -46218,7 +46180,7 @@ def add_prefix(prefix):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
         return prefix + string
-    
+
 
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
@@ -46247,7 +46209,7 @@ prefix_func = add_prefix("pre-")
 # The function executes first, and its return value is stored in the variable.
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
-result = prefix_func("fix") 
+result = prefix_func("fix")
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -46273,7 +46235,7 @@ print(result)
 def add_prefix(prefix):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def prefix_string(string):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -46286,7 +46248,7 @@ def add_prefix(prefix):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
         return prefix + string
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -47617,7 +47579,7 @@ reverse_func = reverse_string()
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(reverse_func("Hello, World!"))  
+print(reverse_func("Hello, World!"))
 
 #==============================================================================
 # FUNCTION DEFINITION: 'reverse_string'
@@ -47816,7 +47778,7 @@ def is_sorted():
 # Returning: compare_elements(lst)
 #------------------------------------------------------------------------------
     return compare_elements(lst)
-    
+
 #==============================================================================
 # FUNCTION DEFINITION: 'compare_elements'
 #------------------------------------------------------------------------------
@@ -48749,7 +48711,7 @@ def max_in_list(lst):
 # Returning: max(lst)
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
-    return max(lst)  
+    return max(lst)
 
 #==============================================================================
 # FUNCTION DEFINITION: 'find_largest'
@@ -48800,7 +48762,7 @@ lst = [12, 45, 7, 23, 67756, 89, 34]
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(find_largest())  
+print(find_largest())
 
 #==============================================================================
 # FUNCTION DEFINITION: 'max_in_list'
@@ -48845,7 +48807,7 @@ def max_in_list(lst):
 # Returning: max(lst)
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
-    return max(lst)  
+    return max(lst)
 
 #==============================================================================
 # FUNCTION DEFINITION: 'find_largest'
@@ -48896,7 +48858,7 @@ def find_largest():
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(find_largest())  
+print(find_largest())
 
 """
 Problem: 376
@@ -49356,7 +49318,7 @@ user = input("type numbers: ").split()
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(list(map(int, user)))
-    
+
 
 #==============================================================================
 # FUNCTION DEFINITION: 'convert_to_integers'
@@ -49501,7 +49463,7 @@ def length_strings(lst):
 # Returning: sort
 #------------------------------------------------------------------------------
     return sort
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -49891,7 +49853,7 @@ def main(lst):
 # Returning: list(sorted(lst, key=inner))
 #------------------------------------------------------------------------------
     return list(sorted(lst, key=inner))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -50548,7 +50510,7 @@ def main(lst_tuples):
 # Returning: list(sorted(lst_tuples, key=inner))
 #------------------------------------------------------------------------------
     return list(sorted(lst_tuples, key=inner))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst_tuples'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51033,8 +50995,8 @@ def count_vowels(s):
 # The function executes first, and its return value is stored in the variable.
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
-    s = s.lower() 
-    
+    s = s.lower()
+
 #==============================================================================
 # FOR LOOP: Iterating over 's'
 #------------------------------------------------------------------------------
@@ -51212,7 +51174,7 @@ def add_five(lst):
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     result = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
 #------------------------------------------------------------------------------
@@ -51298,7 +51260,7 @@ def find_min(numbers):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
     min_num = numbers[0]
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'numbers'
 #------------------------------------------------------------------------------
@@ -51339,7 +51301,7 @@ def find_min(numbers):
 # Returning: min_num
 #------------------------------------------------------------------------------
     return min_num
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51500,7 +51462,7 @@ Write a function that converts centimetets to inches. Type a integer as argument
 def converts(cm):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'inch'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51576,7 +51538,7 @@ def reverse(lst):
 # Returning: lst
 #------------------------------------------------------------------------------
     return lst
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51651,7 +51613,7 @@ def calculate_average(lst):
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
         length_num += 1
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'add_num'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51681,7 +51643,7 @@ def calculate_average(lst):
 # Variable name: 'add_num +' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         add_num += number
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'total'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51696,7 +51658,7 @@ def calculate_average(lst):
 # Returning: total
 #------------------------------------------------------------------------------
     return total
-           
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51767,7 +51729,7 @@ def remove_duplicates(lst):
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     commom = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
 #------------------------------------------------------------------------------
@@ -51830,7 +51792,7 @@ def remove_duplicates(lst):
 # Returning: unique
 #------------------------------------------------------------------------------
     return unique
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -51879,7 +51841,7 @@ def len_words(lst):
 # Variable name: 'result' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
     result = {}
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'lst'
 #------------------------------------------------------------------------------
@@ -51938,7 +51900,7 @@ def len_words(lst):
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-               
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -52016,7 +51978,7 @@ def filter_string(lst):
 # LEARNING NOTE: In Python, empty collections (empty list, string, etc.) are considered False.
 #==============================================================================
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
-        if len(word) == 3: 
+        if len(word) == 3:
 #------------------------------------------------------------------------------
 # METHOD CALL: 'result.append()'
 # Purpose: This calls a method (a function that belongs to an object) on an object.
@@ -52035,7 +51997,7 @@ def filter_string(lst):
 # Returning: result
 #------------------------------------------------------------------------------
     return result
-                    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -52076,7 +52038,7 @@ Write a Python function called calculate_sum that takes two numbers as arguments
 def calculate_sum(a, b):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 # Built-in function 'sum()' adds all numbers in an iterable and returns the total.
     def inner_sum(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
@@ -52090,7 +52052,7 @@ def calculate_sum(a, b):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
         return x + y
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -54724,7 +54686,7 @@ Write a Python function string_contains_digit that checks if a string contains a
 def string_contains_digit(string):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def contains_digit(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -54768,7 +54730,7 @@ def string_contains_digit(string):
 # Returning: False
 #------------------------------------------------------------------------------
         return False
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -54776,7 +54738,7 @@ def string_contains_digit(string):
 # Returning: contains_digit(string)
 #------------------------------------------------------------------------------
     return contains_digit(string)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -54817,7 +54779,7 @@ Write a Python function string_contains_letter that checks if a string contains 
 def string_contains_letter(string):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def contains_letter(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -54861,7 +54823,7 @@ def string_contains_letter(string):
 # Returning: False
 #------------------------------------------------------------------------------
         return False
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -54869,7 +54831,7 @@ def string_contains_letter(string):
 # Returning: contains_letter(string)
 #------------------------------------------------------------------------------
     return contains_letter(string)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'string'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -54910,7 +54872,7 @@ Write a Python function calculate_average that takes three numbers and returns t
 def average_of_list(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def average(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -54955,7 +54917,7 @@ def average_of_list(lst):
 # Variable name: 'total' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             total = add_num / count_len
-            
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -54963,7 +54925,7 @@ def average_of_list(lst):
 # Returning: total
 #------------------------------------------------------------------------------
         return total
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55012,7 +54974,7 @@ Write a Python function check_multiple_of_n that takes two numbers and checks if
 def check_multiple_of_n(num1, num2):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def is_multiple(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55022,8 +54984,8 @@ def check_multiple_of_n(num1, num2):
 # When a 'return' statement executes, the function stops running and control returns to where it was called.
 # Returning: x % y == 0
 #------------------------------------------------------------------------------
-        return x % y == 0 
-    
+        return x % y == 0
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55049,7 +55011,7 @@ print(check_multiple_of_n(10, 2))
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(check_multiple_of_n(10, 3)) 
+print(check_multiple_of_n(10, 3))
 
 """
 Problem: 448
@@ -55071,7 +55033,7 @@ Write a Python function longest_string that takes a list of strings and returns 
 def longest_string(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def longest(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55125,7 +55087,7 @@ def longest_string(lst):
 # Returning: longest_word
 #------------------------------------------------------------------------------
         return longest_word
-            
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55133,7 +55095,7 @@ def longest_string(lst):
 # Returning: longest(lst)
 #------------------------------------------------------------------------------
     return longest(lst)
-                    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -55182,7 +55144,7 @@ def longest_string(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
         return max(strings, key=len)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55190,7 +55152,7 @@ def longest_string(lst):
 # Returning: find_longest(lst)
 #------------------------------------------------------------------------------
     return find_longest(lst)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -55231,7 +55193,7 @@ Write a Python function shortest_string that takes a list of strings and returns
 def shortest_string(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def shortest(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55243,7 +55205,7 @@ def shortest_string(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'min()' returns the smallest value from an iterable or multiple arguments.
         return min(x, key=len)
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55251,7 +55213,7 @@ def shortest_string(lst):
 # Returning: shortest(lst)
 #------------------------------------------------------------------------------
     return shortest(lst)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -55292,7 +55254,7 @@ Write a Python function remove_duplicates that takes a list and removes duplicat
 def remove_duplicates(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def duplicates_removed(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55306,7 +55268,7 @@ def remove_duplicates(lst):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
         unique = set()
-        
+
 #==============================================================================
 # FOR LOOP: Iterating over 'x'
 #------------------------------------------------------------------------------
@@ -55337,7 +55299,7 @@ def remove_duplicates(lst):
 # Returning: unique
 #------------------------------------------------------------------------------
         return unique
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55427,7 +55389,7 @@ def fibonacci(n):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
             return fib_recursive(n - 1) + fib_recursive(n - 2)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55445,7 +55407,7 @@ def fibonacci(n):
 # Integers are whole numbers, floats are decimal numbers.
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
-n = 10 
+n = 10
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -55476,7 +55438,7 @@ Write a Python function called calculate_sum that takes two numbers as arguments
 def calculate_sum(a, b):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 # Built-in function 'sum()' adds all numbers in an iterable and returns the total.
     def inner_sum(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
@@ -55490,7 +55452,7 @@ def calculate_sum(a, b):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
         return x + y
-    
+
     def inner_mult(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55503,7 +55465,7 @@ def calculate_sum(a, b):
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
         return x * y
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55545,7 +55507,7 @@ Write a Python function called calculate_integers that takes two numbers as argu
 def calculate_integers(a, b):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def product(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55558,7 +55520,7 @@ def calculate_integers(a, b):
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
         return x * y
-        
+
     def sum_int(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55571,7 +55533,7 @@ def calculate_integers(a, b):
 # LEARNING NOTE: Python's '+' is polymorphic - it behaves differently based on data types.
 #------------------------------------------------------------------------------
         return x + y
-        
+
     def division(x, y):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55584,7 +55546,7 @@ def calculate_integers(a, b):
 # LEARNING NOTE: Use '//' for integer division (floor division) if you need an integer result.
 #------------------------------------------------------------------------------
         return x / y
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55592,7 +55554,7 @@ def calculate_integers(a, b):
 # Returning: product(a, b), sum_int(a, b), division(a, b)
 #------------------------------------------------------------------------------
     return product(a, b), sum_int(a, b), division(a, b)
-    
+
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -55625,7 +55587,7 @@ Write a Python function average_of_list that calculates the average of a list of
 def average_of_list(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def average(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55670,7 +55632,7 @@ def average_of_list(lst):
 # Variable name: 'total' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             total = add_num / count_len
-            
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55678,7 +55640,7 @@ def average_of_list(lst):
 # Returning: total
 #------------------------------------------------------------------------------
         return total
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55737,7 +55699,7 @@ def len_lst(lst):
 # LEARNING NOTE: Without parentheses, you'd be storing the function itself, not its result.
 #------------------------------------------------------------------------------
     sort = sorted(lst, key=len)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55745,7 +55707,7 @@ def len_lst(lst):
 # Returning: sort
 #------------------------------------------------------------------------------
     return sort
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -55799,7 +55761,7 @@ def min_len(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'min()' returns the smallest value from an iterable or multiple arguments.
     min_string = min(lst, key=len)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55807,7 +55769,7 @@ def min_len(lst):
 # Returning: min_string
 #------------------------------------------------------------------------------
     return min_string
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -55848,7 +55810,7 @@ Write a Python function to find the maximum string alphabetically using the key 
 def max_string_alpha(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def max_string(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -55860,7 +55822,7 @@ def max_string_alpha(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
         return len(x)
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -55912,7 +55874,7 @@ from operator import itemgetter
 def sort_dicts_by_key(dict_list, sort_key):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    # Use itemgetter 
+    # Use itemgetter
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56033,7 +55995,7 @@ Write a Python function that sorts a list of words by the number of vowels they 
 def sort_words_by_vowel_count(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def count_vowels(word):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -56100,7 +56062,7 @@ def sort_words_by_vowel_count(lst):
 # Returning: count
 #------------------------------------------------------------------------------
         return count
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56163,7 +56125,7 @@ def longest_word(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     longest_w = max(lst, key=len)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56171,7 +56133,7 @@ def longest_word(lst):
 # Returning: longest_w
 #------------------------------------------------------------------------------
     return longest_w
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56191,7 +56153,7 @@ lst = ["cheater", "lepard", "lion"]
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
 print(longest_word(lst))
-    
+
 """
 Problem: 463
 # The 'in' operator checks if a value exists in a sequence (membership test).
@@ -56214,7 +56176,7 @@ Write a Python function to sort a list of tuples by the sum of the elements in e
 def sum_of_tuple(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56222,7 +56184,7 @@ def sum_of_tuple(lst):
 # Returning: sorted(lst, key=sum)
 #------------------------------------------------------------------------------
     return sorted(lst, key=sum)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56263,7 +56225,7 @@ Write a Python function to sort a list of strings by the last character of each 
 def list_of_strings_lst(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def last_char(s):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -56274,7 +56236,7 @@ def list_of_strings_lst(lst):
 # Returning: s[-1]
 #------------------------------------------------------------------------------
         return s[-1]
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56325,7 +56287,7 @@ Write a Python function to sort a list of strings by the number of uppercase let
 def sort_number_uppercases(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def uppercase_count(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -56382,7 +56344,7 @@ def sort_number_uppercases(lst):
 # Returning: count
 #------------------------------------------------------------------------------
         return count
-                
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56438,7 +56400,7 @@ Write a Python function to find the tuple with the largest product of its elemen
 def tuple_largest_product(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def product(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -56478,7 +56440,7 @@ def tuple_largest_product(lst):
 # Returning: count
 #------------------------------------------------------------------------------
         return count
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56535,7 +56497,7 @@ def floating_point(numbers):
 # Returning: sorted(numbers, key=round)
 #------------------------------------------------------------------------------
     return sorted(numbers, key=round)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'numbers'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56590,8 +56552,8 @@ def first_element_decending_order(lst):
 # This accesses an element in a list using its index (position).
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
-        return x[0] 
-    
+        return x[0]
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56640,11 +56602,11 @@ Write a Python function that sorts a list of words by the number of consonants u
 def number_of_consonants(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def consonants(word):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'consonants_set'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56655,7 +56617,7 @@ def number_of_consonants(lst):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
         consonants_set = "bcdfghjklmnpqrstvwxyz"
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'count'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56718,7 +56680,7 @@ def number_of_consonants(lst):
 # Returning: sorted(lst, key=consonants)
 #------------------------------------------------------------------------------
     return sorted(lst, key=consonants)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56770,7 +56732,7 @@ def min_string(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'min()' returns the smallest value from an iterable or multiple arguments.
     return min(lst, key=len)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -56811,7 +56773,7 @@ Write a Python function to sort a list of dictionaries by the length of the valu
 def length_of_value(lst, key):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def length_function(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -56824,7 +56786,7 @@ def length_of_value(lst, key):
 #------------------------------------------------------------------------------
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
         return len(x.get(key, ""))
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -56960,7 +56922,7 @@ Write a Python function that sorts a list of integers by their remainder when di
 def main(lst, divisor):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def inner(num):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57058,7 +57020,7 @@ def sort_by_remainder(lst, divisor):
 # Returning: remainder_key(x, divisor)
 #------------------------------------------------------------------------------
         return remainder_key(x, divisor)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57153,7 +57115,7 @@ def sort_by_year(dates):
 # Lists are indexed starting from 0, and items can be added, removed, or modified.
 #------------------------------------------------------------------------------
     date_objects = []
-    
+
 #==============================================================================
 # FOR LOOP: Iterating over 'dates'
 #------------------------------------------------------------------------------
@@ -57177,7 +57139,7 @@ def sort_by_year(dates):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         date_objects.append(datetime.strptime(date, "%d.%m.%Y"))
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'sorted_dates'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -57222,7 +57184,7 @@ def sort_by_year(dates):
 # LEARNING NOTE: Methods can modify the object (in-place) or return a new value.
 #------------------------------------------------------------------------------
         sorted_date_strings.append(date.strftime("%d.%m.%Y"))
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57283,11 +57245,11 @@ Write a Python function to sort a list of names by the number of times the lette
 def sort_by_a_count(names):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def count_a(name):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57296,7 +57258,7 @@ def sort_by_a_count(names):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
         return name.lower().count('a')
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57355,7 +57317,7 @@ Write a Python function to sort a list of numbers by their square using the key 
 def sort_sqaure(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def sqaured(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57368,7 +57330,7 @@ def sort_sqaure(lst):
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
         return x * x
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57376,8 +57338,8 @@ def sort_sqaure(lst):
 # Returning: sorted(lst, key=sqaured)
 #------------------------------------------------------------------------------
     return sorted(lst, key=sqaured)
-        
-    
+
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -57429,7 +57391,7 @@ def closest_to_target(lst, target):
 # Returning: abs(x - target)
 #------------------------------------------------------------------------------
         return abs(x - target)
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57501,7 +57463,7 @@ Write a Python function that sorts a list of tuples based on the length of the f
 def length_of_first_element(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def length_of_first(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57516,7 +57478,7 @@ def length_of_first_element(lst):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         return len(x[0])
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57579,7 +57541,7 @@ Write a Python function to sort a list of strings by the number of spaces they c
 def number_of_spaces(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def spaces_count(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57591,7 +57553,7 @@ def number_of_spaces(lst):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
         return x.count(" ")
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57599,7 +57561,7 @@ def number_of_spaces(lst):
 # Returning: sorted(lst, key=spaces_count)
 #------------------------------------------------------------------------------
     return sorted(lst, key=spaces_count)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -57645,7 +57607,7 @@ Write a Python function that finds the word with the most vowels in a list using
 def most_vowels(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def count_vowels(word):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57659,7 +57621,7 @@ def most_vowels(lst):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
         vowels = "aeiou"
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'count'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -57713,7 +57675,7 @@ def most_vowels(lst):
 # Returning: count
 #------------------------------------------------------------------------------
         return count
-            
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57722,7 +57684,7 @@ def most_vowels(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'max()' returns the largest value from an iterable or multiple arguments.
     return max(lst, key=count_vowels)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -57765,7 +57727,7 @@ Write a Python function to sort a list of integers by the number of digits they 
 def sort_lst_integers(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def count_digits(n):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57784,7 +57746,7 @@ def sort_lst_integers(lst):
 # Returning: sorted(lst, key=count_digits)
 #------------------------------------------------------------------------------
     return sorted(lst, key=count_digits)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -57838,8 +57800,8 @@ def sort_tuples_by_difference(lst):
 # This accesses an element in a list using its index (position).
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
-        return abs(tup[0] - tup[1]) 
-    
+        return abs(tup[0] - tup[1])
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57889,7 +57851,7 @@ Write a Python function to sort a list of strings by the ASCII value of their fi
 def sort_strings_by_ascii(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def ascii_value(s):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -57903,7 +57865,7 @@ def sort_strings_by_ascii(lst):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         return ord(s[0])
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -57967,7 +57929,7 @@ def sort_lists_by_sum(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'sum()' adds all numbers in an iterable and returns the total.
         return sum(sublist)
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58021,11 +57983,11 @@ Write a Python function to find the word with the fewest consonants in a list us
 def number_of_consonants(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def consonants(word):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'consonants_set'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58036,7 +57998,7 @@ def number_of_consonants(lst):
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
         consonants_set = "bcdfghjklmnpqrstvwxyz"
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'count'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58100,7 +58062,7 @@ def number_of_consonants(lst):
 #------------------------------------------------------------------------------
 # Built-in function 'min()' returns the smallest value from an iterable or multiple arguments.
     return min(lst, key=consonants)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58142,7 +58104,7 @@ Write a Python function that sorts a list of file names by their file extension 
 def sort_files_by_extension(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def file_extension(filename):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -58154,7 +58116,7 @@ def sort_files_by_extension(lst):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
         return filename.split('.')[-1]
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58204,7 +58166,7 @@ Write a Python function to sort a list of numbers by the square root of each num
 def sqaure_numbers_lst(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def sqaure(n):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -58217,7 +58179,7 @@ def sqaure_numbers_lst(lst):
 # LEARNING NOTE: For strings, '*' repeats the string (e.g., 'hi' * 3 = 'hihihi').
 #------------------------------------------------------------------------------
         return n * n
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58225,7 +58187,7 @@ def sqaure_numbers_lst(lst):
 # Returning: sorted(lst, key=sqaure)
 #------------------------------------------------------------------------------
     return sorted(lst, key=sqaure)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58280,7 +58242,7 @@ def sort_words_by_distinct_letters(words):
 #------------------------------------------------------------------------------
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
         return len(set(word))
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58331,7 +58293,7 @@ Write a Python function that sorts a list of strings by the second letter in eac
 def sort_second_letter(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def second_letter(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -58345,7 +58307,7 @@ def sort_second_letter(lst):
 # Python uses zero-based indexing - the first element is at index 0, second at index 1, etc.
 # LEARNING NOTE: Negative indices count from the end (-1 is the last element).
         return x[1]
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58353,7 +58315,7 @@ def sort_second_letter(lst):
 # Returning: sorted(lst, key=second_letter)
 #------------------------------------------------------------------------------
     return sorted(lst, key=second_letter)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'lst'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58396,7 +58358,7 @@ Write a Python function to sort a list of people by their age stored in a dictio
 def people_age(dic):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def sort_age(person):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -58407,7 +58369,7 @@ def people_age(dic):
 # Returning: dic[person]
 #------------------------------------------------------------------------------
         return dic[person]
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58415,7 +58377,7 @@ def people_age(dic):
 # Returning: sorted(dic, key=sort_age)
 #------------------------------------------------------------------------------
     return sorted(dic, key=sort_age)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'dic'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58453,7 +58415,7 @@ Write a Python function that sorts a list of numbers by their binary representat
 def sort_by_binary_representation(lst):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def binary_representation(x):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -58464,7 +58426,7 @@ def sort_by_binary_representation(lst):
 # Returning: bin(x)
 #------------------------------------------------------------------------------
         return bin(x)
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58528,7 +58490,7 @@ def sort_keys_by_value(dic):
 # Returning: dic[key]
 #------------------------------------------------------------------------------
         return dic[key]
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58537,7 +58499,7 @@ def sort_keys_by_value(dic):
 # This returns the result of calling a method on an object.
 #------------------------------------------------------------------------------
     return sorted(dic.keys(), key=get_value)
-   
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'dic'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58588,7 +58550,7 @@ def sort_fractions_by_decimal(fractions):
 # Returning: float(fraction)
 #------------------------------------------------------------------------------
         return float(fraction)
-        
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58639,7 +58601,7 @@ Write a Python function to find the longest string that ends with a specific let
 def longest_string_letter(lst, letter):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
     def longest_letter(s):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -58652,7 +58614,7 @@ def longest_string_letter(lst, letter):
 #------------------------------------------------------------------------------
 # Built-in function 'len()' returns the length (number of items) of a sequence or collection.
         return len(s) if s.endswith(letter) else -1
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58707,7 +58669,7 @@ print(longest_string_letter(lst, 'a'))
 def longest_string(string, letter):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'words'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58758,14 +58720,14 @@ def longest_string(string, letter):
 # Returning: 0
 #------------------------------------------------------------------------------
             return 0
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'longest'
 # Purpose: This creates a new variable or updates an existing one with a value.
 # In Python, variables are created when you first assign a value to them (no declaration needed).
 # Variable name: 'longest' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
-    longest = None  
+    longest = None
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'max_length'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58775,7 +58737,7 @@ def longest_string(string, letter):
 # Integers are whole numbers, floats are decimal numbers.
 # Python automatically determines the type based on the value.
 #------------------------------------------------------------------------------
-    max_length = 0 
+    max_length = 0
 
 #==============================================================================
 # FOR LOOP: Iterating over 'words'
@@ -58827,7 +58789,7 @@ def longest_string(string, letter):
 # Variable name: 'longest' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
             longest = word
-    
+
 #------------------------------------------------------------------------------
 # RETURN STATEMENT:
 # Purpose: This exits the function immediately and sends a value back to the caller.
@@ -58894,7 +58856,7 @@ class Dog(Animal):
 # Returning: "Bark"
 #------------------------------------------------------------------------------
         return "Bark"
-        
+
 class Cat(Animal):
     def speak(self):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
@@ -58906,7 +58868,7 @@ class Cat(Animal):
 # Returning: "Meow"
 #------------------------------------------------------------------------------
         return "Meow"
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'dog'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -58976,7 +58938,7 @@ class Car(Vehicle):
     # To use it, call the function name followed by parentheses with any required arguments.
 
         super().__init__(speed, color)
-        
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'self.model'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -59036,9 +58998,9 @@ class Student(Person):
     def __init__(self, name, grade):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
-    
+
         super().__init__(name)
-    
+
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'self.grade'
 # Purpose: This creates a new variable or updates an existing one with a value.
@@ -59046,7 +59008,7 @@ class Student(Person):
 # Variable name: 'self.grade' - follows Python naming conventions (lowercase with underscores).
 #------------------------------------------------------------------------------
         self.grade = grade
-        
+
     def introduce(self):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
@@ -59078,7 +59040,7 @@ person = Person("Alice")
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(person.introduce()) 
+print(person.introduce())
 
 #------------------------------------------------------------------------------
 # VARIABLE ASSIGNMENT: 'student'
@@ -59098,7 +59060,7 @@ student = Student("Bob", 10)
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(student.introduce()) 
+print(student.introduce())
 
 """
 Problem: 498
@@ -59162,7 +59124,7 @@ rectangle = Rectangle(5, 3)
 # LEARNING NOTE: print() automatically converts values to strings and adds a newline at the end.
 # You can print multiple items separated by commas - they'll be printed with spaces between them.
 #------------------------------------------------------------------------------
-print(f"Area of the rectangle: {rectangle.area()}") 
+print(f"Area of the rectangle: {rectangle.area()}")
 
 """
 Problem: 499
@@ -59253,7 +59215,7 @@ class Manager(Employee):
     def __init__(self, name, salary):
     # FUNCTION SUMMARY: This function is now defined and ready to be called.
     # To use it, call the function name followed by parentheses with any required arguments.
-    
+
         super().__init__(name, salary)
 
     def assign_task(self, task):
@@ -59317,14 +59279,14 @@ print(manager.assign_task("Prepare a project report"))
 #===============================================================================
 # This file demonstrates comprehensive Python programming concepts through practical exercises.
 # Each function represents a complete solution to a specific problem.
-# 
+#
 # KEY TAKEAWAYS:
 # - Functions make code reusable and organized
 # - Python provides many built-in functions that simplify common tasks
 # - Understanding data types is crucial for writing correct code
 # - Control structures (if/for/while) enable complex program logic
 # - Practice with these exercises builds a strong Python foundation
-# 
+#
 # NEXT STEPS:
 # - Try modifying the functions to handle edge cases
 # - Experiment with different input values

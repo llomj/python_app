@@ -4087,7 +4087,7 @@ def count_hello(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-string = "hello, you cunt"
+string = "hello, you pal"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -4137,7 +4137,7 @@ def count(string):
 # Strings in Python are immutable - you cannot change individual characters, only create new strings.
 # Python supports single quotes ('), double quotes ("), and triple quotes for multi-line strings.
 #------------------------------------------------------------------------------
-string = "hello, you cunt ###"
+string = "hello, you pal ###"
 #------------------------------------------------------------------------------
 # PRINT STATEMENT: Output to console
 # Purpose: This displays text or values to the standard output (usually the terminal/console).
@@ -31725,7 +31725,7 @@ while password != "python":
 
 """
 Problem: 845
-Write a Python program that multiplies a number by itself until it exceeds 10,000 using a while loop.
+Write a Python program that repeatedly squares a number until it exceeds 10,000 using a while loop.
 """
 
 #------------------------------------------------------------------------------

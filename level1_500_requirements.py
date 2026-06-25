@@ -1,4 +1,4 @@
-#function problems level 1 (chatGPT￼) 
+#function problems level 1 (chatGPT￼)
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -6,12 +6,12 @@
 # The function should accept two numeric parameters (integers or floats) and
 # return their sum. This is a fundamental arithmetic operation that demonstrates
 # function definition, parameters, and return statements in Python.
-# 
+#
 # Key Requirements:
 # - Function must take exactly two numeric parameters
 # - Function must return the sum of the two parameters
 # - Should work with both integers and floating-point numbers
-# 
+#
 # Example Input/Output:
 # - add_numbers(5, 5) should return 10
 # - add_numbers(3.5, 2.5) should return 6.0
@@ -29,12 +29,12 @@ Write a Python function called `add_numbers` that takes two numbers as parameter
 # This approach is memory-efficient as it doesn't store intermediate values.
 def add_number(a, b):
     return a + b  # Returns the sum of parameters a and b
-    
+
 # TEST CASE:
 # This demonstrates the function with two positive integers (5 and 5).
 # The expected result is 10, which will be printed to the console.
 print(add_number(5, 5))  # Output: 10
-    
+
 # ALTERNATIVE SOLUTION EXPLANATION:
 # This solution uses an intermediate variable to store the result before returning.
 # While functionally identical to the previous solution, this approach can be
@@ -43,7 +43,7 @@ print(add_number(5, 5))  # Output: 10
 def add_num(a, b):
     result = a + b  # Calculate the sum and store it in 'result'
     return result   # Return the stored result
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating that both solutions produce the same output.
 print(add_num(5, 5))  # Output: 10
@@ -54,12 +54,12 @@ print(add_num(5, 5))  # Output: 10
 # The function should accept two numeric parameters and return their product
 # (the result of multiplying them together). This demonstrates the use of
 # the multiplication operator (*) in Python functions.
-# 
+#
 # Key Requirements:
 # - Function must take exactly two numeric parameters
 # - Function must return the product (multiplication result)
 # - Should handle integers, floats, and negative numbers correctly
-# 
+#
 # Example Input/Output:
 # - multiply_numbers(5, 5) should return 25
 # - multiply_numbers(3.5, 2) should return 7.0
@@ -77,7 +77,7 @@ Write a Python function called `multiply_numbers` that takes two numbers as para
 # returns the result directly. This is the most straightforward approach.
 def multiply_numbers(a, b):
     return a * b  # Returns the product of a multiplied by b
-    
+
 # TEST CASE:
 # This test multiplies 5 by 5, which should result in 25.
 print(multiply_numbers(5, 5))  # Output: 25
@@ -88,18 +88,18 @@ print(multiply_numbers(5, 5))  # Output: 25
 # The function should accept a list containing numeric values and return the
 # highest value among them. This is a common operation in data analysis and
 # algorithm design.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must return the maximum value from the list
 # - Should handle both positive and negative numbers
 # - Should work with integers and floats
-# 
+#
 # Example Input/Output:
 # - find_max([2, 67, 300]) should return 300
 # - find_max([5, 100, 3, 8, 15]) should return 100
 # - find_max([-10, -5, -20]) should return -5 (least negative is maximum)
-# 
+#
 # Edge Cases:
 # - Empty list would cause an error (not handled in these solutions)
 # - Single-element list should return that element
@@ -120,9 +120,9 @@ def find_max(number):
 # TEST CASE:
 # This test uses a list with three numbers: 2, 67, and 300.
 # The maximum value is 300, which will be printed.
-result = [2, 67, 300]    
+result = [2, 67, 300]
 print(find_max(result))  # Output: 300
-        
+
 # ALTERNATIVE SOLUTION EXPLANATION (Manual Implementation):
 # This solution manually implements the max-finding algorithm without using
 # the built-in max() function. It demonstrates how to find the maximum using
@@ -132,7 +132,7 @@ def find_max(numbers):
     # Initialize max_number with the first element of the list
     # This assumes the list is not empty
     max_number = numbers[0]
-    
+
     # Iterate through each number in the list
     for num in numbers:
         # Compare current number with the current maximum
@@ -140,7 +140,7 @@ def find_max(numbers):
         if num > max_number:
             max_number = num  # Update max_number to the new maximum
     return max_number  # Return the maximum value found
-    
+
 # TEST CASE:
 # This test uses a list with five numbers and includes a formatted output message.
 numbers_list = [5, 100, 3, 8, 15]
@@ -152,20 +152,20 @@ print("The maximum number in the list is:", find_max(numbers_list))  # Output: T
 # of numbers. The average is calculated by summing all numbers and dividing
 # by the count of numbers. The problem specifically asks to use sum() and len()
 # functions, which are built-in Python functions.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the average (mean) of all numbers
 # - Must use sum() to calculate the total
 # - Must use len() to get the count of numbers
-# 
+#
 # Formula: average = sum(numbers) / len(numbers)
-# 
+#
 # Example Input/Output:
 # - calculate_average([1, 67, 888]) should return (1+67+888)/3 = 318.67...
 # - calculate_average([44, 67, 54]) should return (44+67+54)/3 = 55.0
 # - calculate_average([10, 20, 30, 40]) should return 25.0
-# 
+#
 # Edge Cases:
 # - Empty list would cause division by zero error (not handled)
 # - Single-element list returns that element
@@ -185,13 +185,13 @@ def calculate_average(number):
     # Division gives us the average (mean)
     result = sum(number) / len(number)
     return result  # Return the calculated average
-    
+
 # TEST CASE:
 # This test calculates the average of [1, 67, 888].
 # Sum = 956, Count = 3, Average = 956/3 = 318.666...
 lst = [1, 67, 888]
 print(calculate_average(lst))  # Output: 318.6666666666667
-    
+
 # ALTERNATIVE SOLUTION EXPLANATION:
 # This is essentially the same solution with a different function name.
 # The logic is identical: sum all numbers and divide by the count.
@@ -200,13 +200,13 @@ print(calculate_average(lst))  # Output: 318.6666666666667
 def cal_average(number):
     # Calculate sum of all numbers divided by the count
     result = sum(number) / len(number)
-    
+
     return result  # Return the average
-    
+
 # TEST CASE:
 # This test calculates the average of [44, 67, 54].
 # Sum = 165, Count = 3, Average = 165/3 = 55.0
-lst = [44,67,54]    
+lst = [44,67,54]
 print(cal_average(lst))  # Output: 55.0
 
 # ============================================================================
@@ -215,18 +215,18 @@ print(cal_average(lst))  # Output: 55.0
 # Vowels are defined as the letters: a, e, i, o, u (both lowercase and uppercase).
 # The problem specifies to ignore case sensitivity, meaning 'A' and 'a' should
 # both be counted as vowels. This is a common string processing task.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must count vowels: a, e, i, o, u (case-insensitive)
 # - Must return the total count of vowels found
-# 
+#
 # Example Input/Output:
 # - count_vowels("Jonathan") should return 3 (o, a, a)
 # - count_vowels("Hello") should return 2 (e, o)
 # - count_vowels("AEIOU") should return 5 (all vowels)
 # - count_vowels("xyz") should return 0 (no vowels)
-# 
+#
 # Note: The current solution only checks lowercase vowels, which may not
 # fully satisfy the case-insensitive requirement. A better solution would
 # convert the string to lowercase first.
@@ -243,7 +243,7 @@ Write a Python function called `count_vowels` that takes a string as input and r
 # case-insensitivity, the string should be converted to lowercase first.
 def count_vowels(string):
     count = 0  # Initialize counter to zero
-    
+
     # Iterate through each character in the string
     for char in string:
         # Check if the character is a lowercase vowel
@@ -251,7 +251,7 @@ def count_vowels(string):
         if char in "aeiou":
             count += 1  # Increment counter if vowel found
     return count  # Return the total count of vowels
-    
+
 # TEST CASE:
 # This test counts vowels in "Jonathan". The vowels are: o, a, a (3 total).
 # However, if the string contained uppercase vowels, they wouldn't be counted
@@ -265,18 +265,18 @@ print(count_vowels(result))  # Output: 3
 # characters appear in the opposite order. For example, "hello" becomes "olleh".
 # This is a common string manipulation task that can be solved using Python's
 # slicing syntax or by iterating through the string.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with characters in reverse order
 # - Original string should remain unchanged (though this solution modifies it)
-# 
+#
 # Example Input/Output:
 # - reverse_string("Jonathan") should return "nahtanoJ"
 # - reverse_string("hello") should return "olleh"
 # - reverse_string("a") should return "a" (single character)
 # - reverse_string("") should return "" (empty string)
-# 
+#
 # Note: The solution uses string slicing [::-1], which is the most Pythonic
 # and efficient way to reverse a string in Python.
 # ============================================================================
@@ -284,7 +284,7 @@ print(count_vowels(result))  # Output: 3
 Problem 6:
 Write a Python function called `reverse_string` that takes a string as input and returns the reverse of that string.
 """
-    
+
 # SOLUTION EXPLANATION:
 # This solution uses Python's extended slicing syntax [::-1] to reverse the string.
 # The syntax [start:stop:step] with step=-1 means:
@@ -296,37 +296,37 @@ def reverse_string(string):
     # [::-1] is Python's slicing syntax that reverses the string
     # It creates a new string with characters in reverse order
     string = string[::-1]
-    
+
     return string  # Return the reversed string
-    
+
 # TEST CASE:
 # This test reverses "Jonathan" to "nahtanoJ".
 # Each character is placed in the opposite position.
 result = "Jonathan"
 print(reverse_string(result))  # Output: nahtanoJ
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem asks us to determine if a number is even. An even number is
 # any integer that is divisible by 2 with no remainder. This is a fundamental
 # mathematical operation that's commonly used in programming for conditional
 # logic and loops.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return True if the number is even
 # - Function must return False if the number is odd
-# 
+#
 # Mathematical Definition:
 # - Even number: divisible by 2 (remainder is 0 when divided by 2)
 # - Odd number: not divisible by 2 (remainder is 1 when divided by 2)
-# 
+#
 # Example Input/Output:
 # - is_even(10) should return True (10 ÷ 2 = 5 with remainder 0)
 # - is_even(7) should return False (7 ÷ 2 = 3 with remainder 1)
 # - is_even(0) should return True (0 is considered even)
 # - is_even(-4) should return True (negative even numbers are still even)
-# 
+#
 # The modulo operator (%) is used to check the remainder after division.
 # ============================================================================
 """
@@ -344,35 +344,35 @@ def is_even(number):
     # If remainder is 0, the number is even (returns True)
     # If remainder is 1, the number is odd (returns False)
     return number % 2 == 0
-               
+
 # TEST CASE:
 # This test checks if 10 is even. Since 10 ÷ 2 = 5 with remainder 0,
 # the function should return True.
-result = 10        
+result = 10
 print(is_even(result))  # Output: True
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires calculating the square of a number. The square of a
-# number is the result of multiplying that number by itself. For example,
+# number is the result of multiplying that number to the power of 2. For example,
 # the square of 5 is 25 (5 × 5 = 25). This is a basic mathematical operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a number (integer or float) as input
 # - Function must return the square (number × number)
 # - Should work with both positive and negative numbers
-# 
+#
 # Mathematical Definition:
 # - Square of n = n × n = n²
 # - Square of -5 = (-5) × (-5) = 25 (squares are always positive or zero)
-# 
+#
 # Example Input/Output:
-# - calculate_square(6) should return 36 (6 × 6)
-# - calculate_square(9) should return 81 (9 × 9)
-# - calculate_square(-4) should return 16 ((-4) × (-4))
-# - calculate_square(3.5) should return 12.25 (3.5 × 3.5)
-# 
-# Note: The first solution has a bug - it uses number ** number (power operation)
+# - calculate_square(6) should return 36 (6 ** 2)
+# - calculate_square(9) should return 81 (9 ** 2)
+# - calculate_square(-4) should return 16 ((-4) ** 2)
+# - calculate_square(3.5) should return 12.25 (3.5 ** 2)
+#
+# Note: The first solution has a bug - it uses number ** 2 (power operation)
 # instead of number ** 2, which would calculate number to the power of itself
 # rather than the square. For example, 9 ** 9 = 387,420,489, not 81.
 # ============================================================================
@@ -382,34 +382,34 @@ Write a Python function called `calculate_square` that takes a number as input a
 """
 
 # SOLUTION EXPLANATION (BUGGY VERSION):
-# WARNING: This solution has a bug! It uses number ** number instead of number ** 2.
-# The ** operator is Python's exponentiation operator. number ** number means
+# WARNING: This solution has a bug! It uses number ** 2 instead of number ** 2.
+# The ** operator is Python's exponentiation operator. number ** 2 means
 # "number raised to the power of number", not "number squared".
 # For example: 9 ** 9 = 387,420,489 (not 81, which is 9²).
 # The correct syntax should be: number ** 2
 def cal_square(number):
-    # BUG: This calculates number^number, not number²
+    # BUG: This calculates number**2, not number squared
     # Should be: return number ** 2
-    return number ** number
-       
+    return number ** 2
+
 # TEST CASE:
 # This test attempts to square 9, but due to the bug, it calculates 9^9 instead.
 # Expected: 81, Actual: 387,420,489
 lst = 9
-print(cal_square(lst))  # Output: 387420489 (incorrect - should be 81)
+print(cal_square(lst))  # Output: 81
 
 # CORRECT SOLUTION EXPLANATION:
-# This solution correctly calculates the square by multiplying the number by itself.
+# This solution correctly calculates the square by multiplying the number to the power of 2.
 # This is the most straightforward approach and clearly shows what "square" means.
-def calculate_sqaure(number):
-    # Multiply number by itself to get the square
-    square = number * number
-    
+def calculate_square(number):
+    # Multiply number to the power of 2 to get the square
+    square = number ** 2
+
     return square  # Return the squared value
-    
+
 # TEST CASE:
-# This test correctly squares 6: 6 × 6 = 36
-print(calculate_sqaure(6))  # Output: 36
+# This test correctly squares 6: 6 ** 2 = 36
+print(calculate_square(6))  # Output: 36
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -417,16 +417,16 @@ print(calculate_sqaure(6))  # Output: 36
 # and returns a personalized greeting message. The function should format the
 # message as "Hello, [name]!" where [name] is replaced with the actual name
 # provided as input. This demonstrates string formatting and function usage.
-# 
+#
 # Key Requirements:
 # - Function must accept a string parameter (the name)
 # - Function must return or print a greeting message
 # - Message format should be "Hello, [name]!"
-# 
+#
 # Example Input/Output:
 # - greet_user("Jonathan") should return "Hello, Jonathan!"
 # - greet_user("Alice") should return "Hello, Alice!"
-# 
+#
 # Note: The solution uses f-string formatting, which is a modern Python feature
 # for string interpolation. The actual output format may vary slightly.
 # ============================================================================
@@ -444,7 +444,7 @@ def greet_user(string):
     # f-string syntax: f"text {variable}" embeds the variable value
     # Note: The output uses lowercase "hello" instead of "Hello" as specified
     return f"hello {string}"  # Returns formatted greeting string
-        
+
 # TEST CASE:
 # This test greets "Jonathan" with the message "hello Jonathan"
 print(greet_user("Jonathan"))  # Output: hello Jonathan
@@ -455,17 +455,17 @@ print(greet_user("Jonathan"))  # Output: hello Jonathan
 # The function should take a list of numbers as input and return a new list
 # where each element is the square of the corresponding element in the input list.
 # This demonstrates list comprehension, iteration, and mathematical operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a NEW list (not modify the original)
 # - Each element in the new list should be the square of the corresponding element
-# 
+#
 # Example Input/Output:
 # - square_list([2, 4, 5, 6]) should return [4, 16, 25, 36]
 # - square_list([1, 3, 5]) should return [1, 9, 25]
 # - square_list([-2, 0, 2]) should return [4, 0, 4]
-# 
+#
 # The square of a number n is n × n or n².
 # ============================================================================
 """
@@ -480,14 +480,14 @@ Write a Python function called `square_list` that takes a list of numbers as inp
 # is clear and easy to understand, making it good for learning purposes.
 def square_lst(numbers):
     squared_numbers = []  # Initialize empty list to store squared values
-    
+
     # Iterate through each number in the input list
     for number in numbers:
-        # Calculate square using ** operator (number ** 2 = number²)
+        # Calculate square using ** operator (number ** 2 = number squared)
         # and append to the new list
         squared_numbers.append(number ** 2)
     return squared_numbers  # Return the new list with squared values
-    
+
 # TEST CASE:
 # This test squares each number in [2, 4, 5, 6]:
 # 2² = 4, 4² = 16, 5² = 25, 6² = 36
@@ -501,17 +501,17 @@ print(square_lst(result))  # Output: [4, 16, 25, 36]
 # The function should take a string as input and return a new string where
 # all lowercase letters are converted to their uppercase equivalents, while
 # uppercase letters and non-letter characters remain unchanged.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a string with all characters in uppercase
 # - Non-letter characters (numbers, symbols, spaces) remain unchanged
-# 
+#
 # Example Input/Output:
 # - convert_to_uppercase("Jonathan") should return "JONATHAN"
 # - convert_to_uppercase("Hello World") should return "HELLO WORLD"
 # - convert_to_uppercase("abc123") should return "ABC123"
-# 
+#
 # Python's built-in .upper() method handles this conversion efficiently.
 # ============================================================================
 """
@@ -528,7 +528,7 @@ def covert_uppercase(string):
     # .upper() is a string method that returns a new string with all
     # lowercase letters converted to uppercase
     return string.upper()  # Returns uppercase version of the string
-    
+
 # TEST CASE:
 # This test converts "Jonathan" to "JONATHAN"
 # All lowercase letters (o, a, t, h, a, n) are converted to uppercase
@@ -540,17 +540,17 @@ print(covert_uppercase("Jonathan"))  # Output: JONATHAN
 # function should take a list of numbers as input and return the total sum
 # of all elements. This is a fundamental list operation that's commonly used
 # in data processing and mathematical calculations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the sum of all numbers in the list
 # - Should work with integers, floats, and mixed numeric types
-# 
+#
 # Example Input/Output:
 # - calculate_sum([1, 56, 778]) should return 835 (1 + 56 + 778)
 # - calculate_sum([10, 20, 30]) should return 60
 # - calculate_sum([-5, 10, -3]) should return 2
-# 
+#
 # Python provides a built-in sum() function, but the problem can also be
 # solved manually using a loop to demonstrate the algorithm.
 # ============================================================================
@@ -571,7 +571,7 @@ def calculate_sum(number):
 
 # TEST CASE:
 # This test sums [1, 56, 778]: 1 + 56 + 778 = 835
-lst = [1, 56, 778]    
+lst = [1, 56, 778]
 print(calculate_sum(lst))  # Output: 835
 
 # ALTERNATIVE SOLUTION EXPLANATION (Manual Implementation):
@@ -581,12 +581,12 @@ print(calculate_sum(lst))  # Output: 835
 # and is useful for learning purposes, though less efficient than sum().
 def cal_sum(numbers):
     count = 0  # Initialize counter to zero (will accumulate the sum)
-    
+
     # Iterate through each number in the list
     for number in numbers:
         count += number  # Add current number to the running total
     return count  # Return the final sum
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating that both solutions produce
 # the same result: 1 + 56 + 778 = 835
@@ -598,22 +598,22 @@ print(cal_sum(lst))  # Output: 835
 # This problem asks us to determine if a number is odd. An odd number is any
 # integer that is NOT divisible by 2, meaning it has a remainder of 1 when
 # divided by 2. This is the opposite of an even number check.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return True if the number is odd
 # - Function must return False if the number is even
-# 
+#
 # Mathematical Definition:
 # - Odd number: NOT divisible by 2 (remainder is 1 when divided by 2)
 # - Even number: divisible by 2 (remainder is 0 when divided by 2)
-# 
+#
 # Example Input/Output:
 # - is_odd(7) should return True (7 ÷ 2 = 3 with remainder 1)
 # - is_odd(10) should return False (10 ÷ 2 = 5 with remainder 0)
 # - is_odd(0) should return False (0 is even)
 # - is_odd(-3) should return True (negative odd numbers are still odd)
-# 
+#
 # WARNING: The current solution has a bug! It checks if number % 2 == 0,
 # which actually checks if the number is EVEN, not odd. The correct check
 # should be number % 2 != 0 or number % 2 == 1.
@@ -644,17 +644,17 @@ print(is_odd(10))  # Output: True (INCORRECT - 10 is even, not odd!)
 # single string. The function should take two string parameters and return a
 # new string that contains the first string followed by the second string.
 # This is a fundamental string operation in programming.
-# 
+#
 # Key Requirements:
 # - Function must accept two string parameters
 # - Function must return a new string (concatenation of both inputs)
 # - The first string should come before the second string in the result
-# 
+#
 # Example Input/Output:
-# - concatenate_strings("Jonathan", "moll") should return "Jonathanmoll"
+# - concatenate_strings("Jonathan", "noll") should return "Jonathannoll"
 # - concatenate_strings("Hello", "World") should return "HelloWorld"
 # - concatenate_strings("", "test") should return "test" (empty string + string)
-# 
+#
 # In Python, the + operator is used for string concatenation.
 # ============================================================================
 """
@@ -670,12 +670,12 @@ def concatenate_strings(string1, string2):
     # The + operator concatenates (joins) two strings together
     concatenate = string1 + string2  # Join string1 and string2
     return concatenate  # Return the concatenated string
-       
+
 # TEST CASE:
-# This test concatenates "Jonathan" and "moll" to produce "Jonathanmoll"
+# This test concatenates "Jonathan" and "noll" to produce "Jonathannoll"
 lst1 = "Jonathan"
-lst2 = "moll"
-print(concatenate_strings(lst1, lst2))  # Output: Jonathanmoll
+lst2 = "noll"
+print(concatenate_strings(lst1, lst2))  # Output: Jonathannoll
 
 # ALTERNATIVE SOLUTION EXPLANATION:
 # This is a more concise version that directly returns the concatenated string
@@ -684,10 +684,10 @@ print(concatenate_strings(lst1, lst2))  # Output: Jonathanmoll
 def concatenate_string(string1, string2):
     # Directly return the concatenated string
     return string1 + string2  # Returns string1 followed by string2
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
-print(concatenate_string("Jonathan", "moll"))  # Output: Jonathanmoll
+print(concatenate_string("Jonathan", "noll"))  # Output: Jonathannoll
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -695,17 +695,17 @@ print(concatenate_string("Jonathan", "moll"))  # Output: Jonathanmoll
 # The function should take a string as input and return the total count of
 # characters in that string. This is a basic string operation that's used
 # frequently in programming for validation, formatting, and processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return the number of characters in the string
 # - Should count all characters including spaces, punctuation, and numbers
-# 
+#
 # Example Input/Output:
 # - find_length("Jonathan") should return 8 (8 characters)
 # - find_length("Hello World") should return 11 (including the space)
 # - find_length("") should return 0 (empty string has zero length)
-# 
+#
 # Python provides a built-in len() function, but the problem can also be
 # solved manually to demonstrate the counting algorithm.
 # ============================================================================
@@ -735,12 +735,12 @@ print(find_length("Jonathan"))  # Output: 8
 # algorithm and is useful for learning, though less efficient than len().
 def find_len(string):
     count = 0  # Initialize counter to zero
-    
+
     # Iterate through each character in the string
     for char in string:
         count += 1  # Increment counter for each character found
     return count  # Return the total count (length)
-        
+
 # TEST CASE:
 # Same test case as above, demonstrating that both solutions produce
 # the same result: "Jonathan" has 8 characters
@@ -752,19 +752,19 @@ print(find_len("Jonathan"))  # Output: 8
 # is a word, phrase, or sequence that reads the same forwards and backwards.
 # Examples include "racecar", "level", and "madam". The function should handle
 # case-insensitivity and ignore spaces for phrases like "A man a plan a canal Panama".
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return True if the string is a palindrome, False otherwise
 # - Should handle case-insensitivity (treat 'A' and 'a' as the same)
 # - Should ignore spaces (for multi-word palindromes)
-# 
+#
 # Example Input/Output:
 # - is_palindrome("racecar") should return True (reads same forwards/backwards)
 # - is_palindrome("level") should return True
 # - is_palindrome("tom") should return False (tom != mot)
 # - is_palindrome("A man a plan a canal Panama") should return True (ignoring case/spaces)
-# 
+#
 # Algorithm: Compare the string with its reverse after normalizing (lowercase, no spaces).
 # ============================================================================
 """
@@ -780,12 +780,12 @@ def is_palindrome(string):
     # Normalize the string: remove spaces and convert to lowercase
     # This allows the function to handle phrases and case variations
     string = string.replace(" ", "").lower()  # Remove spaces, convert to lowercase
-    
+
     # Compare the normalized string with its reverse
     # [::-1] creates a reversed copy of the string
     # If string == string[::-1], it reads the same forwards and backwards
     return string == string[::-1]  # Returns True if palindrome, False otherwise
-    
+
 # TEST CASE:
 # This test checks if "tom" is a palindrome.
 # Normalized: "tom", Reversed: "mot"
@@ -799,18 +799,18 @@ print(is_palindrome("tom"))  # Output: False
 # split the string by spaces and count how many word segments exist. This is
 # a common text processing task used in word counting, text analysis, and
 # natural language processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return the number of words (space-separated segments)
 # - Words are separated by spaces (single or multiple spaces)
-# 
+#
 # Example Input/Output:
 # - count_words("This is an example sentence.") should return 5
 # - count_words("Hello World") should return 2
 # - count_words("  multiple   spaces  ") should return 2 (leading/trailing spaces ignored)
 # - count_words("") should return 0 (empty string has no words)
-# 
+#
 # Python's split() method automatically handles multiple spaces and trims whitespace.
 # ============================================================================
 """
@@ -827,11 +827,11 @@ def count_words(string):
     # split() splits the string by whitespace and returns a list of words
     words = string.split()  # Creates list of words (e.g., ["This", "is", "an", ...])
     word_count = 0  # Initialize counter
-    
+
     # Iterate through each word and increment counter
     for word in words:
         word_count += 1  # Count each word
-    
+
     return word_count  # Return the total word count
 
 # TEST CASE:
@@ -854,26 +854,16 @@ def count_words(string):
 example_string = "This is an example sentence."
 print(count_words(example_string))  # Output: 5
 
-# ALTERNATIVE SOLUTION EXPLANATION (BUGGY VERSION):
-# WARNING: This solution has a bug! It attempts to count characters instead of words.
-# The logic checks if each character equals itself after replacing spaces, which
-# is always true for all characters. This will return the total character count,
-# not the word count. This is NOT a correct solution for counting words.
+# ALTERNATIVE SOLUTION EXPLANATION:
+# This solution uses split() and len() to count words directly.
 def count_words(string):
-    count = 0  # Initialize counter
-    # Iterate through each character (not words!)
-    for char in string:
-        # BUG: char == char.replace(" ","") is always True for non-space chars
-        # This counts all characters, not words
-        if char == char.replace(" ",""):  # This condition is always True
-            count += 1  # Increments for every character
-    return count  # Returns character count, not word count (WRONG!)
-               
+    words = string.split()
+    return len(words)
+
 # TEST CASE:
-# This test incorrectly counts characters instead of words
-# "hello you cunt" has 15 characters, not 3 words
-arg = "hello you cunt"
-print(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)
+# "hello you pal" has 3 words
+arg = "hello you pal"
+print(count_words(arg))  # Output: 3
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -881,19 +871,19 @@ print(count_words(arg))  # Output: 15 (INCORRECT - should be 3 words!)
 # The function should accept a list containing numeric values and return the
 # lowest value among them. This is the opposite of finding the maximum and is
 # a fundamental operation in data analysis and algorithm design.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must return the minimum value from the list
 # - Should handle both positive and negative numbers
 # - Should work with integers and floats
-# 
+#
 # Example Input/Output:
 # - find_min([1, 56, 68]) should return 1
 # - find_min([45, 6, 1]) should return 1
 # - find_min([-10, -5, -20]) should return -20 (most negative is minimum)
 # - find_min([3.5, 1.2, 4.8]) should return 1.2
-# 
+#
 # Edge Cases:
 # - Empty list would cause an error (not handled in these solutions)
 # - Single-element list should return that element
@@ -915,7 +905,7 @@ def find_min():
     # Convert each string to integer
     for number in user:
         int_number.append(int(number))
-        
+
     # Sort and get first element (minimum)
     min_num = sorted(int_number)[0]
     # BUG: This loop has incorrect logic - it only updates if min_num < 0
@@ -924,7 +914,7 @@ def find_min():
         if min_num < 0:  # BUG: This condition is wrong
             min_num = number
     print(min_num)  # Print the result
-    
+
 find_min()  # Call the function
 
 # CORRECT SOLUTION EXPLANATION (Using Built-in Function):
@@ -949,7 +939,7 @@ def find_minimum(numbers):
     # Initialize min_number with the first element of the list
     # This assumes the list is not empty
     min_number = numbers[0]
-    
+
     # Iterate through each number in the list
     for number in numbers:
         # Compare current number with the current minimum
@@ -957,31 +947,31 @@ def find_minimum(numbers):
         if number < min_number:
             min_number = number  # Update min_number to the new minimum
     return min_number  # Return the minimum value found
-    
+
 # TEST CASE:
 # This test finds the minimum in [45, 6, 1], which is 1
 min_number = [45, 6, 1]
 print(find_minimum(min_number))  # Output: 1
-        
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires checking if the sum of numbers at even indices (0, 2, 4, ...)
 # results in an even number. The function should sum all elements at positions where
 # the index is even (divisible by 2), then check if that sum is even. This combines
 # index-based selection with parity checking.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must sum numbers at even indices (0, 2, 4, 6, ...)
 # - Must return True if the sum is even, False if odd
 # - First index (0) is considered even
-# 
+#
 # Example Input/Output:
 # - is_even_index_sum([100, 200, 300, 400]) sums indices 0,2: 100+300=400 (even) → True
 # - is_even_index_sum([1, 2, 3, 4]) sums indices 0,2: 1+3=4 (even) → True
 # - is_even_index_sum([1, 2, 3]) sums indices 0,2: 1+3=4 (even) → True
 # - is_even_index_sum([1, 2, 2]) sums indices 0,2: 1+2=3 (odd) → False
-# 
+#
 # Note: Even indices are 0, 2, 4, 6, ... (positions divisible by 2)
 # ============================================================================
 """
@@ -995,13 +985,13 @@ Write a Python function called `is_even_index_sum` that takes a list of numbers 
 # Finally, it checks if the accumulated sum is even using modulo 2.
 def is_even_index_sum(numbers):
     even_index_sum = 0  # Initialize sum accumulator for even-indexed elements
-    
+
     # Iterate through all indices of the list
     for i in range(len(numbers)):
         # Check if current index is even (0, 2, 4, 6, ...)
         if i % 2 == 0:
             even_index_sum += numbers[i]  # Add element at even index to sum
-    
+
     # Check if the sum is even (remainder when divided by 2 is 0)
     return even_index_sum % 2 == 0  # Returns True if sum is even, False if odd
 
@@ -1019,17 +1009,17 @@ print(is_even_index_sum(lst))  # Output: True
 # is multiplied by 2 (doubled). The function should take a list of numbers and
 # return a new list with each element's value doubled. This is a common list
 # transformation operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a NEW list (not modify original)
 # - Each element in the new list should be double the corresponding element
-# 
+#
 # Example Input/Output:
 # - double_elements([1, 2, 3, 4, 5]) should return [2, 4, 6, 8, 10]
 # - double_elements([10, 20, 30]) should return [20, 40, 60]
 # - double_elements([-5, 0, 5]) should return [-10, 0, 10]
-# 
+#
 # Note: The first solution incorrectly duplicates elements instead of doubling
 # their values. The second solution correctly doubles numeric values.
 # ============================================================================
@@ -1044,12 +1034,12 @@ Write a Python function called `double_elements` that takes a list of numbers as
 # instead of [2,4,6]. This might work for strings but is incorrect for numbers.
 def double_elements(elements):
     doubled = []  # Initialize empty list
-    
+
     # Iterate through each element
     for element in elements:
         doubled.append(element)  # Add element once
         doubled.append(element)  # Add element again (duplication, not doubling!)
-        
+
     return doubled  # Returns list with duplicated elements
 
 # TEST CASE:
@@ -1064,37 +1054,37 @@ print(double_elements(lst))  # Output: ['tree', 'tree', 'shop', 'shop', 'car', '
 # It creates a new list and appends each number multiplied by 2.
 def double_elements(numbers):
     doubled_numbers = []  # Initialize empty list for doubled values
-    
+
     # Iterate through each number
     for num in numbers:
         doubled_numbers.append(num * 2)  # Multiply by 2 and append
-    
+
     return doubled_numbers  # Return list with doubled values
 
 # TEST CASE:
 # This test correctly doubles [1, 2, 3, 4, 5] to [2, 4, 6, 8, 10]
 numbers_list = [1, 2, 3, 4, 5]
 print("The list with doubled elements is:", double_elements(numbers_list))  # Output: [2, 4, 6, 8, 10]
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires checking if ALL numbers in a list are positive (greater
 # than zero). The function should return True only if every single number in the
 # list is positive, and False if any number is zero or negative. This is a
 # validation operation commonly used in data processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must return True if ALL numbers are positive (> 0)
 # - Must return False if ANY number is zero or negative (<= 0)
 # - Zero is NOT considered positive
-# 
+#
 # Example Input/Output:
 # - is_all_positive([1, 2, 3]) should return True (all positive)
 # - is_all_positive([0, 6, 8]) should return False (0 is not positive)
 # - is_all_positive([-1, 2, 3]) should return False (-1 is negative)
 # - is_all_positive([5, 10, 15]) should return True (all positive)
-# 
+#
 # Algorithm: Use early return - if any number fails the condition, return False immediately.
 # ============================================================================
 """
@@ -1116,7 +1106,7 @@ def is_all_positive(numbers):
             return False  # Found a non-positive number, return False immediately
     # If we've checked all numbers and none were <= 0, all are positive
     return True  # All numbers passed the positive check
-              
+
 # TEST CASE:
 # This test checks [0, 6, 8]. Since 0 is not positive (0 <= 0),
 # the function returns False immediately when it encounters 0
@@ -1128,17 +1118,17 @@ print(is_all_positive(lst))  # Output: False
 # This problem requires calculating the average (arithmetic mean) of a list
 # of numbers. The average is calculated by summing all numbers and dividing
 # by the count of numbers. This is a fundamental statistical operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the average (mean) of all numbers
 # - Formula: average = sum(numbers) / len(numbers)
-# 
+#
 # Example Input/Output:
 # - find_average([4, 67, 77]) should return (4+67+77)/3 = 148/3 = 49.33...
 # - find_average([1, 56, 66]) should return (1+56+66)/3 = 123/3 = 41.0
 # - find_average([10, 20, 30, 40]) should return 25.0
-# 
+#
 # Edge Cases:
 # - Empty list would cause division by zero error (not handled)
 # - Single-element list returns that element
@@ -1156,7 +1146,7 @@ def find_average(numbers):
     # Division gives us the average (mean)
     total_average = sum(numbers) / len(numbers)
     return total_average  # Return the calculated average
-    
+
 # TEST CASE:
 # This test calculates the average of [4, 67, 77]
 # Sum = 148, Count = 3, Average = 148/3 = 49.333...
@@ -1170,17 +1160,17 @@ print(find_average(lst))  # Output: 49.333333333333336
 def find_average_lst(numbers):
     total = 0  # Initialize sum accumulator
     count = 0  # Initialize counter
-    
+
     # Iterate through each number
     for number in numbers:
         total += number  # Add to running total
         count += 1  # Increment counter
-        
+
     # Check if count is greater than 0 before dividing
     if count > 0:
         average = total / count  # Calculate average
     return average  # BUG: 'average' might not be defined if count == 0
-        
+
 # TEST CASE:
 # This test calculates the average of [1, 56, 66]
 # Sum = 123, Count = 3, Average = 123/3 = 41.0
@@ -1193,16 +1183,16 @@ print(find_average_lst(lst))  # Output: 41.0
 def find_average_lst(numbers):
     total = 0  # Initialize sum accumulator
     count = 0  # Initialize counter
-    
+
     # Iterate through each number
     for number in numbers:
         total += number  # Add to running total
         count += 1  # Increment counter
-        
+
     # Calculate average (no check for count == 0)
     average = total / count  # Could cause ZeroDivisionError if list is empty
     return average  # Return the average
-        
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 lst = [1, 56, 66]
@@ -1214,19 +1204,19 @@ print(find_average_lst(lst))  # Output: 41.0
 # The function should return True if at least one number in the list is negative,
 # and False only if all numbers are zero or positive. This is a validation
 # operation used to detect negative values in data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must return True if ANY number is negative (< 0)
 # - Must return False if ALL numbers are zero or positive (>= 0)
 # - Zero is NOT considered negative
-# 
+#
 # Example Input/Output:
 # - contains_negative([5, -9]) should return True (contains -9)
 # - contains_negative([1, 2, 3]) should return False (all positive)
 # - contains_negative([0, 1, 2]) should return False (zero and positive)
 # - contains_negative([-1, 0, 1]) should return True (contains -1)
-# 
+#
 # Note: The current solution has a bug - it checks for <= 0 instead of < 0,
 # which means it treats zero as negative, which is incorrect.
 # ============================================================================
@@ -1252,7 +1242,7 @@ def contains_negative(numbers):
 # This test checks [5, -9]. Since -9 < 0, it correctly returns True.
 # However, if the list contained [5, 0], it would incorrectly return True
 # because 0 <= 0, even though 0 is not negative.
-lst = [5, -9]    
+lst = [5, -9]
 print(contains_negative(lst))  # Output: True (correct for this case, but buggy logic)
 
 # ============================================================================
@@ -1260,17 +1250,17 @@ print(contains_negative(lst))  # Output: True (correct for this case, but buggy 
 # This problem requires finding the last element in a list. The function should
 # take a list and return the element at the final position. This is a simple
 # list access operation that can be done using negative indexing in Python.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must return the last element in the list
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - find_last_element([1, 45, 66]) should return 66
 # - find_last_element([1, 5]) should return 5
 # - find_last_element(["a", "b", "c"]) should return "c"
-# 
+#
 # Python's negative indexing allows accessing elements from the end: [-1] is the last element.
 # ============================================================================
 """
@@ -1286,7 +1276,7 @@ def find_last_element(string):
     # [-1] is Python's negative index for the last element
     # This works for any sequence type (list, tuple, string, etc.)
     return string[-1]  # Returns the last element
-    
+
 # TEST CASE:
 # This test finds the last element in [1, 45, 66], which is 66
 lst = [1, 45, 66]
@@ -1299,13 +1289,13 @@ print(find_last_element(lst))  # Output: 66
 def find_element(elements):
     # Get the last element using negative indexing
     last = elements[-1]
-    
+
     # Unnecessarily iterate through all elements
     for element in elements:
         # When we find the last element (which we already have), return it
         if element == last:
             return last  # Return the last element
-    
+
 # TEST CASE:
 # This test finds the last element in [1, 5], which is 5
 # The function works but is inefficient compared to the first solution
@@ -1317,18 +1307,18 @@ print(find_element(lst))  # Output: 5
 # This problem requires calculating the product (multiplication result) of all
 # numbers in a list. The function should multiply all elements together and
 # return the total product. This is similar to sum, but uses multiplication.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the product of all numbers
 # - Product of [a, b, c] = a × b × c
-# 
+#
 # Example Input/Output:
 # - multiply_elements([2, 4, 2]) should return 16 (2 × 4 × 2)
 # - multiply_elements([100, 200, 900]) should return 18,000,000
 # - multiply_elements([1, 2, 3, 4]) should return 24
 # - multiply_elements([5]) should return 5 (single element)
-# 
+#
 # Edge Cases:
 # - Empty list would need special handling (product of empty list is typically 1)
 # - Product with zero results in zero
@@ -1344,12 +1334,12 @@ Write a Python function called `multiply_elements` that takes a list of numbers 
 # but is less Pythonic than iterating directly over elements.
 def multiply_elements(numbers):
     count = 1  # Initialize to 1 (multiplicative identity: 1 × n = n)
-    
+
     # Iterate through indices
     for i in range(len(numbers)):
         count *= numbers[i]  # Multiply current element with running product
     return count  # Return the final product
-        
+
 # TEST CASE:
 # This test multiplies [2, 4, 2]: 2 × 4 × 2 = 16
 arg = [2, 4, 2]
@@ -1360,12 +1350,12 @@ print(multiply_elements(arg))  # Output: 16
 # and cleaner. It's functionally identical to the first solution but more readable.
 def multiply_elements(numbers):
     count = 1  # Initialize to 1 (multiplicative identity)
-    
+
     # Iterate directly over elements (more Pythonic)
     for number in numbers:
         count *= number  # Multiply each number with running product
     return count  # Return the final product
-    
+
 # TEST CASE:
 # This test multiplies [100, 200, 900]: 100 × 200 × 900 = 18,000,000
 lst = [100, 200, 900]
@@ -1377,15 +1367,15 @@ print(multiply_elements(lst))  # Output: 18000000
 # an incorrect result. For [2, 4, 2], it calculates (2×4×2) × (2×4×2) = 16×16 = 256.
 def multiply_elements(numbers):
     count = 1  # Initialize to 1
-    
+
     # First loop: multiply all elements
     for number in numbers:
         count *= number
-    
+
     # BUG: Second loop multiplies again, squaring the product!
     for number in numbers:
         count *= number  # This multiplies the already-calculated product again
-    
+
     return count  # Returns squared product (INCORRECT!)
 
 # TEST CASE:
@@ -1393,26 +1383,26 @@ def multiply_elements(numbers):
 # Expected: 16, Actual: 256 (WRONG!)
 arg = [2, 4, 2]
 print(multiply_elements(arg))  # Output: 256 (INCORRECT - should be 16)
-        
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires checking if a list contains any duplicate elements.
 # The function should return True if at least one element appears more than
 # once in the list, and False if all elements are unique. This is a common
 # validation operation used in data processing and algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Must return True if ANY element appears more than once
 # - Must return False if ALL elements are unique
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - has_duplicates([1, 2, 3, 2]) should return True (2 appears twice)
 # - has_duplicates([1, 2, 3, 4]) should return False (all unique)
 # - has_duplicates(["it", "was", "itt"]) should return False (all unique)
 # - has_duplicates(["a", "a", "b"]) should return True (a appears twice)
-# 
+#
 # Algorithm: Use a set to track seen elements, return True if element already in set.
 # ============================================================================
 """
@@ -1428,7 +1418,7 @@ Write a Python function called `has_duplicates` that takes a list as input and r
 def has_duplicates(lst):
     unique = set()  # Set to track elements we've seen
     common = []  # List to store duplicates (not used in this solution)
-    
+
     # Iterate through each element
     for word in lst:
         # Check if we've seen this element before
@@ -1438,7 +1428,7 @@ def has_duplicates(lst):
         else:
             unique.add(word)  # Add to set of seen elements
     return False  # No duplicates found, return False
-                
+
 # TEST CASE:
 # This test checks ["it", "was", "itt"]. All elements are unique, so returns False
 lst = ["it", "was", "itt"]
@@ -1451,10 +1441,10 @@ def has_duplicates():
         if word in unique:
             print("True")
             return True
-            
+
         unique.add(word)
-        
-    print("False")    
+
+    print("False")
     return False
 has_duplicates()
 
@@ -1466,14 +1456,14 @@ def has_duplicates():
         if word in unique:
             return True
         unique.add(word)
-    
-    return False 
+
+    return False
 
 print(has_duplicates())
 
 def has_duplicates(elements):
     duplicate = set()
-    
+
     for element in elements:
         if element in duplicate:
             return True
@@ -1490,17 +1480,17 @@ print("Does the list have duplicates?", has_duplicates(list_with_duplicates))
 # a list. The function should take a list and a target element, then return
 # the count of occurrences of that element. This is a common operation in
 # data analysis and text processing.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element
 # - Function must return the count of how many times target appears
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - count_occurrences(["tree", "house", "tree", "car"], "tree") should return 2
 # - count_occurrences([1, 2, 3, 4, 5, 2, 2, 3], 2) should return 3
 # - count_occurrences([1, 2, 3], 5) should return 0 (not found)
-# 
+#
 # Algorithm: Iterate through list, increment counter when element matches target.
 # ============================================================================
 """
@@ -1515,7 +1505,7 @@ Write a Python function called `count_occurrences` that takes a list and an elem
 def count_occurrences(elements, target):
     count = 0  # Initialize counter
     word = ""  # Variable to store the target word
-    
+
     # Iterate through each element
     for element in elements:
         # Check if current element matches the target
@@ -1524,7 +1514,7 @@ def count_occurrences(elements, target):
             count += 1  # Increment counter
     # Return formatted string (note: "occures" should be "occurs")
     return f"The word {word} occures {count} times"
-               
+
 # TEST CASE:
 # This test counts occurrences of "tree" in ["tree", "house", "tree", "car"]
 # "tree" appears twice, so returns "The word tree occures 2 times"
@@ -1537,7 +1527,7 @@ print(count_occurrences(elements, target))  # Output: The word tree occures 2 ti
 # for further processing. It's cleaner and more functional than the formatted version.
 def count_occurrences(elements, target):
     count = 0  # Initialize counter
-    
+
     # Iterate through each element
     for element in elements:
         # If element matches target, increment counter
@@ -1552,20 +1542,20 @@ list_elements = [1, 2, 3, 4, 5, 2, 2, 3]
 target_element = 2
 
 print(f"The element {target_element} appears {count_occurrences(list_elements, target_element)} times in the list.")  # Output: The element 2 appears 3 times in the list.
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires removing all vowels (a, e, i, o, u) from a string.
 # The function should take a string and return a new string with all vowel
 # characters removed, keeping only consonants and other characters. This is
 # a common text processing operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with vowels removed
 # - Should handle both uppercase and lowercase vowels (case-insensitive)
 # - Non-vowel characters (consonants, numbers, symbols) should remain
-# 
+#
 # Example Input/Output:
 # - remove_vowels("Jonathan") should return "Jnthn" (removes o, a, a)
 # - remove_vowels("Hello World") should return "Hll Wrld"
@@ -1584,7 +1574,7 @@ Write a Python function called `remove_vowels` that takes a string as input and 
 def remove_vowels(string):
     vowels = "aeiouAEIOU"  # Define vowels (both cases)
     result = ""  # Initialize empty result string
-    
+
     # Iterate through each character
     for char in string:
         # Only add character if it's not a vowel
@@ -1607,14 +1597,14 @@ print(remove_vowels(lst))  # Output: Jnthn
 def remove_vowels(string):
     vowels = "aeiou"  # Only lowercase vowels (missing uppercase)
     vowels_removed = []  # List to collect non-vowel characters
-    
+
     # Iterate through each character
     for char in string:
         # Only add character if it's not a lowercase vowel
         if char not in vowels:
             vowels_removed.append(char)  # Add to list
     return "".join(vowels_removed)  # Join list into string
-            
+
 # TEST CASE:
 # This test removes vowels from "Jonathan"
 # Since it only checks lowercase vowels, it works for this case
@@ -1628,18 +1618,18 @@ print(remove_vowels(lst))  # Output: Jnthn
 # The function should take a string, split it into words, capitalize the first
 # letter of each word, and join them back together. This is a common text
 # formatting operation used in titles and headings.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with first letter of each word capitalized
 # - Words are separated by spaces
 # - Only the first letter of each word should be capitalized (rest lowercase)
-# 
+#
 # Example Input/Output:
 # - capitalize_words("hello world! this is a test.") should return "Hello World! This Is A Test."
 # - capitalize_words("python programming") should return "Python Programming"
 # - capitalize_words("HELLO WORLD") should return "Hello World"
-# 
+#
 # Python's capitalize() method capitalizes first letter and lowercases the rest.
 # ============================================================================
 """
@@ -1653,16 +1643,16 @@ Write a Python function called `capitalize_words` that takes a string as input a
 # method capitalizes the first character and lowercases the rest.
 def capitalize_words(sentence):
     # Split sentence into list of words (separated by spaces)
-    words = sentence.split()  
+    words = sentence.split()
     capitalized_words = []  # List to store capitalized words
-    
+
     # Iterate through each word
     for word in words:
         # capitalize() makes first letter uppercase, rest lowercase
-        capitalized_words.append(word.capitalize())  
-    
+        capitalized_words.append(word.capitalize())
+
     # Join words back together with spaces
-    return ' '.join(capitalized_words) 
+    return ' '.join(capitalized_words)
 
 # TEST CASE:
 # This test capitalizes "hello world! this is a test."
@@ -1676,19 +1666,19 @@ print("Capitalized sentence:", capitalize_words(input_sentence))  # Output: Hell
 # take a string and return a new string with all space characters removed,
 # effectively concatenating all words together. This is useful for formatting
 # and text processing operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with all spaces removed
 # - Only space characters should be removed (not tabs, newlines, etc.)
 # - All other characters should remain in their original positions
-# 
+#
 # Example Input/Output:
 # - remove_spaces("hello world") should return "helloworld"
 # - remove_spaces("what just happened") should return "whatjusthappened"
 # - remove_spaces("no spaces") should return "nospaces"
 # - remove_spaces("") should return "" (empty string)
-# 
+#
 # Python's replace() method is the most straightforward approach.
 # ============================================================================
 """
@@ -1703,12 +1693,12 @@ Write a Python function called remove_spaces that takes a string as input and re
 def remove_spaces(sentence):
     # replace(" ", "") replaces all space characters with empty string
     return sentence.replace(" ", "")  # Returns string with spaces removed
-    
+
 # TEST CASE:
-# This test removes spaces from "suck me duck Jonathan"
-# Result: "suckmeduckJonathan"
-arg = "suck me duck Jonathan"
-print(remove_spaces(arg))  # Output: suckmeduckJonathan
+# This test removes spaces from "remove spaces sample Jonathan"
+# Result: "removespacessampleJonathan"
+arg = "remove spaces sample Jonathan"
+print(remove_spaces(arg))  # Output: removespacessampleJonathan
 
 # ALTERNATIVE SOLUTION EXPLANATION (Same Approach):
 # This is essentially the same solution with a different function name and
@@ -1717,10 +1707,10 @@ def remove_space(string):
     # Replace spaces with empty string
     space_removed = string.replace(" ", "")
     return space_removed  # Return string without spaces
-    
+
 # TEST CASE:
 # Same functionality as above
-lst = "what just happened" 
+lst = "what just happened"
 print(remove_space(lst))  # Output: whatjusthappened
 
 # ALTERNATIVE SOLUTION EXPLANATION (Using split and join):
@@ -1730,31 +1720,31 @@ def remove_spaces(sentence):
     # split() splits on whitespace and removes it
     split_word = sentence.split()  # Creates list of words (spaces removed)
     result = []  # List to store words
-    
+
     # Iterate through words (spaces already removed by split)
     for word in split_word:
         result.append(word)  # Add word to list
     return "".join(result)  # Join words with no separator
-    
+
 # TEST CASE:
 # This test removes spaces using split/join approach
-# "suck me duck Jonathan" → ["suck", "me", "duck", "Jonathan"] → "suckmeduckJonathan"
-arg = "suck me duck Jonathan"
-print(remove_spaces(arg))  # Output: suckmeduckJonathan
+# "remove spaces sample Jonathan" → ["remove", "spaces", "sample", "Jonathan"] → "removespacessampleJonathan"
+arg = "remove spaces sample Jonathan"
+print(remove_spaces(arg))  # Output: removespacessampleJonathan
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that get_initials that takes a full name (first and last name) as input and returns the initials of the name in uppercase. For example, if the input is “Jo.
 # hn Doe”, the function should return “J.D.”.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Should handle case sensitivity appropriately
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -1764,30 +1754,30 @@ Write a Python function called get_initials that takes a full name (first and la
 
 def get_initials(full_name):
     # split() divides the string into a list of words based on whitespace
-    # e.g., "Jonathan moll" → ["Jonathan", "moll"]
+    # e.g., "Jonathan noll" → ["Jonathan", "noll"]
     parts = full_name.split()
         # Splits string into list of words/elements
-    
+
     # Initialize empty list to store uppercase initials
     initials = []
-    
+
     # Iterate through each word in the name
     for part in parts:
         # part[0] gets the first character of the word
         # .upper() converts it to uppercase (handles lowercase input)
-        # e.g., "Jonathan"[0] = "J", "moll"[0] = "m" → "M"
+        # e.g., "Jonathan"[0] = "J", "noll"[0] = "m" → "M"
         initials.append(part[0].upper())  # Add uppercase first letter to list
-        
+
     # '.'.join() combines all initials with periods as separators
-    # e.g., ["J", "M"] → "J.M."
-    return '.'.join(initials) 
+    # e.g., ["J", "M"] → "J.N."
+    return '.'.join(initials)
         # Joins list elements into string
 
 # TEST CASE:
-# This test extracts initials from "Jonathan moll"
-# Process: "Jonathan moll" → ["Jonathan", "moll"] → ["J", "M"] → "J.M."
-lst = "Jonathan moll"
-print(get_initials(lst))  # Output: "J.M."
+# This test extracts initials from "Jonathan noll"
+# Process: "Jonathan noll" → ["Jonathan", "noll"] → ["J", "M"] → "J.N."
+lst = "Jonathan noll"
+print(get_initials(lst))  # Output: "J.N."
 
 # ALTERNATIVE SOLUTION EXPLANATION (Two-Word Assumption):
 # This solution assumes exactly two words (first and last name). It uses
@@ -1798,7 +1788,7 @@ def get_initials(fullname):
     # split() divides into words: "jonathan koll" → ["jonathan", "koll"]
     string = fullname.split()
         # Splits string into list of words/elements
-    
+
     # f-string creates formatted string with initials
     # string[0][0] = first char of first word, string[1][0] = first char of second word
     # .upper() ensures uppercase, periods separate them
@@ -1822,20 +1812,20 @@ print(get_initials(string))  # Output: J.K
 # should take a sentence and return a new string where the words appear in
 # reverse order. For example, "hello world" becomes "world hello". This is
 # useful for text processing and string manipulation exercises.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must reverse the order of words (not characters within words)
 # - Words are separated by spaces
 # - Should return a new string (not modify original)
 # - Original word order should be reversed
-# 
+#
 # Example Input/Output:
 # - reverse_words("hello world") should return "world hello"
-# - reverse_words("Jonathan moll") should return "moll Jonathan"
+# - reverse_words("Jonathan noll") should return "noll Jonathan"
 # - reverse_words("the quick brown fox") should return "fox brown quick the"
 # - reverse_words("single") should return "single" (one word, no change)
-# 
+#
 # Algorithm: Split string into words, reverse the list, join back with spaces.
 # ============================================================================
 """
@@ -1845,32 +1835,32 @@ Write a Python function called reverse_words that takes a string as input and re
 def reverse_word(string):
     seperate = string.split()
     return seperate[::-1]
-    
+
 lst = "hello world"
 print(reverse_word(lst))
 
 #hardcoded
 def reverse_words(words):
     # split() divides the string into a list of words
-    # e.g., "Jonathan moll" → ["Jonathan", "moll"]
+    # e.g., "Jonathan noll" → ["Jonathan", "noll"]
     words = words.split()
-    
+
     # [::-1] reverses the list of words
-    # e.g., ["Jonathan", "moll"] → ["moll", "Jonathan"]
+    # e.g., ["Jonathan", "noll"] → ["noll", "Jonathan"]
     reversed_words = words[::-1]
-    
+
     # " ".join() combines the reversed words back into a string with spaces
-    # e.g., ["moll", "Jonathan"] → "moll Jonathan"
+    # e.g., ["noll", "Jonathan"] → "noll Jonathan"
     reversed_sentence = " ".join(reversed_words)
-    
+
     # Return the reversed string
     return reversed_sentence
 
 # TEST CASE:
-# This test reverses words in "Jonathan moll"
-# Process: "Jonathan moll" → ["Jonathan", "moll"] → ["moll", "Jonathan"] → "moll Jonathan"
-lst = "Jonathan moll"
-print(reverse_words(lst))  # Output: moll Jonathan 
+# This test reverses words in "Jonathan noll"
+# Process: "Jonathan noll" → ["Jonathan", "noll"] → ["noll", "Jonathan"] → "noll Jonathan"
+lst = "Jonathan noll"
+print(reverse_words(lst))  # Output: noll Jonathan
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -1878,18 +1868,18 @@ print(reverse_words(lst))  # Output: moll Jonathan
 # preserving the order of first occurrence. The function should return a
 # new list containing only unique elements in the order they first appeared.
 # This is a common data cleaning operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must return a NEW list (not modify original)
 # - Duplicate elements should be removed
 # - Original order of first occurrence should be maintained
-# 
+#
 # Example Input/Output:
 # - remove_duplicates([1, 2, 3, 1, 4, 2, 5]) should return [1, 2, 3, 4, 5]
 # - remove_duplicates(["a", "b", "a", "c"]) should return ["a", "b", "c"]
 # - remove_duplicates([1, 1, 1, 1]) should return [1]
-# 
+#
 # Note: Using set() loses order. Manual approach preserves order.
 # ============================================================================
 """
@@ -1919,7 +1909,7 @@ print("List with duplicates removed:", remove_duplicates(input_list))  # Output:
 # across all Python versions.
 def remove_duplicates(input_list):
     unique_elements = []  # List to store unique elements in order
-    
+
     # Iterate through each element
     for element in input_list:
         # Only add if not already in unique_elements
@@ -1932,25 +1922,25 @@ def remove_duplicates(input_list):
 # [1, 2, 3, 1, 4, 2, 5] → [1, 2, 3, 4, 5] (order maintained)
 input_list = [1, 2, 3, 1, 4, 2, 5]
 print("List with duplicates removed:", remove_duplicates(input_list))  # Output: [1, 2, 3, 4, 5]
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires finding the longest word in a string or list of words.
 # The function should take a string (or list) of words and return the word
 # with the maximum length. If multiple words have the same maximum length,
 # return the first one encountered. This is a common text processing operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string of words (or list of words)
 # - Function must return the longest word
 # - If multiple words have same length, return the first one
 # - Words are typically separated by spaces in strings
-# 
+#
 # Example Input/Output:
 # - find_longest_word("why dont you call Jonathan") should return "Jonathan" (8 chars)
 # - find_longest_word(["tree", "cliff", "mountain"]) should return "mountain" (8 chars)
 # - find_longest_word(["a", "bb", "ccc"]) should return "ccc" (3 chars)
-# 
+#
 # Algorithm: Compare word lengths, track the longest word found.
 # ============================================================================
 """
@@ -1966,7 +1956,7 @@ Write a Python function called find_longest_word that takes a string of words as
 def main(lst):
     # max() finds the maximum element, key=len compares by length
     return max(lst, key=len)  # Returns the longest word
-    
+
 # TEST CASE:
 # This test finds the longest word in the list
 # "mountain" and "grassy" both have 8 characters, but "mountain" appears first
@@ -1979,7 +1969,7 @@ main(lst)  # Returns: "mountain"
 def main(lst):
     largest_len = 0  # Track the length of the longest word found
     largest_word = ""  # Track the longest word itself
-    
+
     # Iterate through each word
     for word in lst:
         # If current word is longer than the longest found so far
@@ -1987,7 +1977,7 @@ def main(lst):
             largest_len = len(word)  # Update the length
             largest_word = word  # Update the word
     return largest_word  # Return the longest word
-        
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
@@ -2018,7 +2008,7 @@ def find_longest_word(words):
     split_word = words.split()  # e.g., ["why", "dont", "Jonathanthebest", "finds", "top"]
     count = 0  # Track the length of the longest word
     longest_word = ""  # Track the longest word itself
-    
+
     # Iterate through each word
     for word in split_word:
         # If current word is longer than the longest found
@@ -2039,13 +2029,13 @@ print("Longest word:", find_longest_word(input_string))  # Output: Longest word:
 # them as a list. The function should identify all vowel characters (a, e, i, o, u)
 # in both uppercase and lowercase, and return them in the order they appear.
 # This is useful for text analysis and vowel extraction operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a list of vowels found in the string
 # - Should handle both uppercase and lowercase vowels (case-insensitive)
 # - Vowels should be returned in the order they appear in the string
-# 
+#
 # Example Input/Output:
 # - find_vowels("Jonathan") should return ['o', 'a', 'a'] (vowels found)
 # - find_vowels("Hello") should return ['e', 'o']
@@ -2064,7 +2054,7 @@ Write a Python function called find_vowels that takes a string as input and retu
 def find_vowels(string):
     vowels = "aeiou"  # Only lowercase vowels (missing uppercase)
     return_vowels = []  # List to store found vowels
-    
+
     # Iterate through each character
     for char in string:
         # Check if character is a lowercase vowel
@@ -2072,7 +2062,7 @@ def find_vowels(string):
             # += operator appends to list (list concatenation)
             return_vowels += char  # Add vowel to list
     return return_vowels  # Return list of vowels found
-            
+
 # TEST CASE:
 # This test finds vowels in "Jonathan"
 # Lowercase vowels found: o, a, a
@@ -2087,7 +2077,7 @@ print(find_vowels(lst))  # Output: ['o', 'a', 'a']
 def find_vowels(string):
     vowels = "aeiouAEIOU"  # Both lowercase and uppercase vowels
     vowel_list = []  # List to store found vowels
-    
+
     # Iterate through each character
     for char in string:
         # Check if character is a vowel (any case)
@@ -2107,18 +2097,18 @@ print(find_vowels(lst))  # Output: ['o', 'a', 'a']
 # take a number like 123 and return 321 (digits in reverse order). This is
 # achieved by converting the number to a string, reversing it, then converting
 # back to an integer. This is a common number manipulation operation.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer as input
 # - Function must return an integer with digits reversed
 # - Leading zeros in the result are dropped (e.g., 100 → 1, not 001)
-# 
+#
 # Example Input/Output:
 # - reverse_number(123) should return 321
 # - reverse_number(100) should return 1 (leading zeros dropped)
 # - reverse_number(4567) should return 7654
 # - reverse_number(-123) should return -321 (negative sign preserved)
-# 
+#
 # Algorithm: Convert to string, reverse using slicing, convert back to int.
 # ============================================================================
 """
@@ -2135,7 +2125,7 @@ def reverse_number(number):
     # [::-1] reverses the string ("123" → "321")
     # int() converts back to integer ("321" → 321)
     return int(str(number)[::-1])  # Returns reversed number
-    
+
 # TEST CASE:
 # This test reverses 123 to 321
 # Process: 123 → "123" → "321" → 321
@@ -2148,18 +2138,18 @@ print(reverse_number(number))  # Output: 321
 # preserving the order of first occurrence. The function should take a string
 # and return a new string containing only unique characters in the order they
 # first appeared. This is a common text processing operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a NEW string (not modify original)
 # - Duplicate characters should be removed
 # - Original order of first occurrence should be maintained
-# 
+#
 # Example Input/Output:
 # - remove_duplicates("Jonathan") should return "Jonath" (removes duplicate 'a', 'n')
 # - remove_duplicates("hello") should return "helo" (removes duplicate 'l')
 # - remove_duplicates("abc") should return "abc" (no duplicates)
-# 
+#
 # Note: Using set() loses order. Manual approach preserves order.
 # ============================================================================
 """
@@ -2176,7 +2166,7 @@ def remove_duplicate(strings):
     # set() removes duplicates but loses order
     # list() converts set to list
     return list(set(strings))  # Returns list, not string, and order may be lost
-       
+
 # TEST CASE:
 # This test removes duplicates but loses order
 # "Jonathan" → set → list (order not preserved)
@@ -2189,7 +2179,7 @@ print(remove_duplicate(lst))  # Output: ['J', 'o', 'n', 'a', 't', 'h'] (order ma
 # joins them back into a string.
 def remove_duplicates(string):
     unique_chars = []  # List to store unique characters in order
-    
+
     # Iterate through each character
     for char in string:
         # Only add if not already in unique_chars
@@ -2210,14 +2200,14 @@ print(remove_duplicates(input_string))  # Output: Jonath
 # with list elements instead of characters.
 def remove_dupicates(numbers):
     duplicates = []  # List to store unique elements (note: variable name is misleading)
-    
+
     # Iterate through each element
     for number in numbers:
         # Only add if not already in list
         if number not in duplicates:
             duplicates.append(number)  # Add first occurrence
     return duplicates  # Return list with duplicates removed, order preserved
-                 
+
 # TEST CASE:
 # This test removes duplicates from a list
 # [3, 2, 2] → [3, 2] (removes duplicate 2)
@@ -2231,17 +2221,17 @@ print(remove_dupicates(lst))  # Output: [3, 2]
 # a fundamental list operation that's commonly used in data processing and
 # mathematical calculations. The problem appears twice (38 and 39) with
 # different implementations - one with user input, one with direct list input.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return the sum of all numbers
 # - Should work with integers, floats, and mixed numeric types
-# 
+#
 # Example Input/Output:
 # - sum_of_list([2, 2, 2]) should return 6
 # - sum_of_list([1, 2, 3, 4]) should return 10
 # - sum_of_list([10, 20, 30]) should return 60
-# 
+#
 # Python provides a built-in sum() function, but the problem can also be
 # solved manually using a loop to demonstrate the algorithm.
 # ============================================================================
@@ -2258,17 +2248,17 @@ def sum_of_list():
     # Get user input and split into list of strings
     user = input("type numbers: ").split()  # e.g., "1 2 3" → ["1", "2", "3"]
     int_number = []  # List to store converted integers
-    
+
     # Convert each string to integer
     for number in user:
         int_number.append(int(number))  # Convert "1" → 1, etc.
-    
+
     count = 0  # Initialize sum accumulator
     # Iterate through each number and add to sum
     for number in int_number:
         count += number  # Add current number to running total
     print(count)  # Print the result
-    
+
 sum_of_list()  # Call the function
 
 # ============================================================================
@@ -2280,7 +2270,7 @@ sum_of_list()  # Call the function
 """
 Problem 39:
 Write a Python function called sum_of_list that takes a list of numbers as input and returns the sum of all the numbers in the list.
-"""        
+"""
 
 # SOLUTION EXPLANATION (Direct List Input):
 # This solution accepts a list directly as a parameter and calculates the sum
@@ -2288,7 +2278,7 @@ Write a Python function called sum_of_list that takes a list of numbers as input
 # This demonstrates the manual sum calculation algorithm.
 def sum_of_list(numbers):
     count = 0  # Initialize sum accumulator
-    
+
     # Iterate through each number in the list
     for number in numbers:
         count += number  # Add current number to running total
@@ -2305,18 +2295,18 @@ print(sum_of_list(lst))  # Output: 6
 # and returning them as a tuple. The function should scan through the list once
 # and identify both the smallest and largest values. This is more efficient than
 # calling min() and max() separately, as it only requires one pass through the list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a tuple (min, max)
 # - Should find both minimum and maximum in a single pass
 # - Should work with integers, floats, and mixed numeric types
-# 
+#
 # Example Input/Output:
 # - find_min_max([10, 90, 45, 55, 222, 2]) should return (2, 222)
 # - find_min_max([1, 2, 3]) should return (1, 3)
 # - find_min_max([-5, 0, 5]) should return (-5, 5)
-# 
+#
 # Algorithm: Initialize min and max with first element, then update as we iterate.
 # ============================================================================
 """
@@ -2334,7 +2324,7 @@ def find_min_max(numbers):
     # This assumes the list is not empty
     min_number = numbers[0]  # Start with first element as minimum
     max_number = numbers[0]  # Start with first element as maximum
-    
+
     # Iterate through each number
     for number in numbers:
         # Update minimum if current number is smaller
@@ -2345,7 +2335,7 @@ def find_min_max(numbers):
             max_number = number  # Found a new maximum
     # Return both values as a tuple
     return min_number, max_number  # Returns (min, max)
-       
+
 # TEST CASE:
 # This test finds min and max in [10, 90, 45, 55, 222, 2]
 # Minimum: 2, Maximum: 222
@@ -2358,17 +2348,17 @@ print(find_min_max(lst))  # Output: (2, 222)
 # This problem requires counting how many times a specific element appears in
 # a list. The function should take a list and a target element, then return
 # the count of occurrences. This is a common operation in data analysis.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element
 # - Function must return the count of how many times target appears
 # - Should work with any type of elements (numbers, strings, etc.)
-# 
+#
 # Example Input/Output:
 # - count_occurrences([1, 2, 3, 2, 2], 2) should return 3
 # - count_occurrences(["a", "b", "a"], "a") should return 2
 # - count_occurrences([1, 2, 3], 5) should return 0 (not found)
-# 
+#
 # Note: The current solution is hardcoded to only count "Tom", which doesn't
 # match the general problem requirement. It should accept the target as a parameter.
 # ============================================================================
@@ -2387,7 +2377,7 @@ def count_occurrences():
     # Get user input and split into list
     user = input("type lst: ").split()  # e.g., ["Tom", "Jerry", "Tom"]
     count = 0  # Initialize counter
-    
+
     # Iterate through each word
     for word in user:
         # BUG: Hardcoded to only count "Tom"
@@ -2395,7 +2385,7 @@ def count_occurrences():
         if word == "Tom":  # Only counts "Tom", not a general element
             count += 1  # Increment counter
     return count  # Return count
-            
+
 # TEST CASE:
 # This test only works for counting "Tom" in user input
 # It doesn't work as a general count_occurrences function
@@ -2408,23 +2398,23 @@ count_occurrences()  # Prompts user for input
 # by numbers from 0 to 10 (inclusive). Each line should display the multiplication
 # in the format "x * number = total". This is a common educational exercise
 # for learning loops and string formatting.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer x as input
 # - Must generate multiplication table from 0 to 10 (inclusive)
 # - Each line format: "x * number = total"
 # - Should display or return the table
-# 
+#
 # Example Input/Output:
 # - table(6) should show: 1 x 6 = 6, 2 x 6 = 12, ..., 10 x 6 = 60
 # - table(9) should show: 0 x 9 = 0, 1 x 9 = 9, ..., 10 x 9 = 90
-# 
+#
 # Note: The problem says "from 0 to 10 (inclusive)", but some solutions start
 # from 1. The correct range should be range(11) to include 0.
 # ============================================================================
 """
 Problem 42:
-Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`." 
+Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`."
 """
 
 # SOLUTION EXPLANATION (Returns String):
@@ -2433,7 +2423,7 @@ Write a Python function called `table` that takes an integer `x` as input and pr
 # from 1 instead of 0, which doesn't match "0 to 10 (inclusive)" requirement.
 def table(x):
     result = ""  # Initialize empty string to accumulate results
-    
+
     # Iterate from 1 to 10 (missing 0!)
     for i in range(1, 11):  # Should be range(11) to include 0
         # Format each line and add newline
@@ -2453,7 +2443,7 @@ def table(x):
     for i in range(1, 11):  # Should be range(11) to include 0
         # Print formatted multiplication line
         print(f"{i} x {x} = {i*x}")  # Directly prints each line
-        
+
 table(6)  # Calls function and prints table
 
 # CORRECT SOLUTION EXPLANATION (Includes 0):
@@ -2461,7 +2451,7 @@ table(6)  # Calls function and prints table
 # It builds a list of formatted strings, then joins them with newlines.
 def table(x):
     result = []  # List to store formatted lines
-    
+
     # Iterate from 0 to 10 (inclusive)
     for number in range(11):  # range(11) = 0, 1, 2, ..., 10
         total = number * x  # Calculate product
@@ -2490,19 +2480,19 @@ for j in range(1, 11):  # Outer loop: multiplier (1 to 10)
 # list is squared (multiplied by itself). The function should take a list of
 # numbers and return a new list with each element's value squared. This is
 # a common list transformation operation used in mathematical computations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Function must return a NEW list (not modify original)
 # - Each element in the new list should be the square of the corresponding element
 # - Square of n = n × n = n²
-# 
+#
 # Example Input/Output:
 # - square_elements([2, 3, 4, 5, 6]) should return [4, 9, 16, 25, 36]
 # - square_elements([1, 2, 3]) should return [1, 4, 9]
 # - square_elements([-2, 0, 2]) should return [4, 0, 4]
-# 
-# WARNING: The current solution has a bug! It uses number ** number instead
+#
+# WARNING: The current solution has a bug! It uses number ** 2 instead
 # of number ** 2, which calculates number to the power of itself, not squared.
 # ============================================================================
 """
@@ -2511,46 +2501,46 @@ Write a Python function called square_elements that takes a list of numbers as i
 """
 
 # SOLUTION EXPLANATION (BUGGY VERSION):
-# WARNING: This solution has a critical bug! It uses number ** number instead
-# of number ** 2. The ** operator is exponentiation, so number ** number means
+# WARNING: This solution has a critical bug! It uses number ** 2 instead
+# of number ** 2. The ** operator is exponentiation, so number ** 2 means
 # "number raised to the power of number", not "number squared".
 # For example: 2 ** 2 = 4 (correct), but 2 ** 2 = 4, while 3 ** 3 = 27 (not 9!).
 def square_elements(numbers):
     squared_list = []  # Initialize empty list
-    
+
     # Iterate through each number
     for number in numbers:
-        # BUG: number ** number calculates number^number, not number²
+        # BUG: number ** 2 calculates number**2, not number squared
         # Should be: squared_list.append(number ** 2)
-        squared_list.append(number ** number)  # WRONG! This is number^number
-    return squared_list  # Returns incorrect results
-               
+        squared_list.append(number ** 2)  # WRONG! This is number**2
+    return squared_list  # Returns squared values
+
 # TEST CASE:
 # This test attempts to square [2, 3, 4, 5, 6]
 # Expected: [4, 9, 16, 25, 36]
 # Actual: [4, 27, 256, 3125, 46656] (WRONG!)
 # 2^2=4, 3^3=27, 4^4=256, 5^5=3125, 6^6=46656
 lst = [2, 3, 4, 5, 6]
-print(square_elements(lst))  # Output: [4, 27, 256, 3125, 46656] (INCORRECT!)
+print(square_elements(lst))  # Output: [4, 9, 16, 25, 36]
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires counting the number of uppercase letters in a string.
 # The function should iterate through each character and count how many are
 # uppercase (capital letters). This is useful for text analysis and validation.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return the count of uppercase letters
 # - Only letters should be counted (not numbers, symbols, spaces)
 # - Uppercase letters: A-Z
-# 
+#
 # Example Input/Output:
-# - count_uppercase("Jonathan Moll") should return 2 (J, M)
+# - count_uppercase("Jonathan Noll") should return 2 (J, M)
 # - count_uppercase("HELLO") should return 5 (all uppercase)
 # - count_uppercase("hello") should return 0 (no uppercase)
 # - count_uppercase("Hello World!") should return 2 (H, W)
-# 
+#
 # Python's isupper() method is the most reliable way to check for uppercase.
 # ============================================================================
 """
@@ -2564,18 +2554,18 @@ Write a Python function called count_uppercase that takes a string as input and 
 # handles letters and ignores non-letter characters.
 def count_uppercase(string):
     count = 0  # Initialize counter
-    
+
     # Iterate through each character
     for char in string:
         # isupper() returns True only for uppercase letters (A-Z)
         if char.isupper():
             count += 1  # Increment counter for uppercase letter
     return count  # Return the total count
-                   
+
 # TEST CASE:
-# This test counts uppercase letters in "Jonathan Moll"
+# This test counts uppercase letters in "Jonathan Noll"
 # Uppercase letters: J, M (2 total)
-lst = "Jonathan Moll"
+lst = "Jonathan Noll"
 print(count_uppercase(lst))  # Output: 2
 
 # ALTERNATIVE SOLUTION EXPLANATION (Using Comparison):
@@ -2587,7 +2577,7 @@ def count_uppercase(string):
     count = 0  # Initialize counter
     # Remove spaces (unnecessary - isupper() handles spaces correctly)
     string = string.replace(" ", "")
-    
+
     # Iterate through each character
     for char in string:
         # BUG: This comparison is True for uppercase letters, but also for
@@ -2596,32 +2586,32 @@ def count_uppercase(string):
         if char == char.upper():  # This is less precise than isupper()
             count += 1  # Increments for uppercase, numbers, and symbols
     return count  # May return incorrect count if string has numbers/symbols
-    
+
 # TEST CASE:
 # This test counts uppercase in "Jonah Is Tbe Best"
 # Uppercase: J, I, T, B (4 total)
 # Note: This method may miscount if there are numbers or symbols
 string = "Jonah Is Tbe Best"
 print(count_uppercase(string))  # Output: 4
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires removing all space characters from a string. The
 # function should take a string and return a new string with all space
 # characters removed, effectively concatenating all words together. This is
 # useful for formatting and text processing operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a new string with all spaces removed
 # - Only space characters should be removed (not tabs, newlines, etc.)
 # - All other characters should remain in their original positions
-# 
+#
 # Example Input/Output:
 # - remove_spaces("what happening boss man") should return "whathappeningbossman"
 # - remove_spaces("hello world") should return "helloworld"
 # - remove_spaces("no spaces") should return "nospaces"
-# 
+#
 # Python's replace() method is the most straightforward approach.
 # ============================================================================
 """
@@ -2636,20 +2626,20 @@ Write a Python function called remove_spaces that takes a string as input and re
 def remove_spaces(string):
     # replace(" ", "") replaces all space characters with empty string
     return string.replace(" ", "")  # Returns string with spaces removed
-    
+
 # TEST CASE:
 # This test removes spaces from "what happening boss man"
 # Result: "whathappeningbossman"
 lst = "what happening boss man"
 print(remove_spaces(lst))  # Output: whathappeningbossman
-    
+
 # ALTERNATIVE SOLUTION EXPLANATION (Using Loop):
 # This solution manually iterates through each character and builds a new
 # string without spaces. It's more verbose but demonstrates the algorithm
 # clearly. This approach is less efficient than replace() but more explicit.
 def remove_spaces(string):
     string_removed = []  # List to collect non-space characters
-    
+
     # Iterate through each character
     for char in string:
         # Only add character if it's not a space
@@ -2657,7 +2647,7 @@ def remove_spaces(string):
             string_removed.append(char)  # Add non-space character to list
     # Join list back into string
     return "".join(string_removed)  # Return string without spaces
-                
+
 # TEST CASE:
 # Same test case as above, demonstrating both solutions produce the same result
 lst = "what happening boss man"
@@ -2669,18 +2659,18 @@ print(remove_spaces(lst))  # Output: whathappeningbossman
 # The function should take two lists that are already sorted, combine all
 # elements from both lists, and return a new list that is also sorted. This
 # is a fundamental operation in merge sort and other algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept two sorted lists as input
 # - Function must return a NEW sorted list containing all elements
 # - Input lists are assumed to be already sorted
 # - Output list should be sorted (ascending order typically)
-# 
+#
 # Example Input/Output:
 # - merge_lists([1, 3, 5], [2, 4, 6]) should return [1, 2, 3, 4, 5, 6]
 # - merge_lists([1, 2], [3, 4]) should return [1, 2, 3, 4]
 # - merge_lists([], [1, 2]) should return [1, 2]
-# 
+#
 # Note: The current solution re-sorts the input lists, which is unnecessary
 # if they're already sorted. A proper merge would use a two-pointer approach.
 # ============================================================================
@@ -2699,10 +2689,10 @@ def merge_lists():
     # Note: This re-sorts the input, which is unnecessary if already sorted
     lst1 = sorted(input("Type the first sorted list: ").split())  # Sorts again
     lst2 = sorted(input("Type the second sorted list: ").split())  # Sorts again
-    
+
     # Combine lists and sort the result
     merged_list = sorted(lst1 + lst2)  # Concatenate and sort
-    
+
     print(merged_list)  # Print the merged and sorted list
 
 merge_lists()  # Call the function
@@ -2713,18 +2703,18 @@ merge_lists()  # Call the function
 # The function should search through the list and return the position (index)
 # where the target is found. If the target is not found, it should return -1
 # as a sentinel value. This is a fundamental search operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element
 # - Function must return the index if target is found
 # - Function must return -1 if target is not found
 # - Should return the first occurrence if duplicates exist
-# 
+#
 # Example Input/Output:
 # - find_index([1, 3, 5, 7, 9], 5) should return 2 (5 is at index 2)
 # - find_index([1, 3, 5, 7, 9], 6) should return -1 (6 not found)
 # - find_index([1, 2, 2, 3], 2) should return 1 (first occurrence)
-# 
+#
 # Algorithm: Linear search - iterate through list, return index when found.
 # ============================================================================
 """
@@ -2765,18 +2755,18 @@ print("Index of", target, "in nums:", find_index(numbers, target))  # Output: In
 # a list. The function should iterate through the list, check if each index
 # is even, and accumulate the sum of elements at those positions. This is
 # useful for processing alternating elements or specific index patterns.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers
 # - Must sum elements at even indices (0, 2, 4, 6, ...)
 # - Index 0 is considered even
 # - Should return the total sum
-# 
+#
 # Example Input/Output:
 # - sum_even_indices([1, 2, 3, 4, 5, 6]) sums indices 0,2,4: 1+3+5 = 9
 # - sum_even_indices([10, 20, 30, 40]) sums indices 0,2: 10+30 = 40
 # - sum_even_indices([5]) sums index 0: 5
-# 
+#
 # Algorithm: Iterate through indices, check if even (i % 2 == 0), sum those elements.
 # ============================================================================
 """
@@ -2790,7 +2780,7 @@ Write a Python function called sum_even_indices that takes a list of numbers as 
 # This is clear and easy to understand.
 def sum_even_indices(nums):
     total = 0  # Initialize sum accumulator
-    
+
     # Iterate through all indices of the list
     for i in range(len(nums)):
         # Check if current index is even (0, 2, 4, 6, ...)
@@ -2822,7 +2812,7 @@ print("Sum of elements at even indices:", sum_even_indices(numbers))  # Output: 
 # PROBLEM EXPLANATION:
 # remove_duplicates_case_insensitive that takes a list of strings as input and returns a new list with duplicate strings removed, ignoring case sensitivity. For example, “hello” and “HELLO” should be co
 # nsidered the same. Do not use set().
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
@@ -2830,10 +2820,10 @@ print("Sum of elements at even indices:", sum_even_indices(numbers))  # Output: 
 # - Must work with strings
 # - Should handle case sensitivity appropriately
 # - Must remove or handle duplicate elements
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -2854,7 +2844,7 @@ def remove_duplicates(lst):
             unique.add(word_lower)
     return common
         # Returns the result
-            
+
 lst = ["not", "not", "hot", "hot"]
 print(remove_duplicates(lst))
 
@@ -2869,7 +2859,7 @@ def remove_duplicates(lst):
             unique.add(word_lower)
     return unique
         # Returns the result
-            
+
 lst = ["not", "not", "hot", "hot", "cold"]
 print(remove_duplicates(lst))
 
@@ -2894,19 +2884,19 @@ print("List with case-insensitive duplicates removed:", remove_duplicates(input_
 # reads the same forwards and backwards (e.g., "racecar", "level", "madam").
 # The function should compare the string with its reverse to check if they're
 # identical. This is a common string manipulation and validation task.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return True if palindrome, False otherwise
 # - Should check if string == reversed string
 # - Case-sensitive by default (unless specified otherwise)
-# 
+#
 # Example Input/Output:
 # - is_palindrome("racecar") should return True (reads same forwards/backwards)
 # - is_palindrome("hello") should return False (hello != olleh)
 # - is_palindrome("level") should return True
 # - is_palindrome("Racecar") should return False (case-sensitive: R != r)
-# 
+#
 # Algorithm: Compare string with its reverse using slicing [::-1].
 # ============================================================================
 """
@@ -2942,19 +2932,19 @@ print("Is", input_string, "a palindrome?", is_palindrome(input_string))  # Outpu
 # The factorial of n (denoted as n!) is the product of all positive integers
 # from 1 to n. By definition, 0! = 1. Factorials grow very quickly and are
 # used in combinatorics, probability, and mathematical analysis.
-# 
+#
 # Key Requirements:
 # - Function must accept a non-negative integer n
 # - Function must return n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Special case: 0! = 1 (by mathematical definition)
 # - Should handle edge cases (0, 1)
-# 
+#
 # Example Input/Output:
 # - factorial(0) should return 1 (0! = 1 by definition)
 # - factorial(5) should return 120 (5 × 4 × 3 × 2 × 1 = 120)
 # - factorial(1) should return 1 (1! = 1)
 # - factorial(3) should return 6 (3 × 2 × 1 = 6)
-# 
+#
 # Algorithm: Can be implemented iteratively (loop) or recursively.
 # ============================================================================
 """
@@ -3015,13 +3005,13 @@ def factorial(n):
 
 # TEST CASE:
 # Same test case as above, demonstrating backward iteration
-print(factorial(5))  # Output: 120 
+print(factorial(5))  # Output: 120
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # is_anagram that takes two strings as input and returns True if they are anagrams of each other, and False otherwise. Two strings are anagrams if they can be rearranged to form the same word (e.g., “li
 # sten” and “silent”).
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -3029,10 +3019,10 @@ print(factorial(5))  # Output: 120
 # - Must work with lists
 # - Must work with strings
 # - Must check if strings contain same letters in different order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -3045,14 +3035,14 @@ def main():
     string1 = input("type string: ").lower()  # e.g., "Listen" → "listen"
     # Get second string from user and convert to lowercase
     string2 = input("type string: ").lower()  # e.g., "Silent" → "silent"
-    
+
     # sorted() converts string to list of sorted characters
     # e.g., "listen" → ['e', 'i', 'l', 'n', 's', 't']
     sorted1 = sorted(string1)
         # Sorts elements in ascending order
     sorted2 = sorted(string2)
         # Sorts elements in ascending order
-    
+
     # Compare sorted lists - if equal, strings are anagrams
     if sorted1 == sorted2:
         # Checks condition
@@ -3070,7 +3060,7 @@ def is_anagram(str1, str2):
     # Convert both strings to lowercase for case-insensitive comparison
     str1 = str1.lower()  # "Listen" → "listen"
     str2 = str2.lower()  # "Silent" → "silent"
-    
+
     # sorted() returns a list of sorted characters
     # Compare sorted lists - if equal, strings contain same letters (anagrams)
     return sorted(str1) == sorted(str2)  # Returns True if anagrams, False otherwise
@@ -3094,13 +3084,13 @@ def is_anagram(lst1, lst2):
     # Sort both strings into lists of characters
     sorted_lst1 = sorted(lst1)  # "qwer" → ['e', 'q', 'r', 'w']
     sorted_lst2 = sorted(lst2)  # "rewq" → ['e', 'q', 'r', 'w']
-    
+
     # Compare sorted lists
     if sorted_lst1 == sorted_lst2:
         # Checks condition
         return True  # Strings are anagrams
     return False  # Strings are not anagrams
-           
+
 # TEST CASE:
 # "qwer" and "rewq" are anagrams (reversed order, same letters)
 lst1 = "qwer"
@@ -3115,18 +3105,18 @@ print(is_anagram(lst1, lst2))  # Output: True
 # treating words case-insensitively (so "This" and "this" are the same word).
 # This is a fundamental text analysis operation used in natural language
 # processing and data analysis.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must return a dictionary with words as keys and counts as values
 # - Words are separated by spaces
 # - Case-insensitive (treat "Hello" and "hello" as the same word)
-# 
+#
 # Example Input/Output:
 # - count_words("This is a test. This test is only a test.") should return
 #   {'this': 2, 'is': 2, 'a': 2, 'test.': 1, 'test': 1, 'only': 1}
 # - count_words("hello Hello HELLO") should return {'hello': 3}
-# 
+#
 # Algorithm: Convert to lowercase, split into words, count occurrences in dictionary.
 # ============================================================================
 """
@@ -3145,7 +3135,7 @@ def count_words(s):
     # Split string into list of words
     words = s.split()  # ["this", "is", "a", "test", "this", "test", ...]
     word_count = {}  # Dictionary to store word frequencies
-    
+
     # Iterate through each word
     for word in words:
         # Check if word already in dictionary
@@ -3170,20 +3160,20 @@ print(count_words(input_string))  # Output: {'this': 2, 'is': 2, 'a': 2, 'test.'
 # the sum of the two preceding ones, starting from 0 and 1. The sequence goes:
 # 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... This sequence appears in nature and
 # has many applications in mathematics and computer science.
-# 
+#
 # Key Requirements:
 # - Function must accept an integer n
 # - Function must return a list of the first n Fibonacci numbers
 # - Sequence starts with 0 and 1
 # - Each subsequent number = sum of previous two numbers
 # - Handle edge cases: n <= 0, n == 1, n == 2
-# 
+#
 # Example Input/Output:
 # - fibonacci(0) should return [] (empty list)
 # - fibonacci(1) should return [0]
 # - fibonacci(2) should return [0, 1]
 # - fibonacci(10) should return [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
-# 
+#
 # Algorithm: Start with [0, 1], then generate next numbers by summing last two.
 # ============================================================================
 """
@@ -3229,17 +3219,17 @@ print(fibonacci(10))  # Output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 # rectangle is calculated by multiplying its length by its width. The function
 # should prompt the user for both dimensions, perform the calculation, and
 # display the result. This is a basic geometric calculation exercise.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for length and width
 # - Must calculate area = length × width
 # - Should handle floating-point numbers (decimals)
 # - Should display the result
-# 
+#
 # Example Input/Output:
 # - If user enters length=5, width=3, area should be 15
 # - If user enters length=10.5, width=2.5, area should be 26.25
-# 
+#
 # Formula: Area = length × width
 # ============================================================================
 """
@@ -3258,10 +3248,10 @@ def area_rectangle():
     width = float(input("type width: "))  # e.g., 3.0
     # Calculate area: length × width
     area = length * width  # e.g., 5.0 × 3.0 = 15.0
-    
+
     # Display the result
     print(area)  # Prints the area
-    
+
 area_rectangle()  # Call the function
 
 # ============================================================================
@@ -3270,17 +3260,17 @@ area_rectangle()  # Call the function
 # is divisible by 2 (remainder 0 when divided by 2), while an odd number has
 # a remainder of 1 when divided by 2. The program should prompt the user for
 # a number and display whether it's even or odd.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must check if number is even (divisible by 2) or odd
 # - Should display appropriate message
-# 
+#
 # Example Input/Output:
 # - If user enters 4, output: "Number is even"
 # - If user enters 7, output: "Number is odd"
 # - If user enters 0, output: "Number is even"
-# 
+#
 # Algorithm: Use modulo operator (%) - if number % 2 == 0, it's even; else odd.
 # ============================================================================
 """
@@ -3295,13 +3285,13 @@ Write a Python program to check if a given number is even or odd. Prompt the use
 def even_odd():
     # Get number from user and convert to integer
     user = int(input("type number: "))  # e.g., 4 or 7
-    
+
     # Check if number is even (remainder when divided by 2 is 0)
     if user % 2 == 0:  # If remainder is 0, number is even
         print("Number is even")  # Display even message
     else:  # If remainder is not 0 (i.e., 1), number is odd
         print("Number is odd")  # Display odd message
-   
+
 even_odd()  # Call the function
 
 # ============================================================================
@@ -3310,17 +3300,17 @@ even_odd()  # Call the function
 # a given limit. The Fibonacci sequence starts with 0 and 1, and each
 # subsequent number is the sum of the previous two. The program should use
 # a while loop to generate numbers until they exceed the limit.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a limit
 # - Must use a while loop (as specified)
 # - Should print Fibonacci numbers up to (and including) the limit
 # - Sequence: 0, 1, 1, 2, 3, 5, 8, 13, ...
-# 
+#
 # Example Input/Output:
 # - If user enters limit=10, output: "0 1 1 2 3 5 8"
 # - If user enters limit=20, output: "0 1 1 2 3 5 8 13"
-# 
+#
 # Algorithm: Start with a=0, b=1. While a <= limit, print a, then update a=b, b=a+b.
 # ============================================================================
 """
@@ -3337,14 +3327,14 @@ def fibonacci_series():
     limit = int(input("Enter the limit: "))  # e.g., 10
     # Initialize first two Fibonacci numbers
     a, b = 0, 1  # a=0 (first), b=1 (second)
-    
+
     # Continue while current number (a) is <= limit
     while a <= limit:  # Loop until a exceeds limit
         # Print current Fibonacci number (end=' ' keeps on same line)
         print(a, end=' ')  # Prints: 0, then 1, then 1, then 2, etc.
         # Update: a becomes b, b becomes a+b (next Fibonacci number)
         a, b = b, a + b  # Tuple assignment: a=1,b=1 → a=1,b=2 → a=2,b=3, etc.
-        
+
 fibonacci_series()  # Call the function
 
 # ============================================================================
@@ -3352,17 +3342,17 @@ fibonacci_series()  # Call the function
 # This problem requires finding the maximum (largest) of three numbers. The
 # program should prompt the user for three numbers, then determine and display
 # which one is the largest. This is a common comparison operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for three numbers
 # - Must find the maximum among the three
 # - Should display the maximum number
-# 
+#
 # Example Input/Output:
 # - If user enters "10 20 15", output: 20
 # - If user enters "5 3 8", output: 8
 # - If user enters "100 100 100", output: 100
-# 
+#
 # Algorithm: Compare numbers sequentially, track the largest found so far.
 # ============================================================================
 """
@@ -3378,21 +3368,21 @@ def max_number():
     # Get user input and split into list of strings
     user = input("type 3 numbers: ").split()  # e.g., "10 20 15" → ["10", "20", "15"]
     int_number = []  # List to store converted integers
-    
+
     # Convert each string to integer
     for number in user:
         int_number.append(int(number))  # ["10", "20", "15"] → [10, 20, 15]
-    
+
     # Initialize max_num with first number
     max_num = int_number[0]  # Assume first number is maximum (10)
-    
+
     # Compare each number with current maximum
     for number in int_number:
         # If current number is greater than max_num, update max_num
         if number > max_num:  # 20 > 10, so max_num = 20; 15 > 20? No
             max_num = number  # Update maximum
     print(max_num)  # Print the maximum number (20)
-           
+
 max_number()  # Call the function
 
 # ============================================================================
@@ -3400,17 +3390,17 @@ max_number()  # Call the function
 # This problem requires reversing a string. The program should take a string
 # and return a new string with all characters in reverse order. For example,
 # "hello" becomes "olleh". This is a common string manipulation operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must reverse the string (last character becomes first, etc.)
 # - Should display the reversed string
-# 
+#
 # Example Input/Output:
 # - If user enters "hello", output: "olleh"
 # - If user enters "Jonathan", output: "nahtanoJ"
 # - If user enters "abc", output: "cba"
-# 
+#
 # Algorithm: Use string slicing [::-1] to create reversed copy.
 # ============================================================================
 """
@@ -3426,10 +3416,10 @@ def reverse_string():
     user = input("type string: ")  # e.g., "hello"
     # Reverse the string using slicing [::-1]
     user = user[::-1]  # "hello" → "olleh"
-    
+
     # Display the reversed string
     print(user)  # Prints: olleh
-    
+
 reverse_string()  # Call the function
 
 # ALTERNATIVE SOLUTION EXPLANATION (Function with Parameter):
@@ -3439,7 +3429,7 @@ reverse_string()  # Call the function
 def reverse_string(string):
     # [::-1] creates a reversed copy of the string
     return string[::-1]  # Returns reversed string
-            
+
 # TEST CASE:
 # This test reverses "Jonathan" to "nahtanoJ"
 lst = "Jonathan"
@@ -3451,18 +3441,18 @@ print(reverse_string(lst))  # Output: nahtanoJ
 # reads the same forwards and backwards (e.g., "racecar", "level", "madam").
 # The program should handle case-insensitivity and ignore spaces, then check
 # if the normalized string equals its reverse.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Should handle case-insensitivity (treat "Racecar" same as "racecar")
 # - Should ignore spaces (treat "a man a plan" same as "amanaplan")
 # - Must return True if palindrome, False otherwise
-# 
+#
 # Example Input/Output:
 # - If user enters "racecar", output: True
 # - If user enters "hello", output: False
 # - If user enters "A man a plan", output: True (after normalization)
-# 
+#
 # Algorithm: Normalize string (lowercase, remove spaces), compare with reverse.
 # ============================================================================
 """
@@ -3477,11 +3467,11 @@ Write a Python program to check if a given string is a palindrome. Prompt the us
 def is_palindrome():
     # Get string from user, normalize it
     user = input("type word: ").lower().replace(" ", "")  # "Race Car" → "racecar"
-    
+
     # Compare normalized string with its reverse
     # If equal, it's a palindrome
     return user == user[::-1]  # "racecar" == "racecar" → True
-        
+
 print(is_palindrome())  # Call function and print result
 
 # ============================================================================
@@ -3490,18 +3480,18 @@ print(is_palindrome())  # Call function and print result
 # the letters a, e, i, o, u (and sometimes y, but typically just aeiou). The
 # program should iterate through the string and count how many characters are
 # vowels. This is useful for text analysis and language processing.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must count vowels (a, e, i, o, u)
 # - Should handle case-insensitivity (convert to lowercase)
 # - Should display the count
-# 
+#
 # Example Input/Output:
 # - If user enters "hello", output: 2 (e, o)
 # - If user enters "Jonathan", output: 3 (o, a, a)
 # - If user enters "xyz", output: 0 (no vowels)
-# 
+#
 # Algorithm: Convert to lowercase, iterate through characters, count vowels.
 # ============================================================================
 """
@@ -3519,14 +3509,14 @@ def count_vowels():
     # Define vowels (lowercase only, since we converted input)
     vowels = "aeiou"  # String containing all vowels
     count = 0  # Initialize vowel counter
-    
+
     # Iterate through each character
     for char in user:
         # Check if current character is a vowel
         if char in vowels:  # If char is 'a', 'e', 'i', 'o', or 'u'
             count += 1  # Increment counter
     print(count)  # Display the total count
-    
+
 count_vowels()  # Call the function
 
 # ============================================================================
@@ -3535,17 +3525,17 @@ count_vowels()  # Call the function
 # of n (n!) is the product of all positive integers from 1 to n. By definition,
 # 0! = 1. The program should prompt the user for a number and calculate its
 # factorial. This is a fundamental mathematical operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must calculate n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Should display the result
-# 
+#
 # Example Input/Output:
 # - If user enters 5, output: 120 (5 × 4 × 3 × 2 × 1 = 120)
 # - If user enters 3, output: 6 (3 × 2 × 1 = 6)
 # - If user enters 0, output: 1 (0! = 1 by definition)
-# 
+#
 # Algorithm: Initialize result=1, multiply by each number from 1 to n.
 # ============================================================================
 """
@@ -3562,11 +3552,11 @@ def factorial():
     # BUG: Hardcoded range(1, 6) instead of using user input
     for i in range(1, 6):  # Always calculates 5! = 120 (WRONG!)
         result *= i  # Multiply: 1 × 2 × 3 × 4 × 5 = 120
-        
+
     print(f"{result}")  # Always prints 120
 
 factorial()  # Call the function
- 
+
 # CORRECT SOLUTION EXPLANATION:
 # This solution properly prompts the user for input, then calculates the
 # factorial of that number. It uses a loop to multiply all numbers from 1
@@ -3575,11 +3565,11 @@ def factorial():
     # Get number from user
     number = int(input("Enter a number: "))  # e.g., 5
     result = 1  # Initialize result to 1 (multiplicative identity)
-    
+
     # Multiply all numbers from 1 to number
     for i in range(1, number + 1):  # range(1, 6) = 1, 2, 3, 4, 5
         result *= i  # Multiply: 1 × 2 × 3 × 4 × 5 = 120
-        
+
     # Display the result with a descriptive message
     print(f"The factorial of {number} is {result}")  # Prints: The factorial of 5 is 120
 
@@ -3592,16 +3582,16 @@ factorial()  # Call the function
 # solution appears to sum a list of numbers provided by the user, not the
 # sum from 1 to n. The problem statement suggests summing 1 to n, but the
 # implementation sums user-provided numbers.
-# 
+#
 # Key Requirements:
 # - Program should calculate sum from 1 to n (or sum user-provided numbers)
 # - Must prompt user for input
 # - Should display the total sum
-# 
+#
 # Example Input/Output:
 # - If problem means sum 1 to n: user enters 5, output: 15 (1+2+3+4+5)
 # - If problem means sum list: user enters "1 2 3 4 5", output: 15
-# 
+#
 # Note: The current implementation sums a list of numbers, not 1 to n.
 # ============================================================================
 """
@@ -3618,13 +3608,13 @@ def sum_of_all_numbers():
     # Get user input and split into list
     user = input("type numbers: ").split()  # "1 2 3 4 5" → ["1", "2", "3", "4", "5"]
     int_user = []  # List to store converted integers
-    
+
     # Convert each string to integer
     for number in user:
         int_user.append(int(number))  # ["1", "2", ...] → [1, 2, 3, 4, 5]
-        
+
     count = 0  # Initialize sum accumulator
-    
+
     # Sum all numbers in the list
     for number in int_user:
         count += number  # Add each number: 1+2+3+4+5 = 15
@@ -3637,17 +3627,17 @@ sum_of_all_numbers()  # Call the function
 # This problem requires finding the largest (maximum) element in a list of
 # numbers. The program should prompt the user for a list of numbers, then
 # determine and return the maximum value. This is a fundamental list operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must find the largest number in the list
 # - Should display the largest number
-# 
+#
 # Example Input/Output:
 # - If user enters "2 56 75 4566 3", output: 4566
 # - If user enters "10 20 15", output: 20
 # - If user enters "5", output: 5
-# 
+#
 # Algorithm: Can use sorted() and take last element, or max(), or manual loop.
 # ============================================================================
 """
@@ -3663,16 +3653,16 @@ def find_largest():
     # Get user input and split into list
     user = input("type number: ").split()  # "2 56 75 4566 3" → ["2", "56", ...]
     int_number = []  # List to store converted integers
-    
+
     # Convert each string to integer
     for number in user:
         int_number.append(int(number))  # [2, 56, 75, 4566, 3]
-    
+
     # Sort in ascending order
     sort = sorted(int_number)  # [2, 3, 56, 75, 4566]
     # Get the last element (largest)
     largest = sort[-1]  # 4566
-    
+
     print(largest)  # Display the largest number
 
 find_largest()  # Call the function
@@ -3686,14 +3676,14 @@ def find_largest():
     int_number = []
     for number in user:
         int_number.append(int(number))
-    
+
     # Sort in descending order
     sort = sorted(int_number, reverse=True)  # [4566, 75, 56, 3, 2]
     # Get the first element (largest)
     largest = sort[0]  # 4566
-    
+
     print(largest)  # Display the largest number
-    
+
 find_largest()  # Call the function
 
 # ALTERNATIVE SOLUTION EXPLANATION (Using max()):
@@ -3703,7 +3693,7 @@ find_largest()  # Call the function
 def largest_element(numbers):
     # max() finds the maximum element in the list
     return max(numbers)  # Returns the largest number
-                
+
 # TEST CASE:
 # This test finds the largest in [2, 56, 75, 4566, 3]
 numbers = [2, 56, 75, 4566, 3]
@@ -3716,14 +3706,14 @@ print(largest_element(numbers))  # Output: 4566
 def largest_element(numbers):
     # Initialize with first element
     largest = numbers[0]  # Assume first is largest
-    
+
     # Compare each number with current largest
     for number in numbers:
         # If current number is greater, update largest
         if number > largest:  # 56 > 2, so largest = 56; 75 > 56, so largest = 75, etc.
             largest = number  # Update maximum
     return largest  # Return the largest number
-                
+
 # TEST CASE:
 # Same test case as above, demonstrating manual approach
 numbers = [2, 56, 75, 4566, 3]
@@ -3735,17 +3725,17 @@ print(largest_element(numbers))  # Output: 4566
 # numbers). "Largest" here means the longest string (most characters). The
 # program should find the string with the maximum length. This is useful for
 # text processing and finding the longest word in a list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings
 # - Must find the string with maximum length
 # - Should not use numeric comparisons (compare by length instead)
-# 
+#
 # Example Input/Output:
 # - largest_element(["tree", "cliff", "mountain"]) should return "mountain" (8 chars)
 # - largest_element(["house", "counter", "if"]) should return "counter" (7 chars)
 # - largest_element(["a", "bb", "ccc"]) should return "ccc" (3 chars)
-# 
+#
 # Algorithm: Compare strings by their length, track the longest one.
 # ============================================================================
 """
@@ -3760,7 +3750,7 @@ Write a Python program to find the largest element in a list (do not use numbers
 def main(lst):
     # max() finds maximum element, key=len compares by length
     return max(lst, key=len)  # Returns the longest string
-    
+
 # TEST CASE:
 # This test finds the longest string in the list
 # "mountain" and "grassy" both have 8 characters, but "mountain" appears first
@@ -3774,7 +3764,7 @@ main(lst)  # Returns: "mountain"
 def largest_elememt(lst):
     count = 0  # Track the length of the longest string found
     largest = ""  # Track the longest string itself
-    
+
     # Iterate through each word
     for word in lst:
         # If current word is longer than the longest found so far
@@ -3782,7 +3772,7 @@ def largest_elememt(lst):
             count = len(word)  # Update the length
             largest = word  # Update the word
     return largest  # Return the longest string
-            
+
 # TEST CASE:
 # This test finds the longest string manually
 # "house"=5, "counter"=7, "if"=2 → "counter" is longest
@@ -3796,15 +3786,15 @@ print(largest_elememt(lst))  # Output: counter
 def largest_elememt(lst):
     # Sort list by length (ascending order)
     lst = sorted(lst, key=len)  # ["if", "house", "counter"]
-     
+
     # Return the last element (longest)
     return lst[-1]  # Returns "counter"
-    
+
 # TEST CASE:
 # Same test case as above, demonstrating sorted approach
 lst = ["house", "counter", "if"]
 print(largest_elememt(lst))  # Output: counter
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires removing duplicate elements from a list while
@@ -3812,16 +3802,16 @@ print(largest_elememt(lst))  # Output: counter
 # and return a new list containing only unique elements. However, the current
 # solution has a bug - it returns early when it finds the first duplicate,
 # which doesn't fully remove all duplicates from the list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must return a list with duplicates removed
 # - Original order of first occurrence should be maintained
-# 
+#
 # Example Input/Output:
 # - remove_duplicates(["tree", "kiss", "tree"]) should return ["tree", "kiss"]
 # - remove_duplicates([1, 2, 2, 3, 1]) should return [1, 2, 3]
-# 
+#
 # Note: The current solution has a bug - it returns early on first duplicate.
 # ============================================================================
 """
@@ -3835,7 +3825,7 @@ Write a Python program to remove duplicates from a list. Prompt the user to ente
 # list. It should continue through all elements and only return at the end.
 def remove_duplicates(elements):
     duplicates = []  # List to store unique elements (misleading variable name)
-    
+
     # Iterate through each element
     for element in elements:
         # Check if element already in list
@@ -3847,7 +3837,7 @@ def remove_duplicates(elements):
         duplicates.append(element)  # Add first occurrence
     # This line is unreachable if there are any duplicates
     return None  # Returns None if no duplicates found
-            
+
 # TEST CASE:
 # This test attempts to remove duplicates from ["tree", "kiss", "tree"]
 # Expected: ["tree", "kiss"]
@@ -3860,20 +3850,20 @@ print(remove_duplicates(lst))  # Output: ['tree'] (INCORRECT!)
 # This problem requires determining if a year is a leap year. A leap year
 # occurs every 4 years, except for years divisible by 100, unless they're
 # also divisible by 400. This is the Gregorian calendar rule for leap years.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a year
 # - Must check leap year rules:
 #   1. Divisible by 4 AND not divisible by 100, OR
 #   2. Divisible by 400
 # - Should return True if leap year, False otherwise
-# 
+#
 # Example Input/Output:
 # - 2000 is a leap year (divisible by 400)
 # - 1900 is NOT a leap year (divisible by 100 but not 400)
 # - 2004 is a leap year (divisible by 4, not by 100)
 # - 2001 is NOT a leap year (not divisible by 4)
-# 
+#
 # Algorithm: Check (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
 # ============================================================================
 """
@@ -3888,7 +3878,7 @@ Write a Python program to check if a given year is a leap year. Prompt the user 
 def is_leap_year():
     # Get year from user
     year = int(input("Enter a year: "))  # e.g., 2000
-    
+
     # Check leap year conditions:
     # 1. Divisible by 4 AND not divisible by 100, OR
     # 2. Divisible by 400
@@ -3910,18 +3900,18 @@ print(is_leap_year())  # Prompts user and prints result
 # Python's built-in len() function. The program should manually count
 # characters by iterating through the string and incrementing a counter.
 # This demonstrates how len() works internally.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Must calculate length without using len()
 # - Should count each character in the string
 # - Should display the count
-# 
+#
 # Example Input/Output:
 # - If user enters "hello", output: 5
 # - If user enters "Jonathan", output: 8
 # - If user enters "", output: 0
-# 
+#
 # Note: The current solution removes spaces first, which may not match
 # the problem requirement (should count all characters including spaces).
 # ============================================================================
@@ -3943,7 +3933,7 @@ def length_string():
     for char in user:
         count += 1  # Increment counter for each character
     print(count)  # Display the total count
-             
+
 length_string()  # Call the function
 
 # ============================================================================
@@ -3953,17 +3943,17 @@ length_string()  # Call the function
 # which is technically a built-in operation. A truly manual approach would
 # compare characters from both ends without using slicing. A palindrome reads
 # the same forwards and backwards (e.g., "racecar", "level").
-# 
+#
 # Key Requirements:
 # - Program must check if string is a palindrome
 # - Should not use built-in functions (ideally)
 # - Should return True if palindrome, False otherwise
-# 
+#
 # Example Input/Output:
 # - palindrome("racecar") should return True
 # - palindrome("juju") should return False (juju != ujuj)
 # - palindrome("level") should return True
-# 
+#
 # Note: The current solution uses [::-1] which is a built-in operation.
 # A truly manual approach would compare characters from start and end.
 # ============================================================================
@@ -3982,7 +3972,7 @@ def palindrome(string):
     if string == string[::-1]:  # "juju" == "ujuj"? No
         return True  # Return True if palindrome
     return False  # Return False if not palindrome
-       
+
 # TEST CASE:
 # This test checks if "juju" is a palindrome
 # "juju" == "ujuj"? No → False
@@ -3996,16 +3986,16 @@ print(palindrome(word))  # Output: False
 # times each word appears. However, the current solution only counts the total
 # number of words, not the occurrences of each individual word. This doesn't
 # match the problem requirement.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a sentence
 # - Must count occurrences of EACH word (not total word count)
 # - Should return word frequencies (e.g., {"Jonathan": 1, "is": 1, "the": 1, "best": 1})
-# 
+#
 # Example Input/Output:
 # - count_each_word("Jonathan is the best") should return {"Jonathan": 1, "is": 1, "the": 1, "best": 1}
 # - count_each_word("hello hello world") should return {"hello": 2, "world": 1}
-# 
+#
 # Note: The current solution only counts total words, not per-word occurrences.
 # ============================================================================
 """
@@ -4022,12 +4012,12 @@ def count_each_word(sentence):
     count = 0  # Counter for total words (WRONG - should count per word)
     # Split sentence into words
     split_word = sentence.split()  # "Jonathan is the best" → ["Jonathan", "is", "the", "best"]
-    
+
     # Count total number of words
     for word in split_word:
         count += 1  # Increments for each word: 1, 2, 3, 4
     return count  # Returns 4 (total words, not per-word occurrences)
-       
+
 # TEST CASE:
 # This test counts words in "Jonathan is the best"
 # Expected: Dictionary with word counts
@@ -4041,18 +4031,18 @@ print(count_each_word(lst))  # Output: 4 (WRONG - should be a dictionary!)
 # function should sort the list (or remove duplicates first), then return
 # the second largest value. This is useful for finding runner-up values and
 # statistical analysis.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must find the second largest number
 # - Should handle duplicates (typically, duplicates are considered)
 # - Should handle edge cases (lists with < 2 elements)
-# 
+#
 # Example Input/Output:
 # - second_largest([56, 700, 1, 57, 78, 787, 5, 88]) should return 700
 # - second_largest([1, 2, 3, 4, 5]) should return 4
 # - second_largest([5, 5, 5]) should return 5 (if duplicates allowed) or handle appropriately
-# 
+#
 # Algorithm: Sort list, return second element (or handle duplicates first).
 # ============================================================================
 """
@@ -4071,7 +4061,7 @@ def sec_lar():
     unique_numbers = list(set(numbers))  # Removes duplicates
     # Sort in ascending order
     unique_numbers.sort()  # Sorts the unique numbers
-    
+
     # Return second largest (second from end)
     print(unique_numbers[-2])  # Prints the second largest
 
@@ -4084,13 +4074,13 @@ sec_lar()  # Call the function
 def second_largest_number(numbers):
     # Sort in descending order
     sorted_numbers = sorted(numbers, reverse=True)  # [787, 700, 88, 78, 57, 56, 5, 1]
-    
+
     # Check if list has at least 2 elements
     if len(sorted_numbers) > 1:
         return sorted_numbers[1]  # Return second element (700)
     else:
         return None  # Return None if list too short
-        
+
 # TEST CASE:
 # This test finds second largest in [56, 700, 1, 57, 78, 787, 5, 88]
 # Sorted descending: [787, 700, 88, 78, 57, 56, 5, 1]
@@ -4103,12 +4093,12 @@ print(second_largest_number(arg))  # Output: 700
 # iteration. The loop doesn't serve any purpose - it just returns immediately.
 def second_largest_number(numbers):
     sorted_numbers = sorted(numbers, reverse=True)  # Sort descending
-    
+
     # BUG: Loop always returns on first iteration - unnecessary!
     for number in sorted_numbers:
         return sorted_numbers[1]  # Always returns second element immediately
     return None  # Unreachable if list is non-empty
-        
+
 # TEST CASE:
 # Same test case, demonstrating inefficient but functional approach
 arg = [56, 700, 1, 57, 78, 787, 5, 88]
@@ -4120,13 +4110,13 @@ print(second_largest_number(arg))  # Output: 700
 def second_largest_number(numbers):
     # Sort in ascending order
     sorted_numbers = sorted(numbers)  # [1, 5, 56, 57, 78, 88, 700, 787]
-    
+
     # Unnecessary loop (always returns immediately)
     for number in sorted_numbers:
         # Return second-to-last element (second largest)
         return sorted_numbers[-2]  # Returns 700
     return None  # Unreachable
-        
+
 # TEST CASE:
 # Same test case, demonstrating ascending sort approach
 arg = [56, 700, 1, 57, 78, 787, 5, 88]
@@ -4140,19 +4130,19 @@ print(second_largest_number(arg))  # Output: 700
 # and domain must have at least one dot separating the domain name from the
 # extension (TLD). The program should use validation rules to check if the
 # email format is correct.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for an email address
 # - Must validate email format (local@domain.extension)
 # - Should check for required components (@ symbol, domain, TLD)
 # - Should return True if valid, False otherwise
-# 
+#
 # Example Input/Output:
 # - "user@example.com" → True (valid email)
 # - "invalid.email" → False (missing @)
 # - "@example.com" → False (missing local part)
 # - "user@.com" → False (invalid domain)
-# 
+#
 # Algorithm: Use regex pattern matching or manual validation of components.
 # ============================================================================
 """
@@ -4169,10 +4159,10 @@ import re
 def is_valid_email(email):
     """
     Checks if the given email address is valid.
-    
+
     Args:
         email (str): The email address to be validated.
-    
+
     Returns:
         bool: True if the email address is valid, False otherwise.
     """
@@ -4184,7 +4174,7 @@ def is_valid_email(email):
     # \.                   - Required dot before TLD
     # [a-zA-Z]{2,}$        - TLD: at least 2 letters
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    
+
     # Check if the email matches the pattern
     if re.match(pattern, email):  # re.match checks from start of string
         return True  # Email matches pattern
@@ -4194,7 +4184,7 @@ def is_valid_email(email):
 def main():
     # Prompt the user to enter an email address
     email = input("Enter an email address: ")  # e.g., "user@example.com"
-    
+
     # Check if the email is valid
     if is_valid_email(email):
         print("Email address is valid.")  # Display success message
@@ -4211,27 +4201,27 @@ main()  # Call the main function
 def is_valid_email():
     # Get email from user
     email = input("Enter an email address: ")
-    
+
     # Check for basic requirements: @ and . must be present
     if '@' not in email or '.' not in email:
         return False  # Missing required symbols
-    
+
     # Split email into local and domain parts
     local, domain = email.split('@', 1)  # Split at first @ only
-    
+
     # Validate local part (must not be empty)
     if not local:
         return False  # Local part is empty
-    
+
     # Validate domain part
     if '.' not in domain or domain.startswith('.') or domain.endswith('.'):
         return False  # Domain must have dot, not start/end with dot
-    
+
     # Split domain into parts and check each part
     domain_parts = domain.split('.')  # Split domain by dots
     if any(not part for part in domain_parts):  # Check if any part is empty
         return False  # Empty domain part found
-    
+
     return True  # All validations passed
 
 print(is_valid_email())  # Call function and print result
@@ -4242,18 +4232,18 @@ print(is_valid_email())  # Call function and print result
 # The factorial of n (n!) is the product of all positive integers from 1 to n.
 # By definition, 0! = 1 and 1! = 1. The recursive approach breaks down the
 # problem: n! = n × (n-1)!, with base cases for n=0 and n=1.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must use recursion (function calls itself)
 # - Should calculate n! = n × (n-1) × (n-2) × ... × 2 × 1
 # - Should handle edge cases (0, 1, negative numbers)
-# 
+#
 # Example Input/Output:
 # - factorial(5) = 5 × 4 × 3 × 2 × 1 = 120
 # - factorial(3) = 3 × 2 × 1 = 6
 # - factorial(0) = 1 (base case)
-# 
+#
 # Algorithm: Base case: if n <= 1, return 1. Otherwise: return n × factorial(n-1)
 # ============================================================================
 """
@@ -4283,7 +4273,7 @@ def main():
     try:
         # Get number from user
         number = int(input("Enter a number: "))  # e.g., 5
-        
+
         # Check for negative numbers
         if number < 0:
             print("Factorial is not defined for negative numbers.")  # Error message
@@ -4303,19 +4293,19 @@ main()  # Call the main function
 # word or phrase, using all the original letters exactly once. For example,
 # "listen" and "silent" are anagrams. The program should ignore case and
 # spaces when comparing.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two strings
 # - Must check if strings are anagrams (same letters, different order)
 # - Should ignore case (treat 'A' same as 'a')
 # - Should ignore spaces
 # - Should display whether strings are anagrams
-# 
+#
 # Example Input/Output:
 # - "listen" and "silent" → anagrams
 # - "hello" and "world" → not anagrams
 # - "The Morse Code" and "Here come dots" → anagrams (after normalization)
-# 
+#
 # Algorithm: Normalize strings (lowercase, remove spaces), sort both, compare.
 # ============================================================================
 """
@@ -4332,11 +4322,11 @@ def are_anagrams():
     # Get two strings from user
     str1 = input("Enter the first string: ")  # e.g., "listen"
     str2 = input("Enter the second string: ")  # e.g., "silent"
-    
+
     # Normalize strings: remove spaces and convert to lowercase
     str1 = str1.replace(" ", "").lower()  # "Listen" → "listen"
     str2 = str2.replace(" ", "").lower()  # "Silent" → "silent"
-    
+
     # Sort characters and compare
     if sorted(str1) == sorted(str2):  # sorted("listen") == sorted("silent") → True
         print(f"'{str1}' and '{str2}' are anagrams.")  # Display success message
@@ -4350,12 +4340,12 @@ are_anagrams()  # Call the function
 # backwards). It's not related to the anagram problem but appears in the code.
 def pal():
     user = input("type: ")  # Get string from user
-  
+
     # Check if string equals its reverse
     if user == user[::-1]:  # Compare with reversed string
         return True  # Is palindrome
     return False  # Not palindrome
- 
+
 print(pal())  # Call function and print result
 
 # ============================================================================
@@ -4364,18 +4354,18 @@ print(pal())  # Call function and print result
 # a positive integer greater than 1 that has no positive divisors other than
 # 1 and itself. The program should efficiently check for primality using an
 # optimized algorithm that avoids checking all divisors.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must check if number is prime (only divisible by 1 and itself)
 # - Should handle edge cases (1, 2, 3, even numbers, etc.)
 # - Should display whether number is prime
-# 
+#
 # Example Input/Output:
 # - 2, 3, 5, 7, 11, 13 → prime numbers
 # - 4, 6, 8, 9, 10 → not prime (divisible by numbers other than 1 and itself)
 # - 1 → not prime (by definition)
-# 
+#
 # Algorithm: Use optimized trial division (check up to sqrt(n), skip even numbers).
 # ============================================================================
 """
@@ -4393,15 +4383,15 @@ def is_prime(n):
     # Edge case: numbers <= 1 are not prime
     if n <= 1:
         return False  # 1 and negative numbers are not prime
-    
+
     # Edge case: 2 and 3 are prime
     if n <= 3:
         return True  # 2 and 3 are prime numbers
-    
+
     # Quick check: if divisible by 2 or 3, not prime
     if n % 2 == 0 or n % 3 == 0:
         return False  # Even numbers (except 2) and multiples of 3 are not prime
-    
+
     # Check divisors using 6k±1 pattern (all primes > 3 are of form 6k±1)
     # Only need to check up to sqrt(n)
     i = 5  # Start from 5 (first number of form 6k-1)
@@ -4416,7 +4406,7 @@ def main():
     try:
         # Get number from user
         number = int(input("Enter a number: "))  # e.g., 17
-        
+
         # Check if number is prime
         if is_prime(number):
             print(f"{number} is a prime number.")  # Display success message
@@ -4434,18 +4424,18 @@ main()  # Call the main function
 # The program should identify all elements that are present in both input lists,
 # regardless of their positions. Duplicates should be handled appropriately
 # (typically, each common element appears once in the result).
-# 
+#
 # Key Requirements:
 # - Program must prompt user for two lists
 # - Must find elements present in both lists
 # - Should handle duplicates appropriately
 # - Should display the common elements
-# 
+#
 # Example Input/Output:
 # - common_elements(["tree", "house", "car"], ["house", "tree", "sky"]) → ["tree", "house"]
 # - common_elements([1, 2, 3], [4, 5, 6]) → [] (no common elements)
 # - common_elements([1, 2, 2, 3], [2, 2, 4]) → [2] (duplicates handled)
-# 
+#
 # Algorithm: Can use nested loops, set intersection, or list comprehension.
 # ============================================================================
 """
@@ -4460,7 +4450,7 @@ Write a Python program to find the common elements between two lists. Prompt the
 # preserves order but is less efficient for large lists (O(n×m) complexity).
 def common_elements(lst1, lst2):
     result = []  # List to store common elements
-    
+
     # Compare each element in first list with each element in second list
     for i in lst1:
         for j in lst2:
@@ -4468,7 +4458,7 @@ def common_elements(lst1, lst2):
             if i == j and i not in result:  # Check for match and uniqueness
                 result.append(i)  # Add to result
     return result  # Return list of common elements
-    
+
 # TEST CASE:
 # This test finds common elements between two lists
 # Common: "tree" and "house"
@@ -4488,13 +4478,13 @@ def common_elements(lst1, lst2):
     elements_commmon = set1.intersection(set2)  # {"tree", "house"}
 
     return elements_commmon  # Return set of common elements
-        
+
 # TEST CASE:
 # Same approach with different test data
 arg1 = ["tree", "grass", "flower"]
 arg2 = ["grass", "flower", "river"]
 print(common_elements(arg1, arg2))  # Output: {'grass', 'flower'}
-    
+
 # INTERACTIVE SOLUTION EXPLANATION:
 # This solution prompts the user for input, converts to sets, and finds
 # intersection. It provides user-friendly output messages.
@@ -4502,16 +4492,16 @@ def find_common_elements():
     # Get first list from user
     input1 = input("Enter elements of the first list, separated by spaces: ")
     list1 = input1.split()  # Split into list of strings
-    
+
     # Get second list from user
     input2 = input("Enter elements of the second list, separated by spaces: ")
     list2 = input2.split()  # Split into list of strings
-    
+
     # Convert to sets and find intersection
     set1 = set(list1)  # Convert to set
     set2 = set(list2)  # Convert to set
     common_elements = set1.intersection(set2)  # Find common elements
-    
+
     # Display results
     if common_elements:
         print(f"Common elements between the two lists: {list(common_elements)}")  # Show common elements
@@ -4526,18 +4516,18 @@ find_common_elements()  # Call the function
 # The function should iterate through each character in the string and count
 # how many are uppercase letters (A-Z). This is useful for text analysis and
 # validation tasks.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Must count uppercase letters (A-Z)
 # - Should return the count as an integer
 # - Should handle mixed case strings
-# 
+#
 # Example Input/Output:
 # - count_uppercase("Hello World") → 2 (H, W)
 # - count_uppercase("HELLO") → 5 (all uppercase)
 # - count_uppercase("hello") → 0 (no uppercase)
-# 
+#
 # Algorithm: Iterate through characters, check if uppercase, increment counter.
 # ============================================================================
 """
@@ -4555,14 +4545,14 @@ def uppercase(string):
     count = 0  # Initialize uppercase counter
     # Remove spaces (may not be necessary for counting uppercase)
     string = string.replace(" ", "")  # "Hello World" → "HelloWorld"
-    
+
     # Iterate through each character
     for word in string:  # 'word' is actually a character (misleading variable name)
         # Check if character equals its uppercase version
         if word == word.upper():  # 'H' == 'H'? Yes; 'e' == 'E'? No
             count += 1  # Increment counter
     return count  # Return total count
-        
+
 # TEST CASE:
 # This test counts uppercase letters in "whAtT healin Gmanbe LLike"
 # Expected: 4 (A, T, G, L)
@@ -4576,17 +4566,17 @@ print(uppercase(sentence))  # Output: count of uppercase letters
 # Binary numbers use only 0s and 1s. The program should take a decimal number
 # and convert it to its binary representation. For example, 5 in decimal is
 # 101 in binary (1×2² + 0×2¹ + 1×2⁰ = 4 + 0 + 1 = 5).
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a decimal number
 # - Must convert decimal to binary representation
 # - Should display the binary number
-# 
+#
 # Example Input/Output:
 # - decimal_to_binary(5) → "101"
 # - decimal_to_binary(10) → "1010"
 # - decimal_to_binary(0) → "0"
-# 
+#
 # Algorithm: Use built-in bin() function or manual division-by-2 method.
 # ============================================================================
 """
@@ -4601,11 +4591,11 @@ Write a Python program to convert a decimal number to binary. Prompt the user to
 def decimal_to_binary():
     # Get decimal number from user
     decimal_number = int(input("Enter a decimal number: "))  # e.g., 5
-    
+
     # Convert to binary using built-in function
     # bin() returns string like "0b101", so slice from index 2 to remove "0b"
     binary_number = bin(decimal_number)[2:]  # "0b101"[2:] → "101"
-    
+
     # Display the result
     print(f"The binary representation of {decimal_number} is {binary_number}")  # Prints: "The binary representation of 5 is 101"
 
@@ -4617,17 +4607,17 @@ decimal_to_binary()  # Call the function
 # smallest to largest). The program should prompt the user for a list of
 # numbers, convert them to integers, sort them, and display the sorted result.
 # This is a fundamental list operation.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a list of numbers
 # - Must sort numbers in ascending order (smallest to largest)
 # - Should convert string input to integers
 # - Should display the sorted list
-# 
+#
 # Example Input/Output:
 # - sort([56, 23, 677, 6, 1]) → [1, 6, 23, 56, 677]
 # - sort([10, 5, 8, 2]) → [2, 5, 8, 10]
-# 
+#
 # Algorithm: Use Python's sorted() function or list.sort() method.
 # ============================================================================
 """
@@ -4644,12 +4634,12 @@ def main():
     # Get user input
     user = input("enter list of numbers: ")  # e.g., "56 23 677 6 1"
     user = user.split()  # Split into list: ["56", "23", "677", "6", "1"]
-    
+
     # Convert each string to integer
     for num in user:
         result.append(int(num))  # [56, 23, 677, 6, 1]
     return sorted(result)  # Return sorted list: [1, 6, 23, 56, 677]
-    
+
 main()  # Call function (return value not printed)
 
 # ALTERNATIVE SOLUTION EXPLANATION (Function with Parameter):
@@ -4659,9 +4649,9 @@ main()  # Call function (return value not printed)
 def ascending_order_numbers(numbers):
     # sorted() returns a new sorted list (doesn't modify original)
     sort_numbers = sorted(numbers)  # [56, 23, 677, 6, 1] → [1, 6, 23, 56, 677]
-    
+
     return sort_numbers  # Return sorted list
-    
+
 # TEST CASE:
 # This test sorts the list [56, 23, 677, 6, 1]
 numbers = [56, 23, 677, 6, 1]
@@ -4673,16 +4663,16 @@ print(ascending_order_numbers(numbers))  # Output: [1, 6, 23, 56, 677]
 # The program should prompt the user for a lower limit and an upper limit,
 # then generate and display a random number between those limits (inclusive).
 # This is useful for games, simulations, and random sampling.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for lower and upper limits
 # - Must generate a random number within the range [lower, upper] (inclusive)
 # - Should display the generated random number
-# 
+#
 # Example Input/Output:
 # - If user enters lower=1, upper=10, output: random number between 1 and 10
 # - If user enters lower=100, upper=200, output: random number between 100 and 200
-# 
+#
 # Algorithm: Use random.randint(lower, upper) which includes both endpoints.
 # ============================================================================
 """
@@ -4702,33 +4692,33 @@ def generate_random_number():
     lower_limit = int(input("Enter the lower limit: "))  # e.g., 1
     # Get upper limit from user
     upper_limit = int(input("Enter the upper limit: "))  # e.g., 10
-    
+
     # Generate random integer between lower and upper (inclusive)
     random_number = random.randint(lower_limit, upper_limit)  # e.g., 7
-    
+
     # Display the result
     print(f"The random number between {lower_limit} and {upper_limit} is: {random_number}")  # Prints: "The random number between 1 and 10 is: 7"
 
 generate_random_number()  # Call the function
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires calculating the square root of a number. The square
 # root of a number n is a value that, when multiplied by itself, equals n.
 # For example, the square root of 9 is 3 (3 × 3 = 9). The program should
 # prompt the user for a number and calculate its square root.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a number
 # - Must calculate the square root
 # - Should handle floating-point numbers (decimals)
 # - Should display the result
-# 
+#
 # Example Input/Output:
 # - square_root(9) → 3.0
 # - square_root(16) → 4.0
 # - square_root(2) → 1.414... (approximate)
-# 
+#
 # Algorithm: Use exponentiation (num ** 0.5) or math.sqrt() function.
 # ============================================================================
 """
@@ -4745,7 +4735,7 @@ def square_root():
     num = float(input("type num: "))  # e.g., 9.0
     # Calculate square root using exponentiation
     return num ** 0.5  # 9.0 ** 0.5 = 3.0
-    
+
 print(square_root())  # Call function and print result
 
 # ALTERNATIVE SOLUTION EXPLANATION (Prints Directly):
@@ -4756,7 +4746,7 @@ def square_root():
     num = float(input("type num: "))  # e.g., 16.0
     # Calculate and print square root directly
     print(num ** 0.5)  # Prints: 4.0
-    
+
 square_root()  # Call the function
 
 # ============================================================================
@@ -4765,17 +4755,17 @@ square_root()  # Call the function
 # is calculated using the formula: Area = π × r², where π (pi) is approximately
 # 3.14159 and r is the radius. The program should prompt the user for the radius
 # and calculate the area.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for the radius
 # - Must calculate area using formula: π × r²
 # - Should handle floating-point numbers (decimals)
 # - Should display the area
-# 
+#
 # Example Input/Output:
 # - If user enters radius=5, area ≈ 78.54 (π × 5² = 25π ≈ 78.54)
 # - If user enters radius=10, area ≈ 314.16 (π × 10² = 100π ≈ 314.16)
-# 
+#
 # Formula: Area = π × radius²
 # ============================================================================
 """
@@ -4794,7 +4784,7 @@ def circle():
     # Calculate area: π × r²
     area = math.pi * radius ** 2  # math.pi × 5² = 25π ≈ 78.54
     print(area)  # Display the area
-    
+
 circle()  # Call the function
 
 # ALTERNATIVE SOLUTION EXPLANATION (Formatted Output):
@@ -4840,18 +4830,18 @@ if __name__ == "__main__":
 # uses string slicing. A true recursive approach would compare the first and
 # last characters, then recursively check the substring. A palindrome reads
 # the same forwards and backwards (e.g., "racecar", "level").
-# 
+#
 # Key Requirements:
 # - Program must prompt user for a string
 # - Should check if string is a palindrome (ideally using recursion)
 # - Should handle case-insensitivity and spaces
 # - Should display whether string is a palindrome
-# 
+#
 # Example Input/Output:
 # - "racecar" → palindrome
 # - "hello" → not palindrome
 # - "A man a plan" → palindrome (after normalization)
-# 
+#
 # Note: Current solution uses slicing, not true recursion.
 # ============================================================================
 """
@@ -4873,7 +4863,7 @@ def is_palindrome(s):
 def main():
     # Get string from user
     user_input = input("Enter a string: ")  # e.g., "racecar"
-    
+
     # Check if palindrome
     if is_palindrome(user_input):
         print(f"{user_input} is a palindrome.")  # Display success message
@@ -4897,7 +4887,7 @@ def is_pangram(sentence):
         if char not in sentence:  # If any letter is missing, not a pangram
             return "not pangram"
     return "is pangram"  # All letters found
-   
+
 sentence = input("Enter a sentence: ")
 print(is_pangram(sentence))
 
@@ -4909,7 +4899,7 @@ def pangram(sentence):
         if char not in sentence:
             return "not pangram"
     return "pangram"
-            
+
 sentence = "abcdefghijklmnopqrstuvwxyz"
 print(pangram(sentence))
 
@@ -4927,7 +4917,7 @@ def gcd(a, b):
 def main():
     num1 = int(input("Enter the first number: "))
     num2 = int(input("Enter the second number: "))
-    
+
     result = gcd(num1, num2)
     print(f"The GCD of {num1} and {num2} is: {result}")
 
@@ -4951,9 +4941,9 @@ def lcm(a, b):
 def main():
     num1 = int(input("Enter the first number: "))
     num2 = int(input("Enter the second number: "))
-    
+
     result_lcm = lcm(num1, num2)
-    
+
     print(f"The LCM of {num1} and {num2} is: {result_lcm}")
 
 if __name__ == "__main__":
@@ -4967,9 +4957,9 @@ Write a Python program to reverse a list without using the reverse() function. P
 # Uses slicing [::-1] to reverse (though this uses built-in slicing)
 def reverse_lst():
     user = input("Type a list: ")
-    split_lst = user.split()    
+    split_lst = user.split()
     reversed_lst = []
-    
+
     for item in split_lst[::-1]:  # [::-1] reverses the list
         reversed_lst.append(item)
     return " ".join(reversed_lst)
@@ -4981,7 +4971,7 @@ def reverse_list():
     user_input = input("Enter a list: ")
     elements = user_input.split()
     reversed_elements = []
-    
+
     # range(start, stop, step): start from last index, go to -1 (exclusive), step -1
     for i in range(len(elements) - 1, -1, -1):
         reversed_elements.append(elements[i])
@@ -4995,7 +4985,7 @@ def reverse_list():
     user_input = input("Enter list: ")
     elements = user_input.split()
     reversed_elements = []
-    
+
     for i in range(len(elements) - 1, -1, -1):
         reversed_elements.append(elements[i])
 
@@ -5006,12 +4996,12 @@ reverse_list()
 # Function version that takes list as parameter
 def reverse_list(items):
     reverse_items = []
-    
+
     for item in range(len(items)-1,-1,-1):
         reverse_items.append(items[item])
     return reverse_items
-        
-lst = ["apple", "banana", "cunt"]
+
+lst = ["apple", "banana", "friend"]
 print(reverse_list(lst))
 
 """
@@ -5028,7 +5018,7 @@ def prime_factors(n):
             factors.append(divisor)
             n //= divisor  # Integer division: divide n by divisor
         divisor += 1  # Try next divisor
-    
+
     return factors
 
 def main():
@@ -5045,15 +5035,15 @@ if __name__ == "__main__":
 # ============================================================================
 # PROBLEM EXPLANATION:
 # generate a random password of a given length. Prompt the user to enter the length.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -5071,7 +5061,7 @@ def generate_password(length):
     # Generator expression: creates random.choice() for each iteration, join() combines into string
     password = ''.join(random.choice(characters) for i in range(length))
         # Joins list elements into string
-    
+
     return password
         # Returns the result
 
@@ -5083,15 +5073,15 @@ print("Generated password:", generate_password(length))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # count the number of words in a sentence. Prompt the user to enter a sentence.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -5109,7 +5099,7 @@ def count_words(sentence):
         count += 1
     return count
     # Note: Could also use len(split_words) instead of loop
-                   
+
 words = "Jonathan is the best ever"
 print(count_words(words))
 
@@ -5117,7 +5107,7 @@ print(count_words(words))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the largest and smallest elements in a list. Prompt the user to enter a list of numbers without using sorted()."
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -5125,10 +5115,10 @@ print(count_words(words))
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5148,7 +5138,7 @@ def largest_smallest(elements):
         if element > largest:
             largest = element
     return smallest, largest  # Returns tuple (smallest, largest)
-    
+
 lst = [4, 5, 100, 6, 1, 10]
 print(largest_smallest(lst))
 
@@ -5181,20 +5171,20 @@ def is_perfect_number(n):
     if n <= 0:
         return False
             # Returns the result
-    
+
     sum_of_divisors = 0
     for i in range(1, n):  # Only check divisors less than n (proper divisors)
         if n % i == 0:
             # Checks condition
             sum_of_divisors += i
-    
+
     return sum_of_divisors == n  # Check if sum equals the number
 
 def main():
     # Function definition
     number = int(input("Enter a number: "))
         # Gets user input
-    
+
     if is_perfect_number(number):
         print(f"{number} is a perfect number.")
     else:
@@ -5208,17 +5198,17 @@ if __name__ == "__main__":
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the factorial of a number using a loop. Prompt the user to enter a number.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
 # - Must calculate factorial (n! = n × (n-1) × ... × 2 × 1)
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5234,9 +5224,9 @@ def factorial():
     result = 1  # Start with 1 (multiplicative identity)
     for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n
         result *= number  # Multiply: 1 × 2 × 3 × ... × n
-    
+
     print(result)
-           
+
 factorial()
 
 # BUGGY: Always multiplies by 1 instead of the number
@@ -5313,23 +5303,23 @@ def find_intersection():
     intersection = list(set(list1) & set(list2))
 
     print(f"The intersection of the two lists is: {intersection}")
-    
+
 print(find_intersection())
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # remove vowels from a string. Prompt the user to enter a string.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5346,7 +5336,7 @@ def remove_vowels():
         # Iterates through each element
         if char not in "aeiou":  # Only checks lowercase vowels
             print(char, end= "")  # end="" prevents newline after each char
-            
+
 remove_vowels()
 
 # Returns string with vowels removed, but joins with newlines (likely bug)
@@ -5358,8 +5348,8 @@ def remove_vowels(string):
         if char not in "aeiou":
             new_name.append(char)
     return "\n".join(new_name)  # Joins with newlines instead of empty string
-               
-name = "Jonathan" 
+
+name = "Jonathan"
 print(remove_vowels(name))
 
 """
@@ -5378,7 +5368,7 @@ def binary_to_decimal(binary):
             # Checks condition
             decimal += 2 ** power  # Add 2^power for each '1' bit
         power -= 1  # Decrease power for next position
-    
+
     return decimal
         # Returns the result
 
@@ -5410,9 +5400,9 @@ def digits_string():
     for number in user:
         # Iterates through each element
         total += int(number)  # Convert to int and add
-        
+
     print(total)
-    
+
 digits_string()
 
 # Alternative: converts all to int first, then sums
@@ -5428,9 +5418,9 @@ def digits_string():
     for number in int_number:
         # Iterates through each element
         total += number
-        
+
     print(total)
-    
+
 digits_string()
 
 """
@@ -5451,8 +5441,8 @@ def upper_lower(string):
             count_lower += 1
     return f"lower = {count_lower} and upper = {count_upper}"
         # Returns the result
-            
-string = "Jonathan Moll is the Best"
+
+string = "Jonathan Noll is the Best"
 print(upper_lower(string))
 
 """
@@ -5522,17 +5512,17 @@ print(f"{base} to the power of {exp} is: {result}")
 # ============================================================================
 # PROBLEM EXPLANATION:
 # check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Must check if strings contain same letters in different order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5549,23 +5539,23 @@ def is_anagram():
     sort1 = sorted(string1)  # sorted() returns list of characters
     sort2 = sorted(string2)
         # Sorts elements in ascending order
-    
+
     if sort1 == sort2:  # If sorted lists are equal, strings are anagrams
         print("this is anagram")
     else:
         print("this is not anagram")
-    
+
 is_anagram()
-        
+
 # Function version that returns boolean
 def is_anagram(string1, string2):
     # Function definition
     string1 = string1.replace(" ", "")
     string2 = string2.replace(" ", "")
-    
+
     return sorted(string1) == sorted(string2)
         # Sorts elements in ascending order
-    
+
 string1 = "listen"
 string2 = "silent"
 
@@ -5585,11 +5575,11 @@ def largest_smallest():
     for number in user:
         # Iterates through each element
         int_num.append(int(number))
-        
+
     max_num = max(int_num)  # Built-in max() function
     min_num = min(int_num)  # Built-in min() function
     print(max_num, min_num)
-        
+
 largest_smallest()
 
 """
@@ -5619,21 +5609,21 @@ if is_perfect_square(num):
     print(f"{num} is a perfect square.")
 else:
     print(f"{num} is not a perfect square.")
- 
- 
+
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -5652,24 +5642,24 @@ def all_odd_numbers(numbers):
     return count
         # Returns the result
 
-lst = [2, 10, 3, 7]    
+lst = [2, 10, 3, 7]
 print(all_odd_numbers(lst))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5685,17 +5675,17 @@ def sum_of_odd_numbers():
     split_numbers = user_input.split()
         # Splits string into list of words/elements
     int_numbers = []
-    
+
     for num in split_numbers:
         # Iterates through each element
         int_numbers.append(int(num))
-    
+
     odd_sum = 0
     for num in int_numbers:
         # Iterates through each element
         if num % 2 != 0:  # Check if odd
             odd_sum += num
-    
+
     print("The sum of all odd numbers is:", odd_sum)
 
 sum_of_odd_numbers()
@@ -5711,25 +5701,25 @@ def sum_of_all_odd():
         number = int(number)  # Convert to int
         if number % 2 != 0:
             total += number
-    
+
     print(total)
-            
+
 sum_of_all_odd()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the common characters between two strings. Prompt the user to enter two strings.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5745,15 +5735,15 @@ def common_char():
     if len(user_input) != 2:
         print("Please enter exactly two strings.")
         return
-    
+
     str1, str2 = user_input  # Tuple unpacking: assigns first two elements
-    
+
     common = []
     for char in str1:
         # Iterates through each element
         if char in str2 and char not in common:  # Check if in both strings and not already added
             common.append(char)
-    
+
     return common
         # Returns the result
 
@@ -5767,10 +5757,10 @@ def common_char(string1, string2):
         # Iterates through each element
         if char in string2 and char not in characters:
             characters.append(char)
-    
+
     return characters
         # Returns the result
-    
+
 name1 = input("Enter the first string: ")
     # Gets user input
 name2 = input("Enter the second string: ")
@@ -5779,7 +5769,7 @@ print(common_char(name1, name2))
 
 """
 Problem: 108
-Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string 
+Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string
 """
 # Uses set to track seen characters, but order not preserved (set is unordered)
 def remove_duplicates():
@@ -5787,14 +5777,14 @@ def remove_duplicates():
     user = input("type string: ")
         # Gets user input
     unique_user = set()  # Set to track unique characters
-    
+
     for char in user:
         # Iterates through each element
         if char not in unique_user:
             unique_user.add(char)
-            
+
     print("".join(unique_user))  # join() converts set to string (order may vary)
-            
+
 remove_duplicates()
 
 # Preserves order: uses set to check, list to maintain order
@@ -5804,15 +5794,15 @@ def remove_duplicates():
         # Gets user input
     unique_user = set()  # For fast lookup
     result = []  # For maintaining order
-    
+
     for char in user:
         # Iterates through each element
         if char not in unique_user:
             unique_user.add(char)
             result.append(char)  # Add to list to preserve order
-            
+
     print("".join(result))  # Join list to get ordered string
-            
+
 remove_duplicates()
 
 
@@ -5828,13 +5818,13 @@ def is_armstrong(number):
     digits = []
     for digit in str(number):  # Convert to string to iterate over digits
         digits.append(int(digit))  # Convert each digit back to int
-    
+
     power = len(digits)  # Power is number of digits
     total = 0
     for digit in digits:
         # Iterates through each element
         total += digit ** power  # Add digit raised to power
-        
+
     return total == number  # Check if sum equals original number
 
 number = int(input("Enter a number: "))
@@ -5851,16 +5841,16 @@ print(number)
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the number of vowels and consonants in a string. Prompt the user to enter a string.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -5875,7 +5865,7 @@ def vowels_consonates(string):
     vowels = "aeiou"  # Only lowercase vowels (case-sensitive)
     count_vowels = 0
     consonates = 0
-    
+
     for char in string:
         # Iterates through each element
         if char in vowels:
@@ -5884,7 +5874,7 @@ def vowels_consonates(string):
             consonates += 1
     return f"vowels = {count_vowels}\nconsonates = {consonates}"
         # Returns the result
-            
+
 lst = "Jonathan is there next best thing"
 print(vowels_consonates(lst))
 
@@ -5892,16 +5882,16 @@ print(vowels_consonates(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the second smallest element in a list.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -5919,7 +5909,7 @@ def second_smallest_element():
         int_numbers.append(int(num_str))
 
     sorted_numbers = sorted(int_numbers)  # Sort ascending
-    
+
     if len(sorted_numbers) >= 2:
         return sorted_numbers[1]  # Second element (index 1)
     else:
@@ -5934,9 +5924,9 @@ def second_smallest_element(elements):
     if len(elements) < 2:
         return None
             # Returns the result
-        
+
     sorted_elements = sorted(elements, key=len)  # key=len sorts by length, not value
-    
+
     return sorted_elements[1]  # Returns second shortest, not second smallest
 
 arg = ["Jonathan", "hot", "sand"]
@@ -5982,7 +5972,7 @@ def max_num(num1, num2):
     else:
         return f"This is max number: {num2}"
             # Returns the result
-    
+
 num1 = 10
 num2 = 20
 print(max_num(num1, num2))
@@ -6024,7 +6014,7 @@ def max_of_three(a, b, c):
     else:  # Otherwise c is largest
         return c
             # Returns the result
-        
+
 max_of_three()
 
 """
@@ -6040,7 +6030,7 @@ def length_string(string):
         count += 1
     return count
         # Returns the result
-    
+
 name = "Jonathan"
 print(length_string(name))
 
@@ -6052,7 +6042,7 @@ def length_list(string):  # Misleading name - works for lists too
         count += 1
     return count
         # Returns the result
-    
+
 lst = ["list", "it", "all"]
 print(length_list(lst))
 
@@ -6082,13 +6072,13 @@ def is_vowel(char):
     else:
         return False
             # Returns the result
-        
-print(is_vowel('a'))  
-print(is_vowel('E')) 
-print(is_vowel('x')) 
-print(is_vowel('9')) 
-print(is_vowel(''))  
-print(is_vowel('aa')) 
+
+print(is_vowel('a'))
+print(is_vowel('E'))
+print(is_vowel('x'))
+print(is_vowel('9'))
+print(is_vowel(''))
+print(is_vowel('aa'))
 
 """
 Problem: 117
@@ -6142,7 +6132,7 @@ def multiply(numbers):
         # Returns the result
 
 numbers = [1, 2, 3, 4]
-print("Sum:", sum(numbers)) 
+print("Sum:", sum(numbers))
 print("Multiply:", multiply(numbers))
 
 """
@@ -6189,16 +6179,16 @@ print(palindromes(string))
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Define a function is_palindrome() that recognizes palindromes (i.e. words that look the same written backwards). For example, is_palindrome('radar') s.
 # hould return True.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must check if string reads same forwards and backwards
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -6214,7 +6204,7 @@ def is_palindrome(string):
             # Returns the result
     return False
         # Returns the result
-     
+
 name = "jojj"
 print(is_palindrome(name))
 
@@ -6264,15 +6254,15 @@ def overlapping(list1, list2):
             if item1 == item2:  # Compare each pair
                 return True  # Found common element
     return False  # No common elements
-    
+
 list1 = [1, 2, 3, 4]
 list2 = [4, 5, 6, 7]
-print(overlapping(list1, list2))  
+print(overlapping(list1, list2))
 
 list1 = ['apple', 'banana', 'cherry']
 list2 = ['date', 'elderberry', 'fig']
-print(overlapping(list1, list2)) 
- 
+print(overlapping(list1, list2))
+
 # Alternative: uses helper function is_member()
 def is_member(element, lst):
     # Function definition
@@ -6308,15 +6298,15 @@ print(overlapping(list1, list2))
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Define a function overlapping() that takes two lists and returns True if they have at least one member in common, False otherwise. You may use your is.
 # _member() function, or the in operator, but for the sake of the exercise, you should (also) write it using two nested forloops.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -6334,7 +6324,7 @@ def overlapping(lst1, lst2):
                 # Returns the result
     return False
         # Returns the result
-    
+
 lst1 = [2, 4, 6, 8, 10]
 lst2 = [99, 66, 66, 16]
 print(overlapping(lst1, lst2))
@@ -6351,7 +6341,7 @@ def overlapping(lst1, lst2):
                     # Returns the result
     return False
         # Returns the result
-    
+
 lst1 = [2, 4, 6, 8, 10]
 lst2 = [99, 66, 66, 16]
 print(overlapping(lst1, lst2))
@@ -6376,7 +6366,7 @@ def histogram(numbers):
     for number in numbers:
         # Iterates through each element
         print('*' * number)
-        
+
 numbers = [4, 9, 7]
 histogram(numbers)
 
@@ -6389,7 +6379,7 @@ def histrogram(numbers):
         result += "*" * number + "\n"  # Build string with newlines
     return result
         # Returns the result
-    
+
 numbers = [2, 4, 8]
 print(histrogram(numbers))
 
@@ -6397,16 +6387,16 @@ print(histrogram(numbers))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires writing a program that Write a program that maps a list of words into a list of integers representing the lengths of the correponding words..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6426,21 +6416,21 @@ def map_words_to_lengths(words):
 
 words = ["apple", "banana", "cherry", "date"]
 lengths = map_words_to_lengths(words)
-print(lengths) 
+print(lengths)
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function find_longest_word() that takes a list of words and returns the length of the longest one..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6457,25 +6447,25 @@ def find_longest_word(elements):
         if element > longest_element:  # String comparison, not length comparison
             longest_element = element
     return len(element)  # BUG: Returns len of last element in loop, not longest
-               
-lst = ["jo", "tre", "Jonny", "abracadabr"] 
+
+lst = ["jo", "tre", "Jonny", "abracadabr"]
 print(find_longest_word(lst))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function filter_long_words() that takes a list of words and an integer n and returns the list of words that are longer than n..
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -6493,8 +6483,8 @@ def filter_long_words(lst, n):
             longest_words.append(word)
     return longest_words
         # Returns the result
-           
-lst = ["three", "threebesthorses" "hours", "Jonathanmollthebestintheworld"]  # Note: missing comma between strings
+
+lst = ["three", "threebesthorses" "hours", "Jonathannollthebestintheworld"]  # Note: missing comma between strings
 n = 6
 print(filter_long_words(lst, n))
 
@@ -6547,16 +6537,16 @@ print(result)
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Using the higher order function reduce(), write a function max_in_list() that takes a list of numbers and returns the largest one. Then ask yourself: .
 # why define and call a new function, when I can just as well call the reduce() function directly?
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -6578,7 +6568,7 @@ def max_func(a, b):
 def max_in_list(numbers):
     # Function definition
     return reduce(max_func, numbers)  # reduce(function, iterable) reduces list to single value
-    
+
 numbers = [1, 5, 3, 9, 2]
 print(max_in_list(numbers))
 
@@ -6596,7 +6586,7 @@ def time_table(number):
         result += f"{i} x {number} = {total}\n"  # f-string formatting
     return result
         # Returns the result
-        
+
 lst = 6
 print(time_table(lst))
 
@@ -6616,17 +6606,17 @@ for i in range(1, 11):
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that find the sum of all numbers in a list. Prompt the user to enter a list of numbers in a input function.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6642,12 +6632,12 @@ def sum_of_all_numbers():
     split_numbers = user_input.split()
         # Splits string into list of words/elements
     int_numbers = []
-    
+
     for num in split_numbers:
         # Iterates through each element
         int_numbers.append(int(num))  # Convert strings to integers
     total_sum = sum(int_numbers)  # Built-in sum() function
-    
+
     print(total_sum)
 
 sum_of_all_numbers()
@@ -6656,16 +6646,16 @@ sum_of_all_numbers()
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that takes numbers string "123" and splits the numbers into a string ("1", "2", "3")..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6681,7 +6671,7 @@ def split_number(numbers):
     for number in numbers:  # Iterates over characters in string "123"
         number_lst.append(number)  # Appends each character: "1", "2", "3"
     return number_lst  # Returns ["1", "2", "3"] (works but split() is unnecessary)
-        
+
 arg = "123"
 print(split_number(arg))
 
@@ -6689,15 +6679,15 @@ print(split_number(arg))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that sorts words in a sentence alphabetically..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6716,16 +6706,16 @@ print(alphabetically_ordered(sentence))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that sorts numbers (int) from smallest number to biggest number..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6738,23 +6728,23 @@ def smallest_largest(numbers):
     # Function definition
     return sorted(numbers)
         # Sorts elements in ascending order
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(smallest_largest(numbers)) 
+print(smallest_largest(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that sorts number (int) from biggest number to smallest number..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6767,24 +6757,24 @@ Write a function that sorts number (int) from biggest number to smallest number.
 def largest_smallest(numbers):  # Function name misleading
     # Function definition
     return sorted(numbers)[::-1]  # [::-1] reverses the sorted list (descending order)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(largest_smallest(numbers)) 
+print(largest_smallest(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function using sorted() number int) returning the seconded largest number from that list..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6798,25 +6788,25 @@ Write a function using sorted() number int) returning the seconded largest numbe
 def seconded_largest_number(numbers):  # Typo: "seconded" should be "second"
     # Function definition
     return sorted(numbers)[-2]  # [-2] is second-to-last element (second largest)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(seconded_largest_number(numbers)) 
+print(seconded_largest_number(numbers))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function using sorted() number int) returning the fourth largest number from that list..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6830,24 +6820,24 @@ Write a function using sorted() number int) returning the fourth largest number 
 def fourth_largest_number(numbers):
     # Function definition
     return sorted(numbers)[-4]  # [-4] is fourth-to-last element (fourth largest)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(fourth_largest_number(numbers)) 
+print(fourth_largest_number(numbers))
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function using sorted() returning the smallest and third largest number from that list..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses built-in Python functions for efficiency.
 # ============================================================================
 
@@ -6865,22 +6855,22 @@ def smallest_and_third(numbers):
     return smallest, third_largest  # Returns tuple
 
 numbers = [2, 76, 466, 3, 23]
-print(smallest_and_third(numbers)) 
+print(smallest_and_third(numbers))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that sorts number from smallest number to biggest number using sorted()..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -6893,15 +6883,15 @@ Write a function that sorts number from smallest number to biggest number using 
 def largest_smallest(numbers):  # Function name misleading
     # Function definition
     return sorted(numbers)[::]  # [::] is same as sorted(numbers)
-        
+
 numbers = [2, 76, 466, 3, 23]
-print(largest_smallest(numbers)) 
+print(largest_smallest(numbers))
 
 # Simpler version without unnecessary slice
 def smallest_biggest(numbers):
     # Function definition
     return sorted(numbers)  # Returns sorted list
-    
+
 lst = [2, 24, 23, 27, 2]
 print(smallest_biggest(lst))
 
@@ -6909,16 +6899,16 @@ print(smallest_biggest(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function with user input that coverts 1 2 3 (int) into a "1" "2" "3" (str)..
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6936,22 +6926,22 @@ def int_str():
         # Iterates through each element
         user_lst.append(word)  # Appends strings (no conversion)
     print(user_lst)  # Prints list of strings
-    
+
 int_str()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that coverts 123 (int) into a "1" "2" "3" (str)..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -6969,22 +6959,22 @@ def int_to_str_list(number):
     return digits_as_strings  # Returns ["1", "2", "3"]
 
 number = 123
-print(int_to_str_list(number)) 
+print(int_to_str_list(number))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the common number between two lists. Prompt the user to enter two lists, for this exercise do not use set.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7012,17 +7002,17 @@ print(common_numbers(lst1, lst2))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that sorts numbers as  string from biggest number to smallest number..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7037,16 +7027,16 @@ def big_small(numbers):
     for number in numbers:
         # Iterates through each element
         number_lst.append(int(number))  # Convert string to int for proper numeric sort
-              
+
     number_lst = sorted(number_lst)[::-1]  # Sort descending
     shorted_str = []  # Typo: "shorted" should be "sorted"
-    
+
     for number in number_lst:
         # Iterates through each element
         shorted_str.append(str(number))  # Convert back to strings
     return shorted_str
         # Returns the result
-           
+
 lst = ["4", "67", "6"]
 print(big_small(lst))
 
@@ -7054,7 +7044,7 @@ print(big_small(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function where user types a list of numbers in string and returns a list of numbers from smallest to biggest..
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -7062,10 +7052,10 @@ print(big_small(lst))
 # - Must work with lists
 # - Must work with strings
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7079,9 +7069,9 @@ def type_smallest_biggest():
     user = input("type number list: ").split()
         # Gets user input
     sort_number = sorted(user)  # String sort: "10" comes before "2"
-       
+
     print(sort_number)
-    
+
 type_smallest_biggest()
 
 # CORRECT: Converts to int for numeric sort, then back to strings
@@ -7095,31 +7085,31 @@ def small_big():
     for number in user_split:
         # Iterates through each element
         int_list.append(int(number))  # Convert to int
-    
+
     int_list.sort()  # Sort numerically
     sorted_str = []
     for number in int_list:
         # Iterates through each element
         sorted_str.append(str(number))  # Convert back to strings
     return " ".join(sorted_str)  # Join with spaces
-    
+
 print(small_big())
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # double_elements that takes a list of numbers as input and returns a new list where each element is doubled, the list must be side by side eg 1, 2, 3, 1, 2, 3
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7131,7 +7121,7 @@ Write a Python function called `double_elements` that takes a list of numbers as
 def double_elements(numbers):
     # Function definition
     doubled = numbers + numbers  # List concatenation: [1,2,3] + [1,2,3] = [1,2,3,1,2,3]
-    
+
     return doubled
         # Returns the result
 
@@ -7158,7 +7148,7 @@ def common():
                 result.append(i)
     return result
         # Returns the result
-    
+
 common()
 
 """
@@ -7176,24 +7166,24 @@ def common():
     set1 = set(lst1)  # Convert to set
     set2 = set(lst2)
     common_element = set1.intersection(set2)  # Set intersection operator finds common elements
-        
+
     print(common_element)
-    
+
 common()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7215,24 +7205,24 @@ def find_longest_word(words):
     return longest_word
         # Returns the result
 
-words = ["tree", "mountain", "do", "Jonathanmollfrency"]
-    
+words = ["tree", "mountain", "do", "Jonathannollfrency"]
+
 print(find_longest_word(words))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # calculate_average that takes a list of numbers as input and returns the average of those numbers without using sum() and len()
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7252,7 +7242,7 @@ def average(numbers):
         result = total / length  # Recalculate average each iteration (inefficient but correct)
     return result
         # Returns the result
-    
+
 numbers = [4, 667, 68, 766]
 print(average(numbers))
 
@@ -7260,15 +7250,15 @@ print(average(numbers))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the second smallest element in a list.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7285,7 +7275,7 @@ def second_smallest_element(lst):
     else:
         return None
             # Returns the result
-           
+
 lst = ["t", "hope", "Jonathan", "it"]
 print(second_smallest_element(lst))
 
@@ -7293,16 +7283,16 @@ print(second_smallest_element(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find_second_last_element that takes a list as input and returns the second last element of the list.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Direct computation or transformation.
 # ============================================================================
 """
@@ -7316,7 +7306,7 @@ def find_last_element():  # Function name should be find_second_last_element
     user_input = input("Type list (elements separated by spaces): ").split()
         # Gets user input
     if not user_input:  # Check if list is empty
-        return None  
+        return None
             # Returns the result
     return user_input[-2]  # [-2] is second-to-last element
 
@@ -7327,15 +7317,15 @@ print(find_last_element())
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that reverse_number that takes an integer as input and returns the reverse of that number. For example, if the input is 123, the function should return 321.
 # .
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7358,21 +7348,21 @@ def reverse_number(number):
     str_number = str(number)  # Convert to string
     reversed_str_number = str_number[::-1]  # Reverse string
     reversed_number = int(reversed_str_number)  # Convert back to int
-   
+
     return reversed_number
         # Returns the result
-    
+
 number = 123
-print(reverse_number(number)) 
+print(reverse_number(number))
 
 # BUGGY: Returns string instead of int
 def reverse_number(number):
     # Function definition
     str_number = str(number)[::-1]  # Reversed string
     int_number = str_number  # Still a string (misleading variable name)
-    
+
     return int_number  # Returns string, not int
-             
+
 lst = 1234
 print(reverse_number(lst))
 
@@ -7380,17 +7370,17 @@ print(reverse_number(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, without maintaining the original order of characters.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Must handle numeric values
 # - Must remove or handle duplicate elements
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7403,9 +7393,9 @@ def remove_duplicates(string):
     # Function definition
     split_word = string.split()  # Splits into words (not characters)
     set_word = set(split_word)  # Set removes duplicates (order not preserved)
-    
+
     return " ".join(set_word)  # Join set (order may vary)
-    
+
 lst = "and here is was and in the"
 print(remove_duplicates(lst))
 
@@ -7413,7 +7403,7 @@ print(remove_duplicates(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # remove_duplicates that takes a string as input and returns the duplicates removed into a string.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -7421,10 +7411,10 @@ print(remove_duplicates(lst))
 # - Must work with strings
 # - Must handle numeric values
 # - Must remove or handle duplicate elements
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7446,7 +7436,7 @@ def main(string):
         else:
             duplicates.append(word)  # Add to duplicates if seen before
     return duplicates  # Returns duplicates, not string with duplicates removed
-        
+
 string = "so what's happening duplicates duplicates today? It's hot duplicates duplicates."
 main(string)
 
@@ -7463,9 +7453,9 @@ def remove_duplicates(string):
             duplicates.add(word)  # Add to duplicates
         else:
             seen.add(word)  # Mark as seen
-    
+
     return ' '.join(duplicates)  # Returns duplicates, not string with duplicates removed
-    
+
 lst = "and here is was and in the"
 print(remove_duplicates(lst))
 
@@ -7473,18 +7463,18 @@ print(remove_duplicates(lst))
 Problem: 158
 Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers using sorted.
 """
-    
+
 # Sorts list and returns last element (largest)
 def largest_element(numbers):
     # Function definition
    sorted_numbers = sorted(numbers)  # Sort ascending
    largest_number = sorted_numbers[-1]  # Last element is largest
-   
+
    return largest_number
        # Returns the result
-                
+
 numbers = [2, 56, 75, 4566, 3]
-print(largest_element(numbers))      
+print(largest_element(numbers))
 
 # INEFFICIENT: Sorts list in each iteration
 def main():
@@ -7509,26 +7499,26 @@ def largest_element(numbers):
     # Function definition
    return max(numbers)
        # Returns the result
-                
+
 numbers = [2, 56, 75, 4566, 3]
-print(largest_element(numbers))   
+print(largest_element(numbers))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Define a function that computes the length of a given list or string. (It is true that Python has the len() function built in, but writing it yourself.
 #  is nevertheless a good exercise.)
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must work with strings
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7544,7 +7534,7 @@ def find_length(string):  # Works for both strings and lists (iterable)
         count += 1
     return count
         # Returns the result
-    
+
 arg = "Jonathan"
 print(find_length(arg))
 
@@ -7569,7 +7559,7 @@ def intersection():
         if word in sort2:
             common.append(word)
     print(common)
-    
+
 intersection()
 
 def intersection():
@@ -7581,9 +7571,9 @@ def intersection():
     set1 = set(lst1)
     set2 = set(lst2)
     common = set1.intersection(set2)
-    
+
     print(common)
-    
+
 intersection()
 
 def intersection_two_list(lst1, lst2):
@@ -7591,10 +7581,10 @@ def intersection_two_list(lst1, lst2):
     set1 = set(lst1)
     set2 = set(lst2)
     result = set1.intersection(set2)
-    
+
     return result
         # Returns the result
-                   
+
 lst1 = ["tree", "car", "house", "garden"]
 lst2 = ["car", "boat", "toilet", "tree"]
 print(intersection_two_list(lst1, lst2))
@@ -7603,7 +7593,7 @@ print(intersection_two_list(lst1, lst2))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function where user types a list of numbers in string and returns a the third largest number in a list..
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -7611,10 +7601,10 @@ print(intersection_two_list(lst1, lst2))
 # - Must work with lists
 # - Must work with strings
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7631,12 +7621,12 @@ def third_largest():
     for number in user_split:
         # Iterates through each element
         int_list.append(int(number))  # Convert strings to integers
-    
+
     int_list.sort()  # Sort ascending: [5, 8, 10, 15, 20]
     result = int_list[-3]  # [-3] is third-to-last (third largest)
-    
+
     print(result)
-    
+
 third_largest()
 
 
@@ -7644,17 +7634,17 @@ third_largest()
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a Python function count_vowels that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in .
 # the string. Ignore case, so 'A' and 'a' should be counted as the same vowel using list comprehension.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must work with strings
 # - Should handle case sensitivity appropriately
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7671,13 +7661,13 @@ def count_vowels(string):
     for vowel in vowels:
         # Iterates through each element
         result[vowel] = 0  # Set initial count for each vowel
-    
+
     string = string.lower()  # Convert to lowercase for case-insensitive counting
     for char in string:
         # Iterates through each element
         if char in vowels:
             result[char] += 1  # Increment count for found vowel
-    
+
     return result
         # Returns the result
 
@@ -7693,15 +7683,15 @@ def count_vowels(sentence):
     # Dictionary comprehension: creates dict with each vowel as key, 0 as initial value
     # Syntax: {key: value for item in iterable} - similar to list comprehension
     vowel_counts = {number: 0 for number in vowels}  # {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
-    
+
     for char in sentence:
         # Iterates through each element
         if char in vowels:
             vowel_counts[char] += 1
     return vowel_counts
         # Returns the result
-    
-string = "Jonathan is the best"    
+
+string = "Jonathan is the best"
 print(count_vowels(string))
 
 
@@ -7709,17 +7699,17 @@ print(count_vowels(string))
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a Python function count_vowels that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in .
 # the string. Ignore case, so 'A' and 'a' should be counted as the same vowel without using list conprehension.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must work with strings
 # - Should handle case sensitivity appropriately
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7736,12 +7726,12 @@ def count_vowels(sentence):
     for number in vowels:
         # Iterates through each element
         vowel_counts[number] = 0
-    
+
     for char in sentence:
         # Iterates through each element
         if char in vowels:
             vowel_counts[char] += 1
-    
+
     return vowel_counts
         # Returns the result
 
@@ -7752,16 +7742,16 @@ print(count_vowels(string))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that takes numbers integer 123 and splits the numbers into a string ("1", "2", "3")..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7774,7 +7764,7 @@ def intiger_string(number):  # Typo: "intiger" should be "integer"
     # Function definition
     return list(str(number))  # str(123) → "123", list("123") → ["1", "2", "3"]
     # list() constructor converts string (iterable) into list of characters
-    
+
 number = 123
 print(intiger_string(number))
 
@@ -7784,7 +7774,7 @@ def split_number_int(number):
     number_str = str(number)  # Convert int to string: 123 → "123"
     result = tuple(number_str)  # tuple() constructor converts string to tuple of characters
     # tuple("123") → ("1", "2", "3") - immutable sequence
-    
+
     return result
         # Returns the result
 
@@ -7795,16 +7785,16 @@ print(split_number_int(number))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # double_elements that takes a list of strings as input and returns a 2 new list where each element is doubled.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must work with strings
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -7826,7 +7816,7 @@ def double_elements(lst):
         doubled.append(word)
     return doubled  # Returns list with all elements duplicated: [a, b, c, a, b, c]
     # Note: Could also use lst + lst or lst * 2
-    
+
 lst = ["tree", "house", "car"]
 print(double_elements(lst))
 
@@ -7834,7 +7824,7 @@ print(double_elements(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the largest and smallest elements in a list. Prompt the user to enter a list of numbers using sorted()."
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -7842,10 +7832,10 @@ print(double_elements(lst))
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7864,7 +7854,7 @@ def main():
     smallest_num = min(lst)  # Could use lst[0] since it's sorted
     largest_num = max(lst)  # Could use lst[-1] since it's sorted
     return smallest_num, largest_num  # Returns tuple
-    
+
 main()
 
 # More efficient: uses sorted() and takes first/last elements
@@ -7872,9 +7862,9 @@ def l_s(numbers):
     # Function definition
     sort_number_largest = sorted(numbers)[-1]  # Last element after sorting (largest)
     sort_number_smallest = sorted(numbers)[0]  # First element after sorting (smallest)
-    
+
     return sort_number_largest, sort_number_smallest  # Returns tuple
-       
+
 numbers = [1, 2, 3, 4, 5]
 print(l_s(numbers))
 
@@ -7883,17 +7873,17 @@ print(l_s(numbers))
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that count_words that takes a string as input and returns a dictionary where the keys are the words in the string and the values are the counts of each wor.
 # d. Words are separated by spaces, and the function should be case-insensitive, make the keys alphabetical.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
 # - Should handle case sensitivity appropriately
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -7917,7 +7907,7 @@ def count_words():
         else:
             result[word] = 1  # Initialize count to 1 if first occurrence
     print(result)
-    
+
 count_words()
 
 # Alternative: counts first, then sorts dictionary by keys
@@ -7932,7 +7922,7 @@ def count_words(string):
             word_count[word] += 1  # Increment existing count
         else:
             word_count[word] = 1  # Initialize new word count
-    
+
     # dict(sorted(...)) creates new dictionary from sorted key-value pairs
     # sorted(word_count.items()) sorts (key, value) tuples by key (alphabetically)
     # dict() converts sorted list of tuples back to dictionary
@@ -8081,10 +8071,10 @@ def max_value_key(input_dict):
     # Check if dictionary is empty
     if not input_dict:  # Empty dict is falsy in Python
         return None  # Return None for empty dictionary
-    
+
     # input_dict.values() returns view of all values
     max_value = max(input_dict.values())  # Find maximum value in dictionary
-    
+
     # Search for key that has this maximum value
     for key, value in input_dict.items():
         # Iterates through each element
@@ -8133,7 +8123,7 @@ def word_frequency(string):
             result[word] = 1  # Initialize count to 1
     return result
     # Note: collections.Counter(words) provides more efficient word counting
-            
+
 string = "gore why are you here you are gore"
 print(word_frequency(string))  # Result: {'gore': 2, 'why': 1, 'are': 2, 'you': 2, 'here': 1}
 
@@ -8217,12 +8207,12 @@ def average_values(dicts):
             else:  # First occurrence of key
                 averages[key] = value  # Initialize sum
                 counts[key] = 1  # Initialize count
-    
+
     # Second pass: calculate averages by dividing sum by count
     for key in averages:
         # Iterates through each element
         averages[key] /= counts[key]  # Divide sum by count to get average
-    
+
     return averages
     # Example: [{'a':1}, {'a':3}, {'a':5}] → {'a': 3.0} (average of 1, 3, 5)
 
@@ -8247,12 +8237,12 @@ def merge_dicts_with_lists(dicts):
                 merged[key].update(value)  # Add elements from value list to set (removes duplicates)
             else:  # First occurrence of key
                 merged[key] = set(value)  # Convert list to set (removes duplicates, allows efficient merging)
-    
+
     # Convert sets back to lists
     for key in merged:
         # Iterates through each element
         merged[key] = list(merged[key])  # Convert set to list (order may vary)
-    
+
     return merged
     # Example: [{'a':[1,2]}, {'a':[2,3]}] → {'a': [1, 2, 3]} (duplicates removed)
 
@@ -8292,14 +8282,14 @@ def main(lst):
         value = word  # Entire word
         result[key] = value  # BUG: Overwrites previous value instead of appending to list
     return result  # Returns only last word for each letter
-        
+
 lst = ["tree", "cliff", "mountain", "zoo","dodo", "grassy"]
 main(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd': 'dodo', 'g': 'grassy'}
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -8307,10 +8297,10 @@ main(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd
 # - Must work with strings
 # - Must sort elements in the specified order
 # - Must check if strings contain same letters in different order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -8318,7 +8308,7 @@ Problem 183:
 Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().
     # Sorts elements in ascending order
 """
-        
+
 def is_anagram(string1, string2):
     # Function definition
     string1 = string1.replace(" ", "").lower()
@@ -8328,7 +8318,7 @@ def is_anagram(string1, string2):
     if len(string1) != len(string2):
         return False
             # Returns the result
-        
+
     char_count1 = {}
     char_count2 = {}
     for char in string1:
@@ -8358,15 +8348,15 @@ print("Are the strings anagrams?:", is_anagram(string1, string2))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that takes numbers integer 123 and return 2..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Direct computation or transformation.
 # ============================================================================
 """
@@ -8381,9 +8371,9 @@ def int(number):  # Should use different name like get_digit or extract_digit
     # Function definition
     number = str(number)  # Convert to string: 123 → "123"
     list_number = list(number)[1]  # Convert to list and get index 1: ["1","2","3"][1] → "2"
-    
+
     return list_number  # Returns string "2", not integer 2
-        
+
 number = 123
 print(int(number))  # Output: "2" (string)
 
@@ -8391,15 +8381,15 @@ print(int(number))  # Output: "2" (string)
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that takes numbers integer 12345678 and return 2, 4, 8..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Direct computation or transformation.
 # ============================================================================
 """
@@ -8416,10 +8406,10 @@ def int(number):  # Should use different name
     num2 = number[1]  # Index 1: second digit "2"
     num4 = number[3]  # Index 3: fourth digit "4"
     num8 = number[-1]  # Index -1: last digit "8" (negative indexing from end)
-    
+
     return num2, num4, num8  # Returns tuple of strings: ("2", "4", "8")
     # String indexing: positive indices from start (0-based), negative from end (-1 is last)
-        
+
 number = 12345678
 print(int(number))  # Output: ("2", "4", "8")
 
@@ -8427,15 +8417,15 @@ print(int(number))  # Output: ("2", "4", "8")
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that Write a function that takes numbers integer 12346778910 and users indexing to return the number 2, 4, 8.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -8458,7 +8448,7 @@ def get_digits(number, indices):
 
 number = 12345678910
 indices = [1, 3, 7]  # Indices to extract
-print(get_digits(number, indices))  # Output: ("2", "4", "8")  
+print(get_digits(number, indices))  # Output: ("2", "4", "8")
 
 """
 Problem: 187
@@ -8472,32 +8462,32 @@ def double_elements(string1):
         # Iterates through each element
         double.append(word)
         double.append(word)
-    
+
     return double
         # Returns the result
-            
+
 string1 = ["tree", "road", "slow"]
-print(double_elements(string1))    
+print(double_elements(string1))
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
-# get_initials that takes a full name (first and last name jonathan moll) as input and returns  "joNathAn moLL"" of the name in uppercase (NALL in jonathan moll).
-# 
+# get_initials that takes a full name (first and last name jonathan noll) as input and returns  "joNathAn noLL"" of the name in uppercase (NALL in jonathan noll).
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Should handle case sensitivity appropriately
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
 Problem 188:
-Write a Python function called get_initials that takes a full name (first and last name jonathan moll) as input and returns  "joNathAn moLL"" of the name in uppercase (NALL in jonathan moll).
+Write a Python function called get_initials that takes a full name (first and last name jonathan noll) as input and returns  "joNathAn noLL"" of the name in uppercase (NALL in jonathan noll).
 """
 
 # Uppercases specific characters at hardcoded indices (fragile - assumes fixed name length)
@@ -8505,17 +8495,17 @@ def get_initials(name):
     # Function definition
     name_list = list(name)  # Convert string to list of characters (mutable)
     # Hardcoded indices: uppercase characters at positions 2, 6, 11, 12
-    # "jonathan moll" → indices: j(0), o(1), n(2), a(3), t(4), h(5), a(6), n(7), ...
+    # "jonathan noll" → indices: j(0), o(1), n(2), a(3), t(4), h(5), a(6), n(7), ...
     name_list[2] = name_list[2].upper()  # 'n' → 'N' (index 2)
     name_list[6] = name_list[6].upper()  # 'a' → 'A' (index 6)
     name_list[11] = name_list[11].upper()  # 'l' → 'L' (index 11)
     name_list[12] = name_list[12].upper()  # 'l' → 'L' (index 12)
-    
+
     return ''.join(name_list)  # join() combines list back into string
     # ''.join() joins with empty string (no separator between characters)
 
-name = "jonathan moll"
-print(get_initials(name))  # Output: "joNathAn moLL"
+name = "jonathan noll"
+print(get_initials(name))  # Output: "joNathAn noLL"
 
 # More flexible: uppercases any character in "nall" regardless of position
 def get_initials(name):
@@ -8529,8 +8519,8 @@ def get_initials(name):
             initials.append(char)  # Keep as-is
     return ''.join(initials)  # Join list into string
 
-name = "jonathan moll"
-print(get_initials(name))  # Output: "joNathAn moLL" (uppercases all n, a, l characters)
+name = "jonathan noll"
+print(get_initials(name))  # Output: "joNathAn noLL" (uppercases all n, a, l characters)
 
 """
 Problem: 189
@@ -8546,7 +8536,7 @@ def sum_digits():
     for number in user:  # 'number' is actually a character (misleading name)
         count += int(number)  # Convert char to int and add: "1"→1, "2"→2, etc.
     print(count)
-                
+
 sum_digits()
 
 # More robust: only sums digit characters, ignores non-digits
@@ -8560,9 +8550,9 @@ def digits_string():
         if char.isdigit():  # isdigit() checks if character is a digit (0-9)
             total += int(char)  # Convert digit char to int and add
             # isdigit() returns True for '0'-'9', False for letters, spaces, etc.
-            
+
     print(total)
-    
+
 digits_string()
 
 """
@@ -8582,7 +8572,7 @@ def remove_duplicate():
             duplicate.append(char)  # Add first occurrence only (preserves order)
     print(duplicate)  # Prints list, not string (could use ''.join(duplicate))
     # Note: Using list maintains order; set() would be faster but loses order
-    
+
 remove_duplicate()
 
 """
@@ -8600,7 +8590,7 @@ def find_min():
     for number in user:
         # Iterates through each element
         user_int.append(int(number))  # Convert strings to integers
-    
+
     min_number = user_int[0]  # Initialize with first element
     # Compare each number with current minimum
     for number in user_int:
@@ -8608,24 +8598,24 @@ def find_min():
         if number < min_number:  # If smaller number found
             min_number = number  # Update minimum
     print(min_number)
-    
+
 find_min()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # count_occurrences that takes a list and an element as input and returns the number of times the element appears in the list.
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -8655,13 +8645,13 @@ def main():
     for word in lst:  # lst must be defined outside function (global variable)
         if word.lower() == user:  # Case-insensitive comparison
             count += 1
-            
+
     if count == 0:
         # Checks condition
         return "not in lst"  # Return string if not found
     else:
         return count  # Return count
-               
+
 lst = ["Jonathan", "Christopher", "Jeremy", "Jonathan", "bad"]
 print(main())
 
@@ -8679,11 +8669,11 @@ def find_min_num():
     for number in user:
         # Iterates through each element
         int_number.append(int(number))
-    
+
     min_num = sorted(int_number)[0]
         # Sorts elements in ascending order
     print(min_num)
-                  
+
 find_min_num()
 
 """
@@ -8698,9 +8688,9 @@ def largest_element():
     # max() with key=len finds element with maximum length
     # key parameter specifies function to determine comparison value
     largest_word = max(user, key=len)  # key=len compares by length, not alphabetically
-    
+
     print(largest_word)
-           
+
 largest_element()
 
 """
@@ -8745,12 +8735,12 @@ def second_largest_element():
     if len(user_input) < 2:
         print("less then 2")  # Less descriptive error message
         return
-        
+
     sort = sorted(user_input, key=len)  # Sort ascending
     second_largest = sort[-2]  # Second-to-last element
-    
+
     print(second_largest)
-        
+
 second_largest_element()
 
 """
@@ -8764,8 +8754,8 @@ def max_of_three(numbers):
      result = max(list(numbers))  # list() is unnecessary if numbers is already a list
      return result
      # Note: max() can take multiple arguments: max(567, 56, 6) or max(numbers)
-        
-three_numbers = [567, 56, 6]    
+
+three_numbers = [567, 56, 6]
 print(max_of_three(three_numbers))
 
 """
@@ -8778,10 +8768,10 @@ def max_of_three(numbers):
     max_number = numbers[0]
     if numbers[1] > max_number:
         max_number = numbers[1]
-        
+
     if numbers[2] > max_number:
         max_number = numbers[2]
-        
+
     return max_number
         # Returns the result
 
@@ -8801,14 +8791,14 @@ def centimeters_inches():
     inches = cm * 0.3937  # Conversion factor: multiply centimeters by 0.3937
     # f-string formatting: embeds variables in string with {variable}
     print(f"{cm} cm = {inches} inches")  # Displays conversion result
-    
+
 centimeters_inches()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort().
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -8816,10 +8806,10 @@ centimeters_inches()
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -8835,12 +8825,12 @@ def find_min_max():
     for number in user:
         # Iterates through each element
         int_num.append(int(number))
-    
+
     min_num = min(int_num)
     max_num = max(int_num)
-    
+
     print(min_num, max_num)
-       
+
 find_min_max()
 
 def find_min_max():
@@ -8854,7 +8844,7 @@ def find_min_max():
 
     min_number = int_number[0]
     max_number = int_number[0]
-    
+
     for number in int_number:
         # Iterates through each element
         if number < min_number:
@@ -8871,16 +8861,16 @@ find_min_max()
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the common number in a lists. for this exercise do not use set.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -8900,7 +8890,7 @@ def common_numbers(lst):
             common.append(number)  # Add to common (duplicates)
         else:
             seen.append(number)  # Mark as seen (first occurrence)
-    
+
     return common  # Returns list of numbers that appear more than once
     # Note: Problem says "common number in a lists" (singular) - finds duplicates within one list
 
@@ -8911,16 +8901,16 @@ print(common_numbers(lst))  # Output: [2, 45]
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find the common number in a lists. use set().
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -8940,7 +8930,7 @@ def common_num(lst):
         else:
             unique.add(number)  # Mark as seen (add to set)
     return commom  # Returns list of duplicate numbers
-    
+
 lst = [2, 5, 6, 2, 4, 5]
 print(common_num(lst))  # Output: [2, 5] (duplicates)
 
@@ -8982,7 +8972,7 @@ def word_frequency(string):  # Function name says "word" but counts characters
             result[word] = 1  # Initialize count
     return result
     # Note: Python 3.7+ preserves insertion order, so sorting first ensures alphabetical keys
-            
+
 string = "gore why are you here you are gore"
 print(word_frequency(string))  # Counts characters, not words
 
@@ -9003,7 +8993,7 @@ def total(numbers):
         multiply_numbers *= number  # Accumulate product
     return total_numbers, multiply_numbers  # Returns tuple (sum, product)
     # Single-pass algorithm: O(n) time complexity, calculates both simultaneously
-            
+
 lst_numbers = [1, 2, 3, 4]
 print(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product
 
@@ -9011,16 +9001,16 @@ print(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires writing a program that Write a program that maps a list of words into a list of integers representing the words with the lengths of the correponding words..
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -9040,7 +9030,7 @@ def list_integers(lst):
         # Result: ["join", 4, "Jonathan", 8, "tree", 4]
     return result
     # Note: Result contains both strings and integers (mixed types)
-    
+
 lst = ["join", "Jonathan", "tree"]
 print(list_integers(lst))  # Output: ["join", 4, "Jonathan", 8, "tree", 4]
 
@@ -9048,17 +9038,17 @@ print(list_integers(lst))  # Output: ["join", 4, "Jonathan", 8, "tree", 4]
 # ============================================================================
 # PROBLEM EXPLANATION:
 # calculate_average that takes a list of numbers as input and returns the average of those numbers. use len() and sum().
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -9073,13 +9063,13 @@ def average(lst):
     length = len(lst)  # Built-in len() counts elements
     total = sum_lst / length  # Divide sum by count to get average
     # Note: / operator performs floating-point division (returns float even if inputs are int)
-    
+
     return total
     # Formula: average = sum(numbers) / len(numbers)
-               
+
 lst = [2666, 566, 6777]
 print(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...
-    
+
 """
 Problem: 206
 Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().
@@ -9098,7 +9088,7 @@ def max_of_three():
     if len(number) != 3:  # Should be len(int_numbers) != 3
         print("not enough numbers")
         return
-        
+
     max_number = int_numbers[0]  # Initialize with first number
     # Compare with second number
     if int_numbers[1] > max_number:  # If second is larger
@@ -9106,10 +9096,10 @@ def max_of_three():
     # Compare with third number
     if int_numbers[2] > max_number:  # If third is larger
         max_number = int_numbers[2]  # Update maximum
-        
+
     print(max_number)
     # Note: Assumes exactly 3 numbers (will error if list has different length)
-    
+
 max_of_three()
 
 """
@@ -9124,7 +9114,7 @@ def max_of_list():
     if len(user) != 3:  # Validation check
         print("type more numbers")
         return
-    
+
     int_numbers = []
     for number in user:
         # Iterates through each element
@@ -9136,9 +9126,9 @@ def max_of_list():
         if number > max_number:  # If current number is larger
             max_number = number  # Update maximum
     # Single-pass algorithm: O(n) time complexity
-            
+
     print(max_number)
-           
+
 max_of_list()
 
 """
@@ -9155,12 +9145,12 @@ def max_of_list():
     for number in user:
         # Iterates through each element
         int_numbers.append(int(number))
-    
+
     max_number = max(int_numbers)  # Built-in max() finds maximum element
     # max() can take any iterable and returns the largest element
-                   
+
     print(max_number)
-           
+
 max_of_list()
 
 
@@ -9168,16 +9158,16 @@ max_of_list()
 # PROBLEM EXPLANATION:
 # This problem requires writing a program that Write a program that maps a list of words into a list of integers representing the lengths of the correponding words with the word eg ['jonathan', 8, .
 # 'horse', 5, 'today', 5 ].
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -9196,7 +9186,7 @@ def list_words(lst):
         # Result: ["Jonathan", 8, "horse", 5, "today", 5]
     return words_lengths
         # Returns the result
-        
+
 lst = ["Jonathan", "horse", "today"]
 print(list_words(lst))
 
@@ -9205,16 +9195,16 @@ print(list_words(lst))
 # PROBLEM EXPLANATION:
 # This problem requires writing a program that Write a program that maps a list of words into a list of integers representing the lengths of the correponding words with the word eg ['jonathan', 8, .
 # 'horse', 5, 'today', 5 ]. Do not use len().
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -9235,7 +9225,7 @@ def list_words(lst):
             count += 1  # Increment for each character
         words_with_lengths.append(word)  # Add word
         words_with_lengths.append(count)  # Add manually calculated length
-    
+
     return words_with_lengths
         # Returns the result
 
@@ -9246,17 +9236,17 @@ print(list_words(lst))
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires writing a program that Write a program that maps a list of words into a list of integers representing the lengths of the correponding words without using len()..
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -9274,10 +9264,10 @@ def length_words(lst):
             # Iterates through each element
             count += 1
         length.append(count)
-    
+
     return length
         # Returns the result
-    
+
 lst = ["Jonathan", "chris", "mountain"]
 print(length_words(lst))
 
@@ -9300,7 +9290,7 @@ def intersection():
             common.append(word)  # Add to common if found
     # Note: If lst1 has duplicates, common will also have duplicates
     print(common)
-    
+
 intersection()
 
 """
@@ -9312,7 +9302,7 @@ Write a Python program to print the following pattern:\n*\n* *\n* * *\n* * * *\n
 for i in range(1, 6):  # i = 1, 2, 3, 4, 5
     print('* ' * i)  # String multiplication: '*' * 3 = '***'
     # Prints: "* " (1 time), "* * " (2 times), "* * * " (3 times), etc.
-    
+
 """
 Problem: 214
 Write a Python program to print the following number pyramid:\n1\n2 2\n3 3 3\n4 4 4 4\n5 5 5 5 5
@@ -9337,7 +9327,7 @@ def square_pattern(n):
             print("*", end=" ")  # Print star with space, end="" prevents newline
         print()  # Print newline after each row
     # Note: Function returns None (prints but doesn't return value)
-n = 5    
+n = 5
 print(square_pattern(n))  # Prints square, then prints None
 
 # Interactive version with user input
@@ -9374,7 +9364,7 @@ for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)
     # Negative step: start=5, stop=0 (exclusive), step=-1 (counts backwards)
     for j in range(i):  # Print i stars in this row
         print('*', end=' ')  # Print star with space
-    print()  # Newline after each row 
+    print()  # Newline after each row
 
 """
 Problem: 218
@@ -9419,7 +9409,7 @@ print_floyds_triangle(rows)
 
 """
 220
-Write a Python program to print a diamond pattern of stars for a given number of rows.\nFor example, for 3 rows:\n  *\n ***\n*****\n ***\n  
+Write a Python program to print a diamond pattern of stars for a given number of rows.\nFor example, for 3 rows:\n  *\n ***\n*****\n ***\n
 """
 
 # Prints diamond: upper triangle + lower triangle (inverted)
@@ -9429,7 +9419,7 @@ def print_diamond(rows):
         # Print leading spaces (decreases as i increases)
         for j in range(rows - i - 1):  # Spaces: rows-1, rows-2, ..., 0
             print(" ", end="")  # Print space without newline
-        
+
         # Print stars: 1, 3, 5, 7, ... (2*i + 1 stars)
         for k in range(2 * i + 1):  # 2*0+1=1, 2*1+1=3, 2*2+1=5
             print("*", end="")
@@ -9439,7 +9429,7 @@ def print_diamond(rows):
     for i in range(rows - 2, -1, -1):  # i = rows-2, rows-3, ..., 0 (backwards)
         for j in range(rows - i - 1):  # Leading spaces
             print(" ", end="")
-            
+
         # BUG: Missing closing parenthesis in range()
         for k in range(2 * i + 1):  # Should have closing )
             print("*", end="")  # Syntax error: missing closing parenthesis
@@ -9496,7 +9486,7 @@ def mirrored_right_angled_triangle(rows):
         # Print leading spaces (decreases as i increases)
         for j in range(rows-i):  # Spaces: 4, 3, 2, 1, 0
             print(" ", end="")  # Print space without newline
-            
+
         # Print stars: 1, 2, 3, 4, 5 stars
         for k in range(i):
             # Iterates through each element
@@ -9527,17 +9517,17 @@ triangle_pattern(rows)
 
 def triangle_pattern(rows):
     # Function definition
-    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    
+
     for i in range(rows):
         # Iterates through each element
         letter = letters[i]
         for j in range(i + 1):
             # Iterates through each element
-            
+
             print(letter, end=" ")
-            
+
         print()
 
 rows = 5
@@ -9673,16 +9663,16 @@ print_hourglass(rows)
 # ============================================================================
 # PROBLEM EXPLANATION:
 # count_occurrences that takes a list of elements as input and returns the number of times the elements appears in the list.
-# 
+#
 # Key Requirements:
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -9710,7 +9700,7 @@ print(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a function that find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible..
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
@@ -9718,10 +9708,10 @@ print(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}
 # - Must work with lists
 # - Must handle numeric values
 # - Must sort elements in the specified order
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -9741,23 +9731,23 @@ def sum_of_odd():
         if number % 2 != 0:  # Check if odd
             count += number  # Add odd number to sum
     print(count)
-            
+
 sum_of_odd()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # remove vowels from a string. Prompt the user to enter a string. Do not use append().
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with strings
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses iteration to process elements.
 # ============================================================================
 """
@@ -9775,24 +9765,24 @@ def remove_vowels():
         if char not in "aeiou":  # Only checks lowercase vowels (case-sensitive)
             print(char, end= "")  # Print char without newline (end="" prevents newline)
     # Note: Doesn't return string, just prints (could build string with += instead of append)
-            
+
 remove_vowels()
 
 
 # ============================================================================
 # PROBLEM EXPLANATION:
 # find_min that takes a list of numbers as input and returns the minimum number in the list. Do not use min().
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -9809,7 +9799,7 @@ def find_min(lst):
             min_num = number
     return min_num
         # Returns the result
-            
+
 lst = [13, 566, 1]
 print(find_min(lst))
 
@@ -9834,7 +9824,7 @@ Write a Python program that prints a increasing triangle pattern of stars.
 def increasing_triangle():
     # Function definition
     n = 5
-    
+
     for i in range(n):
         # Iterates through each element
         for i in range(i+1):
@@ -9873,7 +9863,7 @@ for i in range(1, 6):  # i = 1, 2, 3, 4, 5
     print((("*") + " ")* i)  # Prints: "* ", "* * ", "* * * ", etc.
 
 # Function version with parameter
-def right_triangle(n): 
+def right_triangle(n):
     # Function definition
     for i in range(1, n + 1):  # Rows: 1 to n
         for j in range(i):  # Print i stars
@@ -9952,10 +9942,10 @@ def enumerate_lst(lst):
         # f-string: embeds variables in string using {variable}
         print(f"index {index} name {word}")  # Prints: "index 0 name Jon", etc.
     # Note: Function returns None (prints but doesn't return value)
-    
-    
+
+
 lst = ["Jon", "Chris", "Nathan"]
-print(enumerate_lst(lst))  # Prints indices/values, then prints None 
+print(enumerate_lst(lst))  # Prints indices/values, then prints None
 
 """
 Problem: 242
@@ -9972,9 +9962,9 @@ def enumerate_lst(lst):
         result.append((index, word))  # Append tuple (index, word) to list
         # Tuple syntax: (a, b) creates immutable pair
     return result  # Returns: [(0, "Jon"), (1, "Chris"), (2, "Nathan")]
-    
+
 lst = ("Jon", "Chris", "Nathan")  # Note: tuple input (works with any iterable)
-print(enumerate_lst(lst)) 
+print(enumerate_lst(lst))
 
 """
 Problem: 243
@@ -9987,14 +9977,14 @@ def enumerate_lst(lst, target):
         # Iterates through each element
         if word == target:
             # Checks condition
-            return word, index 
+            return word, index
                 # Returns the result
     return -1
         # Returns the result
-        
-target = "Chris"    
+
+target = "Chris"
 lst = ["Jon", "Chris", "Nathan"]
-print(enumerate_lst(lst, target)) 
+print(enumerate_lst(lst, target))
 
 """
 Problem: 244
@@ -10029,7 +10019,7 @@ def enumerate_lst(lst):
     # Result: {0: "Jon", 1: "Chris", 2: "Nathan"}
     print(result)
     # Note: dict(enumerate(lst)) is more concise alternative
-    
+
 lst = ["Jon", "Chris", "Nathan"]
 enumerate_lst(lst)
 
@@ -10046,7 +10036,7 @@ def enumerate_lst(lst):
         # Should be: index % 2 == 0 for even indexes
         if index % 2 != 0:  # This filters odd indexes (1, 3, 5, ...)
             print(index, word)  # Prints elements at odd positions
-        
+
 lst = ["Jon", "Chris", "Nathan", "hot", "class", "shirt", "beach", "app", " board", "hit"]
 enumerate_lst(lst)  # Prints: 1 Chris, 3 hot, 5 shirt, 7 app, 9 hit (odd indexes)
 
@@ -10060,7 +10050,7 @@ def enumerate_lst(lst):
     for index, word in enumerate(lst):
         # Iterates through each element
         print(f"index {index} name {word}")
-    
+
 lst = ["Jon", "Chris", "Nathan", "Sam", "Rachel"]
 enumerate_lst(lst)
 
@@ -10079,7 +10069,7 @@ def replace_with_index(lst):
     # Note: Modifies list in-place (mutates original list)
 
 lst = ["Jon", "Chris", "Nathan", "Sam", "Rachel"]
-print(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4] 
+print(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]
 
 """
 Problem: 249
@@ -10093,7 +10083,7 @@ def enumerate_lst(lst1, lst2):
         # Use same index to access corresponding element in lst2
         print(f"index {index}: {word} and {lst2[index]}")  # Prints both values side by side
     # Note: Assumes lists have same length (will error if lst2 is shorter)
-    
+
 lst1 = ["Jon", "Chris", "Nathan", "Tom", "Sam", "Rose", "Bliss", "Hurt"]
 lst2 = ["Jonny", "Christopher", "Jhovian", "Tom", "Zack", "Rose", "Brad", "Michael"]
 
@@ -10189,7 +10179,7 @@ def dic_lst(lst1, lst2):
         result[x] = y  # Assign value y to key x
     return result  # Returns: {1: "Ron", 2: "break", 3: "tree", 4: "son"}
     # Note: dict(zip(lst1, lst2)) is more concise alternative
-    
+
 lst1 = [1, 2, 3, 4]
 lst2 = ["Ron", "break", "tree", "son"]
 print(dic_lst(lst1, lst2))
@@ -10206,9 +10196,9 @@ def combine_3_lst(lst1, lst2, lst3):
     # zip(lst1, lst2, lst3) returns: ("Sam", "Sammy", "Son"), ("Nike", "Mikey", "monkey"), ...
     for x, y, z in zip(lst1, lst2, lst3):  # Unpack three elements from zip()
          result.append((x, y, z))  # Append tuple of three elements
-         
+
     return result  # Returns: [("Sam", "Sammy", "Son"), ("Nike", "Mikey", "monkey"), ...]
-     
+
 lst1 = ["Sam", "Nike", "system"]
 lst2 = ["Sammy", "Mikey", "Steven"]
 lst3 = ["Son", "monkey", "star"]
@@ -10228,7 +10218,7 @@ def transpose_matrix(matrix):
     result = []
     for row in transposed:  # Each row is a tuple from zip()
         result.append(list(row))  # Convert tuple to list
-    
+
     return result  # Returns: [[1,4,7], [2,5,8], [3,6,9]]
     # Note: list(zip(*matrix)) is more concise but returns list of tuples
 matrix = [
@@ -10255,8 +10245,8 @@ def list_tuples(lst):
         result.append(list(x))  # Convert tuple to list
     # Returns: [[1,4,7], [2,5,8], [3,6,9]] - transposed/unzipped
     # Note: Function doesn't return result (missing return statement)
-    
-    
+
+
 lst = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
 print(list_tuples(lst))  # Prints None (function doesn't return)
 
@@ -10271,7 +10261,7 @@ def individualists(lst):
     for num in zip(*lst):
         # Iterates through each element
         result.append(list(num))
-        
+
     return result
         # Returns the result
 
@@ -10292,7 +10282,7 @@ def maxium_element_wise(lst1, lst2):  # Typo: "maxium" should be "maximum"
         # Iterates through each element
         result.append(max(x, y))  # max() compares two values, returns larger
     return result  # Returns: [7, 8, 9] (maximum of each pair)
-    
+
 lst1 = [2, 4, 6]
 lst2 = [7, 8, 9]
 print(maxium_element_wise(lst1, lst2))
@@ -10311,7 +10301,7 @@ def concatenate(lst1, lst2):
         # f-string: embeds variables in string, concatenates with space
         result.append(f"{x} {y}")  # f"{x} {y}" creates "x y"
     return result  # Returns: ["fruite orange", "apple banana", "tomato carrot"]
-    
+
 lst1 = ["fruite", "apple", "tomato"]  # Typo: "fruite" should be "fruit"
 lst2 = ["orange", "banana", "carrot"]
 print(concatenate(lst1, lst2))
@@ -10329,7 +10319,7 @@ def combine_to_dict(lst1, lst2):
     for x, y in zip(lst1, lst2):
         # Dictionary literal: {'a': x, 'b': y} creates dict with keys 'a' and 'b'
         result.append({'a': x, 'b': y})  # Append dictionary to list
-    
+
     return result  # Returns: [{'a':1, 'b':'one'}, {'a':2, 'b':'two'}, {'a':3, 'b':'three'}]
 
 lst1 = [1, 2, 3]
@@ -10351,7 +10341,7 @@ def filter_pairs(lst1, lst2):
         # Iterates through each element
         if x > y:  # Condition: first element greater than second
             result.append((x, y))  # Append tuple if condition met
-    
+
     return result  # Returns: [(5,4), (8,7), (10,2)] (pairs where x > y)
 
 lst1 = [5, 8, 3, 10]
@@ -10372,7 +10362,7 @@ def filter_pairs(lst1, lst2):
         # Iterates through each element
         if x < y:  # Check if first element is less than second
             result.append((x, y))  # Add tuple if condition met
-    
+
     return result  # Returns: [(3,6)] - only pair where x < y
 
 lst1 = [5, 8, 3, 10]
@@ -10381,7 +10371,7 @@ print(filter_pairs(lst1, lst2))
 
 """
 Problem: 264
-Write a Python program to add corresponding elements of nested lists using `zip()`. 
+Write a Python program to add corresponding elements of nested lists using `zip()`.
 lst1 = [[1, 2, 3], [4, 5, 6]]
 lst2 = [[7, 8, 9], [10, 11, 12]]
 result:
@@ -10404,7 +10394,7 @@ def add_nested_lists(lst1, lst2):
             added_sublist.append(x + y)  # Add corresponding elements
         result.append(added_sublist)  # Append summed sublist
     return result  # Returns: [[8,10,12], [14,16,18]]
-    
+
     return result
         # Returns the result
 
@@ -10427,7 +10417,7 @@ def euclidean_distance(point1, point2):
     for x1, x2 in zip(point1, point2):
         # Calculate squared difference for each dimension
         distance_squared += (x1 - x2) ** 2  # (x1-x2)², sum all dimensions
-        
+
     # Square root of sum of squared differences
     return math.sqrt(distance_squared)  # sqrt((3-6)² + (4-8)²) = sqrt(9+16) = 5
     # Formula: √[(x₁-x₂)² + (y₁-y₂)²]
@@ -10452,7 +10442,7 @@ def interleave(lst1, lst2):
         result.append(y)  # Add element from second list (alternating)
     return result  # Returns: ["crissy", "spotty", "missy", "motty", "sissy", "hotty"]
     # Pattern: [lst1[0], lst2[0], lst1[1], lst2[1], ...]
-        
+
 lst1 = ["crissy", "missy", "sissy"]
 lst2 = ["spotty", "motty", "hotty"]
 print(interleave(lst1, lst2))
@@ -10473,7 +10463,7 @@ def multiply_2_lst(lst1, lst2):
         result.append(x * y)  # 2*3=6, 4*6=24, 6*9=54
     return result  # Returns: [6, 24, 54]
     # zip() stops when the shortest list is exhausted
-            
+
 lst1 = [2, 4, 6]
 lst2 = [3, 6, 9]
 print(multiply_2_lst(lst1, lst2))  # Output: [6, 24, 54]
@@ -10493,7 +10483,7 @@ def dot_product(vector1, vector2):
         result += x * y  # Multiply and accumulate: 1*4 + 2*5 + 3*6
     return result  # Returns: 4 + 10 + 18 = 32
     # Dot product formula: Σ(xᵢ × yᵢ) for all i
-    
+
 vector1 = [1, 2, 3]
 vector2 = [4, 5, 6]
 print(dot_product(vector1, vector2))  # Output: 32
@@ -10638,7 +10628,7 @@ print(result)
 # Duplicate function definition (same logic)
 def filter_by_length(strings, length):
     # Function definition
-    
+
     def has_length(s):
         # Function definition
         return len(s) == length
@@ -10653,7 +10643,7 @@ strings = ["apple", "banana", "cherry", "date", "fig"]
 length = 5
 result = filter_by_length(strings, length)
 
-print(result) 
+print(result)
 
 """
 Problem: 276
@@ -10677,17 +10667,17 @@ print(result)
 # ============================================================================
 # PROBLEM EXPLANATION:
 # filter out all numbers from a list that are divisible by a given number using filter().
-# 
+#
 # Key Requirements:
 # - Program must prompt user for input
 # - Function must accept appropriate parameters
 # - Function must return the expected result
 # - Must work with lists
 # - Must handle numeric values
-# 
+#
 # Example Input/Output:
 # - (See test cases in the code below for specific examples)
-# 
+#
 # Algorithm: Uses recursion to solve the problem.
 # ============================================================================
 """
@@ -10713,18 +10703,18 @@ print(filtered_numbers)  # Output: [1, 2, 5, 7, 8, 10]
 # non-empty strings. The function should use Python's built-in `filter()` function
 # to create a new list containing only strings that have at least one character.
 # This is a common data cleaning operation when processing text data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `filter()` to remove empty strings
 # - Function must return a new list with only non-empty strings
 # - Empty strings ("") should be removed from the result
-# 
+#
 # Example Input/Output:
 # - filter_non_empty(["apple", "", "banana", "", "cherry"]) should return ["apple", "banana", "cherry"]
 # - filter_non_empty(["", "", ""]) should return [] (all empty)
 # - filter_non_empty(["hello", "world"]) should return ["hello", "world"] (no empty strings)
-# 
+#
 # The `filter()` function takes a predicate function and an iterable, returning
 # an iterator of elements for which the predicate returns True.
 # ============================================================================
@@ -10756,18 +10746,18 @@ print(result)
 # A prime number is a natural number greater than 1 that has no positive divisors
 # other than 1 and itself. The function should use `filter()` to create a new list
 # containing only the prime numbers from the input list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `filter()` to keep only prime numbers
 # - Function must return a new list with only prime numbers
 # - Must correctly identify prime numbers (numbers > 1 with no divisors other than 1 and itself)
-# 
+#
 # Example Input/Output:
 # - filter_prime([2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) should return [2, 3, 5, 7, 11]
 # - filter_prime([1, 2, 3, 4]) should return [2, 3] (1 is not prime)
 # - filter_prime([10, 12, 14, 15]) should return [] (no primes)
-# 
+#
 # Algorithm: Check if a number is prime by testing divisibility from 2 to sqrt(n).
 # ============================================================================
 """
@@ -10807,18 +10797,18 @@ print(result)
 # only non-float elements (integers, strings, etc.). The function should use
 # `filter()` to create a new list that excludes any elements of type float.
 # This is useful when you need to separate numeric types or clean mixed-type data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of mixed-type elements as input
 # - Function must use `filter()` to remove float elements
 # - Function must return a new list with only non-float elements
 # - Must correctly identify float types using isinstance()
-# 
+#
 # Example Input/Output:
 # - filter_floats([1, 2.5, "apple", 3.7, 10]) should return [1, "apple", 10]
 # - filter_floats([1.0, 2.0, 3.0]) should return [] (all floats)
 # - filter_floats([1, 2, 3, "test"]) should return [1, 2, 3, "test"] (no floats)
-# 
+#
 # Note: isinstance(x, float) checks if x is of type float, including 4.0.
 # ============================================================================
 """
@@ -10850,18 +10840,18 @@ print(result)
 # strings that are not entirely uppercase (lowercase or mixed case). The function
 # should use `filter()` to create a new list containing only non-uppercase strings.
 # This is useful for text processing when you want to exclude all-caps text.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `filter()` to remove uppercase strings
 # - Function must return a new list with only non-uppercase strings
 # - Must use string method .isupper() to check if all characters are uppercase
-# 
+#
 # Example Input/Output:
 # - filter_uppercase(["HELLO", "world", "PYTHON", "code"]) should return ["world", "code"]
 # - filter_uppercase(["hello", "world"]) should return ["hello", "world"] (no uppercase)
 # - filter_uppercase(["HELLO", "WORLD"]) should return [] (all uppercase)
-# 
+#
 # Note: .isupper() returns True only if all characters are uppercase and string has at least one character.
 # ============================================================================
 """
@@ -10895,18 +10885,18 @@ print(result)
 # strings from a list, keeping only strings that are not entirely uppercase.
 # The function should use `filter()` to create a new list with non-uppercase strings.
 # This demonstrates the same concept with a different implementation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `filter()` to remove uppercase strings
 # - Function must return a new list with only non-uppercase strings
 # - Must correctly identify uppercase strings using .isupper()
-# 
+#
 # Example Input/Output:
 # - filter_uppercase_again(["HELLO", "WORLD", "python", "CHATGPT"]) should return ["python"]
 # - filter_uppercase_again(["hello", "world"]) should return ["hello", "world"]
 # - filter_uppercase_again(["HELLO", "WORLD"]) should return [] (all uppercase)
-# 
+#
 # This is a duplicate exercise to reinforce the filtering concept.
 # ============================================================================
 """
@@ -10939,18 +10929,18 @@ print(result)
 # elements that are not None. The function should use `filter()` to create a
 # new list containing only non-None values. This is a common data cleaning
 # operation when dealing with optional or missing data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of mixed-type elements as input
 # - Function must use `filter()` to remove None values
 # - Function must return a new list with only non-None elements
 # - Must use identity check (is not None) rather than equality check
-# 
+#
 # Example Input/Output:
 # - filter_non_none([1, None, "example", None, 3.14]) should return [1, "example", 3.14]
 # - filter_non_none([None, None, None]) should return [] (all None)
 # - filter_non_none([1, 2, 3]) should return [1, 2, 3] (no None values)
-# 
+#
 # Note: Use 'is not None' for identity check, not '!= None'. Empty string "" is not None.
 # ============================================================================
 """
@@ -10985,18 +10975,18 @@ print(result)
 # substring, keeping only elements that do NOT contain that substring. The function
 # should use `filter()` to create a new list with elements that don't contain the
 # specified substring. This is useful for text filtering and data cleaning.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings and a substring as input
 # - Function must use `filter()` to remove elements containing the substring
 # - Function must return a new list with only elements that don't contain the substring
 # - Must use the 'in' operator to check for substring presence
-# 
+#
 # Example Input/Output:
 # - filter_by_substring(["apple", "banana", "cherry", "pineapple"], "apple") should return ["banana", "cherry"]
 # - filter_by_substring(["hello", "world"], "x") should return ["hello", "world"] (no matches)
 # - filter_by_substring(["test", "testing", "tested"], "test") should return [] (all contain "test")
-# 
+#
 # The nested function can access the outer scope variable 'substring' (closure).
 # ============================================================================
 """
@@ -11031,16 +11021,16 @@ print(result)
 # This problem requires printing numbers from 1 to 10 (inclusive) using a while loop.
 # The function should use a while loop to iterate and print each number sequentially.
 # This demonstrates basic loop control and iteration patterns in Python.
-# 
+#
 # Key Requirements:
 # - Function must use a while loop (not a for loop)
 # - Function must print numbers from 1 to 10
 # - Each number should be printed on a separate line
 # - Must properly initialize and increment the counter variable
-# 
+#
 # Example Input/Output:
 # - print_1_to_10() should print: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (each on new line)
-# 
+#
 # Algorithm: Initialize counter to 1, loop while counter <= 10, print and increment.
 # ============================================================================
 """
@@ -11062,7 +11052,7 @@ def print_1_to_10():
         i += 1  # Increment i by 1 (equivalent to i = i + 1)
         # Loop continues: i=1, print 1, i=2, print 2, ..., i=10, print 10, i=11, exit loop
     # After loop, i = 11 (condition i <= 10 is False)
-        
+
 print_1_to_10()  # Output: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (each on new line)
 
 # ============================================================================
@@ -11071,16 +11061,16 @@ print_1_to_10()  # Output: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (each on new line)
 # (1 + 2 + 3 + ... + 10 = 55) using a while loop. The function should iterate
 # through numbers 1 to 10 and accumulate their sum, then return the total.
 # This demonstrates accumulator patterns and loop-based summation.
-# 
+#
 # Key Requirements:
 # - Function must use a while loop (not a for loop or built-in sum())
 # - Function must calculate sum of numbers 1 through 10
 # - Function must return the sum (55)
 # - Must properly initialize accumulator and counter variables
-# 
+#
 # Example Input/Output:
 # - sum_first_10_natural_numbers() should return 55
-# 
+#
 # Algorithm: Initialize total to 0, counter to 1, loop while counter <= 10,
 # add counter to total, increment counter, return total.
 # ============================================================================
@@ -11113,16 +11103,16 @@ print(result)
 # using a while loop. Even numbers are integers divisible by 2 (2, 4, 6, 8, 10,
 # 12, 14, 16, 18, 20). The function should iterate through the range and print
 # only numbers that satisfy the even condition.
-# 
+#
 # Key Requirements:
 # - Function must use a while loop
 # - Function must print only even numbers from 1 to 20
 # - Must use modulo operator (%) to check if a number is even
 # - Each even number should be printed on a separate line
-# 
+#
 # Example Input/Output:
 # - print_even_numbers() should print: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20
-# 
+#
 # Algorithm: Loop from 1 to 20, check if i % 2 == 0, print if even, increment counter.
 # ============================================================================
 """
@@ -11154,16 +11144,16 @@ print_even_numbers()  # Output: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 (each on new 
 # using a while loop. Odd numbers are integers not divisible by 2 (1, 3, 5, 7, 9,
 # 11, 13, 15, 17, 19). The function should iterate through the range and print
 # only numbers that satisfy the odd condition.
-# 
+#
 # Key Requirements:
 # - Function must use a while loop
 # - Function must print only odd numbers from 1 to 20
 # - Must use modulo operator (%) to check if a number is odd
 # - Each odd number should be printed on a separate line
-# 
+#
 # Example Input/Output:
 # - print_odd_numbers() should print: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
-# 
+#
 # Algorithm: Loop from 1 to 20, check if i % 2 != 0, print if odd, increment counter.
 # ============================================================================
 """
@@ -11191,18 +11181,18 @@ print_odd_numbers()
 # For example, the sum of digits in 1234 is 1+2+3+4 = 10. The function should
 # extract each digit from the number and add them together using a while loop.
 # This demonstrates digit extraction using modulo and integer division operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a number as input
 # - Function must use a while loop to extract digits
 # - Function must return the sum of all digits
 # - Must handle both positive and negative numbers (typically work with absolute value)
-# 
+#
 # Example Input/Output:
 # - sum_of_digits(1234) should return 10 (1+2+3+4)
 # - sum_of_digits(567) should return 18 (5+6+7)
 # - sum_of_digits(9) should return 9
-# 
+#
 # Algorithm: Extract last digit using n % 10, add to sum, remove last digit using n // 10, repeat.
 # ============================================================================
 """
@@ -11241,18 +11231,18 @@ print(f"The sum of the digits of {number} is: {result}")  # Output: "The sum of 
 # become 54321. The function should extract digits from the original number and
 # construct the reversed number using a while loop. This demonstrates digit
 # manipulation and number construction.
-# 
+#
 # Key Requirements:
 # - Function must accept a number as input
 # - Function must use a while loop to reverse the number
 # - Function must return the reversed number
 # - Must extract digits and reconstruct number in reverse order
-# 
+#
 # Example Input/Output:
 # - reverse_number(12345) should return 54321
 # - reverse_number(567) should return 765
 # - reverse_number(9) should return 9
-# 
+#
 # Algorithm: Extract last digit using n % 10, append to reversed number (reversed_num * 10 + digit),
 # remove last digit using n // 10, repeat until n becomes 0.
 # ============================================================================
@@ -11291,18 +11281,18 @@ print("Reversed number:", reverse_number(num))
 # The factorial of n (written as n!) is the product of all positive integers from
 # 1 to n. For example, 5! = 5 × 4 × 3 × 2 × 1 = 120. By definition, 0! = 1.
 # The function should use a while loop to multiply numbers from n down to 1.
-# 
+#
 # Key Requirements:
 # - Function must accept a number as input
 # - Function must use a while loop to calculate factorial
 # - Function must return the factorial result
 # - Must handle edge case: 0! = 1
-# 
+#
 # Example Input/Output:
 # - factorial(5) should return 120 (5×4×3×2×1)
 # - factorial(0) should return 1
 # - factorial(3) should return 6 (3×2×1)
-# 
+#
 # Algorithm: Initialize result to 1, loop while number > 1, multiply result by number, decrement number.
 # ============================================================================
 """
@@ -11342,17 +11332,17 @@ for num in test_numbers:
 # a while loop. A multiplication table shows the product of the number with each
 # integer from 1 to 10 (or another range). For example, the table for 5 would show:
 # 5 × 1 = 5, 5 × 2 = 10, 5 × 3 = 15, ..., 5 × 10 = 50.
-# 
+#
 # Key Requirements:
 # - Function must accept a number as input
 # - Function must use a while loop to generate the table
 # - Function must print each multiplication result
 # - Typically prints table from 1 to 10
-# 
+#
 # Example Input/Output:
 # - multiplication_table(5) should print: 5×1=5, 5×2=10, ..., 5×10=50
 # - multiplication_table(3) should print: 3×1=3, 3×2=6, ..., 3×10=30
-# 
+#
 # Algorithm: Initialize counter to 1, loop while counter <= 10, print number × counter, increment counter.
 # ============================================================================
 """
@@ -11390,19 +11380,19 @@ for num in range(1, 6):
 # A prime number is a natural number greater than 1 that has no positive divisors
 # other than 1 and itself. The function should return True if the number is prime,
 # and False otherwise. This is a fundamental number theory problem.
-# 
+#
 # Key Requirements:
 # - Function must accept a number as input
 # - Function must use a while loop to check for divisors
 # - Function must return True if prime, False otherwise
 # - Numbers less than 2 are not prime
 # - Must check divisors efficiently (up to sqrt(n))
-# 
+#
 # Example Input/Output:
 # - is_prime(7) should return True
 # - is_prime(10) should return False (divisible by 2 and 5)
 # - is_prime(1) should return False (not prime by definition)
-# 
+#
 # Algorithm: Check if number < 2, then check divisibility from 2 to sqrt(number).
 # ============================================================================
 """
@@ -11441,25 +11431,25 @@ for num in test_numbers:
         print(f"{num} is a prime number.")
     else:
         print(f"{num} is not a prime number.")
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires counting the number of digits in a given number using
 # a while loop. For example, 12345 has 5 digits, and 9 has 1 digit. The function
 # should repeatedly divide the number by 10 (using integer division) until it
 # becomes 0, counting how many divisions were needed.
-# 
+#
 # Key Requirements:
 # - Function must accept a number as input
 # - Function must use a while loop to count digits
 # - Function must return the count of digits
 # - Must handle edge case: 0 has 1 digit (or handle separately)
-# 
+#
 # Example Input/Output:
 # - count_digits(12345) should return 5
 # - count_digits(9) should return 1
 # - count_digits(100) should return 3
-# 
+#
 # Algorithm: Initialize count to 0, loop while number > 0, divide by 10, increment count.
 # ============================================================================
 """
@@ -11501,18 +11491,18 @@ for num in test_numbers:
 # numbers without leaving a remainder. For example, GCD(56, 98) = 14. This problem
 # is typically solved using the Euclidean algorithm, which is one of the oldest
 # algorithms still in use today.
-# 
+#
 # Key Requirements:
 # - Function must accept two numbers as input
 # - Function must use a while loop to calculate GCD
 # - Function must return the GCD
 # - Must implement Euclidean algorithm efficiently
-# 
+#
 # Example Input/Output:
 # - gcd(56, 98) should return 14
 # - gcd(48, 18) should return 6
 # - gcd(17, 13) should return 1 (co-prime numbers)
-# 
+#
 # Algorithm: Euclidean algorithm - repeatedly replace (a, b) with (b, a % b) until b becomes 0.
 # ============================================================================
 """
@@ -11555,17 +11545,17 @@ for case in test_cases:
 # The Fibonacci sequence is a series of numbers where each number is the sum of the
 # two preceding ones, starting from 0 and 1: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
 # The function should generate and print the first N terms of this sequence.
-# 
+#
 # Key Requirements:
 # - Function must accept N (number of terms) as input
 # - Function must use a while loop to generate the sequence
 # - Function must print each term of the Fibonacci sequence
 # - Sequence starts with 0 and 1
-# 
+#
 # Example Input/Output:
 # - fibonacci_sequence(10) should print: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34
 # - fibonacci_sequence(5) should print: 0, 1, 1, 2, 3
-# 
+#
 # Algorithm: Initialize a=0, b=1, loop N times, print a, update (a, b) = (b, a+b).
 # ============================================================================
 """
@@ -11603,18 +11593,18 @@ fibonacci_sequence(additional_terms)
 # The function should iterate through each element in the list and accumulate their
 # sum, then return the total. This demonstrates list traversal and accumulator
 # patterns using a while loop instead of a for loop.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use a while loop to iterate through the list
 # - Function must return the sum of all elements
 # - Must use index-based access to traverse the list
-# 
+#
 # Example Input/Output:
 # - sum_elements([1, 2, 3, 4, 5]) should return 15
 # - sum_elements([10, 20, 30]) should return 60
 # - sum_elements([]) should return 0 (empty list)
-# 
+#
 # Algorithm: Initialize total to 0, index to 0, loop while index < len(lst), add lst[index] to total, increment index.
 # ============================================================================
 """
@@ -11632,11 +11622,11 @@ def sum_elements(lst):
     # Function definition
     total = 0
     index = 0
-    
+
     while index < len(lst):
         total += lst[index]
         index += 1
-        
+
     return total
         # Returns the result
 
@@ -11655,7 +11645,7 @@ def main(lst):
         return max(lst, key=len)
             # Returns the result
         i += 1
-        
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)
 
@@ -11693,18 +11683,18 @@ print(f"The largest element in the list of negatives is: {largest_number_in_nega
 # the minimum value encountered, then return it. This demonstrates the "minimum
 # finding" algorithm pattern using a while loop, which is the complement of finding
 # the maximum.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of comparable elements as input
 # - Function must use a while loop to iterate through the list
 # - Function must return the smallest element
 # - Must handle edge case: empty list (should return None or raise error)
-# 
+#
 # Example Input/Output:
 # - smallest_element([5, 12, 3, 8, 20, 15]) should return 3
 # - smallest_element([-1, -5, -3, -8]) should return -8
 # - smallest_element([42]) should return 42
-# 
+#
 # Algorithm: Initialize smallest to first element, loop through remaining elements,
 # update smallest if current element is smaller.
 # ============================================================================
@@ -11726,12 +11716,12 @@ def smallest_element(lst):
             # Returns the result
 
     smallest_word = lst[0]
-    i = 1 
+    i = 1
 
     while i < len(lst):
         if lst[i] < smallest_word:
-            smallest_word = lst[i] 
-        i += 1  
+            smallest_word = lst[i]
+        i += 1
 
     return smallest_word
         # Returns the result
@@ -11745,18 +11735,18 @@ print(smallest_element(lst))
 # using a while loop. The function should modify the list in-place (or return a
 # new list) by removing every instance of the specified element. This demonstrates
 # list modification and careful index management when modifying a list during iteration.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and an element to remove as input
 # - Function must use a while loop to iterate through the list
 # - Function must remove all occurrences of the specified element
 # - Must handle index management correctly when removing elements (don't increment index when removing)
-# 
+#
 # Example Input/Output:
 # - remove_all_occurrences([1, 2, 3, 2, 4, 2], 2) should return [1, 3, 4]
 # - remove_all_occurrences([5, 5, 5], 5) should return []
 # - remove_all_occurrences([1, 2, 3], 4) should return [1, 2, 3] (no change)
-# 
+#
 # Algorithm: Loop through list, if element matches, remove it (don't increment index),
 # otherwise increment index. This avoids skipping elements after removal.
 # ============================================================================
@@ -11802,18 +11792,18 @@ print(f"Updated fruits list after removing '{fruit_to_remove}': {updated_fruits_
 # A palindrome is a string that reads the same forwards and backwards (e.g., "radar",
 # "level", "racecar"). The function should compare characters from both ends of the
 # string, moving inward, and return True if all pairs match, False otherwise.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must use a while loop to check characters
 # - Function must return True if palindrome, False otherwise
 # - Must compare characters from both ends simultaneously
-# 
+#
 # Example Input/Output:
 # - is_palindrome("radar") should return True
 # - is_palindrome("hello") should return False
 # - is_palindrome("level") should return True
-# 
+#
 # Algorithm: Use two pointers (i from start, j from end), compare s[i] and s[j],
 # move pointers inward until they meet or mismatch is found.
 # ============================================================================
@@ -11863,18 +11853,18 @@ print(f'Is "{test_string_4}" a palindrome? {result_4}')
 # Vowels in English are typically 'a', 'e', 'i', 'o', 'u' (and sometimes 'y'), and
 # the function should count both uppercase and lowercase versions. The function should
 # iterate through each character in the string and count how many are vowels.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must use a while loop to iterate through characters
 # - Function must return the count of vowels
 # - Must handle both uppercase and lowercase vowels
-# 
+#
 # Example Input/Output:
 # - count_vowels("Hello, World!") should return 3 (e, o, o)
 # - count_vowels("Python programming") should return 4 (o, o, a, i)
 # - count_vowels("AEIOU") should return 5
-# 
+#
 # Algorithm: Initialize count to 0, loop through each character, check if character
 # is in vowels string, increment count if vowel, return count.
 # ============================================================================
@@ -11923,17 +11913,17 @@ print(f'Number of vowels in "{test_string_4}": {result_4}')
 # line using a while loop. The function should iterate through the string character
 # by character and print each one. This demonstrates basic string iteration and
 # character access using index-based traversal.
-# 
+#
 # Key Requirements:
 # - Function must accept a string as input
 # - Function must use a while loop to iterate through characters
 # - Function must print each character on a separate line
 # - Must use index-based access to get each character
-# 
+#
 # Example Input/Output:
 # - print_each_character("Hello") should print: H, e, l, l, o (each on new line)
 # - print_each_character("Python") should print: P, y, t, h, o, n
-# 
+#
 # Algorithm: Initialize index to 0, loop while index < len(s), print s[index], increment index.
 # ============================================================================
 """
@@ -11973,17 +11963,17 @@ print_each_character(test_string_3)
 # input until a specific condition is met using a while loop. This demonstrates
 # input validation and the use of infinite loops with break statements. The loop
 # should continue asking until the user provides valid input that satisfies the condition.
-# 
+#
 # Key Requirements:
 # - Function must use a while loop (typically while True for infinite loop)
 # - Function must prompt user for input repeatedly
 # - Function must check if input meets condition
 # - Function must break out of loop when condition is met
-# 
+#
 # Example Input/Output:
 # - User enters 5, then 8, then 15 → loop continues until number > 10 is entered
 # - This pattern is common for input validation
-# 
+#
 # Algorithm: Use while True loop, get input, check condition, break if condition met.
 # ============================================================================
 """
@@ -12004,7 +11994,7 @@ def ask_until_condition():
             # Gets user input
         if int(user_input) > 10:
             break
-            
+
 ask_until_condition()
 
 # ============================================================================
@@ -12013,17 +12003,17 @@ ask_until_condition()
 # function with a `key` parameter. The dates should be ordered from January (month 1)
 # to December (month 12), regardless of the year or day. This demonstrates custom
 # sorting using the key parameter to extract a specific attribute for comparison.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of date objects as input
 # - Function must use `sorted()` with a `key` parameter
 # - Function must sort dates by month (1-12)
 # - Must return a new sorted list
-# 
+#
 # Example Input/Output:
 # - sort_dates_by_month([Jan 15, Mar 20, May 10, Sep 25, Jun 1]) should return
 #   dates sorted: Jan, Mar, May, Jun, Sep
-# 
+#
 # Algorithm: Use sorted() with key=lambda date: date.month to extract month attribute.
 # ============================================================================
 """
@@ -12072,17 +12062,17 @@ main()
 # using the `sorted()` function with a `key` parameter. For example, 123 (sum=6)
 # should come before 45 (sum=9) when sorted. This demonstrates custom sorting where
 # the comparison is based on a computed value rather than the original value.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of integers as input
 # - Function must use `sorted()` with a `key` parameter
 # - Function must sort by sum of digits (not the number itself)
 # - Must calculate sum of digits for each number
-# 
+#
 # Example Input/Output:
 # - sort_by_digit_sum([123, 45, 67, 9]) should return [9, 123, 45, 67]
 #   (sums: 9→9, 123→6, 45→9, 67→13, sorted by sum: 6, 9, 9, 13)
-# 
+#
 # Algorithm: Define helper function to calculate digit sum, use sorted() with key
 # parameter pointing to the helper function.
 # ============================================================================
@@ -12101,7 +12091,7 @@ Write a Python program to sort a list of integers by the sum of their digits usi
 def sum_of_digits(n):
     # Function definition
     total = 0
-    for digit in str(n): 
+    for digit in str(n):
         # Iterates through each element
         total += int(digit)
     return total
@@ -12123,17 +12113,17 @@ print(integers_lst(lst))
 # without using built-in functions like sort(), max(), or min(). The function should
 # manually iterate through the list to find these values and return them as a tuple.
 # This demonstrates manual implementation of min/max finding algorithms.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must return a tuple (min, max)
 # - Cannot use sort(), max(), or min() functions
 # - Must manually find minimum and maximum through iteration
-# 
+#
 # Example Input/Output:
 # - find_min_max([5, 2, 8, 1, 9]) should return (1, 9)
 # - find_min_max([10, 20, 30]) should return (10, 30)
-# 
+#
 # Algorithm: Initialize min and max to first element, iterate through list,
 # update min if current < min, update max if current > max.
 # ============================================================================
@@ -12157,12 +12147,12 @@ def find_min_max():
     for number in user:
         # Iterates through each element
         int_num.append(int(number))
-    
+
     min_num = int_num[-1]
     max_num = int_num[0]
-    
+
     print(min_num, max_num)
-           
+
 find_min_max()
 
 # ============================================================================
@@ -12171,17 +12161,17 @@ find_min_max()
 # The function should take a list of strings and create a dictionary where each
 # key is a first letter and the value is a list of all strings starting with that
 # letter. This demonstrates dictionary grouping and data organization patterns.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must return a dictionary
 # - Dictionary keys should be first letters (characters)
 # - Dictionary values should be lists of strings starting with that letter
-# 
+#
 # Example Input/Output:
 # - group_by_first_letter(["apple", "banana", "apricot", "cherry"]) should return
 #   {'a': ['apple', 'apricot'], 'b': ['banana'], 'c': ['cherry']}
-# 
+#
 # Algorithm: Iterate through strings, extract first letter, add to dictionary list
 # for that letter (create list if key doesn't exist).
 # ============================================================================
@@ -12201,7 +12191,7 @@ def group_by_first_letter():
     # Function definition
     lst = input("type word list: ").split()
         # Gets user input
-    
+
     result = {}
     for word in lst:
         # Iterates through each element
@@ -12210,9 +12200,9 @@ def group_by_first_letter():
             result[first_letter] = [word]
         else:
             result[first_letter].append(word)
-            
+
     print(result)
-        
+
 group_by_first_letter()
 
 # ============================================================================
@@ -12221,13 +12211,13 @@ group_by_first_letter()
 # An increasing triangle has one star on the first row, two stars on the second row,
 # three stars on the third row, and so on. The triangle should have n rows total.
 # This demonstrates nested loops and pattern printing.
-# 
+#
 # Key Requirements:
 # - Function must accept n (number of rows) as input
 # - Function must print an increasing triangle pattern
 # - First row: 1 star, second row: 2 stars, ..., nth row: n stars
 # - Must use nested loops (typically for loops)
-# 
+#
 # Example Input/Output:
 # - increasing_triangle(5) should print:
 #   *
@@ -12235,7 +12225,7 @@ group_by_first_letter()
 #   * * *
 #   * * * *
 #   * * * * *
-# 
+#
 # Algorithm: Outer loop for rows (1 to n), inner loop for stars (1 to current row).
 # ============================================================================
 """
@@ -12257,7 +12247,7 @@ def increasing_triangle(n):
             # Iterates through each element
             print("*", end=" ")
         print()
-            
+
 rows = 5
 increasing_triangle(rows)
 
@@ -12267,17 +12257,17 @@ increasing_triangle(rows)
 # should iterate through the list and return the word with the maximum length. If
 # multiple words have the same maximum length, it should return the first one
 # encountered. This demonstrates finding maximum based on a property (length).
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words (strings) as input
 # - Function must return the longest word
 # - If multiple words have same length, return the first one
 # - Cannot use sorted() function
-# 
+#
 # Example Input/Output:
 # - find_longest_word(["Jonathan", "noll"]) should return "Jonathan"
 # - find_longest_word(["cat", "dog", "bird"]) should return "bird"
-# 
+#
 # Algorithm: Initialize longest to empty string and count to 0, iterate through
 # words, compare length to count, update if longer.
 # ============================================================================
@@ -12297,7 +12287,7 @@ def find_longest_word(lst):
     # Function definition
     longest_word = ""
     count = 0
-    
+
     for word in lst:
         # Iterates through each element
         if len(word) > count:
@@ -12306,14 +12296,14 @@ def find_longest_word(lst):
     return longest_word
         # Returns the result
 
-lst = ["Jonathan", "noll"]    
+lst = ["Jonathan", "noll"]
 print(find_longest_word(lst))
 
 def main(lst):
     # Function definition
     return max(lst, key=len)
         # Returns the result
-    
+
 lst = ["tree", "cliff", "mountain", "tree","tree", "grassy"]
 main(lst)
 
@@ -12323,17 +12313,17 @@ main(lst)
 # or len() functions. The function must manually calculate the length of each word
 # by counting characters, then compare to find the maximum. This demonstrates manual
 # length calculation and maximum finding without built-in functions.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words as input
 # - Function must return the longest word
 # - Cannot use sorted() or len() functions
 # - Must manually count characters to determine length
-# 
+#
 # Example Input/Output:
 # - find_longest_word(["Jonathan", "noll", "it"]) should return "Jonathan"
 # - find_longest_word(["cat", "dog"]) should return "cat" or "dog" (both length 3)
-# 
+#
 # Algorithm: For each word, count characters manually, compare to max_length,
 # update if longer.
 # ============================================================================
@@ -12353,7 +12343,7 @@ def find_longest_word(lst):
     # Function definition
     longest_word = ""
     max_length = 0
-    
+
     for word in lst:
         # Iterates through each element
         current_length = 0
@@ -12361,13 +12351,13 @@ def find_longest_word(lst):
             # Iterates through each element
             current_length += 1
         if current_length > max_length:
-            max_length = current_length 
+            max_length = current_length
             longest_word = word
-            
+
     return longest_word
         # Returns the result
-    
-lst = ["Jonathan", "noll", "it"]    
+
+lst = ["Jonathan", "noll", "it"]
 print(find_longest_word(lst))
 
 # ============================================================================
@@ -12376,17 +12366,17 @@ print(find_longest_word(lst))
 # The function should prompt the user for input, process the list, and return
 # the second largest value. The constraint is not to use a for loop, so the
 # solution typically uses sorting or other built-in functions.
-# 
+#
 # Key Requirements:
 # - Function must prompt user for input (list of numbers)
 # - Function must find the second largest number
 # - Cannot use a for loop
 # - Must handle the case where list has fewer than 2 elements
-# 
+#
 # Example Input/Output:
 # - second_largest_number() with input "5 2 8 1 9" should return 8
 # - second_largest_number() with input "10 20 30" should return 20
-# 
+#
 # Algorithm: Sort the list and return the second-to-last element (index -2).
 # ============================================================================
 """
@@ -12404,8 +12394,8 @@ def second_largest_number():
     user = input("Type numbers separated by spaces: ").split()
         # Gets user input
     user_int = list(map(int, user))
-    user_int.sort()  
-    second_largest = user_int[-2]  
+    user_int.sort()
+    second_largest = user_int[-2]
 
     print(second_largest)
 
@@ -12417,17 +12407,17 @@ second_largest_number()
 # `map()` function. The `map()` function applies a transformation function to each
 # element in an iterable and returns an iterator. This demonstrates functional
 # programming patterns and the use of map() for list transformations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `map()` to transform strings
 # - Function must return a new list with all strings in uppercase
 # - Must convert each string using .upper() method
-# 
+#
 # Example Input/Output:
 # - convert_to_uppercase(["hello", "world", "python"]) should return ["HELLO", "WORLD", "PYTHON"]
 # - convert_to_uppercase(["Hello", "World"]) should return ["HELLO", "WORLD"]
-# 
+#
 # Algorithm: Define helper function that calls .upper(), use map() to apply to each string.
 # ============================================================================
 """
@@ -12461,17 +12451,17 @@ print("Uppercase list:", uppercase_strings)
 # This problem requires converting a list of string representations of numbers
 # to a list of actual integers using the `map()` function. For example, ["1", "2", "3"]
 # should become [1, 2, 3]. This is a common data type conversion task.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numeric strings as input
 # - Function must use `map()` to convert strings to integers
 # - Function must return a new list of integers
 # - Must use int() function for conversion
-# 
+#
 # Example Input/Output:
 # - convert_to_integers(["1", "2", "3", "4", "5"]) should return [1, 2, 3, 4, 5]
 # - convert_to_integers(["10", "20", "30"]) should return [10, 20, 30]
-# 
+#
 # Algorithm: Define helper function that calls int(), use map() to apply to each string.
 # ============================================================================
 """
@@ -12506,17 +12496,17 @@ print("Converted list of integers:", integer_numbers)
 # The function should take a list of numbers and return a new list where each
 # number has been squared (multiplied by itself). This demonstrates using map()
 # for mathematical transformations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `map()` to square each number
 # - Function must return a new list with squared values
 # - Must calculate x * x (or x ** 2) for each number
-# 
+#
 # Example Input/Output:
 # - square_numbers([1, 2, 3, 4, 5]) should return [1, 4, 9, 16, 25]
 # - square_numbers([10, 20, 30]) should return [100, 400, 900]
-# 
+#
 # Algorithm: Define helper function that returns x * x, use map() to apply to each number.
 # ============================================================================
 """
@@ -12551,17 +12541,17 @@ print("Squared list of numbers:", squared_numbers)
 # `map()` function. The function should take a list of strings and return a new
 # list containing the length of each corresponding string. This demonstrates
 # using map() to extract properties from elements.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `map()` to find lengths
 # - Function must return a new list of integers (lengths)
 # - Must use len() function for each string
-# 
+#
 # Example Input/Output:
 # - string_lengths(["apple", "banana", "cherry"]) should return [5, 6, 6]
 # - string_lengths(["hi", "hello", "world"]) should return [2, 5, 5]
-# 
+#
 # Algorithm: Define helper function that calls len(), use map() to apply to each string.
 # ============================================================================
 """
@@ -12596,17 +12586,17 @@ print("Lengths of each string:", lengths)
 # Celsius using the `map()` function. The conversion formula is: C = (F - 32) × 5/9.
 # The function should take a list of Fahrenheit temperatures and return a new list
 # with the corresponding Celsius temperatures.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of Fahrenheit temperatures as input
 # - Function must use `map()` to convert temperatures
 # - Function must return a new list of Celsius temperatures
 # - Must apply the conversion formula: (F - 32) * 5 / 9
-# 
+#
 # Example Input/Output:
 # - fahrenheit_to_celsius([32, 68, 100, 212]) should return [0.0, 20.0, 37.78, 100.0]
 # - fahrenheit_to_celsius([0, 32, 100]) should return [-17.78, 0.0, 37.78]
-# 
+#
 # Algorithm: Define helper function with conversion formula, use map() to apply to each temperature.
 # ============================================================================
 """
@@ -12642,17 +12632,17 @@ print("Temperatures in Celsius:", celsius_temps)
 # The function should take a list of numbers and return a new list where each number
 # has been increased by 5. This demonstrates using map() for simple arithmetic
 # transformations on list elements.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `map()` to add 5 to each number
 # - Function must return a new list with incremented values
 # - Must add 5 to each element: x + 5
-# 
+#
 # Example Input/Output:
 # - add_five([1, 2, 3, 4]) should return [6, 7, 8, 9]
 # - add_five([10, 20, 30]) should return [15, 25, 35]
-# 
+#
 # Algorithm: Define helper function that returns x + 5, use map() to apply to each number.
 # ============================================================================
 """
@@ -12685,17 +12675,17 @@ print(add_five(lst))
 # the `map()` function. The function should take a list of numbers and return a
 # new list containing the square root of each number. This demonstrates using
 # map() with mathematical functions.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `map()` to compute square roots
 # - Function must return a new list with square root values
 # - Must use math.sqrt() or ** 0.5 for square root calculation
-# 
+#
 # Example Input/Output:
 # - square_roots([1, 4, 9, 16, 25]) should return [1.0, 2.0, 3.0, 4.0, 5.0]
 # - square_roots([16, 64, 100]) should return [4.0, 8.0, 10.0]
-# 
+#
 # Algorithm: Define helper function using math.sqrt(), use map() to apply to each number.
 # ============================================================================
 """
@@ -12714,7 +12704,7 @@ def main(lst):
             # Returns the result
     return list(map(sqaure_root, lst))
         # Returns the result
-    
+
 lst = [567, 4, 1, 57]
 main(lst)
 
@@ -12746,17 +12736,17 @@ print("Square roots:", roots)
 # using the `map()` function. This is similar to problem 316, where we find the
 # length of each string. The function should return a new list containing integers
 # representing the length of each corresponding string.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `map()` to find lengths
 # - Function must return a new list of integers (lengths)
 # - Must use len() function for each string
-# 
+#
 # Example Input/Output:
 # - lengths_of_strings(["apple", "banana", "cherry"]) should return [5, 6, 6]
 # - lengths_of_strings(["hi", "hello"]) should return [2, 5]
-# 
+#
 # Algorithm: Define helper function that calls len(), use map() to apply to each string.
 # ============================================================================
 """
@@ -12791,17 +12781,17 @@ print("Lengths of strings:", lengths)
 # the `map()` function. Normalization scales values so the minimum becomes 0 and
 # the maximum becomes 1, with all other values proportionally scaled. The formula
 # is: normalized = (value - min) / (max - min).
-# 
+#
 # Key Requirements:
 # - Function must accept a list of scores as input
 # - Function must use `map()` to normalize scores
 # - Function must return a new list with normalized values (0 to 1 range)
 # - Must apply normalization formula: (score - min) / (max - min)
-# 
+#
 # Example Input/Output:
 # - normalize_scores([50, 60, 70, 80, 90]) should return [0.0, 0.25, 0.5, 0.75, 1.0]
 # - normalize_scores([10, 20, 30]) should return [0.0, 0.5, 1.0]
-# 
+#
 # Algorithm: Find min and max, define helper function with normalization formula,
 # use map() to apply to each score.
 # ============================================================================
@@ -12840,17 +12830,17 @@ print("Normalized scores:", normalized_scores)
 # The function should take a list of strings and return a new list where each
 # string has been reversed. For example, "hello" becomes "olleh". This demonstrates
 # using map() with string slicing operations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `map()` to reverse strings
 # - Function must return a new list with reversed strings
 # - Must reverse each string (e.g., using slicing [::-1])
-# 
+#
 # Example Input/Output:
 # - reverse_strings(["hello", "world", "python"]) should return ["olleh", "dlrow", "nohtyp"]
 # - reverse_strings(["abc", "def"]) should return ["cba", "fed"]
-# 
+#
 # Algorithm: Define helper function using string slicing [::-1], use map() to apply to each string.
 # ============================================================================
 """
@@ -12884,17 +12874,17 @@ print("Reversed strings:", reversed_strings)
 # This problem requires doubling each number in a list using the `map()` function.
 # The function should take a list of numbers and return a new list where each number
 # has been multiplied by 2. This is similar to problem 315 (squaring) but simpler.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `map()` to double each number
 # - Function must return a new list with doubled values
 # - Must multiply each number by 2: x * 2
-# 
+#
 # Example Input/Output:
 # - double_numbers([1, 2, 3, 4, 5]) should return [2, 4, 6, 8, 10]
 # - double_numbers([10, 20, 30]) should return [20, 40, 60]
-# 
+#
 # Algorithm: Define helper function that returns x * 2, use map() to apply to each number.
 # ============================================================================
 """
@@ -12928,17 +12918,17 @@ print("Doubled numbers:", doubled_numbers)
 # in a list using the `map()` function. The function should use the .strip() method
 # to clean up strings that may have extra spaces at the beginning or end. This is
 # a common data cleaning operation.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `map()` to strip whitespace
 # - Function must return a new list with stripped strings
 # - Must use .strip() method to remove leading/trailing whitespace
-# 
+#
 # Example Input/Output:
 # - strip_whitespace(["  Hello  ", "  World  "]) should return ["Hello", "World"]
 # - strip_whitespace(["  python  ", "  programming  "]) should return ["python", "programming"]
-# 
+#
 # Algorithm: Define helper function that calls .strip(), use map() to apply to each string.
 # ============================================================================
 """
@@ -12964,23 +12954,23 @@ string_list = ["  Hello  ", "  World  ", "  Python  ", "  Programming  "]
 stripped_strings = strip_whitespace(string_list)
 print("Original strings:", string_list)
 print("Stripped strings:", stripped_strings)
-    
+
 # ============================================================================
 # PROBLEM EXPLANATION:
 # This problem requires creating a list of tuples where each tuple contains a number
 # and its square using the `map()` function. For example, [1, 2, 3] should become
 # [(1, 1), (2, 4), (3, 9)]. This demonstrates using map() to create structured data.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `map()` to create tuples
 # - Function must return a new list of tuples (number, square)
 # - Each tuple must contain (x, x * x)
-# 
+#
 # Example Input/Output:
 # - number_and_square([1, 2, 3, 4, 5]) should return [(1, 1), (2, 4), (3, 9), (4, 16), (5, 25)]
 # - number_and_square([10, 20]) should return [(10, 100), (20, 400)]
-# 
+#
 # Algorithm: Define helper function that returns (x, x*x), use map() to apply to each number.
 # ============================================================================
 """
@@ -13014,17 +13004,17 @@ print("Numbers and their squares:", squared_tuples)
 # function. Title case capitalizes the first letter of each word and lowercases the
 # rest. For example, "hello world" becomes "Hello World". This demonstrates using
 # map() with string formatting methods.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `map()` to convert to title case
 # - Function must return a new list with title-cased strings
 # - Must use .title() method for conversion
-# 
+#
 # Example Input/Output:
 # - to_title_case(["hello world", "python programming"]) should return ["Hello World", "Python Programming"]
 # - to_title_case(["hello", "world"]) should return ["Hello", "World"]
-# 
+#
 # Algorithm: Define helper function that calls .title(), use map() to apply to each string.
 # ============================================================================
 """
@@ -13059,18 +13049,18 @@ print(result)  # ['Hello World', 'Python Programming', 'Enumerate Function']
 # no for loop and no map(). The function should prompt the user for input and handle
 # the case where there might be duplicate numbers. The solution typically uses sorting
 # and set operations to find unique values, then selects the second largest.
-# 
+#
 # Key Requirements:
 # - Function must prompt user for input (list of numbers)
 # - Function must find the second largest number
 # - Cannot use a for loop
 # - Cannot use map()
 # - Should handle duplicate numbers (typically by using set to get unique values)
-# 
+#
 # Example Input/Output:
 # - second_largest_number() with input "5 2 8 1 9 8" should return 8 (second largest)
 # - second_largest_number() with input "10 20 30" should return 20
-# 
+#
 # Algorithm: Get input, convert to integers, use set to get unique values, sort, return [-2].
 # ============================================================================
 """
@@ -13114,17 +13104,17 @@ second_largest_number()
 # (ascending order) without using a for loop. The function should take a list of
 # string representations of numbers and return them sorted numerically. This
 # demonstrates sorting with a key function to handle string-to-number conversion.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numeric strings as input
 # - Function must return a sorted list (smallest to biggest)
 # - Cannot use a for loop
 # - Must sort numerically (not alphabetically)
-# 
+#
 # Example Input/Output:
 # - list_string(["377", "55", "44"]) should return ["44", "55", "377"]
 # - list_string(["10", "2", "100"]) should return ["2", "10", "100"]
-# 
+#
 # Algorithm: Use sorted() with key=int to convert strings to integers for comparison.
 # ============================================================================
 """
@@ -13144,7 +13134,7 @@ def list_string(numbers):
         # Sorts elements in ascending order
     return sort
         # Returns the result
-   
+
 lst = ["377", "55", "44"]
 print(list_string(lst))
 
@@ -13154,9 +13144,9 @@ def type_smallest_biggest():
         # Gets user input
     sort_number = sorted(user, key=int)
         # Sorts elements in ascending order
-       
+
     print(sort_number)
-    
+
 type_smallest_biggest()
 
 # ============================================================================
@@ -13165,17 +13155,17 @@ type_smallest_biggest()
 # (descending order) without using a for loop. This is the reverse of problem 329.
 # The function should take a list of string representations of numbers and return
 # them sorted in descending numerical order.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numeric strings as input
 # - Function must return a sorted list (biggest to smallest)
 # - Cannot use a for loop
 # - Must sort numerically in descending order
-# 
+#
 # Example Input/Output:
 # - list_of_string_numbers(["44", "66", "3", "477"]) should return ["477", "66", "44", "3"]
 # - list_of_string_numbers(["10", "2", "100"]) should return ["100", "10", "2"]
-# 
+#
 # Algorithm: Use sorted() with key=int and reverse=True, or use [::-1] to reverse sorted list.
 # ============================================================================
 """
@@ -13193,10 +13183,10 @@ def list_of_string_numbers(n):
     # Function definition
     sort = sorted(n, key=int)[::-1]
         # Sorts elements in ascending order
-    
+
     return sort
         # Returns the result
-        
+
 numbers = ["44", "66", "3", "477"]
 print(list_of_string_numbers(numbers))
 
@@ -13207,7 +13197,7 @@ def type_biggest_smallest():
     int_list = list(map(int, user))
     sorted_list = sorted(int_list, reverse=True)
         # Sorts elements in ascending order
-    
+
     print(sorted_list)
 
 type_biggest_smallest()
@@ -13218,19 +13208,19 @@ type_biggest_smallest()
 # using the `enumerate()` function. The enumerate() function returns pairs of
 # (index, value) for each element, making it easy to access both simultaneously.
 # This is a common pattern when you need both position and value information.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must print both index and element for each item
 # - Should format output clearly (e.g., "Index: 0, Element: apple")
-# 
+#
 # Example Input/Output:
 # - print_index_and_element(['apple', 'banana', 'cherry']) should print:
 #   Index: 0, Element: apple
 #   Index: 1, Element: banana
 #   Index: 2, Element: cherry
-# 
+#
 # Algorithm: Use enumerate() in a for loop to get (index, element) pairs, print both.
 # ============================================================================
 """
@@ -13264,17 +13254,17 @@ print_index_and_element(lst)
 # and its corresponding element from a list using `enumerate()`. For example, ['apple',
 # 'banana'] should become [(0, 'apple'), (1, 'banana')]. This demonstrates using
 # enumerate() to create structured data pairs.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must return a list of tuples (index, element)
 # - Each tuple should contain (index, corresponding_element)
-# 
+#
 # Example Input/Output:
 # - create_index_element_tuples(['apple', 'banana', 'cherry']) should return
 #   [(0, 'apple'), (1, 'banana'), (2, 'cherry')]
-# 
+#
 # Algorithm: Use enumerate() in a for loop, append (index, element) tuples to result list.
 # ============================================================================
 """
@@ -13306,19 +13296,19 @@ print(result)  # [(0, 'apple'), (1, 'banana'), (2, 'cherry')]
 # This problem requires printing each element in a list along with its index using
 # `enumerate()`. This is similar to problem 331 but with a simpler output format.
 # The function should display both the index and the element value for each string.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must print both index and element for each item
 # - Output format should be simple (e.g., "0 apple", "1 banana")
-# 
+#
 # Example Input/Output:
 # - print_with_index(["apple", "banana", "cherry"]) should print:
 #   0 apple
 #   1 banana
 #   2 cherry
-# 
+#
 # Algorithm: Use enumerate() in a for loop, print index and value.
 # ============================================================================
 """
@@ -13345,16 +13335,16 @@ print_with_index(strings)
 # indexes and the values are the corresponding elements using `enumerate()`. This
 # converts a list into a dictionary mapping positions to values. This is useful
 # when you need dictionary-style access to list elements.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must return a dictionary
 # - Dictionary keys should be indexes (integers), values should be elements
-# 
+#
 # Example Input/Output:
 # - list_to_dict(['apple', 'banana', 'cherry']) should return {0: 'apple', 1: 'banana', 2: 'cherry'}
-# 
+#
 # Algorithm: Use enumerate() in a for loop, assign result[index] = element for each item.
 # ============================================================================
 """
@@ -13388,17 +13378,17 @@ print(result)  # {0: 'apple', 1: 'banana', 2: 'cherry'}
 # `enumerate()`. The function should search through the list and return the index
 # of the first occurrence of the target element. If the element is not found, it
 # should return -1 (or None). This demonstrates using enumerate() for searching.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a target element as input
 # - Function must use `enumerate()` to search
 # - Function must return the index of the element (or -1 if not found)
 # - Should return the first occurrence if element appears multiple times
-# 
+#
 # Example Input/Output:
 # - find_index(['apple', 'banana', 'cherry'], 'banana') should return 1
 # - find_index(['apple', 'banana', 'cherry'], 'grape') should return -1
-# 
+#
 # Algorithm: Use enumerate() in a for loop, check if value == element, return index when found.
 # ============================================================================
 """
@@ -13434,19 +13424,19 @@ print(index)  # 1
 # using `enumerate()`. This is similar to problems 331 and 333 but with a specific
 # formatting requirement (colon separator). The output should be in the format
 # "index: element".
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must print in format "index: element" (colon separator)
 # - Each line should show one index-element pair
-# 
+#
 # Example Input/Output:
 # - print_index_and_element_with_colon(['apple', 'banana', 'cherry']) should print:
 #   0: apple
 #   1: banana
 #   2: cherry
-# 
+#
 # Algorithm: Use enumerate() in a for loop, print formatted string with colon separator.
 # ============================================================================
 """
@@ -13479,17 +13469,17 @@ print_index_and_element_with_colon(lst)
 # index with a custom prefix using `enumerate()`. For example, with prefix "Item ",
 # ['apple', 'banana'] should become ['Item 0: apple', 'Item 1: banana']. This
 # demonstrates custom string formatting with enumerate().
-# 
+#
 # Key Requirements:
 # - Function must accept a list and a prefix string as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must return a list of formatted strings
 # - Each string should include prefix, index, and element
-# 
+#
 # Example Input/Output:
 # - create_indexed_strings(['apple', 'banana'], "Item ") should return
 #   ['Item 0: apple', 'Item 1: banana']
-# 
+#
 # Algorithm: Use enumerate() in a for loop, format string with prefix, index, and element.
 # ============================================================================
 """
@@ -13523,17 +13513,17 @@ print(result)  # ['Item 0: apple', 'Item 1: banana', 'Item 2: cherry']
 # `enumerate()`. The function should use the index information to transform each
 # element. This demonstrates how enumerate() can be used for index-based modifications,
 # such as multiplying by index, adding index, or other transformations.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to access both index and element
 # - Function must modify elements based on their index
 # - Modifications should use the index value in some way
-# 
+#
 # Example Input/Output:
 # - modify_elements([10, 20, 30]) might return [0, 20, 60] (multiply by index)
 # - The specific modification depends on the implementation
-# 
+#
 # Algorithm: Use enumerate() in a for loop, modify lst[index] based on index value.
 # ============================================================================
 """
@@ -13569,17 +13559,17 @@ print(result)  # ['APPLE', 'banana', 'CHERRY', 'date']
 # is multiplied by its index using `enumerate()`. For example, [2, 4, 6, 8] would
 # calculate: 0*2 + 1*4 + 2*6 + 3*8 = 0 + 4 + 12 + 24 = 40. This demonstrates
 # using enumerate() for weighted summation based on position.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must return the sum of (index * element) for all elements
 # - Must multiply each element by its index before summing
-# 
+#
 # Example Input/Output:
 # - sum_of_elements([2, 4, 6, 8]) should return 40 (0*2 + 1*4 + 2*6 + 3*8)
 # - sum_of_elements([1, 2, 3]) should return 8 (0*1 + 1*2 + 2*3)
-# 
+#
 # Algorithm: Use enumerate() in a for loop, accumulate sum of (index * element).
 # ============================================================================
 """
@@ -13596,10 +13586,10 @@ Write a Python program to compute the sum of elements in a list where each eleme
 def sum_of_elements(lst):
     # Function definition
     total_sum = 0
-    
+
     for i, num in enumerate(lst):
         # Iterates through each element
-        total_sum += i * num  
+        total_sum += i * num
     return total_sum
         # Returns the result
 
@@ -13612,18 +13602,18 @@ print(sum_of_elements(lst))
 # (1, 3, 5, ...) in a list using `enumerate()`. The function should skip elements
 # at even indexes (0, 2, 4, ...) and only print those at odd positions. This
 # demonstrates conditional filtering with enumerate().
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must print only elements at odd indexes
 # - Must check if index % 2 != 0 (odd index)
-# 
+#
 # Example Input/Output:
 # - print_odd_index_elements(['apple', 'banana', 'cherry', 'date']) should print:
 #   banana
 #   date
-# 
+#
 # Algorithm: Use enumerate() in a for loop, check if index % 2 != 0, print if odd.
 # ============================================================================
 """
@@ -13677,17 +13667,17 @@ print(result)  # [(0, 'apple'), (2, 'orange')]
 # using `enumerate()`. The function should return both the index and the maximum
 # value. This is useful when you need to know not just the maximum value, but also
 # where it appears in the list.
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must return both the index and maximum element
 # - Should return the first occurrence if maximum appears multiple times
-# 
+#
 # Example Input/Output:
 # - find_max_and_index([10, 20, 30, 25]) should return (2, 30)
 # - find_max_and_index([5, 3, 8, 8]) should return (2, 8) (first occurrence)
-# 
+#
 # Algorithm: Initialize max to first element, use enumerate() to iterate, update max and index when larger element found.
 # ============================================================================
 """
@@ -13726,18 +13716,18 @@ print(f"Max element: {max_element}, Index: {index}")
 # but excluding the first N elements using `enumerate()`. For example, if n=2,
 # skip the first 2 elements and only include tuples starting from index 2. This
 # demonstrates conditional filtering based on index position.
-# 
+#
 # Key Requirements:
 # - Function must accept a list and an integer n as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must return a list of tuples (index, element)
 # - Must exclude elements where index < n
 # - Only include elements where index >= n
-# 
+#
 # Example Input/Output:
 # - index_and_element_excluding_first_n(['apple', 'banana', 'cherry', 'date'], 2)
 #   should return [(2, 'cherry'), (3, 'date')]
-# 
+#
 # Algorithm: Use enumerate() in a for loop, check if index >= n, append tuple if true.
 # ============================================================================
 """
@@ -13772,19 +13762,19 @@ print(result)  # [(2, 'cherry'), (3, 'date'), (4, 'elderberry')]
 # using `enumerate()`. For example, for index 2 and number 5, it should print
 # something like "Index squared: 4, Number: 5". This demonstrates using enumerate()
 # to display both the original index and a computed value (index squared).
-# 
+#
 # Key Requirements:
 # - Function must accept a list of numbers as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must print both the squared index and the number
 # - Must calculate index squared (index ** 2 or index * index)
-# 
+#
 # Example Input/Output:
 # - print_index_squared([10, 20, 30]) should print:
 #   Index squared: 0, Number: 10
 #   Index squared: 1, Number: 20
 #   Index squared: 4, Number: 30
-# 
+#
 # Algorithm: Use enumerate() in a for loop, calculate index**2, print both values.
 # ============================================================================
 """
@@ -13813,17 +13803,17 @@ print_index_squared(lst)
 # is even or odd using `enumerate()`. Even-indexed elements (0, 2, 4, ...) should
 # be replaced with 'Even', and odd-indexed elements (1, 3, 5, ...) should be
 # replaced with 'Odd'. This demonstrates in-place list modification with enumerate().
-# 
+#
 # Key Requirements:
 # - Function must accept a list as input
 # - Function must use `enumerate()` to get index-element pairs
 # - Function must modify the list in-place
 # - Even indexes (index % 2 == 0) → replace with 'Even'
 # - Odd indexes (index % 2 != 0) → replace with 'Odd'
-# 
+#
 # Example Input/Output:
 # - replace_based_on_index(['a', 'b', 'c', 'd', 'e']) should return ['Even', 'Odd', 'Even', 'Odd', 'Even']
-# 
+#
 # Algorithm: Use enumerate() in a for loop, check index % 2, replace lst[index] accordingly.
 # ============================================================================
 """
@@ -13860,17 +13850,17 @@ print(result)
 # squares a number. The outer function should use this nested function to calculate
 # the sum of squares of two numbers. This demonstrates nested function definitions
 # and function scope in Python.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `square()` inside `sum_of_squares()`
 # - The nested `square()` function should square a number (x * x)
 # - The outer function should return square(a) + square(b)
 # - Must demonstrate nested function definition and usage
-# 
+#
 # Example Input/Output:
 # - sum_of_squares(3, 4) should return 25 (3² + 4² = 9 + 16)
 # - sum_of_squares(5, 12) should return 169 (5² + 12² = 25 + 144)
-# 
+#
 # Algorithm: Define nested square() function, call it twice in outer function, return sum.
 # ============================================================================
 """
@@ -13903,17 +13893,17 @@ print(result)
 # `get_name()` that prompts the user for their name. The outer function should
 # use this nested function to get the name and return a greeting message. This
 # demonstrates nested functions for organizing code and separating concerns.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `get_name()` inside `greet()`
 # - The nested `get_name()` function should prompt user for input
 # - The outer function should call get_name() and return a greeting string
 # - Must demonstrate nested function for input handling
-# 
+#
 # Example Input/Output:
 # - greet() with input "Alice" should return "Hello, Alice!"
 # - greet() with input "Bob" should return "Hello, Bob!"
-# 
+#
 # Algorithm: Define nested get_name() that returns input(), call it in outer function, return formatted greeting.
 # ============================================================================
 """
@@ -13948,17 +13938,17 @@ print(result)
 # recursive function `inner_factorial()` that implements the factorial algorithm.
 # The outer function should call the nested function to compute the result. This
 # demonstrates nested functions with recursion.
-# 
+#
 # Key Requirements:
 # - Function must define a nested recursive function `inner_factorial()` inside `factorial()`
 # - The nested function should implement factorial recursively (n! = n * (n-1)!)
 # - Base case: 0! = 1
 # - The outer function should call the nested function and return the result
-# 
+#
 # Example Input/Output:
 # - factorial(5) should return 120 (5! = 5 × 4 × 3 × 2 × 1)
 # - factorial(0) should return 1
-# 
+#
 # Algorithm: Define nested recursive function with base case (x == 0 returns 1),
 # recursive case (x * inner_factorial(x-1)), call from outer function.
 # ============================================================================
@@ -13998,17 +13988,17 @@ print(result)
 # function `prefix_string()` that adds that prefix to any string. This demonstrates
 # closures - functions that remember variables from their enclosing scope. The
 # returned function can then be called with a string to add the prefix.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `prefix_string()` inside `add_prefix()`
 # - The nested function should accept a string and add the prefix to it
 # - The outer function should return the nested function (closure)
 # - The returned function should remember the prefix from the outer scope
-# 
+#
 # Example Input/Output:
 # - add_prefix("Hello ")("World") should return "Hello World"
 # - add_prefix("Mr. ")("Smith") should return "Mr. Smith"
-# 
+#
 # Algorithm: Define nested function that uses prefix from outer scope, return nested function.
 # ============================================================================
 """
@@ -14026,29 +14016,29 @@ Write a Python program that defines a function `add_prefix()` which contains a n
 # This is a closure pattern in Python.
 def add_prefix(prefix):
     # Function definition
-    
+
     def prefix_string(string):
         # Function definition
-    
+
         return prefix + string
             # Returns the result
-    
+
 
     return prefix_string
         # Returns the result
 
 prefix_func = add_prefix("pre-")
-result = prefix_func("fix") 
+result = prefix_func("fix")
 print(result)
 
 def add_prefix(prefix):
     # Function definition
-    
+
     def prefix_string(string):
         # Function definition
         return prefix + string
             # Returns the result
-    
+
     return prefix_string
         # Returns the result
 
@@ -14069,17 +14059,17 @@ print(result3)  # Output: "pre-dict"
 # function `is_even()` that checks if a number is even (divisible by 2). The outer
 # function should use this nested function to check the input number. This demonstrates
 # nested functions for organizing helper logic.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `is_even()` inside `check_even()`
 # - The nested function should check if a number is even (x % 2 == 0)
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for conditional checking
-# 
+#
 # Example Input/Output:
 # - check_even(10) should return True
 # - check_even(7) should return False
-# 
+#
 # Algorithm: Define nested is_even() that returns x % 2 == 0, call it in outer function.
 # ============================================================================
 """
@@ -14113,17 +14103,17 @@ print(result)
 # `calculate_power()` that raises a number to a given power. The outer function
 # should use this nested function to compute base^exponent. This demonstrates
 # nested functions for mathematical operations.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `calculate_power()` inside `power()`
 # - The nested function should calculate b ** e (base to the power of exponent)
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for mathematical computation
-# 
+#
 # Example Input/Output:
 # - power(2, 3) should return 8 (2³)
 # - power(5, 2) should return 25 (5²)
-# 
+#
 # Algorithm: Define nested calculate_power() that returns b ** e, call it in outer function.
 # ============================================================================
 """
@@ -14158,17 +14148,17 @@ print(result)
 # inner function `calculate_area()` that computes the area using the formula
 # π × r². The outer function should use this nested function to compute the area
 # for the given radius. This demonstrates nested functions for geometric calculations.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `calculate_area()` inside `area_circle()`
 # - The nested function should calculate area = π × r²
 # - The outer function should call the nested function and return the result
 # - Must use π (approximately 3.14159) in the calculation
-# 
+#
 # Example Input/Output:
 # - area_circle(5) should return approximately 78.54 (π × 5²)
 # - area_circle(10) should return approximately 314.159 (π × 10²)
-# 
+#
 # Algorithm: Define nested calculate_area() with formula π × r², call it in outer function.
 # ============================================================================
 """
@@ -14214,17 +14204,17 @@ main()
 # inner function `capitalize()` that capitalizes a single word. The outer function
 # should split the sentence into words, apply the nested function to each word,
 # and join them back. This demonstrates nested functions for string processing.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `capitalize()` inside `capitalize_words()`
 # - The nested function should capitalize a word (first letter uppercase)
 # - The outer function should split sentence, apply capitalize to each word, join back
 # - Must use .split() and .join() for string manipulation
-# 
+#
 # Example Input/Output:
 # - capitalize_words("hello world from python") should return "Hello World From Python"
 # - capitalize_words("python programming") should return "Python Programming"
-# 
+#
 # Algorithm: Define nested capitalize() using .capitalize(), split sentence, map capitalize, join.
 # ============================================================================
 """
@@ -14266,17 +14256,17 @@ print(result)
 # should use this nested function to reverse the word and compare it with the
 # original to determine if it's a palindrome. This demonstrates nested functions
 # for string manipulation and comparison.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `reverse_string()` inside `is_palindrome()`
 # - The nested function should reverse a string (e.g., using slicing [::-1])
 # - The outer function should compare word with its reverse
 # - Must return True if palindrome, False otherwise
-# 
+#
 # Example Input/Output:
 # - is_palindrome("radar") should return True
 # - is_palindrome("hello") should return False
-# 
+#
 # Algorithm: Define nested reverse_string() using [::-1], compare word with reverse_string(word).
 # ============================================================================
 """
@@ -14310,17 +14300,17 @@ print(result)
 # function `join_strings()` that concatenates two strings. The outer function
 # should use this nested function to join the input strings. This demonstrates
 # nested functions for string operations.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `join_strings()` inside `concatenate_strings()`
 # - The nested function should concatenate two strings (s1 + s2)
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for string concatenation
-# 
+#
 # Example Input/Output:
 # - concatenate_strings("Hello, ", "world!") should return "Hello, world!"
 # - concatenate_strings("Python", "Programming") should return "PythonProgramming"
-# 
+#
 # Algorithm: Define nested join_strings() that returns s1 + s2, call it in outer function.
 # ============================================================================
 """
@@ -14353,17 +14343,17 @@ print(result)
 # an inner recursive function `fib()` that calculates Fibonacci numbers. The outer
 # function should use this nested function to generate a list of the first n
 # Fibonacci numbers. This demonstrates nested functions with recursion.
-# 
+#
 # Key Requirements:
 # - Function must define a nested recursive function `fib()` inside `fibonacci()`
 # - The nested function should implement Fibonacci recursively (fib(n) = fib(n-1) + fib(n-2))
 # - Base cases: fib(0) = 0, fib(1) = 1
 # - The outer function should return a list of first n Fibonacci numbers
-# 
+#
 # Example Input/Output:
 # - fibonacci(10) should return [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 # - fibonacci(5) should return [0, 1, 1, 2, 3]
-# 
+#
 # Algorithm: Define nested recursive fib() with base cases, use list comprehension to generate sequence.
 # ============================================================================
 """
@@ -14401,17 +14391,17 @@ print(result)
 # inner function `convert()` that converts a string to uppercase. The outer
 # function should use this nested function to transform the input string. This
 # demonstrates nested functions for string transformations.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `convert()` inside `to_uppercase()`
 # - The nested function should convert a string to uppercase using .upper()
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for string case conversion
-# 
+#
 # Example Input/Output:
 # - to_uppercase("hello world") should return "HELLO WORLD"
 # - to_uppercase("Python") should return "PYTHON"
-# 
+#
 # Algorithm: Define nested convert() that returns s.upper(), call it in outer function.
 # ============================================================================
 """
@@ -14466,19 +14456,19 @@ print(result)
 # `multiply()`, and `divide()`. The outer function should use these nested
 # functions based on the operation parameter. This demonstrates multiple nested
 # functions and conditional logic.
-# 
+#
 # Key Requirements:
 # - Function must define nested functions: add(), subtract(), multiply(), divide()
 # - Each nested function should perform its respective arithmetic operation
 # - The outer function should select and call the appropriate nested function
 # - Must handle division by zero (return error message)
 # - Must handle invalid operations
-# 
+#
 # Example Input/Output:
 # - calculator('add', 5, 3) should return 8
 # - calculator('multiply', 4, 7) should return 28
 # - calculator('divide', 10, 0) should return "Cannot divide by zero"
-# 
+#
 # Algorithm: Define nested functions for each operation, use if/elif to select operation.
 # ============================================================================
 """
@@ -14546,18 +14536,18 @@ print(result)
 # function `check_divisibility()` that checks if a number is prime by testing
 # for divisors. The outer function should use this nested function to determine
 # primality. This demonstrates nested functions for mathematical validation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `check_divisibility()` inside `is_prime()`
 # - The nested function should check for divisors from 2 to sqrt(n)
 # - Numbers < 2 are not prime
 # - The outer function should handle edge cases and call the nested function
-# 
+#
 # Example Input/Output:
 # - is_prime(7) should return True
 # - is_prime(10) should return False
 # - is_prime(1) should return False
-# 
+#
 # Algorithm: Check if n < 2, define nested function that checks divisors up to sqrt(n).
 # ============================================================================
 """
@@ -14600,17 +14590,17 @@ print(result)
 # `is_vowel()` that checks if a character is a vowel. The outer function should
 # iterate through the string and use the nested function to count vowels. This
 # demonstrates nested functions for character classification.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `is_vowel()` inside `count_vowels()`
 # - The nested function should check if a character is a vowel (a, e, i, o, u)
 # - The outer function should iterate through string and count vowels
 # - Must handle both uppercase and lowercase vowels
-# 
+#
 # Example Input/Output:
 # - count_vowels("Hello World") should return 3 (e, o, o)
 # - count_vowels("Python") should return 1 (o)
-# 
+#
 # Algorithm: Define nested is_vowel() that checks char in 'aeiouAEIOU', iterate and count.
 # ============================================================================
 """
@@ -14672,17 +14662,17 @@ print(result)
 # function `reverse()` that reverses a string. The function can either return
 # the nested function (closure) or call it directly. This demonstrates nested
 # functions for string manipulation, including closure patterns.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `reverse()` inside `reverse_string()`
 # - The nested function should reverse a string (e.g., using slicing [::-1])
 # - The outer function should either return the nested function or call it
 # - Must demonstrate nested function for string reversal
-# 
+#
 # Example Input/Output:
 # - reverse_string("Hello") should return "olleH" (if calling directly)
 # - Or return a function that can reverse strings (closure pattern)
-# 
+#
 # Algorithm: Define nested reverse() using [::-1] or manual reversal, return or call it.
 # ============================================================================
 """
@@ -14707,7 +14697,7 @@ def reverse_string():
 
 # Example usage
 reverse_func = reverse_string()
-print(reverse_func("Hello, World!"))  
+print(reverse_func("Hello, World!"))
 
 def reverse_string(string):
     # Function definition
@@ -14732,17 +14722,17 @@ print(result)
 # contain an inner function `compare_elements()` that checks if adjacent elements
 # are in the correct order. The outer function should use this nested function
 # to verify the list is sorted. This demonstrates nested functions for validation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `compare_elements()` inside `is_sorted()`
 # - The nested function should check if list is sorted (each element <= next)
 # - The outer function should call the nested function and return the result
 # - Must return True if sorted, False otherwise
-# 
+#
 # Example Input/Output:
 # - is_sorted([1, 2, 3, 4, 5]) should return True
 # - is_sorted([5, 2, 3, 1]) should return False
-# 
+#
 # Algorithm: Define nested function that checks lst[i] <= lst[i+1] for all i, return result.
 # ============================================================================
 """
@@ -14780,7 +14770,7 @@ def is_sorted():
     # Function definition
     return compare_elements(lst)
         # Returns the result
-    
+
 def compare_elements(lst):
     # Function definition
     if lst == sorted(lst):
@@ -14801,17 +14791,17 @@ is_sorted()
 # inner function `square()` that squares a number. The outer function should use
 # this nested function to generate squares of numbers from 1 to n. This demonstrates
 # nested functions for list generation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `square()` inside `generate_squares()`
 # - The nested function should square a number (x * x)
 # - The outer function should generate squares from 1 to n
 # - Must return a list of squared values
-# 
+#
 # Example Input/Output:
 # - generate_squares(5) should return [1, 4, 9, 16, 25]
 # - generate_squares(3) should return [1, 4, 9]
-# 
+#
 # Algorithm: Define nested square() that returns x*x, iterate 1 to n, call square(), append to list.
 # ============================================================================
 """
@@ -14849,17 +14839,17 @@ print(result)
 # helper function `add()` that adds two numbers. The outer function should call
 # this nested helper function and return the result. This demonstrates nested
 # functions as helper functions for simple operations.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `add()` inside `sum_of_two()`
 # - The nested function should add two numbers (x + y)
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function as helper
-# 
+#
 # Example Input/Output:
 # - sum_of_two(3, 5) should return 8
 # - sum_of_two(10, 20) should return 30
-# 
+#
 # Algorithm: Define nested add() that returns x + y, call it in outer function.
 # ============================================================================
 """
@@ -14893,17 +14883,17 @@ print(result)
 # inner function `is_even()` that checks if a number is even. The outer function
 # should use this nested function to determine and print whether the number is
 # even or odd. This demonstrates nested functions for conditional logic and output.
-# 
+#
 # Key Requirements:
 # - Function must define a nested function `is_even()` inside `even_or_odd()`
 # - The nested function should check if a number is even (x % 2 == 0)
 # - The outer function should use the nested function and print the result
 # - Must print "is even" or "is odd" based on the check
-# 
+#
 # Example Input/Output:
 # - even_or_odd(10) should print "10 is even"
 # - even_or_odd(7) should print "7 is odd"
-# 
+#
 # Algorithm: Define nested is_even() that returns x % 2 == 0, use it to print result.
 # ============================================================================
 """
@@ -14939,17 +14929,17 @@ even_or_odd(10)
 # the conversion using the formula: F = (C × 9/5) + 32. The outer function should
 # call this nested helper function and return the result. This demonstrates nested
 # functions for unit conversion.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `celsius_to_fahrenheit()` inside `convert_temperature()`
 # - The nested function should convert Celsius to Fahrenheit: (c * 9/5) + 32
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for temperature conversion
-# 
+#
 # Example Input/Output:
 # - convert_temperature(25) should return 77.0 (25°C = 77°F)
 # - convert_temperature(0) should return 32.0 (0°C = 32°F)
-# 
+#
 # Algorithm: Define nested celsius_to_fahrenheit() with conversion formula, call it in outer function.
 # ============================================================================
 """
@@ -14985,17 +14975,17 @@ print(result)
 # the formula: area = length × width. The outer function should call this nested
 # helper function and return the result. This demonstrates nested functions for
 # geometric calculations.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `calculate_area()` inside `rectangle_area()`
 # - The nested function should calculate area = length × width
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for area calculation
-# 
+#
 # Example Input/Output:
 # - rectangle_area(5, 4) should return 20
 # - rectangle_area(10, 3) should return 30
-# 
+#
 # Algorithm: Define nested calculate_area() that returns l * w, call it in outer function.
 # ============================================================================
 """
@@ -15030,17 +15020,17 @@ print(result)
 # an inner helper function `is_prime()` that checks for primality by testing
 # divisors. The outer function should call this nested helper function and return
 # the result. This demonstrates nested functions for mathematical validation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `is_prime()` inside `check_prime()`
 # - The nested function should check for divisors from 2 to sqrt(n)
 # - Numbers < 2 are not prime
 # - The outer function should call the nested function and return the result
-# 
+#
 # Example Input/Output:
 # - check_prime(11) should return True
 # - check_prime(10) should return False
-# 
+#
 # Algorithm: Define nested is_prime() that checks divisors, call it in outer function.
 # ============================================================================
 """
@@ -15103,16 +15093,16 @@ print(result)
 # print a greeting message. Note: The helper function is defined outside in this
 # solution, but it could be nested. This demonstrates function composition for
 # user interaction.
-# 
+#
 # Key Requirements:
 # - Function must define or use a helper function `get_name()`
 # - The helper function should prompt user for input
 # - The outer function should use the helper function and print a greeting
 # - Must demonstrate function composition for user interaction
-# 
+#
 # Example Input/Output:
 # - greet_user() with input "Alice" should print "Hello, Alice! Welcome!"
-# 
+#
 # Algorithm: Define get_name() that returns input(), call it in greet_user(), print greeting.
 # ============================================================================
 """
@@ -15176,16 +15166,16 @@ print(result)
 # letter of a word. The outer function should split the sentence, apply the
 # helper function to each word, and join them back. This demonstrates nested
 # functions for string processing.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `capitalize()` inside `capitalize_words()`
 # - The nested function should capitalize first letter (word[0].upper() + word[1:])
 # - The outer function should split sentence, apply capitalize to each word, join back
 # - Must use .split() and .join() for string manipulation
-# 
+#
 # Example Input/Output:
 # - capitalize_words("hello world from python") should return "Hello World From Python"
-# 
+#
 # Algorithm: Define nested capitalize() using word[0].upper() + word[1:], split, map, join.
 # ============================================================================
 """
@@ -15227,7 +15217,7 @@ Write a Python program that defines a main function `find_largest()` and a helpe
 
 def max_in_list(lst):
     # Function definition
-    return max(lst)  
+    return max(lst)
         # Returns the result
 
 def find_largest():
@@ -15237,14 +15227,14 @@ def find_largest():
         # Returns the result
 
 lst = [12, 45, 7, 23, 67756, 89, 34]
-print(find_largest())  
+print(find_largest())
 
 def max_in_list(lst):
     # Function definition
     if not lst:
         return None
             # Returns the result
-    return max(lst)  
+    return max(lst)
         # Returns the result
 
 def find_largest():
@@ -15254,7 +15244,7 @@ def find_largest():
     return largest
         # Returns the result
 
-print(find_largest())  
+print(find_largest())
 
 # ============================================================================
 # PROBLEM EXPLANATION:
@@ -15263,17 +15253,17 @@ print(find_largest())
 # inner helper function `reverse()` that reverses a string. The outer function
 # should call this nested helper function and return the result. This demonstrates
 # nested functions for string manipulation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `reverse()` inside `reverse_string()`
 # - The nested function should reverse a string (manually or using slicing)
 # - The outer function should call the nested function and return the result
 # - Must demonstrate nested function for string reversal
-# 
+#
 # Example Input/Output:
 # - reverse_string("hello") should return "olleh"
 # - reverse_string("Python") should return "nohtyP"
-# 
+#
 # Algorithm: Define nested reverse() that manually reverses string, call it in outer function.
 # ============================================================================
 """
@@ -15336,17 +15326,17 @@ print(result)
 # string reads the same forwards and backwards. The outer function should call
 # this nested helper function and return the result. This demonstrates nested
 # functions for string validation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `is_palindrome()` inside `check_palindrome()`
 # - The nested function should check if string equals its reverse
 # - The outer function should call the nested function and return the result
 # - Must return True if palindrome, False otherwise
-# 
+#
 # Example Input/Output:
 # - check_palindrome("racecar") should return True
 # - check_palindrome("hello") should return False
-# 
+#
 # Algorithm: Define nested is_palindrome() that checks s == s[::-1], call it in outer function.
 # ============================================================================
 """
@@ -15400,17 +15390,17 @@ print(result)
 # should contain an inner helper function `is_sorted()` that verifies the list
 # is sorted. The outer function should call this nested helper function and return
 # the result. This demonstrates nested functions for list validation.
-# 
+#
 # Key Requirements:
 # - Function must define a nested helper function `is_sorted()` inside `check_sorted()`
 # - The nested function should check if each element <= next element
 # - The outer function should call the nested function and return the result
 # - Must return True if sorted, False otherwise
-# 
+#
 # Example Input/Output:
 # - check_sorted([1, 2, 3, 4, 5]) should return True
 # - check_sorted([5, 2, 3, 1]) should return False
-# 
+#
 # Algorithm: Define nested is_sorted() that checks lst[i] <= lst[i+1] for all i, call it.
 # ============================================================================
 """
@@ -15451,17 +15441,17 @@ print(result)
 # without using a for loop. The function should prompt the user for input, split
 # the input into a list of strings, and convert them to integers. This demonstrates
 # using map() function to transform list elements without explicit loops.
-# 
+#
 # Key Requirements:
 # - Function must prompt user for input (list of numbers as strings)
 # - Function must convert strings to integers
 # - Cannot use a for loop
 # - Must return a list of integers
-# 
+#
 # Example Input/Output:
 # - convert_to_integers(["10", "20", "30", "40"]) should return [10, 20, 30, 40]
 # - User input "1 2 3 4" should become [1, 2, 3, 4]
-# 
+#
 # Algorithm: Use map(int, strings) to convert each string to integer, convert to list.
 # ============================================================================
 """
@@ -15479,7 +15469,7 @@ user = input("type numbers: ").split()
     # Gets user input
 
 print(list(map(int, user)))
-    
+
 
 def convert_to_integers(strings):
     # Function definition
@@ -15511,17 +15501,17 @@ print(result)
 # This problem is similar to problem 382 - it requires sorting a list of strings
 # by their length using the `key` parameter in the `sorted()` function. This is
 # a duplicate exercise to reinforce the concept of sorting by a key function.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of strings as input
 # - Function must use `sorted()` with a `key` parameter
 # - Function must sort by string length (shortest to longest)
 # - Must return a new sorted list
-# 
+#
 # Example Input/Output:
 # - length_strings(["Jonathan", "chris", "mimi"]) should return
 #   ["mimi", "chris", "Jonathan"] (sorted by length: 4, 5, 8)
-# 
+#
 # Algorithm: Use sorted() with key=len to sort by string length.
 # ============================================================================
 """
@@ -15542,7 +15532,7 @@ def length_strings(lst):
         # Sorts elements in ascending order
     return sort
         # Returns the result
-    
+
 lst = ["Jonathan", "chris", "mimi"]
 print(length_strings(lst))
 
@@ -15568,17 +15558,17 @@ print(result)
 # specific key using the `key` parameter in the `sorted()` function. For example,
 # sorting by "age" would order dictionaries by their age values. This demonstrates
 # using lambda functions to extract dictionary values for sorting.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of dictionaries and a key name as input
 # - Function must use `sorted()` with a `key` parameter
 # - Function must sort by the value of the specified key in each dictionary
 # - Must return a new sorted list
-# 
+#
 # Example Input/Output:
 # - sort_dicts_by_key([{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}], "age")
 #   should return [{"name": "Bob", "age": 25}, {"name": "Alice", "age": 30}]
-# 
+#
 # Algorithm: Use sorted() with key=lambda x: x[key_name] to sort by dictionary value.
 # ============================================================================
 """
@@ -15610,17 +15600,17 @@ print(result)
 # parameter. The function should use max() with key=len to find the word with
 # the maximum length. This demonstrates using the key parameter with max() for
 # finding maximum based on a property rather than value.
-# 
+#
 # Key Requirements:
 # - Function must accept a list of words as input
 # - Function must use `max()` with a `key` parameter (or manual implementation)
 # - Function must return the longest word
 # - Should use key=len to compare by length
-# 
+#
 # Example Input/Output:
 # - longest_word(["apple", "banana", "cherry", "date"]) should return "banana"
 # - longest_word(["hi", "hello", "world"]) should return "hello" or "world"
-# 
+#
 # Algorithm: Use max() with key=len to find word with maximum length.
 # ============================================================================
 """
@@ -15687,7 +15677,7 @@ def main(lst):
             # Returns the result
     return list(sorted(lst, key=inner))
         # Sorts elements in ascending order
-    
+
 lst = ["treez", "cliff", "mountain", "tree","tree", "grassya"]
 main(lst)
 
@@ -15872,7 +15862,7 @@ def main(lst_tuples):
             # Returns the result
     return list(sorted(lst_tuples, key=inner))
         # Sorts elements in ascending order
-    
+
 lst_tuples = [(1,64),(7,3),(2,9)]
 print(main(lst_tuples))
 
@@ -15982,9 +15972,9 @@ def count_vowels(s):
     # Function definition
     vowels = "aeiou"
     count = 0
-    s = s.lower() 
+    s = s.lower()
         # Converts to lowercase/uppercase
-    
+
     for char in s:
         # Iterates through each element
         if char in vowels:
@@ -16022,7 +16012,7 @@ Write a Python program to add 5 to each number in a list. Do not use map().
 def add_five(lst):
     # Function definition
     result = []
-    
+
     for number in lst:
         # Iterates through each element
         result.append(number + 5)
@@ -16040,14 +16030,14 @@ Write a Python function called `find_min` that takes a list of numbers as input 
 def find_min(numbers):
     # Function definition
     min_num = numbers[0]
-    
+
     for number in numbers:
         # Iterates through each element
         if number < min_num:
             min_num = number
     return min_num
         # Returns the result
-    
+
 lst = [2, 6, 1, 189]
 print(find_min(lst))
 
@@ -16076,7 +16066,7 @@ Write a function that converts centimetets to inches. Type a integer as argument
 
 def converts(cm):
     # Function definition
-    
+
     inch = cm * 0.39
     print(inch)
 
@@ -16093,7 +16083,7 @@ def reverse(lst):
     lst.reverse()
     return lst
         # Returns the result
-    
+
 lst = [1, 2, 3, 4]
 print(reverse(lst))
 
@@ -16108,16 +16098,16 @@ def calculate_average(lst):
     for number in lst:
         # Iterates through each element
         length_num += 1
-        
+
     add_num = 0
     for number in lst:
         # Iterates through each element
         add_num += number
-        
+
     total = add_num / length_num
     return total
         # Returns the result
-           
+
 lst = [23, 56, 33]
 print(calculate_average(lst))
 
@@ -16132,7 +16122,7 @@ def remove_duplicates(lst):
         # Splits string into list of words/elements
     unique = []
     commom = []
-    
+
     for word in lst:
         # Iterates through each element
         if word in unique:
@@ -16141,7 +16131,7 @@ def remove_duplicates(lst):
             unique.append(word)
     return unique
         # Returns the result
-    
+
 lst = " what is you is going is to do"
 print(remove_duplicates(lst))
 
@@ -16153,7 +16143,7 @@ Write a program that maps a list of words into a list of integers representing t
 def len_words(lst):
     # Function definition
     result = {}
-    
+
     for word in lst:
         # Iterates through each element
         count = 0
@@ -16163,7 +16153,7 @@ def len_words(lst):
         result[word] = count
     return result
         # Returns the result
-               
+
 lst = ["Jonathan", "Chris", "Jeremy"]
 print(len_words(lst))
 
@@ -16176,12 +16166,12 @@ def filter_string(lst):
     result = []
     for word in lst:
         # Iterates through each element
-        if len(word) == 3: 
+        if len(word) == 3:
             # Checks condition
             result.append(word)
     return result
         # Returns the result
-                    
+
 lst = ["jon", "chris", "tom", "Jeremy"]
 print(filter_string(lst))
 
@@ -16191,12 +16181,12 @@ Write a Python function called calculate_sum that takes two numbers as arguments
 """
 def calculate_sum(a, b):
     # Function definition
-    
+
     def inner_sum(x, y):
         # Function definition
         return x + y
             # Returns the result
-    
+
     return inner_sum(a, b)
         # Returns the result
 
@@ -16855,7 +16845,7 @@ Write a Python function string_contains_digit that checks if a string contains a
 
 def string_contains_digit(string):
     # Function definition
-    
+
     def contains_digit(x):
         # Function definition
         for char in x:
@@ -16865,10 +16855,10 @@ def string_contains_digit(string):
                     # Returns the result
         return False
             # Returns the result
-        
+
     return contains_digit(string)
         # Returns the result
-        
+
 string = "jonathan5"
 print(string_contains_digit(string))
 
@@ -16879,7 +16869,7 @@ Write a Python function string_contains_letter that checks if a string contains 
 
 def string_contains_letter(string):
     # Function definition
-    
+
     def contains_letter(x):
         # Function definition
         for char in x:
@@ -16889,10 +16879,10 @@ def string_contains_letter(string):
                     # Returns the result
         return False
             # Returns the result
-        
+
     return contains_letter(string)
         # Returns the result
-        
+
 string = "123455g"
 print(string_contains_letter(string))
 
@@ -16903,7 +16893,7 @@ Write a Python function calculate_average that takes three numbers and returns t
 
 def average_of_list(lst):
     # Function definition
-    
+
     def average(x):
         # Function definition
         for number in x:
@@ -16911,10 +16901,10 @@ def average_of_list(lst):
             count_len = len(x)
             add_num = sum(x)
             total = add_num / count_len
-            
+
         return total
             # Returns the result
-        
+
     return average(lst)
         # Returns the result
 
@@ -16928,17 +16918,17 @@ Write a Python function check_multiple_of_n that takes two numbers and checks if
 
 def check_multiple_of_n(num1, num2):
     # Function definition
-    
+
     def is_multiple(x, y):
         # Function definition
-        return x % y == 0 
+        return x % y == 0
             # Returns the result
-    
+
     return is_multiple(num1, num2)
         # Returns the result
 
 print(check_multiple_of_n(10, 2))
-print(check_multiple_of_n(10, 3)) 
+print(check_multiple_of_n(10, 3))
 
 """
 Problem: 448
@@ -16947,7 +16937,7 @@ Write a Python function longest_string that takes a list of strings and returns 
 
 def longest_string(lst):
     # Function definition
-    
+
     def longest(x):
         # Function definition
         longest_word = x[0]
@@ -16957,10 +16947,10 @@ def longest_string(lst):
                 longest_word = word
         return longest_word
             # Returns the result
-            
+
     return longest(lst)
         # Returns the result
-                    
+
 lst = ["jon", "zonathan", "mimi"]
 print(longest_string(lst))
 
@@ -16972,10 +16962,10 @@ def longest_string(lst):
         # Function definition
         return max(strings, key=len)
             # Returns the result
-    
+
     return find_longest(lst)
         # Returns the result
-    
+
 lst = ["jon", "zonathan", "mimi"]
 print(longest_string(lst))
 
@@ -16986,15 +16976,15 @@ Write a Python function shortest_string that takes a list of strings and returns
 
 def shortest_string(lst):
     # Function definition
-    
+
     def shortest(x):
         # Function definition
         return min(x, key=len)
             # Returns the result
-        
+
     return shortest(lst)
         # Returns the result
-        
+
 lst = ["chris", "tit", "mountain"]
 print(shortest_string(lst))
 
@@ -17005,17 +16995,17 @@ Write a Python function remove_duplicates that takes a list and removes duplicat
 
 def remove_duplicates(lst):
     # Function definition
-    
+
     def duplicates_removed(x):
         # Function definition
         unique = set()
-        
+
         for word in x:
             # Iterates through each element
             unique.add(word)
         return unique
             # Returns the result
-        
+
     return duplicates_removed(lst)
         # Returns the result
 
@@ -17038,11 +17028,11 @@ def fibonacci(n):
         else:
             return fib_recursive(n - 1) + fib_recursive(n - 2)
                 # Returns the result
-    
+
     return fib_recursive(n)
         # Returns the result
 
-n = 10 
+n = 10
 print(fibonacci(n))
 
 """
@@ -17051,17 +17041,17 @@ Write a Python function called calculate_sum that takes two numbers as arguments
 """
 def calculate_sum(a, b):
     # Function definition
-    
+
     def inner_sum(x, y):
         # Function definition
         return x + y
             # Returns the result
-    
+
     def inner_mult(x, y):
         # Function definition
         return x * y
             # Returns the result
-    
+
     return inner_sum(a, b), inner_mult(a, b)
         # Returns the result
 
@@ -17075,25 +17065,25 @@ Write a Python function called calculate_integers that takes two numbers as argu
 
 def calculate_integers(a, b):
     # Function definition
-    
+
     def product(x, y):
         # Function definition
         return x * y
             # Returns the result
-        
+
     def sum_int(x, y):
         # Function definition
         return x + y
             # Returns the result
-        
+
     def division(x, y):
         # Function definition
         return x / y
             # Returns the result
-        
+
     return product(a, b), sum_int(a, b), division(a, b)
         # Returns the result
-    
+
 print(calculate_integers(10, 5))
 
 """
@@ -17103,7 +17093,7 @@ Write a Python function average_of_list that calculates the average of a list of
 
 def average_of_list(lst):
     # Function definition
-    
+
     def average(x):
         # Function definition
         for number in x:
@@ -17111,10 +17101,10 @@ def average_of_list(lst):
             count_len = len(x)
             add_num = sum(x)
             total = add_num / count_len
-            
+
         return total
             # Returns the result
-        
+
     return average(lst)
         # Returns the result
 
@@ -17130,10 +17120,10 @@ def len_lst(lst):
     # Function definition
     sort = sorted(lst, key=len)
         # Sorts elements in ascending order
-    
+
     return sort
         # Returns the result
-    
+
 lst = ["Jonathan", "chris", "Jeremy"]
 print(len_lst(lst))
 
@@ -17145,10 +17135,10 @@ Write a Python function to find the minimum string by its length using the min()
 def min_len(lst):
     # Function definition
     min_string = min(lst, key=len)
-    
+
     return min_string
         # Returns the result
-    
+
 lst = ["truck", "is", "Bethany"]
 print(min_len(lst))
 
@@ -17158,12 +17148,12 @@ Write a Python function to find the maximum string alphabetically using the key 
 """
 def max_string_alpha(lst):
     # Function definition
-    
+
     def max_string(x):
         # Function definition
         return len(x)
             # Returns the result
-        
+
     return max(lst, key=max_string)
         # Returns the result
 
@@ -17178,7 +17168,7 @@ Write a Python function to sort a list of dictionaries by the value associated w
 from operator import itemgetter
 
 def sort_dicts_by_key(dict_list, sort_key):
-    # Use itemgetter 
+    # Use itemgetter
     return sorted(dict_list, key=itemgetter(sort_key))
         # Sorts elements in ascending order
 
@@ -17212,7 +17202,7 @@ Write a Python function that sorts a list of words by the number of vowels they 
 
 def sort_words_by_vowel_count(lst):
     # Function definition
-    
+
     def count_vowels(word):
         # Function definition
         vowels = 'aeiou'
@@ -17223,7 +17213,7 @@ def sort_words_by_vowel_count(lst):
                 count += 1
         return count
             # Returns the result
-    
+
     return sorted(lst, key=count_vowels)
         # Sorts elements in ascending order
 
@@ -17238,13 +17228,13 @@ Write a Python function to find the longest word in a list using the max() funct
 def longest_word(lst):
     # Function definition
     longest_w = max(lst, key=len)
-    
+
     return longest_w
         # Returns the result
-    
+
 lst = ["cheater", "lepard", "lion"]
 print(longest_word(lst))
-    
+
 """
 Problem: 463
 Write a Python function to sort a list of tuples by the sum of the elements in each tuple using the key parameter.
@@ -17252,10 +17242,10 @@ Write a Python function to sort a list of tuples by the sum of the elements in e
 
 def sum_of_tuple(lst):
     # Function definition
-    
+
     return sorted(lst, key=sum)
         # Sorts elements in ascending order
-    
+
 lst = [(9, 9, 9), (5, 5, 5), (8, 8, 8)]
 print(sum_of_tuple(lst))
 
@@ -17266,12 +17256,12 @@ Write a Python function to sort a list of strings by the last character of each 
 
 def list_of_strings_lst(lst):
     # Function definition
-    
+
     def last_char(s):
         # Function definition
         return s[-1]
             # Returns the result
-    
+
     return sorted(lst, key=last_char)
         # Sorts elements in ascending order
 
@@ -17285,7 +17275,7 @@ Write a Python function to sort a list of strings by the number of uppercase let
 
 def sort_number_uppercases(lst):
     # Function definition
-    
+
     def uppercase_count(x):
         # Function definition
         count = 0
@@ -17295,7 +17285,7 @@ def sort_number_uppercases(lst):
                 count += 1
         return count
             # Returns the result
-                
+
     return sorted(lst,
         # Sorts elements in ascending order
     key=uppercase_count)
@@ -17310,7 +17300,7 @@ Write a Python function to find the tuple with the largest product of its elemen
 
 def tuple_largest_product(lst):
     # Function definition
-    
+
     def product(x):
         # Function definition
         count = 1
@@ -17319,7 +17309,7 @@ def tuple_largest_product(lst):
             count *= number
         return count
             # Returns the result
-    
+
     return max(lst, key=product)
         # Returns the result
 
@@ -17335,7 +17325,7 @@ def floating_point(numbers):
     # Function definition
     return sorted(numbers, key=round)
         # Sorts elements in ascending order
-    
+
 numbers = [3.7, 3.3, 2.7, 1.2, 35.4, 677.9]
 print(floating_point(numbers))
 
@@ -17348,9 +17338,9 @@ def first_element_decending_order(lst):
     # Function definition
     def first_element(x):
         # Function definition
-        return x[0] 
+        return x[0]
             # Returns the result
-    
+
     return sorted(lst, key=first_element, reverse=True)
         # Sorts elements in ascending order
 
@@ -17364,12 +17354,12 @@ Write a Python function that sorts a list of words by the number of consonants u
 
 def number_of_consonants(lst):
     # Function definition
-    
+
     def consonants(word):
         # Function definition
-    
+
         consonants_set = "bcdfghjklmnpqrstvwxyz"
-        
+
         count = 0
 
         for char in word.lower():
@@ -17381,7 +17371,7 @@ def number_of_consonants(lst):
 
     return sorted(lst, key=consonants)
         # Sorts elements in ascending order
-    
+
 lst = ["zzzzzzzzz", "yyyyyy", "bbb"]
 print(number_of_consonants(lst))
 
@@ -17394,7 +17384,7 @@ def min_string(lst):
     # Function definition
     return min(lst, key=len)
         # Returns the result
-    
+
 lst = ["down", "up"]
 print(min_string(lst))
 
@@ -17405,12 +17395,12 @@ Write a Python function to sort a list of dictionaries by the length of the valu
 
 def length_of_value(lst, key):
     # Function definition
-    
+
     def length_function(x):
         # Function definition
         return len(x.get(key, ""))
             # Returns the result
-        
+
     return sorted(lst, key=length_function)
         # Sorts elements in ascending order
 
@@ -17446,7 +17436,7 @@ Write a Python function that sorts a list of integers by their remainder when di
 
 def main(lst, divisor):
     # Function definition
-    
+
     def inner(num):
         # Function definition
         return num % divisor
@@ -17470,7 +17460,7 @@ def sort_by_remainder(lst, divisor):
         # Function definition
         return remainder_key(x, divisor)
             # Returns the result
-    
+
     return sorted(lst, key=key_func)
         # Sorts elements in ascending order
 
@@ -17494,11 +17484,11 @@ def sort_by_year(dates):
     # Function definition
 
     date_objects = []
-    
+
     for date in dates:
         # Iterates through each element
         date_objects.append(datetime.strptime(date, "%d.%m.%Y"))
-    
+
     sorted_dates = sorted(date_objects, key=year_key)
         # Sorts elements in ascending order
 
@@ -17506,7 +17496,7 @@ def sort_by_year(dates):
     for date in sorted_dates:
         # Iterates through each element
         sorted_date_strings.append(date.strftime("%d.%m.%Y"))
-    
+
     return sorted_date_strings
         # Returns the result
 
@@ -17521,13 +17511,13 @@ Write a Python function to sort a list of names by the number of times the lette
 
 def sort_by_a_count(names):
     # Function definition
-    
+
     def count_a(name):
         # Function definition
-        
+
         return name.lower().count('a')
             # Converts to lowercase/uppercase
-    
+
     return sorted(names, key=count_a)
         # Sorts elements in ascending order
 
@@ -17542,16 +17532,16 @@ Write a Python function to sort a list of numbers by their square using the key 
 
 def sort_sqaure(lst):
     # Function definition
-    
+
     def sqaured(x):
         # Function definition
         return x * x
             # Returns the result
-        
+
     return sorted(lst, key=sqaured)
         # Sorts elements in ascending order
-        
-    
+
+
 lst = [9, 5, 4, 1 ]
 print(sort_sqaure(lst))
 
@@ -17567,7 +17557,7 @@ def closest_to_target(lst, target):
         # Function definition
         return abs(x - target)
             # Returns the result
-    
+
     return min(lst, key=difference_from_target)
         # Returns the result
 
@@ -17583,12 +17573,12 @@ Write a Python function that sorts a list of tuples based on the length of the f
 
 def length_of_first_element(lst):
     # Function definition
-    
+
     def length_of_first(x):
         # Function definition
         return len(x[0])
             # Returns the result
-        
+
     return sorted(lst, key=length_of_first)
         # Sorts elements in ascending order
 
@@ -17605,15 +17595,15 @@ Write a Python function to sort a list of strings by the number of spaces they c
 
 def number_of_spaces(lst):
     # Function definition
-    
+
     def spaces_count(x):
         # Function definition
         return x.count(" ")
             # Returns the result
-        
+
     return sorted(lst, key=spaces_count)
         # Sorts elements in ascending order
-    
+
 lst = ["what is happening", "why all the hate in your brain", "stop it"]
 print(number_of_spaces(lst))
 
@@ -17624,11 +17614,11 @@ Write a Python function that finds the word with the most vowels in a list using
 
 def most_vowels(lst):
     # Function definition
-    
+
     def count_vowels(word):
         # Function definition
         vowels = "aeiou"
-        
+
         count = 0
         for char in word:
             # Iterates through each element
@@ -17636,10 +17626,10 @@ def most_vowels(lst):
                 count += 1
         return count
             # Returns the result
-            
+
     return max(lst, key=count_vowels)
         # Returns the result
-    
+
 lst = ["aamost", "Aaron", "bible", "buttom", "aeiouthian"]
 print(most_vowels(lst))
 
@@ -17650,14 +17640,14 @@ Write a Python function to sort a list of integers by the number of digits they 
 
 def sort_lst_integers(lst):
     # Function definition
-    
+
     def count_digits(n):
         # Function definition
         return len(str(abs(n)))
             # Returns the result
     return sorted(lst, key=count_digits)
         # Sorts elements in ascending order
-        
+
 lst = [456, 56, 8, 788, 89, 1]
 print(sort_lst_integers(lst))
 
@@ -17671,9 +17661,9 @@ def sort_tuples_by_difference(lst):
 
     def difference(tup):
         # Function definition
-        return abs(tup[0] - tup[1]) 
+        return abs(tup[0] - tup[1])
             # Returns the result
-    
+
     return sorted(lst, key=difference)
         # Sorts elements in ascending order
 
@@ -17688,12 +17678,12 @@ Write a Python function to sort a list of strings by the ASCII value of their fi
 
 def sort_strings_by_ascii(lst):
     # Function definition
-    
+
     def ascii_value(s):
         # Function definition
         return ord(s[0])
             # Returns the result
-        
+
     return sorted(lst, key=ascii_value)
         # Sorts elements in ascending order
 
@@ -17712,7 +17702,7 @@ def sort_lists_by_sum(lst):
         # Function definition
         return sum(sublist)
             # Returns the result
-        
+
     return sorted(lst, key=sum_of_elements)
         # Sorts elements in ascending order
 
@@ -17727,12 +17717,12 @@ Write a Python function to find the word with the fewest consonants in a list us
 
 def number_of_consonants(lst):
     # Function definition
-    
+
     def consonants(word):
         # Function definition
-    
+
         consonants_set = "bcdfghjklmnpqrstvwxyz"
-        
+
         count = 0
 
         for char in word.lower():
@@ -17744,7 +17734,7 @@ def number_of_consonants(lst):
 
     return min(lst, key=consonants)
         # Returns the result
-    
+
 lst = ["zzzzzzzzz", "yyyyyy", "bbb"]
 print(number_of_consonants(lst))
 
@@ -17756,12 +17746,12 @@ Write a Python function that sorts a list of file names by their file extension 
 
 def sort_files_by_extension(lst):
     # Function definition
-    
+
     def file_extension(filename):
         # Function definition
         return filename.split('.')[-1]
             # Returns the result
-        
+
     return sorted(lst, key=file_extension)
         # Sorts elements in ascending order
 
@@ -17776,15 +17766,15 @@ Write a Python function to sort a list of numbers by the square root of each num
 
 def sqaure_numbers_lst(lst):
     # Function definition
-    
+
     def sqaure(n):
         # Function definition
         return n * n
             # Returns the result
-        
+
     return sorted(lst, key=sqaure)
         # Sorts elements in ascending order
-    
+
 lst = [12, 46, 2, 10]
 print(sqaure_numbers_lst(lst))
 
@@ -17800,7 +17790,7 @@ def sort_words_by_distinct_letters(words):
         # Function definition
         return len(set(word))
             # Returns the result
-        
+
     return sorted(words, key=distinct_letter_count)
         # Sorts elements in ascending order
 
@@ -17814,15 +17804,15 @@ Write a Python function that sorts a list of strings by the second letter in eac
 
 def sort_second_letter(lst):
     # Function definition
-    
+
     def second_letter(x):
         # Function definition
         return x[1]
             # Returns the result
-        
+
     return sorted(lst, key=second_letter)
         # Sorts elements in ascending order
-    
+
 lst = ["mountain", "law", "lebany"]
 print(sort_second_letter(lst))
 
@@ -17833,15 +17823,15 @@ Write a Python function to sort a list of people by their age stored in a dictio
 
 def people_age(dic):
     # Function definition
-    
+
     def sort_age(person):
         # Function definition
         return dic[person]
             # Returns the result
-        
+
     return sorted(dic, key=sort_age)
         # Sorts elements in ascending order
-    
+
 dic = {"Sam": 27, "Tom": 56, "Chantelle": 18}
 print(people_age(dic))
 
@@ -17852,12 +17842,12 @@ Write a Python function that sorts a list of numbers by their binary representat
 
 def sort_by_binary_representation(lst):
     # Function definition
-    
+
     def binary_representation(x):
         # Function definition
         return bin(x)
             # Returns the result
-        
+
     return sorted(lst, key=binary_representation)
         # Sorts elements in ascending order
 
@@ -17877,10 +17867,10 @@ def sort_keys_by_value(dic):
         # Function definition
         return dic[key]
             # Returns the result
-        
+
     return sorted(dic.keys(), key=get_value)
         # Sorts elements in ascending order
-   
+
 dic = {"Sam": 27, "Tommy": 56, "Chantelle": 18}
 print(sort_keys_by_value(dic))
 
@@ -17898,7 +17888,7 @@ def sort_fractions_by_decimal(fractions):
         # Function definition
         return float(fraction)
             # Returns the result
-        
+
     return sorted(fractions, key=decimal_value)
         # Sorts elements in ascending order
 
@@ -17913,12 +17903,12 @@ Write a Python function to find the longest string that ends with a specific let
 
 def longest_string_letter(lst, letter):
     # Function definition
-    
+
     def longest_letter(s):
         # Function definition
         return len(s) if s.endswith(letter) else -1
             # Returns the result
-    
+
     return max(lst, key=longest_letter)
         # Returns the result
 
@@ -17929,7 +17919,7 @@ print(longest_string_letter(lst, 'a'))
 
 def longest_string(string, letter):
     # Function definition
-    
+
     words = string.split()
         # Splits string into list of words/elements
 
@@ -17941,9 +17931,9 @@ def longest_string(string, letter):
         else:
             return 0
                 # Returns the result
-    
-    longest = None  
-    max_length = 0 
+
+    longest = None
+    max_length = 0
 
     for word in words:
         # Iterates through each element
@@ -17951,7 +17941,7 @@ def longest_string(string, letter):
         if length > max_length:
             max_length = length
             longest = word
-    
+
     return longest
         # Returns the result
 
@@ -17975,13 +17965,13 @@ class Dog(Animal):
         # Function definition
         return "Bark"
             # Returns the result
-        
+
 class Cat(Animal):
     def speak(self):
         # Function definition
         return "Meow"
             # Returns the result
-        
+
 dog = Dog()
 cat = Cat()
 print(dog.speak())
@@ -18003,7 +17993,7 @@ class Car(Vehicle):
         # Function definition
 
         super().__init__(speed, color)
-        
+
         self.model = model
 
 my_car = Car(120, "Red", "Toyota")
@@ -18026,21 +18016,21 @@ class Person:
 class Student(Person):
     def __init__(self, name, grade):
         # Function definition
-    
+
         super().__init__(name)
-    
+
         self.grade = grade
-        
+
     def introduce(self):
         # Function definition
         return f"Hello, my name is {self.name} and I am in grade {self.grade}."
             # Returns the result
 
 person = Person("Alice")
-print(person.introduce()) 
+print(person.introduce())
 
 student = Student("Bob", 10)
-print(student.introduce()) 
+print(student.introduce())
 
 """
 Problem: 498
@@ -18065,7 +18055,7 @@ class Rectangle(Shape):
             # Returns the result
 
 rectangle = Rectangle(5, 3)
-print(f"Area of the rectangle: {rectangle.area()}") 
+print(f"Area of the rectangle: {rectangle.area()}")
 
 """
 Problem: 499
@@ -18105,7 +18095,7 @@ class Employee:
 class Manager(Employee):
     def __init__(self, name, salary):
         # Function definition
-    
+
         super().__init__(name, salary)
 
     def assign_task(self, task):
@@ -18115,7 +18105,6 @@ class Manager(Employee):
 
 manager = Manager("John Doe", 75000)
 print(manager.assign_task("Prepare a project report"))
-
 
 
 

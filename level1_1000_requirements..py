@@ -1884,7 +1884,7 @@ Write a Python program to count how many times the word “hello” appears in a
 def count_hello(string):  # Method: count_hello
     return string.count("hello")  # Return the result
     
-string = "hello, you cunt"
+string = "hello, you pal"
 print(count_hello(string))
 
 # TEST CASE:
@@ -1919,7 +1919,7 @@ Write a function that counts how many times the character # appears in a string.
 def count(string):  # Method: count
     return string.count("#")  # Return the result
     
-string = "hello, you cunt ###"
+string = "hello, you pal ###"
 print(count(string))
 
 # TEST CASE:
@@ -15161,7 +15161,7 @@ while password != "python":
 
 # ============================================================================
 # PROBLEM EXPLANATION:
-# Write a Python program that multiplies a number by itself until it exceeds 10,000 using a while loop.
+# Write a Python program that repeatedly squares a number until it exceeds 10,000 using a while loop.
 # 
 # This problem demonstrates various Python programming concepts and features.
 # 
@@ -15176,7 +15176,7 @@ while password != "python":
 
 """
 Problem: 845
-Write a Python program that multiplies a number by itself until it exceeds 10,000 using a while loop.
+Write a Python program that repeatedly squares a number until it exceeds 10,000 using a while loop.
 """
 
 # SOLUTION EXPLANATION:
