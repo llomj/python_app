@@ -1976,7 +1976,7 @@ sys.stdout = io.StringIO()
             </div>
 
             <div
-                className="fixed left-1/2 z-30 w-full max-w-2xl -translate-x-1/2 px-4"
+                className="fixed left-1/2 z-[110] w-full max-w-2xl -translate-x-1/2 px-4"
                 style={{
                     top: `${editorToolbarTop}px`,
                     pointerEvents: 'none'
@@ -2181,7 +2181,7 @@ sys.stdout = io.StringIO()
 
             {showModal !== 'none' && (
                 <div
-                    className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-[120] animate-in fade-in duration-200"
                     style={{
                         paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 1rem))',
                         paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 1rem))',
