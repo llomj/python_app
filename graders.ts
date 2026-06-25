@@ -5728,13 +5728,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1014: {
         functionNames: ['is_palindrome'],
         tests: [
-            { args: ["radar"], expected: true },
+            { args: ["madam"], expected: true },
             { args: ["hello"], expected: false },
+            { args: ["level"], expected: true },
         ]
     },
   1038: {
         functionNames: ['factorial'],
         tests: [
+            { args: [0], expected: 1 },
             { args: [5], expected: 120 },
         ]
     },
@@ -5742,11 +5744,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sum_n'],
         tests: [
             { args: [5], expected: 15 },
+            { args: [10], expected: 55 },
         ]
     },
   1040: {
         functionNames: ['fibonacci'],
         tests: [
+            { args: [0], expected: 0 },
+            { args: [6], expected: 8 },
             { args: [7], expected: 13 },
         ]
     },
@@ -5754,42 +5759,49 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['reverse_string'],
         tests: [
             { args: ["hello"], expected: "olleh" },
+            { args: ["python"], expected: "nohtyp" },
         ]
     },
   1042: {
         functionNames: ['count_digits'],
         tests: [
+            { args: [7], expected: 1 },
             { args: [12345], expected: 5 },
         ]
     },
   1043: {
         functionNames: ['gcd'],
         tests: [
-            { args: [12,8], expected: 4 },
+            { args: [12, 8], expected: 4 },
+            { args: [48, 18], expected: 6 },
         ]
     },
   1044: {
         functionNames: ['list_sum'],
         tests: [
+            { args: [[]], expected: 0 },
             { args: [[1,2,3,4,5]], expected: 15 },
         ]
     },
   1045: {
         functionNames: ['is_palindrome'],
         tests: [
-            { args: ["radar"], expected: true },
-            { args: ["hello"], expected: false },
+            { args: [121], expected: true },
+            { args: [123], expected: false },
+            { args: [1221], expected: true },
         ]
     },
   1046: {
         functionNames: ['power'],
         tests: [
+            { args: [5, 0], expected: 1 },
             { args: [2,3], expected: 8 },
         ]
     },
   1047: {
         functionNames: ['multiply'],
         tests: [
+            { args: [5, 0], expected: 0 },
             { args: [4,5], expected: 20 },
         ]
     },
@@ -5814,6 +5826,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [[1,2,3,4,5]], expected: true },
             { args: [[1,3,2,4,5]], expected: false },
+            { args: [[]], expected: true },
         ]
     },
   1051: {
