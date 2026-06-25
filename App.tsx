@@ -1827,7 +1827,7 @@ sys.stdout = io.StringIO()
                 <div className="flex items-center justify-center mb-3">
                     <div className="flex gap-3 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight" style={{ pointerEvents: 'auto' }}>
                         <button onClick={() => setShowModal('api_key')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="API key settings"><Key size={14} /></button>
-                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Shot:</span><span>{currentStats.shots}</span></div>
+                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Count:</span><span>{currentStats.shots}</span></div>
                         <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{currentStats.success}</span></div>
                         <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{currentStats.failed}</span></div>
                         <div className="flex items-center border-l border-[#1d2d44] pl-3 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
