@@ -81,6 +81,43 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
 
 const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
 
+// Ranking system
+interface Rank {
+    name: string;
+    icon: string;
+    minShots: number;
+    minWinRate: number;
+}
+
+const RANKS: Rank[] = [
+    { name: 'Plankton', icon: '🦠', minShots: 0, minWinRate: 0 },
+    { name: 'Shrimp', icon: '🦐', minShots: 5, minWinRate: 0 },
+    { name: 'Crab', icon: '🦀', minShots: 15, minWinRate: 10 },
+    { name: 'Small Fish', icon: '🐟', minShots: 30, minWinRate: 20 },
+    { name: 'Octopus', icon: '🐙', minShots: 60, minWinRate: 30 },
+    { name: 'Seal', icon: '🦭', minShots: 100, minWinRate: 35 },
+    { name: 'Dolphin', icon: '🐬', minShots: 150, minWinRate: 45 },
+    { name: 'Shark', icon: '🦈', minShots: 250, minWinRate: 55 },
+    { name: 'Whale', icon: '🐋', minShots: 400, minWinRate: 65 },
+    { name: 'God Whale', icon: '👑🐋', minShots: 600, minWinRate: 75 },
+];
+
+const getUserRank = (statsByMode: StatsByMode): Rank => {
+    const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
+    const totalWins = Object.values(statsByMode).reduce((sum, s) => sum + s.success, 0);
+    const winRate = totalShots > 0 ? (totalWins / totalShots) * 100 : 0;
+
+    let currentRank = RANKS[0];
+    for (const rank of RANKS) {
+        if (totalShots >= rank.minShots && winRate >= rank.minWinRate) {
+            currentRank = rank;
+        } else {
+            break;
+        }
+    }
+    return currentRank;
+};
+
 const getSavedDifficultyMode = (): DifficultyMode => {
     const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
     return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
@@ -1400,6 +1437,7 @@ const App: React.FC = () => {
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
     const selectedModeLabel = getDifficultyLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
+    const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
@@ -2701,6 +2739,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
                         <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
+                        <span className="text-base" title={`Rank: ${userRank.name}`}>{userRank.icon}</span>
                         <span className="rounded-full border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#93c5fd]">{selectedModeLabel}</span>
                     </button>
                 </div>
@@ -2830,6 +2869,31 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             <div className="flex h-full min-h-0 flex-col py-2">
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Settings</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4 text-center">
+                                    <div className="text-4xl mb-2">{userRank.icon}</div>
+                                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-white mb-1">{userRank.name}</h3>
+                                    <p className="text-[10px] text-gray-400">
+                                        {(() => {
+                                            const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
+                                            const totalWins = Object.values(statsByMode).reduce((sum, s) => sum + s.success, 0);
+                                            const rate = totalShots > 0 ? ((totalWins / totalShots) * 100).toFixed(0) : '0';
+                                            return `${totalShots} exercises | ${rate}% win rate`;
+                                        })()}
+                                    </p>
+                                    <div className="mt-2 flex items-center justify-center gap-1">
+                                        {RANKS.map((rank, idx) => {
+                                            const isActive = rank.name === userRank.name;
+                                            return (
+                                                <div
+                                                    key={rank.name}
+                                                    className={`w-1.5 h-1.5 rounded-full transition-all ${isActive ? 'bg-[#3b82f6] w-3' : 'bg-[#1d2d44]'}`}
+                                                    title={rank.name}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
 
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-200">
