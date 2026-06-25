@@ -5640,10 +5640,25 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [17], expected: true }
     ]
   },
+  866: {
+    functionNames: ["main"],
+    tests: [
+      { args: [[1, 3, 8], ["9", "2", "7"]], expected: {"1": "9", "3": "2", "8": "7"} },
+      { args: [["a", "b"], [10, 20]], expected: {"a": 10, "b": 20} }
+    ]
+  },
+  867: {
+    functionNames: ["create_dictionary"],
+    tests: [
+      { args: [["apple", "banana", "cherry"], [1, 2, 3]], expected: {"apple": 1, "banana": 2, "cherry": 3} },
+      { args: [[1, 2], ["one", "two"]], expected: {"1": "one", "2": "two"} }
+    ]
+  },
   868: {
     functionNames: ["capitalize_words","capitalize"],
     tests: [
-      { args: ["hello world"], expected: "Hello World" }
+      { args: [["jonathan", "sam", "mimi"]], expected: ["Jonathan", "Sam", "Mimi"] },
+      { args: [["python", "code"]], expected: ["Python", "Code"] }
     ]
   },
   873: {
@@ -5655,8 +5670,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   879: {
     functionNames: ["greet"],
+    compare: "printedOrReturn",
     tests: [
-      { args: ["Alice"], expected: "Hello, Alice!" }
+      { args: ["Alice", 30], expected: "Hello, Alice. You are 30 years old." },
+      { args: ["Bob", 41], expected: "Hello, Bob. You are 41 years old." }
     ]
   },
   883: {
@@ -5669,8 +5686,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   884: {
     functionNames: ["describe"],
     tests: [{
-      args: ["hello", 2, 3],
-      expected: "hello is 2 years old and lives in 3."
+      args: ["Emma", 28, "London"],
+      expected: "Emma is 28 years old and lives in London."
     }]
   },
   888: {
