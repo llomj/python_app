@@ -388,6 +388,7 @@ def __auto_grader_run():
     for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
         args = case.get("args", [])
         expected = case.get("expected")
+        call_returned_with = case.get("callReturnedWith")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
         required_name = case.get("functionName")
@@ -407,6 +408,14 @@ def __auto_grader_run():
         builtins.input = lambda prompt='': next(input_iter)
         try:
             returned = case_target(*args)
+            if call_returned_with is not None:
+                if not callable(returned):
+                    return {
+                        "passed": False,
+                        "functionName": case_target_name,
+                        "message": f"{label} expected {case_target_name}() to return a callable function."
+                    }
+                returned = returned(*call_returned_with)
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
             return {

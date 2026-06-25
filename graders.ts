@@ -4,6 +4,7 @@ export interface AutoTestCase {
     args: unknown[];
     expected: unknown;
     inputValues?: string[];
+    callReturnedWith?: unknown[];
     functionName?: string;
     label?: string;
 }
@@ -2259,11 +2260,57 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['AEIOU'], expected: 5 }
         ]
     },
+  303: {
+        functionNames: ['print_each_character'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: ['abc'], expected: 'a\nb\nc' },
+            { args: ['Hi'], expected: 'H\ni' }
+        ]
+    },
+  304: {
+        functionNames: ['ask_until_condition'],
+        tests: [
+            { args: [], inputValues: ['11'], expected: null },
+            { args: [], inputValues: ['5', '12'], expected: null }
+        ]
+    },
+  307: {
+        functionNames: ['find_min_max'],
+        compare: 'numberList',
+        tests: [
+            { args: [], inputValues: ['10 2 7'], expected: [2, 10] },
+            { args: [], inputValues: ['-5 3 9'], expected: [-5, 9] }
+        ]
+    },
+  308: {
+        functionNames: ['group_by_first_letter'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['apple ape bat'], expected: "{'a': ['apple', 'ape'], 'b': ['bat']}" },
+            { args: [], inputValues: ['cat cow dog'], expected: "{'c': ['cat', 'cow'], 'd': ['dog']}" }
+        ]
+    },
+  310: {
+        functionNames: ['find_longest_word', 'main'],
+        tests: [
+            { args: [['Jonathan', 'noll', 'it']], expected: 'Jonathan' },
+            { args: [['a', 'abc', 'def']], expected: 'abc' }
+        ]
+    },
   311: {
         functionNames: ['find_longest_word'],
         tests: [
             { args: [['Jonathan', 'noll', 'it']], expected: 'Jonathan' },
             { args: [['a', 'ab', 'abc']], expected: 'abc' }
+        ]
+    },
+  312: {
+        functionNames: ['second_largest_number'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['5 2 9 1'], expected: '5' },
+            { args: [], inputValues: ['10 7 3'], expected: '7' }
         ]
     },
   313: {
@@ -2296,7 +2343,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   317: {
         functionNames: ['fahrenheit_to_celsius'],
-        compare: 'float',
         tests: [
             { args: [[32, 68, 100, 212]], expected: [0, 20, 37.77777777777778, 100] },
             { args: [[-40]], expected: [-40] }
@@ -2310,11 +2356,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   320: {
-    functionNames: ["main"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: [1, 4, 9, 16, 25]
-    }]
+        functionNames: ['square_roots', 'main'],
+        tests: [
+            { args: [[4, 9, 16]], expected: [2, 3, 4] },
+            { args: [[1, 25]], expected: [1, 5] }
+        ]
   },
   321: {
         functionNames: ['lengths_of_strings'],
@@ -2379,6 +2425,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['1', '3', '2']], expected: ['3', '2', '1'] }
         ]
     },
+  331: {
+        functionNames: ['print_index_and_element'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['apple', 'banana']], expected: 'Index: 0, Element: apple\nIndex: 1, Element: banana' }
+        ]
+    },
   332: {
         functionNames: ['create_index_element_tuples'],
         tests: [
@@ -2387,12 +2440,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   333: {
-    functionNames: ["print_with_index"],
-    compare: 'printedOrReturn',
-    tests: [{
-      args: ["hello"],
-      expected: "0 h\n1 e\n2 l\n3 l\n4 o"
-    }]
+        functionNames: ['print_with_index'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['apple', 'banana']], expected: '0 apple\n1 banana' },
+            { args: [['x']], expected: '0 x' }
+        ]
   },
   334: {
         functionNames: ['list_to_dict'],
@@ -2408,6 +2461,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a', 'b', 'c'], 'z'], expected: -1 }
         ]
     },
+  336: {
+        functionNames: ['print_index_and_element_with_colon'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['apple', 'banana']], expected: '0: apple\n1: banana' }
+        ]
+    },
   337: {
         functionNames: ['create_indexed_strings'],
         tests: [
@@ -2420,6 +2480,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [['apple', 'banana', 'cherry', 'date']], expected: ['APPLE', 'banana', 'CHERRY', 'date'] },
             { args: [['a', 'b', 'c']], expected: ['A', 'b', 'C'] }
+        ]
+    },
+  340: {
+        functionNames: ['print_odd_index_elements'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: 'banana\ndate' },
+            { args: [['x', 'y']], expected: 'y' }
         ]
     },
   341: {
@@ -2443,6 +2511,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a', 'b', 'c'], 1], expected: [[1, 'b'], [2, 'c']] }
         ]
     },
+  344: {
+        functionNames: ['print_index_squared'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [[1, 2, 3]], expected: 'Index: 0, Squared: 1\nIndex: 1, Squared: 4\nIndex: 2, Squared: 9' }
+        ]
+    },
   345: {
         functionNames: ['replace_based_on_index'],
         tests: [
@@ -2457,6 +2532,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [1, 2], expected: 5 }
         ]
     },
+  347: {
+        functionNames: ['greet'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ['Ada'], expected: 'Hello, Ada!' },
+            { args: [], inputValues: ['Jonathan'], expected: 'Hello, Jonathan!' }
+        ]
+    },
   348: {
         functionNames: ['factorial'],
         tests: [
@@ -2467,9 +2550,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   349: {
         functionNames: ['add_prefix'],
-        compare: 'length',
         tests: [
-            { args: ['pre-'], expected: 'function' }
+            { args: ['pre-'], callReturnedWith: ['fix'], expected: 'pre-fix' },
+            { args: ['un'], callReturnedWith: ['known'], expected: 'unknown' }
         ]
     },
   350: {
