@@ -6235,11 +6235,139 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [1, 5]
     }]
   },
+  901: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[10, 20, 30]" }
+    ]
+  },
   902: {
     functionNames: ["main"],
     tests: [
       { args: [[{"name": "jon", "age": 55}, {"name": "sam", "age": 8}]], expected: [55, 8] },
       { args: [[{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]], expected: [25, 30] }
+    ]
+  },
+  903: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3 + 5 - 2 * 4" }
+    ]
+  },
+  904: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "30 10 20" }
+    ]
+  },
+  905: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "john.doe example.com" }
+    ]
+  },
+  906: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 2 3\n4 5 6" }
+    ]
+  },
+  907: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3 2" }
+    ]
+  },
+  933: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Cannot divide by zero" }
+    ]
+  },
+  934: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Index out of range" }
+    ]
+  },
+  935: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Key not found" }
+    ]
+  },
+  936: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Invalid integer conversion" }
+    ]
+  },
+  937: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Type mismatch error" }
+    ]
+  },
+  938: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "File not found" }
+    ]
+  },
+  939: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Attribute not found" }
+    ]
+  },
+  940: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Variable not defined" }
+    ]
+  },
+  942: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Division successful: 5.0" }
+    ]
+  },
+  943: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Execution completed\nCannot divide by zero" }
     ]
   },
   944: {
