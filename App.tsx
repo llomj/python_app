@@ -464,18 +464,18 @@ def __auto_grader_same(actual, expected, compare):
         return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
     return actual == expected
 
-def __auto_grader_accepts_args(candidate, args):
+def __auto_grader_accepts_args(candidate, args, kwargs=None):
     try:
-        inspect.signature(candidate).bind(*args)
+        inspect.signature(candidate).bind(*args, **(kwargs or {}))
         return True
     except Exception:
         return False
 
-def __auto_grader_find_callable(function_names, args, required_name=None):
+def __auto_grader_find_callable(function_names, args, required_name=None, kwargs=None):
     names = [required_name] if required_name else function_names
     for name in names:
         candidate = globals().get(name)
-        if callable(candidate) and __auto_grader_accepts_args(candidate, args):
+        if callable(candidate) and __auto_grader_accepts_args(candidate, args, kwargs):
             return name, candidate
     return None, None
 
@@ -487,11 +487,12 @@ def __auto_grader_run():
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
     first_args = tests[0].get("args", []) if tests else []
+    first_kwargs = tests[0].get("kwargs", {}) if tests else {}
     if tests and tests[0].get("argFunctionNames"):
         first_args = first_args + [None] * len(tests[0].get("argFunctionNames", []))
     if tests and tests[0].get("functionListArgNames"):
         first_args = [None] + first_args
-    target_name, target = __auto_grader_find_callable(function_names, first_args)
+    target_name, target = __auto_grader_find_callable(function_names, first_args, kwargs=first_kwargs)
 
     if target is None:
         return {
@@ -501,6 +502,7 @@ def __auto_grader_run():
 
     for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
         args = case.get("args", [])
+        kwargs = case.get("kwargs", {})
         arg_function_names = case.get("argFunctionNames", [])
         function_list_arg_names = case.get("functionListArgNames")
         expected = case.get("expected")
@@ -537,7 +539,7 @@ def __auto_grader_run():
                 }
             resolved_args.append(arg_function)
         if required_name:
-            case_target_name, case_target = __auto_grader_find_callable(function_names, resolved_args, required_name)
+            case_target_name, case_target = __auto_grader_find_callable(function_names, resolved_args, required_name, kwargs)
             if case_target is None:
                 return {
                     "passed": False,
@@ -549,7 +551,7 @@ def __auto_grader_run():
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
         try:
-            returned = case_target(*resolved_args)
+            returned = case_target(*resolved_args, **kwargs)
             if call_returned_with is not None:
                 if not callable(returned):
                     return {
@@ -697,7 +699,7 @@ def __auto_grader_run_script():
                     return values
                 random.choices = __script_choices
 
-            namespace = {"__name__": "__main__"}
+            namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
