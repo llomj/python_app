@@ -405,6 +405,7 @@ def __auto_grader_run():
         call_method = case.get("callMethod")
         call_method_args = case.get("callMethodArgs", [])
         get_attrs = case.get("getAttrs")
+        expected_exception = case.get("expectedException")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
         required_name = case.get("functionName")
@@ -467,6 +468,8 @@ def __auto_grader_run():
                 returned = {name: getattr(returned, name, None) for name in get_attrs}
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
+            if expected_exception and type(exc).__name__ == expected_exception:
+                continue
             return {
                 "passed": False,
                 "functionName": case_target_name,
@@ -475,6 +478,13 @@ def __auto_grader_run():
         finally:
             sys.stdout = old_stdout
             builtins.input = old_input
+
+        if expected_exception:
+            return {
+                "passed": False,
+                "functionName": case_target_name,
+                "message": f"{label} expected {expected_exception} to be raised."
+            }
 
         returned_ok = __auto_grader_same(returned, expected, compare)
         printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)

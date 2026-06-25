@@ -11,6 +11,7 @@ export interface AutoTestCase {
     argFunctionNames?: string[];
     functionListArgNames?: string[];
     functionName?: string;
+    expectedException?: string;
     label?: string;
 }
 
@@ -5703,6 +5704,26 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       args: [[1, 2, 3, 4, 5]],
       expected: [1, 5]
     }]
+  },
+  902: {
+    functionNames: ["main"],
+    tests: [
+      { args: [[{"name": "jon", "age": 55}, {"name": "sam", "age": 8}]], expected: [55, 8] },
+      { args: [[{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]], expected: [25, 30] }
+    ]
+  },
+  944: {
+    functionNames: ["check_number"],
+    tests: [
+      { args: [5], expected: null },
+      { args: [-5], expected: null, expectedException: "NegativeNumberError" }
+    ]
+  },
+  948: {
+    functionNames: ["infinite_recursion"],
+    tests: [
+      { args: [], expected: null, expectedException: "RecursionError" }
+    ]
   },
   1014: {
         functionNames: ['is_palindrome'],
