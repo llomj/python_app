@@ -379,6 +379,8 @@ def __auto_grader_run():
     first_args = tests[0].get("args", []) if tests else []
     if tests and tests[0].get("argFunctionNames"):
         first_args = first_args + [None] * len(tests[0].get("argFunctionNames", []))
+    if tests and tests[0].get("functionListArgNames"):
+        first_args = [None] + first_args
     target_name, target = __auto_grader_find_callable(function_names, first_args)
 
     if target is None:
@@ -390,6 +392,7 @@ def __auto_grader_run():
     for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
         args = case.get("args", [])
         arg_function_names = case.get("argFunctionNames", [])
+        function_list_arg_names = case.get("functionListArgNames")
         expected = case.get("expected")
         call_returned_with = case.get("callReturnedWith")
         call_method = case.get("callMethod")
@@ -401,6 +404,18 @@ def __auto_grader_run():
         case_target_name = target_name
         case_target = target
         resolved_args = list(args)
+        if function_list_arg_names is not None:
+            function_list = []
+            for function_name in function_list_arg_names:
+                function = globals().get(function_name)
+                if not callable(function):
+                    return {
+                        "passed": False,
+                        "functionName": case_target_name,
+                        "message": f"{label} missing helper function {function_name}()."
+                    }
+                function_list.append(function)
+            resolved_args = [function_list] + resolved_args
         for arg_function_name in arg_function_names:
             arg_function = globals().get(arg_function_name)
             if not callable(arg_function):

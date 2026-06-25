@@ -9,6 +9,7 @@ export interface AutoTestCase {
     callMethodArgs?: unknown[];
     getAttrs?: string[];
     argFunctionNames?: string[];
+    functionListArgNames?: string[];
     functionName?: string;
     label?: string;
 }
@@ -4219,16 +4220,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   603: {
-        functionNames: ['add'],
+        functionNames: ['average'],
         compare: 'float',
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: 3 }
+            { args: [[1, 2, 3, 4, 5]], expected: 3 },
+            { args: [[]], expected: 0 }
+        ]
+    },
+  604: {
+        functionNames: ['compose_functions'],
+        tests: [
+            { args: [5], functionListArgNames: ['add_one', 'multiply_by_two', 'add_one'], expected: 13 },
+            { args: [3], functionListArgNames: ['multiply_by_two', 'add_one'], expected: 7 }
         ]
     },
   605: {
         functionNames: ['get_keys'],
         tests: [
-            { args: [{a: 1, b: 2, c: 3}, {d: 4}], expected: ['a', 'b', 'c', 'd'] }
+            { args: [{a: 1, b: 2, c: 3}], expected: ['a', 'b', 'c'] }
         ]
     },
   606: {
@@ -4282,7 +4291,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   614: {
         functionNames: ['lst_integers'],
         tests: [
-            { args: [[123, 45, 7, 89, 100]], expected: [100, 7, 45, 123, 89] }
+            { args: [[123, 45, 7, 89, 100]], expected: [100, 123, 7, 45, 89] },
+            { args: [[5666, 566, 56, 6]], expected: [6, 56, 566, 5666] }
         ]
     },
   615: {
@@ -4417,6 +4427,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{a: 5, b: 15, c: 20, d: 3}], expected: ['b', 'c'] }
         ]
     },
+  637: {
+        functionNames: ['print_fruit_keys'],
+        tests: [
+            { args: [{apple: 1.2, banana: 0.5, orange: 0.75}], expected: ['apple', 'banana', 'orange'] }
+        ]
+    },
   638: {
         functionNames: ['max_key'],
         tests: [
@@ -4479,11 +4495,25 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{apple: 1, banana: 2, cherry: 3}], expected: 'apple' }
         ]
     },
+  648: {
+        functionNames: ['shopping_cart_items'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{apple: 3, banana: 6, orange: 4, milk: 1}], expected: 'apple\nbanana\norange\nmilk' }
+        ]
+    },
   649: {
         functionNames: ['check_key_exists'],
         tests: [
             { args: [{a: 1, b: 2, c: 3}, 'b'], expected: true },
             { args: [{a: 1, b: 2, c: 3}, 'z'], expected: false }
+        ]
+    },
+  650: {
+        functionNames: ['print_keys_greater_than_five'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [{apple: 3, banana: 6, orange: 4, milk: 8, bread: 2, eggs: 12}], expected: 'banana\nmilk\neggs' }
         ]
     },
   651: {
