@@ -5,6 +5,10 @@ export interface AutoTestCase {
     expected: unknown;
     inputValues?: string[];
     randomValues?: number[];
+    randomFloatValues?: number[];
+    randomChoiceValues?: unknown[];
+    randomSampleValues?: unknown[][];
+    randomShuffleValues?: unknown[][];
     callReturnedWith?: unknown[];
     callMethod?: string;
     callMethodArgs?: unknown[];
@@ -6288,6 +6292,206 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [
       { args: [], expected: "3 2" }
+    ]
+  },
+  908: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [42], expected: "42" }
+    ]
+  },
+  909: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomFloatValues: [0.25], expected: "0.25" }
+    ]
+  },
+  910: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [24], expected: "24" }
+    ]
+  },
+  911: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["green"], expected: "green" }
+    ]
+  },
+  912: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomShuffleValues: [[5, 4, 3, 2, 1]], expected: "[5, 4, 3, 2, 1]" }
+    ]
+  },
+  913: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomSampleValues: [[3, 7, 11]], expected: "[3, 7, 11]" }
+    ]
+  },
+  914: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomFloatValues: [7.5], expected: "7.5" }
+    ]
+  },
+  915: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["Q"], expected: "Q" }
+    ]
+  },
+  916: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [6], expected: "6" }
+    ]
+  },
+  917: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["Heads"], expected: "Heads" }
+    ]
+  },
+  918: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["Alice", "Brown"], expected: "Alice Brown" }
+    ]
+  },
+  919: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomSampleValues: [["A", "b", "3", "!", "Z", "9", "?", "q"]], expected: "Ab3!Z9?q" }
+    ]
+  },
+  920: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: [true], expected: "True" }
+    ]
+  },
+  921: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [4, 8, 15, 16, 23], expected: "[4, 8, 15, 16, 23]" }
+    ]
+  },
+  922: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomSampleValues: [[2, 4, 6, 8]], expected: "[2, 4, 6, 8]" }
+    ]
+  },
+  923: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [31], expected: "2023-02-01" }
+    ]
+  },
+  924: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["banana"], expected: "banana" }
+    ]
+  },
+  925: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [654321], expected: "654321" }
+    ]
+  },
+  926: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [11259375], expected: "#abcdef" }
+    ]
+  },
+  927: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [123, 456, 7890], expected: "(123) 456-7890" }
+    ]
+  },
+  928: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [2468], expected: "2468" }
+    ]
+  },
+  929: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [2, 5], expected: "2 5" }
+    ]
+  },
+  930: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomValues: [192, 168, 1, 10], expected: "192.168.1.10" }
+    ]
+  },
+  931: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["A", "b", "3", "!", "Z", "9", "?", "q", "R", "7", "$", "m"], expected: "Ab3!Z9?qR7$m" }
+    ]
+  },
+  932: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], randomChoiceValues: ["elephant"], expected: "elephant" }
     ]
   },
   933: {

@@ -582,14 +582,22 @@ def __auto_grader_run_script():
         expected = case.get("expected")
         input_values = list(case.get("inputValues", []))
         random_values = list(case.get("randomValues", []))
+        random_float_values = list(case.get("randomFloatValues", []))
+        random_choice_values = list(case.get("randomChoiceValues", []))
+        random_sample_values = list(case.get("randomSampleValues", []))
+        random_shuffle_values = list(case.get("randomShuffleValues", []))
         label = case.get("label") or ("test " + str(index))
 
         old_stdout = sys.stdout
         old_input = builtins.input
-        old_random = None
+        old_random_methods = {}
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
         random_iter = iter(random_values)
+        random_float_iter = iter(random_float_values)
+        random_choice_iter = iter(random_choice_values)
+        random_sample_iter = iter(random_sample_values)
+        random_shuffle_iter = iter(random_shuffle_values)
 
         def __script_input(prompt=""):
             try:
@@ -600,7 +608,8 @@ def __auto_grader_run_script():
         builtins.input = __script_input
         try:
             import random
-            old_random = random.randint
+            for __name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
+                old_random_methods[__name] = getattr(random, __name)
             if random_values:
                 def __script_randint(_start, _end):
                     try:
@@ -608,6 +617,48 @@ def __auto_grader_run_script():
                     except StopIteration:
                         return random_values[-1]
                 random.randint = __script_randint
+                random.randrange = lambda *_args: __script_randint(0, 0)
+            if random_float_values:
+                def __script_random():
+                    try:
+                        return next(random_float_iter)
+                    except StopIteration:
+                        return random_float_values[-1]
+                random.random = __script_random
+                random.uniform = lambda _start, _end: __script_random()
+            if random_choice_values:
+                def __script_choice(_items):
+                    try:
+                        return next(random_choice_iter)
+                    except StopIteration:
+                        return random_choice_values[-1]
+                random.choice = __script_choice
+            if random_sample_values:
+                def __script_sample(_items, _count):
+                    try:
+                        return list(next(random_sample_iter))
+                    except StopIteration:
+                        return list(random_sample_values[-1])
+                random.sample = __script_sample
+            if random_shuffle_values:
+                def __script_shuffle(items):
+                    try:
+                        replacement = list(next(random_shuffle_iter))
+                    except StopIteration:
+                        replacement = list(random_shuffle_values[-1])
+                    items[:] = replacement
+                    return None
+                random.shuffle = __script_shuffle
+            if random_choice_values:
+                def __script_choices(_items, k=1):
+                    values = []
+                    for _index in range(k):
+                        try:
+                            values.append(next(random_choice_iter))
+                        except StopIteration:
+                            values.append(random_choice_values[-1])
+                    return values
+                random.choices = __script_choices
 
             namespace = {"__name__": "__main__"}
             exec(compiled, namespace)
@@ -618,12 +669,12 @@ def __auto_grader_run_script():
                 "message": f"{label} raised {type(exc).__name__}: {exc}"
             }
         finally:
-            if old_random is not None:
-                try:
-                    import random
-                    random.randint = old_random
-                except Exception:
-                    pass
+            try:
+                import random
+                for __name, __method in old_random_methods.items():
+                    setattr(random, __name, __method)
+            except Exception:
+                pass
             sys.stdout = old_stdout
             builtins.input = old_input
 
