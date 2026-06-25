@@ -25,6 +25,9 @@ import {
     ArrowUpRight,
     RefreshCw,
     Info,
+    SlidersHorizontal,
+    Volume2,
+    Vibrate,
     X,
     ChevronDown,
     ChevronUp
@@ -1124,6 +1127,8 @@ const App: React.FC = () => {
         const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
         return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
     });
+    const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
+    const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
     const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
@@ -1136,6 +1141,10 @@ const App: React.FC = () => {
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
     const stdinValuesRef = useRef<string[]>([]);
+    const keyboardHapticsRef = useRef(keyboardHaptics);
+    const keyboardSoundRef = useRef(keyboardSound);
+    const keyboardAudioRef = useRef<AudioContext | null>(null);
+    const lastKeyboardFeedbackRef = useRef(0);
     const keyboardMainScrollRef = useRef<number | null>(null);
     const keyboardRestoreTimersRef = useRef<number[]>([]);
     const deleteHoldDelayRef = useRef<number | null>(null);
@@ -1157,6 +1166,48 @@ const App: React.FC = () => {
         if (difficultyMode === 'normal') return EXERCISES.length;
         return EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode).length;
     }, [difficultyMode]);
+
+    useEffect(() => {
+        keyboardHapticsRef.current = keyboardHaptics;
+        localStorage.setItem('python_keyboard_haptics', String(keyboardHaptics));
+    }, [keyboardHaptics]);
+
+    useEffect(() => {
+        keyboardSoundRef.current = keyboardSound;
+        localStorage.setItem('python_keyboard_sound', String(keyboardSound));
+    }, [keyboardSound]);
+
+    const playKeyboardFeedback = useCallback(() => {
+        const now = performance.now();
+        if (now - lastKeyboardFeedbackRef.current < 28) return;
+        lastKeyboardFeedbackRef.current = now;
+
+        if (keyboardHapticsRef.current && 'vibrate' in navigator) {
+            navigator.vibrate(8);
+        }
+
+        if (!keyboardSoundRef.current) return;
+        try {
+            const AudioCtor = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioCtor) return;
+            const audio = keyboardAudioRef.current ?? new AudioCtor();
+            keyboardAudioRef.current = audio;
+            if (audio.state === 'suspended') audio.resume();
+            const oscillator = audio.createOscillator();
+            const gain = audio.createGain();
+            oscillator.type = 'triangle';
+            oscillator.frequency.value = 880;
+            gain.gain.setValueAtTime(0.0001, audio.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.035, audio.currentTime + 0.006);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.035);
+            oscillator.connect(gain);
+            gain.connect(audio.destination);
+            oscillator.start();
+            oscillator.stop(audio.currentTime + 0.04);
+        } catch {
+            // Audio feedback is optional and may be blocked by the browser.
+        }
+    }, []);
 
     const preserveEditorKeyboardPosition = useCallback(() => {
         const mainScroller = mainScrollRef.current;
@@ -2235,12 +2286,19 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         longPressTimerRef.current = null;
                                     }
                                 };
+                                const handleKeyboardFeedback = (event: KeyboardEvent) => {
+                                    if (event.metaKey || event.ctrlKey || event.altKey) return;
+                                    if (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Tab') {
+                                        playKeyboardFeedback();
+                                    }
+                                };
                                 dom.addEventListener('mousedown', startLongPress);
                                 dom.addEventListener('touchstart', startLongPress, { passive: true });
                                 dom.addEventListener('mouseup', cancelLongPress);
                                 dom.addEventListener('touchend', cancelLongPress);
                                 dom.addEventListener('touchmove', cancelLongPress);
                                 dom.addEventListener('mousemove', cancelLongPress);
+                                dom.addEventListener('keydown', handleKeyboardFeedback);
                             }}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                         />
@@ -2535,6 +2593,37 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </div>
                                             );
                                         })}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                        <SlidersHorizontal size={14} className="text-[#3b82f6]" />
+                                        Customize
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => setKeyboardHaptics(prev => !prev)}
+                                            className={`rounded-xl border px-3 py-3 text-left transition-all ${keyboardHaptics ? 'border-[#22c55e]/60 bg-[#22c55e]/15 text-white' : 'border-[#1d2d44] bg-[#050c18]/70 text-gray-400'}`}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Vibrate size={15} className={keyboardHaptics ? 'text-[#22c55e]' : 'text-gray-500'} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Haptic</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setKeyboardSound(prev => !prev)}
+                                            className={`rounded-xl border px-3 py-3 text-left transition-all ${keyboardSound ? 'border-[#22c55e]/60 bg-[#22c55e]/15 text-white' : 'border-[#1d2d44] bg-[#050c18]/70 text-gray-400'}`}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Volume2 size={15} className={keyboardSound ? 'text-[#22c55e]' : 'text-gray-500'} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Sound</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
+                                        </button>
                                     </div>
                                 </div>
 
