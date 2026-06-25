@@ -1302,18 +1302,20 @@ const App: React.FC = () => {
         }
     }, [output]);
 
-    // After run completes, ensure editor is visible (not stuck behind toolbar)
+    // After run completes, keep the editor below the fixed file toolbar.
     useEffect(() => {
         if (!isRunning && mainScrollRef.current && output !== 'Run code to see output...') {
-            // Gentle scroll to ensure editor stays visible below fixed toolbar
             const scrollContainer = mainScrollRef.current;
-            const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-            const safeScrollTop = Math.min(scrollContainer.scrollTop, maxScroll * 0.3);
-            if (scrollContainer.scrollTop > safeScrollTop) {
-                scrollContainer.scrollTo({ top: safeScrollTop, behavior: 'smooth' });
+            const editorPanel = editorShellRef.current?.closest('[data-editor-panel]');
+            if (!(editorPanel instanceof HTMLElement)) return;
+
+            const toolbarBottom = editorToolbarTop + 54;
+            const panelTop = editorPanel.getBoundingClientRect().top;
+            if (panelTop < toolbarBottom + 8) {
+                scrollContainer.scrollTop -= toolbarBottom + 8 - panelTop;
             }
         }
-    }, [isRunning]);
+    }, [isRunning, output, editorToolbarTop]);
 
     useEffect(() => {
         return () => {
@@ -2183,7 +2185,11 @@ builtins.input = __app_input
                     overscrollBehaviorY: 'contain'
                 }}
             >
-                <div className="mb-28 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden">
+                <div
+                    data-editor-panel
+                    className="mb-28 bg-[#0a1628] rounded-xl flex flex-col shadow-2xl border border-[#5f7fa6] overflow-hidden"
+                    style={{ scrollMarginTop: `${editorContentTop + 12}px` }}
+                >
                     <div
                         className="hidden"
                     >
