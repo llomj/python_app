@@ -7985,6 +7985,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [10], expected: false },
         ]
     },
+  1140: {
+    functionNames: ["fibonacci_up_to_n"],
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [20], expected: "0 1 1 2 3 5 8 13" },
+      { args: [5], expected: "0 1 1 2 3 5" }
+    ]
+  },
   1141: {
     functionNames: ["count_occurrences"],
     tests: [
@@ -8025,6 +8033,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
+  1148: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "10" }
+    ]
+  },
+  1149: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Local variable: 10\nGlobal variable: 20" }
+    ]
+  },
+  1150: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "30" }
+    ]
+  },
+  1151: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "20" }
+    ]
+  },
+  1152: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Local x: 50\nGlobal x: 100" }
+    ]
+  },
   1153: {
     functionNames: ["example_function"],
     compare: 'printedOrReturn',
@@ -8047,6 +8095,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Modified list: [1, 2, 3, 4, 5, 4]"
     }]
   },
+  1156: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Inside loop: 0\nInside loop: 1\nInside loop: 2\nOutside loop: 2" }
+    ]
+  },
+  1157: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "x is not defined" }
+    ]
+  },
+  1158: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Inner function: x = 10, y = 20\nOuter function: x = 10" }
+    ]
+  },
   1159: {
         functionNames: ['add_numbers'],
         tests: [
@@ -8067,6 +8139,38 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [1, 4, 9, 16, 25]
     }]
   },
+  1162: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "New value of x: 10" }
+    ]
+  },
+  1163: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Function One: 50\nFunction Two: 40" }
+    ]
+  },
+  1164: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Global variable x: 12" }
+    ]
+  },
+  1165: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Inner function: x = 25\nOuter function: x = 25" }
+    ]
+  },
   1166: {
     functionNames: ["print_arguments"],
     compare: 'printedOrReturn',
@@ -8075,6 +8179,38 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "{1, 2, 3}"
     }]
   },
+  1167: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "In the loop: y = 0\nIn the loop: y = 1\nIn the loop: y = 2\nAfter the loop: y = 2" }
+    ]
+  },
+  1168: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Global variable x inside function: 10" }
+    ]
+  },
+  1169: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Mutable variable: [100, 2, 3]\nImmutable variable: 20" }
+    ]
+  },
+  1170: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "List comprehension result: [0, 1, 4, 9, 16]" }
+    ]
+  },
   1171: {
     functionNames: ["print_variable_in_function"],
     compare: 'printedOrReturn',
@@ -8082,6 +8218,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       args: [5],
       expected: "Function variable y: 10"
     }]
+  },
+  1172: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "In the loop: x = 0\nIn the loop: x = 1\nIn the loop: x = 2\nOutside the loop: x = 2" }
+    ]
+  },
+  1173: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Global x after modification: 50" }
+    ]
+  },
+  1174: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Inner function: x = 5, y = 10, z = 15" }
+    ]
   },
   1175: {
     functionNames: ["print_global_variable"],
@@ -8156,6 +8316,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [12,8], expected: 4 },
         ]
     },
+  1194: {
+    functionNames: ["json_to_dict"],
+    tests: [
+      { args: ['{"name": "Bob", "age": 25}'], expected: { name: "Bob", age: 25 } },
+      { args: ['{"ok": true, "count": 3}'], expected: { ok: true, count: 3 } }
+    ]
+  },
   1196: {
         functionNames: ['round_number'],
         compare: 'float',
@@ -8225,6 +8392,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
         ]
     },
+  1207: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "name: Alice\nage: 30\ncity: New York" }
+    ]
+  },
   1208: {
         functionNames: ['dict_length'],
         tests: [
