@@ -9708,6 +9708,398 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], kwargs: { AGE: 30, name: 'Ann' }, expected: { AGE: 30 } }
     ]
   },
+  1402: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "0: apple\n1: banana\n2: cherry" }
+    ]
+  },
+  1403: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[('Alice', 25), ('Bob', 30), ('Charlie', 35)]" }
+    ]
+  },
+  1404: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{1: 'a', 2: 'b', 3: 'c'}" }
+    ]
+  },
+  1405: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1406: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9]" }
+    ]
+  },
+  1407: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['HELLO', 'WORLD', 'PYTHON']" }
+    ]
+  },
+  1408: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[2, 4, 6, 8, 10]" }
+    ]
+  },
+  1409: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3, 4, 5]" }
+    ]
+  },
+  1410: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Python is great" }
+    ]
+  },
+  1411: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "nohtyP" }
+    ]
+  },
+  1412: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Counter({'l': 3, 'o': 2, 'h': 1, 'e': 1, ' ': 1, 'w': 1, 'r': 1, 'd': 1})" }
+    ]
+  },
+  1413: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9]" }
+    ]
+  },
+  1414: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Hello World Python" }
+    ]
+  },
+  1415: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[(1, 4, 7), (2, 5, 8), (3, 6, 9)]" }
+    ]
+  },
+  1416: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Alice Unknown" }
+    ]
+  },
+  1417: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'fruit': ['apple', 'banana', 'cherry'], 'vegetable': ['carrot']}" }
+    ]
+  },
+  1418: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{1: [1, 1, 1], 2: [2, 2], 3: [3, 3, 3, 3], 4: [4]}" }
+    ]
+  },
+  1419: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "he112 w2r1d" }
+    ]
+  },
+  1420: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "first" }
+    ]
+  },
+  1421: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[('a', 'b'), ('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd'), ('c', 'd')]" }
+    ]
+  },
+  1422: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 [2, 3]" }
+    ]
+  },
+  1423: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "hello world:python" }
+    ]
+  },
+  1424: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 30}, {'name': 'Charlie', 'age': 35}]" }
+    ]
+  },
+  1425: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Continues after exception" }
+    ]
+  },
+  1426: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1427: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "14" }
+    ]
+  },
+  1428: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{2, 3}" }
+    ]
+  },
+  1429: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{1, 2, 3, 4}" }
+    ]
+  },
+  1430: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1431: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[3, 2, 1]" }
+    ]
+  },
+  1432: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[('a', 1), ('b', 2)]" }
+    ]
+  },
+  1433: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1" }
+    ]
+  },
+  1434: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{2: ['hi', 'no'], 5: ['hello'], 3: ['yes']}" }
+    ]
+  },
+  1435: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[(2, 1), (4, 2), (1, 3)]" }
+    ]
+  },
+  1436: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Hello" }
+    ]
+  },
+  1437: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "5" }
+    ]
+  },
+  1438: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 2 3" }
+    ]
+  },
+  1439: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'a': 1, 'b': 2}" }
+    ]
+  },
+  1440: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'a': 1}" }
+    ]
+  },
+  1441: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1442: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Key not found" }
+    ]
+  },
+  1443: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1 2" }
+    ]
+  },
+  1444: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1445: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Counter({'a': 3, 'n': 2, 'b': 1})" }
+    ]
+  },
+  1446: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 3]" }
+    ]
+  },
+  1447: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1448: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "1" }
+    ]
+  },
+  1449: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'b': 15}" }
+    ]
+  },
+  1450: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{1: 'a', 2: 'b'}" }
+    ]
+  },
   1468: {
         functionNames: ['is_prime'],
         tests: [
