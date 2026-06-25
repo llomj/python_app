@@ -7426,12 +7426,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [["a","abc","ab"]], expected: "abc" },
         ]
     },
+  1058: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1059: {
         functionNames: ['square_roots'],
         tests: [
             { args: [[1,4,9]], expected: [1,2,3] },
         ]
     },
+  1060: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1061: {
         functionNames: ['sort_by_first_element_desc'],
         tests: [
@@ -7450,6 +7466,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3,4]], expected: [2,4,6,8] },
         ]
     },
+  1064: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1065: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "40" }
+    ]
+  },
   1066: {
         functionNames: ['cube_elements'],
         tests: [
@@ -7462,12 +7494,44 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [["abc","a","ab"]], expected: ["a","ab","abc"] },
         ]
     },
+  1068: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1069: {
         functionNames: ['sum_of_elements'],
         tests: [
             { args: [[1,2,3,4,5]], expected: 15 },
         ]
     },
+  1070: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
+  1071: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "The smallest number in the list is: 7" }
+    ]
+  },
+  1072: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1073: {
         functionNames: ['convert_to_strings'],
         tests: [
@@ -7480,12 +7544,52 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3,4,5,6]], expected: 12 },
         ]
     },
+  1075: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "helloworld" }
+    ]
+  },
+  1076: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "3" }
+    ]
+  },
+  1077: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "15" }
+    ]
+  },
+  1078: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1079: {
         functionNames: ['create_square_root_tuples'],
         tests: [
             { args: [[1,4,9]], expected: [[1,1],[4,2],[9,3]] },
         ]
     },
+  1080: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1081: {
         functionNames: ['average_of_odds'],
         tests: [
@@ -7498,6 +7602,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,2,3,4,5]], expected: [1,9,25] },
         ]
     },
+  1083: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1084: {
         functionNames: ['create_cube_tuples'],
         tests: [
@@ -7516,6 +7628,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [["hi","hello","a"]], expected: [2,5,1] },
         ]
     },
+  1087: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1088: {
         functionNames: ['sum_of_cubes'],
         tests: [
@@ -7528,6 +7648,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [[1,5,3,8,2],4], expected: [1,3,2] },
         ]
     },
+  1090: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1091: {
     functionNames: ["square_generator"],
     tests: [
@@ -7586,6 +7714,139 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["divisible_by_3_and_5_generator"],
     tests: [
       { args: [50], expected: [15, 30, 45] }
+    ]
+  },
+  1101: {
+    functionNames: ["odd_filter_generator"],
+    tests: [
+      { args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] },
+      { args: [[7, 9, 10]], expected: [10] }
+    ]
+  },
+  1102: {
+    functionNames: ["cumulative_sum_generator"],
+    tests: [
+      { args: [[1, 2, 3, 4, 5]], expected: [1, 3, 6, 10, 15] },
+      { args: [[10, -2, 5]], expected: [10, 8, 13] }
+    ]
+  },
+  1103: {
+    functionNames: ["power_generator"],
+    tests: [
+      { args: [5, 3], expected: [1, 8, 27, 64, 125] },
+      { args: [4, 2], expected: [1, 4, 9, 16] }
+    ]
+  },
+  1104: {
+    functionNames: ["word_generator"],
+    tests: [
+      { args: ["This is a test sentence"], expected: ["This", "is", "a", "test", "sentence"] },
+      { args: ["hello world"], expected: ["hello", "world"] }
+    ]
+  },
+  1105: {
+    functionNames: ["square_number_generator"],
+    tests: [
+      { args: [5], expected: [1, 4, 9, 16, 25] },
+      { args: [3], expected: [1, 4, 9] }
+    ]
+  },
+  1106: {
+    functionNames: ["main", "square_odd_number_generator"],
+    tests: [
+      { functionName: "main", args: [10], expected: [1, 9, 25, 49, 81] },
+      { functionName: "square_odd_number_generator", args: [7], expected: [1, 9, 25, 49] }
+    ]
+  },
+  1107: {
+    functionNames: ["reverse_list_generator"],
+    tests: [
+      { args: [[1, 2, 3, 4, 5]], expected: [5, 4, 3, 2, 1] },
+      { args: [["a", "b"]], expected: ["b", "a"] }
+    ]
+  },
+  1108: {
+    functionNames: ["multiple_generator"],
+    tests: [
+      { args: [20, 3], expected: [3, 6, 9, 12, 15, 18] },
+      { args: [10, 5], expected: [5, 10] }
+    ]
+  },
+  1109: {
+    functionNames: ["uppercase_generator"],
+    tests: [
+      { args: ["Hello World"], expected: ["H", "W"] },
+      { args: ["ABCdef"], expected: ["A", "B", "C"] }
+    ]
+  },
+  1110: {
+    functionNames: ["consecutive_diff_generator"],
+    tests: [
+      { args: [[1, 3, 6, 10]], expected: [2, 3, 4] },
+      { args: [[10, 7, 2]], expected: [-3, -5] }
+    ]
+  },
+  1111: {
+    functionNames: ["greater_than_generator"],
+    tests: [
+      { args: [[1, 2, 3, 4, 5, 6], 3], expected: [4, 5, 6] },
+      { args: [[10, 1, 11], 10], expected: [11] }
+    ]
+  },
+  1112: {
+    functionNames: ["sum_with_index_generator"],
+    tests: [
+      { args: [[10, 20, 30, 40]], expected: [10, 21, 32, 43] },
+      { args: [[1, 1, 1]], expected: [1, 2, 3] }
+    ]
+  },
+  1113: {
+    functionNames: ["palindrome_generator"],
+    tests: [
+      { args: [["madam", "apple", "racecar", "banana"]], expected: ["madam", "racecar"] },
+      { args: [["noon", "cat", "level"]], expected: ["noon", "level"] }
+    ]
+  },
+  1114: {
+    functionNames: ["pair_product_generator"],
+    tests: [
+      { args: [[1, 2, 3, 4]], expected: [2, 6, 12] },
+      { args: [[2, 5]], expected: [10] }
+    ]
+  },
+  1115: {
+    functionNames: ["greater_than_previous_generator"],
+    tests: [
+      { args: [[1, 2, 1, 4, 3]], expected: [2, 4] },
+      { args: [[5, 6, 7]], expected: [6, 7] }
+    ]
+  },
+  1116: {
+    functionNames: ["divisible_by_generator"],
+    tests: [
+      { args: [[10, 15, 20, 25, 30], 5], expected: [10, 15, 20, 25, 30] },
+      { args: [[2, 3, 4, 6], 2], expected: [2, 4, 6] }
+    ]
+  },
+  1117: {
+    functionNames: ["even_fibonacci_generator"],
+    tests: [
+      { args: [5], expected: [0, 2, 8, 34, 144] },
+      { args: [3], expected: [0, 2, 8] }
+    ]
+  },
+  1118: {
+    functionNames: ["even_index_generator"],
+    tests: [
+      { args: [[1, 2, 3, 4, 5, 6]], expected: [1, 3, 5] },
+      { args: [["a", "b", "c"]], expected: ["a", "c"] }
+    ]
+  },
+  1119: {
+    functionNames: ["even_length_word_generator"],
+    tests: [
+      { args: ["This is a simple test sentence"], expected: ["This", "is", "simple", "test", "sentence"] },
+      { args: ["odd even four"], expected: ["even", "four"] }
     ]
   },
   1120: {
