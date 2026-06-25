@@ -2683,6 +2683,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [10, 20], expected: 30 }
         ]
     },
+  367: {
+        functionNames: ['even_or_odd'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [10], expected: '10 is even' },
+            { args: [7], expected: '7 is odd' }
+        ]
+    },
   368: {
         functionNames: ['convert_temperature'],
         compare: 'float',
@@ -2816,11 +2824,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   388: {
-    functionNames: ["sort_strings_by_last_character"],
-    tests: [{
-      args: ["hello"],
-      expected: ["e", "h", "l", "l", "o"]
-    }]
+        functionNames: ['sort_strings_by_last_character', 'main'],
+        tests: [
+            { args: [['banana', 'apple', 'grape', 'kiwi']], expected: ['banana', 'apple', 'grape', 'kiwi'] },
+            { args: [['treez', 'cliff', 'grassya']], expected: ['grassya', 'cliff', 'treez'] }
+        ]
   },
   389: {
         functionNames: ['earliest_date'],
@@ -2853,13 +2861,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   393: {
         functionNames: ['sort_complex_numbers'],
         tests: [
-            { args: [[]], expected: [] }
+            { args: [[3, 1, 2]], expected: [1, 2, 3] },
+            { args: [[5, -1, 0]], expected: [0, -1, 5] }
         ]
     },
   395: {
         functionNames: ['sort_fractions'],
         tests: [
-            { args: [[]], expected: [] }
+            { args: [[0.5, 0.3333333333333333, 0.6666666666666666, 0.25]], expected: [0.25, 0.3333333333333333, 0.5, 0.6666666666666666] },
+            { args: [[0.75, 0.125]], expected: [0.125, 0.75] }
+        ]
+    },
+  396: {
+        functionNames: ['sort_tuples_by_sum', 'main'],
+        tests: [
+            { args: [[[1, 2], [3, 4], [1, 1], [2, 2]]], expected: [[1, 1], [1, 2], [2, 2], [3, 4]] },
+            { args: [[[1, 64], [7, 3], [2, 9]]], expected: [[7, 3], [2, 9], [1, 64]] }
         ]
     },
   397: {
@@ -2881,6 +2898,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [['apple', 'banana', 'cherry', 'date']], expected: ['date', 'apple', 'cherry', 'banana'] },
             { args: [['a', 'ab', 'abc']], expected: ['a', 'ab', 'abc'] }
+        ]
+    },
+  400: {
+        functionNames: ['find_highest_ascii_word', 'main'],
+        tests: [
+            { args: [['hello', 'world', 'python', 'scrabble']], expected: 'scrabble' },
+            { args: [['aa', 'bb', 'cc', 'uu']], expected: 'uu' }
         ]
     },
   401: {
