@@ -13,6 +13,7 @@ import {
     Minus,
     Pencil,
     FileCode,
+    FileText,
     AlertTriangle,
     Key,
     ExternalLink,
@@ -1334,7 +1335,7 @@ const App: React.FC = () => {
     const [bootLog, setBootLog] = useState<string>('Handshaking...');
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'problem_full'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full'>('none');
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements'>('code');
     const [aiHintText, setAiHintText] = useState<string>('');
@@ -1371,9 +1372,26 @@ const App: React.FC = () => {
         }
     });
 
+    const [idLogProblems, setIdLogProblems] = useState<SavedProblem[]>(() => {
+        try {
+            const raw = localStorage.getItem('python_mastery_id_log');
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    const [idLogInput, setIdLogInput] = useState('');
+    const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+    const [deleteConfirmType, setDeleteConfirmType] = useState<'saved' | 'idlog' | null>(null);
+
     useEffect(() => {
         localStorage.setItem('python_mastery_saved_problems', JSON.stringify(savedProblems));
     }, [savedProblems]);
+
+    useEffect(() => {
+        localStorage.setItem('python_mastery_id_log', JSON.stringify(idLogProblems));
+    }, [idLogProblems]);
 
     const isProblemSaved = (id: number) => savedProblems.some(p => p.exerciseId === id);
 
@@ -1412,6 +1430,83 @@ const App: React.FC = () => {
             setAiHintText('');
             setShowModal('none');
         }
+    };
+
+    const isProblemInIdLog = (id: number) => idLogProblems.some(p => p.exerciseId === id);
+
+    const addProblemToIdLog = (id: number) => {
+        if (id < 1 || id > 2000) return;
+        if (isProblemInIdLog(id)) return;
+        const ex = EXERCISES.find(e => e.id === id);
+        if (ex) {
+            const newProblem: SavedProblem = {
+                exerciseId: ex.id,
+                description: ex.description,
+                initialCode: ex.initialCode,
+                solution: ex.solution,
+                savedAt: new Date().toISOString(),
+                mastered: false,
+            };
+            setIdLogProblems(prev => [...prev, newProblem]);
+        }
+    };
+
+    const deleteIdLogProblem = (id: number) => {
+        setIdLogProblems(prev => prev.filter(p => p.exerciseId !== id));
+    };
+
+    const markIdLogProblemMastered = (id: number) => {
+        setIdLogProblems(prev =>
+            prev.map(p => (p.exerciseId === id ? { ...p, mastered: true } : p))
+        );
+    };
+
+    const loadIdLogProblem = (problem: SavedProblem) => {
+        const ex = EXERCISES.find(e => e.id === problem.exerciseId);
+        if (ex) {
+            setExercise(ex);
+            setFiles([{ name: 'main.py', content: problem.initialCode }]);
+            setActiveFileIndex(0);
+            setOutput('Run code to see output...');
+            setOutputStatus('idle');
+            setPendingNextProblem(false);
+            setAiHintText('');
+            setShowModal('none');
+        }
+    };
+
+    const handleIdLogSubmit = () => {
+        const id = parseInt(idLogInput);
+        if (!isNaN(id) && id >= 1 && id <= 2000) {
+            addProblemToIdLog(id);
+            setIdLogInput('');
+        }
+    };
+
+    const handleDeleteConfirm = (id: number, type: 'saved' | 'idlog') => {
+        setDeleteConfirmId(id);
+        setDeleteConfirmType(type);
+        setShowModal('delete_confirm');
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteConfirmId(null);
+        setDeleteConfirmType(null);
+        setShowModal('settings');
+    };
+
+    const handleDeleteExecute = () => {
+        if (deleteConfirmId === null || deleteConfirmType === null) return;
+        
+        if (deleteConfirmType === 'saved') {
+            deleteSavedProblem(deleteConfirmId);
+        } else if (deleteConfirmType === 'idlog') {
+            deleteIdLogProblem(deleteConfirmId);
+        }
+        
+        setDeleteConfirmId(null);
+        setDeleteConfirmType(null);
+        setShowModal('settings');
     };
 
     const mainScrollRef = useRef<HTMLDivElement>(null);
@@ -3007,7 +3102,75 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                             </button>
                                                         )}
                                                         <button
-                                                            onClick={() => deleteSavedProblem(problem.exerciseId)}
+                                                            onClick={() => handleDeleteConfirm(problem.exerciseId, 'saved')}
+                                                            title="Remove"
+                                                            className="p-1.5 rounded-md hover:bg-red-500/20 text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
+                                        <FileText size={14} className="text-[#f59e0b]" /> ID Log
+                                    </h3>
+                                    <div className="mb-3 flex gap-2">
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="2000"
+                                            value={idLogInput}
+                                            onChange={(e) => setIdLogInput(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleIdLogSubmit()}
+                                            placeholder="Enter problem ID (1-2000)"
+                                            className="flex-1 bg-[#050c18] border border-[#1d2d44] rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#f59e0b]/50"
+                                        />
+                                        <button
+                                            onClick={handleIdLogSubmit}
+                                            disabled={!idLogInput || parseInt(idLogInput) < 1 || parseInt(idLogInput) > 2000}
+                                            className="px-4 py-2 rounded-lg bg-[#f59e0b]/20 border border-[#f59e0b]/40 text-[#f59e0b] text-xs font-bold hover:bg-[#f59e0b]/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                    {idLogProblems.length === 0 ? (
+                                        <p className="text-[11px] text-gray-400 italic">No problems in ID Log yet. Enter a problem ID above to add it.</p>
+                                    ) : (
+                                        <div className="space-y-2 max-h-[240px] overflow-y-auto pr-1">
+                                            {idLogProblems.map(problem => (
+                                                <div
+                                                    key={problem.exerciseId}
+                                                    onClick={() => loadIdLogProblem(problem)}
+                                                    className="flex items-center justify-between gap-2 rounded-lg border border-[#1d2d44] bg-[#050c18] px-3 py-2 cursor-pointer hover:border-[#f59e0b]/50 transition-colors"
+                                                >
+                                                    <div className="flex-1 text-left min-w-0">
+                                                        <span className="text-[11px] font-bold text-gray-200 block truncate">
+                                                            Problem {problem.exerciseId}
+                                                            {problem.mastered && (
+                                                                <span className="ml-2 text-[10px] text-[#22c55e] font-black uppercase tracking-wider">Mastered</span>
+                                                            )}
+                                                        </span>
+                                                        <span className="text-[10px] text-gray-400 block truncate">
+                                                            {problem.description.split('\n')[0]}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                        {!problem.mastered && (
+                                                            <button
+                                                                onClick={() => markIdLogProblemMastered(problem.exerciseId)}
+                                                                title="Mark as mastered"
+                                                                className="p-1.5 rounded-md hover:bg-[#22c55e]/20 text-[#22c55e] transition-colors"
+                                                            >
+                                                                <CheckCircle size={14} />
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            onClick={() => handleDeleteConfirm(problem.exerciseId, 'idlog')}
                                                             title="Remove"
                                                             className="p-1.5 rounded-md hover:bg-red-500/20 text-red-500 transition-colors"
                                                         >
@@ -3078,6 +3241,21 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     {resetConfirmArmed ? 'Yes, Reset Everything' : 'Reset Now'}
                                 </button>
                                 <button onClick={() => { setResetConfirmArmed(false); setShowModal('none'); }} className="w-full bg-[#1d2d44] py-4 rounded-xl">Cancel</button>
+                            </div>
+                        )}
+                        {showModal === 'delete_confirm' && (
+                            <div className="text-center py-4">
+                                <h2 className="text-lg font-bold mb-2 text-red-400">⚠️ Confirm Delete</h2>
+                                <p className="text-xs text-gray-300 mb-4 leading-relaxed">
+                                    Are you sure you want to remove Problem {deleteConfirmId} from your {deleteConfirmType === 'saved' ? 'Saved Problems' : 'ID Log'}?
+                                </p>
+                                <button
+                                    onClick={handleDeleteExecute}
+                                    className="w-full py-4 rounded-xl font-bold mb-3 bg-red-600 text-white hover:bg-red-700 transition-colors"
+                                >
+                                    Yes, Delete
+                                </button>
+                                <button onClick={handleDeleteCancel} className="w-full bg-[#1d2d44] py-4 rounded-xl hover:bg-[#253a54] transition-colors">Cancel</button>
                             </div>
                         )}
                         {showModal === 'problem_full' && (
