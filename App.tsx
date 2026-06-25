@@ -1055,12 +1055,14 @@ const App: React.FC = () => {
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
     const [resetConfirmArmed, setResetConfirmArmed] = useState(false);
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
     const mainScrollRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
+    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
@@ -1982,9 +1984,46 @@ sys.stdout = io.StringIO()
                     <div ref={editorShellRef} className="flex-grow bg-[#050c18] relative border-b border-[#5f7fa6]" style={{ minHeight: '320px' }}>
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
-                            onCreateEditor={(view) => { activeEditorViewRef.current = view; }}
+                            onCreateEditor={(view) => {
+                                activeEditorViewRef.current = view;
+                                const dom = view.contentDOM;
+                                const startLongPress = (e: MouseEvent | TouchEvent) => {
+                                    const pos = 'touches' in e ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : { x: e.clientX, y: e.clientY };
+                                    longPressTimerRef.current = setTimeout(() => {
+                                        setContextMenu({ x: pos.x, y: pos.y });
+                                    }, 500);
+                                };
+                                const cancelLongPress = () => {
+                                    if (longPressTimerRef.current) {
+                                        clearTimeout(longPressTimerRef.current);
+                                        longPressTimerRef.current = null;
+                                    }
+                                };
+                                dom.addEventListener('mousedown', startLongPress);
+                                dom.addEventListener('touchstart', startLongPress, { passive: true });
+                                dom.addEventListener('mouseup', cancelLongPress);
+                                dom.addEventListener('touchend', cancelLongPress);
+                                dom.addEventListener('touchmove', cancelLongPress);
+                                dom.addEventListener('mousemove', cancelLongPress);
+                            }}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}
                         />
+                        {contextMenu && (
+                            <>
+                                <div className="fixed inset-0 z-30" onClick={() => setContextMenu(null)} />
+                                <div className="fixed z-40 bg-[#0a1628] border border-[#1d2d44] rounded-lg shadow-2xl py-1 min-w-[160px]" style={{ left: contextMenu.x, top: contextMenu.y }}>
+                                    <button onClick={() => { const v = activeEditorViewRef.current; if (v) { v.dispatch({ selection: { anchor: 0, head: v.state.doc.length } }); v.focus(); } setContextMenu(null); }} className="w-full text-left px-4 py-2 text-xs text-white hover:bg-[#1d2d44] transition-colors flex items-center gap-2">
+                                        <MousePointer2 size={12} /> Select All
+                                    </button>
+                                    <button onClick={() => { const v = activeEditorViewRef.current; if (v) { navigator.clipboard.writeText(v.state.sliceDoc(0, v.state.doc.length)); } setContextMenu(null); }} className="w-full text-left px-4 py-2 text-xs text-white hover:bg-[#1d2d44] transition-colors flex items-center gap-2">
+                                        <Copy size={12} /> Copy All
+                                    </button>
+                                    <button onClick={() => { const v = activeEditorViewRef.current; if (v) { v.dispatch({ changes: { from: 0, to: v.state.doc.length } }); v.focus(); } setContextMenu(null); }} className="w-full text-left px-4 py-2 text-xs text-white hover:bg-[#1d2d44] transition-colors flex items-center gap-2">
+                                        <Trash2 size={12} /> Delete All
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                     <div className="bg-[#0a1628] flex-shrink-0">
                         <div className="flex items-center justify-between px-2 py-1 border-b border-[#1d2d44]">
