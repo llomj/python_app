@@ -1218,7 +1218,7 @@ const App: React.FC = () => {
         const newProblem: SavedProblem = {
             exerciseId: exercise.id,
             description: exercise.description,
-            initialCode: exercise.initialCode,
+            initialCode: files[0]?.content ?? exercise.initialCode,
             solution: exercise.solution,
             savedAt: new Date().toISOString(),
             mastered: false,
@@ -2290,26 +2290,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 <SkipForward size={14} />
                                 <span>Next</span>
                             </button>
-                            <button
-                                onClick={() => setShowModal('problem_full')}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    border: '1px solid #1d2d44',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.25rem 0.5rem',
-                                    color: '#3b82f6',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.25rem',
-                                    fontSize: '0.75rem',
-                                    flexShrink: 0,
-                                    pointerEvents: 'auto'
-                                }}
-                            >
-                                <ExternalLink size={14} />
-                                <span>View Full</span>
-                            </button>
                         </div>
                     </div>
                     <pre
@@ -2802,12 +2782,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             {savedProblems.map(problem => (
                                                 <div
                                                     key={problem.exerciseId}
-                                                    className="flex items-center justify-between gap-2 rounded-lg border border-[#1d2d44] bg-[#050c18] px-3 py-2"
+                                                    onClick={() => loadSavedProblem(problem)}
+                                                    className="flex items-center justify-between gap-2 rounded-lg border border-[#1d2d44] bg-[#050c18] px-3 py-2 cursor-pointer hover:border-[#3b82f6]/50 transition-colors"
                                                 >
-                                                    <button
-                                                        onClick={() => loadSavedProblem(problem)}
-                                                        className="flex-1 text-left min-w-0"
-                                                    >
+                                                    <div className="flex-1 text-left min-w-0">
                                                         <span className="text-[11px] font-bold text-gray-200 block truncate">
                                                             Problem {problem.exerciseId}
                                                             {problem.mastered && (
@@ -2817,8 +2795,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                         <span className="text-[10px] text-gray-400 block truncate">
                                                             {problem.description.split('\n')[0]}
                                                         </span>
-                                                    </button>
-                                                    <div className="flex items-center gap-1 flex-shrink-0">
+                                                    </div>
+                                                    <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                                                         {!problem.mastered && (
                                                             <button
                                                                 onClick={() => markSavedProblemMastered(problem.exerciseId)}
@@ -2843,6 +2821,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </div>
 
                                 </div>
+
                                 <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
                             </div>
                         )}
