@@ -1136,6 +1136,8 @@ const App: React.FC = () => {
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
     const stdinValuesRef = useRef<string[]>([]);
+    const keyboardMainScrollRef = useRef<number | null>(null);
+    const keyboardRestoreTimersRef = useRef<number[]>([]);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
     const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1157,6 +1159,26 @@ const App: React.FC = () => {
         if (difficultyMode === 'normal') return EXERCISES.length;
         return EXERCISES.filter(item => classifyExerciseDifficulty(item) === difficultyMode).length;
     }, [difficultyMode]);
+
+    const preserveEditorKeyboardPosition = useCallback(() => {
+        const mainScroller = mainScrollRef.current;
+        if (!mainScroller) return;
+
+        if (keyboardMainScrollRef.current === null) {
+            keyboardMainScrollRef.current = mainScroller.scrollTop;
+        }
+
+        const targetScrollTop = keyboardMainScrollRef.current;
+        const restore = () => {
+            mainScroller.scrollTop = targetScrollTop;
+            if (window.scrollY !== 0) window.scrollTo(0, 0);
+        };
+
+        restore();
+        window.requestAnimationFrame(restore);
+        keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
+        keyboardRestoreTimersRef.current = [60, 140, 280, 520].map(delay => window.setTimeout(restore, delay));
+    }, []);
 
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
@@ -1232,6 +1254,42 @@ const App: React.FC = () => {
 
     // Removed problematic useEffect - inline styles now properly set in JSX to allow scrolling
     // maxHeight: '300px' and overflowY: 'auto' are set directly in the style prop
+
+    useEffect(() => {
+        if (bootStage !== 'launched') return;
+        const editorShell = editorShellRef.current;
+        if (!editorShell) return;
+
+        const handleEditorFocus = () => {
+            keyboardMainScrollRef.current = mainScrollRef.current?.scrollTop ?? 0;
+            preserveEditorKeyboardPosition();
+        };
+
+        const handleEditorBlur = () => {
+            window.setTimeout(() => {
+                keyboardMainScrollRef.current = null;
+            }, 650);
+        };
+
+        const handleViewportChange = () => {
+            if (!editorShell.contains(document.activeElement)) return;
+            preserveEditorKeyboardPosition();
+        };
+
+        editorShell.addEventListener('focusin', handleEditorFocus);
+        editorShell.addEventListener('focusout', handleEditorBlur);
+        window.visualViewport?.addEventListener('resize', handleViewportChange);
+        window.visualViewport?.addEventListener('scroll', handleViewportChange);
+
+        return () => {
+            editorShell.removeEventListener('focusin', handleEditorFocus);
+            editorShell.removeEventListener('focusout', handleEditorBlur);
+            window.visualViewport?.removeEventListener('resize', handleViewportChange);
+            window.visualViewport?.removeEventListener('scroll', handleViewportChange);
+            keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
+            keyboardRestoreTimersRef.current = [];
+        };
+    }, [bootStage, preserveEditorKeyboardPosition]);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_stats', JSON.stringify(statsByMode));
