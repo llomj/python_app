@@ -242,6 +242,51 @@ def declarations_only(source):
     except Exception:
         return source
 
+def declarations_first_defs(source):
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return source
+    kept = []
+    seen = set()
+    for node in tree.body:
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            kept.append(node)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name not in seen:
+            seen.add(node.name)
+            kept.append(node)
+    tree.body = kept
+    ast.fix_missing_locations(tree)
+    try:
+        return ast.unparse(tree) + "\n"
+    except Exception:
+        return source
+
+def declaration_variants(source):
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return [source]
+    allowed = (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+    declaration_nodes = [node for node in tree.body if isinstance(node, allowed)]
+    variants = []
+    for end in range(1, len(declaration_nodes) + 1):
+        variant_tree = ast.Module(body=declaration_nodes[:end], type_ignores=[])
+        ast.fix_missing_locations(variant_tree)
+        try:
+            variants.append(ast.unparse(variant_tree) + "\n")
+        except Exception:
+            pass
+    final = declarations_only(source)
+    variants.append(final)
+    seen = set()
+    unique = []
+    for variant in variants:
+        if variant not in seen:
+            seen.add(variant)
+            unique.append(variant)
+    return unique or [source]
+
 def accepts_args(candidate, args, kwargs=None):
     try:
         inspect.signature(candidate).bind(*args, **(kwargs or {}))
@@ -270,28 +315,36 @@ def run_grader(source, grader):
                     return run_script_tests(solution, tests, compare), "", solution
             finally:
                 os.chdir(old_cwd)
-    solution = declarations_only(solution)
-    namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
-    old_stdout = sys.stdout
-    old_input = builtins.input
-    with tempfile.TemporaryDirectory() as temp_dir:
-        old_cwd = os.getcwd()
-        try:
-            os.chdir(temp_dir)
-            sys.stdout = io.StringIO()
+    last_error = ""
+    last_solution = ""
+    for candidate_solution in declaration_variants(solution):
+        namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
+        old_stdout = sys.stdout
+        old_input = builtins.input
+        with tempfile.TemporaryDirectory() as temp_dir:
+            old_cwd = os.getcwd()
             try:
+                os.chdir(temp_dir)
+                sys.stdout = io.StringIO()
+                try:
+                    with time_limit(1.0):
+                        exec(compile(candidate_solution, "<solution>", "exec"), namespace)
+                except BaseException as exc:
+                    last_error = f"solution setup raised {type(exc).__name__}: {exc}"
+                    last_solution = candidate_solution
+                    continue
+                finally:
+                    sys.stdout = old_stdout
                 with time_limit(1.0):
-                    exec(compile(solution, "<solution>", "exec"), namespace)
-            except BaseException as exc:
-                return False, f"solution setup raised {type(exc).__name__}: {exc}", solution
+                    if run_function_tests(namespace, grader, tests, compare):
+                        return True, "", candidate_solution
+                    last_error = "grader mismatch"
+                    last_solution = candidate_solution
             finally:
+                os.chdir(old_cwd)
                 sys.stdout = old_stdout
-            with time_limit(1.0):
-                return run_function_tests(namespace, grader, tests, compare), "", solution
-        finally:
-            os.chdir(old_cwd)
-            sys.stdout = old_stdout
-            builtins.input = old_input
+                builtins.input = old_input
+    return False, last_error, last_solution
 
 def run_script_tests(solution, tests, compare):
     compiled = compile(solution, "<solution>", "exec")
