@@ -320,6 +320,8 @@ import inspect
 import re
 import ast
 import types
+import os
+import shutil
 
 __auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
 __auto_grader_source = ${JSON.stringify(sourceCode)}
@@ -373,6 +375,8 @@ def __auto_grader_compact_pattern(value):
     return "\\n".join(re.sub(r"[ \\t]+", "", line) for line in __auto_grader_clean_text(value).splitlines())
 
 def __auto_grader_same(actual, expected, compare):
+    if compare == "typeName":
+        return type(actual).__name__ == expected
     actual = __auto_grader_normalize(actual)
     expected = __auto_grader_normalize(expected)
     if isinstance(actual, str) and isinstance(expected, (list, dict, tuple, set)):
@@ -397,6 +401,22 @@ def __auto_grader_same(actual, expected, compare):
             return False
         value = numbers[-1]
         return float(expected[0]) <= value <= float(expected[1])
+    if compare == "setPop":
+        if not isinstance(expected, list):
+            return False
+        lines = __auto_grader_clean_text(actual).splitlines()
+        if len(lines) < 2:
+            return False
+        try:
+            removed_values = __auto_grader_numbers(lines[0])
+            remaining = __auto_grader_maybe_literal(lines[1])
+            if len(removed_values) != 1:
+                return False
+            removed = int(removed_values[0])
+            expected_set = set(expected)
+            return removed in expected_set and set(remaining) == expected_set - {removed}
+        except Exception:
+            return False
     if compare == "length":
         try:
             return len(str(actual)) == int(expected)
@@ -510,6 +530,8 @@ def __auto_grader_run():
         arg_expressions = case.get("argExpressions", [])
         function_list_arg_names = case.get("functionListArgNames")
         expected = case.get("expected")
+        setup_remove = case.get("setupRemove", [])
+        setup_dirs = case.get("setupDirs", [])
         setup_files = case.get("setupFiles", {})
         get_files = case.get("getFiles")
         call_returned_with = case.get("callReturnedWith")
@@ -518,6 +540,9 @@ def __auto_grader_run():
         call_method_arg_expressions = case.get("callMethodArgExpressions", [])
         get_attrs = case.get("getAttrs")
         set_attrs = case.get("setAttrs", {})
+        delete_attrs = case.get("deleteAttrs", [])
+        set_items = case.get("setItems", [])
+        delete_items = case.get("deleteItems", [])
         expected_exception = case.get("expectedException")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
@@ -568,7 +593,17 @@ def __auto_grader_run():
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
         try:
+            for path_name in setup_remove:
+                if os.path.islink(path_name) or os.path.isfile(path_name):
+                    os.remove(path_name)
+                elif os.path.isdir(path_name):
+                    shutil.rmtree(path_name)
+            for dir_name in setup_dirs:
+                os.makedirs(dir_name, exist_ok=True)
             for file_name, file_content in setup_files.items():
+                dir_name = os.path.dirname(file_name)
+                if dir_name:
+                    os.makedirs(dir_name, exist_ok=True)
                 with open(file_name, "w", encoding="utf-8") as setup_file:
                     setup_file.write(file_content)
             returned = case_target(*resolved_args, **kwargs)
@@ -580,6 +615,14 @@ def __auto_grader_run():
                         "message": f"{label} expected {case_target_name}() to return a callable function."
                     }
                 returned = returned(*call_returned_with)
+            for attr_name, attr_value in set_attrs.items():
+                setattr(returned, attr_name, attr_value)
+            for attr_name in delete_attrs:
+                delattr(returned, attr_name)
+            for item_spec in set_items:
+                returned[item_spec.get("key")] = item_spec.get("value")
+            for item_key in delete_items:
+                del returned[item_key]
             if call_method is not None:
                 method = getattr(returned, call_method, None)
                 if not callable(method):
@@ -599,8 +642,6 @@ def __auto_grader_run():
                             "message": f"{label} could not prepare method argument {call_method_arg_expression!r}: {type(exc).__name__}: {exc}"
                         }
                 returned = method(*resolved_call_method_args)
-            for attr_name, attr_value in set_attrs.items():
-                setattr(returned, attr_name, attr_value)
             if get_attrs is not None:
                 returned = {name: getattr(returned, name, None) for name in get_attrs}
             if get_files is not None:
@@ -665,6 +706,8 @@ def __auto_grader_run_script():
         random_choice_values = list(case.get("randomChoiceValues", []))
         random_sample_values = list(case.get("randomSampleValues", []))
         random_shuffle_values = list(case.get("randomShuffleValues", []))
+        setup_remove = case.get("setupRemove", [])
+        setup_dirs = case.get("setupDirs", [])
         setup_files = case.get("setupFiles", {})
         label = case.get("label") or ("test " + str(index))
 
@@ -740,7 +783,17 @@ def __auto_grader_run_script():
                     return values
                 random.choices = __script_choices
 
+            for path_name in setup_remove:
+                if os.path.islink(path_name) or os.path.isfile(path_name):
+                    os.remove(path_name)
+                elif os.path.isdir(path_name):
+                    shutil.rmtree(path_name)
+            for dir_name in setup_dirs:
+                os.makedirs(dir_name, exist_ok=True)
             for file_name, file_content in setup_files.items():
+                dir_name = os.path.dirname(file_name)
+                if dir_name:
+                    os.makedirs(dir_name, exist_ok=True)
                 with open(file_name, "w", encoding="utf-8") as setup_file:
                     setup_file.write(file_content)
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}

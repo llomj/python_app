@@ -5,6 +5,8 @@ export interface AutoTestCase {
     kwargs?: Record<string, unknown>;
     expected: unknown;
     inputValues?: string[];
+    setupRemove?: string[];
+    setupDirs?: string[];
     setupFiles?: Record<string, string>;
     getFiles?: string[];
     randomValues?: number[];
@@ -18,6 +20,9 @@ export interface AutoTestCase {
     callMethodArgExpressions?: string[];
     getAttrs?: string[];
     setAttrs?: Record<string, unknown>;
+    deleteAttrs?: string[];
+    setItems?: Array<{ key: unknown; value: unknown }>;
+    deleteItems?: unknown[];
     argExpressions?: string[];
     argFunctionNames?: string[];
     functionListArgNames?: string[];
@@ -6806,6 +6811,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "True" }
     ]
   },
+  970: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'setPop',
+    tests: [
+      { args: [], expected: [10, 20, 30, 40] }
+    ]
+  },
   971: {
     functionNames: [],
     mode: 'script',
@@ -8042,6 +8055,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [[1,2,2,3],2], expected: 2 }
     ]
   },
+  1142: {
+    functionNames: ["is_perfect_square_and_armstrong"],
+    tests: [
+      { args: [1], expected: true },
+      { args: [153], expected: false },
+      { args: [16], expected: false }
+    ]
+  },
   1143: {
     functionNames: ["divisible_by_7_and_11"],
     tests: [{
@@ -8313,6 +8334,27 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], expected: [1, 100] },
         ]
     },
+  1179: {
+        functionNames: ['current_datetime'],
+        compare: 'typeName',
+        tests: [
+            { args: [], expected: "datetime" },
+        ]
+    },
+  1180: {
+        functionNames: ['current_working_directory'],
+        compare: 'typeName',
+        tests: [
+            { args: [], expected: "str" },
+        ]
+    },
+  1181: {
+        functionNames: ['python_version'],
+        compare: 'typeName',
+        tests: [
+            { args: [], expected: "str" },
+        ]
+    },
   1182: {
     functionNames: ["dict_to_json"],
     tests: [{
@@ -8325,6 +8367,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: ["abc123"], expected: true },
             { args: ["abc"], expected: false },
+        ]
+    },
+  1184: {
+        functionNames: ['list_files'],
+        compare: 'unorderedList',
+        tests: [
+            { args: ["grader_files"], setupRemove: ["grader_files"], setupFiles: { "grader_files/a.txt": "a", "grader_files/b.txt": "b" }, expected: ["a.txt", "b.txt"] },
         ]
     },
   1185: {
@@ -8376,7 +8425,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1192: {
         functionNames: ['rename_file'],
         tests: [
-            { args: ["old_file.txt", "new_file.txt"], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
+            { args: ["old_file.txt", "new_file.txt"], setupRemove: ["new_file.txt"], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
         ]
     },
   1193: {
@@ -8625,7 +8674,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1230: {
         functionNames: ['rename_file'],
         tests: [
-            { args: [], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
+            { args: [], setupRemove: ["new_file.txt"], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
         ]
     },
   1231: {
@@ -8662,6 +8711,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
+  1236: {
+        functionNames: ['create_symlink'],
+        tests: [
+            { args: [], setupRemove: ["example_symlink"], setupFiles: { "example_file.txt": "target" }, callMethod: "is_symlink", expected: true },
+        ]
+    },
   1237: {
     functionNames: ["check_directory_and_files"],
     tests: [{
@@ -8669,6 +8724,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: []
     }]
   },
+  1238: {
+        functionNames: ['get_last_modified_time'],
+        compare: 'length',
+        tests: [
+            { args: [], setupFiles: { "example_file.txt": "timestamp" }, expected: 24 },
+        ]
+    },
   1239: {
     functionNames: ["get_directory_name"],
     tests: [{
@@ -8676,6 +8738,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "example_directory"
     }]
   },
+  1240: {
+        functionNames: ['check_if_empty'],
+        tests: [
+            { args: [], setupRemove: ["example_directory"], setupDirs: ["example_directory"], expected: true },
+        ]
+    },
+  1241: {
+        functionNames: ['iterate_files'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [], setupRemove: ["example_directory"], setupFiles: { "example_directory/a.txt": "a", "example_directory/b.txt": "b" }, expected: ["a.txt", "b.txt"] },
+        ]
+    },
   1242: {
     functionNames: ["get_parent_directory"],
     tests: [{
@@ -9094,6 +9169,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "['example.com', 'test.org']" }
     ]
   },
+  1302: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1303: {
     functionNames: [],
     mode: 'script',
@@ -9108,6 +9191,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [
       { args: [], expected: "True" }
+    ]
+  },
+  1328: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'unorderedList',
+    tests: [
+      { args: [], expected: ["r", "g", "m"] }
     ]
   },
   1305: {
@@ -10887,6 +10978,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "7" }
     ]
   },
+  1541: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'dictUnorderedLists',
+    tests: [
+      { args: [], expected: { tags: ["python", "programming"] } }
+    ]
+  },
   1542: {
     functionNames: [],
     mode: 'script',
@@ -11163,6 +11262,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ["Alice", 30], callMethod: "__eq__", callMethodArgExpressions: ["Person('Bob', 30)"], expected: false },
         ]
     },
+  1575: {
+        functionNames: ['Point'],
+        compare: 'typeName',
+        tests: [
+            { args: [3, 4], callMethod: "__hash__", expected: "int" },
+        ]
+    },
   1576: {
         functionNames: ['Stack'],
         tests: [
@@ -11173,6 +11279,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['MyList'],
         tests: [
             { args: [[10, 20, 30, 40]], callMethod: "__getitem__", callMethodArgs: [2], expected: 30 },
+        ]
+    },
+  1578: {
+        functionNames: ['Timer'],
+        compare: 'typeName',
+        tests: [
+            { args: [], callMethod: "__enter__", expected: "Timer" },
         ]
     },
   1579: {
@@ -11502,6 +11615,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown Status"
     }]
   },
+  1621: {
+        functionNames: ['Person'],
+        tests: [
+            { args: ["Alice"], deleteAttrs: ["name"], getAttrs: ['name'], expected: { name: null } },
+        ]
+    },
+  1622: {
+        functionNames: ['MyDict'],
+        tests: [
+            { args: [], setItems: [{ key: "key", value: "value" }], callMethod: "__getitem__", callMethodArgs: ["key"], expected: "value" },
+        ]
+    },
+  1623: {
+        functionNames: ['MyList'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], deleteItems: [2], getAttrs: ['items'], expected: { items: [1, 2, 4, 5] } },
+        ]
+    },
   1624: {
         functionNames: ['MyContainer'],
         tests: [
