@@ -10788,6 +10788,94 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "120" }
     ]
   },
+  1551: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "50" }
+    ]
+  },
+  1553: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]" }
+    ]
+  },
+  1554: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]" }
+    ]
+  },
+  1555: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['red', 'green', 'blue', 'red', 'green']" }
+    ]
+  },
+  1556: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['hello', 'hello', 'hello']" }
+    ]
+  },
+  1557: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[0, 1, 2, 3, 4]" }
+    ]
+  },
+  1558: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 2, 3, 4, 5] [1, 2, 3, 4, 5]" }
+    ]
+  },
+  1559: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "[1, 3, 6, 10, 15]" }
+    ]
+  },
+  1560: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Person(name='Alice', age=30)" }
+    ]
+  },
+  1561: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Student(name='Bob', age=18, grades=[])" }
+    ]
+  },
+  1562: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Point(x=3, y=4)" }
+    ]
+  },
   1468: {
         functionNames: ['is_prime'],
         tests: [
@@ -11094,6 +11182,118 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['add_one_to_all'],
         tests: [
             { args: [[1,2,3]], expected: [2,3,4] },
+        ]
+    },
+  1681: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10" },
+        ]
+    },
+  1682: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "2\n4\n6\n8\n10\n12\n14\n16\n18\n20" },
+        ]
+    },
+  1683: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "1\n3\n5\n7\n9\n11\n13\n15\n17\n19" },
+        ]
+    },
+  1684: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50" },
+        ]
+    },
+  1685: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "H\ne\nl\nl\no" },
+        ]
+    },
+  1686: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "10\n20\n30" },
+        ]
+    },
+  1687: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "55" },
+        ]
+    },
+  1688: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "120" },
+        ]
+    },
+  1689: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1" },
+        ]
+    },
+  1690: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "0\n3\n6\n9\n12\n15\n18" },
+        ]
+    },
+  1691: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "1\n2\n3\n4\n5" },
+        ]
+    },
+  1692: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "55" },
+        ]
+    },
+  1693: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "2\n4\n6\n8\n10\n12\n14\n16\n18\n20" },
+        ]
+    },
+  1694: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1" },
         ]
     },
   1695: {
