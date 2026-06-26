@@ -12881,7 +12881,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1799: {
         functionNames: ['merge_two_lists'],
         tests: [
-            { args: [[1,2],[3,4]], expected: [1,2,3,4] },
+            { args: [[1,2],[3,4]], expected: [1,3,2,4] },
         ]
     },
   1800: {
@@ -12893,7 +12893,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1801: {
         functionNames: ['get_unique_elements'],
         tests: [
-            { args: [[1,2,2,3,3,4]], expected: [1,2,3,4] },
+            { args: [[1,2,3,4], [3,4,5,6]], expected: [1,2,5,6] },
         ]
     },
   1802: {
@@ -12930,7 +12930,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1807: {
         functionNames: ['count_occurrences_in_list'],
         tests: [
-            { args: [[1,2,2,3,2],2], expected: 3 },
+            { args: [[1,2,2,3,2]], expected: {"1": 1, "2": 3, "3": 1} },
         ]
     },
   1808: {
@@ -12978,13 +12978,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1815: {
         functionNames: ['capitalize_all_words'],
         tests: [
-            { args: [["hello","world"]], expected: ["Hello","World"] },
+            { args: ["hello world"], expected: "Hello World" },
         ]
     },
   1816: {
         functionNames: ['reverse_words'],
         tests: [
-            { args: [["hello","world"]], expected: ["olleh","dlrow"] },
+            { args: ["hello world"], expected: "world hello" },
         ]
     },
   1817: {
@@ -13058,19 +13058,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1828: {
         functionNames: ['get_range_list'],
         tests: [
-            { args: [5], expected: [0,1,2,3,4] },
+            { args: [1,5], expected: [1,2,3,4,5] },
         ]
     },
   1829: {
         functionNames: ['get_even_range'],
         tests: [
-            { args: [10], expected: [0,2,4,6,8] },
+            { args: [1,10], expected: [2,4,6,8,10] },
         ]
     },
   1830: {
         functionNames: ['get_odd_range'],
         tests: [
-            { args: [10], expected: [1,3,5,7,9] },
+            { args: [1,10], expected: [1,3,5,7,9] },
         ]
     },
   1831: {
@@ -13172,13 +13172,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1847: {
         functionNames: ['extract_numbers_from_string'],
         tests: [
-            { args: ["ab12cd34"], expected: "1234" },
+            { args: ["ab12cd34"], expected: ["1","2","3","4"] },
         ]
     },
   1848: {
         functionNames: ['extract_letters_from_string'],
         tests: [
-            { args: ["ab12cd34"], expected: "abcd" },
+            { args: ["ab12cd34"], expected: ["a","b","c","d"] },
         ]
     },
   1849: {
@@ -13220,9 +13220,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1855: {
         functionNames: ['calculate_tip'],
-        compare: 'float',
         tests: [
-            { args: [50,15], expected: 7.5 },
+            { args: [50,15], expected: [7.5,57.5] },
         ]
     },
   1856: {
@@ -13258,26 +13257,26 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1861: {
         functionNames: ['check_all_conditions'],
         tests: [
-            { args: [15], expected: true },
+            { args: [6], expected: true },
         ]
     },
   1862: {
         functionNames: ['format_full_name'],
         tests: [
-            { args: ["John","Doe"], expected: "John Doe" },
+            { args: ["John","Michael","Doe"], expected: "John Michael Doe" },
         ]
     },
   1863: {
         functionNames: ['calculate_bmi'],
         compare: 'float',
         tests: [
-            { args: [70,1.75], expected: 22.857142857142858 },
+            { args: [70,1.75], expected: 22.9 },
         ]
     },
   1864: {
         functionNames: ['check_bmi_category'],
         tests: [
-            { args: [22.5], expected: "Normal weight" },
+            { args: [70,1.75], expected: "Normal" },
         ]
     },
   1865: {
