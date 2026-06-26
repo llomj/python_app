@@ -5481,7 +5481,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["main", "get_unique_elements"],
     compare: "unorderedList",
     tests: [
-      { functionName: "get_unique_elements", args: [["apple", "banana", "apple", "kiwi"]], expected: ["apple", "banana", "kiwi"] }
+      { functionName: "get_unique_elements", args: [["apple", "banana", "apple", "kiwi"]], expected: ["apple", "banana", "kiwi"] },
+      { functionName: "get_unique_elements", args: [[1, 2, 1, 3]], expected: [1, 2, 3] }
     ]
   },
   756: {
@@ -5585,7 +5586,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   770: {
     functionNames: ["main", "sum_of_list"],
     tests: [
-      { functionName: "main", args: [[2, 2, 2, 2, 2]], expected: 10 }
+      { functionName: "main", args: [[2, 2, 2, 2, 2]], expected: 10 },
+      { functionName: "sum_of_list", args: [[1, -1, 5]], expected: 5 }
     ]
   },
   771: {
@@ -5606,7 +5608,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   773: {
     functionNames: ["lst_to_dic"],
     tests: [
-      { args: [[1, 2, 3], ["start", "middle", "end"]], expected: {"1": "start", "2": "middle", "3": "end"} }
+      { args: [[1, 2, 3], ["start", "middle", "end"]], expected: {"1": "start", "2": "middle", "3": "end"} },
+      { args: [["x", "y"], [9, 8]], expected: {"x": 9, "y": 8} }
     ]
   },
   774: {
@@ -5634,7 +5637,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["print_dict_items", "main"],
     compare: "printedOrReturn",
     tests: [
-      { functionName: "print_dict_items", args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" }
+      { functionName: "print_dict_items", args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" },
+      { functionName: "print_dict_items", args: [{"x": "yes"}], expected: "x: yes" }
     ]
   },
   778: {
@@ -5647,7 +5651,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   779: {
     functionNames: ["sort_dic"],
     tests: [
-      { args: [{"b": 2, "a": 1}], expected: {"a": 1, "b": 2} }
+      { args: [{"b": 2, "a": 1}], expected: {"a": 1, "b": 2} },
+      { args: [{"z": 1, "m": 2}], expected: {"m": 2, "z": 1} }
     ]
   },
   780: {
@@ -5660,7 +5665,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   781: {
     functionNames: ["frequency_elements"],
     tests: [
-      { args: [["tree", "tree", "flower", "flower", "tree"]], expected: {"tree": 3, "flower": 2} }
+      { args: [["tree", "tree", "flower", "flower", "tree"]], expected: {"tree": 3, "flower": 2} },
+      { args: [["a", "b", "a"]], expected: {"a": 2, "b": 1} }
     ]
   },
   782: {
@@ -5680,56 +5686,65 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["get_keys"],
     compare: "unorderedList",
     tests: [
-      { args: [{"name": "Steven", "age": 56}], expected: ["name", "age"] }
+      { args: [{"name": "Steven", "age": 56}], expected: ["name", "age"] },
+      { args: [{"city": "Paris"}], expected: ["city"] }
     ]
   },
   785: {
     functionNames: ["get_keys"],
     tests: [
-      { args: [{"name": "Steven", "age": 56}], expected: ["Steven", 56] }
+      { args: [{"name": "Steven", "age": 56}], expected: ["Steven", 56] },
+      { args: [{"city": "Paris"}], expected: ["Paris"] }
     ]
   },
   786: {
     functionNames: ["get_keys"],
     compare: "unorderedList",
     tests: [
-      { args: [{"city": "New York", "job": "Engineer"}], expected: ["New York", "Engineer"] }
+      { args: [{"city": "New York", "job": "Engineer"}], expected: ["New York", "Engineer"] },
+      { args: [{"country": "France"}], expected: ["France"] }
     ]
   },
   787: {
     functionNames: ["largest_value"],
     tests: [
-      { args: [{"name": 777, "age": 56, "city": 34}], expected: 777 }
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: 777 },
+      { args: [{"low": 1, "high": 9}], expected: 9 }
     ]
   },
   788: {
     functionNames: ["largest_value"],
     tests: [
-      { args: [{"name": 777, "age": 56, "city": 34}], expected: 34 }
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: 34 },
+      { args: [{"low": 1, "high": 9}], expected: 1 }
     ]
   },
   789: {
     functionNames: ["lst_dic"],
     tests: [
-      { args: [[1, 2, 3], ["sand", "rock", "beach", "sea"]], expected: {"1": "sand", "2": "rock", "3": "beach"} }
+      { args: [[1, 2, 3], ["sand", "rock", "beach", "sea"]], expected: {"1": "sand", "2": "rock", "3": "beach"} },
+      { args: [["x", "y"], [9, 8]], expected: {"x": 9, "y": 8} }
     ]
   },
   790: {
     functionNames: ["combine_dictionaries"],
     tests: [
-      { args: [{"a": 1, "b": 2, "c": 3}, {"b": 3, "c": 4, "d": 5}], expected: {"a": 1, "b": 5, "c": 7, "d": 5} }
+      { args: [{"a": 1, "b": 2, "c": 3}, {"b": 3, "c": 4, "d": 5}], expected: {"a": 1, "b": 5, "c": 7, "d": 5} },
+      { args: [{"x": 2}, {"x": 3, "y": 4}], expected: {"x": 5, "y": 4} }
     ]
   },
   791: {
     functionNames: ["invert_dictionary"],
     tests: [
-      { args: [{"name": "Alice", "age": 30}], expected: {"Alice": "name", "30": "age"} }
+      { args: [{"name": "Alice", "age": 30}], expected: {"Alice": "name", "30": "age"} },
+      { args: [{"a": "x", "b": "y"}], expected: {"x": "a", "y": "b"} }
     ]
   },
   792: {
     functionNames: ["remove_duplicates_values"],
     tests: [
-      { args: [{"name": "Alice", "age": 30, "nickname": "Alice"}], expected: {"name": "Alice", "age": 30} }
+      { args: [{"name": "Alice", "age": 30, "nickname": "Alice"}], expected: {"name": "Alice", "age": 30} },
+      { args: [{"a": 1, "b": 1, "c": 2}], expected: {"a": 1, "c": 2} }
     ]
   },
   793: {
@@ -5742,13 +5757,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   794: {
     functionNames: ["multiply_by2"],
     tests: [
-      { args: [{"a": 2, "b": 8}], expected: {"a": 4, "b": 16} }
+      { args: [{"a": 2, "b": 8}], expected: {"a": 4, "b": 16} },
+      { args: [{"x": 0, "y": -3}], expected: {"x": 0, "y": -6} }
     ]
   },
   795: {
     functionNames: ["len_key_value_pair"],
     tests: [
-      { args: [{"name": "Alice", "age": 30, "job": "Engineer"}], expected: 3 }
+      { args: [{"name": "Alice", "age": 30, "job": "Engineer"}], expected: 3 },
+      { args: [{}], expected: 0 }
     ]
   },
   796: {
@@ -5761,7 +5778,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   797: {
     functionNames: ["add_key_value_pair"],
     tests: [
-      { args: [{"name": "Alice"}], expected: {"name": "Alice", "new_key": "new_value"} }
+      { args: [{"name": "Alice"}], expected: {"name": "Alice", "new_key": "new_value"} },
+      { args: [{"x": 1}], expected: {"x": 1, "new_key": "new_value"} }
     ]
   },
   798: {
@@ -5780,13 +5798,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   800: {
     functionNames: ["remove_set_keys"],
     tests: [
-      { args: [{"name": "Alice", "age": 30, "city": "New York", "job": "Engineer"}, ["age", "city"]], expected: {"name": "Alice", "job": "Engineer"} }
+      { args: [{"name": "Alice", "age": 30, "city": "New York", "job": "Engineer"}, ["age", "city"]], expected: {"name": "Alice", "job": "Engineer"} },
+      { args: [{"a": 1, "b": 2}, ["b"]], expected: {"a": 1} }
     ]
   },
   801: {
     functionNames: ["dic_lst_tuples"],
     tests: [
-      { args: [{"a": 1, "b": 2}], expected: [["a", 1], ["b", 2]] }
+      { args: [{"a": 1, "b": 2}], expected: [["a", 1], ["b", 2]] },
+      { args: [{"x": 9}], expected: [["x", 9]] }
     ]
   },
   802: {
@@ -5799,7 +5819,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   803: {
     functionNames: ["replace_value"],
     tests: [
-      { args: [{"a": 1, "b": [2]}, [1, 2, 3]], expected: {"a": [1, 2, 3], "b": [2]} }
+      { args: [{"a": 1, "b": [2]}, [1, 2, 3]], expected: {"a": [1, 2, 3], "b": [2]} },
+      { args: [{"x": 5, "y": [1]}, [9]], expected: {"x": [9], "y": [1]} }
     ]
   },
   804: {
@@ -5818,44 +5839,51 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   806: {
     functionNames: ["sort_dic"],
     tests: [
-      { args: [{"a": 1, "b": 2, "c": 0}], expected: {"b": 2, "a": 1, "c": 0} }
+      { args: [{"a": 1, "b": 2, "c": 0}], expected: {"b": 2, "a": 1, "c": 0} },
+      { args: [{"x": 3, "y": 1}], expected: {"x": 3, "y": 1} }
     ]
   },
   807: {
     functionNames: ["lst_tuples"],
     tests: [
-      { args: [[["a", 1], ["b", 2], ["c", 3]]], expected: {"a": 1, "b": 2, "c": 3} }
+      { args: [[["a", 1], ["b", 2], ["c", 3]]], expected: {"a": 1, "b": 2, "c": 3} },
+      { args: [[["x", 9]]], expected: {"x": 9} }
     ]
   },
   808: {
     functionNames: ["less_then_10"],
     tests: [
-      { args: [{"low": 1, "ten": 10, "high": 12}], expected: {"ten": 10, "high": 12} }
+      { args: [{"low": 1, "ten": 10, "high": 12}], expected: {"ten": 10, "high": 12} },
+      { args: [{"small": 9, "big": 11}], expected: {"big": 11} }
     ]
   },
   809: {
     functionNames: ["print_readable"],
     compare: "printedOrReturn",
     tests: [
-      { args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" }
+      { args: [{"a": 1, "b": 2}], expected: "a: 1\nb: 2" },
+      { args: [{"x": "yes"}], expected: "x: yes" }
     ]
   },
   810: {
     functionNames: ["students_grades"],
     tests: [
-      { args: [{"Bob": 50, "Alex": 72, "Fred": 87, "Liz": 90}], expected: ["Alex", "Fred", "Liz"] }
+      { args: [{"Bob": 50, "Alex": 72, "Fred": 87, "Liz": 90}], expected: ["Alex", "Fred", "Liz"] },
+      { args: [{"Low": 69, "Pass": 70}], expected: ["Pass"] }
     ]
   },
   811: {
     functionNames: ["word_len"],
     tests: [
-      { args: ["today we code"], expected: {"today": 5, "we": 2, "code": 4} }
+      { args: ["today we code"], expected: {"today": 5, "we": 2, "code": 4} },
+      { args: ["a bb"], expected: {"a": 1, "bb": 2} }
     ]
   },
   812: {
     functionNames: ["word_len"],
     tests: [
-      { args: ["python is fun"], expected: {"python": 6, "is": 2, "fun": 3} }
+      { args: ["python is fun"], expected: {"python": 6, "is": 2, "fun": 3} },
+      { args: ["a bb"], expected: {"a": 1, "bb": 2} }
     ]
   },
   813: {
@@ -5868,25 +5896,29 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   814: {
     functionNames: ["upper_keys"],
     tests: [
-      { args: [{"a": 1, "b": 2}], expected: {"A": 1, "B": 2} }
+      { args: [{"a": 1, "b": 2}], expected: {"A": 1, "B": 2} },
+      { args: [{"x": 9}], expected: {"X": 9} }
     ]
   },
   815: {
     functionNames: ["intersection"],
     tests: [
-      { args: [{"Bob": 500, "Alex": 72, "Liz": 90}, {"Bob": 50, "Liz": 90}], expected: {"Bob": 500, "Liz": 90} }
+      { args: [{"Bob": 500, "Alex": 72, "Liz": 90}, {"Bob": 50, "Liz": 90}], expected: {"Bob": 500, "Liz": 90} },
+      { args: [{"a": 1, "b": 2}, {"b": 9, "c": 3}], expected: {"b": 2} }
     ]
   },
   816: {
     functionNames: ["count_vowels"],
     tests: [
-      { args: ["hello"], expected: {"a": 0, "e": 1, "i": 0, "o": 1, "u": 0} }
+      { args: ["hello"], expected: {"a": 0, "e": 1, "i": 0, "o": 1, "u": 0} },
+      { args: ["aei"], expected: {"a": 1, "e": 1, "i": 1, "o": 0, "u": 0} }
     ]
   },
   817: {
     functionNames: ["remove_value_is_none"],
     tests: [
-      { args: [{"Bob": null, "Fred": 89, "Liz": 90}], expected: {"Fred": 89, "Liz": 90} }
+      { args: [{"Bob": null, "Fred": 89, "Liz": 90}], expected: {"Fred": 89, "Liz": 90} },
+      { args: [{"a": null, "b": 2}], expected: {"b": 2} }
     ]
   },
   818: {
@@ -5899,43 +5931,50 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   819: {
     functionNames: ["dict_to_json"],
     tests: [
-      { args: [{"Bob": 500, "Alex": 72}], expected: "{\"Bob\": 500, \"Alex\": 72}" }
+      { args: [{"Bob": 500, "Alex": 72}], expected: "{\"Bob\": 500, \"Alex\": 72}" },
+      { args: [{"x": 1}], expected: "{\"x\": 1}" }
     ]
   },
   820: {
     functionNames: ["merge_dicts"],
     tests: [
-      { args: [{"name": "Steven"}, {"named": "Alice"}], expected: {"name": "Steven", "named": "Alice"} }
+      { args: [{"name": "Steven"}, {"named": "Alice"}], expected: {"name": "Steven", "named": "Alice"} },
+      { args: [{"a": 1}, {"b": 2}], expected: {"a": 1, "b": 2} }
     ]
   },
   821: {
     functionNames: ["product_values"],
     tests: [
-      { args: [{"a": 2, "b": 3, "c": 4}], expected: 24 }
+      { args: [{"a": 2, "b": 3, "c": 4}], expected: 24 },
+      { args: [{"x": 5, "y": 0}], expected: 0 }
     ]
   },
   822: {
     functionNames: ["average_values"],
     tests: [
-      { args: [{"a": 10, "b": 20, "c": 30}], expected: 20 }
+      { args: [{"a": 10, "b": 20, "c": 30}], expected: 20 },
+      { args: [{"x": 2, "y": 4}], expected: 3 }
     ]
   },
   823: {
     functionNames: ["swap_values"],
     tests: [
-      { args: [{"a": 1, "b": 2, "c": 3}, "a", "c"], expected: {"a": 3, "b": 2, "c": 1} }
+      { args: [{"a": 1, "b": 2, "c": 3}, "a", "c"], expected: {"a": 3, "b": 2, "c": 1} },
+      { args: [{"x": 9, "y": 8}, "x", "y"], expected: {"x": 8, "y": 9} }
     ]
   },
   824: {
     functionNames: ["largest_value"],
     tests: [
-      { args: [{"name": 777, "age": 56, "city": 34}], expected: "name" }
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: "name" },
+      { args: [{"low": 1, "high": 9}], expected: "high" }
     ]
   },
   825: {
     functionNames: ["smallest_value"],
     tests: [
-      { args: [{"name": 777, "age": 56, "city": 34}], expected: "city" }
+      { args: [{"name": 777, "age": 56, "city": 34}], expected: "city" },
+      { args: [{"low": 1, "high": 9}], expected: "low" }
     ]
   },
   826: {
@@ -6407,17 +6446,29 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   883: {
     functionNames: ["add"],
-    tests: [{
-      args: [1, 2, 3],
-      expected: 6
-    }]
+    tests: [
+      {
+        args: [1, 2, 3],
+        expected: 6
+      },
+      {
+        args: [-1, 5, 0],
+        expected: 4
+      }
+    ]
   },
   884: {
     functionNames: ["describe"],
-    tests: [{
-      args: ["Emma", 28, "London"],
-      expected: "Emma is 28 years old and lives in London."
-    }]
+    tests: [
+      {
+        args: ["Emma", 28, "London"],
+        expected: "Emma is 28 years old and lives in London."
+      },
+      {
+        args: ["Noah", 9, "Paris"],
+        expected: "Noah is 9 years old and lives in Paris."
+      }
+    ]
   },
   885: {
     functionNames: [],
@@ -6540,10 +6591,16 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   900: {
     functionNames: ["min_max"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: [1, 5]
-    }]
+    tests: [
+      {
+        args: [[1, 2, 3, 4, 5]],
+        expected: [1, 5]
+      },
+      {
+        args: [[10, -2, 7]],
+        expected: [-2, 10]
+      }
+    ]
   },
   901: {
     functionNames: [],
@@ -7712,18 +7769,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1048: {
     functionNames: ["print_numbers"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1\n2\n3\n4\n5"
-    }]
+    tests: [
+      {
+        args: [5],
+        expected: "1\n2\n3\n4\n5"
+      },
+      {
+        args: [3],
+        expected: "1\n2\n3"
+      }
+    ]
   },
   1049: {
     functionNames: ["print_reverse"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "5\n4\n3\n2\n1"
-    }]
+    tests: [
+      {
+        args: [5],
+        expected: "5\n4\n3\n2\n1"
+      },
+      {
+        args: [3],
+        expected: "3\n2\n1"
+      }
+    ]
   },
   1050: {
         functionNames: ['is_sorted'],
@@ -7744,7 +7813,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["binary_strings"],
     compare: "printedOrReturn",
     tests: [
-      { args: [2], expected: "00\n01\n10\n11" }
+      { args: [2], expected: "00\n01\n10\n11" },
+      { args: [1], expected: "0\n1" }
     ]
   },
   1053: {
@@ -7758,6 +7828,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['triangular_number'],
         tests: [
             { args: [5], expected: 15 },
+            { args: [3], expected: 6 },
         ]
     },
   1055: {
@@ -7771,13 +7842,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["permutations"],
     compare: "printedOrReturn",
     tests: [
-      { args: ["ab"], expected: "ab\nba" }
+      { args: ["ab"], expected: "ab\nba" },
+      { args: ["a"], expected: "a" }
     ]
   },
   1057: {
         functionNames: ['longest_string'],
         tests: [
             { args: [["a","abc","ab"]], expected: "abc" },
+            { args: [["xy","z"]], expected: "xy" },
         ]
     },
   1058: {
@@ -7792,6 +7865,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['square_roots'],
         tests: [
             { args: [[1,4,9]], expected: [1,2,3] },
+            { args: [[0,16]], expected: [0,4] },
         ]
     },
   1060: {
@@ -7806,18 +7880,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sort_by_first_element_desc'],
         tests: [
             { args: [[[3,1],[1,2],[2,3]]], expected: [[3,1],[2,3],[1,2]] },
+            { args: [[[0,9],[5,1]]], expected: [[5,1],[0,9]] },
         ]
     },
   1062: {
         functionNames: ['filter_short_words'],
         tests: [
             { args: [["a","abc","abcd","ab"],3], expected: ["abc","abcd"] },
+            { args: [["hi","hello"],4], expected: ["hello"] },
         ]
     },
   1063: {
         functionNames: ['double_elements'],
         tests: [
             { args: [[1,2,3,4]], expected: [2,4,6,8] },
+            { args: [[0,-2]], expected: [0,-4] },
         ]
     },
   1064: {
@@ -7840,12 +7917,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['cube_elements'],
         tests: [
             { args: [[1,2,3,4]], expected: [1,8,27,64] },
+            { args: [[0,-2]], expected: [0,-8] },
         ]
     },
   1067: {
         functionNames: ['sort_by_length'],
         tests: [
             { args: [["abc","a","ab"]], expected: ["a","ab","abc"] },
+            { args: [["long","x"]], expected: ["x","long"] },
         ]
     },
   1068: {
@@ -7860,6 +7939,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sum_of_elements'],
         tests: [
             { args: [[1,2,3,4,5]], expected: 15 },
+            { args: [[10,-2]], expected: 8 },
         ]
     },
   1070: {
@@ -7890,12 +7970,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['convert_to_strings'],
         tests: [
             { args: [[1,2,3]], expected: ["1","2","3"] },
+            { args: [[0,-5]], expected: ["0","-5"] },
         ]
     },
   1074: {
         functionNames: ['sum_of_even'],
         tests: [
             { args: [[1,2,3,4,5,6]], expected: 12 },
+            { args: [[1,3,5]], expected: 0 },
         ]
     },
   1075: {
@@ -7934,6 +8016,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['create_square_root_tuples'],
         tests: [
             { args: [[1,4,9]], expected: [[1,1],[4,2],[9,3]] },
+            { args: [[0,16]], expected: [[0,0],[16,4]] },
         ]
     },
   1080: {
@@ -7948,12 +8031,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['average_of_odds'],
         tests: [
             { args: [[1,2,3,4,5]], expected: 3 },
+            { args: [[2,7,9]], expected: 8 },
         ]
     },
   1082: {
         functionNames: ['square_odd_numbers'],
         tests: [
             { args: [[1,2,3,4,5]], expected: [1,9,25] },
+            { args: [[2,7]], expected: [49] },
         ]
     },
   1083: {
@@ -7968,18 +8053,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['create_cube_tuples'],
         tests: [
             { args: [[1,2,3]], expected: [[1,1],[2,8],[3,27]] },
+            { args: [[0,-2]], expected: [[0,0],[-2,-8]] },
         ]
     },
   1085: {
         functionNames: ['filter_greater_than'],
         tests: [
             { args: [[1,5,3,8,2],3], expected: [1,3,2] },
+            { args: [[4,1,6],4], expected: [4,1] },
         ]
     },
   1086: {
         functionNames: ['convert_to_lengths'],
         tests: [
             { args: [["hi","hello","a"]], expected: [2,5,1] },
+            { args: [["","abc"]], expected: [0,3] },
         ]
     },
   1087: {
@@ -7994,12 +8082,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sum_of_cubes'],
         tests: [
             { args: [[1,2,3]], expected: 36 },
+            { args: [[0,-2]], expected: -8 },
         ]
     },
   1089: {
         functionNames: ['remove_elements_greater_than'],
         tests: [
             { args: [[1,5,3,8,2],4], expected: [1,3,2] },
+            { args: [[4,1,6],4], expected: [4,1] },
         ]
     },
   1090: {
@@ -8013,61 +8103,71 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1091: {
     functionNames: ["square_generator"],
     tests: [
-      { args: [5], expected: [0, 1, 4, 9, 16] }
+      { args: [5], expected: [0, 1, 4, 9, 16] },
+      { args: [3], expected: [0, 1, 4] }
     ]
   },
   1092: {
     functionNames: ["fibonacci_generator"],
     tests: [
-      { args: [20], expected: [0, 1, 1, 2, 3, 5, 8, 13] }
+      { args: [20], expected: [0, 1, 1, 2, 3, 5, 8, 13] },
+      { args: [5], expected: [0, 1, 1, 2, 3, 5] }
     ]
   },
   1093: {
     functionNames: ["char_generator"],
     tests: [
-      { args: ["hello"], expected: ["h", "e", "l", "l", "o"] }
+      { args: ["hello"], expected: ["h", "e", "l", "l", "o"] },
+      { args: ["ab"], expected: ["a", "b"] }
     ]
   },
   1094: {
     functionNames: ["step_generator"],
     tests: [
-      { args: [10], expected: [1, 3, 5, 7, 9] }
+      { args: [10], expected: [1, 3, 5, 7, 9] },
+      { args: [5], expected: [1, 3] }
     ]
   },
   1095: {
     functionNames: ["even_number_generator"],
     tests: [
-      { args: [10], expected: [2, 4, 6, 8, 10] }
+      { args: [10], expected: [2, 4, 6, 8, 10] },
+      { args: [5], expected: [2, 4] }
     ]
   },
   1096: {
     functionNames: ["square_even_generator"],
     tests: [
-      { args: [10], expected: [4, 16, 36, 64, 100] }
+      { args: [10], expected: [4, 16, 36, 64, 100] },
+      { args: [5], expected: [4, 16] }
     ]
   },
   1097: {
     functionNames: ["prime_generator"],
     tests: [
-      { args: [5], expected: [2, 3, 5, 7, 11] }
+      { args: [5], expected: [2, 3, 5, 7, 11] },
+      { args: [3], expected: [2, 3, 5] }
     ]
   },
   1098: {
     functionNames: ["consecutive_pair_sum"],
     tests: [
-      { args: [[1, 2, 3, 4, 5]], expected: [3, 5, 7, 9] }
+      { args: [[1, 2, 3, 4, 5]], expected: [3, 5, 7, 9] },
+      { args: [[10, -2, 5]], expected: [8, 3] }
     ]
   },
   1099: {
     functionNames: ["factorial_generator"],
     tests: [
-      { args: [5], expected: [1, 2, 6, 24, 120] }
+      { args: [5], expected: [1, 2, 6, 24, 120] },
+      { args: [3], expected: [1, 2, 6] }
     ]
   },
   1100: {
     functionNames: ["divisible_by_3_and_5_generator"],
     tests: [
-      { args: [50], expected: [15, 30, 45] }
+      { args: [50], expected: [15, 30, 45] },
+      { args: [20], expected: [15] }
     ]
   },
   1101: {
