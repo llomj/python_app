@@ -463,7 +463,8 @@ def run_function_tests(namespace, grader, tests, compare):
         old_open = builtins.open
         old_cwd = os.getcwd()
         sys.stdout = io.StringIO()
-        builtins.input = lambda prompt='': next(iter(case.get("inputValues", [])))
+        input_iter = iter(case.get("inputValues", []))
+        builtins.input = lambda prompt='': next(input_iter)
         denied = set(case.get("permissionDeniedPaths", []))
         def guarded_open(file, *open_args, **open_kwargs):
             if str(file) in denied:

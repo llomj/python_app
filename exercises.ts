@@ -276,7 +276,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 31",
         "description": "Write a Python function called get_initials that takes a full name (first and last name) as input and returns the initials of the name in uppercase. For example, if the input is \u201cJohn Doe\u201d, the function should return \u201cJ.D.\u201d.",
         "initialCode": "def get_initials(full_name):\n    pass\n\ndef get_initials(fullname):\n    pass",
-        "solution": "def get_initials(full_name):\n    parts = full_name.split()\n    \n    initials = []\n    \n    for part in parts:\n        initials.append(part[0].upper())  # Add uppercase first letter to list\n        \n    return '.'.join(initials) \n\nlst = \"Jonathan noll\"\nprint(get_initials(lst))  # Output: \"J.N.\"\n\ndef get_initials(fullname):\n    string = fullname.split()\n    \n    initials = f\"{string[0][0].upper()}.{string[1][0].upper()}\"\n    return initials\n\nstring = \"jonathan koll\"\nprint(get_initials(string))  # Output: J.K\n\n# Alternative solution using list comprehension\ndef get_initials(full_name):\n    return '.'.join([name[0].upper() for name in full_name.split()])\n\nprint(get_initials(\"John Doe\"))  # Output: J.D.\n\n# Alternative solution using map\ndef get_initials(full_name):\n    return '.'.join(map(lambda x: x[0].upper(), full_name.split()))\n\nprint(get_initials(\"Alice Bob Charlie\"))  # Output: A.B.C.",
+        "solution": "def get_initials(full_name):\n    parts = full_name.split()\n    return '.'.join(part[0].upper() for part in parts) + '.'\n\nprint(get_initials(\"John Doe\"))  # Output: J.D.",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -375,7 +375,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 42",
         "description": "Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`.\"",
         "initialCode": "def table(x):\n    pass\n\ndef table(x):\n    pass\n\ndef table(x):\n    pass",
-        "solution": "def table(x):\n    result = \"\"\n    \n    for i in range(1, 11):  # Should be range(11) to include 0\n        result += f\"{i} x {x} = {i*x}\\n\"  # e.g., \"1 x 6 = 6\\n\"\n    return result  # Return the complete table as a string\n\n# Output: \"1 x 6 = 6\\n2 x 6 = 12\\n...10 x 6 = 60\\n\"\nprint(table(6))  # Prints the multiplication table\n\ndef table(x):\n    for i in range(1, 11):  # Should be range(11) to include 0\n        print(f\"{i} x {x} = {i*x}\")  # Directly prints each line\n        \ntable(6)  # Calls function and prints table\n\ndef table(x):\n    result = []  # List to store formatted lines\n    \n    for number in range(11):  # range(11) = 0, 1, 2, ..., 10\n        total = number * x  # Calculate product\n        result.append(f\"{x} x {number} = {total}\")  # e.g., \"9 x 0 = 0\"\n    return \"\\n\".join(result)  # Returns complete table as string\n\nprint(table(9))  # Prints the complete multiplication table\n\nfor j in range(1, 11):  # Outer loop: multiplier (1 to 10)\n    for i in range(1, 11):  # Inner loop: multiplicand (1 to 10)\n        product = j * i  # Calculate product\n        print(f\"{j} x {i} = {product}\")  # Print each multiplication\n    print(\"-\" * 10)  # Separator between tables\n\n# Alternative solution using list comprehension\ndef table(x):\n    return '\\n'.join([f\"{i} x {x} = {i*x}\" for i in range(11)])\n\nprint(table(7))\n\n# Alternative solution using map\ndef table(x):\n    return '\\n'.join(map(lambda i: f\"{i} x {x} = {i*x}\", range(11)))\n\nprint(table(8))",
+        "solution": "def table(x):\n    lines = []\n    for number in range(11):\n        lines.append(f\"{x} * {number} = {x * number}\")\n    return \"\\n\".join(lines)\n\nprint(table(3))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -492,7 +492,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 55",
         "description": "Write a Python program to calculate the area of a rectangle. Prompt the user to enter the length and width.",
         "initialCode": "def area_rectangle():\n    pass",
-        "solution": "def area_rectangle():\n    length = float(input(\"type length: \"))  # e.g., 5.0\n    width = float(input(\"type width: \"))  # e.g., 3.0\n    area = length * width  # e.g., 5.0 \u00d7 3.0 = 15.0\n    \n    print(area)  # Prints the area\n    \narea_rectangle()  # Call the function\n\n# Alternative solution with parameters\ndef area_rectangle(length, width):\n    return length * width\n\nprint(area_rectangle(5, 3))  # Output: 15\nprint(area_rectangle(10, 4))  # Output: 40\n\n# Alternative solution with validation\ndef area_rectangle(length, width):\n    if length <= 0 or width <= 0:\n        return \"Length and width must be positive\"\n    return length * width\n\nprint(area_rectangle(7, 2))  # Output: 14\nprint(area_rectangle(-5, 3))  # Output: Length and width must be positive",
+        "solution": "def area_rectangle():\n    length = float(input(\"Enter length: \"))\n    width = float(input(\"Enter width: \"))\n    print(length * width)\n\narea_rectangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -564,7 +564,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 63",
         "description": "Write a Python program to calculate the sum of all numbers from 1 to a given number. Prompt the user to enter a number.",
         "initialCode": "def sum_of_all_numbers():\n    pass",
-        "solution": "def sum_of_all_numbers():\n    user = input(\"type numbers: \").split()  # \"1 2 3 4 5\" \u2192 [\"1\", \"2\", \"3\", \"4\", \"5\"]\n    int_user = []  # List to store converted integers\n    \n    for number in user:\n        int_user.append(int(number))  # [\"1\", \"2\", ...] \u2192 [1, 2, 3, 4, 5]\n        \n    count = 0\n    \n    for number in int_user:\n        count += number  # Add each number: 1+2+3+4+5 = 15\n    print(count)  # Display the sum\n\nsum_of_all_numbers()  # Call the function\n\n# Alternative solution using built-in sum()\ndef sum_of_all_numbers():\n    numbers = list(map(int, input(\"Enter numbers: \").split()))\n    print(sum(numbers))\n\nsum_of_all_numbers()\n\n# Alternative solution using reduce\ndef sum_of_all_numbers():\n    from functools import reduce\n    numbers = list(map(int, input(\"Enter numbers: \").split()))\n    print(reduce(lambda x, y: x + y, numbers))\n\nsum_of_all_numbers()",
+        "solution": "def sum_of_all_numbers():\n    n = int(input(\"Enter a number: \"))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    print(total)\n\nsum_of_all_numbers()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -609,7 +609,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 68",
         "description": "Write a Python program to find the length of a string without using the built-in len() function. Prompt the user to enter a string.",
         "initialCode": "def length_string():\n    pass",
-        "solution": "def length_string():\n    user = input(\"entre string: \").replace(\" \", \"\")  # \"hello world\" \u2192 \"helloworld\"\n    count = 0\n\n    for char in user:\n        count += 1  # Increment counter for each character\n    print(count)  # Display the total count\n             \nlength_string()  # Call the function\n\n# Alternative solution returning count\ndef length_string(s):\n    count = 0\n    for _ in s:\n        count += 1\n    return count\n\nprint(length_string(\"hello\"))  # Output: 5\nprint(length_string(\"python\"))  # Output: 6\n\n# Alternative solution using recursion\ndef length_string(s):\n    if s == \"\":\n        return 0\n    return 1 + length_string(s[1:])\n\nprint(length_string(\"world\"))  # Output: 5",
+        "solution": "def length_string():\n    text = input(\"Enter a string: \")\n    count = 0\n    for _ in text:\n        count += 1\n    print(count)\n\nlength_string()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -627,7 +627,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 71",
         "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers.",
         "initialCode": "def sec_lar():\n    pass\n\ndef second_largest_number(numbers):\n    pass\n\ndef second_largest_number(numbers):\n    pass\n\ndef second_largest_number(numbers):\n    pass",
-        "solution": "def sec_lar():\n    numbers = list(map(int, input(\"type: \").split()))  # \"56 700 1 57 78 787 5 88\" \u2192 [56, 700, ...]\n    unique_numbers = list(set(numbers))  # Removes duplicates\n    unique_numbers.sort()  # Sorts the unique numbers\n    \n    print(unique_numbers[-2])  # Prints the second largest\n\nsec_lar()  # Call the function\n\ndef second_largest_number(numbers):\n    sorted_numbers = sorted(numbers, reverse=True)  # [787, 700, 88, 78, 57, 56, 5, 1]\n    \n    if len(sorted_numbers) > 1:\n        return sorted_numbers[1]  # Return second element (700)\n    else:\n        return None  # Return None if list too short\n        \narg = [56, 700, 1, 57, 78, 787, 5, 88]\nprint(second_largest_number(arg))  # Output: 700\n\ndef second_largest_number(numbers):\n    sorted_numbers = sorted(numbers, reverse=True)  # Sort descending\n    \n    for number in sorted_numbers:\n        return sorted_numbers[1]  # Always returns second element immediately\n    return None  # Unreachable if list is non-empty\n        \narg = [56, 700, 1, 57, 78, 787, 5, 88]\nprint(second_largest_number(arg))  # Output: 700\n\ndef second_largest_number(numbers):\n    sorted_numbers = sorted(numbers)  # [1, 5, 56, 57, 78, 88, 700, 787]\n    \n    for number in sorted_numbers:\n        return sorted_numbers[-2]  # Returns 700\n    return None  # Unreachable\n        \narg = [56, 700, 1, 57, 78, 787, 5, 88]\nprint(second_largest_number(arg))  # Output: 700\n\n# Using hardcoded values\n    # Replace input() with hardcoded test values",
+        "solution": "def second_largest_number(numbers):\n    unique_numbers = sorted(set(numbers), reverse=True)\n    if len(unique_numbers) < 2:\n        return None\n    return unique_numbers[1]\n\ndef sec_lar():\n    numbers = list(map(int, input(\"Enter numbers: \").split()))\n    print(second_largest_number(numbers))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -636,7 +636,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 72",
         "description": "Write a Python program to check if a given string is a valid email address. Prompt the user to enter an email address.",
         "initialCode": "import re\ndef is_valid_email(email):\n    pass",
-        "solution": "import re\n\ndef is_valid_email(email):\n\n\n# Using manual checks\n    # Alternative: implement pattern check manually",
+        "solution": "import re\n\ndef is_valid_email(email):\n    pattern = r\"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$\"\n    return bool(re.fullmatch(pattern, email))\n\nprint(is_valid_email(\"test@example.com\"))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -654,7 +654,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 74",
         "description": "Write a Python program to check if two strings are anagrams of each other. Prompt the user to enter two strings",
         "initialCode": "def are_anagrams():\n    pass\n\ndef pal():\n    pass",
-        "solution": "def are_anagrams():\n    str1 = input(\"Enter the first string: \")  # e.g., \"listen\"\n    str2 = input(\"Enter the second string: \")  # e.g., \"silent\"\n    \n    str1 = str1.replace(\" \", \"\").lower()  # \"Listen\" \u2192 \"listen\"\n    str2 = str2.replace(\" \", \"\").lower()  # \"Silent\" \u2192 \"silent\"\n    \n    if sorted(str1) == sorted(str2):  # sorted(\"listen\") == sorted(\"silent\") \u2192 True\n        print(f\"'{str1}' and '{str2}' are anagrams.\")  # Display success message\n    else:\n        print(f\"'{str1}' and '{str2}' are not anagrams.\")  # Display failure message\n\nare_anagrams()  # Call the function\n\ndef pal():\n    user = input(\"type: \")  # Get string from user\n  \n    if user == user[::-1]:  # Compare with reversed string\n        return True  # Is palindrome\n    return False  # Not palindrome\n \nprint(pal())  # Call function and print result\n\n# Alternative solution using Counter\ndef are_anagrams():\n    from collections import Counter\n    str1 = input(\"Enter the first string: \").replace(\" \", \"\").lower()\n    str2 = input(\"Enter the second string: \").replace(\" \", \"\").lower()\n    \n    if Counter(str1) == Counter(str2):\n        print(f\"'{str1}' and '{str2}' are anagrams.\")\n    else:\n        print(f\"'{str1}' and '{str2}' are not anagrams.\")\n\nare_anagrams()\n\n# Alternative solution returning boolean\ndef are_anagrams(str1, str2):\n    str1 = str1.replace(\" \", \"\").lower()\n    str2 = str2.replace(\" \", \"\").lower()\n    return sorted(str1) == sorted(str2)\n\nprint(are_anagrams(\"listen\", \"silent\"))  # Output: True\nprint(are_anagrams(\"hello\", \"world\"))    # Output: False",
+        "solution": "def are_anagrams():\n    first = input(\"Enter the first string: \").replace(\" \", \"\").lower()\n    second = input(\"Enter the second string: \").replace(\" \", \"\").lower()\n    print(sorted(first) == sorted(second))\n\nare_anagrams()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -744,7 +744,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 84",
         "description": "Write a Python program to check if a string is a pangram. A pangram is a sentence that contains every letter of the alphabet at least once. Prompt the user to enter a sentence.",
         "initialCode": "def is_pangram(sentence):\n    pass\n\ndef pangram(sentence):\n    pass",
-        "solution": "def is_pangram(sentence):\n    alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n    sentence = sentence.lower()  # Convert to lowercase for case-insensitive check\n    for char in alphabet:\n        if char not in sentence:  # If any letter is missing, not a pangram\n            return \"not pangram\"\n    return \"is pangram\"  # All letters found\n   \nsentence = input(\"Enter a sentence: \")\nprint(is_pangram(sentence))\n\ndef pangram(sentence):\n    alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n    sentence = sentence.lower()\n    for char in alphabet:\n        if char not in sentence:\n            return \"not pangram\"\n    return \"pangram\"\n            \nsentence = \"abcdefghijklmnopqrstuvwxyz\"\nprint(pangram(sentence))\n\n# Alternative solution using set\ndef is_pangram(sentence):\n    alphabet = set(\"abcdefghijklmnopqrstuvwxyz\")\n    sentence = set(sentence.lower())\n    return \"is pangram\" if alphabet.issubset(sentence) else \"not pangram\"\n\nprint(is_pangram(\"The quick brown fox jumps over the lazy dog\"))  # Output: is pangram\n\n# Alternative solution using all()\ndef is_pangram(sentence):\n    sentence = sentence.lower()\n    return \"is pangram\" if all(char in sentence for char in \"abcdefghijklmnopqrstuvwxyz\") else \"not pangram\"\n\nprint(is_pangram(\"Hello World\"))  # Output: not pangram",
+        "solution": "def is_pangram(sentence):\n    alphabet = set(\"abcdefghijklmnopqrstuvwxyz\")\n    return alphabet.issubset(set(sentence.lower()))\n\ndef pangram(sentence):\n    return is_pangram(sentence)\n\nprint(is_pangram(\"The quick brown fox jumps over the lazy dog\"))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
