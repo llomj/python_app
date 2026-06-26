@@ -4766,8 +4766,8 @@ export const EXERCISES: Exercise[] = [
         "id": 547,
         "title": "Problem 547",
         "description": "Write a Python program to count how many times a specific number occurs in a list of floating-point numbers. Use count().",
-        "initialCode": "def count_floating_numbers(lst):\n    pass\n\ndef main(lst):\n    pass",
-        "solution": "def count_floating_numbers(lst):\n    return float(lst.count())\n    \nlst = [2.3, 5, 6.3, 78, 0.6]\nprint(count_floating_numbers(lst))\n\ndef main(lst):\n    result = []\n    for num in lst:\n        if isinstance(num, float):\n            lst.count(num)\n            result.append(num)\n    return result\n    \nlst = [2.66, 67, 45556.67, 7888, 1]\n\nmain(lst)\n\n# Using list comprehension\n    return [num for num in lst if isinstance(num, float)]\n\n# Using filter()\n    return list(filter(lambda num: isinstance(num, float), lst))\n\n# Using list comprehension\n    return [num for num in lst if isinstance(num, float)]\n\n# Using list comprehension\n    return [num for num in lst if isinstance(num, float)]\n\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using sum()\n    return sum(1 for x in lst if x == ))",
+        "initialCode": "def count_floating_numbers(lst, number):\n    pass",
+        "solution": "def count_floating_numbers(lst, number):\n    return lst.count(number)\n\nprint(count_floating_numbers([1.5, 2.0, 1.5, 3.5], 1.5))  # Output: 2",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4794,7 +4794,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 550",
         "description": "Write a function that counts the occurrences of a specified digit in a number. Use count().",
         "initialCode": "def count_digit(num):\n    pass",
-        "solution": "def count_digit(num):\n    num = str(num)\n    return num.count(\"2\")\n\nnum = 1223452\nprint(count_digit(num))\n\n# Using intermediate variable\n    result = num.count(\'2\')\n    return result",
+        "solution": "def count_digit(num, digit):\n    return str(num).count(str(digit))\n\nprint(count_digit(12345, 3))  # Output: 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4821,7 +4821,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 553",
         "description": "Write a Python program to count the occurrences of a specific item in a list of dictionaries. Use count().",
         "initialCode": "def count_item_in_dict_list(dict_list, item):\n    pass",
-        "solution": "def count_item_in_dict_list(dict_list, item):\n    values = []\n    \n    for d in dict_list:\n    \n        for val in d.values():\n            values.append(val)\n\n    return values.count(item)\n\ndict_list = [\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Bob\", \"age\": 25},\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Charlie\", \"age\": 35}\n]\n\nitem = \"Alice\" \nprint(count_item_in_dict_list(dict_list, item))\n\n# Using list comprehension\n    return [val for d in dict_list]\n\n# Using map()\n    return list(map(lambda d: val, dict_list))\n\n# Using list comprehension\n    return [val for d in dict_list]\n\n# Using map()\n    return list(map(lambda d: val, dict_list))\n\n# Using sum()\n    return sum(1 for x in values if x == item)\n\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using inline return\n    return []",
+        "solution": "def count_item_in_dict_list(dict_list, item):\n    return dict_list.count(item)\n\ndict_list = [{\"a\": 1}, {\"a\": 2}, {\"a\": 1}]\nprint(count_item_in_dict_list(dict_list, {\"a\": 1}))  # Output: 2",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4947,7 +4947,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 567",
         "description": "Filter Even Numbers: Write a function that filters all even numbers from a list using filter().",
         "initialCode": "def filters_even_numbers(lst):\n    pass\n\ndef even_num(num):\n    pass",
-        "solution": "def filters_even_numbers(lst):\n    return list(filter(even_num, lst))\n\ndef even_num(num):\n    if num % 2 != 0:\n        return num\n\nlst = [4, 67, 2, 78, 3, 1, 466, 7]\nprint(filters_even_numbers(lst))\n\n# Using list comprehension\n    return [num for num in lst if num]\n\n# Using for loop\n    result = []\n    for num in lst:\n        if even_num(num):\n            result.append(num)\n    return result\n\n# Using intermediate variable\n    result = list(filter(even_num, lst))\n    return result",
+        "solution": "def even_num(num):\n    return num % 2 == 0\n\ndef filters_even_numbers(lst):\n    return list(filter(even_num, lst))\n\nprint(filters_even_numbers([1, 2, 3, 4, 5, 6]))  # Output: [2, 4, 6]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4992,7 +4992,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 572",
         "description": "Filter Palindromes: Write a function that filters out palindromes (words that read the same backward) from a list using filter().",
         "initialCode": "def palindromes(lst):\n    pass",
-        "solution": "def palindromes(lst):\n    \n    def filter_palindrome(word):\n        if word != word[::-1]:\n            return word\n            \n    return list(filter(filter_palindrome, lst))\n               \nlst = [\"radar\", \"red\", \"blue\", \"level\", \"noon\"]\nprint(palindromes(lst))\n\n# Using list comprehension\n    return [word for word in lst if word]\n\n# Using for loop\n    result = []\n    for word in lst:\n        if filter_palindrome(word):\n            result.append(word)\n    return result",
+        "solution": "def palindromes(lst):\n    def is_palindrome(word):\n        return word == word[::-1]\n    return list(filter(is_palindrome, lst))\n\nprint(palindromes([\"radar\", \"hello\", \"level\", \"world\"]))  # Output: ['radar', 'level']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5064,7 +5064,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 580",
         "description": "Filter Positive Numbers: Write a function that filters only positive numbers from a list using filter().",
         "initialCode": "def num_lst(lst):\n    pass",
-        "solution": "def num_lst(lst):\n    \n    def filter_num(num):\n        if num > 1:\n            return num\n    return list(filter(filter_num, lst))\n    \nlst = [-45, 4, 5, -56, 6]    \nprint(num_lst(lst))\n\n# Using list comprehension\n    return [num for num in lst if num]\n\n# Using for loop\n    result = []\n    for num in lst:\n        if filter_num(num):\n            result.append(num)\n    return result\n\n# Using list comprehension\n    return [num for num in lst if filter_num(num)]",
+        "solution": "def num_lst(lst):\n    def is_positive(num):\n        return num > 0\n    return list(filter(is_positive, lst))\n\nprint(num_lst([-1, 0, 1, -2, 2]))  # Output: [1, 2]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5100,7 +5100,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 584",
         "description": "Filter Non-Alphabetic Strings: Write a function that filters out strings that contain non-alphabetic characters using filter().",
         "initialCode": "def non_alphabetical_string(string):\n    pass",
-        "solution": "def non_alphabetical_string(string):\n    \n    def non_alph(char):\n        return char.isalpha()\n            \n    return ''.join(filter(non_alph, string))\n           \nstring = \"whats up dog !?!@$\"\nprint(non_alphabetical_string(string))\n\n# Using inner function\n    # Inline version available\n\n# Using lambda\n    return lambda char: char.isalpha()\n\n# Using lambda\n    return (lambda char: char.isalpha())(a, b)",
+        "solution": "def non_alphabetical_string(string):\n    def is_alpha(word):\n        return word.isalpha()\n    return list(filter(is_alpha, string))\n\nprint(non_alphabetical_string([\"hello\", \"world\", \"abc123\", \"python\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5118,7 +5118,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 586",
         "description": "Unique Words: Write a function that filters out only unique words from a list using filter() and a helper function.",
         "initialCode": "def unique_words(lst):\n    pass",
-        "solution": "def unique_words(lst):\n    \n    def is_unique(word):\n        return lst.count(word) == 1\n        \n    return list(filter(is_unique, lst))\n\nwords = [\"apple\", \"banana\", \"apple\", \"orange\", \"kiwi\", \"banana\"]\nprint(unique_words(words))\n\n# Using list comprehension\n    return [word for word in lst if lst.count(word) == 1]\n\n# Using for loop\n    result = []\n    for word in lst:\n        if is_unique(word):\n            result.append(word)\n    return result\n\n# Using list comprehension\n    return [word for word in lst if is_unique(word)]\n\n# Using sum()\n    return sum(1 for x in lst if x == word)",
+        "solution": "def unique_words(lst):\n    result = []\n    for word in lst:\n        if word not in result:\n            result.append(word)\n    return result\n\nprint(unique_words([\"a\", \"b\", \"a\", \"c\", \"b\"]))  # Output: ['a', 'b', 'c']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5127,7 +5127,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 587",
         "description": "Word Lengths Greater Than N: Write a function that filters words with a length greater than n using filter().",
         "initialCode": "def word_lst(lst):\n    pass",
-        "solution": "def word_lst(lst):\n    \n    def filter_word(word):\n        if len(word) > n:\n            return word\n            \n    return list(filter(filter_word, lst))\n    \nlst = [\"not\", \"four\", \"September\", \"October\"]\nn = 4\nprint(word_lst(lst))\n\n# Using list comprehension\n    return [word for word in lst if word]\n\n# Using for loop\n    result = []\n    for word in lst:\n        if filter_word(word):\n            result.append(word)\n    return result",
+        "solution": "def word_lst(lst, n):\n    def longer_than_n(word):\n        return len(word) > n\n    return list(filter(longer_than_n, lst))\n\nprint(word_lst([\"a\", \"ab\", \"abc\", \"abcd\"], 3))  # Output: ['abcd']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5145,7 +5145,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 589",
         "description": "Sum of Nested Lists: Write a function that flattens and sums all elements of a nested list using map() and reduce().",
         "initialCode": "from functools import reduce\ndef sum_nested_list(nested_list):\n    pass",
-        "solution": "from functools import reduce\n\ndef sum_nested_list(nested_list):\n\n\n# Using for loop\n    # Alternative: use a for loop with an accumulator variable",
+        "solution": "from functools import reduce\n\ndef sum_nested_list(nested_list):\n    flattened = reduce(lambda acc, item: acc + item, nested_list, [])\n    return reduce(lambda total, number: total + number, flattened, 0)\n\nprint(sum_nested_list([[1, 2], [3, 4], [5]]))  # Output: 15",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },

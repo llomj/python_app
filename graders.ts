@@ -3922,7 +3922,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   546: {
         functionNames: ['count_test_occurrences'],
         tests: [
-            { args: ['test test test testing'], expected: 3 }
+            { args: ['test test test testing'], expected: 4 }
         ]
     },
   547: {
@@ -3932,15 +3932,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   548: {
-        functionNames: ['count_vowels'],
+        functionNames: ['count_floating_numbers'],
         tests: [
-            { args: ['hello world'], expected: 3 }
+            { args: [[2.3, 5.0, 6.3, 78.0, 0.6, 5.0], 5.0], expected: 2 }
         ]
     },
   549: {
         functionNames: ['count_uppercase'],
         tests: [
-            { args: ['Hello World PYTHON'], expected: 6 }
+            { args: ['Hello World PYTHON'], expected: 8 }
         ]
     },
   550: {
@@ -3985,13 +3985,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   556: {
         functionNames: ['count_substring'],
         tests: [
-            { args: ['123 456 123 789'], expected: 2 }
+            { args: ['123 456 123 789', '123'], expected: 2 }
         ]
     },
   557: {
         functionNames: ['count_lines_with_word'],
         tests: [
-            { args: ['test.txt', 'error'], expected: 0 }
+            { args: ['test.txt', 'error'], setupFiles: { 'test.txt': 'ok\nerror one\nERROR two\nfine' }, expected: 2 }
         ]
     },
   558: {
@@ -4003,7 +4003,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   559: {
         functionNames: ['count_word'],
         tests: [
-            { args: [['I am happy', 'happy birthday', 'sad day'], 'happy'], expected: 2 }
+            { args: [['I am happy', 'happy birthday', 'sad day']], expected: 2 }
         ]
     },
   560: {
@@ -4027,13 +4027,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   563: {
         functionNames: ['count_x_in_mixed_list'],
         tests: [
-            { args: [[1, 'x', 2, 'x', 3], 'x'], expected: 2 }
+            { args: [[1, 'x', 2, 'x', 3]], expected: 2 }
         ]
     },
   564: {
         functionNames: ['count_letter_occurrences'],
         tests: [
-            { args: ['hello', 'l'], expected: 'The letter l appears 2 time(s) in the string.' }
+            { args: ['hello', 'l'], expected: "The letter 'l' appears 2 times in the given string." }
         ]
     },
   565: {
@@ -4103,7 +4103,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   576: {
-        functionNames: ['min_number'],
+        functionNames: ['number_lst', 'min_number'],
         tests: [
             { args: [[3, 1, 4, 1, 5]], expected: 1 }
         ]
@@ -4177,7 +4177,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   588: {
         functionNames: ['apply_lsts'],
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: [9, 25] }
+            { args: [[1, 2, 3, 4, 5]], expected: [1, 9, 25] }
         ]
     },
   589: {
