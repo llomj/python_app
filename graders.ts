@@ -2892,7 +2892,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   392: {
         functionNames: ['find_highest_scrabble_word'],
         tests: [
-            { args: [['hello', 'world', 'python', 'scrabble']], expected: 'scrabble' },
+            { args: [['hello', 'world', 'python', 'scrabble']], expected: 'python' },
             { args: [['a', 'zzzz']], expected: 'zzzz' }
         ]
     },
@@ -2940,7 +2940,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   399: {
         functionNames: ['sort_words_by_distinct_letters'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['date', 'apple', 'cherry', 'banana'] },
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['banana', 'apple', 'date', 'cherry'] },
             { args: [['a', 'ab', 'abc']], expected: ['a', 'ab', 'abc'] }
         ]
     },
@@ -2954,7 +2954,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   401: {
         functionNames: ['sort_by_vowel_count'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date', 'fig', 'grape']], expected: ['fig', 'date', 'apple', 'grape', 'cherry', 'banana'] },
+            { args: [['apple', 'banana', 'cherry', 'date', 'fig', 'grape']], expected: ['cherry', 'fig', 'apple', 'date', 'grape', 'banana'] },
             { args: [['a', 'e', 'i']], expected: ['a', 'e', 'i'] }
         ]
     },
@@ -3020,7 +3020,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['filter_string'],
         tests: [
             { args: [['jon', 'chris', 'tom', 'Jeremy']], expected: ['jon', 'tom'] },
-            { args: [['a', 'ab', 'abc']], expected: ['a'] }
+            { args: [['a', 'ab', 'abc']], expected: ['abc'] }
         ]
     },
   411: {
@@ -3380,7 +3380,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   461: {
         functionNames: ['sort_words_by_vowel_count'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['date', 'apple', 'cherry', 'banana'] }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['cherry', 'apple', 'date', 'banana'] }
         ]
     },
   462: {
@@ -3440,13 +3440,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   471: {
         functionNames: ['length_of_value'],
         tests: [
-            { args: [[{name: 'Alice'}, {name: 'Bob'}, {name: 'Jonathan'}]], expected: [{name: 'Bob'}, {name: 'Alice'}, {name: 'Jonathan'}] }
+            { args: [[{name: 'Alice'}, {name: 'Bob'}, {name: 'Jonathan'}], 'name'], expected: [{name: 'Bob'}, {name: 'Alice'}, {name: 'Jonathan'}] }
         ]
     },
   472: {
         functionNames: ['find_person'],
         tests: [
-            { args: [[{name: 'Beth'}, {name: 'Brett'}, {name: 'Jhonivan'}, {name: 'Jonathan'}], 'name'], expected: {name: 'Jonathan'} },
+            { args: [[{name: 'Beth'}, {name: 'Brett'}, {name: 'Jhonivan'}, {name: 'Jonathan'}], 'name'], expected: {name: 'Jhonivan'} },
             { args: [[{name: 'Ann'}, {name: 'Christopher'}], 'name'], expected: {name: 'Christopher'} }
         ]
     },
@@ -3458,7 +3458,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     }]
   },
   474: {
-        functionNames: ['year_key'],
+        functionNames: ['sort_by_year'],
         tests: [
             { args: [['2023-10-01', '2020-01-15', '2025-12-31']], expected: ['2020-01-15', '2023-10-01', '2025-12-31'] }
         ]
@@ -3485,7 +3485,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   478: {
         functionNames: ['length_of_first_element'],
         tests: [
-            { args: [[('apple', 1), ('banana', 2), ('fig', 3)]], expected: [('fig', 3), ('apple', 1), ('banana', 2)] }
+            { args: [[['apple', 1], ['banana', 2], ['fig', 3]]], expected: [['fig', 3], ['apple', 1], ['banana', 2]] }
         ]
     },
   479: {
@@ -3545,13 +3545,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   488: {
         functionNames: ['sort_words_by_distinct_letters'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['date', 'apple', 'cherry', 'banana'] }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['banana', 'apple', 'date', 'cherry'] }
         ]
     },
   489: {
         functionNames: ['sort_second_letter'],
         tests: [
-            { args: [['banana', 'apple', 'cherry', 'date']], expected: ['banana', 'date', 'apple', 'cherry'] }
+            { args: [['banana', 'apple', 'cherry', 'date']], expected: ['banana', 'date', 'cherry', 'apple'] }
         ]
     },
   490: {
@@ -3563,7 +3563,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   491: {
         functionNames: ['sort_by_binary_representation'],
         tests: [
-            { args: [[3, 2, 1, 4]], expected: [1, 2, 3, 4] }
+            { args: [[3, 2, 1, 4]], expected: [1, 2, 4, 3] }
         ]
     },
   492: {

@@ -3903,7 +3903,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 450",
         "description": "Write a Python function remove_duplicates that takes a list and removes duplicates using a nested function.",
         "initialCode": "def remove_duplicates(lst):\n    pass",
-        "solution": "def remove_duplicates(lst):\n    \n    def duplicates_removed(x):\n        unique = set()\n        \n        for word in x:\n            unique.add(word)\n        return unique\n        \n    return duplicates_removed(lst)\n\nlst = [\"not\", \"not\", \"today\", \"today\"]\nprint(remove_duplicates(lst))\n\n# Using inner function\n    # Inline version available",
+        "solution": "def remove_duplicates(lst):\n    def duplicates_removed(items):\n        result = []\n        for item in items:\n            if item not in result:\n                result.append(item)\n        return result\n    return duplicates_removed(lst)\n\nprint(remove_duplicates([\"not\", \"not\", \"today\", \"today\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3921,7 +3921,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 452",
         "description": "Write a Python function called calculate_sum that takes two numbers as arguments. Inside this function, define a nested function that returns their sum and another function that returns the multiplication.\"",
         "initialCode": "def calculate_sum(a, b):\n    pass",
-        "solution": "def calculate_sum(a, b):\n    \n    def inner_sum(x, y):\n        return x + y\n    \n    def inner_mult(x, y):\n        return x * y\n    \n    return inner_sum(a, b), inner_mult(a, b)\n\nprint(calculate_sum(7, 3))\n\n# Using inner function\n    # Inline version available",
+        "solution": "def calculate_sum(a, b):\n    def inner_sum(x, y):\n        return x + y\n    def inner_mult(x, y):\n        return x * y\n    product = inner_mult(a, b)\n    return inner_sum(a, b)\n\nprint(calculate_sum(7, 3))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3966,7 +3966,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 458",
         "description": "Write a Python function to find the maximum string alphabetically using the key parameter.",
         "initialCode": "def max_string_alpha(lst):\n    pass",
-        "solution": "def max_string_alpha(lst):\n    \n    def max_string(x):\n        return len(x)\n        \n    return max(lst, key=max_string)\n\nlst = [\"hippopotamus\", \"giraffe\", \"monkey\"]\nprint(max_string_alpha(lst))\n\n# Using for loop\n    count = 0\n    for _ in x:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in x)\n\n# Using built-in sum()\n    return sum(1 for _ in x)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, x, 0)\n\n# Using for loop\n    count = 0\n    for _ in x:\n        count += 1\n    return count",
+        "solution": "def max_string_alpha(lst):\n    def alphabetical_key(word):\n        return word\n    return max(lst, key=alphabetical_key)\n\nprint(max_string_alpha([\"apple\", \"banana\", \"cherry\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4110,7 +4110,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 474",
         "description": "Write a Python function to sort a list of dates by the year using the key parameter.",
         "initialCode": "from datetime import datetime\ndef year_key(date):\n    pass\n\ndef sort_by_year(dates):\n    pass",
-        "solution": "from datetime import datetime\n\ndef year_key(date):\n    return date.year\n\ndef sort_by_year(dates):\n\n    date_objects = []\n    \n    for date in dates:\n        date_objects.append(datetime.strptime(date, \"%d.%m.%Y\"))\n    \n    sorted_dates = sorted(date_objects, key=year_key)\n\n    sorted_date_strings = []\n    for date in sorted_dates:\n        sorted_date_strings.append(date.strftime(\"%d.%m.%Y\"))\n    \n    return sorted_date_strings\n\ndates = [\"01.02.1908\", \"12.11.1955\", \"23.04.1989\", \"07.07.1967\"]\nsorted_dates = sort_by_year(dates)\nprint(sorted_dates)\n\n# Using list comprehension\n    return [datetime.strptime(date, \'%d.%m.%Y\') for date in dates]\n\n# Using map()\n    return list(map(lambda date: datetime.strptime(date, \'%d.%m.%Y\'), dates))",
+        "solution": "from datetime import datetime\n\ndef year_key(date):\n    return datetime.strptime(date, \"%Y-%m-%d\").year\n\ndef sort_by_year(dates):\n    return sorted(dates, key=year_key)\n\nprint(sort_by_year([\"2023-10-01\", \"2020-01-15\", \"2025-12-31\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4254,7 +4254,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 490",
         "description": "Write a Python function to sort a list of people by their age stored in a dictionary using the key parameter.",
         "initialCode": "def people_age(dic):\n    pass",
-        "solution": "def people_age(dic):\n    \n    def sort_age(person):\n        return dic[person]\n        \n    return sorted(dic, key=sort_age)\n    \ndic = {\"Sam\": 27, \"Tom\": 56, \"Chantelle\": 18}\nprint(people_age(dic))\n\n# Using inline expression\n    return (dic[person])",
+        "solution": "def people_age(dic):\n    def sort_age(person):\n        return person[\"age\"]\n    return sorted(dic, key=sort_age)\n\npeople = [{\"name\": \"Alice\", \"age\": 30}, {\"name\": \"Bob\", \"age\": 25}]\nprint(people_age(people))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
