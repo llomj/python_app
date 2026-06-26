@@ -2642,13 +2642,54 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 201",
         "description": "Write a Python program to find the common number in a lists. use set().",
         "initialCode": "def common_num(lst):\n    pass\n\ndef common_numbers(lst):\n    pass",
-        "solution": "def common_num(lst):\n    unique = set()  # Set to track unique numbers seen\n    commom = []  # Typo: \"commom\" should be \"common\"\n    for number in lst:\n        if number in unique:  # Number seen before (duplicate found)\n            commom.append(number)  # Add to duplicates list\n        else:\n            unique.add(number)  # Mark as seen (add to set)\n    return commom  # Returns list of duplicate numbers\n    \nlst = [2, 5, 6, 2, 4, 5]\nprint(common_num(lst))  # Output: [2, 5] (duplicates)\n\ndef common_numbers(lst):\n    seen = set()  # Track seen numbers\n    common = set()  # Track duplicates (set removes duplicate entries in result)\n    for number in lst:\n        if number in seen:  # Duplicate found\n            common.add(number)  # Add to common set\n        else:\n            seen.add(number)  # Mark as seen\n    return common\n\nlst = [43, 2, 45, 567, 666, 2, 45, 43]\nprint(common_numbers(lst))  # Output: {2, 45, 43} (set of duplicates)",,
+        "solution": "def common_num(lst):\n    unique = set()  # Set to track unique numbers seen\n    commom = []  # Typo: \"commom\" should be \"common\"\n    for number in lst:\n        if number in unique:  # Number seen before (duplicate found)\n            commom.append(number)  # Add to duplicates list\n        else:\n            unique.add(number)  # Mark as seen (add to set)\n    return commom  # Returns list of duplicate numbers\n    \nlst = [2, 5, 6, 2, 4, 5]\nprint(common_num(lst))  # Output: [2, 5] (duplicates)\n\ndef common_numbers(lst):\n    seen = set()  # Track seen numbers\n    common = set()  # Track duplicates (set removes duplicate entries in result)\n    for number in lst:\n        if number in seen:  # Duplicate found\n            common.add(number)  # Add to common set\n        else:\n            seen.add(number)  # Mark as seen\n    return common\n\nlst = [43, 2, 45, 567, 666, 2, 45, 43]\nprint(common_numbers(lst))  # Output: {2, 45, 43} (set of duplicates)
+
+# Alternative using set comprehension with count
+def common_numbers(lst):
+    return list({x for x in lst if lst.count(x) > 1})
+
+print(common_numbers([1, 2, 2, 3, 3, 3, 4]))  # Output: [2, 3]
+
+# Alternative using dict.get()
+def common_numbers(lst):
+    count = {}
+    for x in lst:
+        count[x] = count.get(x, 0) + 1
+    return [k for k, v in count.items() if v > 1]
+
+print(common_numbers([1, 2, 2, 3, 4, 4]))  # Output: [2, 4]
+
+# Alternative using Counter
+def common_numbers(lst):
+    from collections import Counter
+    return [k for k, v in Counter(lst).items() if v > 1]
+
+print(common_numbers([5, 5, 6, 7, 7, 8]))  # Output: [5, 7]",
+        "hint": "Check the description for requirements.",
+        "category": "Level 1"
+    },
     {
         "id": 202,
         "title": "Problem 202",
         "description": "Write a function word_frequency that takes a string as input and returns a dictionary where the keys are the characters in the string and the values are the counts of those characters alphabetically.",
         "initialCode": "def word_frequency(string):  # Function name says \"word\" but counts characters\n    pass",
-        "solution": "def word_frequency(string):  # Function name says \"word\" but counts characters\n    string = string.replace(\" \", \"\")  # Remove spaces\n    sort_char = sorted(string)  # Sort characters alphabetically\n    result = {}  # Dictionary for character counts\n    for word in sort_char:  # Variable name 'word' is misleading - it's a character\n        if word in result:\n            result[word] += 1  # Increment count\n        else:\n            result[word] = 1  # Initialize count\n    return result\n            \nstring = \"gore why are you here you are gore\"\nprint(word_frequency(string))  # Counts characters, not words",
+        "solution": "def word_frequency(string):  # Function name says \"word\" but counts characters\n    string = string.replace(\" \", \"\")  # Remove spaces\n    sort_char = sorted(string)  # Sort characters alphabetically\n    result = {}  # Dictionary for character counts\n    for word in sort_char:  # Variable name 'word' is misleading - it's a character\n        if word in result:\n            result[word] += 1  # Increment count\n        else:\n            result[word] = 1  # Initialize count\n    return result\n            \nstring = \"gore why are you here you are gore\"\nprint(word_frequency(string))  # Counts characters, not words
+
+# Alternative using Counter
+def word_frequency(string):
+    from collections import Counter
+    return dict(sorted(Counter(string.replace(\" \", \"\")).items()))
+
+print(word_frequency(\"hello world\"))  # Output: {'d': 1, 'e': 1, 'h': 1, 'l': 3, 'o': 2, 'r': 1, 'w': 1}
+
+# Alternative using dict.get()
+def word_frequency(string):
+    result = {}
+    for c in string.replace(\" \", \"\"):
+        result[c] = result.get(c, 0) + 1
+    return dict(sorted(result.items()))
+
+print(word_frequency(\"aabbc\"))  # Output: {'a': 2, 'b': 2, 'c': 1}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2657,7 +2698,21 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 203",
         "description": "Define a function total() that sums and multiplies (respectively) all the numbers in a list of numbers. For example, sum([1, 2, 3, 4]) should return 10, and multiply([1, 2, 3, 4]) should return 24.",
         "initialCode": "def total(numbers):\n    pass",
-        "solution": "def total(numbers):\n    total_numbers = 0\n    multiply_numbers = 1\n    for number in numbers:\n        total_numbers += number  # Accumulate sum\n        multiply_numbers *= number  # Accumulate product\n    return total_numbers, multiply_numbers  # Returns tuple (sum, product)\n            \nlst_numbers = [1, 2, 3, 4]\nprint(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product",
+        "solution": "def total(numbers):\n    total_numbers = 0\n    multiply_numbers = 1\n    for number in numbers:\n        total_numbers += number  # Accumulate sum\n        multiply_numbers *= number  # Accumulate product\n    return total_numbers, multiply_numbers  # Returns tuple (sum, product)\n            \nlst_numbers = [1, 2, 3, 4]\nprint(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product
+
+# Alternative using sum and reduce
+def total(numbers):
+    from functools import reduce
+    return (sum(numbers), reduce(lambda a, b: a * b, numbers, 1))
+
+print(total([1, 2, 3, 4]))  # Output: (10, 24)
+
+# Alternative using math.prod
+def total(numbers):
+    import math
+    return (sum(numbers), math.prod(numbers))
+
+print(total([1, 2, 3, 4]))  # Output: (10, 24) (Python 3.8+)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2666,7 +2721,22 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 204",
         "description": "Write a program that maps a list of words into a list of integers representing the words with the lengths of the correponding words.",
         "initialCode": "def list_integers(lst):\n    pass",
-        "solution": "def list_integers(lst):\n    result = []\n    for word in lst:\n        result.append(word)  # Add word itself (string)\n        result.append(len(word))  # Add length of word (integer)\n    return result\n    \nlst = [\"join\", \"Jonathan\", \"tree\"]\nprint(list_integers(lst))  # Output: [\"join\", 4, \"Jonathan\", 8, \"tree\", 4]",
+        "solution": "def list_integers(lst):\n    result = []\n    for word in lst:\n        result.append(word)  # Add word itself (string)\n        result.append(len(word))  # Add length of word (integer)\n    return result\n    \nlst = [\"join\", \"Jonathan\", \"tree\"]\nprint(list_integers(lst))  # Output: [\"join\", 4, \"Jonathan\", 8, \"tree\", 4]
+
+# Alternative using list comprehension with chain
+def list_integers(lst):
+    return [x for word in lst for x in (word, len(word))]
+
+print(list_integers([\"join\", \"Jonathan\", \"tree\"]))
+
+# Alternative using sum of pairs
+def list_integers(lst):
+    result = []
+    for word in lst:
+        result += [word, len(word)]
+    return result
+
+print(list_integers([\"hi\", \"there\"]))  # Output: [\"hi\", 2, \"there\", 5]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2675,7 +2745,20 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 205",
         "description": "Write a Python function called `calculate_average` that takes a list of numbers as input and returns the average of those numbers. use len() and sum().",
         "initialCode": "def average(lst):\n    pass",
-        "solution": "def average(lst):\n    sum_lst = sum(lst)  # Built-in sum() adds all numbers\n    length = len(lst)  # Built-in len() counts elements\n    total = sum_lst / length  # Divide sum by count to get average\n    \n    return total\n               \nlst = [2666, 566, 6777]\nprint(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...",
+        "solution": "def average(lst):\n    sum_lst = sum(lst)  # Built-in sum() adds all numbers\n    length = len(lst)  # Built-in len() counts elements\n    total = sum_lst / length  # Divide sum by count to get average\n    \n    return total\n               \nlst = [2666, 566, 6777]\nprint(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...
+
+# Alternative using statistics.mean
+def average(lst):
+    import statistics
+    return statistics.mean(lst)
+
+print(average([2666, 566, 6777]))  # Output: 3336.333...
+
+# Alternative using one-liner
+def average(lst):
+    return sum(lst) / len(lst)
+
+print(average([1, 2, 3, 4]))  # Output: 2.5",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2684,7 +2767,19 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 206",
         "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().",
         "initialCode": "def max_of_three():\n    pass",
-        "solution": "def max_of_three():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    if len(number) != 3:  # Should be len(int_numbers) != 3\n        print(\"not enough numbers\")\n        return\n        \n    max_number = int_numbers[0]\n    if int_numbers[1] > max_number:  # If second is larger\n        max_number = int_numbers[1]  # Update maximum\n    if int_numbers[2] > max_number:  # If third is larger\n        max_number = int_numbers[2]  # Update maximum\n        \n    print(max_number)\n    \nmax_of_three()",
+        "solution": "def max_of_three():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    if len(number) != 3:  # Should be len(int_numbers) != 3\n        print(\"not enough numbers\")\n        return\n        \n    max_number = int_numbers[0]\n    if int_numbers[1] > max_number:  # If second is larger\n        max_number = int_numbers[1]  # Update maximum\n    if int_numbers[2] > max_number:  # If third is larger\n        max_number = int_numbers[2]  # Update maximum\n        \n    print(max_number)\n    \nmax_of_three()
+
+# Alternative using sorted
+def max_of_three(a, b, c):
+    return sorted([a, b, c])[-1]
+
+print(max_of_three(567, 56, 6))  # Output: 567
+
+# Alternative using ternary chain
+def max_of_three(a, b, c):
+    return a if a > b and a > c else b if b > c else c
+
+print(max_of_three(10, 25, 15))  # Output: 25",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2693,7 +2788,20 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 207",
         "description": "Write a Python program to find the maximum of of list of numbers. Prompt the user to enter three numbers. do not use max().",
         "initialCode": "def max_of_list():\n    pass",
-        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()  # Note: says \"three\" but algorithm works for any length\n    if len(user) != 3:  # Validation check\n        print(\"type more numbers\")\n        return\n    \n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    max_number = int_numbers[0]\n    for number in int_numbers:\n        if number > max_number:  # If current number is larger\n            max_number = number  # Update maximum\n            \n    print(max_number)\n           \nmax_of_list()",
+        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()  # Note: says \"three\" but algorithm works for any length\n    if len(user) != 3:  # Validation check\n        print(\"type more numbers\")\n        return\n    \n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    max_number = int_numbers[0]\n    for number in int_numbers:\n        if number > max_number:  # If current number is larger\n            max_number = number  # Update maximum\n            \n    print(max_number)\n           \nmax_of_list()
+
+# Alternative using sorted
+def max_of_list(nums):
+    return sorted(nums)[-1]
+
+print(max_of_list([5, 2, 9, 1, 7]))  # Output: 9
+
+# Alternative using reduce (not max)
+def max_of_list(nums):
+    from functools import reduce
+    return reduce(lambda a, b: a if a > b else b, nums)
+
+print(max_of_list([3, 8, 1, 6]))  # Output: 8",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2702,7 +2810,19 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 208",
         "description": "Write a Python program to find the maximum of of list of numbers. Prompt the user to enter three numbers. Use max().",
         "initialCode": "def max_of_list():\n    pass",
-        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    \n    max_number = max(int_numbers)  # Built-in max() finds maximum element\n                   \n    print(max_number)\n           \nmax_of_list()",
+        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    \n    max_number = max(int_numbers)  # Built-in max() finds maximum element\n                   \n    print(max_number)\n           \nmax_of_list()
+
+# Alternative using max with map
+def max_of_list(nums):
+    return max(nums)
+
+print(max_of_list([5, 2, 9, 1, 7]))  # Output: 9
+
+# Alternative using sorted as validation
+def max_of_list(nums):
+    return sorted(nums, reverse=True)[0]
+
+print(max_of_list([3, 8, 1, 6]))  # Output: 8",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2711,7 +2831,20 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 209",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words with the word eg ['jonathan', 8, 'horse', 5, 'today', 5 ].",
         "initialCode": "def list_words(lst):\n    pass",
-        "solution": "def list_words(lst):\n    words_lengths = []\n    for word in lst:\n        words_lengths.append(word)  # Add word (string)\n        words_lengths.append(len(word))  # Add length (integer) using built-in len()\n    return words_lengths\n        \nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))",
+        "solution": "def list_words(lst):\n    words_lengths = []\n    for word in lst:\n        words_lengths.append(word)  # Add word (string)\n        words_lengths.append(len(word))  # Add length (integer) using built-in len()\n    return words_lengths\n        \nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))
+
+# Alternative using nested list comprehension
+def list_words(lst):
+    return [x for word in lst for x in (word, len(word))]
+
+print(list_words([\"Jonathan\", \"horse\", \"today\"]))
+
+# Alternative using chain.from_iterable
+def list_words(lst):
+    from itertools import chain
+    return list(chain.from_iterable((w, len(w)) for w in lst))
+
+print(list_words([\"cat\", \"dog\"]))  # Output: [\"cat\", 3, \"dog\", 3]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2720,7 +2853,30 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 210",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words with the word eg ['jonathan', 8, 'horse', 5, 'today', 5 ]. Do not use len().",
         "initialCode": "def list_words(lst):\n    pass",
-        "solution": "def list_words(lst):\n    words_with_lengths = []\n    for word in lst:\n        count = 0  # Manual length counter\n        for char in word:\n            count += 1  # Increment for each character\n        words_with_lengths.append(word)  # Add word\n        words_with_lengths.append(count)\n    \n    return words_with_lengths\n\nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))",
+        "solution": "def list_words(lst):\n    words_with_lengths = []\n    for word in lst:\n        count = 0  # Manual length counter\n        for char in word:\n            count += 1  # Increment for each character\n        words_with_lengths.append(word)  # Add word\n        words_with_lengths.append(count)\n    \n    return words_with_lengths\n\nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))
+
+# Alternative using sum of bools
+def list_words(lst):
+    result = []
+    for word in lst:
+        result.append(word)
+        result.append(sum(1 for _ in word))
+    return result
+
+print(list_words([\"Jonathan\", \"horse\", \"today\"]))
+
+# Alternative using enumerate trick
+def list_words(lst):
+    result = []
+    for word in lst:
+        count = -1
+        for _ in enumerate(word):
+            count += 1
+        count += 1  # off-by-one correction
+        result += [word, count]
+    return result
+
+print(list_words([\"hi\", \"hello\"]))  # Output: [\"hi\", 2, \"hello\", 5]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2729,7 +2885,36 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 211",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words without using len().",
         "initialCode": "def length_words(lst):\n    pass",
-        "solution": "def length_words(lst):\n    length = []\n    for word in lst:\n        count = 0\n        for char in word:\n            count += 1\n        length.append(count)\n    \n    return length\n    \nlst = [\"Jonathan\", \"chris\", \"mountain\"]\nprint(length_words(lst))",
+        "solution": "def length_words(lst):\n    length = []\n    for word in lst:\n        count = 0\n        for char in word:\n            count += 1\n        length.append(count)\n    \n    return length\n    \nlst = [\"Jonathan\", \"chris\", \"mountain\"]\nprint(length_words(lst))
+
+# Alternative using map with counter
+def length_words(lst):
+    return [sum(1 for _ in w) for w in lst]
+
+print(length_words([\"Jonathan\", \"chris\", \"mountain\"]))
+
+# Alternative using enumerate
+def length_words(lst):
+    result = []
+    for word in lst:
+        for i, _ in enumerate(word):
+            pass
+        result.append(i + 1)
+    return result
+
+print(length_words([\"cat\", \"horse\"]))  # Output: [3, 5]
+
+# Alternative using manual count with while
+def length_words(lst):
+    return [len_manual(w) for w in lst]
+
+def len_manual(s):
+    c = 0
+    for _ in s:
+        c += 1
+    return c
+
+print(length_words([\"apple\", \"pear\"]))  # Output: [5, 4]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2738,7 +2923,19 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 212",
         "description": "Write a Python program to find the intersection of two lists. Prompt the user to enter two lists without using set() and without using intersection().",
         "initialCode": "def intersection():\n    pass",
-        "solution": "def intersection():\n    lst1 = input(\"type lst1: \").split()\n    lst2 = input(\"type lst2: \").split()\n    common = []\n    for word in lst1:\n        if word in lst2:  # Check if word exists in second list (membership test)\n            common.append(word)  # Add to common if found\n    print(common)\n    \nintersection()",
+        "solution": "def intersection():\n    lst1 = input(\"type lst1: \").split()\n    lst2 = input(\"type lst2: \").split()\n    common = []\n    for word in lst1:\n        if word in lst2:  # Check if word exists in second list (membership test)\n            common.append(word)  # Add to common if found\n    print(common)\n    \nintersection()
+
+# Alternative using list comprehension
+def intersection(lst1, lst2):
+    return [x for x in lst1 if x in lst2]
+
+print(intersection([1, 2, 3, 4], [3, 4, 5, 6]))  # Output: [3, 4]
+
+# Alternative using filter
+def intersection(lst1, lst2):
+    return list(filter(lambda x: x in lst2, lst1))
+
+print(intersection([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Output: [\"b\", \"c\"]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2747,7 +2944,17 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 213",
         "description": "Write a Python program to print the following pattern:\\n*\\n* *\\n* * *\\n* * * *\\n* * * * *",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print('* ' * i)  # String multiplication: '*' * 3 = '***'",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print('* ' * i)  # String multiplication: '*' * 3 = '***'
+
+# Alternative using nested loop
+for i in range(1, 6):
+    for j in range(i):
+        print('*', end=' ')
+    print()
+
+# Alternative using join
+for i in range(1, 6):
+    print(' '.join('*' for _ in range(i)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2756,7 +2963,18 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 214",
         "description": "Write a Python program to print the following number pyramid:\\n1\\n2 2\\n3 3 3\\n4 4 4 4\\n5 5 5 5 5",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print((str(i) + ' ') * i)\n    # Example: i=3 \u2192 \"3 \" * 3 = \"3 3 3 \"",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print((str(i) + ' ') * i)
+    # Example: i=3 \u2192 \"3 \" * 3 = \"3 3 3 \"
+
+# Alternative using nested loop
+for i in range(1, 6):
+    for j in range(i):
+        print(i, end=' ')
+    print()
+
+# Alternative using join
+for i in range(1, 6):
+    print(' '.join(str(i) for _ in range(i)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2765,7 +2983,22 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 215",
         "description": "Write a Python program to print a square pattern of stars with a given side length.",
         "initialCode": "def square_pattern(n):\n    pass\n\ndef print_square_pattern(side_length):\n    pass",
-        "solution": "def square_pattern(n):\n    for i in range(n):  # Outer loop: rows\n        for j in range(n):  # Inner loop: columns\n            print(\"*\", end=\" \")  # Print star with space, end=\"\" prevents newline\n        print()  # Print newline after each row\nn = 5    \nprint(square_pattern(n))  # Prints square, then prints None\n\ndef print_square_pattern(side_length):\n    for i in range(side_length):  # Rows\n        for j in range(side_length):  # Columns\n            print(\"*\", end=\" \")  # end=\" \" keeps stars on same line with space\n        print()  # Newline after each row completes\n\nside_length = int(input(\"Enter the side length of the square: \"))\nprint_square_pattern(side_length)",
+        "solution": "def square_pattern(n):\n    for i in range(n):  # Outer loop: rows\n        for j in range(n):  # Inner loop: columns\n            print(\"*\", end=\" \")  # Print star with space, end=\"\" prevents newline\n        print()  # Print newline after each row\nn = 5    \nprint(square_pattern(n))  # Prints square, then prints None\n\ndef print_square_pattern(side_length):\n    for i in range(side_length):  # Rows\n        for j in range(side_length):  # Columns\n            print(\"*\", end=\" \")  # end=\" \" keeps stars on same line with space\n        print()  # Newline after each row completes\n\nside_length = int(input(\"Enter the side length of the square: \"))\nprint_square_pattern(side_length)
+
+# Alternative using one-liner with join
+def print_square_pattern(n):
+    print('\\n'.join('* ' * n for _ in range(n)))
+
+print_square_pattern(5)
+
+# Alternative using while loop
+def square_pattern(n):
+    i = 0
+    while i < n:
+        print('* ' * n)
+        i += 1
+
+square_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2774,7 +3007,17 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 216",
         "description": "Write a Python program to print a right-angled triangle of numbers:\\n1\\n1 2\\n1 2 3\\n1 2 3 4\\n1 2 3 4 5",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(' '.join(str(num) for num in range(1, i + 1)))",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(' '.join(str(num) for num in range(1, i + 1)))
+
+# Alternative using nested loop
+for i in range(1, 6):
+    for j in range(1, i + 1):
+        print(j, end=' ')
+    print()
+
+# Alternative using map and range
+for i in range(1, 6):
+    print(' '.join(map(str, range(1, i + 1))))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2783,7 +3026,15 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 217",
         "description": "Write a Python program to print an inverted pyramid pattern:\\n* * * * *\\n* * * *\\n* * *\\n* *\\n*\",",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)\n    for j in range(i):  # Print i stars in this row\n        print('*', end=' ')  # Print star with space\n    print()  # Newline after each row",
+        "solution": "for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)\n    for j in range(i):  # Print i stars in this row\n        print('*', end=' ')  # Print star with space\n    print()  # Newline after each row
+
+# Alternative using string multiplication
+for i in range(5, 0, -1):
+    print('* ' * i)
+
+# Alternative using join
+for i in range(5, 0, -1):
+    print(' '.join('*' for _ in range(i)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2792,7 +3043,25 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 218",
         "description": "Write a Python program to print a checkerboard pattern of given size.",
         "initialCode": "def print_checkerboard(size):\n    pass",
-        "solution": "def print_checkerboard(size):\n    for i in range(size):  # Rows\n        for j in range(size):  # Columns\n            if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                print('*', end=' ')\n            else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                print(' ', end=' ')\n        print()  # Newline after each row\n\nsize = int(input(\"Enter the size of the checkerboard: \"))\nprint_checkerboard(size)",
+        "solution": "def print_checkerboard(size):\n    for i in range(size):  # Rows\n        for j in range(size):  # Columns\n            if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                print('*', end=' ')\n            else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                print(' ', end=' ')\n        print()  # Newline after each row\n\nsize = int(input(\"Enter the size of the checkerboard: \"))\nprint_checkerboard(size)
+
+# Alternative using nested comprehension join
+def print_checkerboard(size):
+    for i in range(size):
+        row = ' '.join('*' if (i + j) % 2 == 0 else ' ' for j in range(size))
+        print(row)
+
+print_checkerboard(4)
+
+# Alternative using string multiplication (even rows)
+def print_checkerboard(size):
+    for i in range(size):
+        if i % 2 == 0:
+            print('* ' * size)
+        else:
+            print(' *' * size)
+
+print_checkerboard(4)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2801,7 +3070,27 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 219",
         "description": "Write a Python program to print Floyd's Triangle.\\n1\\n2 3\\n4 5 6\\n7 8 9 10",
         "initialCode": "def print_floyds_triangle(rows):\n    pass",
-        "solution": "def print_floyds_triangle(rows):\n    num = 1  # Counter for consecutive numbers\n    for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n        for j in range(i):  # Print i numbers in row i\n            print(num, end=' ')  # Print current number\n            num += 1  # Increment to next number\n        print()  # Newline after each row\n\nrows = 4\nprint_floyds_triangle(rows)",
+        "solution": "def print_floyds_triangle(rows):\n    num = 1  # Counter for consecutive numbers\n    for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n        for j in range(i):  # Print i numbers in row i\n            print(num, end=' ')  # Print current number\n            num += 1  # Increment to next number\n        print()  # Newline after each row\n\nrows = 4\nprint_floyds_triangle(rows)
+
+# Alternative using while loop
+def print_floyds_triangle(rows):
+    num = 1
+    r = 1
+    while r <= rows:
+        print(' '.join(str(num + c) for c in range(r)))
+        num += r
+        r += 1
+
+print_floyds_triangle(4)
+
+# Alternative calculating numbers per row
+def print_floyds_triangle(rows):
+    num = 1
+    for i in range(1, rows + 1):
+        print(' '.join(str(num + j) for j in range(i)))
+        num += i
+
+print_floyds_triangle(4)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2810,7 +3099,20 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 221",
         "description": "Write a Python program to print a hollow square pattern of stars with a given side length.\\nFor example, for side length 5:\\n*****\\n*   *\\n*   *\\n*   *\\n*****",
         "initialCode": "def print_hollow_square(side_length):\n    pass",
-        "solution": "def print_hollow_square(side_length):\n    for i in range(side_length):  # Rows\n        if i == 0 or i == side_length - 1:  # First or last row\n            print('*' * side_length)  # Print full row of stars\n        else:  # Middle rows\n            # Print: star + spaces + star\n            print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\n\nside_length = 5\nprint_hollow_square(side_length)",
+        "solution": "def print_hollow_square(side_length):\n    for i in range(side_length):  # Rows\n        if i == 0 or i == side_length - 1:  # First or last row\n            print('*' * side_length)  # Print full row of stars\n        else:  # Middle rows\n            # Print: star + spaces + star\n            print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\n\nside_length = 5\nprint_hollow_square(side_length)
+
+# Alternative using join with conditional
+def print_hollow_square(n):
+    for i in range(n):
+        print('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*')
+
+print_hollow_square(5)
+
+# Alternative using list comprehension
+def print_hollow_square(n):
+    print('\\n'.join('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*' for i in range(n)))
+
+print_hollow_square(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2819,7 +3121,21 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 222",
         "description": "Write a Python program to print a reverse pyramid pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4\\n1 2 3\\n1 2\\n1\"",
         "initialCode": "def print_reverse_pyramid(rows):\n    pass",
-        "solution": "def print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n        for j in range(1, i + 1):  # Print numbers 1 to i\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after each row\n\nrows = 5\nprint_reverse_pyramid(rows)",
+        "solution": "def print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n        for j in range(1, i + 1):  # Print numbers 1 to i\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after each row\n\nrows = 5\nprint_reverse_pyramid(rows)
+
+# Alternative using join and map
+def print_reverse_pyramid(rows):
+    for i in range(rows, 0, -1):
+        print(' '.join(map(str, range(1, i + 1))))
+
+print_reverse_pyramid(5)
+
+# Alternative using string multiplication
+def print_reverse_pyramid(rows):
+    for i in range(rows, 0, -1):
+        print(' '.join(str(j) for j in range(1, i + 1)))
+
+print_reverse_pyramid(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2828,7 +3144,21 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 224",
         "description": "description\": \"Write a Python program to print a triangle pattern of letters:\\nA\\nB B\\nC C C\\nD D D D\\nE E E E E\"",
         "initialCode": "def triangle_pattern(rows):\n    pass\n\ndef triangle_pattern(rows):\n    pass",
-        "solution": "def triangle_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        letter = chr(65 + i)  # Get letter for current row\n        for j in range(i + 1):  # Print letter (i+1) times\n            print(letter, end=\" \")  # Print letter with space\n        print()  # Newline after row\n\nrows = 5\ntriangle_pattern(rows)\n\ndef triangle_pattern(rows):\n    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n    \n    for i in range(rows):\n        letter = letters[i]\n        for j in range(i + 1):\n            \n            print(letter, end=\" \")\n            \n        print()\n\nrows = 5\ntriangle_pattern(rows)",
+        "solution": "def triangle_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        letter = chr(65 + i)  # Get letter for current row\n        for j in range(i + 1):  # Print letter (i+1) times\n            print(letter, end=\" \")  # Print letter with space\n        print()  # Newline after row\n\nrows = 5\ntriangle_pattern(rows)\n\ndef triangle_pattern(rows):\n    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n    \n    for i in range(rows):\n        letter = letters[i]\n        for j in range(i + 1):\n            \n            print(letter, end=\" \")\n            \n        print()\n\nrows = 5\ntriangle_pattern(rows)
+
+# Alternative using string indexing
+def triangle_pattern(rows):
+    letters = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"
+    for i in range(rows):
+        print(' '.join(letters[i] for _ in range(i + 1)))
+
+triangle_pattern(5)
+
+# Alternative using one-liner
+def triangle_pattern(rows):
+    print('\\n'.join(' '.join(chr(65 + i) for _ in range(i + 1)) for i in range(rows)))
+
+triangle_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2837,7 +3167,27 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 225",
         "description": "Write a Python program to print a square pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5",
         "initialCode": "def print_square_pattern(size):\n    pass",
-        "solution": "r = 5 # r = row\nc = 5 # c = column\n\nfor n in range(r): # n = number (outer loop: rows)\n    for n in range(1, c + 1):  # BUG: 'n' reused, overwrites outer loop variable\n        print(n, end = \" \")  # Prints 1, 2, 3, 4, 5\n    print()  # Newline after each row\n\ndef print_square_pattern(size):\n    for i in range(size):  # Rows\n        for j in range(1, size + 1):  # Columns: numbers 1 to size\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after row\n\nsize = 5\nprint_square_pattern(size)",
+        "solution": "r = 5 # r = row\nc = 5 # c = column\n\nfor n in range(r): # n = number (outer loop: rows)\n    for n in range(1, c + 1):  # BUG: 'n' reused, overwrites outer loop variable\n        print(n, end = \" \")  # Prints 1, 2, 3, 4, 5\n    print()  # Newline after each row\n\ndef print_square_pattern(size):\n    for i in range(size):  # Rows\n        for j in range(1, size + 1):  # Columns: numbers 1 to size\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after row\n\nsize = 5\nprint_square_pattern(size)
+
+# Alternative using join with map
+def print_square_pattern(size):
+    for _ in range(size):
+        print(' '.join(map(str, range(1, size + 1))))
+
+print_square_pattern(5)
+
+# Alternative using one-liner
+def print_square_pattern(size):
+    print('\\n'.join(' '.join(str(j) for j in range(1, size + 1)) for _ in range(size)))
+
+print_square_pattern(5)
+
+# Alternative using string multiplication
+def print_square_pattern(size):
+    for _ in range(size):
+        print(' '.join(str(i) for i in range(1, size + 1)))
+
+print_square_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
