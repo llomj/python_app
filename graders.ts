@@ -6654,6 +6654,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "Negative number not allowed" }
     ]
   },
+  947: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Memory limit exceeded" }
+    ]
+  },
   948: {
     functionNames: ["infinite_recursion"],
     tests: [
@@ -6674,6 +6682,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [
       { args: [], expected: "Error reading file" }
+    ]
+  },
+  951: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "Process interrupted by user" }
     ]
   },
   952: {
@@ -6924,6 +6940,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "[['name', 'age', 'city'], ['Alice', '25', 'New York'], ['Bob', '30', 'London']]" }
     ]
   },
+  983: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['https://example.com', 'https://google.com']" }
+    ]
+  },
   984: {
     functionNames: [],
     mode: 'script',
@@ -6970,6 +6994,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     tests: [
       { args: [], expected: "['Hello World']" }
+    ]
+  },
+  990: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "{'name': 'Alice', 'age': 25, 'city': 'New York'}" }
     ]
   },
   991: {

@@ -8356,9 +8356,9 @@ export const EXERCISES: Exercise[] = [
     {
         "id": 947,
         "title": "Problem 947",
-        "description": "Write a Python program to handle a MemoryError by attempting to allocate excessive memory.",
+        "description": "Write a Python program to handle a MemoryError safely by simulating the exception.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    lst = [0] * (10**9)\nexcept MemoryError:\n    print(\"Memory limit exceeded\")  # Expected output: Memory limit exceeded\n\n# Wrapped in function\n    def main():\n        try:\n    lst = [0] * (10**9)\nexcept MemoryError:\n    print(\'Memory limit exceeded\')  # Expected output: Memory limit exceeded\n    main()\n\n# Using if check\n    # Check condition instead of try/except",
+        "solution": "try:\n    raise MemoryError(\"simulated memory limit\")\nexcept MemoryError:\n    print(\"Memory limit exceeded\")  # Expected output: Memory limit exceeded\n\n# Wrapped in function\n    def main():\n        try:\n            raise MemoryError(\"simulated memory limit\")\n        except MemoryError:\n            print(\"Memory limit exceeded\")\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8392,9 +8392,9 @@ export const EXERCISES: Exercise[] = [
     {
         "id": 951,
         "title": "Problem 951",
-        "description": "Write a Python program to catch a KeyboardInterrupt exception when the user manually stops the script.",
+        "description": "Write a Python program to catch a KeyboardInterrupt exception safely by simulating the interrupt.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    while True:\n        pass  # Infinite loop to simulate long-running process\nexcept KeyboardInterrupt:\n    print(\"Process interrupted by user\")  # Expected output: Process interrupted by user\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        try:\n    while True:\n        pass  # Infinite loop to simulate long-running process\nexcept KeyboardInterrupt:\n    print(\'Process interrupted by user\')  # Expected output: Process interrupted by user\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...\n    main()",
+        "solution": "try:\n    raise KeyboardInterrupt\nexcept KeyboardInterrupt:\n    print(\"Process interrupted by user\")  # Expected output: Process interrupted by user\n\n# Wrapped in function\n    def main():\n        try:\n            raise KeyboardInterrupt\n        except KeyboardInterrupt:\n            print(\"Process interrupted by user\")\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8680,9 +8680,9 @@ export const EXERCISES: Exercise[] = [
     {
         "id": 983,
         "title": "Problem 983",
-        "description": "Write a Python program to parse HTML and extract all links.",
-        "initialCode": "from bs4 import BeautifulSoup\n# Write your solution here",
-        "solution": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"https://example.com\">Example</a> <a href=\"https://google.com\">Google</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\nlinks = [a[\"href\"] for a in soup.find_all(\"a\")]\nprint(links)  # Expected output: ['https://example.com', 'https://google.com']\n\n# Wrapped in function\n    def main():\n        from bs4 import BeautifulSoup\n\nhtml = '<a href=\'https://example.com\'>Example</a> <a href=\'https://google.com\'>Google</a>'\nsoup = BeautifulSoup(html, \'html.parser\')\nlinks = [a[\'href\'] for a in soup.find_all(\'a\')]\nprint(links)  # Expected output: ['https://example.com', 'https://google.com']\n    main()\n\n# Using return\n    return links",
+        "description": "Write a Python program to parse HTML and extract all links using the standard library.",
+        "initialCode": "from html.parser import HTMLParser\n# Write your solution here",
+        "solution": "from html.parser import HTMLParser\n\nclass LinkParser(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == \"a\":\n            for name, value in attrs:\n                if name == \"href\":\n                    self.links.append(value)\n\nhtml = '<a href=\"https://example.com\">Example</a> <a href=\"https://google.com\">Google</a>'\nparser = LinkParser()\nparser.feed(html)\nprint(parser.links)  # Expected output: ['https://example.com', 'https://google.com']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8743,9 +8743,9 @@ export const EXERCISES: Exercise[] = [
     {
         "id": 990,
         "title": "Problem 990",
-        "description": "Write a Python program to parse a YAML string into a Python dictionary.",
-        "initialCode": "import yaml\n# Write your solution here",
-        "solution": "import yaml\n\nyaml_str = \"name: Alice\\nage: 25\\ncity: New York\"\ndata = yaml.safe_load(yaml_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Wrapped in function\n    def main():\n        import yaml\n\nyaml_str = \'name: Alice\\nage: 25\\ncity: New York\'\ndata = yaml.safe_load(yaml_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n    main()\n\n# Using return\n    return data",
+        "description": "Write a Python program to parse a simple YAML-style key-value string into a Python dictionary without external packages.",
+        "initialCode": "# Write your solution here",
+        "solution": "yaml_str = \"name: Alice\\nage: 25\\ncity: New York\"\ndata = {}\nfor line in yaml_str.splitlines():\n    key, value = line.split(\": \", 1)\n    data[key] = int(value) if value.isdigit() else value\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
