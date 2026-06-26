@@ -1095,7 +1095,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 126",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words.",
         "initialCode": "def map_words_to_lengths(words):\n    pass",
-        "solution": "def map_words_to_lengths(words):\n    lengths = []\n    for word in words:\n        lengths.append(len(word))  # Append length of each word\n    return lengths\n\nwords = [\"apple\", \"banana\", \"cherry\", \"date\"]\nlengths = map_words_to_lengths(words)\nprint(lengths)",
+        "solution": "def map_words_to_lengths(words):\n    lengths = []\n    for word in words:\n        lengths.append(len(word))  # Append length of each word\n    return lengths\n\nwords = [\"apple\", \"banana\", \"cherry\", \"date\"]\nlengths = map_words_to_lengths(words)\nprint(lengths)\n\n# Alternative solution using list comprehension\ndef map_words_to_lengths(words):\n    return [len(word) for word in words]\n\nprint(map_words_to_lengths([\"a\", \"ab\", \"abc\"]))  # Output: [1, 2, 3]\n\n# Alternative solution using map\ndef map_words_to_lengths(words):\n    return list(map(len, words))\n\nprint(map_words_to_lengths([\"hello\", \"world\"]))  # Output: [5, 5]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1104,7 +1104,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 127",
         "description": "Write a function find_longest_word() that takes a list of words and returns the length of the longest one.",
         "initialCode": "def find_longest_word(elements):\n    pass",
-        "solution": "def find_longest_word(elements):\n    longest_element = elements[0]\n    for element in elements:\n        if element > longest_element:  # String comparison, not length comparison\n            longest_element = element\n    return len(element)  # BUG: Returns len of last element in loop, not longest\n               \nlst = [\"jo\", \"tre\", \"Jonny\", \"abracadabr\"] \nprint(find_longest_word(lst))",
+        "solution": "def find_longest_word(elements):\n    longest_element = elements[0]\n    for element in elements:\n        if element > longest_element:  # String comparison, not length comparison\n            longest_element = element\n    return len(element)  # BUG: Returns len of last element in loop, not longest\n               \nlst = [\"jo\", \"tre\", \"Jonny\", \"abracadabr\"] \nprint(find_longest_word(lst))\n\n# Alternative solution using max with key\ndef find_longest_word(words):\n    return len(max(words, key=len))\n\nprint(find_longest_word([\"hi\", \"hello\", \"sup\"]))  # Output: 5\n\n# Alternative solution using list comprehension\ndef find_longest_word(words):\n    return max(len(w) for w in words)\n\nprint(find_longest_word([\"a\", \"abc\", \"ab\"]))  # Output: 3",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1113,7 +1113,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 128",
         "description": "Write a function filter_long_words() that takes a list of words and an integer n and returns the list of words that are longer than n.",
         "initialCode": "def filter_long_words(lst, n):\n    pass",
-        "solution": "def filter_long_words(lst, n):\n    longest_words = []\n    for word in lst:\n        if len(word) > n:  # Check if word length > n\n            longest_words.append(word)\n    return longest_words\n           \nlst = [\"three\", \"threebesthorses\" \"hours\", \"Jonathannollthebestintheworld\"]  # Note: missing comma between strings\nn = 6\nprint(filter_long_words(lst, n))",
+        "solution": "def filter_long_words(lst, n):\n    longest_words = []\n    for word in lst:\n        if len(word) > n:  # Check if word length > n\n            longest_words.append(word)\n    return longest_words\n           \nlst = [\"three\", \"threebesthorses\" \"hours\", \"Jonathannollthebestintheworld\"]  # Note: missing comma between strings\nn = 6\nprint(filter_long_words(lst, n))\n\n# Alternative solution using list comprehension\ndef filter_long_words(lst, n):\n    return [word for word in lst if len(word) > n]\n\nprint(filter_long_words([\"cat\", \"elephant\", \"dog\", \"hippopotamus\"], 4))  # Output: ['elephant', 'hippopotamus']\n\n# Alternative solution using filter\ndef filter_long_words(lst, n):\n    return list(filter(lambda w: len(w) > n, lst))\n\nprint(filter_long_words([\"tiny\", \"medium\", \"longerword\"], 5))  # Output: ['medium', 'longerword']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1122,7 +1122,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 129",
         "description": "A pangram is a sentence that contains all the letters of the English alphabet at least once, for example: The quick brown fox jumps over the lazy dog. Your task here is to write a function to check a sentence to see if it is a pangram or not.",
         "initialCode": "def is_pangram(sentence):\n    pass",
-        "solution": "def is_pangram(sentence):\n    alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n    sentence = sentence.lower()  # Convert to lowercase for case-insensitive check\n    for letter in alphabet:\n        if letter not in sentence:  # If any letter missing, not a pangram\n            return False\n    return True  # All letters found\n\nsentence = input(\"Enter a sentence: \")\nresult = is_pangram(sentence)\nprint(result)",
+        "solution": "def is_pangram(sentence):\n    alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n    sentence = sentence.lower()  # Convert to lowercase for case-insensitive check\n    for letter in alphabet:\n        if letter not in sentence:  # If any letter missing, not a pangram\n            return False\n    return True  # All letters found\n\nsentence = input(\"Enter a sentence: \")\nresult = is_pangram(sentence)\nprint(result)\n\n# Alternative solution using set\ndef is_pangram(sentence):\n    return set(\"abcdefghijklmnopqrstuvwxyz\").issubset(set(sentence.lower()))\n\nprint(is_pangram(\"The quick brown fox jumps over the lazy dog\"))  # Output: True\nprint(is_pangram(\"Hello World\"))                                   # Output: False\n\n# Alternative solution using all()\ndef is_pangram(sentence):\n    sentence = sentence.lower()\n    return all(letter in sentence for letter in \"abcdefghijklmnopqrstuvwxyz\")\n\nprint(is_pangram(\"Pack my box with five dozen liquor jugs\"))  # Output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1131,7 +1131,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 130",
         "description": "Define a simple 'spelling correction' function correct() that takes a string and sees to it that 1) two or more occurrences of the space character is compressed into one, and 2) inserts an extra space after a period if the period is directly followed by a letter. E.g. correct('This is very funny and cool.Indeed!'') should return 'This is very funny and cool. Indeed!'' Tip: Use regular expressions!",
         "initialCode": "import re\ndef correct(text):\n    pass",
-        "solution": "import re\n\ndef correct(text):\n    text = re.sub(r'\\s+', ' ', text)  # re.sub(pattern, replacement, string)\n    text = re.sub(r'\\.(?=[A-Za-z])', '. ', text)  # (?=...) is positive lookahead assertion\n    return text\n\ntext = input(\"Enter a string: \")\nresult = correct(text)\nprint(result)",
+        "solution": "import re\n\ndef correct(text):\n    text = re.sub(r'\\s+', ' ', text)  # re.sub(pattern, replacement, string)\n    text = re.sub(r'\\.(?=[A-Za-z])', '. ', text)  # (?=...) is positive lookahead assertion\n    return text\n\ntext = input(\"Enter a string: \")\nresult = correct(text)\nprint(result)\n\n# Alternative solution without regex, using split and join\ndef correct(text):\n    words = text.split()  # split() compresses all whitespace\n    result = ' '.join(words)\n    result = result.replace('.', '. ')  # Add space after periods\n    result = result.replace('.  ', '. ')  # Fix double spaces\n    return result\n\nprint(correct(\"This is very  funny and cool.Indeed!\"))  # Output: This is very funny and cool. Indeed!\n\n# Alternative solution using a single regex\ndef correct(text):\n    import re\n    text = re.sub(r'\\s+', ' ', text)\n    return re.sub(r'\\.(\\w)', r'. \\1', text)\n\nprint(correct(\"Hello world.Yes\"))  # Output: Hello world. Yes",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1140,7 +1140,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 131",
         "description": "Using the higher order function reduce(), write a function max_in_list() that takes a list of numbers and returns the largest one. Then ask yourself: why define and call a new function, when I can just as well call the reduce() function directly?",
         "initialCode": "from functools import reduce  # reduce() applies function cumulatively to items\ndef max_func(a, b):\n    pass\n\ndef max_in_list(numbers):\n    pass",
-        "solution": "from functools import reduce  # reduce() applies function cumulatively to items\n\ndef max_func(a, b):\n    if a > b:\n        return a\n    return b\n\ndef max_in_list(numbers):\n    return reduce(max_func, numbers)  # reduce(function, iterable) reduces list to single value\n    \nnumbers = [1, 5, 3, 9, 2]\nprint(max_in_list(numbers))",
+        "solution": "from functools import reduce  # reduce() applies function cumulatively to items\n\ndef max_func(a, b):\n    if a > b:\n        return a\n    return b\n\ndef max_in_list(numbers):\n    return reduce(max_func, numbers)  # reduce(function, iterable) reduces list to single value\n    \nnumbers = [1, 5, 3, 9, 2]\nprint(max_in_list(numbers))\n\n# Alternative solution using lambda with reduce\ndef max_in_list(numbers):\n    from functools import reduce\n    return reduce(lambda a, b: a if a > b else b, numbers)\n\nprint(max_in_list([10, 3, 7, 15, 2]))  # Output: 15\n\n# Alternative solution using max() built-in\ndef max_in_list(numbers):\n    return max(numbers)\n\nprint(max_in_list([4, 9, 2, 11]))  # Output: 11",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1149,7 +1149,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 133",
         "description": "Write a program to create a time table using 2 for loops to print the full time table from 1 -10, eg 1 x 1 up to 10 x 10\"",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 11):\n    for j in range(1, 11):\n        print(f\"{i} x {j} = {i * j}\")  # Prints all combinations 1x1 to 10x10",
+        "solution": "for i in range(1, 11):\n    for j in range(1, 11):\n        print(f\"{i} x {j} = {i * j}\")  # Prints all combinations 1x1 to 10x10\n\n# Alternative solution using list comprehension\ntable = '\\n'.join([f\"{i} x {j} = {i*j}\" for i in range(1, 11) for j in range(1, 11)])\nprint(table)\n\n# Alternative solution using while loops\ni = 1\nwhile i <= 10:\n    j = 1\n    while j <= 10:\n        print(f\"{i} x {j} = {i * j}\")\n        j += 1\n    i += 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1158,7 +1158,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 134",
         "description": "Write a Python program to find the sum of all numbers in a list. Prompt the user to enter a list of numbers in a input function",
         "initialCode": "def sum_of_all_numbers():\n    pass",
-        "solution": "def sum_of_all_numbers():\n    user_input = input(\"Enter a list of numbers separated by spaces: \")\n    split_numbers = user_input.split()\n    int_numbers = []\n    \n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    \n    print(total_sum)\n\nsum_of_all_numbers()",
+        "solution": "def sum_of_all_numbers():\n    user_input = input(\"Enter a list of numbers separated by spaces: \")\n    split_numbers = user_input.split()\n    int_numbers = []\n    \n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    \n    print(total_sum)\n\nsum_of_all_numbers()\n\n# Alternative solution using map with sum\ndef sum_of_all_numbers():\n    numbers = list(map(int, input(\"Enter numbers: \").split()))\n    print(sum(numbers))\n\nsum_of_all_numbers()\n\n# Alternative solution using generator\ndef sum_of_all_numbers():\n    print(sum(int(x) for x in input(\"Enter numbers: \").split()))\n\nsum_of_all_numbers()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1167,7 +1167,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 135",
         "description": "Write a function that takes numbers string \"123\" and splits the numbers into a string (\"1\", \"2\", \"3\").",
         "initialCode": "def split_number(numbers):\n    pass",
-        "solution": "def split_number(numbers):\n    numbers_split = numbers.split()  # split() on \"123\" returns [\"123\"] (no spaces to split on)\n    number_lst = []\n    for number in numbers:  # Iterates over characters in string \"123\"\n        number_lst.append(number)  # Appends each character: \"1\", \"2\", \"3\"\n    return number_lst  # Returns [\"1\", \"2\", \"3\"] (works but split() is unnecessary)\n        \narg = \"123\"\nprint(split_number(arg))",
+        "solution": "def split_number(numbers):\n    numbers_split = numbers.split()  # split() on \"123\" returns [\"123\"] (no spaces to split on)\n    number_lst = []\n    for number in numbers:  # Iterates over characters in string \"123\"\n        number_lst.append(number)  # Appends each character: \"1\", \"2\", \"3\"\n    return number_lst  # Returns [\"1\", \"2\", \"3\"] (works but split() is unnecessary)\n        \narg = \"123\"\nprint(split_number(arg))\n\n# Alternative solution using list()\ndef split_number(numbers):\n    return list(numbers)\n\nprint(split_number(\"123\"))  # Output: ['1', '2', '3']\n\n# Alternative solution using list comprehension\ndef split_number(numbers):\n    return [c for c in numbers]\n\nprint(split_number(\"456\"))  # Output: ['4', '5', '6']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1176,7 +1176,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 136",
         "description": "Write a function that sorts words in a sentence alphabetically.",
         "initialCode": "def alphabetically_ordered(sentence):\n    pass",
-        "solution": "def alphabetically_ordered(sentence):\n    return \" \".join(sorted(sentence.split()))  # sorted() sorts alphabetically, join() combines with spaces\n\nsentence = \"hello caca face\"\nprint(alphabetically_ordered(sentence))",
+        "solution": "def alphabetically_ordered(sentence):\n    return \" \".join(sorted(sentence.split()))  # sorted() sorts alphabetically, join() combines with spaces\n\nsentence = \"hello caca face\"\nprint(alphabetically_ordered(sentence))\n\n# Alternative solution using sorted with key case-insensitive\ndef alphabetically_ordered(sentence):\n    return ' '.join(sorted(sentence.split(), key=str.lower))\n\nprint(alphabetically_ordered(\"Banana apple Cherry\"))  # Output: apple Banana Cherry\n\n# Alternative solution using sort() method\ndef alphabetically_ordered(sentence):\n    words = sentence.split()\n    words.sort()\n    return ' '.join(words)\n\nprint(alphabetically_ordered(\"zebra cat dog\"))  # Output: cat dog zebra",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1185,7 +1185,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 137",
         "description": "Write a function that sorts numbers (int) from smallest number to biggest number.",
         "initialCode": "def smallest_largest(numbers):\n    pass",
-        "solution": "def smallest_largest(numbers):\n    return sorted(numbers)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(smallest_largest(numbers))",
+        "solution": "def smallest_largest(numbers):\n    return sorted(numbers)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(smallest_largest(numbers))\n\n# Alternative solution using list.sort()\ndef smallest_largest(numbers):\n    result = numbers[:]\n    result.sort()\n    return result\n\nprint(smallest_largest([5, 1, 9, 3]))  # Output: [1, 3, 5, 9]\n\n# Alternative solution using sorted with reverse\ndef smallest_largest(numbers):\n    return sorted(numbers)\n\nprint(smallest_largest([10, 2, 8]))  # Output: [2, 8, 10]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1194,7 +1194,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 138",
         "description": "Write a function that sorts number (int) from biggest number to smallest number.",
         "initialCode": "def largest_smallest(numbers):  # Function name misleading\n    pass",
-        "solution": "def largest_smallest(numbers):  # Function name misleading\n    return sorted(numbers)[::-1]  # [::-1] reverses the sorted list (descending order)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(largest_smallest(numbers))",
+        "solution": "def largest_smallest(numbers):  # Function name misleading\n    return sorted(numbers)[::-1]  # [::-1] reverses the sorted list (descending order)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(largest_smallest(numbers))\n\n# Alternative solution using sorted with reverse=True\ndef largest_smallest(numbers):\n    return sorted(numbers, reverse=True)\n\nprint(largest_smallest([5, 1, 9, 3]))  # Output: [9, 5, 3, 1]\n\n# Alternative solution using list.sort()\ndef largest_smallest(numbers):\n    result = numbers[:]\n    result.sort(reverse=True)\n    return result\n\nprint(largest_smallest([10, 2, 8]))  # Output: [10, 8, 2]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1203,7 +1203,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 139",
         "description": "Write a function using sorted() number int) returning the seconded largest number from that list.",
         "initialCode": "def seconded_largest_number(numbers):  # Typo: \"seconded\" should be \"second\"\n    pass",
-        "solution": "def seconded_largest_number(numbers):  # Typo: \"seconded\" should be \"second\"\n    return sorted(numbers)[-2]  # [-2] is second-to-last element (second largest)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(seconded_largest_number(numbers))",
+        "solution": "def seconded_largest_number(numbers):  # Typo: \"seconded\" should be \"second\"\n    return sorted(numbers)[-2]  # [-2] is second-to-last element (second largest)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(seconded_largest_number(numbers))\n\n# Alternative solution using heapq\ndef seconded_largest_number(numbers):\n    import heapq\n    return heapq.nlargest(2, numbers)[-1]\n\nprint(seconded_largest_number([10, 5, 8, 3, 12]))  # Output: 10\n\n# Alternative solution using set to handle duplicates\ndef seconded_largest_number(numbers):\n    return sorted(set(numbers))[-2]\n\nprint(seconded_largest_number([5, 5, 3, 1, 4]))  # Output: 4",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1212,7 +1212,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 140",
         "description": "Write a function using sorted() number int) returning the fourth largest number from that list.",
         "initialCode": "def fourth_largest_number(numbers):\n    pass",
-        "solution": "def fourth_largest_number(numbers):\n    return sorted(numbers)[-4]  # [-4] is fourth-to-last element (fourth largest)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(fourth_largest_number(numbers))",
+        "solution": "def fourth_largest_number(numbers):\n    return sorted(numbers)[-4]  # [-4] is fourth-to-last element (fourth largest)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(fourth_largest_number(numbers))\n\n# Alternative solution using heapq\ndef fourth_largest_number(numbers):\n    import heapq\n    return heapq.nlargest(4, set(numbers))[-1]\n\nprint(fourth_largest_number([10, 5, 8, 3, 12, 7]))  # Output: 5\n\n# Alternative solution using sorted with unique\ndef fourth_largest_number(numbers):\n    return sorted(set(numbers))[-4]\n\nprint(fourth_largest_number([9, 2, 7, 5, 1, 3]))  # Output: 3",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1221,7 +1221,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 141",
         "description": "Write a function using sorted() returning the smallest and third largest number from that list.",
         "initialCode": "def smallest_and_third(numbers):\n    pass",
-        "solution": "def smallest_and_third(numbers):\n    smallest = sorted(numbers)[0]  # First element (smallest)\n    third_largest = sorted(numbers)[-3]  # Third from end (third largest)\n    return smallest, third_largest  # Returns tuple\n\nnumbers = [2, 76, 466, 3, 23]\nprint(smallest_and_third(numbers))",
+        "solution": "def smallest_and_third(numbers):\n    smallest = sorted(numbers)[0]  # First element (smallest)\n    third_largest = sorted(numbers)[-3]  # Third from end (third largest)\n    return smallest, third_largest  # Returns tuple\n\nnumbers = [2, 76, 466, 3, 23]\nprint(smallest_and_third(numbers))\n\n# Alternative solution using min and heapq\ndef smallest_and_third(numbers):\n    import heapq\n    smallest = min(numbers)\n    third_largest = heapq.nlargest(3, set(numbers))[-1]\n    return smallest, third_largest\n\nprint(smallest_and_third([5, 9, 2, 7, 11, 3]))  # Output: (2, 7)\n\n# Alternative solution using sorted only\ndef smallest_and_third(numbers):\n    s = sorted(set(numbers))\n    return s[0], s[-3]\n\nprint(smallest_and_third([10, 3, 8, 1, 6, 9]))  # Output: (1, 6)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1230,7 +1230,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 142",
         "description": "Write a function that sorts number from smallest number to biggest number using sorted().",
         "initialCode": "def largest_smallest(numbers):  # Function name misleading\n    pass\n\ndef smallest_biggest(numbers):\n    pass",
-        "solution": "def largest_smallest(numbers):  # Function name misleading\n    return sorted(numbers)[::]  # [::] is same as sorted(numbers)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(largest_smallest(numbers)) \n\ndef smallest_biggest(numbers):\n    return sorted(numbers)  # Returns sorted list\n    \nlst = [2, 24, 23, 27, 2]\nprint(smallest_biggest(lst))",
+        "solution": "def largest_smallest(numbers):  # Function name misleading\n    return sorted(numbers)[::]  # [::] is same as sorted(numbers)\n        \nnumbers = [2, 76, 466, 3, 23]\nprint(largest_smallest(numbers)) \n\ndef smallest_biggest(numbers):\n    return sorted(numbers)  # Returns sorted list\n    \nlst = [2, 24, 23, 27, 2]\nprint(smallest_biggest(lst))\n\n# Alternative solution using list.sort()\ndef smallest_biggest(numbers):\n    result = numbers[:]\n    result.sort()\n    return result\n\nprint(smallest_biggest([3, 1, 4, 2]))  # Output: [1, 2, 3, 4]\n\n# Alternative solution using sorted with key\ndef smallest_biggest(numbers):\n    return sorted(numbers, key=int)\n\nprint(smallest_biggest([9, 5, 7]))  # Output: [5, 7, 9]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1239,7 +1239,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 143",
         "description": "Write a function with user input that coverts 1 2 3 (int) into a \"1\" \"2\" \"3\" (str).",
         "initialCode": "def int_str():\n    pass",
-        "solution": "def int_str():\n    user_lst = []\n    user = input(\"type: \")  # e.g., \"1 2 3\"\n    split_str = user.split()  # [\"1\", \"2\", \"3\"] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    print(user_lst)  # Prints list of strings\n    \nint_str()",
+        "solution": "def int_str():\n    user_lst = []\n    user = input(\"type: \")  # e.g., \"1 2 3\"\n    split_str = user.split()  # [\"1\", \"2\", \"3\"] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    print(user_lst)  # Prints list of strings\n    \nint_str()\n\n# Alternative solution using list comprehension\ndef int_str():\n    print([x for x in input(\"type: \").split()])\n\nint_str()\n\n# Alternative solution using split() directly\ndef int_str():\n    print(input(\"type: \").split())\n\nint_str()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1248,7 +1248,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 144",
         "description": "Write a function that coverts 123 (int) into a \"1\" \"2\" \"3\" (str).",
         "initialCode": "def int_to_str_list(number):\n    pass",
-        "solution": "def int_to_str_list(number):\n    number_str = str(number)  # Convert int to string: 123 \u2192 \"123\"\n    digits_as_strings = []\n    for digit in number_str:  # Iterate over characters in string\n        digits_as_strings.append(digit)  # Each character is already a string\n    return digits_as_strings  # Returns [\"1\", \"2\", \"3\"]\n\nnumber = 123\nprint(int_to_str_list(number))",
+        "solution": "def int_to_str_list(number):\n    number_str = str(number)  # Convert int to string: 123 \u2192 \"123\"\n    digits_as_strings = []\n    for digit in number_str:  # Iterate over characters in string\n        digits_as_strings.append(digit)  # Each character is already a string\n    return digits_as_strings  # Returns [\"1\", \"2\", \"3\"]\n\nnumber = 123\nprint(int_to_str_list(number))\n\n# Alternative solution using list()\ndef int_to_str_list(number):\n    return list(str(number))\n\nprint(int_to_str_list(456))  # Output: ['4', '5', '6']\n\n# Alternative solution using list comprehension\ndef int_to_str_list(number):\n    return [d for d in str(number)]\n\nprint(int_to_str_list(789))  # Output: ['7', '8', '9']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1257,7 +1257,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 145",
         "description": "Write a Python program to find the common number between two lists. Prompt the user to enter two lists, for this exercise do not use set.",
         "initialCode": "def common_numbers(lst1, lst2):\n    pass",
-        "solution": "def common_numbers(lst1, lst2):\n    result = []\n    for i in lst1:\n        for j in lst2:\n            if i == j and i not in result:  # Check if equal and not already added\n                result.append(i)\n    return result\n\nlst1 = [2, 24, 23, 27, 2]\nlst2 = [56, 2, 27, 455, 1]\nprint(common_numbers(lst1, lst2))",
+        "solution": "def common_numbers(lst1, lst2):\n    result = []\n    for i in lst1:\n        for j in lst2:\n            if i == j and i not in result:  # Check if equal and not already added\n                result.append(i)\n    return result\n\nlst1 = [2, 24, 23, 27, 2]\nlst2 = [56, 2, 27, 455, 1]\nprint(common_numbers(lst1, lst2))\n\n# Alternative solution using list comprehension\ndef common_numbers(lst1, lst2):\n    return list(dict.fromkeys([x for x in lst1 if x in lst2]))\n\nprint(common_numbers([1, 2, 3], [3, 4, 5]))  # Output: [3]\n\n# Alternative solution using filter\ndef common_numbers(lst1, lst2):\n    return list(dict.fromkeys(filter(lambda x: x in lst2, lst1)))\n\nprint(common_numbers(['a', 'b', 'c'], ['b', 'c', 'd']))  # Output: ['b', 'c']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1266,7 +1266,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 146",
         "description": "Write a function that sorts numbers as  string from biggest number to smallest number.",
         "initialCode": "def big_small(numbers):\n    pass",
-        "solution": "def big_small(numbers):\n    number_lst = []\n    for number in numbers:\n        number_lst.append(int(number))  # Convert string to int for proper numeric sort\n              \n    number_lst = sorted(number_lst)[::-1]  # Sort descending\n    shorted_str = []  # Typo: \"shorted\" should be \"sorted\"\n    \n    for number in number_lst:\n        shorted_str.append(str(number))  # Convert back to strings\n    return shorted_str\n           \nlst = [\"4\", \"67\", \"6\"]\nprint(big_small(lst))",
+        "solution": "def big_small(numbers):\n    number_lst = []\n    for number in numbers:\n        number_lst.append(int(number))  # Convert string to int for proper numeric sort\n              \n    number_lst = sorted(number_lst)[::-1]  # Sort descending\n    shorted_str = []  # Typo: \"shorted\" should be \"sorted\"\n    \n    for number in number_lst:\n        shorted_str.append(str(number))  # Convert back to strings\n    return shorted_str\n           \nlst = [\"4\", \"67\", \"6\"]\nprint(big_small(lst))\n\n# Alternative solution using sorted with key=int\ndef big_small(numbers):\n    return sorted(numbers, key=int, reverse=True)\n\nprint(big_small([\"4\", \"67\", \"6\"]))  # Output: ['67', '6', '4']\n\n# Alternative solution using list comprehension\ndef big_small(numbers):\n    return [str(n) for n in sorted([int(x) for x in numbers], reverse=True)]\n\nprint(big_small([\"10\", \"2\", \"35\"]))  # Output: ['35', '10', '2']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1275,7 +1275,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 147",
         "description": "Write a function where user types a list of numbers in string and returns a list of numbers from smallest to biggest.",
         "initialCode": "def type_smallest_biggest():\n    pass\n\ndef small_big():\n    pass",
-        "solution": "def type_smallest_biggest():\n    user = input(\"type number list: \").split()\n    sort_number = sorted(user)  # String sort: \"10\" comes before \"2\"\n       \n    print(sort_number)\n    \ntype_smallest_biggest()\n\ndef small_big():\n    user_string = input(\"type number followed by spaces: \")\n    user_split = user_string.split()\n    int_list = []\n    for number in user_split:\n        int_list.append(int(number))  # Convert to int\n    \n    int_list.sort()  # Sort numerically\n    sorted_str = []\n    for number in int_list:\n        sorted_str.append(str(number))  # Convert back to strings\n    return \" \".join(sorted_str)  # Join with spaces\n    \nprint(small_big())",
+        "solution": "def type_smallest_biggest():\n    user = input(\"type number list: \").split()\n    sort_number = sorted(user)  # String sort: \"10\" comes before \"2\"\n       \n    print(sort_number)\n    \ntype_smallest_biggest()\n\ndef small_big():\n    user_string = input(\"type number followed by spaces: \")\n    user_split = user_string.split()\n    int_list = []\n    for number in user_split:\n        int_list.append(int(number))  # Convert to int\n    \n    int_list.sort()  # Sort numerically\n    sorted_str = []\n    for number in int_list:\n        sorted_str.append(str(number))  # Convert back to strings\n    return \" \".join(sorted_str)  # Join with spaces\n    \nprint(small_big())\n\n# Alternative solution using map and sorted\ndef small_big():\n    nums = list(map(int, input(\"Enter numbers: \").split()))\n    nums.sort()\n    return ' '.join(map(str, nums))\n\nprint(small_big())\n\n# Alternative solution using key=int in sorted\ndef type_smallest_biggest():\n    print(' '.join(sorted(input(\"Enter numbers: \").split(), key=int)))\n\ntype_smallest_biggest()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1284,7 +1284,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 148",
         "description": "Write a Python function called `double_elements` that takes a list of numbers as input and returns a new list where each element is doubled, the list must be side by side eg 1, 2, 3, 1, 2, 3",
         "initialCode": "def double_elements(numbers):\n    pass",
-        "solution": "def double_elements(numbers):\n    doubled = numbers + numbers  # List concatenation: [1,2,3] + [1,2,3] = [1,2,3,1,2,3]\n    \n    return doubled\n\nlst = [2, 4, 6, 8]\nprint(double_elements(lst))",
+        "solution": "def double_elements(numbers):\n    doubled = numbers + numbers  # List concatenation: [1,2,3] + [1,2,3] = [1,2,3,1,2,3]\n    \n    return doubled\n\nlst = [2, 4, 6, 8]\nprint(double_elements(lst))\n\n# Alternative solution using list multiplication\ndef double_elements(numbers):\n    return numbers * 2\n\nprint(double_elements([1, 2, 3]))  # Output: [1, 2, 3, 1, 2, 3]\n\n# Alternative solution using extend\ndef double_elements(numbers):\n    result = numbers[:]\n    result.extend(numbers)\n    return result\n\nprint(double_elements([5, 6, 7]))  # Output: [5, 6, 7, 5, 6, 7]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1293,7 +1293,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 149",
         "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists using 2 for loops.",
         "initialCode": "def common():\n    pass",
-        "solution": "def common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    result = []\n    for i in lst1:  # Outer loop\n        for j in lst2:  # Inner loop (nested)\n            if i == j and i not in result:\n                result.append(i)\n    return result\n    \ncommon()",
+        "solution": "def common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    result = []\n    for i in lst1:  # Outer loop\n        for j in lst2:  # Inner loop (nested)\n            if i == j and i not in result:\n                result.append(i)\n    return result\n    \ncommon()\n\n# Alternative solution using set intersection\ndef common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    return list(set(lst1) & set(lst2))\n\nprint(common())\n\n# Alternative solution using list comprehension\ndef common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    return list(dict.fromkeys([x for x in lst1 if x in lst2]))\n\nprint(common())",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1302,7 +1302,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 150",
         "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists without using for loops.",
         "initialCode": "def common():\n    pass",
-        "solution": "def common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n        \n    print(common_element)\n    \ncommon()",
+        "solution": "def common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n        \n    print(common_element)\n    \ncommon()\n\n# Alternative solution using & operator\ndef common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    print(set(lst1) & set(lst2))\n\ncommon()\n\n# Alternative solution returning list\ndef common():\n    lst1 = input(\"type lst: \").split()\n    lst2 = input(\"type lst: \").split()\n    print(list(set(lst1).intersection(set(lst2))))\n\ncommon()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
