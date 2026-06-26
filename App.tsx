@@ -491,6 +491,8 @@ def __auto_grader_run():
     first_kwargs = tests[0].get("kwargs", {}) if tests else {}
     if tests and tests[0].get("argFunctionNames"):
         first_args = first_args + [None] * len(tests[0].get("argFunctionNames", []))
+    if tests and tests[0].get("argExpressions"):
+        first_args = first_args + [None] * len(tests[0].get("argExpressions", []))
     if tests and tests[0].get("functionListArgNames"):
         first_args = [None] + first_args
     target_name, target = __auto_grader_find_callable(function_names, first_args, kwargs=first_kwargs)
@@ -505,11 +507,13 @@ def __auto_grader_run():
         args = case.get("args", [])
         kwargs = case.get("kwargs", {})
         arg_function_names = case.get("argFunctionNames", [])
+        arg_expressions = case.get("argExpressions", [])
         function_list_arg_names = case.get("functionListArgNames")
         expected = case.get("expected")
         call_returned_with = case.get("callReturnedWith")
         call_method = case.get("callMethod")
         call_method_args = case.get("callMethodArgs", [])
+        call_method_arg_expressions = case.get("callMethodArgExpressions", [])
         get_attrs = case.get("getAttrs")
         expected_exception = case.get("expectedException")
         input_values = list(case.get("inputValues", []))
@@ -537,8 +541,17 @@ def __auto_grader_run():
                     "passed": False,
                     "functionName": case_target_name,
                     "message": f"{label} missing helper function {arg_function_name}()."
-                }
+                    }
             resolved_args.append(arg_function)
+        for arg_expression in arg_expressions:
+            try:
+                resolved_args.append(eval(arg_expression, globals()))
+            except Exception as exc:
+                return {
+                    "passed": False,
+                    "functionName": case_target_name,
+                    "message": f"{label} could not prepare callable argument {arg_expression!r}: {type(exc).__name__}: {exc}"
+                }
         if required_name:
             case_target_name, case_target = __auto_grader_find_callable(function_names, resolved_args, required_name, kwargs)
             if case_target is None:
@@ -569,7 +582,17 @@ def __auto_grader_run():
                         "functionName": case_target_name,
                         "message": f"{label} expected returned object to have method {call_method}()."
                     }
-                returned = method(*call_method_args)
+                resolved_call_method_args = list(call_method_args)
+                for call_method_arg_expression in call_method_arg_expressions:
+                    try:
+                        resolved_call_method_args.append(eval(call_method_arg_expression, globals()))
+                    except Exception as exc:
+                        return {
+                            "passed": False,
+                            "functionName": case_target_name,
+                            "message": f"{label} could not prepare method argument {call_method_arg_expression!r}: {type(exc).__name__}: {exc}"
+                        }
+                returned = method(*resolved_call_method_args)
             if get_attrs is not None:
                 returned = {name: getattr(returned, name, None) for name in get_attrs}
             printed = sys.stdout.getvalue().strip()

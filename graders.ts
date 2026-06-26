@@ -13,7 +13,9 @@ export interface AutoTestCase {
     callReturnedWith?: unknown[];
     callMethod?: string;
     callMethodArgs?: unknown[];
+    callMethodArgExpressions?: string[];
     getAttrs?: string[];
+    argExpressions?: string[];
     argFunctionNames?: string[];
     functionListArgNames?: string[];
     functionName?: string;
@@ -11081,6 +11083,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [3, 4], callMethod: "__repr__", expected: "Point(x=3, y=4)" },
         ]
     },
+  1574: {
+        functionNames: ['Person'],
+        tests: [
+            { args: ["Alice", 30], callMethod: "__eq__", callMethodArgExpressions: ["Person('Alice', 30)"], expected: true },
+            { args: ["Alice", 30], callMethod: "__eq__", callMethodArgExpressions: ["Person('Bob', 30)"], expected: false },
+        ]
+    },
+  1576: {
+        functionNames: ['Stack'],
+        tests: [
+            { args: [], callMethod: "__len__", expected: 0 },
+        ]
+    },
   1577: {
         functionNames: ['MyList'],
         tests: [
@@ -11157,6 +11172,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: "['first', 'second', 'third']" },
+        ]
+    },
+  1589: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "{'c': 3, 'd': 4, 'a': 1, 'b': 2}" },
         ]
     },
   1590: {
@@ -11377,6 +11400,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: ["Alice", 30]
     }]
   },
+  1618: {
+        functionNames: ['apply_operation'],
+        tests: [
+            { args: [5, 3], argExpressions: ["lambda a, b: a * b"], expected: 15 },
+            { args: [5, 3], argExpressions: ["lambda a, b: a + b"], expected: 8 },
+        ]
+    },
   1619: {
     functionNames: ["categorize"],
     tests: [{
@@ -11391,6 +11421,20 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown Status"
     }]
   },
+  1624: {
+        functionNames: ['MyContainer'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], callMethod: "__contains__", callMethodArgs: [3], expected: true },
+            { args: [[1, 2, 3, 4, 5]], callMethod: "__contains__", callMethodArgs: [9], expected: false },
+        ]
+    },
+  1625: {
+        functionNames: ['CountDown'],
+        tests: [
+            { args: [5], callMethod: "__next__", expected: 5 },
+            { args: [1], callMethod: "__next__", expected: 1 },
+        ]
+    },
   1626: {
         functionNames: [],
         mode: 'script',
@@ -11461,6 +11505,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: "['b', 'c', 'a']" },
+        ]
+    },
+  1635: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "{'a': 1, 'b': 2, 'c': 3}" },
         ]
     },
   1636: {
@@ -13592,6 +13644,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ["John","F","Kennedy"], expected: "JFK" },
         ]
     },
+  1972: {
+        functionNames: ['get_elements_with_condition'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5, 6]], argExpressions: ["lambda x: x > 3"], expected: [4, 5, 6] },
+            { args: [[1, 2, 3, 4, 5, 6]], argExpressions: ["lambda x: x % 2 == 0"], expected: [2, 4, 6] },
+        ]
+    },
   1973: {
         functionNames: ['calculate_total_area'],
         compare: 'float',
@@ -13628,6 +13687,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['format_decimal_places'],
         tests: [
             { args: [3.14159,2], expected: "3.14" },
+        ]
+    },
+  1979: {
+        functionNames: ['get_elements_satisfying_all'],
+        tests: [
+            { args: [[1, 2, 3, 4, 5, 6]], argExpressions: ["lambda x: x > 2", "lambda x: x < 6"], expected: [3, 4, 5] },
+            { args: [[1, 2, 3, 4, 5, 6]], argExpressions: ["lambda x: x % 2 == 0", "lambda x: x > 3"], expected: [4, 6] },
         ]
     },
   1980: {
