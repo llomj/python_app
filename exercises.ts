@@ -3196,7 +3196,20 @@ print_square_pattern(5)",
         "title": "Problem 226",
         "description": "Write a Python program to print a hollow right-angled triangle of stars:\\n*\\n* *\\n*  *\\n*   *\\n*****",
         "initialCode": "def print_hollow_right_triangle(height):\n    pass",
-        "solution": "def print_hollow_right_triangle(height):\n    for i in range(height):  # i = 0, 1, 2, 3, 4\n        if i == height - 1:  # Last row (i = 4 for height=5)\n            print('*' * (i + 1))  # Print full row of stars (5 stars)\n        else:  # Middle rows (i = 0, 1, 2, 3)\n            # Print: star + spaces + star\n            print('*' + ' ' * i + '*')  # Hollow row: \"*\", \"* *\", \"*  *\", \"*   *\"\n\nheight = 5\nprint_hollow_right_triangle(height)",
+        "solution": "def print_hollow_right_triangle(height):\n    for i in range(height):  # i = 0, 1, 2, 3, 4\n        if i == height - 1:  # Last row (i = 4 for height=5)\n            print('*' * (i + 1))  # Print full row of stars (5 stars)\n        else:  # Middle rows (i = 0, 1, 2, 3)\n            # Print: star + spaces + star\n            print('*' + ' ' * i + '*')  # Hollow row: \"*\", \"* *\", \"*  *\", \"*   *\"\n\nheight = 5\nprint_hollow_right_triangle(height)
+
+# Alternative using conditional expression
+def print_hollow_right_triangle(n):
+    for i in range(n):
+        print('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1))
+
+print_hollow_right_triangle(5)
+
+# Alternative using join
+def print_hollow_right_triangle(n):
+    print('\\n'.join('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1) for i in range(n)))
+
+print_hollow_right_triangle(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3205,7 +3218,17 @@ print_square_pattern(5)",
         "title": "Problem 227",
         "description": "Write a Python program to print a zigzag pattern of stars for a given number of rows.\\nFor example, for 5 rows:\\n*   *   *\\n * * * *\\n  *   *\\n * * * *\\n*   *   *",
         "initialCode": "def print_zigzag(rows):\n    pass",
-        "solution": "def print_zigzag(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                print('*', end=' ')\n            else:\n                print(' ', end=' ')\n        print()\n\nrows = 5\nprint_zigzag(rows)",
+        "solution": "def print_zigzag(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                print('*', end=' ')\n            else:\n                print(' ', end=' ')\n        print()\n\nrows = 5\nprint_zigzag(rows)
+
+# Alternative using simpler alternating rows
+def print_zigzag(rows):
+    for i in range(rows):
+        if i % 2 == 0:
+            print('*   ' * (rows // 2 + 1))
+        else:
+            print(' * *' * (rows // 2 + 1))
+
+print_zigzag(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3214,7 +3237,21 @@ print_square_pattern(5)",
         "title": "Problem 228",
         "description": "Write a Python program to print a cross pattern of stars for a given odd number of rows.\\nFor example, for 5 rows:\\n*   *\\n * *\\n  *\\n * *\\n*   *\"",
         "initialCode": "def print_cross(rows):\n    pass",
-        "solution": "def print_cross(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if j == i or j == (rows - 1 - i):  # On either diagonal\n                print('*', end='')  # Print star\n            else:\n                print(' ', end='')  # Print space\n        print()  # Newline after row\n\nrows = 5\nprint_cross(rows)",
+        "solution": "def print_cross(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if j == i or j == (rows - 1 - i):  # On either diagonal\n                print('*', end='')  # Print star\n            else:\n                print(' ', end='')  # Print space\n        print()  # Newline after row\n\nrows = 5\nprint_cross(rows)
+
+# Alternative using abs() symmetry
+def print_cross(rows):
+    for i in range(rows):
+        print(' ' * min(i, rows - 1 - i) + '*' + ' ' * (abs(rows // 2 - i) * 2 - 1) + ('' if i == rows // 2 else '*'))
+
+print_cross(5)
+
+# Alternative using list comprehension with conditional
+def print_cross(rows):
+    for i in range(rows):
+        print(''.join('*' if j == i or j == rows - 1 - i else ' ' for j in range(rows)))
+
+print_cross(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3223,7 +3260,26 @@ print_square_pattern(5)",
         "title": "Problem 229",
         "description": "Write a Python program to print an hourglass pattern of stars:\\n*****\\n ***\\n  *\\n ***\\n*****",
         "initialCode": "def print_hourglass(rows):\n    pass",
-        "solution": "def print_hourglass(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3\n        print(' ' * i + '*' * (rows - i * 2))  # May produce incorrect pattern for some rows\n\nrows = 4\nprint_hourglass(rows)",
+        "solution": "def print_hourglass(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3\n        print(' ' * i + '*' * (rows - i * 2))  # May produce incorrect pattern for some rows\n\nrows = 4\nprint_hourglass(rows)
+
+# Alternative using proper hourglass with odd rows
+def print_hourglass(rows):
+    n = rows // 2
+    for i in range(n, -1, -1):
+        print(' ' * (n - i) + '*' * (2 * i + 1))
+    for i in range(1, n + 1):
+        print(' ' * (n - i) + '*' * (2 * i + 1))
+
+print_hourglass(5)
+
+# Alternative using list comprehension
+def print_hourglass(rows):
+    n = rows // 2
+    pattern = [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(n, -1, -1)]
+    pattern += [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(1, n + 1)]
+    print('\\n'.join(pattern))
+
+print_hourglass(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3232,7 +3288,33 @@ print_square_pattern(5)",
         "title": "Problem 230",
         "description": "Write a Python function called count_occurrences that takes a list of elements as input and returns the number of times the elements appears in the list.",
         "initialCode": "def count_occurrences(lst):\n    pass",
-        "solution": "def count_occurrences(lst):\n    result = {}  # Dictionary: element \u2192 count\n    for word in lst:  # Iterate over all elements\n        if word in result:  # Element seen before\n            result[word] += 1  # Increment count\n        else:  # First occurrence\n            result[word] = 1\n    return result\n\nlst = [\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]\nprint(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}",
+        "solution": "def count_occurrences(lst):\n    result = {}  # Dictionary: element \u2192 count\n    for word in lst:  # Iterate over all elements\n        if word in result:  # Element seen before\n            result[word] += 1  # Increment count\n        else:  # First occurrence\n            result[word] = 1\n    return result\n\nlst = [\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]\nprint(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}
+
+# Alternative using Counter
+def count_occurrences(lst):
+    from collections import Counter
+    return dict(Counter(lst))
+
+print(count_occurrences([\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]))
+
+# Alternative using dict.get()
+def count_occurrences(lst):
+    result = {}
+    for item in lst:
+        result[item] = result.get(item, 0) + 1
+    return result
+
+print(count_occurrences([\"a\", \"b\", \"a\", \"c\", \"b\"]))
+
+# Alternative using setdefault
+def count_occurrences(lst):
+    result = {}
+    for item in lst:
+        result.setdefault(item, 0)
+        result[item] += 1
+    return result
+
+print(count_occurrences([1, 2, 1, 3, 1, 2]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3241,7 +3323,25 @@ print_square_pattern(5)",
         "title": "Problem 231",
         "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible.",
         "initialCode": "def sum_of_odd():\n    pass",
-        "solution": "def sum_of_odd():\n    user = input(\"type numbers: \").split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    print(count)\n            \nsum_of_odd()",
+        "solution": "def sum_of_odd():\n    user = input(\"type numbers: \").split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    print(count)\n            \nsum_of_odd()
+
+# Alternative using sum with generator
+def sum_of_odd(nums):
+    return sum(n for n in nums if n % 2 != 0)
+
+print(sum_of_odd([1, 2, 3, 4, 5]))
+
+# Alternative using filter and sum
+def sum_of_odd(nums):
+    return sum(filter(lambda x: x % 2 != 0, nums))
+
+print(sum_of_odd([2, 4, 6, 7, 9]))
+
+# Alternative using list comprehension
+def sum_of_odd(nums):
+    return sum([n for n in nums if n % 2])
+
+print(sum_of_odd([10, 15, 20, 25]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3250,7 +3350,26 @@ print_square_pattern(5)",
         "title": "Problem 232",
         "description": "Write a Python program to remove vowels from a string. Prompt the user to enter a string. Do not use append().",
         "initialCode": "def remove_vowels():\n    pass",
-        "solution": "def remove_vowels():\n    user = input(\"type string: \")\n    for char in user:\n        if char not in \"aeiou\":  # Only checks lowercase vowels (case-sensitive)\n            print(char, end= \"\")  # Print char without newline (end=\"\" prevents newline)\n            \nremove_vowels()",
+        "solution": "def remove_vowels():\n    user = input(\"type string: \")\n    for char in user:\n        if char not in \"aeiou\":  # Only checks lowercase vowels (case-sensitive)\n            print(char, end= \"\")  # Print char without newline (end=\"\" prevents newline)\n            \nremove_vowels()
+
+# Alternative using join and filter
+def remove_vowels(s):
+    return ''.join(filter(lambda c: c not in \"aeiouAEIOU\", s))
+
+print(remove_vowels(\"hello world\"))  # Output: hll wrld
+
+# Alternative using translate
+def remove_vowels(s):
+    return s.translate(str.maketrans('', '', \"aeiouAEIOU\"))
+
+print(remove_vowels(\"banana\"))  # Output: bnn
+
+# Alternative using regex
+def remove_vowels(s):
+    import re
+    return re.sub(r'[aeiouAEIOU]', '', s)
+
+print(remove_vowels(\"Hello, World!\"))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3259,7 +3378,31 @@ print_square_pattern(5)",
         "title": "Problem 233",
         "description": "Write a Python function called `find_min` that takes a list of numbers as input and returns the minimum number in the list. Do not use min().",
         "initialCode": "def find_min(lst):\n    pass",
-        "solution": "def find_min(lst):\n    min_num = lst[0]\n    for number in lst:\n        if number < min_num:\n            min_num = number\n    return min_num\n            \nlst = [13, 566, 1]\nprint(find_min(lst))",
+        "solution": "def find_min(lst):\n    min_num = lst[0]\n    for number in lst:\n        if number < min_num:\n            min_num = number\n    return min_num\n            \nlst = [13, 566, 1]\nprint(find_min(lst))
+
+# Alternative using sorted
+def find_min(lst):
+    return sorted(lst)[0]
+
+print(find_min([13, 566, 1]))
+
+# Alternative using reduce
+def find_min(lst):
+    from functools import reduce
+    return reduce(lambda a, b: a if a < b else b, lst)
+
+print(find_min([5, 2, 9, 1, 7]))
+
+# Alternative using while loop
+def find_min(lst):
+    i, min_val = 1, lst[0]
+    while i < len(lst):
+        if lst[i] < min_val:
+            min_val = lst[i]
+        i += 1
+    return min_val
+
+print(find_min([8, 3, 5, 2]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3268,7 +3411,29 @@ print_square_pattern(5)",
         "title": "Problem 234",
         "description": "Write a Python program to print a square pattern of stars with a given side length. Use a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "i = 1  # Loop counter\n\nwhile (i < 6):  # Loop 5 times (i = 1, 2, 3, 4, 5)\n    print(\"* \" * 5)  # Print 5 stars with spaces (hardcoded, not using variable)\n    i += 1  # Increment counter",
+        "solution": "i = 1  # Loop counter\n\nwhile (i < 6):  # Loop 5 times (i = 1, 2, 3, 4, 5)\n    print(\"* \" * 5)  # Print 5 stars with spaces (hardcoded, not using variable)\n    i += 1  # Increment counter
+
+# Alternative using parameterized while loop
+def print_square(n):
+    i = 0
+    while i < n:
+        print('* ' * n)
+        i += 1
+
+print_square(5)
+
+# Alternative using while with nested while
+def print_square(n):
+    i = 0
+    while i < n:
+        j = 0
+        while j < n:
+            print('*', end=' ')
+            j += 1
+        print()
+        i += 1
+
+print_square(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3277,7 +3442,20 @@ print_square_pattern(5)",
         "title": "Problem 235",
         "description": "Write a Python program that prints a increasing triangle pattern of stars.",
         "initialCode": "def increasing_triangle():\n    pass",
-        "solution": "def increasing_triangle():\n    n = 5\n    \n    for i in range(n):\n        for i in range(i+1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())",
+        "solution": "def increasing_triangle():\n    n = 5\n    \n    for i in range(n):\n        for i in range(i+1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())
+
+# Alternative using string multiplication
+def increasing_triangle():
+    for i in range(1, 6):
+        print('* ' * i)
+
+increasing_triangle()
+
+# Alternative using join
+def increasing_triangle():
+    print('\\n'.join('* ' * i for i in range(1, 6)))
+
+increasing_triangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3286,7 +3464,23 @@ print_square_pattern(5)",
         "title": "Problem 236",
         "description": "Write a Python program that prints a decreasing triangle pattern of stars.",
         "initialCode": "def decreasing_triangle():\n    pass",
-        "solution": "def decreasing_triangle():\n    n = 5\n    for i in range(n):  # i = 0, 1, 2, 3, 4\n        for j in range(i, n):  # Print (n-i) stars\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())  # BUG: Calls wrong function (should be decreasing_triangle())",
+        "solution": "def decreasing_triangle():\n    n = 5\n    for i in range(n):  # i = 0, 1, 2, 3, 4\n        for j in range(i, n):  # Print (n-i) stars\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())  # BUG: Calls wrong function (should be decreasing_triangle())
+
+# Alternative using string multiplication
+def decreasing_triangle():
+    for i in range(5, 0, -1):
+        print('* ' * i)
+
+decreasing_triangle()
+
+# Alternative using reversed range
+def decreasing_triangle():
+    for i in range(5, 0, -1):
+        for j in range(i):
+            print('*', end=' ')
+        print()
+
+decreasing_triangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3295,7 +3489,20 @@ print_square_pattern(5)",
         "title": "Problem 237",
         "description": "Write a Python program that prints a right triangle pattern of stars.",
         "initialCode": "def right_triangle(n): \n    pass",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(((\"*\") + \" \")* i)  # Prints: \"* \", \"* * \", \"* * * \", etc.\n\ndef right_triangle(n): \n    for i in range(1, n + 1):  # Rows: 1 to n\n        for j in range(i):  # Print i stars\n            print(\"*\", end=\" \")  # Print star with space\n        print()  # Newline after row\n\nnumber = 5\nright_triangle(number)",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(((\"*\") + \" \")* i)  # Prints: \"* \", \"* * \", \"* * * \", etc.\n\ndef right_triangle(n): \n    for i in range(1, n + 1):  # Rows: 1 to n\n        for j in range(i):  # Print i stars\n            print(\"*\", end=\" \")  # Print star with space\n        print()  # Newline after row\n\nnumber = 5\nright_triangle(number)
+
+# Alternative using join
+def right_triangle(n):
+    for i in range(1, n + 1):
+        print(' '.join('*' for _ in range(i)))
+
+right_triangle(5)
+
+# Alternative using string multiplication
+def right_triangle(n):
+    print('\\n'.join('* ' * i for i in range(1, n + 1)))
+
+right_triangle(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3304,7 +3511,23 @@ print_square_pattern(5)",
         "title": "Problem 238",
         "description": "Write a Python program that prints a left triangle pattern of stars.",
         "initialCode": "def left_triangle():\n    pass",
-        "solution": "def left_triangle():\n    n = 5\n    for i in range(n):\n        for i in range(i, n):\n            print(\" \", end=\" \")\n    for i in range(n):\n        for i in range(i + 1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())",
+        "solution": "def left_triangle():\n    n = 5\n    for i in range(n):\n        for i in range(i, n):\n            print(\" \", end=\" \")\n    for i in range(n):\n        for i in range(i + 1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())
+
+# Alternative using spaces and stars
+def left_triangle():
+    n = 5
+    for i in range(1, n + 1):
+        print('  ' * (n - i) + '* ' * i)
+
+left_triangle()
+
+# Alternative using rjust
+def left_triangle():
+    n = 5
+    for i in range(1, n + 1):
+        print(('* ' * i).rjust(n * 2))
+
+left_triangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3313,7 +3536,20 @@ print_square_pattern(5)",
         "title": "Problem 239",
         "description": "Write a Python program that prints a hill pattern of stars.",
         "initialCode": "def print_hill_pattern(rows):\n    pass",
-        "solution": "def print_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * (rows - i - 1) + '*' * (2 * i + 1))\n\nrows = 5\nprint_hill_pattern(rows)",
+        "solution": "def print_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * (rows - i - 1) + '*' * (2 * i + 1))\n\nrows = 5\nprint_hill_pattern(rows)
+
+# Alternative using center method
+def print_hill_pattern(rows):
+    for i in range(rows):
+        print(('*' * (2 * i + 1)).center(rows * 2 - 1))
+
+print_hill_pattern(5)
+
+# Alternative using list comprehension
+def print_hill_pattern(rows):
+    print('\\n'.join(('*' * (2 * i + 1)).center(rows * 2 - 1) for i in range(rows)))
+
+print_hill_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3322,7 +3558,20 @@ print_square_pattern(5)",
         "title": "Problem 240",
         "description": "Write a Python program that prints a reverse hill pattern of stars.",
         "initialCode": "def print_reverse_hill_pattern(rows):\n    pass",
-        "solution": "def print_reverse_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * i + '*' * (2 * (rows - i) - 1))\n\nrows = 5\nprint_reverse_hill_pattern(rows)",
+        "solution": "def print_reverse_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * i + '*' * (2 * (rows - i) - 1))\n\nrows = 5\nprint_reverse_hill_pattern(rows)
+
+# Alternative using center method
+def print_reverse_hill_pattern(rows):
+    for i in range(rows):
+        print(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1))
+
+print_reverse_hill_pattern(5)
+
+# Alternative using list comprehension
+def print_reverse_hill_pattern(rows):
+    print('\\n'.join(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1) for i in range(rows)))
+
+print_reverse_hill_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3331,7 +3580,19 @@ print_square_pattern(5)",
         "title": "Problem 241",
         "description": "Write a Python program to print the index and value of each element in a list using `enumerate()`",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):  # enumerate() provides index-value pairs\n        print(f\"index {index} name {word}\")  # Prints: \"index 0 name Jon\", etc.\n    \n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst))  # Prints indices/values, then prints None",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):  # enumerate() provides index-value pairs\n        print(f\"index {index} name {word}\")  # Prints: \"index 0 name Jon\", etc.\n    \n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst))  # Prints indices/values, then prints None
+
+# Alternative returning as list of strings
+def enumerate_lst(lst):
+    return [f\"index {i} name {v}\" for i, v in enumerate(lst)]
+
+print('\\n'.join(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"])))
+
+# Alternative using dict
+def enumerate_lst(lst):
+    return dict(enumerate(lst))
+
+print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))  # Output: {0: 'Jon', 1: 'Chris', 2: 'Nathan'}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3340,7 +3601,19 @@ print_square_pattern(5)",
         "title": "Problem 242",
         "description": "Write a Python program to create a list of tuples where each tuple contains the index and the value from a given list using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    result = []\n    for index, word in enumerate(lst):\n        result.append((index, word))  # Append tuple (index, word) to list\n    return result  # Returns: [(0, \"Jon\"), (1, \"Chris\"), (2, \"Nathan\")]\n    \nlst = (\"Jon\", \"Chris\", \"Nathan\")  # Note: tuple input (works with any iterable)\nprint(enumerate_lst(lst))",
+        "solution": "def enumerate_lst(lst):\n    result = []\n    for index, word in enumerate(lst):\n        result.append((index, word))  # Append tuple (index, word) to list\n    return result  # Returns: [(0, \"Jon\"), (1, \"Chris\"), (2, \"Nathan\")]\n    \nlst = (\"Jon\", \"Chris\", \"Nathan\")  # Note: tuple input (works with any iterable)\nprint(enumerate_lst(lst))
+
+# Alternative using list() on enumerate
+def enumerate_lst(lst):
+    return list(enumerate(lst))
+
+print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))
+
+# Alternative using list comprehension
+def enumerate_lst(lst):
+    return [(i, v) for i, v in enumerate(lst)]
+
+print(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: [(0, 'a'), (1, 'b'), (2, 'c')]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3349,7 +3622,19 @@ print_square_pattern(5)",
         "title": "Problem 243",
         "description": "Write a Python program to find the index of the first occurrence of a specific value in a list using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst, target):\n    pass",
-        "solution": "def enumerate_lst(lst, target):\n    for index, word in enumerate(lst):\n        if word == target:\n            return word, index \n    return -1\n        \ntarget = \"Chris\"    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst, target))",
+        "solution": "def enumerate_lst(lst, target):\n    for index, word in enumerate(lst):\n        if word == target:\n            return word, index \n    return -1\n        \ntarget = \"Chris\"    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst, target))
+
+# Alternative using list.index()
+def find_first(lst, target):
+    return target, lst.index(target)
+
+print(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))
+
+# Alternative using next with generator
+def find_first(lst, target):
+    return next(((v, i) for i, v in enumerate(lst) if v == target), -1)
+
+print(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))  # Output: ('Chris', 1)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3358,7 +3643,21 @@ print_square_pattern(5)",
         "title": "Problem 244",
         "description": "Write a Python program to print the index and value of each element in a list starting from index 1 using `enumerate()`",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst, start=1):  # start parameter sets initial index\n        print(f\"Index {index}, Name {word}\")  # Prints: \"Index 1, Name Jon\", etc.\n\nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst, start=1):  # start parameter sets initial index\n        print(f\"Index {index}, Name {word}\")  # Prints: \"Index 1, Name Jon\", etc.\n\nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)
+
+# Alternative returning formatted strings
+def enumerate_lst(lst):
+    return [f\"Index {i}, Name {v}\" for i, v in enumerate(lst, 1)]
+
+for s in enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]):
+    print(s)
+
+# Alternative with zip and range
+def enumerate_lst(lst):
+    for i, v in zip(range(1, len(lst) + 1), lst):
+        print(f\"Index {i}, Name {v}\")
+
+enumerate_lst([\"A\", \"B\", \"C\"])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3367,7 +3666,19 @@ print_square_pattern(5)",
         "title": "Problem 245",
         "description": "Write a Python program to create a dictionary where keys are the indexes and values are the corresponding elements from a list using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    result = {}  # Dictionary: index \u2192 value\n    for index, word in enumerate(lst):\n        result[index] = word  # Assign value to index key\n    print(result)\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)",
+        "solution": "def enumerate_lst(lst):\n    result = {}  # Dictionary: index \u2192 value\n    for index, word in enumerate(lst):\n        result[index] = word  # Assign value to index key\n    print(result)\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)
+
+# Alternative using dict comprehension
+def enumerate_lst(lst):
+    return {i: v for i, v in enumerate(lst)}
+
+print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))
+
+# Alternative using dict() on enumerate
+def enumerate_lst(lst):
+    return dict(enumerate(lst))
+
+print(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: {0: 'a', 1: 'b', 2: 'c'}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3376,7 +3687,20 @@ print_square_pattern(5)",
         "title": "Problem 246",
         "description": "Write a Python program to filter and print elements of a list that are at even indexes using `enumerate()`",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        if index % 2 != 0:  # This filters odd indexes (1, 3, 5, ...)\n            print(index, word)  # Prints elements at odd positions\n        \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\", \"shirt\", \"beach\", \"app\", \" board\", \"hit\"]\nenumerate_lst(lst)  # Prints: 1 Chris, 3 hot, 5 shirt, 7 app, 9 hit (odd indexes)",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        if index % 2 != 0:  # This filters odd indexes (1, 3, 5, ...)\n            print(index, word)  # Prints elements at odd positions\n        \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\", \"shirt\", \"beach\", \"app\", \" board\", \"hit\"]\nenumerate_lst(lst)  # Prints: 1 Chris, 3 hot, 5 shirt, 7 app, 9 hit (odd indexes)
+
+# Alternative using slicing for even indexes
+def enumerate_lst(lst):
+    for i in range(0, len(lst), 2):
+        print(i, lst[i])
+
+enumerate_lst([\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\"])
+
+# Alternative using list comprehension for even indexes
+def enumerate_lst(lst):
+    return [(i, lst[i]) for i in range(0, len(lst), 2)]
+
+print(enumerate_lst([\"a\", \"b\", \"c\", \"d\", \"e\"]))  # Output: [(0, 'a'), (2, 'c'), (4, 'e')]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3385,7 +3709,22 @@ print_square_pattern(5)",
         "title": "Problem 247",
         "description": "Write a Python program to print the index and value of each element in a list using a `for` loop with `enumerate()`.",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        print(f\"index {index} name {word}\")\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nenumerate_lst(lst)",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        print(f\"index {index} name {word}\")\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nenumerate_lst(lst)
+
+# Alternative as list comprehension
+def enumerate_lst(lst):
+    return [f\"index {i} name {v}\" for i, v in enumerate(lst)]
+
+print('\\n'.join(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"])))
+
+# Alternative using while loop
+def enumerate_lst(lst):
+    i = 0
+    while i < len(lst):
+        print(f\"index {i} name {lst[i]}\")
+        i += 1
+
+enumerate_lst([\"A\", \"B\", \"C\"])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3394,7 +3733,19 @@ print_square_pattern(5)",
         "title": "Problem 248",
         "description": "Write a Python program to replace each element in a list with its index using `enumerate()`",
         "initialCode": "def replace_with_index(lst):\n    pass",
-        "solution": "def replace_with_index(lst):\n    for index, _ in enumerate(lst):  # _ is conventional name for unused variable\n        lst[index] = index  # Replace element at index with index value itself\n    return lst  # Returns modified list: [0, 1, 2, 3, 4]\n\nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nprint(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]",
+        "solution": "def replace_with_index(lst):\n    for index, _ in enumerate(lst):  # _ is conventional name for unused variable\n        lst[index] = index  # Replace element at index with index value itself\n    return lst  # Returns modified list: [0, 1, 2, 3, 4]\n\nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nprint(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]
+
+# Alternative using list comprehension
+def replace_with_index(lst):
+    return [i for i in range(len(lst))]
+
+print(replace_with_index([\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]))
+
+# Alternative using range
+def replace_with_index(lst):
+    return list(range(len(lst)))
+
+print(replace_with_index([1, 2, 3]))  # Output: [0, 1, 2]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3403,7 +3754,20 @@ print_square_pattern(5)",
         "title": "Problem 249",
         "description": "Write a Python program to print the index and values from two lists of equal length side by side using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst1, lst2):\n    pass",
-        "solution": "def enumerate_lst(lst1, lst2):\n    for index, word in enumerate(lst1):  # Get index and value from lst1\n        print(f\"index {index}: {word} and {lst2[index]}\")  # Prints both values side by side\n    \nlst1 = [\"Jon\", \"Chris\", \"Nathan\", \"Tom\", \"Sam\", \"Rose\", \"Bliss\", \"Hurt\"]\nlst2 = [\"Jonny\", \"Christopher\", \"Jhovian\", \"Tom\", \"Zack\", \"Rose\", \"Brad\", \"Michael\"]\n\nenumerate_lst(lst1, lst2)",
+        "solution": "def enumerate_lst(lst1, lst2):\n    for index, word in enumerate(lst1):  # Get index and value from lst1\n        print(f\"index {index}: {word} and {lst2[index]}\")  # Prints both values side by side\n    \nlst1 = [\"Jon\", \"Chris\", \"Nathan\", \"Tom\", \"Sam\", \"Rose\", \"Bliss\", \"Hurt\"]\nlst2 = [\"Jonny\", \"Christopher\", \"Jhovian\", \"Tom\", \"Zack\", \"Rose\", \"Brad\", \"Michael\"]\n\nenumerate_lst(lst1, lst2)
+
+# Alternative using zip
+def enumerate_lst(lst1, lst2):
+    for i, (a, b) in enumerate(zip(lst1, lst2)):
+        print(f\"index {i}: {a} and {b}\")
+
+enumerate_lst([\"Jon\", \"Chris\"], [\"Jonny\", \"Christopher\"])
+
+# Alternative returning list of formatted strings
+def enumerate_lst(lst1, lst2):
+    return [f\"index {i}: {a} and {b}\" for i, (a, b) in enumerate(zip(lst1, lst2))]
+
+print('\\n'.join(enumerate_lst([\"Tom\", \"Sam\"], [\"Tommy\", \"Samuel\"])))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3412,7 +3776,25 @@ print_square_pattern(5)",
         "title": "Problem 250",
         "description": "Write a Python program to calculate the sum of elements in a list that are located at odd indexes using `enumerate()`.",
         "initialCode": "def sum_odd_indexed_elements(lst):\n    pass",
-        "solution": "def sum_odd_indexed_elements(lst):\n    total = 0\n    for index, value in enumerate(lst):\n        if index % 2 != 0:  # Check if index is odd (1, 3, 5, ...)\n            total += value  # Add value to sum\n    return total\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = sum_odd_indexed_elements(lst)  # Sums elements at indices 1, 3, 5: 2+4+6 = 12\nprint(result)",
+        "solution": "def sum_odd_indexed_elements(lst):\n    total = 0\n    for index, value in enumerate(lst):\n        if index % 2 != 0:  # Check if index is odd (1, 3, 5, ...)\n            total += value  # Add value to sum\n    return total\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = sum_odd_indexed_elements(lst)  # Sums elements at indices 1, 3, 5: 2+4+6 = 12\nprint(result)
+
+# Alternative using slicing
+def sum_odd_indexed_elements(lst):
+    return sum(lst[1::2])  # Start at index 1, step 2
+
+print(sum_odd_indexed_elements([1, 2, 3, 4, 5, 6]))  # Output: 12
+
+# Alternative using enumerate with generator
+def sum_odd_indexed_elements(lst):
+    return sum(v for i, v in enumerate(lst) if i % 2 != 0)
+
+print(sum_odd_indexed_elements([10, 20, 30, 40]))  # Output: 60 (20+40)
+
+# Alternative using range
+def sum_odd_indexed_elements(lst):
+    return sum(lst[i] for i in range(1, len(lst), 2))
+
+print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
