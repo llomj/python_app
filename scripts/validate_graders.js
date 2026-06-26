@@ -29,6 +29,26 @@ function loadTsExports(fileName) {
 const { EXERCISES } = loadTsExports('exercises.ts');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 
+const exerciseIds = EXERCISES.map(exercise => exercise.id);
+const uniqueExerciseIds = new Set(exerciseIds);
+const duplicateExerciseIds = exerciseIds.filter((id, index) => exerciseIds.indexOf(id) !== index);
+const graderIds = Object.keys(AUTO_GRADERS).map(Number);
+const missingGraders = exerciseIds.filter(id => !AUTO_GRADERS[id]);
+const orphanGraders = graderIds.filter(id => !uniqueExerciseIds.has(id));
+
+if (duplicateExerciseIds.length || missingGraders.length || orphanGraders.length) {
+  if (duplicateExerciseIds.length) {
+    console.error(`Duplicate exercise IDs: ${[...new Set(duplicateExerciseIds)].join(', ')}`);
+  }
+  if (missingGraders.length) {
+    console.error(`Exercises missing graders: ${missingGraders.join(', ')}`);
+  }
+  if (orphanGraders.length) {
+    console.error(`Graders without matching exercises: ${orphanGraders.join(', ')}`);
+  }
+  process.exit(1);
+}
+
 const validator = String.raw`
 import ast
 import builtins
