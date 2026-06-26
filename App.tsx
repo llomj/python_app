@@ -510,11 +510,14 @@ def __auto_grader_run():
         arg_expressions = case.get("argExpressions", [])
         function_list_arg_names = case.get("functionListArgNames")
         expected = case.get("expected")
+        setup_files = case.get("setupFiles", {})
+        get_files = case.get("getFiles")
         call_returned_with = case.get("callReturnedWith")
         call_method = case.get("callMethod")
         call_method_args = case.get("callMethodArgs", [])
         call_method_arg_expressions = case.get("callMethodArgExpressions", [])
         get_attrs = case.get("getAttrs")
+        set_attrs = case.get("setAttrs", {})
         expected_exception = case.get("expectedException")
         input_values = list(case.get("inputValues", []))
         label = case.get("label") or ("test " + str(index))
@@ -565,6 +568,9 @@ def __auto_grader_run():
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
         try:
+            for file_name, file_content in setup_files.items():
+                with open(file_name, "w", encoding="utf-8") as setup_file:
+                    setup_file.write(file_content)
             returned = case_target(*resolved_args, **kwargs)
             if call_returned_with is not None:
                 if not callable(returned):
@@ -593,8 +599,18 @@ def __auto_grader_run():
                             "message": f"{label} could not prepare method argument {call_method_arg_expression!r}: {type(exc).__name__}: {exc}"
                         }
                 returned = method(*resolved_call_method_args)
+            for attr_name, attr_value in set_attrs.items():
+                setattr(returned, attr_name, attr_value)
             if get_attrs is not None:
                 returned = {name: getattr(returned, name, None) for name in get_attrs}
+            if get_files is not None:
+                returned = {}
+                for file_name in get_files:
+                    try:
+                        with open(file_name, "r", encoding="utf-8") as result_file:
+                            returned[file_name] = result_file.read()
+                    except FileNotFoundError:
+                        returned[file_name] = None
             printed = sys.stdout.getvalue().strip()
         except Exception as exc:
             if expected_exception and type(exc).__name__ == expected_exception:
@@ -649,6 +665,7 @@ def __auto_grader_run_script():
         random_choice_values = list(case.get("randomChoiceValues", []))
         random_sample_values = list(case.get("randomSampleValues", []))
         random_shuffle_values = list(case.get("randomShuffleValues", []))
+        setup_files = case.get("setupFiles", {})
         label = case.get("label") or ("test " + str(index))
 
         old_stdout = sys.stdout
@@ -723,6 +740,9 @@ def __auto_grader_run_script():
                     return values
                 random.choices = __script_choices
 
+            for file_name, file_content in setup_files.items():
+                with open(file_name, "w", encoding="utf-8") as setup_file:
+                    setup_file.write(file_content)
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()

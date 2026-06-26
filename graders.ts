@@ -5,6 +5,8 @@ export interface AutoTestCase {
     kwargs?: Record<string, unknown>;
     expected: unknown;
     inputValues?: string[];
+    setupFiles?: Record<string, string>;
+    getFiles?: string[];
     randomValues?: number[];
     randomFloatValues?: number[];
     randomChoiceValues?: unknown[];
@@ -15,6 +17,7 @@ export interface AutoTestCase {
     callMethodArgs?: unknown[];
     callMethodArgExpressions?: string[];
     getAttrs?: string[];
+    setAttrs?: Record<string, unknown>;
     argExpressions?: string[];
     argFunctionNames?: string[];
     functionListArgNames?: string[];
@@ -2886,6 +2889,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [[3, 1, 2]], expected: [1, 2, 3] },
             { args: [[5, -1, 0]], expected: [0, -1, 5] }
+        ]
+    },
+  394: {
+        functionNames: ['find_largest_file'],
+        tests: [
+            { args: [["small.txt", "large.txt"]], setupFiles: { "small.txt": "small", "large.txt": "this is larger" }, expected: "large.txt" },
         ]
     },
   395: {
@@ -8297,6 +8306,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [16], expected: 4 },
         ]
     },
+  1178: {
+        functionNames: ['generate_random_number'],
+        compare: 'numberRange',
+        tests: [
+            { args: [], expected: [1, 100] },
+        ]
+    },
   1182: {
     functionNames: ["dict_to_json"],
     tests: [{
@@ -8338,6 +8354,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], expected: 3.141592653589793 },
         ]
     },
+  1189: {
+        functionNames: ['shuffle_list'],
+        compare: 'unorderedList',
+        tests: [
+            { args: [[1, 2, 3, 4, 5]], expected: [1, 2, 3, 4, 5] },
+        ]
+    },
   1190: {
     functionNames: ["count_occurrences"],
     tests: [
@@ -8350,6 +8373,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [12,8], expected: 4 },
         ]
     },
+  1192: {
+        functionNames: ['rename_file'],
+        tests: [
+            { args: ["old_file.txt", "new_file.txt"], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
+        ]
+    },
+  1193: {
+        functionNames: ['format_current_date'],
+        compare: 'length',
+        tests: [
+            { args: [], expected: 10 },
+        ]
+    },
   1194: {
     functionNames: ["json_to_dict"],
     tests: [
@@ -8357,6 +8393,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: ['{"ok": true, "count": 3}'], expected: { ok: true, count: 3 } }
     ]
   },
+  1195: {
+        functionNames: ['select_random_element'],
+        tests: [
+            { args: [[7]], expected: 7 },
+        ]
+    },
   1196: {
         functionNames: ['round_number'],
         compare: 'float',
@@ -8574,6 +8616,18 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: ".txt"
     }]
   },
+  1229: {
+        functionNames: ['get_file_size'],
+        tests: [
+            { args: [], setupFiles: { "example_file.txt": "hello" }, expected: 5 },
+        ]
+    },
+  1230: {
+        functionNames: ['rename_file'],
+        tests: [
+            { args: [], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
+        ]
+    },
   1231: {
     functionNames: ["create_directory"],
     tests: [{
@@ -8588,6 +8642,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Directory new_directory removed"
     }]
   },
+  1233: {
+        functionNames: ['remove_file'],
+        tests: [
+            { args: [], setupFiles: { "example_file.txt": "remove me" }, getFiles: ["example_file.txt"], expected: { "example_file.txt": null } },
+        ]
+    },
   1234: {
     functionNames: ["get_absolute_path"],
     tests: [{
@@ -8630,6 +8690,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: true
     }]
   },
+  1244: {
+        functionNames: ['get_human_readable_size'],
+        tests: [
+            { args: [], setupFiles: { "example_file.txt": "x".repeat(2048) }, expected: "2.00 KB" },
+        ]
+    },
   1246: {
     functionNames: ["check_conditions"],
     tests: [{
@@ -11071,6 +11137,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [5], getAttrs: ['area'], expected: { area: 78.53975 } },
         ]
     },
+  1571: {
+        functionNames: ['Temperature'],
+        tests: [
+            { args: [], setAttrs: { celsius: 25 }, getAttrs: ['celsius'], expected: { celsius: 25 } },
+            { args: [], setAttrs: { celsius: -274 }, expected: null, expectedException: "ValueError" },
+        ]
+    },
   1572: {
         functionNames: ['Book'],
         tests: [
@@ -11108,6 +11181,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'printedOrReturn',
         tests: [
             { args: [], expected: "Entering resource\nEntering resource\nUsing resources\nExiting resource\nExiting resource" },
+        ]
+    },
+  1580: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], setupFiles: { "example.txt": "exists" }, expected: "File exists: True" },
         ]
     },
   1581: {
@@ -12367,6 +12448,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['difference_sets'],
         tests: [
             { args: [[1,2,3],[2,3]], expected: [1] },
+        ]
+    },
+  1764: {
+        functionNames: ['read_file_content'],
+        tests: [
+            { args: ["example.txt"], setupFiles: { "example.txt": "Hello file" }, expected: "Hello file" },
+        ]
+    },
+  1765: {
+        functionNames: ['write_to_file'],
+        tests: [
+            { args: ["output.txt", "Hello, World!"], getFiles: ["output.txt"], expected: { "output.txt": "Hello, World!" } },
+        ]
+    },
+  1766: {
+        functionNames: ['append_to_file'],
+        tests: [
+            { args: ["append.txt", " plus more"], setupFiles: { "append.txt": "start" }, getFiles: ["append.txt"], expected: { "append.txt": "start plus more" } },
         ]
     },
   1767: {
