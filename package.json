@@ -6,7 +6,8 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "validate:graders": "node scripts/validate_graders.js"
+        "validate:graders": "node scripts/validate_graders.js",
+        "audit:graders": "node scripts/audit_graders.js"
     },
     "dependencies": {
         "react": "^18.2.0",
