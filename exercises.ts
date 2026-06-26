@@ -11040,7 +11040,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1245",
         "description": "Write a Python program to change the current working directory using `pathlib`.",
         "initialCode": "from pathlib import Path\ndef change_working_directory():\n    pass",
-        "solution": "from pathlib import Path\n\ndef change_working_directory():\n    p = Path(\"example_directory\")\n    p.chdir()\n    return f\"Changed working directory to: {p}\"\n\nchanged_directory = change_working_directory()\nprint(changed_directory)",
+        "solution": "from pathlib import Path\nimport os\n\ndef change_working_directory():\n    p = Path(\"example_directory\")\n    os.chdir(p)\n    return f\"Changed working directory to: {p}\"\n\nchanged_directory = change_working_directory()\nprint(changed_directory)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11759,8 +11759,8 @@ export const EXERCISES: Exercise[] = [
         "id": 1325,
         "title": "Problem 1325",
         "description": "Write a Python program to check if a string contains any emoji.",
-        "initialCode": "# Write your solution here",
-        "solution": "emoji_text = \"I love \ud83c\udf55 and \ud83d\udc0d\"\nmatch = bool(re.search(r\"[\\U0001F600-\\U0001F64F]\", emoji_text))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        emoji_text = \'I love \ud83c\udf55 and \ud83d\udc0d\'\nmatch = bool(re.search(r\'[\\U0001F600-\\U0001F64F]\', emoji_text))\nprint(match)  # Expected: True\n    main()\n\n# Using return\n    return match",
+        "initialCode": "import re\n# Write your solution here",
+        "solution": "import re\n\nemoji_text = \"I love \\U0001F355 and \\U0001F40D\"\nmatch = bool(re.search(r\"[\\U0001F300-\\U0001FAFF]\", emoji_text))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        emoji_text = \'I love \\U0001F355 and \\U0001F40D\'\nmatch = bool(re.search(r\'[\\U0001F300-\\U0001FAFF]\', emoji_text))\nprint(match)  # Expected: True\n    main()\n\n# Using return\n    return match",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11777,8 +11777,8 @@ export const EXERCISES: Exercise[] = [
         "id": 1327,
         "title": "Problem 1327",
         "description": "Write a Python program to extract prices with a dollar sign.",
-        "initialCode": "# Write your solution here",
-        "solution": "text = \"Items: $20.99, $3.50, $100\"\nprices = re.findall(r\"\\$\\d+(\\.\\d{2})?\", text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']\n\n# Wrapped in function\n    def main():\n        text = \'Items: $20.99, $3.50, $100\'\nprices = re.findall(r\'\\$\\d+(\\.\\d{2})?\', text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']\n    main()",
+        "initialCode": "import re\n# Write your solution here",
+        "solution": "import re\n\ntext = \"Items: $20.99, $3.50, $100\"\nprices = re.findall(r\"\\$\\d+(?:\\.\\d{2})?\", text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']\n\n# Wrapped in function\n    def main():\n        text = \'Items: $20.99, $3.50, $100\'\nprices = re.findall(r\'\\$\\d+(?:\\.\\d{2})?\', text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },

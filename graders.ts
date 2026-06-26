@@ -8,6 +8,7 @@ export interface AutoTestCase {
     setupRemove?: string[];
     setupDirs?: string[];
     setupFiles?: Record<string, string>;
+    permissionDeniedPaths?: string[];
     getFiles?: string[];
     randomValues?: number[];
     randomFloatValues?: number[];
@@ -6606,6 +6607,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "Variable not defined" }
     ]
   },
+  941: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], permissionDeniedPaths: ["/root/protected.txt"], expected: "Permission denied" }
+    ]
+  },
   942: {
     functionNames: [],
     mode: 'script',
@@ -8771,6 +8780,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], setupFiles: { "example_file.txt": "x".repeat(2048) }, expected: "2.00 KB" },
         ]
     },
+  1245: {
+        functionNames: ['change_working_directory'],
+        tests: [
+            { args: [], setupRemove: ["example_directory"], setupDirs: ["example_directory"], expected: "Changed working directory to: example_directory" },
+        ]
+    },
   1246: {
     functionNames: ["check_conditions"],
     tests: [{
@@ -9361,12 +9376,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       { args: [], expected: "['@python', '@realpython', '@openai']" }
     ]
   },
+  1325: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "True" }
+    ]
+  },
   1326: {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
     tests: [
       { args: [], expected: "['02:30 PM', '07:45 AM']" }
+    ]
+  },
+  1327: {
+    functionNames: [],
+    mode: 'script',
+    compare: 'printedOrReturn',
+    tests: [
+      { args: [], expected: "['$20.99', '$3.50', '$100']" }
     ]
   },
   1329: {

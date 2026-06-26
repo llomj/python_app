@@ -533,6 +533,7 @@ def __auto_grader_run():
         setup_remove = case.get("setupRemove", [])
         setup_dirs = case.get("setupDirs", [])
         setup_files = case.get("setupFiles", {})
+        permission_denied_paths = set(case.get("permissionDeniedPaths", []))
         get_files = case.get("getFiles")
         call_returned_with = case.get("callReturnedWith")
         call_method = case.get("callMethod")
@@ -589,9 +590,15 @@ def __auto_grader_run():
                 }
         old_stdout = sys.stdout
         old_input = builtins.input
+        old_open = builtins.open
+        old_cwd = os.getcwd()
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
         builtins.input = lambda prompt='': next(input_iter)
+        def __guarded_open(file, *open_args, **open_kwargs):
+            if str(file) in permission_denied_paths:
+                raise PermissionError("Permission denied")
+            return old_open(file, *open_args, **open_kwargs)
         try:
             for path_name in setup_remove:
                 if os.path.islink(path_name) or os.path.isfile(path_name):
@@ -606,6 +613,8 @@ def __auto_grader_run():
                     os.makedirs(dir_name, exist_ok=True)
                 with open(file_name, "w", encoding="utf-8") as setup_file:
                     setup_file.write(file_content)
+            if permission_denied_paths:
+                builtins.open = __guarded_open
             returned = case_target(*resolved_args, **kwargs)
             if call_returned_with is not None:
                 if not callable(returned):
@@ -662,8 +671,13 @@ def __auto_grader_run():
                 "message": f"{label} raised {type(exc).__name__}: {exc}"
             }
         finally:
+            try:
+                os.chdir(old_cwd)
+            except Exception:
+                pass
             sys.stdout = old_stdout
             builtins.input = old_input
+            builtins.open = old_open
 
         if expected_exception:
             return {
@@ -709,10 +723,13 @@ def __auto_grader_run_script():
         setup_remove = case.get("setupRemove", [])
         setup_dirs = case.get("setupDirs", [])
         setup_files = case.get("setupFiles", {})
+        permission_denied_paths = set(case.get("permissionDeniedPaths", []))
         label = case.get("label") or ("test " + str(index))
 
         old_stdout = sys.stdout
         old_input = builtins.input
+        old_open = builtins.open
+        old_cwd = os.getcwd()
         old_random_methods = {}
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
@@ -729,6 +746,10 @@ def __auto_grader_run_script():
                 raise Exception("No test input left for input().")
 
         builtins.input = __script_input
+        def __script_guarded_open(file, *open_args, **open_kwargs):
+            if str(file) in permission_denied_paths:
+                raise PermissionError("Permission denied")
+            return old_open(file, *open_args, **open_kwargs)
         try:
             import random
             for __name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
@@ -796,6 +817,8 @@ def __auto_grader_run_script():
                     os.makedirs(dir_name, exist_ok=True)
                 with open(file_name, "w", encoding="utf-8") as setup_file:
                     setup_file.write(file_content)
+            if permission_denied_paths:
+                builtins.open = __script_guarded_open
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
@@ -811,8 +834,13 @@ def __auto_grader_run_script():
                     setattr(random, __name, __method)
             except Exception:
                 pass
+            try:
+                os.chdir(old_cwd)
+            except Exception:
+                pass
             sys.stdout = old_stdout
             builtins.input = old_input
+            builtins.open = old_open
 
         if not __auto_grader_same(printed, expected, compare):
             return {
