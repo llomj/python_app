@@ -75,6 +75,8 @@ def normalize(value):
             return value.isoformat()
         except Exception:
             pass
+    if isinstance(value, os.PathLike):
+        return str(value)
     if type(value).__name__ in ("dict_keys", "dict_values", "dict_items"):
         return [normalize(item) for item in value]
     if hasattr(value, "__iter__") and hasattr(value, "__next__"):
@@ -428,6 +430,7 @@ def install_random(case, old_random):
     if case.get("randomChoiceValues"):
         fallback = case["randomChoiceValues"][-1]
         random.choice = lambda _items: next(choice_values, fallback)
+        random.choices = lambda _items, *args, **kwargs: [next(choice_values, fallback) for _ in range(kwargs.get("k", 1))]
     if case.get("randomSampleValues"):
         fallback = case["randomSampleValues"][-1]
         random.sample = lambda _items, _count: list(next(sample_values, fallback))

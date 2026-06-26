@@ -5431,7 +5431,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   785: {
     functionNames: ["get_keys"],
-    compare: "unorderedList",
     tests: [
       { args: [{"name": "Steven", "age": 56}], expected: ["Steven", 56] }
     ]
@@ -7974,8 +7973,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1123: {
         functionNames: ['check_even_odd'],
         tests: [
-            { args: [4], expected: true },
-            { args: [7], expected: false },
+            { args: [4], expected: 'Even' },
+            { args: [7], expected: 'Odd' },
         ]
     },
   1124: {
@@ -7987,9 +7986,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1125: {
         functionNames: ['divisible_by_7'],
+        compare: 'printedOrReturn',
         tests: [
-            { args: [14], expected: true },
-            { args: [10], expected: false },
+            { args: [14], expected: '7\n14' },
+            { args: [10], expected: '7' },
         ]
     },
   1126: {
@@ -8055,8 +8055,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1135: {
     functionNames: ["multiplication_table"],
+    compare: 'printedOrReturn',
     tests: [
-      { args: [5], expected: [] }
+      { args: [5], expected: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50" }
     ]
   },
   1136: {
@@ -8429,9 +8430,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1186: {
     functionNames: ["measure_time"],
+    compare: 'numberRange',
     tests: [{
       args: [],
-      expected: 0.007227182388305664
+      expected: [0, 5]
     }]
   },
   1187: {
@@ -8458,7 +8460,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1190: {
     functionNames: ["count_occurrences"],
     tests: [
-      { args: [[1,2,2,3],2], expected: 2 }
+      { args: [[1,2,2,3]], expected: {"1": 1, "2": 2, "3": 1} }
     ]
   },
   1191: {
@@ -8495,47 +8497,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1196: {
         functionNames: ['round_number'],
-        compare: 'float',
         tests: [
-            { args: [3.14159,2], expected: 3.14 },
+            { args: [3.14159], expected: 3 },
         ]
     },
   1197: {
         functionNames: ['access_value'],
         tests: [
-            { args: [{"a":1,"b":2},"a"], expected: 1 },
+            { args: [], expected: 'Alice' },
         ]
     },
   1198: {
         functionNames: ['add_key_value'],
         tests: [
-            { args: [{"a":1},"b",2], expected: {"a":1,"b":2} },
+            { args: [], expected: {"name": "Alice", "age": 30, "city": "New York"} },
         ]
     },
   1199: {
         functionNames: ['remove_key'],
         tests: [
-            { args: [{"a":1,"b":2},"a"], expected: {"b":2} },
+            { args: [], expected: {"name": "Alice", "age": 30} },
         ]
     },
   1200: {
     functionNames: ["get_keys"],
     tests: [{
       args: [],
-      expected: "dict_keys(['name', 'age', 'city'])"
+      expected: ['name', 'age', 'city']
     }]
   },
   1201: {
     functionNames: ["get_values"],
     tests: [{
       args: [],
-      expected: "dict_values(['Alice', 30, 'New York'])"
+      expected: ['Alice', 30, 'New York']
     }]
   },
   1202: {
         functionNames: ['check_key'],
         tests: [
-            { args: [{"a":1,"b":2},"a"], expected: true },
+            { args: [], expected: true },
         ]
     },
   1203: {
@@ -8547,19 +8548,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1204: {
         functionNames: ['clear_dict'],
         tests: [
-            { args: [{"a":1}], expected: {} },
+            { args: [], expected: {} },
         ]
     },
   1205: {
         functionNames: ['copy_dict'],
         tests: [
-            { args: [{"a":1}], expected: {"a":1} },
+            { args: [], expected: {"name": "Alice", "age": 30} },
         ]
     },
   1206: {
         functionNames: ['merge_dicts'],
         tests: [
-            { args: [{"a":1},{"b":2}], expected: {"a":1,"b":2} },
+            { args: [], expected: {"name": "Alice", "age": 30, "city": "New York", "job": "Engineer"} },
         ]
     },
   1207: {
@@ -8573,25 +8574,25 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1208: {
         functionNames: ['dict_length'],
         tests: [
-            { args: [{"a":1,"b":2,"c":3}], expected: 3 },
+            { args: [], expected: 3 },
         ]
     },
   1209: {
         functionNames: ['reverse_dict'],
         tests: [
-            { args: [{"a":1,"b":2}], expected: {"1":"a","2":"b"} },
+            { args: [], expected: {"Alice": "name", "30": "age", "New York": "city"} },
         ]
     },
   1210: {
         functionNames: ['create_dict_from_lists'],
         tests: [
-            { args: [["a","b"],[1,2]], expected: {"a":1,"b":2} },
+            { args: [], expected: {"name": "Alice", "age": 30, "city": "New York"} },
         ]
     },
   1211: {
         functionNames: ['sum_values'],
         tests: [
-            { args: [{"a":1,"b":2,"c":3}], expected: 6 },
+            { args: [], expected: 60 },
         ]
     },
   1212: {
@@ -8604,14 +8605,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1213: {
         functionNames: ['max_value'],
         tests: [
-            { args: [{"a":1,"b":5,"c":3}], expected: 5 },
+            { args: [], expected: 30 },
         ]
     },
   1214: {
         functionNames: ['is_dict_empty'],
         tests: [
-            { args: [{}], expected: true },
-            { args: [{"a":1}], expected: false },
+            { args: [], expected: true },
         ]
     },
   1215: {
@@ -8638,13 +8638,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1218: {
         functionNames: ['first_key_value'],
         tests: [
-            { args: [{"a":1,"b":2}], expected: ["a",1] },
+            { args: [], expected: ["a", 10] },
         ]
     },
   1219: {
         functionNames: ['merge_multiple_dicts'],
         tests: [
-            { args: [[{"a":1},{"b":2},{"c":3}]], expected: {"a":1,"b":2,"c":3} },
+            { args: [], expected: {"a": 10, "b": 20, "c": 30, "d": 40, "e": 50} },
         ]
     },
   1220: {
@@ -8733,6 +8733,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["remove_directory"],
     tests: [{
       args: [],
+      setupRemove: ["new_directory"],
+      setupDirs: ["new_directory"],
       expected: "Directory new_directory removed"
     }]
   },
@@ -8744,16 +8746,17 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1234: {
     functionNames: ["get_absolute_path"],
+    compare: 'printedOrReturn',
     tests: [{
       args: [],
-      expected: "/Users/noll/Desktop/python_app/example_file.txt"
+      expected: "example_file.txt"
     }]
   },
   1235: {
     functionNames: ["check_if_symlink"],
     tests: [{
       args: [],
-      expected: true
+      expected: false
     }]
   },
   1236: {

@@ -340,6 +340,8 @@ def __auto_grader_normalize(value):
             return value.isoformat()
         except Exception:
             pass
+    if isinstance(value, os.PathLike):
+        return str(value)
     if type(value).__name__ in ("dict_keys", "dict_values", "dict_items"):
         return [__auto_grader_normalize(item) for item in value]
     if hasattr(value, "__iter__") and hasattr(value, "__next__"):

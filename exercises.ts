@@ -6765,7 +6765,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 770",
         "description": "Create a program with a helper function `sum_of_list(lst)` that returns the sum of all numbers in a list, and uses it on a sample list.",
         "initialCode": "def main(lst):\n    pass\n\ndef sum_of_list(n):\n    pass",
-        "solution": "def main(lst):\n    return sum_of_list(lst)\n    \ndef sum_of_list(n):\n    count = 0\n    for n in lst:\n        count += n\n    return count\n\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))\n\n# Using built-in sum()\n    return sum(1 for n in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, n: acc + 1, lst, 0)\n\n# Using for loop\n    count = 0\n    for n in lst:\n        count += n\n    return count",
+        "solution": "def main(lst):\n    return sum_of_list(lst)\n    \ndef sum_of_list(lst):\n    count = 0\n    for n in lst:\n        count += n\n    return count\n\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))\n\n# Using built-in sum()\n    return sum(lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, n: acc + n, lst, 0)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8682,7 +8682,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 983",
         "description": "Write a Python program to parse HTML and extract all links using the standard library.",
         "initialCode": "from html.parser import HTMLParser\n# Write your solution here",
-        "solution": "from html.parser import HTMLParser\n\nclass LinkParser(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == \'a\':\n            for name, value in attrs:\n                if name == \'href\':\n                    self.links.append(value)\n\nhtml = '<a href=\'https://example.com\'>Example</a> <a href=\'https://google.com\'>Google</a>'\nparser = LinkParser()\nparser.feed(html)\nprint(parser.links)  # Expected output: ['https://example.com', 'https://google.com']\n\n\n# Using dataclass\nfrom dataclasses import dataclass\n\n@dataclass\nclass Computer:\n    brand: str\n    processor: str",
+        "solution": "from html.parser import HTMLParser\n\nclass LinkParser(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == 'a':\n            for name, value in attrs:\n                if name == 'href':\n                    self.links.append(value)\n\nhtml = \"<a href='https://example.com'>Example</a> <a href='https://google.com'>Google</a>\"\nparser = LinkParser()\nparser.feed(html)\nprint(parser.links)  # Expected output: ['https://example.com', 'https://google.com']\n\n\n# Using dataclass\nfrom dataclasses import dataclass\n\n@dataclass\nclass Computer:\n    brand: str\n    processor: str",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -10113,7 +10113,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1142",
         "description": "Write a Python program to check if a given number is a perfect square and an Armstrong number. Control flow.",
         "initialCode": "def is_perfect_square_and_armstrong(n):\n    pass",
-        "solution": "def is_perfect_square_and_armstrong(n):\n    if is_perfect_square(n) and is_armstrong(n):\n        return True\n    else:\n        return False\n\nresult = is_perfect_square_and_armstrong(153)\nprint(result)\n\n# Using return expression\n    return bool(is_perfect_square(n) and is_armstrong(n))",
+        "solution": "def is_perfect_square(n):\n    return int(n ** 0.5) ** 2 == n\n\ndef is_armstrong(n):\n    digits = str(n)\n    power = len(digits)\n    return sum(int(digit) ** power for digit in digits) == n\n\ndef is_perfect_square_and_armstrong(n):\n    return is_perfect_square(n) and is_armstrong(n)\n\nresult = is_perfect_square_and_armstrong(153)\nprint(result)\n\n# Using return expression\n    return bool(is_perfect_square(n) and is_armstrong(n))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
