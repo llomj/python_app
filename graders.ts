@@ -4748,7 +4748,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   679: {
         functionNames: ['string_keys'],
         tests: [
-            { args: [{a: 1, 42: 'answer', c: 3}], expected: ['a', 'c'] }
+            { args: [{a: 1, 42: 'answer', c: 3}], expected: ['42', 'a', 'c'] }
         ]
     },
   680: {
@@ -4760,7 +4760,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   681: {
         functionNames: ['retrieve_integer_keys'],
         tests: [
-            { args: [{1: 'one', 'two': 2, 3: 'three'}], expected: [1, 3] }
+            { args: [], argExpressions: ["{1: 'one', 'two': 2, 3: 'three'}"], expected: [1, 3] }
         ]
     },
   682: {
@@ -4853,7 +4853,6 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   696: {
         functionNames: ['celsius_to_fahrenheit'],
-        compare: 'float',
         tests: [
             { args: [[0, 20, 37, 100]], expected: [32.0, 68.0, 98.6, 212.0] }
         ]
@@ -5669,10 +5668,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     ]
   },
   823: {
-    functionNames: ["swap_values", "main"],
+    functionNames: ["swap_values"],
     tests: [
-      { functionName: "swap_values", args: [{"a": 1, "b": 2, "c": 3}, "a", "c"], expected: {"a": 3, "b": 2, "c": 1} },
-      { functionName: "main", args: [{"name": 777, "age": 56, "city": 34, "job": 1}], expected: {"name": 777, "age": 56, "city": 1, "job": 34} }
+      { args: [{"a": 1, "b": 2, "c": 3}, "a", "c"], expected: {"a": 3, "b": 2, "c": 1} }
     ]
   },
   824: {

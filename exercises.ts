@@ -5847,7 +5847,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 667",
         "description": "Create a dictionary of names and ages, and return the keys sorted by age.",
         "initialCode": "def name_age(dic):\n    pass",
-        "solution": "def name_age(dic):\n    \n    def sort_age(x):\n        for keys, values in x:\n            return values\n    return sorted(dic, key=sort_age)\n    \n\ndic = {\"Tom\": 15, \"Lucka\": 66, \"Bob\": 8}    \nprint(name_age(dic))\n\n# Using inner function\n    # Inline version available\n\n# Using lambda\n    return lambda x: values",
+        "solution": "def name_age(dic):\n    def sort_age(name):\n        return dic[name]\n\n    return sorted(dic, key=sort_age)\n\ndic = {\"Tom\": 15, \"Lucka\": 66, \"Bob\": 8}\nprint(name_age(dic))\n\n# Using lambda\ndef name_age(dic):\n    return sorted(dic, key=lambda name: dic[name])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },

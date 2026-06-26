@@ -201,12 +201,18 @@ def same(actual, expected, compare):
         return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
     return actual == expected
 
-def runnable_prefix(source):
+def runnable_prefix(source, prefer_markers=False):
     markers = ["\n\n# Wrapped in function", "\n\n# Using ", "\n\n# Adding ", "\n\n# With ", "\n\n# Alternative"]
-    candidates = [source]
-    for marker in markers:
-        if marker in source:
-            candidates.append(source.split(marker, 1)[0])
+    candidates = [] if prefer_markers else [source]
+    marker_positions = sorted(
+        (source.index(marker), marker)
+        for marker in markers
+        if marker in source
+    )
+    for _position, marker in marker_positions:
+        candidates.append(source.split(marker, 1)[0])
+    if prefer_markers:
+        candidates.append(source)
     lines = source.splitlines()
     for i in range(len(lines), 0, -1):
         candidates.append("\n".join(lines[:i]))
@@ -305,8 +311,8 @@ def find_callable(namespace, function_names, args, required_name=None, kwargs=No
 def run_grader(source, grader):
     compare = grader.get("compare", "exact")
     tests = grader.get("tests", [])
-    solution = runnable_prefix(source)
     if grader.get("mode") == "script":
+        solution = runnable_prefix(source, prefer_markers=True)
         with tempfile.TemporaryDirectory() as temp_dir:
             old_cwd = os.getcwd()
             try:
@@ -315,6 +321,7 @@ def run_grader(source, grader):
                     return run_script_tests(solution, tests, compare), "", solution
             finally:
                 os.chdir(old_cwd)
+    solution = runnable_prefix(source)
     last_error = ""
     last_solution = ""
     for candidate_solution in declaration_variants(solution):
