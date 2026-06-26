@@ -1311,26 +1311,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 151",
         "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.",
         "initialCode": "def find_longest_word(words):\n    pass",
-        "solution": "def find_longest_word(words):\n    count = 0  # Tracks length of longest word found\n    longest_word = \"\"\n    for word in words:\n        if len(word) > count:  # If current word is longer\n            count = len(word)  # Update length\n            longest_word = word  # Update word\n    return longest_word\n\nwords = [\"tree\", \"mountain\", \"do\", \"Jonathannollfrency\"]\n    \nprint(find_longest_word(words))
-
-# Alternative solution using max() with key=len
-def find_longest_word(words):
-    return max(words, key=len)
-
-print(find_longest_word([\"hello\", \"world\", \"python\"]))  # Output: python
-
-# Alternative solution using reduce
-def find_longest_word(words):
-    from functools import reduce
-    return reduce(lambda a, b: a if len(a) >= len(b) else b, words)
-
-print(find_longest_word([\"a\", \"ab\", \"abc\"]))  # Output: abc
-
-# Alternative solution using sorted
-def find_longest_word(words):
-    return sorted(words, key=len, reverse=True)[0]
-
-print(find_longest_word([\"short\", \"longer\", \"longest\"]))  # Output: longest",
+        "solution": "def find_longest_word(words):\n    count = 0  # Tracks length of longest word found\n    longest_word = \"\"\n    for word in words:\n        if len(word) > count:  # If current word is longer\n            count = len(word)  # Update length\n            longest_word = word  # Update word\n    return longest_word\n\nwords = [\"tree\", \"mountain\", \"do\", \"Jonathannollfrency\"]\n    \nprint(find_longest_word(words))\n\n# Alternative solution using max() with key=len\ndef find_longest_word(words):\n    return max(words, key=len)\n\nprint(find_longest_word([\"hello\", \"world\", \"python\"]))  # Output: python\n\n# Alternative solution using reduce\ndef find_longest_word(words):\n    from functools import reduce\n    return reduce(lambda a, b: a if len(a) >= len(b) else b, words)\n\nprint(find_longest_word([\"a\", \"ab\", \"abc\"]))  # Output: abc\n\n# Alternative solution using sorted\ndef find_longest_word(words):\n    return sorted(words, key=len, reverse=True)[0]\n\nprint(find_longest_word([\"short\", \"longer\", \"longest\"]))  # Output: longest",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1339,27 +1320,7 @@ print(find_longest_word([\"short\", \"longer\", \"longest\"]))  # Output: longes
         "title": "Problem 152",
         "description": "Write a Python function called `calculate_average` that takes a list of numbers as input and returns the average of those numbers without using sum() and len()",
         "initialCode": "def average(numbers):\n    pass",
-        "solution": "def average(numbers):\n    length = 0  # Manual length counter\n    total = 0  # Manual sum accumulator\n    for number in numbers:\n        length += 1  # Count elements\n        total += number  # Sum elements\n        result = total / length\n    return result\n    \nnumbers = [4, 667, 68, 766]\nprint(average(numbers))
-
-# Alternative solution using sum()/len()
-def average(numbers):
-    return sum(numbers) / len(numbers)
-
-print(average([4, 667, 68, 766]))  # Output: 376.25
-
-# Alternative solution using statistics.mean
-def average(numbers):
-    import statistics
-    return statistics.mean(numbers)
-
-print(average([10, 20, 30, 40]))  # Output: 25.0
-
-# Alternative solution using reduce
-def average(numbers):
-    from functools import reduce
-    return reduce(lambda x, y: x + y, numbers) / len(numbers)
-
-print(average([1, 2, 3, 4]))  # Output: 2.5",
+        "solution": "def average(numbers):\n    length = 0  # Manual length counter\n    total = 0  # Manual sum accumulator\n    for number in numbers:\n        length += 1  # Count elements\n        total += number  # Sum elements\n        result = total / length\n    return result\n    \nnumbers = [4, 667, 68, 766]\nprint(average(numbers))\n\n# Alternative solution using sum()/len()\ndef average(numbers):\n    return sum(numbers) / len(numbers)\n\nprint(average([4, 667, 68, 766]))  # Output: 376.25\n\n# Alternative solution using statistics.mean\ndef average(numbers):\n    import statistics\n    return statistics.mean(numbers)\n\nprint(average([10, 20, 30, 40]))  # Output: 25.0\n\n# Alternative solution using reduce\ndef average(numbers):\n    from functools import reduce\n    return reduce(lambda x, y: x + y, numbers) / len(numbers)\n\nprint(average([1, 2, 3, 4]))  # Output: 2.5",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1368,34 +1329,7 @@ print(average([1, 2, 3, 4]))  # Output: 2.5",
         "title": "Problem 153",
         "description": "Write a Python program to find the second smallest element in a list.",
         "initialCode": "def second_smallest_element(lst):\n    pass",
-        "solution": "def second_smallest_element(lst):\n    sorted_lst = sorted(lst, key=len)  # key=len sorts by length, not value\n    if len(sorted_lst) >= 2:\n        return sorted_lst[1]  # Returns second shortest, not second smallest\n    else:\n        return None
-           
-lst = [\"t\", \"hope\", \"Jonathan\", \"it\"]
-print(second_smallest_element(lst))
-
-# Alternative solution using sorted() properly
-def second_smallest_element(lst):
-    sorted_lst = sorted(lst)
-    if len(sorted_lst) >= 2:
-        return sorted_lst[1]
-    return None
-
-lst = [4, 2, 7, 1, 9]
-print(second_smallest_element(lst))  # Output: 2
-
-# Alternative solution using heapq
-def second_smallest_element(lst):
-    import heapq
-    return heapq.nsmallest(2, set(lst))[-1]
-
-print(second_smallest_element([5, 3, 8, 1, 9]))  # Output: 3
-
-# Alternative solution using set and sorted
-def second_smallest_element(lst):
-    unique = sorted(set(lst))
-    return unique[1] if len(unique) >= 2 else None
-
-print(second_smallest_element([7, 7, 1, 1, 5]))  # Output: 5",
+        "solution": "def second_smallest_element(lst):\n    sorted_lst = sorted(lst, key=len)  # key=len sorts by length, not value\n    if len(sorted_lst) >= 2:\n        return sorted_lst[1]  # Returns second shortest, not second smallest\n    else:\n        return None\n           \nlst = [\"t\", \"hope\", \"Jonathan\", \"it\"]\nprint(second_smallest_element(lst))\n\n# Alternative solution using sorted() properly\ndef second_smallest_element(lst):\n    sorted_lst = sorted(lst)\n    if len(sorted_lst) >= 2:\n        return sorted_lst[1]\n    return None\n\nlst = [4, 2, 7, 1, 9]\nprint(second_smallest_element(lst))  # Output: 2\n\n# Alternative solution using heapq\ndef second_smallest_element(lst):\n    import heapq\n    return heapq.nsmallest(2, set(lst))[-1]\n\nprint(second_smallest_element([5, 3, 8, 1, 9]))  # Output: 3\n\n# Alternative solution using set and sorted\ndef second_smallest_element(lst):\n    unique = sorted(set(lst))\n    return unique[1] if len(unique) >= 2 else None\n\nprint(second_smallest_element([7, 7, 1, 1, 5]))  # Output: 5",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1404,27 +1338,7 @@ print(second_smallest_element([7, 7, 1, 1, 5]))  # Output: 5",
         "title": "Problem 154",
         "description": "Write a Python function called `find_second_last_element` that takes a list as input and returns the second last element of the list.",
         "initialCode": "def find_last_element():  # Function name should be find_second_last_element\n    pass",
-        "solution": "def find_last_element():  # Function name should be find_second_last_element
-    user_input = input(\"Type list (elements separated by spaces): \").split()
-    if not user_input:  # Check if list is empty
-        return None  
-    return user_input[-2]  # [-2] is second-to-last element
-
-print(find_last_element())
-
-# Alternative solution with correct function name
-def find_second_last_element(lst):
-    if len(lst) < 2:
-        return None
-    return lst[-2]
-
-print(find_second_last_element([1, 2, 3, 4, 5]))  # Output: 4
-
-# Alternative solution using slicing
-def find_second_last_element(lst):
-    return lst[-2:-1][0] if len(lst) >= 2 else None
-
-print(find_second_last_element([\"a\", \"b\", \"c\"]))  # Output: b",
+        "solution": "def find_last_element():  # Function name should be find_second_last_element\n    user_input = input(\"Type list (elements separated by spaces): \").split()\n    if not user_input:  # Check if list is empty\n        return None  \n    return user_input[-2]  # [-2] is second-to-last element\n\nprint(find_last_element())\n\n# Alternative solution with correct function name\ndef find_second_last_element(lst):\n    if len(lst) < 2:\n        return None\n    return lst[-2]\n\nprint(find_second_last_element([1, 2, 3, 4, 5]))  # Output: 4\n\n# Alternative solution using slicing\ndef find_second_last_element(lst):\n    return lst[-2:-1][0] if len(lst) >= 2 else None\n\nprint(find_second_last_element([\"a\", \"b\", \"c\"]))  # Output: b",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1433,20 +1347,7 @@ print(find_second_last_element([\"a\", \"b\", \"c\"]))  # Output: b",
         "title": "Problem 155",
         "description": "Write a Python function called reverse_number that takes an integer as input and returns the reverse of that number. For example, if the input is 123, the function should return 321.",
         "initialCode": "def reverse_number(number):\n    pass\n\ndef reverse_number(number):\n    pass\n\ndef reverse_number(number):\n    pass",
-        "solution": "def reverse_number(number):\n    return int(str(number)[::-1])  # str() \u2192 reverse with [::-1] \u2192 int()\n\nlst = 456\nprint(reverse_number(lst))\n\ndef reverse_number(number):\n    str_number = str(number)  # Convert to string\n    reversed_str_number = str_number[::-1]  # Reverse string\n    reversed_number = int(reversed_str_number)  # Convert back to int\n   \n    return reversed_number\n    \nnumber = 123\nprint(reverse_number(number)) \n\ndef reverse_number(number):\n    str_number = str(number)[::-1]  # Reversed string\n    int_number = str_number  # Still a string (misleading variable name)\n    \n    return int_number  # Returns string, not int\n             \nlst = 1234\nprint(reverse_number(lst))
-
-# Alternative solution using numeric operations (no string conversion)
-def reverse_number(number):
-    reversed_num = 0
-    num = abs(number)
-    while num > 0:
-        reversed_num = reversed_num * 10 + num % 10
-        num //= 10
-    return reversed_num if number >= 0 else -reversed_num
-
-print(reverse_number(123))    # Output: 321
-print(reverse_number(-456))   # Output: -654
-print(reverse_number(1000))   # Output: 1",
+        "solution": "def reverse_number(number):\n    return int(str(number)[::-1])  # str() \u2192 reverse with [::-1] \u2192 int()\n\nlst = 456\nprint(reverse_number(lst))\n\ndef reverse_number(number):\n    str_number = str(number)  # Convert to string\n    reversed_str_number = str_number[::-1]  # Reverse string\n    reversed_number = int(reversed_str_number)  # Convert back to int\n   \n    return reversed_number\n    \nnumber = 123\nprint(reverse_number(number)) \n\ndef reverse_number(number):\n    str_number = str(number)[::-1]  # Reversed string\n    int_number = str_number  # Still a string (misleading variable name)\n    \n    return int_number  # Returns string, not int\n             \nlst = 1234\nprint(reverse_number(lst))\n\n# Alternative solution using numeric operations (no string conversion)\ndef reverse_number(number):\n    reversed_num = 0\n    num = abs(number)\n    while num > 0:\n        reversed_num = reversed_num * 10 + num % 10\n        num //= 10\n    return reversed_num if number >= 0 else -reversed_num\n\nprint(reverse_number(123))    # Output: 321\nprint(reverse_number(-456))   # Output: -654\nprint(reverse_number(1000))   # Output: 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1455,26 +1356,7 @@ print(reverse_number(1000))   # Output: 1",
         "title": "Problem 156",
         "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, without maintaining the original order of characters.",
         "initialCode": "def remove_duplicates(string):\n    pass",
-        "solution": "def remove_duplicates(string):\n    split_word = string.split()  # Splits into words (not characters)\n    set_word = set(split_word)  # Set removes duplicates (order not preserved)\n    \n    return \" \".join(set_word)  # Join set (order may vary)\n    \nlst = \"and here is was and in the\"\nprint(remove_duplicates(lst))
-
-# Alternative solution using set() on characters (correct for char-level)
-def remove_duplicates(string):
-    return ''.join(set(string))
-
-print(remove_duplicates(\"hello\"))  # Output: ehol (order may vary)
-
-# Alternative solution preserving order with dict.fromkeys
-def remove_duplicates(string):
-    return ''.join(dict.fromkeys(string))
-
-print(remove_duplicates(\"hello\"))  # Output: helo
-
-# Alternative solution using list comprehension with seen set
-def remove_duplicates(string):
-    seen = set()
-    return ''.join(c for c in string if not (c in seen or seen.add(c)))
-
-print(remove_duplicates(\"aabbcc\"))  # Output: abc",
+        "solution": "def remove_duplicates(string):\n    split_word = string.split()  # Splits into words (not characters)\n    set_word = set(split_word)  # Set removes duplicates (order not preserved)\n    \n    return \" \".join(set_word)  # Join set (order may vary)\n    \nlst = \"and here is was and in the\"\nprint(remove_duplicates(lst))\n\n# Alternative solution using set() on characters (correct for char-level)\ndef remove_duplicates(string):\n    return ''.join(set(string))\n\nprint(remove_duplicates(\"hello\"))  # Output: ehol (order may vary)\n\n# Alternative solution preserving order with dict.fromkeys\ndef remove_duplicates(string):\n    return ''.join(dict.fromkeys(string))\n\nprint(remove_duplicates(\"hello\"))  # Output: helo\n\n# Alternative solution using list comprehension with seen set\ndef remove_duplicates(string):\n    seen = set()\n    return ''.join(c for c in string if not (c in seen or seen.add(c)))\n\nprint(remove_duplicates(\"aabbcc\"))  # Output: abc",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1483,25 +1365,7 @@ print(remove_duplicates(\"aabbcc\"))  # Output: abc",
         "title": "Problem 157",
         "description": "Write a Python function called remove_duplicates that takes a string as input and returns the duplicates removed into a string.",
         "initialCode": "def main(string):\n    pass\n\ndef remove_duplicates(string):\n    pass",
-        "solution": "def main(string):\n    lst = []\n    duplicates = []\n    split_string = string.split()\n    for word in split_string:\n        if word not in lst:\n            lst.append(word)  # Track unique words\n        else:\n            duplicates.append(word)  # Add to duplicates if seen before\n    return duplicates  # Returns duplicates, not string with duplicates removed\n        \nstring = \"so what's happening duplicates duplicates today? It's hot duplicates duplicates.\"\nmain(string)\n\ndef remove_duplicates(string):\n    split_word = string.split()\n    seen = set()  # Track seen words\n    duplicates = set()  # Track duplicate words\n    for word in split_word:\n        if word in seen:\n            duplicates.add(word)  # Add to duplicates\n        else:\n            seen.add(word)  # Mark as seen\n    \n    return ' '.join(duplicates)  # Returns duplicates, not string with duplicates removed\n    \nlst = \"and here is was and in the\"\nprint(remove_duplicates(lst))
-
-# Alternative solution returning string with duplicates removed (preserving order)
-def remove_duplicates(string):
-    seen = set()
-    result = []
-    for word in string.split():
-        if word not in seen:
-            seen.add(word)
-            result.append(word)
-    return ' '.join(result)
-
-print(remove_duplicates(\"and here is was and in the\"))  # Output: and here is was in the
-
-# Alternative solution using dict.fromkeys
-def remove_duplicates(string):
-    return ' '.join(dict.fromkeys(string.split()))
-
-print(remove_duplicates(\"and here is was and in the\"))  # Output: and here is was in the",
+        "solution": "def main(string):\n    lst = []\n    duplicates = []\n    split_string = string.split()\n    for word in split_string:\n        if word not in lst:\n            lst.append(word)  # Track unique words\n        else:\n            duplicates.append(word)  # Add to duplicates if seen before\n    return duplicates  # Returns duplicates, not string with duplicates removed\n        \nstring = \"so what's happening duplicates duplicates today? It's hot duplicates duplicates.\"\nmain(string)\n\ndef remove_duplicates(string):\n    split_word = string.split()\n    seen = set()  # Track seen words\n    duplicates = set()  # Track duplicate words\n    for word in split_word:\n        if word in seen:\n            duplicates.add(word)  # Add to duplicates\n        else:\n            seen.add(word)  # Mark as seen\n    \n    return ' '.join(duplicates)  # Returns duplicates, not string with duplicates removed\n    \nlst = \"and here is was and in the\"\nprint(remove_duplicates(lst))\n\n# Alternative solution returning string with duplicates removed (preserving order)\ndef remove_duplicates(string):\n    seen = set()\n    result = []\n    for word in string.split():\n        if word not in seen:\n            seen.add(word)\n            result.append(word)\n    return ' '.join(result)\n\nprint(remove_duplicates(\"and here is was and in the\"))  # Output: and here is was in the\n\n# Alternative solution using dict.fromkeys\ndef remove_duplicates(string):\n    return ' '.join(dict.fromkeys(string.split()))\n\nprint(remove_duplicates(\"and here is was and in the\"))  # Output: and here is was in the",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1510,20 +1374,7 @@ print(remove_duplicates(\"and here is was and in the\"))  # Output: and here is 
         "title": "Problem 158",
         "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers using sorted.",
         "initialCode": "def largest_element(numbers):\n    pass\n\ndef main():\n    pass",
-        "solution": "def largest_element(numbers):\n   sorted_numbers = sorted(numbers)  # Sort ascending\n   largest_number = sorted_numbers[-1]  # Last element is largest\n   \n   return largest_number\n                \nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))      \n\ndef main():\n    result = []\n    user = input(\"type numbers: \").split()\n    for num in user:\n        result.append(int(num))\n        largest_num = sorted(result)[-1]  # BUG: Sorts entire list each iteration (inefficient)\n    return largest_num  # Returns largest from final sorted list\n\nmain()
-
-# Alternative solution using max()
-def largest_element(numbers):
-    return max(numbers)
-
-print(largest_element([2, 56, 75, 4566, 3]))  # Output: 4566
-
-# Alternative solution using reduce
-def largest_element(numbers):
-    from functools import reduce
-    return reduce(lambda a, b: a if a > b else b, numbers)
-
-print(largest_element([10, 5, 20, 3]))  # Output: 20",
+        "solution": "def largest_element(numbers):\n   sorted_numbers = sorted(numbers)  # Sort ascending\n   largest_number = sorted_numbers[-1]  # Last element is largest\n   \n   return largest_number\n                \nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))      \n\ndef main():\n    result = []\n    user = input(\"type numbers: \").split()\n    for num in user:\n        result.append(int(num))\n        largest_num = sorted(result)[-1]  # BUG: Sorts entire list each iteration (inefficient)\n    return largest_num  # Returns largest from final sorted list\n\nmain()\n\n# Alternative solution using max()\ndef largest_element(numbers):\n    return max(numbers)\n\nprint(largest_element([2, 56, 75, 4566, 3]))  # Output: 4566\n\n# Alternative solution using reduce\ndef largest_element(numbers):\n    from functools import reduce\n    return reduce(lambda a, b: a if a > b else b, numbers)\n\nprint(largest_element([10, 5, 20, 3]))  # Output: 20",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1532,23 +1383,7 @@ print(largest_element([10, 5, 20, 3]))  # Output: 20",
         "title": "Problem 159",
         "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers using max().",
         "initialCode": "def largest_element(numbers):\n    pass",
-        "solution": "def largest_element(numbers):\n   return max(numbers)
-               
-numbers = [2, 56, 75, 4566, 3]
-print(largest_element(numbers))
-
-# Alternative solution using sorted()
-def largest_element(numbers):
-    return sorted(numbers)[-1]
-
-print(largest_element([2, 56, 75, 4566, 3]))  # Output: 4566
-
-# Alternative solution using reduce
-def largest_element(numbers):
-    from functools import reduce
-    return reduce(lambda a, b: a if a > b else b, numbers)
-
-print(largest_element([10, 5, 20, 3]))  # Output: 20",
+        "solution": "def largest_element(numbers):\n   return max(numbers)\n               \nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))\n\n# Alternative solution using sorted()\ndef largest_element(numbers):\n    return sorted(numbers)[-1]\n\nprint(largest_element([2, 56, 75, 4566, 3]))  # Output: 4566\n\n# Alternative solution using reduce\ndef largest_element(numbers):\n    from functools import reduce\n    return reduce(lambda a, b: a if a > b else b, numbers)\n\nprint(largest_element([10, 5, 20, 3]))  # Output: 20",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1557,30 +1392,7 @@ print(largest_element([10, 5, 20, 3]))  # Output: 20",
         "title": "Problem 160",
         "description": "Define a function that computes the length of a given list or string. (It is true that Python has the len() function built in, but writing it yourself is nevertheless a good exercise.)",
         "initialCode": "def find_length(string):  # Works for both strings and lists (iterable)\n    pass",
-        "solution": "def find_length(string):  # Works for both strings and lists (iterable)\n    count = 0\n    for char in string:  # Iterate over elements\n        count += 1\n    return count
-    \narg = \"Jonathan\"\nprint(find_length(arg))
-
-# Alternative solution using sum with generator
-def find_length(string):
-    return sum(1 for _ in string)
-
-print(find_length(\"Jonathan\"))  # Output: 8
-
-# Alternative solution using recursion
-def find_length(string):
-    if string == \"\":
-        return 0
-    return 1 + find_length(string[1:])
-
-print(find_length(\"hello\"))  # Output: 5
-
-# Alternative solution using enumerate
-def find_length(string):
-    for i, _ in enumerate(string):
-        pass
-    return i + 1 if string else 0
-
-print(find_length(\"python\"))  # Output: 6",
+        "solution": "def find_length(string):  # Works for both strings and lists (iterable)\n    count = 0\n    for char in string:  # Iterate over elements\n        count += 1\n    return count\n    \narg = \"Jonathan\"\nprint(find_length(arg))\n\n# Alternative solution using sum with generator\ndef find_length(string):\n    return sum(1 for _ in string)\n\nprint(find_length(\"Jonathan\"))  # Output: 8\n\n# Alternative solution using recursion\ndef find_length(string):\n    if string == \"\":\n        return 0\n    return 1 + find_length(string[1:])\n\nprint(find_length(\"hello\"))  # Output: 5\n\n# Alternative solution using enumerate\ndef find_length(string):\n    for i, _ in enumerate(string):\n        pass\n    return i + 1 if string else 0\n\nprint(find_length(\"python\"))  # Output: 6",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1589,27 +1401,7 @@ print(find_length(\"python\"))  # Output: 6",
         "title": "Problem 161",
         "description": "Write a Python program to find the intersection of two lists. Prompt the user to enter two lists using set.",
         "initialCode": "def intersection():\n    pass\n\ndef intersection():\n    pass\n\ndef intersection_two_list(lst1, lst2):\n    pass",
-        "solution": "def intersection():\n    lst1 = input(\"type list: \").split()\n    lst2 = input(\"type list: \").split()\n    sort1 = sorted(lst1)\n    sort2 = sorted(lst2)\n    common = []\n    for word in sort1:\n        if word in sort2:\n            common.append(word)\n    print(common)\n    \nintersection()\n\ndef intersection():\n    lst1 = input(\"type lst1: \").split()\n    lst2 = input(\"type lst2: \").split()\n    set1 = set(lst1)\n    set2 = set(lst2)\n    common = set1.intersection(set2)\n    \n    print(common)\n    \nintersection()\n\ndef intersection_two_list(lst1, lst2):\n    set1 = set(lst1)\n    set2 = set(lst2)\n    result = set1.intersection(set2)\n    \n    return result\n                   \nlst1 = [\"tree\", \"car\", \"house\", \"garden\"]\nlst2 = [\"car\", \"boat\", \"toilet\", \"tree\"]\nprint(intersection_two_list(lst1, lst2))
-
-# Alternative solution using & operator
-def intersection_two_list(lst1, lst2):
-    return list(set(lst1) & set(lst2))
-
-lst1 = [\"tree\", \"car\", \"house\", \"garden\"]
-lst2 = [\"car\", \"boat\", \"toilet\", \"tree\"]
-print(intersection_two_list(lst1, lst2))  # Output: ['tree', 'car']
-
-# Alternative solution using list comprehension
-def intersection_two_list(lst1, lst2):
-    return list(set([x for x in lst1 if x in lst2]))
-
-print(intersection_two_list([1, 2, 3, 4], [3, 4, 5, 6]))  # Output: [3, 4]
-
-# Alternative solution using filter
-def intersection_two_list(lst1, lst2):
-    return list(filter(lambda x: x in lst2, lst1))
-
-print(intersection_two_list([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Output: ['b', 'c']",
+        "solution": "def intersection():\n    lst1 = input(\"type list: \").split()\n    lst2 = input(\"type list: \").split()\n    sort1 = sorted(lst1)\n    sort2 = sorted(lst2)\n    common = []\n    for word in sort1:\n        if word in sort2:\n            common.append(word)\n    print(common)\n    \nintersection()\n\ndef intersection():\n    lst1 = input(\"type lst1: \").split()\n    lst2 = input(\"type lst2: \").split()\n    set1 = set(lst1)\n    set2 = set(lst2)\n    common = set1.intersection(set2)\n    \n    print(common)\n    \nintersection()\n\ndef intersection_two_list(lst1, lst2):\n    set1 = set(lst1)\n    set2 = set(lst2)\n    result = set1.intersection(set2)\n    \n    return result\n                   \nlst1 = [\"tree\", \"car\", \"house\", \"garden\"]\nlst2 = [\"car\", \"boat\", \"toilet\", \"tree\"]\nprint(intersection_two_list(lst1, lst2))\n\n# Alternative solution using & operator\ndef intersection_two_list(lst1, lst2):\n    return list(set(lst1) & set(lst2))\n\nlst1 = [\"tree\", \"car\", \"house\", \"garden\"]\nlst2 = [\"car\", \"boat\", \"toilet\", \"tree\"]\nprint(intersection_two_list(lst1, lst2))  # Output: ['tree', 'car']\n\n# Alternative solution using list comprehension\ndef intersection_two_list(lst1, lst2):\n    return list(set([x for x in lst1 if x in lst2]))\n\nprint(intersection_two_list([1, 2, 3, 4], [3, 4, 5, 6]))  # Output: [3, 4]\n\n# Alternative solution using filter\ndef intersection_two_list(lst1, lst2):\n    return list(filter(lambda x: x in lst2, lst1))\n\nprint(intersection_two_list([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Output: ['b', 'c']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1618,28 +1410,7 @@ print(intersection_two_list([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Ou
         "title": "Problem 162",
         "description": "Write a function where user types a list of numbers in string and returns a the third largest number in a list.",
         "initialCode": "def third_largest():\n    pass",
-        "solution": "def third_largest():\n    user_string = input(\"type number followed by spaces: \")  # e.g., \"10 5 20 15 8\"\n    user_split = user_string.split()  # Split into list of strings\n    int_list = []\n    for number in user_split:\n        int_list.append(int(number))  # Convert strings to integers\n    \n    int_list.sort()  # Sort ascending: [5, 8, 10, 15, 20]\n    result = int_list[-3]  # [-3] is third-to-last (third largest)\n    \n    print(result)\n    \nthird_largest()
-
-# Alternative solution using sorted with reverse
-def third_largest():
-    numbers = list(map(int, input(\"type numbers: \").split()))
-    return sorted(numbers, reverse=True)[2]
-
-print(third_largest())
-
-# Alternative solution using heapq
-def third_largest():
-    import heapq
-    numbers = list(map(int, input(\"type numbers: \").split()))
-    return heapq.nlargest(3, numbers)[-1]
-
-print(third_largest())
-
-# Alternative solution pure function
-def third_largest(numbers):
-    return sorted(numbers)[-3]
-
-print(third_largest([10, 5, 20, 15, 8]))  # Output: 10",
+        "solution": "def third_largest():\n    user_string = input(\"type number followed by spaces: \")  # e.g., \"10 5 20 15 8\"\n    user_split = user_string.split()  # Split into list of strings\n    int_list = []\n    for number in user_split:\n        int_list.append(int(number))  # Convert strings to integers\n    \n    int_list.sort()  # Sort ascending: [5, 8, 10, 15, 20]\n    result = int_list[-3]  # [-3] is third-to-last (third largest)\n    \n    print(result)\n    \nthird_largest()\n\n# Alternative solution using sorted with reverse\ndef third_largest():\n    numbers = list(map(int, input(\"type numbers: \").split()))\n    return sorted(numbers, reverse=True)[2]\n\nprint(third_largest())\n\n# Alternative solution using heapq\ndef third_largest():\n    import heapq\n    numbers = list(map(int, input(\"type numbers: \").split()))\n    return heapq.nlargest(3, numbers)[-1]\n\nprint(third_largest())\n\n# Alternative solution pure function\ndef third_largest(numbers):\n    return sorted(numbers)[-3]\n\nprint(third_largest([10, 5, 20, 15, 8]))  # Output: 10",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1648,22 +1419,7 @@ print(third_largest([10, 5, 20, 15, 8]))  # Output: 10",
         "title": "Problem 163",
         "description": "Write a Python function `count_vowels` that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in the string. Ignore case, so 'A' and 'a' should be counted as the same vowel using list comprehension.",
         "initialCode": "def count_vowels(string):\n    pass\n\ndef count_vowels(sentence):\n    pass",
-        "solution": "def count_vowels(string):\n    vowels = \"aeiou\"\n    result = {}  # Dictionary to store vowel counts\n    for vowel in vowels:\n        result[vowel] = 0  # Set initial count for each vowel\n    \n    string = string.lower()  # Convert to lowercase for case-insensitive counting\n    for char in string:\n        if char in vowels:\n            result[char] += 1  # Increment count for found vowel\n    \n    return result\n\nstring = \"JOnathAn is the best\"\nprint(count_vowels(string))\n\ndef count_vowels(sentence):\n    sentence = sentence.lower()\n    vowels = \"aeiou\"\n    vowel_counts = {number: 0 for number in vowels}  # {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}\n    \n    for char in sentence:\n        if char in vowels:\n            vowel_counts[char] += 1\n    return vowel_counts\n    \nstring = \"Jonathan is the best\"    \nprint(count_vowels(string))
-
-# Alternative solution using collections.Counter
-def count_vowels(string):
-    from collections import Counter
-    c = Counter(c for c in string.lower() if c in 'aeiou')
-    return {v: c.get(v, 0) for v in 'aeiou'}
-
-print(count_vowels(\"Jonathan is the best\"))
-
-# Alternative solution using str.count()
-def count_vowels(string):
-    string = string.lower()
-    return {v: string.count(v) for v in 'aeiou'}
-
-print(count_vowels(\"Jonathan is the best\"))",
+        "solution": "def count_vowels(string):\n    vowels = \"aeiou\"\n    result = {}  # Dictionary to store vowel counts\n    for vowel in vowels:\n        result[vowel] = 0  # Set initial count for each vowel\n    \n    string = string.lower()  # Convert to lowercase for case-insensitive counting\n    for char in string:\n        if char in vowels:\n            result[char] += 1  # Increment count for found vowel\n    \n    return result\n\nstring = \"JOnathAn is the best\"\nprint(count_vowels(string))\n\ndef count_vowels(sentence):\n    sentence = sentence.lower()\n    vowels = \"aeiou\"\n    vowel_counts = {number: 0 for number in vowels}  # {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}\n    \n    for char in sentence:\n        if char in vowels:\n            vowel_counts[char] += 1\n    return vowel_counts\n    \nstring = \"Jonathan is the best\"    \nprint(count_vowels(string))\n\n# Alternative solution using collections.Counter\ndef count_vowels(string):\n    from collections import Counter\n    c = Counter(c for c in string.lower() if c in 'aeiou')\n    return {v: c.get(v, 0) for v in 'aeiou'}\n\nprint(count_vowels(\"Jonathan is the best\"))\n\n# Alternative solution using str.count()\ndef count_vowels(string):\n    string = string.lower()\n    return {v: string.count(v) for v in 'aeiou'}\n\nprint(count_vowels(\"Jonathan is the best\"))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1672,22 +1428,7 @@ print(count_vowels(\"Jonathan is the best\"))",
         "title": "Problem 164",
         "description": "Write a Python function `count_vowels` that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in the string. Ignore case, so 'A' and 'a' should be counted as the same vowel without using list conprehension.",
         "initialCode": "def count_vowels(sentence):\n    pass",
-        "solution": "def count_vowels(sentence):\n    sentence = sentence.lower()\n    vowels = \"aeiou\"\n    vowel_counts = {}\n    for number in vowels:\n        vowel_counts[number] = 0\n    \n    for char in sentence:\n        if char in vowels:\n            vowel_counts[char] += 1\n    \n    return vowel_counts\n\nstring = \"Jonathan is the best\"\nprint(count_vowels(string))
-
-# Alternative solution using collections.Counter
-def count_vowels(sentence):
-    from collections import Counter
-    c = Counter(c for c in sentence.lower() if c in 'aeiou')
-    return {v: c.get(v, 0) for v in 'aeiou'}
-
-print(count_vowels(\"Jonathan is the best\"))
-
-# Alternative solution using str.count()
-def count_vowels(sentence):
-    sentence = sentence.lower()
-    return {v: sentence.count(v) for v in 'aeiou'}
-
-print(count_vowels(\"Jonathan is the best\"))",
+        "solution": "def count_vowels(sentence):\n    sentence = sentence.lower()\n    vowels = \"aeiou\"\n    vowel_counts = {}\n    for number in vowels:\n        vowel_counts[number] = 0\n    \n    for char in sentence:\n        if char in vowels:\n            vowel_counts[char] += 1\n    \n    return vowel_counts\n\nstring = \"Jonathan is the best\"\nprint(count_vowels(string))\n\n# Alternative solution using collections.Counter\ndef count_vowels(sentence):\n    from collections import Counter\n    c = Counter(c for c in sentence.lower() if c in 'aeiou')\n    return {v: c.get(v, 0) for v in 'aeiou'}\n\nprint(count_vowels(\"Jonathan is the best\"))\n\n# Alternative solution using str.count()\ndef count_vowels(sentence):\n    sentence = sentence.lower()\n    return {v: sentence.count(v) for v in 'aeiou'}\n\nprint(count_vowels(\"Jonathan is the best\"))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1696,19 +1437,7 @@ print(count_vowels(\"Jonathan is the best\"))",
         "title": "Problem 165",
         "description": "Write a function that takes numbers integer 123 and splits the numbers into a string (\"1\", \"2\", \"3\").",
         "initialCode": "def intiger_string(number):  # Typo: \"intiger\" should be \"integer\"\n    pass\n\ndef split_number_int(number):\n    pass",
-        "solution": "def intiger_string(number):  # Typo: \"intiger\" should be \"integer\"\n    return list(str(number))  # str(123) \u2192 \"123\", list(\"123\") \u2192 [\"1\", \"2\", \"3\"]\n    \nnumber = 123\nprint(intiger_string(number))\n\ndef split_number_int(number):\n    number_str = str(number)  # Convert int to string: 123 \u2192 \"123\"\n    result = tuple(number_str)  # tuple() constructor converts string to tuple of characters\n    \n    return result\n\nnumber = 123\nprint(split_number_int(number))
-
-# Alternative solution using map
-def split_number_int(number):
-    return list(map(str, str(number)))
-
-print(split_number_int(456))  # Output: ['4', '5', '6']
-
-# Alternative solution using list comprehension
-def split_number_int(number):
-    return [c for c in str(number)]
-
-print(split_number_int(789))  # Output: ['7', '8', '9']",
+        "solution": "def intiger_string(number):  # Typo: \"intiger\" should be \"integer\"\n    return list(str(number))  # str(123) \u2192 \"123\", list(\"123\") \u2192 [\"1\", \"2\", \"3\"]\n    \nnumber = 123\nprint(intiger_string(number))\n\ndef split_number_int(number):\n    number_str = str(number)  # Convert int to string: 123 \u2192 \"123\"\n    result = tuple(number_str)  # tuple() constructor converts string to tuple of characters\n    \n    return result\n\nnumber = 123\nprint(split_number_int(number))\n\n# Alternative solution using map\ndef split_number_int(number):\n    return list(map(str, str(number)))\n\nprint(split_number_int(456))  # Output: ['4', '5', '6']\n\n# Alternative solution using list comprehension\ndef split_number_int(number):\n    return [c for c in str(number)]\n\nprint(split_number_int(789))  # Output: ['7', '8', '9']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1717,27 +1446,7 @@ print(split_number_int(789))  # Output: ['7', '8', '9']",
         "title": "Problem 166",
         "description": "Write a Python function called `double_elements` that takes a list of strings as input and returns a 2 new list where each element is doubled.",
         "initialCode": "def double_elements(lst):\n    pass",
-        "solution": "def double_elements(lst):\n    doubled = []\n    for word in lst:\n        doubled.append(word)\n    for word in lst:\n        doubled.append(word)\n    return doubled  # Returns list with all elements duplicated: [a, b, c, a, b, c]\n    \nlst = [\"tree\", \"house\", \"car\"]\nprint(double_elements(lst))
-
-# Alternative solution using * operator
-def double_elements(lst):
-    return lst * 2
-
-print(double_elements([\"tree\", \"house\", \"car\"]))  # Output: ['tree', 'house', 'car', 'tree', 'house', 'car']
-
-# Alternative solution using extend
-def double_elements(lst):
-    result = lst[:]
-    result.extend(lst)
-    return result
-
-print(double_elements([\"a\", \"b\", \"c\"]))  # Output: ['a', 'b', 'c', 'a', 'b', 'c']
-
-# Alternative solution using list comprehension
-def double_elements(lst):
-    return [x for pair in zip(lst, lst) for x in pair]
-
-print(double_elements([\"x\", \"y\", \"z\"]))  # Output: ['x', 'x', 'y', 'y', 'z', 'z']",
+        "solution": "def double_elements(lst):\n    doubled = []\n    for word in lst:\n        doubled.append(word)\n    for word in lst:\n        doubled.append(word)\n    return doubled  # Returns list with all elements duplicated: [a, b, c, a, b, c]\n    \nlst = [\"tree\", \"house\", \"car\"]\nprint(double_elements(lst))\n\n# Alternative solution using * operator\ndef double_elements(lst):\n    return lst * 2\n\nprint(double_elements([\"tree\", \"house\", \"car\"]))  # Output: ['tree', 'house', 'car', 'tree', 'house', 'car']\n\n# Alternative solution using extend\ndef double_elements(lst):\n    result = lst[:]\n    result.extend(lst)\n    return result\n\nprint(double_elements([\"a\", \"b\", \"c\"]))  # Output: ['a', 'b', 'c', 'a', 'b', 'c']\n\n# Alternative solution using list comprehension\ndef double_elements(lst):\n    return [x for pair in zip(lst, lst) for x in pair]\n\nprint(double_elements([\"x\", \"y\", \"z\"]))  # Output: ['x', 'x', 'y', 'y', 'z', 'z']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1746,28 +1455,7 @@ print(double_elements([\"x\", \"y\", \"z\"]))  # Output: ['x', 'x', 'y', 'y', 'z
         "title": "Problem 167",
         "description": "Write a Python program to find the largest and smallest elements in a list. Prompt the user to enter a list of numbers using sorted().\"",
         "initialCode": "def main():\n    pass\n\ndef l_s(numbers):\n    pass",
-        "solution": "def main():\n    user = input(\"type numbers: \").split()  # Get input and split\n    lst = list(sorted(map(int, user)))  # map() is higher-order function that applies function to iterable\n    smallest_num = min(lst)  # Could use lst[0] since it's sorted\n    largest_num = max(lst)  # Could use lst[-1] since it's sorted\n    return smallest_num, largest_num  # Returns tuple\n    \nmain()\n\ndef l_s(numbers):\n    sort_number_largest = sorted(numbers)[-1]  # Last element after sorting (largest)\n    sort_number_smallest = sorted(numbers)[0]  # First element after sorting (smallest)\n    \n    return sort_number_largest, sort_number_smallest  # Returns tuple\n       \nnumbers = [1, 2, 3, 4, 5]\nprint(l_s(numbers))
-
-# Alternative solution using min() and max()
-def l_s(numbers):
-    return min(numbers), max(numbers)
-
-print(l_s([10, 3, 7, 1, 9]))  # Output: (1, 10)
-
-# Alternative solution using reduce
-def l_s(numbers):
-    from functools import reduce
-    smallest = reduce(lambda a, b: a if a < b else b, numbers)
-    largest = reduce(lambda a, b: a if a > b else b, numbers)
-    return smallest, largest
-
-print(l_s([4, 5, 100, 6, 1, 10]))  # Output: (1, 100)
-
-# Alternative solution using numpy-style unpacking
-def l_s(numbers):
-    return sorted(numbers)[0], sorted(numbers)[-1]
-
-print(l_s([5, 2, 9, 1, 7]))  # Output: (1, 9)",
+        "solution": "def main():\n    user = input(\"type numbers: \").split()  # Get input and split\n    lst = list(sorted(map(int, user)))  # map() is higher-order function that applies function to iterable\n    smallest_num = min(lst)  # Could use lst[0] since it's sorted\n    largest_num = max(lst)  # Could use lst[-1] since it's sorted\n    return smallest_num, largest_num  # Returns tuple\n    \nmain()\n\ndef l_s(numbers):\n    sort_number_largest = sorted(numbers)[-1]  # Last element after sorting (largest)\n    sort_number_smallest = sorted(numbers)[0]  # First element after sorting (smallest)\n    \n    return sort_number_largest, sort_number_smallest  # Returns tuple\n       \nnumbers = [1, 2, 3, 4, 5]\nprint(l_s(numbers))\n\n# Alternative solution using min() and max()\ndef l_s(numbers):\n    return min(numbers), max(numbers)\n\nprint(l_s([10, 3, 7, 1, 9]))  # Output: (1, 10)\n\n# Alternative solution using reduce\ndef l_s(numbers):\n    from functools import reduce\n    smallest = reduce(lambda a, b: a if a < b else b, numbers)\n    largest = reduce(lambda a, b: a if a > b else b, numbers)\n    return smallest, largest\n\nprint(l_s([4, 5, 100, 6, 1, 10]))  # Output: (1, 100)\n\n# Alternative solution using numpy-style unpacking\ndef l_s(numbers):\n    return sorted(numbers)[0], sorted(numbers)[-1]\n\nprint(l_s([5, 2, 9, 1, 7]))  # Output: (1, 9)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1776,35 +1464,7 @@ print(l_s([5, 2, 9, 1, 7]))  # Output: (1, 9)",
         "title": "Problem 168",
         "description": "Write a Python function called count_words that takes a string as input and returns a dictionary where the keys are the words in the string and the values are the counts of each word. Words are separated by spaces, and the function should be case-insensitive, make the keys alphabetical.",
         "initialCode": "def count_words():\n    pass\n\ndef count_words(string):\n    pass",
-        "solution": "def count_words():\n    user = input(\"type words: \").split()\n    sort = sorted(user)  # Sort words alphabetically\n    result = {}  # Dictionary to store word counts\n    for word in sort:\n        word = word.lower()  # Convert to lowercase for case-insensitive counting\n        if word in result:  # Dictionary membership check\n            result[word] += 1  # Increment count if word exists\n        else:\n            result[word] = 1\n    print(result)\n    \ncount_words()\n\ndef count_words(string):\n    string = string.lower()  # Case-insensitive: convert entire string to lowercase\n    words = string.split()  # Split into words\n    word_count = {}  # Dictionary for word frequencies\n    for word in words:\n        if word in word_count:\n            word_count[word] += 1  # Increment existing count\n        else:\n            word_count[word] = 1\n    \n    sorted_word_count = dict(sorted(word_count.items()))  # Sort dictionary by keys\n    return sorted_word_count\n\ninput_string = \"This is a test. This test is only a test.\"\nprint(count_words(input_string))
-
-# Alternative solution using collections.Counter
-def count_words(string):
-    from collections import Counter
-    return dict(sorted(Counter(string.lower().split()).items()))
-
-print(count_words(\"This is a test. This test is only a test.\"))
-
-# Alternative solution using dict.get()
-def count_words(string):
-    words = string.lower().split()
-    count = {}
-    for word in words:
-        count[word] = count.get(word, 0) + 1
-    return dict(sorted(count.items()))
-
-print(count_words(\"one two one two three\"))  # Output: {'one': 2, 'three': 1, 'two': 2}
-
-# Alternative solution using setdefault
-def count_words(string):
-    words = string.lower().split()
-    count = {}
-    for word in words:
-        count.setdefault(word, 0)
-        count[word] += 1
-    return dict(sorted(count.items()))
-
-print(count_words(\"hello hello world\"))  # Output: {'hello': 2, 'world': 1}",
+        "solution": "def count_words():\n    user = input(\"type words: \").split()\n    sort = sorted(user)  # Sort words alphabetically\n    result = {}  # Dictionary to store word counts\n    for word in sort:\n        word = word.lower()  # Convert to lowercase for case-insensitive counting\n        if word in result:  # Dictionary membership check\n            result[word] += 1  # Increment count if word exists\n        else:\n            result[word] = 1\n    print(result)\n    \ncount_words()\n\ndef count_words(string):\n    string = string.lower()  # Case-insensitive: convert entire string to lowercase\n    words = string.split()  # Split into words\n    word_count = {}  # Dictionary for word frequencies\n    for word in words:\n        if word in word_count:\n            word_count[word] += 1  # Increment existing count\n        else:\n            word_count[word] = 1\n    \n    sorted_word_count = dict(sorted(word_count.items()))  # Sort dictionary by keys\n    return sorted_word_count\n\ninput_string = \"This is a test. This test is only a test.\"\nprint(count_words(input_string))\n\n# Alternative solution using collections.Counter\ndef count_words(string):\n    from collections import Counter\n    return dict(sorted(Counter(string.lower().split()).items()))\n\nprint(count_words(\"This is a test. This test is only a test.\"))\n\n# Alternative solution using dict.get()\ndef count_words(string):\n    words = string.lower().split()\n    count = {}\n    for word in words:\n        count[word] = count.get(word, 0) + 1\n    return dict(sorted(count.items()))\n\nprint(count_words(\"one two one two three\"))  # Output: {'one': 2, 'three': 1, 'two': 2}\n\n# Alternative solution using setdefault\ndef count_words(string):\n    words = string.lower().split()\n    count = {}\n    for word in words:\n        count.setdefault(word, 0)\n        count[word] += 1\n    return dict(sorted(count.items()))\n\nprint(count_words(\"hello hello world\"))  # Output: {'hello': 2, 'world': 1}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1813,26 +1473,7 @@ print(count_words(\"hello hello world\"))  # Output: {'hello': 2, 'world': 1}",
         "title": "Problem 169",
         "description": "Write a function merge_dictionaries that takes two dictionaries as arguments and returns a new dictionary that contains all the key-value pairs from both dictionaries. If a key is present in both dictionaries, the value from the second dictionary should overwrite the value from the first dictionary.",
         "initialCode": "def merge_dictionaries(dict1, dict2):\n    pass",
-        "solution": "def merge_dictionaries(dict1, dict2):\n    merged = dict1.copy()\n    for key, value in dict2.items():\n        merged[key] = value\n    return merged\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'b': 3, 'c': 4}\n\nresult = merge_dictionaries(dict1, dict2)\nprint(result)
-
-# Alternative solution using ** unpacking
-def merge_dictionaries(dict1, dict2):
-    return {**dict1, **dict2}
-
-print(merge_dictionaries({'a': 1, 'b': 2}, {'b': 3, 'c': 4}))
-
-# Alternative solution using dict() with **
-def merge_dictionaries(dict1, dict2):
-    return dict(dict1, **dict2)
-
-print(merge_dictionaries({'x': 10}, {'y': 20}))  # Output: {'x': 10, 'y': 20}
-
-# Alternative solution using update in single expression
-def merge_dictionaries(dict1, dict2):
-    merged = dict1.copy()
-    return merged.update(dict2) or merged
-
-print(merge_dictionaries({'a': 1}, {'b': 2}))  # Output: {'a': 1, 'b': 2}",
+        "solution": "def merge_dictionaries(dict1, dict2):\n    merged = dict1.copy()\n    for key, value in dict2.items():\n        merged[key] = value\n    return merged\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'b': 3, 'c': 4}\n\nresult = merge_dictionaries(dict1, dict2)\nprint(result)\n\n# Alternative solution using ** unpacking\ndef merge_dictionaries(dict1, dict2):\n    return {**dict1, **dict2}\n\nprint(merge_dictionaries({'a': 1, 'b': 2}, {'b': 3, 'c': 4}))\n\n# Alternative solution using dict() with **\ndef merge_dictionaries(dict1, dict2):\n    return dict(dict1, **dict2)\n\nprint(merge_dictionaries({'x': 10}, {'y': 20}))  # Output: {'x': 10, 'y': 20}\n\n# Alternative solution using update in single expression\ndef merge_dictionaries(dict1, dict2):\n    merged = dict1.copy()\n    return merged.update(dict2) or merged\n\nprint(merge_dictionaries({'a': 1}, {'b': 2}))  # Output: {'a': 1, 'b': 2}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1841,33 +1482,7 @@ print(merge_dictionaries({'a': 1}, {'b': 2}))  # Output: {'a': 1, 'b': 2}",
         "title": "Problem 170",
         "description": "Write a function count_characters that takes a string as input and returns a dictionary where the keys are characters in the string and the values are the counts of those characters.",
         "initialCode": "def count_characters(string):\n    pass",
-        "solution": "def count_characters(string):\n    counts = {}  # Dictionary to store character frequencies\n    for char in string:  # Iterate over each character\n        if char in counts:  # Dictionary membership check (O(1) average case)\n            counts[char] += 1  # Increment count if character exists\n        else:\n            counts[char] = 1\n    return counts\n\nstring = input(\"Enter a string: \")\nresult = count_characters(string)\nprint(result)
-
-# Alternative solution using collections.Counter
-def count_characters(string):
-    from collections import Counter
-    return dict(Counter(string))
-
-print(count_characters(\"hello\"))  # Output: {'h': 1, 'e': 1, 'l': 2, 'o': 1}
-
-# Alternative solution using dict.get()
-def count_characters(string):
-    counts = {}
-    for char in string:
-        counts[char] = counts.get(char, 0) + 1
-    return counts
-
-print(count_characters(\"aabbcc\"))  # Output: {'a': 2, 'b': 2, 'c': 2}
-
-# Alternative solution using setdefault
-def count_characters(string):
-    counts = {}
-    for char in string:
-        counts.setdefault(char, 0)
-        counts[char] += 1
-    return counts
-
-print(count_characters(\"abcabc\"))  # Output: {'a': 2, 'b': 2, 'c': 2}",
+        "solution": "def count_characters(string):\n    counts = {}  # Dictionary to store character frequencies\n    for char in string:  # Iterate over each character\n        if char in counts:  # Dictionary membership check (O(1) average case)\n            counts[char] += 1  # Increment count if character exists\n        else:\n            counts[char] = 1\n    return counts\n\nstring = input(\"Enter a string: \")\nresult = count_characters(string)\nprint(result)\n\n# Alternative solution using collections.Counter\ndef count_characters(string):\n    from collections import Counter\n    return dict(Counter(string))\n\nprint(count_characters(\"hello\"))  # Output: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n\n# Alternative solution using dict.get()\ndef count_characters(string):\n    counts = {}\n    for char in string:\n        counts[char] = counts.get(char, 0) + 1\n    return counts\n\nprint(count_characters(\"aabbcc\"))  # Output: {'a': 2, 'b': 2, 'c': 2}\n\n# Alternative solution using setdefault\ndef count_characters(string):\n    counts = {}\n    for char in string:\n        counts.setdefault(char, 0)\n        counts[char] += 1\n    return counts\n\nprint(count_characters(\"abcabc\"))  # Output: {'a': 2, 'b': 2, 'c': 2}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1876,32 +1491,7 @@ print(count_characters(\"abcabc\"))  # Output: {'a': 2, 'b': 2, 'c': 2}",
         "title": "Problem 171",
         "description": "Write a function invert_dictionary that takes a dictionary as input and returns a new dictionary where the keys are the values from the input dictionary, and the values are lists of keys from the input dictionary that had that value.",
         "initialCode": "def invert_dictionary(input_dict):\n    pass",
-        "solution": "def invert_dictionary(input_dict):\n    inverted = {}  # New dictionary for inverted structure\n    for key, value in input_dict.items():\n        if value not in inverted:\n            inverted[value] = []\n        inverted[value].append(key)  # Add key to list of keys that had this value\n    return inverted\n\ninput_dict = {'a': 1, 'b': 2, 'c': 1}  # 'a' and 'c' both have value 1\nresult = invert_dictionary(input_dict)  # Result: {1: ['a', 'c'], 2: ['b']}\nprint(result)
-
-# Alternative solution using collections.defaultdict
-def invert_dictionary(input_dict):
-    from collections import defaultdict
-    inverted = defaultdict(list)
-    for key, value in input_dict.items():
-        inverted[value].append(key)
-    return dict(inverted)
-
-print(invert_dictionary({'a': 1, 'b': 2, 'c': 1}))
-
-# Alternative solution using dict.setdefault
-def invert_dictionary(input_dict):
-    inverted = {}
-    for key, value in input_dict.items():
-        inverted.setdefault(value, []).append(key)
-    return inverted
-
-print(invert_dictionary({'x': 10, 'y': 20, 'z': 10}))  # Output: {10: ['x', 'z'], 20: ['y']}
-
-# Alternative solution using dictionary comprehension
-def invert_dictionary(input_dict):
-    return {v: [k for k in input_dict if input_dict[k] == v] for v in set(input_dict.values())}
-
-print(invert_dictionary({'a': 1, 'b': 2, 'c': 1}))  # Output: {1: ['a', 'c'], 2: ['b']}",
+        "solution": "def invert_dictionary(input_dict):\n    inverted = {}  # New dictionary for inverted structure\n    for key, value in input_dict.items():\n        if value not in inverted:\n            inverted[value] = []\n        inverted[value].append(key)  # Add key to list of keys that had this value\n    return inverted\n\ninput_dict = {'a': 1, 'b': 2, 'c': 1}  # 'a' and 'c' both have value 1\nresult = invert_dictionary(input_dict)  # Result: {1: ['a', 'c'], 2: ['b']}\nprint(result)\n\n# Alternative solution using collections.defaultdict\ndef invert_dictionary(input_dict):\n    from collections import defaultdict\n    inverted = defaultdict(list)\n    for key, value in input_dict.items():\n        inverted[value].append(key)\n    return dict(inverted)\n\nprint(invert_dictionary({'a': 1, 'b': 2, 'c': 1}))\n\n# Alternative solution using dict.setdefault\ndef invert_dictionary(input_dict):\n    inverted = {}\n    for key, value in input_dict.items():\n        inverted.setdefault(value, []).append(key)\n    return inverted\n\nprint(invert_dictionary({'x': 10, 'y': 20, 'z': 10}))  # Output: {10: ['x', 'z'], 20: ['y']}\n\n# Alternative solution using dictionary comprehension\ndef invert_dictionary(input_dict):\n    return {v: [k for k in input_dict if input_dict[k] == v] for v in set(input_dict.values())}\n\nprint(invert_dictionary({'a': 1, 'b': 2, 'c': 1}))  # Output: {1: ['a', 'c'], 2: ['b']}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1910,25 +1500,7 @@ print(invert_dictionary({'a': 1, 'b': 2, 'c': 1}))  # Output: {1: ['a', 'c'], 2:
         "title": "Problem 172",
         "description": "Write a function filter_by_value that takes a dictionary and a threshold value as input and returns a new dictionary containing only the key-value pairs where the value is greater than the threshold.",
         "initialCode": "def filter_by_value(input_dict, threshold):\n    pass",
-        "solution": "def filter_by_value(input_dict, threshold):\n    filtered = {}  # New dictionary for filtered results\n    for key, value in input_dict.items():  # Iterate over all key-value pairs\n        if value > threshold:  # Check if value exceeds threshold\n            filtered[key] = value  # Add key-value pair to filtered dict\n    return filtered\n\ninput_dict = {'a': 5, 'b': 2, 'c': 8}\nthreshold = 3\nresult = filter_by_value(input_dict, threshold)  # Result: {'a': 5, 'c': 8} (b: 2 is filtered out)\nprint(result)
-
-# Alternative solution using dictionary comprehension
-def filter_by_value(input_dict, threshold):
-    return {k: v for k, v in input_dict.items() if v > threshold}
-
-print(filter_by_value({'a': 5, 'b': 2, 'c': 8}, 3))  # Output: {'a': 5, 'c': 8}
-
-# Alternative solution using filter()
-def filter_by_value(input_dict, threshold):
-    return dict(filter(lambda item: item[1] > threshold, input_dict.items()))
-
-print(filter_by_value({'x': 10, 'y': 3, 'z': 7}, 5))  # Output: {'x': 10, 'z': 7}
-
-# Alternative solution using dict() with generator
-def filter_by_value(input_dict, threshold):
-    return dict((k, v) for k, v in input_dict.items() if v > threshold)
-
-print(filter_by_value({'a': 1, 'b': 10, 'c': 5}, 4))  # Output: {'b': 10, 'c': 5}",
+        "solution": "def filter_by_value(input_dict, threshold):\n    filtered = {}  # New dictionary for filtered results\n    for key, value in input_dict.items():  # Iterate over all key-value pairs\n        if value > threshold:  # Check if value exceeds threshold\n            filtered[key] = value  # Add key-value pair to filtered dict\n    return filtered\n\ninput_dict = {'a': 5, 'b': 2, 'c': 8}\nthreshold = 3\nresult = filter_by_value(input_dict, threshold)  # Result: {'a': 5, 'c': 8} (b: 2 is filtered out)\nprint(result)\n\n# Alternative solution using dictionary comprehension\ndef filter_by_value(input_dict, threshold):\n    return {k: v for k, v in input_dict.items() if v > threshold}\n\nprint(filter_by_value({'a': 5, 'b': 2, 'c': 8}, 3))  # Output: {'a': 5, 'c': 8}\n\n# Alternative solution using filter()\ndef filter_by_value(input_dict, threshold):\n    return dict(filter(lambda item: item[1] > threshold, input_dict.items()))\n\nprint(filter_by_value({'x': 10, 'y': 3, 'z': 7}, 5))  # Output: {'x': 10, 'z': 7}\n\n# Alternative solution using dict() with generator\ndef filter_by_value(input_dict, threshold):\n    return dict((k, v) for k, v in input_dict.items() if v > threshold)\n\nprint(filter_by_value({'a': 1, 'b': 10, 'c': 5}, 4))  # Output: {'b': 10, 'c': 5}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1937,25 +1509,7 @@ print(filter_by_value({'a': 1, 'b': 10, 'c': 5}, 4))  # Output: {'b': 10, 'c': 5
         "title": "Problem 173",
         "description": "Write a function combine_lists_to_dict that takes two lists\u2014one for keys and one for values\u2014as input and returns a dictionary where each key-value pair is taken from corresponding elements in the input lists.",
         "initialCode": "def combine_lists_to_dict(keys, values):\n    pass",
-        "solution": "def combine_lists_to_dict(keys, values):\n    combined = {}\n    for i in range(len(keys)):\n        combined[keys[i]] = values[i]\n    return combined\n\nkeys = ['a', 'b', 'c']\nvalues = [1, 2, 3]\nresult = combine_lists_to_dict(keys, values)\nprint(result)
-
-# Alternative solution using zip() with dict()
-def combine_lists_to_dict(keys, values):
-    return dict(zip(keys, values))
-
-print(combine_lists_to_dict(['a', 'b', 'c'], [1, 2, 3]))  # Output: {'a': 1, 'b': 2, 'c': 3}
-
-# Alternative solution using dictionary comprehension
-def combine_lists_to_dict(keys, values):
-    return {keys[i]: values[i] for i in range(len(keys))}
-
-print(combine_lists_to_dict(['x', 'y'], [10, 20]))  # Output: {'x': 10, 'y': 20}
-
-# Alternative solution using dict comprehension with zip
-def combine_lists_to_dict(keys, values):
-    return {k: v for k, v in zip(keys, values)}
-
-print(combine_lists_to_dict(['one', 'two'], [1, 2]))  # Output: {'one': 1, 'two': 2}",
+        "solution": "def combine_lists_to_dict(keys, values):\n    combined = {}\n    for i in range(len(keys)):\n        combined[keys[i]] = values[i]\n    return combined\n\nkeys = ['a', 'b', 'c']\nvalues = [1, 2, 3]\nresult = combine_lists_to_dict(keys, values)\nprint(result)\n\n# Alternative solution using zip() with dict()\ndef combine_lists_to_dict(keys, values):\n    return dict(zip(keys, values))\n\nprint(combine_lists_to_dict(['a', 'b', 'c'], [1, 2, 3]))  # Output: {'a': 1, 'b': 2, 'c': 3}\n\n# Alternative solution using dictionary comprehension\ndef combine_lists_to_dict(keys, values):\n    return {keys[i]: values[i] for i in range(len(keys))}\n\nprint(combine_lists_to_dict(['x', 'y'], [10, 20]))  # Output: {'x': 10, 'y': 20}\n\n# Alternative solution using dict comprehension with zip\ndef combine_lists_to_dict(keys, values):\n    return {k: v for k, v in zip(keys, values)}\n\nprint(combine_lists_to_dict(['one', 'two'], [1, 2]))  # Output: {'one': 1, 'two': 2}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1964,33 +1518,7 @@ print(combine_lists_to_dict(['one', 'two'], [1, 2]))  # Output: {'one': 1, 'two'
         "title": "Problem 174",
         "description": "Write a function max_value_key that takes a dictionary as input and returns the key associated with the maximum value. If the dictionary is empty, the function should return None.",
         "initialCode": "def max_value_key(input_dict):\n    pass",
-        "solution": "def max_value_key(input_dict):\n    if not input_dict:  # Empty dict is falsy in Python\n        return None  # Return None for empty dictionary\n    \n    max_value = max(input_dict.values())  # Find maximum value in dictionary\n    \n    for key, value in input_dict.items():\n        if value == max_value:  # Found key with maximum value\n            return key  # Return first key found with max value\n\nmy_dict = {'a': 10, 'b': 5, 'c': 20, 'd': 15}  # Max value is 20 (key 'c')\nprint(max_value_key(my_dict))  # Output: 'c'\n\nempty_dict = {}\nprint(max_value_key(empty_dict))  # Output: None
-
-# Alternative solution using max() with key argument
-def max_value_key(input_dict):
-    if not input_dict:
-        return None
-    return max(input_dict, key=input_dict.get)
-
-print(max_value_key({'a': 10, 'b': 5, 'c': 20}))  # Output: 'c'
-print(max_value_key({}))  # Output: None
-
-# Alternative solution using sorted()
-def max_value_key(input_dict):
-    if not input_dict:
-        return None
-    return sorted(input_dict.items(), key=lambda x: x[1])[-1][0]
-
-print(max_value_key({'x': 5, 'y': 15, 'z': 10}))  # Output: 'y'
-
-# Alternative solution using reduce
-def max_value_key(input_dict):
-    from functools import reduce
-    if not input_dict:
-        return None
-    return reduce(lambda a, b: a if input_dict[a] >= input_dict[b] else b, input_dict)
-
-print(max_value_key({'a': 3, 'b': 7, 'c': 1}))  # Output: 'b'",
+        "solution": "def max_value_key(input_dict):\n    if not input_dict:  # Empty dict is falsy in Python\n        return None  # Return None for empty dictionary\n    \n    max_value = max(input_dict.values())  # Find maximum value in dictionary\n    \n    for key, value in input_dict.items():\n        if value == max_value:  # Found key with maximum value\n            return key  # Return first key found with max value\n\nmy_dict = {'a': 10, 'b': 5, 'c': 20, 'd': 15}  # Max value is 20 (key 'c')\nprint(max_value_key(my_dict))  # Output: 'c'\n\nempty_dict = {}\nprint(max_value_key(empty_dict))  # Output: None\n\n# Alternative solution using max() with key argument\ndef max_value_key(input_dict):\n    if not input_dict:\n        return None\n    return max(input_dict, key=input_dict.get)\n\nprint(max_value_key({'a': 10, 'b': 5, 'c': 20}))  # Output: 'c'\nprint(max_value_key({}))  # Output: None\n\n# Alternative solution using sorted()\ndef max_value_key(input_dict):\n    if not input_dict:\n        return None\n    return sorted(input_dict.items(), key=lambda x: x[1])[-1][0]\n\nprint(max_value_key({'x': 5, 'y': 15, 'z': 10}))  # Output: 'y'\n\n# Alternative solution using reduce\ndef max_value_key(input_dict):\n    from functools import reduce\n    if not input_dict:\n        return None\n    return reduce(lambda a, b: a if input_dict[a] >= input_dict[b] else b, input_dict)\n\nprint(max_value_key({'a': 3, 'b': 7, 'c': 1}))  # Output: 'b'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -1999,35 +1527,7 @@ print(max_value_key({'a': 3, 'b': 7, 'c': 1}))  # Output: 'b'",
         "title": "Problem 175",
         "description": "Write a function dict_equal that takes two dictionaries as input and returns True if they are equal (i.e., they have the same keys with the same corresponding values), and False otherwise.",
         "initialCode": "def dict_equal(dict1, dict2):\n    pass",
-        "solution": "def dict_equal(dict1, dict2):\n    return dict1 == dict2\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'a': 1, 'b': 2}\nresult = dict_equal(dict1, dict2)  # True: same keys and values\nprint(result)
-
-# Alternative solution using all() with generator
-def dict_equal(dict1, dict2):
-    if dict1.keys() != dict2.keys():
-        return False
-    return all(dict1[k] == dict2[k] for k in dict1)
-
-print(dict_equal({'a': 1, 'b': 2}, {'a': 1, 'b': 2}))  # Output: True
-print(dict_equal({'a': 1}, {'a': 2}))  # Output: False
-
-# Alternative solution using symmetric difference of items
-def dict_equal(dict1, dict2):
-    return len(set(dict1.items()) ^ set(dict2.items())) == 0
-
-print(dict_equal({'x': 10}, {'x': 10}))  # Output: True
-print(dict_equal({'x': 10}, {'x': 20}))  # Output: False
-
-# Alternative solution manual check
-def dict_equal(dict1, dict2):
-    if len(dict1) != len(dict2):
-        return False
-    for key in dict1:
-        if key not in dict2 or dict1[key] != dict2[key]:
-            return False
-    return True
-
-print(dict_equal({'a': 1, 'b': 2}, {'b': 2, 'a': 1}))  # Output: True
-print(dict_equal({'a': 1}, {}))  # Output: False",
+        "solution": "def dict_equal(dict1, dict2):\n    return dict1 == dict2\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'a': 1, 'b': 2}\nresult = dict_equal(dict1, dict2)  # True: same keys and values\nprint(result)\n\n# Alternative solution using all() with generator\ndef dict_equal(dict1, dict2):\n    if dict1.keys() != dict2.keys():\n        return False\n    return all(dict1[k] == dict2[k] for k in dict1)\n\nprint(dict_equal({'a': 1, 'b': 2}, {'a': 1, 'b': 2}))  # Output: True\nprint(dict_equal({'a': 1}, {'a': 2}))  # Output: False\n\n# Alternative solution using symmetric difference of items\ndef dict_equal(dict1, dict2):\n    return len(set(dict1.items()) ^ set(dict2.items())) == 0\n\nprint(dict_equal({'x': 10}, {'x': 10}))  # Output: True\nprint(dict_equal({'x': 10}, {'x': 20}))  # Output: False\n\n# Alternative solution manual check\ndef dict_equal(dict1, dict2):\n    if len(dict1) != len(dict2):\n        return False\n    for key in dict1:\n        if key not in dict2 or dict1[key] != dict2[key]:\n            return False\n    return True\n\nprint(dict_equal({'a': 1, 'b': 2}, {'b': 2, 'a': 1}))  # Output: True\nprint(dict_equal({'a': 1}, {}))  # Output: False",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2036,23 +1536,7 @@ print(dict_equal({'a': 1}, {}))  # Output: False",
         "title": "Problem 176",
         "description": "Write a function word_frequency that takes a string as input and returns a dictionary where the keys are words in the string and the values are the counts of those words.",
         "initialCode": "def word_frequency(string):\n    pass",
-        "solution": "def word_frequency(string):\n    words = string.split()  # Split string into list of words\n    result = {}  # Dictionary to store word frequencies\n    for word in words:\n        if word in result:  # Word seen before\n            result[word] += 1  # Increment count\n        else:  # First occurrence of word\n            result[word] = 1\n    return result\n            \nstring = \"gore why are you here you are gore\"\nprint(word_frequency(string))  # Result: {'gore': 2, 'why': 1, 'are': 2, 'you': 2, 'here': 1}
-
-# Alternative solution using collections.Counter
-def word_frequency(string):
-    from collections import Counter
-    return dict(Counter(string.split()))
-
-print(word_frequency(\"gore why are you here you are gore\"))
-
-# Alternative solution using dict.get()
-def word_frequency(string):
-    freq = {}
-    for word in string.split():
-        freq[word] = freq.get(word, 0) + 1
-    return freq
-
-print(word_frequency(\"one two one two three\"))  # Output: {'one': 2, 'two': 2, 'three': 1}",
+        "solution": "def word_frequency(string):\n    words = string.split()  # Split string into list of words\n    result = {}  # Dictionary to store word frequencies\n    for word in words:\n        if word in result:  # Word seen before\n            result[word] += 1  # Increment count\n        else:  # First occurrence of word\n            result[word] = 1\n    return result\n            \nstring = \"gore why are you here you are gore\"\nprint(word_frequency(string))  # Result: {'gore': 2, 'why': 1, 'are': 2, 'you': 2, 'here': 1}\n\n# Alternative solution using collections.Counter\ndef word_frequency(string):\n    from collections import Counter\n    return dict(Counter(string.split()))\n\nprint(word_frequency(\"gore why are you here you are gore\"))\n\n# Alternative solution using dict.get()\ndef word_frequency(string):\n    freq = {}\n    for word in string.split():\n        freq[word] = freq.get(word, 0) + 1\n    return freq\n\nprint(word_frequency(\"one two one two three\"))  # Output: {'one': 2, 'two': 2, 'three': 1}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2061,23 +1545,7 @@ print(word_frequency(\"one two one two three\"))  # Output: {'one': 2, 'two': 2,
         "title": "Problem 177",
         "description": "Write a function merge_list_of_dicts that takes a list of dictionaries as input and returns a single dictionary that merges all dictionaries in the list. If any keys are duplicated across dictionaries, the value from the last dictionary in the list should overwrite the previous ones.",
         "initialCode": "def merge_list_of_dicts(dicts):\n    pass",
-        "solution": "def merge_list_of_dicts(dicts):\n    merged = {}  # Result dictionary\n    for d in dicts:  # Iterate over each dictionary in list\n        merged.update(d)  # dict.update() modifies dict in-place, adding/updating entries\n    return merged\n\ndicts = [{'a': 1, 'b': 2}, {'b': 3, 'c': 4}, {'a': 5}]\nresult = merge_list_of_dicts(dicts)  # Result: {'a': 5, 'b': 3, 'c': 4}\nprint(result)
-
-# Alternative solution using ** unpacking in a loop
-def merge_list_of_dicts(dicts):
-    merged = {}
-    for d in dicts:
-        merged = {**merged, **d}
-    return merged
-
-print(merge_list_of_dicts([{'a': 1}, {'b': 2}, {'a': 3}]))  # Output: {'a': 3, 'b': 2}
-
-# Alternative solution using reduce
-def merge_list_of_dicts(dicts):
-    from functools import reduce
-    return reduce(lambda a, b: {**a, **b}, dicts, {})
-
-print(merge_list_of_dicts([{'x': 1}, {'y': 2}, {'x': 3}]))  # Output: {'x': 3, 'y': 2}",
+        "solution": "def merge_list_of_dicts(dicts):\n    merged = {}  # Result dictionary\n    for d in dicts:  # Iterate over each dictionary in list\n        merged.update(d)  # dict.update() modifies dict in-place, adding/updating entries\n    return merged\n\ndicts = [{'a': 1, 'b': 2}, {'b': 3, 'c': 4}, {'a': 5}]\nresult = merge_list_of_dicts(dicts)  # Result: {'a': 5, 'b': 3, 'c': 4}\nprint(result)\n\n# Alternative solution using ** unpacking in a loop\ndef merge_list_of_dicts(dicts):\n    merged = {}\n    for d in dicts:\n        merged = {**merged, **d}\n    return merged\n\nprint(merge_list_of_dicts([{'a': 1}, {'b': 2}, {'a': 3}]))  # Output: {'a': 3, 'b': 2}\n\n# Alternative solution using reduce\ndef merge_list_of_dicts(dicts):\n    from functools import reduce\n    return reduce(lambda a, b: {**a, **b}, dicts, {})\n\nprint(merge_list_of_dicts([{'x': 1}, {'y': 2}, {'x': 3}]))  # Output: {'x': 3, 'y': 2}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2086,20 +1554,7 @@ print(merge_list_of_dicts([{'x': 1}, {'y': 2}, {'x': 3}]))  # Output: {'x': 3, '
         "title": "Problem 178",
         "description": "Write a function remove_duplicates_from_values that takes a dictionary as input and returns a new dictionary where each key-value pair is preserved, but the values are lists with duplicates removed.",
         "initialCode": "def remove_duplicates_from_values(input_dict):\n    pass",
-        "solution": "def remove_duplicates_from_values(input_dict):\n    new_dict = {}\n    for key, value in input_dict.items():\n        new_dict[key] = list(set(value))\n    return new_dict\n\ninput_dict = {'a': [1, 2, 2, 3], 'b': [3, 4, 4, 5], 'c': [1, 1]}\nresult = remove_duplicates_from_values(input_dict)\nprint(result)
-
-# Alternative solution using dictionary comprehension
-def remove_duplicates_from_values(input_dict):
-    return {k: list(set(v)) for k, v in input_dict.items()}
-
-print(remove_duplicates_from_values({'x': [1, 1, 2], 'y': [3, 3]}))
-
-# Alternative solution using OrderedDict to preserve order
-def remove_duplicates_from_values(input_dict):
-    from collections import OrderedDict
-    return {k: list(OrderedDict.fromkeys(v)) for k, v in input_dict.items()}
-
-print(remove_duplicates_from_values({'a': [1, 2, 1, 3]}))  # Output: {'a': [1, 2, 3]}",
+        "solution": "def remove_duplicates_from_values(input_dict):\n    new_dict = {}\n    for key, value in input_dict.items():\n        new_dict[key] = list(set(value))\n    return new_dict\n\ninput_dict = {'a': [1, 2, 2, 3], 'b': [3, 4, 4, 5], 'c': [1, 1]}\nresult = remove_duplicates_from_values(input_dict)\nprint(result)\n\n# Alternative solution using dictionary comprehension\ndef remove_duplicates_from_values(input_dict):\n    return {k: list(set(v)) for k, v in input_dict.items()}\n\nprint(remove_duplicates_from_values({'x': [1, 1, 2], 'y': [3, 3]}))\n\n# Alternative solution using OrderedDict to preserve order\ndef remove_duplicates_from_values(input_dict):\n    from collections import OrderedDict\n    return {k: list(OrderedDict.fromkeys(v)) for k, v in input_dict.items()}\n\nprint(remove_duplicates_from_values({'a': [1, 2, 1, 3]}))  # Output: {'a': [1, 2, 3]}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2108,20 +1563,7 @@ print(remove_duplicates_from_values({'a': [1, 2, 1, 3]}))  # Output: {'a': [1, 2
         "title": "Problem 179",
         "description": "Write a function common_keys_max_values that takes two dictionaries and returns a new dictionary that contains only the keys that are present in both input dictionaries. The value for each key in the new dictionary should be the maximum of the values from the two input dictionaries.",
         "initialCode": "def common_keys_max_values(dict1, dict2):\n    pass",
-        "solution": "def common_keys_max_values(dict1, dict2):\n    common_keys = {}\n    for key in dict1.keys() & dict2.keys():  # Iterate over common keys only\n        common_keys[key] = max(dict1[key], dict2[key])  # Take maximum value\n    return common_keys\n\ndict1 = {'a': 1, 'b': 2, 'c': 3}\ndict2 = {'b': 3, 'c': 1, 'd': 4}  # Common keys: 'b', 'c'\nresult = common_keys_max_values(dict1, dict2)  # Result: {'b': 3, 'c': 3} (max values)\nprint(result)
-
-# Alternative solution using dictionary comprehension
-def common_keys_max_values(dict1, dict2):
-    return {k: max(dict1[k], dict2[k]) for k in dict1.keys() & dict2.keys()}
-
-print(common_keys_max_values({'a': 1, 'b': 5}, {'b': 3, 'c': 4}))  # Output: {'b': 5}
-
-# Alternative solution using set intersection
-def common_keys_max_values(dict1, dict2):
-    common = set(dict1) & set(dict2)
-    return {k: max(dict1[k], dict2[k]) for k in common}
-
-print(common_keys_max_values({'x': 10, 'y': 5}, {'y': 8, 'z': 3}))  # Output: {'y': 8}",
+        "solution": "def common_keys_max_values(dict1, dict2):\n    common_keys = {}\n    for key in dict1.keys() & dict2.keys():  # Iterate over common keys only\n        common_keys[key] = max(dict1[key], dict2[key])  # Take maximum value\n    return common_keys\n\ndict1 = {'a': 1, 'b': 2, 'c': 3}\ndict2 = {'b': 3, 'c': 1, 'd': 4}  # Common keys: 'b', 'c'\nresult = common_keys_max_values(dict1, dict2)  # Result: {'b': 3, 'c': 3} (max values)\nprint(result)\n\n# Alternative solution using dictionary comprehension\ndef common_keys_max_values(dict1, dict2):\n    return {k: max(dict1[k], dict2[k]) for k in dict1.keys() & dict2.keys()}\n\nprint(common_keys_max_values({'a': 1, 'b': 5}, {'b': 3, 'c': 4}))  # Output: {'b': 5}\n\n# Alternative solution using set intersection\ndef common_keys_max_values(dict1, dict2):\n    common = set(dict1) & set(dict2)\n    return {k: max(dict1[k], dict2[k]) for k in common}\n\nprint(common_keys_max_values({'x': 10, 'y': 5}, {'y': 8, 'z': 3}))  # Output: {'y': 8}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2130,27 +1572,7 @@ print(common_keys_max_values({'x': 10, 'y': 5}, {'y': 8, 'z': 3}))  # Output: {'
         "title": "Problem 180",
         "description": "Write a function average_values that takes a list of dictionaries as input and returns a new dictionary. The new dictionary should contain the same keys, and the values should be the average of the values associated with each key across all input dictionaries.",
         "initialCode": "def average_values(dicts):\n    pass",
-        "solution": "def average_values(dicts):\n    averages = {}\n    counts = {}\n    for d in dicts:  # Iterate over each dictionary\n        for key, value in d.items():  # Iterate over key-value pairs\n            if key in averages:  # Key seen before\n                averages[key] += value  # Add to sum\n                counts[key] += 1  # Increment count\n            else:  # First occurrence of key\n                averages[key] = value  # Initialize sum\n                counts[key] = 1  # Initialize count\n    \n    for key in averages:\n        averages[key] /= counts[key]  # Divide sum by count to get average\n    \n    return averages\n\ndicts = [{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}]\nresult = average_values(dicts)  # Result: {'a': 3.0, 'b': 4.0} (averages)\nprint(result)
-
-# Alternative solution using defaultdict
-def average_values(dicts):
-    from collections import defaultdict
-    sums = defaultdict(float)
-    counts = defaultdict(int)
-    for d in dicts:
-        for k, v in d.items():
-            sums[k] += v
-            counts[k] += 1
-    return {k: sums[k] / counts[k] for k in sums}
-
-print(average_values([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}]))
-
-# Alternative solution using pandas-style approach with dict comprehension
-def average_values(dicts):
-    all_keys = set().union(*dicts)
-    return {k: sum(d.get(k, 0) for d in dicts) / sum(1 for d in dicts if k in d) for k in all_keys}
-
-print(average_values([{'a': 1}, {'a': 3, 'b': 4}]))  # Output: {'a': 2.0, 'b': 4.0}",
+        "solution": "def average_values(dicts):\n    averages = {}\n    counts = {}\n    for d in dicts:  # Iterate over each dictionary\n        for key, value in d.items():  # Iterate over key-value pairs\n            if key in averages:  # Key seen before\n                averages[key] += value  # Add to sum\n                counts[key] += 1  # Increment count\n            else:  # First occurrence of key\n                averages[key] = value  # Initialize sum\n                counts[key] = 1  # Initialize count\n    \n    for key in averages:\n        averages[key] /= counts[key]  # Divide sum by count to get average\n    \n    return averages\n\ndicts = [{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}]\nresult = average_values(dicts)  # Result: {'a': 3.0, 'b': 4.0} (averages)\nprint(result)\n\n# Alternative solution using defaultdict\ndef average_values(dicts):\n    from collections import defaultdict\n    sums = defaultdict(float)\n    counts = defaultdict(int)\n    for d in dicts:\n        for k, v in d.items():\n            sums[k] += v\n            counts[k] += 1\n    return {k: sums[k] / counts[k] for k in sums}\n\nprint(average_values([{'a': 1, 'b': 2}, {'a': 3, 'b': 4}, {'a': 5, 'b': 6}]))\n\n# Alternative solution using pandas-style approach with dict comprehension\ndef average_values(dicts):\n    all_keys = set().union(*dicts)\n    return {k: sum(d.get(k, 0) for d in dicts) / sum(1 for d in dicts if k in d) for k in all_keys}\n\nprint(average_values([{'a': 1}, {'a': 3, 'b': 4}]))  # Output: {'a': 2.0, 'b': 4.0}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2159,25 +1581,7 @@ print(average_values([{'a': 1}, {'a': 3, 'b': 4}]))  # Output: {'a': 2.0, 'b': 4
         "title": "Problem 181",
         "description": "Write a function merge_dicts_with_lists that takes a list of dictionaries as input. Each dictionary in the list has keys that are strings and values that are lists of integers. The function should merge these dictionaries into a single dictionary where the keys are preserved, and the values are merged lists containing all unique integers from the input dictionaries for each key.",
         "initialCode": "def merge_dicts_with_lists(dicts):\n    pass",
-        "solution": "def merge_dicts_with_lists(dicts):\n    merged = {}\n    for d in dicts:  # Iterate over each dictionary\n        for key, value in d.items():  # value is a list of integers\n            if key in merged:  # Key already exists\n                merged[key].update(value)  # Add elements from value list to set (removes duplicates)\n            else:  # First occurrence of key\n                merged[key] = set(value)  # Convert list to set (removes duplicates, allows efficient merging)\n    \n    for key in merged:\n        merged[key] = list(merged[key])  # Convert set to list (order may vary)\n    \n    return merged\n\ndicts = [{'a': [1, 2, 3], 'b': [2, 3]}, {'a': [3, 4], 'b': [4, 5], 'c': [6]}, {'c': [7, 8, 6]}]\nresult = merge_dicts_with_lists(dicts)  # Merges lists, removes duplicates\nprint(result)
-
-# Alternative solution using defaultdict
-def merge_dicts_with_lists(dicts):
-    from collections import defaultdict
-    merged = defaultdict(set)
-    for d in dicts:
-        for k, v in d.items():
-            merged[k].update(v)
-    return {k: list(v) for k, v in merged.items()}
-
-print(merge_dicts_with_lists([{'a': [1, 2]}, {'a': [2, 3], 'b': [4]}]))
-
-# Alternative solution using dict comprehension with set
-def merge_dicts_with_lists(dicts):
-    all_keys = set(k for d in dicts for k in d)
-    return {k: list(set(v for d in dicts if k in d for v in d[k])) for k in all_keys}
-
-print(merge_dicts_with_lists([{'x': [1, 2]}, {'x': [3], 'y': [4]}]))",
+        "solution": "def merge_dicts_with_lists(dicts):\n    merged = {}\n    for d in dicts:  # Iterate over each dictionary\n        for key, value in d.items():  # value is a list of integers\n            if key in merged:  # Key already exists\n                merged[key].update(value)  # Add elements from value list to set (removes duplicates)\n            else:  # First occurrence of key\n                merged[key] = set(value)  # Convert list to set (removes duplicates, allows efficient merging)\n    \n    for key in merged:\n        merged[key] = list(merged[key])  # Convert set to list (order may vary)\n    \n    return merged\n\ndicts = [{'a': [1, 2, 3], 'b': [2, 3]}, {'a': [3, 4], 'b': [4, 5], 'c': [6]}, {'c': [7, 8, 6]}]\nresult = merge_dicts_with_lists(dicts)  # Merges lists, removes duplicates\nprint(result)\n\n# Alternative solution using defaultdict\ndef merge_dicts_with_lists(dicts):\n    from collections import defaultdict\n    merged = defaultdict(set)\n    for d in dicts:\n        for k, v in d.items():\n            merged[k].update(v)\n    return {k: list(v) for k, v in merged.items()}\n\nprint(merge_dicts_with_lists([{'a': [1, 2]}, {'a': [2, 3], 'b': [4]}]))\n\n# Alternative solution using dict comprehension with set\ndef merge_dicts_with_lists(dicts):\n    all_keys = set(k for d in dicts for k in d)\n    return {k: list(set(v for d in dicts if k in d for v in d[k])) for k in all_keys}\n\nprint(merge_dicts_with_lists([{'x': [1, 2]}, {'x': [3], 'y': [4]}]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2186,26 +1590,7 @@ print(merge_dicts_with_lists([{'x': [1, 2]}, {'x': [3], 'y': [4]}]))",
         "title": "Problem 182",
         "description": "Write a function group_by_first_letter that takes a list of strings as input and returns a dictionary. The dictionary should group the strings by their first letter. Each key in the dictionary should be a first letter, and the corresponding value should be a list of strings that start with that letter.",
         "initialCode": "def group_by_first_letter(lst):\n    pass\n\ndef main(lst):\n    pass",
-        "solution": "def group_by_first_letter(lst):\n    result = {}  # Dictionary: key = first letter, value = list of words\n    for word in lst:\n        first_letter = word[0]  # Get first character using index [0]\n        if first_letter not in result:  # First word with this starting letter\n            result[first_letter] = [word]\n        else:  # Letter seen before\n            result[first_letter].append(word)  # Add word to existing list\n    return result\n\nlst = [\"apple\", \"banana\", \"orange\", \"cake\"]\nprint(group_by_first_letter(lst))  # Result: {'a': ['apple'], 'b': ['banana'], 'o': ['orange'], 'c': ['cake']}\n\ndef main(lst):\n    result = {}\n    for word in lst:\n        key = word[0]  # First letter\n        value = word  # Entire word\n        result[key] = value  # BUG: Overwrites previous value instead of appending to list\n    return result  # Returns only last word for each letter\n        \nlst = [\"tree\", \"cliff\", \"mountain\", \"zoo\",\"dodo\", \"grassy\"]\nmain(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd': 'dodo', 'g': 'grassy'}
-
-# Alternative solution using setdefault
-def group_by_first_letter(lst):
-    result = {}
-    for word in lst:
-        result.setdefault(word[0], []).append(word)
-    return result
-
-print(group_by_first_letter([\"apple\", \"banana\", \"avocado\", \"blueberry\"]))
-
-# Alternative solution using defaultdict
-def group_by_first_letter(lst):
-    from collections import defaultdict
-    result = defaultdict(list)
-    for word in lst:
-        result[word[0]].append(word)
-    return dict(result)
-
-print(group_by_first_letter([\"cat\", \"dog\", \"car\", \"deer\"]))  # Output: {'c': ['cat', 'car'], 'd': ['dog', 'deer']}",
+        "solution": "def group_by_first_letter(lst):\n    result = {}  # Dictionary: key = first letter, value = list of words\n    for word in lst:\n        first_letter = word[0]  # Get first character using index [0]\n        if first_letter not in result:  # First word with this starting letter\n            result[first_letter] = [word]\n        else:  # Letter seen before\n            result[first_letter].append(word)  # Add word to existing list\n    return result\n\nlst = [\"apple\", \"banana\", \"orange\", \"cake\"]\nprint(group_by_first_letter(lst))  # Result: {'a': ['apple'], 'b': ['banana'], 'o': ['orange'], 'c': ['cake']}\n\ndef main(lst):\n    result = {}\n    for word in lst:\n        key = word[0]  # First letter\n        value = word  # Entire word\n        result[key] = value  # BUG: Overwrites previous value instead of appending to list\n    return result  # Returns only last word for each letter\n        \nlst = [\"tree\", \"cliff\", \"mountain\", \"zoo\",\"dodo\", \"grassy\"]\nmain(lst)  # Result: {'t': 'tree', 'c': 'cliff', 'm': 'mountain', 'z': 'zoo', 'd': 'dodo', 'g': 'grassy'}\n\n# Alternative solution using setdefault\ndef group_by_first_letter(lst):\n    result = {}\n    for word in lst:\n        result.setdefault(word[0], []).append(word)\n    return result\n\nprint(group_by_first_letter([\"apple\", \"banana\", \"avocado\", \"blueberry\"]))\n\n# Alternative solution using defaultdict\ndef group_by_first_letter(lst):\n    from collections import defaultdict\n    result = defaultdict(list)\n    for word in lst:\n        result[word[0]].append(word)\n    return dict(result)\n\nprint(group_by_first_letter([\"cat\", \"dog\", \"car\", \"deer\"]))  # Output: {'c': ['cat', 'car'], 'd': ['dog', 'deer']}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2214,24 +1599,7 @@ print(group_by_first_letter([\"cat\", \"dog\", \"car\", \"deer\"]))  # Output: {
         "title": "Problem 183",
         "description": "Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().",
         "initialCode": "def is_anagram(string1, string2):\n    pass",
-        "solution": "def is_anagram(string1, string2):\n    string1 = string1.replace(\" \", \"\").lower()\n    string2 = string2.replace(\" \", \"\").lower()\n    if len(string1) != len(string2):\n        return False\n        \n    char_count1 = {}\n    char_count2 = {}\n    for char in string1:\n        if char in char_count1:\n            char_count1[char] += 1\n        else:\n            char_count1[char] = 1\n\n    for char in string2:\n        if char in char_count2:\n            char_count2[char] += 1\n        else:\n            char_count2[char] = 1\n    return char_count1 == char_count2\n\nstring1 = input(\"Enter the first string: \")\nstring2 = input(\"Enter the second string: \")\n\nprint(\"Are the strings anagrams?:\", is_anagram(string1, string2))
-
-# Alternative solution using Counter (without sorted)
-def is_anagram(string1, string2):
-    from collections import Counter
-    return Counter(string1.replace(\" \", \"\").lower()) == Counter(string2.replace(\" \", \"\").lower())
-
-print(is_anagram(\"listen\", \"silent\"))  # Output: True
-
-# Alternative solution using all() with count
-def is_anagram(string1, string2):
-    s1, s2 = string1.replace(\" \", \"\").lower(), string2.replace(\" \", \"\").lower()
-    if len(s1) != len(s2):
-        return False
-    return all(s1.count(c) == s2.count(c) for c in set(s1))
-
-print(is_anagram(\"hello\", \"olleh\"))  # Output: True
-print(is_anagram(\"test\", \"tent\"))   # Output: False",
+        "solution": "def is_anagram(string1, string2):\n    string1 = string1.replace(\" \", \"\").lower()\n    string2 = string2.replace(\" \", \"\").lower()\n    if len(string1) != len(string2):\n        return False\n        \n    char_count1 = {}\n    char_count2 = {}\n    for char in string1:\n        if char in char_count1:\n            char_count1[char] += 1\n        else:\n            char_count1[char] = 1\n\n    for char in string2:\n        if char in char_count2:\n            char_count2[char] += 1\n        else:\n            char_count2[char] = 1\n    return char_count1 == char_count2\n\nstring1 = input(\"Enter the first string: \")\nstring2 = input(\"Enter the second string: \")\n\nprint(\"Are the strings anagrams?:\", is_anagram(string1, string2))\n\n# Alternative solution using Counter (without sorted)\ndef is_anagram(string1, string2):\n    from collections import Counter\n    return Counter(string1.replace(\" \", \"\").lower()) == Counter(string2.replace(\" \", \"\").lower())\n\nprint(is_anagram(\"listen\", \"silent\"))  # Output: True\n\n# Alternative solution using all() with count\ndef is_anagram(string1, string2):\n    s1, s2 = string1.replace(\" \", \"\").lower(), string2.replace(\" \", \"\").lower()\n    if len(s1) != len(s2):\n        return False\n    return all(s1.count(c) == s2.count(c) for c in set(s1))\n\nprint(is_anagram(\"hello\", \"olleh\"))  # Output: True\nprint(is_anagram(\"test\", \"tent\"))   # Output: False",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2240,19 +1608,7 @@ print(is_anagram(\"test\", \"tent\"))   # Output: False",
         "title": "Problem 184",
         "description": "Write a function that takes numbers integer 123 and return 2.",
         "initialCode": "def int(number):  # Should use different name like get_digit or extract_digit\n    pass",
-        "solution": "def int(number):  # Should use different name like get_digit or extract_digit\n    number = str(number)  # Convert to string: 123 \u2192 \"123\"\n    list_number = list(number)[1]  # Convert to list and get index 1: [\"1\",\"2\",\"3\"][1] \u2192 \"2\"\n    \n    return list_number  # Returns string \"2\", not integer 2\n        \nnumber = 123\nprint(int(number))  # Output: \"2\" (string)
-
-# Alternative using integer division and modulo
-def extract_digit(number):
-    return (number // 10) % 10  # 123 // 10 = 12, 12 % 10 = 2
-
-print(extract_digit(123))  # Output: 2 (integer, not string)
-
-# Alternative using string indexing (compact)
-def get_digit(n):
-    return str(n)[1]
-
-print(get_digit(123))  # Output: \"2\"",
+        "solution": "def int(number):  # Should use different name like get_digit or extract_digit\n    number = str(number)  # Convert to string: 123 \u2192 \"123\"\n    list_number = list(number)[1]  # Convert to list and get index 1: [\"1\",\"2\",\"3\"][1] \u2192 \"2\"\n    \n    return list_number  # Returns string \"2\", not integer 2\n        \nnumber = 123\nprint(int(number))  # Output: \"2\" (string)\n\n# Alternative using integer division and modulo\ndef extract_digit(number):\n    return (number // 10) % 10  # 123 // 10 = 12, 12 % 10 = 2\n\nprint(extract_digit(123))  # Output: 2 (integer, not string)\n\n# Alternative using string indexing (compact)\ndef get_digit(n):\n    return str(n)[1]\n\nprint(get_digit(123))  # Output: \"2\"",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2261,21 +1617,7 @@ print(get_digit(123))  # Output: \"2\"",
         "title": "Problem 185",
         "description": "Write a function that takes numbers integer 12345678 and return 2, 4, 8.",
         "initialCode": "def int(number):  # Should use different name\n    pass",
-        "solution": "def int(number):  # Should use different name\n    number = str(number)  # Convert to string: 12345678 \u2192 \"12345678\"\n    num2 = number[1]  # Index 1: second digit \"2\"\n    num4 = number[3]  # Index 3: fourth digit \"4\"\n    num8 = number[-1]  # Index -1: last digit \"8\" (negative indexing from end)\n    \n    return num2, num4, num8  # Returns tuple of strings: (\"2\", \"4\", \"8\")\n        \nnumber = 12345678\nprint(int(number))  # Output: (\"2\", \"4\", \"8\")
-
-# Alternative using integer arithmetic (no string conversion)
-def extract_digits(number):
-    s = str(number)
-    return s[1], s[3], s[-1]
-
-print(extract_digits(12345678))
-
-# Alternative using list comprehension
-def get_digits(num):
-    s = str(num)
-    return tuple(s[i] for i in [1, 3, -1])
-
-print(get_digits(12345678))",
+        "solution": "def int(number):  # Should use different name\n    number = str(number)  # Convert to string: 12345678 \u2192 \"12345678\"\n    num2 = number[1]  # Index 1: second digit \"2\"\n    num4 = number[3]  # Index 3: fourth digit \"4\"\n    num8 = number[-1]  # Index -1: last digit \"8\" (negative indexing from end)\n    \n    return num2, num4, num8  # Returns tuple of strings: (\"2\", \"4\", \"8\")\n        \nnumber = 12345678\nprint(int(number))  # Output: (\"2\", \"4\", \"8\")\n\n# Alternative using integer arithmetic (no string conversion)\ndef extract_digits(number):\n    s = str(number)\n    return s[1], s[3], s[-1]\n\nprint(extract_digits(12345678))\n\n# Alternative using list comprehension\ndef get_digits(num):\n    s = str(num)\n    return tuple(s[i] for i in [1, 3, -1])\n\nprint(get_digits(12345678))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2284,20 +1626,7 @@ print(get_digits(12345678))",
         "title": "Problem 186",
         "description": "Write a function that takes numbers integer 12346778910 and users indexing to return the number 2, 4, 8",
         "initialCode": "def get_digits(number, indices):\n    pass",
-        "solution": "def get_digits(number, indices):\n    number_str = str(number)  # Convert to string for indexing: 12345678910 \u2192 \"12345678910\"\n    result = []\n    for i in indices:  # Iterate over list of indices\n        result.append(number_str[i])  # Extract character at index i\n\n    return tuple(result)  # Convert list to tuple: (\"2\", \"4\", \"8\")\n\nnumber = 12345678910\nindices = [1, 3, 7]  # Indices to extract\nprint(get_digits(number, indices))  # Output: (\"2\", \"4\", \"8\")
-
-# Alternative using list comprehension
-def get_digits(number, indices):
-    return tuple(str(number)[i] for i in indices)
-
-print(get_digits(12345678910, [1, 3, 7]))
-
-# Alternative using operator.itemgetter
-def get_digits(number, indices):
-    from operator import itemgetter
-    return itemgetter(*indices)(str(number))
-
-print(get_digits(12345678910, [1, 3, 7]))",
+        "solution": "def get_digits(number, indices):\n    number_str = str(number)  # Convert to string for indexing: 12345678910 \u2192 \"12345678910\"\n    result = []\n    for i in indices:  # Iterate over list of indices\n        result.append(number_str[i])  # Extract character at index i\n\n    return tuple(result)  # Convert list to tuple: (\"2\", \"4\", \"8\")\n\nnumber = 12345678910\nindices = [1, 3, 7]  # Indices to extract\nprint(get_digits(number, indices))  # Output: (\"2\", \"4\", \"8\")\n\n# Alternative using list comprehension\ndef get_digits(number, indices):\n    return tuple(str(number)[i] for i in indices)\n\nprint(get_digits(12345678910, [1, 3, 7]))\n\n# Alternative using operator.itemgetter\ndef get_digits(number, indices):\n    from operator import itemgetter\n    return itemgetter(*indices)(str(number))\n\nprint(get_digits(12345678910, [1, 3, 7]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2306,20 +1635,7 @@ print(get_digits(12345678910, [1, 3, 7]))",
         "title": "Problem 187",
         "description": "Write a Python function called `double_elements` that takes a list of strings as input and returns a 2 new list where each element is doubled where each element is doubled side by side eg 'tree', 'tree', 'road', 'road', 'slow', 'slow'.",
         "initialCode": "def double_elements(string1):\n    pass",
-        "solution": "def double_elements(string1):\n    double = []\n    for word in string1:\n        double.append(word)\n        double.append(word)\n    \n    return double\n            \nstring1 = [\"tree\", \"road\", \"slow\"]\nprint(double_elements(string1))
-
-# Alternative using nested loop
-def double_elements(lst):
-    return [word for word in lst for _ in range(2)]
-
-print(double_elements([\"tree\", \"road\", \"slow\"]))
-
-# Alternative using itertools.chain
-def double_elements(lst):
-    from itertools import chain
-    return list(chain.from_iterable([w, w] for w in lst))
-
-print(double_elements([\"a\", \"b\", \"c\"]))  # Output: ['a', 'a', 'b', 'b', 'c', 'c']",
+        "solution": "def double_elements(string1):\n    double = []\n    for word in string1:\n        double.append(word)\n        double.append(word)\n    \n    return double\n            \nstring1 = [\"tree\", \"road\", \"slow\"]\nprint(double_elements(string1))\n\n# Alternative using nested loop\ndef double_elements(lst):\n    return [word for word in lst for _ in range(2)]\n\nprint(double_elements([\"tree\", \"road\", \"slow\"]))\n\n# Alternative using itertools.chain\ndef double_elements(lst):\n    from itertools import chain\n    return list(chain.from_iterable([w, w] for w in lst))\n\nprint(double_elements([\"a\", \"b\", \"c\"]))  # Output: ['a', 'a', 'b', 'b', 'c', 'c']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2328,20 +1644,7 @@ print(double_elements([\"a\", \"b\", \"c\"]))  # Output: ['a', 'a', 'b', 'b', 'c
         "title": "Problem 188",
         "description": "Write a Python function called get_initials that takes a full name (first and last name jonathan noll) as input and returns  \"joNathAn noLL\"\" of the name in uppercase (NALL in jonathan noll).",
         "initialCode": "def get_initials(name):\n    pass\n\ndef get_initials(name):\n    pass",
-        "solution": "def get_initials(name):\n    name_list = list(name)  # Convert string to list of characters (mutable)\n    name_list[2] = name_list[2].upper()  # 'n' \u2192 'N' (index 2)\n    name_list[6] = name_list[6].upper()  # 'a' \u2192 'A' (index 6)\n    name_list[11] = name_list[11].upper()  # 'l' \u2192 'L' (index 11)\n    name_list[12] = name_list[12].upper()  # 'l' \u2192 'L' (index 12)\n    \n    return ''.join(name_list)  # join() combines list back into string\n\nname = \"jonathan noll\"\nprint(get_initials(name))  # Output: \"joNathAn noLL\"\n\ndef get_initials(name):\n    initials = []\n    for char in name:\n        if char in \"nall\":  # Check if character is 'n', 'a', or 'l' (case-sensitive)\n            initials.append(char.upper())  # Convert to uppercase\n        else:\n            initials.append(char)  # Keep as-is\n    return ''.join(initials)  # Join list into string\n\nname = \"jonathan noll\"\nprint(get_initials(name))  # Output: \"joNathAn noLL\" (uppercases all n, a, l characters)
-
-# Alternative using translate with str.maketrans
-def get_initials(name):
-    trans = str.maketrans(\"nall\", \"NALL\")
-    return name.translate(trans)
-
-print(get_initials(\"jonathan noll\"))  # Output: \"joNathAn noLL\"
-
-# Alternative using join with conditional expression
-def get_initials(name):
-    return ''.join(c.upper() if c in \"nall\" else c for c in name)
-
-print(get_initials(\"jonathan noll\"))",
+        "solution": "def get_initials(name):\n    name_list = list(name)  # Convert string to list of characters (mutable)\n    name_list[2] = name_list[2].upper()  # 'n' \u2192 'N' (index 2)\n    name_list[6] = name_list[6].upper()  # 'a' \u2192 'A' (index 6)\n    name_list[11] = name_list[11].upper()  # 'l' \u2192 'L' (index 11)\n    name_list[12] = name_list[12].upper()  # 'l' \u2192 'L' (index 12)\n    \n    return ''.join(name_list)  # join() combines list back into string\n\nname = \"jonathan noll\"\nprint(get_initials(name))  # Output: \"joNathAn noLL\"\n\ndef get_initials(name):\n    initials = []\n    for char in name:\n        if char in \"nall\":  # Check if character is 'n', 'a', or 'l' (case-sensitive)\n            initials.append(char.upper())  # Convert to uppercase\n        else:\n            initials.append(char)  # Keep as-is\n    return ''.join(initials)  # Join list into string\n\nname = \"jonathan noll\"\nprint(get_initials(name))  # Output: \"joNathAn noLL\" (uppercases all n, a, l characters)\n\n# Alternative using translate with str.maketrans\ndef get_initials(name):\n    trans = str.maketrans(\"nall\", \"NALL\")\n    return name.translate(trans)\n\nprint(get_initials(\"jonathan noll\"))  # Output: \"joNathAn noLL\"\n\n# Alternative using join with conditional expression\ndef get_initials(name):\n    return ''.join(c.upper() if c in \"nall\" else c for c in name)\n\nprint(get_initials(\"jonathan noll\"))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2350,21 +1653,7 @@ print(get_initials(\"jonathan noll\"))",
         "title": "Problem 189",
         "description": "Write a Python program to find the sum of the digits in a string. Prompt the user to enter a string containing numbers eg \"1234\" should return 10.",
         "initialCode": "def sum_digits():\n    pass\n\ndef digits_string():\n    pass",
-        "solution": "def sum_digits():\n    user = list(input(\"type number: \"))  # Convert string to list of characters\n    count = 0\n    for number in user:  # 'number' is actually a character (misleading name)\n        count += int(number)  # Convert char to int and add: \"1\"\u21921, \"2\"\u21922, etc.\n    print(count)\n                \nsum_digits()\n\ndef digits_string():\n    user = input(\"Type a string containing numbers: \")\n    total = 0\n    for char in user:\n        if char.isdigit():  # isdigit() checks if character is a digit (0-9)\n            total += int(char)  # Convert digit char to int and add\n            \n    print(total)\n    \ndigits_string()
-
-# Alternative using sum with generator
-def sum_digits(s):
-    return sum(int(c) for c in s if c.isdigit())
-
-print(sum_digits(\"1234\"))  # Output: 10
-print(sum_digits(\"a1b2c3\"))  # Output: 6
-
-# Alternative using reduce
-def sum_digits(s):
-    from functools import reduce
-    return reduce(lambda a, c: a + int(c), filter(str.isdigit, s), 0)
-
-print(sum_digits(\"45x67\"))  # Output: 22",
+        "solution": "def sum_digits():\n    user = list(input(\"type number: \"))  # Convert string to list of characters\n    count = 0\n    for number in user:  # 'number' is actually a character (misleading name)\n        count += int(number)  # Convert char to int and add: \"1\"\u21921, \"2\"\u21922, etc.\n    print(count)\n                \nsum_digits()\n\ndef digits_string():\n    user = input(\"Type a string containing numbers: \")\n    total = 0\n    for char in user:\n        if char.isdigit():  # isdigit() checks if character is a digit (0-9)\n            total += int(char)  # Convert digit char to int and add\n            \n    print(total)\n    \ndigits_string()\n\n# Alternative using sum with generator\ndef sum_digits(s):\n    return sum(int(c) for c in s if c.isdigit())\n\nprint(sum_digits(\"1234\"))  # Output: 10\nprint(sum_digits(\"a1b2c3\"))  # Output: 6\n\n# Alternative using reduce\ndef sum_digits(s):\n    from functools import reduce\n    return reduce(lambda a, c: a + int(c), filter(str.isdigit, s), 0)\n\nprint(sum_digits(\"45x67\"))  # Output: 22",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2373,20 +1662,7 @@ print(sum_digits(\"45x67\"))  # Output: 22",
         "title": "Problem 190",
         "description": "Write a Python program to remove duplicates from a string and maintain the order of characters. Prompt the user to enter a string",
         "initialCode": "def remove_duplicate():\n    pass",
-        "solution": "def remove_duplicate():\n    user = input(\"type string: \")\n    duplicate = []\n    for char in user:\n        if char not in duplicate:  # Check if character already seen\n            duplicate.append(char)  # Add first occurrence only (preserves order)\n    print(duplicate)  # Prints list, not string (could use ''.join(duplicate))\n    \nremove_duplicate()
-
-# Alternative using dict.fromkeys (Python 3.7+ preserves insertion order)
-def remove_duplicate(s):
-    return ''.join(dict.fromkeys(s))
-
-print(remove_duplicate(\"hello\"))  # Output: \"helo\"
-
-# Alternative using OrderedDict
-def remove_duplicate(s):
-    from collections import OrderedDict
-    return ''.join(OrderedDict.fromkeys(s))
-
-print(remove_duplicate(\"banana\"))  # Output: \"ban\"",
+        "solution": "def remove_duplicate():\n    user = input(\"type string: \")\n    duplicate = []\n    for char in user:\n        if char not in duplicate:  # Check if character already seen\n            duplicate.append(char)  # Add first occurrence only (preserves order)\n    print(duplicate)  # Prints list, not string (could use ''.join(duplicate))\n    \nremove_duplicate()\n\n# Alternative using dict.fromkeys (Python 3.7+ preserves insertion order)\ndef remove_duplicate(s):\n    return ''.join(dict.fromkeys(s))\n\nprint(remove_duplicate(\"hello\"))  # Output: \"helo\"\n\n# Alternative using OrderedDict\ndef remove_duplicate(s):\n    from collections import OrderedDict\n    return ''.join(OrderedDict.fromkeys(s))\n\nprint(remove_duplicate(\"banana\"))  # Output: \"ban\"",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2395,20 +1671,7 @@ print(remove_duplicate(\"banana\"))  # Output: \"ban\"",
         "title": "Problem 191",
         "description": "Write a Python function called `find_min` that takes a list of numbers as input and returns the minimum number in the list without sorted().",
         "initialCode": "def find_min():\n    pass",
-        "solution": "def find_min():\n    user = input(\"type list: \").split()\n    user_int = []\n    for number in user:\n        user_int.append(int(number))  # Convert strings to integers\n    \n    min_number = user_int[0]\n    for number in user_int:\n        if number < min_number:  # If smaller number found\n            min_number = number  # Update minimum\n    print(min_number)\n    \nfind_min()
-
-# Alternative using built-in min()
-def find_min(nums):
-    return min(nums)
-
-print(find_min([13, 566, 1]))  # Output: 1
-
-# Alternative using reduce
-def find_min(nums):
-    from functools import reduce
-    return reduce(lambda a, b: a if a < b else b, nums)
-
-print(find_min([5, 2, 9, 1, 7]))  # Output: 1",
+        "solution": "def find_min():\n    user = input(\"type list: \").split()\n    user_int = []\n    for number in user:\n        user_int.append(int(number))  # Convert strings to integers\n    \n    min_number = user_int[0]\n    for number in user_int:\n        if number < min_number:  # If smaller number found\n            min_number = number  # Update minimum\n    print(min_number)\n    \nfind_min()\n\n# Alternative using built-in min()\ndef find_min(nums):\n    return min(nums)\n\nprint(find_min([13, 566, 1]))  # Output: 1\n\n# Alternative using reduce\ndef find_min(nums):\n    from functools import reduce\n    return reduce(lambda a, b: a if a < b else b, nums)\n\nprint(find_min([5, 2, 9, 1, 7]))  # Output: 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2417,26 +1680,7 @@ print(find_min([5, 2, 9, 1, 7]))  # Output: 1",
         "title": "Problem 192",
         "description": "Write a Python function called count_occurrences that takes a list and an element as input and returns the number of times the element appears in the list.",
         "initialCode": "def count_occurrences(lst, element):\n    pass\n\ndef main():\n    pass",
-        "solution": "def count_occurrences(lst, element):\n    count = 0\n    for item in lst:\n        if item == element:  # Compare each item with target element\n            count += 1  # Increment counter when match found\n    return count\n\ntest_list = [1, 2, 3, 4, 1, 2, 1, 5, 1]\nelement_to_count = 1\nprint(\"Number of occurrences of\", element_to_count, \":\", count_occurrences(test_list, element_to_count))\n\ndef main():\n    user = input(\"type element: \").lower()  # Convert input to lowercase\n    count = 0\n    for word in lst:  # lst must be defined outside function (global variable)\n        if word.lower() == user:  # Case-insensitive comparison\n            count += 1\n            \n    if count == 0:\n        return \"not in lst\"  # Return string if not found\n    else:\n        return count  # Return count\n               \nlst = [\"Jonathan\", \"Christopher\", \"Jeremy\", \"Jonathan\", \"bad\"]\nprint(main())
-
-# Alternative using list.count() method
-def count_occurrences(lst, element):
-    return lst.count(element)
-
-print(count_occurrences([1, 2, 3, 1, 1, 4], 1))  # Output: 3
-
-# Alternative using collections.Counter
-def count_occurrences(lst, element):
-    from collections import Counter
-    return Counter(lst)[element]
-
-print(count_occurrences([\"a\", \"b\", \"a\", \"c\", \"a\"], \"a\"))  # Output: 3
-
-# Alternative using filter and len
-def count_occurrences(lst, element):
-    return len(list(filter(lambda x: x == element, lst)))
-
-print(count_occurrences([1, 2, 1, 3], 1))  # Output: 2",
+        "solution": "def count_occurrences(lst, element):\n    count = 0\n    for item in lst:\n        if item == element:  # Compare each item with target element\n            count += 1  # Increment counter when match found\n    return count\n\ntest_list = [1, 2, 3, 4, 1, 2, 1, 5, 1]\nelement_to_count = 1\nprint(\"Number of occurrences of\", element_to_count, \":\", count_occurrences(test_list, element_to_count))\n\ndef main():\n    user = input(\"type element: \").lower()  # Convert input to lowercase\n    count = 0\n    for word in lst:  # lst must be defined outside function (global variable)\n        if word.lower() == user:  # Case-insensitive comparison\n            count += 1\n            \n    if count == 0:\n        return \"not in lst\"  # Return string if not found\n    else:\n        return count  # Return count\n               \nlst = [\"Jonathan\", \"Christopher\", \"Jeremy\", \"Jonathan\", \"bad\"]\nprint(main())\n\n# Alternative using list.count() method\ndef count_occurrences(lst, element):\n    return lst.count(element)\n\nprint(count_occurrences([1, 2, 3, 1, 1, 4], 1))  # Output: 3\n\n# Alternative using collections.Counter\ndef count_occurrences(lst, element):\n    from collections import Counter\n    return Counter(lst)[element]\n\nprint(count_occurrences([\"a\", \"b\", \"a\", \"c\", \"a\"], \"a\"))  # Output: 3\n\n# Alternative using filter and len\ndef count_occurrences(lst, element):\n    return len(list(filter(lambda x: x == element, lst)))\n\nprint(count_occurrences([1, 2, 1, 3], 1))  # Output: 2",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2445,19 +1689,7 @@ print(count_occurrences([1, 2, 1, 3], 1))  # Output: 2",
         "title": "Problem 193",
         "description": "Write a Python function called `find_min` that takes a list of numbers as user input and returns the minimum number in the list. use sorted().",
         "initialCode": "def find_min_num():\n    pass",
-        "solution": "def find_min_num():\n    user = input(\"type number: \").split()\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n    \n    min_num = sorted(int_number)[0]\n    print(min_num)\n                  \nfind_min_num()
-
-# Alternative using sorted() with min()
-def find_min_num(nums):
-    return sorted(nums)[0]
-
-print(find_min_num([5, 2, 9, 1]))  # Output: 1
-
-# Alternative using sorted() with pop()
-def find_min_num(nums):
-    return sorted(nums).pop(0)
-
-print(find_min_num([8, 3, 5, 2]))  # Output: 2",
+        "solution": "def find_min_num():\n    user = input(\"type number: \").split()\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n    \n    min_num = sorted(int_number)[0]\n    print(min_num)\n                  \nfind_min_num()\n\n# Alternative using sorted() with min()\ndef find_min_num(nums):\n    return sorted(nums)[0]\n\nprint(find_min_num([5, 2, 9, 1]))  # Output: 1\n\n# Alternative using sorted() with pop()\ndef find_min_num(nums):\n    return sorted(nums).pop(0)\n\nprint(find_min_num([8, 3, 5, 2]))  # Output: 2",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2466,20 +1698,7 @@ print(find_min_num([8, 3, 5, 2]))  # Output: 2",
         "title": "Problem 194",
         "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of items using max(). Write a list of words.",
         "initialCode": "def largest_element():\n    pass",
-        "solution": "def largest_element():\n    user = input(\"type list: \").split()\n    largest_word = max(user, key=len)  # key=len compares by length, not alphabetically\n    \n    print(largest_word)\n           \nlargest_element()
-
-# Alternative using sorted with key=len
-def largest_element(words):
-    return sorted(words, key=len)[-1]
-
-print(largest_element([\"apple\", \"banana\", \"cherry\"]))  # Output: banana
-
-# Alternative using reduce for longest word
-def largest_element(words):
-    from functools import reduce
-    return reduce(lambda a, b: a if len(a) >= len(b) else b, words)
-
-print(largest_element([\"cat\", \"elephant\", \"dog\"]))  # Output: elephant",
+        "solution": "def largest_element():\n    user = input(\"type list: \").split()\n    largest_word = max(user, key=len)  # key=len compares by length, not alphabetically\n    \n    print(largest_word)\n           \nlargest_element()\n\n# Alternative using sorted with key=len\ndef largest_element(words):\n    return sorted(words, key=len)[-1]\n\nprint(largest_element([\"apple\", \"banana\", \"cherry\"]))  # Output: banana\n\n# Alternative using reduce for longest word\ndef largest_element(words):\n    from functools import reduce\n    return reduce(lambda a, b: a if len(a) >= len(b) else b, words)\n\nprint(largest_element([\"cat\", \"elephant\", \"dog\"]))  # Output: elephant",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2488,29 +1707,7 @@ print(largest_element([\"cat\", \"elephant\", \"dog\"]))  # Output: elephant",
         "title": "Problem 195",
         "description": "Write a Python program to find the second largest element in a list. Prompt the user to enter a list of items. Write a list of words.",
         "initialCode": "def second_largest_element():\n    pass\n\ndef second_largest_element():\n    pass\n\ndef second_largest_element():\n    pass",
-        "solution": "def second_largest_element():\n    user_input = input(\"Enter a list of words: \").split()\n    if len(user_input) < 2:  # Edge case: need at least 2 words\n        print(\"The list must contain at least two words.\")\n        return\n\n    sorted_words = sorted(user_input, key=len, reverse=True)  # reverse=True sorts descending\n    print(f\"The second largest word is: {sorted_words[1]}\")  # Index 1 is second longest\n\nsecond_largest_element()\n\ndef second_largest_element():\n    user_input = input(\"Enter a list of words: \").split()\n    if len(user_input) < 2:\n        print(\"The list must contain at least two words.\")\n        return\n\n    sorted_words = sorted(user_input, key=len)  # Sort ascending (shortest first)\n    print(f\"The second largest word is: {sorted_words[-2]}\")  # [-2] is second-to-last (second longest)\n\nsecond_largest_element()\n\ndef second_largest_element():\n    user_input = input(\"Enter a list of words: \").split()\n    if len(user_input) < 2:\n        print(\"less then 2\")  # Less descriptive error message\n        return\n        \n    sort = sorted(user_input, key=len)  # Sort ascending\n    second_largest = sort[-2]  # Second-to-last element\n    \n    print(second_largest)\n        \nsecond_largest_element()
-
-# Alternative using heapq.nlargest
-def second_largest_element(words):
-    from heapq import nlargest
-    return nlargest(2, words, key=len)[-1]
-
-print(second_largest_element([\"apple\", \"banana\", \"kiwi\", \"strawberry\"]))  # Output: banana
-
-# Alternative using manual iteration
-def second_largest_element(words):
-    if len(words) < 2:
-        return None
-    first = second = \"\"
-    for w in words:
-        if len(w) > len(first):
-            second = first
-            first = w
-        elif len(w) > len(second):
-            second = w
-    return second
-
-print(second_largest_element([\"cat\", \"dog\", \"elephant\", \"bee\"]))  # Output: cat (len 3, elephant is 8)",
+        "solution": "def second_largest_element():\n    user_input = input(\"Enter a list of words: \").split()\n    if len(user_input) < 2:  # Edge case: need at least 2 words\n        print(\"The list must contain at least two words.\")\n        return\n\n    sorted_words = sorted(user_input, key=len, reverse=True)  # reverse=True sorts descending\n    print(f\"The second largest word is: {sorted_words[1]}\")  # Index 1 is second longest\n\nsecond_largest_element()\n\ndef second_largest_element():\n    user_input = input(\"Enter a list of words: \").split()\n    if len(user_input) < 2:\n        print(\"The list must contain at least two words.\")\n        return\n\n    sorted_words = sorted(user_input, key=len)  # Sort ascending (shortest first)\n    print(f\"The second largest word is: {sorted_words[-2]}\")  # [-2] is second-to-last (second longest)\n\nsecond_largest_element()\n\ndef second_largest_element():\n    user_input = input(\"Enter a list of words: \").split()\n    if len(user_input) < 2:\n        print(\"less then 2\")  # Less descriptive error message\n        return\n        \n    sort = sorted(user_input, key=len)  # Sort ascending\n    second_largest = sort[-2]  # Second-to-last element\n    \n    print(second_largest)\n        \nsecond_largest_element()\n\n# Alternative using heapq.nlargest\ndef second_largest_element(words):\n    from heapq import nlargest\n    return nlargest(2, words, key=len)[-1]\n\nprint(second_largest_element([\"apple\", \"banana\", \"kiwi\", \"strawberry\"]))  # Output: banana\n\n# Alternative using manual iteration\ndef second_largest_element(words):\n    if len(words) < 2:\n        return None\n    first = second = \"\"\n    for w in words:\n        if len(w) > len(first):\n            second = first\n            first = w\n        elif len(w) > len(second):\n            second = w\n    return second\n\nprint(second_largest_element([\"cat\", \"dog\", \"elephant\", \"bee\"]))  # Output: cat (len 3, elephant is 8)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2519,19 +1716,7 @@ print(second_largest_element([\"cat\", \"dog\", \"elephant\", \"bee\"]))  # Outp
         "title": "Problem 196",
         "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. use max().",
         "initialCode": "def max_of_three(numbers):\n    pass",
-        "solution": "def max_of_three(numbers):\n     result = max(list(numbers))  # list() is unnecessary if numbers is already a list\n     return result\n        \nthree_numbers = [567, 56, 6]    \nprint(max_of_three(three_numbers))
-
-# Alternative using sorted
-def max_of_three(numbers):
-    return sorted(numbers)[-1]
-
-print(max_of_three([567, 56, 6]))
-
-# Alternative using manual comparison
-def max_of_three(numbers):
-    return numbers[0] if numbers[0] > numbers[1] and numbers[0] > numbers[2] else numbers[1] if numbers[1] > numbers[2] else numbers[2]
-
-print(max_of_three([567, 56, 6]))",
+        "solution": "def max_of_three(numbers):\n     result = max(list(numbers))  # list() is unnecessary if numbers is already a list\n     return result\n        \nthree_numbers = [567, 56, 6]    \nprint(max_of_three(three_numbers))\n\n# Alternative using sorted\ndef max_of_three(numbers):\n    return sorted(numbers)[-1]\n\nprint(max_of_three([567, 56, 6]))\n\n# Alternative using manual comparison\ndef max_of_three(numbers):\n    return numbers[0] if numbers[0] > numbers[1] and numbers[0] > numbers[2] else numbers[1] if numbers[1] > numbers[2] else numbers[2]\n\nprint(max_of_three([567, 56, 6]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2540,19 +1725,7 @@ print(max_of_three([567, 56, 6]))",
         "title": "Problem 197",
         "description": "Write a Python program to find the maximum of three numbers. Enter three numbers in a list. Without using any build in fuctions apart from print().",
         "initialCode": "def max_of_three(numbers):\n    pass",
-        "solution": "def max_of_three(numbers):\n    max_number = numbers[0]\n    if numbers[1] > max_number:\n        max_number = numbers[1]\n        \n    if numbers[2] > max_number:\n        max_number = numbers[2]\n        \n    return max_number\n\nthree_numbers = [567, 56, 6]\nprint(max_of_three(three_numbers))
-
-# Alternative using reduce (but reduce is a built-in, so skipping per constraints)
-
-# Alternative using a loop (works for any length)
-def max_of_three(numbers):
-    max_val = numbers[0]
-    for n in numbers:
-        if n > max_val:
-            max_val = n
-    return max_val
-
-print(max_of_three([567, 56, 6]))",
+        "solution": "def max_of_three(numbers):\n    max_number = numbers[0]\n    if numbers[1] > max_number:\n        max_number = numbers[1]\n        \n    if numbers[2] > max_number:\n        max_number = numbers[2]\n        \n    return max_number\n\nthree_numbers = [567, 56, 6]\nprint(max_of_three(three_numbers))\n\n# Alternative using reduce (but reduce is a built-in, so skipping per constraints)\n\n# Alternative using a loop (works for any length)\ndef max_of_three(numbers):\n    max_val = numbers[0]\n    for n in numbers:\n        if n > max_val:\n            max_val = n\n    return max_val\n\nprint(max_of_three([567, 56, 6]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2561,19 +1734,7 @@ print(max_of_three([567, 56, 6]))",
         "title": "Problem 198",
         "description": "Write a function that converts centimetets to inches.",
         "initialCode": "def centimeters_inches():\n    pass",
-        "solution": "def centimeters_inches():\n    cm = int(input(\"type centimeters: \"))\n    inches = cm * 0.3937  # Conversion factor: multiply centimeters by 0.3937\n    print(f\"{cm} cm = {inches} inches\")  # Displays conversion result\n    \ncentimeters_inches()
-
-# Alternative returning result instead of printing
-def cm_to_inches(cm):
-    return cm * 0.3937
-
-print(f\"100 cm = {cm_to_inches(100):.2f} inches\")  # Output: 100 cm = 39.37 inches
-
-# Alternative using round for cleaner output
-def centimeters_inches(cm):
-    return round(cm * 0.3937, 2)
-
-print(centimeters_inches(50))  # Output: 19.69",
+        "solution": "def centimeters_inches():\n    cm = int(input(\"type centimeters: \"))\n    inches = cm * 0.3937  # Conversion factor: multiply centimeters by 0.3937\n    print(f\"{cm} cm = {inches} inches\")  # Displays conversion result\n    \ncentimeters_inches()\n\n# Alternative returning result instead of printing\ndef cm_to_inches(cm):\n    return cm * 0.3937\n\nprint(f\"100 cm = {cm_to_inches(100):.2f} inches\")  # Output: 100 cm = 39.37 inches\n\n# Alternative using round for cleaner output\ndef centimeters_inches(cm):\n    return round(cm * 0.3937, 2)\n\nprint(centimeters_inches(50))  # Output: 19.69",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2582,27 +1743,7 @@ print(centimeters_inches(50))  # Output: 19.69",
         "title": "Problem 199",
         "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort().",
         "initialCode": "def find_min_max():\n    pass\n\ndef find_min_max():\n    pass",
-        "solution": "def find_min_max():\n    user = input(\"type list of numbers: \").split()\n    int_num = []\n    for number in user:\n        int_num.append(int(number))\n    \n    min_num = min(int_num)\n    max_num = max(int_num)\n    \n    print(min_num, max_num)\n       \nfind_min_max()\n\ndef find_min_max():\n    user = input(\"type numbers: \").split()\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n\n    min_number = int_number[0]\n    max_number = int_number[0]\n    \n    for number in int_number:\n        if number < min_number:\n            min_number = number\n        if number > max_number:\n            max_number = number\n    print(min_number, max_number)\n    return min_number, max_number\n\nfind_min_max()
-
-# Alternative using built-in min/max
-def find_min_max(nums):
-    return (min(nums), max(nums))
-
-print(find_min_max([5, 2, 9, 1, 7]))  # Output: (1, 9)
-
-# Alternative using numpy-style unpacking with sorted
-def find_min_max(nums):
-    s = sorted(nums)
-    return (s[0], s[-1])
-
-print(find_min_max([3, 8, 1, 6]))  # Output: (1, 8)
-
-# Alternative using reduce for both
-def find_min_max(nums):
-    from functools import reduce
-    return reduce(lambda acc, x: (min(acc[0], x), max(acc[1], x)), nums, (nums[0], nums[0]))
-
-print(find_min_max([10, 3, 7, 1, 9]))  # Output: (1, 10)",
+        "solution": "def find_min_max():\n    user = input(\"type list of numbers: \").split()\n    int_num = []\n    for number in user:\n        int_num.append(int(number))\n    \n    min_num = min(int_num)\n    max_num = max(int_num)\n    \n    print(min_num, max_num)\n       \nfind_min_max()\n\ndef find_min_max():\n    user = input(\"type numbers: \").split()\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n\n    min_number = int_number[0]\n    max_number = int_number[0]\n    \n    for number in int_number:\n        if number < min_number:\n            min_number = number\n        if number > max_number:\n            max_number = number\n    print(min_number, max_number)\n    return min_number, max_number\n\nfind_min_max()\n\n# Alternative using built-in min/max\ndef find_min_max(nums):\n    return (min(nums), max(nums))\n\nprint(find_min_max([5, 2, 9, 1, 7]))  # Output: (1, 9)\n\n# Alternative using numpy-style unpacking with sorted\ndef find_min_max(nums):\n    s = sorted(nums)\n    return (s[0], s[-1])\n\nprint(find_min_max([3, 8, 1, 6]))  # Output: (1, 8)\n\n# Alternative using reduce for both\ndef find_min_max(nums):\n    from functools import reduce\n    return reduce(lambda acc, x: (min(acc[0], x), max(acc[1], x)), nums, (nums[0], nums[0]))\n\nprint(find_min_max([10, 3, 7, 1, 9]))  # Output: (1, 10)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2611,29 +1752,7 @@ print(find_min_max([10, 3, 7, 1, 9]))  # Output: (1, 10)",
         "title": "Problem 200",
         "description": "Write a Python program to find the common number in a lists. for this exercise do not use set.",
         "initialCode": "def common_numbers(lst):\n    pass",
-        "solution": "def common_numbers(lst):\n    seen = []  # Track numbers we've seen\n    common = []  # Track duplicate numbers\n    for number in lst:\n        if number in seen and number not in common:  # Found duplicate\n            common.append(number)  # Add to common (duplicates)\n        else:\n            seen.append(number)  # Mark as seen (first occurrence)\n    \n    return common  # Returns list of numbers that appear more than once\n\nlst = [43, 2, 45, 567, 666, 2, 45]  # Duplicates: 2 and 45\nprint(common_numbers(lst))  # Output: [2, 45]
-
-# Alternative using dictionary counter
-def common_numbers(lst):
-    from collections import Counter
-    return [k for k, v in Counter(lst).items() if v > 1]
-
-print(common_numbers([43, 2, 45, 567, 666, 2, 45]))  # Output: [2, 45]
-
-# Alternative using list comprehension with count
-def common_numbers(lst):
-    return list({x for x in lst if lst.count(x) > 1})
-
-print(common_numbers([43, 2, 45, 567, 666, 2, 45]))  # Output: [2, 45]
-
-# Alternative using dict.get()
-def common_numbers(lst):
-    count = {}
-    for x in lst:
-        count[x] = count.get(x, 0) + 1
-    return [k for k, v in count.items() if v > 1]
-
-print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
+        "solution": "def common_numbers(lst):\n    seen = []  # Track numbers we've seen\n    common = []  # Track duplicate numbers\n    for number in lst:\n        if number in seen and number not in common:  # Found duplicate\n            common.append(number)  # Add to common (duplicates)\n        else:\n            seen.append(number)  # Mark as seen (first occurrence)\n    \n    return common  # Returns list of numbers that appear more than once\n\nlst = [43, 2, 45, 567, 666, 2, 45]  # Duplicates: 2 and 45\nprint(common_numbers(lst))  # Output: [2, 45]\n\n# Alternative using dictionary counter\ndef common_numbers(lst):\n    from collections import Counter\n    return [k for k, v in Counter(lst).items() if v > 1]\n\nprint(common_numbers([43, 2, 45, 567, 666, 2, 45]))  # Output: [2, 45]\n\n# Alternative using list comprehension with count\ndef common_numbers(lst):\n    return list({x for x in lst if lst.count(x) > 1})\n\nprint(common_numbers([43, 2, 45, 567, 666, 2, 45]))  # Output: [2, 45]\n\n# Alternative using dict.get()\ndef common_numbers(lst):\n    count = {}\n    for x in lst:\n        count[x] = count.get(x, 0) + 1\n    return [k for k, v in count.items() if v > 1]\n\nprint(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2642,29 +1761,7 @@ print(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]",
         "title": "Problem 201",
         "description": "Write a Python program to find the common number in a lists. use set().",
         "initialCode": "def common_num(lst):\n    pass\n\ndef common_numbers(lst):\n    pass",
-        "solution": "def common_num(lst):\n    unique = set()  # Set to track unique numbers seen\n    commom = []  # Typo: \"commom\" should be \"common\"\n    for number in lst:\n        if number in unique:  # Number seen before (duplicate found)\n            commom.append(number)  # Add to duplicates list\n        else:\n            unique.add(number)  # Mark as seen (add to set)\n    return commom  # Returns list of duplicate numbers\n    \nlst = [2, 5, 6, 2, 4, 5]\nprint(common_num(lst))  # Output: [2, 5] (duplicates)\n\ndef common_numbers(lst):\n    seen = set()  # Track seen numbers\n    common = set()  # Track duplicates (set removes duplicate entries in result)\n    for number in lst:\n        if number in seen:  # Duplicate found\n            common.add(number)  # Add to common set\n        else:\n            seen.add(number)  # Mark as seen\n    return common\n\nlst = [43, 2, 45, 567, 666, 2, 45, 43]\nprint(common_numbers(lst))  # Output: {2, 45, 43} (set of duplicates)
-
-# Alternative using set comprehension with count
-def common_numbers(lst):
-    return list({x for x in lst if lst.count(x) > 1})
-
-print(common_numbers([1, 2, 2, 3, 3, 3, 4]))  # Output: [2, 3]
-
-# Alternative using dict.get()
-def common_numbers(lst):
-    count = {}
-    for x in lst:
-        count[x] = count.get(x, 0) + 1
-    return [k for k, v in count.items() if v > 1]
-
-print(common_numbers([1, 2, 2, 3, 4, 4]))  # Output: [2, 4]
-
-# Alternative using Counter
-def common_numbers(lst):
-    from collections import Counter
-    return [k for k, v in Counter(lst).items() if v > 1]
-
-print(common_numbers([5, 5, 6, 7, 7, 8]))  # Output: [5, 7]",
+        "solution": "def common_num(lst):\n    unique = set()  # Set to track unique numbers seen\n    commom = []  # Typo: \"commom\" should be \"common\"\n    for number in lst:\n        if number in unique:  # Number seen before (duplicate found)\n            commom.append(number)  # Add to duplicates list\n        else:\n            unique.add(number)  # Mark as seen (add to set)\n    return commom  # Returns list of duplicate numbers\n    \nlst = [2, 5, 6, 2, 4, 5]\nprint(common_num(lst))  # Output: [2, 5] (duplicates)\n\ndef common_numbers(lst):\n    seen = set()  # Track seen numbers\n    common = set()  # Track duplicates (set removes duplicate entries in result)\n    for number in lst:\n        if number in seen:  # Duplicate found\n            common.add(number)  # Add to common set\n        else:\n            seen.add(number)  # Mark as seen\n    return common\n\nlst = [43, 2, 45, 567, 666, 2, 45, 43]\nprint(common_numbers(lst))  # Output: {2, 45, 43} (set of duplicates)\n\n# Alternative using set comprehension with count\ndef common_numbers(lst):\n    return list({x for x in lst if lst.count(x) > 1})\n\nprint(common_numbers([1, 2, 2, 3, 3, 3, 4]))  # Output: [2, 3]\n\n# Alternative using dict.get()\ndef common_numbers(lst):\n    count = {}\n    for x in lst:\n        count[x] = count.get(x, 0) + 1\n    return [k for k, v in count.items() if v > 1]\n\nprint(common_numbers([1, 2, 2, 3, 4, 4]))  # Output: [2, 4]\n\n# Alternative using Counter\ndef common_numbers(lst):\n    from collections import Counter\n    return [k for k, v in Counter(lst).items() if v > 1]\n\nprint(common_numbers([5, 5, 6, 7, 7, 8]))  # Output: [5, 7]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2673,23 +1770,7 @@ print(common_numbers([5, 5, 6, 7, 7, 8]))  # Output: [5, 7]",
         "title": "Problem 202",
         "description": "Write a function word_frequency that takes a string as input and returns a dictionary where the keys are the characters in the string and the values are the counts of those characters alphabetically.",
         "initialCode": "def word_frequency(string):  # Function name says \"word\" but counts characters\n    pass",
-        "solution": "def word_frequency(string):  # Function name says \"word\" but counts characters\n    string = string.replace(\" \", \"\")  # Remove spaces\n    sort_char = sorted(string)  # Sort characters alphabetically\n    result = {}  # Dictionary for character counts\n    for word in sort_char:  # Variable name 'word' is misleading - it's a character\n        if word in result:\n            result[word] += 1  # Increment count\n        else:\n            result[word] = 1  # Initialize count\n    return result\n            \nstring = \"gore why are you here you are gore\"\nprint(word_frequency(string))  # Counts characters, not words
-
-# Alternative using Counter
-def word_frequency(string):
-    from collections import Counter
-    return dict(sorted(Counter(string.replace(\" \", \"\")).items()))
-
-print(word_frequency(\"hello world\"))  # Output: {'d': 1, 'e': 1, 'h': 1, 'l': 3, 'o': 2, 'r': 1, 'w': 1}
-
-# Alternative using dict.get()
-def word_frequency(string):
-    result = {}
-    for c in string.replace(\" \", \"\"):
-        result[c] = result.get(c, 0) + 1
-    return dict(sorted(result.items()))
-
-print(word_frequency(\"aabbc\"))  # Output: {'a': 2, 'b': 2, 'c': 1}",
+        "solution": "def word_frequency(string):  # Function name says \"word\" but counts characters\n    string = string.replace(\" \", \"\")  # Remove spaces\n    sort_char = sorted(string)  # Sort characters alphabetically\n    result = {}  # Dictionary for character counts\n    for word in sort_char:  # Variable name 'word' is misleading - it's a character\n        if word in result:\n            result[word] += 1  # Increment count\n        else:\n            result[word] = 1  # Initialize count\n    return result\n            \nstring = \"gore why are you here you are gore\"\nprint(word_frequency(string))  # Counts characters, not words\n\n# Alternative using Counter\ndef word_frequency(string):\n    from collections import Counter\n    return dict(sorted(Counter(string.replace(\" \", \"\")).items()))\n\nprint(word_frequency(\"hello world\"))  # Output: {'d': 1, 'e': 1, 'h': 1, 'l': 3, 'o': 2, 'r': 1, 'w': 1}\n\n# Alternative using dict.get()\ndef word_frequency(string):\n    result = {}\n    for c in string.replace(\" \", \"\"):\n        result[c] = result.get(c, 0) + 1\n    return dict(sorted(result.items()))\n\nprint(word_frequency(\"aabbc\"))  # Output: {'a': 2, 'b': 2, 'c': 1}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2698,21 +1779,7 @@ print(word_frequency(\"aabbc\"))  # Output: {'a': 2, 'b': 2, 'c': 1}",
         "title": "Problem 203",
         "description": "Define a function total() that sums and multiplies (respectively) all the numbers in a list of numbers. For example, sum([1, 2, 3, 4]) should return 10, and multiply([1, 2, 3, 4]) should return 24.",
         "initialCode": "def total(numbers):\n    pass",
-        "solution": "def total(numbers):\n    total_numbers = 0\n    multiply_numbers = 1\n    for number in numbers:\n        total_numbers += number  # Accumulate sum\n        multiply_numbers *= number  # Accumulate product\n    return total_numbers, multiply_numbers  # Returns tuple (sum, product)\n            \nlst_numbers = [1, 2, 3, 4]\nprint(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product
-
-# Alternative using sum and reduce
-def total(numbers):
-    from functools import reduce
-    return (sum(numbers), reduce(lambda a, b: a * b, numbers, 1))
-
-print(total([1, 2, 3, 4]))  # Output: (10, 24)
-
-# Alternative using math.prod
-def total(numbers):
-    import math
-    return (sum(numbers), math.prod(numbers))
-
-print(total([1, 2, 3, 4]))  # Output: (10, 24) (Python 3.8+)",
+        "solution": "def total(numbers):\n    total_numbers = 0\n    multiply_numbers = 1\n    for number in numbers:\n        total_numbers += number  # Accumulate sum\n        multiply_numbers *= number  # Accumulate product\n    return total_numbers, multiply_numbers  # Returns tuple (sum, product)\n            \nlst_numbers = [1, 2, 3, 4]\nprint(total(lst_numbers))  # Output: (10, 24) - tuple of sum and product\n\n# Alternative using sum and reduce\ndef total(numbers):\n    from functools import reduce\n    return (sum(numbers), reduce(lambda a, b: a * b, numbers, 1))\n\nprint(total([1, 2, 3, 4]))  # Output: (10, 24)\n\n# Alternative using math.prod\ndef total(numbers):\n    import math\n    return (sum(numbers), math.prod(numbers))\n\nprint(total([1, 2, 3, 4]))  # Output: (10, 24) (Python 3.8+)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2721,22 +1788,7 @@ print(total([1, 2, 3, 4]))  # Output: (10, 24) (Python 3.8+)",
         "title": "Problem 204",
         "description": "Write a program that maps a list of words into a list of integers representing the words with the lengths of the correponding words.",
         "initialCode": "def list_integers(lst):\n    pass",
-        "solution": "def list_integers(lst):\n    result = []\n    for word in lst:\n        result.append(word)  # Add word itself (string)\n        result.append(len(word))  # Add length of word (integer)\n    return result\n    \nlst = [\"join\", \"Jonathan\", \"tree\"]\nprint(list_integers(lst))  # Output: [\"join\", 4, \"Jonathan\", 8, \"tree\", 4]
-
-# Alternative using list comprehension with chain
-def list_integers(lst):
-    return [x for word in lst for x in (word, len(word))]
-
-print(list_integers([\"join\", \"Jonathan\", \"tree\"]))
-
-# Alternative using sum of pairs
-def list_integers(lst):
-    result = []
-    for word in lst:
-        result += [word, len(word)]
-    return result
-
-print(list_integers([\"hi\", \"there\"]))  # Output: [\"hi\", 2, \"there\", 5]",
+        "solution": "def list_integers(lst):\n    result = []\n    for word in lst:\n        result.append(word)  # Add word itself (string)\n        result.append(len(word))  # Add length of word (integer)\n    return result\n    \nlst = [\"join\", \"Jonathan\", \"tree\"]\nprint(list_integers(lst))  # Output: [\"join\", 4, \"Jonathan\", 8, \"tree\", 4]\n\n# Alternative using list comprehension with chain\ndef list_integers(lst):\n    return [x for word in lst for x in (word, len(word))]\n\nprint(list_integers([\"join\", \"Jonathan\", \"tree\"]))\n\n# Alternative using sum of pairs\ndef list_integers(lst):\n    result = []\n    for word in lst:\n        result += [word, len(word)]\n    return result\n\nprint(list_integers([\"hi\", \"there\"]))  # Output: [\"hi\", 2, \"there\", 5]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2745,20 +1797,7 @@ print(list_integers([\"hi\", \"there\"]))  # Output: [\"hi\", 2, \"there\", 5]",
         "title": "Problem 205",
         "description": "Write a Python function called `calculate_average` that takes a list of numbers as input and returns the average of those numbers. use len() and sum().",
         "initialCode": "def average(lst):\n    pass",
-        "solution": "def average(lst):\n    sum_lst = sum(lst)  # Built-in sum() adds all numbers\n    length = len(lst)  # Built-in len() counts elements\n    total = sum_lst / length  # Divide sum by count to get average\n    \n    return total\n               \nlst = [2666, 566, 6777]\nprint(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...
-
-# Alternative using statistics.mean
-def average(lst):
-    import statistics
-    return statistics.mean(lst)
-
-print(average([2666, 566, 6777]))  # Output: 3336.333...
-
-# Alternative using one-liner
-def average(lst):
-    return sum(lst) / len(lst)
-
-print(average([1, 2, 3, 4]))  # Output: 2.5",
+        "solution": "def average(lst):\n    sum_lst = sum(lst)  # Built-in sum() adds all numbers\n    length = len(lst)  # Built-in len() counts elements\n    total = sum_lst / length  # Divide sum by count to get average\n    \n    return total\n               \nlst = [2666, 566, 6777]\nprint(average(lst))  # Output: (2666 + 566 + 6777) / 3 = 10009 / 3 = 3336.333...\n\n# Alternative using statistics.mean\ndef average(lst):\n    import statistics\n    return statistics.mean(lst)\n\nprint(average([2666, 566, 6777]))  # Output: 3336.333...\n\n# Alternative using one-liner\ndef average(lst):\n    return sum(lst) / len(lst)\n\nprint(average([1, 2, 3, 4]))  # Output: 2.5",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2767,19 +1806,7 @@ print(average([1, 2, 3, 4]))  # Output: 2.5",
         "title": "Problem 206",
         "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().",
         "initialCode": "def max_of_three():\n    pass",
-        "solution": "def max_of_three():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    if len(number) != 3:  # Should be len(int_numbers) != 3\n        print(\"not enough numbers\")\n        return\n        \n    max_number = int_numbers[0]\n    if int_numbers[1] > max_number:  # If second is larger\n        max_number = int_numbers[1]  # Update maximum\n    if int_numbers[2] > max_number:  # If third is larger\n        max_number = int_numbers[2]  # Update maximum\n        \n    print(max_number)\n    \nmax_of_three()
-
-# Alternative using sorted
-def max_of_three(a, b, c):
-    return sorted([a, b, c])[-1]
-
-print(max_of_three(567, 56, 6))  # Output: 567
-
-# Alternative using ternary chain
-def max_of_three(a, b, c):
-    return a if a > b and a > c else b if b > c else c
-
-print(max_of_three(10, 25, 15))  # Output: 25",
+        "solution": "def max_of_three():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    if len(number) != 3:  # Should be len(int_numbers) != 3\n        print(\"not enough numbers\")\n        return\n        \n    max_number = int_numbers[0]\n    if int_numbers[1] > max_number:  # If second is larger\n        max_number = int_numbers[1]  # Update maximum\n    if int_numbers[2] > max_number:  # If third is larger\n        max_number = int_numbers[2]  # Update maximum\n        \n    print(max_number)\n    \nmax_of_three()\n\n# Alternative using sorted\ndef max_of_three(a, b, c):\n    return sorted([a, b, c])[-1]\n\nprint(max_of_three(567, 56, 6))  # Output: 567\n\n# Alternative using ternary chain\ndef max_of_three(a, b, c):\n    return a if a > b and a > c else b if b > c else c\n\nprint(max_of_three(10, 25, 15))  # Output: 25",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2788,20 +1815,7 @@ print(max_of_three(10, 25, 15))  # Output: 25",
         "title": "Problem 207",
         "description": "Write a Python program to find the maximum of of list of numbers. Prompt the user to enter three numbers. do not use max().",
         "initialCode": "def max_of_list():\n    pass",
-        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()  # Note: says \"three\" but algorithm works for any length\n    if len(user) != 3:  # Validation check\n        print(\"type more numbers\")\n        return\n    \n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    max_number = int_numbers[0]\n    for number in int_numbers:\n        if number > max_number:  # If current number is larger\n            max_number = number  # Update maximum\n            \n    print(max_number)\n           \nmax_of_list()
-
-# Alternative using sorted
-def max_of_list(nums):
-    return sorted(nums)[-1]
-
-print(max_of_list([5, 2, 9, 1, 7]))  # Output: 9
-
-# Alternative using reduce (not max)
-def max_of_list(nums):
-    from functools import reduce
-    return reduce(lambda a, b: a if a > b else b, nums)
-
-print(max_of_list([3, 8, 1, 6]))  # Output: 8",
+        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()  # Note: says \"three\" but algorithm works for any length\n    if len(user) != 3:  # Validation check\n        print(\"type more numbers\")\n        return\n    \n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    max_number = int_numbers[0]\n    for number in int_numbers:\n        if number > max_number:  # If current number is larger\n            max_number = number  # Update maximum\n            \n    print(max_number)\n           \nmax_of_list()\n\n# Alternative using sorted\ndef max_of_list(nums):\n    return sorted(nums)[-1]\n\nprint(max_of_list([5, 2, 9, 1, 7]))  # Output: 9\n\n# Alternative using reduce (not max)\ndef max_of_list(nums):\n    from functools import reduce\n    return reduce(lambda a, b: a if a > b else b, nums)\n\nprint(max_of_list([3, 8, 1, 6]))  # Output: 8",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2810,19 +1824,7 @@ print(max_of_list([3, 8, 1, 6]))  # Output: 8",
         "title": "Problem 208",
         "description": "Write a Python program to find the maximum of of list of numbers. Prompt the user to enter three numbers. Use max().",
         "initialCode": "def max_of_list():\n    pass",
-        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    \n    max_number = max(int_numbers)  # Built-in max() finds maximum element\n                   \n    print(max_number)\n           \nmax_of_list()
-
-# Alternative using max with map
-def max_of_list(nums):
-    return max(nums)
-
-print(max_of_list([5, 2, 9, 1, 7]))  # Output: 9
-
-# Alternative using sorted as validation
-def max_of_list(nums):
-    return sorted(nums, reverse=True)[0]
-
-print(max_of_list([3, 8, 1, 6]))  # Output: 8",
+        "solution": "def max_of_list():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    \n    max_number = max(int_numbers)  # Built-in max() finds maximum element\n                   \n    print(max_number)\n           \nmax_of_list()\n\n# Alternative using max with map\ndef max_of_list(nums):\n    return max(nums)\n\nprint(max_of_list([5, 2, 9, 1, 7]))  # Output: 9\n\n# Alternative using sorted as validation\ndef max_of_list(nums):\n    return sorted(nums, reverse=True)[0]\n\nprint(max_of_list([3, 8, 1, 6]))  # Output: 8",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2831,20 +1833,7 @@ print(max_of_list([3, 8, 1, 6]))  # Output: 8",
         "title": "Problem 209",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words with the word eg ['jonathan', 8, 'horse', 5, 'today', 5 ].",
         "initialCode": "def list_words(lst):\n    pass",
-        "solution": "def list_words(lst):\n    words_lengths = []\n    for word in lst:\n        words_lengths.append(word)  # Add word (string)\n        words_lengths.append(len(word))  # Add length (integer) using built-in len()\n    return words_lengths\n        \nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))
-
-# Alternative using nested list comprehension
-def list_words(lst):
-    return [x for word in lst for x in (word, len(word))]
-
-print(list_words([\"Jonathan\", \"horse\", \"today\"]))
-
-# Alternative using chain.from_iterable
-def list_words(lst):
-    from itertools import chain
-    return list(chain.from_iterable((w, len(w)) for w in lst))
-
-print(list_words([\"cat\", \"dog\"]))  # Output: [\"cat\", 3, \"dog\", 3]",
+        "solution": "def list_words(lst):\n    words_lengths = []\n    for word in lst:\n        words_lengths.append(word)  # Add word (string)\n        words_lengths.append(len(word))  # Add length (integer) using built-in len()\n    return words_lengths\n        \nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))\n\n# Alternative using nested list comprehension\ndef list_words(lst):\n    return [x for word in lst for x in (word, len(word))]\n\nprint(list_words([\"Jonathan\", \"horse\", \"today\"]))\n\n# Alternative using chain.from_iterable\ndef list_words(lst):\n    from itertools import chain\n    return list(chain.from_iterable((w, len(w)) for w in lst))\n\nprint(list_words([\"cat\", \"dog\"]))  # Output: [\"cat\", 3, \"dog\", 3]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2853,30 +1842,7 @@ print(list_words([\"cat\", \"dog\"]))  # Output: [\"cat\", 3, \"dog\", 3]",
         "title": "Problem 210",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words with the word eg ['jonathan', 8, 'horse', 5, 'today', 5 ]. Do not use len().",
         "initialCode": "def list_words(lst):\n    pass",
-        "solution": "def list_words(lst):\n    words_with_lengths = []\n    for word in lst:\n        count = 0  # Manual length counter\n        for char in word:\n            count += 1  # Increment for each character\n        words_with_lengths.append(word)  # Add word\n        words_with_lengths.append(count)\n    \n    return words_with_lengths\n\nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))
-
-# Alternative using sum of bools
-def list_words(lst):
-    result = []
-    for word in lst:
-        result.append(word)
-        result.append(sum(1 for _ in word))
-    return result
-
-print(list_words([\"Jonathan\", \"horse\", \"today\"]))
-
-# Alternative using enumerate trick
-def list_words(lst):
-    result = []
-    for word in lst:
-        count = -1
-        for _ in enumerate(word):
-            count += 1
-        count += 1  # off-by-one correction
-        result += [word, count]
-    return result
-
-print(list_words([\"hi\", \"hello\"]))  # Output: [\"hi\", 2, \"hello\", 5]",
+        "solution": "def list_words(lst):\n    words_with_lengths = []\n    for word in lst:\n        count = 0  # Manual length counter\n        for char in word:\n            count += 1  # Increment for each character\n        words_with_lengths.append(word)  # Add word\n        words_with_lengths.append(count)\n    \n    return words_with_lengths\n\nlst = [\"Jonathan\", \"horse\", \"today\"]\nprint(list_words(lst))\n\n# Alternative using sum of bools\ndef list_words(lst):\n    result = []\n    for word in lst:\n        result.append(word)\n        result.append(sum(1 for _ in word))\n    return result\n\nprint(list_words([\"Jonathan\", \"horse\", \"today\"]))\n\n# Alternative using enumerate trick\ndef list_words(lst):\n    result = []\n    for word in lst:\n        count = -1\n        for _ in enumerate(word):\n            count += 1\n        count += 1  # off-by-one correction\n        result += [word, count]\n    return result\n\nprint(list_words([\"hi\", \"hello\"]))  # Output: [\"hi\", 2, \"hello\", 5]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2885,36 +1851,7 @@ print(list_words([\"hi\", \"hello\"]))  # Output: [\"hi\", 2, \"hello\", 5]",
         "title": "Problem 211",
         "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words without using len().",
         "initialCode": "def length_words(lst):\n    pass",
-        "solution": "def length_words(lst):\n    length = []\n    for word in lst:\n        count = 0\n        for char in word:\n            count += 1\n        length.append(count)\n    \n    return length\n    \nlst = [\"Jonathan\", \"chris\", \"mountain\"]\nprint(length_words(lst))
-
-# Alternative using map with counter
-def length_words(lst):
-    return [sum(1 for _ in w) for w in lst]
-
-print(length_words([\"Jonathan\", \"chris\", \"mountain\"]))
-
-# Alternative using enumerate
-def length_words(lst):
-    result = []
-    for word in lst:
-        for i, _ in enumerate(word):
-            pass
-        result.append(i + 1)
-    return result
-
-print(length_words([\"cat\", \"horse\"]))  # Output: [3, 5]
-
-# Alternative using manual count with while
-def length_words(lst):
-    return [len_manual(w) for w in lst]
-
-def len_manual(s):
-    c = 0
-    for _ in s:
-        c += 1
-    return c
-
-print(length_words([\"apple\", \"pear\"]))  # Output: [5, 4]",
+        "solution": "def length_words(lst):\n    length = []\n    for word in lst:\n        count = 0\n        for char in word:\n            count += 1\n        length.append(count)\n    \n    return length\n    \nlst = [\"Jonathan\", \"chris\", \"mountain\"]\nprint(length_words(lst))\n\n# Alternative using map with counter\ndef length_words(lst):\n    return [sum(1 for _ in w) for w in lst]\n\nprint(length_words([\"Jonathan\", \"chris\", \"mountain\"]))\n\n# Alternative using enumerate\ndef length_words(lst):\n    result = []\n    for word in lst:\n        for i, _ in enumerate(word):\n            pass\n        result.append(i + 1)\n    return result\n\nprint(length_words([\"cat\", \"horse\"]))  # Output: [3, 5]\n\n# Alternative using manual count with while\ndef length_words(lst):\n    return [len_manual(w) for w in lst]\n\ndef len_manual(s):\n    c = 0\n    for _ in s:\n        c += 1\n    return c\n\nprint(length_words([\"apple\", \"pear\"]))  # Output: [5, 4]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2923,19 +1860,7 @@ print(length_words([\"apple\", \"pear\"]))  # Output: [5, 4]",
         "title": "Problem 212",
         "description": "Write a Python program to find the intersection of two lists. Prompt the user to enter two lists without using set() and without using intersection().",
         "initialCode": "def intersection():\n    pass",
-        "solution": "def intersection():\n    lst1 = input(\"type lst1: \").split()\n    lst2 = input(\"type lst2: \").split()\n    common = []\n    for word in lst1:\n        if word in lst2:  # Check if word exists in second list (membership test)\n            common.append(word)  # Add to common if found\n    print(common)\n    \nintersection()
-
-# Alternative using list comprehension
-def intersection(lst1, lst2):
-    return [x for x in lst1 if x in lst2]
-
-print(intersection([1, 2, 3, 4], [3, 4, 5, 6]))  # Output: [3, 4]
-
-# Alternative using filter
-def intersection(lst1, lst2):
-    return list(filter(lambda x: x in lst2, lst1))
-
-print(intersection([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Output: [\"b\", \"c\"]",
+        "solution": "def intersection():\n    lst1 = input(\"type lst1: \").split()\n    lst2 = input(\"type lst2: \").split()\n    common = []\n    for word in lst1:\n        if word in lst2:  # Check if word exists in second list (membership test)\n            common.append(word)  # Add to common if found\n    print(common)\n    \nintersection()\n\n# Alternative using list comprehension\ndef intersection(lst1, lst2):\n    return [x for x in lst1 if x in lst2]\n\nprint(intersection([1, 2, 3, 4], [3, 4, 5, 6]))  # Output: [3, 4]\n\n# Alternative using filter\ndef intersection(lst1, lst2):\n    return list(filter(lambda x: x in lst2, lst1))\n\nprint(intersection([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Output: [\"b\", \"c\"]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2944,17 +1869,7 @@ print(intersection([\"a\", \"b\", \"c\"], [\"b\", \"c\", \"d\"]))  # Output: [\"
         "title": "Problem 213",
         "description": "Write a Python program to print the following pattern:\\n*\\n* *\\n* * *\\n* * * *\\n* * * * *",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print('* ' * i)  # String multiplication: '*' * 3 = '***'
-
-# Alternative using nested loop
-for i in range(1, 6):
-    for j in range(i):
-        print('*', end=' ')
-    print()
-
-# Alternative using join
-for i in range(1, 6):
-    print(' '.join('*' for _ in range(i)))",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print('* ' * i)  # String multiplication: '*' * 3 = '***'\n\n# Alternative using nested loop\nfor i in range(1, 6):\n    for j in range(i):\n        print('*', end=' ')\n    print()\n\n# Alternative using join\nfor i in range(1, 6):\n    print(' '.join('*' for _ in range(i)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2963,18 +1878,7 @@ for i in range(1, 6):
         "title": "Problem 214",
         "description": "Write a Python program to print the following number pyramid:\\n1\\n2 2\\n3 3 3\\n4 4 4 4\\n5 5 5 5 5",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print((str(i) + ' ') * i)
-    # Example: i=3 \u2192 \"3 \" * 3 = \"3 3 3 \"
-
-# Alternative using nested loop
-for i in range(1, 6):
-    for j in range(i):
-        print(i, end=' ')
-    print()
-
-# Alternative using join
-for i in range(1, 6):
-    print(' '.join(str(i) for _ in range(i)))",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print((str(i) + ' ') * i)\n    # Example: i=3 \u2192 \"3 \" * 3 = \"3 3 3 \"\n\n# Alternative using nested loop\nfor i in range(1, 6):\n    for j in range(i):\n        print(i, end=' ')\n    print()\n\n# Alternative using join\nfor i in range(1, 6):\n    print(' '.join(str(i) for _ in range(i)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2983,22 +1887,7 @@ for i in range(1, 6):
         "title": "Problem 215",
         "description": "Write a Python program to print a square pattern of stars with a given side length.",
         "initialCode": "def square_pattern(n):\n    pass\n\ndef print_square_pattern(side_length):\n    pass",
-        "solution": "def square_pattern(n):\n    for i in range(n):  # Outer loop: rows\n        for j in range(n):  # Inner loop: columns\n            print(\"*\", end=\" \")  # Print star with space, end=\"\" prevents newline\n        print()  # Print newline after each row\nn = 5    \nprint(square_pattern(n))  # Prints square, then prints None\n\ndef print_square_pattern(side_length):\n    for i in range(side_length):  # Rows\n        for j in range(side_length):  # Columns\n            print(\"*\", end=\" \")  # end=\" \" keeps stars on same line with space\n        print()  # Newline after each row completes\n\nside_length = int(input(\"Enter the side length of the square: \"))\nprint_square_pattern(side_length)
-
-# Alternative using one-liner with join
-def print_square_pattern(n):
-    print('\\n'.join('* ' * n for _ in range(n)))
-
-print_square_pattern(5)
-
-# Alternative using while loop
-def square_pattern(n):
-    i = 0
-    while i < n:
-        print('* ' * n)
-        i += 1
-
-square_pattern(5)",
+        "solution": "def square_pattern(n):\n    for i in range(n):  # Outer loop: rows\n        for j in range(n):  # Inner loop: columns\n            print(\"*\", end=\" \")  # Print star with space, end=\"\" prevents newline\n        print()  # Print newline after each row\nn = 5    \nprint(square_pattern(n))  # Prints square, then prints None\n\ndef print_square_pattern(side_length):\n    for i in range(side_length):  # Rows\n        for j in range(side_length):  # Columns\n            print(\"*\", end=\" \")  # end=\" \" keeps stars on same line with space\n        print()  # Newline after each row completes\n\nside_length = int(input(\"Enter the side length of the square: \"))\nprint_square_pattern(side_length)\n\n# Alternative using one-liner with join\ndef print_square_pattern(n):\n    print('\\n'.join('* ' * n for _ in range(n)))\n\nprint_square_pattern(5)\n\n# Alternative using while loop\ndef square_pattern(n):\n    i = 0\n    while i < n:\n        print('* ' * n)\n        i += 1\n\nsquare_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3007,17 +1896,7 @@ square_pattern(5)",
         "title": "Problem 216",
         "description": "Write a Python program to print a right-angled triangle of numbers:\\n1\\n1 2\\n1 2 3\\n1 2 3 4\\n1 2 3 4 5",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(' '.join(str(num) for num in range(1, i + 1)))
-
-# Alternative using nested loop
-for i in range(1, 6):
-    for j in range(1, i + 1):
-        print(j, end=' ')
-    print()
-
-# Alternative using map and range
-for i in range(1, 6):
-    print(' '.join(map(str, range(1, i + 1))))",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(' '.join(str(num) for num in range(1, i + 1)))\n\n# Alternative using nested loop\nfor i in range(1, 6):\n    for j in range(1, i + 1):\n        print(j, end=' ')\n    print()\n\n# Alternative using map and range\nfor i in range(1, 6):\n    print(' '.join(map(str, range(1, i + 1))))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3026,15 +1905,7 @@ for i in range(1, 6):
         "title": "Problem 217",
         "description": "Write a Python program to print an inverted pyramid pattern:\\n* * * * *\\n* * * *\\n* * *\\n* *\\n*\",",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)\n    for j in range(i):  # Print i stars in this row\n        print('*', end=' ')  # Print star with space\n    print()  # Newline after each row
-
-# Alternative using string multiplication
-for i in range(5, 0, -1):
-    print('* ' * i)
-
-# Alternative using join
-for i in range(5, 0, -1):
-    print(' '.join('*' for _ in range(i)))",
+        "solution": "for i in range(5, 0, -1):  # range(5, 0, -1) = [5, 4, 3, 2, 1] (negative step)\n    for j in range(i):  # Print i stars in this row\n        print('*', end=' ')  # Print star with space\n    print()  # Newline after each row\n\n# Alternative using string multiplication\nfor i in range(5, 0, -1):\n    print('* ' * i)\n\n# Alternative using join\nfor i in range(5, 0, -1):\n    print(' '.join('*' for _ in range(i)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3043,25 +1914,7 @@ for i in range(5, 0, -1):
         "title": "Problem 218",
         "description": "Write a Python program to print a checkerboard pattern of given size.",
         "initialCode": "def print_checkerboard(size):\n    pass",
-        "solution": "def print_checkerboard(size):\n    for i in range(size):  # Rows\n        for j in range(size):  # Columns\n            if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                print('*', end=' ')\n            else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                print(' ', end=' ')\n        print()  # Newline after each row\n\nsize = int(input(\"Enter the size of the checkerboard: \"))\nprint_checkerboard(size)
-
-# Alternative using nested comprehension join
-def print_checkerboard(size):
-    for i in range(size):
-        row = ' '.join('*' if (i + j) % 2 == 0 else ' ' for j in range(size))
-        print(row)
-
-print_checkerboard(4)
-
-# Alternative using string multiplication (even rows)
-def print_checkerboard(size):
-    for i in range(size):
-        if i % 2 == 0:
-            print('* ' * size)
-        else:
-            print(' *' * size)
-
-print_checkerboard(4)",
+        "solution": "def print_checkerboard(size):\n    for i in range(size):  # Rows\n        for j in range(size):  # Columns\n            if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                print('*', end=' ')\n            else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                print(' ', end=' ')\n        print()  # Newline after each row\n\nsize = int(input(\"Enter the size of the checkerboard: \"))\nprint_checkerboard(size)\n\n# Alternative using nested comprehension join\ndef print_checkerboard(size):\n    for i in range(size):\n        row = ' '.join('*' if (i + j) % 2 == 0 else ' ' for j in range(size))\n        print(row)\n\nprint_checkerboard(4)\n\n# Alternative using string multiplication (even rows)\ndef print_checkerboard(size):\n    for i in range(size):\n        if i % 2 == 0:\n            print('* ' * size)\n        else:\n            print(' *' * size)\n\nprint_checkerboard(4)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3070,27 +1923,7 @@ print_checkerboard(4)",
         "title": "Problem 219",
         "description": "Write a Python program to print Floyd's Triangle.\\n1\\n2 3\\n4 5 6\\n7 8 9 10",
         "initialCode": "def print_floyds_triangle(rows):\n    pass",
-        "solution": "def print_floyds_triangle(rows):\n    num = 1  # Counter for consecutive numbers\n    for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n        for j in range(i):  # Print i numbers in row i\n            print(num, end=' ')  # Print current number\n            num += 1  # Increment to next number\n        print()  # Newline after each row\n\nrows = 4\nprint_floyds_triangle(rows)
-
-# Alternative using while loop
-def print_floyds_triangle(rows):
-    num = 1
-    r = 1
-    while r <= rows:
-        print(' '.join(str(num + c) for c in range(r)))
-        num += r
-        r += 1
-
-print_floyds_triangle(4)
-
-# Alternative calculating numbers per row
-def print_floyds_triangle(rows):
-    num = 1
-    for i in range(1, rows + 1):
-        print(' '.join(str(num + j) for j in range(i)))
-        num += i
-
-print_floyds_triangle(4)",
+        "solution": "def print_floyds_triangle(rows):\n    num = 1  # Counter for consecutive numbers\n    for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n        for j in range(i):  # Print i numbers in row i\n            print(num, end=' ')  # Print current number\n            num += 1  # Increment to next number\n        print()  # Newline after each row\n\nrows = 4\nprint_floyds_triangle(rows)\n\n# Alternative using while loop\ndef print_floyds_triangle(rows):\n    num = 1\n    r = 1\n    while r <= rows:\n        print(' '.join(str(num + c) for c in range(r)))\n        num += r\n        r += 1\n\nprint_floyds_triangle(4)\n\n# Alternative calculating numbers per row\ndef print_floyds_triangle(rows):\n    num = 1\n    for i in range(1, rows + 1):\n        print(' '.join(str(num + j) for j in range(i)))\n        num += i\n\nprint_floyds_triangle(4)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3099,20 +1932,7 @@ print_floyds_triangle(4)",
         "title": "Problem 221",
         "description": "Write a Python program to print a hollow square pattern of stars with a given side length.\\nFor example, for side length 5:\\n*****\\n*   *\\n*   *\\n*   *\\n*****",
         "initialCode": "def print_hollow_square(side_length):\n    pass",
-        "solution": "def print_hollow_square(side_length):\n    for i in range(side_length):  # Rows\n        if i == 0 or i == side_length - 1:  # First or last row\n            print('*' * side_length)  # Print full row of stars\n        else:  # Middle rows\n            # Print: star + spaces + star\n            print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\n\nside_length = 5\nprint_hollow_square(side_length)
-
-# Alternative using join with conditional
-def print_hollow_square(n):
-    for i in range(n):
-        print('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*')
-
-print_hollow_square(5)
-
-# Alternative using list comprehension
-def print_hollow_square(n):
-    print('\\n'.join('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*' for i in range(n)))
-
-print_hollow_square(5)",
+        "solution": "def print_hollow_square(side_length):\n    for i in range(side_length):  # Rows\n        if i == 0 or i == side_length - 1:  # First or last row\n            print('*' * side_length)  # Print full row of stars\n        else:  # Middle rows\n            # Print: star + spaces + star\n            print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\n\nside_length = 5\nprint_hollow_square(side_length)\n\n# Alternative using join with conditional\ndef print_hollow_square(n):\n    for i in range(n):\n        print('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*')\n\nprint_hollow_square(5)\n\n# Alternative using list comprehension\ndef print_hollow_square(n):\n    print('\\n'.join('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*' for i in range(n)))\n\nprint_hollow_square(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3121,21 +1941,7 @@ print_hollow_square(5)",
         "title": "Problem 222",
         "description": "Write a Python program to print a reverse pyramid pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4\\n1 2 3\\n1 2\\n1\"",
         "initialCode": "def print_reverse_pyramid(rows):\n    pass",
-        "solution": "def print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n        for j in range(1, i + 1):  # Print numbers 1 to i\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after each row\n\nrows = 5\nprint_reverse_pyramid(rows)
-
-# Alternative using join and map
-def print_reverse_pyramid(rows):
-    for i in range(rows, 0, -1):
-        print(' '.join(map(str, range(1, i + 1))))
-
-print_reverse_pyramid(5)
-
-# Alternative using string multiplication
-def print_reverse_pyramid(rows):
-    for i in range(rows, 0, -1):
-        print(' '.join(str(j) for j in range(1, i + 1)))
-
-print_reverse_pyramid(5)",
+        "solution": "def print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n        for j in range(1, i + 1):  # Print numbers 1 to i\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after each row\n\nrows = 5\nprint_reverse_pyramid(rows)\n\n# Alternative using join and map\ndef print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):\n        print(' '.join(map(str, range(1, i + 1))))\n\nprint_reverse_pyramid(5)\n\n# Alternative using string multiplication\ndef print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):\n        print(' '.join(str(j) for j in range(1, i + 1)))\n\nprint_reverse_pyramid(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3144,21 +1950,7 @@ print_reverse_pyramid(5)",
         "title": "Problem 224",
         "description": "description\": \"Write a Python program to print a triangle pattern of letters:\\nA\\nB B\\nC C C\\nD D D D\\nE E E E E\"",
         "initialCode": "def triangle_pattern(rows):\n    pass\n\ndef triangle_pattern(rows):\n    pass",
-        "solution": "def triangle_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        letter = chr(65 + i)  # Get letter for current row\n        for j in range(i + 1):  # Print letter (i+1) times\n            print(letter, end=\" \")  # Print letter with space\n        print()  # Newline after row\n\nrows = 5\ntriangle_pattern(rows)\n\ndef triangle_pattern(rows):\n    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n    \n    for i in range(rows):\n        letter = letters[i]\n        for j in range(i + 1):\n            \n            print(letter, end=\" \")\n            \n        print()\n\nrows = 5\ntriangle_pattern(rows)
-
-# Alternative using string indexing
-def triangle_pattern(rows):
-    letters = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"
-    for i in range(rows):
-        print(' '.join(letters[i] for _ in range(i + 1)))
-
-triangle_pattern(5)
-
-# Alternative using one-liner
-def triangle_pattern(rows):
-    print('\\n'.join(' '.join(chr(65 + i) for _ in range(i + 1)) for i in range(rows)))
-
-triangle_pattern(5)",
+        "solution": "def triangle_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        letter = chr(65 + i)  # Get letter for current row\n        for j in range(i + 1):  # Print letter (i+1) times\n            print(letter, end=\" \")  # Print letter with space\n        print()  # Newline after row\n\nrows = 5\ntriangle_pattern(rows)\n\ndef triangle_pattern(rows):\n    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n    \n    for i in range(rows):\n        letter = letters[i]\n        for j in range(i + 1):\n            \n            print(letter, end=\" \")\n            \n        print()\n\nrows = 5\ntriangle_pattern(rows)\n\n# Alternative using string indexing\ndef triangle_pattern(rows):\n    letters = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\n    for i in range(rows):\n        print(' '.join(letters[i] for _ in range(i + 1)))\n\ntriangle_pattern(5)\n\n# Alternative using one-liner\ndef triangle_pattern(rows):\n    print('\\n'.join(' '.join(chr(65 + i) for _ in range(i + 1)) for i in range(rows)))\n\ntriangle_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3167,27 +1959,7 @@ triangle_pattern(5)",
         "title": "Problem 225",
         "description": "Write a Python program to print a square pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5",
         "initialCode": "def print_square_pattern(size):\n    pass",
-        "solution": "r = 5 # r = row\nc = 5 # c = column\n\nfor n in range(r): # n = number (outer loop: rows)\n    for n in range(1, c + 1):  # BUG: 'n' reused, overwrites outer loop variable\n        print(n, end = \" \")  # Prints 1, 2, 3, 4, 5\n    print()  # Newline after each row\n\ndef print_square_pattern(size):\n    for i in range(size):  # Rows\n        for j in range(1, size + 1):  # Columns: numbers 1 to size\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after row\n\nsize = 5\nprint_square_pattern(size)
-
-# Alternative using join with map
-def print_square_pattern(size):
-    for _ in range(size):
-        print(' '.join(map(str, range(1, size + 1))))
-
-print_square_pattern(5)
-
-# Alternative using one-liner
-def print_square_pattern(size):
-    print('\\n'.join(' '.join(str(j) for j in range(1, size + 1)) for _ in range(size)))
-
-print_square_pattern(5)
-
-# Alternative using string multiplication
-def print_square_pattern(size):
-    for _ in range(size):
-        print(' '.join(str(i) for i in range(1, size + 1)))
-
-print_square_pattern(5)",
+        "solution": "r = 5 # r = row\nc = 5 # c = column\n\nfor n in range(r): # n = number (outer loop: rows)\n    for n in range(1, c + 1):  # BUG: 'n' reused, overwrites outer loop variable\n        print(n, end = \" \")  # Prints 1, 2, 3, 4, 5\n    print()  # Newline after each row\n\ndef print_square_pattern(size):\n    for i in range(size):  # Rows\n        for j in range(1, size + 1):  # Columns: numbers 1 to size\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after row\n\nsize = 5\nprint_square_pattern(size)\n\n# Alternative using join with map\ndef print_square_pattern(size):\n    for _ in range(size):\n        print(' '.join(map(str, range(1, size + 1))))\n\nprint_square_pattern(5)\n\n# Alternative using one-liner\ndef print_square_pattern(size):\n    print('\\n'.join(' '.join(str(j) for j in range(1, size + 1)) for _ in range(size)))\n\nprint_square_pattern(5)\n\n# Alternative using string multiplication\ndef print_square_pattern(size):\n    for _ in range(size):\n        print(' '.join(str(i) for i in range(1, size + 1)))\n\nprint_square_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3196,20 +1968,7 @@ print_square_pattern(5)",
         "title": "Problem 226",
         "description": "Write a Python program to print a hollow right-angled triangle of stars:\\n*\\n* *\\n*  *\\n*   *\\n*****",
         "initialCode": "def print_hollow_right_triangle(height):\n    pass",
-        "solution": "def print_hollow_right_triangle(height):\n    for i in range(height):  # i = 0, 1, 2, 3, 4\n        if i == height - 1:  # Last row (i = 4 for height=5)\n            print('*' * (i + 1))  # Print full row of stars (5 stars)\n        else:  # Middle rows (i = 0, 1, 2, 3)\n            # Print: star + spaces + star\n            print('*' + ' ' * i + '*')  # Hollow row: \"*\", \"* *\", \"*  *\", \"*   *\"\n\nheight = 5\nprint_hollow_right_triangle(height)
-
-# Alternative using conditional expression
-def print_hollow_right_triangle(n):
-    for i in range(n):
-        print('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1))
-
-print_hollow_right_triangle(5)
-
-# Alternative using join
-def print_hollow_right_triangle(n):
-    print('\\n'.join('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1) for i in range(n)))
-
-print_hollow_right_triangle(5)",
+        "solution": "def print_hollow_right_triangle(height):\n    for i in range(height):  # i = 0, 1, 2, 3, 4\n        if i == height - 1:  # Last row (i = 4 for height=5)\n            print('*' * (i + 1))  # Print full row of stars (5 stars)\n        else:  # Middle rows (i = 0, 1, 2, 3)\n            # Print: star + spaces + star\n            print('*' + ' ' * i + '*')  # Hollow row: \"*\", \"* *\", \"*  *\", \"*   *\"\n\nheight = 5\nprint_hollow_right_triangle(height)\n\n# Alternative using conditional expression\ndef print_hollow_right_triangle(n):\n    for i in range(n):\n        print('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1))\n\nprint_hollow_right_triangle(5)\n\n# Alternative using join\ndef print_hollow_right_triangle(n):\n    print('\\n'.join('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1) for i in range(n)))\n\nprint_hollow_right_triangle(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3218,17 +1977,7 @@ print_hollow_right_triangle(5)",
         "title": "Problem 227",
         "description": "Write a Python program to print a zigzag pattern of stars for a given number of rows.\\nFor example, for 5 rows:\\n*   *   *\\n * * * *\\n  *   *\\n * * * *\\n*   *   *",
         "initialCode": "def print_zigzag(rows):\n    pass",
-        "solution": "def print_zigzag(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                print('*', end=' ')\n            else:\n                print(' ', end=' ')\n        print()\n\nrows = 5\nprint_zigzag(rows)
-
-# Alternative using simpler alternating rows
-def print_zigzag(rows):
-    for i in range(rows):
-        if i % 2 == 0:
-            print('*   ' * (rows // 2 + 1))
-        else:
-            print(' * *' * (rows // 2 + 1))
-
-print_zigzag(5)",
+        "solution": "def print_zigzag(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                print('*', end=' ')\n            else:\n                print(' ', end=' ')\n        print()\n\nrows = 5\nprint_zigzag(rows)\n\n# Alternative using simpler alternating rows\ndef print_zigzag(rows):\n    for i in range(rows):\n        if i % 2 == 0:\n            print('*   ' * (rows // 2 + 1))\n        else:\n            print(' * *' * (rows // 2 + 1))\n\nprint_zigzag(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3237,21 +1986,7 @@ print_zigzag(5)",
         "title": "Problem 228",
         "description": "Write a Python program to print a cross pattern of stars for a given odd number of rows.\\nFor example, for 5 rows:\\n*   *\\n * *\\n  *\\n * *\\n*   *\"",
         "initialCode": "def print_cross(rows):\n    pass",
-        "solution": "def print_cross(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if j == i or j == (rows - 1 - i):  # On either diagonal\n                print('*', end='')  # Print star\n            else:\n                print(' ', end='')  # Print space\n        print()  # Newline after row\n\nrows = 5\nprint_cross(rows)
-
-# Alternative using abs() symmetry
-def print_cross(rows):
-    for i in range(rows):
-        print(' ' * min(i, rows - 1 - i) + '*' + ' ' * (abs(rows // 2 - i) * 2 - 1) + ('' if i == rows // 2 else '*'))
-
-print_cross(5)
-
-# Alternative using list comprehension with conditional
-def print_cross(rows):
-    for i in range(rows):
-        print(''.join('*' if j == i or j == rows - 1 - i else ' ' for j in range(rows)))
-
-print_cross(5)",
+        "solution": "def print_cross(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if j == i or j == (rows - 1 - i):  # On either diagonal\n                print('*', end='')  # Print star\n            else:\n                print(' ', end='')  # Print space\n        print()  # Newline after row\n\nrows = 5\nprint_cross(rows)\n\n# Alternative using abs() symmetry\ndef print_cross(rows):\n    for i in range(rows):\n        print(' ' * min(i, rows - 1 - i) + '*' + ' ' * (abs(rows // 2 - i) * 2 - 1) + ('' if i == rows // 2 else '*'))\n\nprint_cross(5)\n\n# Alternative using list comprehension with conditional\ndef print_cross(rows):\n    for i in range(rows):\n        print(''.join('*' if j == i or j == rows - 1 - i else ' ' for j in range(rows)))\n\nprint_cross(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3260,26 +1995,7 @@ print_cross(5)",
         "title": "Problem 229",
         "description": "Write a Python program to print an hourglass pattern of stars:\\n*****\\n ***\\n  *\\n ***\\n*****",
         "initialCode": "def print_hourglass(rows):\n    pass",
-        "solution": "def print_hourglass(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3\n        print(' ' * i + '*' * (rows - i * 2))  # May produce incorrect pattern for some rows\n\nrows = 4\nprint_hourglass(rows)
-
-# Alternative using proper hourglass with odd rows
-def print_hourglass(rows):
-    n = rows // 2
-    for i in range(n, -1, -1):
-        print(' ' * (n - i) + '*' * (2 * i + 1))
-    for i in range(1, n + 1):
-        print(' ' * (n - i) + '*' * (2 * i + 1))
-
-print_hourglass(5)
-
-# Alternative using list comprehension
-def print_hourglass(rows):
-    n = rows // 2
-    pattern = [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(n, -1, -1)]
-    pattern += [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(1, n + 1)]
-    print('\\n'.join(pattern))
-
-print_hourglass(5)",
+        "solution": "def print_hourglass(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3\n        print(' ' * i + '*' * (rows - i * 2))  # May produce incorrect pattern for some rows\n\nrows = 4\nprint_hourglass(rows)\n\n# Alternative using proper hourglass with odd rows\ndef print_hourglass(rows):\n    n = rows // 2\n    for i in range(n, -1, -1):\n        print(' ' * (n - i) + '*' * (2 * i + 1))\n    for i in range(1, n + 1):\n        print(' ' * (n - i) + '*' * (2 * i + 1))\n\nprint_hourglass(5)\n\n# Alternative using list comprehension\ndef print_hourglass(rows):\n    n = rows // 2\n    pattern = [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(n, -1, -1)]\n    pattern += [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(1, n + 1)]\n    print('\\n'.join(pattern))\n\nprint_hourglass(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3288,33 +2004,7 @@ print_hourglass(5)",
         "title": "Problem 230",
         "description": "Write a Python function called count_occurrences that takes a list of elements as input and returns the number of times the elements appears in the list.",
         "initialCode": "def count_occurrences(lst):\n    pass",
-        "solution": "def count_occurrences(lst):\n    result = {}  # Dictionary: element \u2192 count\n    for word in lst:  # Iterate over all elements\n        if word in result:  # Element seen before\n            result[word] += 1  # Increment count\n        else:  # First occurrence\n            result[word] = 1\n    return result\n\nlst = [\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]\nprint(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}
-
-# Alternative using Counter
-def count_occurrences(lst):
-    from collections import Counter
-    return dict(Counter(lst))
-
-print(count_occurrences([\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]))
-
-# Alternative using dict.get()
-def count_occurrences(lst):
-    result = {}
-    for item in lst:
-        result[item] = result.get(item, 0) + 1
-    return result
-
-print(count_occurrences([\"a\", \"b\", \"a\", \"c\", \"b\"]))
-
-# Alternative using setdefault
-def count_occurrences(lst):
-    result = {}
-    for item in lst:
-        result.setdefault(item, 0)
-        result[item] += 1
-    return result
-
-print(count_occurrences([1, 2, 1, 3, 1, 2]))",
+        "solution": "def count_occurrences(lst):\n    result = {}  # Dictionary: element \u2192 count\n    for word in lst:  # Iterate over all elements\n        if word in result:  # Element seen before\n            result[word] += 1  # Increment count\n        else:  # First occurrence\n            result[word] = 1\n    return result\n\nlst = [\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]\nprint(count_occurrences(lst))  # Output: {'tom': 2, 'fred': 2, 'chris': 1}\n\n# Alternative using Counter\ndef count_occurrences(lst):\n    from collections import Counter\n    return dict(Counter(lst))\n\nprint(count_occurrences([\"tom\", \"fred\", \"tom\", \"chris\", \"fred\"]))\n\n# Alternative using dict.get()\ndef count_occurrences(lst):\n    result = {}\n    for item in lst:\n        result[item] = result.get(item, 0) + 1\n    return result\n\nprint(count_occurrences([\"a\", \"b\", \"a\", \"c\", \"b\"]))\n\n# Alternative using setdefault\ndef count_occurrences(lst):\n    result = {}\n    for item in lst:\n        result.setdefault(item, 0)\n        result[item] += 1\n    return result\n\nprint(count_occurrences([1, 2, 1, 3, 1, 2]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3323,25 +2013,7 @@ print(count_occurrences([1, 2, 1, 3, 1, 2]))",
         "title": "Problem 231",
         "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible.",
         "initialCode": "def sum_of_odd():\n    pass",
-        "solution": "def sum_of_odd():\n    user = input(\"type numbers: \").split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    print(count)\n            \nsum_of_odd()
-
-# Alternative using sum with generator
-def sum_of_odd(nums):
-    return sum(n for n in nums if n % 2 != 0)
-
-print(sum_of_odd([1, 2, 3, 4, 5]))
-
-# Alternative using filter and sum
-def sum_of_odd(nums):
-    return sum(filter(lambda x: x % 2 != 0, nums))
-
-print(sum_of_odd([2, 4, 6, 7, 9]))
-
-# Alternative using list comprehension
-def sum_of_odd(nums):
-    return sum([n for n in nums if n % 2])
-
-print(sum_of_odd([10, 15, 20, 25]))",
+        "solution": "def sum_of_odd():\n    user = input(\"type numbers: \").split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    print(count)\n            \nsum_of_odd()\n\n# Alternative using sum with generator\ndef sum_of_odd(nums):\n    return sum(n for n in nums if n % 2 != 0)\n\nprint(sum_of_odd([1, 2, 3, 4, 5]))\n\n# Alternative using filter and sum\ndef sum_of_odd(nums):\n    return sum(filter(lambda x: x % 2 != 0, nums))\n\nprint(sum_of_odd([2, 4, 6, 7, 9]))\n\n# Alternative using list comprehension\ndef sum_of_odd(nums):\n    return sum([n for n in nums if n % 2])\n\nprint(sum_of_odd([10, 15, 20, 25]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3350,26 +2022,7 @@ print(sum_of_odd([10, 15, 20, 25]))",
         "title": "Problem 232",
         "description": "Write a Python program to remove vowels from a string. Prompt the user to enter a string. Do not use append().",
         "initialCode": "def remove_vowels():\n    pass",
-        "solution": "def remove_vowels():\n    user = input(\"type string: \")\n    for char in user:\n        if char not in \"aeiou\":  # Only checks lowercase vowels (case-sensitive)\n            print(char, end= \"\")  # Print char without newline (end=\"\" prevents newline)\n            \nremove_vowels()
-
-# Alternative using join and filter
-def remove_vowels(s):
-    return ''.join(filter(lambda c: c not in \"aeiouAEIOU\", s))
-
-print(remove_vowels(\"hello world\"))  # Output: hll wrld
-
-# Alternative using translate
-def remove_vowels(s):
-    return s.translate(str.maketrans('', '', \"aeiouAEIOU\"))
-
-print(remove_vowels(\"banana\"))  # Output: bnn
-
-# Alternative using regex
-def remove_vowels(s):
-    import re
-    return re.sub(r'[aeiouAEIOU]', '', s)
-
-print(remove_vowels(\"Hello, World!\"))",
+        "solution": "def remove_vowels():\n    user = input(\"type string: \")\n    for char in user:\n        if char not in \"aeiou\":  # Only checks lowercase vowels (case-sensitive)\n            print(char, end= \"\")  # Print char without newline (end=\"\" prevents newline)\n            \nremove_vowels()\n\n# Alternative using join and filter\ndef remove_vowels(s):\n    return ''.join(filter(lambda c: c not in \"aeiouAEIOU\", s))\n\nprint(remove_vowels(\"hello world\"))  # Output: hll wrld\n\n# Alternative using translate\ndef remove_vowels(s):\n    return s.translate(str.maketrans('', '', \"aeiouAEIOU\"))\n\nprint(remove_vowels(\"banana\"))  # Output: bnn\n\n# Alternative using regex\ndef remove_vowels(s):\n    import re\n    return re.sub(r'[aeiouAEIOU]', '', s)\n\nprint(remove_vowels(\"Hello, World!\"))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3378,31 +2031,7 @@ print(remove_vowels(\"Hello, World!\"))",
         "title": "Problem 233",
         "description": "Write a Python function called `find_min` that takes a list of numbers as input and returns the minimum number in the list. Do not use min().",
         "initialCode": "def find_min(lst):\n    pass",
-        "solution": "def find_min(lst):\n    min_num = lst[0]\n    for number in lst:\n        if number < min_num:\n            min_num = number\n    return min_num\n            \nlst = [13, 566, 1]\nprint(find_min(lst))
-
-# Alternative using sorted
-def find_min(lst):
-    return sorted(lst)[0]
-
-print(find_min([13, 566, 1]))
-
-# Alternative using reduce
-def find_min(lst):
-    from functools import reduce
-    return reduce(lambda a, b: a if a < b else b, lst)
-
-print(find_min([5, 2, 9, 1, 7]))
-
-# Alternative using while loop
-def find_min(lst):
-    i, min_val = 1, lst[0]
-    while i < len(lst):
-        if lst[i] < min_val:
-            min_val = lst[i]
-        i += 1
-    return min_val
-
-print(find_min([8, 3, 5, 2]))",
+        "solution": "def find_min(lst):\n    min_num = lst[0]\n    for number in lst:\n        if number < min_num:\n            min_num = number\n    return min_num\n            \nlst = [13, 566, 1]\nprint(find_min(lst))\n\n# Alternative using sorted\ndef find_min(lst):\n    return sorted(lst)[0]\n\nprint(find_min([13, 566, 1]))\n\n# Alternative using reduce\ndef find_min(lst):\n    from functools import reduce\n    return reduce(lambda a, b: a if a < b else b, lst)\n\nprint(find_min([5, 2, 9, 1, 7]))\n\n# Alternative using while loop\ndef find_min(lst):\n    i, min_val = 1, lst[0]\n    while i < len(lst):\n        if lst[i] < min_val:\n            min_val = lst[i]\n        i += 1\n    return min_val\n\nprint(find_min([8, 3, 5, 2]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3411,29 +2040,7 @@ print(find_min([8, 3, 5, 2]))",
         "title": "Problem 234",
         "description": "Write a Python program to print a square pattern of stars with a given side length. Use a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "i = 1  # Loop counter\n\nwhile (i < 6):  # Loop 5 times (i = 1, 2, 3, 4, 5)\n    print(\"* \" * 5)  # Print 5 stars with spaces (hardcoded, not using variable)\n    i += 1  # Increment counter
-
-# Alternative using parameterized while loop
-def print_square(n):
-    i = 0
-    while i < n:
-        print('* ' * n)
-        i += 1
-
-print_square(5)
-
-# Alternative using while with nested while
-def print_square(n):
-    i = 0
-    while i < n:
-        j = 0
-        while j < n:
-            print('*', end=' ')
-            j += 1
-        print()
-        i += 1
-
-print_square(5)",
+        "solution": "i = 1  # Loop counter\n\nwhile (i < 6):  # Loop 5 times (i = 1, 2, 3, 4, 5)\n    print(\"* \" * 5)  # Print 5 stars with spaces (hardcoded, not using variable)\n    i += 1  # Increment counter\n\n# Alternative using parameterized while loop\ndef print_square(n):\n    i = 0\n    while i < n:\n        print('* ' * n)\n        i += 1\n\nprint_square(5)\n\n# Alternative using while with nested while\ndef print_square(n):\n    i = 0\n    while i < n:\n        j = 0\n        while j < n:\n            print('*', end=' ')\n            j += 1\n        print()\n        i += 1\n\nprint_square(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3442,20 +2049,7 @@ print_square(5)",
         "title": "Problem 235",
         "description": "Write a Python program that prints a increasing triangle pattern of stars.",
         "initialCode": "def increasing_triangle():\n    pass",
-        "solution": "def increasing_triangle():\n    n = 5\n    \n    for i in range(n):\n        for i in range(i+1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())
-
-# Alternative using string multiplication
-def increasing_triangle():
-    for i in range(1, 6):
-        print('* ' * i)
-
-increasing_triangle()
-
-# Alternative using join
-def increasing_triangle():
-    print('\\n'.join('* ' * i for i in range(1, 6)))
-
-increasing_triangle()",
+        "solution": "def increasing_triangle():\n    n = 5\n    \n    for i in range(n):\n        for i in range(i+1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())\n\n# Alternative using string multiplication\ndef increasing_triangle():\n    for i in range(1, 6):\n        print('* ' * i)\n\nincreasing_triangle()\n\n# Alternative using join\ndef increasing_triangle():\n    print('\\n'.join('* ' * i for i in range(1, 6)))\n\nincreasing_triangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3464,23 +2058,7 @@ increasing_triangle()",
         "title": "Problem 236",
         "description": "Write a Python program that prints a decreasing triangle pattern of stars.",
         "initialCode": "def decreasing_triangle():\n    pass",
-        "solution": "def decreasing_triangle():\n    n = 5\n    for i in range(n):  # i = 0, 1, 2, 3, 4\n        for j in range(i, n):  # Print (n-i) stars\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())  # BUG: Calls wrong function (should be decreasing_triangle())
-
-# Alternative using string multiplication
-def decreasing_triangle():
-    for i in range(5, 0, -1):
-        print('* ' * i)
-
-decreasing_triangle()
-
-# Alternative using reversed range
-def decreasing_triangle():
-    for i in range(5, 0, -1):
-        for j in range(i):
-            print('*', end=' ')
-        print()
-
-decreasing_triangle()",
+        "solution": "def decreasing_triangle():\n    n = 5\n    for i in range(n):  # i = 0, 1, 2, 3, 4\n        for j in range(i, n):  # Print (n-i) stars\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())  # BUG: Calls wrong function (should be decreasing_triangle())\n\n# Alternative using string multiplication\ndef decreasing_triangle():\n    for i in range(5, 0, -1):\n        print('* ' * i)\n\ndecreasing_triangle()\n\n# Alternative using reversed range\ndef decreasing_triangle():\n    for i in range(5, 0, -1):\n        for j in range(i):\n            print('*', end=' ')\n        print()\n\ndecreasing_triangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3489,20 +2067,7 @@ decreasing_triangle()",
         "title": "Problem 237",
         "description": "Write a Python program that prints a right triangle pattern of stars.",
         "initialCode": "def right_triangle(n): \n    pass",
-        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(((\"*\") + \" \")* i)  # Prints: \"* \", \"* * \", \"* * * \", etc.\n\ndef right_triangle(n): \n    for i in range(1, n + 1):  # Rows: 1 to n\n        for j in range(i):  # Print i stars\n            print(\"*\", end=\" \")  # Print star with space\n        print()  # Newline after row\n\nnumber = 5\nright_triangle(number)
-
-# Alternative using join
-def right_triangle(n):
-    for i in range(1, n + 1):
-        print(' '.join('*' for _ in range(i)))
-
-right_triangle(5)
-
-# Alternative using string multiplication
-def right_triangle(n):
-    print('\\n'.join('* ' * i for i in range(1, n + 1)))
-
-right_triangle(5)",
+        "solution": "for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print(((\"*\") + \" \")* i)  # Prints: \"* \", \"* * \", \"* * * \", etc.\n\ndef right_triangle(n): \n    for i in range(1, n + 1):  # Rows: 1 to n\n        for j in range(i):  # Print i stars\n            print(\"*\", end=\" \")  # Print star with space\n        print()  # Newline after row\n\nnumber = 5\nright_triangle(number)\n\n# Alternative using join\ndef right_triangle(n):\n    for i in range(1, n + 1):\n        print(' '.join('*' for _ in range(i)))\n\nright_triangle(5)\n\n# Alternative using string multiplication\ndef right_triangle(n):\n    print('\\n'.join('* ' * i for i in range(1, n + 1)))\n\nright_triangle(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3511,23 +2076,7 @@ right_triangle(5)",
         "title": "Problem 238",
         "description": "Write a Python program that prints a left triangle pattern of stars.",
         "initialCode": "def left_triangle():\n    pass",
-        "solution": "def left_triangle():\n    n = 5\n    for i in range(n):\n        for i in range(i, n):\n            print(\" \", end=\" \")\n    for i in range(n):\n        for i in range(i + 1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())
-
-# Alternative using spaces and stars
-def left_triangle():
-    n = 5
-    for i in range(1, n + 1):
-        print('  ' * (n - i) + '* ' * i)
-
-left_triangle()
-
-# Alternative using rjust
-def left_triangle():
-    n = 5
-    for i in range(1, n + 1):
-        print(('* ' * i).rjust(n * 2))
-
-left_triangle()",
+        "solution": "def left_triangle():\n    n = 5\n    for i in range(n):\n        for i in range(i, n):\n            print(\" \", end=\" \")\n    for i in range(n):\n        for i in range(i + 1):\n            print(\"*\", end=\" \")\n        print()\n\nprint(increasing_triangle())\n\n# Alternative using spaces and stars\ndef left_triangle():\n    n = 5\n    for i in range(1, n + 1):\n        print('  ' * (n - i) + '* ' * i)\n\nleft_triangle()\n\n# Alternative using rjust\ndef left_triangle():\n    n = 5\n    for i in range(1, n + 1):\n        print(('* ' * i).rjust(n * 2))\n\nleft_triangle()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3536,20 +2085,7 @@ left_triangle()",
         "title": "Problem 239",
         "description": "Write a Python program that prints a hill pattern of stars.",
         "initialCode": "def print_hill_pattern(rows):\n    pass",
-        "solution": "def print_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * (rows - i - 1) + '*' * (2 * i + 1))\n\nrows = 5\nprint_hill_pattern(rows)
-
-# Alternative using center method
-def print_hill_pattern(rows):
-    for i in range(rows):
-        print(('*' * (2 * i + 1)).center(rows * 2 - 1))
-
-print_hill_pattern(5)
-
-# Alternative using list comprehension
-def print_hill_pattern(rows):
-    print('\\n'.join(('*' * (2 * i + 1)).center(rows * 2 - 1) for i in range(rows)))
-
-print_hill_pattern(5)",
+        "solution": "def print_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * (rows - i - 1) + '*' * (2 * i + 1))\n\nrows = 5\nprint_hill_pattern(rows)\n\n# Alternative using center method\ndef print_hill_pattern(rows):\n    for i in range(rows):\n        print(('*' * (2 * i + 1)).center(rows * 2 - 1))\n\nprint_hill_pattern(5)\n\n# Alternative using list comprehension\ndef print_hill_pattern(rows):\n    print('\\n'.join(('*' * (2 * i + 1)).center(rows * 2 - 1) for i in range(rows)))\n\nprint_hill_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3558,20 +2094,7 @@ print_hill_pattern(5)",
         "title": "Problem 240",
         "description": "Write a Python program that prints a reverse hill pattern of stars.",
         "initialCode": "def print_reverse_hill_pattern(rows):\n    pass",
-        "solution": "def print_reverse_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * i + '*' * (2 * (rows - i) - 1))\n\nrows = 5\nprint_reverse_hill_pattern(rows)
-
-# Alternative using center method
-def print_reverse_hill_pattern(rows):
-    for i in range(rows):
-        print(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1))
-
-print_reverse_hill_pattern(5)
-
-# Alternative using list comprehension
-def print_reverse_hill_pattern(rows):
-    print('\\n'.join(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1) for i in range(rows)))
-
-print_reverse_hill_pattern(5)",
+        "solution": "def print_reverse_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * i + '*' * (2 * (rows - i) - 1))\n\nrows = 5\nprint_reverse_hill_pattern(rows)\n\n# Alternative using center method\ndef print_reverse_hill_pattern(rows):\n    for i in range(rows):\n        print(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1))\n\nprint_reverse_hill_pattern(5)\n\n# Alternative using list comprehension\ndef print_reverse_hill_pattern(rows):\n    print('\\n'.join(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1) for i in range(rows)))\n\nprint_reverse_hill_pattern(5)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3580,19 +2103,7 @@ print_reverse_hill_pattern(5)",
         "title": "Problem 241",
         "description": "Write a Python program to print the index and value of each element in a list using `enumerate()`",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):  # enumerate() provides index-value pairs\n        print(f\"index {index} name {word}\")  # Prints: \"index 0 name Jon\", etc.\n    \n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst))  # Prints indices/values, then prints None
-
-# Alternative returning as list of strings
-def enumerate_lst(lst):
-    return [f\"index {i} name {v}\" for i, v in enumerate(lst)]
-
-print('\\n'.join(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"])))
-
-# Alternative using dict
-def enumerate_lst(lst):
-    return dict(enumerate(lst))
-
-print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))  # Output: {0: 'Jon', 1: 'Chris', 2: 'Nathan'}",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):  # enumerate() provides index-value pairs\n        print(f\"index {index} name {word}\")  # Prints: \"index 0 name Jon\", etc.\n    \n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst))  # Prints indices/values, then prints None\n\n# Alternative returning as list of strings\ndef enumerate_lst(lst):\n    return [f\"index {i} name {v}\" for i, v in enumerate(lst)]\n\nprint('\\n'.join(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"])))\n\n# Alternative using dict\ndef enumerate_lst(lst):\n    return dict(enumerate(lst))\n\nprint(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))  # Output: {0: 'Jon', 1: 'Chris', 2: 'Nathan'}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3601,19 +2112,7 @@ print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))  # Output: {0: 'Jon', 1: 
         "title": "Problem 242",
         "description": "Write a Python program to create a list of tuples where each tuple contains the index and the value from a given list using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    result = []\n    for index, word in enumerate(lst):\n        result.append((index, word))  # Append tuple (index, word) to list\n    return result  # Returns: [(0, \"Jon\"), (1, \"Chris\"), (2, \"Nathan\")]\n    \nlst = (\"Jon\", \"Chris\", \"Nathan\")  # Note: tuple input (works with any iterable)\nprint(enumerate_lst(lst))
-
-# Alternative using list() on enumerate
-def enumerate_lst(lst):
-    return list(enumerate(lst))
-
-print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))
-
-# Alternative using list comprehension
-def enumerate_lst(lst):
-    return [(i, v) for i, v in enumerate(lst)]
-
-print(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: [(0, 'a'), (1, 'b'), (2, 'c')]",
+        "solution": "def enumerate_lst(lst):\n    result = []\n    for index, word in enumerate(lst):\n        result.append((index, word))  # Append tuple (index, word) to list\n    return result  # Returns: [(0, \"Jon\"), (1, \"Chris\"), (2, \"Nathan\")]\n    \nlst = (\"Jon\", \"Chris\", \"Nathan\")  # Note: tuple input (works with any iterable)\nprint(enumerate_lst(lst))\n\n# Alternative using list() on enumerate\ndef enumerate_lst(lst):\n    return list(enumerate(lst))\n\nprint(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))\n\n# Alternative using list comprehension\ndef enumerate_lst(lst):\n    return [(i, v) for i, v in enumerate(lst)]\n\nprint(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: [(0, 'a'), (1, 'b'), (2, 'c')]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3622,19 +2121,7 @@ print(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: [(0, 'a'), (1, 'b'), (2, 
         "title": "Problem 243",
         "description": "Write a Python program to find the index of the first occurrence of a specific value in a list using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst, target):\n    pass",
-        "solution": "def enumerate_lst(lst, target):\n    for index, word in enumerate(lst):\n        if word == target:\n            return word, index \n    return -1\n        \ntarget = \"Chris\"    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst, target))
-
-# Alternative using list.index()
-def find_first(lst, target):
-    return target, lst.index(target)
-
-print(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))
-
-# Alternative using next with generator
-def find_first(lst, target):
-    return next(((v, i) for i, v in enumerate(lst) if v == target), -1)
-
-print(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))  # Output: ('Chris', 1)",
+        "solution": "def enumerate_lst(lst, target):\n    for index, word in enumerate(lst):\n        if word == target:\n            return word, index \n    return -1\n        \ntarget = \"Chris\"    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nprint(enumerate_lst(lst, target))\n\n# Alternative using list.index()\ndef find_first(lst, target):\n    return target, lst.index(target)\n\nprint(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))\n\n# Alternative using next with generator\ndef find_first(lst, target):\n    return next(((v, i) for i, v in enumerate(lst) if v == target), -1)\n\nprint(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))  # Output: ('Chris', 1)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3643,21 +2130,7 @@ print(find_first([\"Jon\", \"Chris\", \"Nathan\"], \"Chris\"))  # Output: ('Chri
         "title": "Problem 244",
         "description": "Write a Python program to print the index and value of each element in a list starting from index 1 using `enumerate()`",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst, start=1):  # start parameter sets initial index\n        print(f\"Index {index}, Name {word}\")  # Prints: \"Index 1, Name Jon\", etc.\n\nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)
-
-# Alternative returning formatted strings
-def enumerate_lst(lst):
-    return [f\"Index {i}, Name {v}\" for i, v in enumerate(lst, 1)]
-
-for s in enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]):
-    print(s)
-
-# Alternative with zip and range
-def enumerate_lst(lst):
-    for i, v in zip(range(1, len(lst) + 1), lst):
-        print(f\"Index {i}, Name {v}\")
-
-enumerate_lst([\"A\", \"B\", \"C\"])",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst, start=1):  # start parameter sets initial index\n        print(f\"Index {index}, Name {word}\")  # Prints: \"Index 1, Name Jon\", etc.\n\nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)\n\n# Alternative returning formatted strings\ndef enumerate_lst(lst):\n    return [f\"Index {i}, Name {v}\" for i, v in enumerate(lst, 1)]\n\nfor s in enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]):\n    print(s)\n\n# Alternative with zip and range\ndef enumerate_lst(lst):\n    for i, v in zip(range(1, len(lst) + 1), lst):\n        print(f\"Index {i}, Name {v}\")\n\nenumerate_lst([\"A\", \"B\", \"C\"])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3666,19 +2139,7 @@ enumerate_lst([\"A\", \"B\", \"C\"])",
         "title": "Problem 245",
         "description": "Write a Python program to create a dictionary where keys are the indexes and values are the corresponding elements from a list using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    result = {}  # Dictionary: index \u2192 value\n    for index, word in enumerate(lst):\n        result[index] = word  # Assign value to index key\n    print(result)\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)
-
-# Alternative using dict comprehension
-def enumerate_lst(lst):
-    return {i: v for i, v in enumerate(lst)}
-
-print(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))
-
-# Alternative using dict() on enumerate
-def enumerate_lst(lst):
-    return dict(enumerate(lst))
-
-print(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: {0: 'a', 1: 'b', 2: 'c'}",
+        "solution": "def enumerate_lst(lst):\n    result = {}  # Dictionary: index \u2192 value\n    for index, word in enumerate(lst):\n        result[index] = word  # Assign value to index key\n    print(result)\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\"]\nenumerate_lst(lst)\n\n# Alternative using dict comprehension\ndef enumerate_lst(lst):\n    return {i: v for i, v in enumerate(lst)}\n\nprint(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"]))\n\n# Alternative using dict() on enumerate\ndef enumerate_lst(lst):\n    return dict(enumerate(lst))\n\nprint(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: {0: 'a', 1: 'b', 2: 'c'}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3687,20 +2148,7 @@ print(enumerate_lst([\"a\", \"b\", \"c\"]))  # Output: {0: 'a', 1: 'b', 2: 'c'}"
         "title": "Problem 246",
         "description": "Write a Python program to filter and print elements of a list that are at even indexes using `enumerate()`",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        if index % 2 != 0:  # This filters odd indexes (1, 3, 5, ...)\n            print(index, word)  # Prints elements at odd positions\n        \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\", \"shirt\", \"beach\", \"app\", \" board\", \"hit\"]\nenumerate_lst(lst)  # Prints: 1 Chris, 3 hot, 5 shirt, 7 app, 9 hit (odd indexes)
-
-# Alternative using slicing for even indexes
-def enumerate_lst(lst):
-    for i in range(0, len(lst), 2):
-        print(i, lst[i])
-
-enumerate_lst([\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\"])
-
-# Alternative using list comprehension for even indexes
-def enumerate_lst(lst):
-    return [(i, lst[i]) for i in range(0, len(lst), 2)]
-
-print(enumerate_lst([\"a\", \"b\", \"c\", \"d\", \"e\"]))  # Output: [(0, 'a'), (2, 'c'), (4, 'e')]",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        if index % 2 != 0:  # This filters odd indexes (1, 3, 5, ...)\n            print(index, word)  # Prints elements at odd positions\n        \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\", \"shirt\", \"beach\", \"app\", \" board\", \"hit\"]\nenumerate_lst(lst)  # Prints: 1 Chris, 3 hot, 5 shirt, 7 app, 9 hit (odd indexes)\n\n# Alternative using slicing for even indexes\ndef enumerate_lst(lst):\n    for i in range(0, len(lst), 2):\n        print(i, lst[i])\n\nenumerate_lst([\"Jon\", \"Chris\", \"Nathan\", \"hot\", \"class\"])\n\n# Alternative using list comprehension for even indexes\ndef enumerate_lst(lst):\n    return [(i, lst[i]) for i in range(0, len(lst), 2)]\n\nprint(enumerate_lst([\"a\", \"b\", \"c\", \"d\", \"e\"]))  # Output: [(0, 'a'), (2, 'c'), (4, 'e')]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3709,22 +2157,7 @@ print(enumerate_lst([\"a\", \"b\", \"c\", \"d\", \"e\"]))  # Output: [(0, 'a'), 
         "title": "Problem 247",
         "description": "Write a Python program to print the index and value of each element in a list using a `for` loop with `enumerate()`.",
         "initialCode": "def enumerate_lst(lst):\n    pass",
-        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        print(f\"index {index} name {word}\")\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nenumerate_lst(lst)
-
-# Alternative as list comprehension
-def enumerate_lst(lst):
-    return [f\"index {i} name {v}\" for i, v in enumerate(lst)]
-
-print('\\n'.join(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"])))
-
-# Alternative using while loop
-def enumerate_lst(lst):
-    i = 0
-    while i < len(lst):
-        print(f\"index {i} name {lst[i]}\")
-        i += 1
-
-enumerate_lst([\"A\", \"B\", \"C\"])",
+        "solution": "def enumerate_lst(lst):\n    for index, word in enumerate(lst):\n        print(f\"index {index} name {word}\")\n    \nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nenumerate_lst(lst)\n\n# Alternative as list comprehension\ndef enumerate_lst(lst):\n    return [f\"index {i} name {v}\" for i, v in enumerate(lst)]\n\nprint('\\n'.join(enumerate_lst([\"Jon\", \"Chris\", \"Nathan\"])))\n\n# Alternative using while loop\ndef enumerate_lst(lst):\n    i = 0\n    while i < len(lst):\n        print(f\"index {i} name {lst[i]}\")\n        i += 1\n\nenumerate_lst([\"A\", \"B\", \"C\"])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3733,19 +2166,7 @@ enumerate_lst([\"A\", \"B\", \"C\"])",
         "title": "Problem 248",
         "description": "Write a Python program to replace each element in a list with its index using `enumerate()`",
         "initialCode": "def replace_with_index(lst):\n    pass",
-        "solution": "def replace_with_index(lst):\n    for index, _ in enumerate(lst):  # _ is conventional name for unused variable\n        lst[index] = index  # Replace element at index with index value itself\n    return lst  # Returns modified list: [0, 1, 2, 3, 4]\n\nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nprint(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]
-
-# Alternative using list comprehension
-def replace_with_index(lst):
-    return [i for i in range(len(lst))]
-
-print(replace_with_index([\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]))
-
-# Alternative using range
-def replace_with_index(lst):
-    return list(range(len(lst)))
-
-print(replace_with_index([1, 2, 3]))  # Output: [0, 1, 2]",
+        "solution": "def replace_with_index(lst):\n    for index, _ in enumerate(lst):  # _ is conventional name for unused variable\n        lst[index] = index  # Replace element at index with index value itself\n    return lst  # Returns modified list: [0, 1, 2, 3, 4]\n\nlst = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]\nprint(replace_with_index(lst))  # Output: [0, 1, 2, 3, 4]\n\n# Alternative using list comprehension\ndef replace_with_index(lst):\n    return [i for i in range(len(lst))]\n\nprint(replace_with_index([\"Jon\", \"Chris\", \"Nathan\", \"Sam\", \"Rachel\"]))\n\n# Alternative using range\ndef replace_with_index(lst):\n    return list(range(len(lst)))\n\nprint(replace_with_index([1, 2, 3]))  # Output: [0, 1, 2]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3754,20 +2175,7 @@ print(replace_with_index([1, 2, 3]))  # Output: [0, 1, 2]",
         "title": "Problem 249",
         "description": "Write a Python program to print the index and values from two lists of equal length side by side using `enumerate()`.",
         "initialCode": "def enumerate_lst(lst1, lst2):\n    pass",
-        "solution": "def enumerate_lst(lst1, lst2):\n    for index, word in enumerate(lst1):  # Get index and value from lst1\n        print(f\"index {index}: {word} and {lst2[index]}\")  # Prints both values side by side\n    \nlst1 = [\"Jon\", \"Chris\", \"Nathan\", \"Tom\", \"Sam\", \"Rose\", \"Bliss\", \"Hurt\"]\nlst2 = [\"Jonny\", \"Christopher\", \"Jhovian\", \"Tom\", \"Zack\", \"Rose\", \"Brad\", \"Michael\"]\n\nenumerate_lst(lst1, lst2)
-
-# Alternative using zip
-def enumerate_lst(lst1, lst2):
-    for i, (a, b) in enumerate(zip(lst1, lst2)):
-        print(f\"index {i}: {a} and {b}\")
-
-enumerate_lst([\"Jon\", \"Chris\"], [\"Jonny\", \"Christopher\"])
-
-# Alternative returning list of formatted strings
-def enumerate_lst(lst1, lst2):
-    return [f\"index {i}: {a} and {b}\" for i, (a, b) in enumerate(zip(lst1, lst2))]
-
-print('\\n'.join(enumerate_lst([\"Tom\", \"Sam\"], [\"Tommy\", \"Samuel\"])))",
+        "solution": "def enumerate_lst(lst1, lst2):\n    for index, word in enumerate(lst1):  # Get index and value from lst1\n        print(f\"index {index}: {word} and {lst2[index]}\")  # Prints both values side by side\n    \nlst1 = [\"Jon\", \"Chris\", \"Nathan\", \"Tom\", \"Sam\", \"Rose\", \"Bliss\", \"Hurt\"]\nlst2 = [\"Jonny\", \"Christopher\", \"Jhovian\", \"Tom\", \"Zack\", \"Rose\", \"Brad\", \"Michael\"]\n\nenumerate_lst(lst1, lst2)\n\n# Alternative using zip\ndef enumerate_lst(lst1, lst2):\n    for i, (a, b) in enumerate(zip(lst1, lst2)):\n        print(f\"index {i}: {a} and {b}\")\n\nenumerate_lst([\"Jon\", \"Chris\"], [\"Jonny\", \"Christopher\"])\n\n# Alternative returning list of formatted strings\ndef enumerate_lst(lst1, lst2):\n    return [f\"index {i}: {a} and {b}\" for i, (a, b) in enumerate(zip(lst1, lst2))]\n\nprint('\\n'.join(enumerate_lst([\"Tom\", \"Sam\"], [\"Tommy\", \"Samuel\"])))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3776,25 +2184,7 @@ print('\\n'.join(enumerate_lst([\"Tom\", \"Sam\"], [\"Tommy\", \"Samuel\"])))",
         "title": "Problem 250",
         "description": "Write a Python program to calculate the sum of elements in a list that are located at odd indexes using `enumerate()`.",
         "initialCode": "def sum_odd_indexed_elements(lst):\n    pass",
-        "solution": "def sum_odd_indexed_elements(lst):\n    total = 0\n    for index, value in enumerate(lst):\n        if index % 2 != 0:  # Check if index is odd (1, 3, 5, ...)\n            total += value  # Add value to sum\n    return total\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = sum_odd_indexed_elements(lst)  # Sums elements at indices 1, 3, 5: 2+4+6 = 12\nprint(result)
-
-# Alternative using slicing
-def sum_odd_indexed_elements(lst):
-    return sum(lst[1::2])  # Start at index 1, step 2
-
-print(sum_odd_indexed_elements([1, 2, 3, 4, 5, 6]))  # Output: 12
-
-# Alternative using enumerate with generator
-def sum_odd_indexed_elements(lst):
-    return sum(v for i, v in enumerate(lst) if i % 2 != 0)
-
-print(sum_odd_indexed_elements([10, 20, 30, 40]))  # Output: 60 (20+40)
-
-# Alternative using range
-def sum_odd_indexed_elements(lst):
-    return sum(lst[i] for i in range(1, len(lst), 2))
-
-print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
+        "solution": "def sum_odd_indexed_elements(lst):\n    total = 0\n    for index, value in enumerate(lst):\n        if index % 2 != 0:  # Check if index is odd (1, 3, 5, ...)\n            total += value  # Add value to sum\n    return total\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = sum_odd_indexed_elements(lst)  # Sums elements at indices 1, 3, 5: 2+4+6 = 12\nprint(result)\n\n# Alternative using slicing\ndef sum_odd_indexed_elements(lst):\n    return sum(lst[1::2])  # Start at index 1, step 2\n\nprint(sum_odd_indexed_elements([1, 2, 3, 4, 5, 6]))  # Output: 12\n\n# Alternative using enumerate with generator\ndef sum_odd_indexed_elements(lst):\n    return sum(v for i, v in enumerate(lst) if i % 2 != 0)\n\nprint(sum_odd_indexed_elements([10, 20, 30, 40]))  # Output: 60 (20+40)\n\n# Alternative using range\ndef sum_odd_indexed_elements(lst):\n    return sum(lst[i] for i in range(1, len(lst), 2))\n\nprint(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3803,7 +2193,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 251",
         "description": "Write a Python program to pair elements from two lists of equal length using `zip()`.",
         "initialCode": "def pair_elements(lst1, lst2):\n    pass",
-        "solution": "def pair_elements(lst1, lst2):\n    paired = list(zip(lst1, lst2))  # zip() pairs elements at same index\n    return paired  # Returns: [(\"Jon\", \"A\"), (\"Chris\", \"B\"), (\"Nathan\", \"C\"), (\"Sam\", \"D\")]\n\nlst1 = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\"]\nlst2 = [\"A\", \"B\", \"C\", \"D\"]\n\nprint(pair_elements(lst1, lst2))",
+        "solution": "def pair_elements(lst1, lst2):\n    paired = list(zip(lst1, lst2))  # zip() pairs elements at same index\n    return paired  # Returns: [(\"Jon\", \"A\"), (\"Chris\", \"B\"), (\"Nathan\", \"C\"), (\"Sam\", \"D\")]\n\nlst1 = [\"Jon\", \"Chris\", \"Nathan\", \"Sam\"]\nlst2 = [\"A\", \"B\", \"C\", \"D\"]\n\nprint(pair_elements(lst1, lst2))\n\n# Alternative using list comprehension\ndef pair_elements(lst1, lst2):\n    return [x for x in zip(lst1, lst2)]\n\nprint(pair_elements([\"Jon\", \"Chris\", \"Nathan\", \"Sam\"], [\"A\", \"B\", \"C\", \"D\"]))\n\n# Alternative using unpacking operator\ndef pair_elements(lst1, lst2):\n    return [*zip(lst1, lst2)]\n\nprint(pair_elements([\"Jon\", \"Chris\", \"Nathan\", \"Sam\"], [\"A\", \"B\", \"C\", \"D\"]))\n\n# Alternative using traditional for loop\ndef pair_elements(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        result.append((lst1[i], lst2[i]))\n    return result\n\nprint(pair_elements([\"Jon\", \"Chris\", \"Nathan\", \"Sam\"], [\"A\", \"B\", \"C\", \"D\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3812,7 +2202,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 252",
         "description": "Write a Python program to find the sum of corresponding elements from two lists using `zip()`.",
         "initialCode": "def sum_of_2_lst(lst1, lst2):\n    pass",
-        "solution": "def sum_of_2_lst(lst1, lst2):\n    summed_list = []\n    for x, y in zip(lst1, lst2):\n        summed_list.append(x + y)\n    return summed_list\n\nlst1 = [2, 4, 6, 8]\nlst2 = [2, 4, 6, 8]\n\nprint(sum_of_2_lst(lst1, lst2))",
+        "solution": "def sum_of_2_lst(lst1, lst2):\n    summed_list = []\n    for x, y in zip(lst1, lst2):\n        summed_list.append(x + y)\n    return summed_list\n\nlst1 = [2, 4, 6, 8]\nlst2 = [2, 4, 6, 8]\n\nprint(sum_of_2_lst(lst1, lst2))\n\n# Alternative using list comprehension\ndef sum_of_2_lst(lst1, lst2):\n    return [x + y for x, y in zip(lst1, lst2)]\n\nprint(sum_of_2_lst([2, 4, 6, 8], [2, 4, 6, 8]))\n\n# Alternative using map() and sum()\ndef sum_of_2_lst(lst1, lst2):\n    return list(map(sum, zip(lst1, lst2)))\n\nprint(sum_of_2_lst([2, 4, 6, 8], [2, 4, 6, 8]))\n\n# Alternative using traditional for loop with range\ndef sum_of_2_lst(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        result.append(lst1[i] + lst2[i])\n    return result\n\nprint(sum_of_2_lst([2, 4, 6, 8], [2, 4, 6, 8]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3821,7 +2211,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 253",
         "description": "Write a Python function to sort a list of tuples by the second element in each tuple using the key parameter.",
         "initialCode": "def sort_tuples_by_second(tuples_list):\n    pass",
-        "solution": "def sort_tuples_by_second(tuples_list):\n    return sorted(tuples_list, key=lambda x: x[1])  # Sort by x[1] (second element)\n\ntuples_list = [(1, 3), (3, 2), (5, 1)]\nresult = sort_tuples_by_second(tuples_list)  # Sorted by second element: 3, 2, 1\nprint(result)",
+        "solution": "def sort_tuples_by_second(tuples_list):\n    return sorted(tuples_list, key=lambda x: x[1])  # Sort by x[1] (second element)\n\ntuples_list = [(1, 3), (3, 2), (5, 1)]\nresult = sort_tuples_by_second(tuples_list)  # Sorted by second element: 3, 2, 1\nprint(result)\n\n# Alternative using itemgetter\nfrom operator import itemgetter\n\ndef sort_tuples_by_second(tuples_list):\n    return sorted(tuples_list, key=itemgetter(1))\n\nprint(sort_tuples_by_second([(1, 3), (3, 2), (5, 1)]))\n\n# Alternative using bubble sort\ndef sort_tuples_by_second(tuples_list):\n    lst = list(tuples_list)\n    for i in range(len(lst)):\n        for j in range(0, len(lst) - i - 1):\n            if lst[j][1] > lst[j + 1][1]:\n                lst[j], lst[j + 1] = lst[j + 1], lst[j]\n    return lst\n\nprint(sort_tuples_by_second([(1, 3), (3, 2), (5, 1)]))\n\n# Alternative using sort() in-place\ndef sort_tuples_by_second(tuples_list):\n    tuples_list.sort(key=lambda x: x[1])\n    return tuples_list\n\nprint(sort_tuples_by_second([(1, 3), (3, 2), (5, 1)]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3830,7 +2220,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 254",
         "description": "Write a Python program to create a dictionary from two lists, one for keys and one for values, using `zip()`.",
         "initialCode": "def dic_lst(lst1, lst2):\n    pass",
-        "solution": "def dic_lst(lst1, lst2):\n    result = {}\n    for x, y in zip(lst1, lst2):  # x from lst1 (key), y from lst2 (value)\n        result[x] = y  # Assign value y to key x\n    return result  # Returns: {1: \"Ron\", 2: \"break\", 3: \"tree\", 4: \"son\"}\n    \nlst1 = [1, 2, 3, 4]\nlst2 = [\"Ron\", \"break\", \"tree\", \"son\"]\nprint(dic_lst(lst1, lst2))",
+        "solution": "def dic_lst(lst1, lst2):\n    result = {}\n    for x, y in zip(lst1, lst2):  # x from lst1 (key), y from lst2 (value)\n        result[x] = y  # Assign value y to key x\n    return result  # Returns: {1: \"Ron\", 2: \"break\", 3: \"tree\", 4: \"son\"}\n    \nlst1 = [1, 2, 3, 4]\nlst2 = [\"Ron\", \"break\", \"tree\", \"son\"]\nprint(dic_lst(lst1, lst2))\n\n# Alternative using dict() constructor\ndef dic_lst(lst1, lst2):\n    return dict(zip(lst1, lst2))\n\nprint(dic_lst([1, 2, 3, 4], [\"Ron\", \"break\", \"tree\", \"son\"]))\n\n# Alternative using dictionary comprehension\ndef dic_lst(lst1, lst2):\n    return {k: v for k, v in zip(lst1, lst2)}\n\nprint(dic_lst([1, 2, 3, 4], [\"Ron\", \"break\", \"tree\", \"son\"]))\n\n# Alternative using enumerate\ndef dic_lst(lst1, lst2):\n    result = {}\n    for i in range(len(lst1)):\n        result[lst1[i]] = lst2[i]\n    return result\n\nprint(dic_lst([1, 2, 3, 4], [\"Ron\", \"break\", \"tree\", \"son\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3839,7 +2229,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 255",
         "description": "Write a Python program to combine three lists into a list of tuples using `zip()`.",
         "initialCode": "def combine_3_lst(lst1, lst2, lst3):\n    pass",
-        "solution": "def combine_3_lst(lst1, lst2, lst3):\n    result = []\n    for x, y, z in zip(lst1, lst2, lst3):  # Unpack three elements from zip()\n         result.append((x, y, z))  # Append tuple of three elements\n         \n    return result  # Returns: [(\"Sam\", \"Sammy\", \"Son\"), (\"Nike\", \"Mikey\", \"monkey\"), ...]\n     \nlst1 = [\"Sam\", \"Nike\", \"system\"]\nlst2 = [\"Sammy\", \"Mikey\", \"Steven\"]\nlst3 = [\"Son\", \"monkey\", \"star\"]\nprint(combine_3_lst(lst1, lst2, lst3))",
+        "solution": "def combine_3_lst(lst1, lst2, lst3):\n    result = []\n    for x, y, z in zip(lst1, lst2, lst3):  # Unpack three elements from zip()\n         result.append((x, y, z))  # Append tuple of three elements\n         \n    return result  # Returns: [(\"Sam\", \"Sammy\", \"Son\"), (\"Nike\", \"Mikey\", \"monkey\"), ...]\n     \nlst1 = [\"Sam\", \"Nike\", \"system\"]\nlst2 = [\"Sammy\", \"Mikey\", \"Steven\"]\nlst3 = [\"Son\", \"monkey\", \"star\"]\nprint(combine_3_lst(lst1, lst2, lst3))\n\n# Alternative using list(zip())\ndef combine_3_lst(lst1, lst2, lst3):\n    return list(zip(lst1, lst2, lst3))\n\nprint(combine_3_lst([\"Sam\", \"Nike\", \"system\"], [\"Sammy\", \"Mikey\", \"Steven\"], [\"Son\", \"monkey\", \"star\"]))\n\n# Alternative using unpacking\ndef combine_3_lst(lst1, lst2, lst3):\n    return [*zip(lst1, lst2, lst3)]\n\nprint(combine_3_lst([\"Sam\", \"Nike\", \"system\"], [\"Sammy\", \"Mikey\", \"Steven\"], [\"Son\", \"monkey\", \"star\"]))\n\n# Alternative using traditional for loop with index\ndef combine_3_lst(lst1, lst2, lst3):\n    result = []\n    for i in range(len(lst1)):\n        result.append((lst1[i], lst2[i], lst3[i]))\n    return result\n\nprint(combine_3_lst([\"Sam\", \"Nike\", \"system\"], [\"Sammy\", \"Mikey\", \"Steven\"], [\"Son\", \"monkey\", \"star\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3848,7 +2238,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 256",
         "description": "Write a Python program to transpose a 2D matrix (list of lists) using `zip()`.",
         "initialCode": "def transpose_matrix(matrix):\n    pass",
-        "solution": "def transpose_matrix(matrix):\n    transposed = zip(*matrix)  # * operator unpacks iterable as arguments\n    result = []\n    for row in transposed:  # Each row is a tuple from zip()\n        result.append(list(row))  # Convert tuple to list\n    \n    return result  # Returns: [[1,4,7], [2,5,8], [3,6,9]]\nmatrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9]\n]\n\nprint(transpose_matrix(matrix))",
+        "solution": "def transpose_matrix(matrix):\n    transposed = zip(*matrix)  # * operator unpacks iterable as arguments\n    result = []\n    for row in transposed:  # Each row is a tuple from zip()\n        result.append(list(row))  # Convert tuple to list\n    \n    return result  # Returns: [[1,4,7], [2,5,8], [3,6,9]]\nmatrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9]\n]\n\nprint(transpose_matrix(matrix))\n\n# Alternative using list comprehension with zip(*)\ndef transpose_matrix(matrix):\n    return [list(row) for row in zip(*matrix)]\n\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(transpose_matrix(matrix))\n\n# Alternative using list comprehension with nested loops\ndef transpose_matrix(matrix):\n    return [[row[i] for row in matrix] for i in range(len(matrix[0]))]\n\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(transpose_matrix(matrix))\n\n# Alternative using nested for loops\ndef transpose_matrix(matrix):\n    rows = len(matrix)\n    cols = len(matrix[0])\n    result = [[0] * rows for _ in range(cols)]\n    for i in range(rows):\n        for j in range(cols):\n            result[j][i] = matrix[i][j]\n    return result\n\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(transpose_matrix(matrix))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3857,7 +2247,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 257",
         "description": "Write a Python program to unzip a list of tuples into individual lists using `zip()`.",
         "initialCode": "def list_tuples(lst):\n    pass",
-        "solution": "def list_tuples(lst):\n    unzipped = zip(*lst)  # Unzip: groups elements at same index\n    result = []\n    for x in unzipped:  # Each x is a tuple of elements at same position\n        result.append(list(x))  # Convert tuple to list\n    \n    \nlst = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]\nprint(list_tuples(lst))  # Prints None (function doesn't return)",
+        "solution": "def list_tuples(lst):\n    unzipped = zip(*lst)  # Unzip: groups elements at same index\n    result = []\n    for x in unzipped:  # Each x is a tuple of elements at same position\n        result.append(list(x))  # Convert tuple to list\n    \n    \nlst = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]\nprint(list_tuples(lst))  # Prints None (function doesn't return)\n\n# Alternative using list comprehension\ndef list_tuples(lst):\n    return [list(t) for t in zip(*lst)]\n\nprint(list_tuples([(1, 2, 3), (4, 5, 6), (7, 8, 9)]))\n\n# Alternative using map()\ndef list_tuples(lst):\n    return list(map(list, zip(*lst)))\n\nprint(list_tuples([(1, 2, 3), (4, 5, 6), (7, 8, 9)]))\n\n# Alternative using manual unpacking\ndef list_tuples(lst):\n    result = [[], [], []]\n    for t in lst:\n        for i, val in enumerate(t):\n            result[i].append(val)\n    return result\n\nprint(list_tuples([(1, 2, 3), (4, 5, 6), (7, 8, 9)]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3866,7 +2256,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 258",
         "description": "Write a Python program to unzip a list of tuples into individual lists using `zip()`.",
         "initialCode": "def individualists(lst):\n    pass",
-        "solution": "def individualists(lst):\n    result = []\n    for num in zip(*lst):\n        result.append(list(num))\n        \n    return result\n\nlst = [(1, 2, 3), (4, 5, 6)]\nprint(individualists(lst))",
+        "solution": "def individualists(lst):\n    result = []\n    for num in zip(*lst):\n        result.append(list(num))\n        \n    return result\n\nlst = [(1, 2, 3), (4, 5, 6)]\nprint(individualists(lst))\n\n# Alternative using list comprehension\ndef individualists(lst):\n    return [list(t) for t in zip(*lst)]\n\nprint(individualists([(1, 2, 3), (4, 5, 6)]))\n\n# Alternative using map(list, zip(*))\ndef individualists(lst):\n    return list(map(list, zip(*lst)))\n\nprint(individualists([(1, 2, 3), (4, 5, 6)]))\n\n# Alternative using manual loop\ndef individualists(lst):\n    num_cols = len(lst[0])\n    result = [[] for _ in range(num_cols)]\n    for t in lst:\n        for i, val in enumerate(t):\n            result[i].append(val)\n    return result\n\nprint(individualists([(1, 2, 3), (4, 5, 6)]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3875,7 +2265,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 259",
         "description": "Write a Python program to find the element-wise maximum of two lists using `zip()`.",
         "initialCode": "def maxium_element_wise(lst1, lst2):  # Typo: \"maxium\" should be \"maximum\"\n    pass",
-        "solution": "def maxium_element_wise(lst1, lst2):  # Typo: \"maxium\" should be \"maximum\"\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(max(x, y))  # max() compares two values, returns larger\n    return result  # Returns: [7, 8, 9] (maximum of each pair)\n    \nlst1 = [2, 4, 6]\nlst2 = [7, 8, 9]\nprint(maxium_element_wise(lst1, lst2))",
+        "solution": "def maxium_element_wise(lst1, lst2):  # Typo: \"maxium\" should be \"maximum\"\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(max(x, y))  # max() compares two values, returns larger\n    return result  # Returns: [7, 8, 9] (maximum of each pair)\n    \nlst1 = [2, 4, 6]\nlst2 = [7, 8, 9]\nprint(maxium_element_wise(lst1, lst2))\n\n# Alternative using list comprehension\ndef maxium_element_wise(lst1, lst2):\n    return [max(x, y) for x, y in zip(lst1, lst2)]\n\nprint(maxium_element_wise([2, 4, 6], [7, 8, 9]))\n\n# Alternative using map() with max\ndef maxium_element_wise(lst1, lst2):\n    return list(map(max, lst1, lst2))\n\nprint(maxium_element_wise([2, 4, 6], [7, 8, 9]))\n\n# Alternative using traditional if/else\ndef maxium_element_wise(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        if lst1[i] > lst2[i]:\n            result.append(lst1[i])\n        else:\n            result.append(lst2[i])\n    return result\n\nprint(maxium_element_wise([2, 4, 6], [7, 8, 9]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3884,7 +2274,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 260",
         "description": "Write a Python program to concatenate corresponding strings from two lists using `zip()`",
         "initialCode": "def concatenate(lst1, lst2):\n    pass",
-        "solution": "def concatenate(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(f\"{x} {y}\")\n    return result  # Returns: [\"fruite orange\", \"apple banana\", \"tomato carrot\"]\n    \nlst1 = [\"fruite\", \"apple\", \"tomato\"]  # Typo: \"fruite\" should be \"fruit\"\nlst2 = [\"orange\", \"banana\", \"carrot\"]\nprint(concatenate(lst1, lst2))",
+        "solution": "def concatenate(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(f\"{x} {y}\")\n    return result  # Returns: [\"fruite orange\", \"apple banana\", \"tomato carrot\"]\n    \nlst1 = [\"fruite\", \"apple\", \"tomato\"]  # Typo: \"fruite\" should be \"fruit\"\nlst2 = [\"orange\", \"banana\", \"carrot\"]\nprint(concatenate(lst1, lst2))\n\n# Alternative using list comprehension\ndef concatenate(lst1, lst2):\n    return [f\"{x} {y}\" for x, y in zip(lst1, lst2)]\n\nprint(concatenate([\"fruite\", \"apple\", \"tomato\"], [\"orange\", \"banana\", \"carrot\"]))\n\n# Alternative using map() with lambda\ndef concatenate(lst1, lst2):\n    return list(map(lambda a, b: f\"{a} {b}\", lst1, lst2))\n\nprint(concatenate([\"fruite\", \"apple\", \"tomato\"], [\"orange\", \"banana\", \"carrot\"]))\n\n# Alternative using traditional for loop with +\ndef concatenate(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        result.append(lst1[i] + \" \" + lst2[i])\n    return result\n\nprint(concatenate([\"fruite\", \"apple\", \"tomato\"], [\"orange\", \"banana\", \"carrot\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3893,7 +2283,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 261",
         "description": "Write a Python program to combine two lists into a list of dictionaries using `zip()`. Each dictionary should have keys 'a' and 'b'.",
         "initialCode": "def combine_to_dict(lst1, lst2):\n    pass",
-        "solution": "def combine_to_dict(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append({'a': x, 'b': y})  # Append dictionary to list\n    \n    return result  # Returns: [{'a':1, 'b':'one'}, {'a':2, 'b':'two'}, {'a':3, 'b':'three'}]\n\nlst1 = [1, 2, 3]\nlst2 = ['one', 'two', 'three']\nprint(combine_to_dict(lst1, lst2))",
+        "solution": "def combine_to_dict(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append({'a': x, 'b': y})  # Append dictionary to list\n    \n    return result  # Returns: [{'a':1, 'b':'one'}, {'a':2, 'b':'two'}, {'a':3, 'b':'three'}]\n\nlst1 = [1, 2, 3]\nlst2 = ['one', 'two', 'three']\nprint(combine_to_dict(lst1, lst2))\n\n# Alternative using list comprehension\ndef combine_to_dict(lst1, lst2):\n    return [{\"a\": x, \"b\": y} for x, y in zip(lst1, lst2)]\n\nprint(combine_to_dict([1, 2, 3], [\"one\", \"two\", \"three\"]))\n\n# Alternative using map() with lambda\ndef combine_to_dict(lst1, lst2):\n    return list(map(lambda x, y: {\"a\": x, \"b\": y}, lst1, lst2))\n\nprint(combine_to_dict([1, 2, 3], [\"one\", \"two\", \"three\"]))\n\n# Alternative using traditional for loop\ndef combine_to_dict(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        result.append({\"a\": lst1[i], \"b\": lst2[i]})\n    return result\n\nprint(combine_to_dict([1, 2, 3], [\"one\", \"two\", \"three\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3902,7 +2292,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 262",
         "description": "Write a Python program to filter pairs of elements from two lists where the first element is greater than the second using `zip()`.",
         "initialCode": "def filter_pairs(lst1, lst2):\n    pass",
-        "solution": "def filter_pairs(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        if x > y:  # Condition: first element greater than second\n            result.append((x, y))  # Append tuple if condition met\n    \n    return result  # Returns: [(5,4), (8,7), (10,2)] (pairs where x > y)\n\nlst1 = [5, 8, 3, 10]\nlst2 = [4, 7, 6, 2]\nprint(filter_pairs(lst1, lst2))",
+        "solution": "def filter_pairs(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        if x > y:  # Condition: first element greater than second\n            result.append((x, y))  # Append tuple if condition met\n    \n    return result  # Returns: [(5,4), (8,7), (10,2)] (pairs where x > y)\n\nlst1 = [5, 8, 3, 10]\nlst2 = [4, 7, 6, 2]\nprint(filter_pairs(lst1, lst2))\n\n# Alternative using list comprehension\ndef filter_pairs(lst1, lst2):\n    return [(x, y) for x, y in zip(lst1, lst2) if x > y]\n\nprint(filter_pairs([5, 8, 3, 10], [4, 7, 6, 2]))\n\n# Alternative using filter() with lambda\ndef filter_pairs(lst1, lst2):\n    return list(filter(lambda pair: pair[0] > pair[1], zip(lst1, lst2)))\n\nprint(filter_pairs([5, 8, 3, 10], [4, 7, 6, 2]))\n\n# Alternative using traditional for loop\ndef filter_pairs(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        if lst1[i] > lst2[i]:\n            result.append((lst1[i], lst2[i]))\n    return result\n\nprint(filter_pairs([5, 8, 3, 10], [4, 7, 6, 2]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3911,7 +2301,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 263",
         "description": "Write a Python program to filter pairs of elements from two lists where the first element is lesser than the second using `zip()`.",
         "initialCode": "def filter_pairs(lst1, lst2):\n    pass",
-        "solution": "def filter_pairs(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        if x < y:  # Check if first element is less than second\n            result.append((x, y))  # Add tuple if condition met\n    \n    return result  # Returns: [(3,6)] - only pair where x < y\n\nlst1 = [5, 8, 3, 10]\nlst2 = [4, 7, 6, 2]\nprint(filter_pairs(lst1, lst2))",
+        "solution": "def filter_pairs(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        if x < y:  # Check if first element is less than second\n            result.append((x, y))  # Add tuple if condition met\n    \n    return result  # Returns: [(3,6)] - only pair where x < y\n\nlst1 = [5, 8, 3, 10]\nlst2 = [4, 7, 6, 2]\nprint(filter_pairs(lst1, lst2))\n\n# Alternative using list comprehension\ndef filter_pairs(lst1, lst2):\n    return [(x, y) for x, y in zip(lst1, lst2) if x < y]\n\nprint(filter_pairs([5, 8, 3, 10], [4, 7, 6, 2]))\n\n# Alternative using filter() with lambda\ndef filter_pairs(lst1, lst2):\n    return list(filter(lambda pair: pair[0] < pair[1], zip(lst1, lst2)))\n\nprint(filter_pairs([5, 8, 3, 10], [4, 7, 6, 2]))\n\n# Alternative using traditional for loop\ndef filter_pairs(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        if lst1[i] < lst2[i]:\n            result.append((lst1[i], lst2[i]))\n    return result\n\nprint(filter_pairs([5, 8, 3, 10], [4, 7, 6, 2]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3920,7 +2310,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 264",
         "description": "Write a Python program to add corresponding elements of nested lists using `zip()`.\nlst1 = [[1, 2, 3], [4, 5, 6]]\nlst2 = [[7, 8, 9], [10, 11, 12]]\nresult:\n[[8, 10, 12], [14, 16, 18]]",
         "initialCode": "def add_nested_lists(lst1, lst2):\n    pass",
-        "solution": "def add_nested_lists(lst1, lst2):\n    result = []\n    for sublist1, sublist2 in zip(lst1, lst2):\n        added_sublist = []\n        for x, y in zip(sublist1, sublist2):\n            added_sublist.append(x + y)  # Add corresponding elements\n        result.append(added_sublist)  # Append summed sublist\n    return result  # Returns: [[8,10,12], [14,16,18]]\n    \n    return result\n\nlst1 = [[1, 2, 3], [4, 5, 6]]\nlst2 = [[7, 8, 9], [10, 11, 12]]\nprint(add_nested_lists(lst1, lst2))",
+        "solution": "def add_nested_lists(lst1, lst2):\n    result = []\n    for sublist1, sublist2 in zip(lst1, lst2):\n        added_sublist = []\n        for x, y in zip(sublist1, sublist2):\n            added_sublist.append(x + y)  # Add corresponding elements\n        result.append(added_sublist)  # Append summed sublist\n    return result  # Returns: [[8,10,12], [14,16,18]]\n    \n    return result\n\nlst1 = [[1, 2, 3], [4, 5, 6]]\nlst2 = [[7, 8, 9], [10, 11, 12]]\nprint(add_nested_lists(lst1, lst2))\n\n# Alternative using nested list comprehension\ndef add_nested_lists(lst1, lst2):\n    return [[a + b for a, b in zip(s1, s2)] for s1, s2 in zip(lst1, lst2)]\n\nprint(add_nested_lists([[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]))\n\n# Alternative using map() with nested loop\ndef add_nested_lists(lst1, lst2):\n    return list(map(lambda s1, s2: [a + b for a, b in zip(s1, s2)], lst1, lst2))\n\nprint(add_nested_lists([[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]))\n\n# Alternative using nested indices\ndef add_nested_lists(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        sub = []\n        for j in range(len(lst1[i])):\n            sub.append(lst1[i][j] + lst2[i][j])\n        result.append(sub)\n    return result\n\nprint(add_nested_lists([[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3929,7 +2319,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 265",
         "description": "Write a Python program to calculate the Euclidean distance between two points in 2D space using `zip()`.",
         "initialCode": "import math\ndef euclidean_distance(point1, point2):\n    pass",
-        "solution": "import math\n\ndef euclidean_distance(point1, point2):\n    distance_squared = 0\n    for x1, x2 in zip(point1, point2):\n        distance_squared += (x1 - x2) ** 2  # (x1-x2)\u00b2, sum all dimensions\n        \n    return math.sqrt(distance_squared)  # sqrt((3-6)\u00b2 + (4-8)\u00b2) = sqrt(9+16) = 5\n\npoint1 = (3, 4)\npoint2 = (6, 8)\nprint(euclidean_distance(point1, point2))  # Output: 5.0",
+        "solution": "import math\n\ndef euclidean_distance(point1, point2):\n    distance_squared = 0\n    for x1, x2 in zip(point1, point2):\n        distance_squared += (x1 - x2) ** 2  # (x1-x2)\u00b2, sum all dimensions\n        \n    return math.sqrt(distance_squared)  # sqrt((3-6)\u00b2 + (4-8)\u00b2) = sqrt(9+16) = 5\n\npoint1 = (3, 4)\npoint2 = (6, 8)\nprint(euclidean_distance(point1, point2))  # Output: 5.0\n\n# Alternative using generator expression\nimport math\n\ndef euclidean_distance(point1, point2):\n    return math.sqrt(sum((x1 - x2) ** 2 for x1, x2 in zip(point1, point2)))\n\nprint(euclidean_distance((3, 4), (6, 8)))\n\n# Alternative using math.dist() (Python 3.8+)\nimport math\n\ndef euclidean_distance(point1, point2):\n    return math.dist(point1, point2)\n\nprint(euclidean_distance((3, 4), (6, 8)))\n\n# Alternative using **0.5 (no math import)\ndef euclidean_distance(point1, point2):\n    return sum((a - b) ** 2 for a, b in zip(point1, point2)) ** 0.5\n\nprint(euclidean_distance((3, 4), (6, 8)))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3938,7 +2328,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 266",
         "description": "Write a Python program to interleave two lists into a single list using `zip()`.",
         "initialCode": "def interleave(lst1, lst2):\n    pass",
-        "solution": "def interleave(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(x)  # Add element from first list\n        result.append(y)  # Add element from second list (alternating)\n    return result  # Returns: [\"crissy\", \"spotty\", \"missy\", \"motty\", \"sissy\", \"hotty\"]\n        \nlst1 = [\"crissy\", \"missy\", \"sissy\"]\nlst2 = [\"spotty\", \"motty\", \"hotty\"]\nprint(interleave(lst1, lst2))",
+        "solution": "def interleave(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(x)  # Add element from first list\n        result.append(y)  # Add element from second list (alternating)\n    return result  # Returns: [\"crissy\", \"spotty\", \"missy\", \"motty\", \"sissy\", \"hotty\"]\n        \nlst1 = [\"crissy\", \"missy\", \"sissy\"]\nlst2 = [\"spotty\", \"motty\", \"hotty\"]\nprint(interleave(lst1, lst2))\n\n# Alternative using flat list comprehension\ndef interleave(lst1, lst2):\n    return [x for pair in zip(lst1, lst2) for x in pair]\n\nprint(interleave([\"crissy\", \"missy\", \"sissy\"], [\"spotty\", \"motty\", \"hotty\"]))\n\n# Alternative using sum() with tuple unpacking\ndef interleave(lst1, lst2):\n    return list(sum(zip(lst1, lst2), ()))\n\nprint(interleave([\"crissy\", \"missy\", \"sissy\"], [\"spotty\", \"motty\", \"hotty\"]))\n\n# Alternative using chain from itertools\nfrom itertools import chain\n\ndef interleave(lst1, lst2):\n    return list(chain.from_iterable(zip(lst1, lst2)))\n\nprint(interleave([\"crissy\", \"missy\", \"sissy\"], [\"spotty\", \"motty\", \"hotty\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3947,7 +2337,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 267",
         "description": "Write a Python program to multiply corresponding elements of two lists using `zip()`.",
         "initialCode": "def multiply_2_lst(lst1, lst2):\n    pass",
-        "solution": "def multiply_2_lst(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(x * y)  # 2*3=6, 4*6=24, 6*9=54\n    return result  # Returns: [6, 24, 54]\n            \nlst1 = [2, 4, 6]\nlst2 = [3, 6, 9]\nprint(multiply_2_lst(lst1, lst2))  # Output: [6, 24, 54]",
+        "solution": "def multiply_2_lst(lst1, lst2):\n    result = []\n    for x, y in zip(lst1, lst2):\n        result.append(x * y)  # 2*3=6, 4*6=24, 6*9=54\n    return result  # Returns: [6, 24, 54]\n            \nlst1 = [2, 4, 6]\nlst2 = [3, 6, 9]\nprint(multiply_2_lst(lst1, lst2))  # Output: [6, 24, 54]\n\n# Alternative using list comprehension\ndef multiply_2_lst(lst1, lst2):\n    return [x * y for x, y in zip(lst1, lst2)]\n\nprint(multiply_2_lst([2, 4, 6], [3, 6, 9]))\n\n# Alternative using map() with lambda\ndef multiply_2_lst(lst1, lst2):\n    return list(map(lambda a, b: a * b, lst1, lst2))\n\nprint(multiply_2_lst([2, 4, 6], [3, 6, 9]))\n\n# Alternative using traditional for loop with range\ndef multiply_2_lst(lst1, lst2):\n    result = []\n    for i in range(len(lst1)):\n        result.append(lst1[i] * lst2[i])\n    return result\n\nprint(multiply_2_lst([2, 4, 6], [3, 6, 9]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3956,7 +2346,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 268",
         "description": "Write a Python program to calculate the dot product of two vectors represented as lists using `zip()`.",
         "initialCode": "def dot_product(vector1, vector2):\n    pass",
-        "solution": "def dot_product(vector1, vector2):\n    result = 0  # Accumulator for sum\n    for x, y in zip(vector1, vector2):\n        result += x * y  # Multiply and accumulate: 1*4 + 2*5 + 3*6\n    return result  # Returns: 4 + 10 + 18 = 32\n    \nvector1 = [1, 2, 3]\nvector2 = [4, 5, 6]\nprint(dot_product(vector1, vector2))  # Output: 32",
+        "solution": "def dot_product(vector1, vector2):\n    result = 0  # Accumulator for sum\n    for x, y in zip(vector1, vector2):\n        result += x * y  # Multiply and accumulate: 1*4 + 2*5 + 3*6\n    return result  # Returns: 4 + 10 + 18 = 32\n    \nvector1 = [1, 2, 3]\nvector2 = [4, 5, 6]\nprint(dot_product(vector1, vector2))  # Output: 32\n\n# Alternative using generator expression\ndef dot_product(vector1, vector2):\n    return sum(x * y for x, y in zip(vector1, vector2))\n\nprint(dot_product([1, 2, 3], [4, 5, 6]))\n\n# Alternative using map() and sum()\ndef dot_product(vector1, vector2):\n    return sum(map(lambda a, b: a * b, vector1, vector2))\n\nprint(dot_product([1, 2, 3], [4, 5, 6]))\n\n# Alternative using reduce\nfrom functools import reduce\n\ndef dot_product(vector1, vector2):\n    return reduce(lambda acc, pair: acc + pair[0] * pair[1], zip(vector1, vector2), 0)\n\nprint(dot_product([1, 2, 3], [4, 5, 6]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3965,7 +2355,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 269",
         "description": "Write a Python program to filter out all even numbers from a list using `filter()`.",
         "initialCode": "def is_odd(x):\n    pass\n\ndef filter_even_numbers(lst):  # Name suggests keeping evens, but actually removes them\n    pass",
-        "solution": "def is_odd(x):\n    return x % 2 != 0  # Returns True for odd numbers (1, 3, 5, ...)\n\ndef filter_even_numbers(lst):  # Name suggests keeping evens, but actually removes them\n    return list(filter(is_odd, lst))  # Returns: [1, 3, 5] (odd numbers only)\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = filter_even_numbers(lst)  # Filters out evens, keeps odds: [1, 3, 5]\nprint(result)",
+        "solution": "def is_odd(x):\n    return x % 2 != 0  # Returns True for odd numbers (1, 3, 5, ...)\n\ndef filter_even_numbers(lst):  # Name suggests keeping evens, but actually removes them\n    return list(filter(is_odd, lst))  # Returns: [1, 3, 5] (odd numbers only)\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = filter_even_numbers(lst)  # Filters out evens, keeps odds: [1, 3, 5]\nprint(result)\n\n# Alternative using lambda\ndef filter_even_numbers(lst):\n    return list(filter(lambda x: x % 2 != 0, lst))\n\nprint(filter_even_numbers([1, 2, 3, 4, 5, 6]))\n\n# Alternative using list comprehension\ndef filter_even_numbers(lst):\n    return [x for x in lst if x % 2 != 0]\n\nprint(filter_even_numbers([1, 2, 3, 4, 5, 6]))\n\n# Alternative using traditional for loop\ndef filter_even_numbers(lst):\n    result = []\n    for x in lst:\n        if x % 2 != 0:\n            result.append(x)\n    return result\n\nprint(filter_even_numbers([1, 2, 3, 4, 5, 6]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3974,7 +2364,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 270",
         "description": "Write a Python program to filter out all odd numbers from a list using `filter()`.",
         "initialCode": "def is_even(x):\n    pass\n\ndef filter_odd_numbers(lst):  # Function name misleading - filters to keep even numbers\n    pass",
-        "solution": "def is_even(x):\n    return x % 2 == 0  # Returns True for even numbers\n\ndef filter_odd_numbers(lst):  # Function name misleading - filters to keep even numbers\n    return list(filter(is_even, lst))  # filter() returns iterator, convert to list\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = filter_odd_numbers(lst)  # Keeps even numbers: [2, 4, 6]\nprint(result)",
+        "solution": "def is_even(x):\n    return x % 2 == 0  # Returns True for even numbers\n\ndef filter_odd_numbers(lst):  # Function name misleading - filters to keep even numbers\n    return list(filter(is_even, lst))  # filter() returns iterator, convert to list\n\nlst = [1, 2, 3, 4, 5, 6]\nresult = filter_odd_numbers(lst)  # Keeps even numbers: [2, 4, 6]\nprint(result)\n\n# Alternative using lambda\ndef filter_odd_numbers(lst):\n    return list(filter(lambda x: x % 2 == 0, lst))\n\nprint(filter_odd_numbers([1, 2, 3, 4, 5, 6]))\n\n# Alternative using list comprehension\ndef filter_odd_numbers(lst):\n    return [x for x in lst if x % 2 == 0]\n\nprint(filter_odd_numbers([1, 2, 3, 4, 5, 6]))\n\n# Alternative using traditional for loop\ndef filter_odd_numbers(lst):\n    result = []\n    for x in lst:\n        if x % 2 == 0:\n            result.append(x)\n    return result\n\nprint(filter_odd_numbers([1, 2, 3, 4, 5, 6]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3983,7 +2373,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 271",
         "description": "Write a Python program to filter out all positive numbers from a list using `filter()`.",
         "initialCode": "def is_non_positive(x):\n    pass\n\ndef filter_positive_numbers(lst):  # Name suggests keeping positives, but actually removes them\n    pass",
-        "solution": "def is_non_positive(x):\n    return x <= 0  # Returns True for 0 and negative numbers\n\ndef filter_positive_numbers(lst):  # Name suggests keeping positives, but actually removes them\n    return list(filter(is_non_positive, lst))  # Returns: [-2, -1, 0] (non-positive numbers)\n\nlst = [-2, -1, 0, 1, 2, 3]\nresult = filter_positive_numbers(lst)\nprint(result)\ufffc",
+        "solution": "def is_non_positive(x):\n    return x <= 0  # Returns True for 0 and negative numbers\n\ndef filter_positive_numbers(lst):  # Name suggests keeping positives, but actually removes them\n    return list(filter(is_non_positive, lst))  # Returns: [-2, -1, 0] (non-positive numbers)\n\nlst = [-2, -1, 0, 1, 2, 3]\nresult = filter_positive_numbers(lst)\nprint(result)\ufffc\n\n# Alternative using lambda\ndef filter_positive_numbers(lst):\n    return list(filter(lambda x: x <= 0, lst))\n\nprint(filter_positive_numbers([-2, -1, 0, 1, 2, 3]))\n\n# Alternative using list comprehension\ndef filter_positive_numbers(lst):\n    return [x for x in lst if x <= 0]\n\nprint(filter_positive_numbers([-2, -1, 0, 1, 2, 3]))\n\n# Alternative using traditional for loop\ndef filter_positive_numbers(lst):\n    result = []\n    for x in lst:\n        if x <= 0:\n            result.append(x)\n    return result\n\nprint(filter_positive_numbers([-2, -1, 0, 1, 2, 3]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3992,7 +2382,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 272",
         "description": "Write a Python program to filter out all negative numbers from a list using `filter()`.",
         "initialCode": "def is_non_negative(x):\n    pass\n\ndef filter_negative_numbers(lst):\n    pass",
-        "solution": "def is_non_negative(x):\n    return x >= 0\n\ndef filter_negative_numbers(lst):\n    return list(filter(is_non_negative, lst))\n\nlst = [-2, -1, 0, 1, 2, 3]\nresult = filter_negative_numbers(lst)\nprint(result)",
+        "solution": "def is_non_negative(x):\n    return x >= 0\n\ndef filter_negative_numbers(lst):\n    return list(filter(is_non_negative, lst))\n\nlst = [-2, -1, 0, 1, 2, 3]\nresult = filter_negative_numbers(lst)\nprint(result)\n\n# Alternative using lambda\ndef filter_negative_numbers(lst):\n    return list(filter(lambda x: x >= 0, lst))\n\nprint(filter_negative_numbers([-2, -1, 0, 1, 2, 3]))\n\n# Alternative using list comprehension\ndef filter_negative_numbers(lst):\n    return [x for x in lst if x >= 0]\n\nprint(filter_negative_numbers([-2, -1, 0, 1, 2, 3]))\n\n# Alternative using traditional for loop\ndef filter_negative_numbers(lst):\n    result = []\n    for x in lst:\n        if x >= 0:\n            result.append(x)\n    return result\n\nprint(filter_negative_numbers([-2, -1, 0, 1, 2, 3]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4001,7 +2391,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 274",
         "description": "Write a Python program to filter out all palindromes from a list of strings using `filter()`.",
         "initialCode": "def is_palindrome(s):\n    pass\n\ndef filter_palindromes(lst):\n    pass",
-        "solution": "def is_palindrome(s):\n    return s == s[::-1]\n\ndef filter_palindromes(lst):\n    return list(filter(is_palindrome, lst))\n\nlst = ['madam', 'hello', 'racecar', 'world', 'level']\nresult = filter_palindromes(lst)\nprint(result)",
+        "solution": "def is_palindrome(s):\n    return s == s[::-1]\n\ndef filter_palindromes(lst):\n    return list(filter(is_palindrome, lst))\n\nlst = ['madam', 'hello', 'racecar', 'world', 'level']\nresult = filter_palindromes(lst)\nprint(result)\n\n# Alternative using lambda\ndef filter_palindromes(lst):\n    return list(filter(lambda s: s == s[::-1], lst))\n\nprint(filter_palindromes([\"madam\", \"hello\", \"racecar\", \"world\", \"level\"]))\n\n# Alternative using list comprehension\ndef filter_palindromes(lst):\n    return [s for s in lst if s == s[::-1]]\n\nprint(filter_palindromes([\"madam\", \"hello\", \"racecar\", \"world\", \"level\"]))\n\n# Alternative using two-pointer check\ndef filter_palindromes(lst):\n    def is_pal(s):\n        left, right = 0, len(s) - 1\n        while left < right:\n            if s[left] != s[right]:\n                return False\n            left += 1\n            right -= 1\n        return True\n    return [s for s in lst if is_pal(s)]\n\nprint(filter_palindromes([\"madam\", \"hello\", \"racecar\", \"world\", \"level\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4010,7 +2400,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 276",
         "description": "Write a Python program to filter out all numbers from a list that are divisible by a given number using `filter()`.",
         "initialCode": "def filter_divisible(numbers, divisor):\n    pass",
-        "solution": "def filter_divisible(numbers, divisor):\n    def is_divisible(n):\n        return n % divisor == 0  # Returns True if n is divisible by divisor\n    return list(filter(is_divisible, numbers))  # Returns: [10, 15, 20, 25, 30, 35, 40] (all divisible by 5)\n\nnumbers = [10, 15, 20, 25, 30, 35, 40]\ndivisor = 5\nresult = filter_divisible(numbers, divisor)\nprint(result)",
+        "solution": "def filter_divisible(numbers, divisor):\n    def is_divisible(n):\n        return n % divisor == 0  # Returns True if n is divisible by divisor\n    return list(filter(is_divisible, numbers))  # Returns: [10, 15, 20, 25, 30, 35, 40] (all divisible by 5)\n\nnumbers = [10, 15, 20, 25, 30, 35, 40]\ndivisor = 5\nresult = filter_divisible(numbers, divisor)\nprint(result)\n\n# Alternative using lambda\ndef filter_divisible(numbers, divisor):\n    return list(filter(lambda n: n % divisor == 0, numbers))\n\nprint(filter_divisible([10, 15, 20, 25, 30, 35, 40], 5))\n\n# Alternative using list comprehension\ndef filter_divisible(numbers, divisor):\n    return [n for n in numbers if n % divisor == 0]\n\nprint(filter_divisible([10, 15, 20, 25, 30, 35, 40], 5))\n\n# Alternative using traditional for loop\ndef filter_divisible(numbers, divisor):\n    result = []\n    for n in numbers:\n        if n % divisor == 0:\n            result.append(n)\n    return result\n\nprint(filter_divisible([10, 15, 20, 25, 30, 35, 40], 5))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4019,7 +2409,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 277",
         "description": "Write a Python program to filter out all numbers from a list that are divisible by a given number using `filter()`.\nDid you complete the exercise? (y/n)",
         "initialCode": "def is_not_divisible(num, divisor):\n    pass",
-        "solution": "def is_not_divisible(num, divisor):\n    return num % divisor != 0\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndivisor = 3\n\nfiltered_numbers = list(filter(is_not_divisible, numbers))\nprint(filtered_numbers)  # Output: [1, 2, 5, 7, 8, 10]",
+        "solution": "def is_not_divisible(num, divisor):\n    return num % divisor != 0\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndivisor = 3\n\nfiltered_numbers = list(filter(is_not_divisible, numbers))\nprint(filtered_numbers)  # Output: [1, 2, 5, 7, 8, 10]\n\n# Alternative using lambda\ndef is_not_divisible(num, divisor):\n    return num % divisor != 0\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndivisor = 3\nfiltered_numbers = list(filter(lambda n: n % divisor != 0, numbers))\nprint(filtered_numbers)\n\n# Alternative using list comprehension\ndef is_not_divisible(num, divisor):\n    return num % divisor != 0\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndivisor = 3\nfiltered_numbers = [n for n in numbers if n % divisor != 0]\nprint(filtered_numbers)\n\n# Alternative using traditional for loop\ndef is_not_divisible(num, divisor):\n    return num % divisor != 0\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndivisor = 3\nfiltered_numbers = []\nfor n in numbers:\n    if n % divisor != 0:\n        filtered_numbers.append(n)\nprint(filtered_numbers)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4028,7 +2418,7 @@ print(sum_odd_indexed_elements([2, 4, 6, 8, 10]))  # Output: 12 (4+8)",
         "title": "Problem 278",
         "description": "Write a Python program to filter out all non-empty strings from a list using `filter()`.",
         "initialCode": "def filter_non_empty(strings):\n    pass",
-        "solution": "def filter_non_empty(strings):\n    def is_non_empty(s):\n        return s != \"\"  # Returns True if string is not empty\n    return list(filter(is_non_empty, strings))  # Returns: [\"apple\", \"banana\", \"cherry\", \"date\"]\n\nstrings = [\"apple\", \"\", \"banana\", \"\", \"cherry\", \"date\", \"\"]\nresult = filter_non_empty(strings)\nprint(result)",
+        "solution": "def filter_non_empty(strings):\n    def is_non_empty(s):\n        return s != \"\"  # Returns True if string is not empty\n    return list(filter(is_non_empty, strings))  # Returns: [\"apple\", \"banana\", \"cherry\", \"date\"]\n\nstrings = [\"apple\", \"\", \"banana\", \"\", \"cherry\", \"date\", \"\"]\nresult = filter_non_empty(strings)\nprint(result)\n\n# Alternative using filter(None, strings) (falsy filter)\ndef filter_non_empty(strings):\n    return list(filter(None, strings))\n\nprint(filter_non_empty([\"apple\", \"\", \"banana\", \"\", \"cherry\", \"date\", \"\"]))\n\n# Alternative using list comprehension\ndef filter_non_empty(strings):\n    return [s for s in strings if s != \"\"]\n\nprint(filter_non_empty([\"apple\", \"\", \"banana\", \"\", \"cherry\", \"date\", \"\"]))\n\n# Alternative using filter(bool, strings)\ndef filter_non_empty(strings):\n    return list(filter(bool, strings))\n\nprint(filter_non_empty([\"apple\", \"\", \"banana\", \"\", \"cherry\", \"date\", \"\"]))\n\n# Alternative using traditional for loop\ndef filter_non_empty(strings):\n    result = []\n    for s in strings:\n        if s != \"\":\n            result.append(s)\n    return result\n\nprint(filter_non_empty([\"apple\", \"\", \"banana\", \"\", \"cherry\", \"date\", \"\"]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
