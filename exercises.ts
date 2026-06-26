@@ -2661,7 +2661,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 307",
         "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort() or max() or min().",
         "initialCode": "def find_min_max():\n    pass",
-        "solution": "def find_min_max():\n    user = input(\"type list of numbers: \").split()\n\n    int_num = []\n    for number in user:\n        int_num.append(int(number))\n    \n    min_num = int_num[-1]\n    max_num = int_num[0]\n    \n    print(min_num, max_num)\n           \nfind_min_max()",
+        "solution": "def find_min_max():\n    user = input(\"type list of numbers: \").split()\n\n    int_num = []\n    for number in user:\n        int_num.append(int(number))\n    \n    min_num = int_num[-1]\n    max_num = int_num[0]\n    \n    print(min_num, max_num)\n           \nfind_min_max()\n\n# Using list comprehension\n    return [int(number) for number in user]\n\n# Using map()\n    return list(map(lambda number: int(number), user))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2679,7 +2679,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 310",
         "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered. Do not use sorted().",
         "initialCode": "def find_longest_word(lst):\n    pass\n\ndef main(lst):\n    pass",
-        "solution": "def find_longest_word(lst):\n    longest_word = \"\"\n    count = 0\n    \n    for word in lst:\n        if len(word) > count:\n            count = len(word)\n            longest_word = word\n    return longest_word\n\nlst = [\"Jonathan\", \"noll\"]    \nprint(find_longest_word(lst))\n\ndef main(lst):\n    return max(lst, key=len)\n    \nlst = [\"tree\", \"cliff\", \"mountain\", \"tree\",\"tree\", \"grassy\"]\nmain(lst)",
+        "solution": "def find_longest_word(lst):\n    longest_word = \"\"\n    count = 0\n    \n    for word in lst:\n        if len(word) > count:\n            count = len(word)\n            longest_word = word\n    return longest_word\n\nlst = [\"Jonathan\", \"noll\"]    \nprint(find_longest_word(lst))\n\ndef main(lst):\n    return max(lst, key=len)\n    \nlst = [\"tree\", \"cliff\", \"mountain\", \"tree\",\"tree\", \"grassy\"]\nmain(lst)\n\n# Using built-in sum()\n    return sum(1 for word in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, word: acc + 1, lst, 0)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2697,7 +2697,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 312",
         "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop.",
         "initialCode": "def second_largest_number():\n    pass",
-        "solution": "def second_largest_number():\n    user = input(\"Type numbers separated by spaces: \").split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n\n    print(second_largest)\n\nsecond_largest_number()\n\n# Using for loop\n    result = []\n    for x in user:\n        result.append(int(x))\n    return result",
+        "solution": "def second_largest_number():\n    user = input(\"Type numbers separated by spaces: \").split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n\n    print(second_largest)\n\nsecond_largest_number()\n\n# Using for loop\n    result = []\n    for x in user:\n        result.append(int(x))\n    return result\n\n# Using list comprehension\n    return [int(x) for x in user]\n\n# Using map()\n    return list(map(lambda x: int(x), user))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2850,7 +2850,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 330",
         "description": "Write a function where user types a list of numbers in string and returns a list of numbers from biggest to smallest. Do not use a for loop.",
         "initialCode": "def list_of_string_numbers(n):\n    pass\n\ndef type_biggest_smallest():\n    pass",
-        "solution": "def list_of_string_numbers(n):\n    sort = sorted(n, key=int)[::-1]\n    \n    return sort\n        \nnumbers = [\"44\", \"66\", \"3\", \"477\"]\nprint(list_of_string_numbers(numbers))\n\ndef type_biggest_smallest():\n    user = input(\"Type numbers: \").split()\n    int_list = list(map(int, user))\n    sorted_list = sorted(int_list, reverse=True)\n    \n    print(sorted_list)\n\ntype_biggest_smallest()\n\n# Using for loop\n    result = []\n    for x in user:\n        result.append(int(x))\n    return result",
+        "solution": "def list_of_string_numbers(n):\n    sort = sorted(n, key=int)[::-1]\n    \n    return sort\n        \nnumbers = [\"44\", \"66\", \"3\", \"477\"]\nprint(list_of_string_numbers(numbers))\n\ndef type_biggest_smallest():\n    user = input(\"Type numbers: \").split()\n    int_list = list(map(int, user))\n    sorted_list = sorted(int_list, reverse=True)\n    \n    print(sorted_list)\n\ntype_biggest_smallest()\n\n# Using for loop\n    result = []\n    for x in user:\n        result.append(int(x))\n    return result\n\n# Using list comprehension\n    return [int(x) for x in user]\n\n# Using map()\n    return list(map(lambda x: int(x), user))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2985,7 +2985,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 346",
         "description": "Write a Python program that defines a function `sum_of_squares()` which contains a nested function `square()` that squares a number. The `sum_of_squares()` function should sum the squares of two numbers.",
         "initialCode": "def sum_of_squares(a, b):\n    pass",
-        "solution": "def sum_of_squares(a, b):\n    def square(x):\n        return x * x\n    return square(a) + square(b)\n\nresult = sum_of_squares(3, 4)\nprint(result)",
+        "solution": "def sum_of_squares(a, b):\n    def square(x):\n        return x * x\n    return square(a) + square(b)\n\nresult = sum_of_squares(3, 4)\nprint(result)\n\n# Using lambda\n    return lambda x: x * x",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2994,7 +2994,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 347",
         "description": "Write a Python program that defines a function `greet()` which contains a nested function `get_name()` to prompt the user for their name. The `greet()` function should return a greeting message using the name.",
         "initialCode": "def greet():\n    pass",
-        "solution": "def greet():\n    def get_name():\n        return input(\"What is your name? \")\n    name = get_name()\n    return f\"Hello, {name}!\"\n\nresult = greet()\nprint(result)",
+        "solution": "def greet():\n    def get_name():\n        return input(\"What is your name? \")\n    name = get_name()\n    return f\"Hello, {name}!\"\n\nresult = greet()\nprint(result)\n\n# Using lambda\n    return lambda x: input(\'What is your name? \')",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3003,7 +3003,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 348",
         "description": "Write a Python program that defines a function `factorial()` which contains a nested recursive function `inner_factorial()` to calculate the factorial of a number.",
         "initialCode": "def factorial(n):\n    pass",
-        "solution": "def factorial(n):\n    def inner_factorial(x):\n        if x == 0:\n            return 1\n        else:\n            return x * inner_factorial(x - 1)\n    return inner_factorial(n)\n\nresult = factorial(5)\nprint(result)",
+        "solution": "def factorial(n):\n    def inner_factorial(x):\n        if x == 0:\n            return 1\n        else:\n            return x * inner_factorial(x - 1)\n    return inner_factorial(n)\n\nresult = factorial(5)\nprint(result)\n\n# Using lambda\n    return lambda x: 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3021,7 +3021,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 350",
         "description": "Write a Python program that defines a function `check_even()` which contains a nested function `is_even()` that checks if a number is even. The `check_even()` function should return whether the number is even.",
         "initialCode": "def check_even(num):\n    pass",
-        "solution": "def check_even(num):\n    def is_even(x):\n        return x % 2 == 0\n    return is_even(num)\n\nresult = check_even(10)\nprint(result)",
+        "solution": "def check_even(num):\n    def is_even(x):\n        return x % 2 == 0\n    return is_even(num)\n\nresult = check_even(10)\nprint(result)\n\n# Using lambda\n    return lambda x: x % 2 == 0",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3030,7 +3030,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 351",
         "description": "Write a Python program that defines a function `power()` which contains a nested function `calculate_power()` that raises a number to a given power. The `power()` function should return the result.",
         "initialCode": "def power(base, exponent):\n    pass",
-        "solution": "def power(base, exponent):\n    def calculate_power(b, e):\n        return b ** e\n    return calculate_power(base, exponent)\n\nresult = power(2, 3)\nprint(result)",
+        "solution": "def power(base, exponent):\n    def calculate_power(b, e):\n        return b ** e\n    return calculate_power(base, exponent)\n\nresult = power(2, 3)\nprint(result)\n\n# Using lambda\n    return lambda x: b ** e",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3039,7 +3039,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 352",
         "description": "Write a Python program that defines a function `area_circle()` which contains a nested function `calculate_area()` that computes the area of a circle given its radius. The `area_circle()` function should return the area.",
         "initialCode": "def area_circle(radius):\n    pass\n\ndef main():\n    pass",
-        "solution": "def area_circle(radius):\n    def calculate_area(r):\n        return 3.14159 * r * r\n    return calculate_area(radius)\n\nresult = area_circle(5)\nprint(result)\n\ndef main():\n    def inner(radius):\n        return  3.14159 * radius * radius\n    return inner(n)\nn = 6\nmain()",
+        "solution": "def area_circle(radius):\n    def calculate_area(r):\n        return 3.14159 * r * r\n    return calculate_area(radius)\n\nresult = area_circle(5)\nprint(result)\n\ndef main():\n    def inner(radius):\n        return  3.14159 * radius * radius\n    return inner(n)\nn = 6\nmain()\n\n# Using lambda\n    return lambda r: 3.14159 * r * r",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3048,7 +3048,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 353",
         "description": "Write a Python program that defines a function `capitalize_words()` which contains a nested function `capitalize()` that capitalizes a word. The `capitalize_words()` function should return a string with each word capitalized.",
         "initialCode": "def capitalize_words(sentence):\n    pass",
-        "solution": "def capitalize_words(sentence):\n    def capitalize(word):\n        return word.capitalize()\n    words = sentence.split()\n    capitalized_words = []\n    for word in words:\n        capitalized_words.append(capitalize(word))\n    return ' '.join(capitalized_words)\n\nresult = capitalize_words(\"hello world from python\")\nprint(result)",
+        "solution": "def capitalize_words(sentence):\n    def capitalize(word):\n        return word.capitalize()\n    words = sentence.split()\n    capitalized_words = []\n    for word in words:\n        capitalized_words.append(capitalize(word))\n    return ' '.join(capitalized_words)\n\nresult = capitalize_words(\"hello world from python\")\nprint(result)\n\n# Using list comprehension\n    return [capitalize(word) for word in words]\n\n# Using map()\n    return list(map(lambda word: capitalize(word), words))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3066,7 +3066,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 355",
         "description": "Write a Python program that defines a function `concatenate_strings()` which contains a nested function `join_strings()` that concatenates two strings.",
         "initialCode": "def concatenate_strings(str1, str2):\n    pass",
-        "solution": "def concatenate_strings(str1, str2):\n    def join_strings(s1, s2):\n        return s1 + s2\n    return join_strings(str1, str2)\n\nresult = concatenate_strings(\"Hello, \", \"world!\")\nprint(result)",
+        "solution": "def concatenate_strings(str1, str2):\n    def join_strings(s1, s2):\n        return s1 + s2\n    return join_strings(str1, str2)\n\nresult = concatenate_strings(\"Hello, \", \"world!\")\nprint(result)\n\n# Using lambda\n    return lambda x: s1 + s2",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3075,7 +3075,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 356",
         "description": "Write a Python program that defines a function `fibonacci()` which contains a nested recursive function `fib()` to generate the Fibonacci sequence up to a given number of terms.",
         "initialCode": "def fibonacci(n):\n    pass",
-        "solution": "def fibonacci(n):\n    def fib(x):\n        if x <= 1:\n            return x\n        else:\n            return fib(x - 1) + fib(x - 2)\n    return [fib(i) for i in range(n)]\n\nresult = fibonacci(10)\nprint(result)",
+        "solution": "def fibonacci(n):\n    def fib(x):\n        if x <= 1:\n            return x\n        else:\n            return fib(x - 1) + fib(x - 2)\n    return [fib(i) for i in range(n)]\n\nresult = fibonacci(10)\nprint(result)\n\n# Using lambda\n    return lambda x: x",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3084,7 +3084,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 357",
         "description": "Write a Python program that defines a function `to_uppercase()` which contains a nested function `convert()` that converts a string to uppercase.",
         "initialCode": "def to_uppercase(string):\n    pass",
-        "solution": "def to_uppercase(string):\n    def convert(s):\n        return s.upper()\n    return convert(string)\n\nresult = to_uppercase(\"hello world\")\nprint(result)",
+        "solution": "def to_uppercase(string):\n    def convert(s):\n        return s.upper()\n    return convert(string)\n\nresult = to_uppercase(\"hello world\")\nprint(result)\n\n# Using lambda\n    return lambda s: s.upper()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3102,7 +3102,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 359",
         "description": "Write a Python program that defines a function `calculator()` which contains nested functions for `add()`, `subtract()`, `multiply()`, and `divide()`. The `calculator()` function should perform the selected operation.",
         "initialCode": "def calculator(operation, a, b):\n    pass",
-        "solution": "def calculator(operation, a, b):\n    def add(x, y):\n        return x + y\n\n    def subtract(x, y):\n        return x - y\n\n    def multiply(x, y):\n        return x * y\n\n    def divide(x, y):\n        if y != 0:\n            return x / y\n        else:\n            return \"Cannot divide by zero\"\n\n    if operation == 'add':\n        return add(a, b)\n    elif operation == 'subtract':\n        return subtract(a, b)\n    elif operation == 'multiply':\n        return multiply(a, b)\n    elif operation == 'divide':\n        return divide(a, b)\n    else:\n        return \"Invalid operation\"\n\nresult = calculator('add', 5, 3)\nprint(result)",
+        "solution": "def calculator(operation, a, b):\n    def add(x, y):\n        return x + y\n\n    def subtract(x, y):\n        return x - y\n\n    def multiply(x, y):\n        return x * y\n\n    def divide(x, y):\n        if y != 0:\n            return x / y\n        else:\n            return \"Cannot divide by zero\"\n\n    if operation == 'add':\n        return add(a, b)\n    elif operation == 'subtract':\n        return subtract(a, b)\n    elif operation == 'multiply':\n        return multiply(a, b)\n    elif operation == 'divide':\n        return divide(a, b)\n    else:\n        return \"Invalid operation\"\n\nresult = calculator('add', 5, 3)\nprint(result)\n\n# Using lambda\n    return lambda x: x + y",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3111,7 +3111,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 360",
         "description": "Write a Python program that defines a function `is_prime()` which contains a nested function `check_divisibility()` to check if a number is prime.",
         "initialCode": "def is_prime(n):\n    pass",
-        "solution": "def is_prime(n):\n    def check_divisibility(x):\n        if x < 2:\n            return False\n        for i in range(2, int(x ** 0.5) + 1):\n            if x % i == 0:\n                return False\n        return True\n    return check_divisibility(n)\n\nresult = is_prime(7)\nprint(result)",
+        "solution": "def is_prime(n):\n    def check_divisibility(x):\n        if x < 2:\n            return False\n        for i in range(2, int(x ** 0.5) + 1):\n            if x % i == 0:\n                return False\n        return True\n    return check_divisibility(n)\n\nresult = is_prime(7)\nprint(result)\n\n# Using lambda\n    return lambda x: False",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3120,7 +3120,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 361",
         "description": "Write a Python program that defines a function `count_vowels()` which contains a nested function `is_vowel()` to count the number of vowels in a string.",
         "initialCode": "def count_vowels(string):\n    pass",
-        "solution": "def count_vowels(string):\n    def is_vowel(char):\n        return char in 'aeiouAEIOU'\n\n    count = 0\n    for char in string:\n        if is_vowel(char):\n            count += 1\n    return count\n\nresult = count_vowels(\"Hello World\")\nprint(result)",
+        "solution": "def count_vowels(string):\n    def is_vowel(char):\n        return char in 'aeiouAEIOU'\n\n    count = 0\n    for char in string:\n        if is_vowel(char):\n            count += 1\n    return count\n\nresult = count_vowels(\"Hello World\")\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for char in string)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, string, 0)\n\n# Using for loop\n    count = 0\n    for char in string:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3129,7 +3129,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 362",
         "description": "Write a Python program that defines a function `calculate_average()` which contains a nested function `sum_numbers()` to calculate the average of a list of numbers.",
         "initialCode": "def calculate_average(numbers):\n    pass",
-        "solution": "def calculate_average(numbers):\n    def sum_numbers(nums):\n        total = 0\n        for num in nums:\n            total += num\n        return total\n\n    return sum_numbers(numbers) / len(numbers)\n\nresult = calculate_average([1, 2, 3, 4, 5])\nprint(result)",
+        "solution": "def calculate_average(numbers):\n    def sum_numbers(nums):\n        total = 0\n        for num in nums:\n            total += num\n        return total\n\n    return sum_numbers(numbers) / len(numbers)\n\nresult = calculate_average([1, 2, 3, 4, 5])\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for num in nums)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, num: acc + 1, nums, 0)\n\n# Using for loop\n    total = 0\n    for num in nums:\n        total += num\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3156,7 +3156,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 365",
         "description": "Write a Python program that defines a function `generate_squares()` which contains a nested function `square()` to generate a list of squares of numbers from 1 to n.",
         "initialCode": "def generate_squares(n):\n    pass",
-        "solution": "def generate_squares(n):\n    def square(x):\n        return x * x\n    squares = []\n    for i in range(1, n + 1):\n        squares.append(square(i))\n    return squares\n\nresult = generate_squares(5)\nprint(result)",
+        "solution": "def generate_squares(n):\n    def square(x):\n        return x * x\n    squares = []\n    for i in range(1, n + 1):\n        squares.append(square(i))\n    return squares\n\nresult = generate_squares(5)\nprint(result)\n\n# Using list comprehension\n    return [square(i) for i in range]\n\n# Using map()\n    return list(map(lambda i: square(i), range))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3165,7 +3165,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 366",
         "description": "Write a Python program that defines a main function `sum_of_two()` and a helper function `add(a, b)` that adds two numbers together. The `sum_of_two()` function should call the helper function and return the result.",
         "initialCode": "def sum_of_two(a, b):\n    pass",
-        "solution": "def sum_of_two(a, b):\n    def add(x, y):\n        return x + y\n    return add(a, b)\n\nresult = sum_of_two(3, 5)\nprint(result)",
+        "solution": "def sum_of_two(a, b):\n    def add(x, y):\n        return x + y\n    return add(a, b)\n\nresult = sum_of_two(3, 5)\nprint(result)\n\n# Using lambda\n    return lambda x: x + y",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3174,7 +3174,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 367",
         "description": "Write a Python program that defines a main function `even_or_odd()` and a nested function `is_even(n)` that checks if a number is even. The `even_or_odd()` function should use the helper function to print whether the number is even or odd.",
         "initialCode": "def even_or_odd(n):\n    pass",
-        "solution": "def even_or_odd(n):\n    def is_even(x):\n        return x % 2 == 0\n    if is_even(n):\n        print(f\"{n} is even\")\n    else:\n        print(f\"{n} is odd\")\n\neven_or_odd(10)",
+        "solution": "def even_or_odd(n):\n    def is_even(x):\n        return x % 2 == 0\n    if is_even(n):\n        print(f\"{n} is even\")\n    else:\n        print(f\"{n} is odd\")\n\neven_or_odd(10)\n\n# Using lambda\n    return lambda x: x % 2 == 0",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3183,7 +3183,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 368",
         "description": "Write a Python program that defines a main function `convert_temperature()` and a helper function `celsius_to_fahrenheit(c)` that converts a temperature from Celsius to Fahrenheit. The `convert_temperature()` function should use the helper function to return the converted temperature.",
         "initialCode": "def convert_temperature(celsius):\n    pass",
-        "solution": "def convert_temperature(celsius):\n    def celsius_to_fahrenheit(c):\n        return (c * 9/5) + 32\n    return celsius_to_fahrenheit(celsius)\n\nresult = convert_temperature(25)\nprint(result)",
+        "solution": "def convert_temperature(celsius):\n    def celsius_to_fahrenheit(c):\n        return (c * 9/5) + 32\n    return celsius_to_fahrenheit(celsius)\n\nresult = convert_temperature(25)\nprint(result)\n\n# Using lambda\n    return lambda c: (c * 9/5) + 32",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3192,7 +3192,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 369",
         "description": "Write a Python program that defines a main function `rectangle_area()` and a helper function `calculate_area(length, width)` that calculates the area of a rectangle. The `rectangle_area()` function should use the helper function to return the area.",
         "initialCode": "def rectangle_area(length, width):\n    pass",
-        "solution": "def rectangle_area(length, width):\n    def calculate_area(l, w):\n        return l * w\n    return calculate_area(length, width)\n\nresult = rectangle_area(5, 10)\nprint(result)",
+        "solution": "def rectangle_area(length, width):\n    def calculate_area(l, w):\n        return l * w\n    return calculate_area(length, width)\n\nresult = rectangle_area(5, 10)\nprint(result)\n\n# Using lambda\n    return lambda x: l * w",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3201,7 +3201,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 370",
         "description": "Write a Python program that defines a main function `check_prime()` and a helper function `is_prime(n)` that checks if a number is prime. The `check_prime()` function should use the helper function to return whether the number is prime.",
         "initialCode": "def check_prime(n):\n    pass",
-        "solution": "def check_prime(n):\n    def is_prime(num):\n        if num < 2:\n            return False\n        for i in range(2, int(num ** 0.5) + 1):\n            if num % i == 0:\n                return False\n        return True\n    return is_prime(n)\n\nresult = check_prime(11)\nprint(result)",
+        "solution": "def check_prime(n):\n    def is_prime(num):\n        if num < 2:\n            return False\n        for i in range(2, int(num ** 0.5) + 1):\n            if num % i == 0:\n                return False\n        return True\n    return is_prime(n)\n\nresult = check_prime(11)\nprint(result)\n\n# Using lambda\n    return lambda num: False",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3210,7 +3210,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 371",
         "description": "Write a Python program that defines a main function `find_minimum()` and a helper function `min_of_three(a, b, c)` that returns the minimum of three numbers. The `find_minimum()` function should use the helper function to return the minimum value.",
         "initialCode": "def find_minimum(a, b, c):\n    pass",
-        "solution": "def find_minimum(a, b, c):\n    def min_of_three(x, y, z):\n        return min(x, y, z)\n    return min_of_three(a, b, c)\n\nresult = find_minimum(5, 3, 8)\nprint(result)",
+        "solution": "def find_minimum(a, b, c):\n    def min_of_three(x, y, z):\n        return min(x, y, z)\n    return min_of_three(a, b, c)\n\nresult = find_minimum(5, 3, 8)\nprint(result)\n\n# Using lambda\n    return lambda x: min(x, y, z)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3228,7 +3228,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 374",
         "description": "Write a Python program that defines a main function `capitalize_words()` and a helper function `capitalize(word)` that capitalizes the first letter of a word. The `capitalize_words()` function should use the helper function to capitalize each word in a sentence.",
         "initialCode": "def capitalize_words(sentence):\n    pass",
-        "solution": "def capitalize_words(sentence):\n    def capitalize(word):\n        return word[0].upper() + word[1:]\n\n    words = sentence.split()\n    capitalized_words = []\n    for word in words:\n        capitalized_words.append(capitalize(word))\n    return ' '.join(capitalized_words)\n\nresult = capitalize_words(\"hello world from python\")\nprint(result)",
+        "solution": "def capitalize_words(sentence):\n    def capitalize(word):\n        return word[0].upper() + word[1:]\n\n    words = sentence.split()\n    capitalized_words = []\n    for word in words:\n        capitalized_words.append(capitalize(word))\n    return ' '.join(capitalized_words)\n\nresult = capitalize_words(\"hello world from python\")\nprint(result)\n\n# Using list comprehension\n    return [capitalize(word) for word in words]\n\n# Using map()\n    return list(map(lambda word: capitalize(word), words))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3246,7 +3246,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 376",
         "description": "Write a Python program that defines a main function `reverse_string()` and a helper function `reverse(s)` that reverses a given string. The `reverse_string()` function should use the helper function to return the reversed string.",
         "initialCode": "def reverse_string(s):\n    pass",
-        "solution": "def reverse_string(s):\n    def reverse(s):\n        reversed_str = ''\n        for char in s:\n            reversed_str = char + reversed_str\n        return reversed_str\n    return reverse(s)\n\nresult = reverse_string(\"hello\")\nprint(result)",
+        "solution": "def reverse_string(s):\n    def reverse(s):\n        reversed_str = ''\n        for char in s:\n            reversed_str = char + reversed_str\n        return reversed_str\n    return reverse(s)\n\nresult = reverse_string(\"hello\")\nprint(result)\n\n# Using lambda\n    return lambda s: reversed_str",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3264,7 +3264,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 378",
         "description": "Write a Python program that defines a main function `check_palindrome()` and a helper function `is_palindrome(s)` that checks if a string is a palindrome. The `check_palindrome()` function should use the helper function to return whether the string is a palindrome.",
         "initialCode": "def check_palindrome(s):\n    pass",
-        "solution": "def check_palindrome(s):\n    def is_palindrome(s):\n        return s == s[::-1]\n\n    return is_palindrome(s)\n\nresult = check_palindrome(\"racecar\")\nprint(result)\n\n# Using reversed()\n    return list(reversed(s))\n\n# Using for loop\n    result = []\n    for x in s:\n        result.insert(0, x)\n    return result",
+        "solution": "def check_palindrome(s):\n    def is_palindrome(s):\n        return s == s[::-1]\n\n    return is_palindrome(s)\n\nresult = check_palindrome(\"racecar\")\nprint(result)\n\n# Using reversed()\n    return list(reversed(s))\n\n# Using for loop\n    result = []\n    for x in s:\n        result.insert(0, x)\n    return result\n\n# Using lambda\n    return lambda s: s == s[::-1]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3282,7 +3282,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 380",
         "description": "Write a Python program that defines a main function `check_sorted()` and a helper function `is_sorted(lst)` that checks if a list is sorted in ascending order. The `check_sorted()` function should use the helper function to return whether the list is sorted.",
         "initialCode": "def check_sorted(lst):\n    pass",
-        "solution": "def check_sorted(lst):\n    def is_sorted(lst):\n        for i in range(len(lst) - 1):\n            if lst[i] > lst[i + 1]:\n                return False\n        return True\n\n    return is_sorted(lst)\n\nresult = check_sorted([1, 2, 3, 4])\nprint(result)",
+        "solution": "def check_sorted(lst):\n    def is_sorted(lst):\n        for i in range(len(lst) - 1):\n            if lst[i] > lst[i + 1]:\n                return False\n        return True\n\n    return is_sorted(lst)\n\nresult = check_sorted([1, 2, 3, 4])\nprint(result)\n\n# Using max() with key\n    return max(range, key=lambda i: lst[i])\n\n# Using sorted()\n    return sorted(range, key=lambda i: lst[i])[-1]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3327,7 +3327,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 386",
         "description": "Write a Python program to find the longest word in a list of words using the `key` parameter.",
         "initialCode": "def longest_word(words):\n    pass",
-        "solution": "def longest_word(words):\n    longest = \"\"\n    for word in words:\n        if len(word) > len(longest):\n            longest = word\n    return longest\n\nresult = longest_word([\"apple\", \"banana\", \"cherry\", \"date\"])\nprint(result)",
+        "solution": "def longest_word(words):\n    longest = \"\"\n    for word in words:\n        if len(word) > len(longest):\n            longest = word\n    return longest\n\nresult = longest_word([\"apple\", \"banana\", \"cherry\", \"date\"])\nprint(result)\n\n# Using max() with key\n    return max(words, key=lambda word: len(word))\n\n# Using sorted()\n    return sorted(words, key=lambda word: len(word))[-1]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3390,7 +3390,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 393",
         "description": "Write a Python program to sort a list of complex numbers by their magnitude using the `key` parameter in the `sorted()` function.",
         "initialCode": "def sort_complex_numbers(complex_numbers):\n    pass",
-        "solution": "def sort_complex_numbers(complex_numbers):\n    def get_magnitude(c):\n        return abs(c)\n\n    sorted_numbers = sorted(complex_numbers, key=get_magnitude)\n    return sorted_numbers\n\nresult = sort_complex_numbers([3 + 4j, 1 + 1j, 0 + 2j, 5 + 0j])\nprint(result)",
+        "solution": "def sort_complex_numbers(complex_numbers):\n    def get_magnitude(c):\n        return abs(c)\n\n    sorted_numbers = sorted(complex_numbers, key=get_magnitude)\n    return sorted_numbers\n\nresult = sort_complex_numbers([3 + 4j, 1 + 1j, 0 + 2j, 5 + 0j])\nprint(result)\n\n# Using lambda\n    return lambda c: abs(c)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3408,7 +3408,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 395",
         "description": "Write a Python program to sort a list of fractions (using the `fractions.Fraction` class) by their value using the `key` parameter in the `sorted()` function.",
         "initialCode": "from fractions import Fraction\ndef sort_fractions(fractions):\n    pass",
-        "solution": "from fractions import Fraction\n\ndef sort_fractions(fractions):\n    def get_fraction_value(frac):\n        return float(frac)\n\n    sorted_fractions = sorted(fractions, key=get_fraction_value)\n    return sorted_fractions\n\nresult = sort_fractions([Fraction(1, 2), Fraction(1, 3), Fraction(2, 3), Fraction(1, 4)])\nprint(result)",
+        "solution": "from fractions import Fraction\n\ndef sort_fractions(fractions):\n    def get_fraction_value(frac):\n        return float(frac)\n\n    sorted_fractions = sorted(fractions, key=get_fraction_value)\n    return sorted_fractions\n\nresult = sort_fractions([Fraction(1, 2), Fraction(1, 3), Fraction(2, 3), Fraction(1, 4)])\nprint(result)\n\n# Using lambda key\n    return sorted(..., key=lambda frac: float(frac))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3444,7 +3444,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 399",
         "description": "Write a Python program to sort a list of words by the number of distinct letters in each word using the `key` parameter in the `sorted()` function.",
         "initialCode": "def sort_words_by_distinct_letters(words):\n    pass",
-        "solution": "def sort_words_by_distinct_letters(words):\n    def distinct_letter_count(word):\n        return len(set(word))\n\n    sorted_words = sorted(words, key=distinct_letter_count)\n    return sorted_words\n\nresult = sort_words_by_distinct_letters([\"apple\", \"banana\", \"cherry\", \"date\"])\nprint(result)",
+        "solution": "def sort_words_by_distinct_letters(words):\n    def distinct_letter_count(word):\n        return len(set(word))\n\n    sorted_words = sorted(words, key=distinct_letter_count)\n    return sorted_words\n\nresult = sort_words_by_distinct_letters([\"apple\", \"banana\", \"cherry\", \"date\"])\nprint(result)\n\n# Using lambda\n    return lambda word: len(set(word))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3453,7 +3453,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 400",
         "description": "Write a Python program to find the word with the highest sum of ASCII values of its characters in a list of words using the `key` parameter.",
         "initialCode": "def main(lst):\n    pass\n\ndef ascii_value(word):\n    pass\n\ndef find_highest_ascii_word(words):\n    pass",
-        "solution": "def main(lst):\n    def inner(word):\n        count = 0\n        for char in word:\n            count += ord(char)\n        return count\n    return max(lst, key=inner)\n\nlst = [\"aa\", \"bb\", \"cc\", \"dg\",\"uu\", \"ak\"]\nmain(lst)\n\ndef ascii_value(word):\n    total_value = 0\n    for char in word:\n        total_value += ord(char)\n    return total_value\n\ndef find_highest_ascii_word(words):\n    highest_word = max(words, key=ascii_value)\n    return highest_word\n\nresult = find_highest_ascii_word([\"hello\", \"world\", \"python\", \"scrabble\"])\nprint(result)",
+        "solution": "def main(lst):\n    def inner(word):\n        count = 0\n        for char in word:\n            count += ord(char)\n        return count\n    return max(lst, key=inner)\n\nlst = [\"aa\", \"bb\", \"cc\", \"dg\",\"uu\", \"ak\"]\nmain(lst)\n\ndef ascii_value(word):\n    total_value = 0\n    for char in word:\n        total_value += ord(char)\n    return total_value\n\ndef find_highest_ascii_word(words):\n    highest_word = max(words, key=ascii_value)\n    return highest_word\n\nresult = find_highest_ascii_word([\"hello\", \"world\", \"python\", \"scrabble\"])\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for char in word)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, word, 0)\n\n# Using for loop\n    count = 0\n    for char in word:\n        count += ord(char)\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3462,7 +3462,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 401",
         "description": "Write a Python program to sort a list of strings by the number of vowels in each string using the `key` parameter in the `sorted()` function.\"",
         "initialCode": "def count_vowels(s):\n    pass\n\ndef sort_by_vowel_count(strings):\n    pass",
-        "solution": "def count_vowels(s):\n    vowels = \"aeiou\"\n    count = 0\n    s = s.lower() \n    \n    for char in s:\n        if char in vowels:\n            count += 1\n    return count\n\ndef sort_by_vowel_count(strings):\n    return sorted(strings, key=count_vowels)\n\nstrings = [\"apple\", \"banana\", \"cherry\", \"date\", \"fig\", \"grape\"]\nsorted_strings = sort_by_vowel_count(strings)\nprint(sorted_strings)",
+        "solution": "def count_vowels(s):\n    vowels = \"aeiou\"\n    count = 0\n    s = s.lower() \n    \n    for char in s:\n        if char in vowels:\n            count += 1\n    return count\n\ndef sort_by_vowel_count(strings):\n    return sorted(strings, key=count_vowels)\n\nstrings = [\"apple\", \"banana\", \"cherry\", \"date\", \"fig\", \"grape\"]\nsorted_strings = sort_by_vowel_count(strings)\nprint(sorted_strings)\n\n# Using built-in sum()\n    return sum(1 for char in s)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, s, 0)\n\n# Using for loop\n    count = 0\n    for char in s:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3525,7 +3525,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 408",
         "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, with maintaining the original order of characters.",
         "initialCode": "def remove_duplicates(lst):\n    pass",
-        "solution": "def remove_duplicates(lst):\n    lst = lst.split()\n    unique = []\n    commom = []\n    \n    for word in lst:\n        if word in unique:\n            commom.append(word)\n        else:\n            unique.append(word)\n    return unique\n    \nlst = \" what is you is going is to do\"\nprint(remove_duplicates(lst))",
+        "solution": "def remove_duplicates(lst):\n    lst = lst.split()\n    unique = []\n    commom = []\n    \n    for word in lst:\n        if word in unique:\n            commom.append(word)\n        else:\n            unique.append(word)\n    return unique\n    \nlst = \" what is you is going is to do\"\nprint(remove_duplicates(lst))\n\n# Using list comprehension\n    return [word for word in lst if word in unique]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3561,7 +3561,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 412",
         "description": "Write a Python function called calculate_product that takes two numbers as arguments. Inside this function, define a nested function that returns their product.",
         "initialCode": "def calculate_product(a, b):\n    pass",
-        "solution": "def calculate_product(a, b):\n    def product():\n        return a * b\n    return product()\n\nresult = calculate_product(3, 5)\nprint(result)",
+        "solution": "def calculate_product(a, b):\n    def product():\n        return a * b\n    return product()\n\nresult = calculate_product(3, 5)\nprint(result)\n\n# Using lambda\n    return lambda x: a * b",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3570,7 +3570,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 413",
         "description": "Write a Python function called calculate_difference that takes two numbers as arguments. Inside this function, define a nested function that returns their difference.",
         "initialCode": "def calculate_difference(a, b):\n    pass",
-        "solution": "def calculate_difference(a, b):\n    def difference():\n        return a - b\n    return difference()\n\nresult = calculate_difference(10, 3)\nprint(result)",
+        "solution": "def calculate_difference(a, b):\n    def difference():\n        return a - b\n    return difference()\n\nresult = calculate_difference(10, 3)\nprint(result)\n\n# Using lambda\n    return lambda x: a - b",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3579,7 +3579,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 414",
         "description": "Write a Python function called calculate_quotient that takes two numbers as arguments. Inside this function, define a nested function that returns their quotient.",
         "initialCode": "def calculate_quotient(a, b):\n    pass",
-        "solution": "def calculate_quotient(a, b):\n    def quotient():\n        return a / b\n    return quotient()\n\nresult = calculate_quotient(10, 2)\nprint(result)",
+        "solution": "def calculate_quotient(a, b):\n    def quotient():\n        return a / b\n    return quotient()\n\nresult = calculate_quotient(10, 2)\nprint(result)\n\n# Using lambda\n    return lambda x: a / b",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3588,7 +3588,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 415",
         "description": "Write a Python function area_of_rectangle that calculates the area of a rectangle given its length and width. Use a nested function to calculate the area.",
         "initialCode": "def area_of_rectangle(length, width):\n    pass",
-        "solution": "def area_of_rectangle(length, width):\n    def area():\n        return length * width\n    return area()\n\nresult = area_of_rectangle(5, 4)\nprint(result)",
+        "solution": "def area_of_rectangle(length, width):\n    def area():\n        return length * width\n    return area()\n\nresult = area_of_rectangle(5, 4)\nprint(result)\n\n# Using lambda\n    return lambda x: length * width",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3597,7 +3597,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 416",
         "description": "Write a Python function perimeter_of_square that calculates the perimeter of a square given its side length. Use a nested function to calculate the perimeter.",
         "initialCode": "def perimeter_of_square(side_length):\n    pass",
-        "solution": "def perimeter_of_square(side_length):\n    def perimeter():\n        return 4 * side_length\n    return perimeter()\n\nresult = perimeter_of_square(5)\nprint(result)",
+        "solution": "def perimeter_of_square(side_length):\n    def perimeter():\n        return 4 * side_length\n    return perimeter()\n\nresult = perimeter_of_square(5)\nprint(result)\n\n# Using lambda\n    return lambda x: 4 * side_length",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3606,7 +3606,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 417",
         "description": "Write a Python function called fahrenheit_to_celsius that takes a temperature in Fahrenheit and converts it to Celsius. Use a nested function to do the conversion.",
         "initialCode": "def fahrenheit_to_celsius(fahrenheit):\n    pass",
-        "solution": "def fahrenheit_to_celsius(fahrenheit):\n    def convert():\n        return (fahrenheit - 32) * 5 / 9\n    return convert()\n\nresult = fahrenheit_to_celsius(68)\nprint(result)",
+        "solution": "def fahrenheit_to_celsius(fahrenheit):\n    def convert():\n        return (fahrenheit - 32) * 5 / 9\n    return convert()\n\nresult = fahrenheit_to_celsius(68)\nprint(result)\n\n# Using lambda\n    return lambda x: (fahrenheit - 32) * 5 / 9",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3615,7 +3615,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 418",
         "description": "Write a Python function called celsius_to_fahrenheit that takes a temperature in Celsius and converts it to Fahrenheit. Use a nested function to do the conversion.",
         "initialCode": "def celsius_to_fahrenheit(celsius):\n    pass",
-        "solution": "def celsius_to_fahrenheit(celsius):\n    def convert():\n        return (celsius * 9 / 5) + 32\n    return convert()\n\nresult = celsius_to_fahrenheit(20)\nprint(result)",
+        "solution": "def celsius_to_fahrenheit(celsius):\n    def convert():\n        return (celsius * 9 / 5) + 32\n    return convert()\n\nresult = celsius_to_fahrenheit(20)\nprint(result)\n\n# Using lambda\n    return lambda x: (celsius * 9 / 5) + 32",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3624,7 +3624,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 419",
         "description": "Write a Python function called even_or_odd that takes a number and returns whether it\u2019s even or odd. Use a nested function to check this condition.",
         "initialCode": "def even_or_odd(number):\n    pass",
-        "solution": "def even_or_odd(number):\n    def check():\n        if number % 2 == 0:\n            return \"Even\"\n        else:\n            return \"Odd\"\n    return check()\n\nresult = even_or_odd(7)\nprint(result)",
+        "solution": "def even_or_odd(number):\n    def check():\n        if number % 2 == 0:\n            return \"Even\"\n        else:\n            return \"Odd\"\n    return check()\n\nresult = even_or_odd(7)\nprint(result)\n\n# Using lambda\n    return lambda x: \'Even\'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3642,7 +3642,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 421",
         "description": "Write a Python function called list_sum that takes a list of numbers and returns the sum. Inside it, define a nested function that adds the elements.",
         "initialCode": "def list_sum(numbers):\n    pass",
-        "solution": "def list_sum(numbers):\n    def add_elements():\n        total = 0\n        for number in numbers:\n            total += number\n        return total\n    return add_elements()\n\nresult = list_sum([1, 2, 3, 4])\nprint(result)",
+        "solution": "def list_sum(numbers):\n    def add_elements():\n        total = 0\n        for number in numbers:\n            total += number\n        return total\n    return add_elements()\n\nresult = list_sum([1, 2, 3, 4])\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for number in numbers)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, number: acc + 1, numbers, 0)\n\n# Using for loop\n    total = 0\n    for number in numbers:\n        total += number\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3651,7 +3651,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 422",
         "description": "Write a Python function called list_product that takes a list of numbers and returns the product of all elements. Use a nested function to compute the product.",
         "initialCode": "def list_product(numbers):\n    pass",
-        "solution": "def list_product(numbers):\n    def multiply_elements():\n        product = 1\n        for number in numbers:\n            product *= number\n        return product\n    return multiply_elements()\n\nresult = list_product([1, 2, 3, 4])\nprint(result)",
+        "solution": "def list_product(numbers):\n    def multiply_elements():\n        product = 1\n        for number in numbers:\n            product *= number\n        return product\n    return multiply_elements()\n\nresult = list_product([1, 2, 3, 4])\nprint(result)\n\n# Using lambda\n    return lambda x: product",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3660,7 +3660,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 423",
         "description": "Write a Python function greater_than that takes two numbers and returns True if the first is greater than the second. Use a nested function for comparison.",
         "initialCode": "def greater_than(a, b):\n    pass",
-        "solution": "def greater_than(a, b):\n    def compare():\n        return a > b\n    return compare()\n\nresult = greater_than(10, 5)\nprint(result)",
+        "solution": "def greater_than(a, b):\n    def compare():\n        return a > b\n    return compare()\n\nresult = greater_than(10, 5)\nprint(result)\n\n# Using lambda\n    return lambda x: a > b",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3669,7 +3669,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 424",
         "description": "Write a Python function string_length that takes a string and returns its length. Use a nested function that calculates and returns the length.",
         "initialCode": "def string_length(s):\n    pass",
-        "solution": "def string_length(s):\n    def calculate_length():\n        length = 0\n        for char in s:\n            length += 1\n        return length\n    return calculate_length()\n\nresult = string_length(\"Hello, World!\")\nprint(result)",
+        "solution": "def string_length(s):\n    def calculate_length():\n        length = 0\n        for char in s:\n            length += 1\n        return length\n    return calculate_length()\n\nresult = string_length(\"Hello, World!\")\nprint(result)\n\n# Using lambda\n    return lambda x: length",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3687,7 +3687,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 426",
         "description": "Write a Python function count_vowels that takes a string and counts the number of vowels using a nested function.",
         "initialCode": "def count_vowels(s):\n    pass",
-        "solution": "def count_vowels(s):\n    def is_vowel(char):\n        return char.lower() in 'aeiou'\n\n    count = 0\n    for char in s:\n        if is_vowel(char):\n            count += 1\n    return count\n\nresult = count_vowels(\"Hello, World!\")\nprint(result)",
+        "solution": "def count_vowels(s):\n    def is_vowel(char):\n        return char.lower() in 'aeiou'\n\n    count = 0\n    for char in s:\n        if is_vowel(char):\n            count += 1\n    return count\n\nresult = count_vowels(\"Hello, World!\")\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for char in s)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, s, 0)\n\n# Using for loop\n    count = 0\n    for char in s:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3696,7 +3696,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 427",
         "description": "Write a Python function reverse_string that takes a string and returns its reverse using a nested function.",
         "initialCode": "def reverse_string(s):\n    pass",
-        "solution": "def reverse_string(s):\n    def reverse():\n        reversed_s = \"\"\n        for char in s:\n            reversed_s = char + reversed_s\n        return reversed_s\n    return reverse()\n\nresult = reverse_string(\"Hello\")\nprint(result)",
+        "solution": "def reverse_string(s):\n    def reverse():\n        reversed_s = \"\"\n        for char in s:\n            reversed_s = char + reversed_s\n        return reversed_s\n    return reverse()\n\nresult = reverse_string(\"Hello\")\nprint(result)\n\n# Using lambda\n    return lambda x: reversed_s",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3714,7 +3714,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 429",
         "description": "Write a Python function multiply_by_n that takes a number n and returns another function that multiplies a given number by n.",
         "initialCode": "def multiply_by_n(n):\n    pass",
-        "solution": "def multiply_by_n(n):\n    def multiply(x):\n        return n * x\n    return multiply\n\nmultiply_by_3 = multiply_by_n(3)\nresult = multiply_by_3(5)\nprint(result)",
+        "solution": "def multiply_by_n(n):\n    def multiply(x):\n        return n * x\n    return multiply\n\nmultiply_by_3 = multiply_by_n(3)\nresult = multiply_by_3(5)\nprint(result)\n\n# Using lambda\n    return lambda x: n * x",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3723,7 +3723,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 430",
         "description": "Write a Python function add_tax that takes a price and returns the price after applying a tax percentage using a nested function.",
         "initialCode": "def add_tax(price):\n    pass",
-        "solution": "def add_tax(price):\n    def calculate_tax():\n        tax_rate = 0.15\n        return price + (price * tax_rate)\n    return calculate_tax()\n\nresult = add_tax(100)\nprint(result)",
+        "solution": "def add_tax(price):\n    def calculate_tax():\n        tax_rate = 0.15\n        return price + (price * tax_rate)\n    return calculate_tax()\n\nresult = add_tax(100)\nprint(result)\n\n# Using lambda\n    return lambda x: price + (price * tax_rate)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3732,7 +3732,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 431",
         "description": "Write a Python function greet_person that takes a name and returns a greeting using a nested function.",
         "initialCode": "def greet_person(name):\n    pass",
-        "solution": "def greet_person(name):\n    def greeting():\n        return f\"Hello, {name}!\"\n    return greeting()\n\nresult = greet_person(\"Alice\")\nprint(result)",
+        "solution": "def greet_person(name):\n    def greeting():\n        return f\"Hello, {name}!\"\n    return greeting()\n\nresult = greet_person(\"Alice\")\nprint(result)\n\n# Using lambda\n    return lambda x: f\'Hello, {name}!\'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3741,7 +3741,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 432",
         "description": "Write a Python function factorial that calculates the factorial of a number using a nested recursive function.",
         "initialCode": "def factorial(n):\n    pass",
-        "solution": "def factorial(n):\n    def calc_factorial(num):\n        if num == 0 or num == 1:\n            return 1\n        else:\n            return num * calc_factorial(num - 1)\n\n    return calc_factorial(n)\n\nresult = factorial(5)\nprint(result)",
+        "solution": "def factorial(n):\n    def calc_factorial(num):\n        if num == 0 or num == 1:\n            return 1\n        else:\n            return num * calc_factorial(num - 1)\n\n    return calc_factorial(n)\n\nresult = factorial(5)\nprint(result)\n\n# Using lambda\n    return lambda num: 1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3759,7 +3759,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 434",
         "description": "Write a Python function gcd that calculates the greatest common divisor of two numbers using a nested function.",
         "initialCode": "def gcd(a, b):\n    pass",
-        "solution": "def gcd(a, b):\n    def calculate_gcd(x, y):\n        while y != 0:\n            (x, y) = (y, x % y)\n        return x\n    return calculate_gcd(a, b)\n\nresult = gcd(48, 18)\nprint(result)\n\n# Using while loop with break\n    while True:\n        if not (y != 0):\n            break\n        ...",
+        "solution": "def gcd(a, b):\n    def calculate_gcd(x, y):\n        while y != 0:\n            (x, y) = (y, x % y)\n        return x\n    return calculate_gcd(a, b)\n\nresult = gcd(48, 18)\nprint(result)\n\n# Using while loop with break\n    while True:\n        if not (y != 0):\n            break\n        ...\n\n# Using lambda\n    return lambda x: x",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3777,7 +3777,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 436",
         "description": "Write a Python function square_of_number that returns the square of a number using a nested function.",
         "initialCode": "def square_of_number(n):\n    pass",
-        "solution": "def square_of_number(n):\n    def square():\n        return n * n\n    return square()\n\nresult = square_of_number(5)\nprint(result)",
+        "solution": "def square_of_number(n):\n    def square():\n        return n * n\n    return square()\n\nresult = square_of_number(5)\nprint(result)\n\n# Using lambda\n    return lambda x: n * n",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3795,7 +3795,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 438",
         "description": "Write a Python function sort_list_descending that takes a list and sorts it in descending order using a nested function.",
         "initialCode": "def sort_list_descending(lst):\n    pass",
-        "solution": "def sort_list_descending(lst):\n    def sort():\n        sorted_list = []\n        while lst:\n            maximum = lst[0]\n            for item in lst:\n                if item > maximum:\n                    maximum = item\n            sorted_list.append(maximum)\n            lst.remove(maximum)\n        return sorted_list\n    return sort()\n\nresult = sort_list_descending([4, 1, 3, 2])\nprint(result)\n\n# Using while loop with break\n    while True:\n        if not (lst):\n            break\n        ...",
+        "solution": "def sort_list_descending(lst):\n    def sort():\n        sorted_list = []\n        while lst:\n            maximum = lst[0]\n            for item in lst:\n                if item > maximum:\n                    maximum = item\n            sorted_list.append(maximum)\n            lst.remove(maximum)\n        return sorted_list\n    return sort()\n\nresult = sort_list_descending([4, 1, 3, 2])\nprint(result)\n\n# Using while loop with break\n    while True:\n        if not (lst):\n            break\n        ...\n\n# Using list comprehension\n    return [maximum for item in lst if item > maximum]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3804,7 +3804,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 439",
         "description": "Write a Python function max_of_three that takes three numbers and returns the maximum using a nested function.",
         "initialCode": "def max_of_three(a, b, c):\n    pass",
-        "solution": "def max_of_three(a, b, c):\n    def find_max():\n        max_value = a\n        if b > max_value:\n            max_value = b\n        if c > max_value:\n            max_value = c\n        return max_value\n    return find_max()\n\nresult = max_of_three(10, 20, 15)\nprint(result)",
+        "solution": "def max_of_three(a, b, c):\n    def find_max():\n        max_value = a\n        if b > max_value:\n            max_value = b\n        if c > max_value:\n            max_value = c\n        return max_value\n    return find_max()\n\nresult = max_of_three(10, 20, 15)\nprint(result)\n\n# Using lambda\n    return lambda x: max_value",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3813,7 +3813,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 440",
         "description": "Write a Python function average_of_list that calculates the average of a list of numbers using a nested function. Do not use sum() and len()",
         "initialCode": "def average_of_list(lst):\n    pass",
-        "solution": "def average_of_list(lst):\n    def calculate_average():\n        total = 0\n        count = 0\n        for number in lst:\n            total += number\n            count += 1\n        return total / count if count != 0 else 0\n    return calculate_average()\n\nresult = average_of_list([10, 20, 30, 40])\nprint(result)",
+        "solution": "def average_of_list(lst):\n    def calculate_average():\n        total = 0\n        count = 0\n        for number in lst:\n            total += number\n            count += 1\n        return total / count if count != 0 else 0\n    return calculate_average()\n\nresult = average_of_list([10, 20, 30, 40])\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for number in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, number: acc + 1, lst, 0)\n\n# Using for loop\n    total = 0\n    for number in lst:\n        total += number\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3822,7 +3822,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 441",
         "description": "Write a Python function average_of_list that calculates the average of a list of numbers using a nested function.",
         "initialCode": "def average_of_list(lst):\n    pass",
-        "solution": "def average_of_list(lst):\n    def calculate_average():\n        total = 0\n        count = 0\n        for number in lst:\n            total += number\n            count += 1\n        return total / count if count != 0 else 0\n    return calculate_average()\n\nresult = average_of_list([5, 15, 25])\nprint(result)",
+        "solution": "def average_of_list(lst):\n    def calculate_average():\n        total = 0\n        count = 0\n        for number in lst:\n            total += number\n            count += 1\n        return total / count if count != 0 else 0\n    return calculate_average()\n\nresult = average_of_list([5, 15, 25])\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for number in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, number: acc + 1, lst, 0)\n\n# Using for loop\n    total = 0\n    for number in lst:\n        total += number\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3840,7 +3840,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 443",
         "description": "Write a Python function is_lowercase that checks if all characters in a string are lowercase using a nested function.",
         "initialCode": "def is_lowercase(s):\n    pass",
-        "solution": "def is_lowercase(s):\n    def check():\n        for char in s:\n            if not char.islower():\n                return False\n        return True\n    return check()\n\nresult = is_lowercase(\"hello\")\nprint(result)",
+        "solution": "def is_lowercase(s):\n    def check():\n        for char in s:\n            if not char.islower():\n                return False\n        return True\n    return check()\n\nresult = is_lowercase(\"hello\")\nprint(result)\n\n# Using lambda\n    return lambda x: False",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3885,7 +3885,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 448",
         "description": "Write a Python function longest_string that takes a list of strings and returns the longest one using a nested function.",
         "initialCode": "def longest_string(lst):\n    pass\n\ndef longest_string(lst):\n    pass",
-        "solution": "def longest_string(lst):\n    \n    def longest(x):\n        longest_word = x[0]\n        for word in x:\n            if word > longest_word:\n                longest_word = word\n        return longest_word\n            \n    return longest(lst)\n                    \nlst = [\"jon\", \"zonathan\", \"mimi\"]\nprint(longest_string(lst))\n\ndef longest_string(lst):\n\n    def find_longest(strings):\n        return max(strings, key=len)\n    \n    return find_longest(lst)\n    \nlst = [\"jon\", \"zonathan\", \"mimi\"]\nprint(longest_string(lst))",
+        "solution": "def longest_string(lst):\n    \n    def longest(x):\n        longest_word = x[0]\n        for word in x:\n            if word > longest_word:\n                longest_word = word\n        return longest_word\n            \n    return longest(lst)\n                    \nlst = [\"jon\", \"zonathan\", \"mimi\"]\nprint(longest_string(lst))\n\ndef longest_string(lst):\n\n    def find_longest(strings):\n        return max(strings, key=len)\n    \n    return find_longest(lst)\n    \nlst = [\"jon\", \"zonathan\", \"mimi\"]\nprint(longest_string(lst))\n\n# Using max() with key\n    return max(x, key=lambda word: word)\n\n# Using sorted()\n    return sorted(x, key=lambda word: word)[-1]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3966,7 +3966,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 458",
         "description": "Write a Python function to find the maximum string alphabetically using the key parameter.",
         "initialCode": "def max_string_alpha(lst):\n    pass",
-        "solution": "def max_string_alpha(lst):\n    \n    def max_string(x):\n        return len(x)\n        \n    return max(lst, key=max_string)\n\nlst = [\"hippopotamus\", \"giraffe\", \"monkey\"]\nprint(max_string_alpha(lst))\n\n# Using for loop\n    count = 0\n    for _ in x:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in x)",
+        "solution": "def max_string_alpha(lst):\n    \n    def max_string(x):\n        return len(x)\n        \n    return max(lst, key=max_string)\n\nlst = [\"hippopotamus\", \"giraffe\", \"monkey\"]\nprint(max_string_alpha(lst))\n\n# Using for loop\n    count = 0\n    for _ in x:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in x)\n\n# Using built-in sum()\n    return sum(1 for _ in x)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, x, 0)\n\n# Using for loop\n    count = 0\n    for _ in x:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3993,7 +3993,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 461",
         "description": "Write a Python function that sorts a list of words by the number of vowels they contain using the key parameter.",
         "initialCode": "def sort_words_by_vowel_count(lst):\n    pass",
-        "solution": "def sort_words_by_vowel_count(lst):\n    \n    def count_vowels(word):\n        vowels = 'aeiou'\n        count = 0\n        for char in word:\n            if char in vowels:\n                count += 1\n        return count\n    \n    return sorted(lst, key=count_vowels)\n\nlst = [\"apple\", \"banana\", \"cherry\", \"date\"]\nprint(sort_words_by_vowel_count(lst))",
+        "solution": "def sort_words_by_vowel_count(lst):\n    \n    def count_vowels(word):\n        vowels = 'aeiou'\n        count = 0\n        for char in word:\n            if char in vowels:\n                count += 1\n        return count\n    \n    return sorted(lst, key=count_vowels)\n\nlst = [\"apple\", \"banana\", \"cherry\", \"date\"]\nprint(sort_words_by_vowel_count(lst))\n\n# Using built-in sum()\n    return sum(1 for char in word)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, word, 0)\n\n# Using for loop\n    count = 0\n    for char in word:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4029,7 +4029,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 465",
         "description": "Write a Python function to sort a list of strings by the number of uppercase letters in each string using the key parameter.",
         "initialCode": "def sort_number_uppercases(lst):\n    pass",
-        "solution": "def sort_number_uppercases(lst):\n    \n    def uppercase_count(x):\n        count = 0\n        for char in x:\n            if char.isupper():\n                count += 1\n        return count\n                \n    return sorted(lst,\n    key=uppercase_count)\n\nlst = [\"SNSKEYHG\", \"SlIppery\", \"SNAKEGG\"]\nprint(sort_number_uppercases(lst))",
+        "solution": "def sort_number_uppercases(lst):\n    \n    def uppercase_count(x):\n        count = 0\n        for char in x:\n            if char.isupper():\n                count += 1\n        return count\n                \n    return sorted(lst,\n    key=uppercase_count)\n\nlst = [\"SNSKEYHG\", \"SlIppery\", \"SNAKEGG\"]\nprint(sort_number_uppercases(lst))\n\n# Using built-in sum()\n    return sum(1 for char in x)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, x, 0)\n\n# Using for loop\n    count = 0\n    for char in x:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4056,7 +4056,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 468",
         "description": "Write a Python function to sort a list of tuples based on the first element in descending order using the key parameter.",
         "initialCode": "def first_element_decending_order(lst):\n    pass",
-        "solution": "def first_element_decending_order(lst):\n    def first_element(x):\n        return x[0] \n    \n    return sorted(lst, key=first_element, reverse=True)\n\nlst = [(\"see\", \"sea\", \"saw\"), (\"zoat\", \"zite\", \"zank\")]\nprint(first_element_decending_order(lst))",
+        "solution": "def first_element_decending_order(lst):\n    def first_element(x):\n        return x[0] \n    \n    return sorted(lst, key=first_element, reverse=True)\n\nlst = [(\"see\", \"sea\", \"saw\"), (\"zoat\", \"zite\", \"zank\")]\nprint(first_element_decending_order(lst))\n\n# Using lambda\n    return lambda x: x[0]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4083,7 +4083,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 471",
         "description": "Write a Python function to sort a list of dictionaries by the length of the value associated with a specific key using the key parameter.",
         "initialCode": "def length_of_value(lst, key):\n    pass",
-        "solution": "def length_of_value(lst, key):\n    \n    def length_function(x):\n        return len(x.get(key, \"\"))\n        \n    return sorted(lst, key=length_function)\n\nlst = [{\"a\": \"tree\", \"b\": \"bushen\"}, {\"a\": \"tin\", \"b\": \"bash\"}, {\"a\": \"tumb\", \"b\": \"bat\"}]\nsorted_lst = length_of_value(lst, \"b\")\nprint(sorted_lst)",
+        "solution": "def length_of_value(lst, key):\n    \n    def length_function(x):\n        return len(x.get(key, \"\"))\n        \n    return sorted(lst, key=length_function)\n\nlst = [{\"a\": \"tree\", \"b\": \"bushen\"}, {\"a\": \"tin\", \"b\": \"bash\"}, {\"a\": \"tumb\", \"b\": \"bat\"}]\nsorted_lst = length_of_value(lst, \"b\")\nprint(sorted_lst)\n\n# Using lambda key\n    return sorted(..., key=lambda x: len(x.get(key, \'\')))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4101,7 +4101,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 473",
         "description": "Write a Python function that sorts a list of integers by their remainder when divided by a given number using the key parameter.",
         "initialCode": "def main(lst, divisor):\n    pass\n\ndef remainder_key(x, divisor):\n    pass\n\ndef sort_by_remainder(lst, divisor):\n    pass",
-        "solution": "def main(lst, divisor):\n    \n    def inner(num):\n        return num % divisor\n    return sorted(lst, key=inner)\n\nlst = [677, 34, 9, 2, 67]\ndivisor = 5\nmain(lst, divisor)\n\ndef remainder_key(x, divisor):\n    return x % divisor\n\ndef sort_by_remainder(lst, divisor):\n\n    def key_func(x):\n        return remainder_key(x, divisor)\n    \n    return sorted(lst, key=key_func)\n\nlst = [10, 23, 4, 7, 15]\ndivisor = 5\nprint(sort_by_remainder(lst, divisor))",
+        "solution": "def main(lst, divisor):\n    \n    def inner(num):\n        return num % divisor\n    return sorted(lst, key=inner)\n\nlst = [677, 34, 9, 2, 67]\ndivisor = 5\nmain(lst, divisor)\n\ndef remainder_key(x, divisor):\n    return x % divisor\n\ndef sort_by_remainder(lst, divisor):\n\n    def key_func(x):\n        return remainder_key(x, divisor)\n    \n    return sorted(lst, key=key_func)\n\nlst = [10, 23, 4, 7, 15]\ndivisor = 5\nprint(sort_by_remainder(lst, divisor))\n\n# Using lambda key\n    return sorted(..., key=lambda x: remainder_key(x, divisor))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4110,7 +4110,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 474",
         "description": "Write a Python function to sort a list of dates by the year using the key parameter.",
         "initialCode": "from datetime import datetime\ndef year_key(date):\n    pass\n\ndef sort_by_year(dates):\n    pass",
-        "solution": "from datetime import datetime\n\ndef year_key(date):\n    return date.year\n\ndef sort_by_year(dates):\n\n    date_objects = []\n    \n    for date in dates:\n        date_objects.append(datetime.strptime(date, \"%d.%m.%Y\"))\n    \n    sorted_dates = sorted(date_objects, key=year_key)\n\n    sorted_date_strings = []\n    for date in sorted_dates:\n        sorted_date_strings.append(date.strftime(\"%d.%m.%Y\"))\n    \n    return sorted_date_strings\n\ndates = [\"01.02.1908\", \"12.11.1955\", \"23.04.1989\", \"07.07.1967\"]\nsorted_dates = sort_by_year(dates)\nprint(sorted_dates)",
+        "solution": "from datetime import datetime\n\ndef year_key(date):\n    return date.year\n\ndef sort_by_year(dates):\n\n    date_objects = []\n    \n    for date in dates:\n        date_objects.append(datetime.strptime(date, \"%d.%m.%Y\"))\n    \n    sorted_dates = sorted(date_objects, key=year_key)\n\n    sorted_date_strings = []\n    for date in sorted_dates:\n        sorted_date_strings.append(date.strftime(\"%d.%m.%Y\"))\n    \n    return sorted_date_strings\n\ndates = [\"01.02.1908\", \"12.11.1955\", \"23.04.1989\", \"07.07.1967\"]\nsorted_dates = sort_by_year(dates)\nprint(sorted_dates)\n\n# Using list comprehension\n    return [datetime.strptime(date, \'%d.%m.%Y\') for date in dates]\n\n# Using map()\n    return list(map(lambda date: datetime.strptime(date, \'%d.%m.%Y\'), dates))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4128,7 +4128,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 476",
         "description": "Write a Python function to sort a list of numbers by their square using the key parameter.",
         "initialCode": "def sort_sqaure(lst):\n    pass",
-        "solution": "def sort_sqaure(lst):\n    \n    def sqaured(x):\n        return x * x\n        \n    return sorted(lst, key=sqaured)\n        \n    \nlst = [9, 5, 4, 1 ]\nprint(sort_sqaure(lst))",
+        "solution": "def sort_sqaure(lst):\n    \n    def sqaured(x):\n        return x * x\n        \n    return sorted(lst, key=sqaured)\n        \n    \nlst = [9, 5, 4, 1 ]\nprint(sort_sqaure(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda x: x * x)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4146,7 +4146,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 478",
         "description": "Write a Python function that sorts a list of tuples based on the length of the first element in each tuple using the key parameter.",
         "initialCode": "def length_of_first_element(lst):\n    pass",
-        "solution": "def length_of_first_element(lst):\n    \n    def length_of_first(x):\n        return len(x[0])\n        \n    return sorted(lst, key=length_of_first)\n\nlst = [(\"initiate\", \"love\", \"seat\"), (\"sweet\", \"beat\", \"hell\")]\nsorted_list = length_of_first_element(lst)\nprint(sorted_list)\n\n# Using for loop\n    count = 0\n    for _ in x[0]:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in x[0])",
+        "solution": "def length_of_first_element(lst):\n    \n    def length_of_first(x):\n        return len(x[0])\n        \n    return sorted(lst, key=length_of_first)\n\nlst = [(\"initiate\", \"love\", \"seat\"), (\"sweet\", \"beat\", \"hell\")]\nsorted_list = length_of_first_element(lst)\nprint(sorted_list)\n\n# Using for loop\n    count = 0\n    for _ in x[0]:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in x[0])\n\n# Using built-in sum()\n    return sum(1 for _ in x[0])\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, x[0], 0)\n\n# Using for loop\n    count = 0\n    for _ in x[0]:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4155,7 +4155,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 479",
         "description": "Write a Python function to sort a list of strings by the number of spaces they contain using the key parameter.",
         "initialCode": "def number_of_spaces(lst):\n    pass",
-        "solution": "def number_of_spaces(lst):\n    \n    def spaces_count(x):\n        return x.count(\" \")\n        \n    return sorted(lst, key=spaces_count)\n    \nlst = [\"what is happening\", \"why all the hate in your brain\", \"stop it\"]\nprint(number_of_spaces(lst))",
+        "solution": "def number_of_spaces(lst):\n    \n    def spaces_count(x):\n        return x.count(\" \")\n        \n    return sorted(lst, key=spaces_count)\n    \nlst = [\"what is happening\", \"why all the hate in your brain\", \"stop it\"]\nprint(number_of_spaces(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda x: x.count(\' \'))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4173,7 +4173,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 481",
         "description": "Write a Python function to sort a list of integers by the number of digits they contain using the key parameter.",
         "initialCode": "def sort_lst_integers(lst):\n    pass",
-        "solution": "def sort_lst_integers(lst):\n    \n    def count_digits(n):\n        return len(str(abs(n)))\n    return sorted(lst, key=count_digits)\n        \nlst = [456, 56, 8, 788, 89, 1]\nprint(sort_lst_integers(lst))",
+        "solution": "def sort_lst_integers(lst):\n    \n    def count_digits(n):\n        return len(str(abs(n)))\n    return sorted(lst, key=count_digits)\n        \nlst = [456, 56, 8, 788, 89, 1]\nprint(sort_lst_integers(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda n: len(str(abs(n))))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4218,7 +4218,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 486",
         "description": "Write a Python function that sorts a list of file names by their file extension using the key parameter.",
         "initialCode": "def sort_files_by_extension(lst):\n    pass",
-        "solution": "def sort_files_by_extension(lst):\n    \n    def file_extension(filename):\n        return filename.split('.')[-1]\n        \n    return sorted(lst, key=file_extension)\n\nlst = [\"document.txt\", \"photo.jpeg\", \"music.mp3\", \"video.mp4\", \"archive.zip\"]\n\nprint(sort_files_by_extension(lst))",
+        "solution": "def sort_files_by_extension(lst):\n    \n    def file_extension(filename):\n        return filename.split('.')[-1]\n        \n    return sorted(lst, key=file_extension)\n\nlst = [\"document.txt\", \"photo.jpeg\", \"music.mp3\", \"video.mp4\", \"archive.zip\"]\n\nprint(sort_files_by_extension(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda filename: filename.split('.')[-1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4227,7 +4227,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 487",
         "description": "Write a Python function to sort a list of numbers by the square root of each number using the key parameter.",
         "initialCode": "def sqaure_numbers_lst(lst):\n    pass",
-        "solution": "def sqaure_numbers_lst(lst):\n    \n    def sqaure(n):\n        return n * n\n        \n    return sorted(lst, key=sqaure)\n    \nlst = [12, 46, 2, 10]\nprint(sqaure_numbers_lst(lst))",
+        "solution": "def sqaure_numbers_lst(lst):\n    \n    def sqaure(n):\n        return n * n\n        \n    return sorted(lst, key=sqaure)\n    \nlst = [12, 46, 2, 10]\nprint(sqaure_numbers_lst(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda n: n * n)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4245,7 +4245,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 489",
         "description": "Write a Python function that sorts a list of strings by the second letter in each string using the key parameter.",
         "initialCode": "def sort_second_letter(lst):\n    pass",
-        "solution": "def sort_second_letter(lst):\n    \n    def second_letter(x):\n        return x[1]\n        \n    return sorted(lst, key=second_letter)\n    \nlst = [\"mountain\", \"law\", \"lebany\"]\nprint(sort_second_letter(lst))",
+        "solution": "def sort_second_letter(lst):\n    \n    def second_letter(x):\n        return x[1]\n        \n    return sorted(lst, key=second_letter)\n    \nlst = [\"mountain\", \"law\", \"lebany\"]\nprint(sort_second_letter(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda x: x[1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4263,7 +4263,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 491",
         "description": "Write a Python function that sorts a list of numbers by their binary representation using the key parameter.",
         "initialCode": "def sort_by_binary_representation(lst):\n    pass",
-        "solution": "def sort_by_binary_representation(lst):\n    \n    def binary_representation(x):\n        return bin(x)\n        \n    return sorted(lst, key=binary_representation)\n\nlst = [5, 3, 8, 1, 12]\n\nprint(sort_by_binary_representation(lst))",
+        "solution": "def sort_by_binary_representation(lst):\n    \n    def binary_representation(x):\n        return bin(x)\n        \n    return sorted(lst, key=binary_representation)\n\nlst = [5, 3, 8, 1, 12]\n\nprint(sort_by_binary_representation(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda x: bin(x))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4272,7 +4272,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 492",
         "description": "Write a Python function to find the person with the shortest name in a list of dictionaries using the min() function with the key parameter.",
         "initialCode": "def sort_keys_by_value(dic):\n    pass",
-        "solution": "def sort_keys_by_value(dic):\n\n    def get_value(key):\n        return dic[key]\n        \n    return sorted(dic.keys(), key=get_value)\n   \ndic = {\"Sam\": 27, \"Tommy\": 56, \"Chantelle\": 18}\nprint(sort_keys_by_value(dic))",
+        "solution": "def sort_keys_by_value(dic):\n\n    def get_value(key):\n        return dic[key]\n        \n    return sorted(dic.keys(), key=get_value)\n   \ndic = {\"Sam\": 27, \"Tommy\": 56, \"Chantelle\": 18}\nprint(sort_keys_by_value(dic))\n\n# Using lambda key\n    return sorted(..., key=lambda key: dic[key])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4290,7 +4290,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 494",
         "description": "Write a Python function to find the longest string that ends with a specific letter using the max() function with the key parameter.",
         "initialCode": "def longest_string_letter(lst, letter):\n    pass\n\ndef longest_string(string, letter):\n    pass",
-        "solution": "def longest_string_letter(lst, letter):\n    \n    def longest_letter(s):\n        return len(s) if s.endswith(letter) else -1\n    \n    return max(lst, key=longest_letter)\n\nlst = [\"Jonathan\", \"Nathan\", \"Sarah\", \"Martha\"]\n\nprint(longest_string_letter(lst, 'n'))\nprint(longest_string_letter(lst, 'a'))\n\ndef longest_string(string, letter):\n    \n    words = string.split()\n\n    def letter_ends(word):\n        if word.endswith(letter):\n            return len(word)\n        else:\n            return 0\n    \n    longest = None  \n    max_length = 0 \n\n    for word in words:\n        length = letter_ends(word)\n        if length > max_length:\n            max_length = length\n            longest = word\n    \n    return longest\n\ninput_string = \"Jonathan nathan Natas\"\nletter = \"a\"\nprint(longest_string(input_string, letter))\n\n# Using for loop\n    count = 0\n    for _ in s:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in s)",
+        "solution": "def longest_string_letter(lst, letter):\n    \n    def longest_letter(s):\n        return len(s) if s.endswith(letter) else -1\n    \n    return max(lst, key=longest_letter)\n\nlst = [\"Jonathan\", \"Nathan\", \"Sarah\", \"Martha\"]\n\nprint(longest_string_letter(lst, 'n'))\nprint(longest_string_letter(lst, 'a'))\n\ndef longest_string(string, letter):\n    \n    words = string.split()\n\n    def letter_ends(word):\n        if word.endswith(letter):\n            return len(word)\n        else:\n            return 0\n    \n    longest = None  \n    max_length = 0 \n\n    for word in words:\n        length = letter_ends(word)\n        if length > max_length:\n            max_length = length\n            longest = word\n    \n    return longest\n\ninput_string = \"Jonathan nathan Natas\"\nletter = \"a\"\nprint(longest_string(input_string, letter))\n\n# Using for loop\n    count = 0\n    for _ in s:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in s)\n\n# Using built-in sum()\n    return sum(1 for word in words)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, word: acc + 1, words, 0)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4704,7 +4704,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 540",
         "description": "Write a Python function to count how many times the digit 0 appears in a list of numbers. Use count().",
         "initialCode": "def count_number(num):\n    pass\n\ndef main(lst):\n    pass",
-        "solution": "def count_number(num):\n    return num.count(0)\n    \nnum = [3, 5, 0, 0, 6, 0]\nprint(count_number(num))\n\ndef main(lst):\n    total = 0\n    for num in lst:\n        total += str(num).count('0')\n    print(total)\n\nlst = [56700, 40, 0, 0, 570]\nmain(lst)",
+        "solution": "def count_number(num):\n    return num.count(0)\n    \nnum = [3, 5, 0, 0, 6, 0]\nprint(count_number(num))\n\ndef main(lst):\n    total = 0\n    for num in lst:\n        total += str(num).count('0')\n    print(total)\n\nlst = [56700, 40, 0, 0, 570]\nmain(lst)\n\n# Using built-in sum()\n    return sum(1 for num in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, num: acc + 1, lst, 0)\n\n# Using for loop\n    total = 0\n    for num in lst:\n        total += str(num).count('0')\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4767,7 +4767,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 547",
         "description": "Write a Python program to count how many times a specific number occurs in a list of floating-point numbers. Use count().",
         "initialCode": "def count_floating_numbers(lst):\n    pass\n\ndef main(lst):\n    pass",
-        "solution": "def count_floating_numbers(lst):\n    return float(lst.count())\n    \nlst = [2.3, 5, 6.3, 78, 0.6]\nprint(count_floating_numbers(lst))\n\ndef main(lst):\n    result = []\n    for num in lst:\n        if isinstance(num, float):\n            lst.count(num)\n            result.append(num)\n    return result\n    \nlst = [2.66, 67, 45556.67, 7888, 1]\n\nmain(lst)\n\n# Using list comprehension\n    return [num for num in lst if isinstance(num, float)]\n\n# Using filter()\n    return list(filter(lambda num: isinstance(num, float), lst))",
+        "solution": "def count_floating_numbers(lst):\n    return float(lst.count())\n    \nlst = [2.3, 5, 6.3, 78, 0.6]\nprint(count_floating_numbers(lst))\n\ndef main(lst):\n    result = []\n    for num in lst:\n        if isinstance(num, float):\n            lst.count(num)\n            result.append(num)\n    return result\n    \nlst = [2.66, 67, 45556.67, 7888, 1]\n\nmain(lst)\n\n# Using list comprehension\n    return [num for num in lst if isinstance(num, float)]\n\n# Using filter()\n    return list(filter(lambda num: isinstance(num, float), lst))\n\n# Using list comprehension\n    return [num for num in lst if isinstance(num, float)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4821,7 +4821,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 553",
         "description": "Write a Python program to count the occurrences of a specific item in a list of dictionaries. Use count().",
         "initialCode": "def count_item_in_dict_list(dict_list, item):\n    pass",
-        "solution": "def count_item_in_dict_list(dict_list, item):\n    values = []\n    \n    for d in dict_list:\n    \n        for val in d.values():\n            values.append(val)\n\n    return values.count(item)\n\ndict_list = [\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Bob\", \"age\": 25},\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Charlie\", \"age\": 35}\n]\n\nitem = \"Alice\" \nprint(count_item_in_dict_list(dict_list, item))",
+        "solution": "def count_item_in_dict_list(dict_list, item):\n    values = []\n    \n    for d in dict_list:\n    \n        for val in d.values():\n            values.append(val)\n\n    return values.count(item)\n\ndict_list = [\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Bob\", \"age\": 25},\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Charlie\", \"age\": 35}\n]\n\nitem = \"Alice\" \nprint(count_item_in_dict_list(dict_list, item))\n\n# Using list comprehension\n    return [val for d in dict_list]\n\n# Using map()\n    return list(map(lambda d: val, dict_list))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4866,7 +4866,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 558",
         "description": "Write a function to count the number of times a particular email domain appears in a list of email addresses. Use count().",
         "initialCode": "def count_email_domain(email_list, domain):\n    pass",
-        "solution": "def count_email_domain(email_list, domain):\n    \n    count = 0\n    for email in email_list:\n    \n        email_domain = email.split('@')[-1]\n        \n        if email_domain == domain:\n            count += 1\n            \n    return count\n\nemail_list = [\n    \"user1@example.com\",\n    \"user2@example.com\",\n    \"user3@sample.com\",\n    \"user4@example.com\"\n]\ndomain = \"example.com\"\nprint(count_email_domain(email_list, domain))",
+        "solution": "def count_email_domain(email_list, domain):\n    \n    count = 0\n    for email in email_list:\n    \n        email_domain = email.split('@')[-1]\n        \n        if email_domain == domain:\n            count += 1\n            \n    return count\n\nemail_list = [\n    \"user1@example.com\",\n    \"user2@example.com\",\n    \"user3@sample.com\",\n    \"user4@example.com\"\n]\ndomain = \"example.com\"\nprint(count_email_domain(email_list, domain))\n\n# Using built-in sum()\n    return sum(1 for email in email_list)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, email: acc + 1, email_list, 0)\n\n# Using for loop\n    count = 0\n    for email in email_list:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4875,7 +4875,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 559",
         "description": "Write a Python program to count the occurrences of the word \u201chappy\u201d in a given list of sentences. Use count().",
         "initialCode": "def count_word(sentences):\n    pass",
-        "solution": "def count_word(sentences):\n    count = 0\n    for sentence in sentences:\n        count += sentence.count(\"happy\")\n    return count\n\nsentences = [\"I am happy today\", \"She looks very happy\", \"Happy times are here\", \"joy joy happy happy\"]\nprint(count_word(sentences))",
+        "solution": "def count_word(sentences):\n    count = 0\n    for sentence in sentences:\n        count += sentence.count(\"happy\")\n    return count\n\nsentences = [\"I am happy today\", \"She looks very happy\", \"Happy times are here\", \"joy joy happy happy\"]\nprint(count_word(sentences))\n\n# Using built-in sum()\n    return sum(1 for sentence in sentences)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, sentence: acc + 1, sentences, 0)\n\n# Using for loop\n    count = 0\n    for sentence in sentences:\n        count += sentence.count(\'happy\')\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4884,7 +4884,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 560",
         "description": "Write a function to count the number of times the character \u2018!\u2019 appears in a list of strings. Use count().",
         "initialCode": "def count_exclamations(lst):\n    pass",
-        "solution": "def count_exclamations(lst):\n    count = 0\n    for string in lst:\n        count += string.count('!')\n    return count\n\nlst = [\"Hello!\", \"Wow! Amazing!\", \"No exclamation here\", \"Yes!\"]\nprint(count_exclamations(lst))",
+        "solution": "def count_exclamations(lst):\n    count = 0\n    for string in lst:\n        count += string.count('!')\n    return count\n\nlst = [\"Hello!\", \"Wow! Amazing!\", \"No exclamation here\", \"Yes!\"]\nprint(count_exclamations(lst))\n\n# Using built-in sum()\n    return sum(1 for string in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, string: acc + 1, lst, 0)\n\n# Using for loop\n    count = 0\n    for string in lst:\n        count += string.count('!')\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5064,7 +5064,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 580",
         "description": "Filter Positive Numbers: Write a function that filters only positive numbers from a list using filter().",
         "initialCode": "def num_lst(lst):\n    pass",
-        "solution": "def num_lst(lst):\n    \n    def filter_num(num):\n        if num > 1:\n            return num\n    return list(filter(filter_num, lst))\n    \nlst = [-45, 4, 5, -56, 6]    \nprint(num_lst(lst))\n\n# Using list comprehension\n    return [num for num in lst if num]\n\n# Using for loop\n    result = []\n    for num in lst:\n        if filter_num(num):\n            result.append(num)\n    return result",
+        "solution": "def num_lst(lst):\n    \n    def filter_num(num):\n        if num > 1:\n            return num\n    return list(filter(filter_num, lst))\n    \nlst = [-45, 4, 5, -56, 6]    \nprint(num_lst(lst))\n\n# Using list comprehension\n    return [num for num in lst if num]\n\n# Using for loop\n    result = []\n    for num in lst:\n        if filter_num(num):\n            result.append(num)\n    return result\n\n# Using list comprehension\n    return [num for num in lst if filter_num(num)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5253,7 +5253,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 601",
         "description": "Map with Index: Write a function that uses map() but passes the index of each element to the mapping function as well.",
         "initialCode": "def map_with_index(lst, func):\n    pass\n\ndef example_func(index, value):\n    pass",
-        "solution": "def map_with_index(lst, func):\n    \n    def indexed_func(indexed_item):\n        index, item = indexed_item\n        return func(index, item)\n\n    return list(map(indexed_func, enumerate(lst)))\n\n\ndef example_func(index, value):\n    return index * value\n\nnumbers = [10, 20, 30, 40]\nresult = map_with_index(numbers, example_func)\nprint(result)\n\n# Using list comprehension\n    return [func(index, item) for indexed_item in enumerate(lst]\n\n# Using for loop\n    result = []\n    for indexed_item in enumerate(lst:\n        result.append(indexed_func(indexed_item))\n    return result",
+        "solution": "def map_with_index(lst, func):\n    \n    def indexed_func(indexed_item):\n        index, item = indexed_item\n        return func(index, item)\n\n    return list(map(indexed_func, enumerate(lst)))\n\n\ndef example_func(index, value):\n    return index * value\n\nnumbers = [10, 20, 30, 40]\nresult = map_with_index(numbers, example_func)\nprint(result)\n\n# Using list comprehension\n    return [func(index, item) for indexed_item in enumerate(lst]\n\n# Using for loop\n    result = []\n    for indexed_item in enumerate(lst:\n        result.append(indexed_func(indexed_item))\n    return result\n\n# Using list comprehension\n    return [indexed_func(indexed_item) for indexed_item in enumerate]\n\n# Using map()\n    return list(map(lambda indexed_item: indexed_func(indexed_item), enumerate))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5316,7 +5316,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 608",
         "description": "Write a function to sort a list of dictionaries by a specific key in each dictionary using key().",
         "initialCode": "def sort_dicts_by_key(lst, target_key):\n    pass",
-        "solution": "def sort_dicts_by_key(lst, target_key):\n    \n    def get_key_value(d):\n        return d[target_key]\n    \n    return sorted(lst, key=get_key_value)\n\ndicts = [\n    {\"id\": 5, \"name\": \"zinc\"},\n    {\"id\": 3, \"name\": \"metal\"},\n    {\"id\": 8, \"name\": \"gold\"},\n    {\"id\": 6, \"name\": \"copper\"},\n    {\"id\": 3, \"name\": \"ruby\"}\n]\n\ntarget_key = \"id\"\nsorted_dicts = sort_dicts_by_key(dicts, target_key)\nprint(sorted_dicts)",
+        "solution": "def sort_dicts_by_key(lst, target_key):\n    \n    def get_key_value(d):\n        return d[target_key]\n    \n    return sorted(lst, key=get_key_value)\n\ndicts = [\n    {\"id\": 5, \"name\": \"zinc\"},\n    {\"id\": 3, \"name\": \"metal\"},\n    {\"id\": 8, \"name\": \"gold\"},\n    {\"id\": 6, \"name\": \"copper\"},\n    {\"id\": 3, \"name\": \"ruby\"}\n]\n\ntarget_key = \"id\"\nsorted_dicts = sort_dicts_by_key(dicts, target_key)\nprint(sorted_dicts)\n\n# Using lambda key\n    return sorted(..., key=lambda d: d[target_key])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5325,7 +5325,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 609",
         "description": "Write a Python program to sort a list of names by their last name using the key().",
         "initialCode": "def sort_last_names(names):\n    pass",
-        "solution": "def sort_last_names(names):\n    \n    def get_last_name(name):\n        return name.split()[-1]\n    \n    return sorted(names, key=get_last_name)\n\nnames = [\"Tom Simons\", \"Lisa Johnson\", \"Mark Twain\", \"Sarah Connor\", \"Peter Parker\"]\nprint(sort_last_names(names))",
+        "solution": "def sort_last_names(names):\n    \n    def get_last_name(name):\n        return name.split()[-1]\n    \n    return sorted(names, key=get_last_name)\n\nnames = [\"Tom Simons\", \"Lisa Johnson\", \"Mark Twain\", \"Sarah Connor\", \"Peter Parker\"]\nprint(sort_last_names(names))\n\n# Using lambda key\n    return sorted(..., key=lambda name: name.split()[-1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5334,7 +5334,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 610",
         "description": "Write a function that sorts a list of mixed case strings, ignoring case. use key parameter.",
         "initialCode": "def sort_ignore_case(strings):\n    pass",
-        "solution": "def sort_ignore_case(strings):\n    \n    def case_insensitive_key(s):\n        return s.lower()\n    \n    return sorted(strings, key=case_insensitive_key)\n\nmixed_case_strings = [\"banana\", \"Apple\", \"orange\", \"mango\", \"grape\"]\nsorted_strings = sort_ignore_case(mixed_case_strings)\nprint(sorted_strings)",
+        "solution": "def sort_ignore_case(strings):\n    \n    def case_insensitive_key(s):\n        return s.lower()\n    \n    return sorted(strings, key=case_insensitive_key)\n\nmixed_case_strings = [\"banana\", \"Apple\", \"orange\", \"mango\", \"grape\"]\nsorted_strings = sort_ignore_case(mixed_case_strings)\nprint(sorted_strings)\n\n# Using lambda key\n    return sorted(..., key=lambda s: s.lower())",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5352,7 +5352,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 612",
         "description": "Write a function that sorts a list of words by the number of vowels they contain using the key parameter.",
         "initialCode": "def lst_words(lst):\n    pass",
-        "solution": "def lst_words(lst):\n    \n    def sort(x):\n        vowels = \"aeiou\"\n        \n        count = 0\n        for char in x.lower():\n            if char in vowels:\n                count += 1\n        return count\n        \n    return sorted(lst, key=sort)\n    \nlst = [\"jobaeiou\", \"Jo\", \"aei\"]    \nprint(lst_words(lst))",
+        "solution": "def lst_words(lst):\n    \n    def sort(x):\n        vowels = \"aeiou\"\n        \n        count = 0\n        for char in x.lower():\n            if char in vowels:\n                count += 1\n        return count\n        \n    return sorted(lst, key=sort)\n    \nlst = [\"jobaeiou\", \"Jo\", \"aei\"]    \nprint(lst_words(lst))\n\n# Using built-in sum()\n    return sum(1 for char in x)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, x, 0)\n\n# Using for loop\n    count = 0\n    for char in x:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5361,7 +5361,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 613",
         "description": "Write a Python program to sort a list of people by their age from a list of dictionaries.",
         "initialCode": "def sort_people_by_age(people):\n    pass",
-        "solution": "def sort_people_by_age(people):\n    \n    def get_age(person):\n        return person['age']\n    \n    return sorted(people, key=get_age)\n\npeople = [\n    {\"name\": \"Jon\", \"age\": 34},\n    {\"name\": \"Sam\", \"age\": 23},\n    {\"name\": \"Bob\", \"age\": 45}\n]\nsorted_people = sort_people_by_age(people)\nprint(sorted_people)",
+        "solution": "def sort_people_by_age(people):\n    \n    def get_age(person):\n        return person['age']\n    \n    return sorted(people, key=get_age)\n\npeople = [\n    {\"name\": \"Jon\", \"age\": 34},\n    {\"name\": \"Sam\", \"age\": 23},\n    {\"name\": \"Bob\", \"age\": 45}\n]\nsorted_people = sort_people_by_age(people)\nprint(sorted_people)\n\n# Using lambda key\n    return sorted(..., key=lambda person: person['age'])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5370,7 +5370,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 614",
         "description": "Write a function that sorts a list of integers based on the sum of their digits using the key parameter.",
         "initialCode": "def lst_integers(lst):\n    pass",
-        "solution": "def lst_integers(lst):\n    \n    def sort_sum(x):\n        total = 0\n        for digit in str(x):\n            total += int(digit) \n        return total\n    \n    return sorted(lst, key=sort_sum)\n\nlst = [5666, 566, 56, 6]\nsorted_list = lst_integers(lst)\nprint(sorted_list)",
+        "solution": "def lst_integers(lst):\n    \n    def sort_sum(x):\n        total = 0\n        for digit in str(x):\n            total += int(digit) \n        return total\n    \n    return sorted(lst, key=sort_sum)\n\nlst = [5666, 566, 56, 6]\nsorted_list = lst_integers(lst)\nprint(sorted_list)\n\n# Using built-in sum()\n    return sum(1 for digit in str)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, digit: acc + 1, str, 0)\n\n# Using for loop\n    total = 0\n    for digit in str:\n        total += int(digit)\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5379,7 +5379,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 615",
         "description": "Write a Python program to sort a list of products by price using the key parameter.",
         "initialCode": "def lst_products(lst):\n    pass",
-        "solution": "def lst_products(lst):\n    \n    def sort(product):\n        return product['price']\n\n    return sorted(lst, key=sort)\n\nproducts = [\n    {\"name\": \"chocolate\", \"price\": 2.50},\n    {\"name\": \"bread\", \"price\": 1.20},\n    {\"name\": \"milk\", \"price\": 1.50},\n    {\"name\": \"cheese\", \"price\": 3.00}\n]\nsorted_products = lst_products(products)\nprint(sorted_products)",
+        "solution": "def lst_products(lst):\n    \n    def sort(product):\n        return product['price']\n\n    return sorted(lst, key=sort)\n\nproducts = [\n    {\"name\": \"chocolate\", \"price\": 2.50},\n    {\"name\": \"bread\", \"price\": 1.20},\n    {\"name\": \"milk\", \"price\": 1.50},\n    {\"name\": \"cheese\", \"price\": 3.00}\n]\nsorted_products = lst_products(products)\nprint(sorted_products)\n\n# Using lambda key\n    return sorted(..., key=lambda product: product['price'])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5397,7 +5397,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 617",
         "description": "Write a Python program to sort a list of tuples by the first element, then by the second if the first elements are equal using key.",
         "initialCode": "def lst_tuples(lst):\n    pass",
-        "solution": "def lst_tuples(lst):\n    def sort(tup):\n        return (tup[0], tup[1]) \n    \n    return sorted(lst, key=sort)\n\nlst = [(\"nice\", \"good\"), (\"evil\", \"bad\"), (\"nice\", \"better\"), (\"evil\", \"worse\")]\nsorted_tuples = lst_tuples(lst)\nprint(sorted_tuples)",
+        "solution": "def lst_tuples(lst):\n    def sort(tup):\n        return (tup[0], tup[1]) \n    \n    return sorted(lst, key=sort)\n\nlst = [(\"nice\", \"good\"), (\"evil\", \"bad\"), (\"nice\", \"better\"), (\"evil\", \"worse\")]\nsorted_tuples = lst_tuples(lst)\nprint(sorted_tuples)\n\n# Using lambda\n    return lambda tup: (tup[0], tup[1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5406,7 +5406,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 618",
         "description": "Write a function that sorts a list of names based on the number of characters in each name using the key parameter.",
         "initialCode": "def lst_names(lst):\n    pass\n\ndef lst_names(lst):\n    pass",
-        "solution": "def lst_names(lst):\n    \n    def sort_len_of_name(name):\n        return len(name)\n        \n    return sorted(lst, key=sort_len_of_name)\n        \n\nlst = [\"Jonathan\", \"Christopher\", \"Chantelle\", \"Bob\", \"Mimi\"]\nprint(lst_names(lst))\n\ndef lst_names(lst):\n    \n    def sort_len_of_name(name):\n        count = 0\n        for char in name:\n            count += 1\n        return count\n        \n    return sorted(lst, key=sort_len_of_name)\n        \nlst = [\"Jonathan\", \"Christopher\", \"Chantelle\", \"Bob\", \"Mimi\"]\nprint(lst_names(lst))\n\n# Using for loop\n    count = 0\n    for _ in name:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in name)",
+        "solution": "def lst_names(lst):\n    \n    def sort_len_of_name(name):\n        return len(name)\n        \n    return sorted(lst, key=sort_len_of_name)\n        \n\nlst = [\"Jonathan\", \"Christopher\", \"Chantelle\", \"Bob\", \"Mimi\"]\nprint(lst_names(lst))\n\ndef lst_names(lst):\n    \n    def sort_len_of_name(name):\n        count = 0\n        for char in name:\n            count += 1\n        return count\n        \n    return sorted(lst, key=sort_len_of_name)\n        \nlst = [\"Jonathan\", \"Christopher\", \"Chantelle\", \"Bob\", \"Mimi\"]\nprint(lst_names(lst))\n\n# Using for loop\n    count = 0\n    for _ in name:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in name)\n\n# Using built-in sum()\n    return sum(1 for char in name)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, name, 0)\n\n# Using for loop\n    count = 0\n    for char in name:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5433,7 +5433,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 621",
         "description": "Write a Python program to sort a list of words based on the frequency of their first letter using the key parameter.",
         "initialCode": "def frequency_first_letter(words):\n    pass\n\nfrom collections import Counter\ndef frequency_first_letter(words):\n    pass",
-        "solution": "def frequency_first_letter(words):\n    letter_count = {}\n    for word in words:\n        first_letter = word[0]\n        if first_letter in letter_count:\n            letter_count[first_letter] += 1\n        else:\n            letter_count[first_letter] = 1\n    \n    def sort(word):\n        return letter_count[word[0]] \n        \n    return sorted(words, key=sort)\n\nwords = [\"apple\", \"apricot\", \"banana\", \"berry\", \"blueberry\", \"cherry\", \"carrot\"]\nprint(frequency_first_letter(words))\n\n\nfrom collections import Counter\n\ndef frequency_first_letter(words):\n    \n    letter_count = Counter()\n    \n    for word in words:\n        first_letter = word[0] \n        letter_count[first_letter] += 1\n\n    def sort(word):\n        return letter_count[word[0]]\n        \n    return sorted(words, key=sort)\n\nwords = [\"apple\", \"apricot\", \"banana\", \"berry\", \"blueberry\", \"cherry\", \"carrot\"]\nprint(frequency_first_letter(words))",
+        "solution": "def frequency_first_letter(words):\n    letter_count = {}\n    for word in words:\n        first_letter = word[0]\n        if first_letter in letter_count:\n            letter_count[first_letter] += 1\n        else:\n            letter_count[first_letter] = 1\n    \n    def sort(word):\n        return letter_count[word[0]] \n        \n    return sorted(words, key=sort)\n\nwords = [\"apple\", \"apricot\", \"banana\", \"berry\", \"blueberry\", \"cherry\", \"carrot\"]\nprint(frequency_first_letter(words))\n\n\nfrom collections import Counter\n\ndef frequency_first_letter(words):\n    \n    letter_count = Counter()\n    \n    for word in words:\n        first_letter = word[0] \n        letter_count[first_letter] += 1\n\n    def sort(word):\n        return letter_count[word[0]]\n        \n    return sorted(words, key=sort)\n\nwords = [\"apple\", \"apricot\", \"banana\", \"berry\", \"blueberry\", \"cherry\", \"carrot\"]\nprint(frequency_first_letter(words))\n\n# Using lambda key\n    return sorted(..., key=lambda word: letter_count[word[0]])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5442,7 +5442,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 622",
         "description": "Write a function that sorts a list of tuples by the absolute value of the first element using the key parameter.",
         "initialCode": "def lst_of_tuples(lst):\n    pass",
-        "solution": "def lst_of_tuples(lst):\n    \n    def sort(x):\n        return abs((x)[0])\n        \n    return sorted(lst, key=sort)\n\n\nlst = [(2.3, 4.2), (5.3, 7.3), (3.1, 2.4), (5.2, 6.2)]\nprint(lst_of_tuples(lst))",
+        "solution": "def lst_of_tuples(lst):\n    \n    def sort(x):\n        return abs((x)[0])\n        \n    return sorted(lst, key=sort)\n\n\nlst = [(2.3, 4.2), (5.3, 7.3), (3.1, 2.4), (5.2, 6.2)]\nprint(lst_of_tuples(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda x: abs((x)[0]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5451,7 +5451,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 623",
         "description": "Write a Python program to sort a list of strings by their reverse order using the key parameter.",
         "initialCode": "def reverse_order(lst):\n    pass\n\ndef reverse_order(lst):\n    pass",
-        "solution": "def reverse_order(lst):\n    \n    def sort(word):\n        return word\n        \n    return sorted(lst, key=sort, reverse= True)\n        \nlst = [\"butt\", \"shoulders\", \"legs\"]    \nprint(reverse_order(lst))\n\n\ndef reverse_order(lst):\n    \n    def sort(word):\n        return word[::-1]\n        \n    return sorted(lst, key=sort)\n        \nlst = [\"butt\", \"shoulders\", \"legs\"]    \nprint(reverse_order(lst))\n\n# Using reversed()\n    return list(reversed(word))\n\n# Using for loop\n    result = []\n    for x in word:\n        result.insert(0, x)\n    return result",
+        "solution": "def reverse_order(lst):\n    \n    def sort(word):\n        return word\n        \n    return sorted(lst, key=sort, reverse= True)\n        \nlst = [\"butt\", \"shoulders\", \"legs\"]    \nprint(reverse_order(lst))\n\n\ndef reverse_order(lst):\n    \n    def sort(word):\n        return word[::-1]\n        \n    return sorted(lst, key=sort)\n        \nlst = [\"butt\", \"shoulders\", \"legs\"]    \nprint(reverse_order(lst))\n\n# Using reversed()\n    return list(reversed(word))\n\n# Using for loop\n    result = []\n    for x in word:\n        result.insert(0, x)\n    return result\n\n# Using lambda key\n    return sorted(..., key=lambda word: word)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5460,7 +5460,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 624",
         "description": "Write a function that sorts a list of temperatures in Celsius, converting them to Fahrenheit for sorting using the key parameter.",
         "initialCode": "def temperture(lst):\n    pass",
-        "solution": "def temperture(lst):\n    \n    def sort(celsius):\n        \n        fahrenheit = (9/5) * celsius + 32\n        return fahrenheit\n        \n    return sorted(lst, key=sort)\n            \nlst = [23, 33, 12, 45]    \nprint(temperture(lst))",
+        "solution": "def temperture(lst):\n    \n    def sort(celsius):\n        \n        fahrenheit = (9/5) * celsius + 32\n        return fahrenheit\n        \n    return sorted(lst, key=sort)\n            \nlst = [23, 33, 12, 45]    \nprint(temperture(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda celsius: fahrenheit)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5469,7 +5469,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 625",
         "description": "Write a Python program to sort a list of scores from a game, taking into account that some scores may be negative using the key parameter.",
         "initialCode": "def sort_scores(scores):\n    pass",
-        "solution": "def sort_scores(scores):\n    \n    def key_function(x):\n        return x  \n    \n    return sorted(scores, key=key_function)\n\nscores = [10, -5, 20, 0, -15, 5]\nsorted_scores = sort_scores(scores)\nprint(sorted_scores)",
+        "solution": "def sort_scores(scores):\n    \n    def key_function(x):\n        return x  \n    \n    return sorted(scores, key=key_function)\n\nscores = [10, -5, 20, 0, -15, 5]\nsorted_scores = sort_scores(scores)\nprint(sorted_scores)\n\n# Using lambda key\n    return sorted(..., key=lambda x: x)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5478,7 +5478,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 626",
         "description": "Write a function that sorts a list of email addresses by the domain part using the key parameter.",
         "initialCode": "def sort_emails(emails):\n    pass",
-        "solution": "def sort_emails(emails):\n    \n    def get_domain(email):\n        return email.split('@')[1] \n    \n    return sorted(emails, key=get_domain)\n\nemails = [\"alice@example.com\", \"bob@test.com\", \"charlie@example.com\", \"dave@sample.com\"]\nsorted_emails = sort_emails(emails)\nprint(sorted_emails)",
+        "solution": "def sort_emails(emails):\n    \n    def get_domain(email):\n        return email.split('@')[1] \n    \n    return sorted(emails, key=get_domain)\n\nemails = [\"alice@example.com\", \"bob@test.com\", \"charlie@example.com\", \"dave@sample.com\"]\nsorted_emails = sort_emails(emails)\nprint(sorted_emails)\n\n# Using lambda key\n    return sorted(..., key=lambda email: email.split('@')[1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5496,7 +5496,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 628",
         "description": "Write a function that sorts a list of words by the last letter of each word using the key parameter.",
         "initialCode": "def last_letter(lst):\n    pass",
-        "solution": "def last_letter(lst):\n    \n    def sort(word):\n        return word[-1]\n        \n    return sorted(lst, key=sort)\n    \nlst = [\"house\", \"garden\", \"boat\", \"building\"]\nprint(last_letter(lst))",
+        "solution": "def last_letter(lst):\n    \n    def sort(word):\n        return word[-1]\n        \n    return sorted(lst, key=sort)\n    \nlst = [\"house\", \"garden\", \"boat\", \"building\"]\nprint(last_letter(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda word: word[-1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5505,7 +5505,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 629",
         "description": "Write a Python program to sort a list of numbers by the number of times they appear in another list using the key parameter.",
         "initialCode": "def lst_of_numbers(lst):\n    pass",
-        "solution": "def lst_of_numbers(lst):\n    frequency = {}\n    for number in lst:\n        if number in frequency:\n            frequency[number] += 1\n        else:\n            frequency[number] = 1\n    \n    def sort(number):\n        return frequency[number]\n    \n    return sorted(lst, key=sort)\n\nlst = [3, 677, 4, 3, 67, 4]\nprint(lst_of_numbers(lst))",
+        "solution": "def lst_of_numbers(lst):\n    frequency = {}\n    for number in lst:\n        if number in frequency:\n            frequency[number] += 1\n        else:\n            frequency[number] = 1\n    \n    def sort(number):\n        return frequency[number]\n    \n    return sorted(lst, key=sort)\n\nlst = [3, 677, 4, 3, 67, 4]\nprint(lst_of_numbers(lst))\n\n# Using lambda key\n    return sorted(..., key=lambda number: frequency[number])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5514,7 +5514,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 630",
         "description": "Write a function that sorts a list of students by their grades using the key parameter.",
         "initialCode": "def sort_students_by_grades(students):\n    pass",
-        "solution": "def sort_students_by_grades(students):\n    \n    def get_grade(student):\n        return student[1] \n        \n    return sorted(students, key=get_grade)\n\nstudents = [(\"Alice\", 85), (\"Bob\", 70), (\"Charlie\", 95), (\"David\", 65)]\nprint(sort_students_by_grades(students))",
+        "solution": "def sort_students_by_grades(students):\n    \n    def get_grade(student):\n        return student[1] \n        \n    return sorted(students, key=get_grade)\n\nstudents = [(\"Alice\", 85), (\"Bob\", 70), (\"Charlie\", 95), (\"David\", 65)]\nprint(sort_students_by_grades(students))\n\n# Using lambda key\n    return sorted(..., key=lambda student: student[1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5532,7 +5532,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 632",
         "description": "Write a function that sorts a list of files based on their file extension using the key parameter.",
         "initialCode": "def sort_files_by_extension(files):\n    pass",
-        "solution": "def sort_files_by_extension(files):\n\n    def get_extension(file):\n        return file.split('.')[-1]\n        \n    return sorted(files, key=get_extension)\n\nfiles = [\"document.pdf\", \"image.png\", \"archive.zip\", \"presentation.pptx\", \"notes.txt\"]\nprint(sort_files_by_extension(files))",
+        "solution": "def sort_files_by_extension(files):\n\n    def get_extension(file):\n        return file.split('.')[-1]\n        \n    return sorted(files, key=get_extension)\n\nfiles = [\"document.pdf\", \"image.png\", \"archive.zip\", \"presentation.pptx\", \"notes.txt\"]\nprint(sort_files_by_extension(files))\n\n# Using lambda key\n    return sorted(..., key=lambda file: file.split('.')[-1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5541,7 +5541,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 633",
         "description": "Write a Python program to sort a list of movies by their release date using the key parameter.",
         "initialCode": "def sort_movies_by_release_date(movies):\n    pass",
-        "solution": "def sort_movies_by_release_date(movies):\n    \n    def get_release_date(movie):\n        return movie['release_date'] \n        \n    return sorted(movies, key=get_release_date)\n\nmovies = [\n    {\"title\": \"Inception\", \"release_date\": \"2010-07-16\"},\n    {\"title\": \"The Matrix\", \"release_date\": \"1999-03-31\"},\n    {\"title\": \"Interstellar\", \"release_date\": \"2014-11-07\"},\n    {\"title\": \"The Godfather\", \"release_date\": \"1972-03-24\"}\n]\nsorted_movies = sort_movies_by_release_date(movies)\nfor movie in sorted_movies:\n    print(f\"{movie['title']} - {movie['release_date']}\")",
+        "solution": "def sort_movies_by_release_date(movies):\n    \n    def get_release_date(movie):\n        return movie['release_date'] \n        \n    return sorted(movies, key=get_release_date)\n\nmovies = [\n    {\"title\": \"Inception\", \"release_date\": \"2010-07-16\"},\n    {\"title\": \"The Matrix\", \"release_date\": \"1999-03-31\"},\n    {\"title\": \"Interstellar\", \"release_date\": \"2014-11-07\"},\n    {\"title\": \"The Godfather\", \"release_date\": \"1972-03-24\"}\n]\nsorted_movies = sort_movies_by_release_date(movies)\nfor movie in sorted_movies:\n    print(f\"{movie['title']} - {movie['release_date']}\")\n\n# Using lambda key\n    return sorted(..., key=lambda movie: movie['release_date'])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5622,7 +5622,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 642",
         "description": "Write a program to create a dictionary and count how many keys it has.",
         "initialCode": "def count_key(dic):\n    pass",
-        "solution": "def count_key(dic):\n    count = 0\n    for key in dic.keys():\n        count += 1\n    return count\n\ndic = {\"a\":1, \"b\": 2, \"c\": 3}\nprint(count_key(dic))",
+        "solution": "def count_key(dic):\n    count = 0\n    for key in dic.keys():\n        count += 1\n    return count\n\ndic = {\"a\":1, \"b\": 2, \"c\": 3}\nprint(count_key(dic))\n\n# Using built-in sum()\n    return sum(1 for key in dic)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, key: acc + 1, dic, 0)\n\n# Using for loop\n    count = 0\n    for key in dic:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5631,7 +5631,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 643",
         "description": "Write a function that takes a dictionary and returns only the keys that start with a specific letter.",
         "initialCode": "def count_key(dic, letter):\n    pass",
-        "solution": "def count_key(dic, letter):\n    result = []\n    for key in dic.keys():\n        if key.startswith(letter):\n            result.append(key)\n    return result\n\ndic = {\"apple\": 1, \"banana\": 2, \"apricot\": 3, \"berry\": 4}\nprint(count_key(dic, 'a'))",
+        "solution": "def count_key(dic, letter):\n    result = []\n    for key in dic.keys():\n        if key.startswith(letter):\n            result.append(key)\n    return result\n\ndic = {\"apple\": 1, \"banana\": 2, \"apricot\": 3, \"berry\": 4}\nprint(count_key(dic, 'a'))\n\n# Using list comprehension\n    return [key for key in dic if key.startswith(letter)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5703,7 +5703,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 651",
         "description": "Write a function that accepts a dictionary and returns a list of keys that are strings.",
         "initialCode": "def returns_strings(dic):\n    pass",
-        "solution": "def returns_strings(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, str):\n            result.append(key)\n    return result\n\nexample_dict = {\"Nat\": 90, 56: 70, \"Zac\": 60, 56: 56}\nprint(returns_strings(example_dict))\n\n# Using list comprehension\n    return [key for key in dic if isinstance(key, str)]\n\n# Using filter()\n    return list(filter(lambda key: isinstance(key, str), dic))",
+        "solution": "def returns_strings(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, str):\n            result.append(key)\n    return result\n\nexample_dict = {\"Nat\": 90, 56: 70, \"Zac\": 60, 56: 56}\nprint(returns_strings(example_dict))\n\n# Using list comprehension\n    return [key for key in dic if isinstance(key, str)]\n\n# Using filter()\n    return list(filter(lambda key: isinstance(key, str), dic))\n\n# Using list comprehension\n    return [key for key in dic if isinstance(key, str)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5712,7 +5712,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 652",
         "description": "Create a dictionary of sports and their popularity rankings, and return the keys sorted by ranking.",
         "initialCode": "def sports_by_popularity(sports_dict):\n    pass",
-        "solution": "def sports_by_popularity(sports_dict):\n\n    def get_ranking(sport):\n        return sports_dict[sport]\n\n    return sorted(sports_dict, key=get_ranking)\n\nsports_dict = {\n    \"Soccer\": 1,\n    \"Basketball\": 3,\n    \"Cricket\": 2,\n    \"Tennis\": 4\n}\nprint(sports_by_popularity(sports_dict))",
+        "solution": "def sports_by_popularity(sports_dict):\n\n    def get_ranking(sport):\n        return sports_dict[sport]\n\n    return sorted(sports_dict, key=get_ranking)\n\nsports_dict = {\n    \"Soccer\": 1,\n    \"Basketball\": 3,\n    \"Cricket\": 2,\n    \"Tennis\": 4\n}\nprint(sports_by_popularity(sports_dict))\n\n# Using lambda key\n    return sorted(..., key=lambda sport: sports_dict[sport])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5748,7 +5748,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 656",
         "description": "Create a dictionary of pets and their owners, and print all the keys that contain the letter \u201co\u201d.",
         "initialCode": "def pet_owners(dic):\n    pass\n\ndef pet_owners(dic):\n    pass",
-        "solution": "def pet_owners(dic):\n    result = []\n    for key in dic.keys():\n        if \"o\" in key: \n            result.append(key)\n    return result\n\ndic = {\n    \"Boudy\": \"Alice\",\n    \"Mittens\": \"Bob\",\n    \"Charlie\": \"Catherine\",\n    \"Monty\": \"David\",\n    \"Bella\": \"Eva\"\n}\nprint(pet_owners(dic))\n\ndef pet_owners(dic):\n    result = []\n    for key in dic.keys():\n        for char in key:\n            if char == \"o\":\n                result.append(key)\n    return result\n    \ndic = {\n    \"Boudy\": \"Alice\",\n    \"Mittens\": \"Bob\",\n    \"Charlie\": \"Catherine\",\n    \"Monty\": \"David\",\n    \"Bella\": \"Eva\"\n}\nprint(pet_owners(dic))\n\n# Using list comprehension\n    return [key for key in dic if \'o\' in key]\n\n# Using filter()\n    return list(filter(lambda key: \'o\' in key, dic))",
+        "solution": "def pet_owners(dic):\n    result = []\n    for key in dic.keys():\n        if \"o\" in key: \n            result.append(key)\n    return result\n\ndic = {\n    \"Boudy\": \"Alice\",\n    \"Mittens\": \"Bob\",\n    \"Charlie\": \"Catherine\",\n    \"Monty\": \"David\",\n    \"Bella\": \"Eva\"\n}\nprint(pet_owners(dic))\n\ndef pet_owners(dic):\n    result = []\n    for key in dic.keys():\n        for char in key:\n            if char == \"o\":\n                result.append(key)\n    return result\n    \ndic = {\n    \"Boudy\": \"Alice\",\n    \"Mittens\": \"Bob\",\n    \"Charlie\": \"Catherine\",\n    \"Monty\": \"David\",\n    \"Bella\": \"Eva\"\n}\nprint(pet_owners(dic))\n\n# Using list comprehension\n    return [key for key in dic if \'o\' in key]\n\n# Using filter()\n    return list(filter(lambda key: \'o\' in key, dic))\n\n# Using list comprehension\n    return [key for key in dic if \'o\' in key]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5757,7 +5757,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 657",
         "description": "Write a program that counts how many keys in a dictionary are of type tuples.",
         "initialCode": "def count_tuple_keys(dic):\n    pass",
-        "solution": "def count_tuple_keys(dic):\n    count = 0\n    for key in dic.keys():\n        if isinstance(key, tuple):\n            count += 1\n    return count\n\ndic = {\n    (1, 2): \"tuple_key_1\",\n    \"string_key\": \"value1\",\n    (3, 4): \"tuple_key_2\",\n    3: \"integer_key\"\n}\nprint(count_tuple_keys(dic))",
+        "solution": "def count_tuple_keys(dic):\n    count = 0\n    for key in dic.keys():\n        if isinstance(key, tuple):\n            count += 1\n    return count\n\ndic = {\n    (1, 2): \"tuple_key_1\",\n    \"string_key\": \"value1\",\n    (3, 4): \"tuple_key_2\",\n    3: \"integer_key\"\n}\nprint(count_tuple_keys(dic))\n\n# Using built-in sum()\n    return sum(1 for key in dic)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, key: acc + 1, dic, 0)\n\n# Using for loop\n    count = 0\n    for key in dic:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5802,7 +5802,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 662",
         "description": "Create a dictionary of temperatures and their units, and return the keys as uppercase strings.",
         "initialCode": "def temperature(dic):\n    pass",
-        "solution": "def temperature(dic):\n    upper_keys = []\n    for key in dic.keys():\n        upper_keys.append(key.upper())\n    return upper_keys\n\ndic = {\n    \"Celsius\": [0, 20, 37, 100],\n    \"Fahrenheit\": [32, 68, 98.6, 212],\n    \"Kelvin\": [273.15, 293.15, 310.15, 373.15]\n}\nprint(temperature(dic))",
+        "solution": "def temperature(dic):\n    upper_keys = []\n    for key in dic.keys():\n        upper_keys.append(key.upper())\n    return upper_keys\n\ndic = {\n    \"Celsius\": [0, 20, 37, 100],\n    \"Fahrenheit\": [32, 68, 98.6, 212],\n    \"Kelvin\": [273.15, 293.15, 310.15, 373.15]\n}\nprint(temperature(dic))\n\n# Using list comprehension\n    return [key.upper() for key in dic]\n\n# Using map()\n    return list(map(lambda key: key.upper(), dic))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5811,7 +5811,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 663",
         "description": "Write a function that takes a dictionary and returns keys that are found in a given list.",
         "initialCode": "def keys_in_list(dic, given_list):\n    pass",
-        "solution": "def keys_in_list(dic, given_list):\n    result = []\n    for key in dic.keys():\n        if key in given_list:\n            result.append(key)\n    return result\n\ndic = {\n    \"apple\": 1,\n    \"banana\": 2,\n    \"cherry\": 3,\n    \"date\": 4\n}\n\ngiven_list = [\"banana\", \"date\", \"grape\"]\nprint(keys_in_list(dic, given_list))\n\n# Using list comprehension\n    return [key for key in dic if key in given_list]\n\n# Using filter()\n    return list(filter(lambda key: key in given_list, dic))",
+        "solution": "def keys_in_list(dic, given_list):\n    result = []\n    for key in dic.keys():\n        if key in given_list:\n            result.append(key)\n    return result\n\ndic = {\n    \"apple\": 1,\n    \"banana\": 2,\n    \"cherry\": 3,\n    \"date\": 4\n}\n\ngiven_list = [\"banana\", \"date\", \"grape\"]\nprint(keys_in_list(dic, given_list))\n\n# Using list comprehension\n    return [key for key in dic if key in given_list]\n\n# Using filter()\n    return list(filter(lambda key: key in given_list, dic))\n\n# Using list comprehension\n    return [key for key in dic if key in given_list]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5829,7 +5829,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 665",
         "description": "Write a function that takes a dictionary and returns a list of keys that have values greater than 10.",
         "initialCode": "def keys_with_values_greater_than_10(dic):\n    pass\n\ndef get_dict_keys(dic):\n    pass",
-        "solution": "def keys_with_values_greater_than_10(dic):\n    result = []\n    for key in dic.keys(): \n        if dic[key] > 10: \n            result.append(key)\n    return result\n\ndic = {\"Sam\": 5, \"Chris\": 34, \"Simon\": 12, \"Anna\": 9}\nprint(keys_with_values_greater_than_10(dic)) \n\ndef get_dict_keys(dic):\n    result = []\n    for key, value in dic.items():\n        if value > 10:\n            result.append(key)\n    return result\n\nmy_dict = {'apple': 30, 'banana': 50, 'cherry': 2, 'date': 7}\nprint(get_dict_keys(my_dict))\n\n# Using list comprehension\n    return [key for key in dic if dic[key] > 10]\n\n# Using filter()\n    return list(filter(lambda key: dic[key] > 10, dic))",
+        "solution": "def keys_with_values_greater_than_10(dic):\n    result = []\n    for key in dic.keys(): \n        if dic[key] > 10: \n            result.append(key)\n    return result\n\ndic = {\"Sam\": 5, \"Chris\": 34, \"Simon\": 12, \"Anna\": 9}\nprint(keys_with_values_greater_than_10(dic)) \n\ndef get_dict_keys(dic):\n    result = []\n    for key, value in dic.items():\n        if value > 10:\n            result.append(key)\n    return result\n\nmy_dict = {'apple': 30, 'banana': 50, 'cherry': 2, 'date': 7}\nprint(get_dict_keys(my_dict))\n\n# Using list comprehension\n    return [key for key in dic if dic[key] > 10]\n\n# Using filter()\n    return list(filter(lambda key: dic[key] > 10, dic))\n\n# Using list comprehension\n    return [key for key in dic if dic[key] > 10]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5874,7 +5874,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 670",
         "description": "Write a program to create a dictionary and count how many keys it has.\ndic = {\n\"United States\": \"Washington, D.C.\",\n\"Canada\": \"Ottawa\",\n\"United Kingdom\": \"London\",\n\"France\": \"Paris\",\n\"Germany\": \"Berlin\"\n}",
         "initialCode": "def count_keys(dic):\n    pass",
-        "solution": "def count_keys(dic):\n    return len(dic)\n\ndic = {\n    \"United States\": \"Washington, D.C.\",\n    \"Canada\": \"Ottawa\",\n    \"United Kingdom\": \"London\",\n    \"France\": \"Paris\",\n    \"Germany\": \"Berlin\"\n}\nprint(count_keys(dic))\n\n# Using for loop\n    count = 0\n    for _ in dic:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in dic)",
+        "solution": "def count_keys(dic):\n    return len(dic)\n\ndic = {\n    \"United States\": \"Washington, D.C.\",\n    \"Canada\": \"Ottawa\",\n    \"United Kingdom\": \"London\",\n    \"France\": \"Paris\",\n    \"Germany\": \"Berlin\"\n}\nprint(count_keys(dic))\n\n# Using for loop\n    count = 0\n    for _ in dic:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in dic)\n\n# Using built-in sum()\n    return sum(1 for _ in dic)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, dic, 0)\n\n# Using for loop\n    count = 0\n    for _ in dic:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5883,7 +5883,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 671",
         "description": "Write a function that takes a dictionary and returns only the keys that start with a specific letter.",
         "initialCode": "def keys_starting_with(dic, letter):\n    pass",
-        "solution": "def keys_starting_with(dic, letter):\n    result = []\n    for key in dic.keys():\n        if key.startswith(letter):\n            result.append(key)\n    return result\n\ndic = {\n    \"apple\": 1,\n    \"banana\": 2,\n    \"apricot\": 3,\n    \"berry\": 4,\n    \"carrot\": 5\n}\nprint(keys_starting_with(dic, \"a\"))\n\n# Using list comprehension\n    return [key for key in dic if key.startswith(letter)]\n\n# Using filter()\n    return list(filter(lambda key: key.startswith(letter), dic))",
+        "solution": "def keys_starting_with(dic, letter):\n    result = []\n    for key in dic.keys():\n        if key.startswith(letter):\n            result.append(key)\n    return result\n\ndic = {\n    \"apple\": 1,\n    \"banana\": 2,\n    \"apricot\": 3,\n    \"berry\": 4,\n    \"carrot\": 5\n}\nprint(keys_starting_with(dic, \"a\"))\n\n# Using list comprehension\n    return [key for key in dic if key.startswith(letter)]\n\n# Using filter()\n    return list(filter(lambda key: key.startswith(letter), dic))\n\n# Using list comprehension\n    return [key for key in dic if key.startswith(letter)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5973,7 +5973,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 681",
         "description": "Write a program that retrieves keys from a dictionary that are of type integer.",
         "initialCode": "def retrieve_integer_keys(dic):\n    pass",
-        "solution": "def retrieve_integer_keys(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, int):\n            result.append(key)\n    return result\n\nexample_dict = {\n    1: \"one\",\n    \"two\": 2,\n    3: \"three\",\n    \"four\": 4\n}\nprint(retrieve_integer_keys(example_dict))",
+        "solution": "def retrieve_integer_keys(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, int):\n            result.append(key)\n    return result\n\nexample_dict = {\n    1: \"one\",\n    \"two\": 2,\n    3: \"three\",\n    \"four\": 4\n}\nprint(retrieve_integer_keys(example_dict))\n\n# Using list comprehension\n    return [key for key in dic if isinstance(key, int)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6054,7 +6054,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 690",
         "description": "Create a dictionary of temperatures and their units, and return the keys as uppercase strings. keys only (\"Celsius\": [0, 20, 37, 100]).",
         "initialCode": "def uppercase_keys(dic):\n    pass",
-        "solution": "def uppercase_keys(dic):\n    result = []\n    for key in dic.keys():\n        result.append(key.upper())\n    return result\n\ndic = {\n    \"Celsius\": [0, 20, 37, 100],\n    \"Fahrenheit\": [32, 68, 98.6, 212],\n    \"Kelvin\": [273.15, 293.15, 310.15, 373.15]\n}\nprint(uppercase_keys(dic))\n\n# Using list comprehension\n    return [key.upper() for key in dic]\n\n# Using map()\n    return list(map(lambda key: key.upper(), dic))",
+        "solution": "def uppercase_keys(dic):\n    result = []\n    for key in dic.keys():\n        result.append(key.upper())\n    return result\n\ndic = {\n    \"Celsius\": [0, 20, 37, 100],\n    \"Fahrenheit\": [32, 68, 98.6, 212],\n    \"Kelvin\": [273.15, 293.15, 310.15, 373.15]\n}\nprint(uppercase_keys(dic))\n\n# Using list comprehension\n    return [key.upper() for key in dic]\n\n# Using map()\n    return list(map(lambda key: key.upper(), dic))\n\n# Using list comprehension\n    return [key.upper() for key in dic]\n\n# Using map()\n    return list(map(lambda key: key.upper(), dic))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6189,7 +6189,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 706",
         "description": "Write a function that takes a list of email addresses and extracts the domain names using `map()`.",
         "initialCode": "def lst_emails(lst):\n    pass",
-        "solution": "def lst_emails(lst):\n    \n    def domain(string):\n        return string.split('@')[1]\n        \n    return list(map(domain, lst))\n\nlst = [\"user@example.com\", \"admin@domain.org\", \"info@website.net\"]\nprint(lst_emails(lst))\n\n# Using list comprehension\n    return [string.split('@')[1] for string in lst]\n\n# Using for loop\n    result = []\n    for string in lst:\n        result.append(domain(string))\n    return result",
+        "solution": "def lst_emails(lst):\n    \n    def domain(string):\n        return string.split('@')[1]\n        \n    return list(map(domain, lst))\n\nlst = [\"user@example.com\", \"admin@domain.org\", \"info@website.net\"]\nprint(lst_emails(lst))\n\n# Using list comprehension\n    return [string.split('@')[1] for string in lst]\n\n# Using for loop\n    result = []\n    for string in lst:\n        result.append(domain(string))\n    return result\n\n# Using list comprehension\n    return [domain(string) for string in lst]\n\n# Using map()\n    return list(map(lambda string: domain(string), lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6495,7 +6495,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 740",
         "description": "Create a program with a helper function `is_palindrome(word)` that checks if a word is a palindrome and uses it to filter a list of words.",
         "initialCode": "def lst_of_word(lst):\n    pass\n\ndef is_palindrome(word):\n    pass",
-        "solution": "def lst_of_word(lst):\n    return list(filter(is_palindrome, lst)) \n    \ndef is_palindrome(word):\n    return word == word[::-1]\n\nlst = [\"radar\", \"words\", \"level\", \"deed\"]\nprint(lst_of_word(lst))\n\n# Using list comprehension\n    return [word for word in lst if word == word[::-1]]\n\n# Using for loop\n    result = []\n    for word in lst:\n        if is_palindrome(word):\n            result.append(word)\n    return result",
+        "solution": "def lst_of_word(lst):\n    return list(filter(is_palindrome, lst)) \n    \ndef is_palindrome(word):\n    return word == word[::-1]\n\nlst = [\"radar\", \"words\", \"level\", \"deed\"]\nprint(lst_of_word(lst))\n\n# Using list comprehension\n    return [word for word in lst if word == word[::-1]]\n\n# Using for loop\n    result = []\n    for word in lst:\n        if is_palindrome(word):\n            result.append(word)\n    return result\n\n# Using list comprehension\n    return [word for word in lst if is_palindrome(word)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6540,7 +6540,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 745",
         "description": "Define a helper function `format_name(first_name, last_name)` that returns a formatted full name, and use it to format a list of names.",
         "initialCode": "def format_name(first_name, last_name):\n    pass\n\ndef format_names(lst):\n    pass",
-        "solution": "def format_name(first_name, last_name):\n    return f\"{first_name} {last_name}\"\n\ndef format_names(lst):\n    \n    def format_pair(name_pair):\n        return format_name(name_pair[0], name_pair[1])\n    \n    return list(map(format_pair, lst))\n\nnames = [(\"John\", \"Doe\"), (\"Jane\", \"Smith\"), (\"Alice\", \"Johnson\")]\nformatted_names = format_names(names)\nprint(formatted_names)\n\n# Using list comprehension\n    return [format_name(name_pair[0], name_pair[1]) for name_pair in lst]\n\n# Using for loop\n    result = []\n    for name_pair in lst:\n        result.append(format_pair(name_pair))\n    return result",
+        "solution": "def format_name(first_name, last_name):\n    return f\"{first_name} {last_name}\"\n\ndef format_names(lst):\n    \n    def format_pair(name_pair):\n        return format_name(name_pair[0], name_pair[1])\n    \n    return list(map(format_pair, lst))\n\nnames = [(\"John\", \"Doe\"), (\"Jane\", \"Smith\"), (\"Alice\", \"Johnson\")]\nformatted_names = format_names(names)\nprint(formatted_names)\n\n# Using list comprehension\n    return [format_name(name_pair[0], name_pair[1]) for name_pair in lst]\n\n# Using for loop\n    result = []\n    for name_pair in lst:\n        result.append(format_pair(name_pair))\n    return result\n\n# Using list comprehension\n    return [format_pair(name_pair) for name_pair in lst]\n\n# Using map()\n    return list(map(lambda name_pair: format_pair(name_pair), lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6549,7 +6549,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 746",
         "description": "Create a program with a helper function `find_gcd(a, b)` that finds the greatest common divisor of two numbers, and use it to find the GCD of a list of pairs.",
         "initialCode": "def find_gcd(a, b):\n    pass\n\ndef gcd_of_pairs(lst):\n    pass",
-        "solution": "def find_gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n\ndef gcd_of_pairs(lst):\n    def gcd_pair(pair):\n        return find_gcd(pair[0], pair[1])\n    \n    return list(map(gcd_pair, lst))\n\npairs = [(48, 18), (56, 98), (100, 10)]\ngcd_results = gcd_of_pairs(pairs)\nprint(gcd_results)\n\n# Using list comprehension\n    return [find_gcd(pair[0], pair[1]) for pair in lst]\n\n# Using for loop\n    result = []\n    for pair in lst:\n        result.append(gcd_pair(pair))\n    return result",
+        "solution": "def find_gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n\ndef gcd_of_pairs(lst):\n    def gcd_pair(pair):\n        return find_gcd(pair[0], pair[1])\n    \n    return list(map(gcd_pair, lst))\n\npairs = [(48, 18), (56, 98), (100, 10)]\ngcd_results = gcd_of_pairs(pairs)\nprint(gcd_results)\n\n# Using list comprehension\n    return [find_gcd(pair[0], pair[1]) for pair in lst]\n\n# Using for loop\n    result = []\n    for pair in lst:\n        result.append(gcd_pair(pair))\n    return result\n\n# Using list comprehension\n    return [gcd_pair(pair) for pair in lst]\n\n# Using map()\n    return list(map(lambda pair: gcd_pair(pair), lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6612,7 +6612,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 753",
         "description": "Write a program that defines a helper function `calculate_factorial(n)` that calculates the factorial of a number, and uses it for a range of numbers.",
         "initialCode": "def main(lst):\n    pass\n\ndef lst_of_numbers(lst):\n    pass\n\ndef calculate_factorial(num):\n    pass",
-        "solution": "def main(lst):\n    def inner(n):\n        factorial = 1\n        for num in range(1, n + 1):\n            factorial *= num\n        return factorial\n    return list(map(inner, lst))\n            \nlst = [4,5,6,7]\nmain(lst)\n\ndef lst_of_numbers(lst):\n    return list(map(calculate_factorial, lst))\n\ndef calculate_factorial(num):\n    factorial = 1\n    for i in range(1, num + 1):\n        factorial *= i\n    return factorial\n\nlst = [2, 4, 7, 8]\nprint(lst_of_numbers(lst))\n\n# Using list comprehension\n    return [factorial for n in lst]\n\n# Using for loop\n    result = []\n    for n in lst:\n        result.append(inner(n))\n    return result",
+        "solution": "def main(lst):\n    def inner(n):\n        factorial = 1\n        for num in range(1, n + 1):\n            factorial *= num\n        return factorial\n    return list(map(inner, lst))\n            \nlst = [4,5,6,7]\nmain(lst)\n\ndef lst_of_numbers(lst):\n    return list(map(calculate_factorial, lst))\n\ndef calculate_factorial(num):\n    factorial = 1\n    for i in range(1, num + 1):\n        factorial *= i\n    return factorial\n\nlst = [2, 4, 7, 8]\nprint(lst_of_numbers(lst))\n\n# Using list comprehension\n    return [factorial for n in lst]\n\n# Using for loop\n    result = []\n    for n in lst:\n        result.append(inner(n))\n    return result\n\n# Using list comprehension\n    return [inner(n) for num in range]\n\n# Using map()\n    return list(map(lambda num: inner(n), range))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6621,7 +6621,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 754",
         "description": "Define a helper function `sort_dict_by_value(d)` that sorts a dictionary by its values, and use it to sort a given dictionary.",
         "initialCode": "def main(dic):\n    pass\n\ndef sort_dict_by_value(d):\n    pass\n\ndef get_value(item):\n    pass\n\ndef main(dic):\n    pass\n\ndef sort_dict_by_value(d):\n    pass",
-        "solution": "def main(dic):\n    return sort_dict_by_value(dic)\n\ndef sort_dict_by_value(d):\n    return dict(sorted(d.items(), key=get_value))\n\ndef get_value(item):\n    return item[1]\n\ndic = {\n    \"name\": 2,\n    \"age\": 5,\n    \"city\": 1,\n    \"job\": 3\n}    \nprint(main(dic))\n\ndef main(dic):\n    return sort_dict_by_value(dic)\n\ndef sort_dict_by_value(d):\n    sorted_items = sorted(d.items(), key=get_value)\n\n    result = {}\n    for key, value in sorted_items:\n        result[key] = value\n    return result\n\ndic = {\n    \"name\": 2,\n    \"age\": 5,\n    \"city\": 1,\n    \"job\": 3\n}    \nprint(main(dic))",
+        "solution": "def main(dic):\n    return sort_dict_by_value(dic)\n\ndef sort_dict_by_value(d):\n    return dict(sorted(d.items(), key=get_value))\n\ndef get_value(item):\n    return item[1]\n\ndic = {\n    \"name\": 2,\n    \"age\": 5,\n    \"city\": 1,\n    \"job\": 3\n}    \nprint(main(dic))\n\ndef main(dic):\n    return sort_dict_by_value(dic)\n\ndef sort_dict_by_value(d):\n    sorted_items = sorted(d.items(), key=get_value)\n\n    result = {}\n    for key, value in sorted_items:\n        result[key] = value\n    return result\n\ndic = {\n    \"name\": 2,\n    \"age\": 5,\n    \"city\": 1,\n    \"job\": 3\n}    \nprint(main(dic))\n\n# Using lambda key\n    return sorted(..., key=lambda item: item[1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6711,7 +6711,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 764",
         "description": "Create a program with a helper function `get_common_elements(lst1, lst2)` that returns common elements between two lists, and uses it on two sample lists.",
         "initialCode": "def get_common_elements(lst1, lst2):\n    pass\n\ndef main(lst1, lst2):\n    pass\n\ndef get_common_elements(x, y):\n    pass",
-        "solution": "def get_common_elements(lst1, lst2):\n    common_word = []\n    for word in lst1:\n        if word in lst2:\n            common_word.append(word)\n    return common_word\n  \nlst1 = [\"tree\", \"boat\", \"sea\", \"dog\"]\nlst2 = [\"boat\", \"cat\", \"sea\"]\nprint(get_common_elements(lst1, lst2))\n\ndef main(lst1, lst2):\n    return get_common_elements(lst1, lst2)\n\ndef get_common_elements(x, y):\n    duplicates = []\n    for item in x:\n        if item in y and item not in duplicates:\n            duplicates.append(item)\n    return duplicates\n\nlst1 = [\"tree\", \"boat\", \"sea\", \"dog\"]\nlst2 = [\"boat\", \"cat\", \"sea\"]\nprint(main(lst1, lst2))",
+        "solution": "def get_common_elements(lst1, lst2):\n    common_word = []\n    for word in lst1:\n        if word in lst2:\n            common_word.append(word)\n    return common_word\n  \nlst1 = [\"tree\", \"boat\", \"sea\", \"dog\"]\nlst2 = [\"boat\", \"cat\", \"sea\"]\nprint(get_common_elements(lst1, lst2))\n\ndef main(lst1, lst2):\n    return get_common_elements(lst1, lst2)\n\ndef get_common_elements(x, y):\n    duplicates = []\n    for item in x:\n        if item in y and item not in duplicates:\n            duplicates.append(item)\n    return duplicates\n\nlst1 = [\"tree\", \"boat\", \"sea\", \"dog\"]\nlst2 = [\"boat\", \"cat\", \"sea\"]\nprint(main(lst1, lst2))\n\n# Using list comprehension\n    return [word for word in lst1 if word in lst2]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6729,7 +6729,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 766",
         "description": "Define a helper function `convert_to_uppercase(word)` that converts a word to uppercase, and uses it on a list of words.",
         "initialCode": "def main(lst):\n    pass\n\ndef convert_to_uppercase(word):\n    pass",
-        "solution": "def main(lst):\n    return list(map(convert_to_uppercase, lst))  \n\ndef convert_to_uppercase(word):\n    return word.upper()\n\nlst = [\"eorl\", \"sitting\", \"kong\"]\nprint(main(lst))\n\n# Using list comprehension\n    return [word.upper() for word in lst]\n\n# Using for loop\n    result = []\n    for word in lst:\n        result.append(convert_to_uppercase(word))\n    return result",
+        "solution": "def main(lst):\n    return list(map(convert_to_uppercase, lst))  \n\ndef convert_to_uppercase(word):\n    return word.upper()\n\nlst = [\"eorl\", \"sitting\", \"kong\"]\nprint(main(lst))\n\n# Using list comprehension\n    return [word.upper() for word in lst]\n\n# Using for loop\n    result = []\n    for word in lst:\n        result.append(convert_to_uppercase(word))\n    return result\n\n# Using list comprehension\n    return [convert_to_uppercase(word) for word in lst]\n\n# Using map()\n    return list(map(lambda word: convert_to_uppercase(word), lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6747,7 +6747,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 768",
         "description": "Write a program that defines a helper function `remove_special_characters(s)` that removes special characters from a string, and uses it on a sample list of strings.",
         "initialCode": "def main(lst):\n    pass\n\ndef remove_special_characters(s):\n    pass",
-        "solution": "def main(lst):\n    return list(map(remove_special_characters, lst))  \n\ndef remove_special_characters(s):\n    s = s.replace('@', '').replace('?', '')\n    return s\n\nlst = [\"eor?@l\", \"s@itting?\", \"@mountain?\"] \nprint(main(lst))\n\n# Using list comprehension\n    return [s for s in lst]\n\n# Using for loop\n    result = []\n    for s in lst:\n        result.append(remove_special_characters(s))\n    return result",
+        "solution": "def main(lst):\n    return list(map(remove_special_characters, lst))  \n\ndef remove_special_characters(s):\n    s = s.replace('@', '').replace('?', '')\n    return s\n\nlst = [\"eor?@l\", \"s@itting?\", \"@mountain?\"] \nprint(main(lst))\n\n# Using list comprehension\n    return [s for s in lst]\n\n# Using for loop\n    result = []\n    for s in lst:\n        result.append(remove_special_characters(s))\n    return result\n\n# Using list comprehension\n    return [remove_special_characters(s) for s in lst]\n\n# Using map()\n    return list(map(lambda s: remove_special_characters(s), lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6756,7 +6756,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 769",
         "description": "Define a helper function `is_substring(s1, s2)` that checks if `s1` is a substring of `s2`, and uses it on a list of string pairs.",
         "initialCode": "def main(lst):\n    pass\n\ndef is_substring(s1, s2):\n    pass",
-        "solution": "def main(lst):\n    results = []\n    for pair in lst:\n        results.append(is_substring(pair[0], pair[1]))\n    return results\n\ndef is_substring(s1, s2):\n    return s1 in s2\n\nlst = [(\"apple\", \"pineapple\"), (\"dog\", \"doghouse\"), (\"cat\", \"concatenate\")]\nprint(main(lst))",
+        "solution": "def main(lst):\n    results = []\n    for pair in lst:\n        results.append(is_substring(pair[0], pair[1]))\n    return results\n\ndef is_substring(s1, s2):\n    return s1 in s2\n\nlst = [(\"apple\", \"pineapple\"), (\"dog\", \"doghouse\"), (\"cat\", \"concatenate\")]\nprint(main(lst))\n\n# Using list comprehension\n    return [is_substring(pair[0], pair[1]) for pair in lst]\n\n# Using map()\n    return list(map(lambda pair: is_substring(pair[0], pair[1]), lst))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6765,7 +6765,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 770",
         "description": "Create a program with a helper function `sum_of_list(lst)` that returns the sum of all numbers in a list, and uses it on a sample list.",
         "initialCode": "def main(lst):\n    pass\n\ndef sum_of_list(n):\n    pass",
-        "solution": "def main(lst):\n    return sum_of_list(lst)\n    \ndef sum_of_list(n):\n    count = 0\n    for n in lst:\n        count += n\n    return count\n\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))",
+        "solution": "def main(lst):\n    return sum_of_list(lst)\n    \ndef sum_of_list(n):\n    count = 0\n    for n in lst:\n        count += n\n    return count\n\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))\n\n# Using built-in sum()\n    return sum(1 for n in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, n: acc + 1, lst, 0)\n\n# Using for loop\n    count = 0\n    for n in lst:\n        count += n\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7386,7 +7386,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 839",
         "description": "Write a Python program that counts the number of vowels in a user-provided string using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "string = input(\"Enter a string: \")\nvowels = \"aeiouAEIOU\"\ni = 0\ncount = 0\nwhile i < len(string):\n    if string[i] in vowels:\n        count += 1\n    i += 1\nprint(count)",
+        "solution": "string = input(\"Enter a string: \")\nvowels = \"aeiouAEIOU\"\ni = 0\ncount = 0\nwhile i < len(string):\n    if string[i] in vowels:\n        count += 1\n    i += 1\nprint(count)\n\n# Wrapped in function\n    def main():\n        string = input(\'Enter a string: \')\nvowels = \'aeiouAEIOU\'\ni = 0\ncount = 0\nwhile i < len(string):\n    if string[i] in vowels:\n        count += 1\n    i += 1\nprint(count)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7395,7 +7395,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 840",
         "description": "Write a Python program that asks the user to input a string and keeps removing the last character of the string until it\u2019s empty using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "string = input(\"Enter a string: \")\nwhile string:\n    print(string)\n    string = string[:-1]\n\n# Using while loop with break\n    while True:\n        if not (string):\n            break\n        ...",
+        "solution": "string = input(\"Enter a string: \")\nwhile string:\n    print(string)\n    string = string[:-1]\n\n# Using while loop with break\n    while True:\n        if not (string):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        string = input(\'Enter a string: \')\nwhile string:\n    print(string)\n    string = string[:-1]\n\n# Using while loop with break\n    while True:\n        if not (string):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7449,7 +7449,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 846",
         "description": "Write a Python program to reverse the digits of a number using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "num = int(input(\"Enter a number: \"))\nreversed_num = 0\nwhile num > 0:\n    reversed_num = reversed_num * 10 + num % 10\n    num //= 10\nprint(reversed_num)\n\n# Using while loop with break\n    while True:\n        if not (num > 0):\n            break\n        ...",
+        "solution": "num = int(input(\"Enter a number: \"))\nreversed_num = 0\nwhile num > 0:\n    reversed_num = reversed_num * 10 + num % 10\n    num //= 10\nprint(reversed_num)\n\n# Using while loop with break\n    while True:\n        if not (num > 0):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        num = int(input(\'Enter a number: \'))\nreversed_num = 0\nwhile num > 0:\n    reversed_num = reversed_num * 10 + num % 10\n    num //= 10\nprint(reversed_num)\n\n# Using while loop with break\n    while True:\n        if not (num > 0):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7458,7 +7458,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 847",
         "description": "Write a Python program that asks the user to input numbers and prints the average when they type \u201cdone\u201d using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "total = 0\ncount = 0\nwhile True:\n    user_input = input(\"Enter a number (type 'done' to end): \")\n    if user_input == \"done\":\n        break\n    total += int(user_input)\n    count += 1\nif count != 0:\n    print(total / count)\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...",
+        "solution": "total = 0\ncount = 0\nwhile True:\n    user_input = input(\"Enter a number (type 'done' to end): \")\n    if user_input == \"done\":\n        break\n    total += int(user_input)\n    count += 1\nif count != 0:\n    print(total / count)\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        total = 0\ncount = 0\nwhile True:\n    user_input = input(\'Enter a number (type 'done' to end): \')\n    if user_input == \'done\':\n        break\n    total += int(user_input)\n    count += 1\nif count != 0:\n    print(total / count)\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7494,7 +7494,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 851",
         "description": "Write a Python program that prints all the letters of a string except the vowels using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "string = input(\"Enter a string: \")\nvowels = \"aeiouAEIOU\"\ni = 0\nwhile i < len(string):\n    if string[i] not in vowels:\n        print(string[i], end=\"\")\n    i += 1\n\n# Using while loop with break\n    while True:\n        if not (i < len(string)):\n            break\n        ...",
+        "solution": "string = input(\"Enter a string: \")\nvowels = \"aeiouAEIOU\"\ni = 0\nwhile i < len(string):\n    if string[i] not in vowels:\n        print(string[i], end=\"\")\n    i += 1\n\n# Using while loop with break\n    while True:\n        if not (i < len(string)):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        string = input(\'Enter a string: \')\nvowels = \'aeiouAEIOU\'\ni = 0\nwhile i < len(string):\n    if string[i] not in vowels:\n        print(string[i], end=\'\')\n    i += 1\n\n# Using while loop with break\n    while True:\n        if not (i < len(string)):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7539,7 +7539,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 856",
         "description": "Write a Python program that asks the user for a number and keeps printing its square until the square exceeds 1000 using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "num = int(input(\"Enter a number: \"))\nwhile num ** 2 <= 1000:\n    print(num ** 2)\n    num += 1\n\n# Using while loop with break\n    while True:\n        if not (num ** 2 <= 1000):\n            break\n        ...",
+        "solution": "num = int(input(\"Enter a number: \"))\nwhile num ** 2 <= 1000:\n    print(num ** 2)\n    num += 1\n\n# Using while loop with break\n    while True:\n        if not (num ** 2 <= 1000):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        num = int(input(\'Enter a number: \'))\nwhile num ** 2 <= 1000:\n    print(num ** 2)\n    num += 1\n\n# Using while loop with break\n    while True:\n        if not (num ** 2 <= 1000):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7575,7 +7575,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 860",
         "description": "Write a Python program to sum all the odd numbers from 1 to 100 using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "num = 1\ntotal = 0\nwhile num <= 100:\n    if num % 2 != 0:\n        total += num\n    num += 1\nprint(total)\n\n# Using while loop with break\n    while True:\n        if not (num <= 100):\n            break\n        ...",
+        "solution": "num = 1\ntotal = 0\nwhile num <= 100:\n    if num % 2 != 0:\n        total += num\n    num += 1\nprint(total)\n\n# Using while loop with break\n    while True:\n        if not (num <= 100):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        num = 1\ntotal = 0\nwhile num <= 100:\n    if num % 2 != 0:\n        total += num\n    num += 1\nprint(total)\n\n# Using while loop with break\n    while True:\n        if not (num <= 100):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7593,7 +7593,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 862",
         "description": "Write a Python program that keeps asking the user for a number and prints whether it is a palindrome. Stop when the user types \u201cquit\u201d.",
         "initialCode": "# Write your solution here",
-        "solution": "user = None\nwhile user != \"quit\":\n    user = input(\"type num: \")\n    if user == user[::-1]:\n        print(\"palindrome\")\n\nwhile True:\n    user_input = input(\"Enter a number (type 'quit' to stop): \")\n    if user_input == \"quit\":\n        break\n    if user_input == user_input[::-1]:\n        print(f\"{user_input} is a palindrome\")\n    else:\n        print(f\"{user_input} is not a palindrome\")\n\n# Using reversed()\n    return list(reversed(user))\n\n# Using for loop\n    result = []\n    for x in user:\n        result.insert(0, x)\n    return result",
+        "solution": "user = None\nwhile user != \"quit\":\n    user = input(\"type num: \")\n    if user == user[::-1]:\n        print(\"palindrome\")\n\nwhile True:\n    user_input = input(\"Enter a number (type 'quit' to stop): \")\n    if user_input == \"quit\":\n        break\n    if user_input == user_input[::-1]:\n        print(f\"{user_input} is a palindrome\")\n    else:\n        print(f\"{user_input} is not a palindrome\")\n\n# Using reversed()\n    return list(reversed(user))\n\n# Using for loop\n    result = []\n    for x in user:\n        result.insert(0, x)\n    return result\n\n# Wrapped in function\n    def main():\n        user = None\nwhile user != \'quit\':\n    user = input(\'type num: \')\n    if user == user[::-1]:\n        print(\'palindrome\')\n\nwhile True:\n    user_input = input(\'Enter a number (type 'quit' to stop): \')\n    if user_input == \'quit\':\n        break\n    if user_input == user_input[::-1]:\n        print(f\'{user_input} is a palindrome\')\n    else:\n        print(f\'{user_input} is not a palindrome\')\n\n# Using reversed()\n    return list(reversed(user))\n\n# Using for loop\n    result = []\n    for x in user:\n        result.insert(0, x)\n    return result\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7656,7 +7656,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 869",
         "description": "Write a Python program to unpack a list of three elements into three variables.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3]\na, b, c = numbers\nprint(a, b, c)  # Expected output: 1 2 3",
+        "solution": "numbers = [1, 2, 3]\na, b, c = numbers\nprint(a, b, c)  # Expected output: 1 2 3\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3]\na, b, c = numbers\nprint(a, b, c)  # Expected output: 1 2 3\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7665,7 +7665,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 870",
         "description": "Write a Python program to unpack the first and last elements of a list while collecting the middle elements in another variable.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [10, 20, 30, 40, 50]\nfirst, *middle, last = numbers\nprint(first, middle, last)  # Expected output: 10 [20, 30, 40] 50",
+        "solution": "numbers = [10, 20, 30, 40, 50]\nfirst, *middle, last = numbers\nprint(first, middle, last)  # Expected output: 10 [20, 30, 40] 50\n\n# Wrapped in function\n    def main():\n        numbers = [10, 20, 30, 40, 50]\nfirst, *middle, last = numbers\nprint(first, middle, last)  # Expected output: 10 [20, 30, 40] 50\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7674,7 +7674,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 871",
         "description": "Write a Python program to swap two variables using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "x, y = 5, 10\nx, y = y, x\nprint(x, y)  # Expected output: 10 5",
+        "solution": "x, y = 5, 10\nx, y = y, x\nprint(x, y)  # Expected output: 10 5\n\n# Wrapped in function\n    def main():\n        x, y = 5, 10\nx, y = y, x\nprint(x, y)  # Expected output: 10 5\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7683,7 +7683,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 872",
         "description": "Write a Python program to unpack the keys and values of a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nkeys, values = zip(*data.items())\nprint(keys, values)  # Expected output: ('name', 'age', 'city') ('Alice', 25, 'New York')",
+        "solution": "data = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nkeys, values = zip(*data.items())\nprint(keys, values)  # Expected output: ('name', 'age', 'city') ('Alice', 25, 'New York')\n\n# Wrapped in function\n    def main():\n        data = {\'name\': \'Alice\', \'age\': 25, \'city\': \'New York\'}\nkeys, values = zip(*data.items())\nprint(keys, values)  # Expected output: ('name', 'age', 'city') ('Alice', 25, 'New York')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7701,7 +7701,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 874",
         "description": "Write a Python program to extract the first two characters and the rest of a string using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "word = \"Python\"\nfirst, second, *rest = word\nprint(first, second, \"\".join(rest))  # Expected output: P y thon",
+        "solution": "word = \"Python\"\nfirst, second, *rest = word\nprint(first, second, \"\".join(rest))  # Expected output: P y thon\n\n# Wrapped in function\n    def main():\n        word = \'Python\'\nfirst, second, *rest = word\nprint(first, second, \'\'.join(rest))  # Expected output: P y thon\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7710,7 +7710,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 875",
         "description": "Write a Python program to extract the first and last elements of a tuple using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "values = (100, 200, 300, 400, 500)\nfirst, *_, last = values\nprint(first, last)  # Expected output: 100 500",
+        "solution": "values = (100, 200, 300, 400, 500)\nfirst, *_, last = values\nprint(first, last)  # Expected output: 100 500\n\n# Wrapped in function\n    def main():\n        values = (100, 200, 300, 400, 500)\nfirst, *_, last = values\nprint(first, last)  # Expected output: 100 500\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7728,7 +7728,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 877",
         "description": "Write a Python program to unpack a range into separate variables.",
         "initialCode": "# Write your solution here",
-        "solution": "a, b, c = range(3)\nprint(a, b, c)  # Expected output: 0 1 2",
+        "solution": "a, b, c = range(3)\nprint(a, b, c)  # Expected output: 0 1 2\n\n# Wrapped in function\n    def main():\n        a, b, c = range(3)\nprint(a, b, c)  # Expected output: 0 1 2\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7737,7 +7737,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 878",
         "description": "Write a Python program to split a full name into first and last name using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "full_name = \"John Doe\"\nfirst_name, last_name = full_name.split()\nprint(first_name, last_name)  # Expected output: John Doe",
+        "solution": "full_name = \"John Doe\"\nfirst_name, last_name = full_name.split()\nprint(first_name, last_name)  # Expected output: John Doe\n\n# Wrapped in function\n    def main():\n        full_name = \'John Doe\'\nfirst_name, last_name = full_name.split()\nprint(first_name, last_name)  # Expected output: John Doe\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7755,7 +7755,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 880",
         "description": "Write a Python program to merge two lists using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "list1 = [1, 2, 3]\nlist2 = [4, 5, 6]\nmerged = [*list1, *list2]\nprint(merged)  # Expected output: [1, 2, 3, 4, 5, 6]",
+        "solution": "list1 = [1, 2, 3]\nlist2 = [4, 5, 6]\nmerged = [*list1, *list2]\nprint(merged)  # Expected output: [1, 2, 3, 4, 5, 6]\n\n# Wrapped in function\n    def main():\n        list1 = [1, 2, 3]\nlist2 = [4, 5, 6]\nmerged = [*list1, *list2]\nprint(merged)  # Expected output: [1, 2, 3, 4, 5, 6]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7764,7 +7764,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 881",
         "description": "Write a Python program to merge two dictionaries using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "dict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\nmerged_dict = {**dict1, **dict2}\nprint(merged_dict)  # Expected output: {'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+        "solution": "dict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\nmerged_dict = {**dict1, **dict2}\nprint(merged_dict)  # Expected output: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n\n# Wrapped in function\n    def main():\n        dict1 = {\'a\': 1, \'b\': 2}\ndict2 = {\'c\': 3, \'d\': 4}\nmerged_dict = {**dict1, **dict2}\nprint(merged_dict)  # Expected output: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7773,7 +7773,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 882",
         "description": "Write a Python program to unpack and ignore certain values using `_`.",
         "initialCode": "# Write your solution here",
-        "solution": "values = (1, 2, 3, 4, 5)\nfirst, _, third, _, last = values\nprint(first, third, last)  # Expected output: 1 3 5",
+        "solution": "values = (1, 2, 3, 4, 5)\nfirst, _, third, _, last = values\nprint(first, third, last)  # Expected output: 1 3 5\n\n# Wrapped in function\n    def main():\n        values = (1, 2, 3, 4, 5)\nfirst, _, third, _, last = values\nprint(first, third, last)  # Expected output: 1 3 5\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7800,7 +7800,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 885",
         "description": "Write a Python program to extract individual characters from a string using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "word = \"ABC\"\na, b, c = word\nprint(a, b, c)  # Expected output: A B C",
+        "solution": "word = \"ABC\"\na, b, c = word\nprint(a, b, c)  # Expected output: A B C\n\n# Wrapped in function\n    def main():\n        word = \'ABC\'\na, b, c = word\nprint(a, b, c)  # Expected output: A B C\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7809,7 +7809,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 886",
         "description": "Write a Python program to unpack a list with unknown length using the starred expression.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]\nfirst, *middle, last = numbers\nprint(first, middle, last)  # Expected output: 1 [2, 3, 4, 5, 6, 7, 8] 9",
+        "solution": "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]\nfirst, *middle, last = numbers\nprint(first, middle, last)  # Expected output: 1 [2, 3, 4, 5, 6, 7, 8] 9\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]\nfirst, *middle, last = numbers\nprint(first, middle, last)  # Expected output: 1 [2, 3, 4, 5, 6, 7, 8] 9\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7818,7 +7818,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 887",
         "description": "Write a Python program to use unpacking inside a loop to iterate through a list of tuples.",
         "initialCode": "# Write your solution here",
-        "solution": "pairs = [(1, 'a'), (2, 'b'), (3, 'c')]\nfor number, letter in pairs:\n    print(number, letter)\n\n# Expected output:\n# 1 a\n# 2 b\n# 3 c",
+        "solution": "pairs = [(1, 'a'), (2, 'b'), (3, 'c')]\nfor number, letter in pairs:\n    print(number, letter)\n\n# Expected output:\n# 1 a\n# 2 b\n# 3 c\n\n# Wrapped in function\n    def main():\n        pairs = [(1, 'a'), (2, 'b'), (3, 'c')]\nfor number, letter in pairs:\n    print(number, letter)\n\n# Expected output:\n# 1 a\n# 2 b\n# 3 c\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7836,7 +7836,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 889",
         "description": "Write a Python program to unpack a list of lists and sum corresponding elements using the `zip()` function. Use list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "lists = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nsummed = [sum(x) for x in zip(*lists)]\nprint(summed)  # Expected output: [12, 15, 18]",
+        "solution": "lists = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nsummed = [sum(x) for x in zip(*lists)]\nprint(summed)  # Expected output: [12, 15, 18]\n\n# Wrapped in function\n    def main():\n        lists = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nsummed = [sum(x) for x in zip(*lists)]\nprint(summed)  # Expected output: [12, 15, 18]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7845,7 +7845,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 890",
         "description": "Write a Python program to unpack a dictionary\u2019s items and reformat them as key-value pairs.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nformatted = [f\"{key}: {value}\" for key, value in data.items()]\nprint(formatted)  # Expected output: ['name: Alice', 'age: 25', 'city: New York']",
+        "solution": "data = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nformatted = [f\"{key}: {value}\" for key, value in data.items()]\nprint(formatted)  # Expected output: ['name: Alice', 'age: 25', 'city: New York']\n\n# Wrapped in function\n    def main():\n        data = {\'name\': \'Alice\', \'age\': 25, \'city\': \'New York\'}\nformatted = [f\'{key}: {value}\' for key, value in data.items()]\nprint(formatted)  # Expected output: ['name: Alice', 'age: 25', 'city: New York']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7854,7 +7854,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 891",
         "description": "Write a Python program to use unpacking to split a sentence into words and capture the first and last words separately.",
         "initialCode": "# Write your solution here",
-        "solution": "sentence = \"Python is a powerful programming language\"\nfirst, *middle, last = sentence.split()\nprint(first, middle, last)  # Expected output: Python ['is', 'a', 'powerful', 'programming'] language",
+        "solution": "sentence = \"Python is a powerful programming language\"\nfirst, *middle, last = sentence.split()\nprint(first, middle, last)  # Expected output: Python ['is', 'a', 'powerful', 'programming'] language\n\n# Wrapped in function\n    def main():\n        sentence = \'Python is a powerful programming language\'\nfirst, *middle, last = sentence.split()\nprint(first, middle, last)  # Expected output: Python ['is', 'a', 'powerful', 'programming'] language\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7863,7 +7863,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 892",
         "description": "Write a Python program to unpack only the vowels from a given word using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "word = \"unpacking\"\nvowels = [c for c in word if c in \"aeiou\"]\nprint(vowels)  # Expected output: ['u', 'a', 'i']",
+        "solution": "word = \"unpacking\"\nvowels = [c for c in word if c in \"aeiou\"]\nprint(vowels)  # Expected output: ['u', 'a', 'i']\n\n# Wrapped in function\n    def main():\n        word = \'unpacking\'\nvowels = [c for c in word if c in \'aeiou\']\nprint(vowels)  # Expected output: ['u', 'a', 'i']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7872,7 +7872,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 893",
         "description": "Write a Python program to unpack a tuple containing mixed data types.",
         "initialCode": "# Write your solution here",
-        "solution": "data = (\"Alice\", 30, 5.8, True)\nname, age, height, is_student = data\nprint(name, age, height, is_student)  # Expected output: Alice 30 5.8 True",
+        "solution": "data = (\"Alice\", 30, 5.8, True)\nname, age, height, is_student = data\nprint(name, age, height, is_student)  # Expected output: Alice 30 5.8 True\n\n# Wrapped in function\n    def main():\n        data = (\'Alice\', 30, 5.8, True)\nname, age, height, is_student = data\nprint(name, age, height, is_student)  # Expected output: Alice 30 5.8 True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7881,7 +7881,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 894",
         "description": "Write a Python program to unpack and sort a list of tuples by the second element.",
         "initialCode": "# Write your solution here",
-        "solution": "tuples = [(1, 3), (4, 1), (2, 2)]\nsorted_tuples = sorted(tuples, key=lambda x: x[1])\nprint(sorted_tuples)  # Expected output: [(4, 1), (2, 2), (1, 3)]\n\n# Using named function\n    def key_func(x):\n        return x[1]\n    return sorted(..., key=key_func)",
+        "solution": "tuples = [(1, 3), (4, 1), (2, 2)]\nsorted_tuples = sorted(tuples, key=lambda x: x[1])\nprint(sorted_tuples)  # Expected output: [(4, 1), (2, 2), (1, 3)]\n\n# Using named function\n    def key_func(x):\n        return x[1]\n    return sorted(..., key=key_func)\n\n# Using lambda key\n    return sorted(..., key=lambda x: x[1])",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7890,7 +7890,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 895",
         "description": "Write a Python program to extract only even numbers from a list using unpacking inside list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5, 6]\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)  # Expected output: [2, 4, 6]",
+        "solution": "numbers = [1, 2, 3, 4, 5, 6]\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)  # Expected output: [2, 4, 6]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5, 6]\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)  # Expected output: [2, 4, 6]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7899,7 +7899,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 896",
         "description": "Write a Python program to swap three variables using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "a, b, c = 1, 2, 3\na, b, c = c, a, b\nprint(a, b, c)  # Expected output: 3 1 2",
+        "solution": "a, b, c = 1, 2, 3\na, b, c = c, a, b\nprint(a, b, c)  # Expected output: 3 1 2\n\n# Wrapped in function\n    def main():\n        a, b, c = 1, 2, 3\na, b, c = c, a, b\nprint(a, b, c)  # Expected output: 3 1 2\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7917,7 +7917,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 898",
         "description": "Write a Python program to use unpacking inside a lambda function to add three numbers.",
         "initialCode": "# Write your solution here",
-        "solution": "add_three = lambda x, y, z: x + y + z\nnumbers = (4, 5, 6)\nprint(add_three(*numbers))  # Expected output: 15",
+        "solution": "add_three = lambda x, y, z: x + y + z\nnumbers = (4, 5, 6)\nprint(add_three(*numbers))  # Expected output: 15\n\n# Wrapped in function\n    def main():\n        add_three = lambda x, y, z: x + y + z\nnumbers = (4, 5, 6)\nprint(add_three(*numbers))  # Expected output: 15\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7926,7 +7926,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 899",
         "description": "Write a Python program to extract and reverse the digits of a number using unpacking.",
         "initialCode": "# Write your solution here",
-        "solution": "num = 12345\ndigits = list(str(num))\nreversed_digits = digits[::-1]\nprint(reversed_digits)  # Expected output: ['5', '4', '3', '2', '1']\n\nnum = 123456\nstr_num = str(num)[::-1]\nlst_num = list(str_num)\nprint(lst_num)\n\n# Using reversed()\n    return list(reversed(digits))\n\n# Using for loop\n    result = []\n    for x in digits:\n        result.insert(0, x)\n    return result",
+        "solution": "num = 12345\ndigits = list(str(num))\nreversed_digits = digits[::-1]\nprint(reversed_digits)  # Expected output: ['5', '4', '3', '2', '1']\n\nnum = 123456\nstr_num = str(num)[::-1]\nlst_num = list(str_num)\nprint(lst_num)\n\n# Using reversed()\n    return list(reversed(digits))\n\n# Using for loop\n    result = []\n    for x in digits:\n        result.insert(0, x)\n    return result\n\n# Wrapped in function\n    def main():\n        num = 12345\ndigits = list(str(num))\nreversed_digits = digits[::-1]\nprint(reversed_digits)  # Expected output: ['5', '4', '3', '2', '1']\n\nnum = 123456\nstr_num = str(num)[::-1]\nlst_num = list(str_num)\nprint(lst_num)\n\n# Using reversed()\n    return list(reversed(digits))\n\n# Using for loop\n    result = []\n    for x in digits:\n        result.insert(0, x)\n    return result\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7962,7 +7962,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 903",
         "description": "Write a Python program to use unpacking to separate numbers in a mathematical expression.",
         "initialCode": "# Write your solution here",
-        "solution": "expression = \"3 + 5 - 2 * 4\"\na, op1, b, op2, c, op3, d = expression.split()\nprint(a, op1, b, op2, c, op3, d)  # Expected output: 3 + 5 - 2 * 4",
+        "solution": "expression = \"3 + 5 - 2 * 4\"\na, op1, b, op2, c, op3, d = expression.split()\nprint(a, op1, b, op2, c, op3, d)  # Expected output: 3 + 5 - 2 * 4\n\n# Wrapped in function\n    def main():\n        expression = \'3 + 5 - 2 * 4\'\na, op1, b, op2, c, op3, d = expression.split()\nprint(a, op1, b, op2, c, op3, d)  # Expected output: 3 + 5 - 2 * 4\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7971,7 +7971,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 904",
         "description": "Write a Python program to unpack and reassign dictionary values dynamically.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {\"x\": 10, \"y\": 20, \"z\": 30}\nx, y, z = data.values()\nx, y, z = z, x, y\nprint(x, y, z)  # Expected output: 30 10 20",
+        "solution": "data = {\"x\": 10, \"y\": 20, \"z\": 30}\nx, y, z = data.values()\nx, y, z = z, x, y\nprint(x, y, z)  # Expected output: 30 10 20\n\n# Wrapped in function\n    def main():\n        data = {\'x\': 10, \'y\': 20, \'z\': 30}\nx, y, z = data.values()\nx, y, z = z, x, y\nprint(x, y, z)  # Expected output: 30 10 20\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7980,7 +7980,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 905",
         "description": "Write a Python program to use unpacking to extract domain and subdomain from an email address.",
         "initialCode": "# Write your solution here",
-        "solution": "email = \"john.doe@example.com\"\nuser, domain = email.split(\"@\")\nprint(user, domain)  # Expected output: john.doe example.com",
+        "solution": "email = \"john.doe@example.com\"\nuser, domain = email.split(\"@\")\nprint(user, domain)  # Expected output: john.doe example.com\n\n# Wrapped in function\n    def main():\n        email = \'john.doe@example.com\'\nuser, domain = email.split(\'@\')\nprint(user, domain)  # Expected output: john.doe example.com\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7989,7 +7989,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 906",
         "description": "Write a Python program to unpack nested tuples inside a list.",
         "initialCode": "# Write your solution here",
-        "solution": "nested_tuples = [(1, (2, 3)), (4, (5, 6))]\nfor a, (b, c) in nested_tuples:\n    print(a, b, c)\n\n# Expected output:\n# 1 2 3\n# 4 5 6",
+        "solution": "nested_tuples = [(1, (2, 3)), (4, (5, 6))]\nfor a, (b, c) in nested_tuples:\n    print(a, b, c)\n\n# Expected output:\n# 1 2 3\n# 4 5 6\n\n# Wrapped in function\n    def main():\n        nested_tuples = [(1, (2, 3)), (4, (5, 6))]\nfor a, (b, c) in nested_tuples:\n    print(a, b, c)\n\n# Expected output:\n# 1 2 3\n# 4 5 6\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7998,7 +7998,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 907",
         "description": "Write a Python program to unpack values returned from `divmod()`.",
         "initialCode": "# Write your solution here",
-        "solution": "quotient, remainder = divmod(17, 5)\nprint(quotient, remainder)  # Expected output: 3 2",
+        "solution": "quotient, remainder = divmod(17, 5)\nprint(quotient, remainder)  # Expected output: 3 2\n\n# Wrapped in function\n    def main():\n        quotient, remainder = divmod(17, 5)\nprint(quotient, remainder)  # Expected output: 3 2\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8007,7 +8007,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 908",
         "description": "Write a Python program to generate a random integer between 1 and 100.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nnum = random.randint(1, 100)\nprint(num)  # Expected output: A random number between 1 and 100",
+        "solution": "import random\n\nnum = random.randint(1, 100)\nprint(num)  # Expected output: A random number between 1 and 100\n\n# Wrapped in function\n    def main():\n        import random\n\nnum = random.randint(1, 100)\nprint(num)  # Expected output: A random number between 1 and 100\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8016,7 +8016,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 909",
         "description": "Write a Python program to generate a random floating-point number between 0 and 1.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nnum = random.random()\nprint(num)  # Expected output: A random float between 0 and 1",
+        "solution": "import random\n\nnum = random.random()\nprint(num)  # Expected output: A random float between 0 and 1\n\n# Wrapped in function\n    def main():\n        import random\n\nnum = random.random()\nprint(num)  # Expected output: A random float between 0 and 1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8025,7 +8025,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 910",
         "description": "Write a Python program to generate a random even integer between 10 and 50.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nnum = random.randrange(10, 51, 2)\nprint(num)  # Expected output: A random even number between 10 and 50",
+        "solution": "import random\n\nnum = random.randrange(10, 51, 2)\nprint(num)  # Expected output: A random even number between 10 and 50\n\n# Wrapped in function\n    def main():\n        import random\n\nnum = random.randrange(10, 51, 2)\nprint(num)  # Expected output: A random even number between 10 and 50\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8034,7 +8034,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 911",
         "description": "Write a Python program to randomly select an element from a given list.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\ncolors = [\"red\", \"blue\", \"green\", \"yellow\", \"purple\"]\nselected = random.choice(colors)\nprint(selected)  # Expected output: A random color from the list",
+        "solution": "import random\n\ncolors = [\"red\", \"blue\", \"green\", \"yellow\", \"purple\"]\nselected = random.choice(colors)\nprint(selected)  # Expected output: A random color from the list\n\n# Wrapped in function\n    def main():\n        import random\n\ncolors = [\'red\', \'blue\', \'green\', \'yellow\', \'purple\']\nselected = random.choice(colors)\nprint(selected)  # Expected output: A random color from the list\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8043,7 +8043,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 912",
         "description": "Write a Python program to shuffle a list randomly.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nnumbers = [1, 2, 3, 4, 5]\nrandom.shuffle(numbers)\nprint(numbers)  # Expected output: A shuffled version of the list",
+        "solution": "import random\n\nnumbers = [1, 2, 3, 4, 5]\nrandom.shuffle(numbers)\nprint(numbers)  # Expected output: A shuffled version of the list\n\n# Wrapped in function\n    def main():\n        import random\n\nnumbers = [1, 2, 3, 4, 5]\nrandom.shuffle(numbers)\nprint(numbers)  # Expected output: A shuffled version of the list\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8052,7 +8052,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 913",
         "description": "Write a Python program to select 3 unique random numbers from a list.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nnumbers = list(range(1, 21))\nselected = random.sample(numbers, 3)\nprint(selected)  # Expected output: 3 unique numbers from 1 to 20",
+        "solution": "import random\n\nnumbers = list(range(1, 21))\nselected = random.sample(numbers, 3)\nprint(selected)  # Expected output: 3 unique numbers from 1 to 20\n\n# Wrapped in function\n    def main():\n        import random\n\nnumbers = list(range(1, 21))\nselected = random.sample(numbers, 3)\nprint(selected)  # Expected output: 3 unique numbers from 1 to 20\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8061,7 +8061,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 914",
         "description": "Write a Python program to generate a random floating-point number between 5 and 10.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nnum = random.uniform(5, 10)\nprint(num)  # Expected output: A random float between 5 and 10",
+        "solution": "import random\n\nnum = random.uniform(5, 10)\nprint(num)  # Expected output: A random float between 5 and 10\n\n# Wrapped in function\n    def main():\n        import random\n\nnum = random.uniform(5, 10)\nprint(num)  # Expected output: A random float between 5 and 10\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8070,7 +8070,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 915",
         "description": "Write a Python program to generate a random letter from the English alphabet.",
         "initialCode": "import random\nimport string\n# Write your solution here",
-        "solution": "import random\nimport string\n\nletter = random.choice(string.ascii_letters)\nprint(letter)  # Expected output: A random letter from a-z or A-Z",
+        "solution": "import random\nimport string\n\nletter = random.choice(string.ascii_letters)\nprint(letter)  # Expected output: A random letter from a-z or A-Z\n\n# Wrapped in function\n    def main():\n        import random\nimport string\n\nletter = random.choice(string.ascii_letters)\nprint(letter)  # Expected output: A random letter from a-z or A-Z\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8079,7 +8079,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 916",
         "description": "Write a Python program to simulate the rolling of a six-sided die.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nroll = random.randint(1, 6)\nprint(roll)  # Expected output: A number between 1 and 6",
+        "solution": "import random\n\nroll = random.randint(1, 6)\nprint(roll)  # Expected output: A number between 1 and 6\n\n# Wrapped in function\n    def main():\n        import random\n\nroll = random.randint(1, 6)\nprint(roll)  # Expected output: A number between 1 and 6\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8088,7 +8088,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 917",
         "description": "Write a Python program to simulate flipping a coin.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nflip = random.choice([\"Heads\", \"Tails\"])\nprint(flip)  # Expected output: Heads or Tails",
+        "solution": "import random\n\nflip = random.choice([\"Heads\", \"Tails\"])\nprint(flip)  # Expected output: Heads or Tails\n\n# Wrapped in function\n    def main():\n        import random\n\nflip = random.choice([\'Heads\', \'Tails\'])\nprint(flip)  # Expected output: Heads or Tails\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8097,7 +8097,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 918",
         "description": "Write a Python program to randomly select a first name and last name from separate lists and combine them.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nfirst_names = [\"Alice\", \"Bob\", \"Charlie\", \"David\"]\nlast_names = [\"Smith\", \"Johnson\", \"Brown\", \"Williams\"]\n\nfull_name = f\"{random.choice(first_names)} {random.choice(last_names)}\"\nprint(full_name)  # Expected output: A random full name",
+        "solution": "import random\n\nfirst_names = [\"Alice\", \"Bob\", \"Charlie\", \"David\"]\nlast_names = [\"Smith\", \"Johnson\", \"Brown\", \"Williams\"]\n\nfull_name = f\"{random.choice(first_names)} {random.choice(last_names)}\"\nprint(full_name)  # Expected output: A random full name\n\n# Wrapped in function\n    def main():\n        import random\n\nfirst_names = [\'Alice\', \'Bob\', \'Charlie\', \'David\']\nlast_names = [\'Smith\', \'Johnson\', \'Brown\', \'Williams\']\n\nfull_name = f\'{random.choice(first_names)} {random.choice(last_names)}\'\nprint(full_name)  # Expected output: A random full name\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8106,7 +8106,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 919",
         "description": "Write a Python program to generate a random password with 8 characters including letters, digits, and special characters.",
         "initialCode": "import random\nimport string\n# Write your solution here",
-        "solution": "import random\nimport string\n\ncharacters = string.ascii_letters + string.digits + string.punctuation\npassword = \"\".join(random.sample(characters, 8))\nprint(password)  # Expected output: A random 8-character password",
+        "solution": "import random\nimport string\n\ncharacters = string.ascii_letters + string.digits + string.punctuation\npassword = \"\".join(random.sample(characters, 8))\nprint(password)  # Expected output: A random 8-character password\n\n# Wrapped in function\n    def main():\n        import random\nimport string\n\ncharacters = string.ascii_letters + string.digits + string.punctuation\npassword = \'\'.join(random.sample(characters, 8))\nprint(password)  # Expected output: A random 8-character password\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8115,7 +8115,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 920",
         "description": "Write a Python program to generate a random boolean value (True or False).",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nboolean_value = random.choice([True, False])\nprint(boolean_value)  # Expected output: True or False",
+        "solution": "import random\n\nboolean_value = random.choice([True, False])\nprint(boolean_value)  # Expected output: True or False\n\n# Wrapped in function\n    def main():\n        import random\n\nboolean_value = random.choice([True, False])\nprint(boolean_value)  # Expected output: True or False\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8133,7 +8133,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 922",
         "description": "Write a Python program to select a random subset of 4 elements from a list.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nitems = list(range(1, 11))\nsubset = random.sample(items, 4)\nprint(subset)  # Expected output: A random selection of 4 numbers from 1 to 10",
+        "solution": "import random\n\nitems = list(range(1, 11))\nsubset = random.sample(items, 4)\nprint(subset)  # Expected output: A random selection of 4 numbers from 1 to 10\n\n# Wrapped in function\n    def main():\n        import random\n\nitems = list(range(1, 11))\nsubset = random.sample(items, 4)\nprint(subset)  # Expected output: A random selection of 4 numbers from 1 to 10\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8142,7 +8142,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 923",
         "description": "Write a Python program to generate a random date within the year 2023.",
         "initialCode": "import random\nimport datetime\n# Write your solution here",
-        "solution": "import random\nimport datetime\n\nstart_date = datetime.date(2023, 1, 1)\nend_date = datetime.date(2023, 12, 31)\nrandom_days = random.randint(0, (end_date - start_date).days)\nrandom_date = start_date + datetime.timedelta(days=random_days)\nprint(random_date)  # Expected output: A random date in 2023",
+        "solution": "import random\nimport datetime\n\nstart_date = datetime.date(2023, 1, 1)\nend_date = datetime.date(2023, 12, 31)\nrandom_days = random.randint(0, (end_date - start_date).days)\nrandom_date = start_date + datetime.timedelta(days=random_days)\nprint(random_date)  # Expected output: A random date in 2023\n\n# Wrapped in function\n    def main():\n        import random\nimport datetime\n\nstart_date = datetime.date(2023, 1, 1)\nend_date = datetime.date(2023, 12, 31)\nrandom_days = random.randint(0, (end_date - start_date).days)\nrandom_date = start_date + datetime.timedelta(days=random_days)\nprint(random_date)  # Expected output: A random date in 2023\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8151,7 +8151,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 924",
         "description": "Write a Python program to randomly pick an element from a set.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nfruits = {\"apple\", \"banana\", \"cherry\", \"date\"}\nrandom_fruit = random.choice(list(fruits))\nprint(random_fruit)  # Expected output: A random fruit from the set",
+        "solution": "import random\n\nfruits = {\"apple\", \"banana\", \"cherry\", \"date\"}\nrandom_fruit = random.choice(list(fruits))\nprint(random_fruit)  # Expected output: A random fruit from the set\n\n# Wrapped in function\n    def main():\n        import random\n\nfruits = {\'apple\', \'banana\', \'cherry\', \'date\'}\nrandom_fruit = random.choice(list(fruits))\nprint(random_fruit)  # Expected output: A random fruit from the set\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8160,7 +8160,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 925",
         "description": "Write a Python program to randomly generate a 6-digit verification code.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\ncode = random.randint(100000, 999999)\nprint(code)  # Expected output: A 6-digit random number",
+        "solution": "import random\n\ncode = random.randint(100000, 999999)\nprint(code)  # Expected output: A 6-digit random number\n\n# Wrapped in function\n    def main():\n        import random\n\ncode = random.randint(100000, 999999)\nprint(code)  # Expected output: A 6-digit random number\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8169,7 +8169,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 926",
         "description": "Write a Python program to generate a random hexadecimal color code.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nhex_color = \"#{:06x}\".format(random.randint(0, 0xFFFFFF))\nprint(hex_color)  # Expected output: A random hex color",
+        "solution": "import random\n\nhex_color = \"#{:06x}\".format(random.randint(0, 0xFFFFFF))\nprint(hex_color)  # Expected output: A random hex color\n\n# Wrapped in function\n    def main():\n        import random\n\nhex_color = \'#{:06x}\'.format(random.randint(0, 0xFFFFFF))\nprint(hex_color)  # Expected output: A random hex color\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8178,7 +8178,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 927",
         "description": "Write a Python program to generate a random phone number in the format (XXX) XXX-XXXX.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nphone_number = f\"({random.randint(100, 999)}) {random.randint(100, 999)}-{random.randint(1000, 9999)}\"\nprint(phone_number)  # Expected output: A random phone number",
+        "solution": "import random\n\nphone_number = f\"({random.randint(100, 999)}) {random.randint(100, 999)}-{random.randint(1000, 9999)}\"\nprint(phone_number)  # Expected output: A random phone number\n\n# Wrapped in function\n    def main():\n        import random\n\nphone_number = f\'({random.randint(100, 999)}) {random.randint(100, 999)}-{random.randint(1000, 9999)}\'\nprint(phone_number)  # Expected output: A random phone number\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8187,7 +8187,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 928",
         "description": "Write a Python program to generate a random 4-digit PIN code.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\npin = f\"{random.randint(1000, 9999)}\"\nprint(pin)  # Expected output: A 4-digit random PIN",
+        "solution": "import random\n\npin = f\"{random.randint(1000, 9999)}\"\nprint(pin)  # Expected output: A 4-digit random PIN\n\n# Wrapped in function\n    def main():\n        import random\n\npin = f\'{random.randint(1000, 9999)}\'\nprint(pin)  # Expected output: A 4-digit random PIN\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8196,7 +8196,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 929",
         "description": "Write a Python program to simulate a random dice roll with two six-sided dice.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\ndice1 = random.randint(1, 6)\ndice2 = random.randint(1, 6)\nprint(dice1, dice2)  # Expected output: Two random numbers between 1 and 6",
+        "solution": "import random\n\ndice1 = random.randint(1, 6)\ndice2 = random.randint(1, 6)\nprint(dice1, dice2)  # Expected output: Two random numbers between 1 and 6\n\n# Wrapped in function\n    def main():\n        import random\n\ndice1 = random.randint(1, 6)\ndice2 = random.randint(1, 6)\nprint(dice1, dice2)  # Expected output: Two random numbers between 1 and 6\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8205,7 +8205,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 930",
         "description": "Write a Python program to generate a random IP address.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nip_address = \".\".join(str(random.randint(0, 255)) for _ in range(4))\nprint(ip_address)  # Expected output: A random IP address",
+        "solution": "import random\n\nip_address = \".\".join(str(random.randint(0, 255)) for _ in range(4))\nprint(ip_address)  # Expected output: A random IP address\n\n# Wrapped in function\n    def main():\n        import random\n\nip_address = \'.\'.join(str(random.randint(0, 255)) for _ in range(4))\nprint(ip_address)  # Expected output: A random IP address\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8214,7 +8214,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 931",
         "description": "Write a Python program to generate a random strong password of 12 characters.",
         "initialCode": "import random\nimport string\n# Write your solution here",
-        "solution": "import random\nimport string\n\ncharacters = string.ascii_letters + string.digits + string.punctuation\npassword = \"\".join(random.choices(characters, k=12))\nprint(password)  # Expected output: A random 12-character password",
+        "solution": "import random\nimport string\n\ncharacters = string.ascii_letters + string.digits + string.punctuation\npassword = \"\".join(random.choices(characters, k=12))\nprint(password)  # Expected output: A random 12-character password\n\n# Wrapped in function\n    def main():\n        import random\nimport string\n\ncharacters = string.ascii_letters + string.digits + string.punctuation\npassword = \'\'.join(random.choices(characters, k=12))\nprint(password)  # Expected output: A random 12-character password\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8223,7 +8223,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 932",
         "description": "Write a Python program to randomly pick an item from a tuple.",
         "initialCode": "import random\n# Write your solution here",
-        "solution": "import random\n\nanimals = (\"dog\", \"cat\", \"elephant\", \"lion\")\nrandom_animal = random.choice(animals)\nprint(random_animal)  # Expected output: A random animal from the tuple",
+        "solution": "import random\n\nanimals = (\"dog\", \"cat\", \"elephant\", \"lion\")\nrandom_animal = random.choice(animals)\nprint(random_animal)  # Expected output: A random animal from the tuple\n\n# Wrapped in function\n    def main():\n        import random\n\nanimals = (\'dog\', \'cat\', \'elephant\', \'lion\')\nrandom_animal = random.choice(animals)\nprint(random_animal)  # Expected output: A random animal from the tuple\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8232,7 +8232,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 933",
         "description": "Write a Python program to handle division by zero exception when dividing two numbers.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    a, b = 10, 0\n    result = a / b\nexcept ZeroDivisionError:\n    result = \"Cannot divide by zero\"\n    \nprint(result)  # Expected output: Cannot divide by zero",
+        "solution": "try:\n    a, b = 10, 0\n    result = a / b\nexcept ZeroDivisionError:\n    result = \"Cannot divide by zero\"\n    \nprint(result)  # Expected output: Cannot divide by zero\n\n# Wrapped in function\n    def main():\n        try:\n    a, b = 10, 0\n    result = a / b\nexcept ZeroDivisionError:\n    result = \'Cannot divide by zero\'\n    \nprint(result)  # Expected output: Cannot divide by zero\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8241,7 +8241,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 934",
         "description": "Write a Python program to handle an IndexError when accessing an out-of-range list index.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    lst = [1, 2, 3]\n    value = lst[5]\nexcept IndexError:\n    value = \"Index out of range\"\n\nprint(value)  # Expected output: Index out of range",
+        "solution": "try:\n    lst = [1, 2, 3]\n    value = lst[5]\nexcept IndexError:\n    value = \"Index out of range\"\n\nprint(value)  # Expected output: Index out of range\n\n# Wrapped in function\n    def main():\n        try:\n    lst = [1, 2, 3]\n    value = lst[5]\nexcept IndexError:\n    value = \'Index out of range\'\n\nprint(value)  # Expected output: Index out of range\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8250,7 +8250,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 935",
         "description": "Write a Python program to handle a KeyError when accessing a non-existent key in a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    d = {\"name\": \"Alice\"}\n    value = d[\"age\"]\nexcept KeyError:\n    value = \"Key not found\"\n\nprint(value)  # Expected output: Key not found",
+        "solution": "try:\n    d = {\"name\": \"Alice\"}\n    value = d[\"age\"]\nexcept KeyError:\n    value = \"Key not found\"\n\nprint(value)  # Expected output: Key not found\n\n# Wrapped in function\n    def main():\n        try:\n    d = {\'name\': \'Alice\'}\n    value = d[\'age\']\nexcept KeyError:\n    value = \'Key not found\'\n\nprint(value)  # Expected output: Key not found\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8259,7 +8259,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 936",
         "description": "Write a Python program to handle a ValueError when converting an invalid string to an integer.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    num = int(\"abc\")\nexcept ValueError:\n    num = \"Invalid integer conversion\"\n\nprint(num)  # Expected output: Invalid integer conversion",
+        "solution": "try:\n    num = int(\"abc\")\nexcept ValueError:\n    num = \"Invalid integer conversion\"\n\nprint(num)  # Expected output: Invalid integer conversion\n\n# Wrapped in function\n    def main():\n        try:\n    num = int(\'abc\')\nexcept ValueError:\n    num = \'Invalid integer conversion\'\n\nprint(num)  # Expected output: Invalid integer conversion\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8268,7 +8268,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 937",
         "description": "Write a Python program to handle a TypeError when trying to concatenate a string with an integer.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    result = \"Age: \" + 25\nexcept TypeError:\n    result = \"Type mismatch error\"\n\nprint(result)  # Expected output: Type mismatch error",
+        "solution": "try:\n    result = \"Age: \" + 25\nexcept TypeError:\n    result = \"Type mismatch error\"\n\nprint(result)  # Expected output: Type mismatch error\n\n# Wrapped in function\n    def main():\n        try:\n    result = \'Age: \' + 25\nexcept TypeError:\n    result = \'Type mismatch error\'\n\nprint(result)  # Expected output: Type mismatch error\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8277,7 +8277,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 938",
         "description": "Write a Python program to handle a FileNotFoundError when trying to open a non-existent file.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    with open(\"nonexistent.txt\", \"r\") as file:\n        content = file.read()\nexcept FileNotFoundError:\n    content = \"File not found\"\n\nprint(content)  # Expected output: File not found",
+        "solution": "try:\n    with open(\"nonexistent.txt\", \"r\") as file:\n        content = file.read()\nexcept FileNotFoundError:\n    content = \"File not found\"\n\nprint(content)  # Expected output: File not found\n\n# Wrapped in function\n    def main():\n        try:\n    with open(\'nonexistent.txt\', \'r\') as file:\n        content = file.read()\nexcept FileNotFoundError:\n    content = \'File not found\'\n\nprint(content)  # Expected output: File not found\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8295,7 +8295,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 940",
         "description": "Write a Python program to catch a NameError when accessing an undefined variable.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    result = x + 10\nexcept NameError:\n    result = \"Variable not defined\"\n\nprint(result)  # Expected output: Variable not defined",
+        "solution": "try:\n    result = x + 10\nexcept NameError:\n    result = \"Variable not defined\"\n\nprint(result)  # Expected output: Variable not defined\n\n# Wrapped in function\n    def main():\n        try:\n    result = x + 10\nexcept NameError:\n    result = \'Variable not defined\'\n\nprint(result)  # Expected output: Variable not defined\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8304,7 +8304,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 941",
         "description": "Write a Python program to handle a PermissionError when trying to write to a read-only file.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    with open(\"/root/protected.txt\", \"w\") as file:\n        file.write(\"Test\")\nexcept PermissionError:\n    result = \"Permission denied\"\n\nprint(result)  # Expected output: Permission denied",
+        "solution": "try:\n    with open(\"/root/protected.txt\", \"w\") as file:\n        file.write(\"Test\")\nexcept PermissionError:\n    result = \"Permission denied\"\n\nprint(result)  # Expected output: Permission denied\n\n# Wrapped in function\n    def main():\n        try:\n    with open(\'/root/protected.txt\', \'w\') as file:\n        file.write(\'Test\')\nexcept PermissionError:\n    result = \'Permission denied\'\n\nprint(result)  # Expected output: Permission denied\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8313,7 +8313,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 942",
         "description": "Write a Python program to use a try-except-else block to catch errors in division.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    a, b = 10, 2\n    result = a / b\nexcept ZeroDivisionError:\n    result = \"Cannot divide by zero\"\nelse:\n    result = f\"Division successful: {result}\"\n\nprint(result)  # Expected output: Division successful: 5.0",
+        "solution": "try:\n    a, b = 10, 2\n    result = a / b\nexcept ZeroDivisionError:\n    result = \"Cannot divide by zero\"\nelse:\n    result = f\"Division successful: {result}\"\n\nprint(result)  # Expected output: Division successful: 5.0\n\n# Wrapped in function\n    def main():\n        try:\n    a, b = 10, 2\n    result = a / b\nexcept ZeroDivisionError:\n    result = \'Cannot divide by zero\'\nelse:\n    result = f\'Division successful: {result}\'\n\nprint(result)  # Expected output: Division successful: 5.0\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8322,7 +8322,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 943",
         "description": "Write a Python program to use a finally block to always print a message after exception handling.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    result = \"Cannot divide by zero\"\nfinally:\n    print(\"Execution completed\")\n\nprint(result)  # Expected output: Cannot divide by zero\n               # Execution completed",
+        "solution": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    result = \"Cannot divide by zero\"\nfinally:\n    print(\"Execution completed\")\n\nprint(result)  # Expected output: Cannot divide by zero\n               # Execution completed\n\n# Wrapped in function\n    def main():\n        try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    result = \'Cannot divide by zero\'\nfinally:\n    print(\'Execution completed\')\n\nprint(result)  # Expected output: Cannot divide by zero\n               # Execution completed\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8340,7 +8340,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 945",
         "description": "Write a Python program to handle a multiple exception scenario (ZeroDivisionError and TypeError).",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    num = \"10\" / 2\nexcept (ZeroDivisionError, TypeError):\n    result = \"An error occurred\"\n\nprint(result)  # Expected output: An error occurred",
+        "solution": "try:\n    num = \"10\" / 2\nexcept (ZeroDivisionError, TypeError):\n    result = \"An error occurred\"\n\nprint(result)  # Expected output: An error occurred\n\n# Wrapped in function\n    def main():\n        try:\n    num = \'10\' / 2\nexcept (ZeroDivisionError, TypeError):\n    result = \'An error occurred\'\n\nprint(result)  # Expected output: An error occurred\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8349,7 +8349,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 946",
         "description": "Write a Python program to use the `assert` statement to raise an AssertionError if a condition is false.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    x = -1\n    assert x >= 0, \"Negative number not allowed\"\nexcept AssertionError as e:\n    print(e)  # Expected output: Negative number not allowed",
+        "solution": "try:\n    x = -1\n    assert x >= 0, \"Negative number not allowed\"\nexcept AssertionError as e:\n    print(e)  # Expected output: Negative number not allowed\n\n# Wrapped in function\n    def main():\n        try:\n    x = -1\n    assert x >= 0, \'Negative number not allowed\'\nexcept AssertionError as e:\n    print(e)  # Expected output: Negative number not allowed\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8358,7 +8358,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 947",
         "description": "Write a Python program to handle a MemoryError by attempting to allocate excessive memory.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    lst = [0] * (10**9)\nexcept MemoryError:\n    print(\"Memory limit exceeded\")  # Expected output: Memory limit exceeded",
+        "solution": "try:\n    lst = [0] * (10**9)\nexcept MemoryError:\n    print(\"Memory limit exceeded\")  # Expected output: Memory limit exceeded\n\n# Wrapped in function\n    def main():\n        try:\n    lst = [0] * (10**9)\nexcept MemoryError:\n    print(\'Memory limit exceeded\')  # Expected output: Memory limit exceeded\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8376,7 +8376,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 949",
         "description": "Write a Python program to catch a ModuleNotFoundError when trying to import a non-existent module.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    import nonexistent_module\nexcept ModuleNotFoundError:\n    print(\"Module not found\")  # Expected output: Module not found",
+        "solution": "try:\n    import nonexistent_module\nexcept ModuleNotFoundError:\n    print(\"Module not found\")  # Expected output: Module not found\n\n# Wrapped in function\n    def main():\n        try:\n    import nonexistent_module\nexcept ModuleNotFoundError:\n    print(\'Module not found\')  # Expected output: Module not found\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8385,7 +8385,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 950",
         "description": "Write a Python program to catch an IOError when trying to read a file that does not exist.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    with open(\"missingfile.txt\", \"r\") as f:\n        data = f.read()\nexcept IOError:\n    print(\"Error reading file\")  # Expected output: Error reading file",
+        "solution": "try:\n    with open(\"missingfile.txt\", \"r\") as f:\n        data = f.read()\nexcept IOError:\n    print(\"Error reading file\")  # Expected output: Error reading file\n\n# Wrapped in function\n    def main():\n        try:\n    with open(\'missingfile.txt\', \'r\') as f:\n        data = f.read()\nexcept IOError:\n    print(\'Error reading file\')  # Expected output: Error reading file\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8394,7 +8394,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 951",
         "description": "Write a Python program to catch a KeyboardInterrupt exception when the user manually stops the script.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    while True:\n        pass  # Infinite loop to simulate long-running process\nexcept KeyboardInterrupt:\n    print(\"Process interrupted by user\")  # Expected output: Process interrupted by user\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...",
+        "solution": "try:\n    while True:\n        pass  # Infinite loop to simulate long-running process\nexcept KeyboardInterrupt:\n    print(\"Process interrupted by user\")  # Expected output: Process interrupted by user\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        try:\n    while True:\n        pass  # Infinite loop to simulate long-running process\nexcept KeyboardInterrupt:\n    print(\'Process interrupted by user\')  # Expected output: Process interrupted by user\n\n# Using while loop with break\n    while True:\n        if not (True):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8403,7 +8403,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 952",
         "description": "Write a Python program to convert a string to uppercase using a built-in method.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"hello world\"\nupper_text = text.upper()\nprint(upper_text)  # Expected output: HELLO WORLD",
+        "solution": "text = \"hello world\"\nupper_text = text.upper()\nprint(upper_text)  # Expected output: HELLO WORLD\n\n# Wrapped in function\n    def main():\n        text = \'hello world\'\nupper_text = text.upper()\nprint(upper_text)  # Expected output: HELLO WORLD\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8412,7 +8412,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 953",
         "description": "Write a Python program to count the occurrences of a specific character in a string using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"banana\"\ncount_a = text.count(\"a\")\nprint(count_a)  # Expected output: 3",
+        "solution": "text = \"banana\"\ncount_a = text.count(\"a\")\nprint(count_a)  # Expected output: 3\n\n# Wrapped in function\n    def main():\n        text = \'banana\'\ncount_a = text.count(\'a\')\nprint(count_a)  # Expected output: 3\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8421,7 +8421,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 954",
         "description": "Write a Python program to check if a string starts with a specific prefix using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"hello world\"\nresult = text.startswith(\"hello\")\nprint(result)  # Expected output: True",
+        "solution": "text = \"hello world\"\nresult = text.startswith(\"hello\")\nprint(result)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        text = \'hello world\'\nresult = text.startswith(\'hello\')\nprint(result)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8430,7 +8430,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 955",
         "description": "Write a Python program to replace all occurrences of a word in a string using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"I love apples. Apples are delicious.\"\nnew_text = text.replace(\"Apples\", \"Bananas\")\nprint(new_text)  # Expected output: I love apples. Bananas are delicious.",
+        "solution": "text = \"I love apples. Apples are delicious.\"\nnew_text = text.replace(\"Apples\", \"Bananas\")\nprint(new_text)  # Expected output: I love apples. Bananas are delicious.\n\n# Wrapped in function\n    def main():\n        text = \'I love apples. Apples are delicious.\'\nnew_text = text.replace(\'Apples\', \'Bananas\')\nprint(new_text)  # Expected output: I love apples. Bananas are delicious.\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8439,7 +8439,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 956",
         "description": "Write a Python program to split a sentence into words using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "sentence = \"Python is amazing\"\nwords = sentence.split()\nprint(words)  # Expected output: ['Python', 'is', 'amazing']",
+        "solution": "sentence = \"Python is amazing\"\nwords = sentence.split()\nprint(words)  # Expected output: ['Python', 'is', 'amazing']\n\n# Wrapped in function\n    def main():\n        sentence = \'Python is amazing\'\nwords = sentence.split()\nprint(words)  # Expected output: ['Python', 'is', 'amazing']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8448,7 +8448,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 957",
         "description": "Write a Python program to join a list of words into a sentence using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "words = [\"Python\", \"is\", \"fun\"]\nsentence = \" \".join(words)\nprint(sentence)  # Expected output: Python is fun",
+        "solution": "words = [\"Python\", \"is\", \"fun\"]\nsentence = \" \".join(words)\nprint(sentence)  # Expected output: Python is fun\n\n# Wrapped in function\n    def main():\n        words = [\'Python\', \'is\', \'fun\']\nsentence = \' \'.join(words)\nprint(sentence)  # Expected output: Python is fun\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8457,7 +8457,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 958",
         "description": "Write a Python program to remove leading and trailing spaces from a string using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"   hello world   \"\ntrimmed_text = text.strip()\nprint(trimmed_text)  # Expected output: hello world",
+        "solution": "text = \"   hello world   \"\ntrimmed_text = text.strip()\nprint(trimmed_text)  # Expected output: hello world\n\n# Wrapped in function\n    def main():\n        text = \'   hello world   \'\ntrimmed_text = text.strip()\nprint(trimmed_text)  # Expected output: hello world\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8466,7 +8466,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 959",
         "description": "Write a Python program to find the index of a specific element in a list using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [10, 20, 30, 40, 50]\nindex_30 = numbers.index(30)\nprint(index_30)  # Expected output: 2",
+        "solution": "numbers = [10, 20, 30, 40, 50]\nindex_30 = numbers.index(30)\nprint(index_30)  # Expected output: 2\n\n# Wrapped in function\n    def main():\n        numbers = [10, 20, 30, 40, 50]\nindex_30 = numbers.index(30)\nprint(index_30)  # Expected output: 2\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8475,7 +8475,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 960",
         "description": "Write a Python program to sort a list of numbers in ascending order using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [5, 2, 8, 1, 3]\nnumbers.sort()\nprint(numbers)  # Expected output: [1, 2, 3, 5, 8]",
+        "solution": "numbers = [5, 2, 8, 1, 3]\nnumbers.sort()\nprint(numbers)  # Expected output: [1, 2, 3, 5, 8]\n\n# Wrapped in function\n    def main():\n        numbers = [5, 2, 8, 1, 3]\nnumbers.sort()\nprint(numbers)  # Expected output: [1, 2, 3, 5, 8]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8484,7 +8484,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 961",
         "description": "Write a Python program to reverse the order of elements in a list using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5]\nnumbers.reverse()\nprint(numbers)  # Expected output: [5, 4, 3, 2, 1]",
+        "solution": "numbers = [1, 2, 3, 4, 5]\nnumbers.reverse()\nprint(numbers)  # Expected output: [5, 4, 3, 2, 1]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5]\nnumbers.reverse()\nprint(numbers)  # Expected output: [5, 4, 3, 2, 1]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8493,7 +8493,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 962",
         "description": "Write a Python program to add an element at the end of a list using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3]\nnumbers.append(4)\nprint(numbers)  # Expected output: [1, 2, 3, 4]",
+        "solution": "numbers = [1, 2, 3]\nnumbers.append(4)\nprint(numbers)  # Expected output: [1, 2, 3, 4]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3]\nnumbers.append(4)\nprint(numbers)  # Expected output: [1, 2, 3, 4]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8502,7 +8502,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 963",
         "description": "Write a Python program to remove the last element from a list using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [10, 20, 30]\nlast_item = numbers.pop()\nprint(numbers)  # Expected output: [10, 20]\nprint(last_item)  # Expected output: 30",
+        "solution": "numbers = [10, 20, 30]\nlast_item = numbers.pop()\nprint(numbers)  # Expected output: [10, 20]\nprint(last_item)  # Expected output: 30\n\n# Wrapped in function\n    def main():\n        numbers = [10, 20, 30]\nlast_item = numbers.pop()\nprint(numbers)  # Expected output: [10, 20]\nprint(last_item)  # Expected output: 30\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8511,7 +8511,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 964",
         "description": "Write a Python program to remove a specific element from a list using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [5, 10, 15, 20]\nnumbers.remove(10)\nprint(numbers)  # Expected output: [5, 15, 20]",
+        "solution": "numbers = [5, 10, 15, 20]\nnumbers.remove(10)\nprint(numbers)  # Expected output: [5, 15, 20]\n\n# Wrapped in function\n    def main():\n        numbers = [5, 10, 15, 20]\nnumbers.remove(10)\nprint(numbers)  # Expected output: [5, 15, 20]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8520,7 +8520,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 965",
         "description": "Write a Python program to get all the keys from a dictionary using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "person = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nkeys = person.keys()\nprint(list(keys))  # Expected output: ['name', 'age', 'city']",
+        "solution": "person = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nkeys = person.keys()\nprint(list(keys))  # Expected output: ['name', 'age', 'city']\n\n# Wrapped in function\n    def main():\n        person = {\'name\': \'Alice\', \'age\': 25, \'city\': \'New York\'}\nkeys = person.keys()\nprint(list(keys))  # Expected output: ['name', 'age', 'city']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8529,7 +8529,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 966",
         "description": "Write a Python program to get all the values from a dictionary using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "person = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nvalues = person.values()\nprint(list(values))  # Expected output: ['Alice', 25, 'New York']",
+        "solution": "person = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nvalues = person.values()\nprint(list(values))  # Expected output: ['Alice', 25, 'New York']\n\n# Wrapped in function\n    def main():\n        person = {\'name\': \'Alice\', \'age\': 25, \'city\': \'New York\'}\nvalues = person.values()\nprint(list(values))  # Expected output: ['Alice', 25, 'New York']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8538,7 +8538,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 967",
         "description": "Write a Python program to merge two dictionaries using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "dict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\ndict1.update(dict2)\nprint(dict1)  # Expected output: {'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+        "solution": "dict1 = {\"a\": 1, \"b\": 2}\ndict2 = {\"c\": 3, \"d\": 4}\ndict1.update(dict2)\nprint(dict1)  # Expected output: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n\n# Wrapped in function\n    def main():\n        dict1 = {\'a\': 1, \'b\': 2}\ndict2 = {\'c\': 3, \'d\': 4}\ndict1.update(dict2)\nprint(dict1)  # Expected output: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8547,7 +8547,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 968",
         "description": "Write a Python program to remove an item from a dictionary using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "person = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nperson.pop(\"age\")\nprint(person)  # Expected output: {'name': 'Alice', 'city': 'New York'}",
+        "solution": "person = {\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}\nperson.pop(\"age\")\nprint(person)  # Expected output: {'name': 'Alice', 'city': 'New York'}\n\n# Wrapped in function\n    def main():\n        person = {\'name\': \'Alice\', \'age\': 25, \'city\': \'New York\'}\nperson.pop(\'age\')\nprint(person)  # Expected output: {'name': 'Alice', 'city': 'New York'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8556,7 +8556,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 969",
         "description": "Write a Python program to check if a set contains a specific element using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = {1, 2, 3, 4, 5}\nresult = 3 in numbers\nprint(result)  # Expected output: True",
+        "solution": "numbers = {1, 2, 3, 4, 5}\nresult = 3 in numbers\nprint(result)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        numbers = {1, 2, 3, 4, 5}\nresult = 3 in numbers\nprint(result)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8565,7 +8565,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 970",
         "description": "Write a Python program to remove and return an arbitrary element from a set using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = {10, 20, 30, 40}\nremoved_element = numbers.pop()\nprint(removed_element)  # Expected output: A random element from the set\nprint(numbers)  # Expected output: The set without the removed element",
+        "solution": "numbers = {10, 20, 30, 40}\nremoved_element = numbers.pop()\nprint(removed_element)  # Expected output: A random element from the set\nprint(numbers)  # Expected output: The set without the removed element\n\n# Wrapped in function\n    def main():\n        numbers = {10, 20, 30, 40}\nremoved_element = numbers.pop()\nprint(removed_element)  # Expected output: A random element from the set\nprint(numbers)  # Expected output: The set without the removed element\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8574,7 +8574,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 971",
         "description": "Write a Python program to clear all elements from a list using a method.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5]\nnumbers.clear()\nprint(numbers)  # Expected output: []",
+        "solution": "numbers = [1, 2, 3, 4, 5]\nnumbers.clear()\nprint(numbers)  # Expected output: []\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5]\nnumbers.clear()\nprint(numbers)  # Expected output: []\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8583,7 +8583,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 972",
         "description": "Write a Python program to parse an integer from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "num_str = \"42\"\nnum = int(num_str)\nprint(num)  # Expected output: 42",
+        "solution": "num_str = \"42\"\nnum = int(num_str)\nprint(num)  # Expected output: 42\n\n# Wrapped in function\n    def main():\n        num_str = \'42\'\nnum = int(num_str)\nprint(num)  # Expected output: 42\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8592,7 +8592,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 973",
         "description": "Write a Python program to parse a float from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "num_str = \"3.14\"\nnum = float(num_str)\nprint(num)  # Expected output: 3.14",
+        "solution": "num_str = \"3.14\"\nnum = float(num_str)\nprint(num)  # Expected output: 3.14\n\n# Wrapped in function\n    def main():\n        num_str = \'3.14\'\nnum = float(num_str)\nprint(num)  # Expected output: 3.14\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8601,7 +8601,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 974",
         "description": "Write a Python program to parse a boolean from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "bool_str = \"True\"\nboolean_value = bool_str.lower() == \"true\"\nprint(boolean_value)  # Expected output: True",
+        "solution": "bool_str = \"True\"\nboolean_value = bool_str.lower() == \"true\"\nprint(boolean_value)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        bool_str = \'True\'\nboolean_value = bool_str.lower() == \'true\'\nprint(boolean_value)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8610,7 +8610,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 975",
         "description": "Write a Python program to parse multiple integers from a comma-separated string.",
         "initialCode": "# Write your solution here",
-        "solution": "num_str = \"10,20,30,40\"\nnumbers = list(map(int, num_str.split(\",\")))\nprint(numbers)  # Expected output: [10, 20, 30, 40]\n\n# Using for loop\n    result = []\n    for x in num_str.split(\',\':\n        result.append(int(x))\n    return result",
+        "solution": "num_str = \"10,20,30,40\"\nnumbers = list(map(int, num_str.split(\",\")))\nprint(numbers)  # Expected output: [10, 20, 30, 40]\n\n# Using for loop\n    result = []\n    for x in num_str.split(\',\':\n        result.append(int(x))\n    return result\n\n# Using list comprehension\n    return [int(x) for x in num_str]\n\n# Using map()\n    return list(map(lambda x: int(x), num_str))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8619,7 +8619,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 976",
         "description": "Write a Python program to parse a date from a string in the format 'YYYY-MM-DD'.",
         "initialCode": "from datetime import datetime\n# Write your solution here",
-        "solution": "from datetime import datetime\n\ndate_str = \"2024-03-22\"\nparsed_date = datetime.strptime(date_str, \"%Y-%m-%d\")\nprint(parsed_date)  # Expected output: 2024-03-22 00:00:00",
+        "solution": "from datetime import datetime\n\ndate_str = \"2024-03-22\"\nparsed_date = datetime.strptime(date_str, \"%Y-%m-%d\")\nprint(parsed_date)  # Expected output: 2024-03-22 00:00:00\n\n# Wrapped in function\n    def main():\n        from datetime import datetime\n\ndate_str = \'2024-03-22\'\nparsed_date = datetime.strptime(date_str, \'%Y-%m-%d\')\nprint(parsed_date)  # Expected output: 2024-03-22 00:00:00\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8628,7 +8628,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 977",
         "description": "Write a Python program to extract numbers from a mixed string.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \"My order number is 12345 and tracking ID is 67890.\"\nnumbers = re.findall(r\"\\d+\", text)\nprint(numbers)  # Expected output: ['12345', '67890']",
+        "solution": "import re\n\ntext = \"My order number is 12345 and tracking ID is 67890.\"\nnumbers = re.findall(r\"\\d+\", text)\nprint(numbers)  # Expected output: ['12345', '67890']\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \'My order number is 12345 and tracking ID is 67890.\'\nnumbers = re.findall(r\'\\d+\', text)\nprint(numbers)  # Expected output: ['12345', '67890']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8637,7 +8637,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 978",
         "description": "Write a Python program to parse a JSON string into a Python dictionary.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\njson_str = '{\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}'\ndata = json.loads(json_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}",
+        "solution": "import json\n\njson_str = '{\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}'\ndata = json.loads(json_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Wrapped in function\n    def main():\n        import json\n\njson_str = '{\'name\': \'Alice\', \'age\': 25, \'city\': \'New York\'}'\ndata = json.loads(json_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8646,7 +8646,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 979",
         "description": "Write a Python program to convert a dictionary to a JSON string.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\ndata = {\"name\": \"Bob\", \"age\": 30, \"city\": \"London\"}\njson_str = json.dumps(data)\nprint(json_str)  # Expected output: '{\"name\": \"Bob\", \"age\": 30, \"city\": \"London\"}'",
+        "solution": "import json\n\ndata = {\"name\": \"Bob\", \"age\": 30, \"city\": \"London\"}\njson_str = json.dumps(data)\nprint(json_str)  # Expected output: '{\"name\": \"Bob\", \"age\": 30, \"city\": \"London\"}'\n\n# Wrapped in function\n    def main():\n        import json\n\ndata = {\'name\': \'Bob\', \'age\': 30, \'city\': \'London\'}\njson_str = json.dumps(data)\nprint(json_str)  # Expected output: '{\'name\': \'Bob\', \'age\': 30, \'city\': \'London\'}'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8655,7 +8655,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 980",
         "description": "Write a Python program to parse an XML string and extract specific data.",
         "initialCode": "import xml.etree.ElementTree as ET\n# Write your solution here",
-        "solution": "import xml.etree.ElementTree as ET\n\nxml_str = \"<person><name>Charlie</name><age>28</age></person>\"\nroot = ET.fromstring(xml_str)\nname = root.find(\"name\").text\nprint(name)  # Expected output: Charlie",
+        "solution": "import xml.etree.ElementTree as ET\n\nxml_str = \"<person><name>Charlie</name><age>28</age></person>\"\nroot = ET.fromstring(xml_str)\nname = root.find(\"name\").text\nprint(name)  # Expected output: Charlie\n\n# Wrapped in function\n    def main():\n        import xml.etree.ElementTree as ET\n\nxml_str = \'<person><name>Charlie</name><age>28</age></person>\'\nroot = ET.fromstring(xml_str)\nname = root.find(\'name\').text\nprint(name)  # Expected output: Charlie\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8664,7 +8664,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 981",
         "description": "Write a Python program to parse key-value pairs from a query string.",
         "initialCode": "from urllib.parse import parse_qs\n# Write your solution here",
-        "solution": "from urllib.parse import parse_qs\n\nquery_str = \"name=David&age=35&city=Paris\"\nparsed_data = parse_qs(query_str)\nprint(parsed_data)  # Expected output: {'name': ['David'], 'age': ['35'], 'city': ['Paris']}",
+        "solution": "from urllib.parse import parse_qs\n\nquery_str = \"name=David&age=35&city=Paris\"\nparsed_data = parse_qs(query_str)\nprint(parsed_data)  # Expected output: {'name': ['David'], 'age': ['35'], 'city': ['Paris']}\n\n# Wrapped in function\n    def main():\n        from urllib.parse import parse_qs\n\nquery_str = \'name=David&age=35&city=Paris\'\nparsed_data = parse_qs(query_str)\nprint(parsed_data)  # Expected output: {'name': ['David'], 'age': ['35'], 'city': ['Paris']}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8673,7 +8673,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 982",
         "description": "Write a Python program to parse a CSV string into a list of lists.",
         "initialCode": "import csv\nfrom io import StringIO\n# Write your solution here",
-        "solution": "import csv\nfrom io import StringIO\n\ncsv_str = \"name,age,city\\nAlice,25,New York\\nBob,30,London\"\ncsv_file = StringIO(csv_str)\nreader = csv.reader(csv_file)\ndata = list(reader)\nprint(data)  \n# Expected output: [['name', 'age', 'city'], ['Alice', '25', 'New York'], ['Bob', '30', 'London']]",
+        "solution": "import csv\nfrom io import StringIO\n\ncsv_str = \"name,age,city\\nAlice,25,New York\\nBob,30,London\"\ncsv_file = StringIO(csv_str)\nreader = csv.reader(csv_file)\ndata = list(reader)\nprint(data)  \n# Expected output: [['name', 'age', 'city'], ['Alice', '25', 'New York'], ['Bob', '30', 'London']]\n\n# Wrapped in function\n    def main():\n        import csv\nfrom io import StringIO\n\ncsv_str = \'name,age,city\\nAlice,25,New York\\nBob,30,London\'\ncsv_file = StringIO(csv_str)\nreader = csv.reader(csv_file)\ndata = list(reader)\nprint(data)  \n# Expected output: [['name', 'age', 'city'], ['Alice', '25', 'New York'], ['Bob', '30', 'London']]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8682,7 +8682,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 983",
         "description": "Write a Python program to parse HTML and extract all links.",
         "initialCode": "from bs4 import BeautifulSoup\n# Write your solution here",
-        "solution": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"https://example.com\">Example</a> <a href=\"https://google.com\">Google</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\nlinks = [a[\"href\"] for a in soup.find_all(\"a\")]\nprint(links)  # Expected output: ['https://example.com', 'https://google.com']",
+        "solution": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"https://example.com\">Example</a> <a href=\"https://google.com\">Google</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\nlinks = [a[\"href\"] for a in soup.find_all(\"a\")]\nprint(links)  # Expected output: ['https://example.com', 'https://google.com']\n\n# Wrapped in function\n    def main():\n        from bs4 import BeautifulSoup\n\nhtml = '<a href=\'https://example.com\'>Example</a> <a href=\'https://google.com\'>Google</a>'\nsoup = BeautifulSoup(html, \'html.parser\')\nlinks = [a[\'href\'] for a in soup.find_all(\'a\')]\nprint(links)  # Expected output: ['https://example.com', 'https://google.com']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8691,7 +8691,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 984",
         "description": "Write a Python program to parse a time string in the format 'HH:MM:SS' into a `datetime.time` object.",
         "initialCode": "from datetime import datetime\n# Write your solution here",
-        "solution": "from datetime import datetime\n\ntime_str = \"14:30:45\"\nparsed_time = datetime.strptime(time_str, \"%H:%M:%S\").time()\nprint(parsed_time)  # Expected output: 14:30:45",
+        "solution": "from datetime import datetime\n\ntime_str = \"14:30:45\"\nparsed_time = datetime.strptime(time_str, \"%H:%M:%S\").time()\nprint(parsed_time)  # Expected output: 14:30:45\n\n# Wrapped in function\n    def main():\n        from datetime import datetime\n\ntime_str = \'14:30:45\'\nparsed_time = datetime.strptime(time_str, \'%H:%M:%S\').time()\nprint(parsed_time)  # Expected output: 14:30:45\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8700,7 +8700,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 985",
         "description": "Write a Python program to parse a hexadecimal number string into an integer.",
         "initialCode": "# Write your solution here",
-        "solution": "hex_str = \"0x1A\"\nnum = int(hex_str, 16)\nprint(num)  # Expected output: 26",
+        "solution": "hex_str = \"0x1A\"\nnum = int(hex_str, 16)\nprint(num)  # Expected output: 26\n\n# Wrapped in function\n    def main():\n        hex_str = \'0x1A\'\nnum = int(hex_str, 16)\nprint(num)  # Expected output: 26\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8709,7 +8709,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 986",
         "description": "Write a Python program to parse a binary number string into an integer.",
         "initialCode": "# Write your solution here",
-        "solution": "binary_str = \"1010\"\nnum = int(binary_str, 2)\nprint(num)  # Expected output: 10",
+        "solution": "binary_str = \"1010\"\nnum = int(binary_str, 2)\nprint(num)  # Expected output: 10\n\n# Wrapped in function\n    def main():\n        binary_str = \'1010\'\nnum = int(binary_str, 2)\nprint(num)  # Expected output: 10\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8718,7 +8718,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 987",
         "description": "Write a Python program to parse a scientific notation string into a float.",
         "initialCode": "# Write your solution here",
-        "solution": "sci_str = \"3.5e4\"\nnum = float(sci_str)\nprint(num)  # Expected output: 35000.0",
+        "solution": "sci_str = \"3.5e4\"\nnum = float(sci_str)\nprint(num)  # Expected output: 35000.0\n\n# Wrapped in function\n    def main():\n        sci_str = \'3.5e4\'\nnum = float(sci_str)\nprint(num)  # Expected output: 35000.0\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8727,7 +8727,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 988",
         "description": "Write a Python program to parse a configuration file (.ini format) and extract a setting.",
         "initialCode": "import configparser\n# Write your solution here",
-        "solution": "import configparser\n\nconfig_str = \"[Settings]\\nusername=admin\\npassword=1234\"\nconfig = configparser.ConfigParser()\nconfig.read_string(config_str)\nusername = config[\"Settings\"][\"username\"]\nprint(username)  # Expected output: admin",
+        "solution": "import configparser\n\nconfig_str = \"[Settings]\\nusername=admin\\npassword=1234\"\nconfig = configparser.ConfigParser()\nconfig.read_string(config_str)\nusername = config[\"Settings\"][\"username\"]\nprint(username)  # Expected output: admin\n\n# Wrapped in function\n    def main():\n        import configparser\n\nconfig_str = \'[Settings]\\nusername=admin\\npassword=1234\'\nconfig = configparser.ConfigParser()\nconfig.read_string(config_str)\nusername = config[\'Settings\'][\'username\']\nprint(username)  # Expected output: admin\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8736,7 +8736,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 989",
         "description": "Write a Python program to parse a markdown string and extract the text from a header.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\nmarkdown = \"# Hello World\\nThis is a markdown file.\"\nheader = re.findall(r\"^# (.+)\", markdown, re.MULTILINE)\nprint(header)  # Expected output: ['Hello World']",
+        "solution": "import re\n\nmarkdown = \"# Hello World\\nThis is a markdown file.\"\nheader = re.findall(r\"^# (.+)\", markdown, re.MULTILINE)\nprint(header)  # Expected output: ['Hello World']\n\n# Wrapped in function\n    def main():\n        import re\n\nmarkdown = \'# Hello World\\nThis is a markdown file.\'\nheader = re.findall(r\'^# (.+)\', markdown, re.MULTILINE)\nprint(header)  # Expected output: ['Hello World']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8745,7 +8745,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 990",
         "description": "Write a Python program to parse a YAML string into a Python dictionary.",
         "initialCode": "import yaml\n# Write your solution here",
-        "solution": "import yaml\n\nyaml_str = \"name: Alice\\nage: 25\\ncity: New York\"\ndata = yaml.safe_load(yaml_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}",
+        "solution": "import yaml\n\nyaml_str = \"name: Alice\\nage: 25\\ncity: New York\"\ndata = yaml.safe_load(yaml_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Wrapped in function\n    def main():\n        import yaml\n\nyaml_str = \'name: Alice\\nage: 25\\ncity: New York\'\ndata = yaml.safe_load(yaml_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8754,7 +8754,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 991",
         "description": "Write a Python program to parse a JSON array into a Python list.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\njson_str = '[1, 2, 3, 4, 5]'\ndata = json.loads(json_str)\nprint(data)  # Expected output: [1, 2, 3, 4, 5]",
+        "solution": "import json\n\njson_str = '[1, 2, 3, 4, 5]'\ndata = json.loads(json_str)\nprint(data)  # Expected output: [1, 2, 3, 4, 5]\n\n# Wrapped in function\n    def main():\n        import json\n\njson_str = '[1, 2, 3, 4, 5]'\ndata = json.loads(json_str)\nprint(data)  # Expected output: [1, 2, 3, 4, 5]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8763,7 +8763,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 992",
         "description": "Write a Python program to parse a currency string and extract the numeric value.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ncurrency_str = \"$123.45\"\nvalue = float(re.sub(r\"[^\\d.]\", \"\", currency_str))\nprint(value)  # Expected output: 123.45",
+        "solution": "import re\n\ncurrency_str = \"$123.45\"\nvalue = float(re.sub(r\"[^\\d.]\", \"\", currency_str))\nprint(value)  # Expected output: 123.45\n\n# Wrapped in function\n    def main():\n        import re\n\ncurrency_str = \'$123.45\'\nvalue = float(re.sub(r\'[^\\d.]\', \'\', currency_str))\nprint(value)  # Expected output: 123.45\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8772,7 +8772,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 993",
         "description": "Write a Python program to parse command-line arguments.",
         "initialCode": "import argparse\n# Write your solution here",
-        "solution": "import argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--name\", type=str, default=\"User\")\nargs = parser.parse_args(args=[\"--name\", \"Alice\"])\nprint(args.name)  # Expected output: Alice",
+        "solution": "import argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--name\", type=str, default=\"User\")\nargs = parser.parse_args(args=[\"--name\", \"Alice\"])\nprint(args.name)  # Expected output: Alice\n\n# Wrapped in function\n    def main():\n        import argparse\n\nparser = argparse.ArgumentParser()\nparser.add_argument(\'--name\', type=str, default=\'User\')\nargs = parser.parse_args(args=[\'--name\', \'Alice\'])\nprint(args.name)  # Expected output: Alice\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8790,7 +8790,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 995",
         "description": "Write a Python program to slice the last 4 characters from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Programming\"\nsliced_text = text[-4:]\nprint(sliced_text)  # Expected output: ming",
+        "solution": "text = \"Programming\"\nsliced_text = text[-4:]\nprint(sliced_text)  # Expected output: ming\n\n# Wrapped in function\n    def main():\n        text = \'Programming\'\nsliced_text = text[-4:]\nprint(sliced_text)  # Expected output: ming\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8799,7 +8799,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 996",
         "description": "Write a Python program to slice all elements from a list except the first two.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [10, 20, 30, 40, 50]\nsliced_list = numbers[2:]\nprint(sliced_list)  # Expected output: [30, 40, 50]",
+        "solution": "numbers = [10, 20, 30, 40, 50]\nsliced_list = numbers[2:]\nprint(sliced_list)  # Expected output: [30, 40, 50]\n\n# Wrapped in function\n    def main():\n        numbers = [10, 20, 30, 40, 50]\nsliced_list = numbers[2:]\nprint(sliced_list)  # Expected output: [30, 40, 50]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8808,7 +8808,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 997",
         "description": "Write a Python program to slice the last 3 elements from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5, 6]\nsliced_list = numbers[-3:]\nprint(sliced_list)  # Expected output: [4, 5, 6]",
+        "solution": "numbers = [1, 2, 3, 4, 5, 6]\nsliced_list = numbers[-3:]\nprint(sliced_list)  # Expected output: [4, 5, 6]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5, 6]\nsliced_list = numbers[-3:]\nprint(sliced_list)  # Expected output: [4, 5, 6]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8817,7 +8817,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 998",
         "description": "Write a Python program to extract only the even-indexed characters from a string using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"PythonSlicing\"\nsliced_text = text[::2]\nprint(sliced_text)  # Expected output: PtoSln",
+        "solution": "text = \"PythonSlicing\"\nsliced_text = text[::2]\nprint(sliced_text)  # Expected output: PtoSln\n\n# Wrapped in function\n    def main():\n        text = \'PythonSlicing\'\nsliced_text = text[::2]\nprint(sliced_text)  # Expected output: PtoSln\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8853,7 +8853,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1002",
         "description": "Write a Python program to extract every third element from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [10, 20, 30, 40, 50, 60, 70, 80]\nsliced_list = numbers[::3]\nprint(sliced_list)  # Expected output: [10, 40, 70]",
+        "solution": "numbers = [10, 20, 30, 40, 50, 60, 70, 80]\nsliced_list = numbers[::3]\nprint(sliced_list)  # Expected output: [10, 40, 70]\n\n# Wrapped in function\n    def main():\n        numbers = [10, 20, 30, 40, 50, 60, 70, 80]\nsliced_list = numbers[::3]\nprint(sliced_list)  # Expected output: [10, 40, 70]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8862,7 +8862,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1003",
         "description": "Write a Python program to extract every second character from a string in reverse order.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"abcdefghij\"\nsliced_text = text[::-2]\nprint(sliced_text)  # Expected output: jhfdb",
+        "solution": "text = \"abcdefghij\"\nsliced_text = text[::-2]\nprint(sliced_text)  # Expected output: jhfdb\n\n# Wrapped in function\n    def main():\n        text = \'abcdefghij\'\nsliced_text = text[::-2]\nprint(sliced_text)  # Expected output: jhfdb\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8871,7 +8871,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1004",
         "description": "Write a Python program to slice the middle three characters from a string with an odd length.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"abcdefg\"\nmiddle_index = len(text) // 2\nsliced_text = text[middle_index - 1: middle_index + 2]\nprint(sliced_text)  # Expected output: cde",
+        "solution": "text = \"abcdefg\"\nmiddle_index = len(text) // 2\nsliced_text = text[middle_index - 1: middle_index + 2]\nprint(sliced_text)  # Expected output: cde\n\n# Wrapped in function\n    def main():\n        text = \'abcdefg\'\nmiddle_index = len(text) // 2\nsliced_text = text[middle_index - 1: middle_index + 2]\nprint(sliced_text)  # Expected output: cde\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8880,7 +8880,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1005",
         "description": "Write a Python program to remove the first and last characters from a string using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Python\"\nsliced_text = text[1:-1]\nprint(sliced_text)  # Expected output: ytho",
+        "solution": "text = \"Python\"\nsliced_text = text[1:-1]\nprint(sliced_text)  # Expected output: ytho\n\n# Wrapped in function\n    def main():\n        text = \'Python\'\nsliced_text = text[1:-1]\nprint(sliced_text)  # Expected output: ytho\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8889,7 +8889,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1006",
         "description": "Write a Python program to get the first half of a string using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"abcdefgh\"\nsliced_text = text[:len(text) // 2]\nprint(sliced_text)  # Expected output: abcd",
+        "solution": "text = \"abcdefgh\"\nsliced_text = text[:len(text) // 2]\nprint(sliced_text)  # Expected output: abcd\n\n# Wrapped in function\n    def main():\n        text = \'abcdefgh\'\nsliced_text = text[:len(text) // 2]\nprint(sliced_text)  # Expected output: abcd\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8898,7 +8898,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1007",
         "description": "Write a Python program to get the second half of a string using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"abcdefgh\"\nsliced_text = text[len(text) // 2:]\nprint(sliced_text)  # Expected output: efgh",
+        "solution": "text = \"abcdefgh\"\nsliced_text = text[len(text) // 2:]\nprint(sliced_text)  # Expected output: efgh\n\n# Wrapped in function\n    def main():\n        text = \'abcdefgh\'\nsliced_text = text[len(text) // 2:]\nprint(sliced_text)  # Expected output: efgh\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8907,7 +8907,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1008",
         "description": "Write a Python program to extract the middle two characters from an even-length string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"abcdef\"\nmiddle_index = len(text) // 2\nsliced_text = text[middle_index - 1: middle_index + 1]\nprint(sliced_text)  # Expected output: cd",
+        "solution": "text = \"abcdef\"\nmiddle_index = len(text) // 2\nsliced_text = text[middle_index - 1: middle_index + 1]\nprint(sliced_text)  # Expected output: cd\n\n# Wrapped in function\n    def main():\n        text = \'abcdef\'\nmiddle_index = len(text) // 2\nsliced_text = text[middle_index - 1: middle_index + 1]\nprint(sliced_text)  # Expected output: cd\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8916,7 +8916,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1009",
         "description": "Write a Python program to remove the first three elements from a list using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5, 6]\nsliced_list = numbers[3:]\nprint(sliced_list)  # Expected output: [4, 5, 6]",
+        "solution": "numbers = [1, 2, 3, 4, 5, 6]\nsliced_list = numbers[3:]\nprint(sliced_list)  # Expected output: [4, 5, 6]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5, 6]\nsliced_list = numbers[3:]\nprint(sliced_list)  # Expected output: [4, 5, 6]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8934,7 +8934,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1011",
         "description": "Write a Python program to slice every alternate element from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5, 6, 7, 8]\nsliced_list = numbers[::2]\nprint(sliced_list)  # Expected output: [1, 3, 5, 7]",
+        "solution": "numbers = [1, 2, 3, 4, 5, 6, 7, 8]\nsliced_list = numbers[::2]\nprint(sliced_list)  # Expected output: [1, 3, 5, 7]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5, 6, 7, 8]\nsliced_list = numbers[::2]\nprint(sliced_list)  # Expected output: [1, 3, 5, 7]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8943,7 +8943,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1012",
         "description": "Write a Python program to extract a substring from index 3 to 7 using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"PythonProgramming\"\nsliced_text = text[3:8]\nprint(sliced_text)  # Expected output: honPr",
+        "solution": "text = \"PythonProgramming\"\nsliced_text = text[3:8]\nprint(sliced_text)  # Expected output: honPr\n\n# Wrapped in function\n    def main():\n        text = \'PythonProgramming\'\nsliced_text = text[3:8]\nprint(sliced_text)  # Expected output: honPr\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8952,7 +8952,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1013",
         "description": "Write a Python program to extract a tuple slice from index 2 to 5.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = (100, 200, 300, 400, 500, 600)\nsliced_tuple = numbers[2:6]\nprint(sliced_tuple)  # Expected output: (300, 400, 500, 600)",
+        "solution": "numbers = (100, 200, 300, 400, 500, 600)\nsliced_tuple = numbers[2:6]\nprint(sliced_tuple)  # Expected output: (300, 400, 500, 600)\n\n# Wrapped in function\n    def main():\n        numbers = (100, 200, 300, 400, 500, 600)\nsliced_tuple = numbers[2:6]\nprint(sliced_tuple)  # Expected output: (300, 400, 500, 600)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8970,7 +8970,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1015",
         "description": "Write a Python program to extract the last three characters of a string using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Programming\"\nsliced_text = text[-3:]\nprint(sliced_text)  # Expected output: ing",
+        "solution": "text = \"Programming\"\nsliced_text = text[-3:]\nprint(sliced_text)  # Expected output: ing\n\n# Wrapped in function\n    def main():\n        text = \'Programming\'\nsliced_text = text[-3:]\nprint(sliced_text)  # Expected output: ing\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8979,7 +8979,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1016",
         "description": "Write a Python program to extract the first five elements of a list using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [10, 20, 30, 40, 50, 60, 70]\nsliced_list = numbers[:5]\nprint(sliced_list)  # Expected output: [10, 20, 30, 40, 50]",
+        "solution": "numbers = [10, 20, 30, 40, 50, 60, 70]\nsliced_list = numbers[:5]\nprint(sliced_list)  # Expected output: [10, 20, 30, 40, 50]\n\n# Wrapped in function\n    def main():\n        numbers = [10, 20, 30, 40, 50, 60, 70]\nsliced_list = numbers[:5]\nprint(sliced_list)  # Expected output: [10, 20, 30, 40, 50]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8988,7 +8988,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1017",
         "description": "Write a Python program to extract all but the last three elements from a tuple using slicing.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = (5, 10, 15, 20, 25, 30, 35)\nsliced_tuple = numbers[:-3]\nprint(sliced_tuple)  # Expected output: (5, 10, 15, 20)",
+        "solution": "numbers = (5, 10, 15, 20, 25, 30, 35)\nsliced_tuple = numbers[:-3]\nprint(sliced_tuple)  # Expected output: (5, 10, 15, 20)\n\n# Wrapped in function\n    def main():\n        numbers = (5, 10, 15, 20, 25, 30, 35)\nsliced_tuple = numbers[:-3]\nprint(sliced_tuple)  # Expected output: (5, 10, 15, 20)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8997,7 +8997,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1018",
         "description": "Write a Python program to extract a string without its first and last two characters.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"HelloWorld\"\nsliced_text = text[2:-2]\nprint(sliced_text)  # Expected output: lloWor",
+        "solution": "text = \"HelloWorld\"\nsliced_text = text[2:-2]\nprint(sliced_text)  # Expected output: lloWor\n\n# Wrapped in function\n    def main():\n        text = \'HelloWorld\'\nsliced_text = text[2:-2]\nprint(sliced_text)  # Expected output: lloWor\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9006,7 +9006,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1019",
         "description": "Write a Python program to create a list of squares of numbers from 1 to 10 using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "squares = [x ** 2 for x in range(1, 11)]\nprint(squares)  # Expected output: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]",
+        "solution": "squares = [x ** 2 for x in range(1, 11)]\nprint(squares)  # Expected output: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]\n\n# Wrapped in function\n    def main():\n        squares = [x ** 2 for x in range(1, 11)]\nprint(squares)  # Expected output: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9015,7 +9015,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1020",
         "description": "Write a Python program to create a list of even numbers from 1 to 20 using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "evens = [x for x in range(1, 21) if x % 2 == 0]\nprint(evens)  # Expected output: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]",
+        "solution": "evens = [x for x in range(1, 21) if x % 2 == 0]\nprint(evens)  # Expected output: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]\n\n# Wrapped in function\n    def main():\n        evens = [x for x in range(1, 21) if x % 2 == 0]\nprint(evens)  # Expected output: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9024,7 +9024,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1021",
         "description": "Write a Python program to create a list of numbers from 1 to 50 that are divisible by 5 using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "div_by_5 = [x for x in range(1, 51) if x % 5 == 0]\nprint(div_by_5)  # Expected output: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]",
+        "solution": "div_by_5 = [x for x in range(1, 51) if x % 5 == 0]\nprint(div_by_5)  # Expected output: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]\n\n# Wrapped in function\n    def main():\n        div_by_5 = [x for x in range(1, 51) if x % 5 == 0]\nprint(div_by_5)  # Expected output: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9033,7 +9033,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1022",
         "description": "Write a Python program to create a list of the first letter of each word in a given sentence using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "sentence = \"Python is a powerful programming language\"\nfirst_letters = [word[0] for word in sentence.split()]\nprint(first_letters)  # Expected output: ['P', 'i', 'a', 'p', 'p', 'l']",
+        "solution": "sentence = \"Python is a powerful programming language\"\nfirst_letters = [word[0] for word in sentence.split()]\nprint(first_letters)  # Expected output: ['P', 'i', 'a', 'p', 'p', 'l']\n\n# Wrapped in function\n    def main():\n        sentence = \'Python is a powerful programming language\'\nfirst_letters = [word[0] for word in sentence.split()]\nprint(first_letters)  # Expected output: ['P', 'i', 'a', 'p', 'p', 'l']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9042,7 +9042,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1023",
         "description": "Write a Python program to create a list of words with more than three letters from a sentence using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "sentence = \"The sun is bright today\"\nlong_words = [word for word in sentence.split() if len(word) > 3]\nprint(long_words)  # Expected output: ['bright', 'today']",
+        "solution": "sentence = \"The sun is bright today\"\nlong_words = [word for word in sentence.split() if len(word) > 3]\nprint(long_words)  # Expected output: ['bright', 'today']\n\n# Wrapped in function\n    def main():\n        sentence = \'The sun is bright today\'\nlong_words = [word for word in sentence.split() if len(word) > 3]\nprint(long_words)  # Expected output: ['bright', 'today']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9051,7 +9051,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1024",
         "description": "Write a Python program to generate a list of tuples containing a number and its square for numbers from 1 to 10. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "squares_tuples = [(x, x**2) for x in range(1, 11)]\nprint(squares_tuples)  # Expected output: [(1, 1), (2, 4), ..., (10, 100)]",
+        "solution": "squares_tuples = [(x, x**2) for x in range(1, 11)]\nprint(squares_tuples)  # Expected output: [(1, 1), (2, 4), ..., (10, 100)]\n\n# Wrapped in function\n    def main():\n        squares_tuples = [(x, x**2) for x in range(1, 11)]\nprint(squares_tuples)  # Expected output: [(1, 1), (2, 4), ..., (10, 100)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9060,7 +9060,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1025",
         "description": "Write a Python program to create a new list where every element from an existing list is doubled. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [3, 5, 7, 9]\ndoubled = [x * 2 for x in numbers]\nprint(doubled)  # Expected output: [6, 10, 14, 18]",
+        "solution": "numbers = [3, 5, 7, 9]\ndoubled = [x * 2 for x in numbers]\nprint(doubled)  # Expected output: [6, 10, 14, 18]\n\n# Wrapped in function\n    def main():\n        numbers = [3, 5, 7, 9]\ndoubled = [x * 2 for x in numbers]\nprint(doubled)  # Expected output: [6, 10, 14, 18]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9069,7 +9069,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1026",
         "description": "Write a Python program to create a list of numbers from 1 to 100 that are either divisible by 3 or 7. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "div_by_3_or_7 = [x for x in range(1, 101) if x % 3 == 0 or x % 7 == 0]\nprint(div_by_3_or_7)",
+        "solution": "div_by_3_or_7 = [x for x in range(1, 101) if x % 3 == 0 or x % 7 == 0]\nprint(div_by_3_or_7)\n\n# Wrapped in function\n    def main():\n        div_by_3_or_7 = [x for x in range(1, 101) if x % 3 == 0 or x % 7 == 0]\nprint(div_by_3_or_7)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9078,7 +9078,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1027",
         "description": "Write a Python program to convert a list of strings to uppercase using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "words = [\"hello\", \"world\", \"python\"]\nupper_words = [word.upper() for word in words]\nprint(upper_words)  # Expected output: ['HELLO', 'WORLD', 'PYTHON']",
+        "solution": "words = [\"hello\", \"world\", \"python\"]\nupper_words = [word.upper() for word in words]\nprint(upper_words)  # Expected output: ['HELLO', 'WORLD', 'PYTHON']\n\n# Wrapped in function\n    def main():\n        words = [\'hello\', \'world\', \'python\']\nupper_words = [word.upper() for word in words]\nprint(upper_words)  # Expected output: ['HELLO', 'WORLD', 'PYTHON']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9087,7 +9087,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1028",
         "description": "Write a Python program to flatten a nested list using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "nested_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nflattened = [num for sublist in nested_list for num in sublist]\nprint(flattened)  # Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        "solution": "nested_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nflattened = [num for sublist in nested_list for num in sublist]\nprint(flattened)  # Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n# Wrapped in function\n    def main():\n        nested_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nflattened = [num for sublist in nested_list for num in sublist]\nprint(flattened)  # Expected output: [1, 2, 3, 4, 5, 6, 7, 8, 9]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9096,7 +9096,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1029",
         "description": "Write a Python program to create a list of vowels from a given string using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"List Comprehension is Powerful\"\nvowels = [char for char in text if char.lower() in \"aeiou\"]\nprint(vowels)  # Expected output: ['i', 'o', 'e', 'e', 'i', 'o', 'i', 'o', 'e']",
+        "solution": "text = \"List Comprehension is Powerful\"\nvowels = [char for char in text if char.lower() in \"aeiou\"]\nprint(vowels)  # Expected output: ['i', 'o', 'e', 'e', 'i', 'o', 'i', 'o', 'e']\n\n# Wrapped in function\n    def main():\n        text = \'List Comprehension is Powerful\'\nvowels = [char for char in text if char.lower() in \'aeiou\']\nprint(vowels)  # Expected output: ['i', 'o', 'e', 'e', 'i', 'o', 'i', 'o', 'e']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9114,7 +9114,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1031",
         "description": "Write a Python program to generate a list of first 10 Fibonacci numbers using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "fib = [0, 1]\n[fib.append(fib[-1] + fib[-2]) for _ in range(8)]\nprint(fib)  # Expected output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]",
+        "solution": "fib = [0, 1]\n[fib.append(fib[-1] + fib[-2]) for _ in range(8)]\nprint(fib)  # Expected output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n\n# Wrapped in function\n    def main():\n        fib = [0, 1]\n[fib.append(fib[-1] + fib[-2]) for _ in range(8)]\nprint(fib)  # Expected output: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9123,7 +9123,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1032",
         "description": "Write a Python program to create a list of prime numbers up to 50 using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "primes = [x for x in range(2, 51) if all(x % y != 0 for y in range(2, int(x**0.5) + 1))]\nprint(primes)",
+        "solution": "primes = [x for x in range(2, 51) if all(x % y != 0 for y in range(2, int(x**0.5) + 1))]\nprint(primes)\n\n# Wrapped in function\n    def main():\n        primes = [x for x in range(2, 51) if all(x % y != 0 for y in range(2, int(x**0.5) + 1))]\nprint(primes)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9132,7 +9132,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1033",
         "description": "Write a Python program to generate a list of all words in a sentence that end with a vowel. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "sentence = \"The apple is on the tree\"\nvowel_ending_words = [word for word in sentence.split() if word[-1].lower() in \"aeiou\"]\nprint(vowel_ending_words)  # Expected output: ['The', 'apple', 'is', 'tree']",
+        "solution": "sentence = \"The apple is on the tree\"\nvowel_ending_words = [word for word in sentence.split() if word[-1].lower() in \"aeiou\"]\nprint(vowel_ending_words)  # Expected output: ['The', 'apple', 'is', 'tree']\n\n# Wrapped in function\n    def main():\n        sentence = \'The apple is on the tree\'\nvowel_ending_words = [word for word in sentence.split() if word[-1].lower() in \'aeiou\']\nprint(vowel_ending_words)  # Expected output: ['The', 'apple', 'is', 'tree']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9141,7 +9141,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1034",
         "description": "Write a Python program to create a list of lowercase characters from a given string. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Python List Comprehension\"\nlower_chars = [char for char in text if char.islower()]\nprint(lower_chars)  # Expected output: ['y', 't', 'h', 'o', 'n', 'i', 's', 't', 'o', 'm', 'p', 'r', 'e', 'h', 'e', 'n', 's', 'i', 'o', 'n']",
+        "solution": "text = \"Python List Comprehension\"\nlower_chars = [char for char in text if char.islower()]\nprint(lower_chars)  # Expected output: ['y', 't', 'h', 'o', 'n', 'i', 's', 't', 'o', 'm', 'p', 'r', 'e', 'h', 'e', 'n', 's', 'i', 'o', 'n']\n\n# Wrapped in function\n    def main():\n        text = \'Python List Comprehension\'\nlower_chars = [char for char in text if char.islower()]\nprint(lower_chars)  # Expected output: ['y', 't', 'h', 'o', 'n', 'i', 's', 't', 'o', 'm', 'p', 'r', 'e', 'h', 'e', 'n', 's', 'i', 'o', 'n']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9150,7 +9150,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1035",
         "description": "Write a Python program to create a list of words with their lengths from a given sentence. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "sentence = \"List comprehension makes Python concise\"\nword_lengths = [(word, len(word)) for word in sentence.split()]\nprint(word_lengths)  # Expected output: [('List', 4), ('comprehension', 13), ('makes', 5), ('Python', 6), ('concise', 7)]",
+        "solution": "sentence = \"List comprehension makes Python concise\"\nword_lengths = [(word, len(word)) for word in sentence.split()]\nprint(word_lengths)  # Expected output: [('List', 4), ('comprehension', 13), ('makes', 5), ('Python', 6), ('concise', 7)]\n\n# Wrapped in function\n    def main():\n        sentence = \'List comprehension makes Python concise\'\nword_lengths = [(word, len(word)) for word in sentence.split()]\nprint(word_lengths)  # Expected output: [('List', 4), ('comprehension', 13), ('makes', 5), ('Python', 6), ('concise', 7)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9159,7 +9159,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1036",
         "description": "Write a Python program to remove duplicates from a list using list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 2, 3, 4, 4, 5]\nunique_numbers = list(dict.fromkeys(numbers))\nprint(unique_numbers)  # Expected output: [1, 2, 3, 4, 5]",
+        "solution": "numbers = [1, 2, 2, 3, 4, 4, 5]\nunique_numbers = list(dict.fromkeys(numbers))\nprint(unique_numbers)  # Expected output: [1, 2, 3, 4, 5]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 2, 3, 4, 4, 5]\nunique_numbers = list(dict.fromkeys(numbers))\nprint(unique_numbers)  # Expected output: [1, 2, 3, 4, 5]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9168,7 +9168,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1037",
         "description": "Write a Python program to filter words containing the letter 'p' from a given list. List comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "words = [\"apple\", \"banana\", \"grape\", \"cherry\", \"peach\"]\nfiltered_words = [word for word in words if \"p\" in word]\nprint(filtered_words)  # Expected output: ['apple', 'grape', 'peach']",
+        "solution": "words = [\"apple\", \"banana\", \"grape\", \"cherry\", \"peach\"]\nfiltered_words = [word for word in words if \"p\" in word]\nprint(filtered_words)  # Expected output: ['apple', 'grape', 'peach']\n\n# Wrapped in function\n    def main():\n        words = [\'apple\', \'banana\', \'grape\', \'cherry\', \'peach\']\nfiltered_words = [word for word in words if \'p\' in word]\nprint(filtered_words)  # Expected output: ['apple', 'grape', 'peach']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9357,7 +9357,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1058",
         "description": "Write a Python program to check if a number is even using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "is_even = lambda x: x % 2 == 0\n\nresult = is_even(4)\nprint(result)",
+        "solution": "is_even = lambda x: x % 2 == 0\n\nresult = is_even(4)\nprint(result)\n\n# Wrapped in function\n    def main():\n        is_even = lambda x: x % 2 == 0\n\nresult = is_even(4)\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9375,7 +9375,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1060",
         "description": "Write a Python program to check if a string contains any digits using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "contains_digits = lambda s: any(map(str.isdigit, s))\n\nresult = contains_digits(\"hello123\")\nprint(result)",
+        "solution": "contains_digits = lambda s: any(map(str.isdigit, s))\n\nresult = contains_digits(\"hello123\")\nprint(result)\n\n# Wrapped in function\n    def main():\n        contains_digits = lambda s: any(map(str.isdigit, s))\n\nresult = contains_digits(\'hello123\')\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9384,7 +9384,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1061",
         "description": "Write a Python program to sort a list of tuples based on the first element in descending order using a lambda expression.",
         "initialCode": "def sort_by_first_element_desc(tuples):\n    pass",
-        "solution": "def sort_by_first_element_desc(tuples):\n    return sorted(tuples, key=lambda x: x[0], reverse=True)\n\nresult = sort_by_first_element_desc([(3, \"apple\"), (1, \"banana\"), (2, \"cherry\")])\nprint(result)\n\n# Using named function\n    def key_func(x):\n        return x[0], reverse=True\n    return sorted(..., key=key_func)",
+        "solution": "def sort_by_first_element_desc(tuples):\n    return sorted(tuples, key=lambda x: x[0], reverse=True)\n\nresult = sort_by_first_element_desc([(3, \"apple\"), (1, \"banana\"), (2, \"cherry\")])\nprint(result)\n\n# Using named function\n    def key_func(x):\n        return x[0], reverse=True\n    return sorted(..., key=key_func)\n\n# Using lambda key\n    return sorted(..., key=lambda x: x[0], reverse=True)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9411,7 +9411,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1064",
         "description": "Write a Python program to check if a number is divisible by 3 using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "is_divisible_by_3 = lambda x: x % 3 == 0\n\nresult = is_divisible_by_3(9)\nprint(result)",
+        "solution": "is_divisible_by_3 = lambda x: x % 3 == 0\n\nresult = is_divisible_by_3(9)\nprint(result)\n\n# Wrapped in function\n    def main():\n        is_divisible_by_3 = lambda x: x % 3 == 0\n\nresult = is_divisible_by_3(9)\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9420,7 +9420,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1065",
         "description": "Write a Python program to find the second largest number in a list using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "second_largest = lambda numbers: sorted(set(numbers))[-2]\n\nresult = second_largest([10, 20, 30, 40, 50])\nprint(result)",
+        "solution": "second_largest = lambda numbers: sorted(set(numbers))[-2]\n\nresult = second_largest([10, 20, 30, 40, 50])\nprint(result)\n\n# Wrapped in function\n    def main():\n        second_largest = lambda numbers: sorted(set(numbers))[-2]\n\nresult = second_largest([10, 20, 30, 40, 50])\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9438,7 +9438,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1067",
         "description": "Write a Python program to sort a list of words by their lengths using the `sorted()` function with a lambda expression.",
         "initialCode": "def sort_by_length(words):\n    pass",
-        "solution": "def sort_by_length(words):\n    return sorted(words, key=lambda word: len(word))\n\nresult = sort_by_length([\"apple\", \"banana\", \"kiwi\", \"cherry\"])\nprint(result)\n\n# Using named function\n    def key_func(word):\n        return len(word\n    return sorted(..., key=key_func)",
+        "solution": "def sort_by_length(words):\n    return sorted(words, key=lambda word: len(word))\n\nresult = sort_by_length([\"apple\", \"banana\", \"kiwi\", \"cherry\"])\nprint(result)\n\n# Using named function\n    def key_func(word):\n        return len(word\n    return sorted(..., key=key_func)\n\n# Using lambda key\n    return sorted(..., key=lambda word: len(word)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9465,7 +9465,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1070",
         "description": "Write a Python program to check if a string ends with a vowel using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "ends_with_vowel = lambda s: s[-1].lower() in 'aeiou'\n\nresult = ends_with_vowel(\"hello\")\nprint(result)",
+        "solution": "ends_with_vowel = lambda s: s[-1].lower() in 'aeiou'\n\nresult = ends_with_vowel(\"hello\")\nprint(result)\n\n# Wrapped in function\n    def main():\n        ends_with_vowel = lambda s: s[-1].lower() in 'aeiou'\n\nresult = ends_with_vowel(\'hello\')\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9474,7 +9474,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1071",
         "description": "Write a Python program to find the smallest number in a list using the `min()` function with a lambda expression.",
         "initialCode": "# Write your solution here",
-        "solution": "# Define a list of numbers\nnumbers = [12, 45, 7, 23, 56, 89, 34]\n\n# Use the min() function with a lambda expression to find the smallest number\nsmallest_number = min(numbers, key=lambda x: x)\n\n# Print the result\nprint(\"The smallest number in the list is:\", smallest_number)",
+        "solution": "# Define a list of numbers\nnumbers = [12, 45, 7, 23, 56, 89, 34]\n\n# Use the min() function with a lambda expression to find the smallest number\nsmallest_number = min(numbers, key=lambda x: x)\n\n# Print the result\nprint(\"The smallest number in the list is:\", smallest_number)\n\n# Wrapped in function\n    def main():\n        # Define a list of numbers\nnumbers = [12, 45, 7, 23, 56, 89, 34]\n\n# Use the min() function with a lambda expression to find the smallest number\nsmallest_number = min(numbers, key=lambda x: x)\n\n# Print the result\nprint(\'The smallest number in the list is:\', smallest_number)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9483,7 +9483,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1072",
         "description": "Write a Python program to check if a string contains only alphabetic characters using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "is_alpha = lambda s: s.isalpha()\n\nresult = is_alpha(\"hello\")\nprint(result)",
+        "solution": "is_alpha = lambda s: s.isalpha()\n\nresult = is_alpha(\"hello\")\nprint(result)\n\n# Wrapped in function\n    def main():\n        is_alpha = lambda s: s.isalpha()\n\nresult = is_alpha(\'hello\')\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9528,7 +9528,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1077",
         "description": "Write a Python program to find the product of all odd numbers in a list using a lambda function.",
         "initialCode": "from functools import reduce\n# Write your solution here",
-        "solution": "from functools import reduce\n\nproduct_of_odds = lambda numbers: reduce(lambda x, y: x * y, filter(lambda x: x % 2 != 0, numbers))\n\nresult = product_of_odds([1, 2, 3, 4, 5])\nprint(result)",
+        "solution": "from functools import reduce\n\nproduct_of_odds = lambda numbers: reduce(lambda x, y: x * y, filter(lambda x: x % 2 != 0, numbers))\n\nresult = product_of_odds([1, 2, 3, 4, 5])\nprint(result)\n\n# Wrapped in function\n    def main():\n        from functools import reduce\n\nproduct_of_odds = lambda numbers: reduce(lambda x, y: x * y, filter(lambda x: x % 2 != 0, numbers))\n\nresult = product_of_odds([1, 2, 3, 4, 5])\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9537,7 +9537,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1078",
         "description": "Write a Python program to check if a number is prime using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "is_prime = lambda n: all(n % i != 0 for i in range(2, int(n ** 0.5) + 1)) if n > 1 else False\n\nresult = is_prime(7)\nprint(result)",
+        "solution": "is_prime = lambda n: all(n % i != 0 for i in range(2, int(n ** 0.5) + 1)) if n > 1 else False\n\nresult = is_prime(7)\nprint(result)\n\n# Wrapped in function\n    def main():\n        is_prime = lambda n: all(n % i != 0 for i in range(2, int(n ** 0.5) + 1)) if n > 1 else False\n\nresult = is_prime(7)\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9555,7 +9555,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1080",
         "description": "Write a Python program to check if a string contains any uppercase letters using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "contains_uppercase = lambda s: any(map(str.isupper, s))\n\nresult = contains_uppercase(\"Hello\")\nprint(result)",
+        "solution": "contains_uppercase = lambda s: any(map(str.isupper, s))\n\nresult = contains_uppercase(\"Hello\")\nprint(result)\n\n# Wrapped in function\n    def main():\n        contains_uppercase = lambda s: any(map(str.isupper, s))\n\nresult = contains_uppercase(\'Hello\')\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9564,7 +9564,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1081",
         "description": "Write a Python program to find the average of odd numbers in a list using a lambda function.",
         "initialCode": "def average_of_odds(lst):\n    pass\n\ndef average_of_odds(numbers):\n    pass",
-        "solution": "def average_of_odds(lst):\n    odd = list(filter(lambda num: num % 2 !=0, lst))\n    total = sum(odd)\n    count = len(odd)\n    average = total / count\n    return average\nlst = [1,2,3,4,5,6,7,8,9]\n\naverage_of_odds(lst)\n\ndef average_of_odds(numbers):\n    odd_numbers = list(filter(lambda x: x % 2 != 0, numbers))\n    return sum(odd_numbers) / len(odd_numbers) if odd_numbers else 0\n\nresult = average_of_odds([1, 2, 3, 4, 5])\nprint(result)\n\n# Using for loop\n    result = 0\n    for x in odd_numbers:\n        result += x\n    return result\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, x: acc + x, odd_numbers, 0)",
+        "solution": "def average_of_odds(lst):\n    odd = list(filter(lambda num: num % 2 !=0, lst))\n    total = sum(odd)\n    count = len(odd)\n    average = total / count\n    return average\nlst = [1,2,3,4,5,6,7,8,9]\n\naverage_of_odds(lst)\n\ndef average_of_odds(numbers):\n    odd_numbers = list(filter(lambda x: x % 2 != 0, numbers))\n    return sum(odd_numbers) / len(odd_numbers) if odd_numbers else 0\n\nresult = average_of_odds([1, 2, 3, 4, 5])\nprint(result)\n\n# Using for loop\n    result = 0\n    for x in odd_numbers:\n        result += x\n    return result\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, x: acc + x, odd_numbers, 0)\n\n# Using built-in sum()\n    return sum(1 for x in odd_numbers)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, x: acc + 1, odd_numbers, 0)\n\n# Using for loop\n    result = 0\n    for x in odd_numbers:\n        result += x\n    return result",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9582,7 +9582,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1083",
         "description": "Write a Python program to check if a list contains any negative numbers using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "contains_negative = lambda numbers: any(map(lambda x: x < 0, numbers))\n\nresult = contains_negative([1, -2, 3, 4])\nprint(result)",
+        "solution": "contains_negative = lambda numbers: any(map(lambda x: x < 0, numbers))\n\nresult = contains_negative([1, -2, 3, 4])\nprint(result)\n\n# Wrapped in function\n    def main():\n        contains_negative = lambda numbers: any(map(lambda x: x < 0, numbers))\n\nresult = contains_negative([1, -2, 3, 4])\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9618,7 +9618,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1087",
         "description": "Write a Python program to check if a number is a perfect square using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "is_perfect_square = lambda x: int(x**0.5) ** 2 == x\n\nresult = is_perfect_square(16)\nprint(result)",
+        "solution": "is_perfect_square = lambda x: int(x**0.5) ** 2 == x\n\nresult = is_perfect_square(16)\nprint(result)\n\n# Wrapped in function\n    def main():\n        is_perfect_square = lambda x: int(x**0.5) ** 2 == x\n\nresult = is_perfect_square(16)\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9645,7 +9645,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1090",
         "description": "Write a Python program to check if all elements in a list are positive using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "all_positive = lambda numbers: all(map(lambda x: x > 0, numbers))\n\nresult = all_positive([1, 2, 3, 4])\nprint(result)",
+        "solution": "all_positive = lambda numbers: all(map(lambda x: x > 0, numbers))\n\nresult = all_positive([1, 2, 3, 4])\nprint(result)\n\n# Wrapped in function\n    def main():\n        all_positive = lambda numbers: all(map(lambda x: x > 0, numbers))\n\nresult = all_positive([1, 2, 3, 4])\nprint(result)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9726,7 +9726,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1099",
         "description": "Write a Python program to create a generator that yields the factorial of each number from 1 to n.",
         "initialCode": "def factorial_generator(n):\n    pass",
-        "solution": "def factorial_generator(n):\n    def factorial(x):\n        result = 1\n        for i in range(1, x+1):\n            result *= i\n        return result\n    for i in range(1, n+1):\n        yield factorial(i)\n\nresult = list(factorial_generator(5))\nprint(result)",
+        "solution": "def factorial_generator(n):\n    def factorial(x):\n        result = 1\n        for i in range(1, x+1):\n            result *= i\n        return result\n    for i in range(1, n+1):\n        yield factorial(i)\n\nresult = list(factorial_generator(5))\nprint(result)\n\n# Using lambda\n    return lambda x: result",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9870,7 +9870,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1115",
         "description": "Write a Python program to create a generator that yields elements from a list that are greater than the previous element.",
         "initialCode": "def greater_than_previous_generator(lst):\n    pass",
-        "solution": "def greater_than_previous_generator(lst):\n    for i in range(1, len(lst)):\n        if lst[i] > lst[i-1]:\n            yield lst[i]\n\nresult = list(greater_than_previous_generator([1, 2, 1, 4, 3]))\nprint(result)",
+        "solution": "def greater_than_previous_generator(lst):\n    for i in range(1, len(lst)):\n        if lst[i] > lst[i-1]:\n            yield lst[i]\n\nresult = list(greater_than_previous_generator([1, 2, 1, 4, 3]))\nprint(result)\n\n# Using max() with key\n    return max(range, key=lambda i: lst[i])\n\n# Using sorted()\n    return sorted(range, key=lambda i: lst[i])[-1]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9996,7 +9996,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1129",
         "description": "Write a Python program to count the number of vowels in a given string. Control flow.",
         "initialCode": "def count_vowels(s):\n    pass",
-        "solution": "def count_vowels(s):\n    vowels = \"aeiou\"\n    count = 0\n    for char in s:\n        if char.lower() in vowels:\n            count += 1\n    return count\n\nresult = count_vowels(\"Hello World\")\nprint(result)",
+        "solution": "def count_vowels(s):\n    vowels = \"aeiou\"\n    count = 0\n    for char in s:\n        if char.lower() in vowels:\n            count += 1\n    return count\n\nresult = count_vowels(\"Hello World\")\nprint(result)\n\n# Using built-in sum()\n    return sum(1 for char in s)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, char: acc + 1, s, 0)\n\n# Using for loop\n    count = 0\n    for char in s:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -10023,7 +10023,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1132",
         "description": "Write a Python program to print all the prime numbers less than or equal to n. Control flow.",
         "initialCode": "def prime_numbers_up_to_n(n):\n    pass",
-        "solution": "def prime_numbers_up_to_n(n):\n    primes = []\n    for num in range(2, n+1):\n        if all(num % i != 0 for i in range(2, int(num**0.5) + 1)):\n            primes.append(num)\n    return primes\n\nresult = prime_numbers_up_to_n(20)\nprint(result)",
+        "solution": "def prime_numbers_up_to_n(n):\n    primes = []\n    for num in range(2, n+1):\n        if all(num % i != 0 for i in range(2, int(num**0.5) + 1)):\n            primes.append(num)\n    return primes\n\nresult = prime_numbers_up_to_n(20)\nprint(result)\n\n# Using list comprehension\n    return [num for num in range if all(num % i != 0 for i in range(2, int(num**0.5) + 1))]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11175,7 +11175,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1260",
         "description": "Write a Python program to check if a string is not empty and its length is an even number using the `and` operator.",
         "initialCode": "def check_string_length():\n    pass",
-        "solution": "def check_string_length():\n    text = \"hello\"\n    return len(text) > 0 and len(text) % 2 == 0\n\nresult = check_string_length()\nprint(f\"String is not empty and its length is even: {result}\")\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in text)",
+        "solution": "def check_string_length():\n    text = \"hello\"\n    return len(text) > 0 and len(text) % 2 == 0\n\nresult = check_string_length()\nprint(f\"String is not empty and its length is even: {result}\")\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in text)\n\n# Using built-in sum()\n    return sum(1 for _ in text)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, text, 0)\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11247,7 +11247,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1268",
         "description": "Write a Python program to check if a list contains exactly 5 elements and the last element is greater than 10 using the `and` operator.",
         "initialCode": "def check_list_length_and_last_element():\n    pass",
-        "solution": "def check_list_length_and_last_element():\n    lst = [1, 2, 3, 4, 12]\n    return len(lst) == 5 and lst[-1] > 10\n\nresult = check_list_length_and_last_element()\nprint(f\"List contains exactly 5 elements and last element is greater than 10: {result}\")\n\n# Using for loop\n    count = 0\n    for _ in lst:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in lst)",
+        "solution": "def check_list_length_and_last_element():\n    lst = [1, 2, 3, 4, 12]\n    return len(lst) == 5 and lst[-1] > 10\n\nresult = check_list_length_and_last_element()\nprint(f\"List contains exactly 5 elements and last element is greater than 10: {result}\")\n\n# Using for loop\n    count = 0\n    for _ in lst:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in lst)\n\n# Using built-in sum()\n    return sum(1 for _ in lst)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, lst, 0)\n\n# Using for loop\n    count = 0\n    for _ in lst:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11382,7 +11382,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1283",
         "description": "Write a Python program to check if a string is empty or contains a number using the `or` operator.",
         "initialCode": "def check_string_empty_or_number():\n    pass",
-        "solution": "def check_string_empty_or_number():\n    text = \"hello123\"\n    return len(text) == 0 or any(char.isdigit() for char in text)\n\nresult = check_string_empty_or_number()\nprint(f\"String is empty or contains a number: {result}\")\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in text)",
+        "solution": "def check_string_empty_or_number():\n    text = \"hello123\"\n    return len(text) == 0 or any(char.isdigit() for char in text)\n\nresult = check_string_empty_or_number()\nprint(f\"String is empty or contains a number: {result}\")\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in text)\n\n# Using built-in sum()\n    return sum(1 for _ in text)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, text, 0)\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11490,7 +11490,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1295",
         "description": "Write a Python program to check if a string is not empty or contains the character 'a' using the `or` operator.",
         "initialCode": "def check_string():\n    pass",
-        "solution": "def check_string():\n    text = \"apple\"\n    return len(text) > 0 or \"a\" in text\n\nresult = check_string()\nprint(f\"String is not empty or contains 'a': {result}\")\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in text)",
+        "solution": "def check_string():\n    text = \"apple\"\n    return len(text) > 0 or \"a\" in text\n\nresult = check_string()\nprint(f\"String is not empty or contains 'a': {result}\")\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using sum()\n    return sum(1 for _ in text)\n\n# Using built-in sum()\n    return sum(1 for _ in text)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, _: acc + 1, text, 0)\n\n# Using for loop\n    count = 0\n    for _ in text:\n        count += 1\n    return count",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11499,7 +11499,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1296",
         "description": "Write a Python program to extract all words starting with a capital letter.",
         "initialCode": "# Write your solution here",
-        "solution": "s = \"Hello World, this is Python.\"\nwords = re.findall(r\"\\b[A-Z][a-z]*\\b\", s)\nprint(words)  # Expected output: ['Hello', 'World', 'Python']",
+        "solution": "s = \"Hello World, this is Python.\"\nwords = re.findall(r\"\\b[A-Z][a-z]*\\b\", s)\nprint(words)  # Expected output: ['Hello', 'World', 'Python']\n\n# Wrapped in function\n    def main():\n        s = \'Hello World, this is Python.\'\nwords = re.findall(r\'\\b[A-Z][a-z]*\\b\', s)\nprint(words)  # Expected output: ['Hello', 'World', 'Python']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11517,7 +11517,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1298",
         "description": "Write a Python program to check if a password contains at least one digit, one uppercase, and one lowercase letter.",
         "initialCode": "# Write your solution here",
-        "solution": "password = \"Password123\"\nmatch = bool(re.search(r\"[A-Z]\", password) and re.search(r\"[a-z]\", password) and re.search(r\"\\d\", password))\nprint(match)  # Expected output: True",
+        "solution": "password = \"Password123\"\nmatch = bool(re.search(r\"[A-Z]\", password) and re.search(r\"[a-z]\", password) and re.search(r\"\\d\", password))\nprint(match)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        password = \'Password123\'\nmatch = bool(re.search(r\'[A-Z]\', password) and re.search(r\'[a-z]\', password) and re.search(r\'\\d\', password))\nprint(match)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11526,7 +11526,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1299",
         "description": "Write a Python program to find all email addresses in a text.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Send to alice@example.com and bob99@domain.co.uk\"\nemails = re.findall(r\"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\", text)\nprint(emails)  # Expected output: ['alice@example.com', 'bob99@domain.co.uk']",
+        "solution": "text = \"Send to alice@example.com and bob99@domain.co.uk\"\nemails = re.findall(r\"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\", text)\nprint(emails)  # Expected output: ['alice@example.com', 'bob99@domain.co.uk']\n\n# Wrapped in function\n    def main():\n        text = \'Send to alice@example.com and bob99@domain.co.uk\'\nemails = re.findall(r\'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\', text)\nprint(emails)  # Expected output: ['alice@example.com', 'bob99@domain.co.uk']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11535,7 +11535,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1300",
         "description": "Write a Python program to extract hashtags from a tweet.",
         "initialCode": "# Write your solution here",
-        "solution": "tweet = \"Loving the #Python #coding journey!\"\nhashtags = re.findall(r\"#\\w+\", tweet)\nprint(hashtags)  # Expected output: ['#Python', '#coding']",
+        "solution": "tweet = \"Loving the #Python #coding journey!\"\nhashtags = re.findall(r\"#\\w+\", tweet)\nprint(hashtags)  # Expected output: ['#Python', '#coding']\n\n# Wrapped in function\n    def main():\n        tweet = \'Loving the #Python #coding journey!\'\nhashtags = re.findall(r\'#\\w+\', tweet)\nprint(hashtags)  # Expected output: ['#Python', '#coding']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11544,7 +11544,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1301",
         "description": "Write a Python program to extract domain names from URLs.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Visit us at https://example.com or http://test.org\"\ndomains = re.findall(r\"https?://([\\w.-]+)\", text)\nprint(domains)  # Expected output: ['example.com', 'test.org']",
+        "solution": "text = \"Visit us at https://example.com or http://test.org\"\ndomains = re.findall(r\"https?://([\\w.-]+)\", text)\nprint(domains)  # Expected output: ['example.com', 'test.org']\n\n# Wrapped in function\n    def main():\n        text = \'Visit us at https://example.com or http://test.org\'\ndomains = re.findall(r\'https?://([\\w.-]+)\', text)\nprint(domains)  # Expected output: ['example.com', 'test.org']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11553,7 +11553,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1302",
         "description": "Write a Python program to validate if a string is a valid IPv4 address.",
         "initialCode": "# Write your solution here",
-        "solution": "ip = \"192.168.1.1\"\npattern = r\"^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$\"\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True",
+        "solution": "ip = \"192.168.1.1\"\npattern = r\"^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$\"\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        ip = \'192.168.1.1\'\npattern = r\'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$\'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11562,7 +11562,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1303",
         "description": "Write a Python program to remove all punctuation from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Hello, world! Python is great.\"\nclean = re.sub(r\"[^\\w\\s]\", \"\", text)\nprint(clean)  # Expected output: Hello world Python is great",
+        "solution": "text = \"Hello, world! Python is great.\"\nclean = re.sub(r\"[^\\w\\s]\", \"\", text)\nprint(clean)  # Expected output: Hello world Python is great\n\n# Wrapped in function\n    def main():\n        text = \'Hello, world! Python is great.\'\nclean = re.sub(r\'[^\\w\\s]\', \'\', text)\nprint(clean)  # Expected output: Hello world Python is great\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11571,7 +11571,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1304",
         "description": "Write a Python program to match a string that starts with a vowel.",
         "initialCode": "# Write your solution here",
-        "solution": "s = \"apple\"\nmatch = bool(re.match(r\"^[aeiouAEIOU]\", s))\nprint(match)  # Expected output: True",
+        "solution": "s = \"apple\"\nmatch = bool(re.match(r\"^[aeiouAEIOU]\", s))\nprint(match)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        s = \'apple\'\nmatch = bool(re.match(r\'^[aeiouAEIOU]\', s))\nprint(match)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11580,7 +11580,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1305",
         "description": "Write a Python program to extract all valid dates in the format YYYY-MM-DD.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Events: 2024-06-01, 2025-07-04, 99-01-01\"\ndates = re.findall(r\"\\b\\d{4}-\\d{2}-\\d{2}\\b\", text)\nprint(dates)  # Expected output: ['2024-06-01', '2025-07-04']",
+        "solution": "text = \"Events: 2024-06-01, 2025-07-04, 99-01-01\"\ndates = re.findall(r\"\\b\\d{4}-\\d{2}-\\d{2}\\b\", text)\nprint(dates)  # Expected output: ['2024-06-01', '2025-07-04']\n\n# Wrapped in function\n    def main():\n        text = \'Events: 2024-06-01, 2025-07-04, 99-01-01\'\ndates = re.findall(r\'\\b\\d{4}-\\d{2}-\\d{2}\\b\', text)\nprint(dates)  # Expected output: ['2024-06-01', '2025-07-04']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11589,7 +11589,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1306",
         "description": "Write a Python program to validate a hexadecimal color code.",
         "initialCode": "# Write your solution here",
-        "solution": "color = \"#1a2b3c\"\nmatch = bool(re.fullmatch(r\"#([A-Fa-f0-9]{6})\", color))\nprint(match)  # Expected output: True",
+        "solution": "color = \"#1a2b3c\"\nmatch = bool(re.fullmatch(r\"#([A-Fa-f0-9]{6})\", color))\nprint(match)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        color = \'#1a2b3c\'\nmatch = bool(re.fullmatch(r\'#([A-Fa-f0-9]{6})\', color))\nprint(match)  # Expected output: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11598,7 +11598,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1307",
         "description": "Write a Python program to extract all words that end with 'ing'.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"I am running and jumping while singing.\"\nwords = re.findall(r\"\\b\\w+ing\\b\", text)\nprint(words)  # Expected output: ['running', 'jumping', 'singing']",
+        "solution": "text = \"I am running and jumping while singing.\"\nwords = re.findall(r\"\\b\\w+ing\\b\", text)\nprint(words)  # Expected output: ['running', 'jumping', 'singing']\n\n# Wrapped in function\n    def main():\n        text = \'I am running and jumping while singing.\'\nwords = re.findall(r\'\\b\\w+ing\\b\', text)\nprint(words)  # Expected output: ['running', 'jumping', 'singing']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11607,7 +11607,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1308",
         "description": "Write a Python program to extract the file extension from a filename.",
         "initialCode": "# Write your solution here",
-        "solution": "filename = \"document.pdf\"\next = re.search(r\"\\.(\\w+)$\", filename).group(1)\nprint(ext)  # Expected output: pdf",
+        "solution": "filename = \"document.pdf\"\next = re.search(r\"\\.(\\w+)$\", filename).group(1)\nprint(ext)  # Expected output: pdf\n\n# Wrapped in function\n    def main():\n        filename = \'document.pdf\'\next = re.search(r\'\\.(\\w+)$\', filename).group(1)\nprint(ext)  # Expected output: pdf\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11616,7 +11616,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1309",
         "description": "Write a Python program to find duplicated words in a sentence.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"This is is a test test string\"\nduplicates = re.findall(r\"\\b(\\w+)\\s+\\1\\b\", text)\nprint(duplicates)  # Expected output: ['is', 'test']",
+        "solution": "text = \"This is is a test test string\"\nduplicates = re.findall(r\"\\b(\\w+)\\s+\\1\\b\", text)\nprint(duplicates)  # Expected output: ['is', 'test']\n\n# Wrapped in function\n    def main():\n        text = \'This is is a test test string\'\nduplicates = re.findall(r\'\\b(\\w+)\\s+\\1\\b\', text)\nprint(duplicates)  # Expected output: ['is', 'test']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11625,7 +11625,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1310",
         "description": "Write a Python program to extract all capitalized words from a paragraph.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Alice and Bob went to New York City on Monday.\"\ncapitalized = re.findall(r\"\\b[A-Z][a-z]*\\b\", text)\nprint(capitalized)  # Expected: ['Alice', 'Bob', 'New', 'York', 'City', 'Monday']",
+        "solution": "text = \"Alice and Bob went to New York City on Monday.\"\ncapitalized = re.findall(r\"\\b[A-Z][a-z]*\\b\", text)\nprint(capitalized)  # Expected: ['Alice', 'Bob', 'New', 'York', 'City', 'Monday']\n\n# Wrapped in function\n    def main():\n        text = \'Alice and Bob went to New York City on Monday.\'\ncapitalized = re.findall(r\'\\b[A-Z][a-z]*\\b\', text)\nprint(capitalized)  # Expected: ['Alice', 'Bob', 'New', 'York', 'City', 'Monday']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11634,7 +11634,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1311",
         "description": "Write a Python program to validate a time in 24-hour format (HH:MM).",
         "initialCode": "# Write your solution here",
-        "solution": "time = \"23:59\"\nmatch = bool(re.fullmatch(r\"([01]\\d|2[0-3]):[0-5]\\d\", time))\nprint(match)  # Expected: True",
+        "solution": "time = \"23:59\"\nmatch = bool(re.fullmatch(r\"([01]\\d|2[0-3]):[0-5]\\d\", time))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        time = \'23:59\'\nmatch = bool(re.fullmatch(r\'([01]\\d|2[0-3]):[0-5]\\d\', time))\nprint(match)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11643,7 +11643,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1312",
         "description": "Write a Python program to extract all integers and floats from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"The temperature is 21.5C, and humidity is 60% with 0.25 inches rain.\"\nnumbers = re.findall(r\"\\d+\\.\\d+|\\d+\", text)\nprint(numbers)  # Expected: ['21.5', '60', '0.25']",
+        "solution": "text = \"The temperature is 21.5C, and humidity is 60% with 0.25 inches rain.\"\nnumbers = re.findall(r\"\\d+\\.\\d+|\\d+\", text)\nprint(numbers)  # Expected: ['21.5', '60', '0.25']\n\n# Wrapped in function\n    def main():\n        text = \'The temperature is 21.5C, and humidity is 60% with 0.25 inches rain.\'\nnumbers = re.findall(r\'\\d+\\.\\d+|\\d+\', text)\nprint(numbers)  # Expected: ['21.5', '60', '0.25']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11661,7 +11661,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1314",
         "description": "Write a Python program to check if a string is a valid slug (only lowercase letters, numbers, hyphens).",
         "initialCode": "# Write your solution here",
-        "solution": "slug = \"python-tips-101\"\nmatch = bool(re.fullmatch(r\"[a-z0-9]+(-[a-z0-9]+)*\", slug))\nprint(match)  # Expected: True",
+        "solution": "slug = \"python-tips-101\"\nmatch = bool(re.fullmatch(r\"[a-z0-9]+(-[a-z0-9]+)*\", slug))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        slug = \'python-tips-101\'\nmatch = bool(re.fullmatch(r\'[a-z0-9]+(-[a-z0-9]+)*\', slug))\nprint(match)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11670,7 +11670,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1315",
         "description": "Write a Python program to extract content inside parentheses.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"This is a sample (with content) and (another one).\"\ncontent = re.findall(r\"\\((.*?)\\)\", text)\nprint(content)  # Expected: ['with content', 'another one']",
+        "solution": "text = \"This is a sample (with content) and (another one).\"\ncontent = re.findall(r\"\\((.*?)\\)\", text)\nprint(content)  # Expected: ['with content', 'another one']\n\n# Wrapped in function\n    def main():\n        text = \'This is a sample (with content) and (another one).\'\ncontent = re.findall(r\'\\((.*?)\\)\', text)\nprint(content)  # Expected: ['with content', 'another one']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11679,7 +11679,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1316",
         "description": "Write a Python program to match all valid HTML tags in a string.",
         "initialCode": "# Write your solution here",
-        "solution": "html = \"<div><p>Hello</p></div>\"\ntags = re.findall(r\"<[^>]+>\", html)\nprint(tags)  # Expected: ['<div>', '<p>', '</p>', '</div>']",
+        "solution": "html = \"<div><p>Hello</p></div>\"\ntags = re.findall(r\"<[^>]+>\", html)\nprint(tags)  # Expected: ['<div>', '<p>', '</p>', '</div>']\n\n# Wrapped in function\n    def main():\n        html = \'<div><p>Hello</p></div>\'\ntags = re.findall(r\'<[^>]+>\', html)\nprint(tags)  # Expected: ['<div>', '<p>', '</p>', '</div>']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11688,7 +11688,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1317",
         "description": "Write a Python program to validate if a string is a US ZIP code (5 digits).",
         "initialCode": "# Write your solution here",
-        "solution": "zip_code = \"12345\"\nmatch = bool(re.fullmatch(r\"\\d{5}\", zip_code))\nprint(match)  # Expected: True",
+        "solution": "zip_code = \"12345\"\nmatch = bool(re.fullmatch(r\"\\d{5}\", zip_code))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        zip_code = \'12345\'\nmatch = bool(re.fullmatch(r\'\\d{5}\', zip_code))\nprint(match)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11697,7 +11697,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1318",
         "description": "Write a Python program to find all abbreviations like \"U.S.A.\" in a string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Some examples: U.S.A. and E.U.\"\nabbreviations = re.findall(r\"(?:[A-Z]\\.){2,}\", text)\nprint(abbreviations)  # Expected: ['U.S.A.', 'E.U.']",
+        "solution": "text = \"Some examples: U.S.A. and E.U.\"\nabbreviations = re.findall(r\"(?:[A-Z]\\.){2,}\", text)\nprint(abbreviations)  # Expected: ['U.S.A.', 'E.U.']\n\n# Wrapped in function\n    def main():\n        text = \'Some examples: U.S.A. and E.U.\'\nabbreviations = re.findall(r\'(?:[A-Z]\\.){2,}\', text)\nprint(abbreviations)  # Expected: ['U.S.A.', 'E.U.']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11706,7 +11706,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1319",
         "description": "Write a Python program to count how many times a word appears in a case-insensitive way.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Python is great. I love python because PYTHON is powerful.\"\ncount = len(re.findall(r\"\\bpython\\b\", text, re.IGNORECASE))\nprint(count)  # Expected: 3",
+        "solution": "text = \"Python is great. I love python because PYTHON is powerful.\"\ncount = len(re.findall(r\"\\bpython\\b\", text, re.IGNORECASE))\nprint(count)  # Expected: 3\n\n# Wrapped in function\n    def main():\n        text = \'Python is great. I love python because PYTHON is powerful.\'\ncount = len(re.findall(r\'\\bpython\\b\', text, re.IGNORECASE))\nprint(count)  # Expected: 3\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11715,7 +11715,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1320",
         "description": "Write a Python program to replace duplicate spaces with a single space.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"This    is  a    spaced   sentence.\"\nclean = re.sub(r\"\\s{2,}\", \" \", text)\nprint(clean)  # Expected: \"This is a spaced sentence.\"",
+        "solution": "text = \"This    is  a    spaced   sentence.\"\nclean = re.sub(r\"\\s{2,}\", \" \", text)\nprint(clean)  # Expected: \"This is a spaced sentence.\"\n\n# Wrapped in function\n    def main():\n        text = \'This    is  a    spaced   sentence.\'\nclean = re.sub(r\'\\s{2,}\', \' \', text)\nprint(clean)  # Expected: \'This is a spaced sentence.\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11724,7 +11724,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1321",
         "description": "Write a Python program to validate a MAC address (e.g., 00:1A:2B:3C:4D:5E).",
         "initialCode": "# Write your solution here",
-        "solution": "mac = \"00:1A:2B:3C:4D:5E\"\nmatch = bool(re.fullmatch(r\"([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}\", mac))\nprint(match)  # Expected: True",
+        "solution": "mac = \"00:1A:2B:3C:4D:5E\"\nmatch = bool(re.fullmatch(r\"([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}\", mac))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        mac = \'00:1A:2B:3C:4D:5E\'\nmatch = bool(re.fullmatch(r\'([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}\', mac))\nprint(match)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11733,7 +11733,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1322",
         "description": "Write a Python program to extract the username from an email address.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\nemail = \"john.doe@example.com\"\nusername = re.match(r\"([^@]+)\", email).group(1)\nprint(username)  # Expected: john.doe",
+        "solution": "import re\nemail = \"john.doe@example.com\"\nusername = re.match(r\"([^@]+)\", email).group(1)\nprint(username)  # Expected: john.doe\n\n# Wrapped in function\n    def main():\n        import re\nemail = \'john.doe@example.com\'\nusername = re.match(r\'([^@]+)\', email).group(1)\nprint(username)  # Expected: john.doe\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11742,7 +11742,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1323",
         "description": "Write a Python program to insert commas into a numeric string every three digits.",
         "initialCode": "# Write your solution here",
-        "solution": "num = \"1000000\"\nformatted = re.sub(r\"(?<=\\d)(?=(\\d{3})+$)\", \",\", num)\nprint(formatted)  # Expected: 1,000,000",
+        "solution": "num = \"1000000\"\nformatted = re.sub(r\"(?<=\\d)(?=(\\d{3})+$)\", \",\", num)\nprint(formatted)  # Expected: 1,000,000\n\n# Wrapped in function\n    def main():\n        num = \'1000000\'\nformatted = re.sub(r\'(?<=\\d)(?=(\\d{3})+$)\', \',\', num)\nprint(formatted)  # Expected: 1,000,000\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11751,7 +11751,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1324",
         "description": "Write a Python program to extract all valid Twitter handles from a string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Follow @python, @realpython, and @openai!\"\nhandles = re.findall(r\"@\\w+\", text)\nprint(handles)  # Expected: ['@python', '@realpython', '@openai']",
+        "solution": "text = \"Follow @python, @realpython, and @openai!\"\nhandles = re.findall(r\"@\\w+\", text)\nprint(handles)  # Expected: ['@python', '@realpython', '@openai']\n\n# Wrapped in function\n    def main():\n        text = \'Follow @python, @realpython, and @openai!\'\nhandles = re.findall(r\'@\\w+\', text)\nprint(handles)  # Expected: ['@python', '@realpython', '@openai']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11760,7 +11760,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1325",
         "description": "Write a Python program to check if a string contains any emoji.",
         "initialCode": "# Write your solution here",
-        "solution": "emoji_text = \"I love \ud83c\udf55 and \ud83d\udc0d\"\nmatch = bool(re.search(r\"[\\U0001F600-\\U0001F64F]\", emoji_text))\nprint(match)  # Expected: True",
+        "solution": "emoji_text = \"I love \ud83c\udf55 and \ud83d\udc0d\"\nmatch = bool(re.search(r\"[\\U0001F600-\\U0001F64F]\", emoji_text))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        emoji_text = \'I love \ud83c\udf55 and \ud83d\udc0d\'\nmatch = bool(re.search(r\'[\\U0001F600-\\U0001F64F]\', emoji_text))\nprint(match)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11769,7 +11769,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1326",
         "description": "Write a Python program to extract time values in 12-hour format with AM/PM.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Meeting at 02:30 PM and dinner at 07:45 AM.\"\ntimes = re.findall(r\"\\b\\d{2}:\\d{2} [AP]M\\b\", text)\nprint(times)  # Expected: ['02:30 PM', '07:45 AM']",
+        "solution": "text = \"Meeting at 02:30 PM and dinner at 07:45 AM.\"\ntimes = re.findall(r\"\\b\\d{2}:\\d{2} [AP]M\\b\", text)\nprint(times)  # Expected: ['02:30 PM', '07:45 AM']\n\n# Wrapped in function\n    def main():\n        text = \'Meeting at 02:30 PM and dinner at 07:45 AM.\'\ntimes = re.findall(r\'\\b\\d{2}:\\d{2} [AP]M\\b\', text)\nprint(times)  # Expected: ['02:30 PM', '07:45 AM']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11778,7 +11778,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1327",
         "description": "Write a Python program to extract prices with a dollar sign.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Items: $20.99, $3.50, $100\"\nprices = re.findall(r\"\\$\\d+(\\.\\d{2})?\", text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']",
+        "solution": "text = \"Items: $20.99, $3.50, $100\"\nprices = re.findall(r\"\\$\\d+(\\.\\d{2})?\", text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']\n\n# Wrapped in function\n    def main():\n        text = \'Items: $20.99, $3.50, $100\'\nprices = re.findall(r\'\\$\\d+(\\.\\d{2})?\', text)\nprint(prices)  # Expected: ['$20.99', '$3.50', '$100']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11787,7 +11787,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1328",
         "description": "Write a Python program to detect duplicate characters in a string using regex.",
         "initialCode": "# Write your solution here",
-        "solution": "s = \"programming\"\nduplicates = re.findall(r\"(\\w)(?=.*\\1)\", s)\nprint(set(duplicates))  # Expected: {'r', 'g', 'm'}",
+        "solution": "s = \"programming\"\nduplicates = re.findall(r\"(\\w)(?=.*\\1)\", s)\nprint(set(duplicates))  # Expected: {'r', 'g', 'm'}\n\n# Wrapped in function\n    def main():\n        s = \'programming\'\nduplicates = re.findall(r\'(\\w)(?=.*\\1)\', s)\nprint(set(duplicates))  # Expected: {'r', 'g', 'm'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11796,7 +11796,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1329",
         "description": "Write a Python program to validate a hexadecimal number (e.g., 0x1A3F).",
         "initialCode": "# Write your solution here",
-        "solution": "hex_num = \"0x1A3F\"\nmatch = bool(re.fullmatch(r\"0x[0-9A-Fa-f]+\", hex_num))\nprint(match)  # Expected: True",
+        "solution": "hex_num = \"0x1A3F\"\nmatch = bool(re.fullmatch(r\"0x[0-9A-Fa-f]+\", hex_num))\nprint(match)  # Expected: True\n\n# Wrapped in function\n    def main():\n        hex_num = \'0x1A3F\'\nmatch = bool(re.fullmatch(r\'0x[0-9A-Fa-f]+\', hex_num))\nprint(match)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11805,7 +11805,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1330",
         "description": "Write a Python program to extract quoted strings (single or double quotes).",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \"'Hello', she said. \\\"How are you?\\\"\"\nquotes = re.findall(r\"(['\\\"])(.*?)\\1\", text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']",
+        "solution": "import re\n\ntext = \"'Hello', she said. \\\"How are you?\\\"\"\nquotes = re.findall(r\"(['\\\"])(.*?)\\1\", text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \''Hello', she said. \\\'How are you?\\\'\'\nquotes = re.findall(r\'(['\\\'])(.*?)\\1\', text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11814,7 +11814,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1331",
         "description": "Write a Python program to check if a variable is an integer using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = 10\nprint(isinstance(x, int))  # Expected: True",
+        "solution": "x = 10\nprint(isinstance(x, int))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = 10\nprint(isinstance(x, int))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11823,7 +11823,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1332",
         "description": "Write a Python program to check if a variable is a string using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = \"hello\"\nprint(isinstance(x, str))  # Expected: True",
+        "solution": "x = \"hello\"\nprint(isinstance(x, str))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = \'hello\'\nprint(isinstance(x, str))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11832,7 +11832,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1333",
         "description": "Write a Python program to check if a variable is a float using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = 3.14\nprint(isinstance(x, float))  # Expected: True",
+        "solution": "x = 3.14\nprint(isinstance(x, float))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = 3.14\nprint(isinstance(x, float))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11841,7 +11841,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1334",
         "description": "Write a Python program to check if a variable is a list using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = [1, 2, 3]\nprint(isinstance(x, list))  # Expected: True",
+        "solution": "x = [1, 2, 3]\nprint(isinstance(x, list))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = [1, 2, 3]\nprint(isinstance(x, list))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11850,7 +11850,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1335",
         "description": "Write a Python program to check if a variable is a dictionary using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = {\"a\": 1}\nprint(isinstance(x, dict))  # Expected: True",
+        "solution": "x = {\"a\": 1}\nprint(isinstance(x, dict))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = {\'a\': 1}\nprint(isinstance(x, dict))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11859,7 +11859,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1336",
         "description": "Write a Python program to check if a variable is either int or float using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = 10.0\nprint(isinstance(x, (int, float)))  # Expected: True",
+        "solution": "x = 10.0\nprint(isinstance(x, (int, float)))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = 10.0\nprint(isinstance(x, (int, float)))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11868,7 +11868,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1337",
         "description": "Write a Python program to check if each element in a list is a string.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [\"apple\", \"banana\", \"cherry\"]\nresult = all(isinstance(item, str) for item in lst)\nprint(result)  # Expected: True",
+        "solution": "lst = [\"apple\", \"banana\", \"cherry\"]\nresult = all(isinstance(item, str) for item in lst)\nprint(result)  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [\'apple\', \'banana\', \'cherry\']\nresult = all(isinstance(item, str) for item in lst)\nprint(result)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11877,7 +11877,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1338",
         "description": "Write a Python program to filter only integers from a mixed list using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "items = [1, \"a\", 3.5, 4, \"b\"]\nints = [x for x in items if isinstance(x, int)]\nprint(ints)  # Expected: [1, 4]",
+        "solution": "items = [1, \"a\", 3.5, 4, \"b\"]\nints = [x for x in items if isinstance(x, int)]\nprint(ints)  # Expected: [1, 4]\n\n# Wrapped in function\n    def main():\n        items = [1, \'a\', 3.5, 4, \'b\']\nints = [x for x in items if isinstance(x, int)]\nprint(ints)  # Expected: [1, 4]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11886,7 +11886,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1339",
         "description": "Write a Python program to filter only strings from a mixed list using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "items = [1, \"apple\", 2.5, \"banana\"]\nstrings = [x for x in items if isinstance(x, str)]\nprint(strings)  # Expected: ['apple', 'banana']",
+        "solution": "items = [1, \"apple\", 2.5, \"banana\"]\nstrings = [x for x in items if isinstance(x, str)]\nprint(strings)  # Expected: ['apple', 'banana']\n\n# Wrapped in function\n    def main():\n        items = [1, \'apple\', 2.5, \'banana\']\nstrings = [x for x in items if isinstance(x, str)]\nprint(strings)  # Expected: ['apple', 'banana']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11895,7 +11895,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1340",
         "description": "Write a Python program to check if an object is a boolean using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = True\nprint(isinstance(x, bool))  # Expected: True",
+        "solution": "x = True\nprint(isinstance(x, bool))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = True\nprint(isinstance(x, bool))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11904,7 +11904,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1341",
         "description": "Write a Python program to check if a variable is a tuple using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = (1, 2, 3)\nprint(isinstance(x, tuple))  # Expected: True",
+        "solution": "x = (1, 2, 3)\nprint(isinstance(x, tuple))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = (1, 2, 3)\nprint(isinstance(x, tuple))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11913,7 +11913,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1342",
         "description": "Write a Python program to check if an object is not a string using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = 42\nprint(not isinstance(x, str))  # Expected: True",
+        "solution": "x = 42\nprint(not isinstance(x, str))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = 42\nprint(not isinstance(x, str))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11931,7 +11931,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1344",
         "description": "Write a Python program to check if all elements in a nested list are lists.",
         "initialCode": "# Write your solution here",
-        "solution": "nested = [[1, 2], [3, 4]]\nresult = all(isinstance(sub, list) for sub in nested)\nprint(result)  # Expected: True",
+        "solution": "nested = [[1, 2], [3, 4]]\nresult = all(isinstance(sub, list) for sub in nested)\nprint(result)  # Expected: True\n\n# Wrapped in function\n    def main():\n        nested = [[1, 2], [3, 4]]\nresult = all(isinstance(sub, list) for sub in nested)\nprint(result)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11940,7 +11940,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1345",
         "description": "Write a Python program to separate strings and numbers from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "mixed = [1, \"one\", 2, \"two\", 3, \"three\"]\nnums = [x for x in mixed if isinstance(x, int)]\nwords = [x for x in mixed if isinstance(x, str)]\nprint(nums)   # Expected: [1, 2, 3]\nprint(words)  # Expected: ['one', 'two', 'three']",
+        "solution": "mixed = [1, \"one\", 2, \"two\", 3, \"three\"]\nnums = [x for x in mixed if isinstance(x, int)]\nwords = [x for x in mixed if isinstance(x, str)]\nprint(nums)   # Expected: [1, 2, 3]\nprint(words)  # Expected: ['one', 'two', 'three']\n\n# Wrapped in function\n    def main():\n        mixed = [1, \'one\', 2, \'two\', 3, \'three\']\nnums = [x for x in mixed if isinstance(x, int)]\nwords = [x for x in mixed if isinstance(x, str)]\nprint(nums)   # Expected: [1, 2, 3]\nprint(words)  # Expected: ['one', 'two', 'three']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11958,7 +11958,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1347",
         "description": "Write a Python program to check if a variable is a set using isinstance().",
         "initialCode": "# Write your solution here",
-        "solution": "x = {1, 2, 3}\nprint(isinstance(x, set))  # Expected: True",
+        "solution": "x = {1, 2, 3}\nprint(isinstance(x, set))  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = {1, 2, 3}\nprint(isinstance(x, set))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11967,7 +11967,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1348",
         "description": "Write a Python program to validate that dictionary keys are all strings.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"a\": 1, \"b\": 2}\nresult = all(isinstance(k, str) for k in d.keys())\nprint(result)  # Expected: True",
+        "solution": "d = {\"a\": 1, \"b\": 2}\nresult = all(isinstance(k, str) for k in d.keys())\nprint(result)  # Expected: True\n\n# Wrapped in function\n    def main():\n        d = {\'a\': 1, \'b\': 2}\nresult = all(isinstance(k, str) for k in d.keys())\nprint(result)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11994,7 +11994,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1351",
         "description": "Write a Python program to remove a key from a dictionary using pop() and print the updated dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"a\": 1, \"b\": 2, \"c\": 3}\nd.pop(\"b\")\nprint(d)  # Expected: {'a': 1, 'c': 3}",
+        "solution": "d = {\"a\": 1, \"b\": 2, \"c\": 3}\nd.pop(\"b\")\nprint(d)  # Expected: {'a': 1, 'c': 3}\n\n# Wrapped in function\n    def main():\n        d = {\'a\': 1, \'b\': 2, \'c\': 3}\nd.pop(\'b\')\nprint(d)  # Expected: {'a': 1, 'c': 3}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12003,7 +12003,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1352",
         "description": "Write a Python program to use pop() to retrieve the value of a key from a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"a\": 10, \"b\": 20}\nvalue = d.pop(\"a\")\nprint(value)  # Expected: 10",
+        "solution": "d = {\"a\": 10, \"b\": 20}\nvalue = d.pop(\"a\")\nprint(value)  # Expected: 10\n\n# Wrapped in function\n    def main():\n        d = {\'a\': 10, \'b\': 20}\nvalue = d.pop(\'a\')\nprint(value)  # Expected: 10\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12012,7 +12012,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1353",
         "description": "Write a Python program to use pop() on a list to remove the last item.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3, 4]\nlst.pop()\nprint(lst)  # Expected: [1, 2, 3]",
+        "solution": "lst = [1, 2, 3, 4]\nlst.pop()\nprint(lst)  # Expected: [1, 2, 3]\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3, 4]\nlst.pop()\nprint(lst)  # Expected: [1, 2, 3]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12021,7 +12021,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1354",
         "description": "Write a Python program to remove a specific index from a list using pop().",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [10, 20, 30, 40]\nlst.pop(1)\nprint(lst)  # Expected: [10, 30, 40]",
+        "solution": "lst = [10, 20, 30, 40]\nlst.pop(1)\nprint(lst)  # Expected: [10, 30, 40]\n\n# Wrapped in function\n    def main():\n        lst = [10, 20, 30, 40]\nlst.pop(1)\nprint(lst)  # Expected: [10, 30, 40]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12039,7 +12039,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1356",
         "description": "Write a Python program to remove all elements from a list using pop() in a loop.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3]\nwhile lst:\n    print(lst.pop())  # Expected: 3, 2, 1 (on separate lines)\n\n# Using while loop with break\n    while True:\n        if not (lst):\n            break\n        ...",
+        "solution": "lst = [1, 2, 3]\nwhile lst:\n    print(lst.pop())  # Expected: 3, 2, 1 (on separate lines)\n\n# Using while loop with break\n    while True:\n        if not (lst):\n            break\n        ...\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3]\nwhile lst:\n    print(lst.pop())  # Expected: 3, 2, 1 (on separate lines)\n\n# Using while loop with break\n    while True:\n        if not (lst):\n            break\n        ...\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12048,7 +12048,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1357",
         "description": "Write a Python program to handle IndexError when popping from an empty list.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = []\ntry:\n    lst.pop()\nexcept IndexError:\n    print(\"List is empty\")  # Expected: \"List is empty\"",
+        "solution": "lst = []\ntry:\n    lst.pop()\nexcept IndexError:\n    print(\"List is empty\")  # Expected: \"List is empty\"\n\n# Wrapped in function\n    def main():\n        lst = []\ntry:\n    lst.pop()\nexcept IndexError:\n    print(\'List is empty\')  # Expected: \'List is empty\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12057,7 +12057,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1358",
         "description": "Write a Python program to use pop() with dictionaries and provide a default return value if the key doesn't exist.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"x\": 5}\nval = d.pop(\"y\", \"Not Found\")\nprint(val)  # Expected: \"Not Found\"",
+        "solution": "d = {\"x\": 5}\nval = d.pop(\"y\", \"Not Found\")\nprint(val)  # Expected: \"Not Found\"\n\n# Wrapped in function\n    def main():\n        d = {\'x\': 5}\nval = d.pop(\'y\', \'Not Found\')\nprint(val)  # Expected: \'Not Found\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12066,7 +12066,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1359",
         "description": "Write a Python program to safely remove a key from a dictionary using pop() inside a try block.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"a\": 100}\ntry:\n    print(d.pop(\"b\"))\nexcept KeyError:\n    print(\"Key not found\")  # Expected: \"Key not found\"",
+        "solution": "d = {\"a\": 100}\ntry:\n    print(d.pop(\"b\"))\nexcept KeyError:\n    print(\"Key not found\")  # Expected: \"Key not found\"\n\n# Wrapped in function\n    def main():\n        d = {\'a\': 100}\ntry:\n    print(d.pop(\'b\'))\nexcept KeyError:\n    print(\'Key not found\')  # Expected: \'Key not found\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12084,7 +12084,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1361",
         "description": "Write a Python program to pop elements from a stack represented by a list.",
         "initialCode": "# Write your solution here",
-        "solution": "stack = [1, 2, 3]\nprint(stack.pop())  # Expected: 3",
+        "solution": "stack = [1, 2, 3]\nprint(stack.pop())  # Expected: 3\n\n# Wrapped in function\n    def main():\n        stack = [1, 2, 3]\nprint(stack.pop())  # Expected: 3\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12093,7 +12093,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1362",
         "description": "Write a Python program to simulate queue dequeue using pop(0).",
         "initialCode": "# Write your solution here",
-        "solution": "queue = [10, 20, 30]\nprint(queue.pop(0))  # Expected: 10",
+        "solution": "queue = [10, 20, 30]\nprint(queue.pop(0))  # Expected: 10\n\n# Wrapped in function\n    def main():\n        queue = [10, 20, 30]\nprint(queue.pop(0))  # Expected: 10\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12102,7 +12102,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1363",
         "description": "Write a Python program to remove the last element from a list using pop() and store it.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [4, 5, 6]\nlast = numbers.pop()\nprint(last)  # Expected: 6",
+        "solution": "numbers = [4, 5, 6]\nlast = numbers.pop()\nprint(last)  # Expected: 6\n\n# Wrapped in function\n    def main():\n        numbers = [4, 5, 6]\nlast = numbers.pop()\nprint(last)  # Expected: 6\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12111,7 +12111,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1364",
         "description": "Write a Python program to demonstrate the use of pop() on a string key in a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"name\": \"Alice\", \"age\": 30}\nprint(d.pop(\"name\"))  # Expected: \"Alice\"",
+        "solution": "d = {\"name\": \"Alice\", \"age\": 30}\nprint(d.pop(\"name\"))  # Expected: \"Alice\"\n\n# Wrapped in function\n    def main():\n        d = {\'name\': \'Alice\', \'age\': 30}\nprint(d.pop(\'name\'))  # Expected: \'Alice\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12120,7 +12120,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1365",
         "description": "Write a Python program to pop multiple elements from the end of a list using a loop.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3, 4, 5]\nfor _ in range(3):\n    lst.pop()\nprint(lst)  # Expected: [1, 2]",
+        "solution": "lst = [1, 2, 3, 4, 5]\nfor _ in range(3):\n    lst.pop()\nprint(lst)  # Expected: [1, 2]\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3, 4, 5]\nfor _ in range(3):\n    lst.pop()\nprint(lst)  # Expected: [1, 2]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12129,7 +12129,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1366",
         "description": "Write a Python program to pop and sum the last two numbers from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [100, 200, 300]\nsum_last_two = lst.pop() + lst.pop()\nprint(sum_last_two)  # Expected: 500",
+        "solution": "lst = [100, 200, 300]\nsum_last_two = lst.pop() + lst.pop()\nprint(sum_last_two)  # Expected: 500\n\n# Wrapped in function\n    def main():\n        lst = [100, 200, 300]\nsum_last_two = lst.pop() + lst.pop()\nprint(sum_last_two)  # Expected: 500\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12147,7 +12147,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1368",
         "description": "Write a Python program to pop an element from a list and append it to another list.",
         "initialCode": "# Write your solution here",
-        "solution": "src = [9, 8, 7]\ndst = []\ndst.append(src.pop())\nprint(dst)  # Expected: [7]",
+        "solution": "src = [9, 8, 7]\ndst = []\ndst.append(src.pop())\nprint(dst)  # Expected: [7]\n\n# Wrapped in function\n    def main():\n        src = [9, 8, 7]\ndst = []\ndst.append(src.pop())\nprint(dst)  # Expected: [7]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12156,7 +12156,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1369",
         "description": "Write a Python program to implement a basic undo feature using pop() on a list of actions.",
         "initialCode": "# Write your solution here",
-        "solution": "actions = [\"type\", \"edit\", \"save\"]\nundo = actions.pop()\nprint(undo)  # Expected: \"save\"",
+        "solution": "actions = [\"type\", \"edit\", \"save\"]\nundo = actions.pop()\nprint(undo)  # Expected: \"save\"\n\n# Wrapped in function\n    def main():\n        actions = [\'type\', \'edit\', \'save\']\nundo = actions.pop()\nprint(undo)  # Expected: \'save\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12165,7 +12165,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1370",
         "description": "Write a Python program to pop elements from a nested list.",
         "initialCode": "# Write your solution here",
-        "solution": "nested = [[1, 2], [3, 4], [5, 6]]\nlast_sublist = nested.pop()\nprint(last_sublist)  # Expected: [5, 6]",
+        "solution": "nested = [[1, 2], [3, 4], [5, 6]]\nlast_sublist = nested.pop()\nprint(last_sublist)  # Expected: [5, 6]\n\n# Wrapped in function\n    def main():\n        nested = [[1, 2], [3, 4], [5, 6]]\nlast_sublist = nested.pop()\nprint(last_sublist)  # Expected: [5, 6]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12453,7 +12453,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1403",
         "description": "Write a Pythonic way to use `zip()` to combine two lists into a list of tuples.",
         "initialCode": "# Write your solution here",
-        "solution": "names = ['Alice', 'Bob', 'Charlie']\nages = [25, 30, 35]\ncombined = list(zip(names, ages))\nprint(combined)  # Expected: [('Alice', 25), ('Bob', 30), ('Charlie', 35)]",
+        "solution": "names = ['Alice', 'Bob', 'Charlie']\nages = [25, 30, 35]\ncombined = list(zip(names, ages))\nprint(combined)  # Expected: [('Alice', 25), ('Bob', 30), ('Charlie', 35)]\n\n# Wrapped in function\n    def main():\n        names = ['Alice', 'Bob', 'Charlie']\nages = [25, 30, 35]\ncombined = list(zip(names, ages))\nprint(combined)  # Expected: [('Alice', 25), ('Bob', 30), ('Charlie', 35)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12462,7 +12462,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1404",
         "description": "Write a Pythonic way to use a dictionary comprehension to swap keys and values.",
         "initialCode": "# Write your solution here",
-        "solution": "original = {'a': 1, 'b': 2, 'c': 3}\nswapped = {v: k for k, v in original.items()}\nprint(swapped)  # Expected: {1: 'a', 2: 'b', 3: 'c'}",
+        "solution": "original = {'a': 1, 'b': 2, 'c': 3}\nswapped = {v: k for k, v in original.items()}\nprint(swapped)  # Expected: {1: 'a', 2: 'b', 3: 'c'}\n\n# Wrapped in function\n    def main():\n        original = {'a': 1, 'b': 2, 'c': 3}\nswapped = {v: k for k, v in original.items()}\nprint(swapped)  # Expected: {1: 'a', 2: 'b', 3: 'c'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12471,7 +12471,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1405",
         "description": "Write a Pythonic way to use `all()` to check if all elements in a list satisfy a condition.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [2, 4, 6, 8]\nall_even = all(x % 2 == 0 for x in numbers)\nprint(all_even)  # Expected: True",
+        "solution": "numbers = [2, 4, 6, 8]\nall_even = all(x % 2 == 0 for x in numbers)\nprint(all_even)  # Expected: True\n\n# Wrapped in function\n    def main():\n        numbers = [2, 4, 6, 8]\nall_even = all(x % 2 == 0 for x in numbers)\nprint(all_even)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12480,7 +12480,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1406",
         "description": "Write a Pythonic way to flatten a list of lists using a list comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "nested = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]\nflattened = [item for sublist in nested for item in sublist]\nprint(flattened)  # Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        "solution": "nested = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]\nflattened = [item for sublist in nested for item in sublist]\nprint(flattened)  # Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n# Wrapped in function\n    def main():\n        nested = [[1, 2, 3], [4, 5], [6, 7, 8, 9]]\nflattened = [item for sublist in nested for item in sublist]\nprint(flattened)  # Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12489,7 +12489,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1407",
         "description": "Write a Pythonic way to use `map()` to convert a list of strings to uppercase.",
         "initialCode": "# Write your solution here",
-        "solution": "words = ['hello', 'world', 'python']\nuppercase_words = list(map(str.upper, words))\nprint(uppercase_words)  # Expected: ['HELLO', 'WORLD', 'PYTHON']",
+        "solution": "words = ['hello', 'world', 'python']\nuppercase_words = list(map(str.upper, words))\nprint(uppercase_words)  # Expected: ['HELLO', 'WORLD', 'PYTHON']\n\n# Wrapped in function\n    def main():\n        words = ['hello', 'world', 'python']\nuppercase_words = list(map(str.upper, words))\nprint(uppercase_words)  # Expected: ['HELLO', 'WORLD', 'PYTHON']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12498,7 +12498,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1408",
         "description": "Write a Pythonic way to use `filter()` with a lambda to get even numbers from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\neven_numbers = list(filter(lambda x: x % 2 == 0, numbers))\nprint(even_numbers)  # Expected: [2, 4, 6, 8, 10]",
+        "solution": "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\neven_numbers = list(filter(lambda x: x % 2 == 0, numbers))\nprint(even_numbers)  # Expected: [2, 4, 6, 8, 10]\n\n# Wrapped in function\n    def main():\n        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\neven_numbers = list(filter(lambda x: x % 2 == 0, numbers))\nprint(even_numbers)  # Expected: [2, 4, 6, 8, 10]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12507,7 +12507,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1409",
         "description": "Write a Pythonic way to use `set()` to remove duplicates from a list while preserving order using dict.fromkeys().",
         "initialCode": "# Write your solution here",
-        "solution": "items = [1, 2, 2, 3, 3, 3, 4, 5, 5]\nunique_ordered = list(dict.fromkeys(items))\nprint(unique_ordered)  # Expected: [1, 2, 3, 4, 5]",
+        "solution": "items = [1, 2, 2, 3, 3, 3, 4, 5, 5]\nunique_ordered = list(dict.fromkeys(items))\nprint(unique_ordered)  # Expected: [1, 2, 3, 4, 5]\n\n# Wrapped in function\n    def main():\n        items = [1, 2, 2, 3, 3, 3, 4, 5, 5]\nunique_ordered = list(dict.fromkeys(items))\nprint(unique_ordered)  # Expected: [1, 2, 3, 4, 5]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12516,7 +12516,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1410",
         "description": "Write a Pythonic way to use `str.join()` to concatenate a list of strings with a separator.",
         "initialCode": "# Write your solution here",
-        "solution": "words = ['Python', 'is', 'great']\nsentence = ' '.join(words)\nprint(sentence)  # Expected: Python is great",
+        "solution": "words = ['Python', 'is', 'great']\nsentence = ' '.join(words)\nprint(sentence)  # Expected: Python is great\n\n# Wrapped in function\n    def main():\n        words = ['Python', 'is', 'great']\nsentence = ' '.join(words)\nprint(sentence)  # Expected: Python is great\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12525,7 +12525,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1411",
         "description": "Write a Pythonic way to use list slicing to reverse a string.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Python\"\nreversed_text = text[::-1]\nprint(reversed_text)  # Expected: nohtyP\n\n# Using reversed()\n    return list(reversed(text))\n\n# Using for loop\n    result = []\n    for x in text:\n        result.insert(0, x)\n    return result",
+        "solution": "text = \"Python\"\nreversed_text = text[::-1]\nprint(reversed_text)  # Expected: nohtyP\n\n# Using reversed()\n    return list(reversed(text))\n\n# Using for loop\n    result = []\n    for x in text:\n        result.insert(0, x)\n    return result\n\n# Wrapped in function\n    def main():\n        text = \'Python\'\nreversed_text = text[::-1]\nprint(reversed_text)  # Expected: nohtyP\n\n# Using reversed()\n    return list(reversed(text))\n\n# Using for loop\n    result = []\n    for x in text:\n        result.insert(0, x)\n    return result\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12534,7 +12534,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1412",
         "description": "Write a Pythonic way to use `collections.Counter` to count character frequencies in a string.",
         "initialCode": "from collections import Counter\n# Write your solution here",
-        "solution": "from collections import Counter\ntext = \"hello world\"\nchar_counts = Counter(text)\nprint(char_counts)  # Expected: Counter({'l': 3, 'o': 2, 'h': 1, 'e': 1, ' ': 1, 'w': 1, 'r': 1, 'd': 1})",
+        "solution": "from collections import Counter\ntext = \"hello world\"\nchar_counts = Counter(text)\nprint(char_counts)  # Expected: Counter({'l': 3, 'o': 2, 'h': 1, 'e': 1, ' ': 1, 'w': 1, 'r': 1, 'd': 1})\n\n# Wrapped in function\n    def main():\n        from collections import Counter\ntext = \'hello world\'\nchar_counts = Counter(text)\nprint(char_counts)  # Expected: Counter({'l': 3, 'o': 2, 'h': 1, 'e': 1, ' ': 1, 'w': 1, 'r': 1, 'd': 1})\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12543,7 +12543,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1413",
         "description": "Write a Pythonic way to use `itertools.chain()` to combine multiple lists into one.",
         "initialCode": "from itertools import chain\n# Write your solution here",
-        "solution": "from itertools import chain\nlist1 = [1, 2, 3]\nlist2 = [4, 5, 6]\nlist3 = [7, 8, 9]\ncombined = list(chain(list1, list2, list3))\nprint(combined)  # Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        "solution": "from itertools import chain\nlist1 = [1, 2, 3]\nlist2 = [4, 5, 6]\nlist3 = [7, 8, 9]\ncombined = list(chain(list1, list2, list3))\nprint(combined)  # Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n# Wrapped in function\n    def main():\n        from itertools import chain\nlist1 = [1, 2, 3]\nlist2 = [4, 5, 6]\nlist3 = [7, 8, 9]\ncombined = list(chain(list1, list2, list3))\nprint(combined)  # Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12552,7 +12552,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1414",
         "description": "Write a Pythonic way to use `str.split()` and list comprehension to capitalize each word.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"hello world python\"\ncapitalized = ' '.join(word.capitalize() for word in text.split())\nprint(capitalized)  # Expected: Hello World Python",
+        "solution": "text = \"hello world python\"\ncapitalized = ' '.join(word.capitalize() for word in text.split())\nprint(capitalized)  # Expected: Hello World Python\n\n# Wrapped in function\n    def main():\n        text = \'hello world python\'\ncapitalized = ' '.join(word.capitalize() for word in text.split())\nprint(capitalized)  # Expected: Hello World Python\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12561,7 +12561,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1415",
         "description": "Write a Pythonic way to use `zip()` with `*` to transpose a list of lists.",
         "initialCode": "# Write your solution here",
-        "solution": "matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\ntransposed = list(zip(*matrix))\nprint(transposed)  # Expected: [(1, 4, 7), (2, 5, 8), (3, 6, 9)]",
+        "solution": "matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\ntransposed = list(zip(*matrix))\nprint(transposed)  # Expected: [(1, 4, 7), (2, 5, 8), (3, 6, 9)]\n\n# Wrapped in function\n    def main():\n        matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\ntransposed = list(zip(*matrix))\nprint(transposed)  # Expected: [(1, 4, 7), (2, 5, 8), (3, 6, 9)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12570,7 +12570,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1416",
         "description": "Write a Pythonic way to use `dict.get()` with a default value to safely access dictionary keys.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {'name': 'Alice', 'age': 30}\nname = data.get('name', 'Unknown')\ncity = data.get('city', 'Unknown')\nprint(name, city)  # Expected: Alice Unknown",
+        "solution": "data = {'name': 'Alice', 'age': 30}\nname = data.get('name', 'Unknown')\ncity = data.get('city', 'Unknown')\nprint(name, city)  # Expected: Alice Unknown\n\n# Wrapped in function\n    def main():\n        data = {'name': 'Alice', 'age': 30}\nname = data.get('name', 'Unknown')\ncity = data.get('city', 'Unknown')\nprint(name, city)  # Expected: Alice Unknown\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12579,7 +12579,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1417",
         "description": "Write a Pythonic way to use `collections.defaultdict` to group items by a key.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nitems = [('fruit', 'apple'), ('fruit', 'banana'), ('vegetable', 'carrot'), ('fruit', 'cherry')]\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\nprint(dict(grouped))  # Expected: {'fruit': ['apple', 'banana', 'cherry'], 'vegetable': ['carrot']}",
+        "solution": "from collections import defaultdict\nitems = [('fruit', 'apple'), ('fruit', 'banana'), ('vegetable', 'carrot'), ('fruit', 'cherry')]\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\nprint(dict(grouped))  # Expected: {'fruit': ['apple', 'banana', 'cherry'], 'vegetable': ['carrot']}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nitems = [('fruit', 'apple'), ('fruit', 'banana'), ('vegetable', 'carrot'), ('fruit', 'cherry')]\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\nprint(dict(grouped))  # Expected: {'fruit': ['apple', 'banana', 'cherry'], 'vegetable': ['carrot']}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12588,7 +12588,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1418",
         "description": "Write a Pythonic way to use `itertools.groupby()` to group consecutive identical elements.",
         "initialCode": "from itertools import groupby\n# Write your solution here",
-        "solution": "from itertools import groupby\ndata = [1, 1, 1, 2, 2, 3, 3, 3, 3, 4]\ngrouped = {k: list(g) for k, g in groupby(data)}\nprint(grouped)  # Expected: {1: [1, 1, 1], 2: [2, 2], 3: [3, 3, 3, 3], 4: [4]}",
+        "solution": "from itertools import groupby\ndata = [1, 1, 1, 2, 2, 3, 3, 3, 3, 4]\ngrouped = {k: list(g) for k, g in groupby(data)}\nprint(grouped)  # Expected: {1: [1, 1, 1], 2: [2, 2], 3: [3, 3, 3, 3], 4: [4]}\n\n# Wrapped in function\n    def main():\n        from itertools import groupby\ndata = [1, 1, 1, 2, 2, 3, 3, 3, 3, 4]\ngrouped = {k: list(g) for k, g in groupby(data)}\nprint(grouped)  # Expected: {1: [1, 1, 1], 2: [2, 2], 3: [3, 3, 3, 3], 4: [4]}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12597,7 +12597,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1419",
         "description": "Write a Pythonic way to use `str.maketrans()` and `str.translate()` to replace multiple characters.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"hello world\"\ntranslation = str.maketrans('lo', '12')\nresult = text.translate(translation)\nprint(result)  # Expected: he112 w2r1d",
+        "solution": "text = \"hello world\"\ntranslation = str.maketrans('lo', '12')\nresult = text.translate(translation)\nprint(result)  # Expected: he112 w2r1d\n\n# Wrapped in function\n    def main():\n        text = \'hello world\'\ntranslation = str.maketrans('lo', '12')\nresult = text.translate(translation)\nprint(result)  # Expected: he112 w2r1d\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12606,7 +12606,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1420",
         "description": "Write a Pythonic way to use `frozenset()` to create an immutable set for use as a dictionary key.",
         "initialCode": "# Write your solution here",
-        "solution": "fs1 = frozenset([1, 2, 3])\nfs2 = frozenset([4, 5, 6])\nmapping = {fs1: 'first', fs2: 'second'}\nprint(mapping[fs1])  # Expected: first",
+        "solution": "fs1 = frozenset([1, 2, 3])\nfs2 = frozenset([4, 5, 6])\nmapping = {fs1: 'first', fs2: 'second'}\nprint(mapping[fs1])  # Expected: first\n\n# Wrapped in function\n    def main():\n        fs1 = frozenset([1, 2, 3])\nfs2 = frozenset([4, 5, 6])\nmapping = {fs1: 'first', fs2: 'second'}\nprint(mapping[fs1])  # Expected: first\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12615,7 +12615,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1421",
         "description": "Write a Pythonic way to use `itertools.combinations()` to generate all pairs from a list.",
         "initialCode": "from itertools import combinations\n# Write your solution here",
-        "solution": "from itertools import combinations\nitems = ['a', 'b', 'c', 'd']\npairs = list(combinations(items, 2))\nprint(pairs)  # Expected: [('a', 'b'), ('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd'), ('c', 'd')]",
+        "solution": "from itertools import combinations\nitems = ['a', 'b', 'c', 'd']\npairs = list(combinations(items, 2))\nprint(pairs)  # Expected: [('a', 'b'), ('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd'), ('c', 'd')]\n\n# Wrapped in function\n    def main():\n        from itertools import combinations\nitems = ['a', 'b', 'c', 'd']\npairs = list(combinations(items, 2))\nprint(pairs)  # Expected: [('a', 'b'), ('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd'), ('c', 'd')]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12624,7 +12624,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1422",
         "description": "Write a Pythonic way to use `collections.deque` to implement a queue with append and popleft.",
         "initialCode": "from collections import deque\n# Write your solution here",
-        "solution": "from collections import deque\nqueue = deque()\nqueue.append(1)\nqueue.append(2)\nqueue.append(3)\nfirst = queue.popleft()\nprint(first, list(queue))  # Expected: 1 [2, 3]",
+        "solution": "from collections import deque\nqueue = deque()\nqueue.append(1)\nqueue.append(2)\nqueue.append(3)\nfirst = queue.popleft()\nprint(first, list(queue))  # Expected: 1 [2, 3]\n\n# Wrapped in function\n    def main():\n        from collections import deque\nqueue = deque()\nqueue.append(1)\nqueue.append(2)\nqueue.append(3)\nfirst = queue.popleft()\nprint(first, list(queue))  # Expected: 1 [2, 3]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12633,7 +12633,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1423",
         "description": "Write a Pythonic way to use `str.partition()` to split a string at the first occurrence of a delimiter.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"hello:world:python\"\nbefore, sep, after = text.partition(':')\nprint(before, after)  # Expected: hello world:python",
+        "solution": "text = \"hello:world:python\"\nbefore, sep, after = text.partition(':')\nprint(before, after)  # Expected: hello world:python\n\n# Wrapped in function\n    def main():\n        text = \'hello:world:python\'\nbefore, sep, after = text.partition(':')\nprint(before, after)  # Expected: hello world:python\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12642,7 +12642,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1424",
         "description": "Write a Pythonic way to use `operator.itemgetter()` to sort a list of dictionaries by a key.",
         "initialCode": "from operator import itemgetter\n# Write your solution here",
-        "solution": "from operator import itemgetter\npeople = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 35}]\nsorted_people = sorted(people, key=itemgetter('age'))\nprint(sorted_people)  # Expected: [{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 30}, {'name': 'Charlie', 'age': 35}]",
+        "solution": "from operator import itemgetter\npeople = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 35}]\nsorted_people = sorted(people, key=itemgetter('age'))\nprint(sorted_people)  # Expected: [{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 30}, {'name': 'Charlie', 'age': 35}]\n\n# Wrapped in function\n    def main():\n        from operator import itemgetter\npeople = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 35}]\nsorted_people = sorted(people, key=itemgetter('age'))\nprint(sorted_people)  # Expected: [{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 30}, {'name': 'Charlie', 'age': 35}]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12651,7 +12651,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1425",
         "description": "Write a Pythonic way to use `contextlib.suppress()` to ignore specific exceptions.",
         "initialCode": "from contextlib import suppress\n# Write your solution here",
-        "solution": "from contextlib import suppress\nwith suppress(ValueError, ZeroDivisionError):\n    result = int(\"not a number\")  # This would raise ValueError, but it's suppressed\n    print(\"This won't print\")\nprint(\"Continues after exception\")  # Expected: Continues after exception",
+        "solution": "from contextlib import suppress\nwith suppress(ValueError, ZeroDivisionError):\n    result = int(\"not a number\")  # This would raise ValueError, but it's suppressed\n    print(\"This won't print\")\nprint(\"Continues after exception\")  # Expected: Continues after exception\n\n# Wrapped in function\n    def main():\n        from contextlib import suppress\nwith suppress(ValueError, ZeroDivisionError):\n    result = int(\'not a number\')  # This would raise ValueError, but it's suppressed\n    print(\'This won't print\')\nprint(\'Continues after exception\')  # Expected: Continues after exception\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12660,7 +12660,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1426",
         "description": "Write a Pythonic way to check if any item in a list is true.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [0, False, 5]\nprint(any(lst))  # Expected: True",
+        "solution": "lst = [0, False, 5]\nprint(any(lst))  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [0, False, 5]\nprint(any(lst))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12669,7 +12669,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1427",
         "description": "Write a Pythonic way to use a generator expression to calculate the sum of squares.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3]\ntotal = sum(x**2 for x in lst)\nprint(total)  # Expected: 14",
+        "solution": "lst = [1, 2, 3]\ntotal = sum(x**2 for x in lst)\nprint(total)  # Expected: 14\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3]\ntotal = sum(x**2 for x in lst)\nprint(total)  # Expected: 14\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12678,7 +12678,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1428",
         "description": "Write a Pythonic program to get the intersection of two sets.",
         "initialCode": "# Write your solution here",
-        "solution": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a & b)  # Expected: {2, 3}",
+        "solution": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a & b)  # Expected: {2, 3}\n\n# Wrapped in function\n    def main():\n        a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a & b)  # Expected: {2, 3}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12705,7 +12705,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1431",
         "description": "Write a Pythonic one-liner to reverse a list.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3]\nprint(lst[::-1])  # Expected: [3, 2, 1]",
+        "solution": "lst = [1, 2, 3]\nprint(lst[::-1])  # Expected: [3, 2, 1]\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3]\nprint(lst[::-1])  # Expected: [3, 2, 1]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12723,7 +12723,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1433",
         "description": "Write a Pythonic way to initialize a dictionary with default integer values.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nd = defaultdict(int)\nd[\"x\"] += 1\nprint(d[\"x\"])  # Expected: 1",
+        "solution": "from collections import defaultdict\nd = defaultdict(int)\nd[\"x\"] += 1\nprint(d[\"x\"])  # Expected: 1\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nd = defaultdict(int)\nd[\'x\'] += 1\nprint(d[\'x\'])  # Expected: 1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12750,7 +12750,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1436",
         "description": "Write a Pythonic way to use a context manager to read a file.",
         "initialCode": "# Write your solution here",
-        "solution": "# Simulated context manager example\nwith open(\"temp.txt\", \"w\") as f:\n    f.write(\"Hello\")\nwith open(\"temp.txt\") as f:\n    print(f.read())  # Expected: \"Hello\"",
+        "solution": "# Simulated context manager example\nwith open(\"temp.txt\", \"w\") as f:\n    f.write(\"Hello\")\nwith open(\"temp.txt\") as f:\n    print(f.read())  # Expected: \"Hello\"\n\n# Wrapped in function\n    def main():\n        # Simulated context manager example\nwith open(\'temp.txt\', \'w\') as f:\n    f.write(\'Hello\')\nwith open(\'temp.txt\') as f:\n    print(f.read())  # Expected: \'Hello\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12759,7 +12759,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1437",
         "description": "Write a Pythonic one-liner to find the maximum item in a list.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 5, 2]\nprint(max(lst))  # Expected: 5",
+        "solution": "lst = [1, 5, 2]\nprint(max(lst))  # Expected: 5\n\n# Wrapped in function\n    def main():\n        lst = [1, 5, 2]\nprint(max(lst))  # Expected: 5\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12777,7 +12777,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1439",
         "description": "Write a Pythonic way to create a dictionary from two lists.",
         "initialCode": "# Write your solution here",
-        "solution": "keys = ['a', 'b']\nvalues = [1, 2]\nd = dict(zip(keys, values))\nprint(d)  # Expected: {'a': 1, 'b': 2}",
+        "solution": "keys = ['a', 'b']\nvalues = [1, 2]\nd = dict(zip(keys, values))\nprint(d)  # Expected: {'a': 1, 'b': 2}\n\n# Wrapped in function\n    def main():\n        keys = ['a', 'b']\nvalues = [1, 2]\nd = dict(zip(keys, values))\nprint(d)  # Expected: {'a': 1, 'b': 2}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12786,7 +12786,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1440",
         "description": "Write a Pythonic way to remove a key from a dictionary if it exists.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1, 'b': 2}\nd.pop('b', None)\nprint(d)  # Expected: {'a': 1}",
+        "solution": "d = {'a': 1, 'b': 2}\nd.pop('b', None)\nprint(d)  # Expected: {'a': 1}\n\n# Wrapped in function\n    def main():\n        d = {'a': 1, 'b': 2}\nd.pop('b', None)\nprint(d)  # Expected: {'a': 1}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12795,7 +12795,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1441",
         "description": "Write a Pythonic way to check if a variable is None.",
         "initialCode": "# Write your solution here",
-        "solution": "x = None\nprint(x is None)  # Expected: True",
+        "solution": "x = None\nprint(x is None)  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = None\nprint(x is None)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12804,7 +12804,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1442",
         "description": "Write a Pythonic way to handle a missing dictionary key using try-except.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1}\ntry:\n    print(d['b'])\nexcept KeyError:\n    print(\"Key not found\")  # Expected: Key not found",
+        "solution": "d = {'a': 1}\ntry:\n    print(d['b'])\nexcept KeyError:\n    print(\"Key not found\")  # Expected: Key not found\n\n# Wrapped in function\n    def main():\n        d = {'a': 1}\ntry:\n    print(d['b'])\nexcept KeyError:\n    print(\'Key not found\')  # Expected: Key not found\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12813,7 +12813,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1443",
         "description": "Write a Pythonic way to unpack a tuple into variables.",
         "initialCode": "# Write your solution here",
-        "solution": "t = (1, 2)\nx, y = t\nprint(x, y)  # Expected: 1 2",
+        "solution": "t = (1, 2)\nx, y = t\nprint(x, y)  # Expected: 1 2\n\n# Wrapped in function\n    def main():\n        t = (1, 2)\nx, y = t\nprint(x, y)  # Expected: 1 2\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12822,7 +12822,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1444",
         "description": "Write a Pythonic one-liner to check if a list contains duplicates.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 2]\nprint(len(lst) != len(set(lst)))  # Expected: True",
+        "solution": "lst = [1, 2, 2]\nprint(len(lst) != len(set(lst)))  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 2]\nprint(len(lst) != len(set(lst)))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12831,7 +12831,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1445",
         "description": "Write a Pythonic program to count character frequencies in a string.",
         "initialCode": "# Write your solution here",
-        "solution": "s = \"banana\"\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}",
+        "solution": "s = \"banana\"\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Wrapped in function\n    def main():\n        s = \'banana\'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12840,7 +12840,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1446",
         "description": "Write a Pythonic one-liner to filter out negative numbers from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, -2, 3, -4]\nprint([x for x in lst if x >= 0])  # Expected: [1, 3]",
+        "solution": "lst = [1, -2, 3, -4]\nprint([x for x in lst if x >= 0])  # Expected: [1, 3]\n\n# Wrapped in function\n    def main():\n        lst = [1, -2, 3, -4]\nprint([x for x in lst if x >= 0])  # Expected: [1, 3]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12849,7 +12849,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1447",
         "description": "Write a Pythonic way to test if a list has at least one even number.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 3, 4]\nprint(any(x % 2 == 0 for x in lst))  # Expected: True",
+        "solution": "lst = [1, 3, 4]\nprint(any(x % 2 == 0 for x in lst))  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [1, 3, 4]\nprint(any(x % 2 == 0 for x in lst))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12858,7 +12858,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1448",
         "description": "Write a Pythonic way to get the index of an item in a list.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = ['a', 'b', 'c']\nprint(lst.index('b'))  # Expected: 1",
+        "solution": "lst = ['a', 'b', 'c']\nprint(lst.index('b'))  # Expected: 1\n\n# Wrapped in function\n    def main():\n        lst = ['a', 'b', 'c']\nprint(lst.index('b'))  # Expected: 1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12867,7 +12867,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1449",
         "description": "Write a Pythonic way to filter dictionary items with values > 10.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 5, 'b': 15}\nfiltered = {k: v for k, v in d.items() if v > 10}\nprint(filtered)  # Expected: {'b': 15}",
+        "solution": "d = {'a': 5, 'b': 15}\nfiltered = {k: v for k, v in d.items() if v > 10}\nprint(filtered)  # Expected: {'b': 15}\n\n# Wrapped in function\n    def main():\n        d = {'a': 5, 'b': 15}\nfiltered = {k: v for k, v in d.items() if v > 10}\nprint(filtered)  # Expected: {'b': 15}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12876,7 +12876,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1450",
         "description": "Write a Pythonic program to invert a dictionary (keys become values, values become keys).",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1, 'b': 2}\ninverted = {v: k for k, v in d.items()}\nprint(inverted)  # Expected: {1: 'a', 2: 'b'}",
+        "solution": "d = {'a': 1, 'b': 2}\ninverted = {v: k for k, v in d.items()}\nprint(inverted)  # Expected: {1: 'a', 2: 'b'}\n\n# Wrapped in function\n    def main():\n        d = {'a': 1, 'b': 2}\ninverted = {v: k for k, v in d.items()}\nprint(inverted)  # Expected: {1: 'a', 2: 'b'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12885,7 +12885,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1451",
         "description": "Write a Python program using `all()` to check if all numbers in a list are positive.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3, 4]\nprint(all(x > 0 for x in lst))  # Expected: True",
+        "solution": "lst = [1, 2, 3, 4]\nprint(all(x > 0 for x in lst))  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3, 4]\nprint(all(x > 0 for x in lst))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12894,7 +12894,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1452",
         "description": "Use `all()` to determine if all characters in a string are lowercase.",
         "initialCode": "# Write your solution here",
-        "solution": "s = \"hello\"\nprint(all(c.islower() for c in s))  # Expected: True",
+        "solution": "s = \"hello\"\nprint(all(c.islower() for c in s))  # Expected: True\n\n# Wrapped in function\n    def main():\n        s = \'hello\'\nprint(all(c.islower() for c in s))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12903,7 +12903,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1453",
         "description": "Write a Pythonic way to use `all()` to check if all elements in a list are even.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [2, 4, 6]\nprint(all(x % 2 == 0 for x in lst))  # Expected: True",
+        "solution": "lst = [2, 4, 6]\nprint(all(x % 2 == 0 for x in lst))  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [2, 4, 6]\nprint(all(x % 2 == 0 for x in lst))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12921,7 +12921,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1455",
         "description": "Use `all()` to check if all items in a set are greater than 10.",
         "initialCode": "# Write your solution here",
-        "solution": "s = {11, 12, 13}\nprint(all(x > 10 for x in s))  # Expected: True",
+        "solution": "s = {11, 12, 13}\nprint(all(x > 10 for x in s))  # Expected: True\n\n# Wrapped in function\n    def main():\n        s = {11, 12, 13}\nprint(all(x > 10 for x in s))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12939,7 +12939,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1457",
         "description": "Use `all()` to check if all elements in a matrix row are equal.",
         "initialCode": "# Write your solution here",
-        "solution": "row = [5, 5, 5]\nprint(all(x == row[0] for x in row))  # Expected: True",
+        "solution": "row = [5, 5, 5]\nprint(all(x == row[0] for x in row))  # Expected: True\n\n# Wrapped in function\n    def main():\n        row = [5, 5, 5]\nprint(all(x == row[0] for x in row))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12957,7 +12957,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1459",
         "description": "Write a Python program that uses `all()` to check if all keys in a dictionary are strings.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {\"a\": 1, \"b\": 2}\nprint(all(isinstance(k, str) for k in d.keys()))  # Expected: True",
+        "solution": "d = {\"a\": 1, \"b\": 2}\nprint(all(isinstance(k, str) for k in d.keys()))  # Expected: True\n\n# Wrapped in function\n    def main():\n        d = {\'a\': 1, \'b\': 2}\nprint(all(isinstance(k, str) for k in d.keys()))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12966,7 +12966,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1460",
         "description": "Use `all()` to verify that all files have a \".txt\" extension.",
         "initialCode": "# Write your solution here",
-        "solution": "files = [\"doc1.txt\", \"doc2.txt\"]\nprint(all(f.endswith(\".txt\") for f in files))  # Expected: True",
+        "solution": "files = [\"doc1.txt\", \"doc2.txt\"]\nprint(all(f.endswith(\".txt\") for f in files))  # Expected: True\n\n# Wrapped in function\n    def main():\n        files = [\'doc1.txt\', \'doc2.txt\']\nprint(all(f.endswith(\'.txt\') for f in files))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12975,7 +12975,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1461",
         "description": "Use `all()` to check if all numbers in a list are within a certain range.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = [5, 6, 7]\nprint(all(1 <= x <= 10 for x in nums))  # Expected: True",
+        "solution": "nums = [5, 6, 7]\nprint(all(1 <= x <= 10 for x in nums))  # Expected: True\n\n# Wrapped in function\n    def main():\n        nums = [5, 6, 7]\nprint(all(1 <= x <= 10 for x in nums))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12984,7 +12984,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1462",
         "description": "Check if all sublists in a 2D list are non-empty using `all()`.",
         "initialCode": "# Write your solution here",
-        "solution": "matrix = [[1], [2], [3]]\nprint(all(len(sublist) > 0 for sublist in matrix))  # Expected: True",
+        "solution": "matrix = [[1], [2], [3]]\nprint(all(len(sublist) > 0 for sublist in matrix))  # Expected: True\n\n# Wrapped in function\n    def main():\n        matrix = [[1], [2], [3]]\nprint(all(len(sublist) > 0 for sublist in matrix))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12993,7 +12993,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1463",
         "description": "Use `all()` to confirm all booleans in a list are True.",
         "initialCode": "# Write your solution here",
-        "solution": "flags = [True, True, True]\nprint(all(flags))  # Expected: True",
+        "solution": "flags = [True, True, True]\nprint(all(flags))  # Expected: True\n\n# Wrapped in function\n    def main():\n        flags = [True, True, True]\nprint(all(flags))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13011,7 +13011,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1465",
         "description": "Write a Python program using `all()` to check if a list of numbers is strictly increasing.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = [1, 2, 3, 4]\nprint(all(x < y for x, y in zip(nums, nums[1:])))  # Expected: True",
+        "solution": "nums = [1, 2, 3, 4]\nprint(all(x < y for x, y in zip(nums, nums[1:])))  # Expected: True\n\n# Wrapped in function\n    def main():\n        nums = [1, 2, 3, 4]\nprint(all(x < y for x, y in zip(nums, nums[1:])))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13020,7 +13020,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1466",
         "description": "Check if all environment variables in a list are defined (non-empty strings).",
         "initialCode": "# Write your solution here",
-        "solution": "envs = [\"PATH\", \"HOME\", \"USER\"]\nprint(all(isinstance(env, str) and env for env in envs))  # Expected: True",
+        "solution": "envs = [\"PATH\", \"HOME\", \"USER\"]\nprint(all(isinstance(env, str) and env for env in envs))  # Expected: True\n\n# Wrapped in function\n    def main():\n        envs = [\'PATH\', \'HOME\', \'USER\']\nprint(all(isinstance(env, str) and env for env in envs))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13029,7 +13029,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1467",
         "description": "Use `all()` to ensure all items in a tuple are of the same type.",
         "initialCode": "# Write your solution here",
-        "solution": "t = (1, 2, 3)\nprint(all(type(x) == type(t[0]) for x in t))  # Expected: True",
+        "solution": "t = (1, 2, 3)\nprint(all(type(x) == type(t[0]) for x in t))  # Expected: True\n\n# Wrapped in function\n    def main():\n        t = (1, 2, 3)\nprint(all(type(x) == type(t[0]) for x in t))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13047,7 +13047,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1469",
         "description": "Use `all()` to confirm all values in a list are not None.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 2, 3]\nprint(all(x is not None for x in lst))  # Expected: True",
+        "solution": "lst = [1, 2, 3]\nprint(all(x is not None for x in lst))  # Expected: True\n\n# Wrapped in function\n    def main():\n        lst = [1, 2, 3]\nprint(all(x is not None for x in lst))  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13065,7 +13065,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1471",
         "description": "Write a Python program to check if a variable is `None` using `is`.",
         "initialCode": "# Write your solution here",
-        "solution": "x = None\nprint(x is None)  # Expected: True",
+        "solution": "x = None\nprint(x is None)  # Expected: True\n\n# Wrapped in function\n    def main():\n        x = None\nprint(x is None)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13074,7 +13074,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1472",
         "description": "Check if two variables point to the same list object using `is`.",
         "initialCode": "# Write your solution here",
-        "solution": "a = []\nb = a\nprint(a is b)  # Expected: True",
+        "solution": "a = []\nb = a\nprint(a is b)  # Expected: True\n\n# Wrapped in function\n    def main():\n        a = []\nb = a\nprint(a is b)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13083,7 +13083,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1473",
         "description": "Check if two separately created lists are not the same object using `is`.",
         "initialCode": "# Write your solution here",
-        "solution": "a = []\nb = []\nprint(a is not b)  # Expected: True",
+        "solution": "a = []\nb = []\nprint(a is not b)  # Expected: True\n\n# Wrapped in function\n    def main():\n        a = []\nb = []\nprint(a is not b)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13092,7 +13092,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1474",
         "description": "Use `is` to check if a variable is exactly `True`.",
         "initialCode": "# Write your solution here",
-        "solution": "flag = True\nprint(flag is True)  # Expected: True",
+        "solution": "flag = True\nprint(flag is True)  # Expected: True\n\n# Wrapped in function\n    def main():\n        flag = True\nprint(flag is True)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13110,7 +13110,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1476",
         "description": "Use `is` to check identity of small integers.",
         "initialCode": "# Write your solution here",
-        "solution": "a = 100\nb = 100\nprint(a is b)  # Expected: True (due to integer caching)",
+        "solution": "a = 100\nb = 100\nprint(a is b)  # Expected: True (due to integer caching)\n\n# Wrapped in function\n    def main():\n        a = 100\nb = 100\nprint(a is b)  # Expected: True (due to integer caching)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13155,7 +13155,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1481",
         "description": "Check if two instances of a class are not the same object.",
         "initialCode": "class X:\n    pass",
-        "solution": "class X:\n    pass\n\nx1 = X()\nx2 = X()\nprint(x1 is not x2)  # Expected: True",
+        "solution": "class X:\n    pass\n\nx1 = X()\nx2 = X()\nprint(x1 is not x2)  # Expected: True\n\n# Wrapped in function\n    def main():\n        class X:\n    pass\n\nx1 = X()\nx2 = X()\nprint(x1 is not x2)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13164,7 +13164,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1482",
         "description": "Check identity of two variables referencing the same dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "d1 = {\"a\": 1}\nd2 = d1\nprint(d1 is d2)  # Expected: True",
+        "solution": "d1 = {\"a\": 1}\nd2 = d1\nprint(d1 is d2)  # Expected: True\n\n# Wrapped in function\n    def main():\n        d1 = {\'a\': 1}\nd2 = d1\nprint(d1 is d2)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13173,7 +13173,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1483",
         "description": "Use `is` in an assertion to verify object identity.",
         "initialCode": "# Write your solution here",
-        "solution": "a = b = object()\nassert a is b\nprint(\"Assertion passed\")  # Expected: Assertion passed",
+        "solution": "a = b = object()\nassert a is b\nprint(\"Assertion passed\")  # Expected: Assertion passed\n\n# Wrapped in function\n    def main():\n        a = b = object()\nassert a is b\nprint(\'Assertion passed\')  # Expected: Assertion passed\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13209,7 +13209,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1487",
         "description": "Check that changing a variable makes it no longer the same object.",
         "initialCode": "# Write your solution here",
-        "solution": "a = [1, 2]\nb = a\na = [1, 2]\nprint(a is b)  # Expected: False",
+        "solution": "a = [1, 2]\nb = a\na = [1, 2]\nprint(a is b)  # Expected: False\n\n# Wrapped in function\n    def main():\n        a = [1, 2]\nb = a\na = [1, 2]\nprint(a is b)  # Expected: False\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13227,7 +13227,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1489",
         "description": "Use `is` with `not` to check that a value is not `False`.",
         "initialCode": "# Write your solution here",
-        "solution": "value = \"some text\"\nprint(value is not False)  # Expected: True",
+        "solution": "value = \"some text\"\nprint(value is not False)  # Expected: True\n\n# Wrapped in function\n    def main():\n        value = \'some text\'\nprint(value is not False)  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13245,7 +13245,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1491",
         "description": "Use `default=` with the `max()` function to return a default when the list is empty.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = []\nprint(max(nums, default=0))  # Expected: 0",
+        "solution": "nums = []\nprint(max(nums, default=0))  # Expected: 0\n\n# Wrapped in function\n    def main():\n        nums = []\nprint(max(nums, default=0))  # Expected: 0\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13263,7 +13263,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1493",
         "description": "Use `default=` in `max()` to safely get the longest word from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "words = []\nprint(max(words, key=len, default=\"None\"))  # Expected: \"None\"",
+        "solution": "words = []\nprint(max(words, key=len, default=\"None\"))  # Expected: \"None\"\n\n# Wrapped in function\n    def main():\n        words = []\nprint(max(words, key=len, default=\'None\'))  # Expected: \'None\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13281,7 +13281,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1495",
         "description": "Use `default=` in `next()` to safely access an item in a generator.",
         "initialCode": "# Write your solution here",
-        "solution": "gen = (x for x in range(5) if x > 10)\nprint(next(gen, default=\"No item\"))  # Expected: \"No item\"",
+        "solution": "gen = (x for x in range(5) if x > 10)\nprint(next(gen, default=\"No item\"))  # Expected: \"No item\"\n\n# Wrapped in function\n    def main():\n        gen = (x for x in range(5) if x > 10)\nprint(next(gen, default=\'No item\'))  # Expected: \'No item\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13290,7 +13290,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1496",
         "description": "Use `default=` with `max()` on a filtered list to handle no matches.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = [1, 3, 5]\nprint(max((x for x in nums if x % 2 == 0), default=None))  # Expected: None",
+        "solution": "nums = [1, 3, 5]\nprint(max((x for x in nums if x % 2 == 0), default=None))  # Expected: None\n\n# Wrapped in function\n    def main():\n        nums = [1, 3, 5]\nprint(max((x for x in nums if x % 2 == 0), default=None))  # Expected: None\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13299,7 +13299,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1497",
         "description": "Use `default=` in `min()` to get a fallback value when no condition matches.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = [1, 3, 5]\nprint(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -1",
+        "solution": "nums = [1, 3, 5]\nprint(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -1\n\n# Wrapped in function\n    def main():\n        nums = [1, 3, 5]\nprint(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13308,7 +13308,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1498",
         "description": "Use `default=` with `next()` to find the first name starting with \"Z\".",
         "initialCode": "# Write your solution here",
-        "solution": "names = [\"Alice\", \"Bob\"]\nprint(next((name for name in names if name.startswith(\"Z\")), default=\"Not found\"))  # Expected: \"Not found\"",
+        "solution": "names = [\"Alice\", \"Bob\"]\nprint(next((name for name in names if name.startswith(\"Z\")), default=\"Not found\"))  # Expected: \"Not found\"\n\n# Wrapped in function\n    def main():\n        names = [\'Alice\', \'Bob\']\nprint(next((name for name in names if name.startswith(\'Z\')), default=\'Not found\'))  # Expected: \'Not found\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13317,7 +13317,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1499",
         "description": "Use `default=` with `max()` to find the max in a sublist or return a placeholder.",
         "initialCode": "# Write your solution here",
-        "solution": "data = []\nprint(max(data, default=\"empty\"))  # Expected: \"empty\"",
+        "solution": "data = []\nprint(max(data, default=\"empty\"))  # Expected: \"empty\"\n\n# Wrapped in function\n    def main():\n        data = []\nprint(max(data, default=\'empty\'))  # Expected: \'empty\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13326,7 +13326,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1500",
         "description": "Use `default=` in `next()` to handle an empty comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "print(next((x for x in []), default=\"Empty\"))  # Expected: \"Empty\"",
+        "solution": "print(next((x for x in []), default=\"Empty\"))  # Expected: \"Empty\"\n\n# Wrapped in function\n    def main():\n        print(next((x for x in []), default=\'Empty\'))  # Expected: \'Empty\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13335,7 +13335,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1501",
         "description": "Use `default=` with `min()` to avoid crash on an empty set.",
         "initialCode": "# Write your solution here",
-        "solution": "s = set()\nprint(min(s, default=0))  # Expected: 0",
+        "solution": "s = set()\nprint(min(s, default=0))  # Expected: 0\n\n# Wrapped in function\n    def main():\n        s = set()\nprint(min(s, default=0))  # Expected: 0\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13344,7 +13344,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1502",
         "description": "Use `default=` with `next()` to check for existence of an element in a list.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), default=\"Missing\"))  # Expected: \"Missing\"",
+        "solution": "nums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), default=\"Missing\"))  # Expected: \"Missing\"\n\n# Wrapped in function\n    def main():\n        nums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), default=\'Missing\'))  # Expected: \'Missing\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13353,7 +13353,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1503",
         "description": "Use `default=` in `max()` to return fallback when list is empty.",
         "initialCode": "# Write your solution here",
-        "solution": "scores = []\nprint(max(scores, default=\"No scores\"))  # Expected: \"No scores\"",
+        "solution": "scores = []\nprint(max(scores, default=\"No scores\"))  # Expected: \"No scores\"\n\n# Wrapped in function\n    def main():\n        scores = []\nprint(max(scores, default=\'No scores\'))  # Expected: \'No scores\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13362,7 +13362,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1504",
         "description": "Use `default=` with `next()` to return a default if no element satisfies the condition.",
         "initialCode": "# Write your solution here",
-        "solution": "letters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), default=\"Not found\"))  # Expected: \"Not found\"",
+        "solution": "letters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), default=\"Not found\"))  # Expected: \"Not found\"\n\n# Wrapped in function\n    def main():\n        letters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), default=\'Not found\'))  # Expected: \'Not found\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13371,7 +13371,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1505",
         "description": "Use `default=` in `max()` with a custom key function and empty input.",
         "initialCode": "# Write your solution here",
-        "solution": "strings = []\nprint(max(strings, key=str.lower, default=\"None\"))  # Expected: \"None\"",
+        "solution": "strings = []\nprint(max(strings, key=str.lower, default=\"None\"))  # Expected: \"None\"\n\n# Wrapped in function\n    def main():\n        strings = []\nprint(max(strings, key=str.lower, default=\'None\'))  # Expected: \'None\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13380,7 +13380,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1506",
         "description": "Use `default=` with `next()` to safely iterate a condition on a list of dictionaries.",
         "initialCode": "# Write your solution here",
-        "solution": "users = [{\"name\": \"Alice\"}, {\"name\": \"Bob\"}]\nprint(next((u for u in users if u[\"name\"] == \"Zoe\"), default=\"No match\"))  # Expected: \"No match\"",
+        "solution": "users = [{\"name\": \"Alice\"}, {\"name\": \"Bob\"}]\nprint(next((u for u in users if u[\"name\"] == \"Zoe\"), default=\"No match\"))  # Expected: \"No match\"\n\n# Wrapped in function\n    def main():\n        users = [{\'name\': \'Alice\'}, {\'name\': \'Bob\'}]\nprint(next((u for u in users if u[\'name\'] == \'Zoe\'), default=\'No match\'))  # Expected: \'No match\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13389,7 +13389,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1507",
         "description": "Use `default=` with `min()` to handle a list that may be empty.",
         "initialCode": "# Write your solution here",
-        "solution": "data = []\nprint(min(data, default=-99))  # Expected: -99",
+        "solution": "data = []\nprint(min(data, default=-99))  # Expected: -99\n\n# Wrapped in function\n    def main():\n        data = []\nprint(min(data, default=-99))  # Expected: -99\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13398,7 +13398,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1508",
         "description": "Use `default=` in `max()` to get highest score or \"No data\".",
         "initialCode": "# Write your solution here",
-        "solution": "scores = []\nprint(max(scores, default=\"No data\"))  # Expected: \"No data\"",
+        "solution": "scores = []\nprint(max(scores, default=\"No data\"))  # Expected: \"No data\"\n\n# Wrapped in function\n    def main():\n        scores = []\nprint(max(scores, default=\'No data\'))  # Expected: \'No data\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13407,7 +13407,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1509",
         "description": "Use `default=` in `next()` to avoid StopIteration on empty input.",
         "initialCode": "# Write your solution here",
-        "solution": "print(next(iter([]), default=\"Nothing\"))  # Expected: \"Nothing\"",
+        "solution": "print(next(iter([]), default=\"Nothing\"))  # Expected: \"Nothing\"\n\n# Wrapped in function\n    def main():\n        print(next(iter([]), default=\'Nothing\'))  # Expected: \'Nothing\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13416,7 +13416,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1510",
         "description": "Use `default=` with `max()` to find max string or return fallback.",
         "initialCode": "# Write your solution here",
-        "solution": "words = []\nprint(max(words, default=\"N/A\"))  # Expected: \"N/A\"",
+        "solution": "words = []\nprint(max(words, default=\"N/A\"))  # Expected: \"N/A\"\n\n# Wrapped in function\n    def main():\n        words = []\nprint(max(words, default=\'N/A\'))  # Expected: \'N/A\'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13425,7 +13425,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1511",
         "description": "Use `default=` with `sorted()` to handle empty iterables and return a default sorted list.",
         "initialCode": "# Write your solution here",
-        "solution": "# Note: sorted() doesn't have a default parameter, but we can handle empty iterables\nitems = []\nresult = sorted(items) if items else []\nprint(result)  # Expected: []",
+        "solution": "# Note: sorted() doesn't have a default parameter, but we can handle empty iterables\nitems = []\nresult = sorted(items) if items else []\nprint(result)  # Expected: []\n\n# Wrapped in function\n    def main():\n        # Note: sorted() doesn't have a default parameter, but we can handle empty iterables\nitems = []\nresult = sorted(items) if items else []\nprint(result)  # Expected: []\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13434,7 +13434,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1512",
         "description": "Use `default=` with `min()` to find the minimum value in a list of dictionaries by a key, or return a default.",
         "initialCode": "# Write your solution here",
-        "solution": "people = [{'age': 25}, {'age': 30}, {'age': 20}]\nmin_age_dict = min(people, key=lambda x: x.get('age', 0), default={'age': 0})\nprint(min_age_dict)  # Expected: {'age': 20}",
+        "solution": "people = [{'age': 25}, {'age': 30}, {'age': 20}]\nmin_age_dict = min(people, key=lambda x: x.get('age', 0), default={'age': 0})\nprint(min_age_dict)  # Expected: {'age': 20}\n\n# Wrapped in function\n    def main():\n        people = [{'age': 25}, {'age': 30}, {'age': 20}]\nmin_age_dict = min(people, key=lambda x: x.get('age', 0), default={'age': 0})\nprint(min_age_dict)  # Expected: {'age': 20}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13443,7 +13443,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1513",
         "description": "Use `default=` with `max()` to find the maximum length string in a list, or return 'No items' if empty.",
         "initialCode": "# Write your solution here",
-        "solution": "words = ['hello', 'world', 'python']\nmax_word = max(words, key=len, default='No items')\nprint(max_word)  # Expected: python",
+        "solution": "words = ['hello', 'world', 'python']\nmax_word = max(words, key=len, default='No items')\nprint(max_word)  # Expected: python\n\n# Wrapped in function\n    def main():\n        words = ['hello', 'world', 'python']\nmax_word = max(words, key=len, default='No items')\nprint(max_word)  # Expected: python\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13452,7 +13452,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1514",
         "description": "Use `dict.get()` with a default value to safely access nested dictionary keys.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {'user': {'name': 'Alice', 'age': 30}}\nname = data.get('user', {}).get('name', 'Unknown')\ncity = data.get('user', {}).get('city', 'Unknown')\nprint(name, city)  # Expected: Alice Unknown",
+        "solution": "data = {'user': {'name': 'Alice', 'age': 30}}\nname = data.get('user', {}).get('name', 'Unknown')\ncity = data.get('user', {}).get('city', 'Unknown')\nprint(name, city)  # Expected: Alice Unknown\n\n# Wrapped in function\n    def main():\n        data = {'user': {'name': 'Alice', 'age': 30}}\nname = data.get('user', {}).get('name', 'Unknown')\ncity = data.get('user', {}).get('city', 'Unknown')\nprint(name, city)  # Expected: Alice Unknown\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13461,7 +13461,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1515",
         "description": "Use `collections.defaultdict` with `int` as default factory to count occurrences of items in a list.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nitems = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']\ncounter = defaultdict(int)\nfor item in items:\n    counter[item] += 1\nprint(dict(counter))  # Expected: {'apple': 3, 'banana': 2, 'cherry': 1}",
+        "solution": "from collections import defaultdict\nitems = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']\ncounter = defaultdict(int)\nfor item in items:\n    counter[item] += 1\nprint(dict(counter))  # Expected: {'apple': 3, 'banana': 2, 'cherry': 1}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nitems = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']\ncounter = defaultdict(int)\nfor item in items:\n    counter[item] += 1\nprint(dict(counter))  # Expected: {'apple': 3, 'banana': 2, 'cherry': 1}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13470,7 +13470,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1516",
         "description": "Use `dict.setdefault()` to initialize a list value in a dictionary if the key doesn't exist.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {}\ndata.setdefault('items', []).append('apple')\ndata.setdefault('items', []).append('banana')\nprint(data)  # Expected: {'items': ['apple', 'banana']}",
+        "solution": "data = {}\ndata.setdefault('items', []).append('apple')\ndata.setdefault('items', []).append('banana')\nprint(data)  # Expected: {'items': ['apple', 'banana']}\n\n# Wrapped in function\n    def main():\n        data = {}\ndata.setdefault('items', []).append('apple')\ndata.setdefault('items', []).append('banana')\nprint(data)  # Expected: {'items': ['apple', 'banana']}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13479,7 +13479,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1517",
         "description": "Use `default=` with `next()` to get the first element from a filtered iterator, or return None.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 3, 5, 8, 10]\nfirst_even = next((x for x in numbers if x % 2 == 0), None)\nprint(first_even)  # Expected: 8",
+        "solution": "numbers = [1, 3, 5, 8, 10]\nfirst_even = next((x for x in numbers if x % 2 == 0), None)\nprint(first_even)  # Expected: 8\n\n# Wrapped in function\n    def main():\n        numbers = [1, 3, 5, 8, 10]\nfirst_even = next((x for x in numbers if x % 2 == 0), None)\nprint(first_even)  # Expected: 8\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13488,7 +13488,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1518",
         "description": "Use `collections.defaultdict` with `list` as default factory to group items by category.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nitems = [('fruit', 'apple'), ('fruit', 'banana'), ('vegetable', 'carrot')]\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\nprint(dict(grouped))  # Expected: {'fruit': ['apple', 'banana'], 'vegetable': ['carrot']}",
+        "solution": "from collections import defaultdict\nitems = [('fruit', 'apple'), ('fruit', 'banana'), ('vegetable', 'carrot')]\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\nprint(dict(grouped))  # Expected: {'fruit': ['apple', 'banana'], 'vegetable': ['carrot']}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nitems = [('fruit', 'apple'), ('fruit', 'banana'), ('vegetable', 'carrot')]\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\nprint(dict(grouped))  # Expected: {'fruit': ['apple', 'banana'], 'vegetable': ['carrot']}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13497,7 +13497,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1519",
         "description": "Use `dict.get()` with a default empty dictionary to safely access dictionary values.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {'user': {'name': 'Alice'}}\nuser_info = data.get('user', {})\nname = user_info.get('name', 'Unknown')\nprint(name)  # Expected: Alice",
+        "solution": "data = {'user': {'name': 'Alice'}}\nuser_info = data.get('user', {})\nname = user_info.get('name', 'Unknown')\nprint(name)  # Expected: Alice\n\n# Wrapped in function\n    def main():\n        data = {'user': {'name': 'Alice'}}\nuser_info = data.get('user', {})\nname = user_info.get('name', 'Unknown')\nprint(name)  # Expected: Alice\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13506,7 +13506,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1520",
         "description": "Use `default=` with `min()` and a key function to find the shortest string, or return an empty string.",
         "initialCode": "# Write your solution here",
-        "solution": "words = ['hello', 'world', 'python', 'hi']\nshortest = min(words, key=len, default='')\nprint(shortest)  # Expected: hi",
+        "solution": "words = ['hello', 'world', 'python', 'hi']\nshortest = min(words, key=len, default='')\nprint(shortest)  # Expected: hi\n\n# Wrapped in function\n    def main():\n        words = ['hello', 'world', 'python', 'hi']\nshortest = min(words, key=len, default='')\nprint(shortest)  # Expected: hi\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13515,7 +13515,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1521",
         "description": "Use `dict.setdefault()` to create a nested dictionary structure with default values.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {}\ndata.setdefault('user', {}).setdefault('profile', {})['name'] = 'Alice'\nprint(data)  # Expected: {'user': {'profile': {'name': 'Alice'}}}",
+        "solution": "data = {}\ndata.setdefault('user', {}).setdefault('profile', {})['name'] = 'Alice'\nprint(data)  # Expected: {'user': {'profile': {'name': 'Alice'}}}\n\n# Wrapped in function\n    def main():\n        data = {}\ndata.setdefault('user', {}).setdefault('profile', {})['name'] = 'Alice'\nprint(data)  # Expected: {'user': {'profile': {'name': 'Alice'}}}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13524,7 +13524,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1522",
         "description": "Use `default=` with `max()` to find the maximum value in a list of tuples by index, or return (0, 0).",
         "initialCode": "# Write your solution here",
-        "solution": "tuples = [(1, 5), (3, 2), (2, 8)]\nmax_tuple = max(tuples, key=lambda x: x[1], default=(0, 0))\nprint(max_tuple)  # Expected: (2, 8)",
+        "solution": "tuples = [(1, 5), (3, 2), (2, 8)]\nmax_tuple = max(tuples, key=lambda x: x[1], default=(0, 0))\nprint(max_tuple)  # Expected: (2, 8)\n\n# Wrapped in function\n    def main():\n        tuples = [(1, 5), (3, 2), (2, 8)]\nmax_tuple = max(tuples, key=lambda x: x[1], default=(0, 0))\nprint(max_tuple)  # Expected: (2, 8)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13533,7 +13533,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1523",
         "description": "Use `collections.defaultdict` with `set` as default factory to collect unique values per key.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nitems = [('a', 1), ('a', 2), ('b', 1), ('a', 1), ('b', 3)]\ngrouped = defaultdict(set)\nfor key, value in items:\n    grouped[key].add(value)\nprint({k: list(v) for k, v in grouped.items()})  # Expected: {'a': [1, 2], 'b': [1, 3]}",
+        "solution": "from collections import defaultdict\nitems = [('a', 1), ('a', 2), ('b', 1), ('a', 1), ('b', 3)]\ngrouped = defaultdict(set)\nfor key, value in items:\n    grouped[key].add(value)\nprint({k: list(v) for k, v in grouped.items()})  # Expected: {'a': [1, 2], 'b': [1, 3]}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nitems = [('a', 1), ('a', 2), ('b', 1), ('a', 1), ('b', 3)]\ngrouped = defaultdict(set)\nfor key, value in items:\n    grouped[key].add(value)\nprint({k: list(v) for k, v in grouped.items()})  # Expected: {'a': [1, 2], 'b': [1, 3]}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13542,7 +13542,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1524",
         "description": "Use `dict.get()` with a default value of 0 to safely sum values from multiple dictionaries.",
         "initialCode": "# Write your solution here",
-        "solution": "dict1 = {'a': 10, 'b': 20}\ndict2 = {'b': 30, 'c': 40}\ntotal = sum(dict1.get(k, 0) + dict2.get(k, 0) for k in set(dict1) | set(dict2))\nprint(total)  # Expected: 100",
+        "solution": "dict1 = {'a': 10, 'b': 20}\ndict2 = {'b': 30, 'c': 40}\ntotal = sum(dict1.get(k, 0) + dict2.get(k, 0) for k in set(dict1) | set(dict2))\nprint(total)  # Expected: 100\n\n# Wrapped in function\n    def main():\n        dict1 = {'a': 10, 'b': 20}\ndict2 = {'b': 30, 'c': 40}\ntotal = sum(dict1.get(k, 0) + dict2.get(k, 0) for k in set(dict1) | set(dict2))\nprint(total)  # Expected: 100\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13551,7 +13551,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1525",
         "description": "Use `default=` with `next()` to get the first even number from an iterator, or return -1.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 3, 5, 7]\nfirst_even = next((x for x in numbers if x % 2 == 0), -1)\nprint(first_even)  # Expected: -1",
+        "solution": "numbers = [1, 3, 5, 7]\nfirst_even = next((x for x in numbers if x % 2 == 0), -1)\nprint(first_even)  # Expected: -1\n\n# Wrapped in function\n    def main():\n        numbers = [1, 3, 5, 7]\nfirst_even = next((x for x in numbers if x % 2 == 0), -1)\nprint(first_even)  # Expected: -1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13560,7 +13560,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1526",
         "description": "Use `dict.setdefault()` to append items to a list value, creating the list if it doesn't exist.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {}\ndata.setdefault('items', []).append('apple')\ndata.setdefault('items', []).append('banana')\nprint(data['items'])  # Expected: ['apple', 'banana']",
+        "solution": "data = {}\ndata.setdefault('items', []).append('apple')\ndata.setdefault('items', []).append('banana')\nprint(data['items'])  # Expected: ['apple', 'banana']\n\n# Wrapped in function\n    def main():\n        data = {}\ndata.setdefault('items', []).append('apple')\ndata.setdefault('items', []).append('banana')\nprint(data['items'])  # Expected: ['apple', 'banana']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13569,7 +13569,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1527",
         "description": "Use `default=` with `min()` to find the minimum age from a list of person dictionaries, or return 0.",
         "initialCode": "# Write your solution here",
-        "solution": "people = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\nmin_age = min((p.get('age', 0) for p in people), default=0)\nprint(min_age)  # Expected: 25",
+        "solution": "people = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\nmin_age = min((p.get('age', 0) for p in people), default=0)\nprint(min_age)  # Expected: 25\n\n# Wrapped in function\n    def main():\n        people = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\nmin_age = min((p.get('age', 0) for p in people), default=0)\nprint(min_age)  # Expected: 25\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13578,7 +13578,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1528",
         "description": "Use `collections.defaultdict` with `lambda: []` to group strings by their first character.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nwords = ['apple', 'banana', 'apricot', 'cherry', 'blueberry']\ngrouped = defaultdict(lambda: [])\nfor word in words:\n    grouped[word[0]].append(word)\nprint(dict(grouped))  # Expected: {'a': ['apple', 'apricot'], 'b': ['banana', 'blueberry'], 'c': ['cherry']}",
+        "solution": "from collections import defaultdict\nwords = ['apple', 'banana', 'apricot', 'cherry', 'blueberry']\ngrouped = defaultdict(lambda: [])\nfor word in words:\n    grouped[word[0]].append(word)\nprint(dict(grouped))  # Expected: {'a': ['apple', 'apricot'], 'b': ['banana', 'blueberry'], 'c': ['cherry']}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nwords = ['apple', 'banana', 'apricot', 'cherry', 'blueberry']\ngrouped = defaultdict(lambda: [])\nfor word in words:\n    grouped[word[0]].append(word)\nprint(dict(grouped))  # Expected: {'a': ['apple', 'apricot'], 'b': ['banana', 'blueberry'], 'c': ['cherry']}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13587,7 +13587,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1529",
         "description": "Use `dict.get()` with a default empty list to safely access list values from a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {'items': ['apple', 'banana']}\nitems = data.get('items', [])\nmissing = data.get('missing', [])\nprint(items, missing)  # Expected: ['apple', 'banana'] []",
+        "solution": "data = {'items': ['apple', 'banana']}\nitems = data.get('items', [])\nmissing = data.get('missing', [])\nprint(items, missing)  # Expected: ['apple', 'banana'] []\n\n# Wrapped in function\n    def main():\n        data = {'items': ['apple', 'banana']}\nitems = data.get('items', [])\nmissing = data.get('missing', [])\nprint(items, missing)  # Expected: ['apple', 'banana'] []\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13596,7 +13596,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1530",
         "description": "Use `default=` with `max()` and a key function to find the longest word, or return 'N/A'.",
         "initialCode": "# Write your solution here",
-        "solution": "words = ['hello', 'world', 'python']\nlongest = max(words, key=len, default='N/A')\nprint(longest)  # Expected: python",
+        "solution": "words = ['hello', 'world', 'python']\nlongest = max(words, key=len, default='N/A')\nprint(longest)  # Expected: python\n\n# Wrapped in function\n    def main():\n        words = ['hello', 'world', 'python']\nlongest = max(words, key=len, default='N/A')\nprint(longest)  # Expected: python\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13605,7 +13605,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1531",
         "description": "Use `dict.setdefault()` to initialize a counter dictionary with default value 0.",
         "initialCode": "# Write your solution here",
-        "solution": "counter = {}\ncounter.setdefault('count', 0)\ncounter['count'] += 1\nprint(counter)  # Expected: {'count': 1}",
+        "solution": "counter = {}\ncounter.setdefault('count', 0)\ncounter['count'] += 1\nprint(counter)  # Expected: {'count': 1}\n\n# Wrapped in function\n    def main():\n        counter = {}\ncounter.setdefault('count', 0)\ncounter['count'] += 1\nprint(counter)  # Expected: {'count': 1}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13623,7 +13623,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1533",
         "description": "Use `collections.defaultdict` with `int` to create a frequency counter for characters in a string.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\ntext = \"hello\"\nchar_count = defaultdict(int)\nfor char in text:\n    char_count[char] += 1\nprint(dict(char_count))  # Expected: {'h': 1, 'e': 1, 'l': 2, 'o': 1}",
+        "solution": "from collections import defaultdict\ntext = \"hello\"\nchar_count = defaultdict(int)\nfor char in text:\n    char_count[char] += 1\nprint(dict(char_count))  # Expected: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\ntext = \'hello\'\nchar_count = defaultdict(int)\nfor char in text:\n    char_count[char] += 1\nprint(dict(char_count))  # Expected: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13632,7 +13632,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1534",
         "description": "Use `dict.get()` with a default value to safely merge two dictionaries, handling missing keys.",
         "initialCode": "# Write your solution here",
-        "solution": "dict1 = {'a': 1, 'b': 2}\ndict2 = {'b': 3, 'c': 4}\nmerged = {k: dict1.get(k, 0) + dict2.get(k, 0) for k in set(dict1) | set(dict2)}\nprint(merged)  # Expected: {'a': 1, 'b': 5, 'c': 4}",
+        "solution": "dict1 = {'a': 1, 'b': 2}\ndict2 = {'b': 3, 'c': 4}\nmerged = {k: dict1.get(k, 0) + dict2.get(k, 0) for k in set(dict1) | set(dict2)}\nprint(merged)  # Expected: {'a': 1, 'b': 5, 'c': 4}\n\n# Wrapped in function\n    def main():\n        dict1 = {'a': 1, 'b': 2}\ndict2 = {'b': 3, 'c': 4}\nmerged = {k: dict1.get(k, 0) + dict2.get(k, 0) for k in set(dict1) | set(dict2)}\nprint(merged)  # Expected: {'a': 1, 'b': 5, 'c': 4}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13641,7 +13641,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1535",
         "description": "Use `default=` with `min()` to find the minimum score from a list of student records, or return 0.0.",
         "initialCode": "# Write your solution here",
-        "solution": "students = [{'name': 'Alice', 'score': 85.5}, {'name': 'Bob', 'score': 92.0}]\nmin_score = min((s.get('score', 0.0) for s in students), default=0.0)\nprint(min_score)  # Expected: 85.5",
+        "solution": "students = [{'name': 'Alice', 'score': 85.5}, {'name': 'Bob', 'score': 92.0}]\nmin_score = min((s.get('score', 0.0) for s in students), default=0.0)\nprint(min_score)  # Expected: 85.5\n\n# Wrapped in function\n    def main():\n        students = [{'name': 'Alice', 'score': 85.5}, {'name': 'Bob', 'score': 92.0}]\nmin_score = min((s.get('score', 0.0) for s in students), default=0.0)\nprint(min_score)  # Expected: 85.5\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13650,7 +13650,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1536",
         "description": "Use `dict.setdefault()` to create a dictionary of lists, appending values to existing lists.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {}\ndata.setdefault('fruits', []).append('apple')\ndata.setdefault('fruits', []).append('banana')\ndata.setdefault('vegetables', []).append('carrot')\nprint(data)  # Expected: {'fruits': ['apple', 'banana'], 'vegetables': ['carrot']}",
+        "solution": "data = {}\ndata.setdefault('fruits', []).append('apple')\ndata.setdefault('fruits', []).append('banana')\ndata.setdefault('vegetables', []).append('carrot')\nprint(data)  # Expected: {'fruits': ['apple', 'banana'], 'vegetables': ['carrot']}\n\n# Wrapped in function\n    def main():\n        data = {}\ndata.setdefault('fruits', []).append('apple')\ndata.setdefault('fruits', []).append('banana')\ndata.setdefault('vegetables', []).append('carrot')\nprint(data)  # Expected: {'fruits': ['apple', 'banana'], 'vegetables': ['carrot']}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13659,7 +13659,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1537",
         "description": "Use `default=` with `max()` to find the maximum price from a list of products, or return 'No products'.",
         "initialCode": "# Write your solution here",
-        "solution": "products = [{'name': 'laptop', 'price': 999}, {'name': 'phone', 'price': 699}]\nmax_price = max((p.get('price', 0) for p in products), default='No products')\nprint(max_price)  # Expected: 999",
+        "solution": "products = [{'name': 'laptop', 'price': 999}, {'name': 'phone', 'price': 699}]\nmax_price = max((p.get('price', 0) for p in products), default='No products')\nprint(max_price)  # Expected: 999\n\n# Wrapped in function\n    def main():\n        products = [{'name': 'laptop', 'price': 999}, {'name': 'phone', 'price': 699}]\nmax_price = max((p.get('price', 0) for p in products), default='No products')\nprint(max_price)  # Expected: 999\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13668,7 +13668,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1538",
         "description": "Use `collections.defaultdict` with `lambda: defaultdict(int)` to create nested counters.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\ndata = [('a', 'x'), ('a', 'y'), ('b', 'x'), ('a', 'x')]\nnested = defaultdict(lambda: defaultdict(int))\nfor key1, key2 in data:\n    nested[key1][key2] += 1\nprint({k: dict(v) for k, v in nested.items()})  # Expected: {'a': {'x': 2, 'y': 1}, 'b': {'x': 1}}",
+        "solution": "from collections import defaultdict\ndata = [('a', 'x'), ('a', 'y'), ('b', 'x'), ('a', 'x')]\nnested = defaultdict(lambda: defaultdict(int))\nfor key1, key2 in data:\n    nested[key1][key2] += 1\nprint({k: dict(v) for k, v in nested.items()})  # Expected: {'a': {'x': 2, 'y': 1}, 'b': {'x': 1}}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\ndata = [('a', 'x'), ('a', 'y'), ('b', 'x'), ('a', 'x')]\nnested = defaultdict(lambda: defaultdict(int))\nfor key1, key2 in data:\n    nested[key1][key2] += 1\nprint({k: dict(v) for k, v in nested.items()})  # Expected: {'a': {'x': 2, 'y': 1}, 'b': {'x': 1}}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13677,7 +13677,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1539",
         "description": "Use `dict.get()` with a default empty string to safely concatenate values from multiple dictionaries.",
         "initialCode": "# Write your solution here",
-        "solution": "dict1 = {'name': 'Alice'}\ndict2 = {'surname': 'Smith'}\nfull_name = dict1.get('name', '') + ' ' + dict2.get('surname', '')\nprint(full_name)  # Expected: Alice Smith",
+        "solution": "dict1 = {'name': 'Alice'}\ndict2 = {'surname': 'Smith'}\nfull_name = dict1.get('name', '') + ' ' + dict2.get('surname', '')\nprint(full_name)  # Expected: Alice Smith\n\n# Wrapped in function\n    def main():\n        dict1 = {'name': 'Alice'}\ndict2 = {'surname': 'Smith'}\nfull_name = dict1.get('name', '') + ' ' + dict2.get('surname', '')\nprint(full_name)  # Expected: Alice Smith\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13686,7 +13686,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1540",
         "description": "Use `default=` with `next()` to get the first element matching a condition, or return a default object.",
         "initialCode": "# Write your solution here",
-        "solution": "numbers = [1, 3, 5, 7, 9]\nfirst_greater_than_5 = next((x for x in numbers if x > 5), None)\nprint(first_greater_than_5)  # Expected: 7",
+        "solution": "numbers = [1, 3, 5, 7, 9]\nfirst_greater_than_5 = next((x for x in numbers if x > 5), None)\nprint(first_greater_than_5)  # Expected: 7\n\n# Wrapped in function\n    def main():\n        numbers = [1, 3, 5, 7, 9]\nfirst_greater_than_5 = next((x for x in numbers if x > 5), None)\nprint(first_greater_than_5)  # Expected: 7\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13695,7 +13695,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1541",
         "description": "Use `dict.setdefault()` to initialize a set value in a dictionary, adding items to the set.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {}\ndata.setdefault('tags', set()).add('python')\ndata.setdefault('tags', set()).add('programming')\nprint(data)  # Expected: {'tags': {'python', 'programming'}}",
+        "solution": "data = {}\ndata.setdefault('tags', set()).add('python')\ndata.setdefault('tags', set()).add('programming')\nprint(data)  # Expected: {'tags': {'python', 'programming'}}\n\n# Wrapped in function\n    def main():\n        data = {}\ndata.setdefault('tags', set()).add('python')\ndata.setdefault('tags', set()).add('programming')\nprint(data)  # Expected: {'tags': {'python', 'programming'}}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13704,7 +13704,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1542",
         "description": "Use `default=` with `min()` and a custom key to find the oldest person, or return a default person dict.",
         "initialCode": "# Write your solution here",
-        "solution": "people = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\noldest = min(people, key=lambda x: x.get('age', 0), default={'name': 'Unknown', 'age': 0})\nprint(oldest)  # Expected: {'name': 'Bob', 'age': 25}",
+        "solution": "people = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\noldest = min(people, key=lambda x: x.get('age', 0), default={'name': 'Unknown', 'age': 0})\nprint(oldest)  # Expected: {'name': 'Bob', 'age': 25}\n\n# Wrapped in function\n    def main():\n        people = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\noldest = min(people, key=lambda x: x.get('age', 0), default={'name': 'Unknown', 'age': 0})\nprint(oldest)  # Expected: {'name': 'Bob', 'age': 25}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13713,7 +13713,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1543",
         "description": "Use `collections.defaultdict` with `str` as default factory to build a string concatenation dictionary.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nwords = [('category', 'apple'), ('category', 'banana'), ('type', 'fruit')]\nresult = defaultdict(str)\nfor key, value in words:\n    result[key] += value + ' '\nprint({k: v.strip() for k, v in result.items()})  # Expected: {'category': 'apple banana', 'type': 'fruit'}",
+        "solution": "from collections import defaultdict\nwords = [('category', 'apple'), ('category', 'banana'), ('type', 'fruit')]\nresult = defaultdict(str)\nfor key, value in words:\n    result[key] += value + ' '\nprint({k: v.strip() for k, v in result.items()})  # Expected: {'category': 'apple banana', 'type': 'fruit'}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nwords = [('category', 'apple'), ('category', 'banana'), ('type', 'fruit')]\nresult = defaultdict(str)\nfor key, value in words:\n    result[key] += value + ' '\nprint({k: v.strip() for k, v in result.items()})  # Expected: {'category': 'apple banana', 'type': 'fruit'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13722,7 +13722,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1544",
         "description": "Use `dict.get()` with a default value of [] to safely extend a list from dictionary values.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {'items': [1, 2, 3]}\nexisting = data.get('items', [])\nexisting.extend([4, 5])\nprint(existing)  # Expected: [1, 2, 3, 4, 5]",
+        "solution": "data = {'items': [1, 2, 3]}\nexisting = data.get('items', [])\nexisting.extend([4, 5])\nprint(existing)  # Expected: [1, 2, 3, 4, 5]\n\n# Wrapped in function\n    def main():\n        data = {'items': [1, 2, 3]}\nexisting = data.get('items', [])\nexisting.extend([4, 5])\nprint(existing)  # Expected: [1, 2, 3, 4, 5]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13731,7 +13731,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1545",
         "description": "Use `default=` with `max()` to find the maximum timestamp from a list of events, or return datetime.min.",
         "initialCode": "from datetime import datetime\n# Write your solution here",
-        "solution": "from datetime import datetime\nevents = [datetime(2023, 1, 1), datetime(2023, 2, 1), datetime(2023, 3, 1)]\nmax_date = max(events, default=datetime.min)\nprint(max_date)  # Expected: 2023-03-01 00:00:00",
+        "solution": "from datetime import datetime\nevents = [datetime(2023, 1, 1), datetime(2023, 2, 1), datetime(2023, 3, 1)]\nmax_date = max(events, default=datetime.min)\nprint(max_date)  # Expected: 2023-03-01 00:00:00\n\n# Wrapped in function\n    def main():\n        from datetime import datetime\nevents = [datetime(2023, 1, 1), datetime(2023, 2, 1), datetime(2023, 3, 1)]\nmax_date = max(events, default=datetime.min)\nprint(max_date)  # Expected: 2023-03-01 00:00:00\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13740,7 +13740,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1546",
         "description": "Use `dict.setdefault()` to create a dictionary of dictionaries with nested default values.",
         "initialCode": "# Write your solution here",
-        "solution": "data = {}\ndata.setdefault('users', {}).setdefault('alice', {})['age'] = 30\ndata.setdefault('users', {}).setdefault('bob', {})['age'] = 25\nprint(data)  # Expected: {'users': {'alice': {'age': 30}, 'bob': {'age': 25}}}",
+        "solution": "data = {}\ndata.setdefault('users', {}).setdefault('alice', {})['age'] = 30\ndata.setdefault('users', {}).setdefault('bob', {})['age'] = 25\nprint(data)  # Expected: {'users': {'alice': {'age': 30}, 'bob': {'age': 25}}}\n\n# Wrapped in function\n    def main():\n        data = {}\ndata.setdefault('users', {}).setdefault('alice', {})['age'] = 30\ndata.setdefault('users', {}).setdefault('bob', {})['age'] = 25\nprint(data)  # Expected: {'users': {'alice': {'age': 30}, 'bob': {'age': 25}}}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13758,7 +13758,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1548",
         "description": "Use `collections.defaultdict` with `lambda: {'count': 0, 'total': 0}` to create statistics dictionaries.",
         "initialCode": "from collections import defaultdict\n# Write your solution here",
-        "solution": "from collections import defaultdict\nstats = defaultdict(lambda: {'count': 0, 'total': 0})\nstats['item1']['count'] += 1\nstats['item1']['total'] += 10\nstats['item2']['count'] += 1\nstats['item2']['total'] += 20\nprint(dict(stats))  # Expected: {'item1': {'count': 1, 'total': 10}, 'item2': {'count': 1, 'total': 20}}",
+        "solution": "from collections import defaultdict\nstats = defaultdict(lambda: {'count': 0, 'total': 0})\nstats['item1']['count'] += 1\nstats['item1']['total'] += 10\nstats['item2']['count'] += 1\nstats['item2']['total'] += 20\nprint(dict(stats))  # Expected: {'item1': {'count': 1, 'total': 10}, 'item2': {'count': 1, 'total': 20}}\n\n# Wrapped in function\n    def main():\n        from collections import defaultdict\nstats = defaultdict(lambda: {'count': 0, 'total': 0})\nstats['item1']['count'] += 1\nstats['item1']['total'] += 10\nstats['item2']['count'] += 1\nstats['item2']['total'] += 20\nprint(dict(stats))  # Expected: {'item1': {'count': 1, 'total': 10}, 'item2': {'count': 1, 'total': 20}}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13776,7 +13776,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1550",
         "description": "Write a Pythonic way to use `functools.reduce()` to calculate the product of all numbers in a list.",
         "initialCode": "from functools import reduce\n# Write your solution here",
-        "solution": "from functools import reduce\nnumbers = [2, 3, 4, 5]\nproduct = reduce(lambda x, y: x * y, numbers)\nprint(product)  # Expected: 120",
+        "solution": "from functools import reduce\nnumbers = [2, 3, 4, 5]\nproduct = reduce(lambda x, y: x * y, numbers)\nprint(product)  # Expected: 120\n\n# Wrapped in function\n    def main():\n        from functools import reduce\nnumbers = [2, 3, 4, 5]\nproduct = reduce(lambda x, y: x * y, numbers)\nprint(product)  # Expected: 120\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13785,7 +13785,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1551",
         "description": "Write a Pythonic way to use `functools.partial()` to create a function that multiplies a number by a fixed value.",
         "initialCode": "from functools import partial\n# Write your solution here",
-        "solution": "from functools import partial\nmultiply_by_5 = partial(lambda x, y: x * y, 5)\nresult = multiply_by_5(10)\nprint(result)  # Expected: 50",
+        "solution": "from functools import partial\nmultiply_by_5 = partial(lambda x, y: x * y, 5)\nresult = multiply_by_5(10)\nprint(result)  # Expected: 50\n\n# Wrapped in function\n    def main():\n        from functools import partial\nmultiply_by_5 = partial(lambda x, y: x * y, 5)\nresult = multiply_by_5(10)\nprint(result)  # Expected: 50\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13803,7 +13803,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1553",
         "description": "Write a Pythonic way to use `itertools.permutations()` to generate all permutations of a list.",
         "initialCode": "from itertools import permutations\n# Write your solution here",
-        "solution": "from itertools import permutations\nitems = [1, 2, 3]\nperms = list(permutations(items))\nprint(perms)  # Expected: [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]",
+        "solution": "from itertools import permutations\nitems = [1, 2, 3]\nperms = list(permutations(items))\nprint(perms)  # Expected: [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]\n\n# Wrapped in function\n    def main():\n        from itertools import permutations\nitems = [1, 2, 3]\nperms = list(permutations(items))\nprint(perms)  # Expected: [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13812,7 +13812,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1554",
         "description": "Write a Pythonic way to use `itertools.product()` to generate the Cartesian product of two lists.",
         "initialCode": "from itertools import product\n# Write your solution here",
-        "solution": "from itertools import product\nlist1 = [1, 2]\nlist2 = ['a', 'b']\ncartesian = list(product(list1, list2))\nprint(cartesian)  # Expected: [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]",
+        "solution": "from itertools import product\nlist1 = [1, 2]\nlist2 = ['a', 'b']\ncartesian = list(product(list1, list2))\nprint(cartesian)  # Expected: [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]\n\n# Wrapped in function\n    def main():\n        from itertools import product\nlist1 = [1, 2]\nlist2 = ['a', 'b']\ncartesian = list(product(list1, list2))\nprint(cartesian)  # Expected: [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13821,7 +13821,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1555",
         "description": "Write a Pythonic way to use `itertools.cycle()` to cycle through a list indefinitely.",
         "initialCode": "from itertools import cycle\n# Write your solution here",
-        "solution": "from itertools import cycle\ncolors = ['red', 'green', 'blue']\ncolor_cycle = cycle(colors)\nfirst_5 = [next(color_cycle) for _ in range(5)]\nprint(first_5)  # Expected: ['red', 'green', 'blue', 'red', 'green']",
+        "solution": "from itertools import cycle\ncolors = ['red', 'green', 'blue']\ncolor_cycle = cycle(colors)\nfirst_5 = [next(color_cycle) for _ in range(5)]\nprint(first_5)  # Expected: ['red', 'green', 'blue', 'red', 'green']\n\n# Wrapped in function\n    def main():\n        from itertools import cycle\ncolors = ['red', 'green', 'blue']\ncolor_cycle = cycle(colors)\nfirst_5 = [next(color_cycle) for _ in range(5)]\nprint(first_5)  # Expected: ['red', 'green', 'blue', 'red', 'green']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13839,7 +13839,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1557",
         "description": "Write a Pythonic way to use `itertools.islice()` to get the first n elements from an iterator.",
         "initialCode": "from itertools import islice\n# Write your solution here",
-        "solution": "from itertools import islice\nnumbers = range(10)\nfirst_5 = list(islice(numbers, 5))\nprint(first_5)  # Expected: [0, 1, 2, 3, 4]",
+        "solution": "from itertools import islice\nnumbers = range(10)\nfirst_5 = list(islice(numbers, 5))\nprint(first_5)  # Expected: [0, 1, 2, 3, 4]\n\n# Wrapped in function\n    def main():\n        from itertools import islice\nnumbers = range(10)\nfirst_5 = list(islice(numbers, 5))\nprint(first_5)  # Expected: [0, 1, 2, 3, 4]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13848,7 +13848,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1558",
         "description": "Write a Pythonic way to use `itertools.tee()` to split an iterator into multiple independent iterators.",
         "initialCode": "from itertools import tee\n# Write your solution here",
-        "solution": "from itertools import tee\nnumbers = iter([1, 2, 3, 4, 5])\niter1, iter2 = tee(numbers, 2)\nprint(list(iter1), list(iter2))  # Expected: [1, 2, 3, 4, 5] [1, 2, 3, 4, 5]",
+        "solution": "from itertools import tee\nnumbers = iter([1, 2, 3, 4, 5])\niter1, iter2 = tee(numbers, 2)\nprint(list(iter1), list(iter2))  # Expected: [1, 2, 3, 4, 5] [1, 2, 3, 4, 5]\n\n# Wrapped in function\n    def main():\n        from itertools import tee\nnumbers = iter([1, 2, 3, 4, 5])\niter1, iter2 = tee(numbers, 2)\nprint(list(iter1), list(iter2))  # Expected: [1, 2, 3, 4, 5] [1, 2, 3, 4, 5]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13857,7 +13857,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1559",
         "description": "Write a Pythonic way to use `itertools.accumulate()` to calculate cumulative sums of a list.",
         "initialCode": "from itertools import accumulate\n# Write your solution here",
-        "solution": "from itertools import accumulate\nnumbers = [1, 2, 3, 4, 5]\ncumulative = list(accumulate(numbers))\nprint(cumulative)  # Expected: [1, 3, 6, 10, 15]",
+        "solution": "from itertools import accumulate\nnumbers = [1, 2, 3, 4, 5]\ncumulative = list(accumulate(numbers))\nprint(cumulative)  # Expected: [1, 3, 6, 10, 15]\n\n# Wrapped in function\n    def main():\n        from itertools import accumulate\nnumbers = [1, 2, 3, 4, 5]\ncumulative = list(accumulate(numbers))\nprint(cumulative)  # Expected: [1, 3, 6, 10, 15]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13866,7 +13866,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1560",
         "description": "Write a Python program using `dataclasses` to create a simple Person class with name and age fields.",
         "initialCode": "from dataclasses import dataclass\nclass Person:\n    pass",
-        "solution": "from dataclasses import dataclass\n\n@dataclass\nclass Person:\n    name: str\n    age: int\n\nperson = Person(\"Alice\", 30)\nprint(person)  # Expected: Person(name='Alice', age=30)",
+        "solution": "from dataclasses import dataclass\n\n@dataclass\nclass Person:\n    name: str\n    age: int\n\nperson = Person(\"Alice\", 30)\nprint(person)  # Expected: Person(name='Alice', age=30)\n\n# Wrapped in function\n    def main():\n        from dataclasses import dataclass\n\n@dataclass\nclass Person:\n    name: str\n    age: int\n\nperson = Person(\'Alice\', 30)\nprint(person)  # Expected: Person(name='Alice', age=30)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13875,7 +13875,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1561",
         "description": "Write a Python program using `dataclasses.field()` to set default values in a dataclass.",
         "initialCode": "from dataclasses import dataclass, field\nclass Student:\n    pass",
-        "solution": "from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    name: str\n    age: int = field(default=18)\n    grades: list = field(default_factory=list)\n\nstudent = Student(\"Bob\")\nprint(student)  # Expected: Student(name='Bob', age=18, grades=[])",
+        "solution": "from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    name: str\n    age: int = field(default=18)\n    grades: list = field(default_factory=list)\n\nstudent = Student(\"Bob\")\nprint(student)  # Expected: Student(name='Bob', age=18, grades=[])\n\n# Wrapped in function\n    def main():\n        from dataclasses import dataclass, field\n\n@dataclass\nclass Student:\n    name: str\n    age: int = field(default=18)\n    grades: list = field(default_factory=list)\n\nstudent = Student(\'Bob\')\nprint(student)  # Expected: Student(name='Bob', age=18, grades=[])\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13884,7 +13884,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1562",
         "description": "Write a Python program using `@dataclass(frozen=True)` to create an immutable dataclass.",
         "initialCode": "from dataclasses import dataclass\nclass Point:\n    pass",
-        "solution": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Point:\n    x: int\n    y: int\n\npoint = Point(3, 4)\nprint(point)  # Expected: Point(x=3, y=4)",
+        "solution": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Point:\n    x: int\n    y: int\n\npoint = Point(3, 4)\nprint(point)  # Expected: Point(x=3, y=4)\n\n# Wrapped in function\n    def main():\n        from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Point:\n    x: int\n    y: int\n\npoint = Point(3, 4)\nprint(point)  # Expected: Point(x=3, y=4)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14046,7 +14046,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1580",
         "description": "Write a Pythonic way to use `pathlib.Path` to check if a file exists.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - actual file may not exist\npath = Path(\"example.txt\")\nexists = path.exists()\nprint(f\"File exists: {exists}\")  # Expected: File exists: False (or True if file exists)",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - actual file may not exist\npath = Path(\"example.txt\")\nexists = path.exists()\nprint(f\"File exists: {exists}\")  # Expected: File exists: False (or True if file exists)\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\n# Note: This is a demonstration - actual file may not exist\npath = Path(\'example.txt\')\nexists = path.exists()\nprint(f\'File exists: {exists}\')  # Expected: File exists: False (or True if file exists)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14055,7 +14055,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1581",
         "description": "Write a Pythonic way to use `pathlib.Path` to get the parent directory of a file path.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\npath = Path(\"/home/user/documents/file.txt\")\nparent = path.parent\nprint(parent)  # Expected: /home/user/documents",
+        "solution": "from pathlib import Path\n\npath = Path(\"/home/user/documents/file.txt\")\nparent = path.parent\nprint(parent)  # Expected: /home/user/documents\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\npath = Path(\'/home/user/documents/file.txt\')\nparent = path.parent\nprint(parent)  # Expected: /home/user/documents\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14064,7 +14064,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1582",
         "description": "Write a Pythonic way to use `pathlib.Path` to join path components.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\nbase = Path(\"/home/user\")\nfull_path = base / \"documents\" / \"file.txt\"\nprint(full_path)  # Expected: /home/user/documents/file.txt",
+        "solution": "from pathlib import Path\n\nbase = Path(\"/home/user\")\nfull_path = base / \"documents\" / \"file.txt\"\nprint(full_path)  # Expected: /home/user/documents/file.txt\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\nbase = Path(\'/home/user\')\nfull_path = base / \'documents\' / \'file.txt\'\nprint(full_path)  # Expected: /home/user/documents/file.txt\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14073,7 +14073,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1583",
         "description": "Write a Python program using `json.dumps()` to convert a Python dictionary to a JSON string.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\ndata = {\"name\": \"Alice\", \"age\": 30, \"city\": \"New York\"}\njson_string = json.dumps(data)\nprint(json_string)  # Expected: {\"name\": \"Alice\", \"age\": 30, \"city\": \"New York\"}",
+        "solution": "import json\n\ndata = {\"name\": \"Alice\", \"age\": 30, \"city\": \"New York\"}\njson_string = json.dumps(data)\nprint(json_string)  # Expected: {\"name\": \"Alice\", \"age\": 30, \"city\": \"New York\"}\n\n# Wrapped in function\n    def main():\n        import json\n\ndata = {\'name\': \'Alice\', \'age\': 30, \'city\': \'New York\'}\njson_string = json.dumps(data)\nprint(json_string)  # Expected: {\'name\': \'Alice\', \'age\': 30, \'city\': \'New York\'}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14082,7 +14082,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1584",
         "description": "Write a Python program using `json.loads()` to parse a JSON string into a Python dictionary.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\njson_string = '{\"name\": \"Alice\", \"age\": 30}'\ndata = json.loads(json_string)\nprint(data)  # Expected: {'name': 'Alice', 'age': 30}",
+        "solution": "import json\n\njson_string = '{\"name\": \"Alice\", \"age\": 30}'\ndata = json.loads(json_string)\nprint(data)  # Expected: {'name': 'Alice', 'age': 30}\n\n# Wrapped in function\n    def main():\n        import json\n\njson_string = '{\'name\': \'Alice\', \'age\': 30}'\ndata = json.loads(json_string)\nprint(data)  # Expected: {'name': 'Alice', 'age': 30}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14091,7 +14091,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1585",
         "description": "Write a Python program using `re.sub()` to replace all occurrences of a pattern in a string.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \"The cat sat on the mat\"\nnew_text = re.sub(r'cat', 'dog', text)\nprint(new_text)  # Expected: The dog sat on the mat",
+        "solution": "import re\n\ntext = \"The cat sat on the mat\"\nnew_text = re.sub(r'cat', 'dog', text)\nprint(new_text)  # Expected: The dog sat on the mat\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \'The cat sat on the mat\'\nnew_text = re.sub(r'cat', 'dog', text)\nprint(new_text)  # Expected: The dog sat on the mat\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14100,7 +14100,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1586",
         "description": "Write a Python program using `re.finditer()` to find all matches of a pattern and get their positions.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \"The cat and the hat\"\npattern = r'\\b\\w{3}\\b'\nmatches = [(m.group(), m.start()) for m in re.finditer(pattern, text)]\nprint(matches)  # Expected: [('The', 0), ('cat', 4), ('and', 8), ('the', 12), ('hat', 16)]",
+        "solution": "import re\n\ntext = \"The cat and the hat\"\npattern = r'\\b\\w{3}\\b'\nmatches = [(m.group(), m.start()) for m in re.finditer(pattern, text)]\nprint(matches)  # Expected: [('The', 0), ('cat', 4), ('and', 8), ('the', 12), ('hat', 16)]\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \'The cat and the hat\'\npattern = r'\\b\\w{3}\\b'\nmatches = [(m.group(), m.start()) for m in re.finditer(pattern, text)]\nprint(matches)  # Expected: [('The', 0), ('cat', 4), ('and', 8), ('the', 12), ('hat', 16)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14109,7 +14109,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1587",
         "description": "Write a Python program using named groups in regex to extract specific parts of a string.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \"John Doe, age 30\"\npattern = r'(?P<name>\\w+\\s+\\w+).*age\\s+(?P<age>\\d+)'\nmatch = re.search(pattern, text)\nif match:\n    print(match.group('name'), match.group('age'))  # Expected: John Doe 30",
+        "solution": "import re\n\ntext = \"John Doe, age 30\"\npattern = r'(?P<name>\\w+\\s+\\w+).*age\\s+(?P<age>\\d+)'\nmatch = re.search(pattern, text)\nif match:\n    print(match.group('name'), match.group('age'))  # Expected: John Doe 30\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \'John Doe, age 30\'\npattern = r'(?P<name>\\w+\\s+\\w+).*age\\s+(?P<age>\\d+)'\nmatch = re.search(pattern, text)\nif match:\n    print(match.group('name'), match.group('age'))  # Expected: John Doe 30\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14118,7 +14118,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1588",
         "description": "Write a Pythonic way to use `collections.OrderedDict` to maintain insertion order in a dictionary.",
         "initialCode": "from collections import OrderedDict\n# Write your solution here",
-        "solution": "from collections import OrderedDict\n\nod = OrderedDict()\nod['first'] = 1\nod['second'] = 2\nod['third'] = 3\nprint(list(od.keys()))  # Expected: ['first', 'second', 'third']",
+        "solution": "from collections import OrderedDict\n\nod = OrderedDict()\nod['first'] = 1\nod['second'] = 2\nod['third'] = 3\nprint(list(od.keys()))  # Expected: ['first', 'second', 'third']\n\n# Wrapped in function\n    def main():\n        from collections import OrderedDict\n\nod = OrderedDict()\nod['first'] = 1\nod['second'] = 2\nod['third'] = 3\nprint(list(od.keys()))  # Expected: ['first', 'second', 'third']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14127,7 +14127,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1589",
         "description": "Write a Pythonic way to use `collections.ChainMap` to combine multiple dictionaries into a single mapping.",
         "initialCode": "from collections import ChainMap\n# Write your solution here",
-        "solution": "from collections import ChainMap\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3, 'd': 4}\nchain = ChainMap(dict1, dict2)\nprint(dict(chain))  # Expected: {'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+        "solution": "from collections import ChainMap\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3, 'd': 4}\nchain = ChainMap(dict1, dict2)\nprint(dict(chain))  # Expected: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n\n# Wrapped in function\n    def main():\n        from collections import ChainMap\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3, 'd': 4}\nchain = ChainMap(dict1, dict2)\nprint(dict(chain))  # Expected: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14136,7 +14136,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1590",
         "description": "Write a Pythonic way to use `collections.namedtuple` to create a simple data structure with named fields.",
         "initialCode": "from collections import namedtuple\n# Write your solution here",
-        "solution": "from collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(3, 4)\nprint(p.x, p.y)  # Expected: 3 4",
+        "solution": "from collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(3, 4)\nprint(p.x, p.y)  # Expected: 3 4\n\n# Wrapped in function\n    def main():\n        from collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(3, 4)\nprint(p.x, p.y)  # Expected: 3 4\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14145,7 +14145,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1591",
         "description": "Write a Pythonic way to use nested list comprehensions to create a matrix.",
         "initialCode": "# Write your solution here",
-        "solution": "matrix = [[i * j for j in range(1, 4)] for i in range(1, 4)]\nprint(matrix)  # Expected: [[1, 2, 3], [2, 4, 6], [3, 6, 9]]",
+        "solution": "matrix = [[i * j for j in range(1, 4)] for i in range(1, 4)]\nprint(matrix)  # Expected: [[1, 2, 3], [2, 4, 6], [3, 6, 9]]\n\n# Wrapped in function\n    def main():\n        matrix = [[i * j for j in range(1, 4)] for i in range(1, 4)]\nprint(matrix)  # Expected: [[1, 2, 3], [2, 4, 6], [3, 6, 9]]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14181,7 +14181,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1595",
         "description": "Write a Pythonic way to use `str.removeprefix()` to remove a prefix from a string if it exists.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"HelloWorld\"\nresult = text.removeprefix(\"Hello\")\nprint(result)  # Expected: World",
+        "solution": "text = \"HelloWorld\"\nresult = text.removeprefix(\"Hello\")\nprint(result)  # Expected: World\n\n# Wrapped in function\n    def main():\n        text = \'HelloWorld\'\nresult = text.removeprefix(\'Hello\')\nprint(result)  # Expected: World\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14190,7 +14190,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1596",
         "description": "Write a Pythonic way to use `str.removesuffix()` to remove a suffix from a string if it exists.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"HelloWorld\"\nresult = text.removesuffix(\"World\")\nprint(result)  # Expected: Hello",
+        "solution": "text = \"HelloWorld\"\nresult = text.removesuffix(\"World\")\nprint(result)  # Expected: Hello\n\n# Wrapped in function\n    def main():\n        text = \'HelloWorld\'\nresult = text.removesuffix(\'World\')\nprint(result)  # Expected: Hello\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14199,7 +14199,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1597",
         "description": "Write a Pythonic way to use `str.rsplit()` to split a string from the right, limiting the number of splits.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"one.two.three.four\"\nparts = text.rsplit('.', 2)\nprint(parts)  # Expected: ['one.two', 'three', 'four']",
+        "solution": "text = \"one.two.three.four\"\nparts = text.rsplit('.', 2)\nprint(parts)  # Expected: ['one.two', 'three', 'four']\n\n# Wrapped in function\n    def main():\n        text = \'one.two.three.four\'\nparts = text.rsplit('.', 2)\nprint(parts)  # Expected: ['one.two', 'three', 'four']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14208,7 +14208,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1598",
         "description": "Write a Pythonic way to use `list.copy()` to create a shallow copy of a list.",
         "initialCode": "# Write your solution here",
-        "solution": "original = [1, 2, [3, 4]]\ncopied = original.copy()\ncopied[0] = 10\nprint(original, copied)  # Expected: [1, 2, [3, 4]] [10, 2, [3, 4]]",
+        "solution": "original = [1, 2, [3, 4]]\ncopied = original.copy()\ncopied[0] = 10\nprint(original, copied)  # Expected: [1, 2, [3, 4]] [10, 2, [3, 4]]\n\n# Wrapped in function\n    def main():\n        original = [1, 2, [3, 4]]\ncopied = original.copy()\ncopied[0] = 10\nprint(original, copied)  # Expected: [1, 2, [3, 4]] [10, 2, [3, 4]]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14217,7 +14217,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1599",
         "description": "Write a Pythonic way to use `list.clear()` to remove all elements from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "my_list = [1, 2, 3, 4, 5]\nmy_list.clear()\nprint(my_list)  # Expected: []",
+        "solution": "my_list = [1, 2, 3, 4, 5]\nmy_list.clear()\nprint(my_list)  # Expected: []\n\n# Wrapped in function\n    def main():\n        my_list = [1, 2, 3, 4, 5]\nmy_list.clear()\nprint(my_list)  # Expected: []\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14226,7 +14226,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1600",
         "description": "Write a Pythonic way to use `dict.popitem()` to remove and return the last key-value pair from a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nitem = d.popitem()\nprint(item, d)  # Expected: ('c', 3) {'a': 1, 'b': 2}",
+        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nitem = d.popitem()\nprint(item, d)  # Expected: ('c', 3) {'a': 1, 'b': 2}\n\n# Wrapped in function\n    def main():\n        d = {'a': 1, 'b': 2, 'c': 3}\nitem = d.popitem()\nprint(item, d)  # Expected: ('c', 3) {'a': 1, 'b': 2}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14235,7 +14235,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1601",
         "description": "Write a Pythonic way to use `dict.update()` to merge another dictionary into an existing one.",
         "initialCode": "# Write your solution here",
-        "solution": "dict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3, 'd': 4}\ndict1.update(dict2)\nprint(dict1)  # Expected: {'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+        "solution": "dict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3, 'd': 4}\ndict1.update(dict2)\nprint(dict1)  # Expected: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n\n# Wrapped in function\n    def main():\n        dict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3, 'd': 4}\ndict1.update(dict2)\nprint(dict1)  # Expected: {'a': 1, 'b': 2, 'c': 3, 'd': 4}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14244,7 +14244,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1602",
         "description": "Write a Pythonic way to use `dict.keys()` to iterate over dictionary keys.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nkeys = list(d.keys())\nprint(keys)  # Expected: ['a', 'b', 'c']",
+        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nkeys = list(d.keys())\nprint(keys)  # Expected: ['a', 'b', 'c']\n\n# Wrapped in function\n    def main():\n        d = {'a': 1, 'b': 2, 'c': 3}\nkeys = list(d.keys())\nprint(keys)  # Expected: ['a', 'b', 'c']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14253,7 +14253,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1603",
         "description": "Write a Pythonic way to use `dict.values()` to get all values from a dictionary as a view.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nvalues = list(d.values())\nprint(values)  # Expected: [1, 2, 3]",
+        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nvalues = list(d.values())\nprint(values)  # Expected: [1, 2, 3]\n\n# Wrapped in function\n    def main():\n        d = {'a': 1, 'b': 2, 'c': 3}\nvalues = list(d.values())\nprint(values)  # Expected: [1, 2, 3]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14262,7 +14262,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1604",
         "description": "Write a Pythonic way to use `dict.items()` to iterate over key-value pairs in a dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nitems = list(d.items())\nprint(items)  # Expected: [('a', 1), ('b', 2), ('c', 3)]",
+        "solution": "d = {'a': 1, 'b': 2, 'c': 3}\nitems = list(d.items())\nprint(items)  # Expected: [('a', 1), ('b', 2), ('c', 3)]\n\n# Wrapped in function\n    def main():\n        d = {'a': 1, 'b': 2, 'c': 3}\nitems = list(d.items())\nprint(items)  # Expected: [('a', 1), ('b', 2), ('c', 3)]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14271,7 +14271,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1605",
         "description": "Write a Python program to define a custom exception class that inherits from Exception.",
         "initialCode": "class CustomError(Exception):\n    pass",
-        "solution": "class CustomError(Exception):\n    pass\n\ntry:\n    raise CustomError(\"This is a custom error\")\nexcept CustomError as e:\n    print(f\"Caught: {e}\")  # Expected: Caught: This is a custom error",
+        "solution": "class CustomError(Exception):\n    pass\n\ntry:\n    raise CustomError(\"This is a custom error\")\nexcept CustomError as e:\n    print(f\"Caught: {e}\")  # Expected: Caught: This is a custom error\n\n# Wrapped in function\n    def main():\n        class CustomError(Exception):\n    pass\n\ntry:\n    raise CustomError(\'This is a custom error\')\nexcept CustomError as e:\n    print(f\'Caught: {e}\')  # Expected: Caught: This is a custom error\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14280,7 +14280,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1606",
         "description": "Write a Python program using exception chaining with `raise...from` to preserve the original exception.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    try:\n        int(\"not a number\")\n    except ValueError as e:\n        raise TypeError(\"Conversion failed\") from e\nexcept TypeError as e:\n    print(f\"Error: {e}, caused by: {e.__cause__}\")  # Expected: Error: Conversion failed, caused by: invalid literal for int() with base 10: 'not a number'",
+        "solution": "try:\n    try:\n        int(\"not a number\")\n    except ValueError as e:\n        raise TypeError(\"Conversion failed\") from e\nexcept TypeError as e:\n    print(f\"Error: {e}, caused by: {e.__cause__}\")  # Expected: Error: Conversion failed, caused by: invalid literal for int() with base 10: 'not a number'\n\n# Wrapped in function\n    def main():\n        try:\n    try:\n        int(\'not a number\')\n    except ValueError as e:\n        raise TypeError(\'Conversion failed\') from e\nexcept TypeError as e:\n    print(f\'Error: {e}, caused by: {e.__cause__}\')  # Expected: Error: Conversion failed, caused by: invalid literal for int() with base 10: 'not a number'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14289,7 +14289,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1607",
         "description": "Write a Pythonic way to use `contextlib.redirect_stdout` to capture print output to a string.",
         "initialCode": "from contextlib import redirect_stdout\nfrom io import StringIO\n# Write your solution here",
-        "solution": "from contextlib import redirect_stdout\nfrom io import StringIO\n\nf = StringIO()\nwith redirect_stdout(f):\n    print(\"Hello, World!\")\n    print(\"Python is great!\")\noutput = f.getvalue()\nprint(f\"Captured: {output}\")  # Expected: Captured: Hello, World!\\nPython is great!\\n",
+        "solution": "from contextlib import redirect_stdout\nfrom io import StringIO\n\nf = StringIO()\nwith redirect_stdout(f):\n    print(\"Hello, World!\")\n    print(\"Python is great!\")\noutput = f.getvalue()\nprint(f\"Captured: {output}\")  # Expected: Captured: Hello, World!\\nPython is great!\\n\n\n# Wrapped in function\n    def main():\n        from contextlib import redirect_stdout\nfrom io import StringIO\n\nf = StringIO()\nwith redirect_stdout(f):\n    print(\'Hello, World!\')\n    print(\'Python is great!\')\noutput = f.getvalue()\nprint(f\'Captured: {output}\')  # Expected: Captured: Hello, World!\\nPython is great!\\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14316,7 +14316,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1610",
         "description": "Write a Pythonic way to use `itertools.combinations_with_replacement()` to generate combinations allowing repeated elements.",
         "initialCode": "from itertools import combinations_with_replacement\n# Write your solution here",
-        "solution": "from itertools import combinations_with_replacement\n\nitems = ['a', 'b', 'c']\ncombs = list(combinations_with_replacement(items, 2))\nprint(combs)  # Expected: [('a', 'a'), ('a', 'b'), ('a', 'c'), ('b', 'b'), ('b', 'c'), ('c', 'c')]",
+        "solution": "from itertools import combinations_with_replacement\n\nitems = ['a', 'b', 'c']\ncombs = list(combinations_with_replacement(items, 2))\nprint(combs)  # Expected: [('a', 'a'), ('a', 'b'), ('a', 'c'), ('b', 'b'), ('b', 'c'), ('c', 'c')]\n\n# Wrapped in function\n    def main():\n        from itertools import combinations_with_replacement\n\nitems = ['a', 'b', 'c']\ncombs = list(combinations_with_replacement(items, 2))\nprint(combs)  # Expected: [('a', 'a'), ('a', 'b'), ('a', 'c'), ('b', 'b'), ('b', 'c'), ('c', 'c')]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14325,7 +14325,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1611",
         "description": "Write a Pythonic way to use `itertools.dropwhile()` to skip elements until a condition is false.",
         "initialCode": "from itertools import dropwhile\n# Write your solution here",
-        "solution": "from itertools import dropwhile\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = list(dropwhile(lambda x: x < 5, numbers))\nprint(result)  # Expected: [5, 6, 7, 8]",
+        "solution": "from itertools import dropwhile\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = list(dropwhile(lambda x: x < 5, numbers))\nprint(result)  # Expected: [5, 6, 7, 8]\n\n# Wrapped in function\n    def main():\n        from itertools import dropwhile\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = list(dropwhile(lambda x: x < 5, numbers))\nprint(result)  # Expected: [5, 6, 7, 8]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14334,7 +14334,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1612",
         "description": "Write a Pythonic way to use `itertools.takewhile()` to take elements from an iterator while a condition is true.",
         "initialCode": "from itertools import takewhile\n# Write your solution here",
-        "solution": "from itertools import takewhile\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = list(takewhile(lambda x: x < 5, numbers))\nprint(result)  # Expected: [1, 2, 3, 4]",
+        "solution": "from itertools import takewhile\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = list(takewhile(lambda x: x < 5, numbers))\nprint(result)  # Expected: [1, 2, 3, 4]\n\n# Wrapped in function\n    def main():\n        from itertools import takewhile\n\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8]\nresult = list(takewhile(lambda x: x < 5, numbers))\nprint(result)  # Expected: [1, 2, 3, 4]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14343,7 +14343,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1613",
         "description": "Write a Pythonic way to use `itertools.starmap()` to apply a function to arguments unpacked from tuples.",
         "initialCode": "from itertools import starmap\nimport operator\n# Write your solution here",
-        "solution": "from itertools import starmap\nimport operator\n\npairs = [(2, 3), (4, 5), (6, 7)]\nproducts = list(starmap(operator.mul, pairs))\nprint(products)  # Expected: [6, 20, 42]",
+        "solution": "from itertools import starmap\nimport operator\n\npairs = [(2, 3), (4, 5), (6, 7)]\nproducts = list(starmap(operator.mul, pairs))\nprint(products)  # Expected: [6, 20, 42]\n\n# Wrapped in function\n    def main():\n        from itertools import starmap\nimport operator\n\npairs = [(2, 3), (4, 5), (6, 7)]\nproducts = list(starmap(operator.mul, pairs))\nprint(products)  # Expected: [6, 20, 42]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14469,7 +14469,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1627",
         "description": "Write a Pythonic way to use `pathlib.Path.read_text()` to read the entire contents of a text file.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path(\"file.txt\").read_text()\nprint(\"Demonstration: Path('file.txt').read_text() reads file content\")",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path(\"file.txt\").read_text()\nprint(\"Demonstration: Path('file.txt').read_text() reads file content\")\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path(\'file.txt\').read_text()\nprint(\'Demonstration: Path('file.txt').read_text() reads file content\')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14478,7 +14478,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1628",
         "description": "Write a Pythonic way to use `pathlib.Path.write_text()` to write text to a file.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: Path(\"file.txt\").write_text(\"Hello, World!\")\nprint(\"Demonstration: Path('file.txt').write_text('Hello, World!') writes to file\")",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: Path(\"file.txt\").write_text(\"Hello, World!\")\nprint(\"Demonstration: Path('file.txt').write_text('Hello, World!') writes to file\")\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: Path(\'file.txt\').write_text(\'Hello, World!\')\nprint(\'Demonstration: Path('file.txt').write_text('Hello, World!') writes to file\')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14487,7 +14487,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1629",
         "description": "Write a Pythonic way to use `pathlib.Path.glob()` to find all files matching a pattern.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\nprint(\"Demonstration: Path('.').glob('*.py') finds all .py files\")",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\nprint(\"Demonstration: Path('.').glob('*.py') finds all .py files\")\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\nprint(\'Demonstration: Path('.').glob('*.py') finds all .py files\')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14496,7 +14496,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1630",
         "description": "Write a Python program using `json.dump()` to write a Python object to a JSON file.",
         "initialCode": "import json\nfrom pathlib import Path\n# Write your solution here",
-        "solution": "import json\nfrom pathlib import Path\n\ndata = {\"name\": \"Alice\", \"age\": 30}\n# Note: In practice: json.dump(data, open(\"data.json\", \"w\"))\nprint(\"Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\")",
+        "solution": "import json\nfrom pathlib import Path\n\ndata = {\"name\": \"Alice\", \"age\": 30}\n# Note: In practice: json.dump(data, open(\"data.json\", \"w\"))\nprint(\"Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\")\n\n# Wrapped in function\n    def main():\n        import json\nfrom pathlib import Path\n\ndata = {\'name\': \'Alice\', \'age\': 30}\n# Note: In practice: json.dump(data, open(\'data.json\', \'w\'))\nprint(\'Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14505,7 +14505,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1631",
         "description": "Write a Python program using `json.load()` to read a JSON file and parse it into a Python object.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\n# Note: In practice: data = json.load(open(\"data.json\"))\nprint(\"Demonstration: json.load(open('data.json')) reads and parses JSON file\")",
+        "solution": "import json\n\n# Note: In practice: data = json.load(open(\"data.json\"))\nprint(\"Demonstration: json.load(open('data.json')) reads and parses JSON file\")\n\n# Wrapped in function\n    def main():\n        import json\n\n# Note: In practice: data = json.load(open(\'data.json\'))\nprint(\'Demonstration: json.load(open('data.json')) reads and parses JSON file\')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14514,7 +14514,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1632",
         "description": "Write a Python program using `re.compile()` to create a compiled regex pattern for repeated use.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\npattern = re.compile(r'\\d+')\ntext = \"I have 3 cats and 2 dogs\"\nmatches = pattern.findall(text)\nprint(matches)  # Expected: ['3', '2']",
+        "solution": "import re\n\npattern = re.compile(r'\\d+')\ntext = \"I have 3 cats and 2 dogs\"\nmatches = pattern.findall(text)\nprint(matches)  # Expected: ['3', '2']\n\n# Wrapped in function\n    def main():\n        import re\n\npattern = re.compile(r'\\d+')\ntext = \'I have 3 cats and 2 dogs\'\nmatches = pattern.findall(text)\nprint(matches)  # Expected: ['3', '2']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14523,7 +14523,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1633",
         "description": "Write a Python program using `re.split()` to split a string by a regex pattern.",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \"apple,banana;cherry:date\"\nparts = re.split(r'[,;:]', text)\nprint(parts)  # Expected: ['apple', 'banana', 'cherry', 'date']",
+        "solution": "import re\n\ntext = \"apple,banana;cherry:date\"\nparts = re.split(r'[,;:]', text)\nprint(parts)  # Expected: ['apple', 'banana', 'cherry', 'date']\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \'apple,banana;cherry:date\'\nparts = re.split(r'[,;:]', text)\nprint(parts)  # Expected: ['apple', 'banana', 'cherry', 'date']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14532,7 +14532,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1634",
         "description": "Write a Pythonic way to use `collections.OrderedDict.move_to_end()` to move a key to the end of an ordered dictionary.",
         "initialCode": "from collections import OrderedDict\n# Write your solution here",
-        "solution": "from collections import OrderedDict\n\nod = OrderedDict([('a', 1), ('b', 2), ('c', 3)])\nod.move_to_end('a')\nprint(list(od.keys()))  # Expected: ['b', 'c', 'a']",
+        "solution": "from collections import OrderedDict\n\nod = OrderedDict([('a', 1), ('b', 2), ('c', 3)])\nod.move_to_end('a')\nprint(list(od.keys()))  # Expected: ['b', 'c', 'a']\n\n# Wrapped in function\n    def main():\n        from collections import OrderedDict\n\nod = OrderedDict([('a', 1), ('b', 2), ('c', 3)])\nod.move_to_end('a')\nprint(list(od.keys()))  # Expected: ['b', 'c', 'a']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14541,7 +14541,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1635",
         "description": "Write a Pythonic way to use `collections.ChainMap.new_child()` to add a new dictionary to the beginning of a ChainMap.",
         "initialCode": "from collections import ChainMap\n# Write your solution here",
-        "solution": "from collections import ChainMap\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3}\nchain = ChainMap(dict1)\nnew_chain = chain.new_child(dict2)\nprint(dict(new_chain))  # Expected: {'c': 3, 'a': 1, 'b': 2}",
+        "solution": "from collections import ChainMap\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3}\nchain = ChainMap(dict1)\nnew_chain = chain.new_child(dict2)\nprint(dict(new_chain))  # Expected: {'c': 3, 'a': 1, 'b': 2}\n\n# Wrapped in function\n    def main():\n        from collections import ChainMap\n\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'c': 3}\nchain = ChainMap(dict1)\nnew_chain = chain.new_child(dict2)\nprint(dict(new_chain))  # Expected: {'c': 3, 'a': 1, 'b': 2}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14550,7 +14550,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1636",
         "description": "Write a Pythonic way to use `collections.namedtuple._replace()` to create a new namedtuple with updated fields.",
         "initialCode": "from collections import namedtuple\n# Write your solution here",
-        "solution": "from collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np1 = Point(3, 4)\np2 = p1._replace(x=10)\nprint(p1, p2)  # Expected: Point(x=3, y=4) Point(x=10, y=4)",
+        "solution": "from collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np1 = Point(3, 4)\np2 = p1._replace(x=10)\nprint(p1, p2)  # Expected: Point(x=3, y=4) Point(x=10, y=4)\n\n# Wrapped in function\n    def main():\n        from collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np1 = Point(3, 4)\np2 = p1._replace(x=10)\nprint(p1, p2)  # Expected: Point(x=3, y=4) Point(x=10, y=4)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14559,7 +14559,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1637",
         "description": "Write a Pythonic way to use a dictionary comprehension with nested loops to create a multiplication table dictionary.",
         "initialCode": "# Write your solution here",
-        "solution": "table = {f\"{i}x{j}\": i * j for i in range(1, 4) for j in range(1, 4)}\nprint(table)  # Expected: {'1x1': 1, '1x2': 2, ..., '3x3': 9}",
+        "solution": "table = {f\"{i}x{j}\": i * j for i in range(1, 4) for j in range(1, 4)}\nprint(table)  # Expected: {'1x1': 1, '1x2': 2, ..., '3x3': 9}\n\n# Wrapped in function\n    def main():\n        table = {f\'{i}x{j}\': i * j for i in range(1, 4) for j in range(1, 4)}\nprint(table)  # Expected: {'1x1': 1, '1x2': 2, ..., '3x3': 9}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14568,7 +14568,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1638",
         "description": "Write a Pythonic way to use a set comprehension to create a set of unique characters from multiple strings.",
         "initialCode": "# Write your solution here",
-        "solution": "strings = [\"hello\", \"world\", \"python\"]\nunique_chars = {char for s in strings for char in s}\nprint(sorted(unique_chars))  # Expected: ['d', 'e', 'h', 'l', 'n', 'o', 'p', 'r', 't', 'w', 'y']",
+        "solution": "strings = [\"hello\", \"world\", \"python\"]\nunique_chars = {char for s in strings for char in s}\nprint(sorted(unique_chars))  # Expected: ['d', 'e', 'h', 'l', 'n', 'o', 'p', 'r', 't', 'w', 'y']\n\n# Wrapped in function\n    def main():\n        strings = [\'hello\', \'world\', \'python\']\nunique_chars = {char for s in strings for char in s}\nprint(sorted(unique_chars))  # Expected: ['d', 'e', 'h', 'l', 'n', 'o', 'p', 'r', 't', 'w', 'y']\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14577,7 +14577,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1639",
         "description": "Write a Pythonic way to use `operator.add` with `functools.reduce()` to sum a list of numbers.",
         "initialCode": "from functools import reduce\nimport operator\n# Write your solution here",
-        "solution": "from functools import reduce\nimport operator\n\nnumbers = [1, 2, 3, 4, 5]\ntotal = reduce(operator.add, numbers)\nprint(total)  # Expected: 15",
+        "solution": "from functools import reduce\nimport operator\n\nnumbers = [1, 2, 3, 4, 5]\ntotal = reduce(operator.add, numbers)\nprint(total)  # Expected: 15\n\n# Wrapped in function\n    def main():\n        from functools import reduce\nimport operator\n\nnumbers = [1, 2, 3, 4, 5]\ntotal = reduce(operator.add, numbers)\nprint(total)  # Expected: 15\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14586,7 +14586,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1640",
         "description": "Write a Pythonic way to use `operator.mul` with `functools.reduce()` to calculate the product of a list.",
         "initialCode": "from functools import reduce\nimport operator\n# Write your solution here",
-        "solution": "from functools import reduce\nimport operator\n\nnumbers = [2, 3, 4]\nproduct = reduce(operator.mul, numbers)\nprint(product)  # Expected: 24",
+        "solution": "from functools import reduce\nimport operator\n\nnumbers = [2, 3, 4]\nproduct = reduce(operator.mul, numbers)\nprint(product)  # Expected: 24\n\n# Wrapped in function\n    def main():\n        from functools import reduce\nimport operator\n\nnumbers = [2, 3, 4]\nproduct = reduce(operator.mul, numbers)\nprint(product)  # Expected: 24\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14595,7 +14595,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1641",
         "description": "Write a Python program using `str.casefold()` to perform case-insensitive string comparison.",
         "initialCode": "# Write your solution here",
-        "solution": "str1 = \"Hello\"\nstr2 = \"HELLO\"\nprint(str1.casefold() == str2.casefold())  # Expected: True",
+        "solution": "str1 = \"Hello\"\nstr2 = \"HELLO\"\nprint(str1.casefold() == str2.casefold())  # Expected: True\n\n# Wrapped in function\n    def main():\n        str1 = \'Hello\'\nstr2 = \'HELLO\'\nprint(str1.casefold() == str2.casefold())  # Expected: True\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14604,7 +14604,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1642",
         "description": "Write a Python program using `str.encode()` to convert a string to bytes using UTF-8 encoding.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Hello, World!\"\nencoded = text.encode('utf-8')\nprint(encoded)  # Expected: b'Hello, World!'",
+        "solution": "text = \"Hello, World!\"\nencoded = text.encode('utf-8')\nprint(encoded)  # Expected: b'Hello, World!'\n\n# Wrapped in function\n    def main():\n        text = \'Hello, World!\'\nencoded = text.encode('utf-8')\nprint(encoded)  # Expected: b'Hello, World!'\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14613,7 +14613,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1643",
         "description": "Write a Python program using `bytes.decode()` to convert bytes back to a string.",
         "initialCode": "# Write your solution here",
-        "solution": "bytes_data = b'Hello, World!'\ndecoded = bytes_data.decode('utf-8')\nprint(decoded)  # Expected: Hello, World!",
+        "solution": "bytes_data = b'Hello, World!'\ndecoded = bytes_data.decode('utf-8')\nprint(decoded)  # Expected: Hello, World!\n\n# Wrapped in function\n    def main():\n        bytes_data = b'Hello, World!'\ndecoded = bytes_data.decode('utf-8')\nprint(decoded)  # Expected: Hello, World!\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14622,7 +14622,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1644",
         "description": "Write a Pythonic way to use `list.extend()` to add multiple elements from an iterable to a list.",
         "initialCode": "# Write your solution here",
-        "solution": "my_list = [1, 2, 3]\nmy_list.extend([4, 5, 6])\nprint(my_list)  # Expected: [1, 2, 3, 4, 5, 6]",
+        "solution": "my_list = [1, 2, 3]\nmy_list.extend([4, 5, 6])\nprint(my_list)  # Expected: [1, 2, 3, 4, 5, 6]\n\n# Wrapped in function\n    def main():\n        my_list = [1, 2, 3]\nmy_list.extend([4, 5, 6])\nprint(my_list)  # Expected: [1, 2, 3, 4, 5, 6]\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14631,7 +14631,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1645",
         "description": "Write a Pythonic way to use `list.index()` to find the index of the first occurrence of an element.",
         "initialCode": "# Write your solution here",
-        "solution": "my_list = [10, 20, 30, 20, 40]\nindex = my_list.index(20)\nprint(index)  # Expected: 1",
+        "solution": "my_list = [10, 20, 30, 20, 40]\nindex = my_list.index(20)\nprint(index)  # Expected: 1\n\n# Wrapped in function\n    def main():\n        my_list = [10, 20, 30, 20, 40]\nindex = my_list.index(20)\nprint(index)  # Expected: 1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14640,7 +14640,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1646",
         "description": "Write a Pythonic way to use `dict.fromkeys()` to create a dictionary with keys from a list and a default value.",
         "initialCode": "# Write your solution here",
-        "solution": "keys = ['a', 'b', 'c']\nd = dict.fromkeys(keys, 0)\nprint(d)  # Expected: {'a': 0, 'b': 0, 'c': 0}",
+        "solution": "keys = ['a', 'b', 'c']\nd = dict.fromkeys(keys, 0)\nprint(d)  # Expected: {'a': 0, 'b': 0, 'c': 0}\n\n# Wrapped in function\n    def main():\n        keys = ['a', 'b', 'c']\nd = dict.fromkeys(keys, 0)\nprint(d)  # Expected: {'a': 0, 'b': 0, 'c': 0}\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14649,7 +14649,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1647",
         "description": "Write a Python program using a try-except-else block where the else clause runs only if no exception occurs.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    result = 10 / 2\nexcept ZeroDivisionError:\n    print(\"Division by zero\")\nelse:\n    print(f\"Result: {result}\")  # Expected: Result: 5.0",
+        "solution": "try:\n    result = 10 / 2\nexcept ZeroDivisionError:\n    print(\"Division by zero\")\nelse:\n    print(f\"Result: {result}\")  # Expected: Result: 5.0\n\n# Wrapped in function\n    def main():\n        try:\n    result = 10 / 2\nexcept ZeroDivisionError:\n    print(\'Division by zero\')\nelse:\n    print(f\'Result: {result}\')  # Expected: Result: 5.0\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14658,7 +14658,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1648",
         "description": "Write a Python program using a try-except-finally block where finally always executes regardless of exceptions.",
         "initialCode": "# Write your solution here",
-        "solution": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Caught division by zero\")\nfinally:\n    print(\"This always executes\")  # Expected: Caught division by zero, This always executes",
+        "solution": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Caught division by zero\")\nfinally:\n    print(\"This always executes\")  # Expected: Caught division by zero, This always executes\n\n# Wrapped in function\n    def main():\n        try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\'Caught division by zero\')\nfinally:\n    print(\'This always executes\')  # Expected: Caught division by zero, This always executes\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14667,7 +14667,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1649",
         "description": "Write a Pythonic way to use `contextlib.suppress()` with multiple exception types to ignore multiple types of errors.",
         "initialCode": "from contextlib import suppress\n# Write your solution here",
-        "solution": "from contextlib import suppress\n\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int(\"not a number\")  # Would raise ValueError, but suppressed\n    print(\"This won't print\")\nprint(\"Continues after suppressed exception\")  # Expected: Continues after suppressed exception",
+        "solution": "from contextlib import suppress\n\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int(\"not a number\")  # Would raise ValueError, but suppressed\n    print(\"This won't print\")\nprint(\"Continues after suppressed exception\")  # Expected: Continues after suppressed exception\n\n# Wrapped in function\n    def main():\n        from contextlib import suppress\n\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int(\'not a number\')  # Would raise ValueError, but suppressed\n    print(\'This won't print\')\nprint(\'Continues after suppressed exception\')  # Expected: Continues after suppressed exception\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14955,7 +14955,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1681",
         "description": "Write a Python program to print numbers from 1 to 10 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 11):\n    print(i)  # Expected: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
+        "solution": "for i in range(1, 11):\n    print(i)  # Expected: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\n# Wrapped in function\n    def main():\n        for i in range(1, 11):\n    print(i)  # Expected: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14964,7 +14964,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1682",
         "description": "Write a Python program to print all even numbers from 1 to 20 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 21):\n    if i % 2 == 0:\n        print(i)  # Expected: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20",
+        "solution": "for i in range(1, 21):\n    if i % 2 == 0:\n        print(i)  # Expected: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20\n\n# Wrapped in function\n    def main():\n        for i in range(1, 21):\n    if i % 2 == 0:\n        print(i)  # Expected: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14973,7 +14973,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1683",
         "description": "Write a Python program to print all odd numbers from 1 to 20 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 21):\n    if i % 2 != 0:\n        print(i)  # Expected: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19",
+        "solution": "for i in range(1, 21):\n    if i % 2 != 0:\n        print(i)  # Expected: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19\n\n# Wrapped in function\n    def main():\n        for i in range(1, 21):\n    if i % 2 != 0:\n        print(i)  # Expected: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14982,7 +14982,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1684",
         "description": "Write a Python program to print the multiplication table of 5 from 1 to 10 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(1, 11):\n    print(f\"5 x {i} = {5 * i}\")  # Expected: 5 x 1 = 5, 5 x 2 = 10, ..., 5 x 10 = 50",
+        "solution": "for i in range(1, 11):\n    print(f\"5 x {i} = {5 * i}\")  # Expected: 5 x 1 = 5, 5 x 2 = 10, ..., 5 x 10 = 50\n\n# Wrapped in function\n    def main():\n        for i in range(1, 11):\n    print(f\'5 x {i} = {5 * i}\')  # Expected: 5 x 1 = 5, 5 x 2 = 10, ..., 5 x 10 = 50\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14991,7 +14991,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1685",
         "description": "Write a Python program to print each character of a string on a separate line using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "text = \"Hello\"\nfor char in text:\n    print(char)  # Expected: H, e, l, l, o (each on new line)",
+        "solution": "text = \"Hello\"\nfor char in text:\n    print(char)  # Expected: H, e, l, l, o (each on new line)\n\n# Wrapped in function\n    def main():\n        text = \'Hello\'\nfor char in text:\n    print(char)  # Expected: H, e, l, l, o (each on new line)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -15000,7 +15000,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1686",
         "description": "Write a Python program to print each element of a list on a separate line using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "my_list = [10, 20, 30]\nfor element in my_list:\n    print(element)  # Expected: 10, 20, 30 (each on new line)",
+        "solution": "my_list = [10, 20, 30]\nfor element in my_list:\n    print(element)  # Expected: 10, 20, 30 (each on new line)\n\n# Wrapped in function\n    def main():\n        my_list = [10, 20, 30]\nfor element in my_list:\n    print(element)  # Expected: 10, 20, 30 (each on new line)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -15009,7 +15009,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1687",
         "description": "Write a Python program to calculate the sum of numbers from 1 to 10 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "total = 0\nfor i in range(1, 11):\n    total += i\nprint(total)  # Expected: 55",
+        "solution": "total = 0\nfor i in range(1, 11):\n    total += i\nprint(total)  # Expected: 55\n\n# Using built-in sum()\n    return sum(1 for i in range)\n\n# Using reduce()\n    from functools import reduce\n    return reduce(lambda acc, i: acc + 1, range, 0)\n\n# Using for loop\n    total = 0\n    for i in range:\n        total += i\n    return total",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -15018,7 +15018,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1688",
         "description": "Write a Python program to calculate the product of numbers from 1 to 5 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "product = 1\nfor i in range(1, 6):\n    product *= i\nprint(product)  # Expected: 120",
+        "solution": "product = 1\nfor i in range(1, 6):\n    product *= i\nprint(product)  # Expected: 120\n\n# Wrapped in function\n    def main():\n        product = 1\nfor i in range(1, 6):\n    product *= i\nprint(product)  # Expected: 120\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -15027,7 +15027,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1689",
         "description": "Write a Python program to count from 10 down to 1 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(10, 0, -1):\n    print(i)  # Expected: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1",
+        "solution": "for i in range(10, 0, -1):\n    print(i)  # Expected: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1\n\n# Wrapped in function\n    def main():\n        for i in range(10, 0, -1):\n    print(i)  # Expected: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -15036,7 +15036,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1690",
         "description": "Write a Python program to print numbers from 0 to 20 that are divisible by 3 using a for loop.",
         "initialCode": "# Write your solution here",
-        "solution": "for i in range(0, 21):\n    if i % 3 == 0:\n        print(i)  # Expected: 0, 3, 6, 9, 12, 15, 18",
+        "solution": "for i in range(0, 21):\n    if i % 3 == 0:\n        print(i)  # Expected: 0, 3, 6, 9, 12, 15, 18\n\n# Wrapped in function\n    def main():\n        for i in range(0, 21):\n    if i % 3 == 0:\n        print(i)  # Expected: 0, 3, 6, 9, 12, 15, 18\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -15072,7 +15072,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1694",
         "description": "Write a Python program using a while loop to count down from 10 to 1.",
         "initialCode": "# Write your solution here",
-        "solution": "i = 10\nwhile i >= 1:\n    print(i)\n    i -= 1  # Expected: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1",
+        "solution": "i = 10\nwhile i >= 1:\n    print(i)\n    i -= 1  # Expected: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1\n\n# Wrapped in function\n    def main():\n        i = 10\nwhile i >= 1:\n    print(i)\n    i -= 1  # Expected: 10, 9, 8, 7, 6, 5, 4, 3, 2, 1\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -16008,7 +16008,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1798",
         "description": "Write a Python function called `remove_duplicates_from_list` that takes a list and returns a new list with duplicate elements removed, preserving order.",
         "initialCode": "def remove_duplicates_from_list(my_list):\n    pass",
-        "solution": "def remove_duplicates_from_list(my_list):\n    seen = []\n    result = []\n    for item in my_list:\n        if item not in seen:\n            seen.append(item)\n            result.append(item)\n    return result\n\nresult = remove_duplicates_from_list([1, 2, 2, 3, 3, 3, 4])\nprint(result)  # Expected: [1, 2, 3, 4]",
+        "solution": "def remove_duplicates_from_list(my_list):\n    seen = []\n    result = []\n    for item in my_list:\n        if item not in seen:\n            seen.append(item)\n            result.append(item)\n    return result\n\nresult = remove_duplicates_from_list([1, 2, 2, 3, 3, 3, 4])\nprint(result)  # Expected: [1, 2, 3, 4]\n\n# Using list comprehension\n    return [item for item in my_list if item not in seen]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
