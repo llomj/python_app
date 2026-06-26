@@ -3459,13 +3459,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   470: {
         functionNames: ['min_string'],
         tests: [
-            { args: [['apple', 'fig', 'banana']], expected: 'fig' }
+            { args: [['apple', 'fig', 'banana']], expected: 'fig' },
+            { args: [['long', 'to', 'a']], expected: 'a' }
         ]
     },
   471: {
         functionNames: ['length_of_value'],
         tests: [
-            { args: [[{name: 'Alice'}, {name: 'Bob'}, {name: 'Jonathan'}], 'name'], expected: [{name: 'Bob'}, {name: 'Alice'}, {name: 'Jonathan'}] }
+            { args: [[{name: 'Alice'}, {name: 'Bob'}, {name: 'Jonathan'}], 'name'], expected: [{name: 'Bob'}, {name: 'Alice'}, {name: 'Jonathan'}] },
+            { args: [[{code: 'zz'}, {code: 'a'}, {code: 'mmmm'}], 'code'], expected: [{code: 'a'}, {code: 'zz'}, {code: 'mmmm'}] }
         ]
     },
   472: {
@@ -3477,27 +3479,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   473: {
     functionNames: ["main"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5], 2],
-      expected: [2, 4, 1, 3, 5]
-    }]
+    tests: [
+      { args: [[1, 2, 3, 4, 5], 2], expected: [2, 4, 1, 3, 5] },
+      { args: [[10, 11, 12, 13], 3], expected: [12, 10, 13, 11] }
+    ]
   },
   474: {
         functionNames: ['sort_by_year'],
         tests: [
-            { args: [['2023-10-01', '2020-01-15', '2025-12-31']], expected: ['2020-01-15', '2023-10-01', '2025-12-31'] }
+            { args: [['2023-10-01', '2020-01-15', '2025-12-31']], expected: ['2020-01-15', '2023-10-01', '2025-12-31'] },
+            { args: [['1999-12-31', '2024-01-01', '2001-06-15']], expected: ['1999-12-31', '2001-06-15', '2024-01-01'] }
         ]
     },
   475: {
         functionNames: ['sort_by_a_count'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['cherry', 'apple', 'date', 'banana'] }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['cherry', 'apple', 'date', 'banana'] },
+            { args: [['bbb', 'atlas', 'aardvark']], expected: ['bbb', 'atlas', 'aardvark'] }
         ]
     },
   476: {
         functionNames: ['sort_sqaure'],
         tests: [
-            { args: [[-2, 3, -1, 2]], expected: [-1, -2, 2, 3] }
+            { args: [[-2, 3, -1, 2]], expected: [-1, -2, 2, 3] },
+            { args: [[0, -4, 1]], expected: [0, 1, -4] }
         ]
     },
   477: {
@@ -3510,85 +3515,99 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   478: {
         functionNames: ['length_of_first_element'],
         tests: [
-            { args: [[['apple', 1], ['banana', 2], ['fig', 3]]], expected: [['fig', 3], ['apple', 1], ['banana', 2]] }
+            { args: [[['apple', 1], ['banana', 2], ['fig', 3]]], expected: [['fig', 3], ['apple', 1], ['banana', 2]] },
+            { args: [[['aa', 1], ['b', 2], ['cccc', 3]]], expected: [['b', 2], ['aa', 1], ['cccc', 3]] }
         ]
     },
   479: {
         functionNames: ['number_of_spaces'],
         tests: [
-            { args: [['hello world', 'a b c', 'nospace']], expected: ['nospace', 'hello world', 'a b c'] }
+            { args: [['hello world', 'a b c', 'nospace']], expected: ['nospace', 'hello world', 'a b c'] },
+            { args: [['two spaces here', 'one space', 'zero']], expected: ['zero', 'one space', 'two spaces here'] }
         ]
     },
   480: {
         functionNames: ['most_vowels'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: 'banana' }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: 'banana' },
+            { args: [['sky', 'audio', 'tree']], expected: 'audio' }
         ]
     },
   481: {
         functionNames: ['sort_lst_integers'],
         tests: [
-            { args: [[100, 5, 50, 2, 1000]], expected: [5, 2, 50, 100, 1000] }
+            { args: [[100, 5, 50, 2, 1000]], expected: [5, 2, 50, 100, 1000] },
+            { args: [[-10, 3, 200, -4]], expected: [3, -4, -10, 200] }
         ]
     },
   482: {
         functionNames: ['sort_tuples_by_difference'],
         tests: [
-            { args: [[[1, 5], [3, 4], [10, 2]]], expected: [[3, 4], [1, 5], [10, 2]] }
+            { args: [[[1, 5], [3, 4], [10, 2]]], expected: [[3, 4], [1, 5], [10, 2]] },
+            { args: [[[5, 5], [2, 8], [9, 7]]], expected: [[5, 5], [9, 7], [2, 8]] }
         ]
     },
   483: {
         functionNames: ['sort_strings_by_ascii'],
         tests: [
-            { args: [['banana', 'Apple', 'cherry']], expected: ['Apple', 'banana', 'cherry'] }
+            { args: [['banana', 'Apple', 'cherry']], expected: ['Apple', 'banana', 'cherry'] },
+            { args: [['zoo', 'ant', 'Dog']], expected: ['Dog', 'ant', 'zoo'] }
         ]
     },
   484: {
         functionNames: ['sort_lists_by_sum'],
         tests: [
-            { args: [[[1, 2], [3, 4], [1, 1]]], expected: [[1, 1], [1, 2], [3, 4]] }
+            { args: [[[1, 2], [3, 4], [1, 1]]], expected: [[1, 1], [1, 2], [3, 4]] },
+            { args: [[[5], [1, 1, 1], [2, 2]]], expected: [[1, 1, 1], [2, 2], [5]] }
         ]
     },
   485: {
         functionNames: ['number_of_consonants'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: 'date' }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: 'date' },
+            { args: [['aeiou', 'cat', 'sky']], expected: 'aeiou' }
         ]
     },
   486: {
         functionNames: ['sort_files_by_extension'],
         tests: [
-            { args: [['file.txt', 'image.jpg', 'doc.pdf', 'script.py']], expected: ['image.jpg', 'doc.pdf', 'script.py', 'file.txt'] }
+            { args: [['file.txt', 'image.jpg', 'doc.pdf', 'script.py']], expected: ['image.jpg', 'doc.pdf', 'script.py', 'file.txt'] },
+            { args: [['a.zip', 'b.csv', 'c.txt']], expected: ['b.csv', 'c.txt', 'a.zip'] }
         ]
     },
   487: {
         functionNames: ['sqaure_numbers_lst'],
         tests: [
-            { args: [[4, 9, 1, 16]], expected: [1, 4, 9, 16] }
+            { args: [[4, 9, 1, 16]], expected: [1, 4, 9, 16] },
+            { args: [[-3, 2, -1]], expected: [-1, 2, -3] }
         ]
     },
   488: {
         functionNames: ['sort_words_by_distinct_letters'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['banana', 'apple', 'date', 'cherry'] }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['banana', 'apple', 'date', 'cherry'] },
+            { args: [['aaa', 'ab', 'abc']], expected: ['aaa', 'ab', 'abc'] }
         ]
     },
   489: {
         functionNames: ['sort_second_letter'],
         tests: [
-            { args: [['banana', 'apple', 'cherry', 'date']], expected: ['banana', 'date', 'cherry', 'apple'] }
+            { args: [['banana', 'apple', 'cherry', 'date']], expected: ['banana', 'date', 'cherry', 'apple'] },
+            { args: [['za', 'ab', 'cc']], expected: ['za', 'ab', 'cc'] }
         ]
     },
   490: {
         functionNames: ['people_age'],
         tests: [
-            { args: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 25}, {name: 'Charlie', age: 35}]], expected: [{name: 'Bob', age: 25}, {name: 'Alice', age: 30}, {name: 'Charlie', age: 35}] }
+            { args: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 25}, {name: 'Charlie', age: 35}]], expected: [{name: 'Bob', age: 25}, {name: 'Alice', age: 30}, {name: 'Charlie', age: 35}] },
+            { args: [[{name: 'Young', age: 10}, {name: 'Old', age: 80}]], expected: [{name: 'Young', age: 10}, {name: 'Old', age: 80}] }
         ]
     },
   491: {
         functionNames: ['sort_by_binary_representation'],
         tests: [
-            { args: [[3, 2, 1, 4]], expected: [1, 2, 4, 3] }
+            { args: [[3, 2, 1, 4]], expected: [1, 2, 4, 3] },
+            { args: [[8, 5, 1]], expected: [1, 8, 5] }
         ]
     },
   492: {
@@ -3601,13 +3620,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   493: {
         functionNames: ['sort_fractions_by_decimal'],
         tests: [
-            { args: [[3, 7, 1, 5]], expected: [1, 3, 5, 7] }
+            { args: [[3, 7, 1, 5]], expected: [1, 3, 5, 7] },
+            { args: [[10, 2, 6]], expected: [2, 6, 10] }
         ]
     },
   494: {
         functionNames: ['longest_string_letter'],
         tests: [
-            { args: [['apple', 'grape', 'date', 'cherry'], 'e'], expected: 'apple' }
+            { args: [['apple', 'grape', 'date', 'cherry'], 'e'], expected: 'apple' },
+            { args: [['sun', 'moon', 'star'], 'n'], expected: 'moon' }
         ]
     },
   495: {
@@ -3662,7 +3683,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   502: {
         functionNames: ['EBook'],
         tests: [
-            { args: ['Python Programming', 'John Doe', 2.5], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Python Programming', author: 'John Doe', file_size: 2.5} }
+            { args: ['Python Programming', 'John Doe', 2.5], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Python Programming', author: 'John Doe', file_size: 2.5} },
+            { args: ['Clean Code', 'Robert Martin', 1.8], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Clean Code', author: 'Robert Martin', file_size: 1.8} }
         ]
     },
   503: {
@@ -3688,7 +3710,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   506: {
         functionNames: ['Laptop'],
         tests: [
-            { args: ['Dell', 'Intel i7', 2.3], getAttrs: ['brand', 'processor', 'weight'], expected: {brand: 'Dell', processor: 'Intel i7', weight: 2.3} }
+            { args: ['Dell', 'Intel i7', 2.3], getAttrs: ['brand', 'processor', 'weight'], expected: {brand: 'Dell', processor: 'Intel i7', weight: 2.3} },
+            { args: ['Apple', 'M3', 1.5], getAttrs: ['brand', 'processor', 'weight'], expected: {brand: 'Apple', processor: 'M3', weight: 1.5} }
         ]
     },
   507: {
@@ -3708,7 +3731,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   509: {
         functionNames: ['Skyscraper'],
         tests: [
-            { args: [50, '123 High Street', 200], getAttrs: ['floors', 'address', 'height'], expected: {floors: 50, address: '123 High Street', height: 200} }
+            { args: [50, '123 High Street', 200], getAttrs: ['floors', 'address', 'height'], expected: {floors: 50, address: '123 High Street', height: 200} },
+            { args: [80, '9 Tower Ave', 350], getAttrs: ['floors', 'address', 'height'], expected: {floors: 80, address: '9 Tower Ave', height: 350} }
         ]
     },
   510: {
@@ -3728,7 +3752,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   512: {
         functionNames: ['Poet'],
         tests: [
-            { args: ['William Wordsworth'], getAttrs: ['name', 'genre'], expected: {name: 'William Wordsworth', genre: 'Poetry'} }
+            { args: ['William Wordsworth'], getAttrs: ['name', 'genre'], expected: {name: 'William Wordsworth', genre: 'Poetry'} },
+            { args: ['Maya Angelou'], getAttrs: ['name', 'genre'], expected: {name: 'Maya Angelou', genre: 'Poetry'} }
         ]
     },
   513: {
@@ -3741,7 +3766,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   514: {
         functionNames: ['Painter'],
         tests: [
-            { args: ['Vincent van Gogh', 'Oil Paint'], callMethod: 'paint', expected: 'Painting with Oil Paint' }
+            { args: ['Vincent van Gogh', 'Oil Paint'], callMethod: 'paint', expected: 'Painting with Oil Paint' },
+            { args: ['Frida Kahlo', 'Acrylic'], callMethod: 'paint', expected: 'Painting with Acrylic' }
         ]
     },
   515: {
@@ -3784,7 +3810,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   521: {
         functionNames: ['SavingsAccount'],
         tests: [
-            { args: [1500, 'Bob', 2.5], getAttrs: ['balance', 'owner', 'interest_rate'], expected: {balance: 1500, owner: 'Bob', interest_rate: 2.5} }
+            { args: [1500, 'Bob', 2.5], getAttrs: ['balance', 'owner', 'interest_rate'], expected: {balance: 1500, owner: 'Bob', interest_rate: 2.5} },
+            { args: [250, 'Alice', 4], getAttrs: ['balance', 'owner', 'interest_rate'], expected: {balance: 250, owner: 'Alice', interest_rate: 4} }
         ]
     },
   522: {
@@ -3821,7 +3848,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   527: {
         functionNames: ['create_chair'],
         tests: [
-            { args: ['wood', 'brown', 4], getAttrs: ['material', 'color', 'legs'], expected: {material: 'wood', color: 'brown', legs: 4} }
+            { args: ['wood', 'brown', 4], getAttrs: ['material', 'color', 'legs'], expected: {material: 'wood', color: 'brown', legs: 4} },
+            { args: ['metal', 'black', 3], getAttrs: ['material', 'color', 'legs'], expected: {material: 'metal', color: 'black', legs: 3} }
         ]
     },
   528: {
@@ -3839,7 +3867,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   530: {
         functionNames: ['TechCompany'],
         tests: [
-            { args: ['Tech Innovators', 'San Francisco', ['Smartphone', 'Laptop']], getAttrs: ['name', 'location', 'products'], expected: {name: 'Tech Innovators', location: 'San Francisco', products: ['Smartphone', 'Laptop']} }
+            { args: ['Tech Innovators', 'San Francisco', ['Smartphone', 'Laptop']], getAttrs: ['name', 'location', 'products'], expected: {name: 'Tech Innovators', location: 'San Francisco', products: ['Smartphone', 'Laptop']} },
+            { args: ['Cloud Labs', 'Austin', ['API', 'Dashboard']], getAttrs: ['name', 'location', 'products'], expected: {name: 'Cloud Labs', location: 'Austin', products: ['API', 'Dashboard']} }
         ]
     },
   531: {
@@ -3866,7 +3895,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   534: {
         functionNames: ['GameSoftware'],
         tests: [
-            { args: ['EpicQuest', '2.5', 'RPG'], getAttrs: ['name', 'version', 'genre'], expected: {name: 'EpicQuest', version: '2.5', genre: 'RPG'} }
+            { args: ['EpicQuest', '2.5', 'RPG'], getAttrs: ['name', 'version', 'genre'], expected: {name: 'EpicQuest', version: '2.5', genre: 'RPG'} },
+            { args: ['SpeedRun', '1.0', 'Racing'], getAttrs: ['name', 'version', 'genre'], expected: {name: 'SpeedRun', version: '1.0', genre: 'Racing'} }
         ]
     },
   535: {
@@ -3929,43 +3959,50 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   543: {
         functionNames: ['count_word_in_file'],
         tests: [
-            { args: ['test.txt', 'python'], expected: 0 }
+            { args: ['test.txt', 'python'], expected: 0 },
+            { args: ['words.txt', 'python'], setupFiles: {'words.txt': 'python ruby python\njavascript'}, expected: 2 }
         ]
     },
   544: {
         functionNames: ['count_letters'],
         tests: [
-            { args: [['hello', 'world', 'python']], expected: 1 }
+            { args: [['hello', 'world', 'python']], expected: 1 },
+            { args: [['tree', 'bee']], expected: 4 }
         ]
     },
   545: {
         functionNames: ['count_elements_in_lst'],
         tests: [
-            { args: [[1, 'a', 2, 'a', 3], 'a'], expected: 2 }
+            { args: [[1, 'a', 2, 'a', 3], 'a'], expected: 2 },
+            { args: [[1, 2, 1, '1'], 1], expected: 2 }
         ]
     },
   546: {
         functionNames: ['count_test_occurrences'],
         tests: [
-            { args: ['test test test testing'], expected: 4 }
+            { args: ['test test test testing'], expected: 4 },
+            { args: ['contest test retest'], expected: 3 }
         ]
     },
   547: {
         functionNames: ['count_floating_numbers'],
         tests: [
-            { args: [[1.5, 2.0, 1.5, 3.5], 1.5], expected: 2 }
+            { args: [[1.5, 2.0, 1.5, 3.5], 1.5], expected: 2 },
+            { args: [[0.5, 0.5, 1.0], 0.5], expected: 2 }
         ]
     },
   548: {
         functionNames: ['count_floating_numbers'],
         tests: [
-            { args: [[2.3, 5.0, 6.3, 78.0, 0.6, 5.0], 5.0], expected: 2 }
+            { args: [[2.3, 5.0, 6.3, 78.0, 0.6, 5.0], 5.0], expected: 2 },
+            { args: [[1.1, 1.1, 2.2], 2.2], expected: 1 }
         ]
     },
   549: {
         functionNames: ['count_uppercase'],
         tests: [
-            { args: ['Hello World PYTHON'], expected: 8 }
+            { args: ['Hello World PYTHON'], expected: 8 },
+            { args: ['abc XYZ'], expected: 3 }
         ]
     },
   550: {
@@ -3985,19 +4022,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   552: {
         functionNames: ['count_text'],
         tests: [
-            { args: ['Python is great. Python is fun.'], expected: 2 }
+            { args: ['Python is great. Python is fun.'], expected: 2 },
+            { args: ['python PYTHON PyThOn'], expected: 3 }
         ]
     },
   553: {
         functionNames: ['count_item_in_dict_list'],
         tests: [
-            { args: [[{a: 1}, {a: 2}, {a: 1}], {a: 1}], expected: 2 }
+            { args: [[{a: 1}, {a: 2}, {a: 1}], {a: 1}], expected: 2 },
+            { args: [[{x: 1}, {x: 1}, {x: 2}], {x: 2}], expected: 1 }
         ]
     },
   554: {
         functionNames: ['count_letters'],
         tests: [
-            { args: [['zebra', 'pizza', 'hello']], expected: 3 }
+            { args: [['zebra', 'pizza', 'hello']], expected: 3 },
+            { args: [['zzz', 'nope']], expected: 3 }
         ]
     },
   555: {
@@ -4010,253 +4050,295 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   556: {
         functionNames: ['count_substring'],
         tests: [
-            { args: ['123 456 123 789', '123'], expected: 2 }
+            { args: ['123 456 123 789', '123'], expected: 2 },
+            { args: ['abcabcabc', 'abc'], expected: 3 }
         ]
     },
   557: {
         functionNames: ['count_lines_with_word'],
         tests: [
-            { args: ['test.txt', 'error'], setupFiles: { 'test.txt': 'ok\nerror one\nERROR two\nfine' }, expected: 2 }
+            { args: ['test.txt', 'error'], setupFiles: { 'test.txt': 'ok\nerror one\nERROR two\nfine' }, expected: 2 },
+            { args: ['log.txt', 'warn'], setupFiles: { 'log.txt': 'WARN first\nok\nwarning second\nclear' }, expected: 2 }
         ]
     },
   558: {
         functionNames: ['count_email_domain'],
         tests: [
-            { args: [['a@gmail.com', 'b@yahoo.com', 'c@gmail.com'], 'gmail.com'], expected: 2 }
+            { args: [['a@gmail.com', 'b@yahoo.com', 'c@gmail.com'], 'gmail.com'], expected: 2 },
+            { args: [['a@test.com', 'b@test.com', 'c@mail.com'], 'test.com'], expected: 2 }
         ]
     },
   559: {
         functionNames: ['count_word'],
         tests: [
-            { args: [['I am happy', 'happy birthday', 'sad day']], expected: 2 }
+            { args: [['I am happy', 'happy birthday', 'sad day']], expected: 2 },
+            { args: [['happy happy', 'unhappy', 'sad']], expected: 3 }
         ]
     },
   560: {
         functionNames: ['count_exclamations'],
         tests: [
-            { args: [['hello!', 'world!!', 'python']], expected: 3 }
+            { args: [['hello!', 'world!!', 'python']], expected: 3 },
+            { args: [['!!', 'ok!', 'none']], expected: 3 }
         ]
     },
   561: {
         functionNames: ['count_phrase_occurrences'],
         tests: [
-            { args: ['the cat and the dog and the bird', 'the'], expected: 3 }
+            { args: ['the cat and the dog and the bird', 'the'], expected: 3 },
+            { args: ['red blue red green red', 'red'], expected: 3 }
         ]
     },
   562: {
         functionNames: ['count_word_occurrences'],
         tests: [
-            { args: [['the', 'cat', 'the', 'dog'], 'the'], expected: 2 }
+            { args: [['the', 'cat', 'the', 'dog'], 'the'], expected: 2 },
+            { args: [['a', 'b', 'a', 'a'], 'a'], expected: 3 }
         ]
     },
   563: {
         functionNames: ['count_x_in_mixed_list'],
         tests: [
-            { args: [[1, 'x', 2, 'x', 3]], expected: 2 }
+            { args: [[1, 'x', 2, 'x', 3]], expected: 2 },
+            { args: [[1, 'x', 'no', 2]], expected: 1 }
         ]
     },
   564: {
         functionNames: ['count_letter_occurrences'],
         tests: [
-            { args: ['hello', 'l'], expected: "The letter 'l' appears 2 times in the given string." }
+            { args: ['hello', 'l'], expected: "The letter 'l' appears 2 times in the given string." },
+            { args: ['banana', 'a'], expected: "The letter 'a' appears 3 times in the given string." }
         ]
     },
   565: {
         functionNames: ['square_lst'],
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: [1, 4, 9, 16, 25] }
+            { args: [[1, 2, 3, 4, 5]], expected: [1, 4, 9, 16, 25] },
+            { args: [[-2, 0, 3]], expected: [4, 0, 9] }
         ]
     },
   566: {
         functionNames: ['filter_odd_numbers'],
         tests: [
-            { args: [[1, 2, 3, 4, 5, 6]], expected: [1, 3, 5] }
+            { args: [[1, 2, 3, 4, 5, 6]], expected: [1, 3, 5] },
+            { args: [[2, 4, 7, 9]], expected: [7, 9] }
         ]
     },
   567: {
         functionNames: ['filters_even_numbers'],
         tests: [
-            { args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] }
+            { args: [[1, 2, 3, 4, 5, 6]], expected: [2, 4, 6] },
+            { args: [[1, 3, 8, 10]], expected: [8, 10] }
         ]
     },
   568: {
         functionNames: ['convert_to_uppercase'],
         tests: [
-            { args: [['hello', 'world']], expected: ['HELLO', 'WORLD'] }
+            { args: [['hello', 'world']], expected: ['HELLO', 'WORLD'] },
+            { args: [['Py', 'Code']], expected: ['PY', 'CODE'] }
         ]
     },
   569: {
         functionNames: ['empty_strings'],
         tests: [
-            { args: [['a', '', 'b', '', 'c']], expected: ['a', 'b', 'c'] }
+            { args: [['a', '', 'b', '', 'c']], expected: ['a', 'b', 'c'] },
+            { args: [['dog', '  ', 'cat']], expected: ['dog', 'cat'] }
         ]
     },
   570: {
         functionNames: ['multiply_lst'],
         tests: [
-            { args: [[1, 2, 3]], expected: [5, 10, 15] }
+            { args: [[1, 2, 3]], expected: [5, 10, 15] },
+            { args: [[0, -2]], expected: [0, -10] }
         ]
     },
   571: {
         functionNames: ['lst_of_string'],
         tests: [
-            { args: [['hi', 'hello', 'hey']], expected: [2, 5, 3] }
+            { args: [['hi', 'hello', 'hey']], expected: [2, 5, 3] },
+            { args: [['', 'abc']], expected: [0, 3] }
         ]
     },
   572: {
         functionNames: ['palindromes'],
         tests: [
-            { args: [['radar', 'hello', 'level', 'world']], expected: ['radar', 'level'] }
+            { args: [['radar', 'hello', 'level', 'world']], expected: ['radar', 'level'] },
+            { args: [['noon', 'python', 'madam']], expected: ['noon', 'madam'] }
         ]
     },
   573: {
         functionNames: ['sum_of_lst'],
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: 15 }
+            { args: [[1, 2, 3, 4, 5]], expected: 15 },
+            { args: [[-2, 5, 7]], expected: 10 }
         ]
     },
   574: {
         functionNames: ['sum_of_lst'],
         tests: [
-            { args: [[1, 2, 3, 4]], expected: 24 }
+            { args: [[1, 2, 3, 4]], expected: 24 },
+            { args: [[2, 5, 3]], expected: 30 }
         ]
     },
   575: {
         functionNames: ['capitalize_string'],
         tests: [
-            { args: [['hello', 'world']], expected: ['Hello', 'World'] }
+            { args: [['hello', 'world']], expected: ['Hello', 'World'] },
+            { args: [['python', 'CODE']], expected: ['Python', 'Code'] }
         ]
     },
   576: {
         functionNames: ['number_lst', 'min_number'],
         tests: [
-            { args: [[3, 1, 4, 1, 5]], expected: 1 }
+            { args: [[3, 1, 4, 1, 5]], expected: 1 },
+            { args: [[9, -2, 4]], expected: -2 }
         ]
     },
   577: {
         functionNames: ['find_max'],
         tests: [
-            { args: [[3, 1, 4, 1, 5]], expected: 5 }
+            { args: [[3, 1, 4, 1, 5]], expected: 5 },
+            { args: [[-3, -1, -5]], expected: -1 }
         ]
     },
   578: {
         functionNames: ['list_words'],
         tests: [
-            { args: [['a', 'ab', 'abc', 'abcd', 'abcde']], expected: ['abcd', 'abcde'] }
+            { args: [['a', 'ab', 'abc', 'abcd', 'abcde']], expected: ['abcd', 'abcde'] },
+            { args: [['cat', 'boat', 'tree']], expected: ['boat', 'tree'] }
         ]
     },
   579: {
         functionNames: ['lst_strings'],
         tests: [
-            { args: [['hello', ' ', 'world']], expected: 'hello world' }
+            { args: [['hello', ' ', 'world']], expected: 'hello world' },
+            { args: [['a', 'b', 'c']], expected: 'abc' }
         ]
     },
   580: {
         functionNames: ['num_lst'],
         tests: [
-            { args: [[-1, 0, 1, -2, 2]], expected: [1, 2] }
+            { args: [[-1, 0, 1, -2, 2]], expected: [1, 2] },
+            { args: [[5, -3, 0, 7]], expected: [5, 7] }
         ]
     },
   581: {
         functionNames: ['num_lst'],
         tests: [
-            { args: [[1, 2, 3]], expected: [1, 8, 27] }
+            { args: [[1, 2, 3]], expected: [1, 8, 27] },
+            { args: [[-2, 0, 4]], expected: [-8, 0, 64] }
         ]
     },
   582: {
         functionNames: ['lst_numbers'],
         tests: [
-            { args: [[1, 2, 3]], expected: 14 }
+            { args: [[1, 2, 3]], expected: 14 },
+            { args: [[2, 4]], expected: 20 }
         ]
     },
   583: {
         functionNames: ['lst_2'],
         tests: [
-            { args: [['John', 'Jane'], ['Doe', 'Smith']], expected: ['John Doe', 'Jane Smith'] }
+            { args: [['John', 'Jane'], ['Doe', 'Smith']], expected: ['John Doe', 'Jane Smith'] },
+            { args: [['Ada'], ['Lovelace']], expected: ['Ada Lovelace'] }
         ]
     },
   584: {
         functionNames: ['non_alphabetical_string'],
         tests: [
-            { args: [['hello', 'world', 'abc123', 'python']], expected: ['hello', 'world', 'python'] }
+            { args: [['hello', 'world', 'abc123', 'python']], expected: ['hello', 'world', 'python'] },
+            { args: [['ok', 'no!', 'YES']], expected: ['ok', 'YES'] }
         ]
     },
   585: {
         functionNames: ['lst_words'],
         tests: [
-            { args: [['a', 'b', 'a', 'c', 'b', 'a']], expected: {a: 3, b: 2, c: 1} }
+            { args: [['a', 'b', 'a', 'c', 'b', 'a']], expected: {a: 3, b: 2, c: 1} },
+            { args: [['red', 'blue', 'red']], expected: {red: 2, blue: 1} }
         ]
     },
   586: {
         functionNames: ['unique_words'],
         tests: [
-            { args: [['a', 'b', 'a', 'c', 'b']], expected: ['a', 'b', 'c'] }
+            { args: [['a', 'b', 'a', 'c', 'b']], expected: ['a', 'b', 'c'] },
+            { args: [['x', 'x', 'y']], expected: ['x', 'y'] }
         ]
     },
   587: {
         functionNames: ['word_lst'],
         tests: [
-            { args: [['a', 'ab', 'abc', 'abcd'], 3], expected: ['abcd'] }
+            { args: [['a', 'ab', 'abc', 'abcd'], 3], expected: ['abcd'] },
+            { args: [['tree', 'mountain', 'sun'], 4], expected: ['mountain'] }
         ]
     },
   588: {
         functionNames: ['apply_lsts'],
         tests: [
-            { args: [[1, 2, 3, 4, 5]], expected: [1, 9, 25] }
+            { args: [[1, 2, 3, 4, 5]], expected: [1, 9, 25] },
+            { args: [[2, 3, 6]], expected: [9] }
         ]
     },
   589: {
         functionNames: ['sum_nested_list'],
         tests: [
-            { args: [[[1, 2], [3, 4], [5]]], expected: 15 }
+            { args: [[[1, 2], [3, 4], [5]]], expected: 15 },
+            { args: [[[10], [-2, 3]]], expected: 11 }
         ]
     },
   590: {
         functionNames: ['fibonacci_n_numbers'],
         tests: [
-            { args: [6], expected: [0, 1, 1, 2, 3, 5] }
+            { args: [6], expected: [0, 1, 1, 2, 3, 5] },
+            { args: [3], expected: [0, 1, 1] }
         ]
     },
   591: {
         functionNames: ['lst_string'],
         tests: [
-            { args: [['hello', 'world', 'python']], expected: [2, 1, 1] }
+            { args: [['hello', 'world', 'python']], expected: [2, 1, 1] },
+            { args: [['aei', 'sky']], expected: [3, 0] }
         ]
     },
   592: {
         functionNames: ['sum_even_numbers'],
         tests: [
-            { args: [[1, 2, 3, 4, 5, 6]], expected: 12 }
+            { args: [[1, 2, 3, 4, 5, 6]], expected: 12 },
+            { args: [[2, 8, 9]], expected: 10 }
         ]
     },
   593: {
         functionNames: ['lst_string'],
         tests: [
-            { args: [['a', 'ab', 'abc']], expected: 'abc' }
+            { args: [['a', 'ab', 'abc']], expected: 'abc' },
+            { args: [['short', 'longest', 'mid']], expected: 'longest' }
         ]
     },
   594: {
         functionNames: ['lst_num'],
         tests: [
-            { args: [[1, 2, 3, 4]], expected: [1, 3, 6, 10] }
+            { args: [[1, 2, 3, 4]], expected: [1, 3, 6, 10] },
+            { args: [[5, -2, 1]], expected: [5, 3, 4] }
         ]
     },
   595: {
         functionNames: ['flatten'],
         tests: [
-            { args: [[[1, 2], [3, 4], [5]]], expected: [1, 2, 3, 4, 5] }
+            { args: [[[1, 2], [3, 4], [5]]], expected: [1, 2, 3, 4, 5] },
+            { args: [[['a'], ['b', 'c']]], expected: ['a', 'b', 'c'] }
         ]
     },
   596: {
         functionNames: ['lst_words'],
         tests: [
-            { args: [['a', 'b', 'a', 'c']], expected: {a: 2, b: 1, c: 1} }
+            { args: [['a', 'b', 'a', 'c']], expected: {a: 2, b: 1, c: 1} },
+            { args: [['red', 'red', 'blue']], expected: {red: 2, blue: 1} }
         ]
     },
   597: {
         functionNames: ['lst_words'],
         tests: [
-            { args: [['listen', 'silent', 'hello', 'world'], 'listen'], expected: ['hello', 'world'] }
+            { args: [['listen', 'silent', 'hello', 'world'], 'listen'], expected: ['hello', 'world'] },
+            { args: [['rat', 'tar', 'art', 'cat'], 'rat'], expected: ['cat'] }
         ]
     },
   598: {
@@ -4269,7 +4351,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   599: {
         functionNames: ['word_string'],
         tests: [
-            { args: [['a', 'bb', 'ccc', 'dd']], expected: {1: ['a'], 2: ['bb', 'dd'], 3: ['ccc']} }
+            { args: [['a', 'bb', 'ccc', 'dd']], expected: {1: ['a'], 2: ['bb', 'dd'], 3: ['ccc']} },
+            { args: [['hi', 'to', 'sun']], expected: {2: ['hi', 'to'], 3: ['sun']} }
         ]
     },
   600: {
@@ -4282,13 +4365,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   601: {
         functionNames: ['map_with_index'],
         tests: [
-            { args: [[10, 20, 30, 40]], argFunctionNames: ['example_func'], expected: [0, 20, 60, 120] }
+            { args: [[10, 20, 30, 40]], argFunctionNames: ['example_func'], expected: [0, 20, 60, 120] },
+            { args: [[5, 6]], argFunctionNames: ['example_func'], expected: [0, 6] }
         ]
     },
   602: {
         functionNames: ['intersection'],
         tests: [
-            { args: [[1, 2, 3, 4], [3, 4, 5, 6]], expected: [3, 4] }
+            { args: [[1, 2, 3, 4], [3, 4, 5, 6]], expected: [3, 4] },
+            { args: [['a', 'b', 'c'], ['b', 'x']], expected: ['b'] }
         ]
     },
   603: {
@@ -4309,55 +4394,64 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   605: {
         functionNames: ['get_keys'],
         tests: [
-            { args: [{a: 1, b: 2, c: 3}], expected: ['a', 'b', 'c'] }
+            { args: [{a: 1, b: 2, c: 3}], expected: ['a', 'b', 'c'] },
+            { args: [{x: 9, y: 8}], expected: ['x', 'y'] }
         ]
     },
   606: {
         functionNames: ['sort_string_len'],
         tests: [
-            { args: [['apple', 'fig', 'banana', 'kiwi']], expected: ['fig', 'kiwi', 'apple', 'banana'] }
+            { args: [['apple', 'fig', 'banana', 'kiwi']], expected: ['fig', 'kiwi', 'apple', 'banana'] },
+            { args: [['aa', 'b', 'cccc']], expected: ['b', 'aa', 'cccc'] }
         ]
     },
   607: {
         functionNames: ['lst_tuples_second'],
         tests: [
-            { args: [[[1, 3], [2, 1], [3, 2]]], expected: [[2, 1], [3, 2], [1, 3]] }
+            { args: [[[1, 3], [2, 1], [3, 2]]], expected: [[2, 1], [3, 2], [1, 3]] },
+            { args: [[['a', 2], ['b', 1]]], expected: [['b', 1], ['a', 2]] }
         ]
     },
   608: {
         functionNames: ['sort_dicts_by_key'],
         tests: [
-            { args: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 25}], 'age'], expected: [{name: 'Bob', age: 25}, {name: 'Alice', age: 30}] }
+            { args: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 25}], 'age'], expected: [{name: 'Bob', age: 25}, {name: 'Alice', age: 30}] },
+            { args: [[{name: 'Charlie', age: 20}, {name: 'Alice', age: 30}], 'name'], expected: [{name: 'Alice', age: 30}, {name: 'Charlie', age: 20}] }
         ]
     },
   609: {
         functionNames: ['sort_last_names'],
         tests: [
-            { args: [['John Doe', 'Jane Smith', 'Alice Johnson']], expected: ['John Doe', 'Alice Johnson', 'Jane Smith'] }
+            { args: [['John Doe', 'Jane Smith', 'Alice Johnson']], expected: ['John Doe', 'Alice Johnson', 'Jane Smith'] },
+            { args: [['Ada Lovelace', 'Grace Hopper']], expected: ['Grace Hopper', 'Ada Lovelace'] }
         ]
     },
   610: {
         functionNames: ['sort_ignore_case'],
         tests: [
-            { args: [['banana', 'Apple', 'cherry', 'Date']], expected: ['Apple', 'banana', 'cherry', 'Date'] }
+            { args: [['banana', 'Apple', 'cherry', 'Date']], expected: ['Apple', 'banana', 'cherry', 'Date'] },
+            { args: [['Zoo', 'ant', 'Bee']], expected: ['ant', 'Bee', 'Zoo'] }
         ]
     },
   611: {
         functionNames: ['list_floats'],
         tests: [
-            { args: [[3.5, 1.2, 2.8, 4.1]], expected: [4.1, 3.5, 2.8, 1.2] }
+            { args: [[3.5, 1.2, 2.8, 4.1]], expected: [4.1, 3.5, 2.8, 1.2] },
+            { args: [[0.5, -1.2, 2.0]], expected: [2.0, 0.5, -1.2] }
         ]
     },
   612: {
         functionNames: ['lst_words'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['cherry', 'apple', 'date', 'banana'] }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['cherry', 'apple', 'date', 'banana'] },
+            { args: [['sky', 'tree', 'audio']], expected: ['sky', 'tree', 'audio'] }
         ]
     },
   613: {
         functionNames: ['sort_people_by_age'],
         tests: [
-            { args: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 25}]], expected: [{name: 'Bob', age: 25}, {name: 'Alice', age: 30}] }
+            { args: [[{name: 'Alice', age: 30}, {name: 'Bob', age: 25}]], expected: [{name: 'Bob', age: 25}, {name: 'Alice', age: 30}] },
+            { args: [[{name: 'Old', age: 80}, {name: 'Young', age: 10}]], expected: [{name: 'Young', age: 10}, {name: 'Old', age: 80}] }
         ]
     },
   614: {
@@ -4370,73 +4464,85 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   615: {
         functionNames: ['lst_products'],
         tests: [
-            { args: [[{name: 'A', price: 10}, {name: 'B', price: 5}]], expected: [{name: 'B', price: 5}, {name: 'A', price: 10}] }
+            { args: [[{name: 'A', price: 10}, {name: 'B', price: 5}]], expected: [{name: 'B', price: 5}, {name: 'A', price: 10}] },
+            { args: [[{name: 'X', price: 3}, {name: 'Y', price: 1}]], expected: [{name: 'Y', price: 1}, {name: 'X', price: 3}] }
         ]
     },
   616: {
         functionNames: ['sort_dates'],
         tests: [
-            { args: [['2023-01-01', '2021-01-01', '2022-01-01']], expected: ['2021-01-01', '2022-01-01', '2023-01-01'] }
+            { args: [['2023-01-01', '2021-01-01', '2022-01-01']], expected: ['2021-01-01', '2022-01-01', '2023-01-01'] },
+            { args: [['2020-12-31', '2020-01-01']], expected: ['2020-01-01', '2020-12-31'] }
         ]
     },
   617: {
         functionNames: ['lst_tuples'],
         tests: [
-            { args: [[[1, 3], [1, 2], [2, 1]]], expected: [[1, 2], [1, 3], [2, 1]] }
+            { args: [[[1, 3], [1, 2], [2, 1]]], expected: [[1, 2], [1, 3], [2, 1]] },
+            { args: [[[2, 2], [1, 9], [1, 1]]], expected: [[1, 1], [1, 9], [2, 2]] }
         ]
     },
   618: {
         functionNames: ['lst_names'],
         tests: [
-            { args: [['Alice', 'Bob', 'Jonathan']], expected: ['Bob', 'Alice', 'Jonathan'] }
+            { args: [['Alice', 'Bob', 'Jonathan']], expected: ['Bob', 'Alice', 'Jonathan'] },
+            { args: [['Zoe', 'Al', 'Charlotte']], expected: ['Al', 'Zoe', 'Charlotte'] }
         ]
     },
   619: {
         functionNames: ['sort_by_hire_date'],
         tests: [
-            { args: [[['Alice', '2020-05-15'], ['Bob', '2019-03-22'], ['Charlie', '2021-07-30']]], expected: [['Bob', '2019-03-22'], ['Alice', '2020-05-15'], ['Charlie', '2021-07-30']] }
+            { args: [[['Alice', '2020-05-15'], ['Bob', '2019-03-22'], ['Charlie', '2021-07-30']]], expected: [['Bob', '2019-03-22'], ['Alice', '2020-05-15'], ['Charlie', '2021-07-30']] },
+            { args: [[['A', '2022-01-01'], ['B', '2020-01-01']]], expected: [['B', '2020-01-01'], ['A', '2022-01-01']] }
         ]
     },
   620: {
         functionNames: ['lst_of_sentences'],
         tests: [
-            { args: [['a b c', 'a b', 'a']], expected: ['a', 'a b', 'a b c'] }
+            { args: [['a b c', 'a b', 'a']], expected: ['a', 'a b', 'a b c'] },
+            { args: [['long sentence', 'tiny']], expected: ['tiny', 'long sentence'] }
         ]
     },
   621: {
         functionNames: ['frequency_first_letter'],
         tests: [
-            { args: [['apple', 'banana', 'avocado', 'cherry']], expected: ['banana', 'cherry', 'apple', 'avocado'] }
+            { args: [['apple', 'banana', 'avocado', 'cherry']], expected: ['banana', 'cherry', 'apple', 'avocado'] },
+            { args: [['ant', 'ape', 'bee']], expected: ['bee', 'ant', 'ape'] }
         ]
     },
   622: {
         functionNames: ['lst_of_tuples'],
         tests: [
-            { args: [[[-3, 1], [1, 2], [-2, 3]]], expected: [[1, 2], [-2, 3], [-3, 1]] }
+            { args: [[[-3, 1], [1, 2], [-2, 3]]], expected: [[1, 2], [-2, 3], [-3, 1]] },
+            { args: [[[5, 'a'], [-1, 'b']]], expected: [[-1, 'b'], [5, 'a']] }
         ]
     },
   623: {
         functionNames: ['reverse_order'],
         tests: [
-            { args: [['cat', 'dog', 'bird']], expected: ['dog', 'cat', 'bird'] }
+            { args: [['cat', 'dog', 'bird']], expected: ['dog', 'cat', 'bird'] },
+            { args: [['apple', 'zoo']], expected: ['zoo', 'apple'] }
         ]
     },
   624: {
         functionNames: ['temperture'],
         tests: [
-            { args: [[0, 100, 50, 20]], expected: [0, 20, 50, 100] }
+            { args: [[0, 100, 50, 20]], expected: [0, 20, 50, 100] },
+            { args: [[30, -10, 10]], expected: [-10, 10, 30] }
         ]
     },
   625: {
         functionNames: ['sort_scores'],
         tests: [
-            { args: [[10, -5, 0, 3, -2]], expected: [-5, -2, 0, 3, 10] }
+            { args: [[10, -5, 0, 3, -2]], expected: [-5, -2, 0, 3, 10] },
+            { args: [[5, -1, 2]], expected: [-1, 2, 5] }
         ]
     },
   626: {
         functionNames: ['sort_emails'],
         tests: [
-            { args: [['b@yahoo.com', 'a@gmail.com', 'c@outlook.com']], expected: ['a@gmail.com', 'c@outlook.com', 'b@yahoo.com'] }
+            { args: [['b@yahoo.com', 'a@gmail.com', 'c@outlook.com']], expected: ['a@gmail.com', 'c@outlook.com', 'b@yahoo.com'] },
+            { args: [['x@z.com', 'a@a.com']], expected: ['a@a.com', 'x@z.com'] }
         ]
     },
   627: {
