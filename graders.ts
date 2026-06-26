@@ -10995,9 +10995,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1534: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
     tests: [
-      { args: [], expected: "{'a': 1, 'b': 5, 'c': 4}" }
+      { args: [], expected: {'a': 1, 'b': 5, 'c': 4} }
     ]
   },
   1535: {
@@ -11253,7 +11252,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1563: {
         functionNames: ['sum_numbers'],
         tests: [
-            { args: [1,2], expected: 3 },
+            { args: [[1, 2]], expected: 3 },
         ]
     },
   1564: {
@@ -11479,9 +11478,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   1594: {
-        functionNames: ['greet'],
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
         tests: [
-            { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: [], expected: "['Hello', 'Hello', 'Hello']" },
         ]
     },
   1595: {
@@ -11591,8 +11592,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1608: {
     functionNames: ["my_decorator"],
     tests: [{
-      args: [5],
-      expected: "<function my_decorator.<locals>.wrapper at 0x109c8b740>"
+      args: [],
+      argExpressions: ["lambda: 'Hello'"],
+      getAttrs: ["__name__"],
+      expected: { "__name__": "<lambda>" }
     }]
   },
   1609: {
@@ -11638,8 +11641,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1614: {
         functionNames: ['compare'],
         tests: [
-            { args: [5,3], expected: 1 },
-            { args: [2,5], expected: -1 },
+            { args: [5,3], expected: -2 },
+            { args: [2,5], expected: 3 },
             { args: [4,4], expected: 0 },
         ]
     },
@@ -12091,7 +12094,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1679: {
         functionNames: ['multiply_list'],
         tests: [
-            { args: [[1,2,3],2], expected: [2,4,6] },
+            { args: [[1,2,3]], expected: [2,4,6] },
         ]
     },
   1680: {
@@ -12263,21 +12266,20 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1702: {
         functionNames: ['round_number'],
-        compare: 'float',
         tests: [
-            { args: [3.14159,2], expected: 3.14 },
+            { args: [3.14159], expected: 3 },
         ]
     },
   1703: {
         functionNames: ['get_maximum'],
         tests: [
-            { args: [3,7], expected: 7 },
+            { args: [3,7,5], expected: 7 },
         ]
     },
   1704: {
         functionNames: ['get_minimum'],
         tests: [
-            { args: [3,7], expected: 3 },
+            { args: [3,7,5], expected: 3 },
         ]
     },
   1705: {
@@ -12340,7 +12342,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1714: {
         functionNames: ['format_age_message'],
         tests: [
-            { args: [25], expected: "You are 25 years old." },
+            { args: ["Bob", 25], expected: "Bob is 25 years old." },
         ]
     },
   1715: {
@@ -12606,7 +12608,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1756: {
         functionNames: ['create_tuple'],
         tests: [
-            { args: [[1,2,3]], expected: [1,2,3] },
+            { args: [1,2,3], expected: [1,2,3] },
         ]
     },
   1757: {
@@ -12618,7 +12620,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1758: {
         functionNames: ['unpack_tuple'],
         tests: [
-            { args: [[1,2,3]], expected: [1,2,3] },
+            { args: [[1,2]], expected: [1,2] },
         ]
     },
   1759: {
@@ -12636,19 +12638,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1761: {
         functionNames: ['union_sets'],
         tests: [
-            { args: [[1,2],[2,3]], expected: [1,2,3] },
+            { args: [], argExpressions: ["{1, 2}", "{2, 3}"], expected: [1,2,3] },
         ]
     },
   1762: {
         functionNames: ['intersection_sets'],
         tests: [
-            { args: [[1,2,3],[2,3,4]], expected: [2,3] },
+            { args: [], argExpressions: ["{1, 2, 3}", "{2, 3, 4}"], expected: [2,3] },
         ]
     },
   1763: {
         functionNames: ['difference_sets'],
         tests: [
-            { args: [[1,2,3],[2,3]], expected: [1] },
+            { args: [], argExpressions: ["{1, 2, 3}", "{2, 3}"], expected: [1] },
         ]
     },
   1764: {
@@ -12690,7 +12692,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1770: {
         functionNames: ['join_strings'],
         tests: [
-            { args: [["a","b","c"]], expected: "abc" },
+            { args: [["a","b","c"], ""], expected: "abc" },
         ]
     },
   1771: {

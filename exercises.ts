@@ -14298,7 +14298,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1608",
         "description": "Write a Pythonic way to use `functools.wraps` to preserve function metadata in a decorator.",
         "initialCode": "from functools import wraps\ndef my_decorator(func):\n    pass\n\ndef my_function():\n    pass",
-        "solution": "from functools import wraps\n\ndef my_decorator(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_decorator\ndef my_function():\n\n# Using lambda\n    return (lambda *args, **kwargs: func(*args, **kwargs))(a, b)",
+        "solution": "from functools import wraps\n\ndef my_decorator(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@my_decorator\ndef my_function():\n    return \"Hello\"\n\nprint(my_function.__name__)  # Expected: my_function",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14469,7 +14469,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1627",
         "description": "Write a Pythonic way to use `pathlib.Path.read_text()` to read the entire contents of a text file.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path(\'file.txt\').read_text()\nprint(\'Demonstration: Path('file.txt').read_text() reads file content\')\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path(\'file.txt\').read_text()\nprint(\'Demonstration: Path('file.txt').read_text() reads file content\')\n    main()\n\n# Using os.path\n    import os\n    return os.path.abspath(path)\n\n# Using alternative approach\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path('file.txt').read_text()\nprint(\"Demonstration: Path('file.txt').read_text() reads file content\")\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n        print(\"Demonstration: Path('file.txt').read_text() reads file content\")\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14487,7 +14487,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1629",
         "description": "Write a Pythonic way to use `pathlib.Path.glob()` to find all files matching a pattern.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\nprint(\'Demonstration: Path('.').glob('*.py') finds all .py files\')\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\nprint(\'Demonstration: Path('.').glob('*.py') finds all .py files\')\n    main()\n\n# Using alternative approach\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\nprint(\"Demonstration: Path('.').glob('*.py') finds all .py files\")\n\n# Wrapped in function\n    def main():\n        from pathlib import Path\n        print(\"Demonstration: Path('.').glob('*.py') finds all .py files\")\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14496,7 +14496,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1630",
         "description": "Write a Python program using `json.dump()` to write a Python object to a JSON file.",
         "initialCode": "import json\nfrom pathlib import Path\n# Write your solution here",
-        "solution": "import json\nfrom pathlib import Path\n\ndata = {\'name\': \'Alice\', \'age\': 30}\n# Note: In practice: json.dump(data, open(\'data.json\', \'w\'))\nprint(\'Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\')\n\n# Wrapped in function\n    def main():\n        import json\nfrom pathlib import Path\n\ndata = {\'name\': \'Alice\', \'age\': 30}\n# Note: In practice: json.dump(data, open(\'data.json\', \'w\'))\nprint(\'Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\')\n    main()\n\n# Using eval()\n    # Warning: only for trusted data\n    return eval(json_str)\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "import json\nfrom pathlib import Path\n\ndata = {'name': 'Alice', 'age': 30}\n# Note: In practice: json.dump(data, open('data.json', 'w'))\nprint(\"Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\")\n\n# Wrapped in function\n    def main():\n        import json\n        from pathlib import Path\n        data = {'name': 'Alice', 'age': 30}\n        print(\"Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\")\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14505,7 +14505,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1631",
         "description": "Write a Python program using `json.load()` to read a JSON file and parse it into a Python object.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\n# Note: In practice: data = json.load(open(\'data.json\'))\nprint(\'Demonstration: json.load(open('data.json')) reads and parses JSON file\')\n\n# Wrapped in function\n    def main():\n        import json\n\n# Note: In practice: data = json.load(open(\'data.json\'))\nprint(\'Demonstration: json.load(open('data.json')) reads and parses JSON file\')\n    main()\n\n# Using alternative approach\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "import json\n\n# Note: In practice: data = json.load(open('data.json'))\nprint(\"Demonstration: json.load(open('data.json')) reads and parses JSON file\")\n\n# Wrapped in function\n    def main():\n        import json\n        print(\"Demonstration: json.load(open('data.json')) reads and parses JSON file\")\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14667,7 +14667,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1649",
         "description": "Write a Pythonic way to use `contextlib.suppress()` with multiple exception types to ignore multiple types of errors.",
         "initialCode": "from contextlib import suppress\n# Write your solution here",
-        "solution": "from contextlib import suppress\n\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int(\'not a number\')  # Would raise ValueError, but suppressed\n    print(\'This won't print\')\nprint(\'Continues after suppressed exception\')  # Expected: Continues after suppressed exception\n\n# Wrapped in function\n    def main():\n        from contextlib import suppress\n\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int(\'not a number\')  # Would raise ValueError, but suppressed\n    print(\'This won't print\')\nprint(\'Continues after suppressed exception\')  # Expected: Continues after suppressed exception\n    main()\n\n# Using alternative approach\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "from contextlib import suppress\n\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int('not a number')  # Would raise ValueError, but suppressed\n    print(\"This won't print\")\nprint('Continues after suppressed exception')  # Expected: Continues after suppressed exception\n\n# Wrapped in function\n    def main():\n        from contextlib import suppress\n        with suppress(ValueError, TypeError, ZeroDivisionError):\n            result = int('not a number')\n            print(\"This won't print\")\n        print('Continues after suppressed exception')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
