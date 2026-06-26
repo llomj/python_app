@@ -1,0 +1,515 @@
+const fs = require('fs');
+const path = require('path');
+const ts = require('typescript');
+const vm = require('vm');
+const { spawnSync } = require('child_process');
+
+const root = path.resolve(__dirname, '..');
+
+function loadTsExports(fileName) {
+  const source = fs.readFileSync(path.join(root, fileName), 'utf8');
+  const compiled = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2020,
+      esModuleInterop: true,
+    },
+    fileName,
+  }).outputText;
+  const sandbox = {
+    exports: {},
+    module: { exports: {} },
+    require: () => ({}),
+  };
+  sandbox.exports = sandbox.module.exports;
+  vm.runInNewContext(compiled, sandbox, { filename: fileName });
+  return sandbox.module.exports;
+}
+
+const { EXERCISES } = loadTsExports('exercises.ts');
+const { AUTO_GRADERS } = loadTsExports('graders.ts');
+
+const validator = String.raw`
+import ast
+import builtins
+import contextlib
+import io
+import inspect
+import json
+import math
+import os
+import random
+import re
+import shutil
+import signal
+import sys
+import tempfile
+
+payload = json.load(sys.stdin)
+
+class SolutionTimeout(Exception):
+    pass
+
+@contextlib.contextmanager
+def time_limit(seconds):
+    def handler(_signum, _frame):
+        raise SolutionTimeout(f"solution exceeded {seconds}s")
+    old_handler = signal.signal(signal.SIGALRM, handler)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old_handler)
+
+def jsonable(value):
+    try:
+        json.dumps(value)
+        return value
+    except Exception:
+        return repr(value)
+
+def normalize(value):
+    if hasattr(value, "isoformat") and callable(value.isoformat):
+        try:
+            return value.isoformat()
+        except Exception:
+            pass
+    if type(value).__name__ in ("dict_keys", "dict_values", "dict_items"):
+        return [normalize(item) for item in value]
+    if hasattr(value, "__iter__") and hasattr(value, "__next__"):
+        return [normalize(item) for item in value]
+    if isinstance(value, tuple):
+        return [normalize(item) for item in value]
+    if isinstance(value, list):
+        return [normalize(item) for item in value]
+    if isinstance(value, set):
+        return [normalize(item) for item in value]
+    if isinstance(value, dict):
+        return {str(key): normalize(item) for key, item in value.items()}
+    return value
+
+def numbers(value):
+    return [float(match) for match in re.findall(r"-?\d+(?:\.\d+)?", str(value))]
+
+def maybe_literal(value):
+    if not isinstance(value, str):
+        return value
+    text = value.strip()
+    if not text:
+        return value
+    try:
+        return ast.literal_eval(text)
+    except Exception:
+        return value
+
+def clean_text(value):
+    return "\n".join(line.rstrip() for line in str(value).strip().splitlines())
+
+def compact_pattern(value):
+    return "\n".join(re.sub(r"[ \t]+", "", line) for line in clean_text(value).splitlines())
+
+def same(actual, expected, compare):
+    if compare == "typeName":
+        return type(actual).__name__ == expected
+    actual = normalize(actual)
+    expected = normalize(expected)
+    if isinstance(actual, str) and isinstance(expected, (list, dict, tuple, set)):
+        actual = normalize(maybe_literal(actual))
+    if compare == "float":
+        try:
+            return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
+        except Exception:
+            return False
+    if compare == "printedOrReturn":
+        actual_text = clean_text(actual)
+        expected_text = clean_text(expected)
+        return actual == expected or actual_text == expected_text or expected_text in actual_text or compact_pattern(actual_text) == compact_pattern(expected_text)
+    if compare == "numberRange":
+        found = numbers(actual)
+        if not found or not isinstance(expected, list) or len(expected) != 2:
+            return False
+        return float(expected[0]) <= found[-1] <= float(expected[1])
+    if compare == "setPop":
+        if not isinstance(expected, list):
+            return False
+        lines = clean_text(actual).splitlines()
+        if len(lines) < 2:
+            return False
+        try:
+            removed_values = numbers(lines[0])
+            remaining = maybe_literal(lines[1])
+            if len(removed_values) != 1:
+                return False
+            removed = int(removed_values[0])
+            expected_set = set(expected)
+            return removed in expected_set and set(remaining) == expected_set - {removed}
+        except Exception:
+            return False
+    if compare == "length":
+        try:
+            return len(str(actual)) == int(expected)
+        except Exception:
+            return False
+    if compare == "unorderedList":
+        try:
+            return sorted(list(maybe_literal(actual))) == sorted(list(maybe_literal(expected)))
+        except Exception:
+            return False
+    if compare == "unorderedWords":
+        try:
+            actual = maybe_literal(actual)
+            expected = maybe_literal(expected)
+            if isinstance(actual, str):
+                actual = actual.split()
+            if isinstance(expected, str):
+                expected = expected.split()
+            return sorted(list(actual)) == sorted(list(expected))
+        except Exception:
+            return False
+    if compare == "numberList":
+        try:
+            return numbers(actual) == [float(item) for item in expected]
+        except Exception:
+            return False
+    if compare == "dictUnorderedLists":
+        actual = maybe_literal(actual)
+        expected = maybe_literal(expected)
+        if not isinstance(actual, dict) or not isinstance(expected, dict) or set(actual.keys()) != set(expected.keys()):
+            return False
+        try:
+            return all(sorted(list(actual[key])) == sorted(list(expected[key])) for key in expected)
+        except Exception:
+            return False
+    if compare == "letterCounts":
+        if isinstance(actual, dict):
+            return actual.get("upper", actual.get("uppercase")) == expected.get("upper") and actual.get("lower", actual.get("lowercase")) == expected.get("lower")
+        if isinstance(actual, (list, tuple)) and len(actual) == 2:
+            return list(actual) in ([expected.get("upper"), expected.get("lower")], [expected.get("lower"), expected.get("upper")])
+        text = str(actual).lower()
+        lower_match = re.search(r"lower\D+(\d+)", text)
+        upper_match = re.search(r"upper\D+(\d+)", text)
+        return bool(lower_match and upper_match and int(lower_match.group(1)) == expected.get("lower") and int(upper_match.group(1)) == expected.get("upper"))
+    if compare == "vowelConsonantCounts":
+        if isinstance(actual, dict):
+            return actual.get("vowels", actual.get("vowel")) == expected.get("vowels") and actual.get("consonants", actual.get("consonant")) == expected.get("consonants")
+        if isinstance(actual, (list, tuple)) and len(actual) == 2:
+            return list(actual) == [expected.get("vowels"), expected.get("consonants")]
+        text = str(actual).lower()
+        vowel_match = re.search(r"vowels?\D+(\d+)", text)
+        consonant_match = re.search(r"consonants?\D+(\d+)", text)
+        return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
+    return actual == expected
+
+def runnable_prefix(source):
+    markers = ["\n\n# Wrapped in function", "\n\n# Using ", "\n\n# Adding ", "\n\n# With ", "\n\n# Alternative"]
+    candidates = [source]
+    for marker in markers:
+        if marker in source:
+            candidates.append(source.split(marker, 1)[0])
+    lines = source.splitlines()
+    for i in range(len(lines), 0, -1):
+        candidates.append("\n".join(lines[:i]))
+    seen = set()
+    for candidate in candidates:
+        candidate = candidate.strip() + "\n"
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        try:
+            compile(candidate, "<solution>", "exec")
+            return candidate
+        except SyntaxError:
+            continue
+    return source
+
+def declarations_only(source):
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return source
+    allowed = (
+        ast.Import,
+        ast.ImportFrom,
+        ast.FunctionDef,
+        ast.AsyncFunctionDef,
+        ast.ClassDef,
+    )
+    tree.body = [node for node in tree.body if isinstance(node, allowed)]
+    ast.fix_missing_locations(tree)
+    try:
+        return ast.unparse(tree) + "\n"
+    except Exception:
+        return source
+
+def accepts_args(candidate, args, kwargs=None):
+    try:
+        inspect.signature(candidate).bind(*args, **(kwargs or {}))
+        return True
+    except Exception:
+        return False
+
+def find_callable(namespace, function_names, args, required_name=None, kwargs=None):
+    names = [required_name] if required_name else function_names
+    for name in names:
+        candidate = namespace.get(name)
+        if callable(candidate) and accepts_args(candidate, args, kwargs):
+            return name, candidate
+    return None, None
+
+def run_grader(source, grader):
+    compare = grader.get("compare", "exact")
+    tests = grader.get("tests", [])
+    solution = runnable_prefix(source)
+    if grader.get("mode") == "script":
+        with tempfile.TemporaryDirectory() as temp_dir:
+            old_cwd = os.getcwd()
+            try:
+                os.chdir(temp_dir)
+                with time_limit(1.0):
+                    return run_script_tests(solution, tests, compare), "", solution
+            finally:
+                os.chdir(old_cwd)
+    solution = declarations_only(solution)
+    namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
+    old_stdout = sys.stdout
+    old_input = builtins.input
+    with tempfile.TemporaryDirectory() as temp_dir:
+        old_cwd = os.getcwd()
+        try:
+            os.chdir(temp_dir)
+            sys.stdout = io.StringIO()
+            try:
+                with time_limit(1.0):
+                    exec(compile(solution, "<solution>", "exec"), namespace)
+            except BaseException as exc:
+                return False, f"solution setup raised {type(exc).__name__}: {exc}", solution
+            finally:
+                sys.stdout = old_stdout
+            with time_limit(1.0):
+                return run_function_tests(namespace, grader, tests, compare), "", solution
+        finally:
+            os.chdir(old_cwd)
+            sys.stdout = old_stdout
+            builtins.input = old_input
+
+def run_script_tests(solution, tests, compare):
+    compiled = compile(solution, "<solution>", "exec")
+    for index, case in enumerate(tests, start=1):
+        expected = case.get("expected")
+        input_values = iter(list(case.get("inputValues", [])))
+        old_stdout = sys.stdout
+        old_input = builtins.input
+        old_open = builtins.open
+        old_cwd = os.getcwd()
+        old_random = {}
+        sys.stdout = io.StringIO()
+        builtins.input = lambda prompt='': next(input_values)
+        denied = set(case.get("permissionDeniedPaths", []))
+        def guarded_open(file, *args, **kwargs):
+            if str(file) in denied:
+                raise PermissionError("Permission denied")
+            return old_open(file, *args, **kwargs)
+        try:
+            setup_case(case)
+            install_random(case, old_random)
+            if denied:
+                builtins.open = guarded_open
+            exec(compiled, {"__name__": "__main__", "re": re, "math": math, "json": json})
+            printed = sys.stdout.getvalue().strip()
+        except BaseException as exc:
+            return False
+        finally:
+            restore_random(old_random)
+            os.chdir(old_cwd)
+            sys.stdout = old_stdout
+            builtins.input = old_input
+            builtins.open = old_open
+        if not same(printed, expected, compare):
+            return False
+    return True
+
+def setup_case(case):
+    for path_name in case.get("setupRemove", []):
+        if os.path.islink(path_name) or os.path.isfile(path_name):
+            os.remove(path_name)
+        elif os.path.isdir(path_name):
+            shutil.rmtree(path_name)
+    for dir_name in case.get("setupDirs", []):
+        os.makedirs(dir_name, exist_ok=True)
+    for file_name, file_content in case.get("setupFiles", {}).items():
+        dir_name = os.path.dirname(file_name)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+        with open(file_name, "w", encoding="utf-8") as setup_file:
+            setup_file.write(file_content)
+
+def install_random(case, old_random):
+    for name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
+        old_random[name] = getattr(random, name)
+    values = iter(case.get("randomValues", []))
+    float_values = iter(case.get("randomFloatValues", []))
+    choice_values = iter(case.get("randomChoiceValues", []))
+    sample_values = iter(case.get("randomSampleValues", []))
+    shuffle_values = iter(case.get("randomShuffleValues", []))
+    if case.get("randomValues"):
+        fallback = case["randomValues"][-1]
+        random.randint = lambda _start, _end: next(values, fallback)
+        random.randrange = lambda *_args: random.randint(0, 0)
+    if case.get("randomFloatValues"):
+        fallback = case["randomFloatValues"][-1]
+        random.random = lambda: next(float_values, fallback)
+        random.uniform = lambda _start, _end: random.random()
+    if case.get("randomChoiceValues"):
+        fallback = case["randomChoiceValues"][-1]
+        random.choice = lambda _items: next(choice_values, fallback)
+    if case.get("randomSampleValues"):
+        fallback = case["randomSampleValues"][-1]
+        random.sample = lambda _items, _count: list(next(sample_values, fallback))
+    if case.get("randomShuffleValues"):
+        fallback = case["randomShuffleValues"][-1]
+        def shuffle(items):
+            items[:] = list(next(shuffle_values, fallback))
+        random.shuffle = shuffle
+
+def restore_random(old_random):
+    for name, method in old_random.items():
+        setattr(random, name, method)
+
+def run_function_tests(namespace, grader, tests, compare):
+    function_names = grader.get("functionNames", [])
+    first_args = tests[0].get("args", []) if tests else []
+    first_kwargs = tests[0].get("kwargs", {}) if tests else {}
+    if tests and tests[0].get("argFunctionNames"):
+        first_args = first_args + [None] * len(tests[0].get("argFunctionNames", []))
+    if tests and tests[0].get("argExpressions"):
+        first_args = first_args + [None] * len(tests[0].get("argExpressions", []))
+    if tests and tests[0].get("functionListArgNames"):
+        first_args = [None] + first_args
+    target_name, target = find_callable(namespace, function_names, first_args, kwargs=first_kwargs)
+    if target is None:
+        return False
+    for index, case in enumerate(tests, start=1):
+        args = list(case.get("args", []))
+        kwargs = case.get("kwargs", {})
+        expected = case.get("expected")
+        required_name = case.get("functionName")
+        if case.get("functionListArgNames") is not None:
+            args = [[namespace[name] for name in case.get("functionListArgNames")]] + args
+        for name in case.get("argFunctionNames", []):
+            args.append(namespace[name])
+        for expression in case.get("argExpressions", []):
+            args.append(eval(expression, namespace))
+        case_target_name, case_target = target_name, target
+        if required_name:
+            case_target_name, case_target = find_callable(namespace, function_names, args, required_name, kwargs)
+            if case_target is None:
+                return False
+        old_stdout = sys.stdout
+        old_input = builtins.input
+        old_open = builtins.open
+        old_cwd = os.getcwd()
+        sys.stdout = io.StringIO()
+        builtins.input = lambda prompt='': next(iter(case.get("inputValues", [])))
+        denied = set(case.get("permissionDeniedPaths", []))
+        def guarded_open(file, *open_args, **open_kwargs):
+            if str(file) in denied:
+                raise PermissionError("Permission denied")
+            return old_open(file, *open_args, **open_kwargs)
+        try:
+            setup_case(case)
+            if denied:
+                builtins.open = guarded_open
+            returned = case_target(*args, **kwargs)
+            if case.get("callReturnedWith") is not None:
+                returned = returned(*case.get("callReturnedWith"))
+            for attr_name, attr_value in case.get("setAttrs", {}).items():
+                setattr(returned, attr_name, attr_value)
+            for attr_name in case.get("deleteAttrs", []):
+                delattr(returned, attr_name)
+            for item_spec in case.get("setItems", []):
+                returned[item_spec.get("key")] = item_spec.get("value")
+            for item_key in case.get("deleteItems", []):
+                del returned[item_key]
+            if case.get("callMethod") is not None:
+                method = getattr(returned, case.get("callMethod"))
+                method_args = list(case.get("callMethodArgs", []))
+                for expression in case.get("callMethodArgExpressions", []):
+                    method_args.append(eval(expression, namespace))
+                returned = method(*method_args)
+            if case.get("getAttrs") is not None:
+                returned = {name: getattr(returned, name, None) for name in case.get("getAttrs")}
+            if case.get("getFiles") is not None:
+                returned = {}
+                for file_name in case.get("getFiles"):
+                    try:
+                        with open(file_name, "r", encoding="utf-8") as result_file:
+                            returned[file_name] = result_file.read()
+                    except FileNotFoundError:
+                        returned[file_name] = None
+            printed = sys.stdout.getvalue().strip()
+        except BaseException as exc:
+            if case.get("expectedException") == type(exc).__name__:
+                continue
+            return False
+        finally:
+            os.chdir(old_cwd)
+            sys.stdout = old_stdout
+            builtins.input = old_input
+            builtins.open = old_open
+        if case.get("expectedException"):
+            return False
+        if not same(returned, expected, compare) and not (printed and same(printed, expected, compare)):
+            return False
+    return True
+
+results = []
+for exercise in payload["exercises"]:
+    grader = payload["graders"].get(str(exercise["id"]))
+    if not grader:
+        continue
+    try:
+        passed, error, selected = run_grader(exercise.get("solution", ""), grader)
+    except BaseException as exc:
+        passed, error, selected = False, f"validator raised {type(exc).__name__}: {exc}", ""
+    results.append({
+        "id": exercise["id"],
+        "passed": bool(passed),
+        "error": error,
+        "selectedLines": len(selected.splitlines()) if selected else 0
+    })
+
+print(json.dumps(results))
+`;
+
+const payload = JSON.stringify({ exercises: EXERCISES, graders: AUTO_GRADERS });
+const result = spawnSync('python3', ['-c', validator], {
+  input: payload,
+  encoding: 'utf8',
+  maxBuffer: 1024 * 1024 * 20,
+  timeout: 300000,
+});
+
+if (result.error) {
+  throw result.error;
+}
+
+if (result.status !== 0) {
+  process.stderr.write(result.stderr);
+  process.exit(result.status);
+}
+
+const results = JSON.parse(result.stdout);
+const failures = results.filter(item => !item.passed);
+
+console.log(`Validated ${results.length} exercise solutions against graders.`);
+console.log(`Passed: ${results.length - failures.length}`);
+console.log(`Failed: ${failures.length}`);
+
+if (failures.length) {
+  console.log('First failures:');
+  for (const failure of failures.slice(0, 80)) {
+    console.log(`${failure.id}: ${failure.error || 'grader mismatch'} (${failure.selectedLines} selected lines)`);
+  }
+  process.exitCode = 1;
+}
