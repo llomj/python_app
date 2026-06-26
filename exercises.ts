@@ -11553,7 +11553,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1302",
         "description": "Write a Python program to validate if a string is a valid IPv4 address.",
         "initialCode": "# Write your solution here",
-        "solution": "ip = \'192.168.1.1\'\npattern = r\'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$\'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        ip = \'192.168.1.1\'\npattern = r\'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$\'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n    main()\n\n# Using return\n    return match\n\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "import re\n\nip = '192.168.1.1'\noctet = r'(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)'\npattern = rf'^{octet}\\.{octet}\\.{octet}\\.{octet}$'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n\n# Wrapped in function\n    def main():\n        import re\n        ip = '192.168.1.1'\n        octet = r'(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)'\n        pattern = rf'^{octet}\\.{octet}\\.{octet}\\.{octet}$'\n        print(bool(re.fullmatch(pattern, ip)))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11805,7 +11805,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1330",
         "description": "Write a Python program to extract quoted strings (single or double quotes).",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\ntext = \''Hello', she said. \\\'How are you?\\\'\'\nquotes = re.findall(r\'(['\\\'])(.*?)\\1\', text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']\n\n# Wrapped in function\n    def main():\n        import re\n\ntext = \''Hello', she said. \\\'How are you?\\\'\'\nquotes = re.findall(r\'(['\\\'])(.*?)\\1\', text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']\n    main()\n\n# Using alternative approach\n\n# Using manual checks\n    # Alternative: implement pattern check manually",
+        "solution": "import re\n\ntext = \"'Hello', she said. 'How are you?'\"\nquotes = re.findall(r\"(['\\\"])(.*?)\\1\", text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']\n\n# Wrapped in function\n    def main():\n        import re\n        text = \"'Hello', she said. 'How are you?'\"\n        quotes = re.findall(r\"(['\\\"])(.*?)\\1\", text)\n        print([q[1] for q in quotes])\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12651,7 +12651,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1425",
         "description": "Write a Pythonic way to use `contextlib.suppress()` to ignore specific exceptions.",
         "initialCode": "from contextlib import suppress\n# Write your solution here",
-        "solution": "from contextlib import suppress\nwith suppress(ValueError, ZeroDivisionError):\n    result = int(\'not a number\')  # This would raise ValueError, but it's suppressed\n    print(\'This won't print\')\nprint(\'Continues after exception\')  # Expected: Continues after exception\n\n# Wrapped in function\n    def main():\n        from contextlib import suppress\nwith suppress(ValueError, ZeroDivisionError):\n    result = int(\'not a number\')  # This would raise ValueError, but it's suppressed\n    print(\'This won't print\')\nprint(\'Continues after exception\')  # Expected: Continues after exception\n    main()\n\n# Using alternative approach\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "from contextlib import suppress\nwith suppress(ValueError, ZeroDivisionError):\n    result = int('not a number')  # This would raise ValueError, but it's suppressed\n    print(\"This won't print\")\nprint('Continues after exception')  # Expected: Continues after exception\n\n# Wrapped in function\n    def main():\n        from contextlib import suppress\n        with suppress(ValueError, ZeroDivisionError):\n            result = int('not a number')\n            print(\"This won't print\")\n        print('Continues after exception')\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12687,7 +12687,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1429",
         "description": "Write a Pythonic program to get the union of two sets.",
         "initialCode": "# Write your solution here",
-        "solution": "print(a | b)  # Expected: {1, 2, 3, 4}\n\n# Wrapped in function\n    def demo():\n        print(a | b)  # Expected: {1, 2, 3, 4}\n    demo()\n\n# Using return instead of print\n   # Modify to return value instead of printing\n\n\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure",
+        "solution": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)  # Expected: {1, 2, 3, 4}\n\n# Wrapped in function\n    def demo():\n        a = {1, 2, 3}\n        b = {2, 3, 4}\n        print(a | b)\n    demo()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12831,7 +12831,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1445",
         "description": "Write a Pythonic program to count character frequencies in a string.",
         "initialCode": "# Write your solution here",
-        "solution": "s = \"banana\"\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Wrapped in function\n    def main():\n        s = \'banana\'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n    main()\n\n# Using return\n    return freq",
+        "solution": "from collections import Counter\n\ns = \"banana\"\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Wrapped in function\n    def main():\n        from collections import Counter\n        s = 'banana'\n        freq = Counter(s)\n        print(freq)\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13272,7 +13272,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1494",
         "description": "Use `default=` with `next()` to get the first even number or -1.",
         "initialCode": "# Write your solution here",
-        "solution": "lst = [1, 3, 5]\nprint(next((x for x in lst if x % 2 == 0), default=-1))  # Expected: -1\n\n# Wrapped in function\n    def demo():\n        lst = [1, 3, 5]; print(next((x for x in lst if x % 2 == 0), default=-1))  # Expected: -1\n    demo()\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "lst = [1, 3, 5]\nprint(next((x for x in lst if x % 2 == 0), -1))  # Expected: -1\n\n# Wrapped in function\n    def demo():\n        lst = [1, 3, 5]\n        print(next((x for x in lst if x % 2 == 0), -1))\n    demo()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13281,7 +13281,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1495",
         "description": "Use `default=` in `next()` to safely access an item in a generator.",
         "initialCode": "# Write your solution here",
-        "solution": "gen = (x for x in range(5) if x > 10)\nprint(next(gen, default=\'No item\'))  # Expected: \'No item\'\n\n# Wrapped in function\n    def main():\n        gen = (x for x in range(5) if x > 10)\nprint(next(gen, default=\'No item\'))  # Expected: \'No item\'\n    main()\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "gen = (x for x in range(5) if x > 10)\nprint(next(gen, 'No item'))  # Expected: 'No item'\n\n# Wrapped in function\n    def main():\n        gen = (x for x in range(5) if x > 10)\n        print(next(gen, 'No item'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13308,7 +13308,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1498",
         "description": "Use `default=` with `next()` to find the first name starting with \"Z\".",
         "initialCode": "# Write your solution here",
-        "solution": "names = [\'Alice\', \'Bob\']\nprint(next((name for name in names if name.startswith(\'Z\')), default=\'Not found\'))  # Expected: \'Not found\'\n\n# Wrapped in function\n    def main():\n        names = [\'Alice\', \'Bob\']\nprint(next((name for name in names if name.startswith(\'Z\')), default=\'Not found\'))  # Expected: \'Not found\'\n    main()\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "names = ['Alice', 'Bob']\nprint(next((name for name in names if name.startswith('Z')), 'Not found'))  # Expected: 'Not found'\n\n# Wrapped in function\n    def main():\n        names = ['Alice', 'Bob']\n        print(next((name for name in names if name.startswith('Z')), 'Not found'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13326,7 +13326,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1500",
         "description": "Use `default=` in `next()` to handle an empty comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "print(next((x for x in []), default=\"Empty\"))  # Expected: \"Empty\"\n\n# Wrapped in function\n    def main():\n        print(next((x for x in []), default=\'Empty\'))  # Expected: \'Empty\'\n    main()\n\n# Using return instead of print\n   # Modify to return value instead of printing",
+        "solution": "print(next((x for x in []), \"Empty\"))  # Expected: \"Empty\"\n\n# Wrapped in function\n    def main():\n        print(next((x for x in []), 'Empty'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13344,7 +13344,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1502",
         "description": "Use `default=` with `next()` to check for existence of an element in a list.",
         "initialCode": "# Write your solution here",
-        "solution": "nums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), default=\'Missing\'))  # Expected: \'Missing\'\n\n# Wrapped in function\n    def main():\n        nums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), default=\'Missing\'))  # Expected: \'Missing\'\n    main()\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "nums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), 'Missing'))  # Expected: 'Missing'\n\n# Wrapped in function\n    def main():\n        nums = [1, 3, 5]\n        print(next((x for x in nums if x == 4), 'Missing'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13362,7 +13362,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1504",
         "description": "Use `default=` with `next()` to return a default if no element satisfies the condition.",
         "initialCode": "# Write your solution here",
-        "solution": "letters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), default=\'Not found\'))  # Expected: \'Not found\'\n\n# Wrapped in function\n    def main():\n        letters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), default=\'Not found\'))  # Expected: \'Not found\'\n    main()\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "letters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), 'Not found'))  # Expected: 'Not found'\n\n# Wrapped in function\n    def main():\n        letters = ['a', 'b', 'c']\n        print(next((ch for ch in letters if ch == 'z'), 'Not found'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13380,7 +13380,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1506",
         "description": "Use `default=` with `next()` to safely iterate a condition on a list of dictionaries.",
         "initialCode": "# Write your solution here",
-        "solution": "users = [{\'name\': \'Alice\'}, {\'name\': \'Bob\'}]\nprint(next((u for u in users if u[\'name\'] == \'Zoe\'), default=\'No match\'))  # Expected: \'No match\'\n\n# Wrapped in function\n    def main():\n        users = [{\'name\': \'Alice\'}, {\'name\': \'Bob\'}]\nprint(next((u for u in users if u[\'name\'] == \'Zoe\'), default=\'No match\'))  # Expected: \'No match\'\n    main()\n\n\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result",
+        "solution": "users = [{'name': 'Alice'}, {'name': 'Bob'}]\nprint(next((u for u in users if u['name'] == 'Zoe'), 'No match'))  # Expected: 'No match'\n\n# Wrapped in function\n    def main():\n        users = [{'name': 'Alice'}, {'name': 'Bob'}]\n        print(next((u for u in users if u['name'] == 'Zoe'), 'No match'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13407,7 +13407,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1509",
         "description": "Use `default=` in `next()` to avoid StopIteration on empty input.",
         "initialCode": "# Write your solution here",
-        "solution": "print(next(iter([]), default=\"Nothing\"))  # Expected: \"Nothing\"\n\n# Wrapped in function\n    def main():\n        print(next(iter([]), default=\'Nothing\'))  # Expected: \'Nothing\'\n    main()\n\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using return\n    return next(iter([]",
+        "solution": "print(next(iter([]), \"Nothing\"))  # Expected: \"Nothing\"\n\n# Wrapped in function\n    def main():\n        print(next(iter([]), 'Nothing'))\n    main()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
