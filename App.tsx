@@ -2049,10 +2049,13 @@ const App: React.FC = () => {
     };
 
     const forceResetCache = async () => {
-        if (window.localStorage) window.localStorage.clear();
         if (window.caches) {
             const keys = await window.caches.keys();
             await Promise.all(keys.map(k => window.caches.delete(k)));
+        }
+        if (navigator.serviceWorker) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(registration => registration.unregister()));
         }
         window.location.reload();
     };
