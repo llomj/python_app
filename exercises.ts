@@ -5190,7 +5190,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 594",
         "description": "Cumulative Sum: Write a function that returns a list of cumulative sums of a given list using reduce().",
         "initialCode": "from functools import reduce\ndef lst_num(lst):\n    pass",
-        "solution": "from functools import reduce\n\ndef lst_num(lst):\n    \n    def cumulative(x, y):\n       return x + y\n        \n    return reduce(cumulative, lst)\n        \nlst = [2, 2, 2, 2, 2]\nprint(lst_num(lst))\n\n# Using lambda\n    return (lambda x, y: x + y)(a, b)",
+        "solution": "from functools import reduce\n\ndef lst_num(lst):\n    def cumulative(result, number):\n        result.append(result[-1] + number if result else number)\n        return result\n\n    return reduce(cumulative, lst, [])\n\nlst = [2, 2, 2, 2, 2]\nprint(lst_num(lst))\n\n# Using loop\n    result = []\n    for number in lst:\n        result.append(result[-1] + number if result else number)\n    return result",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5234,8 +5234,8 @@ export const EXERCISES: Exercise[] = [
         "id": 599,
         "title": "Problem 599",
         "description": "Group By Length: Write a function that groups words by their lengths using reduce().",
-        "initialCode": "from functools import reduce\ndef word_string(string):\n    pass",
-        "solution": "from functools import reduce\n\ndef word_string(string):\n    words = string.split()\n    \n    def sort_len_words(x, y):\n        if len(x) == 0:\n            return [y]\n        if len(y) >= len(x[-1]):\n            x.append(y)\n            return x\n        else:\n            x.insert(0, y)\n            return x\n\n    return reduce(sort_len_words, words, [])\n\nstring = \"let's group words by the length\"\nprint(word_string(string))\n\n# Using lambda\n    return (lambda x, y: [y])(a, b)",
+        "initialCode": "from functools import reduce\ndef word_string(words):\n    pass",
+        "solution": "from functools import reduce\n\ndef word_string(words):\n    def group_by_length(result, word):\n        result.setdefault(len(word), []).append(word)\n        return result\n\n    return reduce(group_by_length, words, {})\n\nwords = [\"let's\", \"group\", \"words\", \"by\", \"length\"]\nprint(word_string(words))\n\n# Using loop\n    result = {}\n    for word in words:\n        result.setdefault(len(word), []).append(word)\n    return result",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5721,7 +5721,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 653",
         "description": "Write a program that retrieves keys from a dictionary that are of type integer.",
         "initialCode": "def main(dic):\n    pass",
-        "solution": "def main(dic):\n    result = {}\n    for key, value in dic.items():\n        if isinstance(value, int):\n            result[key] = value\n    return result\n\ndic = {2: 1, \"orange\": 33, \"mango\": 5}\nmain(dic)\n\n# Define a dictionary with integer keys\ndata = {1: 'one', 2: 'two', 3: 'three', 'a': 4, 'b': 5}\n\n# Retrieve keys that are of type integer\ninteger_keys = [key for key in data if isinstance(key, int)]\n\n# Print the retrieved keys\nprint(integer_keys)\n\n# Using inline return\n    return {}\n\n# Using inline return\n    return {}",
+        "solution": "def main(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, int):\n            result.append(key)\n    return result\n\ndic = {2: 1, \"orange\": 33, \"mango\": 5}\nprint(main(dic))\n\n# Using list comprehension\ndef main(dic):\n    return [key for key in dic if isinstance(key, int)]",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },

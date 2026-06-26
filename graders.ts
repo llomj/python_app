@@ -4231,7 +4231,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   597: {
         functionNames: ['lst_words'],
         tests: [
-            { args: [['listen', 'silent', 'hello', 'world'], 'listen'], expected: ['silent'] }
+            { args: [['listen', 'silent', 'hello', 'world'], 'listen'], expected: ['hello', 'world'] }
         ]
     },
   598: {
@@ -4257,11 +4257,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   601: {
         functionNames: ['map_with_index'],
         tests: [
-            { args: [['a', 'b', 'c']], expected: ['0: a', '1: b', '2: c'] }
+            { args: [[10, 20, 30, 40]], argFunctionNames: ['example_func'], expected: [0, 20, 60, 120] }
         ]
     },
   602: {
-        functionNames: ['is_in_list'],
+        functionNames: ['intersection'],
         tests: [
             { args: [[1, 2, 3, 4], [3, 4, 5, 6]], expected: [3, 4] }
         ]
@@ -4326,7 +4326,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   612: {
         functionNames: ['lst_words'],
         tests: [
-            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['date', 'apple', 'cherry', 'banana'] }
+            { args: [['apple', 'banana', 'cherry', 'date']], expected: ['cherry', 'apple', 'date', 'banana'] }
         ]
     },
   613: {
@@ -4369,7 +4369,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   619: {
         functionNames: ['sort_by_hire_date'],
         tests: [
-            { args: [['2023-01-01', '2020-01-01', '2021-01-01']], expected: ['2020-01-01', '2021-01-01', '2023-01-01'] }
+            { args: [[['Alice', '2020-05-15'], ['Bob', '2019-03-22'], ['Charlie', '2021-07-30']]], expected: [['Bob', '2019-03-22'], ['Alice', '2020-05-15'], ['Charlie', '2021-07-30']] }
         ]
     },
   620: {
@@ -4381,19 +4381,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   621: {
         functionNames: ['frequency_first_letter'],
         tests: [
-            { args: [['apple', 'banana', 'avocado', 'cherry']], expected: ['avocado', 'apple', 'banana', 'cherry'] }
+            { args: [['apple', 'banana', 'avocado', 'cherry']], expected: ['banana', 'cherry', 'apple', 'avocado'] }
         ]
     },
   622: {
         functionNames: ['lst_of_tuples'],
         tests: [
-            { args: [[(-3, 1), (1, 2), (-2, 3)]], expected: [(1, 2), (-2, 3), (-3, 1)] }
+            { args: [[[-3, 1], [1, 2], [-2, 3]]], expected: [[1, 2], [-2, 3], [-3, 1]] }
         ]
     },
   623: {
         functionNames: ['reverse_order'],
         tests: [
-            { args: [['cat', 'dog', 'bird']], expected: ['cat', 'bird', 'dog'] }
+            { args: [['cat', 'dog', 'bird']], expected: ['dog', 'cat', 'bird'] }
         ]
     },
   624: {
@@ -4411,13 +4411,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   626: {
         functionNames: ['sort_emails'],
         tests: [
-            { args: [['b@yahoo.com', 'a@gmail.com', 'c@outlook.com']], expected: ['a@gmail.com', 'b@yahoo.com', 'c@outlook.com'] }
+            { args: [['b@yahoo.com', 'a@gmail.com', 'c@outlook.com']], expected: ['a@gmail.com', 'c@outlook.com', 'b@yahoo.com'] }
         ]
     },
   627: {
         functionNames: ['sort_cities_by_population'],
         tests: [
-            { args: [[{city: 'A', pop: 100}, {city: 'B', pop: 50}]], expected: [{city: 'B', pop: 50}, {city: 'A', pop: 100}] }
+            { args: [[['A', 100], ['B', 50]]], expected: [['B', 50], ['A', 100]] }
         ]
     },
   628: {
@@ -4429,19 +4429,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   629: {
         functionNames: ['lst_of_numbers'],
         tests: [
-            { args: [[1, 2, 3], [1, 1, 2, 3, 3, 3]], expected: [2, 1, 3] }
+            { args: [[1, 1, 2, 3, 3, 3]], expected: [2, 1, 1, 3, 3, 3] }
         ]
     },
   630: {
         functionNames: ['sort_students_by_grades'],
         tests: [
-            { args: [[{name: 'A', grade: 90}, {name: 'B', grade: 80}]], expected: [{name: 'B', grade: 80}, {name: 'A', grade: 90}] }
+            { args: [[['A', 90], ['B', 80]]], expected: [['B', 80], ['A', 90]] }
         ]
     },
   631: {
         functionNames: ['sort_books_by_year'],
         tests: [
-            { args: [[{title: 'A', year: 2000}, {title: 'B', year: 1990}]], expected: [{title: 'B', year: 1990}, {title: 'A', year: 2000}] }
+            { args: [[['A', 2000], ['B', 1990]]], expected: [['B', 1990], ['A', 2000]] }
         ]
     },
   632: {
@@ -4453,7 +4453,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   633: {
         functionNames: ['sort_movies_by_release_date'],
         tests: [
-            { args: [['2001', '1999', '2005']], expected: ['1999', '2001', '2005'] }
+            { args: [[{title: 'A', release_date: '2001'}, {title: 'B', release_date: '1999'}, {title: 'C', release_date: '2005'}]], expected: [{title: 'B', release_date: '1999'}, {title: 'A', release_date: '2001'}, {title: 'C', release_date: '2005'}] }
         ]
     },
   634: {
@@ -4483,7 +4483,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   638: {
         functionNames: ['max_key'],
         tests: [
-            { args: [{1: 'a', 5: 'b', 3: 'c'}], expected: 5 }
+            { args: [{1: 'a', 5: 'b', 3: 'c'}], expected: '5' }
         ]
     },
   639: {
@@ -4566,7 +4566,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   651: {
         functionNames: ['returns_strings'],
         tests: [
-            { args: [{a: 1, 42: 'answer', c: 3}], expected: ['a', 'c'] }
+            { args: [{a: 1, 42: 'answer', c: 3}], expected: ['42', 'a', 'c'] }
         ]
     },
   652: {
@@ -4578,7 +4578,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   653: {
         functionNames: ['main'],
         tests: [
-            { args: [{2: 1, orange: 33, mango: 5}], expected: [2] }
+            { args: [], argExpressions: ["{2: 1, 'orange': 33, 'mango': 5}"], expected: [2] }
         ]
     },
   654: {

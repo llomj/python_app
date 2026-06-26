@@ -335,11 +335,16 @@ def run_grader(source, grader):
                     continue
                 finally:
                     sys.stdout = old_stdout
-                with time_limit(1.0):
-                    if run_function_tests(namespace, grader, tests, compare):
-                        return True, "", candidate_solution
-                    last_error = "grader mismatch"
+                try:
+                    with time_limit(1.0):
+                        if run_function_tests(namespace, grader, tests, compare):
+                            return True, "", candidate_solution
+                        last_error = "grader mismatch"
+                        last_solution = candidate_solution
+                except BaseException as exc:
+                    last_error = f"grader raised {type(exc).__name__}: {exc}"
                     last_solution = candidate_solution
+                    continue
             finally:
                 os.chdir(old_cwd)
                 sys.stdout = old_stdout
