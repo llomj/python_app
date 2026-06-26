@@ -2424,6 +2424,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [['a b c']], expected: ['A B C'] }
         ]
     },
+  328: {
+        functionNames: ['second_largest_number'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ["1 5 3 2"], expected: "3" },
+            { args: [], inputValues: ["7 7 7"], expected: "Not enough unique numbers" },
+        ]
+    },
   329: {
         functionNames: ['list_string', 'type_smallest_biggest'],
         tests: [
@@ -3862,6 +3870,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: ['nospaces'], expected: 0 }
         ]
     },
+  542: {
+        functionNames: ['count_occurrences'],
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], inputValues: ["banana", "a"], expected: "The character 'a' occurs 3 times." },
+            { args: [], inputValues: ["banana", "aa"], expected: "Please enter exactly one character." },
+        ]
+    },
   543: {
         functionNames: ['count_word_in_file'],
         tests: [
@@ -4574,6 +4590,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [{Inception: 2010, 'The Matrix': 1999, Gladiator: 2000}], expected: ['Gladiator', 'Inception', 'The Matrix'] }
         ]
     },
+  659: {
+        functionNames: ['keys_with_list_values'],
+        tests: [
+            { args: [{ fruits: ["apple"], vegetable: "carrot", numbers: [1, 2, 3] }], expected: ["fruits", "numbers"] },
+            { args: [{ a: 1, b: 2 }], expected: [] },
+        ]
+    },
   660: {
     functionNames: ["print_car_brands"],
     compare: 'printedOrReturn',
@@ -4598,6 +4621,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['keys_in_list'],
         tests: [
             { args: [{a: 1, b: 2, c: 3}, ['b', 'd']], expected: ['b'] }
+        ]
+    },
+  664: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Headphones\nKeyboard\nMouse\nCharger" },
         ]
     },
   665: {
@@ -11246,6 +11277,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [], expected: "[('a', 1), ('b', 2), ('c', 3)]" },
         ]
     },
+  1605: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Caught: This is a custom error" },
+        ]
+    },
+  1606: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Error: Conversion failed, caused by: invalid literal for int() with base 10: 'not a number'" },
+        ]
+    },
+  1607: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Captured: Hello, World!\nPython is great!" },
+        ]
+    },
   1608: {
     functionNames: ["my_decorator"],
     tests: [{
@@ -11253,6 +11308,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "<function my_decorator.<locals>.wrapper at 0x109c8b740>"
     }]
   },
+  1609: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "[2, 6, 24, 120]" },
+        ]
+    },
+  1610: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "[('a', 'a'), ('a', 'b'), ('a', 'c'), ('b', 'b'), ('b', 'c'), ('c', 'c')]" },
+        ]
+    },
+  1611: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "[5, 6, 7, 8]" },
+        ]
+    },
+  1612: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "[1, 2, 3, 4]" },
+        ]
+    },
+  1613: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "[6, 20, 42]" },
+        ]
+    },
   1614: {
         functionNames: ['compare'],
         tests: [
@@ -11268,6 +11363,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown type: int"
     }]
   },
+  1616: {
+        functionNames: ['process_scores'],
+        tests: [
+            { args: [{ Alice: 85, Bob: 90 }], expected: 175 },
+            { args: [{ A: 1, B: 2, C: 3 }], expected: 6 },
+        ]
+    },
   1617: {
     functionNames: ["get_name_age"],
     tests: [{
@@ -11289,6 +11391,190 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Unknown Status"
     }]
   },
+  1626: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Entering context\nInside context: context value\nExiting context" },
+        ]
+    },
+  1627: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Demonstration: Path('file.txt').read_text() reads file content" },
+        ]
+    },
+  1628: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Demonstration: Path('file.txt').write_text('Hello, World!') writes to file" },
+        ]
+    },
+  1629: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Demonstration: Path('.').glob('*.py') finds all .py files" },
+        ]
+    },
+  1630: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file" },
+        ]
+    },
+  1631: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Demonstration: json.load(open('data.json')) reads and parses JSON file" },
+        ]
+    },
+  1632: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "['3', '2']" },
+        ]
+    },
+  1633: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "['apple', 'banana', 'cherry', 'date']" },
+        ]
+    },
+  1634: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "['b', 'c', 'a']" },
+        ]
+    },
+  1636: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Point(x=3, y=4) Point(x=10, y=4)" },
+        ]
+    },
+  1637: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "{'1x1': 1, '1x2': 2, '1x3': 3, '2x1': 2, '2x2': 4, '2x3': 6, '3x1': 3, '3x2': 6, '3x3': 9}" },
+        ]
+    },
+  1638: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "['d', 'e', 'h', 'l', 'n', 'o', 'p', 'r', 't', 'w', 'y']" },
+        ]
+    },
+  1639: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "15" },
+        ]
+    },
+  1640: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "24" },
+        ]
+    },
+  1641: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "True" },
+        ]
+    },
+  1642: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "b'Hello, World!'" },
+        ]
+    },
+  1643: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Hello, World!" },
+        ]
+    },
+  1644: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "[1, 2, 3, 4, 5, 6]" },
+        ]
+    },
+  1645: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "1" },
+        ]
+    },
+  1646: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "{'a': 0, 'b': 0, 'c': 0}" },
+        ]
+    },
+  1647: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Result: 5.0" },
+        ]
+    },
+  1648: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Caught division by zero\nThis always executes" },
+        ]
+    },
+  1649: {
+        functionNames: [],
+        mode: 'script',
+        compare: 'printedOrReturn',
+        tests: [
+            { args: [], expected: "Continues after suppressed exception" },
+        ]
+    },
   1650: {
         functionNames: ['subtract_numbers'],
         tests: [
@@ -12799,6 +13085,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
             { args: [12], expected: [1,2,3,4,6,12] },
         ]
     },
+  1891: {
+        functionNames: ['check_perfect_square'],
+        tests: [
+            { args: [16], expected: true },
+            { args: [15], expected: false },
+            { args: [0], expected: true },
+        ]
+    },
   1892: {
         functionNames: ['format_time'],
         tests: [
@@ -13278,10 +13572,31 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: [[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5]]
     }]
   },
+  1969: {
+        functionNames: ['calculate_quadratic_roots'],
+        tests: [
+            { args: [1, -5, 6], expected: [3, 2] },
+            { args: [1, 0, 1], expected: null },
+        ]
+    },
+  1970: {
+        functionNames: ['get_strings_matching_pattern'],
+        tests: [
+            { args: [["hello", "lollipop", "world"], "l"], expected: ["hello", "lollipop"] },
+            { args: [["aaaa", "aa", "abc"], "aa"], expected: ["aaaa"] },
+        ]
+    },
   1971: {
         functionNames: ['format_name_initials'],
         tests: [
             { args: ["John","F","Kennedy"], expected: "JFK" },
+        ]
+    },
+  1973: {
+        functionNames: ['calculate_total_area'],
+        compare: 'float',
+        tests: [
+            { args: [[['rectangle', [5, 3]], ['circle', [2]]]], expected: 27.566370614359172 },
         ]
     },
   1974: {
@@ -13378,6 +13693,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "Item 1: 1, Item 2: 2, Item 3: 3, Item 4: 4, Item 5: 5"
     }]
   },
+  1990: {
+        functionNames: ['get_strings_with_pattern_count'],
+        tests: [
+            { args: [["hello", "lollipop", "world"], "l", 2], expected: ["hello"] },
+            { args: [["aaa", "aa", "a"], "a", 1], expected: ["a"] },
+        ]
+    },
   1991: {
     functionNames: ["calculate_compound_growth"],
     tests: [{
@@ -13392,10 +13714,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: []
     }]
   },
+  1993: {
+        functionNames: ['format_table_data'],
+        tests: [
+            { args: [[["Alice", 85], ["Bob", 90], ["Charlie", 75]]], expected: "Alice      | 85\nBob        | 90\nCharlie    | 75" },
+        ]
+    },
   1994: {
         functionNames: ['get_words_with_unique_chars'],
         tests: [
             { args: [["hello","world","abc"]], expected: ["abc"] },
+        ]
+    },
+  1995: {
+        functionNames: ['calculate_total_with_multiple_discounts'],
+        compare: 'float',
+        tests: [
+            { args: [100, [10, 20]], expected: 72 },
+            { args: [200, [50, 10]], expected: 90 },
         ]
     },
   1996: {
@@ -13406,6 +13742,13 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       expected: "hello\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}"
     }]
   },
+  1997: {
+        functionNames: ['get_elements_matching_multiple_patterns'],
+        tests: [
+            { args: [["hello", "world", "python", "programming"], "o", "r"], expected: ["world", "programming"] },
+            { args: [["abc", "abd", "bcd"], "a", "b"], expected: ["abc", "abd"] },
+        ]
+    },
   1998: {
     functionNames: ["calculate_statistical_summary"],
     tests: [{
