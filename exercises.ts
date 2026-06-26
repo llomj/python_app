@@ -1806,7 +1806,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 206",
         "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().",
         "initialCode": "def max_of_three():\n    pass",
-        "solution": "def max_of_three():\n    user = input(\"type three numbers: \").split()\n    int_numbers = []\n    for number in user:\n        int_numbers.append(int(number))\n    if len(number) != 3:  # Should be len(int_numbers) != 3\n        print(\"not enough numbers\")\n        return\n        \n    max_number = int_numbers[0]\n    if int_numbers[1] > max_number:  # If second is larger\n        max_number = int_numbers[1]  # Update maximum\n    if int_numbers[2] > max_number:  # If third is larger\n        max_number = int_numbers[2]  # Update maximum\n        \n    print(max_number)\n    \nmax_of_three()\n\n# Alternative using sorted\ndef max_of_three(a, b, c):\n    return sorted([a, b, c])[-1]\n\nprint(max_of_three(567, 56, 6))  # Output: 567\n\n# Alternative using ternary chain\ndef max_of_three(a, b, c):\n    return a if a > b and a > c else b if b > c else c\n\nprint(max_of_three(10, 25, 15))  # Output: 25",
+        "solution": "def max_of_three():\n    numbers = [int(value) for value in input(\"Enter three numbers: \").split()]\n    if len(numbers) != 3:\n        print(\"not enough numbers\")\n        return\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number > largest:\n            largest = number\n    print(largest)\n\nmax_of_three()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -2661,7 +2661,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 307",
         "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort() or max() or min().",
         "initialCode": "def find_min_max():\n    pass",
-        "solution": "def find_min_max():\n    user = input(\"type list of numbers: \").split()\n\n    int_num = []\n    for number in user:\n        int_num.append(int(number))\n    \n    min_num = int_num[-1]\n    max_num = int_num[0]\n    \n    print(min_num, max_num)\n           \nfind_min_max()\n\n# Using list comprehension\n    return [int(number) for number in user]\n\n# Using map()\n    return list(map(lambda number: int(number), user))",
+        "solution": "def find_min_max():\n    numbers = [int(value) for value in input(\"Enter numbers: \").split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    print(smallest, largest)\n\nfind_min_max()",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -3039,7 +3039,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 352",
         "description": "Write a Python program that defines a function `area_circle()` which contains a nested function `calculate_area()` that computes the area of a circle given its radius. The `area_circle()` function should return the area.",
         "initialCode": "def area_circle(radius):\n    pass\n\ndef main():\n    pass",
-        "solution": "def area_circle(radius):\n    def calculate_area(r):\n        return 3.14159 * r * r\n    return calculate_area(radius)\n\nresult = area_circle(5)\nprint(result)\n\ndef main():\n    def inner(radius):\n        return  3.14159 * radius * radius\n    return inner(n)\nn = 6\nmain()\n\n# Using lambda\n    return lambda r: 3.14159 * r * r",
+        "solution": "import math\n\ndef area_circle(radius):\n    def calculate_area(r):\n        return math.pi * r * r\n    return calculate_area(radius)\n\nprint(area_circle(5))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
