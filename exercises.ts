@@ -4722,7 +4722,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 542",
         "description": "Write a Python function to count the occurrences of a specific character in a string provided by the user. Use count().",
         "initialCode": "def count_occurrences():\n    pass",
-        "solution": "# Using function approach\ndef count_occurrences():\n    user_input = input('Type a sentence: ')\n    \n    char_to_count = input('Enter the character to count: ')\n    \n    if len(char_to_count) != 1:\n        print('Please enter exactly one character.')\n        return\n    \n    count = user_input.count(char_to_count)\n    \n    print(f'The character '{char_to_count}' occurs {count} times.')\n\ncount_occurrences()\n\n# Using return instead of print\n   # Modify to return value instead of printing",
+        "solution": "# Using function approach\ndef count_occurrences():\n    user_input = input('Type a sentence: ')\n    \n    char_to_count = input('Enter the character to count: ')\n    \n    if len(char_to_count) != 1:\n        print('Please enter exactly one character.')\n        return\n    \n    count = user_input.count(char_to_count)\n    \n    print(f\"The character '{char_to_count}' occurs {count} times.\")\n\ncount_occurrences()\n\n# Using return instead of print\n   # Modify to return value instead of printing",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4731,7 +4731,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 543",
         "description": "Write a Python program to count how many times a specific word appears in a text file. Use count().",
         "initialCode": "def count_word_in_file(filename, word):\n    pass",
-        "solution": "# Using function approach\ndef count_word_in_file(filename, word):\n    try:\n        # Open the file and read its content\n        with open(filename, 'r') as file:\n            content = file.read()\n        \n        # Count the occurrences of the specified word\n        word_count = content.count(word)\n        \n        return word_count\n    except FileNotFoundError:\n        print(f'The file '{filename}' does not exist.')\n        return 0\n\n# Example usage\nfilename = 'example.txt'  # Replace with your actual file name\nword_to_count = 'the'     # Replace with the word you want to count\ncount = count_word_in_file(filename, word_to_count)\nprint(f'The word '{word_to_count}' appears {count} times in the file.')\n\n# Using if check\n    # Check condition instead of try/except\n\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef count_word_in_file(filename, word):\n    return sum(1 for c in content if c == word)\n\n# Using manual approach\ndef count_word_in_file(filename, word):\n    count = 0\n    for c in content:\n        if c == word:\n            count += 1\n    return count\n\n# Script approach\nfilename = 15\nword = 'python'\nresult = count_word_in_file(filename, word)\nprint(result)\n\n# Direct approach\nprint(count_word_in_file(25, 'coding'))",
+        "solution": "# Using function approach\ndef count_word_in_file(filename, word):\n    try:\n        # Open the file and read its content\n        with open(filename, 'r') as file:\n            content = file.read()\n        \n        # Count the occurrences of the specified word\n        word_count = content.count(word)\n        \n        return word_count\n    except FileNotFoundError:\n        print(f\"The file '{filename}' does not exist.\")\n        return 0\n\n# Example usage\nfilename = 'example.txt'  # Replace with your actual file name\nword_to_count = 'the'     # Replace with the word you want to count\ncount = count_word_in_file(filename, word_to_count)\nprint(f\"The word '{word_to_count}' appears {count} times in the file.\")\n\n# Using if check\n    # Check condition instead of try/except\n\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef count_word_in_file(filename, word):\n    return sum(1 for c in content if c == word)\n\n# Using manual approach\ndef count_word_in_file(filename, word):\n    count = 0\n    for c in content:\n        if c == word:\n            count += 1\n    return count\n\n# Script approach\nfilename = 15\nword = 'python'\nresult = count_word_in_file(filename, word)\nprint(result)\n\n# Direct approach\nprint(count_word_in_file(25, 'coding'))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -4920,7 +4920,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 564",
         "description": "Write a function to count the occurrences of a specific letter in a string and return a formatted message with the result. Use count().",
         "initialCode": "def count_letter_occurrences(string, letter):\n    pass",
-        "solution": "# Using function approach\ndef count_letter_occurrences(string, letter):\n    count = string.count(letter)\n    \n    return f'The letter '{letter}' appears {count} times in the given string.'\n\ntext = 'This is an example sentence with several letters.'\nletter_to_count = 'e'\nprint(count_letter_occurrences(text, letter_to_count))\n\n# Using built-in approach\ndef count_letter_occurrences(string, letter):\n    return 'The letter '{}' appears {} times in the given string.'.format(letter, count)\n\n# Using manual approach\ndef count_letter_occurrences(string, letter):\n    return 'The letter '%s' appears %s times in the given string.' % (letter, count)\n\n# Script approach\nstring = 'hello'\nletter = 15\nresult = count_letter_occurrences(string, letter)\nprint(result)\n\n# Direct approach\nprint(count_letter_occurrences('world', 25))",
+        "solution": "# Using function approach\ndef count_letter_occurrences(string, letter):\n    count = string.count(letter)\n    \n    return f\"The letter '{letter}' appears {count} times in the given string.\"\n\ntext = 'This is an example sentence with several letters.'\nletter_to_count = 'e'\nprint(count_letter_occurrences(text, letter_to_count))\n\n# Using built-in approach\ndef count_letter_occurrences(string, letter):\n    return \"The letter '{}' appears {} times in the given string.\".format(letter, count)\n\n# Using manual approach\ndef count_letter_occurrences(string, letter):\n    return \"The letter '%s' appears %s times in the given string.\" % (letter, count)\n\n# Script approach\nstring = 'hello'\nletter = 15\nresult = count_letter_occurrences(string, letter)\nprint(result)\n\n# Direct approach\nprint(count_letter_occurrences('world', 25))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5190,7 +5190,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 594",
         "description": "Cumulative Sum: Write a function that returns a list of cumulative sums of a given list using reduce().",
         "initialCode": "from functools import reduce\ndef lst_num(lst):\n    pass",
-        "solution": "from functools import reduce\n\n# Using function approach\ndef lst_num(lst):\n    \n    def cumulative(x, y):\n       return x + y\n        \n    return reduce(cumulative, lst)\n        \nlst = [2, 2, 2, 2, 2]\nprint(lst_num(lst))\n\n# Using built-in approach\ndef lst_num(lst):\n    return sum([x, y])\n\n# Using manual approach\ndef lst_num(lst):\n    import operator\n    return operator.add(x, y)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_num(lst)\nprint(result)\n\n# Direct approach\nprint(lst_num([1, 3, 5, 7]))",
+        "solution": "from functools import reduce\n\n# Using function approach\ndef lst_num(lst):\n    \n    def cumulative(result, value):\n       result.append((result[-1] if result else 0) + value)\n       return result\n        \n    return reduce(cumulative, lst, [])\n        \nlst = [2, 2, 2, 2, 2]\nprint(lst_num(lst))\n\n# Using built-in approach\ndef lst_num(lst):\n    total = 0\n    result = []\n    for value in lst:\n        total += value\n        result.append(total)\n    return result\n\n# Using manual approach\ndef lst_num(lst):\n    total = 0\n    result = []\n    for value in lst:\n        total += value\n        result.append(total)\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_num(lst)\nprint(result)\n\n# Direct approach\nprint(lst_num([1, 3, 5, 7]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5235,7 +5235,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 599",
         "description": "Group By Length: Write a function that groups words by their lengths using reduce().",
         "initialCode": "from functools import reduce\ndef word_string(string):\n    pass",
-        "solution": "from functools import reduce\n\n# Using function approach\ndef word_string(string):\n    words = string.split()\n    \n    def sort_len_words(x, y):\n        if len(x) == 0:\n            return [y]\n        if len(y) >= len(x[-1]):\n            x.append(y)\n            return x\n        else:\n            x.insert(0, y)\n            return x\n\n    return reduce(sort_len_words, words, [])\n\nstring = 'let's group words by the length'\nprint(word_string(string))\n\n# Using built-in approach\ndef word_string(string):\n    result = [y]\n    return result\n\n# Using manual approach\ndef word_string(string):\n    return [y]\n\n# Script approach\nstring = 'hello'\nresult = word_string(string)\nprint(result)\n\n# Direct approach\nprint(word_string('world'))",
+        "solution": "from functools import reduce\n\n# Using function approach\ndef word_string(string):\n    words = string.split() if isinstance(string, str) else string\n    \n    def group_by_length(result, word):\n        result.setdefault(len(word), []).append(word)\n        return result\n\n    return reduce(group_by_length, words, {})\n\nstring = \"let's group words by the length\"\nprint(word_string(string))\n\n# Using built-in approach\ndef word_string(string):\n    words = string.split() if isinstance(string, str) else string\n    result = {}\n    for word in words:\n        result.setdefault(len(word), []).append(word)\n    return result\n\n# Using manual approach\ndef word_string(string):\n    words = string.split() if isinstance(string, str) else string\n    result = {}\n    for word in words:\n        result.setdefault(len(word), []).append(word)\n    return result\n\n# Script approach\nstring = 'hello'\nresult = word_string(string)\nprint(result)\n\n# Direct approach\nprint(word_string('world'))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5721,7 +5721,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 653",
         "description": "Write a program that retrieves keys from a dictionary that are of type integer.",
         "initialCode": "def main(dic):\n    pass",
-        "solution": "# Using function approach\ndef main(dic):\n    result = {}\n    for key, value in dic.items():\n        if isinstance(value, int):\n            result[key] = value\n    return result\n\ndic = {2: 1, 'orange': 33, 'mango': 5}\nmain(dic)\n\n# Define a dictionary with integer keys\ndata = {1: 'one', 2: 'two', 3: 'three', 'a': 4, 'b': 5}\n\n# Retrieve keys that are of type integer\ninteger_keys = [key for key in data if isinstance(key, int)]\n\n# Print the retrieved keys\nprint(integer_keys)\n\n# Using built-in approach\ndef main(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef main(dic):\n    return result\n\n# Script approach\ndic = 15\nresult = main(dic)\nprint(result)\n\n# Direct approach\nprint(main(25))",
+        "solution": "# Using function approach\ndef main(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, int):\n            result.append(key)\n    return result\n\ndic = {2: 1, 'orange': 33, 'mango': 5}\nprint(main(dic))\n\n# Define a dictionary with integer keys\ndata = {1: 'one', 2: 'two', 3: 'three', 'a': 4, 'b': 5}\n\n# Retrieve keys that are of type integer\ninteger_keys = [key for key in data if isinstance(key, int)]\n\n# Print the retrieved keys\nprint(integer_keys)\n\n# Using built-in approach\ndef main(dic):\n    return [key for key in dic if isinstance(key, int)]\n\n# Using manual approach\ndef main(dic):\n    result = []\n    for key in dic:\n        if isinstance(key, int):\n            result.append(key)\n    return result\n\n# Script approach\ndic = {1: 'one', 'two': 2}\nresult = main(dic)\nprint(result)\n\n# Direct approach\nprint(main({1: 'a', 'b': 2}))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -5847,7 +5847,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 667",
         "description": "Create a dictionary of names and ages, and return the keys sorted by age.",
         "initialCode": "def name_age(dic):\n    pass",
-        "solution": "# Using function approach\ndef name_age(dic):\n    \n    def sort_age(x):\n        for keys, values in x:\n            return values\n    return sorted(dic, key=sort_age)\n    \n\ndic = {'Tom': 15, 'Lucka': 66, 'Bob': 8}    \nprint(name_age(dic))\n\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef name_age(dic):\n    result = values\n    return result\n\n# Using manual approach\ndef name_age(dic):\n    return values\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = name_age(dic)\nprint(result)\n\n# Direct approach\nprint(name_age([4, 1, 8, 6, 3]))",
+        "solution": "# Using function approach\ndef name_age(dic):\n    \n    def sort_age(name):\n        return dic[name]\n    return sorted(dic, key=sort_age)\n    \n\ndic = {'Tom': 15, 'Lucka': 66, 'Bob': 8}    \nprint(name_age(dic))\n\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef name_age(dic):\n    return sorted(dic, key=dic.get)\n\n# Using manual approach\ndef name_age(dic):\n    return sorted(dic, key=lambda name: dic[name])\n\n# Script approach\ndic = {'Tom': 15, 'Lucka': 66, 'Bob': 8}\nresult = name_age(dic)\nprint(result)\n\n# Direct approach\nprint(name_age({'Old': 90, 'Young': 5}))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -6765,7 +6765,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 770",
         "description": "Create a program with a helper function `sum_of_list(lst)` that returns the sum of all numbers in a list, and uses it on a sample list.",
         "initialCode": "def main(lst):\n    pass\n\ndef sum_of_list(n):\n    pass",
-        "solution": "# Using function approach\ndef main(lst):\n    return sum_of_list(lst)\n    \ndef sum_of_list(n):\n    count = 0\n    for n in lst:\n        count += n\n    return count\n\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = sum_of_list(lst)\n    return result\n\n# Using manual approach\ndef main(lst):\n    return sum_of_list(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
+        "solution": "# Using function approach\ndef main(lst):\n    return sum_of_list(lst)\n    \ndef sum_of_list(n):\n    count = 0\n    for item in n:\n        count += item\n    return count\n\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    return sum_of_list(lst)\n\ndef sum_of_list(n):\n    return sum(n)\n\n# Using manual approach\ndef main(lst):\n    return sum_of_list(lst)\n\ndef sum_of_list(n):\n    count = 0\n    for item in n:\n        count += item\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7422,7 +7422,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 843",
         "description": "Write a Python program that asks the user to input numbers and finds the largest number entered using a while loop. Stop when the user types \u201cstop\u201d",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nlargest = float('-inf')\nwhile True:\n    user_input = input('Enter a number (type 'stop' to end): ')\n    if user_input == 'stop':\n        break\n    num = int(user_input)\n    if num > largest:\n        largest = num\nprint(largest)",
+        "solution": "# Using function approach\nlargest = float('-inf')\nwhile True:\n    user_input = input(\"Enter a number (type 'stop' to end): \")\n    if user_input == 'stop':\n        break\n    num = int(user_input)\n    if num > largest:\n        largest = num\nprint(largest)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7458,7 +7458,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 847",
         "description": "Write a Python program that asks the user to input numbers and prints the average when they type \u201cdone\u201d using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\ntotal = 0\ncount = 0\nwhile True:\n    user_input = input('Enter a number (type 'done' to end): ')\n    if user_input == 'done':\n        break\n    total += int(user_input)\n    count += 1\nif count != 0:\n    print(total / count)",
+        "solution": "# Using function approach\ntotal = 0\ncount = 0\nwhile True:\n    user_input = input(\"Enter a number (type 'done' to end): \")\n    if user_input == 'done':\n        break\n    total += int(user_input)\n    count += 1\nif count != 0:\n    print(total / count)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7530,7 +7530,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 855",
         "description": "Write a Python program that keeps asking the user for input and adds it to a list until the user types \u201cstop\u201d. Then print the list using a while loop.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nlst = []\nwhile True:\n    user_input = input('Enter something (type 'stop' to end): ')\n    if user_input == 'stop':\n        break\n    lst.append(user_input)\nprint(lst)",
+        "solution": "# Using function approach\nlst = []\nwhile True:\n    user_input = input(\"Enter something (type 'stop' to end): \")\n    if user_input == 'stop':\n        break\n    lst.append(user_input)\nprint(lst)",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7593,7 +7593,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 862",
         "description": "Write a Python program that keeps asking the user for a number and prints whether it is a palindrome. Stop when the user types \u201cquit\u201d.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nuser = None\nwhile user != 'quit':\n    user = input('type num: ')\n    if user == user[::-1]:\n        print('palindrome')\n\nwhile True:\n    user_input = input('Enter a number (type 'quit' to stop): ')\n    if user_input == 'quit':\n        break\n    if user_input == user_input[::-1]:\n        print(f'{user_input} is a palindrome')\n    else:\n        print(f'{user_input} is not a palindrome')",
+        "solution": "# Using function approach\nwhile True:\n    user_input = input(\"Enter a number (type 'quit' to stop): \")\n    if user_input == 'quit':\n        break\n    if user_input == user_input[::-1]:\n        print(f'{user_input} is a palindrome')\n    else:\n        print(f'{user_input} is not a palindrome')",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -7611,7 +7611,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 864",
         "description": "Write a Python program that keeps asking the user for a string and prints its length until the user types \u201cexit\u201d.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nwhile True:\n    user_input = input('Enter a string (type 'exit' to stop): ')\n    if user_input == 'exit':\n        break\n    print(len(user_input))",
+        "solution": "# Using function approach\nwhile True:\n    user_input = input(\"Enter a string (type 'exit' to stop): \")\n    if user_input == 'exit':\n        break\n    print(len(user_input))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8637,7 +8637,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 978",
         "description": "Write a Python program to parse a JSON string into a Python dictionary.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\n# Using function approach\njson_str = '{'name': 'Alice', 'age': 25, 'city': 'New York'}'\ndata = json.loads(json_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Using built-in approach\ndef solve():\n    import json\n    json_str = '{'name': 'Alice', 'age': 25, 'city': 'New York'}'\n    data = json.loads(json_str)\n    print(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Using manual approach\ndef solve():\n    import json\n    json_str = '{'name': 'Alice', 'age': 25, 'city': 'New York'}'\n    data = json.loads(json_str)\n    return data",
+        "solution": "import json\n\n# Using function approach\njson_str = '{\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}'\ndata = json.loads(json_str)\nprint(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Using built-in approach\ndef solve():\n    import json\n    json_str = '{\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}'\n    data = json.loads(json_str)\n    print(data)  # Expected output: {'name': 'Alice', 'age': 25, 'city': 'New York'}\n\n# Using manual approach\ndef solve():\n    import json\n    json_str = '{\"name\": \"Alice\", \"age\": 25, \"city\": \"New York\"}'\n    data = json.loads(json_str)\n    return data",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -8682,7 +8682,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 983",
         "description": "Write a Python program to parse HTML and extract all links using the standard library.",
         "initialCode": "from html.parser import HTMLParser\n# Write your solution here",
-        "solution": "from html.parser import HTMLParser\n\n# Using function approach\nclass LinkParser(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == 'a':\n            for name, value in attrs:\n                if name == 'href':\n                    self.links.append(value)\n\nhtml = '<a href='https://example.com'>Example</a> <a href='https://google.com'>Google</a>'\nparser = LinkParser()\nparser.feed(html)\nprint(parser.links)  # Expected output: ['https://example.com', 'https://google.com']\n\n\n# Using dataclass\nfrom dataclasses import dataclass\n\n@dataclass\nclass Computer:\n    brand: str\n    processor: str\n\n# Script approach\nobj = LinkParser()\nprint(obj)\n\n# Direct approach\nprint(LinkParser())",
+        "solution": "from html.parser import HTMLParser\n\n# Using function approach\nclass LinkParser(HTMLParser):\n    def __init__(self):\n        super().__init__()\n        self.links = []\n\n    def handle_starttag(self, tag, attrs):\n        if tag == 'a':\n            for name, value in attrs:\n                if name == 'href':\n                    self.links.append(value)\n\nhtml = \"<a href='https://example.com'>Example</a> <a href='https://google.com'>Google</a>\"\nparser = LinkParser()\nparser.feed(html)\nprint(parser.links)  # Expected output: ['https://example.com', 'https://google.com']\n\n\n# Using dataclass\nfrom dataclasses import dataclass\n\n@dataclass\nclass Computer:\n    brand: str\n    processor: str\n\n# Script approach\nobj = LinkParser()\nprint(obj)\n\n# Direct approach\nprint(LinkParser())",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -9510,7 +9510,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1075",
         "description": "Write a Python program to remove all whitespace from a string using a lambda function.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nstring = 'i'm going for a walk'\nresult = lambda char: char.replace(' ', '')\n\nresult(string)\n\nremove_whitespace = lambda s: ''.join(s.split())\n\nresult = remove_whitespace('hello world')\nprint(result)\n\n# Using built-in approach\ndef solve():\n    string = 'i'm going for a walk'\n    result = lambda char: char.replace(' ', '')\n    result(string)\n    remove_whitespace = lambda s: ''.join(s.split())\n    result = remove_whitespace('hello world')\n    print(result)\n\n# Using manual approach\ndef solve():\n    string = 'i'm going for a walk'\n    result = lambda char: char.replace(' ', '')\n    result(string)\n    remove_whitespace = lambda s: ''.join(s.split())\n    result = remove_whitespace('hello world')\n    return result",
+        "solution": "# Using function approach\nstring = \"i'm going for a walk\"\nresult = lambda char: char.replace(' ', '')\n\nresult(string)\n\nremove_whitespace = lambda s: ''.join(s.split())\n\nresult = remove_whitespace('hello world')\nprint(result)\n\n# Using built-in approach\ndef solve():\n    string = \"i'm going for a walk\"\n    result = lambda char: char.replace(' ', '')\n    result(string)\n    remove_whitespace = lambda s: ''.join(s.split())\n    result = remove_whitespace('hello world')\n    print(result)\n\n# Using manual approach\ndef solve():\n    string = \"i'm going for a walk\"\n    result = lambda char: char.replace(' ', '')\n    result(string)\n    remove_whitespace = lambda s: ''.join(s.split())\n    result = remove_whitespace('hello world')\n    return result",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -10113,7 +10113,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1142",
         "description": "Write a Python program to check if a given number is a perfect square and an Armstrong number. Control flow.",
         "initialCode": "def is_perfect_square_and_armstrong(n):\n    pass",
-        "solution": "# Using function approach\ndef is_perfect_square_and_armstrong(n):\n    if is_perfect_square(n) and is_armstrong(n):\n        return True\n    else:\n        return False\n\nresult = is_perfect_square_and_armstrong(153)\nprint(result)\n\n# Using built-in approach\ndef is_perfect_square_and_armstrong(n):\n    result = True\n    return result\n\n# Using manual approach\ndef is_perfect_square_and_armstrong(n):\n    return True\n\n# Script approach\nn = 6\nresult = is_perfect_square_and_armstrong(n)\nprint(result)\n\n# Direct approach\nprint(is_perfect_square_and_armstrong(15))",
+        "solution": "# Using function approach\ndef is_perfect_square_and_armstrong(n):\n    root = int(n ** 0.5)\n    is_perfect_square = root * root == n\n    digits = str(n)\n    is_armstrong = sum(int(digit) ** len(digits) for digit in digits) == n\n    return is_perfect_square and is_armstrong\n\nresult = is_perfect_square_and_armstrong(153)\nprint(result)\n\n# Using built-in approach\ndef is_perfect_square_and_armstrong(n):\n    root = int(n ** 0.5)\n    digits = str(n)\n    return root * root == n and sum(int(digit) ** len(digits) for digit in digits) == n\n\n# Using manual approach\ndef is_perfect_square_and_armstrong(n):\n    root = int(n ** 0.5)\n    digits = str(n)\n    total = 0\n    for digit in digits:\n        total += int(digit) ** len(digits)\n    return root * root == n and total == n\n\n# Script approach\nn = 6\nresult = is_perfect_square_and_armstrong(n)\nprint(result)\n\n# Direct approach\nprint(is_perfect_square_and_armstrong(15))",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11553,7 +11553,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1302",
         "description": "Write a Python program to validate if a string is a valid IPv4 address.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nip = '192.168.1.1'\npattern = r'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n\n# Using built-in approach\ndef solve():\n    ip = '192.168.1.1'\n    pattern = r'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$'\n    match = bool(re.fullmatch(pattern, ip))\n    print(match)  # Expected output: True\n\n# Using manual approach\ndef solve():\n    ip = '192.168.1.1'\n    pattern = r'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$'\n    match = bool(re.fullmatch(pattern, ip))\n    return match\n\n# Script approach\nip = '192.168.1.1'\npattern = r'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True\n\n# Direct approach\nip = '192.168.1.1'\npattern = r'^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(?!$)){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$'\nmatch = bool(re.fullmatch(pattern, ip))\nprint(match)  # Expected output: True",
+        "solution": "# Using function approach\nip = '192.168.1.1'\nparts = ip.split('.')\nmatch = len(parts) == 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in parts)\nprint(match)  # Expected output: True\n\n# Using built-in approach\ndef solve():\n    ip = '192.168.1.1'\n    parts = ip.split('.')\n    match = len(parts) == 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in parts)\n    print(match)  # Expected output: True\n\n# Using manual approach\ndef solve():\n    ip = '192.168.1.1'\n    parts = ip.split('.')\n    match = len(parts) == 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in parts)\n    return match\n\n# Script approach\nip = '192.168.1.1'\nparts = ip.split('.')\nmatch = len(parts) == 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in parts)\nprint(match)  # Expected output: True\n\n# Direct approach\nip = '192.168.1.1'\nparts = ip.split('.')\nmatch = len(parts) == 4 and all(part.isdigit() and 0 <= int(part) <= 255 for part in parts)\nprint(match)  # Expected output: True",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -11805,7 +11805,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1330",
         "description": "Write a Python program to extract quoted strings (single or double quotes).",
         "initialCode": "import re\n# Write your solution here",
-        "solution": "import re\n\n# Using function approach\ntext = ''Hello', she said. 'How are you?''\nquotes = re.findall(r'([''])(.*?)\\1', text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']",
+        "solution": "import re\n\n# Using function approach\ntext = \"'Hello', she said. 'How are you?'\"\nquotes = re.findall(r\"(['\\\"])(.*?)\\1\", text)\nprint([q[1] for q in quotes])  # Expected: ['Hello', 'How are you?']",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },

@@ -6283,7 +6283,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     mode: 'script',
     compare: 'printedOrReturn',
     tests: [
-      { args: [], inputValues: ["121", "quit", "121", "12", "quit"], expected: "121 is a palindrome\n12 is not a palindrome" }
+      { args: [], inputValues: ["121", "12", "quit"], expected: "121 is a palindrome\n12 is not a palindrome" }
     ]
   },
   863: {
