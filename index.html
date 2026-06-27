@@ -88,12 +88,26 @@
             left: 0;
             right: 0;
             text-align: center;
-            font-size: 11px;
+            font-size: 14px;
             color: #3b82f6;
             text-decoration: underline;
             z-index: 10000;
             font-weight: bold;
             letter-spacing: 0.5px;
+            padding: 16px 0;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+            background: none;
+            border: none;
+            font-family: -apple-system;
+        }
+        .rescue-link:active {
+            color: #60a5fa;
+        }
+        .boot-screen .rescue-link {
+            pointer-events: auto;
         }
 
         /* Solution 37: Remove ALL constraints - let content expand naturally */
@@ -148,8 +162,24 @@
         <p style="margin-top: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; color: #3b82f6;">CONNECTING
             TO EDITOR...</p>
         <p style="margin-top: 8px; font-size: 10px; color: #4b5563;">Please wait for Python engine</p>
-        <a href="javascript:caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))).then(() => navigator.serviceWorker.getRegistrations().then(regs => Promise.all(regs.map(r => r.unregister()))).then(() => location.reload())));"
-            class="rescue-link">Force Clear Cache & Reload</a>
+        <button id="rescueBtn" class="rescue-link">Force Clear Cache & Reload</button>
+        <script>
+            document.getElementById('rescueBtn').addEventListener('click', function (e) {
+                e.preventDefault();
+                this.textContent = 'Clearing cache...';
+                caches.keys().then(function (keys) {
+                    return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                }).then(function () {
+                    return navigator.serviceWorker.getRegistrations();
+                }).then(function (regs) {
+                    return Promise.all(regs.map(function (r) { return r.unregister(); }));
+                }).then(function () {
+                    location.reload();
+                }).catch(function () {
+                    location.reload();
+                });
+            });
+        </script>
     </div>
     <script type="module" src="./index.tsx"></script>
     <script type="module">
