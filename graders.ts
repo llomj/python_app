@@ -8,6 +8,7 @@ export interface AutoTestCase {
     setupRemove?: string[];
     setupDirs?: string[];
     setupFiles?: Record<string, string>;
+    setupSymlinks?: Record<string, string>;
     permissionDeniedPaths?: string[];
     getFiles?: string[];
     randomValues?: number[];

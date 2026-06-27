@@ -159,7 +159,7 @@
         // and reload. This ensures fresh content on every deploy.
         // ───────────────────────────────────────────────────────────────
         (function () {
-            var APP_VERSION = 'v163';
+            var APP_VERSION = 'v164';
             var prevVersion = localStorage.getItem('app_version');
             var alreadyCleared = sessionStorage.getItem('cache_cleared');
 
@@ -240,7 +240,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
-                    const CURRENT_VERSION = 'v163';
+                    const CURRENT_VERSION = 'v164';
                     const registration = await navigator.serviceWorker.register('./sw.js?v=' + CURRENT_VERSION, {
                         updateViaCache: 'none',
                         scope: './'

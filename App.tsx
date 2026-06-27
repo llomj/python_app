@@ -370,6 +370,29 @@ def __auto_grader_maybe_literal(value):
     except Exception:
         return value
 
+def __auto_grader_declarations_only(source):
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return source
+    allowed = (
+        ast.Import,
+        ast.ImportFrom,
+        ast.FunctionDef,
+        ast.AsyncFunctionDef,
+        ast.ClassDef,
+    )
+    tree.body = [node for node in tree.body if isinstance(node, allowed)]
+    ast.fix_missing_locations(tree)
+    try:
+        return ast.unparse(tree) + "\\n"
+    except Exception:
+        return source
+
+def __auto_grader_load_function_namespace():
+    source = __auto_grader_declarations_only(__auto_grader_source)
+    exec(compile(source, __auto_grader_source_name, "exec"), globals())
+
 def __auto_grader_clean_text(value):
     return "\\n".join(line.rstrip() for line in str(value).strip().splitlines())
 
@@ -506,6 +529,14 @@ def __auto_grader_run():
     if __auto_grader_spec.get("mode") == "script":
         return __auto_grader_run_script()
 
+    try:
+        __auto_grader_load_function_namespace()
+    except Exception as exc:
+        return {
+            "passed": False,
+            "message": f"Could not prepare functions/classes for grading: {type(exc).__name__}: {exc}"
+        }
+
     function_names = __auto_grader_spec.get("functionNames", [])
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
@@ -535,6 +566,7 @@ def __auto_grader_run():
         setup_remove = case.get("setupRemove", [])
         setup_dirs = case.get("setupDirs", [])
         setup_files = case.get("setupFiles", {})
+        setup_symlinks = case.get("setupSymlinks", {})
         permission_denied_paths = set(case.get("permissionDeniedPaths", []))
         get_files = case.get("getFiles")
         call_returned_with = case.get("callReturnedWith")
@@ -615,6 +647,13 @@ def __auto_grader_run():
                     os.makedirs(dir_name, exist_ok=True)
                 with open(file_name, "w", encoding="utf-8") as setup_file:
                     setup_file.write(file_content)
+            for link_name, target_name in setup_symlinks.items():
+                dir_name = os.path.dirname(link_name)
+                if dir_name:
+                    os.makedirs(dir_name, exist_ok=True)
+                if os.path.lexists(link_name):
+                    os.remove(link_name)
+                os.symlink(target_name, link_name)
             if permission_denied_paths:
                 builtins.open = __guarded_open
             returned = case_target(*resolved_args, **kwargs)
@@ -725,6 +764,7 @@ def __auto_grader_run_script():
         setup_remove = case.get("setupRemove", [])
         setup_dirs = case.get("setupDirs", [])
         setup_files = case.get("setupFiles", {})
+        setup_symlinks = case.get("setupSymlinks", {})
         permission_denied_paths = set(case.get("permissionDeniedPaths", []))
         label = case.get("label") or ("test " + str(index))
 
@@ -819,6 +859,13 @@ def __auto_grader_run_script():
                     os.makedirs(dir_name, exist_ok=True)
                 with open(file_name, "w", encoding="utf-8") as setup_file:
                     setup_file.write(file_content)
+            for link_name, target_name in setup_symlinks.items():
+                dir_name = os.path.dirname(link_name)
+                if dir_name:
+                    os.makedirs(dir_name, exist_ok=True)
+                if os.path.lexists(link_name):
+                    os.remove(link_name)
+                os.symlink(target_name, link_name)
             if permission_denied_paths:
                 builtins.open = __script_guarded_open
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
