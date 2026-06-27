@@ -519,6 +519,13 @@ def setup_case(case):
             os.makedirs(dir_name, exist_ok=True)
         with open(file_name, "w", encoding="utf-8") as setup_file:
             setup_file.write(file_content)
+    for link_name, target_name in case.get("setupSymlinks", {}).items():
+        dir_name = os.path.dirname(link_name)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+        if os.path.lexists(link_name):
+            os.remove(link_name)
+        os.symlink(target_name, link_name)
 
 def install_random(case, old_random):
     for name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):

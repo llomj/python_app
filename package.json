@@ -8,7 +8,7 @@
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",
         "audit:graders": "node scripts/audit_graders.js",
-        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 480 --max-single-case-scripts 526 --max-empty-graders 0"
+        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 441 --max-single-case-scripts 526 --max-empty-graders 0"
     },
     "dependencies": {
         "react": "^18.2.0",

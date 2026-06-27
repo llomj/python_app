@@ -9049,24 +9049,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1222: {
     functionNames: ["check_path_exists"],
-    tests: [{
-      args: [],
-      expected: false
-    }]
+    tests: [
+      { args: [], setupRemove: ["example_directory"], expected: false },
+      { args: [], setupDirs: ["example_directory"], expected: true }
+    ]
   },
   1223: {
     functionNames: ["check_if_file"],
-    tests: [{
-      args: [],
-      expected: false
-    }]
+    tests: [
+      { args: [], setupRemove: ["example_file.txt"], expected: false },
+      { args: [], setupFiles: { "example_file.txt": "content" }, expected: true }
+    ]
   },
   1224: {
     functionNames: ["check_if_directory"],
-    tests: [{
-      args: [],
-      expected: false
-    }]
+    tests: [
+      { args: [], setupRemove: ["example_directory"], expected: false },
+      { args: [], setupDirs: ["example_directory"], expected: true }
+    ]
   },
   1225: {
     functionNames: ["get_file_name"],
@@ -9100,12 +9100,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_file_size'],
         tests: [
             { args: [], setupFiles: { "example_file.txt": "hello" }, expected: 5 },
+            { args: [], setupFiles: { "example_file.txt": "hello world" }, expected: 11 },
         ]
     },
   1230: {
         functionNames: ['rename_file'],
         tests: [
             { args: [], setupRemove: ["new_file.txt"], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
+            { args: [], setupRemove: ["new_file.txt"], setupFiles: { "old_file.txt": "second content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "second content", "old_file.txt": null } },
         ]
     },
   1231: {
@@ -9128,6 +9130,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['remove_file'],
         tests: [
             { args: [], setupFiles: { "example_file.txt": "remove me" }, getFiles: ["example_file.txt"], expected: { "example_file.txt": null } },
+            { args: [], setupFiles: { "example_file.txt": "remove again" }, getFiles: ["example_file.txt"], expected: { "example_file.txt": null } },
         ]
     },
   1234: {
@@ -9140,10 +9143,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1235: {
     functionNames: ["check_if_symlink"],
-    tests: [{
-      args: [],
-      expected: false
-    }]
+    tests: [
+      { args: [], setupRemove: ["example_symlink"], expected: false },
+      { args: [], setupRemove: ["example_symlink"], setupFiles: { "example_file.txt": "target" }, setupSymlinks: { "example_symlink": "example_file.txt" }, expected: true }
+    ]
   },
   1236: {
         functionNames: ['create_symlink'],
@@ -9153,10 +9156,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1237: {
     functionNames: ["check_directory_and_files"],
-    tests: [{
-      args: [],
-      expected: []
-    }]
+    compare: 'unorderedList',
+    tests: [
+      { args: [], setupRemove: ["example_directory"], expected: [] },
+      { args: [], setupRemove: ["example_directory"], setupFiles: { "example_directory/a.txt": "a", "example_directory/b.txt": "b" }, expected: ["a.txt", "b.txt"] }
+    ]
   },
   1238: {
         functionNames: ['get_last_modified_time'],
@@ -9176,6 +9180,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['check_if_empty'],
         tests: [
             { args: [], setupRemove: ["example_directory"], setupDirs: ["example_directory"], expected: true },
+            { args: [], setupRemove: ["example_directory"], setupFiles: { "example_directory/file.txt": "x" }, expected: false },
         ]
     },
   1241: {
@@ -9183,6 +9188,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'unorderedList',
         tests: [
             { args: [], setupRemove: ["example_directory"], setupFiles: { "example_directory/a.txt": "a", "example_directory/b.txt": "b" }, expected: ["a.txt", "b.txt"] },
+            { args: [], setupRemove: ["example_directory"], setupFiles: { "example_directory/one.py": "1", "example_directory/two.py": "2" }, expected: ["one.py", "two.py"] },
         ]
     },
   1242: {
@@ -9203,6 +9209,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_human_readable_size'],
         tests: [
             { args: [], setupFiles: { "example_file.txt": "x".repeat(2048) }, expected: "2.00 KB" },
+            { args: [], setupFiles: { "example_file.txt": "x".repeat(512) }, expected: "0.50 KB" },
         ]
     },
   1245: {
@@ -9234,10 +9241,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1249: {
     functionNames: ["main"],
-    tests: [{
-      args: [5],
-      expected: false
-    }]
+    tests: [
+      { args: [5], expected: false },
+      { args: [15], expected: true },
+      { args: [30], expected: true }
+    ]
   },
   1250: {
     functionNames: ["check_list"],
@@ -9360,10 +9368,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1267: {
     functionNames: ["check_file_exists_and_size"],
-    tests: [{
-      args: [],
-      expected: false
-    }]
+    tests: [
+      { args: [], setupRemove: ["example_file.txt"], expected: false },
+      { args: [], setupFiles: { "example_file.txt": "x".repeat(102401) }, expected: true }
+    ]
   },
   1268: {
     functionNames: ["check_list_length_and_last_element"],
@@ -9521,10 +9529,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1290: {
     functionNames: ["check_file_conditions"],
-    tests: [{
-      args: [],
-      expected: false
-    }]
+    tests: [
+      { args: [], setupRemove: ["example_file.txt"], expected: false },
+      { args: [], setupFiles: { "example_file.txt": "present" }, expected: true }
+    ]
   },
   1291: {
     functionNames: ["check_number"],
@@ -10160,33 +10168,38 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ['print_kwargs'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { a: 1, b: 2 }, expected: "{'a': 1, 'b': 2}" }
+      { args: [], kwargs: { a: 1, b: 2 }, expected: "{'a': 1, 'b': 2}" },
+      { args: [], kwargs: { name: 'Noll', score: 9 }, expected: "{'name': 'Noll', 'score': 9}" }
     ]
   },
   1372: {
     functionNames: ['display_kwargs'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { name: 'Alice', age: 30 }, expected: "name: Alice\nage: 30" }
+      { args: [], kwargs: { name: 'Alice', age: 30 }, expected: "name: Alice\nage: 30" },
+      { args: [], kwargs: { city: 'Paris', active: true }, expected: "city: Paris\nactive: True" }
     ]
   },
   1373: {
     functionNames: ['count_kwargs'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { a: 1, b: 2, c: 3 }, expected: "3" }
+      { args: [], kwargs: { a: 1, b: 2, c: 3 }, expected: "3" },
+      { args: [], kwargs: {}, expected: "0" }
     ]
   },
   1374: {
     functionNames: ['kwargs_keys'],
     tests: [
-      { args: [], kwargs: { x: 10, y: 20 }, expected: ['x', 'y'] }
+      { args: [], kwargs: { x: 10, y: 20 }, expected: ['x', 'y'] },
+      { args: [], kwargs: { first: 1, second: 2, third: 3 }, expected: ['first', 'second', 'third'] }
     ]
   },
   1375: {
     functionNames: ['kwargs_values'],
     tests: [
-      { args: [], kwargs: { x: 10, y: 20 }, expected: [10, 20] }
+      { args: [], kwargs: { x: 10, y: 20 }, expected: [10, 20] },
+      { args: [], kwargs: { first: 'a', second: 'b' }, expected: ['a', 'b'] }
     ]
   },
   1376: {
@@ -10207,13 +10220,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ['sum_kwargs'],
     compare: 'float',
     tests: [
-      { args: [], kwargs: { a: 10, b: 5.5, c: 'x' }, expected: 15.5 }
+      { args: [], kwargs: { a: 10, b: 5.5, c: 'x' }, expected: 15.5 },
+      { args: [], kwargs: { a: -2, b: 4, c: false }, expected: 2 }
     ]
   },
   1379: {
     functionNames: ['string_kwargs'],
     tests: [
-      { args: [], kwargs: { a: 'hi', b: 2, c: 'hello' }, expected: { a: 'hi', c: 'hello' } }
+      { args: [], kwargs: { a: 'hi', b: 2, c: 'hello' }, expected: { a: 'hi', c: 'hello' } },
+      { args: [], kwargs: { title: 'Dev', count: 3, ok: true }, expected: { title: 'Dev' } }
     ]
   },
   1380: {
@@ -10221,71 +10236,82 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'printedOrReturn',
         tests: [
             { args: [], kwargs: { name: 'Bob', age: 40 }, expected: "Hello Bob, age 40" },
+            { args: [], kwargs: {}, expected: "Hello Guest, age N/A" },
         ]
     },
   1381: {
     functionNames: ['update_dict'],
     tests: [
-      { args: [{ x: 1 }], kwargs: { y: 2, z: 3 }, expected: { x: 1, y: 2, z: 3 } }
+      { args: [{ x: 1 }], kwargs: { y: 2, z: 3 }, expected: { x: 1, y: 2, z: 3 } },
+      { args: [{ name: 'A' }], kwargs: { name: 'B', age: 5 }, expected: { name: 'B', age: 5 } }
     ]
   },
   1382: {
         functionNames: ['merge_dicts'],
         tests: [
             { args: [{ a: 1 }], kwargs: { b: 2 }, expected: { a: 1, b: 2 } },
+            { args: [{ a: 1 }], kwargs: { a: 9, c: 3 }, expected: { a: 9, c: 3 } },
         ]
     },
   1383: {
     functionNames: ['even_kwargs'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { a: 1, b: 2, c: 4 }, expected: "b: 2\nc: 4" }
+      { args: [], kwargs: { a: 1, b: 2, c: 4 }, expected: "b: 2\nc: 4" },
+      { args: [], kwargs: { x: 7, y: 8, z: '10' }, expected: "y: 8" }
     ]
   },
   1384: {
     functionNames: ['sorted_kwargs'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { z: 9, a: 1, m: 5 }, expected: "a: 1\nm: 5\nz: 9" }
+      { args: [], kwargs: { z: 9, a: 1, m: 5 }, expected: "a: 1\nm: 5\nz: 9" },
+      { args: [], kwargs: { beta: 2, alpha: 1 }, expected: "alpha: 1\nbeta: 2" }
     ]
   },
   1385: {
     functionNames: ['count_strings'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { a: 'one', b: 2, c: 'three' }, expected: "2" }
+      { args: [], kwargs: { a: 'one', b: 2, c: 'three' }, expected: "2" },
+      { args: [], kwargs: { a: 1, b: false }, expected: "0" }
     ]
   },
   1386: {
     functionNames: ['check_truthy'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { a: 0, b: 'hello', c: [] }, expected: "a: Falsy\nb: Truthy\nc: Falsy" }
+      { args: [], kwargs: { a: 0, b: 'hello', c: [] }, expected: "a: Falsy\nb: Truthy\nc: Falsy" },
+      { args: [], kwargs: { yes: true, no: false }, expected: "yes: Truthy\nno: Falsy" }
     ]
   },
   1387: {
     functionNames: ['starts_with_a'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { apple: 1, banana: 2, ant: 3 }, expected: "apple: 1\nant: 3" }
+      { args: [], kwargs: { apple: 1, banana: 2, ant: 3 }, expected: "apple: 1\nant: 3" },
+      { args: [], kwargs: { alpha: 10, beta: 20 }, expected: "alpha: 10" }
     ]
   },
   1388: {
     functionNames: ['reverse_kwargs'],
     tests: [
-      { args: [], kwargs: { a: 1, b: 2 }, expected: { 1: 'a', 2: 'b' } }
+      { args: [], kwargs: { a: 1, b: 2 }, expected: { 1: 'a', 2: 'b' } },
+      { args: [], kwargs: { red: 'r', blue: 'b' }, expected: { r: 'red', b: 'blue' } }
     ]
   },
   1389: {
     functionNames: ['longest_key'],
     tests: [
-      { args: [], kwargs: { short: 1, muchlonger: 2 }, expected: 'muchlonger' }
+      { args: [], kwargs: { short: 1, muchlonger: 2 }, expected: 'muchlonger' },
+      { args: [], kwargs: { aa: 1, bbbb: 2, c: 3 }, expected: 'bbbb' }
     ]
   },
   1390: {
     functionNames: ['stringify_kwargs'],
     tests: [
-      { args: [], kwargs: { x: 10, y: 20 }, expected: 'x=10, y=20' }
+      { args: [], kwargs: { x: 10, y: 20 }, expected: 'x=10, y=20' },
+      { args: [], kwargs: { name: 'Noll', level: 2 }, expected: 'name=Noll, level=2' }
     ]
   },
   1391: {
@@ -10299,32 +10325,37 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ['max_numeric'],
     compare: 'float',
     tests: [
-      { args: [], kwargs: { a: 1, b: 3.5, c: 'x' }, expected: 3.5 }
+      { args: [], kwargs: { a: 1, b: 3.5, c: 'x' }, expected: 3.5 },
+      { args: [], kwargs: { a: 'x', b: -2, c: -1 }, expected: -1 }
     ]
   },
   1393: {
     functionNames: ['count_none'],
     tests: [
-      { args: [], kwargs: { a: null, b: 1, c: null }, expected: 2 }
+      { args: [], kwargs: { a: null, b: 1, c: null }, expected: 2 },
+      { args: [], kwargs: { a: 0, b: false }, expected: 0 }
     ]
   },
   1394: {
     functionNames: ['print_types'],
     compare: 'printedOrReturn',
     tests: [
-      { args: [], kwargs: { a: 1, b: 'str', c: 3.14 }, expected: "a: int\nb: str\nc: float" }
+      { args: [], kwargs: { a: 1, b: 'str', c: 3.14 }, expected: "a: int\nb: str\nc: float" },
+      { args: [], kwargs: { flag: true, items: [1, 2] }, expected: "flag: bool\nitems: list" }
     ]
   },
   1395: {
     functionNames: ['kv_pairs'],
     tests: [
-      { args: [], kwargs: { a: 1, b: 2 }, expected: [['a', 1], ['b', 2]] }
+      { args: [], kwargs: { a: 1, b: 2 }, expected: [['a', 1], ['b', 2]] },
+      { args: [], kwargs: { name: 'Noll', age: 4 }, expected: [['name', 'Noll'], ['age', 4]] }
     ]
   },
   1396: {
     functionNames: ['remove_falsy'],
     tests: [
-      { args: [], kwargs: { a: 0, b: 1, c: '' }, expected: { b: 1 } }
+      { args: [], kwargs: { a: 0, b: 1, c: '' }, expected: { b: 1 } },
+      { args: [], kwargs: { empty: [], text: 'ok', none: null }, expected: { text: 'ok' } }
     ]
   },
   1397: {
@@ -10345,13 +10376,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1399: {
     functionNames: ['clean_temp_keys'],
     tests: [
-      { args: [], kwargs: { temp_x: 1, y: 2 }, expected: { x: 1, y: 2 } }
+      { args: [], kwargs: { temp_x: 1, y: 2 }, expected: { x: 1, y: 2 } },
+      { args: [], kwargs: { temp_name: 'Noll', keep: true }, expected: { name: 'Noll', keep: true } }
     ]
   },
   1400: {
     functionNames: ['uppercase_keys_only'],
     tests: [
-      { args: [], kwargs: { AGE: 30, name: 'Ann' }, expected: { AGE: 30 } }
+      { args: [], kwargs: { AGE: 30, name: 'Ann' }, expected: { AGE: 30 } },
+      { args: [], kwargs: { X: 1, Y: 2, mixedCase: 3 }, expected: { X: 1, Y: 2 } }
     ]
   },
   1402: {
