@@ -1459,6 +1459,7 @@ const App: React.FC = () => {
     const [pyodide, setPyodide] = useState<any>(null);
     const [bootStage, setBootStage] = useState<'loading' | 'ready' | 'launched'>('loading');
     const [bootLog, setBootLog] = useState<string>('Handshaking...');
+    const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
     const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full'>('none');
@@ -2051,28 +2052,26 @@ const App: React.FC = () => {
         setBootStage('launched');
     };
 
-    const forceResetCache = async () => {
-        if (window.caches) {
-            const keys = await window.caches.keys();
-            await Promise.all(keys.map(k => window.caches.delete(k)));
+    const clearAppCacheAndReload = async () => {
+        if (cacheClearBusy) return;
+        setCacheClearBusy(true);
+        try {
+            if (window.caches) {
+                const keys = await window.caches.keys();
+                await Promise.all(keys.map(k => window.caches.delete(k)));
+            }
+            if (navigator.serviceWorker) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(registrations.map(registration => registration.unregister()));
+            }
+            sessionStorage.removeItem('cache_cleared');
+            const nextUrl = new URL(window.location.href);
+            nextUrl.searchParams.set('cache', Date.now().toString());
+            window.location.replace(nextUrl.toString());
+        } catch (error) {
+            console.error('Cache clear failed:', error);
+            window.location.reload();
         }
-        if (navigator.serviceWorker) {
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(registrations.map(registration => registration.unregister()));
-        }
-        window.location.reload();
-    };
-
-    const forceRefreshToNewest = async () => {
-        if (navigator.serviceWorker) {
-            const regs = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(regs.map(r => r.unregister()));
-        }
-        if (window.caches) {
-            const keys = await window.caches.keys();
-            await Promise.all(keys.map(k => window.caches.delete(k)));
-        }
-        window.location.reload(true);
     };
 
     const handleCopyLink = () => {
@@ -2586,7 +2585,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         <p className="text-gray-400 text-[11px] max-w-xs leading-relaxed mb-8">Caching Standard Library (20MB) for offline use.</p>
                         <div className="flex flex-col gap-3 w-full max-w-xs animate-in slide-in-from-bottom-4">
                             <button onClick={() => window.location.reload()} className="w-full bg-[#1d2d44] text-white py-4 rounded-2xl font-black text-[10px] uppercase border border-white/5 flex items-center justify-center gap-2"><RefreshCw size={14} /> Refresh</button>
-                            <button onClick={forceResetCache} className="w-full bg-red-500/10 border border-red-500/20 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase flex items-center justify-center gap-2"><Trash2 size={14} /> Wipe Cache</button>
+                            <button onClick={clearAppCacheAndReload} disabled={cacheClearBusy} className="w-full bg-red-500/10 border border-red-500/20 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase flex items-center justify-center gap-2 disabled:opacity-60"><Trash2 size={14} /> {cacheClearBusy ? 'Clearing...' : 'Clear App Cache'}</button>
                         </div>
                     </>
                 ) : (
@@ -2594,6 +2593,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         <h1 className="text-3xl font-black tracking-tighter mb-2 text-[#3b82f6]">LOCAL ENGINE READY</h1>
                         <p className="text-gray-400 text-xs mb-6 uppercase tracking-widest font-bold">Standard Library Loaded</p>
                         <button onClick={handleLaunch} className="mt-4 bg-[#3b82f6] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-[0_0_40px_rgba(59,130,246,0.3)] active:scale-95 transition-all flex items-center gap-2"><Zap size={20} fill="currentColor" /> ENTER EDITOR</button>
+                        <button onClick={clearAppCacheAndReload} disabled={cacheClearBusy} className="mt-4 w-full max-w-xs bg-red-500/10 border border-red-500/25 text-red-400 py-3 rounded-2xl font-black text-[10px] uppercase flex items-center justify-center gap-2 disabled:opacity-60"><Trash2 size={14} /> {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache'}</button>
                     </div>
                 )}
 
@@ -2981,7 +2981,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {/* Fixed footer - centered version button */}
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
                 <div className="relative flex items-center justify-center">
-                    <button onClick={forceRefreshToNewest} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Refresh to newest version">
+                    <button onClick={() => setShowModal('settings')} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Open settings">
                         <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
                         <span className="text-base" title={`Rank: ${userRank.name}`}>{userRank.icon}</span>
@@ -3155,6 +3155,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             );
                                         })}
                                     </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-red-500/25 bg-red-500/10 p-4">
+                                    <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-red-300">
+                                        <Trash2 size={14} /> App Cache
+                                    </h3>
+                                    <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
+                                        If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.
+                                    </p>
+                                    <button
+                                        onClick={clearAppCacheAndReload}
+                                        disabled={cacheClearBusy}
+                                        className="w-full rounded-xl border border-red-500/35 bg-red-500/15 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-red-300 transition-colors hover:bg-red-500/25 disabled:opacity-60"
+                                    >
+                                        {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
+                                    </button>
                                 </div>
 
                                 <div className="mb-6">
