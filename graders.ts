@@ -13273,90 +13273,96 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_squared_numbers'],
         tests: [
             { args: [[1,2,3]], expected: [1,4,9] },
+            { args: [[-2,0,4]], expected: [4,0,16] },
         ]
     },
   1779: {
         functionNames: ['get_doubled_numbers'],
         tests: [
             { args: [[1,2,3]], expected: [2,4,6] },
+            { args: [[-2,0,4]], expected: [-4,0,8] },
         ]
     },
   1780: {
         functionNames: ['get_even_numbers_comprehension'],
         tests: [
             { args: [[1,2,3,4,5,6]], expected: [2,4,6] },
+            { args: [[-2,-1,0,3]], expected: [-2,0] },
         ]
     },
   1781: {
         functionNames: ['get_uppercase_strings'],
         tests: [
             { args: [["a","b","c"]], expected: ["A","B","C"] },
+            { args: [["Hi","noll"]], expected: ["HI","NOLL"] },
         ]
     },
   1782: {
         functionNames: ['get_string_lengths'],
         tests: [
             { args: [["hi","hello","a"]], expected: [2,5,1] },
+            { args: [["", "abcd"]], expected: [0,4] },
         ]
     },
   1783: {
     functionNames: ["print_number_pattern"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1 \n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5"
-    }]
+    tests: [
+      { args: [5], expected: "1 \n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5" },
+      { args: [3], expected: "1 \n1 2 \n1 2 3" }
+    ]
   },
   1784: {
     functionNames: ["print_star_pattern"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*\n**\n***\n****\n*****"
-    }]
+    tests: [
+      { args: [5], expected: "*\n**\n***\n****\n*****" },
+      { args: [3], expected: "*\n**\n***" }
+    ]
   },
   1785: {
     functionNames: ["print_reverse_star_pattern"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*****\n****\n***\n**\n*"
-    }]
+    tests: [
+      { args: [5], expected: "*****\n****\n***\n**\n*" },
+      { args: [3], expected: "***\n**\n*" }
+    ]
   },
   1786: {
     functionNames: ["print_number_square"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "1 2 3 4 5\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25"
-    }]
+    tests: [
+      { args: [5], expected: "1 2 3 4 5\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25" },
+      { args: [2], expected: "1 2\n3 4" }
+    ]
   },
   1787: {
         functionNames: ['calculate_factorial'],
         tests: [
             { args: [5], expected: 120 },
+            { args: [0], expected: 1 },
         ]
     },
   1788: {
     functionNames: ["calculate_sum_range"],
-    tests: [{
-      args: [1, 5],
-      expected: 15
-    }]
+    tests: [
+      { args: [1, 5], expected: 15 },
+      { args: [-2, 2], expected: 0 }
+    ]
   },
   1789: {
     functionNames: ["calculate_product_range"],
-    tests: [{
-      args: [1, 5],
-      expected: 120
-    }]
+    tests: [
+      { args: [1, 5], expected: 120 },
+      { args: [3, 4], expected: 12 }
+    ]
   },
   1790: {
     functionNames: ["get_fibonacci_sequence"],
-    tests: [{
-      args: [5],
-      expected: [0, 1, 1, 2, 3]
-    }]
+    tests: [
+      { args: [5], expected: [0, 1, 1, 2, 3] },
+      { args: [1], expected: [0] }
+    ]
   },
   1791: {
         functionNames: ['check_palindrome_number'],
@@ -13369,84 +13375,98 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sum_of_digits'],
         tests: [
             { args: [123], expected: 6 },
+            { args: [9001], expected: 10 },
         ]
     },
   1793: {
         functionNames: ['product_of_digits'],
         tests: [
             { args: [123], expected: 6 },
+            { args: [405], expected: 0 },
         ]
     },
   1794: {
         functionNames: ['count_digits'],
         tests: [
             { args: [12345], expected: 5 },
+            { args: [0], expected: 1 },
         ]
     },
   1795: {
         functionNames: ['reverse_number'],
         tests: [
             { args: [123], expected: 321 },
+            { args: [120], expected: 21 },
         ]
     },
   1796: {
         functionNames: ['get_first_n_elements'],
         tests: [
             { args: [[1,2,3,4,5],3], expected: [1,2,3] },
+            { args: [["a","b"],5], expected: ["a","b"] },
         ]
     },
   1797: {
         functionNames: ['get_last_n_elements'],
         tests: [
             { args: [[1,2,3,4,5],3], expected: [3,4,5] },
+            { args: [["a","b"],5], expected: ["a","b"] },
         ]
     },
   1798: {
         functionNames: ['remove_duplicates_from_list'],
         tests: [
             { args: [[1,2,2,3,3,4]], expected: [1,2,3,4] },
+            { args: [["a","a","b"]], expected: ["a","b"] },
         ]
     },
   1799: {
         functionNames: ['merge_two_lists'],
         tests: [
             { args: [[1,2],[3,4]], expected: [1,3,2,4] },
+            { args: [["a"],["b"]], expected: ["a","b"] },
         ]
     },
   1800: {
         functionNames: ['get_common_elements'],
         tests: [
             { args: [[1,2,3],[2,3,4]], expected: [2,3] },
+            { args: [["a","b"],["c"]], expected: [] },
         ]
     },
   1801: {
         functionNames: ['get_unique_elements'],
         tests: [
             { args: [[1,2,3,4], [3,4,5,6]], expected: [1,2,5,6] },
+            { args: [[1,2],[2,3]], expected: [1,3] },
         ]
     },
   1802: {
         functionNames: ['sort_list_ascending'],
         tests: [
             { args: [[3,1,4,1,5]], expected: [1,1,3,4,5] },
+            { args: [[-1,2,0]], expected: [-1,0,2] },
         ]
     },
   1803: {
         functionNames: ['sort_list_descending'],
         tests: [
             { args: [[3,1,4,1,5]], expected: [5,4,3,1,1] },
+            { args: [[-1,2,0]], expected: [2,0,-1] },
         ]
     },
   1804: {
         functionNames: ['get_second_largest'],
         tests: [
             { args: [[1,5,3,8,2]], expected: 5 },
+            { args: [[10,4,7]], expected: 7 },
         ]
     },
   1805: {
         functionNames: ['get_second_smallest'],
         tests: [
             { args: [[1,5,3,8,2]], expected: 2 },
+            { args: [[10,4,7]], expected: 7 },
         ]
     },
   1806: {
@@ -13460,114 +13480,133 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['count_occurrences_in_list'],
         tests: [
             { args: [[1,2,2,3,2]], expected: {"1": 1, "2": 3, "3": 1} },
+            { args: [["a","b","a"]], expected: {"a": 2, "b": 1} },
         ]
     },
   1808: {
         functionNames: ['get_most_frequent'],
         tests: [
             { args: [[1,2,2,3,3,3]], expected: 3 },
+            { args: [["a","b","a"]], expected: "a" },
         ]
     },
   1809: {
         functionNames: ['get_least_frequent'],
         tests: [
             { args: [[1,2,2,3]], expected: 1 },
+            { args: [["a","b","b"]], expected: "a" },
         ]
     },
   1810: {
         functionNames: ['flatten_nested_list'],
         tests: [
             { args: [[[1,2],[3,4],[5]]], expected: [1,2,3,4,5] },
+            { args: [[["a"],[],["b","c"]]], expected: ["a","b","c"] },
         ]
     },
   1811: {
         functionNames: ['group_by_length'],
         tests: [
             { args: [["a","ab","abc","ab"]], expected: {"1":["a"],"2":["ab","ab"],"3":["abc"]} },
+            { args: [["x","yy"]], expected: {"1":["x"],"2":["yy"]} },
         ]
     },
   1812: {
         functionNames: ['filter_by_length'],
         tests: [
             { args: [["a","ab","abc","abcd"],3], expected: ["abc","abcd"] },
+            { args: [["a","ab"],3], expected: [] },
         ]
     },
   1813: {
         functionNames: ['get_longest_string'],
         tests: [
             { args: [["a","abc","ab"]], expected: "abc" },
+            { args: [["noll","ai"]], expected: "noll" },
         ]
     },
   1814: {
         functionNames: ['get_shortest_string'],
         tests: [
             { args: [["a","abc","ab"]], expected: "a" },
+            { args: [["noll","ai"]], expected: "ai" },
         ]
     },
   1815: {
         functionNames: ['capitalize_all_words'],
         tests: [
             { args: ["hello world"], expected: "Hello World" },
+            { args: ["noll app"], expected: "Noll App" },
         ]
     },
   1816: {
         functionNames: ['reverse_words'],
         tests: [
             { args: ["hello world"], expected: "world hello" },
+            { args: ["one two three"], expected: "three two one" },
         ]
     },
   1817: {
         functionNames: ['count_words'],
         tests: [
             { args: ["hello world"], expected: 2 },
+            { args: ["one two three"], expected: 3 },
         ]
     },
   1818: {
         functionNames: ['get_longest_word'],
         tests: [
             { args: ["hello world python"], expected: "python" },
+            { args: ["small bigger"], expected: "bigger" },
         ]
     },
   1819: {
         functionNames: ['get_shortest_word'],
         tests: [
             { args: ["hello world a"], expected: "a" },
+            { args: ["small bigger"], expected: "small" },
         ]
     },
   1820: {
         functionNames: ['remove_vowels_from_string'],
         tests: [
             { args: ["hello"], expected: "hll" },
+            { args: ["AEIOUxyz"], expected: "xyz" },
         ]
     },
   1821: {
         functionNames: ['remove_consonants_from_string'],
         tests: [
             { args: ["hello"], expected: "eo" },
+            { args: ["AEIOUxyz"], expected: "AEIOU" },
         ]
     },
   1822: {
         functionNames: ['count_vowels_in_string'],
         tests: [
             { args: ["hello"], expected: 2 },
+            { args: ["AEIOUxyz"], expected: 5 },
         ]
     },
   1823: {
         functionNames: ['count_consonants_in_string'],
         tests: [
             { args: ["hello"], expected: 3 },
+            { args: ["AEIOUxyz"], expected: 3 },
         ]
     },
   1824: {
         functionNames: ['swap_first_last_words'],
         tests: [
             { args: ["hello world python"], expected: "python world hello" },
+            { args: ["one two"], expected: "two one" },
         ]
     },
   1825: {
         functionNames: ['get_middle_word'],
         tests: [
             { args: ["hello world python"], expected: "world" },
+            { args: ["one two three four"], expected: "three" },
         ]
     },
   1826: {
@@ -13588,138 +13627,161 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_range_list'],
         tests: [
             { args: [1,5], expected: [1,2,3,4,5] },
+            { args: [-2,2], expected: [-2,-1,0,1,2] },
         ]
     },
   1829: {
         functionNames: ['get_even_range'],
         tests: [
             { args: [1,10], expected: [2,4,6,8,10] },
+            { args: [2,6], expected: [2,4,6] },
         ]
     },
   1830: {
         functionNames: ['get_odd_range'],
         tests: [
             { args: [1,10], expected: [1,3,5,7,9] },
+            { args: [2,7], expected: [3,5,7] },
         ]
     },
   1831: {
         functionNames: ['multiply_lists'],
         tests: [
             { args: [[1,2,3],[4,5,6]], expected: [4,10,18] },
+            { args: [[0,-2],[5,3]], expected: [0,-6] },
         ]
     },
   1832: {
         functionNames: ['add_lists'],
         tests: [
             { args: [[1,2,3],[4,5,6]], expected: [5,7,9] },
+            { args: [[-1,2],[5,3]], expected: [4,5] },
         ]
     },
   1833: {
         functionNames: ['subtract_lists'],
         tests: [
             { args: [[5,3,7],[1,2,4]], expected: [4,1,3] },
+            { args: [[0,-2],[5,3]], expected: [-5,-5] },
         ]
     },
   1834: {
         functionNames: ['get_index_of_max'],
         tests: [
             { args: [[1,5,3,8,2]], expected: 3 },
+            { args: [[-1,-5,-3]], expected: 0 },
         ]
     },
   1835: {
         functionNames: ['get_index_of_min'],
         tests: [
             { args: [[1,5,3,8,2]], expected: 0 },
+            { args: [[-1,-5,-3]], expected: 1 },
         ]
     },
   1836: {
         functionNames: ['rotate_list_left'],
         tests: [
             { args: [[1,2,3,4,5],2], expected: [3,4,5,1,2] },
+            { args: [[1,2,3],1], expected: [2,3,1] },
         ]
     },
   1837: {
         functionNames: ['rotate_list_right'],
         tests: [
             { args: [[1,2,3,4,5],2], expected: [4,5,1,2,3] },
+            { args: [[1,2,3],1], expected: [3,1,2] },
         ]
     },
   1838: {
         functionNames: ['chunk_list'],
         tests: [
             { args: [[1,2,3,4,5,6],2], expected: [[1,2],[3,4],[5,6]] },
+            { args: [[1,2,3,4,5],2], expected: [[1,2],[3,4],[5]] },
         ]
     },
   1839: {
         functionNames: ['interleave_lists'],
         tests: [
             { args: [[1,2,3],["a","b","c"]], expected: [1,"a",2,"b",3,"c"] },
+            { args: [[1,2],["a","b"]], expected: [1,"a",2,"b"] },
         ]
     },
   1840: {
         functionNames: ['zip_lists'],
         tests: [
             { args: [[1,2],["a","b"]], expected: [[1,"a"],[2,"b"]] },
+            { args: [[1],["a"]], expected: [[1,"a"]] },
         ]
     },
   1841: {
         functionNames: ['unzip_list'],
         tests: [
             { args: [[[1,"a"],[2,"b"]]], expected: [[1,2],["a","b"]] },
+            { args: [[["x",1],["y",2]]], expected: [["x","y"],[1,2]] },
         ]
     },
   1842: {
         functionNames: ['count_uppercase_letters'],
         tests: [
             { args: ["Hello WORLD"], expected: 6 },
+            { args: ["AbC123"], expected: 2 },
         ]
     },
   1843: {
         functionNames: ['count_lowercase_letters'],
         tests: [
             { args: ["Hello WORLD"], expected: 4 },
+            { args: ["AbC123"], expected: 1 },
         ]
     },
   1844: {
         functionNames: ['swap_uppercase_lowercase'],
         tests: [
             { args: ["Hello"], expected: "hELLO" },
+            { args: ["Py3"], expected: "pY3" },
         ]
     },
   1845: {
         functionNames: ['remove_numbers_from_string'],
         tests: [
             { args: ["ab12cd34"], expected: "abcd" },
+            { args: ["1a2b!"], expected: "ab!" },
         ]
     },
   1846: {
         functionNames: ['remove_letters_from_string'],
         tests: [
             { args: ["ab12cd34"], expected: "1234" },
+            { args: ["1a2b!"], expected: "12!" },
         ]
     },
   1847: {
         functionNames: ['extract_numbers_from_string'],
         tests: [
             { args: ["ab12cd34"], expected: ["1","2","3","4"] },
+            { args: ["x9y8"], expected: ["9","8"] },
         ]
     },
   1848: {
         functionNames: ['extract_letters_from_string'],
         tests: [
             { args: ["ab12cd34"], expected: ["a","b","c","d"] },
+            { args: ["x9y8"], expected: ["x","y"] },
         ]
     },
   1849: {
         functionNames: ['format_phone_number'],
         tests: [
             { args: ["1234567890"], expected: "(123) 456-7890" },
+            { args: ["0987654321"], expected: "(098) 765-4321" },
         ]
     },
   1850: {
         functionNames: ['calculate_volume_box'],
         tests: [
             { args: [3,4,5], expected: 60 },
+            { args: [1,2,3], expected: 6 },
         ]
     },
   1851: {
@@ -13733,66 +13795,77 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['find_grade'],
         tests: [
             { args: [85], expected: "B" },
+            { args: [55], expected: "F" },
         ]
     },
   1853: {
         functionNames: ['get_season'],
         tests: [
             { args: [3], expected: "Spring" },
+            { args: [12], expected: "Winter" },
         ]
     },
   1854: {
         functionNames: ['calculate_discount'],
         tests: [
             { args: [100,20], expected: 80 },
+            { args: [50,10], expected: 45 },
         ]
     },
   1855: {
         functionNames: ['calculate_tip'],
         tests: [
             { args: [50,15], expected: [7.5,57.5] },
+            { args: [80,20], expected: [16,96] },
         ]
     },
   1856: {
         functionNames: ['swap_two_elements'],
         tests: [
             { args: [[1,2,3,4],1,3], expected: [1,4,3,2] },
+            { args: [["a","b","c"],0,2], expected: ["c","b","a"] },
         ]
     },
   1857: {
         functionNames: ['insert_at_index'],
         tests: [
             { args: [[1,2,4],2,3], expected: [1,2,3,4] },
+            { args: [["a","c"],1,"b"], expected: ["a","b","c"] },
         ]
     },
   1858: {
         functionNames: ['remove_at_index'],
         tests: [
             { args: [[1,2,3,4],2], expected: [1,2,4] },
+            { args: [["a","b","c"],0], expected: ["b","c"] },
         ]
     },
   1859: {
         functionNames: ['count_vowels_and_consonants'],
         tests: [
             { args: ["hello"], expected: [2,3] },
+            { args: ["Python"], expected: [1,5] },
         ]
     },
   1860: {
         functionNames: ['get_min_max'],
         tests: [
             { args: [[1,5,3,8,2]], expected: [1,8] },
+            { args: [[-4,0,7]], expected: [-4,7] },
         ]
     },
   1861: {
         functionNames: ['check_all_conditions'],
         tests: [
             { args: [6], expected: true },
+            { args: [-6], expected: false },
         ]
     },
   1862: {
         functionNames: ['format_full_name'],
         tests: [
             { args: ["John","Michael","Doe"], expected: "John Michael Doe" },
+            { args: ["Ada","Lovelace","Byron"], expected: "Ada Lovelace Byron" },
         ]
     },
   1863: {
@@ -13800,102 +13873,120 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'float',
         tests: [
             { args: [70,1.75], expected: 22.9 },
+            { args: [80,1.8], expected: 24.7 },
         ]
     },
   1864: {
         functionNames: ['check_bmi_category'],
         tests: [
             { args: [70,1.75], expected: "Normal" },
+            { args: [50,1.8], expected: "Underweight" },
         ]
     },
   1865: {
         functionNames: ['find_common_elements_three'],
         tests: [
             { args: [[1,2,3],[2,3,4],[2,3,5]], expected: [2,3] },
+            { args: [["a","b"],["b","c"],["b","d"]], expected: ["b"] },
         ]
     },
   1866: {
         functionNames: ['merge_three_lists'],
         tests: [
             { args: [[1],[2],[3]], expected: [1,2,3] },
+            { args: [["a"],["b","c"],[]], expected: ["a","b","c"] },
         ]
     },
   1867: {
         functionNames: ['get_elements_at_indices'],
         tests: [
             { args: [[10,20,30,40],[0,2]], expected: [10,30] },
+            { args: [["a","b","c"],[1,2]], expected: ["b","c"] },
         ]
     },
   1868: {
         functionNames: ['replace_multiple_chars'],
         tests: [
             { args: ["hello",{"l":"x"}], expected: "hexxo" },
+            { args: ["banana",{"a":"o","n":"m"}], expected: "bomomo" },
         ]
     },
   1869: {
         functionNames: ['count_words_by_length'],
         tests: [
             { args: ["a ab abc ab"], expected: {"1":1,"2":2,"3":1} },
+            { args: ["hi to code"], expected: {"2":2,"4":1} },
         ]
     },
   1870: {
         functionNames: ['filter_and_transform'],
         tests: [
             { args: [[1,2,3,4,5]], expected: [4,8] },
+            { args: [[2,4,6]], expected: [4,8,12] },
         ]
     },
   1871: {
         functionNames: ['get_strings_starting_with'],
         tests: [
             { args: [["apple","banana","apricot"],"a"], expected: ["apple","apricot"] },
+            { args: [["cat","car","dog"],"c"], expected: ["cat","car"] },
         ]
     },
   1872: {
         functionNames: ['get_strings_ending_with'],
         tests: [
             { args: [["apple","banana","orange"],"e"], expected: ["apple","orange"] },
+            { args: [["run","sun","sky"],"n"], expected: ["run","sun"] },
         ]
     },
   1873: {
         functionNames: ['calculate_total_cost'],
         tests: [
             { args: [[10,20,30],10], expected: 66 },
+            { args: [[5,15],20], expected: 24 },
         ]
     },
   1874: {
         functionNames: ['find_all_indices'],
         tests: [
             { args: [[1,2,3,2,4],2], expected: [1,3] },
+            { args: [["a","b","a"],"a"], expected: [0,2] },
         ]
     },
   1875: {
         functionNames: ['split_into_chunks'],
         tests: [
             { args: [[1,2,3,4,5,6],2], expected: [[1,2],[3,4],[5,6]] },
+            { args: [[1,2,3,4,5],2], expected: [[1,2],[3,4],[5]] },
         ]
     },
   1876: {
         functionNames: ['remove_multiple_elements'],
         tests: [
             { args: [[1,2,3,4,5],[1,3]], expected: [2,4,5] },
+            { args: [["a","b","c"],["a","c"]], expected: ["b"] },
         ]
     },
   1877: {
         functionNames: ['count_occurrences_multiple'],
         tests: [
             { args: [[1,2,2,3,2,3],[2,3]], expected: {"2":3,"3":2} },
+            { args: [["a","b","a"],["a","c"]], expected: {"a":2,"c":0} },
         ]
     },
   1878: {
         functionNames: ['get_unique_elements_three'],
+        compare: 'unorderedList',
         tests: [
             { args: [[1,2,3],[2,3,4],[3,4,5]], expected: [1,5] },
+            { args: [["a","b"],["b","c"],["c","d"]], expected: ["a","d"] },
         ]
     },
   1879: {
         functionNames: ['sort_by_multiple_criteria'],
         tests: [
             { args: [[["Bob",25,90],["Alice",25,85],["Charlie",30,80]]], expected: [["Alice",25,85],["Bob",25,90],["Charlie",30,80]] },
+            { args: [[["Zoe",20,70],["Ann",20,90],["Kim",21,80]]], expected: [["Zoe",20,70],["Ann",20,90],["Kim",21,80]] },
         ]
     },
   1880: {
@@ -13903,30 +13994,37 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: {"sum": 15, "average": 3, "min": 1, "max": 5}
+    }, {
+      args: [[2, 4, 6]],
+      expected: {"sum": 12, "average": 4, "min": 2, "max": 6}
     }]
   },
   1881: {
         functionNames: ['extract_numbers_from_string'],
         tests: [
             { args: ["ab12cd34"], expected: [12,34] },
+            { args: ["x7y890z"], expected: [7,890] },
         ]
     },
   1882: {
         functionNames: ['format_address'],
         tests: [
             { args: ["123 Main St","New York","NY","10001"], expected: "123 Main St\nNew York, NY 10001" },
+            { args: ["9 Elm","Austin","TX","73301"], expected: "9 Elm\nAustin, TX 73301" },
         ]
     },
   1883: {
         functionNames: ['check_password_strength'],
         tests: [
             { args: ["Abc123!@"], expected: true },
+            { args: ["weak"], expected: false },
         ]
     },
   1884: {
         functionNames: ['get_words_by_length_range'],
         tests: [
             { args: ["a ab abc abcd abcde",2,4], expected: ["ab","abc","abcd"] },
+            { args: ["hi code python",2,4], expected: ["hi","code"] },
         ]
     },
   1885: {
@@ -13934,24 +14032,29 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'float',
         tests: [
             { args: [1000,5,2,12], expected: 1104.941335558327 },
+            { args: [500,4,1,1], expected: 520 },
         ]
     },
   1886: {
         functionNames: ['find_duplicate_elements'],
+        compare: 'unorderedList',
         tests: [
             { args: [[1,2,2,3,3,3]], expected: [2,3] },
+            { args: [["a","b","a","c","b"]], expected: ["a","b"] },
         ]
     },
   1887: {
         functionNames: ['group_by_first_letter'],
         tests: [
             { args: [["apple","banana","apricot"]], expected: {"a":["apple","apricot"],"b":["banana"]} },
+            { args: [["cat","car","dog"]], expected: {"c":["cat","car"],"d":["dog"]} },
         ]
     },
   1888: {
         functionNames: ['calculate_distance'],
         tests: [
             { args: [0,0,3,4], expected: 5 },
+            { args: [1,1,4,5], expected: 5 },
         ]
     },
   1889: {
