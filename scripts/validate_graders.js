@@ -131,6 +131,77 @@ def clean_text(value):
 def compact_pattern(value):
     return "\n".join(re.sub(r"[ \t]+", "", line) for line in clean_text(value).splitlines())
 
+def repair_generated_string_newlines(source):
+    repaired = []
+    quote = None
+    triple = False
+    escaped = False
+    in_comment = False
+    i = 0
+    while i < len(source):
+        char = source[i]
+        if in_comment:
+            repaired.append(char)
+            if char == "\n":
+                in_comment = False
+            i += 1
+            continue
+        if quote is None:
+            if char == "#":
+                in_comment = True
+                repaired.append(char)
+                i += 1
+                continue
+            if char in ("'", '"'):
+                quote = char
+                triple = source[i:i + 3] == char * 3
+                if triple:
+                    repaired.append(source[i:i + 3])
+                    i += 3
+                    continue
+            repaired.append(char)
+            i += 1
+            continue
+        if triple:
+            if source[i:i + 3] == quote * 3:
+                repaired.append(source[i:i + 3])
+                i += 3
+                quote = None
+                triple = False
+                escaped = False
+                continue
+            repaired.append(char)
+            i += 1
+            continue
+        if escaped:
+            repaired.append(char)
+            escaped = False
+            i += 1
+            continue
+        if char == "\\":
+            repaired.append(char)
+            escaped = True
+            i += 1
+            continue
+        if char == quote:
+            repaired.append(char)
+            quote = None
+            i += 1
+            continue
+        if char == "\n":
+            repaired.append("\\n")
+            i += 1
+            continue
+        repaired.append(char)
+        i += 1
+    return "".join(repaired)
+
+def has_executable_ast(source):
+    try:
+        return bool(ast.parse(source).body)
+    except SyntaxError:
+        return False
+
 def same(actual, expected, compare):
     if compare == "typeName":
         return type(actual).__name__ == expected
@@ -248,11 +319,14 @@ def runnable_variants(source, prefer_markers=False):
     seen = set()
     for candidate in candidates:
         candidate = candidate.strip() + "\n"
+        candidate = repair_generated_string_newlines(candidate)
         if candidate in seen:
             continue
         seen.add(candidate)
         try:
             compile(candidate, "<solution>", "exec")
+            if not has_executable_ast(candidate):
+                continue
             yield candidate
         except SyntaxError:
             continue
