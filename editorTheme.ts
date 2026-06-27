@@ -69,6 +69,8 @@ export const pythonHighlightStyle = HighlightStyle.define([
   { tag: t.keyword, color: "#389EDB" },
   { tag: t.number, color: "#FF00FF" },
   { tag: t.string, color: "#00AD89" },
+  { tag: t.escape, color: "#00AD89" },
+  { tag: t.invalid, color: "#00AD89" },
 ]);
 
 export const customPythonTheme = [
