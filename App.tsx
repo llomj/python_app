@@ -2386,13 +2386,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const logicFile = `level1_${filePrefix}_codelogic.py`;
             const reqFile1 = `level1_${filePrefix}_requirements.py`;
             const reqFile2 = `level1_${filePrefix}_requirements..py`;
+            const syntaxFile = `level1_${filePrefix}_syntax.py`;
+
+            // Handle GitHub Pages subdirectory
+            const isGitHubPages = window.location.hostname === 'llomj.github.io';
+            const basePath = isGitHubPages ? '/python_app' : '';
+            const cacheBuster = `?cb=${Date.now()}`;
 
             // Fetch and parse logic file
             try {
-                // Handle GitHub Pages subdirectory
-                const isGitHubPages = window.location.hostname === 'llomj.github.io';
-                const basePath = isGitHubPages ? '/python_app' : '';
-                const logicResponse = await fetch(`${basePath}/${logicFile}`);
+                const logicResponse = await fetch(`${basePath}/${logicFile}${cacheBuster}`);
                 if (logicResponse.ok) {
                     const logicText = await logicResponse.text();
                     const problemLogic = extractProblemContent(logicText, exerciseId);
@@ -2408,12 +2411,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
             // Fetch and parse requirements file (try both variations)
             try {
-                // Handle GitHub Pages subdirectory
-                const isGitHubPages = window.location.hostname === 'llomj.github.io';
-                const basePath = isGitHubPages ? '/python_app' : '';
-                let reqResponse = await fetch(`${basePath}/${reqFile1}`);
+                let reqResponse = await fetch(`${basePath}/${reqFile1}${cacheBuster}`);
                 if (!reqResponse.ok) {
-                    reqResponse = await fetch(`${basePath}/${reqFile2}`);
+                    reqResponse = await fetch(`${basePath}/${reqFile2}${cacheBuster}`);
                 }
                 if (reqResponse.ok) {
                     const reqText = await reqResponse.text();
@@ -2430,10 +2430,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
             // Fetch and parse syntax file
             try {
-                const syntaxFile = `level1_${filePrefix}_syntax.py`;
-                const isGitHubPages = window.location.hostname === 'llomj.github.io';
-                const basePath = isGitHubPages ? '/python_app' : '';
-                const syntaxResponse = await fetch(`${basePath}/${syntaxFile}`);
+                const syntaxResponse = await fetch(`${basePath}/${syntaxFile}${cacheBuster}`);
                 if (syntaxResponse.ok) {
                     const syntaxText = await syntaxResponse.text();
                     const problemSyntax = extractProblemContent(syntaxText, exerciseId);
