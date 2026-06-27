@@ -9,7 +9,8 @@ const MIN_FUNCTION_TESTS = 2;
 function readNumberFlag(name) {
   const prefix = `--${name}=`;
   const inline = process.argv.find(arg => arg.startsWith(prefix));
-  const rawValue = inline ? inline.slice(prefix.length) : process.argv[process.argv.indexOf(`--${name}`) + 1];
+  const flagIndex = process.argv.indexOf(`--${name}`);
+  const rawValue = inline ? inline.slice(prefix.length) : flagIndex >= 0 ? process.argv[flagIndex + 1] : null;
   if (!rawValue || rawValue.startsWith('--')) return null;
   const value = Number(rawValue);
   if (!Number.isFinite(value)) {

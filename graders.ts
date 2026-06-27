@@ -8305,17 +8305,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1120: {
     functionNames: ["check_number"],
-    tests: [{
-      args: [5],
-      expected: "Positive"
-    }]
+    tests: [
+      { args: [5], expected: "Positive" },
+      { args: [-3], expected: "Negative" },
+      { args: [0], expected: "Zero" }
+    ]
   },
   1121: {
     functionNames: ["largest_of_three"],
-    tests: [{
-      args: [1, 2, 3],
-      expected: 3
-    }]
+    tests: [
+      { args: [1, 2, 3], expected: 3 },
+      { args: [9, 4, 2], expected: 9 },
+      { args: [5, 8, 8], expected: 8 }
+    ]
   },
   1122: {
         functionNames: ['is_leap_year'],
@@ -8357,6 +8359,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['factorial'],
         tests: [
             { args: [5], expected: 120 },
+            { args: [0], expected: 1 },
+            { args: [3], expected: 6 },
         ]
     },
   1128: {
@@ -8369,7 +8373,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1129: {
     functionNames: ["count_vowels"],
     tests: [
-      { args: ["hello"], expected: 2 }
+      { args: ["hello"], expected: 2 },
+      { args: ["PYTHON"], expected: 1 },
+      { args: ["rhythms"], expected: 0 }
     ]
   },
   1130: {
@@ -8388,30 +8394,33 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1132: {
     functionNames: ["prime_numbers_up_to_n"],
-    tests: [{
-      args: [5],
-      expected: [2, 3, 5]
-    }]
+    tests: [
+      { args: [5], expected: [2, 3, 5] },
+      { args: [1], expected: [] },
+      { args: [12], expected: [2, 3, 5, 7, 11] }
+    ]
   },
   1133: {
     functionNames: ["even_and_greater_than_10"],
-    tests: [{
-      args: [5],
-      expected: false
-    }]
+    tests: [
+      { args: [5], expected: false },
+      { args: [12], expected: true },
+      { args: [11], expected: false }
+    ]
   },
   1134: {
     functionNames: ["find_divisors"],
-    tests: [{
-      args: [5],
-      expected: [1, 5]
-    }]
+    tests: [
+      { args: [5], expected: [1, 5] },
+      { args: [12], expected: [1, 2, 3, 4, 6, 12] }
+    ]
   },
   1135: {
     functionNames: ["multiplication_table"],
     compare: 'printedOrReturn',
     tests: [
-      { args: [5], expected: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50" }
+      { args: [5], expected: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50" },
+      { args: [2], expected: "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20" }
     ]
   },
   1136: {
@@ -8431,7 +8440,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1138: {
     functionNames: ["second_largest"],
     tests: [
-      { args: [[3,7,2,9,5]], expected: 7 }
+      { args: [[3,7,2,9,5]], expected: 7 },
+      { args: [[10, 10, 4, 2]], expected: 4 },
+      { args: [[8]], expected: null }
     ]
   },
   1139: {
@@ -8452,7 +8463,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1141: {
     functionNames: ["count_occurrences"],
     tests: [
-      { args: [[1,2,2,3],2], expected: 2 }
+      { args: [[1,2,2,3],2], expected: 2 },
+      { args: [["a", "b", "a"], "a"], expected: 2 },
+      { args: [[1, 2, 3], 4], expected: 0 }
     ]
   },
   1142: {
@@ -8465,22 +8478,25 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1143: {
     functionNames: ["divisible_by_7_and_11"],
-    tests: [{
-      args: [1, 5],
-      expected: []
-    }]
+    tests: [
+      { args: [1, 5], expected: [] },
+      { args: [1, 100], expected: [77] },
+      { args: [70, 160], expected: [77, 154] }
+    ]
   },
   1144: {
     functionNames: ["factorial_while"],
-    tests: [{
-      args: [5],
-      expected: 120
-    }]
+    tests: [
+      { args: [5], expected: 120 },
+      { args: [1], expected: 1 },
+      { args: [4], expected: 24 }
+    ]
   },
   1145: {
         functionNames: ['reverse_list'],
         tests: [
             { args: [[1,2,3,4]], expected: [4,3,2,1] },
+            { args: [["a","b","c"]], expected: ["c","b","a"] },
         ]
     },
   1146: {
@@ -8492,10 +8508,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1147: {
     functionNames: ["divisible_by_any_number"],
-    tests: [{
-      args: [5, [1, 2, 3, 4, 5]],
-      expected: true
-    }]
+    tests: [
+      { args: [5, [1, 2, 3, 4, 5]], expected: true },
+      { args: [10, [3, 5, 7]], expected: true },
+      { args: [11, [2, 3, 5]], expected: false }
+    ]
   },
   1148: {
     functionNames: [],
@@ -8540,24 +8557,25 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1153: {
     functionNames: ["example_function"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [1, 2],
-      expected: "The sum of 1 and 2 is 3"
-    }]
+    tests: [
+      { args: [1, 2], expected: "The sum of 1 and 2 is 3" },
+      { args: [5, 7], expected: "The sum of 5 and 7 is 12" }
+    ]
   },
   1154: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: [], expected: "Hello, John!" },
         ]
     },
   1155: {
     functionNames: ["modify_list"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: "Modified list: [1, 2, 3, 4, 5, 4]"
-    }]
+    tests: [
+      { args: [[1, 2, 3, 4, 5]], expected: "Modified list: [1, 2, 3, 4, 5, 4]" },
+      { args: [[]], expected: "Modified list: [4]" }
+    ]
   },
   1156: {
     functionNames: [],
@@ -8587,21 +8605,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['add_numbers'],
         tests: [
             { args: [2,3], expected: 5 },
+            { args: [-4,9], expected: 5 },
         ]
     },
   1160: {
     functionNames: ["append_to_list"],
-    tests: [{
-      args: [5, [1, 2, 3, 4, 5]],
-      expected: [1, 2, 3, 4, 5, 5]
-    }]
+    tests: [
+      { args: [5, [1, 2, 3, 4, 5]], expected: [1, 2, 3, 4, 5, 5] },
+      { args: [1, []], expected: [1] }
+    ]
   },
   1161: {
     functionNames: ["square_numbers"],
-    tests: [{
-      args: [[1, 2, 3, 4, 5]],
-      expected: [1, 4, 9, 16, 25]
-    }]
+    tests: [
+      { args: [[1, 2, 3, 4, 5]], expected: [1, 4, 9, 16, 25] },
+      { args: [[-2, 0, 3]], expected: [4, 0, 9] }
+    ]
   },
   1162: {
     functionNames: [],
@@ -8638,10 +8657,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1166: {
     functionNames: ["print_arguments"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: ["{1, 2, 3}"],
-      expected: "{1, 2, 3}"
-    }]
+    tests: [
+      { args: ["{1, 2, 3}"], expected: "{1, 2, 3}" },
+      { args: ["alpha", 42], expected: "alpha\n42" }
+    ]
   },
   1167: {
     functionNames: [],
@@ -8678,10 +8697,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1171: {
     functionNames: ["print_variable_in_function"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "Function variable y: 10"
-    }]
+    tests: [
+      { args: [5], expected: "Function variable y: 10" },
+      { args: [9], expected: "Function variable y: 18" }
+    ]
   },
   1172: {
     functionNames: [],
@@ -8710,21 +8729,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1175: {
     functionNames: ["print_global_variable"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "Global x inside function: 5"
-    }]
+    tests: [
+      { args: [5], expected: "Global x inside function: 5" },
+      { args: [100], expected: "Global x inside function: 100" }
+    ]
   },
   1176: {
         functionNames: ['factorial_recursive'],
         tests: [
             { args: [5], expected: 120 },
+            { args: [1], expected: 1 },
+            { args: [4], expected: 24 },
         ]
     },
   1177: {
         functionNames: ['calculate_square_root'],
         tests: [
             { args: [16], expected: 4 },
+            { args: [81], expected: 9 },
         ]
     },
   1178: {
@@ -8774,12 +8796,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'unorderedList',
         tests: [
             { args: ["grader_files"], setupRemove: ["grader_files"], setupFiles: { "grader_files/a.txt": "a", "grader_files/b.txt": "b" }, expected: ["a.txt", "b.txt"] },
+            { args: ["grader_more_files"], setupRemove: ["grader_more_files"], setupFiles: { "grader_more_files/data.csv": "x", "grader_more_files/readme.md": "y" }, expected: ["data.csv", "readme.md"] },
         ]
     },
   1185: {
         functionNames: ['calculate_factorial'],
         tests: [
             { args: [5], expected: 120 },
+            { args: [0], expected: 1 },
+            { args: [3], expected: 6 },
         ]
     },
   1186: {
@@ -8809,24 +8834,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'unorderedList',
         tests: [
             { args: [[1, 2, 3, 4, 5]], expected: [1, 2, 3, 4, 5] },
+            { args: [["red", "blue", "green"]], expected: ["red", "blue", "green"] },
         ]
     },
   1190: {
     functionNames: ["count_occurrences"],
     tests: [
-      { args: [[1,2,2,3]], expected: {"1": 1, "2": 2, "3": 1} }
+      { args: [[1,2,2,3]], expected: {"1": 1, "2": 2, "3": 1} },
+      { args: [["a", "b", "a", "c", "b", "a"]], expected: {"a": 3, "b": 2, "c": 1} }
     ]
   },
   1191: {
         functionNames: ['calculate_gcd'],
         tests: [
             { args: [12,8], expected: 4 },
+            { args: [48,180], expected: 12 },
         ]
     },
   1192: {
         functionNames: ['rename_file'],
         tests: [
             { args: ["old_file.txt", "new_file.txt"], setupRemove: ["new_file.txt"], setupFiles: { "old_file.txt": "renamed content" }, getFiles: ["new_file.txt", "old_file.txt"], expected: { "new_file.txt": "renamed content", "old_file.txt": null } },
+            { args: ["source_note.txt", "target_note.txt"], setupRemove: ["target_note.txt"], setupFiles: { "source_note.txt": "second rename" }, getFiles: ["target_note.txt", "source_note.txt"], expected: { "target_note.txt": "second rename", "source_note.txt": null } },
         ]
     },
   1193: {
@@ -8847,12 +8876,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['select_random_element'],
         tests: [
             { args: [[7]], expected: 7 },
+            { args: [["only"]], expected: "only" },
         ]
     },
   1196: {
         functionNames: ['round_number'],
         tests: [
             { args: [3.14159], expected: 3 },
+            { args: [8.6], expected: 9 },
         ]
     },
   1197: {
@@ -8897,6 +8928,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_value'],
         tests: [
             { args: [{"a":1,"b":2},"a"], expected: 1 },
+            { args: [{"a":1,"b":2},"z","missing"], expected: "missing" },
         ]
     },
   1204: {
