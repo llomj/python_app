@@ -7607,22 +7607,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full overflow-hidden">
                                 <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
-                                    <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Rules" />
                                     <TabButton active={modalTab === 'cheat'} onClick={() => setModalTab('cheat')} label="Cheat" />
                                     <TabButton active={modalTab === 'glossary'} onClick={() => setModalTab('glossary')} label="Glossary" />
                                     <TabButton active={modalTab === 'regex'} onClick={() => setModalTab('regex')} label="Regex" />
+                                    <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Rules" />
                                 </div>
                                 <div className="flex-grow overflow-y-auto">
-                                    {modalTab === 'how' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
-                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={RULES_CONTENT} />
-                                            </div>
-                                            <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={RULES_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
-                                            </div>
-                                        </div>
-                                    )}
                                     {modalTab === 'cheat' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
@@ -7650,6 +7640,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 <CodeMirror value={REGEX_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    {modalTab === 'how' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={RULES_CONTENT} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={RULES_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
                                             </div>
                                         </div>
                                     )}
