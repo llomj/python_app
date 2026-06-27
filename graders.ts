@@ -9949,6 +9949,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: [123], expected: "Invalid input" },
         ]
     },
   1344: {
@@ -9971,6 +9972,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['multiply'],
         tests: [
             { args: [4,5], expected: 20 },
+            { args: [2,"x"], expected: "Invalid input" },
+            { args: [-3,2.5], expected: -7.5 },
         ]
     },
   1347: {
@@ -11637,12 +11640,15 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['identity'],
         tests: [
             { args: [5], expected: 5 },
+            { args: [[1, 2, 3]], expected: [1, 2, 3] },
         ]
     },
   1485: {
         functionNames: ['greet'],
+        compare: 'printedOrReturn',
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: [null], expected: null },
         ]
     },
   1532: {
@@ -11666,18 +11672,22 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['fibonacci'],
         tests: [
             { args: [7], expected: 13 },
+            { args: [0], expected: 0 },
+            { args: [10], expected: 55 },
         ]
     },
   1563: {
         functionNames: ['sum_numbers'],
         tests: [
             { args: [[1, 2]], expected: 3 },
+            { args: [[-1, 5, 6]], expected: 10 },
         ]
     },
   1564: {
         functionNames: ['greet'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: [], expected: "Hello, Guest!" },
         ]
     },
   1565: {
@@ -11697,17 +11707,18 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1567: {
     functionNames: ["expensive_function"],
-    tests: [{
-      args: [5],
-      expected: 10
-    }]
+    tests: [
+      { args: [5], expected: 10 },
+      { args: [-3], expected: -6 }
+    ]
   },
   1568: {
     functionNames: ["handle_command"],
-    tests: [{
-      args: [1],
-      expected: "Unknown command"
-    }]
+    tests: [
+      { args: ["start"], expected: "Starting..." },
+      { args: ["stop"], expected: "Stopping..." },
+      { args: [1], expected: "Unknown command" }
+    ]
   },
   1569: {
         functionNames: ['process_point'],
@@ -11722,6 +11733,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['Circle'],
         tests: [
             { args: [5], getAttrs: ['area'], expected: { area: 78.53975 } },
+            { args: [2], getAttrs: ['area'], expected: { area: 12.56636 } },
         ]
     },
   1571: {
@@ -11735,12 +11747,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['Book'],
         tests: [
             { args: ["Python Guide", "John Doe"], callMethod: "__str__", expected: "Python Guide by John Doe" },
+            { args: ["Clean Code", "Robert Martin"], callMethod: "__str__", expected: "Clean Code by Robert Martin" },
         ]
     },
   1573: {
         functionNames: ['Point'],
         tests: [
             { args: [3, 4], callMethod: "__repr__", expected: "Point(x=3, y=4)" },
+            { args: [-1, 2], callMethod: "__repr__", expected: "Point(x=-1, y=2)" },
         ]
     },
   1574: {
@@ -11761,12 +11775,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['Stack'],
         tests: [
             { args: [], callMethod: "__len__", expected: 0 },
+            { args: [], setAttrs: { items: [1, 2, 3] }, callMethod: "__len__", expected: 3 },
         ]
     },
   1577: {
         functionNames: ['MyList'],
         tests: [
             { args: [[10, 20, 30, 40]], callMethod: "__getitem__", callMethodArgs: [2], expected: 30 },
+            { args: [["a", "b", "c"]], callMethod: "__getitem__", callMethodArgs: [0], expected: "a" },
         ]
     },
   1578: {
@@ -12010,12 +12026,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1608: {
     functionNames: ["my_decorator"],
-    tests: [{
-      args: [],
-      argExpressions: ["lambda: 'Hello'"],
-      getAttrs: ["__name__"],
-      expected: { "__name__": "<lambda>" }
-    }]
+    tests: [
+      { args: [], argExpressions: ["lambda: 'Hello'"], getAttrs: ["__name__"], expected: { "__name__": "<lambda>" } },
+      { args: [], argExpressions: ["lambda: 'Hello'"], callReturnedWith: [], expected: "Hello" }
+    ]
   },
   1609: {
         functionNames: [],
@@ -12067,10 +12081,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1615: {
     functionNames: ["process"],
-    tests: [{
-      args: [1],
-      expected: "Unknown type: int"
-    }]
+    tests: [
+      { args: [1], expected: "Integer: 1" },
+      { args: ["go"], expected: "String: go" },
+      { args: [1.5], expected: "Unknown type: float" }
+    ]
   },
   1616: {
         functionNames: ['process_scores'],
@@ -12095,34 +12110,39 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1619: {
     functionNames: ["categorize"],
-    tests: [{
-      args: [1],
-      expected: "Positive"
-    }]
+    tests: [
+      { args: [1], expected: "Positive" },
+      { args: [0], expected: "Zero" },
+      { args: [-5], expected: "Negative" }
+    ]
   },
   1620: {
     functionNames: ["handle_status"],
-    tests: [{
-      args: [1],
-      expected: "Unknown Status"
-    }]
+    tests: [
+      { args: [200], expected: "OK" },
+      { args: [404], expected: "Not Found" },
+      { args: [1], expected: "Unknown Status" }
+    ]
   },
   1621: {
         functionNames: ['Person'],
         tests: [
             { args: ["Alice"], deleteAttrs: ["name"], getAttrs: ['name'], expected: { name: null } },
+            { args: ["Noll"], getAttrs: ['name'], expected: { name: "Noll" } },
         ]
     },
   1622: {
         functionNames: ['MyDict'],
         tests: [
             { args: [], setItems: [{ key: "key", value: "value" }], callMethod: "__getitem__", callMethodArgs: ["key"], expected: "value" },
+            { args: [], setItems: [{ key: "count", value: 3 }], callMethod: "__getitem__", callMethodArgs: ["count"], expected: 3 },
         ]
     },
   1623: {
         functionNames: ['MyList'],
         tests: [
             { args: [[1, 2, 3, 4, 5]], deleteItems: [2], getAttrs: ['items'], expected: { items: [1, 2, 4, 5] } },
+            { args: [["a", "b", "c"]], deleteItems: [0], getAttrs: ['items'], expected: { items: ["b", "c"] } },
         ]
     },
   1624: {
@@ -12335,43 +12355,49 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['subtract_numbers'],
         tests: [
             { args: [5,3], expected: 2 },
+            { args: [-2,5], expected: -7 },
         ]
     },
   1651: {
         functionNames: ['divide_numbers'],
         tests: [
             { args: [6,2], expected: 3 },
+            { args: [5,2], expected: 2.5 },
         ]
     },
   1652: {
         functionNames: ['calculate_remainder'],
         tests: [
             { args: [7,3], expected: 1 },
+            { args: [10,5], expected: 0 },
         ]
     },
   1653: {
         functionNames: ['calculate_power'],
         tests: [
             { args: [2,3], expected: 8 },
+            { args: [5,0], expected: 1 },
         ]
     },
   1654: {
     functionNames: ["calculate_circle_area"],
-    tests: [{
-      args: [1],
-      expected: 3.14
-    }]
+    tests: [
+      { args: [1], expected: 3.14 },
+      { args: [3], expected: 28.259999999999998 }
+    ]
   },
   1655: {
         functionNames: ['calculate_rectangle_area'],
         tests: [
             { args: [4,5], expected: 20 },
+            { args: [0,5], expected: 0 },
         ]
     },
   1656: {
         functionNames: ['calculate_triangle_area'],
         tests: [
             { args: [4,5], expected: 10 },
+            { args: [10,3], expected: 15 },
         ]
     },
   1657: {
@@ -12406,120 +12432,141 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_first_char'],
         tests: [
             { args: ["hello"], expected: "h" },
+            { args: ["Python"], expected: "P" },
         ]
     },
   1662: {
         functionNames: ['get_last_char'],
         tests: [
             { args: ["hello"], expected: "o" },
+            { args: ["Python"], expected: "n" },
         ]
     },
   1663: {
         functionNames: ['get_middle_char'],
         tests: [
             { args: ["hello"], expected: "l" },
+            { args: ["abcd"], expected: "c" },
         ]
     },
   1664: {
         functionNames: ['repeat_string'],
         tests: [
             { args: ["ab",3], expected: "ababab" },
+            { args: ["x",0], expected: "" },
         ]
     },
   1665: {
         functionNames: ['swap_first_last'],
         tests: [
             { args: ["hello"], expected: "oellh" },
+            { args: ["a"], expected: "a" },
+            { args: ["ab"], expected: "ba" },
         ]
     },
   1666: {
         functionNames: ['remove_first_char'],
         tests: [
             { args: ["hello"], expected: "ello" },
+            { args: ["a"], expected: "" },
         ]
     },
   1667: {
         functionNames: ['remove_last_char'],
         tests: [
             { args: ["hello"], expected: "hell" },
+            { args: ["a"], expected: "" },
         ]
     },
   1668: {
         functionNames: ['get_first_word'],
         tests: [
             { args: ["hello world"], expected: "hello" },
+            { args: ["one two three"], expected: "one" },
         ]
     },
   1669: {
         functionNames: ['get_last_word'],
         tests: [
             { args: ["hello world"], expected: "world" },
+            { args: ["one two three"], expected: "three" },
         ]
     },
   1670: {
         functionNames: ['count_characters'],
         tests: [
             { args: ["hello"], expected: 5 },
+            { args: ["hi there"], expected: 7 },
         ]
     },
   1671: {
         functionNames: ['add_to_list'],
         tests: [
             { args: [[1,2],3], expected: [1,2,3] },
+            { args: [[], "x"], expected: ["x"] },
         ]
     },
   1672: {
         functionNames: ['get_first_element'],
         tests: [
             { args: [[1,2,3]], expected: 1 },
+            { args: [["a","b"]], expected: "a" },
         ]
     },
   1673: {
         functionNames: ['get_last_element'],
         tests: [
             { args: [[1,2,3]], expected: 3 },
+            { args: [["a","b"]], expected: "b" },
         ]
     },
   1674: {
         functionNames: ['get_middle_element'],
         tests: [
             { args: [[1,2,3]], expected: 2 },
+            { args: [[1,2,3,4]], expected: 3 },
         ]
     },
   1675: {
         functionNames: ['remove_first_element'],
         tests: [
             { args: [[1,2,3]], expected: [2,3] },
+            { args: [["a"]], expected: [] },
         ]
     },
   1676: {
         functionNames: ['remove_last_element'],
         tests: [
             { args: [[1,2,3]], expected: [1,2] },
+            { args: [["a"]], expected: [] },
         ]
     },
   1677: {
         functionNames: ['get_list_slice'],
         tests: [
             { args: [[1,2,3,4,5],1,3], expected: [2,3] },
+            { args: [["a","b","c","d"],0,2], expected: ["a","b"] },
         ]
     },
   1678: {
         functionNames: ['combine_lists'],
         tests: [
             { args: [[1,2],[3,4]], expected: [1,2,3,4] },
+            { args: [[], ["x"]], expected: ["x"] },
         ]
     },
   1679: {
         functionNames: ['multiply_list'],
         tests: [
             { args: [[1,2,3]], expected: [2,4,6] },
+            { args: [[-1,0,4]], expected: [-2,0,8] },
         ]
     },
   1680: {
         functionNames: ['add_one_to_all'],
         tests: [
             { args: [[1,2,3]], expected: [2,3,4] },
+            { args: [[-1,0,4]], expected: [0,1,5] },
         ]
     },
   1681: {
