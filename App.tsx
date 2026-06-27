@@ -1415,6 +1415,116 @@ function CopyButton({ text }: { text: string }) {
     );
 }
 
+interface SyntaxDocSection {
+    title: string;
+    lines: string[];
+}
+
+const SYNTAX_SECTION_STYLES: Record<string, { border: string; bg: string; title: string; dot: string }> = {
+    SYNTAX: {
+        border: 'border-[#3b82f6]/35',
+        bg: 'bg-[#3b82f6]/10',
+        title: 'text-[#93c5fd]',
+        dot: 'bg-[#3b82f6]'
+    },
+    'EVALUATION ORDER': {
+        border: 'border-[#f59e0b]/35',
+        bg: 'bg-[#f59e0b]/10',
+        title: 'text-[#fbbf24]',
+        dot: 'bg-[#f59e0b]'
+    },
+    'EXECUTION ORDER': {
+        border: 'border-[#22c55e]/35',
+        bg: 'bg-[#22c55e]/10',
+        title: 'text-[#86efac]',
+        dot: 'bg-[#22c55e]'
+    },
+    'EXECUTION FLOW': {
+        border: 'border-[#8b5cf6]/35',
+        bg: 'bg-[#8b5cf6]/10',
+        title: 'text-[#c4b5fd]',
+        dot: 'bg-[#8b5cf6]'
+    }
+};
+
+const cleanSyntaxLine = (line: string) => {
+    const withoutComment = line.replace(/^\s*#\s?/, '');
+    return withoutComment.replace(/^"""\s*|\s*"""$/g, '').trimEnd();
+};
+
+const parseSyntaxDocumentation = (content: string): SyntaxDocSection[] => {
+    const sections: SyntaxDocSection[] = [];
+    let current: SyntaxDocSection | null = null;
+
+    for (const rawLine of content.split('\n')) {
+        const line = cleanSyntaxLine(rawLine);
+        const trimmed = line.trim();
+
+        if (!trimmed || /^Problem\s+\d+:?$/i.test(trimmed)) {
+            continue;
+        }
+
+        const heading = trimmed.replace(/:$/, '').toUpperCase();
+        if (Object.prototype.hasOwnProperty.call(SYNTAX_SECTION_STYLES, heading)) {
+            current = { title: heading, lines: [] };
+            sections.push(current);
+            continue;
+        }
+
+        if (!current) {
+            current = { title: 'OVERVIEW', lines: [] };
+            sections.push(current);
+        }
+        current.lines.push(line);
+    }
+
+    return sections.filter(section => section.lines.some(line => line.trim()));
+};
+
+function SyntaxDocumentationPanel({ content }: { content: string }) {
+    const sections = useMemo(() => parseSyntaxDocumentation(content), [content]);
+
+    return (
+        <div className="space-y-3 p-3 text-xs text-gray-200">
+            {sections.map(section => {
+                const style = SYNTAX_SECTION_STYLES[section.title] ?? {
+                    border: 'border-[#1d2d44]',
+                    bg: 'bg-[#071225]',
+                    title: 'text-gray-200',
+                    dot: 'bg-gray-400'
+                };
+                return (
+                    <section key={section.title} className={`rounded-2xl border ${style.border} ${style.bg} p-3 shadow-lg`}>
+                        <h3 className={`mb-3 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${style.title}`}>
+                            <span className={`h-2 w-2 rounded-full ${style.dot}`} />
+                            {section.title.replace('EVALUATION ORDER', 'Evaluation Order').replace('EXECUTION ORDER', 'Execution Order').replace('EXECUTION FLOW', 'Execution Flow').replace('SYNTAX', 'Syntax')}
+                        </h3>
+                        <div className="space-y-1.5">
+                            {section.lines.map((line, index) => {
+                                const trimmed = line.trim();
+                                const isCode = /^[A-Za-z_][\w.]*\(|^(def|class|if|for|while|return|print|import|from)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
+                                const isFlow = trimmed.startsWith('→') || trimmed.startsWith('def blocks') || trimmed.startsWith('Execution starts');
+                                return (
+                                    <div
+                                        key={`${section.title}-${index}`}
+                                        className={isCode
+                                            ? 'rounded-lg border border-[#1d2d44] bg-[#050c18]/85 px-3 py-2 font-mono text-[11px] leading-relaxed text-[#e5e7eb]'
+                                            : isFlow
+                                                ? 'rounded-lg bg-black/20 px-3 py-2 font-mono text-[11px] leading-relaxed text-[#d8b4fe]'
+                                                : 'leading-relaxed text-gray-300'}
+                                    >
+                                        {trimmed}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </section>
+                );
+            })}
+        </div>
+    );
+}
+
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
@@ -3109,7 +3219,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {syntaxContent ? (
-                                                    <CodeMirror value={syntaxContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                    <SyntaxDocumentationPanel content={syntaxContent} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         Searching syntax documentation...
