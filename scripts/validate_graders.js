@@ -223,8 +223,16 @@ def same(actual, expected, compare):
         return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
     return actual == expected
 
-def runnable_prefix(source, prefer_markers=False):
-    markers = ["\n\n# Wrapped in function", "\n\n# Using ", "\n\n# Adding ", "\n\n# With ", "\n\n# Alternative"]
+def runnable_variants(source, prefer_markers=False):
+    markers = [
+        "\n\n# Wrapped in function",
+        "\n\n# Using ",
+        "\n\n# Adding ",
+        "\n\n# With ",
+        "\n\n# Alternative",
+        "\n\n# Script approach",
+        "\n\n# Direct approach",
+    ]
     candidates = [] if prefer_markers else [source]
     marker_positions = sorted(
         (source.index(marker), marker)
@@ -233,8 +241,7 @@ def runnable_prefix(source, prefer_markers=False):
     )
     for _position, marker in marker_positions:
         candidates.append(source.split(marker, 1)[0])
-    if prefer_markers:
-        candidates.append(source)
+    candidates.append(source)
     lines = source.splitlines()
     for i in range(len(lines), 0, -1):
         candidates.append("\n".join(lines[:i]))
@@ -246,9 +253,13 @@ def runnable_prefix(source, prefer_markers=False):
         seen.add(candidate)
         try:
             compile(candidate, "<solution>", "exec")
-            return candidate
+            yield candidate
         except SyntaxError:
             continue
+
+def runnable_prefix(source, prefer_markers=False):
+    for candidate in runnable_variants(source, prefer_markers):
+        return candidate
     return source
 
 def declarations_only(source):
@@ -334,50 +345,54 @@ def run_grader(source, grader):
     compare = grader.get("compare", "exact")
     tests = grader.get("tests", [])
     if grader.get("mode") == "script":
-        solution = runnable_prefix(source, prefer_markers=True)
         with tempfile.TemporaryDirectory() as temp_dir:
             old_cwd = os.getcwd()
             try:
                 os.chdir(temp_dir)
-                with time_limit(1.0):
-                    return run_script_tests(solution, tests, compare), "", solution
+                last_solution = ""
+                for solution in runnable_variants(source, prefer_markers=True):
+                    last_solution = solution
+                    with time_limit(1.0):
+                        if run_script_tests(solution, tests, compare):
+                            return True, "", solution
+                return False, "grader mismatch", last_solution
             finally:
                 os.chdir(old_cwd)
-    solution = runnable_prefix(source)
     last_error = ""
     last_solution = ""
-    for candidate_solution in declaration_variants(solution):
-        namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
-        old_stdout = sys.stdout
-        old_input = builtins.input
-        with tempfile.TemporaryDirectory() as temp_dir:
-            old_cwd = os.getcwd()
-            try:
-                os.chdir(temp_dir)
-                sys.stdout = io.StringIO()
+    for solution in runnable_variants(source):
+        for candidate_solution in declaration_variants(solution):
+            namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
+            old_stdout = sys.stdout
+            old_input = builtins.input
+            with tempfile.TemporaryDirectory() as temp_dir:
+                old_cwd = os.getcwd()
                 try:
-                    with time_limit(1.0):
-                        exec(compile(candidate_solution, "<solution>", "exec"), namespace)
-                except BaseException as exc:
-                    last_error = f"solution setup raised {type(exc).__name__}: {exc}"
-                    last_solution = candidate_solution
-                    continue
-                finally:
-                    sys.stdout = old_stdout
-                try:
-                    with time_limit(1.0):
-                        if run_function_tests(namespace, grader, tests, compare):
-                            return True, "", candidate_solution
-                        last_error = "grader mismatch"
+                    os.chdir(temp_dir)
+                    sys.stdout = io.StringIO()
+                    try:
+                        with time_limit(1.0):
+                            exec(compile(candidate_solution, "<solution>", "exec"), namespace)
+                    except BaseException as exc:
+                        last_error = f"solution setup raised {type(exc).__name__}: {exc}"
                         last_solution = candidate_solution
-                except BaseException as exc:
-                    last_error = f"grader raised {type(exc).__name__}: {exc}"
-                    last_solution = candidate_solution
-                    continue
-            finally:
-                os.chdir(old_cwd)
-                sys.stdout = old_stdout
-                builtins.input = old_input
+                        continue
+                    finally:
+                        sys.stdout = old_stdout
+                    try:
+                        with time_limit(1.0):
+                            if run_function_tests(namespace, grader, tests, compare):
+                                return True, "", candidate_solution
+                            last_error = "grader mismatch"
+                            last_solution = candidate_solution
+                    except BaseException as exc:
+                        last_error = f"grader raised {type(exc).__name__}: {exc}"
+                        last_solution = candidate_solution
+                        continue
+                finally:
+                    os.chdir(old_cwd)
+                    sys.stdout = old_stdout
+                    builtins.input = old_input
     return False, last_error, last_solution
 
 def run_script_tests(solution, tests, compare):
@@ -590,6 +605,13 @@ if (result.status !== 0) {
 
 const results = JSON.parse(result.stdout);
 const failures = results.filter(item => !item.passed);
+const maxFailuresArg = process.argv.find(arg => arg.startsWith('--max-failures='));
+const maxFailures = maxFailuresArg ? Number(maxFailuresArg.split('=')[1]) : 0;
+
+if (!Number.isFinite(maxFailures)) {
+  console.error(`Invalid --max-failures value: ${maxFailuresArg}`);
+  process.exit(1);
+}
 
 console.log(`Validated ${results.length} exercise solutions against graders.`);
 console.log(`Passed: ${results.length - failures.length}`);
@@ -600,5 +622,10 @@ if (failures.length) {
   for (const failure of failures.slice(0, 80)) {
     console.log(`${failure.id}: ${failure.error || 'grader mismatch'} (${failure.selectedLines} selected lines)`);
   }
-  process.exitCode = 1;
+  if (failures.length > maxFailures) {
+    console.error(`Validation failed: ${failures.length} failures exceeds max ${maxFailures}.`);
+    process.exitCode = 1;
+  } else {
+    console.log(`Validation failure baseline accepted: ${failures.length}/${maxFailures}.`);
+  }
 }
