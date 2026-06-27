@@ -5664,6 +5664,22 @@ Use `default=` in `max()` to safely get the longest word from a list.
 words = []
 print(max(words, key=len, default="None"))  # Expected: "None"
 
+# More examples:
+# words = ["cat", "elephant", "dog"]
+# print(max(words, key=len, default="None"))  # Expected: "elephant"
+#
+# words = ["red", "blue", "tree"]
+# print(max(words, key=len, default="None"))  # Expected: "blue"
+#
+# def longest_word(words):
+#     return max(words, key=len, default="None")
+#
+# print(longest_word([]))                       # Expected: "None"
+# print(longest_word(["hi", "python", "app"]))  # Expected: "python"
+#
+# words = []
+# print(max(words, key=len, default=None))  # Expected: None
+
 
 """ 
 Problem: 1494  
@@ -5718,7 +5734,6 @@ Problem: 1500
 Use `default=` in `next()` to handle an empty comprehension.
 """
 print(next((x for x in []), default="Empty"))  # Expected: "Empty"
-
 
 
 

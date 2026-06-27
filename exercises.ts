@@ -13263,7 +13263,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1493",
         "description": "Use `default=` in `max()` to safely get the longest word from a list.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nwords = []\nprint(max(words, key=len, default='None'))  # Expected: 'None'",
+        "solution": "# Using function approach\n# Goal: safely find the longest word even when the list is empty.\nwords = []\nprint(max(words, key=len, default='None'))  # Expected: 'None'\n\n# Why default= matters:\n# max([], key=len) would raise ValueError because there is no item to return.\n# default='None' gives max() a safe fallback value.\n\n# Example 2: non-empty list returns the longest word.\n# words = ['cat', 'elephant', 'dog']\n# print(max(words, key=len, default='None'))  # Expected: 'elephant'\n\n# Example 3: if there is a tie, max() returns the first longest word it sees.\n# words = ['red', 'blue', 'tree']\n# print(max(words, key=len, default='None'))  # Expected: 'blue'\n\n# Example 4: wrap the same logic in a reusable function.\n# def longest_word(words):\n#     return max(words, key=len, default='None')\n#\n# print(longest_word([]))                       # Expected: 'None'\n# print(longest_word(['hi', 'python', 'app']))  # Expected: 'python'\n\n# Example 5: use None as the fallback when you want a real missing-value marker.\n# words = []\n# print(max(words, key=len, default=None))  # Expected: None",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
