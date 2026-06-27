@@ -7694,7 +7694,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }
             } else {
                 setOutputStatus('info');
-                setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Use WIN/FAILED manually.`);
+                setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Manual fallback buttons are shown in Tools.`);
             }
         } catch (err: any) {
             const errorMessage = String(err?.message || err || '');
@@ -7928,6 +7928,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     }, [showModal, exercise.id, loadSolutionFiles]);
 
     const rate = currentStats.shots > 0 ? ((currentStats.success / currentStats.shots) * 100).toFixed(2) : '0.00';
+    const hasAutoGrader = Boolean(AUTO_GRADERS[exercise.id]);
 
     const pythonCompletionSource = useMemo(() => {
         const symbolMap = new Map<string, Completion>();
@@ -8438,8 +8439,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
                                     <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
                                     <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
-                                    <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                                    <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
+                                    {!hasAutoGrader && (
+                                        <>
+                                            <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
+                                            <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
+                                        </>
+                                    )}
                                     <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
                                 </div>
                             )}
