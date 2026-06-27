@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-# Generate syntax docs in comment format (like the Logic tab).
-# All lines start with # so CodeMirror renders them as gray comments.
+# Generate syntax docs matching Requirements tab style:
+#   - Real Python code (syntax highlighted in color)
+#   - # comment blocks (gray) for explanations
+#   - Inline # comments on code lines
 #
 # Output: level1_{500,1000,1500,2000}_syntax.py
 
@@ -72,41 +74,42 @@ def _call_str(node: ast.Call) -> str:
     return f"{_name(node.func)}({', '.join(args)})"
 
 
-# ── Generators ─────────────────────────────────────────────────────
+# ── Section generators ─────────────────────────────────────────────
 
 def gen_syntax(tree: ast.Module) -> list:
     lines = []
-    lines.append("# ------")
+    lines.append("#")
     lines.append("# SYNTAX:")
-    lines.append("# Syntax shows the Python keywords, operators, and structures used in")
-    lines.append("# this solution.")
+    lines.append("# Syntax describes the Python building blocks used in this code —")
+    lines.append("# the keywords, operators, and structures that make it work.")
     lines.append("#")
 
     funcs = [n for n in tree.body if isinstance(n, ast.FunctionDef)]
     classes = [n for n in tree.body if isinstance(n, ast.ClassDef)]
 
-    if classes:
-        lines.append("# Classes:")
-        for c in classes:
-            bases = [b.id if isinstance(b, ast.Name) else '' for b in c.bases]
-            if bases:
-                lines.append(f"#   class {c.name}({', '.join(bases)}) → inherits from parent class")
-            else:
-                lines.append(f"#   class {c.name} → defines a new type")
-            for m in c.body:
-                if isinstance(m, ast.FunctionDef):
-                    lines.append(f"#     def {m.name}(...) → method of {c.name}")
-        lines.append("#")
-
     if funcs:
         f = funcs[0]
         params = ', '.join(a.arg for a in f.args.args)
-        lines.append(f"#   def {f.name}({params}) → defines a reusable function")
-        has_return = any(isinstance(n, ast.Return) for n in ast.walk(f))
-        if has_return:
-            lines.append(f"#   return → sends a value back to the caller")
-        else:
-            lines.append(f"#   (no return statement — the function prints output directly)")
+        param_comment = f" with parameters {params}" if params else " with no parameters"
+        lines.append(f"def {f.name}({params}):  # defines a function{param_comment}")
+        for stmt in f.body:
+            body_src = ast.unparse(stmt)
+            is_ret = isinstance(stmt, ast.Return)
+            for bl in body_src.split('\n'):
+                comment = "  # return sends the result back to the caller" if is_ret else ""
+                lines.append(f"    {bl}{comment}")
+        lines.append("#")
+
+    if classes:
+        for c in classes:
+            bases = [b.id if isinstance(b, ast.Name) else '' for b in c.bases]
+            bases_str = f"({', '.join(bases)})" if bases else ""
+            lines.append(f"class {c.name}{bases_str}:  # defines a new type")
+            for m in c.body:
+                if isinstance(m, ast.FunctionDef):
+                    src = ast.unparse(m)
+                    for line in src.split('\n'):
+                        lines.append(f"    {line}  # method of {c.name}")
         lines.append("#")
 
     # Keywords
@@ -134,7 +137,7 @@ def gen_syntax(tree: ast.Module) -> list:
     if ops:
         lines.append(f"# Operators: {' '.join(sorted(ops, key=lambda x: (len(x), x)))}")
 
-    # Built-in functions used
+    # Built-in functions
     user_funcs = {f.name for f in tree.body if isinstance(f, (ast.FunctionDef, ast.AsyncFunctionDef))}
     builtins_used = set()
     for n in ast.walk(tree):
@@ -149,10 +152,9 @@ def gen_syntax(tree: ast.Module) -> list:
 def gen_evaluation_order(tree: ast.Module) -> list:
     lines = []
     lines.append("#")
-    lines.append("# ------")
     lines.append("# EVALUATION ORDER:")
-    lines.append("# Evaluation Order shows how Python reads and processes expressions")
-    lines.append("# step by step. Inner expressions are evaluated first, then outer ones.")
+    lines.append("# Evaluation Order traces how Python reads and evaluates expressions.")
+    lines.append("# Inner expressions are evaluated first, then the outer ones.")
     lines.append("#")
 
     func_names = {f.name for f in tree.body if isinstance(f, ast.FunctionDef)}
@@ -163,19 +165,22 @@ def gen_evaluation_order(tree: ast.Module) -> list:
             code = f"{_name(n.left)} {_op_name(n.op)} {_name(n.right)}"
             if code not in shown:
                 shown.add(code)
-                lines.append(f"#   {code} → Python looks up {_name(n.left)}, then {_name(n.right)}, then applies {_op_name(n.op)}")
+                lines.append(f"{code}  # {_name(n.left)} → then {_name(n.right)} → then {_op_name(n.op)}")
         elif isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in func_names:
             code = _call_str(n)
             if code not in shown:
                 shown.add(code)
-                lines.append(f"#   {code} → each argument is evaluated first, then the function body runs")
+                if n.args:
+                    lines.append(f"{code}  # arguments evaluated first, then function body runs")
+                else:
+                    lines.append(f"{code}  # function body runs with no arguments")
         elif isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == 'print':
             for a in n.args:
                 if isinstance(a, ast.Call) and _name(a.func) in func_names:
-                    code = f"print({_call_str(a)})"
+                    code = _call_str(a)
                     if code not in shown:
                         shown.add(code)
-                        lines.append(f"#   {_call_str(a)} runs first → then print() outputs the result")
+                        lines.append(f"print({code})  # {_name(a.func)}() runs first, then print() outputs the result")
         elif isinstance(n, ast.Compare):
             for i, op in enumerate(n.ops):
                 cls_map = {ast.Eq: '==', ast.NotEq: '!=', ast.Lt: '<', ast.LtE: '<=',
@@ -187,10 +192,10 @@ def gen_evaluation_order(tree: ast.Module) -> list:
                     compare = f"{_name(n.left)} {op_s} {_name(n.comparators[i])}"
                     if compare not in shown:
                         shown.add(compare)
-                        lines.append(f"#   {compare} → evaluated as True or False (determines which branch runs)")
+                        lines.append(f"{compare}  # evaluated as True or False → picks which branch")
 
     if not shown:
-        lines.append("#   (expressions are evaluated left to right, inner calls first)")
+        lines.append("# (expressions evaluate left to right, inner calls first)")
 
     return lines
 
@@ -198,10 +203,9 @@ def gen_evaluation_order(tree: ast.Module) -> list:
 def gen_execution_order(tree: ast.Module) -> list:
     lines = []
     lines.append("#")
-    lines.append("# ------")
     lines.append("# EXECUTION ORDER:")
-    lines.append("# Execution Order lists every statement in the sequence Python runs them.")
-    lines.append("# 'def' and 'class' blocks are only stored, not executed yet.")
+    lines.append("# Execution Order shows the sequence Python follows when running")
+    lines.append("# the code. 'def' and 'class' blocks are just stored, not run yet.")
     lines.append("#")
 
     func_map = {f.name: f for f in tree.body if isinstance(f, ast.FunctionDef)}
@@ -209,11 +213,11 @@ def gen_execution_order(tree: ast.Module) -> list:
     for i, stmt in enumerate(tree.body, 1):
         if isinstance(stmt, ast.FunctionDef):
             params = ', '.join(a.arg for a in stmt.args.args)
-            lines.append(f"#   {i}. def {stmt.name}({params}) → stored in memory, not executed")
+            lines.append(f"def {stmt.name}({params}):  # stored in memory, not executed yet")
         elif isinstance(stmt, ast.ClassDef):
             bases = [b.id if isinstance(b, ast.Name) else '' for b in stmt.bases]
-            cls = f"class {stmt.name}({', '.join(bases)})" if bases else f"class {stmt.name}"
-            lines.append(f"#   {i}. {cls} → class definition stored")
+            bases_str = f"({', '.join(bases)})" if bases else ""
+            lines.append(f"class {stmt.name}{bases_str}:  # class definition stored")
         elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
             call = stmt.value
             name = _name(call.func)
@@ -221,54 +225,50 @@ def gen_execution_order(tree: ast.Module) -> list:
             target = func_map.get(name) or (func_map.get(_name(inner.func)) if inner and _name(inner.func) in func_map else None)
 
             if name in func_map:
-                params_str = ', '.join(a.arg for a in target.args.args)
                 binds = ', '.join(f"{a.arg}={_name(b)}" for a, b in zip(target.args.args, call.args))
-                lines.append(f"#   {i}. {_call_str(call)} → calls {name}({params_str}) with {binds}")
-                for j, bs in enumerate(target.body, 1):
+                comment = f"  # calls {name} with {binds}" if binds else f"  # calls {name}()"
+                lines.append(f"{_call_str(call)}{comment}")
+                for bs in target.body:
                     body = ast.unparse(bs)
                     for bl in body.split('\n'):
-                        lines.append(f"#      → {i}.{j} {bl}")
+                        lines.append(f"#   → {bl}")
             elif inner and _name(inner.func) in func_map:
                 itarget = func_map[_name(inner.func)]
-                iparams_str = ', '.join(a.arg for a in itarget.args.args)
                 ibinds = ', '.join(f"{a.arg}={_name(b)}" for a, b in zip(itarget.args.args, inner.args))
-                lines.append(f"#   {i}. {_call_str(call)}")
-                lines.append(f"#      → calls {_name(inner.func)}({iparams_str}) with {ibinds}")
-                for j, bs in enumerate(itarget.body, 1):
+                lines.append(f"{_call_str(call)}  # {_name(inner.func)}() runs with {ibinds}")
+                for bs in itarget.body:
                     body = ast.unparse(bs)
                     for bl in body.split('\n'):
-                        lines.append(f"#      → {i}.{j} {bl}")
+                        lines.append(f"#   → {bl}")
             else:
-                lines.append(f"#   {i}. {_call_str(call)}")
+                lines.append(_call_str(call))
         elif isinstance(stmt, ast.Assign):
             targets = ', '.join(t.id if isinstance(t, ast.Name) else '?' for t in stmt.targets)
-            lines.append(f"#   {i}. {targets} = ... → assigns value to variable")
+            lines.append(f"{targets} = ...  # assigns a value to the variable")
         elif isinstance(stmt, ast.For):
             target = ast.unparse(stmt.target)
-            lines.append(f"#   {i}. for {target} in {_name(stmt.iter)} → loops over each item")
-            for j, bs in enumerate(stmt.body, 1):
-                bcode = _code_line(bs)
+            lines.append(f"for {target} in {_name(stmt.iter)}:  # loops once per item")
+            for bs in stmt.body:
+                bcode = _inline_code(bs)
                 if bcode:
-                    lines.append(f"#      → {i}.{j} {bcode}")
+                    lines.append(f"  {bcode}")
         elif isinstance(stmt, ast.While):
-            lines.append(f"#   {i}. while ... → repeats as long as condition is true")
+            lines.append("# while ... → repeats as long as condition is true")
         elif isinstance(stmt, ast.If):
-            lines.append(f"#   {i}. if ... → only one branch executes")
+            lines.append("# if ... → only one branch executes based on condition")
         elif isinstance(stmt, ast.Import):
             names = ', '.join(a.name for a in stmt.names)
-            lines.append(f"#   {i}. import {names}")
+            lines.append(f"import {names}")
         elif isinstance(stmt, ast.ImportFrom):
             names = ', '.join(a.name for a in stmt.names)
-            lines.append(f"#   {i}. from {stmt.module} import {names}")
+            lines.append(f"from {stmt.module} import {names}")
         elif isinstance(stmt, ast.Expr):
-            lines.append(f"#   {i}. evaluates expression")
-        else:
-            lines.append(f"#   {i}. statement")
+            lines.append("# evaluates expression")
 
     return lines
 
 
-def _code_line(node: ast.AST) -> str:
+def _inline_code(node: ast.AST) -> str:
     if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
         return _call_str(node.value)
     if isinstance(node, ast.Assign):
@@ -280,10 +280,9 @@ def _code_line(node: ast.AST) -> str:
 def gen_execution_flow(tree: ast.Module) -> list:
     lines = []
     lines.append("#")
-    lines.append("# ------")
     lines.append("# EXECUTION FLOW:")
-    lines.append("# Execution Flow tracks how Python jumps between different parts of the")
-    lines.append("# code — which blocks are skipped and where execution actually starts.")
+    lines.append("# Execution Flow tracks where Python jumps during runtime — which")
+    lines.append("# blocks are skipped and which actually run.")
     lines.append("#")
 
     func_names = {f.name for f in tree.body if isinstance(f, ast.FunctionDef)}
@@ -294,51 +293,48 @@ def gen_execution_flow(tree: ast.Module) -> list:
     has_if = any(isinstance(n, ast.If) for n in ast.walk(tree))
 
     if class_names:
-        lines.append(f"#   Classes ({', '.join(class_names)}) are defined — methods are stored, not called")
+        lines.append(f"# Classes {', '.join(class_names)} are defined — methods stored in memory")
     if func_names:
-        lines.append(f"#   Functions ({', '.join(func_names)}) are defined — skipped at runtime, stored in memory")
+        names_str = ', '.join(sorted(func_names))
+        lines.append(f"# def blocks are skipped at runtime — only {names_str} is stored in memory" if len(func_names) == 1 else f"# def blocks are skipped at runtime — {names_str} are stored in memory")
 
     if not top_code:
-        lines.append("#   No code runs at the top level — functions must be called externally")
+        lines.append("# No top-level code runs — functions must be called externally")
     else:
         lines.append("#")
-        lines.append("#   Execution begins at the top-level code (outside def/class blocks):")
+        lines.append("# Execution starts at the top-level code (outside def/class):")
         for stmt in top_code:
             if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
                 call = stmt.value
                 name = _name(call.func)
                 inner = call.args[0] if call.args and isinstance(call.args[0], ast.Call) else None
                 if name in func_names:
-                    lines.append(f"#     {_call_str(call)} → jumps into {name}(), runs body, returns")
+                    lines.append(f"#   → {_call_str(call)}  # jumps into {name}(), runs body, returns")
                 elif inner and _name(inner.func) in func_names:
                     iname = _name(inner.func)
-                    lines.append(f"#     {_call_str(call)} → {iname}() runs first → value passed to print()")
+                    lines.append(f"#   → {_call_str(call)}  # {iname}() runs first → value goes to print()")
                 else:
-                    lines.append(f"#     {_call_str(call)}")
+                    lines.append(f"#   → {_call_str(call)}")
             elif isinstance(stmt, ast.For):
                 target = ast.unparse(stmt.target)
-                lines.append(f"#     for {target} in {_name(stmt.iter)} → runs body once per item")
-            elif isinstance(stmt, ast.While):
-                lines.append(f"#     while → checks condition before each iteration")
+                lines.append(f"#   → for {target} in {_name(stmt.iter)}  # runs body once per item")
             elif isinstance(stmt, ast.If):
-                lines.append(f"#     if → evaluates condition, runs matching branch")
+                lines.append(f"#   → if condition  # evaluates → runs the True branch")
             elif isinstance(stmt, ast.Assign):
                 targets = ', '.join(t.id if isinstance(t, ast.Name) else '?' for t in stmt.targets)
-                lines.append(f"#     {targets} = ... → stored in memory")
-            else:
-                lines.append(f"#     (statement runs)")
+                lines.append(f"#   → {targets} = ...  # stored in memory")
 
     if has_loop:
         lines.append("#")
         for n in ast.walk(tree):
             if isinstance(n, ast.For):
-                lines.append(f"#   Loop: takes one item from {_name(n.iter)} each round, runs body, repeats until done")
+                lines.append(f"# Loop: takes one item from {_name(n.iter)}, runs body, repeats until done")
                 break
             elif isinstance(n, ast.While):
-                lines.append(f"#   Loop: check condition → if True, run body → check again")
+                lines.append("# Loop: check condition → if True run body → check again")
                 break
     if has_if:
-        lines.append(f"#   Branch: condition picks one path — other branches are skipped")
+        lines.append("# Branch: condition picks which block runs — the rest are skipped")
 
     return lines
 
@@ -401,10 +397,9 @@ def main():
             continue
         outfile = OUT_DIR / f'level1_{tier}_syntax.py'
         with open(outfile, 'w', encoding='utf-8') as f:
-            f.write(f'# Syntax documentation for level 1 (problems 1-{tier})\n')
-            f.write(f'# Auto-generated by gen_syntax_files.py\n\n')
+            f.write('# Syntax documentation\n')
             for pid, content in entries:
-                f.write(f'"""\nProblem {pid}:\n#\n{content}\n\n"""\n\n')
+                f.write(f'"""\nProblem {pid}:\n{content}\n\n"""\n\n')
         print(f"Wrote {outfile} ({len(entries)} problems)")
 
     print("\nDone!")

@@ -140,7 +140,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="./assets/index-MbAkVLgB.js"></script>
+  <script type="module" crossorigin src="./assets/index-Cc-5rERZ.js"></script>
 </head>
 
 <body>
@@ -150,7 +150,7 @@
         <p style="margin-top: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; color: #3b82f6;">CONNECTING
             TO EDITOR...</p>
         <p style="margin-top: 8px; font-size: 10px; color: #4b5563;">Please wait for Python engine</p>
-        <a href="javascript:localStorage.clear(); caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))).then(() => location.reload()));"
+        <a href="javascript:caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))).then(() => navigator.serviceWorker.getRegistrations().then(regs => Promise.all(regs.map(r => r.unregister()))).then(() => location.reload())));"
             class="rescue-link">Force Clear Cache & Reload</a>
     </div>
 </body>
