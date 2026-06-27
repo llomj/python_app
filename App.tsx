@@ -862,6 +862,837 @@ __auto_grader_result = __auto_grader_run()
 __auto_grader_json = json.dumps(__auto_grader_result)
 `;
 
+// BUILTIN TAB - Python Built-in Functions
+const BUILTIN_CONTENT = `
+# --- A ---
+
+# abs(x)
+# Returns the absolute value of a number. The argument can be int or float.
+# In-depth: For integers, returns the non-negative magnitude. For floats,
+# returns the positive magnitude. For complex numbers, returns sqrt(real^2 + imag^2).
+
+print(abs(-5))     # 5
+print(abs(3.14))   # 3.14
+print(abs(-3.14))  # 3.14
+
+
+# all(iterable)
+# Returns True if all elements of the iterable are truthy (or iterable is empty).
+# In-depth: Equivalent to a loop that short-circuits on the first falsy value.
+# Empty iterables return True (vacuous truth).
+
+print(all([True, True, True]))    # True
+print(all([True, False, True]))   # False
+print(all([]))                    # True
+
+
+# any(iterable)
+# Returns True if any element of the iterable is truthy.
+# In-depth: Short-circuits on the first truthy value. Returns False if empty.
+
+print(any([False, False, True]))  # True
+print(any([False, False]))        # False
+print(any([]))                    # False
+
+
+# ascii(object)
+# Returns a string containing a printable representation of object, escaping
+# non-ASCII characters with \\\\u or \\\\U escapes.
+# In-depth: Like repr(), but escapes non-ASCII so the result is pure ASCII.
+# Useful for safe display of strings with international characters.
+
+print(ascii("hello"))           # 'hello'
+print(ascii("café"))           # 'caf\\\\u00e9'
+print(ascii("\\\\n"))             # '\\\\n'
+
+
+# --- B ---
+
+# bin(x)
+# Converts an integer to a binary string prefixed with "0b".
+# In-depth: The result is a valid Python expression. x must be an integer.
+# Use format(x, 'b') to get the binary without the prefix.
+
+print(bin(3))     # 0b11
+print(bin(10))    # 0b1010
+print(bin(-5))    # -0b101
+
+
+# bool(x=False)
+# Returns a boolean value: True or False.
+# In-depth: Converts x to True or False using the standard truth-testing
+# procedure (empty sequences/zero/None are False, everything else is True).
+# bool is a subclass of int, so True == 1 and False == 0.
+
+print(bool(1))       # True
+print(bool(0))       # False
+print(bool(""))      # False
+print(bool([]))      # False
+print(bool("abc"))   # True
+
+
+# bytearray(source=b'', encoding='utf-8')
+# Returns a mutable array of bytes.
+# In-depth: Arguments: string + encoding -> encode; integer -> array of zeros
+# of that size; iterable of ints -> initialize from ints; bytes-like -> copy.
+# The resulting object is mutable and supports list-like operations.
+
+print(bytearray(5))              # bytearray(b'\\\\x00\\\\x00\\\\x00\\\\x00\\\\x00')
+print(bytearray([65, 66, 67]))   # bytearray(b'ABC')
+print(bytearray("abc", "utf-8")) # bytearray(b'abc')
+
+
+# bytes(source=b'', encoding='utf-8')
+# Returns an immutable sequence of bytes.
+# In-depth: Same construction rules as bytearray, but the result is immutable.
+# Use bytes literals (b'...') for literal byte strings in code.
+
+print(bytes(5))                  # b'\\\\x00\\\\x00\\\\x00\\\\x00\\\\x00'
+print(bytes([65, 66, 67]))       # b'ABC'
+print(bytes("abc", "utf-8"))     # b'abc'
+
+
+# --- C ---
+
+# callable(object)
+# Returns True if object appears callable (can be invoked with () operator).
+# In-depth: Checks for __call__ in the class. May return True for objects
+# whose __call__ raises TypeError. Does not guarantee invocation succeeds.
+
+print(callable(print))      # True
+print(callable(42))         # False
+print(callable(lambda: 0))  # True
+
+
+# chr(i)
+# Returns the Unicode character represented by integer i.
+# In-depth: i must be in range 0x110000 (0 to 1,114,111). Inverse of ord().
+# Raises ValueError if i is outside the valid range.
+
+print(chr(65))      # A
+print(chr(8364))    # €
+print(chr(128640))  # 🚀
+
+
+# classmethod(function)
+# Transforms a method into a class method, receiving the class as first arg.
+# In-depth: A class method receives the class (cls) implicitly as the first
+# argument, not the instance (self). Can be called on the class or instance.
+# Commonly used as a decorator: @classmethod.
+
+class MyClass:
+    @classmethod
+    def greet(cls):
+        return f"Hello from {cls.__name__}"
+
+print(MyClass.greet())  # Hello from MyClass
+
+
+# compile(source, filename, mode, flags=0, dont_inherit=False, optimize=-1)
+# Compiles source code into a code object executable by exec() or eval().
+# In-depth: mode is 'exec' for module-level code, 'eval' for single expression,
+# or 'single' for a single interactive statement. filename should be the file
+# the code was read from; use '<string>' if it came from a string.
+
+code = compile("x = 42\\\\nprint(x)", "<string>", "exec")
+exec(code)  # 42
+
+
+# complex(real=0, imag=0)
+# Creates a complex number from real and imaginary components.
+# In-depth: Accepts two numeric args (real, imag) or a string argument
+# (like "1+2j"). The string form must not have whitespace around the +.
+
+print(complex(2, 3))     # (2+3j)
+print(complex("1+2j"))   # (1+2j)
+print(complex(5))        # (5+0j)
+
+
+# --- D ---
+
+# delattr(object, name)
+# Deletes the named attribute from object, equivalent to del object.name.
+# In-depth: name must be a string. Raises AttributeError if the attribute
+# doesn't exist. The inverse of setattr().
+
+class Person:
+    name = "Alice"
+    age = 30
+
+delattr(Person, "age")
+print(hasattr(Person, "age"))  # False
+
+
+# dict(**kwargs)
+# Creates a new dictionary (mapping of keys to values).
+# In-depth: Accepts keyword args, an iterable of key-value pairs, or
+# another mapping. Dicts are ordered (insertion order preserved as of 3.7).
+
+print(dict(a=1, b=2))                    # {'a': 1, 'b': 2}
+print(dict([("x", 10), ("y", 20)]))      # {'x': 10, 'y': 20}
+print(dict({"one": 1}, two=2))           # {'one': 1, 'two': 2}
+
+
+# dir(object)
+# Returns a sorted list of names in the current or given object's scope.
+# In-depth: Without args, returns names in current scope. With an object,
+# returns its attributes (including inherited ones). Tries __dir__() first.
+
+print(dir([]))       # [... 'append', 'clear', 'copy', 'count'...]
+print(dir(42))       # [... 'bit_length', 'conjugate', 'denominator'...]
+print("sort" in dir([]))  # True
+
+
+# divmod(a, b)
+# Returns a tuple (a // b, a % b) — quotient and remainder.
+# In-depth: Uses floor division. For integers, result is (floor division,
+# modulus). For floats, returns (floor div, remainder) with floating math.
+# The relationship: a = b * quotient + remainder.
+
+print(divmod(13, 4))   # (3, 1)
+print(divmod(10, 3))   # (3, 1)
+print(divmod(7, 2))    # (3, 1)
+
+
+# --- E ---
+
+# enumerate(iterable, start=0)
+# Returns an enumerate object yielding (index, element) pairs.
+# In-depth: Useful for loop iteration when you need both the index and value.
+# The start parameter controls the beginning index.
+
+for i, v in enumerate(["a", "b", "c"]):
+    print(i, v)
+# 0 a
+# 1 b
+# 2 c
+
+print(list(enumerate("abc", start=1)))
+# [(1, 'a'), (2, 'b'), (3, 'c')]
+
+
+# eval(expression, globals=None, locals=None)
+# Evaluates a string as a Python expression and returns the result.
+# In-depth: expression must be a single expression (not statements). Can
+# accept optional globals and locals dicts for namespace control.
+# Security risk: never eval untrusted input.
+
+x = 10
+print(eval("x * 2"))        # 20
+print(eval("pow(2, 3)"))    # 8
+print(eval("[n*2 for n in range(5)]"))  # [0, 2, 4, 6, 8]
+
+
+# exec(object, globals=None, locals=None)
+# Executes dynamically created Python code (statements and expressions).
+# In-depth: Unlike eval(), exec() supports statements (def, class, import,
+# loops). Returns None. Modifies the provided namespace if given.
+
+code = """
+result = []
+for i in range(3):
+    result.append(i * 10)
+"""
+ns = {}
+exec(code, ns)
+print(ns["result"])  # [0, 10, 20]
+
+
+# --- F ---
+
+# filter(function, iterable)
+# Constructs an iterator yielding elements from iterable where function returns True.
+# In-depth: If function is None, uses the identity function (filters falsy values).
+# Equivalent to: (item for item in iterable if function(item)).
+
+print(list(filter(None, [0, 1, "", "hi", [], [1]])))
+# [1, 'hi', [1]]
+
+print(list(filter(lambda x: x % 2 == 0, range(10))))
+# [0, 2, 4, 6, 8]
+
+
+# float(x=0.0)
+# Converts a number or string to a floating-point number.
+# In-depth: Accepts int, float, or string. Strings can be NaN, Inf, or
+# regular decimal strings. Raises ValueError for invalid inputs.
+
+print(float(42))        # 42.0
+print(float("3.14"))    # 3.14
+print(float("inf"))     # inf
+print(float("nan"))     # nan
+
+
+# format(value, format_spec='')
+# Formats a value according to a format specification.
+# In-depth: Calls value.__format__(format_spec). The format_spec uses
+# the mini-language: padding, alignment, precision, type codes.
+
+print(format(255, 'b'))      # 11111111
+print(format(255, 'x'))      # ff
+print(format(3.14159, '.2f'))  # 3.14
+print(format(42, '06d'))     # 000042
+
+
+# frozenset(iterable=set())
+# Returns an immutable, hashable set object.
+# In-depth: Like set() but immutable, so it can be used as a dict key or
+# set element. Cannot be modified after creation.
+
+fs = frozenset([1, 2, 3, 2])
+print(fs)            # frozenset({1, 2, 3})
+print({fs: "works"})  # {frozenset({1, 2, 3}): 'works'}
+
+
+# --- G ---
+
+# getattr(object, name, default=None)
+# Returns the value of the named attribute of object.
+# In-depth: Equivalent to object.name. If the attribute doesn't exist and
+# default is provided, returns default. Without default, raises AttributeError.
+
+class Point:
+    x = 10
+    y = 20
+
+pt = Point()
+print(getattr(pt, "x"))          # 10
+print(getattr(pt, "z", "N/A"))   # N/A
+
+
+# globals()
+# Returns a dictionary of the current global symbol table.
+# In-depth: The dict is the module-level namespace. Modifying it changes
+# global variables. Inside a function, returns the globals of the module
+# where the function was defined.
+
+print(type(globals()))   # <class 'dict'>
+print("__file__" in globals())  # True
+
+
+# --- H ---
+
+# hasattr(object, name)
+# Returns True if object has the named attribute (string name).
+# In-depth: Implements by calling getattr() and catching AttributeError.
+# Returns False if the attribute does not exist.
+
+class Car:
+    wheels = 4
+    color = "red"
+
+c = Car()
+print(hasattr(c, "wheels"))   # True
+print(hasattr(c, "engine"))   # False
+
+
+# hash(object)
+# Returns the hash value of object (an integer) for use in dict lookups.
+# In-depth: Hashable objects must have equal hashes when compared equal.
+# Mutable objects (lists, dicts, sets) are not hashable. Strings, ints,
+# tuples of hashables are. Raises TypeError for unhashable types.
+
+print(hash(42))           # 42
+print(hash("hello"))      # some large integer
+print(hash((1, 2, 3)))    # some integer
+
+
+# help(object)
+# Invokes the built-in help system for the given object.
+# In-depth: Shows documentation: docstrings, methods, attributes. Can be
+# called without args to enter interactive help. Not typically kept in
+# production code — used interactively or in debugging.
+
+# help(print)
+# help(dict)
+# help(str.upper)
+
+
+# hex(x)
+# Converts an integer to a hexadecimal string prefixed with "0x".
+# In-depth: x must be an integer. Returns lowercase. Use format(x, 'X')
+# for uppercase hex. Inverse of int(string, 16).
+
+print(hex(255))    # 0xff
+print(hex(16))     # 0x10
+print(hex(-42))    # -0x2a
+
+
+# --- I ---
+
+# id(object)
+# Returns the identity (memory address) of an object as an integer.
+# In-depth: Unique and constant for the object's lifetime. Two objects
+# with non-overlapping lifetimes may have the same id(). On CPython,
+# this is the memory address.
+
+a = [1, 2, 3]
+print(id(a))        # 140342345678912
+print(id([1, 2]))   # different memory address
+
+
+# input(prompt='')
+# Reads a line from stdin, converts to string (stripping the trailing newline).
+# In-depth: If prompt is given, writes it to stdout without a trailing newline.
+# On EOF, raises EOFError. The result is always a string.
+
+# name = input("Enter name: ")
+# print(f"Hello, {name}")
+
+
+# int(x=0, base=10)
+# Converts a number or string to an integer.
+# In-depth: With a string, base can be 0 (auto-detect) or 2-36. With a
+# number, truncates toward zero (like int(3.9) -> 3). Without args, returns 0.
+
+print(int(3.14))       # 3
+print(int("1010", 2))  # 10
+print(int("ff", 16))   # 255
+print(int("0xA", 0))   # 10
+
+
+# isinstance(object, classinfo)
+# Returns True if object is an instance of classinfo (or a tuple of classes).
+# In-depth: Checks against class, subclass, or tuple of classes and types.
+# Supports abstract base classes (e.g., isinstance([], Iterable) -> True).
+
+print(isinstance(42, int))                 # True
+print(isinstance([], (list, tuple)))        # True
+print(isinstance("abc", str))              # True
+
+
+# issubclass(class, classinfo)
+# Returns True if class is a subclass of classinfo (direct, indirect, or virtual).
+# In-depth: classinfo can be a class or tuple of classes. A class is considered
+# a subclass of itself. Checks virtual inheritance via ABCs.
+
+class A: pass
+class B(A): pass
+
+print(issubclass(B, A))      # True
+print(issubclass(A, A))      # True
+print(issubclass(bool, int)) # True
+
+
+# iter(object, sentinel=None)
+# Returns an iterator object for the given object.
+# In-depth: With one arg, calls object.__iter__() or builds an iterator
+# from __getitem__(). With sentinel, calls object repeatedly until sentinel.
+
+print(list(iter([1, 2, 3])))     # [1, 2, 3]
+print(list(iter("abc")))         # ['a', 'b', 'c']
+
+
+# --- L ---
+
+# len(object)
+# Returns the length (number of items) of a container.
+# In-depth: Calls __len__() magic method. Works on sequences, mappings,
+# sets, and any object implementing __len__. Raises TypeError otherwise.
+
+print(len([1, 2, 3]))        # 3
+print(len("hello"))          # 5
+print(len({"a": 1, "b": 2})) # 2
+
+
+# list(iterable=())
+# Creates a new list from an iterable (or empty list if no argument).
+# In-depth: Accepts any iterable. Lists are ordered, mutable sequences.
+# Can also use square bracket literals [].
+
+print(list((1, 2, 3)))       # [1, 2, 3]
+print(list("abc"))           # ['a', 'b', 'c']
+print(list(range(5)))        # [0, 1, 2, 3, 4]
+
+
+# locals()
+# Returns a dictionary of the current local symbol table.
+# In-depth: Inside a function, returns the local names. At module level,
+# returns the same as globals(). Modifying the dict may not affect local
+# variables (behavior is implementation-dependent).
+
+def test():
+    x = 10
+    y = 20
+    print(locals())
+
+test()  # {'x': 10, 'y': 20}
+
+
+# --- M ---
+
+# map(function, *iterables)
+# Applies function to every item of iterable(s), yielding results.
+# In-depth: Returns an iterator. With multiple iterables, function must
+# accept that many arguments. Stops at the shortest iterable. Equivalent
+# to a generator expression.
+
+print(list(map(str.upper, ["a", "b", "c"])))
+# ['A', 'B', 'C']
+
+print(list(map(pow, [2, 3, 4], [5, 2, 3])))
+# [32, 9, 64]
+
+
+# max(iterable, *[, key, default])
+# Returns the largest item in an iterable or among arguments.
+# In-depth: With a single iterable, returns its max element. With multiple
+# args, returns the max of those. key is a one-arg ordering function.
+# default is returned if the iterable is empty (otherwise ValueError).
+
+print(max(3, 7, 1, 9))          # 9
+print(max([10, 20, 30]))        # 30
+print(max("hello world"))       # 'w'
+print(max([], default="empty")) # empty
+
+
+# memoryview(object)
+# Returns a memoryview object exposing buffer protocol access.
+# In-depth: Allows memory-efficient access to data without copying.
+# Supports slicing, indexing, and casting. Useful for binary data and
+# large byte arrays where copying would be expensive.
+
+mv = memoryview(b"hello")
+print(mv[0])         # 104
+print(mv[1:3].tobytes())  # b'el'
+
+
+# min(iterable, *[, key, default])
+# Returns the smallest item in an iterable or among arguments.
+# In-depth: With a single iterable, returns its min element. With multiple
+# args, returns the min of those. key is a one-arg ordering function.
+
+print(min(3, 7, 1, 9))          # 1
+print(min([10, 20, 30]))        # 10
+print(min("hello world"))       # ' '
+print(min([], default="empty")) # empty
+
+
+# --- N ---
+
+# next(iterator, default=None)
+# Retrieves the next item from an iterator.
+# In-depth: Calls iterator.__next__(). If the iterator is exhausted and
+# default is given, returns default. Without default, raises StopIteration.
+
+it = iter([1, 2, 3])
+print(next(it))        # 1
+print(next(it))        # 2
+print(next(it))        # 3
+print(next(it, "done"))  # done
+
+
+# --- O ---
+
+# object()
+# Returns a new featureless object (the base for all classes).
+# In-depth: The base class of all Python objects. Provides common methods
+# like __str__, __repr__, __eq__, __hash__. Cannot have arbitrary
+# attributes set on instances of plain object() directly.
+
+obj = object()
+print(isinstance(obj, object))  # True
+print(type(obj).__name__)       # 'object'
+
+
+# oct(x)
+# Converts an integer to an octal string prefixed with "0o".
+# In-depth: x must be an integer. Returns lowercase. Use format(x, 'o')
+# for the octal representation without the prefix.
+
+print(oct(8))    # 0o10
+print(oct(64))   # 0o100
+print(oct(-10))  # -0o12
+
+
+# open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)
+# Opens file and returns a file object.
+# In-depth: mode is 'r' (read), 'w' (write), 'a' (append), 'x' (create),
+# 'b' (binary), 't' (text), '+'. Encoding is needed for text mode.
+# Always use with context manager (with statement).
+
+# with open("example.txt", "w") as f:
+#     f.write("Hello")
+
+# with open("example.txt", "r") as f:
+#     print(f.read())
+
+
+# ord(c)
+# Returns the Unicode code point (integer) for a single character string.
+# In-depth: Inverse of chr(). For ASCII characters, returns 0-127.
+# For emoji, returns the full Unicode code point.
+
+print(ord("A"))     # 65
+print(ord("€"))     # 8364
+print(ord("🚀"))    # 128640
+
+
+# --- P ---
+
+# pow(base, exp, mod=None)
+# Returns base raised to power exp, optionally modulo mod.
+# In-depth: With mod, computes (base**exp) % mod efficiently for large
+# numbers using modular exponentiation. mod must be non-zero.
+
+print(pow(2, 3))       # 8
+print(pow(2, 3, 5))    # 3  (8 % 5)
+print(pow(10, -2))     # 0.01
+
+
+# print(*objects, sep=' ', end='\\\\n', file=None, flush=False)
+# Prints objects to the text stream file (default stdout), separated by sep.
+# In-depth: Converts objects to strings using str(). Keyword args control
+# separator, terminator, output file, and flushing. Returns None.
+
+print("Hello", "World")            # Hello World
+print("A", "B", "C", sep="-")      # A-B-C
+print("Loading...", end="")        # no newline
+
+
+# property(fget=None, fset=None, fdel=None, doc=None)
+# Returns a managed attribute descriptor (getter/setter/deleter).
+# In-depth: Typically used as a decorator. Allows defining getter, setter,
+# and deleter methods that control attribute access. The doc string
+# becomes the attribute's docstring.
+
+class Temperature:
+    def __init__(self, celsius):
+        self._celsius = celsius
+
+    @property
+    def fahrenheit(self):
+        return self._celsius * 9/5 + 32
+
+    @fahrenheit.setter
+    def fahrenheit(self, value):
+        self._celsius = (value - 32) * 5/9
+
+t = Temperature(0)
+print(t.fahrenheit)  # 32.0
+t.fahrenheit = 100
+print(t._celsius)    # 37.777... (approx)
+
+
+# --- R ---
+
+# range(stop) | range(start, stop, step=1)
+# Returns an immutable arithmetic progression of integers.
+# In-depth: Generates numbers from start (default 0) to stop (exclusive),
+# incrementing by step. Lazy — computes values on iteration. Memory
+# efficient even for huge ranges.
+
+print(list(range(5)))           # [0, 1, 2, 3, 4]
+print(list(range(2, 7)))        # [2, 3, 4, 5, 6]
+print(list(range(0, 10, 2)))    # [0, 2, 4, 6, 8]
+print(list(range(5, 0, -1)))    # [5, 4, 3, 2, 1]
+
+
+# repr(object)
+# Returns a string containing a printable representation of object.
+# In-depth: Should look like a valid Python expression that recreates
+# the object. For debugging. In contrast to str(), repr() aims to be
+# unambiguous rather than readable.
+
+print(repr("hello"))    # "'hello'"
+print(repr([1, 2, 3]))  # '[1, 2, 3]'
+print(repr(42))         # '42'
+
+
+# reversed(sequence)
+# Returns a reverse iterator over a sequence.
+# In-depth: Works on any sequence with __reversed__() or __len__() +
+# __getitem__(). For iterables that aren't sequences, use reversed()
+# by converting to list first.
+
+print(list(reversed([1, 2, 3])))  # [3, 2, 1]
+print(list(reversed("abc")))      # ['c', 'b', 'a']
+
+
+# round(number, ndigits=None)
+# Rounds a number to ndigits precision (default 0).
+# In-depth: Banker's rounding: rounds .5 to the nearest even number.
+# For floats, ndigits can be negative (rounds to powers of 10).
+# Returns int when ndigits is omitted, float otherwise.
+
+print(round(3.14159, 2))   # 3.14
+print(round(2.5))          # 2 (banker's rounding)
+print(round(3.5))          # 4 (banker's rounding)
+print(round(12345, -2))    # 12300
+
+
+# --- S ---
+
+# set(iterable=None)
+# Returns a new set object (unordered collection of unique hashable items).
+# In-depth: Elements must be hashable. Sets support union, intersection,
+# difference, symmetric difference. Mutable — add/remove elements.
+
+print(set([1, 2, 2, 3, 3]))   # {1, 2, 3}
+print(set("abracadabra"))      # {'a', 'b', 'c', 'd', 'r'}
+print(set())                   # set()
+
+
+# setattr(object, name, value)
+# Sets the named attribute on object (equivalent to object.name = value).
+# In-depth: name must be a string. Useful when the attribute name is
+# dynamic. Can set attributes on most objects (instances, classes, modules).
+
+class User:
+    pass
+
+u = User()
+setattr(u, "username", "alice")
+setattr(u, "score", 100)
+print(u.username)  # alice
+print(u.score)     # 100
+
+
+# slice(stop) | slice(start, stop, step=None)
+# Returns a slice object representing a range of indices.
+# In-depth: Used for extended slicing: obj[slice(1, 5)] is equivalent
+# to obj[1:5]. Stores start, stop, step attributes.
+
+s = slice(1, 5, 2)
+print(s)                       # slice(1, 5, 2)
+print([0, 1, 2, 3, 4, 5][s])  # [1, 3]
+
+
+# sorted(iterable, *, key=None, reverse=False)
+# Returns a new sorted list from the items in iterable.
+# In-depth: Stable sort (preserves order of equal elements). key is a
+# function that extracts a comparison key. reverse=True for descending.
+# The Timsort algorithm (hybrid stable sort, O(n log n)).
+
+print(sorted([3, 1, 4, 1, 5]))              # [1, 1, 3, 4, 5]
+print(sorted("python"))                      # ['h', 'n', 'o', 'p', 't', 'y']
+print(sorted(["bb", "a", "ccc"], key=len))   # ['a', 'bb', 'ccc']
+print(sorted([3, 1, 4], reverse=True))       # [4, 3, 1]
+
+
+# staticmethod(function)
+# Transforms a method into a static method (no implicit first argument).
+# In-depth: Static methods don't receive self or cls. They behave like
+# regular functions but belong to the class namespace. Used as a
+# decorator: @staticmethod.
+
+class MathUtils:
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+print(MathUtils.add(3, 4))  # 7
+
+
+# str(object='', encoding='utf-8', errors='strict')
+# Returns a string version of object (human-readable representation).
+# In-depth: Calls object.__str__() if available, else __repr__().
+# Encoding and errors are only valid if object is a bytes-like object.
+# Without args, returns empty string.
+
+print(str(42))          # '42'
+print(str([1, 2, 3]))   # '[1, 2, 3]'
+print(str(b"abc"))      # "b'abc'"
+
+
+# sum(iterable, start=0)
+# Sums the items of an iterable from left to right, starting with start.
+# In-depth: start is added to the total. For strings, use ''.join().
+# For non-numeric types that support +, provide an appropriate start.
+
+print(sum([1, 2, 3, 4]))          # 10
+print(sum([1, 2, 3], 10))         # 16
+print(sum([[1], [2], [3]], []))   # [1, 2, 3]
+
+
+# super(type=None, object_or_type=None)
+# Returns a proxy object delegating method calls to a parent class.
+# In-depth: Used in cooperative multiple inheritance. Without args,
+# returns the super object bound to the current class and instance.
+# Essential for calling parent __init__() from child classes.
+
+class Base:
+    def greet(self):
+        return "Base"
+
+class Child(Base):
+    def greet(self):
+        return super().greet() + " -> Child"
+
+print(Child().greet())  # Base -> Child
+
+
+# --- T ---
+
+# tuple(iterable=())
+# Creates a new tuple from an iterable (or empty tuple if no argument).
+# In-depth: Tuples are immutable, ordered sequences. Can be used as dict
+# keys (if all elements are hashable). Parentheses optional in many cases.
+
+print(tuple([1, 2, 3]))       # (1, 2, 3)
+print(tuple("abc"))           # ('a', 'b', 'c')
+print(tuple())                # ()
+
+
+# type(object) | type(name, bases, dict)
+# With one arg, returns the type of object. With three, creates a new class.
+# In-depth: type() is a metaclass. With three args: name (string), bases
+# (tuple of parent classes), dict (namespace dict). Equivalent to class statement.
+
+print(type(42))              # <class 'int'>
+print(type("hello"))         # <class 'str'>
+
+MyClass = type("MyClass", (object,), {"x": 10})
+obj = MyClass()
+print(obj.x)                 # 10
+
+
+# --- V ---
+
+# vars(object=None)
+# Returns the __dict__ (namespace dict) of the given object.
+# In-depth: With no args, equivalent to locals(). With an object, returns
+# its __dict__ attribute. Raises TypeError if object doesn't have __dict__
+# (e.g., class with __slots__).
+
+class MyObj:
+    def __init__(self):
+        self.a = 1
+        self.b = 2
+
+obj = MyObj()
+print(vars(obj))  # {'a': 1, 'b': 2}
+
+
+# --- Z ---
+
+# zip(*iterables, strict=False)
+# Iterates over multiple iterables in parallel, yielding tuples.
+# In-depth: Stops at the shortest iterable. strict=True (3.10+) raises
+# ValueError if lengths differ. Use itertools.zip_longest for unequal
+# lengths with fill value.
+
+letters = ["a", "b", "c"]
+numbers = [1, 2, 3]
+print(list(zip(letters, numbers)))
+# [('a', 1), ('b', 2), ('c', 3)]
+
+print(dict(zip(letters, numbers)))
+# {'a': 1, 'b': 2, 'c': 3}
+
+
+# --- _ ---
+
+# __import__(name, globals=None, locals=None, fromlist=(), level=0)
+# Imports a module by name string (the underlying import implementation).
+# In-depth: Advanced usage; prefer importlib.import_module() for most
+# dynamic imports. fromlist controls whether submodules are imported.
+# level: 0 for absolute, positive for relative (1 = current package).
+
+os = __import__("os")
+print(os.pathsep)  # ':'
+`;
+
 // RULES TAB - Complete Python Reference
 const RULES_CONTENT = `
 # PYTHON RULES — Complete Reference
@@ -7610,6 +8441,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <TabButton active={modalTab === 'cheat'} onClick={() => setModalTab('cheat')} label="Cheat" />
                                     <TabButton active={modalTab === 'glossary'} onClick={() => setModalTab('glossary')} label="Glossary" />
                                     <TabButton active={modalTab === 'regex'} onClick={() => setModalTab('regex')} label="Regex" />
+                                    <TabButton active={modalTab === 'builtin'} onClick={() => setModalTab('builtin')} label="Built-in" />
                                     <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Rules" />
                                 </div>
                                 <div className="flex-grow overflow-y-auto">
@@ -7640,6 +8472,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 <CodeMirror value={REGEX_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    {modalTab === 'builtin' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={BUILTIN_CONTENT} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={BUILTIN_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
                                             </div>
                                         </div>
                                     )}
