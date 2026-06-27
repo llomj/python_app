@@ -862,6 +862,3342 @@ __auto_grader_result = __auto_grader_run()
 __auto_grader_json = json.dumps(__auto_grader_result)
 `;
 
+// RULES TAB - Complete Python Reference
+const RULES_CONTENT = `
+# PYTHON RULES — Complete Reference
+# ================================
+# This is a comprehensive Python reference rendered in CodeMirror.
+# All explanations use # comments (gray), code examples use full
+# Python syntax highlighting (keywords blue, strings green, etc.).
+# ================================
+
+
+# 1. VARIABLES & DATA TYPES
+# =========================
+# Easy definition: Variables are named containers that store references
+# to objects in memory. Python is dynamically typed — you never declare
+# a variable's type explicitly.
+# In-depth: Every variable is a name bound to an object. The type is
+# determined at runtime by the object itself. Multiple names can refer
+# to the same object (aliasing). Python uses reference counting and
+# garbage collection under the hood.
+
+# Creating variables
+name = "Alice"
+age = 30
+height = 5.7
+is_student = True
+nothing = None
+
+# Dynamic typing — variables can change type freely
+value = 42
+print(type(value))          # <class 'int'>
+value = "now a string"
+print(type(value))          # <class 'str'>
+
+# type() and id() — introspection tools
+print(type(42))             # <class 'int'>
+print(id(name))             # unique memory address (integer)
+
+# Multiple assignment
+a, b, c = 1, 2, 3
+x = y = z = 0               # all three bound to same 0
+
+# Pythonic swap
+a, b = b, a
+
+# Delete a variable
+del value                   # removes the name binding
+
+# Built-in data types
+some_int = 42               # int
+some_float = 3.14           # float
+some_str = "hello"          # str
+some_bool = True            # bool (subclass of int)
+some_bytes = b"hello"       # bytes
+some_bytearray = bytearray(b"hello")  # bytearray (mutable)
+
+# Naming rules:
+# - Must start with letter or underscore
+# - Rest can be letters, digits, underscores
+# - Case-sensitive: total != Total != TOTAL
+# - Cannot use reserved keywords (if, else, for, while, class, def, etc.)
+# - Convention: snake_case for variables/functions, UPPER_CASE for constants
+
+
+# 2. NUMBERS & MATH
+# ==================
+# Easy definition: Python has integers (unbounded) and floats (IEEE 754
+# double-precision). All standard arithmetic operations are supported.
+# In-depth: int has arbitrary precision — no overflow. float follows
+# IEEE 754 and may have rounding issues. Complex numbers use j suffix.
+# The math module provides additional functions.
+
+# Integers — arbitrary precision
+big_num = 10**100
+print(big_num)              # 100000000000000000000000000000000000000000000000000...
+
+# Floats
+pi = 3.14159
+sci = 1.5e-10              # scientific notation
+
+# Arithmetic operators
+print(10 + 3)               # 13  addition
+print(10 - 3)               # 7   subtraction
+print(10 * 3)               # 30  multiplication
+print(10 / 3)               # 3.3333333333333335  true division (always float)
+print(10 // 3)              # 3   floor division (integer result)
+print(10 % 3)               # 1   modulus (remainder)
+print(10 ** 3)              # 1000  exponentiation (power)
+
+# Floor division details — rounds toward negative infinity
+print(-10 // 3)             # -4  (not -3! floors down)
+print(10 // -3)             # -4
+
+# Modulus with negatives — result has sign of divisor
+print(-10 % 3)              # 2
+print(10 % -3)              # -2
+
+# Augmented assignment
+x = 10
+x += 5                      # x = 15  (x = x + 5)
+x -= 3                      # x = 12
+x *= 2                      # x = 24
+x /= 4                      # x = 6.0
+x //= 2                     # x = 3.0
+x %= 2                      # x = 1.0
+x **= 3                     # x = 1.0
+
+# Type conversion
+print(int(3.9))             # 3  (truncates toward zero)
+print(float(5))             # 5.0
+print(str(42))              # "42"
+print(bool(1))              # True
+print(bool(0))              # False
+print(int("101", 2))        # 5  (parse binary string)
+
+# round(), abs(), divmod(), pow()
+print(round(3.14159, 2))    # 3.14
+print(abs(-5))              # 5
+print(divmod(17, 5))        # (3, 2)  quotient and remainder
+print(pow(2, 10))           # 1024
+print(pow(2, 10, 1000))     # 24  (2**10 % 1000, more efficient)
+
+# math module
+import math
+
+print(math.ceil(3.2))       # 4
+print(math.floor(3.9))      # 3
+print(math.sqrt(16))        # 4.0
+print(math.pow(2, 10))      # 1024.0  (returns float)
+print(math.pi)              # 3.141592653589793
+print(math.e)               # 2.718281828459045
+print(math.sin(math.pi / 2))  # 1.0
+print(math.cos(0))          # 1.0
+print(math.tan(0))          # 0.0
+print(math.log(100, 10))    # 2.0  (log base 10)
+print(math.log(math.e))     # 1.0  (natural log)
+print(math.factorial(5))    # 120
+print(math.gcd(12, 18))     # 6
+print(math.isfinite(1e308)) # True
+print(math.isinf(float("inf")))  # True
+print(math.isnan(float("nan")))  # True
+
+# Complex numbers
+c = 3 + 4j
+print(c.real)               # 3.0
+print(c.imag)               # 4.0
+print(c.conjugate())        # (3-4j)
+print(abs(c))               # 5.0  (magnitude)
+import cmath
+print(cmath.phase(c))       # phase angle
+
+
+# 3. STRINGS
+# ===========
+# Easy definition: Strings are immutable sequences of Unicode characters.
+# They can be created with single, double, or triple quotes.
+# In-depth: Strings are sequences and support all sequence operations
+# (indexing, slicing, len, in). They are immutable — every operation
+# returns a new string. Python 3 strings are Unicode by default.
+
+# Creating strings
+single = 'hello'
+double = "hello"
+multiline = """This is a
+multi-line string"""
+multiline2 = '''Also multi-line'''
+
+# Escape sequences
+escaped = "She said, \\"Hello!\\""
+newline = "Line 1\\nLine 2"
+tabbed = "Column 1\\tColumn 2"
+backslash = "C:\\\\Users\\\\Name"
+raw_path = r"C:\\Users\\Name"     # raw string — no escape processing
+
+# f-strings (Python 3.6+)
+name = "Alice"
+age = 30
+greeting = f"Hello, {name}. You are {age} years old."
+calc = f"2 + 2 = {2 + 2}"
+formatted = f"Pi is approximately {math.pi:.3f}"
+expr = f"{name.lower()} is {age // 10} decades old"
+# Use {{ and }} for literal braces
+braces = f"{{name}} is a literal template"
+
+# str.format() method
+template = "Hello, {}. You are {} years old."
+print(template.format("Bob", 25))
+
+named = "Hello, {name}. You are {age} years old."
+print(named.format(name="Carol", age=35))
+
+positional = "{0} is {1} and {0} likes Python"
+print(positional.format("Dave", "cool"))
+
+fancy = "{:>10} {:06.2f}".format("pi", 3.14159)
+# right-aligned in 10 chars, float zero-padded 6 width 2 decimals
+
+# % operator formatting (older style)
+print("%s is %d years old" % ("Eve", 28))
+print("Value: %.2f" % 3.14159)
+
+# Common string methods
+text = "  Hello, World!  "
+print(text.upper())             # "  HELLO, WORLD!  "
+print(text.lower())             # "  hello, world!  "
+print(text.strip())             # "Hello, World!"
+print(text.lstrip())            # "Hello, World!  "
+print(text.rstrip())            # "  Hello, World!"
+print(text.replace("World", "Python"))  # "  Hello, Python!  "
+
+csv = "a,b,c,d"
+print(csv.split(","))           # ['a', 'b', 'c', 'd']
+items = ["a", "b", "c"]
+print(",".join(items))          # "a,b,c"
+
+s = "hello"
+print(s.find("l"))              # 2  (first index)
+print(s.find("z"))              # -1  (not found)
+print(s.index("l"))             # 2  (raises ValueError if not found)
+print(s.rfind("l"))             # 3  (last index)
+print(s.count("l"))             # 2
+
+print(s.startswith("he"))       # True
+print(s.endswith("lo"))         # True
+print("hello".isalpha())        # True
+print("123".isdigit())          # True
+print("abc123".isalnum())       # True
+print("   ".isspace())          # True
+
+# Slicing strings
+s = "Python Programming"
+print(s[0])                     # "P"
+print(s[-1])                    # "g"
+print(s[0:6])                   # "Python"
+print(s[:6])                    # "Python"  (start defaults to 0)
+print(s[7:])                    # "Programming"  (stop defaults to end)
+print(s[::2])                   # "Pto rgamn"  (every 2nd char)
+print(s[::-1])                  # "gnimmargorP nohtyP"  (reverse)
+
+# len(), ord(), chr()
+print(len(s))                   # 18
+print(ord("A"))                 # 65
+print(chr(65))                  # "A"
+
+# in and not in
+print("Python" in s)            # True
+print("Java" not in s)          # True
+
+# String immutability — this would FAIL
+# s[0] = "J"  # TypeError: 'str' object does not support item assignment
+
+# Must create a new string instead
+s2 = "J" + s[1:]
+print(s2)                       # "Jython Programming"
+
+
+# 4. LISTS
+# =========
+# Easy definition: Lists are ordered, mutable sequences that can hold
+# items of any type. They are created with square brackets.
+# In-depth: Lists are dynamic arrays under the hood. They support
+# indexing, slicing, and all sequence operations. Mutable means you
+# can change elements, add, remove, and reorder items in place.
+
+# Creating lists
+empty = []
+numbers = [1, 2, 3, 4, 5]
+mixed = [1, "hello", 3.14, True, None]
+nested = [[1, 2], [3, 4], [5, 6]]
+from_range = list(range(5))     # [0, 1, 2, 3, 4]
+from_string = list("hello")     # ['h', 'e', 'l', 'l', 'o']
+
+# Indexing and slicing
+nums = [10, 20, 30, 40, 50]
+print(nums[0])                  # 10
+print(nums[-1])                 # 50
+print(nums[1:4])                # [20, 30, 40]
+print(nums[:3])                 # [10, 20, 30]
+print(nums[2:])                 # [30, 40, 50]
+print(nums[::2])                # [10, 30, 50]
+print(nums[::-1])               # [50, 40, 30, 20, 10]
+
+# Lists are mutable — unlike tuples
+nums[0] = 100
+print(nums)                     # [100, 20, 30, 40, 50]
+nums[1:3] = [200, 300]          # slice assignment
+print(nums)                     # [100, 200, 300, 40, 50]
+
+# List methods
+lst = [3, 1, 4, 1, 5, 9, 2]
+lst.append(6)                   # [3, 1, 4, 1, 5, 9, 2, 6]
+lst.extend([10, 11])            # [3, 1, 4, 1, 5, 9, 2, 6, 10, 11]
+lst.insert(2, 99)               # insert 99 at index 2
+lst.remove(1)                   # remove first occurrence of 1
+popped = lst.pop()              # removes and returns last item
+popped_at = lst.pop(2)          # removes and returns item at index 2
+lst.clear()                     # remove all items
+
+lst = [3, 1, 4, 1, 5, 9, 2]
+print(lst.index(4))             # 2  (first index of 4)
+print(lst.count(1))             # 2
+
+lst.sort()                      # in-place sort: [1, 1, 2, 3, 4, 5, 9]
+lst.sort(reverse=True)          # [9, 5, 4, 3, 2, 1, 1]
+lst.reverse()                   # in-place reverse
+
+# sorted() and reversed() — return new objects, don't modify original
+original = [3, 1, 4]
+sorted_copy = sorted(original)  # [1, 3, 4]
+reversed_copy = list(reversed(original))  # [4, 1, 3]
+
+# List comprehensions
+squares = [x**2 for x in range(10)]
+evens = [x for x in range(20) if x % 2 == 0]
+pairs = [(x, y) for x in [1, 2, 3] for y in [4, 5, 6]]
+matrix = [[x + y for x in range(3)] for y in range(3)]
+# [[0, 1, 2], [1, 2, 3], [2, 3, 4]]
+
+# Nested list / matrix access
+m = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+]
+print(m[1][2])                  # 6
+
+# List as stack (LIFO) — efficient with append/pop
+stack = []
+stack.append(1)                 # push
+stack.append(2)
+stack.append(3)
+top = stack.pop()               # 3
+
+# List as queue — use collections.deque for efficiency
+from collections import deque
+queue = deque(["a", "b", "c"])
+queue.append("d")               # enqueue
+front = queue.popleft()         # "a"  (O(1) instead of O(n) for list.pop(0))
+
+# Shallow copy vs deep copy
+import copy
+original = [[1, 2], [3, 4]]
+
+shallow = original.copy()        # or original[:]
+shallow[0][0] = 99
+print(original[0][0])            # 99  (shared inner list)
+
+deep = copy.deepcopy(original)
+deep[0][0] = 42
+print(original[0][0])            # 99  (no change to original)
+
+# len() on lists
+print(len([1, 2, 3]))           # 3
+
+
+# 5. TUPLES
+# ==========
+# Easy definition: Tuples are ordered, immutable sequences. Once created,
+# their elements cannot be changed. They are created with parentheses.
+# In-depth: Because tuples are immutable, they are hashable (can be used
+# as dictionary keys). They use less memory than lists and are useful
+# for fixed collections of related values.
+
+# Creating tuples
+empty = ()
+single = (1,)                   # comma required — (1) is just int 1
+numbers = (1, 2, 3)
+mixed = (1, "hello", 3.14)
+without_parens = 1, 2, 3       # comma syntax — also a tuple
+from_list = tuple([1, 2, 3])   # tuple() constructor
+
+# Immutability — once created, cannot be changed
+t = (1, 2, 3)
+# t[0] = 99  # TypeError: 'tuple' object does not support item assignment
+
+# But if tuple contains mutable objects, those can be modified
+t_mut = ([1, 2], [3, 4])
+t_mut[0].append(99)            # ([1, 2, 99], [3, 4])  — tuple itself unchanged
+
+# Indexing and slicing (same as lists)
+print(numbers[0])               # 1
+print(numbers[1:3])             # (2, 3)
+
+# Tuple unpacking
+point = (3, 4)
+x, y = point
+print(x, y)                     # 3 4
+
+# Swapping via tuple packing/unpacking
+a, b = 1, 2
+a, b = b, a
+
+# Extended unpacking (Python 3+)
+first, *rest = (1, 2, 3, 4, 5)
+print(first)                    # 1
+print(rest)                     # [2, 3, 4, 5]
+
+first, *middle, last = (1, 2, 3, 4, 5)
+print(middle)                   # [2, 3, 4]
+
+# When to use tuples
+# - Dictionary keys (immutable, hashable)
+# - Function return values returning multiple things
+# - Fixed data that should not change
+# - More memory-efficient than lists for fixed data
+
+# Named tuples
+from collections import namedtuple
+Point = namedtuple("Point", ["x", "y"])
+p = Point(3, 4)
+print(p.x)                      # 3
+print(p.y)                      # 4
+print(p[0])                     # 3  (also indexable)
+x, y = p                        # unpackable
+
+# Named tuple with defaults
+Person = namedtuple("Person", ["name", "age", "city"])
+p = Person("Alice", 30, "NYC")
+
+# ._make() and ._asdict()
+data = ["Bob", 25, "LA"]
+p2 = Person._make(data)
+print(p2._asdict())             # {'name': 'Bob', 'age': 25, 'city': 'LA'}
+
+# One-element tuple gotcha
+not_a_tuple = (1)               # int 1
+actually_a_tuple = (1,)         # tuple with one element
+
+
+# 6. DICTIONARIES
+# ================
+# Easy definition: Dictionaries map immutable keys to values. They are
+# unordered (Python <3.7) or insertion-ordered (Python 3.7+).
+# In-depth: Dictionaries are hash tables with O(1) average lookup,
+# insertion, and deletion. Keys must be hashable (immutable types).
+# Values can be any type.
+
+# Creating dictionaries
+empty = {}
+ages = {"Alice": 30, "Bob": 25, "Charlie": 35}
+from_pairs = dict([("a", 1), ("b", 2), ("c", 3)])
+from_kwargs = dict(name="Alice", age=30)
+from_zip = dict(zip(["a", "b", "c"], [1, 2, 3]))
+
+# Keys must be hashable
+# Valid keys: int, float, str, tuple, frozenset, None, bool
+# Invalid keys: list, dict, set, bytearray
+# {[1, 2]: "value"}  # TypeError: unhashable type: 'list'
+
+# Accessing values
+print(ages["Alice"])            # 30
+print(ages.get("Bob"))          # 25
+print(ages.get("Nobody"))       # None
+print(ages.get("Nobody", 0))    # 0  (default value)
+
+# in operator checks keys
+print("Alice" in ages)          # True
+print("missing" in ages)        # False
+
+# Methods
+d = {"a": 1, "b": 2, "c": 3}
+print(d.keys())                 # dict_keys(['a', 'b', 'c'])
+print(d.values())               # dict_values([1, 2, 3])
+print(d.items())                # dict_items([('a', 1), ('b', 2), ('c', 3)])
+
+d.update({"d": 4, "e": 5})     # add/update multiple keys
+d["f"] = 6                     # add/update single key
+popped = d.pop("a")            # removes and returns value
+item = d.popitem()             # removes and returns (key, value) — LIFO in 3.7+
+d.setdefault("g", 7)           # set only if key doesn't exist
+d.setdefault("b", 99)          # no effect — "b" already exists
+
+del d["c"]                     # delete a key
+# d.clear()                      # remove all items
+
+# Copying
+d_copy = d.copy()
+d_deepcopy = __import__("copy").deepcopy(d)
+
+# Dictionary comprehensions
+squares = {x: x**2 for x in range(10)}
+even_squares = {x: x**2 for x in range(20) if x % 2 == 0}
+swap = {v: k for k, v in {"a": 1, "b": 2}.items()}
+
+# Merging dictionaries (Python 3.5+)
+d1 = {"a": 1, "b": 2}
+d2 = {"c": 3, "d": 4}
+merged = {**d1, **d2}          # {"a": 1, "b": 2, "c": 3, "d": 4}
+
+# Merge operator (Python 3.9+)
+merged2 = d1 | d2              # same result
+
+# collections module
+from collections import defaultdict, OrderedDict, Counter
+
+# defaultdict — provides default for missing keys
+dd = defaultdict(int)
+dd["a"] += 1
+dd["b"] += 2
+print(dd["c"])                  # 0  (int() default)
+
+dd_list = defaultdict(list)
+dd_list["group1"].append("item1")
+
+# OrderedDict — remembers insertion order (regular dict does too since 3.7)
+od = OrderedDict()
+od["a"] = 1
+od["b"] = 2
+od.move_to_end("a")            # move "a" to the end
+
+# Counter — count hashable items
+cnt = Counter("abracadabra")
+print(cnt)                      # Counter({'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1})
+print(cnt.most_common(2))       # [('a', 5), ('b', 2)]
+
+# Nested dictionaries
+users = {
+    "alice": {"age": 30, "city": "NYC"},
+    "bob": {"age": 25, "city": "LA"},
+}
+print(users["alice"]["city"])   # "NYC"
+
+# Iterating
+for key, value in ages.items():
+    print(f"{key}: {value}")
+
+
+# 7. SETS
+# ========
+# Easy definition: Sets are unordered collections of unique, hashable
+# elements. They are useful for membership testing and eliminating
+# duplicates.
+# In-depth: Sets are implemented as hash tables. Elements must be
+# hashable (same requirement as dict keys). Sets support mathematical
+# operations like union, intersection, difference.
+
+# Creating sets
+empty = set()                   # {} creates empty dict, not set
+numbers = {1, 2, 3, 4, 5}
+from_list = set([1, 2, 2, 3, 3, 3])  # {1, 2, 3} — duplicates removed
+from_string = set("hello")      # {'h', 'e', 'l', 'o'} — unordered
+
+# Set comprehensions
+squares = {x**2 for x in range(10)}
+evens = {x for x in range(20) if x % 2 == 0}
+
+# Adding and removing
+s = {1, 2, 3}
+s.add(4)                        # {1, 2, 3, 4}
+s.add(1)                        # no effect — 1 already present
+s.remove(2)                     # {1, 3, 4} — KeyError if not found
+s.discard(3)                    # {1, 4} — no error if not found
+s.discard(999)                  # no error
+popped = s.pop()                # removes and returns arbitrary element
+s.clear()                       # remove all
+
+# Set operations
+a = {1, 2, 3, 4, 5}
+b = {4, 5, 6, 7, 8}
+
+print(a | b)                    # {1, 2, 3, 4, 5, 6, 7, 8}  union
+print(a.union(b))               # same
+
+print(a & b)                    # {4, 5}  intersection
+print(a.intersection(b))        # same
+
+print(a - b)                    # {1, 2, 3}  difference (in a but not b)
+print(a.difference(b))          # same
+
+print(a ^ b)                    # {1, 2, 3, 6, 7, 8}  symmetric difference
+print(a.symmetric_difference(b))  # same
+
+# Comparison operations
+x = {1, 2, 3}
+y = {1, 2, 3, 4, 5}
+
+print(x.issubset(y))            # True  — all elements of x are in y
+print(y.issuperset(x))          # True
+print(x.isdisjoint({4, 5, 6}))   # False  — x contains 4? No, but check
+
+# Frozenset — immutable, hashable set
+fs = frozenset([1, 2, 3])
+# fs.add(4)  # AttributeError: 'frozenset' object has no attribute 'add'
+d = {fs: "frozenset as key"}    # valid — frozensets are hashable
+
+
+# 8. CONTROL FLOW
+# ================
+# Easy definition: Control flow structures let you execute code
+# conditionally with if/elif/else or match patterns.
+# In-depth: Python uses indentation (4 spaces) to define blocks.
+# No braces or begin/end keywords. The condition is evaluated for
+# truthiness, not just boolean True.
+
+# if, elif, else
+age = 18
+
+if age < 13:
+    print("Child")
+elif age < 18:
+    print("Teenager")
+elif age < 65:
+    print("Adult")
+else:
+    print("Senior")
+
+# Truthy and falsy values
+# Falsy: None, False, 0, 0.0, 0j, "" (empty string), [] (empty list),
+#        {} (empty dict), set() (empty set), range(0)
+# Truthy: everything else
+
+if []:                          # False — empty list is falsy
+    print("won't run")
+
+if [1, 2]:                     # True — non-empty list is truthy
+    print("will run")
+
+# Comparison operators
+print(5 == 5)                   # True  equal
+print(5 != 6)                   # True  not equal
+print(5 < 6)                    # True  less than
+print(5 > 4)                    # True  greater than
+print(5 <= 5)                   # True  less than or equal
+print(5 >= 6)                   # False greater than or equal
+
+# Chained comparisons
+print(1 < 5 < 10)              # True  (equivalent to 1 < 5 and 5 < 10)
+print(1 < 5 > 3)               # True
+
+# Logical operators: and, or, not
+print(True and False)          # False
+print(True or False)           # True
+print(not True)                # False
+
+# Short-circuit evaluation
+# and returns first falsy value or last value
+print(0 and 42)                # 0  (short-circuits on 0)
+print(1 and 42)                # 42  (both truthy, returns last)
+
+# or returns first truthy value or last value
+print(0 or 42)                 # 42
+print(42 or 0)                 # 42  (short-circuits)
+
+# Common pattern — provide default
+name = input("name: ") or "Guest"
+
+# Ternary/conditional expression
+status = "adult" if age >= 18 else "minor"
+
+# match/case (Python 3.10+) — structural pattern matching
+def describe(value):
+    match value:
+        case 0:
+            return "zero"
+        case 1 | 2 | 3:
+            return "small"
+        case int() as n if n > 100:
+            return "big number"
+        case str() as s:
+            return f"string: {s}"
+        case [x, y]:
+            return f"two-element list: {x}, {y}"
+        case {"key": value}:
+            return f"dict with key: {value}"
+        case _:
+            return "something else"
+
+
+# 9. LOOPS
+# =========
+# Easy definition: Loops let you iterate over sequences (for) or repeat
+# while a condition is true (while).
+# In-depth: Python's for loop is a for-each — it iterates over elements
+# of any iterable. The while loop runs as long as its condition is
+# truthy. Both support break, continue, and else clauses.
+
+# for loop
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+
+# range()
+for i in range(5):              # 0, 1, 2, 3, 4
+    print(i)
+
+for i in range(2, 8):           # 2, 3, 4, 5, 6, 7
+    print(i)
+
+for i in range(0, 10, 2):       # 0, 2, 4, 6, 8
+    print(i)
+
+for i in range(10, 0, -1):      # 10, 9, 8, ..., 1
+    print(i)
+
+# enumerate() — get index and value
+colors = ["red", "green", "blue"]
+for i, color in enumerate(colors):
+    print(f"{i}: {color}")
+
+for i, color in enumerate(colors, start=1):
+    print(f"{i}: {color}")
+
+# zip() — iterate multiple sequences in parallel
+names = ["Alice", "Bob", "Charlie"]
+ages = [30, 25, 35]
+cities = ["NYC", "LA", "Chicago"]
+
+for name, age, city in zip(names, ages, cities):
+    print(f"{name} is {age} and lives in {city}")
+
+# zip() with unequal lengths — stops at shortest
+for a, b in zip([1, 2, 3], [10, 20]):
+    print(a, b)                 # (1, 10), (2, 20)  — 3 is skipped
+
+# zip longest — from itertools
+from itertools import zip_longest
+for a, b in zip_longest([1, 2, 3], [10, 20], fillvalue=0):
+    print(a, b)                 # (1, 10), (2, 20), (3, 0)
+
+# while loop
+count = 0
+while count < 5:
+    print(count)
+    count += 1
+
+# Infinite loop with break
+while True:
+    response = input("quit? (y/n): ")
+    if response == "y":
+        break
+
+# break — exit loop immediately
+for i in range(10):
+    if i == 5:
+        break
+    print(i)                    # 0, 1, 2, 3, 4
+
+# continue — skip to next iteration
+for i in range(10):
+    if i % 2 == 0:
+        continue
+    print(i)                    # 1, 3, 5, 7, 9
+
+# pass — do nothing (placeholder)
+for i in range(10):
+    if i == 5:
+        pass                    # placeholder for future code
+    print(i)
+
+# else clause on loops — runs only if loop completed without break
+for i in range(5):
+    print(i)
+else:
+    print("Loop completed normally")  # runs
+
+for i in range(5):
+    if i == 3:
+        break
+    print(i)
+else:
+    print("Won't run — loop was broken")
+
+# Nested loops
+for i in range(3):
+    for j in range(3):
+        print(i, j)
+
+# Iterating over dictionary
+person = {"name": "Alice", "age": 30, "city": "NYC"}
+for key in person:              # keys by default
+    print(key, person[key])
+
+for key, value in person.items():
+    print(f"{key}: {value}")
+
+for value in person.values():
+    print(value)
+
+# reversed() — iterate backwards
+for i in reversed(range(10)):
+    print(i)
+
+
+# 10. FUNCTIONS
+# ==============
+# Easy definition: Functions are reusable blocks of code defined with
+# def. They can accept arguments and return values.
+# In-depth: Functions are first-class objects — they can be assigned
+# to variables, passed as arguments, and returned from other functions.
+# Python supports positional, keyword, default, *args, **kwargs,
+# keyword-only, and positional-only parameters.
+
+# Basic function
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Alice"))           # "Hello, Alice!"
+
+# Multiple parameters and return values
+def add(a, b):
+    return a + b
+
+def divide(a, b):
+    quotient = a // b
+    remainder = a % b
+    return quotient, remainder  # returns a tuple
+
+q, r = divide(17, 5)           # unpacking: q=3, r=2
+
+# Default parameter values
+def power(base, exp=2):
+    return base ** exp
+
+print(power(5))                 # 25  (uses default exp=2)
+print(power(5, 3))              # 125
+
+# Mutable default gotcha!
+def add_item(item, lst=[]):     # BAD: list is created once, shared
+    lst.append(item)
+    return lst
+
+print(add_item(1))              # [1]
+print(add_item(2))              # [1, 2]  — not [2]!
+
+# Correct pattern — use None
+def add_item_correct(item, lst=None):
+    if lst is None:
+        lst = []
+    lst.append(item)
+    return lst
+
+# Positional vs keyword arguments
+def describe(name, age, city):
+    print(f"{name}, {age}, {city}")
+
+describe("Alice", 30, "NYC")    # positional
+describe(age=30, name="Alice", city="NYC")  # keyword (order doesn't matter)
+describe("Alice", city="NYC", age=30)  # mixed (positional first)
+
+# *args — variable positional arguments
+def sum_all(*args):
+    total = 0
+    for n in args:
+        total += n
+    return total
+
+print(sum_all(1, 2, 3, 4, 5))  # 15
+# args inside the function is a tuple: (1, 2, 3, 4, 5)
+
+# **kwargs — variable keyword arguments
+def print_kwargs(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_kwargs(name="Alice", age=30, city="NYC")
+# kwargs inside is a dict: {"name": "Alice", "age": 30, "city": "NYC"}
+
+# Combining parameter types
+def func(a, b, *args, c=10, **kwargs):
+    pass  # positional: a, b / *args extra positional / c keyword-default / **kwargs extra keyword
+
+# Keyword-only arguments (after *)
+def func_kw_only(a, b, *, verbose=False, debug=False):
+    if verbose:
+        print(f"a={a}, b={b}")
+    return a + b
+
+# verbose and debug must be passed as keywords
+func_kw_only(1, 2, verbose=True)
+
+# Positional-only arguments (before /) — Python 3.8+
+def func_pos_only(a, b, /, c, d):
+    pass  # a and b are positional-only; c and d are positional or keyword
+
+# func_pos_only(1, 2, 3, 4)       # OK
+# func_pos_only(a=1, b=2, c=3, d=4)  # ERROR: a and b are positional-only
+
+# Lambda — anonymous function
+square = lambda x: x**2
+print(square(5))                # 25
+
+# Lambda with multiple args
+add = lambda a, b: a + b
+
+# Lambda with sort
+pairs = [(1, "one"), (3, "three"), (2, "two")]
+pairs.sort(key=lambda pair: pair[0])
+
+# Nested functions
+def outer(x):
+    def inner(y):
+        return x + y
+    return inner
+
+add_five = outer(5)
+print(add_five(3))              # 8
+
+# Closures — inner function remembers outer scope
+def make_counter():
+    count = 0
+    def counter():
+        nonlocal count
+        count += 1
+        return count
+    return counter
+
+counter_a = make_counter()
+print(counter_a())              # 1
+print(counter_a())              # 2
+
+counter_b = make_counter()
+print(counter_b())              # 1  (independent counter)
+
+# Docstrings
+def multiply(a, b):
+    """Multiply two numbers and return the result.
+
+    Args:
+        a: First number (int or float)
+        b: Second number (int or float)
+
+    Returns:
+        Product of a and b
+    """
+    return a * b
+
+# Annotations/type hints (also see section 21)
+def add_typed(x: int, y: int) -> int:
+    return x + y
+
+
+# 11. SCOPE — LEGB RULE
+# ======================
+# Easy definition: Scope determines where a variable name is visible.
+# Python resolves names using the LEGB order.
+# In-depth: LEGB stands for Local, Enclosing, Global, Built-in. Python
+# searches scopes in this order when looking up a variable name.
+# The global keyword lets you modify module-level variables inside
+# functions. The nonlocal keyword lets you modify enclosing scope
+# variables in nested functions.
+
+# LEGB resolution order
+# L — Local: variables defined inside the current function
+# E — Enclosing: variables in outer (nested) functions
+# G — Global: variables at the module level
+# B — Built-in: Python's built-in names (print, len, range, etc.)
+
+x = "global x"                  # Global scope
+
+def outer():
+    x = "outer x"               # Enclosing scope (for inner)
+    y = "outer y"
+
+    def inner():
+        x = "inner x"           # Local scope
+        print(x)                # "inner x"  — local found first
+        print(y)                # "outer y"  — from enclosing scope
+
+    inner()
+    print(x)                    # "outer x"
+
+outer()
+print(x)                        # "global x"
+
+# global keyword
+count = 0
+
+def increment():
+    global count                # without this, count would be local
+    count += 1
+
+increment()
+print(count)                    # 1
+
+# nonlocal keyword
+def make_accumulator():
+    total = 0
+    def add(n):
+        nonlocal total          # without this, 'total += n' creates local
+        total += n
+        return total
+    return add
+
+acc = make_accumulator()
+print(acc(5))                   # 5
+print(acc(3))                   # 8
+
+# Built-in scope example
+# print, len, range, etc. are in built-in scope
+# You can shadow them (but shouldn't)
+# len = "shadow"  # now len refers to the string, not the built-in
+
+
+# 12. COMPREHENSIONS & GENERATORS
+# ================================
+# Easy definition: Comprehensions provide a concise way to create
+# collections. Generators lazily produce values one at a time.
+# In-depth: List/dict/set comprehensions are syntactic sugar for
+# for-loops with append. Generator expressions and generator functions
+# produce items on demand, using far less memory for large sequences.
+
+# List comprehension
+squares = [x**2 for x in range(10)]
+# Same as:
+# squares = []
+# for x in range(10):
+#     squares.append(x**2)
+
+# With condition
+evens = [x for x in range(20) if x % 2 == 0]
+
+# Nested loops
+matrix = [(x, y) for x in range(3) for y in range(3)]
+# [(0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)]
+
+# if-else in comprehension
+labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
+
+# Dict comprehension
+square_dict = {x: x**2 for x in range(10)}
+even_squares = {x: x**2 for x in range(20) if x % 2 == 0}
+inverted = {v: k for k, v in {"a": 1, "b": 2}.items()}
+
+# Set comprehension
+unique_lengths = {len(word) for word in ["hello", "world", "hi", "there"]}
+
+# Generator expression — memory efficient
+# Uses () instead of []
+gen = (x**2 for x in range(1000000))
+# No list is created — values computed one at a time
+
+print(next(gen))                # 0
+print(next(gen))                # 1
+# Can be used in functions that accept iterables
+total = sum(x**2 for x in range(1000))  # note: extra () not needed
+
+# Generator function with yield
+def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+fib = fibonacci()
+print(next(fib))                # 0
+print(next(fib))                # 1
+print(next(fib))                # 1
+print(next(fib))                # 2
+
+# Generator with termination
+def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+for i in countdown(5):
+    print(i)                    # 5, 4, 3, 2, 1
+
+# yield from — delegate to sub-generator
+def flatten(nested):
+    for item in nested:
+        if isinstance(item, list):
+            yield from flatten(item)
+        else:
+            yield item
+
+nested = [1, [2, [3, 4], 5], 6]
+print(list(flatten(nested)))    # [1, 2, 3, 4, 5, 6]
+
+# Generator.send(), .throw(), .close()
+def coroutine():
+    value = yield "ready"
+    while True:
+        value = yield f"received: {value}"
+
+c = coroutine()
+print(next(c))                  # "ready"  (initialize)
+print(c.send("hello"))          # "received: hello"
+print(c.send(42))               # "received: 42"
+c.close()                       # terminates generator
+
+# Memory efficiency comparison
+import sys
+list_comp = [x for x in range(10000)]
+gen_expr = (x for x in range(10000))
+print(sys.getsizeof(list_comp)) # large (list)
+print(sys.getsizeof(gen_expr))  # tiny (generator object)
+
+
+# 13. MODULES & PACKAGES
+# =======================
+# Easy definition: Modules are .py files containing Python code.
+# Packages are directories of modules with an __init__.py.
+# In-depth: The import system searches sys.path for modules.
+# Each module is executed once and cached in sys.modules.
+# The __name__ == "__main__" pattern lets files be both imported and
+# run directly.
+
+# Import styles
+import math                    # import the whole module
+from math import sqrt, pi     # import specific names
+import math as m               # import with alias
+from math import sqrt as square_root  # alias individual name
+from math import *             # import all public names (discouraged)
+
+# __name__ == "__main__" pattern
+# Put this at the bottom of every module meant to be run directly:
+# if __name__ == "__main__":
+#     main()
+
+# When run directly: __name__ == "__main__"
+# When imported: __name__ == module filename (without .py)
+
+# Creating modules — just save a .py file
+# my_module.py:
+#   def greet():
+#       return "Hello from my_module!"
+#   if __name__ == "__main__":
+#       print(greet())
+#
+# Then: from my_module import greet
+
+# Packages — directory with __init__.py
+# my_package/
+#   __init__.py      # can be empty; runs when package is imported
+#   module_a.py
+#   module_b.py
+#
+# from my_package import module_a
+# from my_package.module_b import some_function
+
+# sys.path — where Python looks for modules
+import sys
+print(sys.path)                 # list of directories Python searches
+
+# Adding custom path
+# sys.path.append("/path/to/my_modules")
+
+# PYTHONPATH environment variable
+# $ export PYTHONPATH=/path/to/modules:$PYTHONPATH
+
+# pip — package installer
+# $ pip install requests
+# $ pip install numpy==1.21.0
+# $ pip install "pandas>=1.3"
+# $ pip uninstall requests
+# $ pip list  # list installed packages
+# $ pip freeze  # list installed packages with versions
+# $ pip freeze > requirements.txt
+# $ pip install -r requirements.txt
+
+# dir() and help()
+print(dir(math))                # list all names in math module
+# help(math.sqrt)               # show documentation (opens pager)
+
+
+# 14. FILE I/O
+# =============
+# Easy definition: File I/O lets you read from and write to files on
+# disk. The built-in open() function is the primary interface.
+# In-depth: Always use the with statement (context manager) for file
+# operations — it ensures the file is properly closed even if an error
+# occurs. Files can be opened in text mode (default) or binary mode.
+
+# Opening and reading files
+file = open("example.txt", "r")  # open for reading
+content = file.read()            # read entire file as string
+file.close()                     # always close! (but with is better)
+
+# Using context manager (preferred)
+with open("example.txt", "r") as f:
+    content = f.read()          # auto-closed after block
+
+# Read modes
+with open("example.txt", "r") as f:
+    entire = f.read()           # whole file as one string
+    f.seek(0)                   # go back to beginning
+    line = f.readline()         # read one line
+    f.seek(0)
+    lines = f.readlines()       # list of all lines
+
+# Iterating over lines (memory efficient)
+with open("large_file.txt", "r") as f:
+    for line in f:
+        print(line.strip())
+
+# Writing to files
+with open("output.txt", "w") as f:
+    f.write("Hello, World!\\n")
+    f.write("Second line\\n")
+
+with open("output.txt", "a") as f:  # append mode
+    f.write("Third line (appended)\\n")
+
+# Write multiple lines
+lines = ["line 1", "line 2", "line 3"]
+with open("output.txt", "w") as f:
+    f.writelines(line + "\\n" for line in lines)
+
+# File modes
+# "r"  — read (default)
+# "w"  — write (overwrites)
+# "a"  — append
+# "r+" — read and write (no truncate)
+# "w+" — read and write (truncates)
+# "a+" — read and append
+# "x"  — exclusive creation (fails if file exists)
+# "b"  — binary mode (combine: "rb", "wb")
+# "t"  — text mode (default, combine: "rt", "wt")
+
+# Binary mode
+with open("image.jpg", "rb") as f:
+    data = f.read()
+    print(len(data))            # number of bytes
+
+with open("copy.jpg", "wb") as f:
+    f.write(data)
+
+# File encoding
+with open("file.txt", "r", encoding="utf-8") as f:
+    text = f.read()
+
+with open("file.txt", "w", encoding="utf-8") as f:
+    f.write("Unicode text: é, ñ, ü, 你好")
+
+# seek() and tell()
+with open("example.txt", "r") as f:
+    print(f.tell())             # 0 (current position)
+    f.read(10)                  # read 10 characters
+    print(f.tell())             # 10
+    f.seek(0)                   # back to beginning
+    f.seek(10)                  # skip to byte/char 10
+    f.seek(-5, 1)               # 5 back from current position
+    f.seek(0, 2)                # seek to end (for getting file size)
+
+# os.path — path manipulation (legacy)
+import os
+print(os.path.exists("file.txt"))
+print(os.path.isfile("file.txt"))
+print(os.path.isdir("mydir"))
+print(os.path.join("dir", "subdir", "file.txt"))
+
+# pathlib — modern path handling
+from pathlib import Path
+p = Path("dir/subdir/file.txt")
+print(p.parent)                 # dir/subdir
+print(p.name)                   # file.txt
+print(p.stem)                   # file
+print(p.suffix)                 # .txt
+print(p.exists())
+print(p.is_file())
+print(p.is_dir())
+
+# Path operations
+Path("new_dir").mkdir(exist_ok=True)
+Path("new_dir/new_file.txt").write_text("hello")
+text = Path("new_dir/new_file.txt").read_text()
+Path("new_dir/new_file.txt").rename("new_dir/renamed.txt")
+# Path("new_dir/renamed.txt").unlink()  # delete file
+
+# tempfile — temporary files
+import tempfile
+with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=True) as f:
+    f.write("temporary content")
+    print(f.name)               # path to temp file
+    # file is auto-deleted when context exits
+
+# temp directory
+with tempfile.TemporaryDirectory() as tmpdir:
+    path = Path(tmpdir) / "test.txt"
+    path.write_text("hello")
+    # dir is auto-deleted when context exits
+
+# shutil — high-level file operations
+import shutil
+# shutil.copy("source.txt", "dest.txt")         # copy file
+# shutil.copytree("source_dir", "dest_dir")     # copy directory
+# shutil.move("source.txt", "dest/location/")   # move file
+# shutil.rmtree("dir_to_delete")                # delete directory (careful!)
+
+
+# 15. EXCEPTION HANDLING
+# =======================
+# Easy definition: Exceptions handle runtime errors gracefully without
+# crashing the program. Use try/except blocks.
+# In-depth: Python uses exceptions for error handling — both built-in
+# errors and custom ones. The try block runs code that might fail.
+# except catches specific exceptions. else runs if no exception.
+# finally always runs (for cleanup).
+
+# Basic try/except
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Can't divide by zero!")
+
+# Catching specific exception types
+try:
+    num = int(input("Enter a number: "))
+    result = 100 / num
+except ValueError:
+    print("That's not a valid number!")
+except ZeroDivisionError:
+    print("Number can't be zero!")
+
+# Multiple exceptions in one except
+try:
+    val = [1, 2, 3][10]
+except (IndexError, KeyError, TypeError) as e:
+    print(f"Caught: {e}")
+
+# Catching exception object
+try:
+    x = 1 / 0
+except ZeroDivisionError as e:
+    print(f"Error: {e}")        # "division by zero"
+    print(f"Type: {type(e)}")   # <class 'ZeroDivisionError'>
+
+# try/except/else
+try:
+    num = int(input("Enter number: "))
+    result = 100 / num
+except ValueError:
+    print("Invalid input")
+except ZeroDivisionError:
+    print("Zero not allowed")
+else:
+    print(f"Result: {result}")  # runs only if no exception
+
+# finally — always runs
+try:
+    f = open("file.txt", "r")
+    data = f.read()
+except FileNotFoundError:
+    print("File not found")
+finally:
+    f.close()                   # always executed
+
+# raise — manually raise an exception
+def withdraw(balance, amount):
+    if amount > balance:
+        raise ValueError("Insufficient funds")
+    return balance - amount
+
+# raise from — chain exceptions
+try:
+    try:
+        x = 1 / 0
+    except ZeroDivisionError as e:
+        raise RuntimeError("Computation failed") from e
+except RuntimeError as e:
+    print(f"Error: {e}")
+    print(f"Caused by: {e.__cause__}")
+
+# Custom exception classes
+class InsufficientFundsError(Exception):
+    """Raised when account balance is insufficient."""
+    def __init__(self, balance, amount):
+        self.balance = balance
+        self.amount = amount
+        self.missing = amount - balance
+        super().__init__(f"Need {self.missing} more")
+
+try:
+    raise InsufficientFundsError(100, 150)
+except InsufficientFundsError as e:
+    print(e.missing)            # 50
+
+# Common built-in exceptions
+# ValueError     — invalid value (int("abc"))
+# TypeError      — wrong type (len(5))
+# IndexError     — list index out of range
+# KeyError       — dict key not found
+# AttributeError — object has no attribute
+# FileNotFoundError — file doesn't exist
+# ZeroDivisionError — division by zero
+# ImportError    — import failed
+# RuntimeError   — general runtime error
+# StopIteration  — end of iterator (next() on exhausted iterator)
+# NameError      — variable not defined
+# SyntaxError    — invalid Python syntax
+
+# assert — debugging assertion
+def divide(a, b):
+    assert b != 0, "Division by zero!"
+    return a / b
+
+# assert can be disabled with -O flag: $ python -O script.py
+
+# try/finally for cleanup (no except)
+# Useful when you need cleanup but let exception propagate
+def read_file(path):
+    f = open(path, "r")
+    try:
+        return f.read()
+    finally:
+        f.close()               # file closed even if read() fails
+
+
+# 16. OOP — CLASSES & OBJECTS
+# ============================
+# Easy definition: Classes are blueprints for creating objects (instances).
+# They bundle data (attributes) and behavior (methods).
+# In-depth: Everything in Python is an object. The __init__ method
+# initializes new instances. self refers to the instance itself.
+# Class variables are shared across instances; instance variables
+# are unique to each instance.
+
+# Basic class
+class Dog:
+    species = "Canis familiaris"  # class variable (shared)
+
+    def __init__(self, name, age):  # constructor
+        self.name = name            # instance variable
+        self.age = age
+
+    def bark(self):                 # instance method
+        return f"{self.name} says Woof!"
+
+    def __str__(self):              # string representation
+        return f"{self.name} ({self.age})"
+
+# Creating objects (instances)
+buddy = Dog("Buddy", 5)
+max_dog = Dog("Max", 3)
+
+print(buddy.name)                   # "Buddy"
+print(buddy.bark())                 # "Buddy says Woof!"
+print(Dog.species)                  # "Canis familiaris" (class variable)
+print(buddy.species)                # also accessible via instance
+
+# Class variables are shared
+Dog.species = "Canis lupus"
+print(buddy.species)                # "Canis lupus"
+
+# Instance variables are separate
+buddy.age = 6
+print(buddy.age)                    # 6
+print(max_dog.age)                  # 3
+
+# Instance methods, class methods, static methods
+class MyClass:
+    class_var = 0
+
+    def __init__(self, value):
+        self.value = value
+
+    def instance_method(self):
+        """Regular method — receives instance as first arg."""
+        return f"instance method: {self.value}"
+
+    @classmethod
+    def class_method(cls):
+        """Receives class (not instance) as first arg."""
+        cls.class_var += 1
+        return f"class method: {cls.class_var}"
+
+    @staticmethod
+    def static_method(x, y):
+        """No self or cls — just a function in the class namespace."""
+        return x + y
+
+obj = MyClass(42)
+print(obj.instance_method())        # "instance method: 42"
+print(MyClass.class_method())       # "class method: 1"
+print(MyClass.static_method(3, 4))  # 7
+
+# @property decorator — computed attributes
+class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        if value < 0:
+            raise ValueError("Radius cannot be negative")
+        self._radius = value
+
+    @property
+    def area(self):
+        return math.pi * self._radius ** 2
+
+    @property
+    def diameter(self):
+        return self._radius * 2
+
+c = Circle(5)
+print(c.radius)                     # 5  (uses @property getter)
+c.radius = 10                       # uses @radius.setter
+print(c.area)                       # 314.159...  (computed property)
+# c.area = 100                      # AttributeError — no setter
+
+# Public, protected, private naming conventions
+# No actual access control — all are conventions
+class Person:
+    def __init__(self, name, age, ssn):
+        self.name = name             # public
+        self._age = age              # "protected" — internal use
+        self.__ssn = ssn             # "private" — name mangling
+
+    def display(self):
+        print(f"{self.name}, {self._age}")
+        # print(self.__ssn)           # OK inside class
+
+p = Person("Alice", 30, "123-45-6789")
+print(p.name)                        # "Alice"
+print(p._age)                        # "protected" but accessible
+# print(p.__ssn)                     # AttributeError — name mangled
+print(p._Person__ssn)                # "123-45-6789" (mangled name)
+
+# __slots__ — memory optimization
+class Point:
+    __slots__ = ("x", "y")          # only these attributes allowed
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(3, 4)
+# p.z = 5  # AttributeError: 'Point' has no attribute 'z'
+
+# Introspection utilities
+class Sample:
+    def __init__(self):
+        self.a = 1
+        self.b = 2
+
+s = Sample()
+print(dir(s))                       # list of attributes and methods
+print(hasattr(s, "a"))              # True
+print(getattr(s, "a"))              # 1
+print(getattr(s, "c", "default"))   # "default" (not found)
+setattr(s, "d", 4)                  # s.d = 4
+print(isinstance(s, Sample))        # True
+print(issubclass(Sample, object))   # True
+
+
+# 17. INHERITANCE
+# ================
+# Easy definition: Inheritance lets a class (child) reuse attributes
+# and methods from another class (parent).
+# In-depth: Python supports single and multiple inheritance.
+# super() calls the parent class's methods. MRO (Method Resolution
+# Order) determines which parent's method is called in diamond
+# hierarchies. Abstract base classes enforce interface contracts.
+
+# Basic inheritance
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        raise NotImplementedError("Subclasses must implement")
+
+    def __str__(self):
+        return f"{self.name} ({type(self).__name__})"
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+animals = [Dog("Buddy"), Cat("Whiskers")]
+for animal in animals:
+    print(animal.speak())
+
+# super() — call parent method
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+    def perimeter(self):
+        return 2 * (self.width + self.height)
+
+class Square(Rectangle):
+    def __init__(self, side):
+        super().__init__(side, side)  # calls Rectangle.__init__
+
+    def __str__(self):
+        return f"Square(side={self.width})"
+
+sq = Square(5)
+print(sq.area())                    # 25
+
+# Multiple inheritance
+class Flyer:
+    def fly(self):
+        return "Flying"
+
+class Swimmer:
+    def swim(self):
+        return "Swimming"
+
+class Duck(Flyer, Swimmer):
+    def quack(self):
+        return "Quack!"
+
+d = Duck()
+print(d.fly())                      # "Flying"  (from Flyer)
+print(d.swim())                     # "Swimming" (from Swimmer)
+
+# MRO — Method Resolution Order
+# Determines which method is called in diamond inheritance
+print(Duck.__mro__)
+# (<class '__main__.Duck'>, <class '__main__.Flyer'>,
+#  <class '__main__.Swimmer'>, <class 'object'>)
+
+# Diamond inheritance — MRO prevents double calls
+class A:
+    def method(self):
+        return "A"
+
+class B(A):
+    def method(self):
+        return "B -> " + super().method()
+
+class C(A):
+    def method(self):
+        return "C -> " + super().method()
+
+class D(B, C):
+    def method(self):
+        return "D -> " + super().method()
+
+d = D()
+print(d.method())  # "D -> B -> C -> A"
+# MRO: D -> B -> C -> A (Python uses C3 linearization)
+
+# Abstract base classes (ABC)
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+    @abstractmethod
+    def perimeter(self):
+        pass
+
+# Cannot instantiate ABC directly:
+# s = Shape()  # TypeError: Can't instantiate abstract class
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return math.pi * self.radius ** 2
+
+    def perimeter(self):
+        return 2 * math.pi * self.radius
+
+# Mixins — provide specific behavior
+class LogMixin:
+    def log(self, message):
+        print(f"[{type(self).__name__}] {message}")
+
+class JsonSerializableMixin:
+    def to_json(self):
+        import json
+        return json.dumps(self.__dict__)
+
+class User(LogMixin, JsonSerializableMixin):
+    def __init__(self, name):
+        self.name = name
+        self.log(f"Created user: {name}")
+
+u = User("Alice")
+print(u.to_json())  # {"name": "Alice"}
+
+
+# 18. MAGIC METHODS (DUNDER METHODS)
+# ===================================
+# Easy definition: Magic methods are special methods with double
+# underscores that define object behavior for built-in operations.
+# In-depth: Dunder methods allow custom classes to work with Python's
+# built-in functions and operators (+, len(), str(), ==, etc.).
+# They are rarely called directly — Python calls them implicitly.
+
+# __str__ and __repr__
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def __repr__(self):
+        """Unambiguous representation — for developers."""
+        return f"Person('{self.name}', {self.age})"
+
+    def __str__(self):
+        """Readable representation — for users."""
+        return f"{self.name} ({self.age})"
+
+p = Person("Alice", 30)
+print(repr(p))                      # Person('Alice', 30)
+print(str(p))                       # Alice (30)
+print(p)                            # same as str(p)
+
+# __len__, __getitem__, __setitem__, __delitem__, __contains__
+class CustomList:
+    def __init__(self, items):
+        self._items = list(items)
+
+    def __len__(self):
+        return len(self._items)
+
+    def __getitem__(self, index):
+        return self._items[index]
+
+    def __setitem__(self, index, value):
+        self._items[index] = value
+
+    def __delitem__(self, index):
+        del self._items[index]
+
+    def __contains__(self, item):
+        return item in self._items
+
+    def __repr__(self):
+        return repr(self._items)
+
+cl = CustomList([1, 2, 3, 4, 5])
+print(len(cl))                      # 5  (calls __len__)
+print(cl[2])                        # 3  (calls __getitem__)
+cl[2] = 99                          # (calls __setitem__)
+print(99 in cl)                     # True  (calls __contains__)
+del cl[2]                           # (calls __delitem__)
+
+# __iter__ and __next__ — make objects iterable
+class Countdown:
+    def __init__(self, start):
+        self.start = start
+
+    def __iter__(self):
+        self.n = self.start + 1
+        return self
+
+    def __next__(self):
+        self.n -= 1
+        if self.n < 0:
+            raise StopIteration
+        return self.n
+
+for i in Countdown(5):
+    print(i)                        # 5, 4, 3, 2, 1
+
+# __call__ — make objects callable like functions
+class Multiplier:
+    def __init__(self, factor):
+        self.factor = factor
+
+    def __call__(self, x):
+        return x * self.factor
+
+double = Multiplier(2)
+triple = Multiplier(3)
+print(double(5))                    # 10
+print(triple(5))                    # 15
+
+# __enter__ and __exit__ — context managers
+class ManagedFile:
+    def __init__(self, filename, mode="r"):
+        self.filename = filename
+        self.mode = mode
+
+    def __enter__(self):
+        self.file = open(self.filename, self.mode)
+        return self.file
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.file.close()
+        # Return True to suppress exceptions, False to propagate
+        return False
+
+with ManagedFile("test.txt", "w") as f:
+    f.write("Hello from custom context manager!")
+
+# __eq__, __ne__, __lt__, __le__, __gt__, __ge__ — comparisons
+class Money:
+    def __init__(self, amount):
+        self.amount = amount
+
+    def __eq__(self, other):
+        return self.amount == other.amount
+
+    def __lt__(self, other):
+        return self.amount < other.amount
+
+    def __le__(self, other):
+        return self.amount <= other.amount
+
+    def __hash__(self):
+        return hash(self.amount)
+
+    def __repr__(self):
+        return f"Money({self.amount})"
+
+m1 = Money(100)
+m2 = Money(200)
+print(m1 == m2)                     # False
+print(m1 < m2)                      # True
+print(m1 <= m2)                     # True
+
+# with total_ordering decorator — fill in remaining comparisons
+from functools import total_ordering
+
+@total_ordering
+class Price:
+    def __init__(self, amount):
+        self.amount = amount
+
+    def __eq__(self, other):
+        return self.amount == other.amount
+
+    def __lt__(self, other):
+        return self.amount < other.amount
+
+    # remaining (<=, >, >=) are derived from == and <
+
+# __add__ and other arithmetic operators
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return Vector(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, scalar):
+        return Vector(self.x * scalar, self.y * scalar)
+
+    def __rmul__(self, scalar):     # scalar * vector
+        return self.__mul__(scalar)
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(1, 2)
+v2 = Vector(3, 4)
+print(v1 + v2)                      # Vector(4, 6)
+print(v1 - v2)                      # Vector(-2, -2)
+print(v1 * 3)                       # Vector(3, 6)
+print(3 * v1)                       # Vector(3, 6) (via __rmul__)
+
+# __bool__ — defines truthiness
+class MyList:
+    def __init__(self, items):
+        self.items = items
+
+    def __bool__(self):
+        return len(self.items) > 0
+
+print(bool(MyList([1, 2, 3])))      # True
+print(bool(MyList([])))              # False
+
+# __new__ vs __init__ — object creation lifecycle
+class Singleton:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self, value):
+        self.value = value
+
+a = Singleton(1)
+b = Singleton(2)
+print(a is b)                       # True (same instance)
+print(a.value)                      # 2  (overwritten by second init)
+
+# __del__ — destructor (called when object is garbage collected)
+class Resource:
+    def __init__(self, name):
+        self.name = name
+        print(f"Acquired: {name}")
+
+    def __del__(self):
+        print(f"Released: {name}")
+
+
+# 19. DECORATORS
+# ===============
+# Easy definition: Decorators are functions that modify the behavior
+# of other functions or classes using the @ syntax.
+# In-depth: A decorator is a callable that takes a function as argument
+# and returns a new function. They're commonly used for logging,
+# timing, access control, caching, and registration.
+
+# Basic decorator — function that wraps another function
+def simple_decorator(func):
+    def wrapper():
+        print("Before the function call")
+        func()
+        print("After the function call")
+    return wrapper
+
+@simple_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# Before the function call
+# Hello!
+# After the function call
+
+# Decorator with arguments — preserve original function signature
+def logger(func):
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__} with {args}, {kwargs}")
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} returned {result}")
+        return result
+    return wrapper
+
+@logger
+def add(a, b):
+    return a + b
+
+add(3, 5)
+# Calling add with (3, 5), {}
+# add returned 8
+
+# Preserving metadata with @wraps
+from functools import wraps
+
+def logger_better(func):
+    @wraps(func)                    # preserves __name__, __doc__, etc.
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+@logger_better
+def greet(name):
+    """Say hello to someone."""
+    return f"Hello, {name}!"
+
+print(greet.__name__)               # "greet"  (not "wrapper")
+print(greet.__doc__)                # "Say hello to someone."
+
+# Decorators with arguments
+def repeat(n):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for _ in range(n):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+@repeat(3)
+def say(message):
+    print(message)
+
+say("Hello!")                       # prints "Hello!" 3 times
+
+# Multiple decorators — applied bottom up
+def bold(func):
+    def wrapper():
+        return f"<b>{func()}</b>"
+    return wrapper
+
+def italic(func):
+    def wrapper():
+        return f"<i>{func()}</i>"
+    return wrapper
+
+@bold
+@italic
+def greet():
+    return "Hello"
+
+print(greet())                      # <b><i>Hello</i></b>
+# Equivalent to: bold(italic(greet))
+
+# Class decorators
+def add_repr(cls):
+    def __repr__(self):
+        attrs = ", ".join(f"{k}={v}" for k, v in self.__dict__.items())
+        return f"{cls.__name__}({attrs})"
+    cls.__repr__ = __repr__
+    return cls
+
+@add_repr
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(3, 4)
+print(p)                            # Point(x=3, y=4)
+
+# Class-based decorators (using __call__)
+class CountCalls:
+    def __init__(self, func):
+        self.func = func
+        self.count = 0
+
+    def __call__(self, *args, **kwargs):
+        self.count += 1
+        print(f"Call {self.count} of {self.func.__name__}")
+        return self.func(*args, **kwargs)
+
+@CountCalls
+def hello():
+    print("Hi!")
+
+hello()                             # Call 1 of hello
+hello()                             # Call 2 of hello
+
+# Built-in decorators
+# @property — already covered in OOP section
+# @staticmethod — already covered
+# @classmethod — already covered
+
+
+# 20. BUILT-IN FUNCTIONS (IMPORTANT ONES)
+# =========================================
+# Easy definition: Python has many built-in functions available
+# without importing anything. These are always ready to use.
+# In-depth: Built-in functions cover type conversion, iteration,
+# math, I/O, introspection, and more. They are loaded from builtins
+# module but always available by default.
+
+# map() — apply function to every item in iterable
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, numbers))
+# [1, 4, 9, 16, 25]
+
+# With multiple iterables
+a = [1, 2, 3]
+b = [10, 20, 30]
+sums = list(map(lambda x, y: x + y, a, b))
+# [11, 22, 33]
+
+# filter() — keep items where function returns True
+evens = list(filter(lambda x: x % 2 == 0, range(10)))
+# [0, 2, 4, 6, 8]
+
+# reduce() — from functools, accumulate value
+from functools import reduce
+total = reduce(lambda a, b: a + b, [1, 2, 3, 4, 5])
+# 15
+
+product = reduce(lambda a, b: a * b, [1, 2, 3, 4, 5])
+# 120
+
+# sorted() — return sorted list copy
+print(sorted([3, 1, 4, 1, 5, 9, 2]))
+# [1, 1, 2, 3, 4, 5, 9]
+
+# With key function
+words = ["apple", "kiwi", "banana", "cherry"]
+print(sorted(words, key=len))       # ["kiwi", "apple", "banana", "cherry"]
+print(sorted(words, key=len, reverse=True))
+# ["banana", "cherry", "apple", "kiwi"]
+
+# Sort by last character
+print(sorted(words, key=lambda s: s[-1]))
+# ["banana", "apple", "cherry", "kiwi"]
+
+# all() and any()
+print(all([True, True, False]))     # False
+print(any([False, False, True]))    # True
+
+# With generators — short-circuit evaluation
+print(all(x > 0 for x in [1, 2, 3]))    # True
+print(any(x < 0 for x in [1, 2, -3]))   # True
+
+# isinstance()
+print(isinstance(42, int))              # True
+print(isinstance("hello", (str, list)))  # True  (checks against tuple)
+
+# hasattr(), getattr(), setattr() — covered in OOP section
+
+# len()
+print(len("hello"))                     # 5
+print(len([1, 2, 3]))                   # 3
+print(len({"a": 1, "b": 2}))            # 2
+
+# sum(), min(), max()
+print(sum([1, 2, 3, 4, 5]))             # 15
+print(sum([1, 2, 3], start=10))         # 16  (start value)
+print(min(3, 1, 4, 1, 5))              # 1
+print(max("hello"))                     # "o"  (lexicographic)
+
+# abs(), round()
+print(abs(-5))                          # 5
+print(round(3.14159, 3))                # 3.142
+
+# range()
+r = range(5)                            # 0, 1, 2, 3, 4
+r = range(2, 8)                         # 2, 3, 4, 5, 6, 7
+r = range(0, 10, 2)                     # 0, 2, 4, 6, 8
+
+# iter() and next()
+it = iter([1, 2, 3])
+print(next(it))                         # 1
+print(next(it))                         # 2
+print(next(it))                         # 3
+# print(next(it))                       # StopIteration
+
+# type() and id()
+print(type(42))                         # <class 'int'>
+print(id("hello"))                      # memory address (int)
+
+# dir() — list attributes
+print(dir([]))                          # all list methods
+
+# vars() — __dict__ of an object
+class Demo:
+    def __init__(self):
+        self.x = 10
+        self.y = 20
+
+d = Demo()
+print(vars(d))                          # {"x": 10, "y": 20}
+
+# repr() and str()
+import datetime
+now = datetime.datetime.now()
+print(repr(now))                        # "datetime.datetime(2026, 6, 27, ...)"
+print(str(now))                         # "2026-06-27 14:30:00..."
+
+# eval() and exec()
+result = eval("2 + 3 * 4")               # 14
+# exec("x = 10")                         # executes as code
+
+# open(), print(), input() — covered in I/O sections
+
+# zip(), reversed(), slice()
+s = slice(1, 5, 2)
+print([0, 1, 2, 3, 4, 5][s])            # [1, 3]
+
+# staticmethod(), classmethod(), property() — covered in OOP
+
+# globals() and locals()
+print(list(globals().keys())[:3])        # global namespace keys
+print(locals())                          # local namespace
+
+# chr(), ord()
+print(ord("A"))                         # 65
+print(chr(65))                          # "A"
+
+# bin(), hex(), oct(), format()
+print(bin(42))                          # "0b101010"
+print(hex(255))                         # "0xff"
+print(oct(8))                           # "0o10"
+print(format(255, "b"))                 # "11111111"  (binary without prefix)
+print(format(255, "x"))                 # "ff"
+print(format(255, "04x"))               # "00ff"
+print(format(0.25, ".2%"))              # "25.00%"
+
+
+# 21. TYPE HINTS
+# ===============
+# Easy definition: Type hints annotate variables, function parameters,
+# and return values with expected types. They are not enforced at
+# runtime but help with tooling and documentation.
+# In-depth: Type hints are defined in PEP 484. They are ignored at
+# runtime but checked by static type checkers (mypy, pyright).
+# The typing module provides complex types like List, Dict, Optional.
+
+# Basic type hints
+name: str = "Alice"
+age: int = 30
+height: float = 5.7
+active: bool = True
+
+# Function parameter and return type hints
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+def add(x: int, y: int) -> int:
+    return x + y
+
+def nothing(x: int, y: int) -> None:
+    print(x + y)
+
+# Default values with hints
+def power(base: float, exp: int = 2) -> float:
+    return base ** exp
+
+# Complex types (from typing module)
+from typing import List, Dict, Tuple, Set, Optional, Any, Union, Callable
+
+# List of integers
+def process_numbers(nums: List[int]) -> List[int]:
+    return [x * 2 for x in nums]
+
+# Dictionary mapping string to int
+def get_counts(items: List[str]) -> Dict[str, int]:
+    return {item: items.count(item) for item in set(items)}
+
+# Tuple with specific types
+def get_point() -> Tuple[float, float]:
+    return (3.0, 4.0)
+
+# Tuple with variable length — homogenous
+def get_coords() -> Tuple[float, ...]:
+    return (1.0, 2.0, 3.0)
+
+# Set
+def unique(items: List[int]) -> Set[int]:
+    return set(items)
+
+# Optional — could be None
+def find_user(user_id: int) -> Optional[str]:
+    if user_id == 1:
+        return "Alice"
+    return None
+
+# Optional is shorthand for Union[str, None]
+def find_user2(user_id: int) -> str | None:
+    # Python 3.10+ inline union syntax
+    if user_id == 1:
+        return "Alice"
+    return None
+
+# Union — multiple possible types
+def parse_number(value: str) -> Union[int, float]:
+    if "." in value:
+        return float(value)
+    return int(value)
+
+# Python 3.10+ inline union syntax
+def parse_number2(value: str) -> int | float:
+    if "." in value:
+        return float(value)
+    return int(value)
+
+# Any — any type allowed
+def log(value: Any) -> None:
+    print(value)
+
+# Callable — function type
+# Callable[[Param1Type, Param2Type], ReturnType]
+def apply(func: Callable[[int, int], int], a: int, b: int) -> int:
+    return func(a, b)
+
+print(apply(lambda x, y: x + y, 3, 5))  # 8
+
+# Type — the class itself, not an instance
+def create_instance(cls: type, *args: Any) -> Any:
+    return cls(*args)
+
+# Forward references (class that hasn't been defined yet)
+class TreeNode:
+    def __init__(self, value: int, left: Optional["TreeNode"] = None):
+        self.value = value
+        self.left = left
+
+# from __future__ import annotations — makes all hints strings
+# (evaluated lazily, no forward reference needed)
+from __future__ import annotations
+
+# Now forward references work without quotes
+# (implicitly all annotations are strings)
+
+# Self type (Python 3.11+)
+# from typing import Self
+# class MyClass:
+#     def copy(self) -> Self:
+#         ...
+
+# TypeVar — generic types
+from typing import TypeVar
+
+T = TypeVar("T")
+
+def first(items: List[T]) -> T:
+    return items[0]
+
+# Constrained TypeVar
+NumT = TypeVar("NumT", int, float)
+
+def double(value: NumT) -> NumT:
+    return value * 2
+
+# TypedDict — typed dictionary with specific keys
+from typing import TypedDict
+
+class PersonDict(TypedDict):
+    name: str
+    age: int
+    city: str
+
+# pd: PersonDict = {"name": "Alice", "age": 30, "city": "NYC"}
+
+
+# 22. INPUT & OUTPUT
+# ===================
+# Easy definition: input() reads user input as a string. print()
+# outputs to the console with customizable formatting.
+# In-depth: input() always returns a string (convert with int(),
+# float() as needed). print() accepts sep, end, and file parameters.
+
+# User input
+name = input("Enter your name: ")   # returns string
+age_str = input("Enter your age: ")
+age = int(age_str)                  # convert to int
+
+# input() always returns a string
+value = input("Enter a number: ")
+print(type(value))                  # <class 'str'>
+
+# print() options
+print("Hello", "World")             # "Hello World"  (default sep=" ")
+print("Hello", "World", sep="-")    # "Hello-World"
+print("Hello", end="!!!\\n")         # "Hello!!!"  (override newline)
+print("Loading", end="")
+print(".", end="")
+print(".")                          # "Loading.."
+
+# print to a file
+with open("output.txt", "w") as f:
+    print("Hello, file!", file=f)   # writes to file instead of console
+
+# print with formatting (f-strings)
+name = "Alice"
+age = 30
+print(f"{name:10} is {age:3d} years old")
+# "Alice      is  30 years old"
+
+# Pretty printing
+import pprint
+data = {
+    "name": "Alice",
+    "age": 30,
+    "pets": ["dog", "cat"],
+    "address": {
+        "street": "123 Main St",
+        "city": "NYC",
+        "zip": 10001,
+    },
+}
+pprint.pprint(data)                 # formatted, sorted keys
+# {'address': {'city': 'NYC', 'street': '123 Main St', 'zip': 10001},
+#  'age': 30,
+#  'name': 'Alice',
+#  'pets': ['dog', 'cat']}
+
+# pformat — get pretty string without printing
+formatted = pprint.pformat(data)
+
+
+# 23. JSON & DATA SERIALIZATION
+# ==============================
+# Easy definition: JSON (JavaScript Object Notation) is a lightweight
+# data interchange format. Python's json module handles encoding
+# (serialization) and decoding (deserialization).
+# In-depth: json.dumps() converts Python objects to JSON strings.
+# json.loads() parses JSON strings to Python objects. Custom objects
+# need a custom encoder/decoder.
+
+import json
+
+# Python to JSON (serialization)
+data = {
+    "name": "Alice",
+    "age": 30,
+    "is_student": False,
+    "scores": [95, 87, 92],
+    "address": None,
+}
+
+json_str = json.dumps(data)
+print(json_str)
+# {"name": "Alice", "age": 30, "is_student": false, "scores": [95, 87, 92], "address": null}
+
+# Pretty-print JSON
+json_pretty = json.dumps(data, indent=2)
+print(json_pretty)
+# {
+#   "name": "Alice",
+#   "age": 30,
+#   "is_student": false,
+#   ...
+# }
+
+# Sorting keys
+json_sorted = json.dumps(data, sort_keys=True, indent=2)
+
+# JSON to Python (deserialization)
+json_input = '{"name": "Bob", "age": 25, "active": true}'
+parsed = json.loads(json_input)
+print(parsed["name"])               # "Bob"
+print(parsed["age"])                # 25
+
+# Type mapping: JSON -> Python
+# object      -> dict
+# array       -> list
+# string      -> str
+# number      -> int or float
+# boolean     -> bool
+# null        -> None
+
+# File I/O with JSON
+# Write to file
+with open("data.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+# Read from file
+with open("data.json", "r") as f:
+    loaded = json.load(f)
+
+# Custom serialization
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+# Default approach — convert to dict first
+def person_to_dict(person: Person) -> dict:
+    return {"name": person.name, "age": person.age}
+
+p = Person("Alice", 30)
+json_str = json.dumps(p, default=person_to_dict)
+# {"name": "Alice", "age": 30}
+
+# Custom encoder
+class PersonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Person):
+            return {"name": obj.name, "age": obj.age}
+        return super().default(obj)
+
+json_str = json.dumps(p, cls=PersonEncoder)
+
+# Custom decoder
+def decode_person(d):
+    if "name" in d and "age" in d:
+        return Person(d["name"], d["age"])
+    return d
+
+p2 = json.loads(json_str, object_hook=decode_person)
+print(type(p2), p2.name)            # <class '__main__.Person'> Alice
+
+# Handling datetime
+from datetime import datetime
+
+def json_serial(obj):
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    raise TypeError(f"Type {type(obj)} not serializable")
+
+now = datetime.now()
+json.dumps({"time": now}, default=json_serial)
+# {"time": "2026-06-27T14:30:00"}
+
+
+# 24. DATETIME
+# =============
+# Easy definition: The datetime module provides classes for working
+# with dates, times, and time intervals.
+# In-depth: datetime combines date and time. date handles dates
+# (year, month, day). time handles time (hour, minute, second).
+# timedelta represents durations. strftime/strptime format/parse
+# date strings.
+
+from datetime import datetime, date, time, timedelta
+
+# Current date and time
+now = datetime.now()
+print(now)                          # 2026-06-27 14:30:00.123456
+print(now.year)                     # 2026
+print(now.month)                    # 6
+print(now.day)                      # 27
+print(now.hour)                     # 14
+print(now.minute)                   # 30
+print(now.second)                   # 0
+print(now.microsecond)              # 123456
+
+# Current date only
+today = date.today()
+print(today)                        # 2026-06-27
+
+# Creating specific dates and times
+d = date(2026, 6, 27)
+t = time(14, 30, 0)
+dt = datetime(2026, 6, 27, 14, 30, 0)
+
+# timedelta — time differences
+delta = timedelta(days=7, hours=3)
+future = now + delta
+past = now - timedelta(weeks=2)
+print(future)
+
+# timedelta features
+print(delta.days)                   # 7
+print(delta.seconds)                # 10800 (3 hours)
+print(delta.total_seconds())        # 615600.0
+
+# Difference between datetimes
+diff = future - now
+print(type(diff))                   # <class 'datetime.timedelta'>
+
+# strftime — format datetime to string
+dt = datetime(2026, 6, 27, 14, 30, 0)
+print(dt.strftime("%Y-%m-%d"))              # "2026-06-27"
+print(dt.strftime("%B %d, %Y"))             # "June 27, 2026"
+print(dt.strftime("%I:%M %p"))              # "02:30 PM"
+print(dt.strftime("%A, %d %B %Y at %H:%M")) # "Saturday, 27 June 2026 at 14:30"
+
+# Common format codes
+# %Y — year (4 digits)
+# %m — month (01-12)
+# %d — day (01-31)
+# %H — hour (00-23)
+# %I — hour (01-12)
+# %M — minute (00-59)
+# %S — second (00-59)
+# %p — AM/PM
+# %A — weekday full name
+# %a — weekday abbreviated
+# %B — month full name
+# %b — month abbreviated
+
+# strptime — parse string to datetime
+date_str = "2026-06-27 14:30:00"
+parsed = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+print(parsed)                       # 2026-06-27 14:30:00
+
+# time.sleep() — pause execution
+import time
+print("Start")
+time.sleep(1.5)                     # pause for 1.5 seconds
+print("After 1.5 seconds")
+
+# time.time() — Unix timestamp (performance measurement)
+start = time.time()
+# ... some operation ...
+end = time.time()
+print(f"Elapsed: {end - start:.4f} seconds")
+
+# time.perf_counter() — more precise timing
+start = time.perf_counter()
+# ... operation ...
+end = time.perf_counter()
+print(f"Elapsed: {end - start:.6f} seconds")
+
+
+# 25. REGULAR EXPRESSIONS (re MODULE)
+# ====================================
+# Easy definition: Regular expressions match patterns in text. The re
+# module provides search, match, findall, sub, and split functions.
+# In-depth: re.search() finds pattern anywhere in string. re.match()
+# matches from beginning only. re.findall() returns all matches.
+# re.sub() replaces matches. re.compile() pre-compiles for reuse.
+
+import re
+
+# re.search() — find pattern anywhere
+text = "The rain in Spain falls mainly on the plain"
+match = re.search(r"Spain", text)
+if match:
+    print(match.start())            # 14  (start index)
+    print(match.end())              # 19  (end index)
+    print(match.group())            # "Spain"
+    print(match.span())             # (14, 19)
+
+# re.match() — match from beginning only
+match = re.match(r"The", text)
+print(match.group() if match else None)  # "The"
+
+match = re.match(r"rain", text)
+print(match)                        # None (not at start)
+
+# re.findall() — all matches as list
+print(re.findall(r"ain", text))     # ['ain', 'ain', 'ain']
+
+# re.finditer() — iterator of match objects
+for match in re.finditer(r"\\w+ain", text):
+    print(match.group())            # "rain", "Spain", "plain"
+
+# re.sub() — replace matches
+result = re.sub(r"ain", "XXX", text)
+print(result)                       # "The rXXX in SpXXX falls mXXXly on the plXXX"
+
+# re.split() — split by pattern
+parts = re.split(r"\\s+", text)      # split on whitespace
+print(parts[:3])                    # ["The", "rain", "in"]
+
+# re.compile() — compile pattern for reuse
+pattern = re.compile(r"\\b\\w{4}\\b")  # 4-letter words
+matches = pattern.findall(text)
+print(matches)                      # ["rain", "spain", "main", "plain"]
+
+# Common patterns
+# .       — any character except newline
+# ^       — start of string
+# $       — end of string
+# *       — 0 or more repetitions
+# +       — 1 or more repetitions
+# ?       — 0 or 1 repetition
+# {n}     — exactly n repetitions
+# {n,}    — n or more repetitions
+# {n,m}   — between n and m repetitions
+# \\d      — digit [0-9]
+# \\D      — non-digit
+# \\w      — word character [a-zA-Z0-9_]
+# \\W      — non-word character
+# \\s      — whitespace [ \\t\\n\\r\\f\\v]
+# \\S      — non-whitespace
+# \\b      — word boundary
+# []      — character class
+# [^]     — negated character class
+# |       — OR
+# ()      — group
+# (?:)    — non-capturing group
+
+# Pattern examples
+# Match email
+email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+text2 = "Contact: alice@example.com or bob@test.org"
+emails = re.findall(email_pattern, text2)
+print(emails)                       # ["alice@example.com", "bob@test.org"]
+
+# Match phone numbers (US)
+phone_pattern = r"\\d{3}[-.]?\\d{3}[-.]?\\d{4}"
+text3 = "Call 555-123-4567 or 555.987.6543"
+phones = re.findall(phone_pattern, text3)
+print(phones)                       # ["555-123-4567", "555.987.6543"]
+
+# Match IP address
+ip_pattern = r"\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}"
+
+# Groups — extract parts
+log_line = "2026-06-27 14:30:00 ERROR: Something went wrong"
+pattern = r"(\\d{4}-\\d{2}-\\d{2}) (\\d{2}:\\d{2}:\\d{2}) (\\w+): (.+)"
+match = re.search(pattern, log_line)
+if match:
+    print(match.groups())           # ("2026-06-27", "14:30:00", "ERROR", "Something went wrong")
+    print(match.group(1))           # "2026-06-27"
+    print(match.group(2))           # "14:30:00"
+    print(match.group(3))           # "ERROR"
+    print(match.group(4))           # "Something went wrong"
+
+# Named groups (?P<name>...)
+pattern = r"(?P<date>\\d{4}-\\d{2}-\\d{2}) (?P<time>\\d{2}:\\d{2}:\\d{2})"
+match = re.search(pattern, log_line)
+if match:
+    print(match.group("date"))      # "2026-06-27"
+    print(match.group("time"))      # "14:30:00"
+
+# Flags
+# re.IGNORECASE (re.I) — case insensitive
+print(re.findall(r"spain", text, re.IGNORECASE))
+
+# re.MULTILINE (re.M) — ^ and $ match line starts/ends
+# re.DOTALL (re.S) — . matches newlines
+# re.VERBOSE (re.X) — allow whitespace and comments in pattern
+
+# Greedy vs non-greedy
+# * and + are greedy (match as much as possible)
+text4 = "<div>hello</div><div>world</div>"
+print(re.findall(r"<div>.*</div>", text4))      # greedy: entire string
+print(re.findall(r"<div>.*?</div>", text4))      # non-greedy: each tag
+
+
+# 26. WORKING WITH ITERATORS
+# ============================
+# Easy definition: Iterators are objects that produce values one at
+# a time using __next__(). When exhausted, they raise StopIteration.
+# In-depth: Any object with __iter__ and __next__ is an iterator.
+# The for loop calls iter() on the iterable, then next() repeatedly.
+# The itertools module provides powerful iterator combinators.
+
+# iter() and next()
+numbers = [1, 2, 3]
+it = iter(numbers)                  # get iterator from iterable
+print(next(it))                     # 1
+print(next(it))                     # 2
+print(next(it))                     # 3
+# print(next(it))                   # StopIteration
+
+# for loop is syntactic sugar for:
+it = iter(numbers)
+while True:
+    try:
+        value = next(it)
+        print(value)
+    except StopIteration:
+        break
+
+# Custom iterator class
+class Range:
+    def __init__(self, start, stop, step=1):
+        self.current = start
+        self.stop = stop
+        self.step = step
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current >= self.stop:
+            raise StopIteration
+        value = self.current
+        self.current += self.step
+        return value
+
+for i in Range(0, 5):
+    print(i)                        # 0, 1, 2, 3, 4
+
+# Iterator with two-way iteration
+class Fibonacci:
+    def __init__(self, max_count=10):
+        self.max_count = max_count
+        self.count = 0
+        self.a, self.b = 0, 1
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.count >= self.max_count:
+            raise StopIteration
+        self.count += 1
+        self.a, self.b = self.b, self.a + self.b
+        return self.a
+
+# itertools module
+from itertools import chain, cycle, repeat, product, permutations, combinations, groupby, count
+
+# chain — combine iterables sequentially
+combined = list(chain([1, 2, 3], [4, 5, 6]))
+print(combined)                     # [1, 2, 3, 4, 5, 6]
+
+# cycle — infinitely repeat an iterable
+counter = 0
+for item in cycle(["A", "B", "C"]):
+    print(item)
+    counter += 1
+    if counter > 5:
+        break
+# A, B, C, A, B, C
+
+# repeat — repeat a value N times
+print(list(repeat("X", 5)))         # ["X", "X", "X", "X", "X"]
+
+# count — infinite counter
+for i in count(10, 2):              # 10, 12, 14, 16, ...
+    if i > 20:
+        break
+    print(i)
+
+# product — Cartesian product
+print(list(product([1, 2], ["A", "B"])))
+# [(1, "A"), (1, "B"), (2, "A"), (2, "B")]
+
+print(list(product([1, 2], repeat=2)))
+# [(1, 1), (1, 2), (2, 1), (2, 2)]
+
+# permutations — all orderings
+print(list(permutations([1, 2, 3], 2)))
+# [(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
+
+# combinations — all subsets (order doesn't matter)
+print(list(combinations([1, 2, 3], 2)))
+# [(1, 2), (1, 3), (2, 3)]
+
+# combinations_with_replacement
+from itertools import combinations_with_replacement
+print(list(combinations_with_replacement([1, 2, 3], 2)))
+# [(1, 1), (1, 2), (1, 3), (2, 2), (2, 3), (3, 3)]
+
+# groupby — group consecutive elements by key function
+data = [("A", 1), ("A", 2), ("B", 3), ("B", 4), ("A", 5)]
+data.sort()                         # groupby requires sorted data!
+for key, group in groupby(data, key=lambda x: x[0]):
+    print(key, list(group))
+# A [("A", 1), ("A", 2)]
+# B [("B", 3), ("B", 4)]
+# A [("A", 5)]
+
+# islice — slice an iterator
+from itertools import islice
+result = list(islice(range(100), 10, 20, 2))
+print(result)                       # [10, 12, 14, 16, 18]
+
+# takewhile and dropwhile
+from itertools import takewhile, dropwhile
+print(list(takewhile(lambda x: x < 5, [1, 3, 7, 4, 2])))  # [1, 3]
+print(list(dropwhile(lambda x: x < 5, [1, 3, 7, 4, 2])))  # [7, 4, 2]
+
+
+# 27. BEST PRACTICES & PEP 8
+# ===========================
+# Easy definition: PEP 8 is Python's style guide. It defines
+# conventions for naming, indentation, spacing, and code layout.
+# In-depth: Following PEP 8 makes code consistent and readable.
+# Tools like black, flake8, and pylint automate style checking.
+# PEP 257 covers docstring conventions.
+
+# Naming conventions
+# Variables/functions/modules: snake_case
+# Classes: PascalCase (CamelCase)
+# Constants: UPPER_CASE
+# Private attributes: _leading_underscore
+# Name-mangled: __double_leading_underscore
+# Dunder methods: __double_underscore__ (don't invent your own)
+
+# Indentation — 4 spaces (never tabs)
+# Bad:
+# def func():
+# ··return 42  (2 spaces)
+
+# Good:
+def func():
+    return 42                   # 4 spaces
+
+# Line length — max 79 characters for code, 72 for comments
+long_string = ("This is a long string that exceeds the 79 character "
+               "limit, so we use implicit string concatenation "
+               "inside parentheses to break it up.")
+
+# Implicit continuation — inside brackets/braces/parens
+result = some_function(
+    arg1=value1,
+    arg2=value2,
+    arg3=value3,
+)
+
+# Imports — grouped: stdlib first, third-party second, local third
+import os
+import sys
+
+import requests
+import numpy as np
+
+from mypackage import mymodule
+
+# Within groups, sort alphabetically
+# Avoid: from module import *
+# Prefer explicit imports
+
+# Whitespace
+# One space around assignment operators
+x = 5
+
+# No space before colon, one space after
+if x == 5:
+    pass
+
+# One space after comma
+def func(a, b, c):
+    pass
+
+# Docstrings (PEP 257)
+# Module docstring at top of file
+# Class docstring after class line
+# Function docstring after def line
+
+class MyClass:
+    """One-line summary of class.
+
+    More detailed description if needed. This follows PEP 257.
+    """
+
+    def my_method(self, param):
+        """Do something.
+
+        Args:
+            param: Description of parameter.
+
+        Returns:
+            Description of return value.
+        """
+        return param
+
+# Zen of Python
+# import this
+# Beautiful is better than ugly.
+# Explicit is better than implicit.
+# Simple is better than complex.
+# Complex is better than complicated.
+# Flat is better than nested.
+# Sparse is better than dense.
+# Readability counts.
+# Special cases aren't special enough to break the rules.
+# Although practicality beats purity.
+# Errors should never pass silently.
+# Unless explicitly silenced.
+# In the face of ambiguity, refuse the temptation to guess.
+# There should be one -- and preferably only one -- obvious way to do it.
+# Although that way may not be obvious at first unless you're Dutch.
+# Now is better than never.
+# Although never is often better than *right* now.
+# If the implementation is hard to explain, it's a bad idea.
+# If the implementation is easy to explain, it may be a good idea.
+# Namespaces are one honking great idea -- let's do more of those!
+
+# EAFP (Easier to Ask for Forgiveness than Permission)
+# vs LBYL (Look Before You Leap)
+
+# EAFP — Pythonic: try first, handle errors
+try:
+    result = risky_operation()
+except SomeError:
+    result = default_value
+
+# LBYL — checks before attempting
+if can_do_risky_operation():
+    result = risky_operation()
+else:
+    result = default_value
+
+# EAFP is generally preferred in Python
+
+
+# 28. ASYNC BASICS
+# =================
+# Easy definition: Async/await enables concurrent code using
+# cooperative multitasking. async def declares an async function
+# (coroutine). await pauses execution until the awaited task completes.
+# In-depth: asyncio is the standard library for async programming.
+# Async code runs in a single thread using an event loop. Tasks
+# yield control at await points, allowing other tasks to run.
+
+import asyncio
+
+# Basic async function (coroutine)
+async def say_hello():
+    print("Hello")
+    await asyncio.sleep(1)          # non-blocking sleep
+    print("World")
+
+# Run the coroutine
+# asyncio.run(say_hello())
+
+# Multiple coroutines concurrently
+async def task(name, delay):
+    print(f"Task {name} started")
+    await asyncio.sleep(delay)
+    print(f"Task {name} finished after {delay}s")
+    return f"Result {name}"
+
+async def main():
+    # Run multiple tasks concurrently
+    results = await asyncio.gather(
+        task("A", 2),
+        task("B", 1),
+        task("C", 3),
+    )
+    print(results)                  # ["Result A", "Result B", "Result C"]
+
+# asyncio.run(main())
+
+# Create tasks
+async def main_with_tasks():
+    task_a = asyncio.create_task(task("A", 2))
+    task_b = asyncio.create_task(task("B", 1))
+
+    print("Both tasks running...")
+    result_a = await task_a
+    result_b = await task_b
+    print(result_a, result_b)
+
+# asyncio.run(main_with_tasks())
+
+# Async context manager
+class AsyncResource:
+    async def __aenter__(self):
+        print("Acquiring resource...")
+        await asyncio.sleep(0.5)
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print("Releasing resource...")
+        await asyncio.sleep(0.3)
+
+    async def use(self):
+        print("Using resource...")
+        await asyncio.sleep(0.2)
+
+async def use_resource():
+    async with AsyncResource() as res:
+        await res.use()
+
+# Async iterator
+class AsyncRange:
+    def __init__(self, n):
+        self.n = n
+        self.i = 0
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        if self.i >= self.n:
+            raise StopAsyncIteration
+        await asyncio.sleep(0.1)
+        value = self.i
+        self.i += 1
+        return value
+
+async def iterate_async():
+    async for i in AsyncRange(5):
+        print(i)
+
+
+# 29. CONTEXT MANAGERS
+# =====================
+# Easy definition: Context managers handle setup and cleanup using
+# the with statement. They're most commonly used for file operations.
+# In-depth: The with statement calls __enter__ on setup and __exit__
+# on cleanup — even if an exception occurs. You can create custom
+# context managers with classes or the contextlib module.
+
+# Basic with statement
+with open("file.txt", "r") as f:
+    data = f.read()
+# File is auto-closed after block
+
+# Multiple context managers
+with open("input.txt", "r") as infile, open("output.txt", "w") as outfile:
+    for line in infile:
+        outfile.write(line.upper())
+
+# Class-based context manager
+class ManagedConnection:
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+
+    def __enter__(self):
+        print(f"Connecting to {self.host}:{self.port}...")
+        # self.connection = connect(self.host, self.port)
+        return self                 # what "as x" gets
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("Closing connection...")
+        # self.connection.close()
+        # Return True to suppress exceptions, False to propagate
+        if exc_type is not None:
+            print(f"Exception occurred: {exc_val}")
+        return False                # propagate exception if any
+
+# with ManagedConnection("localhost", 8080) as conn:
+#     print(f"Connected to {conn.host}")
+
+# contextlib.contextmanager decorator — simpler approach
+from contextlib import contextmanager
+
+@contextmanager
+def managed_file(filename, mode="r"):
+    """Context manager for file operations using generator syntax."""
+    print(f"Opening {filename}")
+    f = open(filename, mode)
+    try:
+        yield f                     # value yielded to "as" variable
+    finally:
+        print(f"Closing {filename}")
+        f.close()
+
+# with managed_file("test.txt", "w") as f:
+#     f.write("Hello!")
+
+# @contextmanager with exception handling
+@contextmanager
+def suppress(*exceptions):
+    """Suppress specified exceptions."""
+    try:
+        yield
+    except exceptions:
+        pass                        # silently ignore
+
+# with suppress(ValueError, TypeError):
+#     x = int("not a number")       # ValueError suppressed
+
+# contextlib.closing — close objects that have a close() method
+from contextlib import closing
+# with closing(some_resource()) as res:
+#     res.use()
+
+# contextlib.redirect_stdout — temporarily redirect output
+from contextlib import redirect_stdout
+import io
+buffer = io.StringIO()
+with redirect_stdout(buffer):
+    print("This goes to buffer, not console")
+output = buffer.getvalue()
+print(output)                       # "This goes to buffer, not console"
+
+
+# 30. COMMON GOTCHAS
+# ===================
+# Easy definition: Python has several well-known pitfalls that trip
+# up beginners and experienced developers alike. Understanding these
+# saves hours of debugging.
+# In-depth: These gotchas arise from Python's design decisions:
+# default arguments are evaluated once, closures capture references
+# not values, is compares identity not equality, and more.
+
+# 1. Mutable default arguments
+def add_item_bad(item, lst=[]):     # BAD
+    lst.append(item)
+    return lst
+
+print(add_item_bad(1))              # [1]
+print(add_item_bad(2))              # [1, 2]  — not [2]!
+print(add_item_bad(3))              # [1, 2, 3]
+
+# Why: Function defaults are evaluated once at definition time,
+# not each time the function is called.
+# Fix: Use None and create a new list each time
+
+def add_item_good(item, lst=None):
+    if lst is None:
+        lst = []
+    lst.append(item)
+    return lst
+
+# 2. Late binding closures
+def create_multipliers():
+    return [lambda x: i * x for i in range(5)]
+
+for mult in create_multipliers():
+    print(mult(2))                  # 8, 8, 8, 8, 8  (not 0, 2, 4, 6, 8)
+
+# Why: All lambdas capture the variable i by reference, not value.
+# By the time they're called, i is 4.
+# Fix 1: Default argument captures current value
+def create_multipliers_fixed():
+    return [lambda x, i=i: i * x for i in range(5)]
+
+for mult in create_multipliers_fixed():
+    print(mult(2))                  # 0, 2, 4, 6, 8
+
+# Fix 2: Use a factory function
+def create_multipliers_fixed2():
+    def make_mult(i):
+        return lambda x: i * x
+    return [make_mult(i) for i in range(5)]
+
+# 3. is vs ==
+a = [1, 2, 3]
+b = [1, 2, 3]
+
+print(a == b)                       # True  (same value)
+print(a is b)                       # False (different objects)
+
+c = a
+print(a is c)                       # True  (same object)
+
+# is checks identity (id()), == checks equality (value)
+# Use is for: None, True, False, singletons
+x = None
+if x is None:                       # correct
+    pass
+
+if x == None:                       # works but not idiomatic
+    pass
+
+# Integer caching (-5 to 256)
+a = 256
+b = 256
+print(a is b)                       # True  (cached)
+
+c = 257
+d = 257
+print(c is d)                       # False (not cached, separate objects)
+
+# Use == for integer comparison, not is
+# CPython caches small integers (-5 to 256) for performance
+
+# 4. Shallow vs deep copy (covered in Lists section)
+import copy
+original = [[1, 2], [3, 4]]
+
+shallow = original.copy()
+shallow[0][0] = 99
+print(original[0][0])               # 99  (shared)
+
+deep = copy.deepcopy(original)
+deep[0][0] = 42
+print(original[0][0])               # 99 (unchanged)
+
+# 5. String immutability
+s = "hello"
+# s[0] = "H"  # TypeError
+
+# Must create new string
+s = "H" + s[1:]
+print(s)                            # "Hello"
+
+# 6. Loop variable leakage (Python 2 vs 3)
+# Python 3: loop variables don't leak (except in comprehensions)
+i = 42
+for i in range(5):
+    pass
+print(i)                            # 4  — loop variable DOES leak
+
+# But list comprehensions in Python 2 leaked; in Python 3 they don't
+# x = [i for i in range(5)]
+# print(i)  # still 4 (not 4 if the comprehension created new i)
+
+# 7. Chained assignment and mutable objects
+x = y = []
+x.append(1)
+print(y)                            # [1]  — same object!
+
+# Fix: create separately
+x = []
+y = []
+x.append(1)
+print(y)                            # []
+
+# 8. Floating point precision
+print(0.1 + 0.2)                    # 0.30000000000000004  (not 0.3!)
+print(0.1 + 0.2 == 0.3)             # False
+
+# Fix: use rounding or Decimal
+from decimal import Decimal
+print(Decimal("0.1") + Decimal("0.2"))  # Decimal("0.3")
+
+# 9. Augmented assignment with mutable vs immutable
+# Immutable (int, str, tuple) — creates new object
+a = 1
+print(id(a))                        # some id
+a += 1
+print(id(a))                        # different id (new object)
+
+# Mutable (list, dict, set) — modifies in place
+b = [1, 2]
+print(id(b))                        # some id
+b += [3, 4]                         # same as b.extend([3, 4])
+print(id(b))                        # same id (modified in place)
+
+# However: b = b + [3, 4]  would create a new list
+c = [1, 2]
+print(id(c))
+c = c + [3, 4]                      # creates new list
+print(id(c))                        # different id
+
+# 10. Deleting while iterating
+# Bad: modifying list while iterating
+numbers = [1, 2, 3, 4, 5]
+for n in numbers:
+    if n % 2 == 0:
+        numbers.remove(n)           # skips next element!
+print(numbers)                      # [1, 3, 5]  — works here but dangerous
+
+# Correct way 1: iterate over a copy
+numbers = [1, 2, 3, 4, 5]
+for n in numbers[:]:                # iterate over copy
+    if n % 2 == 0:
+        numbers.remove(n)
+
+# Correct way 2: list comprehension (preferred)
+numbers = [1, 2, 3, 4, 5]
+numbers = [n for n in numbers if n % 2 != 0]
+
+# 11. Unpacking with wrong length
+# a, b = (1, 2, 3)  # ValueError: too many values to unpack
+# Fixed with extended unpacking
+a, b, *rest = (1, 2, 3, 4, 5)
+print(a, b, rest)                   # 1 2 [3, 4, 5]
+
+# 12. Module import side effects
+# When you import a module, all top-level code runs immediately.
+# This is why the if __name__ == "__main__": guard is critical.
+
+# 13. Boolean is subclass of int
+print(True + True)                  # 2  (True == 1, False == 0)
+print(True * 5)                     # 5
+print(isinstance(True, int))        # True
+print(True == 1)                    # True
+print(True is 1)                    # False (different objects, same value)
+
+# 14. Negative indices and -0
+lst = [1, 2, 3]
+print(lst[-1])                      # 3  (last element)
+print(lst[-0])                      # 1  (-0 is 0, first element)
+
+# 15. Or operator returns value, not bool
+print(0 or 42)                      # 42  (not True)
+print("" or "default")              # "default"
+print(42 or 0)                      # 42  (short-circuits)
+
+# Common pattern: assign default
+name = input("name: ") or "Guest"
+
+# 16. Comparing different types (Python 2 vs 3)
+# Python 3: raises TypeError
+# print(42 > "hello")  # TypeError: '>' not supported between str and int
+
+# Python 2: allowed (inconsistent behavior)
+
+# 17. The += operator with tuples
+t = (1, 2, [3, 4])
+# t[2] += [5, 6]  # TypeError: 'tuple' object does not support item assignment
+# But the list IS modified!
+# t[2] += [5, 6] is equivalent to:
+# t[2].extend([5, 6])  — list is modified
+# t[2] = ...  — then fails because tuple doesn't support assignment
+# Result: list gets extended but the assignment fails
+
+# 18. All or any on empty iterables
+print(all([]))                      # True  (vacuous truth)
+print(any([]))                      # False
+
+# 19. Generator exhaustion
+gen = (x**2 for x in range(3))
+print(list(gen))                    # [0, 1, 4]
+print(list(gen))                    # []  — generator exhausted!
+
+# 20. NameError in nested scopes
+x = "global"
+def outer():
+    x = "outer"
+    def inner():
+        # If you try to access x before assigning, you get UnboundLocalError
+        # x += "modified"  # UnboundLocalError: local 'x' referenced before assignment
+        pass
+    inner()
+`;
+
 // CHEAT TAB - Python Examples Only
 const CHEAT_CONTENT = `# Python Cheat Sheet - Templates & Examples
 import collections
@@ -1320,62 +4656,1209 @@ to access variables from their enclosing functions.
 `;
 
 // REGEX TAB - Regular Expressions Reference
-const REGEX_CONTENT = `#regular expressions
-"""
-**Character Classes**
+const REGEX_CONTENT = `
+# PYTHON REGULAR EXPRESSIONS REFERENCE
+# =====================================
+# Regex (Regular Expressions) is a pattern-matching language for searching,
+# extracting, and manipulating text. Python's re module provides full support.
+#
+# IMPORTANT: raw strings r"..." prevent Python from processing backslash escapes,
+# which is critical since regex uses \\ extensively. Without r"...", you'd need
+# \\\\d instead of \\d, making patterns hard to read.
 
-* \`a-z\`: Matches any lowercase letter
-* \`A-Z\`: Matches any uppercase letter
-* \`0-9\`: Matches any digit
-* \`[a-zA-Z]\`: Matches any letter (both lowercase and uppercase)
-* \`[0-9]\`: Matches any digit
-* \`\\d\`: Matches any digit
-* \`\\w\`: Matches any word character (alphanumeric plus underscore)
-* \`\\s\`: Matches any whitespace character
+import re
 
-**Special Characters**
+# ---------------------------------------------------------------------------
+# 1. WHAT IS REGEX?
+# ---------------------------------------------------------------------------
 
-* \`.\`: Matches any single character
-* \`^\`: Matches the start of a string
-* \`$\`: Matches the end of a string
-* \`*\`: Matches 0 or more of the preceding character
-* \`+\`: Matches 1 or more of the preceding character
-* \`?\`: Matches 0 or 1 of the preceding character
-* \`{n, m}\`: Matches between n and m of the preceding character
-* \`{n,}\`: Matches at least n of the preceding character
-* \`{, m}\`: Matches at most m of the preceding character
+# Regex is a formal language of patterns built from literal characters and
+# metacharacters. It describes text to find, match, or replace within strings.
+#
+# Key concepts:
+#   - Pattern: the regex description you write
+#   - String: the text you search in
+#   - Match: when the pattern successfully describes part (or all) of the string
+#
+# Raw strings r"...": In normal Python strings, \\n means newline, \\t means tab.
+# In raw strings, backslash is literal — exactly what regex engines expect.
+#
+# Without raw string:  "\\\\d+\\\\.\\\\d+"  (Python escapes the backslashes)
+# With raw string:     r"\\d+\\.\\d+"    (what the regex engine actually reads)
+#
+# The re module provides all regex functionality:
+#   re.search()    - find anywhere in string
+#   re.match()     - find at start only
+#   re.findall()   - find all non-overlapping matches
+#   re.sub()       - substitute matches
+#   re.split()     - split string at matches
+#   re.compile()   - pre-compile for performance
 
-**Quantifiers**
+# Basic example: finding digits in a string
+pattern = r"\\d+"
+text = "Order 42 has 100 items"
+result = re.findall(pattern, text)
+print(result)  # ['42', '100']
 
-* \`*\`: Matches 0 or more of the preceding character
-* \`+\`: Matches 1 or more of the preceding character
-* \`?\`: Matches 0 or 1 of the preceding character
-* \`{n, m}\`: Matches between n and m of the preceding character
-* \`{n,}\`: Matches at least n of the preceding character
-* \`{, m}\`: Matches at most m of the preceding character
+# Example: replacing text
+cleaned = re.sub(r"\\d+", "NUMBER", text)
+print(cleaned)  # 'Order NUMBER has NUMBER items'
 
-**Groups and Capturing**
+# ---------------------------------------------------------------------------
+# 2. METACHARACTERS
+# ---------------------------------------------------------------------------
 
-* \`(\` and \`)\`: Used to group parts of a pattern together
-* \`\\1\`, \`\\2\`, etc.: Refer to the capturing groups in the pattern
+# Metacharacters are characters with special meaning in regex. To match them
+# literally, escape with \\ (e.g., \\. matches a literal dot).
 
-**Escaping**
+# . (dot) - matches ANY SINGLE character except newline
+# Equivalent to "any character here"
+pattern = r"h.t"
+print(re.findall(pattern, "hat hot hit hut h\\t h\\n"))  # ['hat', 'hot', 'hit', 'hut', 'h\\t']
+# NOTE: \\n (newline) is NOT matched by dot by default
 
-* \`\\\`: Escapes special characters
-* \`\\b\`: Matches a word boundary
+# ^ (caret) - matches the START of the string
+pattern = r"^Hello"
+print(re.findall(pattern, "Hello world"))   # ['Hello']
+print(re.findall(pattern, "Say Hello"))     # [] - not at start
 
-Here are some examples of regex patterns:
+# $ (dollar) - matches the END of the string
+pattern = r"end$"
+print(re.findall(pattern, "this is the end"))  # ['end']
+print(re.findall(pattern, "end of the line"))  # [] - string doesn't end with it
 
-* \`\\d{4}-\\d{2}-\\d{2}\`: Matches a date in the format DD-MM-YYYY
-* \`[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\`: Matches an email address
-* \`\\d{3}-\\d{3}-\\d{4}\`: Matches a credit card number
-* \`[a-zA-Z]+ [a-zA-Z]+, [A-Z]{2}\`: Matches a full name
-* \`\\d{1,3}\\.\\d{3,5}/\\d{4}\`: Matches a phone number
+# * (star) - matches 0 or MORE of the preceding element (GREEDY)
+# "abc*" matches "ab", "abc", "abcc", "abccc", etc.
+pattern = r"ab*c"
+print(re.findall(pattern, "ac abc abbc abbbc abbbbc"))  # ['ac', 'abc', 'abbc', 'abbbc', 'abbbbc']
 
-These are just a few examples of the many patterns you can use in regex. The specific patterns you use will depend on the problem you're trying to solve.
+# + (plus) - matches 1 or MORE of the preceding element (GREEDY)
+# "abc+" matches "abc", "abcc", but NOT "ab"
+pattern = r"ab+c"
+print(re.findall(pattern, "ac abc abbc abbbc"))  # ['abc', 'abbc', 'abbbc']
+print(re.findall(pattern, "ac"))                  # [] - need at least one b
 
-Do you have a specific problem you'd like me to help you solve using regex?
-"""
+# ? (question mark) - matches 0 or 1 of the preceding element
+# Makes something OPTIONAL
+pattern = r"colou?r"
+print(re.findall(pattern, "color colour"))  # ['color', 'colour']
+
+# {n} - matches EXACTLY n repetitions
+pattern = r"\\d{3}"  # exactly three digits
+print(re.findall(pattern, "abc123def4567"))  # ['123', '456'] (only first 3 of 4567)
+
+# {n,} - matches n or MORE repetitions
+pattern = r"\\d{3,}"  # three or more digits
+print(re.findall(pattern, "12 123 1234 12345"))  # ['123', '1234', '12345']
+
+# {n,m} - matches BETWEEN n and m repetitions (inclusive)
+pattern = r"\\d{2,4}"  # 2, 3, or 4 digits
+print(re.findall(pattern, "1 12 123 1234 12345"))  # ['12', '123', '1234', '1234']
+
+# [] (square brackets) - CHARACTER SET, matches ANY ONE character inside
+pattern = r"[aeiou]"  # any vowel (single character)
+print(re.findall(pattern, "hello world"))  # ['e', 'o', 'o']
+
+# Inside a set, most metacharacters lose their special meaning
+pattern = r"[.^$]"  # literal dot, caret, or dollar sign
+print(re.findall(pattern, "abc.^$def"))  # ['.', '^', '$']
+
+# | (pipe) - ALTERNATION (OR) between patterns
+pattern = r"cat|dog"
+print(re.findall(pattern, "I have a cat and a dog"))  # ['cat', 'dog']
+
+# () (parentheses) - GROUPING
+# Creates a group for capturing, applying quantifiers, or alternation scope
+pattern = r"(ha)+"  # group "ha" one or more times
+print(re.findall(pattern, "haha hahaha h"))  # ['ha', 'ha'] (last match of each)
+
+# \\ (backslash) - ESCAPE character
+# Two uses: (1) escape metacharacters, (2) create special sequences
+pattern = r"\\."  # literal dot (not "any character")
+print(re.findall(pattern, "a.b.c"))  # ['.', '.']
+
+pattern = r"\\d"  # digit character class
+print(re.findall(pattern, "a1b2c"))  # ['1', '2']
+
+# ---------------------------------------------------------------------------
+# 3. CHARACTER CLASSES
+# ---------------------------------------------------------------------------
+
+# Character classes define a SET of characters to match at a position.
+
+# [abc] - matches ONE character: a, b, or c
+pattern = r"[aeiou]"
+print(re.findall(pattern, "python"))  # ['o']
+
+# [^abc] - NEGATION: matches ANY character EXCEPT a, b, or c
+pattern = r"[^aeiou]"  # all consonants (and non-letters)
+print(re.findall(pattern, "hello"))  # ['h', 'l', 'l']
+
+# [a-z] - RANGE: matches any character in the range a to z
+pattern = r"[a-z]"  # any lowercase letter
+print(re.findall(pattern, "Hello123"))  # ['e', 'l', 'l', 'o']
+
+# Multiple ranges: [a-zA-Z0-9] matches any letter or digit
+pattern = r"[a-zA-Z0-9]"
+print(re.findall(pattern, "A b 3 !"))  # ['A', 'b', '3']
+
+# \\d - DIGIT: matches [0-9] (single character)
+pattern = r"\\d"
+print(re.findall(pattern, "Room 42B"))  # ['4', '2']
+
+# \\D - NOT a digit: matches [^0-9]
+pattern = r"\\D"
+print(re.findall(pattern, "A1 B2"))  # ['A', ' ', 'B', ' ']
+
+# \\w - WORD CHARACTER: matches [a-zA-Z0-9_]
+# Includes letters (both cases), digits, and underscore
+pattern = r"\\w+"
+print(re.findall(pattern, "hello_world 123 !@#"))  # ['hello_world', '123']
+
+# \\W - NOT a word character: matches [^a-zA-Z0-9_]
+pattern = r"\\W+"
+print(re.findall(pattern, "hello world!"))  # [' ', '!']
+
+# \\s - WHITESPACE: matches [ \\t\\n\\r\\f\\v] (space, tab, newline, etc.)
+pattern = r"\\s+"
+print(re.findall(pattern, "hello   world\\nnext"))  # ['   ', '\\n']
+
+# \\S - NOT whitespace: matches non-whitespace characters
+pattern = r"\\S+"
+print(re.findall(pattern, "a b\\tc\\nd"))  # ['a', 'b', 'c', 'd']
+
+# Practical: find all words in text
+pattern = r"\\w+"
+text = "Hello, world! It's 2025."
+print(re.findall(pattern, text))  # ['Hello', 'world', 'It', 's', '2025']
+
+# Practical: find all non-words (punctuation, spaces)
+pattern = r"\\W+"
+text = "Hello, world! It's 42."
+print(re.findall(pattern, text))  # [', ', '! ', "'s ", '.']
+
+# ---------------------------------------------------------------------------
+# 4. QUANTIFIERS - GREEDY vs LAZY (NON-GREEDY)
+# ---------------------------------------------------------------------------
+
+# QUANTIFIERS control HOW MANY times a pattern element repeats.
+#
+# GREEDY (default): tries to match AS MUCH AS POSSIBLE, then backtracks if
+# the rest of the pattern fails. The engine grabs everything it can, then
+# gives back one character at a time until the overall pattern matches.
+#
+# LAZY (with ? after quantifier): tries to match AS LITTLE AS POSSIBLE.
+# The engine matches the minimum, then expands if the overall pattern fails.
+
+# Greedy: * matches as much as possible
+text = "<div>hello</div><span>world</span>"
+pattern = r"<.*>"  # greedy: from first < to LAST >
+print(re.findall(pattern, text))  # ['<div>hello</div><span>world</span>']
+
+# Lazy: *? matches as little as possible
+pattern = r"<.*?>"  # lazy: from each < to the next >
+print(re.findall(pattern, text))  # ['<div>', '</div>', '<span>', '</span>']
+
+# Greedy vs Lazy comparison table:
+#   Quantifier  | Greedy (max) | Lazy (min)
+#   ---------------------------------------
+#   star        | *            | *?
+#   plus        | +            | +?
+#   optional    | ?            | ??
+#   range       | {n,m}        | {n,m}?
+#   range+      | {n,}         | {n,}?
+
+# + vs +? examples
+text = "abcabc"
+print(re.findall(r"ab+c", text))   # greedy:  ['abcabc'] (matches from a to last c)
+print(re.findall(r"ab+?c", text))  # lazy:   ['abc'] (first a to first c)
+
+# ? vs ??
+pattern_greedy = r"colou?r"  # greedy optional
+pattern_lazy = r"colou??r"   # lazy optional (prefer without u)
+print(re.findall(pattern_greedy, "color colour"))  # ['color', 'colour']
+print(re.findall(pattern_lazy, "color colour"))    # ['color', 'colour']
+
+# {n,m} vs {n,m}? examples
+text = "aaaa"
+pattern_greedy = r"a{2,4}"   # 2 to 4 a's, prefer 4
+pattern_lazy = r"a{2,4}?"    # 2 to 4 a's, prefer 2
+print(re.findall(pattern_greedy, text))  # ['aaaa']
+print(re.findall(pattern_lazy, text))    # ['aa', 'aa']
+
+# How backtracking works with greedy quantifiers:
+# Pattern: r"a.*b"  on string "a---b---b"
+# Step 1: a matches a at position 0
+# Step 2: .* matches "---b---b" (everything to end)
+# Step 3: b needs to match but we're at end -> FAIL
+# Step 4: .* gives back "b" -> now we have "---b---"
+# Step 5: b matches the last b -> SUCCESS
+# Match: "a---b---b"
+
+# With lazy: r"a.*?b"  on same string
+# Step 1: a matches a at position 0
+# Step 2: .*? matches "" (minimum)
+# Step 3: b matches first b -> SUCCESS immediately
+# Match: "a---b"
+
+# ---------------------------------------------------------------------------
+# 5. ANCHORS
+# ---------------------------------------------------------------------------
+
+# Anchors match POSITIONS in the string, not characters.
+
+# ^ (caret) - start of string (or start of line with re.MULTILINE)
+pattern = r"^Hello"
+print(re.search(pattern, "Hello world"))     # <re.Match...> at position 0
+print(re.search(pattern, "Say Hello world"))  # None
+
+# With re.MULTILINE: ^ matches after each newline
+text = "First line\\nSecond line\\nThird line"
+pattern = r"^\\w+"
+print(re.findall(pattern, text))                          # ['First'] (start of string only)
+print(re.findall(pattern, text, re.MULTILINE))            # ['First', 'Second', 'Third']
+
+# $ (dollar) - end of string (or end of line with re.MULTILINE)
+pattern = r"line$"
+print(re.search(pattern, "end of line"))      # matches
+print(re.search(pattern, "line of text"))     # None
+
+# With re.MULTILINE: $ matches before each newline
+text = "First line\\nSecond line\\nThird line"
+pattern = r"\\w+$"
+print(re.findall(pattern, text))               # ['line'] (end of string only)
+print(re.findall(pattern, text, re.MULTILINE)) # ['line', 'line', 'line']
+
+# \\b - WORD BOUNDARY: position between a word char (\\w) and non-word char (\\W)
+# Matches at start/end of words (zero-width)
+pattern = r"\\bcat\\b"  # whole word "cat", not in "catalog" or "scat"
+print(re.findall(pattern, "cat catalog scat concat"))  # ['cat']
+
+# \\b at start: words starting with pattern
+pattern = r"\\bun"  # words starting with "un"
+print(re.findall(pattern, "unable unit fun under"))  # ['un', 'un', 'un']
+
+# \\b at end: words ending with pattern
+pattern = r"ing\\b"  # words ending with "ing"
+print(re.findall(pattern, "running walk singing"))  # ['ing', 'ing']
+
+# \\B - NOT a word boundary: opposite of \\b
+pattern = r"\\Bcat\\B"  # "cat" NOT at word boundary (inside a word)
+print(re.findall(pattern, "catalog concat"))  # ['cat'] (in "concat", between n and a)
+
+# \\A - start of string ONLY (never affected by re.MULTILINE)
+pattern = r"\\AHello"
+text = "Hello\\nHello"
+print(re.findall(pattern, text))                # ['Hello']
+print(re.findall(pattern, text, re.MULTILINE))  # ['Hello'] (only first, \\A ignores multiline)
+
+# \\Z - end of string ONLY (never affected by re.MULTILINE)
+pattern = r"end\\Z"
+print(re.findall(pattern, "line end"))                       # ['end']
+print(re.findall(pattern, "line end\\nline end", re.MULTILINE))  # ['end'] (only last)
+
+# ---------------------------------------------------------------------------
+# 6. GROUPS & CAPTURING
+# ---------------------------------------------------------------------------
+
+# Groups capture parts of a match for extraction, reuse, or backreferencing.
+
+# (pattern) - CAPTURING GROUP: captures and stores matched text by number
+pattern = r"(\\w+)@(\\w+)\\.(\\w+)"  # three groups: user, domain, tld
+match = re.search(pattern, "user@example.com")
+if match:
+    print(match.group())    # 'user@example.com' (full match)
+    print(match.group(1))   # 'user'
+    print(match.group(2))   # 'example'
+    print(match.group(3))   # 'com'
+    print(match.groups())   # ('user', 'example', 'com')
+
+# Groups are numbered by opening parenthesis position, starting at 1
+# Group 0 is always the entire match
+pattern = r"((\\w+)@(\\w+))\\.(\\w+)"  # nested groups
+match = re.search(pattern, "user@example.com")
+print(match.groups())  # ('user@example', 'user', 'example', 'com')
+
+# (?P<name>pattern) - NAMED CAPTURING GROUP: capture by name instead of number
+pattern = r"(?P<user>\\w+)@(?P<domain>\\w+)\\.(?P<tld>\\w+)"
+match = re.search(pattern, "user@example.com")
+if match:
+    print(match.group("user"))    # 'user'
+    print(match.group("domain"))  # 'example'
+    print(match.group("tld"))     # 'com'
+    print(match.groupdict())      # {'user': 'user', 'domain': 'example', 'tld': 'com'}
+
+# Named groups can still be accessed by number too
+print(match.group(1))  # also 'user'
+
+# (?:pattern) - NON-CAPTURING GROUP: groups without storing the match
+# Use when you need grouping (for quantifiers or alternation) but not extraction
+text = "hello123 hello456"
+pattern = r"(?:\\w+)(\\d+)"  # first group non-capturing, second captures digits
+print(re.findall(pattern, text))  # ['123', '456'] - only captured groups returned
+
+# Non-capturing is more efficient and cleaner when you don't need the capture
+pattern = r"(?:ha)+"  # group for repetition, but we don't need "ha" saved
+print(re.findall(pattern, "haha ha"))  # ['haha', 'ha'] (full matches only)
+
+# \\1, \\2, etc. - BACKREFERENCES in the pattern itself
+# Reference a previously captured group WITHIN the same pattern
+# Finds repeated words
+pattern = r"(\\w+) \\1"  # same word twice, separated by space
+print(re.findall(pattern, "cat cat dog hello dog dog"))  # ['cat', 'dog']
+
+# Backreferences can match quotes, HTML tags, etc.
+pattern = r"(['\\"])(.*?)\\1"  # matching opening and closing quotes
+print(re.findall(pattern, "'hello' \\"world\\" 'broken" ))
+# [("'", 'hello'), ('"', 'world')]
+
+# \\g<name> - BACKREFERENCE by name (for named groups)
+pattern = r"(?P<word>\\w+) \\g<word>"  # same as (\\w+) \\1 but by name
+print(re.findall(pattern, "hello hello world"))  # ['hello']
+
+# Practical: extract key=value pairs
+text = "name=John age=30 city=NYC"
+pattern = r"(\\w+)=(\\w+)"
+matches = re.findall(pattern, text)
+print(matches)  # [('name', 'John'), ('age', '30'), ('city', 'NYC')]
+
+# ---------------------------------------------------------------------------
+# 7. LOOKAHEAD & LOOKBEHIND (Lookaround Assertions)
+# ---------------------------------------------------------------------------
+
+# Lookaround assertions check for a pattern WITHOUT including it in the match.
+# They are ZERO-WIDTH — they assert something about the surrounding text.
+#
+# All four types:
+#   (?=...)  Positive Lookahead:  must follow, not consumed
+#   (?!...)  Negative Lookahead:  must NOT follow
+#   (?<=...) Positive Lookbehind: must precede, not consumed
+#   (?<!...) Negative Lookbehind: must NOT precede
+
+# (?=pattern) - POSITIVE LOOKAHEAD: match if "pattern" follows, but don't include it
+# Example: find all numbers followed by "px"
+text = "12px 34em 56px 78pt"
+pattern = r"\\d+(?=px)"  # digits only if followed by "px"
+print(re.findall(pattern, text))  # ['12', '56']
+
+# (?!pattern) - NEGATIVE LOOKAHEAD: match if "pattern" does NOT follow
+# Example: find all numbers NOT followed by "px"
+pattern = r"\\d+(?!px)"  # digits not followed by "px"
+print(re.findall(pattern, "12px 34em 56px 78pt"))
+# ['3', '56', '78'] - 12 excluded (px follows), 34 gives '3' (4 matches px...)
+
+# Better negative lookahead with word boundary
+pattern = r"\\b\\d+(?!px)\\b"
+print(re.findall(pattern, "12px 34em 56px 78pt"))  # ['34', '78']
+
+# Practical: find "foo" NOT followed by "bar"
+text = "foobar foo foo baz"
+pattern = r"foo(?!bar)"
+print(re.findall(pattern, text))  # ['foo', 'foo'] (first "foo" in "foobar" excluded)
+
+# (?<=pattern) - POSITIVE LOOKBEHIND: match if preceded by "pattern"
+# Example: extract dollar amounts (digits after $ sign)
+text = "Price: $42.50, Cost: $15"
+pattern = r"(?<=\\$)\\d+\\.?\\d*"  # digits with optional decimal after $
+print(re.findall(pattern, text))  # ['42', '50', '15'] wait — '50' is after the dot
+
+# Let me be more precise
+pattern = r"(?<=\\$)\\d+(?:\\.\\d+)?"  # digits plus optional decimal part
+print(re.findall(pattern, text))    # ['42.50', '15']
+
+# (?<!pattern) - NEGATIVE LOOKBEHIND: match if NOT preceded by pattern
+# Example: find "foo" NOT preceded by "bar"
+text = "barfoo foo foobar"
+pattern = r"(?<!bar)foo"
+print(re.findall(pattern, text))  # ['foo', 'foo'] (first "foo" in "barfoo" excluded actually no)
+
+# Let me be clearer
+text = "prefix_foo foo barfoo"
+pattern = r"(?<!bar)foo"
+print(re.findall(pattern, text))  # ['foo'] only the second "foo" — "barfoo" has "foo" after "bar"
+
+# Practical: extract usernames from Twitter handles
+text = "Follow @user1 and @user2 but not user3"
+pattern = r"(?<=@)\\w+"  # word after @ sign
+print(re.findall(pattern, text))  # ['user1', 'user2']
+
+# Practical: find "python" when it IS followed by "3" or "regex"
+text = "I love python3 and python regex but not python2"
+pattern = r"python(?=\\s*[3r])"  # python followed by optional space then 3 or r
+print(re.findall(pattern, text))  # ['python', 'python']
+
+# Practical: find numbers NOT preceded by $
+text = "Total: 42 items, Price: $10, Quantity: 5"
+pattern = r"(?<!\\$)\\b\\d+\\b"
+print(re.findall(pattern, text))  # ['42', '5'] (not '10')
+
+# NOTE: Python's re module requires lookbehinds to be FIXED-WIDTH.
+# This is WRONG: r"(?<=\\s*\\$)\\d+"  (variable width)
+# Use a fixed-width alternative or the regex module (third-party) instead.
+# WRONG: pattern = r"(?<=\\s+)\\d+"  # ValueError: lookbehind requires fixed-width pattern
+
+# ---------------------------------------------------------------------------
+# 8. ALTERNATION
+# ---------------------------------------------------------------------------
+
+# Alternation lets the pattern match one option OR another.
+
+# pattern1|pattern2|pattern3 - try each from left to right, return first match
+pattern = r"cat|dog|bird"
+print(re.findall(pattern, "I have a cat and a dog"))  # ['cat', 'dog']
+
+# Alternation with grouping: limit the scope of |
+# Without grouping: the | applies to everything left vs right
+text = "I see a catfish and a dog"
+pattern = r"cat|catfish"  # matches "cat" first (order matters!)
+print(re.findall(pattern, text))  # ['cat', 'cat'] — "catfish" = "cat" + "fish"
+
+# With grouping: | applies only within the group
+pattern = r"(cat|dog)fish"  # either "catfish" or "dogfish"
+print(re.findall(pattern, text))                                 # ['cat']
+print(re.findall(r"(?:cat|dog)fish", "I see a catfish dogfish"))  # ['catfish', 'dogfish']
+
+# Order matters in alternation: re tries patterns left to right
+# If an earlier alternative matches, later ones are never tried for that position
+text = "abcdef"
+pattern = r"(abc|abcd|abcdef)"
+print(re.search(pattern, text).group())  # 'abc' (first alternative matches)
+
+pattern = r"(abcdef|abcd|abc)"
+print(re.search(pattern, text).group())  # 'abcdef' (longest matched first)
+
+# Practical: match common date formats
+text = "Date: 2024-01-15 or 01/15/2024"
+pattern = r"\\d{4}-\\d{2}-\\d{2}|\\d{2}/\\d{2}/\\d{4}"
+print(re.findall(pattern, text))  # ['2024-01-15', '01/15/2024']
+
+# Practical: match file extensions
+filenames = "file.txt image.jpg document.pdf script.py"
+pattern = r"\\.(txt|jpg|png|pdf|py)"
+print(re.findall(pattern, filenames))  # ['txt', 'jpg', 'pdf', 'py']
+
+# ---------------------------------------------------------------------------
+# 9. FLAGS
+# ---------------------------------------------------------------------------
+
+# Flags modify how the regex engine interprets the pattern.
+# Pass as the flags argument to re functions, or embed inline in the pattern.
+
+# --- re.IGNORECASE (re.I) ---
+# Makes matching case-insensitive for ASCII letters by default
+pattern = r"python"
+print(re.findall(pattern, "Python PYTHON python"))           # ['python']
+print(re.findall(pattern, "Python PYTHON python", re.I))     # ['Python', 'PYTHON', 'python']
+
+# --- re.MULTILINE (re.M) ---
+# Changes ^ and $ to match at start/end of EACH LINE, not just the string
+text = "line1\\nline2\\nline3"
+pattern = r"^\\w+"
+print(re.findall(pattern, text))            # ['line1']
+print(re.findall(pattern, text, re.M))      # ['line1', 'line2', 'line3']
+
+pattern = r"\\w+$"
+print(re.findall(pattern, text))            # ['line3']
+print(re.findall(pattern, text, re.M))      # ['line1', 'line2', 'line3']
+
+# --- re.DOTALL (re.S) ---
+# Makes . match ANY character INCLUDING newline
+text = "hello\\nworld"
+print(re.findall(r"hello.world", text))     # [] (dot doesn't match \\n)
+print(re.findall(r"hello.world", text, re.S))  # ['hello\\nworld']
+
+# --- re.VERBOSE (re.X) ---
+# Allows whitespace and comments in the pattern for readability
+# Spaces in the pattern are IGNORED (use \\s or [ ] to match literal space)
+# Comments with # are ignored to end of line
+
+# Without VERBOSE — hard to read:
+email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+
+# With VERBOSE — readable:
+email_pattern = re.compile(r"""
+    ^                        # start of string
+    [a-zA-Z0-9._%+-]+        # local part (username)
+    @                        # literal @
+    [a-zA-Z0-9.-]+           # domain name
+    \\.                       # literal dot
+    [a-zA-Z]{2,}             # TLD (at least 2 letters)
+    $                        # end of string
+""", re.VERBOSE)
+
+print(email_pattern.match("user@example.com"))   # <re.Match...>
+print(email_pattern.match("user@example.com.org"))  # None (extra domain part)
+
+# --- re.ASCII (re.A) ---
+# Makes \\w, \\d, \\s, \\b match only ASCII characters, ignoring Unicode
+text = "café 123"
+print(re.findall(r"\\w+", text))             # ['café', '123'] (Unicode aware)
+print(re.findall(r"\\w+", text, re.A))       # ['caf', '123']  (é is not ASCII \\w)
+
+# --- re.UNICODE (re.U) ---
+# This is the DEFAULT in Python 3. Makes \\w, \\d, \\s Unicode-aware.
+# Usually you don't need to specify it explicitly.
+
+# --- INLINE FLAGS ---
+# Embed flags directly in the pattern using (?flags)
+# (?i) = IGNORECASE, (?m) = MULTILINE, (?s) = DOTALL, (?x) = VERBOSE
+# (?aiLmsux) — combine multiple flags
+
+# Inline ignorecase: (?i) makes rest of pattern case-insensitive
+pattern = r"(?i)python"
+print(re.findall(pattern, "Python PYTHON python"))  # ['Python', 'PYTHON', 'python']
+
+# Inline flags can be scoped to part of the pattern with (?i:pattern)
+pattern = r"(?i:hello) world"  # only "hello" is case-insensitive
+print(re.findall(pattern, "HELLO world"))   # ['HELLO world']
+print(re.findall(pattern, "HELLO WORLD"))   # [] (world is case-sensitive)
+
+# Multiple inline flags: (?im) = IGNORECASE + MULTILINE
+pattern = r"(?im)^python"
+text = "Python\\nPYTHON\\npython"
+print(re.findall(pattern, text))  # ['Python', 'PYTHON', 'python']
+
+# Disable flags: (?-i) turns off ignorecase
+pattern = r"(?i)hello(?-i) world"  # "hello" case-insensitive, " world" not
+print(re.findall(pattern, "HELLO world"))   # ['HELLO world']
+print(re.findall(pattern, "HELLO WORLD"))   # []
+
+# ---------------------------------------------------------------------------
+# 10. PYTHON re MODULE METHODS
+# ---------------------------------------------------------------------------
+
+# ============ re.search(pattern, string, flags=0) ============
+# Scans through string looking for FIRST match anywhere.
+# Returns Match object or None.
+
+text = "My email is john@example.com and support@test.org"
+match = re.search(r"\\w+@\\w+\\.\\w+", text)
+if match:
+    print(match.group())  # 'john@example.com' (first match only)
+
+match = re.search(r"zzz", text)
+print(match)  # None
+
+# ============ re.match(pattern, string, flags=0) ============
+# Looks for match ONLY at the START of the string.
+# Returns Match object or None.
+# NOTE: "at start" means the match must begin at position 0.
+
+text = "123-456-7890"
+match = re.match(r"\\d{3}", text)
+print(match.group())  # '123' (matches at start)
+
+match = re.match(r"-\\d{3}", text)
+print(match)  # None (text doesn't start with -)
+
+# re.match vs re.search difference:
+text = "Contact: 555-1234"
+print(re.match(r"\\d+", text))   # None (no digit at position 0)
+print(re.search(r"\\d+", text))  # <re.Match...> (digits found at position 9)
+
+# ============ re.fullmatch(pattern, string, flags=0) ============
+# Requires the ENTIRE string to match the pattern.
+# Returns Match object or None.
+
+print(re.fullmatch(r"\\d+", "123"))     # <re.Match...>
+print(re.fullmatch(r"\\d+", "123abc"))  # None (extra characters)
+print(re.match(r"\\d+", "123abc"))      # <re.Match...> (match succeeds at start)
+
+# ============ re.findall(pattern, string, flags=0) ============
+# Returns ALL non-overlapping matches as a list of strings.
+# If the pattern has groups, returns list of tuples (one tuple per group set).
+
+text = "red 5, blue 10, green 15"
+
+# No groups: returns list of full match strings
+print(re.findall(r"\\d+", text))  # ['5', '10', '15']
+
+# With groups: returns list of tuples
+print(re.findall(r"(\\w+) (\\d+)", text))  # [('red', '5'), ('blue', '10'), ('green', '15')]
+
+# Multiple groups in one pattern
+text = "Name: John, Age: 30 | Name: Jane, Age: 25"
+pattern = r"Name: (\\w+), Age: (\\d+)"
+print(re.findall(pattern, text))  # [('John', '30'), ('Jane', '25')]
+
+# ============ re.finditer(pattern, string, flags=0) ============
+# Returns an ITERATOR yielding Match objects.
+# More memory-efficient than findall when you need Match object features.
+
+text = "apple 10, banana 20, cherry 30"
+for match in re.finditer(r"(\\w+) (\\d+)", text):
+    item = match.group(1)
+    count = match.group(2)
+    print(f"{item}: {count}")
+# Output:
+# apple: 10
+# banana: 20
+# cherry: 30
+
+# finditer gives you access to positions, while findall only gives strings
+for match in re.finditer(r"\\d+", "results: 42, 100, 7"):
+    print(f"Value: {match.group()} at position {match.start()}-{match.end()}")
+# Output:
+# Value: 42 at position 9-11
+# Value: 100 at position 13-16
+# Value: 7 at position 18-19
+
+# ============ re.sub(pattern, repl, string, count=0, flags=0) ============
+# Replaces matches with replacement string.
+# count=0 means replace ALL. count=N means replace first N matches.
+# Returns the modified string.
+
+text = "I have 2 cats and 3 dogs"
+result = re.sub(r"\\d+", "N", text)
+print(result)  # 'I have N cats and N dogs'
+
+# count limits replacements
+result = re.sub(r"\\d+", "N", text, count=1)
+print(result)  # 'I have N cats and 3 dogs'
+
+# Replacement can reference groups: \\1, \\2 or \\g<1>, \\g<name>
+text = "John Smith"
+result = re.sub(r"(\\w+) (\\w+)", r"\\2, \\1", text)
+print(result)  # 'Smith, John'
+
+# Using named groups in replacement
+result = re.sub(r"(?P<first>\\w+) (?P<last>\\w+)", r"\\g<last>, \\g<first>", text)
+print(result)  # 'Smith, John'
+
+# Replacement can be a FUNCTION:
+def multiply(match):
+    value = int(match.group())
+    return str(value * 2)
+
+result = re.sub(r"\\d+", multiply, "3 cats and 5 dogs")
+print(result)  # '6 cats and 10 dogs'
+
+# ============ re.subn(pattern, repl, string, count=0, flags=0) ============
+# Same as re.sub but RETURNS A TUPLE: (new_string, number_of_replacements)
+
+text = "a1 b2 c3 d4"
+result, count = re.subn(r"\\d+", "X", text)
+print(result)  # 'aX bX cX dX'
+print(count)   # 4
+
+result, count = re.subn(r"\\d+", "X", text, count=2)
+print(result)  # 'aX bX c3 d4'
+print(count)   # 2
+
+# ============ re.split(pattern, string, maxsplit=0, flags=0) ============
+# Splits string at every match of the pattern.
+# maxsplit=0 means no limit. maxsplit=N limits to N splits.
+
+text = "apple,banana;cherry|date"
+result = re.split(r"[,;|]", text)
+print(result)  # ['apple', 'banana', 'cherry', 'date']
+
+# maxsplit limits splits
+result = re.split(r"[,;|]", text, maxsplit=2)
+print(result)  # ['apple', 'banana', 'cherry|date']
+
+# If pattern captures groups, captured groups appear in the result
+result = re.split(r"(,|;|\\|)", text)
+print(result)  # ['apple', ',', 'banana', ';', 'cherry', '|', 'date']
+# Useful for keeping the delimiters
+
+# Split on whitespace
+text = "one   two\\tthree\\nfour"
+result = re.split(r"\\s+", text)
+print(result)  # ['one', 'two', 'three', 'four']
+
+# ============ re.compile(pattern, flags=0) ============
+# Pre-compiles a pattern into a RegexObject for repeated use.
+# Much faster when using the same pattern many times.
+
+# Without compile (re-parsed every call):
+for word in ["cat", "dog", "bird"]:
+    if re.search(r"\\d+", word):  # pattern compiled each iteration
+        pass
+
+# With compile (pattern parsed once):
+digit_pattern = re.compile(r"\\d+")
+for word in ["cat", "dog", "bird"]:
+    if digit_pattern.search(word):  # reuse compiled pattern
+        pass
+
+# Compiled pattern has all the same methods:
+pattern = re.compile(r"(\\w+)@(\\w+)\\.(\\w+)", re.I)
+match = pattern.search("John@Example.COM")
+if match:
+    print(match.groups())  # ('John', 'Example', 'COM')
+
+# Methods on compiled pattern:
+#   .search(string)     .match(string)     .fullmatch(string)
+#   .findall(string)    .finditer(string)  .sub(repl, string)
+#   .subn(repl, string) .split(string)
+# No need to pass flags again — already compiled in
+
+pattern = re.compile(r"\\d+")
+print(pattern.findall("a1 b2 c3"))     # ['1', '2', '3']
+print(pattern.sub("X", "a1 b2 c3"))    # 'aX bX cX'
+
+# Get pattern info from compiled object:
+print(pattern.pattern)  # '\\d+'
+print(pattern.flags)    # 32 (or whatever flags were passed)
+
+# ---------------------------------------------------------------------------
+# 11. MATCH OBJECT METHODS & ATTRIBUTES
+# ---------------------------------------------------------------------------
+
+# When re.search, re.match, re.fullmatch, or re.finditer succeed, they return
+# or yield Match objects. These provide details about where and what matched.
+
+text = "Contact: john.doe@example.com (work)"
+match = re.search(r"(?P<user>\\w+\\.\\w+)@(?P<domain>\\w+\\.\\w+)", text)
+
+if match:
+    # .group() - entire match (same as .group(0))
+    print(match.group())       # 'john.doe@example.com'
+
+    # .group(n) - specific numbered group
+    print(match.group(1))      # 'john.doe'
+    print(match.group(2))      # 'example.com'
+
+    # .group(name) - named group
+    print(match.group("user"))    # 'john.doe'
+    print(match.group("domain"))  # 'example.com'
+
+    # .groups() - all groups as tuple
+    print(match.groups())     # ('john.doe', 'example.com')
+    print(match.groups(0))    # ('john.doe', 'example.com') — default=None for unmatched groups
+
+    # .groupdict() - named groups as dict
+    print(match.groupdict())  # {'user': 'john.doe', 'domain': 'example.com'}
+
+    # .start() - start position of match (or specific group)
+    print(match.start())      # 9 (where 'john.doe@example.com' starts)
+    print(match.start(1))     # 9 (where group 1 starts)
+    print(match.start(2))     # 18 (where group 2 starts)
+
+    # .end() - end position of match (or specific group)
+    print(match.end())        # 30 (where match ends, exclusive)
+    print(match.end(1))       # 17 (where group 1 ends)
+
+    # .span() - (start, end) tuple
+    print(match.span())       # (9, 30)
+    print(match.span(1))      # (9, 17)
+    print(match.span("domain"))  # (18, 30)
+
+    # .string - the original string passed to the search
+    print(match.string)       # 'Contact: john.doe@example.com (work)'
+
+    # .re - the compiled pattern object used
+    print(match.re)           # re.compile('...')
+    print(match.re.pattern)   # the pattern string
+    print(match.re.flags)     # the flags integer
+
+# Example: Using match object for extraction
+log_line = "2024-01-15 14:30:00 ERROR: Connection timeout on port 8080"
+pattern = r"(?P<date>\\d{4}-\\d{2}-\\d{2}) (?P<time>\\d{2}:\\d{2}:\\d{2}) (?P<level>\\w+): (?P<message>.+)"
+match = re.search(pattern, log_line)
+
+if match:
+    print(f"Date: {match.group('date')}")       # '2024-01-15'
+    print(f"Time: {match.group('time')}")       # '14:30:00'
+    print(f"Level: {match.group('level')}")     # 'ERROR'
+    print(f"Message: {match.group('message')}") # 'Connection timeout on port 8080'
+    print(f"Line occupies: {match.span()}")     # (0, 56)
+
+# ---------------------------------------------------------------------------
+# 12. COMMON PATTERNS
+# ---------------------------------------------------------------------------
+
+# ---------- Email Address ----------
+email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+text = "Contact: support@example.com or admin@test.co.uk"
+print(re.findall(email_pattern, text))  # ['support@example.com', 'admin@test.co.uk']
+
+# ---------- URL ----------
+url_pattern = r"https?://[^\\s]+"
+text = "Visit https://example.com/path?q=1 and http://test.org"
+print(re.findall(url_pattern, text))  # ['https://example.com/path?q=1', 'http://test.org']
+
+# ---------- Phone Number (US) ----------
+phone_pattern = r"\\d{3}[-.]?\\d{3}[-.]?\\d{4}"
+text = "Call 555-123-4567 or 555.123.4568 or 5551234569"
+print(re.findall(phone_pattern, text))
+# ['555-123-4567', '555.123.4568', '5551234569']
+
+# With area code in parens:
+phone2 = r"\\(?\\d{3}\\)?[-.]?\\d{3}[-.]?\\d{4}"
+text = "Call (555) 123-4567 or 555-123-4568"
+# Note: this simplified version doesn't handle the space after parens
+print(re.findall(phone2, text))
+# ['(555)', '123-4567', '555-123-4568'] — broken because we need to handle the whole thing
+
+# Better phone pattern
+phone3 = r"\\(?\\d{3}\\)?[\\s-]?\\d{3}[-.]?\\d{4}"
+text = "Call (555) 123-4567 or 555-123-4568"
+print(re.findall(phone3, text))  # ['(555) 123-4567', '555-123-4568']
+
+# ---------- Date (ISO format) ----------
+date_pattern = r"\\d{4}-\\d{2}-\\d{2}"
+text = "Events: 2024-01-15, 2024-12-25, and invalid 2024-2-1"
+print(re.findall(date_pattern, text))  # ['2024-01-15', '2024-12-25']
+
+# ---------- IP Address (IPv4) ----------
+ip_pattern = r"\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}"
+# Note: this validates format but not range (0-255). Each octet is 1-3 digits.
+text = "Server: 192.168.1.1, Gateway: 10.0.0.1"
+print(re.findall(ip_pattern, text))
+# ['192.168.1.1', '10.0.0.1']
+
+# More precise: validates each octet 0-255 (advanced pattern)
+ip_precise = r"(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)"
+text = "Valid: 192.168.1.1, Invalid: 999.999.999.999"
+print(re.findall(ip_precise, text))  # ['192.168.1.1']
+
+# ---------- Hexadecimal Number ----------
+hex_pattern = r"0[xX][0-9a-fA-F]+"
+text = "Colors: 0xFF, 0x00, 0x1A2B, and 123 (not hex)"
+print(re.findall(hex_pattern, text))  # ['0xFF', '0x00', '0x1A2B']
+
+# ---------- Password Validation ----------
+# Check if password meets rules (must combine multiple patterns):
+# Rule: at least 8 chars, one uppercase, one lowercase, one digit, one special char
+
+password = "MyP@ssw0rd"
+rules = [
+    (r".{8,}",         "at least 8 characters"),
+    (r"[A-Z]",         "uppercase letter"),
+    (r"[a-z]",         "lowercase letter"),
+    (r"\\d",            "digit"),
+    (r"[!@#$%^&*(),.?\\":{}|<>_]", "special character"),
+]
+
+for pattern, desc in rules:
+    if re.search(pattern, password):
+        print(f"[PASS] {desc}")
+    else:
+        print(f"[FAIL] {desc}")
+
+# Single-pattern password validation (full match):
+password_pattern = re.compile(r"""
+    ^
+    (?=.*[A-Z])        # at least one uppercase
+    (?=.*[a-z])        # at least one lowercase
+    (?=.*\\d)           # at least one digit
+    (?=.*[!@#$%^&*])   # at least one special char
+    .{8,}              # at least 8 characters total
+    $
+""", re.VERBOSE)
+
+print(password_pattern.match("MyP@ssw0rd"))  # <re.Match...>
+print(password_pattern.match("weak"))        # None
+
+# ---------- Whitespace Stripping ----------
+# Strip leading whitespace
+text = "   hello   "
+print(re.sub(r"^\\s+", "", text))    # 'hello   '
+
+# Strip trailing whitespace
+print(re.sub(r"\\s+$", "", text))    # '   hello'
+
+# Strip both
+print(re.sub(r"^\\s+|\\s+$", "", text))  # 'hello'
+
+# Normalize multiple spaces to one
+text = "hello    world    python"
+print(re.sub(r"\\s+", " ", text))  # 'hello world python'
+
+# ---------- HTML Tag Stripping (basic) ----------
+html = "<div><p>Hello <b>world</b>!</p></div>"
+strip = re.sub(r"<[^>]*>", "", html)
+print(strip)  # 'Hello world!'
+
+# More careful: strip tags but keep content
+html = '<a href="link">Click here</a> for <span class="info">more</span>'
+strip = re.sub(r"<[^>]*>", "", html)
+print(strip)  # 'Click here for more'
+
+# ---------- Extracting All Numbers from Text ----------
+text = "Order #42: 100 units at $19.99 each, total $1,999.00"
+numbers = re.findall(r"\\d+\\.?\\d*", text)
+print(numbers)  # ['42', '100', '19.99', '1', '999.00'] (1,999 split due to comma)
+
+# Better: handle commas in numbers
+text = "Total: 1,999.00 and 42 and 3.14"
+nums = re.findall(r"\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?|\\d+\\.\\d+|\\d+", text)
+print(nums)  # ['1,999.00', '42', '3.14']
+
+# ---------- Extract Domain from URL ----------
+urls = "https://www.example.com/path http://test.org/page"
+pattern = r"https?://(?:www\\.)?([^/\\s]+)"
+matches = re.findall(pattern, urls)
+print(matches)  # ['example.com', 'test.org']
+
+# ---------------------------------------------------------------------------
+# 13. ADVANCED PATTERNS
+# ---------------------------------------------------------------------------
+
+# ---------- Backreferences: Finding Repeated Words ----------
+text = "this this is a test test of repeated word word patterns"
+pattern = r"(\\w+) \\1"  # word repeated after a space
+print(re.findall(pattern, text))  # ['this', 'test', 'word']
+
+# Case-insensitive repeated word
+text = "This this is a test Test"
+pattern = r"(?i)(\\w+) \\1"
+match = re.search(pattern, text)
+print(match.group())  # 'This this'
+
+# Backreferences in substitution: fixing repeated words
+text = "this this is is a test"
+fixed = re.sub(r"\\b(\\w+) \\1\\b", r"\\1", text)
+print(fixed)  # 'this is a test'
+
+# ---------- Recursive Patterns (not in re module) ----------
+# Python's built-in re module does NOT support recursive patterns.
+# For recursive matching (e.g., nested parentheses, balanced HTML tags),
+# you need the third-party \\\`regex\\\` module:
+#
+#   pip install regex
+#
+# Example with regex module (not available in standard re):
+#
+#   import regex
+#   pattern = regex.compile(r"\\((?:[^()]++|(?R))*+\\)")
+#   matches = pattern.findall("((a+b) * (c+d)) / 2")
+#   print(matches)  # ['((a+b) * (c+d))']
+
+# ---------- Balancing Groups ----------
+# Some regex engines support balancing groups (.NET, PCRE) to match
+# balanced pairs. Python's re does NOT support this natively.
+#
+# Workaround for simple balanced pairs using recursion or manual counting:
+def find_balanced_pairs(text, open_bracket="(", close_bracket=")"):
+    """Find text within balanced parentheses using basic counting."""
+    results = []
+    start = None
+    depth = 0
+    for i, char in enumerate(text):
+        if char == open_bracket:
+            if depth == 0:
+                start = i
+            depth += 1
+        elif char == close_bracket:
+            depth -= 1
+            if depth == 0 and start is not None:
+                results.append(text[start:i+1])
+                start = None
+    return results
+
+text = "(a + (b * c) + (d / e))"
+print(find_balanced_pairs(text))  # ['(a + (b * c) + (d / e))']
+# Only the outermost match because inner ones close before outer
+# Better with recursive approach or regex module
+
+# ---------- Conditional Patterns ----------
+# Python's re module does NOT support conditional patterns like:
+#   (?(condition)yes-pattern|no-pattern)
+#
+# This is a PCRE/Perl feature. Workaround: use multiple patterns.
+#
+# Example: match US vs UK spellings using alternation instead
+text = "color colour flavor flavour"
+# Match either: "color", "colour", "flavor", or "flavour"
+pattern = r"colou?r|flavou?r"
+print(re.findall(pattern, text))  # ['colour', 'color', 'flavour', 'flavor']
+# Wait, that matched all four... let me verify
+# "colou?r" matches "color" and "colour"
+# "flavou?r" matches "flavor" and "flavour"
+# So all four would be found. Good.
+
+# Workaround for "if group captured" scenario using two separate patterns:
+def conditional_match(text):
+    """Match differently based on presence of a prefix."""
+    # Pattern 1: with prefix
+    match = re.search(r"prefix_(abc|def)", text)
+    if match:
+        return f"Has prefix, matched: {match.group(1)}"
+    # Pattern 2: without prefix
+    match = re.search(r"^abc|def$", text)
+    if match:
+        return f"No prefix, matched: {match.group()}"
+    return None
+
+print(conditional_match("prefix_abc_test"))  # 'Has prefix, matched: abc'
+print(conditional_match("abc_test"))         # 'No prefix, matched: abc'
+
+# ---------------------------------------------------------------------------
+# 14. PERFORMANCE & BEST PRACTICES
+# ---------------------------------------------------------------------------
+
+# ---------- Compile Patterns Used Repeatedly ----------
+# DON'T: re-parsing every call
+for i in range(1000):
+    re.search(r"\\d+\\.\\d+", f"value {i}.{i}")  # pattern compiled 1000 times
+
+# DO: compile once
+pattern = re.compile(r"\\d+\\.\\d+")
+for i in range(1000):
+    pattern.search(f"value {i}.{i}")  # compiled once, reused 1000 times
+
+# ---------- Always Use Raw Strings r"..." ----------
+# Without raw string, you need double escaping
+# BAD:
+pattern = "\\\\d+\\\\.\\\\d+"  # Python sees \\\\d -> \\d, \\\\. -> \\.
+
+# GOOD:
+pattern = r"\\d+\\.\\d+"  # Regex sees exactly what you wrote
+
+# Even worse — what if you forget?
+# pattern = "\\d+\\.\\d+"  # \\d -> literal d, \\. -> literal .
+# This would match "d+.d+" not digits!
+
+# ---------- Be Specific in Character Classes ----------
+# BAD: too broad
+pattern = r".*"  # matches everything — often not what you want
+
+# BETTER: be specific
+pattern = r"[a-zA-Z0-9]+"  # exactly what you need
+
+# BAD: using .* when you know the character range
+html_pattern = r"<div>(.*)</div>"  # greedy, matches too much
+
+# BETTER: be specific about what's inside
+html_pattern = r"<div>([^<]*)</div>"  # matches non-< characters
+
+# ---------- Avoid Catastrophic Backtracking ----------
+# WARNING: This pattern can cause severe performance issues with long strings:
+#   r"(a+)+b"  on "aaaaaaaaaaaaaaaaaaaaaaaaac"
+#
+# Why it breaks:
+#   (a+)+ creates nested quantifiers.
+#   When "b" fails to match, the engine tries every possible way to split
+#   the a's into groups before giving up.
+#   For N characters, it tries ~2^N combinations.
+#   With 30 a's: about 1 billion attempts. With 100 a's: literally impossible.
+
+# Bad — catastrophic backtracking risk:
+bad_pattern = r"(a+)+b"
+
+# Bad — another common pattern:
+bad_url = r"https?://([^\\s]+)+"  # nested quantifiers on [^\\s]+
+
+# Bad — (.*)* or (.+)* patterns:
+bad_any = r"(.*)*b"  # DON'T DO THIS
+
+# Safe alternatives:
+# Remove nesting:
+safe_pattern = r"a+b"     # explicit
+safe_url = r"https?://\\S+"  # simpler, no nesting
+
+# Use atomic groups or possessive quantifiers if supported (regex module only)
+# Python's re doesn't support these; use the \\\`regex\\\` module if needed
+
+# Use re.DOTALL with caution — * and + will match everything including newlines
+# and can create backtracking issues with large texts
+
+# ---------- Use re.VERBOSE for Complex Patterns ----------
+# BAD: unreadable one-liner
+complex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+
+# GOOD: readable with VERBOSE and comments
+email_verbose = re.compile(r"""
+    ^                              # start of string
+    [a-zA-Z0-9._%+-]+              # local part
+    @                              # literal @ symbol
+    [a-zA-Z0-9.-]+                 # domain name
+    \\.                             # literal dot
+    [a-zA-Z]{2,}                   # top-level domain (at least 2 chars)
+    $                              # end of string
+""", re.VERBOSE)
+
+# ---------- re.search vs re.match ----------
+# Use re.search when you want to find a pattern ANYWHERE in the string
+# Use re.match when the pattern MUST start at position 0
+
+text = "The code is 12345"
+
+# search finds anywhere:
+print(re.search(r"\\d+", text))  # <re.Match...> (finds 12345)
+
+# match only at start:
+print(re.match(r"\\d+", text))   # None (text starts with "The", not digits)
+
+# If you want "at start" behavior, use re.match.
+# Otherwise, use re.search — it's what most people actually want.
+
+# ---------- Use Non-Capturing Groups When You Don't Need the Capture ----------
+# BAD: capturing when you don't need it
+pattern = r"(ha)+"  # captures group 1, even if we don't need it
+match = re.search(pattern, "haha")
+print(match.groups())  # ('ha',) — stored even if unused
+
+# GOOD: non-capturing
+pattern = r"(?:ha)+"  # groups for quantifier, no capture
+match = re.search(pattern, "haha")
+print(match.groups())  # () — empty, no capture overhead
+
+# Performance difference: non-capturing groups use less memory and are faster
+# because the engine doesn't need to store the matched substring.
+
+# ---------- Additional Performance Tips ----------
+# 1. Use specific character classes instead of .*
+#    r"[a-z]+" is faster than r".*" and more precise
+
+# 2. Anchor when possible — ^ and $ help the engine fail faster
+#    r"^abc" can immediately reject strings not starting with "abc"
+
+# 3. Use finditer instead of findall for large texts
+#    finditer returns a lazy iterator; findall builds the full list
+
+# 4. Use raw strings — always. No exceptions.
+
+# 5. Test your patterns with re.DEBUG flag:
+try:
+    re.compile(r"(\\w+)@(\\w+)\\.(\\w+)", re.DEBUG)
+except re.error:
+    pass  # DEBUG is internal, output varies by Python version
+# Better: use regex101.com or similar online testers
+
+# 6. For simple string operations, don't use regex:
+#    str.startswith(), str.endswith(), str.find(), str.split(), str.strip()
+#    are all faster than their regex equivalents for simple patterns.
+
+# 7. Pre-compile patterns used in loops, inside functions called frequently.
+#    Use functools.lru_cache or module-level constants.
+
+# ---------- Quick Decision Guide ----------
+# Which method to use?
+#
+# Method         | Returns           | Use when
+# ---------------+-------------------+------------------------------
+# re.search()    | Match or None     | Find anywhere in string
+# re.match()     | Match or None     | Must match at start
+# re.fullmatch() | Match or None     | Must match entire string
+# re.findall()   | List of strings   | All matches as text
+# re.finditer()  | Iterator of Match | All matches with positions
+# re.sub()       | String            | Find and replace
+# re.subn()      | (str, int)        | Replace with count
+# re.split()     | List of strings   | Split on pattern
+# re.compile()   | Pattern object    | Reuse pattern many times
+
+# When to use raw strings?
+#   r"..." — ALWAYS for regex patterns.
+#   Exception: when you want \\n, \\t etc. to be interpreted by Python.
+#   But even then, use r"..." with explicit \\n if needed: r"\\d+\\n" is fine.
+
+# ---------- Summary ----------
+# Regex is a powerful but complex tool. Start simple, use VERBOSE for complex
+# patterns, test incrementally, and always use raw strings.
+#
+# Remember:
+#   - Greedy quantifiers try to match as much as possible, then backtrack
+#   - Lazy quantifiers try to match as little as possible, then expand
+#   - Lookaround asserts position without consuming characters
+#   - Groups capture for extraction and backreferencing
+#   - Flags change matching behavior globally or inline
+#   - Compile patterns you reuse frequently
+#   - Avoid nested quantifiers that cause catastrophic backtracking
+#   - Test your patterns with sample data before relying on them
 `;
 
 const PYTHON_KEYWORDS = [
@@ -3124,7 +7607,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full overflow-hidden">
                                 <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
-                                    <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Guide" />
+                                    <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Rules" />
                                     <TabButton active={modalTab === 'cheat'} onClick={() => setModalTab('cheat')} label="Cheat" />
                                     <TabButton active={modalTab === 'glossary'} onClick={() => setModalTab('glossary')} label="Glossary" />
                                     <TabButton active={modalTab === 'regex'} onClick={() => setModalTab('regex')} label="Regex" />
@@ -3133,22 +7616,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     {modalTab === 'how' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text="# Guide
-# For full offline mode, add to Home Screen.
-# Python logic is executed locally.
-#
-# Python Mastery Pro runs Python code entirely in your browser
-# using Pyodide (WebAssembly). No server needed.
-" />
+                                                <CopyButton text={RULES_CONTENT} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={`# Guide
-# For full offline mode, add to Home Screen.
-# Python logic is executed locally.
-#
-# Python Mastery Pro runs Python code entirely in your browser
-# using Pyodide (WebAssembly). No server needed.
-`} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={RULES_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
                                             </div>
                                         </div>
                                     )}
