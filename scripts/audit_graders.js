@@ -6,6 +6,19 @@ const vm = require('vm');
 const root = path.resolve(__dirname, '..');
 const MIN_FUNCTION_TESTS = 2;
 
+function readNumberFlag(name) {
+  const prefix = `--${name}=`;
+  const inline = process.argv.find(arg => arg.startsWith(prefix));
+  const rawValue = inline ? inline.slice(prefix.length) : process.argv[process.argv.indexOf(`--${name}`) + 1];
+  if (!rawValue || rawValue.startsWith('--')) return null;
+  const value = Number(rawValue);
+  if (!Number.isFinite(value)) {
+    console.error(`Invalid --${name} value: ${rawValue}`);
+    process.exit(1);
+  }
+  return value;
+}
+
 function loadTsExports(fileName) {
   const source = fs.readFileSync(path.join(root, fileName), 'utf8');
   const compiled = ts.transpileModule(source, {
@@ -34,12 +47,30 @@ const distribution = new Map();
 const weakFunctionGraders = [];
 const singleCaseScriptGraders = [];
 const emptyGraders = [];
+const invalidGraders = [];
 
 for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   const id = Number(rawId);
   const tests = Array.isArray(grader.tests) ? grader.tests : [];
   const testCount = tests.length;
   distribution.set(testCount, (distribution.get(testCount) || 0) + 1);
+
+  if (!Array.isArray(grader.tests)) {
+    invalidGraders.push(`${id}: tests must be an array`);
+  }
+
+  if (grader.mode !== 'script' && !Array.isArray(grader.functionNames)) {
+    invalidGraders.push(`${id}: function graders must declare functionNames`);
+  }
+
+  tests.forEach((test, index) => {
+    if (!Object.prototype.hasOwnProperty.call(test, 'expected') && !Object.prototype.hasOwnProperty.call(test, 'expectedException')) {
+      invalidGraders.push(`${id}: test ${index + 1} must declare expected or expectedException`);
+    }
+    if (!Object.prototype.hasOwnProperty.call(test, 'args')) {
+      invalidGraders.push(`${id}: test ${index + 1} must declare args`);
+    }
+  });
 
   if (testCount === 0) {
     emptyGraders.push(id);
@@ -64,6 +95,9 @@ const sortedDistribution = [...distribution.entries()].sort((a, b) => a[0] - b[0
 const weakIds = weakFunctionGraders.map(item => item.id);
 const showAll = process.argv.includes('--all');
 const shownWeakIds = showAll ? weakIds : weakIds.slice(0, 100);
+const maxWeakFunctions = readNumberFlag('max-weak-functions');
+const maxSingleCaseScripts = readNumberFlag('max-single-case-scripts');
+const maxEmptyGraders = readNumberFlag('max-empty-graders') ?? 0;
 
 console.log('Grader quality audit');
 console.log(`Exercises: ${EXERCISES.length}`);
@@ -72,6 +106,7 @@ console.log(`Test-count distribution: ${sortedDistribution.map(([count, total]) 
 console.log(`Function graders below ${MIN_FUNCTION_TESTS} tests: ${weakFunctionGraders.length}`);
 console.log(`Single-case script graders: ${singleCaseScriptGraders.length}`);
 console.log(`Empty graders: ${emptyGraders.length}`);
+console.log(`Invalid grader definitions: ${invalidGraders.length}`);
 
 if (weakFunctionGraders.length) {
   console.log(`Weak function grader IDs${showAll ? '' : ' (first 100)'}: ${shownWeakIds.join(', ')}`);
@@ -84,6 +119,34 @@ if (weakFunctionGraders.length) {
   }
 }
 
-if (emptyGraders.length) {
+if (invalidGraders.length) {
+  console.log('Invalid graders:');
+  for (const issue of invalidGraders.slice(0, 80)) {
+    console.log(issue);
+  }
+  if (invalidGraders.length > 80) {
+    console.log(`...and ${invalidGraders.length - 80} more invalid grader issues.`);
+  }
+}
+
+const gateFailures = [];
+if (invalidGraders.length) {
+  gateFailures.push(`${invalidGraders.length} invalid grader definitions`);
+}
+if (emptyGraders.length > maxEmptyGraders) {
+  gateFailures.push(`${emptyGraders.length} empty graders exceeds max ${maxEmptyGraders}`);
+}
+if (maxWeakFunctions !== null && weakFunctionGraders.length > maxWeakFunctions) {
+  gateFailures.push(`${weakFunctionGraders.length} weak function graders exceeds max ${maxWeakFunctions}`);
+}
+if (maxSingleCaseScripts !== null && singleCaseScriptGraders.length > maxSingleCaseScripts) {
+  gateFailures.push(`${singleCaseScriptGraders.length} single-case script graders exceeds max ${maxSingleCaseScripts}`);
+}
+
+if (gateFailures.length) {
+  console.error('Grader audit failed:');
+  for (const failure of gateFailures) {
+    console.error(`- ${failure}`);
+  }
   process.exitCode = 1;
 }
