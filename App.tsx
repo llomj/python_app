@@ -580,6 +580,11 @@ def __auto_grader_run():
         delete_items = case.get("deleteItems", [])
         expected_exception = case.get("expectedException")
         input_values = list(case.get("inputValues", []))
+        random_values = list(case.get("randomValues", []))
+        random_float_values = list(case.get("randomFloatValues", []))
+        random_choice_values = list(case.get("randomChoiceValues", []))
+        random_sample_values = list(case.get("randomSampleValues", []))
+        random_shuffle_values = list(case.get("randomShuffleValues", []))
         label = case.get("label") or ("test " + str(index))
         required_name = case.get("functionName")
         case_target_name = target_name
@@ -626,14 +631,71 @@ def __auto_grader_run():
         old_input = builtins.input
         old_open = builtins.open
         old_cwd = os.getcwd()
+        old_random_methods = {}
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
+        random_iter = iter(random_values)
+        random_float_iter = iter(random_float_values)
+        random_choice_iter = iter(random_choice_values)
+        random_sample_iter = iter(random_sample_values)
+        random_shuffle_iter = iter(random_shuffle_values)
         builtins.input = lambda prompt='': next(input_iter)
         def __guarded_open(file, *open_args, **open_kwargs):
             if str(file) in permission_denied_paths:
                 raise PermissionError("Permission denied")
             return old_open(file, *open_args, **open_kwargs)
         try:
+            import random
+            for __name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
+                old_random_methods[__name] = getattr(random, __name)
+            if random_values:
+                def __function_randint(_start, _end):
+                    try:
+                        return next(random_iter)
+                    except StopIteration:
+                        return random_values[-1]
+                random.randint = __function_randint
+                random.randrange = lambda *_args: __function_randint(0, 0)
+            if random_float_values:
+                def __function_random():
+                    try:
+                        return next(random_float_iter)
+                    except StopIteration:
+                        return random_float_values[-1]
+                random.random = __function_random
+                random.uniform = lambda _start, _end: __function_random()
+            if random_choice_values:
+                def __function_choice(_items):
+                    try:
+                        return next(random_choice_iter)
+                    except StopIteration:
+                        return random_choice_values[-1]
+                random.choice = __function_choice
+                def __function_choices(_items, k=1):
+                    values = []
+                    for _index in range(k):
+                        try:
+                            values.append(next(random_choice_iter))
+                        except StopIteration:
+                            values.append(random_choice_values[-1])
+                    return values
+                random.choices = __function_choices
+            if random_sample_values:
+                def __function_sample(_items, _count):
+                    try:
+                        return list(next(random_sample_iter))
+                    except StopIteration:
+                        return list(random_sample_values[-1])
+                random.sample = __function_sample
+            if random_shuffle_values:
+                def __function_shuffle(items):
+                    try:
+                        replacement = list(next(random_shuffle_iter))
+                    except StopIteration:
+                        replacement = list(random_shuffle_values[-1])
+                    items[:] = replacement
+                    return None
+                random.shuffle = __function_shuffle
             for path_name in setup_remove:
                 if os.path.islink(path_name) or os.path.isfile(path_name):
                     os.remove(path_name)
@@ -712,6 +774,12 @@ def __auto_grader_run():
                 "message": f"{label} raised {type(exc).__name__}: {exc}"
             }
         finally:
+            try:
+                import random
+                for __name, __method in old_random_methods.items():
+                    setattr(random, __name, __method)
+            except Exception:
+                pass
             try:
                 os.chdir(old_cwd)
             except Exception:
