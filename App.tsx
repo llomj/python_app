@@ -1463,7 +1463,7 @@ const App: React.FC = () => {
     const [isInFrame, setIsInFrame] = useState(false);
     const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full'>('none');
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
-    const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements'>('code');
+    const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
     const [aiHintText, setAiHintText] = useState<string>('');
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
@@ -1477,6 +1477,7 @@ const App: React.FC = () => {
     const [outputHeight, setOutputHeight] = useState(85);
     const [logicContent, setLogicContent] = useState<string>('');
     const [requirementsContent, setRequirementsContent] = useState<string>('');
+    const [syntaxContent, setSyntaxContent] = useState<string>('');
     const [resetConfirmArmed, setResetConfirmArmed] = useState(false);
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
@@ -2377,6 +2378,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         } else {
             setLogicContent('');
             setRequirementsContent('');
+            setSyntaxContent('');
             return;
         }
 
@@ -2425,10 +2427,30 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setRequirementsContent('');
                 console.warn(`Error loading requirements file: ${err.message}`);
             }
+
+            // Fetch and parse syntax file
+            try {
+                const syntaxFile = `level1_${filePrefix}_syntax.py`;
+                const isGitHubPages = window.location.hostname === 'llomj.github.io';
+                const basePath = isGitHubPages ? '/python_app' : '';
+                const syntaxResponse = await fetch(`${basePath}/${syntaxFile}`);
+                if (syntaxResponse.ok) {
+                    const syntaxText = await syntaxResponse.text();
+                    const problemSyntax = extractProblemContent(syntaxText, exerciseId);
+                    setSyntaxContent(problemSyntax || '');
+                } else {
+                    setSyntaxContent('');
+                    console.warn(`Syntax file not found: ${syntaxFile}`);
+                }
+            } catch (err) {
+                setSyntaxContent('');
+                console.warn(`Error loading syntax file: ${err.message}`);
+            }
         } catch (err) {
             console.error('Error loading solution files:', err);
             setLogicContent('');
             setRequirementsContent('');
+            setSyntaxContent('');
         }
     }, []);
 
@@ -3038,6 +3060,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label="Solution" />
                                     <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label="Logic" />
                                     <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label="Requirements" />
+                                    <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label="Syntax" />
                                 </div>
                                 <div className="flex-grow overflow-y-auto">
                                     {solutionTab === 'code' && (
@@ -3077,6 +3100,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         Searching requirements...
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {solutionTab === 'syntax' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={syntaxContent || ''} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                {syntaxContent ? (
+                                                    <CodeMirror value={syntaxContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                ) : (
+                                                    <div className="p-8 text-center text-gray-500 text-sm">
+                                                        Searching syntax documentation...
                                                     </div>
                                                 )}
                                             </div>
