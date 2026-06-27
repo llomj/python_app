@@ -12651,7 +12651,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1425",
         "description": "Write a Pythonic way to use `contextlib.suppress()` to ignore specific exceptions.",
         "initialCode": "from contextlib import suppress\n# Write your solution here",
-        "solution": "from contextlib import suppress\n# Using function approach\nwith suppress(ValueError, ZeroDivisionError):\n    result = int('not a number')  # This would raise ValueError, but it's suppressed\n    print('This won't print')\nprint('Continues after exception')  # Expected: Continues after exception",
+        "solution": "from contextlib import suppress\n# Using function approach\nwith suppress(ValueError, ZeroDivisionError):\n    result = int('not a number')  # This would raise ValueError, but it is suppressed\n    print('This will not print')\nprint('Continues after exception')  # Expected: Continues after exception",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12687,7 +12687,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1429",
         "description": "Write a Pythonic program to get the union of two sets.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nprint(a | b)  # Expected: {1, 2, 3, 4}\n\n# Using built-in approach\ndef solve():\n    print(a | b)  # Expected: {1, 2, 3, 4}\n\n# Using manual approach\ndef solve():\n    return a | b\n\n# Script approach\nprint(a | b)  # Expected: {1, 2, 3, 4}\n\n# Direct approach\nprint(a | b)  # Expected: {1, 2, 3, 4}",
+        "solution": "# Using function approach\na = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)  # Expected: {1, 2, 3, 4}\n\n# Using built-in approach\ndef solve():\n    a = {1, 2, 3}\n    b = {2, 3, 4}\n    print(a | b)  # Expected: {1, 2, 3, 4}\n\n# Using manual approach\ndef solve():\n    a = {1, 2, 3}\n    b = {2, 3, 4}\n    return a | b\n\n# Script approach\na = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)  # Expected: {1, 2, 3, 4}\n\n# Direct approach\na = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)  # Expected: {1, 2, 3, 4}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -12831,7 +12831,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1445",
         "description": "Write a Pythonic program to count character frequencies in a string.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\ns = 'banana'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Using built-in approach\ndef solve():\n    s = 'banana'\n    freq = Counter(s)\n    print(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Using manual approach\ndef solve():\n    s = 'banana'\n    freq = Counter(s)\n    return freq\n\n# Script approach\ns = 'banana'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Direct approach\ns = 'banana'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}",
+        "solution": "from collections import Counter\n\n# Using function approach\ns = 'banana'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Using built-in approach\ndef solve():\n    from collections import Counter\n    s = 'banana'\n    freq = Counter(s)\n    print(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Using manual approach\ndef solve():\n    from collections import Counter\n    s = 'banana'\n    freq = Counter(s)\n    return freq\n\n# Script approach\nfrom collections import Counter\ns = 'banana'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}\n\n# Direct approach\nfrom collections import Counter\ns = 'banana'\nfreq = Counter(s)\nprint(freq)  # Expected: {'b': 1, 'a': 3, 'n': 2}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13272,7 +13272,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1494",
         "description": "Use `default=` with `next()` to get the first even number or -1.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nlst = [1, 3, 5]\nprint(next((x for x in lst if x % 2 == 0), default=-1))  # Expected: -1",
+        "solution": "# Using function approach\nlst = [1, 3, 5]\nprint(next((x for x in lst if x % 2 == 0), -1))  # Expected: -1",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13281,7 +13281,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1495",
         "description": "Use `default=` in `next()` to safely access an item in a generator.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\ngen = (x for x in range(5) if x > 10)\nprint(next(gen, default='No item'))  # Expected: 'No item'",
+        "solution": "# Using function approach\ngen = (x for x in range(5) if x > 10)\nprint(next(gen, 'No item'))  # Expected: 'No item'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13308,7 +13308,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1498",
         "description": "Use `default=` with `next()` to find the first name starting with \"Z\".",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nnames = ['Alice', 'Bob']\nprint(next((name for name in names if name.startswith('Z')), default='Not found'))  # Expected: 'Not found'",
+        "solution": "# Using function approach\nnames = ['Alice', 'Bob']\nprint(next((name for name in names if name.startswith('Z')), 'Not found'))  # Expected: 'Not found'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13326,7 +13326,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1500",
         "description": "Use `default=` in `next()` to handle an empty comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nprint(next((x for x in []), default='Empty'))  # Expected: 'Empty'",
+        "solution": "# Using function approach\nprint(next((x for x in []), 'Empty'))  # Expected: 'Empty'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13344,7 +13344,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1502",
         "description": "Use `default=` with `next()` to check for existence of an element in a list.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nnums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), default='Missing'))  # Expected: 'Missing'",
+        "solution": "# Using function approach\nnums = [1, 3, 5]\nprint(next((x for x in nums if x == 4), 'Missing'))  # Expected: 'Missing'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13362,7 +13362,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1504",
         "description": "Use `default=` with `next()` to return a default if no element satisfies the condition.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nletters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), default='Not found'))  # Expected: 'Not found'",
+        "solution": "# Using function approach\nletters = ['a', 'b', 'c']\nprint(next((ch for ch in letters if ch == 'z'), 'Not found'))  # Expected: 'Not found'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13380,7 +13380,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1506",
         "description": "Use `default=` with `next()` to safely iterate a condition on a list of dictionaries.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nusers = [{'name': 'Alice'}, {'name': 'Bob'}]\nprint(next((u for u in users if u['name'] == 'Zoe'), default='No match'))  # Expected: 'No match'",
+        "solution": "# Using function approach\nusers = [{'name': 'Alice'}, {'name': 'Bob'}]\nprint(next((u for u in users if u['name'] == 'Zoe'), 'No match'))  # Expected: 'No match'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13407,7 +13407,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1509",
         "description": "Use `default=` in `next()` to avoid StopIteration on empty input.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nprint(next(iter([]), default='Nothing'))  # Expected: 'Nothing'",
+        "solution": "# Using function approach\nprint(next(iter([]), 'Nothing'))  # Expected: 'Nothing'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14082,7 +14082,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1584",
         "description": "Write a Python program using `json.loads()` to parse a JSON string into a Python dictionary.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\n# Using function approach\njson_string = '{'name': 'Alice', 'age': 30}'\ndata = json.loads(json_string)\nprint(data)  # Expected: {'name': 'Alice', 'age': 30}\n\n# Using built-in approach\ndef solve():\n    import json\n    json_string = '{'name': 'Alice', 'age': 30}'\n    data = json.loads(json_string)\n    print(data)  # Expected: {'name': 'Alice', 'age': 30}\n\n# Using manual approach\ndef solve():\n    import json\n    json_string = '{'name': 'Alice', 'age': 30}'\n    data = json.loads(json_string)\n    return data",
+        "solution": "import json\n\n# Using function approach\njson_string = '{\"name\": \"Alice\", \"age\": 30}'\ndata = json.loads(json_string)\nprint(data)  # Expected: {'name': 'Alice', 'age': 30}\n\n# Using built-in approach\ndef solve():\n    import json\n    json_string = '{\"name\": \"Alice\", \"age\": 30}'\n    data = json.loads(json_string)\n    print(data)  # Expected: {'name': 'Alice', 'age': 30}\n\n# Using manual approach\ndef solve():\n    import json\n    json_string = '{\"name\": \"Alice\", \"age\": 30}'\n    data = json.loads(json_string)\n    return data",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14469,7 +14469,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1627",
         "description": "Write a Pythonic way to use `pathlib.Path.read_text()` to read the entire contents of a text file.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path('file.txt').read_text()\n# Using function approach\nprint('Demonstration: Path('file.txt').read_text() reads file content')\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path('file.txt').read_text()\n# Using function approach\nprint(\"Demonstration: Path('file.txt').read_text() reads file content\")\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14478,7 +14478,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1628",
         "description": "Write a Pythonic way to use `pathlib.Path.write_text()` to write text to a file.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: Path('file.txt').write_text('Hello, World!')\n# Using function approach\nprint('Demonstration: Path('file.txt').write_text('Hello, World!') writes to file')\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: Path('file.txt').write_text('Hello, World!')\n# Using function approach\nprint(\"Demonstration: Path('file.txt').write_text('Hello, World!') writes to file\")\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14487,7 +14487,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1629",
         "description": "Write a Pythonic way to use `pathlib.Path.glob()` to find all files matching a pattern.",
         "initialCode": "from pathlib import Path\n# Write your solution here",
-        "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\n# Using function approach\nprint('Demonstration: Path('.').glob('*.py') finds all .py files')\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
+        "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\n# Using function approach\nprint(\"Demonstration: Path('.').glob('*.py') finds all .py files\")\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14496,7 +14496,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1630",
         "description": "Write a Python program using `json.dump()` to write a Python object to a JSON file.",
         "initialCode": "import json\nfrom pathlib import Path\n# Write your solution here",
-        "solution": "import json\nfrom pathlib import Path\n\n# Using function approach\ndata = {'name': 'Alice', 'age': 30}\n# Note: In practice: json.dump(data, open('data.json', 'w'))\nprint('Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file')\n\n# Using built-in approach\ndef solve():\n    import json\n    from pathlib import Path\n    data = {'name': 'Alice', 'age': 30}\n\n# Using manual approach\ndef solve():\n    import json\n    from pathlib import Path\n    data_2 = {'name': 'Alice', 'age': 30}\n\n# Script approach\nimport json\nfrom pathlib import Path\ndata = {'name': 'Alice', 'age': 30}\n\n# Direct approach\nimport json\nfrom pathlib import Path\ndata = {'name': 'Alice', 'age': 30}",
+        "solution": "import json\nfrom pathlib import Path\n\n# Using function approach\ndata = {'name': 'Alice', 'age': 30}\n# Note: In practice: json.dump(data, open('data.json', 'w'))\nprint(\"Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\")\n\n# Using built-in approach\ndef solve():\n    import json\n    from pathlib import Path\n    data = {'name': 'Alice', 'age': 30}\n\n# Using manual approach\ndef solve():\n    import json\n    from pathlib import Path\n    data_2 = {'name': 'Alice', 'age': 30}\n\n# Script approach\nimport json\nfrom pathlib import Path\ndata = {'name': 'Alice', 'age': 30}\n\n# Direct approach\nimport json\nfrom pathlib import Path\ndata = {'name': 'Alice', 'age': 30}",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14505,7 +14505,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1631",
         "description": "Write a Python program using `json.load()` to read a JSON file and parse it into a Python object.",
         "initialCode": "import json\n# Write your solution here",
-        "solution": "import json\n\n# Note: In practice: data = json.load(open('data.json'))\n# Using function approach\nprint('Demonstration: json.load(open('data.json')) reads and parses JSON file')\n\n# Using built-in approach\ndef solve():\n    import json\n\n# Using manual approach\ndef solve():\n    import json\n\n# Script approach\nimport json\n\n# Direct approach\nimport json",
+        "solution": "import json\n\n# Note: In practice: data = json.load(open('data.json'))\n# Using function approach\nprint(\"Demonstration: json.load(open('data.json')) reads and parses JSON file\")\n\n# Using built-in approach\ndef solve():\n    import json\n\n# Using manual approach\ndef solve():\n    import json\n\n# Script approach\nimport json\n\n# Direct approach\nimport json",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -14667,7 +14667,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1649",
         "description": "Write a Pythonic way to use `contextlib.suppress()` with multiple exception types to ignore multiple types of errors.",
         "initialCode": "from contextlib import suppress\n# Write your solution here",
-        "solution": "from contextlib import suppress\n\n# Using function approach\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int('not a number')  # Would raise ValueError, but suppressed\n    print('This won't print')\nprint('Continues after suppressed exception')  # Expected: Continues after suppressed exception",
+        "solution": "from contextlib import suppress\n\n# Using function approach\nwith suppress(ValueError, TypeError, ZeroDivisionError):\n    result = int('not a number')  # Would raise ValueError, but suppressed\n    print('This will not print')\nprint('Continues after suppressed exception')  # Expected: Continues after suppressed exception",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
