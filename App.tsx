@@ -3122,40 +3122,64 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     >
                         <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10"><X size={24} /></button>
                         {showModal === 'instructions' && (
-                            <div className="flex flex-col h-full">
-                                <div className="flex gap-4 mb-4 border-b border-[#1d2d44]">
+                            <div className="flex flex-col h-full overflow-hidden">
+                                <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
                                     <TabButton active={modalTab === 'how'} onClick={() => setModalTab('how')} label="Guide" />
                                     <TabButton active={modalTab === 'cheat'} onClick={() => setModalTab('cheat')} label="Cheat" />
                                     <TabButton active={modalTab === 'glossary'} onClick={() => setModalTab('glossary')} label="Glossary" />
                                     <TabButton active={modalTab === 'regex'} onClick={() => setModalTab('regex')} label="Regex" />
                                 </div>
-                                <div className="overflow-y-auto text-xs text-gray-300 space-y-4 flex-grow">
-                                    {modalTab === 'how' && <p className="select-text">For full offline mode, add to <b>Home Screen</b>. Python logic is executed locally.</p>}
+                                <div className="flex-grow overflow-y-auto">
+                                    {modalTab === 'how' && (
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text="# Guide
+# For full offline mode, add to Home Screen.
+# Python logic is executed locally.
+#
+# Python Mastery Pro runs Python code entirely in your browser
+# using Pyodide (WebAssembly). No server needed.
+" />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={`# Guide
+# For full offline mode, add to Home Screen.
+# Python logic is executed locally.
+#
+# Python Mastery Pro runs Python code entirely in your browser
+# using Pyodide (WebAssembly). No server needed.
+`} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
+                                        </div>
+                                    )}
                                     {modalTab === 'cheat' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
-                                            <CodeMirror
-                                                value={CHEAT_CONTENT}
-                                                height="400px"
-                                                readOnly={true}
-                                                extensions={[python(), ...customPythonTheme]}
-                                                basicSetup={{ lineNumbers: false, foldGutter: false }}
-                                            />
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={CHEAT_CONTENT} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={CHEAT_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
                                         </div>
                                     )}
                                     {modalTab === 'glossary' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-auto h-[400px] p-4 border border-[#1d2d44]">
-                                            <pre className="text-[#4ade80] font-mono text-xs whitespace-pre-wrap select-text m-0">{GLOSSARY_CONTENT}</pre>
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={GLOSSARY_CONTENT} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={GLOSSARY_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
                                         </div>
                                     )}
                                     {modalTab === 'regex' && (
-                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44]">
-                                            <CodeMirror
-                                                value={REGEX_CONTENT}
-                                                height="400px"
-                                                readOnly={true}
-                                                extensions={[python(), ...customPythonTheme]}
-                                                basicSetup={{ lineNumbers: false, foldGutter: false }}
-                                            />
+                                        <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
+                                            <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
+                                                <CopyButton text={REGEX_CONTENT} />
+                                            </div>
+                                            <div className="flex-1 overflow-auto">
+                                                <CodeMirror value={REGEX_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                            </div>
                                         </div>
                                     )}
                                 </div>
