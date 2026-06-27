@@ -322,10 +322,12 @@ import ast
 import types
 import os
 import shutil
+import tempfile
 
 __auto_grader_spec = json.loads(${JSON.stringify(JSON.stringify(grader))})
 __auto_grader_source = ${JSON.stringify(sourceCode)}
 __auto_grader_source_name = ${JSON.stringify(sourceName)}
+__auto_grader_project_root = os.getcwd()
 
 def __auto_grader_jsonable(value):
     try:
@@ -631,6 +633,8 @@ def __auto_grader_run():
         old_input = builtins.input
         old_open = builtins.open
         old_cwd = os.getcwd()
+        old_sys_path = list(sys.path)
+        temp_dir = tempfile.mkdtemp(prefix="auto_grader_")
         old_random_methods = {}
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
@@ -645,6 +649,9 @@ def __auto_grader_run():
                 raise PermissionError("Permission denied")
             return old_open(file, *open_args, **open_kwargs)
         try:
+            os.chdir(temp_dir)
+            if __auto_grader_project_root not in sys.path:
+                sys.path.insert(0, __auto_grader_project_root)
             import random
             for __name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
                 old_random_methods[__name] = getattr(random, __name)
@@ -784,9 +791,14 @@ def __auto_grader_run():
                 os.chdir(old_cwd)
             except Exception:
                 pass
+            sys.path[:] = old_sys_path
             sys.stdout = old_stdout
             builtins.input = old_input
             builtins.open = old_open
+            try:
+                shutil.rmtree(temp_dir)
+            except Exception:
+                pass
 
         if expected_exception:
             return {
@@ -840,6 +852,8 @@ def __auto_grader_run_script():
         old_input = builtins.input
         old_open = builtins.open
         old_cwd = os.getcwd()
+        old_sys_path = list(sys.path)
+        temp_dir = tempfile.mkdtemp(prefix="auto_grader_")
         old_random_methods = {}
         sys.stdout = io.StringIO()
         input_iter = iter(input_values)
@@ -861,6 +875,9 @@ def __auto_grader_run_script():
                 raise PermissionError("Permission denied")
             return old_open(file, *open_args, **open_kwargs)
         try:
+            os.chdir(temp_dir)
+            if __auto_grader_project_root not in sys.path:
+                sys.path.insert(0, __auto_grader_project_root)
             import random
             for __name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
                 old_random_methods[__name] = getattr(random, __name)
@@ -955,9 +972,14 @@ def __auto_grader_run_script():
                 os.chdir(old_cwd)
             except Exception:
                 pass
+            sys.path[:] = old_sys_path
             sys.stdout = old_stdout
             builtins.input = old_input
             builtins.open = old_open
+            try:
+                shutil.rmtree(temp_dir)
+            except Exception:
+                pass
 
         if not __auto_grader_same(printed, expected, compare):
             return {
