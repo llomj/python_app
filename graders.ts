@@ -1477,7 +1477,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     188: {
         functionNames: ['get_initials'],
         tests: [
-            { args: ['jonathan noll'], expected: 'joNathAn noLL' }
+            { args: ['jonathan noll'], expected: 'joNathAn noLL' },
+            { args: ['xxnxxxaxxxxll'], expected: 'xxNxxxAxxxxLL' }
         ]
     },
     189: {
@@ -1758,10 +1759,16 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   227: {
     functionNames: ["print_zigzag"],
     compare: 'printedOrReturn',
-    tests: [{
-      args: [5],
-      expected: "*       * \n  *       \n*       * \n  *       \n*       *"
-    }]
+    tests: [
+      {
+        args: [5],
+        expected: "*       * \n  *       \n*       * \n  *       \n*       *"
+      },
+      {
+        args: [3],
+        expected: "*   *\n  *\n*   *"
+      }
+    ]
   },
     228: {
         functionNames: ['print_cross'],
