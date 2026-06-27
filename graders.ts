@@ -14068,6 +14068,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_divisors'],
         tests: [
             { args: [12], expected: [1,2,3,4,6,12] },
+            { args: [7], expected: [1,7] },
         ]
     },
   1891: {
@@ -14082,6 +14083,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['format_time'],
         tests: [
             { args: [1,0,0], expected: "01:00:00" },
+            { args: [12,30,5], expected: "12:30:05" },
         ]
     },
   1893: {
@@ -14089,60 +14091,72 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [1, 5, 3],
       expected: 2022
+    }, {
+      args: [2000, 1, 1],
+      expected: 24
     }]
   },
   1894: {
         functionNames: ['get_middle_elements'],
         tests: [
             { args: [[1,2,3,4]], expected: [2,3] },
+            { args: [["a","b","c"]], expected: ["b"] },
         ]
     },
   1895: {
         functionNames: ['swap_adjacent_elements'],
         tests: [
             { args: [[1,2,3,4]], expected: [2,1,4,3] },
+            { args: [[1,2,3,4,5]], expected: [2,1,4,3,5] },
         ]
     },
   1896: {
         functionNames: ['get_every_nth_element'],
         tests: [
             { args: [[1,2,3,4,5,6],2], expected: [1,3,5] },
+            { args: [["a","b","c","d"],3], expected: ["a","d"] },
         ]
     },
   1897: {
         functionNames: ['count_uppercase_lowercase'],
         tests: [
             { args: ["Hello WORLD"], expected: {"uppercase":6,"lowercase":4} },
+            { args: ["Py3"], expected: {"uppercase":1,"lowercase":1} },
         ]
     },
   1898: {
         functionNames: ['remove_duplicates_preserve_order'],
         tests: [
             { args: [[3,1,2,1,3,2]], expected: [3,1,2] },
+            { args: [["a","b","a","c","b"]], expected: ["a","b","c"] },
         ]
     },
   1899: {
         functionNames: ['get_intersection_three_lists'],
         tests: [
             { args: [[1,2,3],[2,3,4],[2,3,5]], expected: [2,3] },
+            { args: [["a","b","c"],["b","c","d"],["c","b"]], expected: ["b","c"] },
         ]
     },
   1900: {
         functionNames: ['calculate_percentage'],
         tests: [
             { args: [25,100], expected: 25 },
+            { args: [1,3], expected: 33.33 },
         ]
     },
   1901: {
         functionNames: ['find_largest_three'],
         tests: [
             { args: [[1,8,3,9,5,2]], expected: [9,8,5] },
+            { args: [[-1,10,0,7]], expected: [10,7,0] },
         ]
     },
   1902: {
         functionNames: ['find_smallest_three'],
         tests: [
             { args: [[1,8,3,9,5,2]], expected: [1,2,3] },
+            { args: [[-1,10,0,7]], expected: [-1,0,7] },
         ]
     },
   1903: {
@@ -14156,54 +14170,63 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_words_starting_with_vowel'],
         tests: [
             { args: ["apple banana orange"], expected: ["apple","orange"] },
+            { args: ["Ice cream and cake"], expected: ["Ice","and"] },
         ]
     },
   1905: {
         functionNames: ['get_words_ending_with_consonant'],
         tests: [
             { args: ["apple banana world"], expected: ["world"] },
+            { args: ["sky tree run"], expected: ["sky","run"] },
         ]
     },
   1906: {
         functionNames: ['calculate_area_perimeter'],
         tests: [
             { args: [4,5], expected: [20,18] },
+            { args: [2,3], expected: [6,10] },
         ]
     },
   1907: {
         functionNames: ['format_currency'],
         tests: [
             { args: [1234.5], expected: "$1234.50" },
+            { args: [9], expected: "$9.00" },
         ]
     },
   1908: {
         functionNames: ['get_even_indices'],
         tests: [
             { args: [[10,20,30,40,50]], expected: [10,30,50] },
+            { args: [["a","b","c","d"]], expected: ["a","c"] },
         ]
     },
   1909: {
         functionNames: ['get_odd_indices'],
         tests: [
             { args: [[10,20,30,40,50]], expected: [20,40] },
+            { args: [["a","b","c","d"]], expected: ["b","d"] },
         ]
     },
   1910: {
         functionNames: ['multiply_corresponding'],
         tests: [
             { args: [[1,2,3],[4,5,6]], expected: [4,10,18] },
+            { args: [[0,-2],[5,3]], expected: [0,-6] },
         ]
     },
   1911: {
         functionNames: ['divide_corresponding'],
         tests: [
             { args: [[10,20,30],[2,4,5]], expected: [5,5,6] },
+            { args: [[9,8],[3,2]], expected: [3,4] },
         ]
     },
   1912: {
         functionNames: ['get_strings_containing'],
         tests: [
             { args: [["hello","world","help"],"el"], expected: ["hello","help"] },
+            { args: [["cat","car","dog"],"ca"], expected: ["cat","car"] },
         ]
     },
   1913: {
@@ -14211,48 +14234,58 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello"],
       expected: {"letters": 5, "digits": 0, "others": 0}
+    }, {
+      args: ["a1!"],
+      expected: {"letters": 1, "digits": 1, "others": 1}
     }]
   },
   1914: {
         functionNames: ['get_range_between'],
         tests: [
             { args: [[1,3,5,7,9],3,7], expected: [3,5,7] },
+            { args: [[0,2,4,6],1,5], expected: [2,4] },
         ]
     },
   1915: {
         functionNames: ['format_date'],
         tests: [
             { args: [2023,12,25], expected: "2023-12-25" },
+            { args: [2024,1,5], expected: "2024-01-05" },
         ]
     },
   1916: {
         functionNames: ['calculate_simple_interest'],
         tests: [
             { args: [1000,5,2], expected: 100 },
+            { args: [500,4,3], expected: 60 },
         ]
     },
   1917: {
         functionNames: ['get_unique_characters'],
         tests: [
             { args: ["hello"], expected: ["h","e","l","o"] },
+            { args: ["banana"], expected: ["b","a","n"] },
         ]
     },
   1918: {
         functionNames: ['count_words_ending_with'],
         tests: [
             { args: ["running walking jumped","ing"], expected: 2 },
+            { args: ["cat bat dog","at"], expected: 2 },
         ]
     },
   1919: {
         functionNames: ['get_numbers_in_range'],
         tests: [
             { args: [[1,5,10,15],5,15], expected: [5,10,15] },
+            { args: [[0,2,4,6],1,5], expected: [2,4] },
         ]
     },
   1920: {
         functionNames: ['format_name_age_city'],
         tests: [
             { args: ["Alice",25,"NYC"], expected: "Name: Alice, Age: 25, City: NYC" },
+            { args: ["Bob",30,"LA"], expected: "Name: Bob, Age: 30, City: LA" },
         ]
     },
   1921: {
@@ -14266,48 +14299,56 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_sum_of_squares'],
         tests: [
             { args: [[1,2,3]], expected: 14 },
+            { args: [[-2,0,4]], expected: 20 },
         ]
     },
   1923: {
         functionNames: ['get_product_of_even'],
         tests: [
             { args: [[1,2,3,4,5]], expected: 8 },
+            { args: [[2,6,7]], expected: 12 },
         ]
     },
   1924: {
         functionNames: ['get_sum_of_odd'],
         tests: [
             { args: [[1,2,3,4,5]], expected: 9 },
+            { args: [[2,4,7,9]], expected: 16 },
         ]
     },
   1925: {
         functionNames: ['find_second_occurrence'],
         tests: [
             { args: [[1,2,3,2,4],2], expected: 3 },
+            { args: [[1,2,3],2], expected: -1 },
         ]
     },
   1926: {
         functionNames: ['get_elements_greater_than_average'],
         tests: [
             { args: [[1,2,3,4,5]], expected: [4,5] },
+            { args: [[10,0,5]], expected: [10] },
         ]
     },
   1927: {
         functionNames: ['get_elements_less_than_average'],
         tests: [
             { args: [[1,2,3,4,5]], expected: [1,2] },
+            { args: [[10,0,5]], expected: [0] },
         ]
     },
   1928: {
         functionNames: ['count_digits_letters'],
         tests: [
             { args: ["abc123"], expected: [3,3] },
+            { args: ["A1!b2"], expected: [2,2] },
         ]
     },
   1929: {
         functionNames: ['get_words_with_length'],
         tests: [
             { args: ["a ab abc abcd",3], expected: ["abc"] },
+            { args: ["hi to code",2], expected: ["hi","to"] },
         ]
     },
   1930: {
@@ -14315,24 +14356,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello", "hello", 3, 4, 5],
       expected: "hello hello, 3, 4 5"
+    }, {
+      args: ["123", "Main St", "NYC", "NY", "10001"],
+      expected: "123 Main St, NYC, NY 10001"
     }]
   },
   1931: {
         functionNames: ['calculate_total_with_discount'],
         tests: [
             { args: [[100],20,0], expected: 80 },
+            { args: [[100,50],10,8], expected: 145.8 },
         ]
     },
   1932: {
         functionNames: ['get_common_prefix'],
         tests: [
             { args: ["flower","flow"], expected: "flow" },
+            { args: ["hello","help"], expected: "hel" },
         ]
     },
   1933: {
         functionNames: ['get_common_suffix'],
         tests: [
             { args: ["running","walking"], expected: "ing" },
+            { args: ["tester","runner"], expected: "er" },
         ]
     },
   1934: {
@@ -14346,18 +14393,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_strings_with_length_range'],
         tests: [
             { args: [["a","ab","abc","abcd"],2,3], expected: ["ab","abc"] },
+            { args: [["hi","code","python"],2,4], expected: ["hi","code"] },
         ]
     },
   1936: {
         functionNames: ['calculate_median'],
         tests: [
             { args: [[1,3,5,7,9]], expected: 5 },
+            { args: [[1,2,3,4]], expected: 2.5 },
         ]
     },
   1937: {
         functionNames: ['get_mode'],
         tests: [
             { args: [[1,2,2,3,3,3]], expected: 3 },
+            { args: [["a","b","a"]], expected: "a" },
         ]
     },
   1938: {
@@ -14366,24 +14416,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello", 2, 3],
       expected: "Name: hello\nAge: 2\nEmail: 3"
+    }, {
+      args: ["Alice", 30, "alice@example.com"],
+      expected: "Name: Alice\nAge: 30\nEmail: alice@example.com"
     }]
   },
   1939: {
         functionNames: ['get_numbers_divisible_by_all'],
         tests: [
             { args: [[2,4,6,8,10],[2,4]], expected: [4,8] },
+            { args: [[6,12,18,20],[2,3]], expected: [6,12,18] },
         ]
     },
   1940: {
         functionNames: ['count_vowels_per_word'],
         tests: [
             { args: ["hello world ai"], expected: {"hello":2,"world":1,"ai":2} },
+            { args: ["sky tree"], expected: {"sky":0,"tree":2} },
         ]
     },
   1941: {
         functionNames: ['get_words_with_vowel_count'],
         tests: [
             { args: ["hello ai world",2], expected: ["hello","ai"] },
+            { args: ["sky tree apple",0], expected: ["sky"] },
         ]
     },
   1942: {
@@ -14391,24 +14447,30 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [1, 2, 3],
       expected: "1 | 2 | 3"
+    }, {
+      args: ["Alice", 30, "Engineer"],
+      expected: "Alice | 30 | Engineer"
     }]
   },
   1943: {
         functionNames: ['get_elements_not_in_both'],
         tests: [
             { args: [[1,2,3],[2,3,4]], expected: [1,4] },
+            { args: [["a","b"],["b","c"]], expected: ["a","c"] },
         ]
     },
   1944: {
         functionNames: ['calculate_weighted_average'],
         tests: [
             { args: [[70,80,90],[1,2,1]], expected: 80 },
+            { args: [[10,20,30],[1,2,3]], expected: 23.333333333333332 },
         ]
     },
   1945: {
         functionNames: ['get_strings_sorted_by_length'],
         tests: [
             { args: [["abc","a","ab"]], expected: ["a","ab","abc"] },
+            { args: [["python","a","hello","world"]], expected: ["a","hello","world","python"] },
         ]
     },
   1946: {
@@ -14416,12 +14478,16 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: ["1%", "2%", "3%", "4%", "5%"]
+    }, {
+      args: [[25, 50, 75]],
+      expected: ["25%", "50%", "75%"]
     }]
   },
   1947: {
         functionNames: ['get_pairs_summing_to'],
         tests: [
             { args: [[1,2,3,4,5],5], expected: [[1,4],[2,3]] },
+            { args: [[1,2,3,4,5],7], expected: [[2,5],[3,4]] },
         ]
     },
   1948: {
@@ -14429,18 +14495,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello"],
       expected: {"vowels": 2, "consonants": 3, "digits": 0, "spaces": 0}
+    }, {
+      args: ["Hi 123!"],
+      expected: {"vowels": 1, "consonants": 1, "digits": 3, "spaces": 1}
     }]
   },
   1949: {
+        compare: 'dictUnorderedLists',
         functionNames: ['get_words_by_vowel_count'],
         tests: [
             { args: ["hello ai world ae"], expected: {"1":["world"],"2":["hello","ai","ae"]} },
+            { args: ["sky tree apple"], expected: {"0":["sky"],"2":["tree","apple"]} },
         ]
     },
   1950: {
         functionNames: ['format_name_with_title'],
         tests: [
             { args: ["John","Doe","Dr"], expected: "Dr. John Doe" },
+            { args: ["Ada","Lovelace","Prof"], expected: "Prof. Ada Lovelace" },
         ]
     },
   1951: {
@@ -14448,12 +14520,16 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [1, 5],
       expected: 0.04363323129985824
+    }, {
+      args: [2, 90],
+      expected: 3.141592653589793
     }]
   },
   1952: {
         functionNames: ['get_elements_at_multiple_indices'],
         tests: [
             { args: [[10,20,30,40],[0,2]], expected: {"0":10,"2":30} },
+            { args: [["a","b","c"],[1,2]], expected: {"1":"b","2":"c"} },
         ]
     },
   1953: {
@@ -14461,6 +14537,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello"],
       expected: {"has_uppercase": false, "has_lowercase": true, "has_digit": false, "has_special": false}
+    }, {
+      args: ["A1!"],
+      expected: {"has_uppercase": true, "has_lowercase": false, "has_digit": true, "has_special": true}
     }]
   },
   1954: {
@@ -14468,6 +14547,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5], 5, 5],
       expected: [[1, 4], [2, 3]]
+    }, {
+      args: [[1, 2, 3], 3, 4],
+      expected: [[1, 2], [1, 3]]
     }]
   },
   1955: {
@@ -14475,42 +14557,52 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [5, 2, 5],
       expected: "+5 (2) 5"
+    }, {
+      args: ["1", "555", "1234567"],
+      expected: "+1 (555) 1234567"
     }]
   },
   1956: {
         functionNames: ['get_consecutive_elements'],
         tests: [
             { args: [[1,2,3,4,5],2], expected: [[1,2],[2,3],[3,4],[4,5]] },
+            { args: [["a","b","c"],2], expected: [["a","b"],["b","c"]] },
         ]
     },
   1957: {
         functionNames: ['calculate_gcd'],
         tests: [
             { args: [12,8], expected: 4 },
+            { args: [48,18], expected: 6 },
         ]
     },
   1958: {
         functionNames: ['calculate_lcm'],
         tests: [
             { args: [12,18], expected: 36 },
+            { args: [4,6], expected: 12 },
         ]
     },
   1959: {
         functionNames: ['get_frequency_dict'],
         tests: [
             { args: [[1,2,2,3]], expected: {"1":1,"2":2,"3":1} },
+            { args: [["a","b","a"]], expected: {"a":2,"b":1} },
         ]
     },
   1960: {
         functionNames: ['format_number_with_commas'],
         tests: [
             { args: [1234567], expected: "1,234,567" },
+            { args: [1000], expected: "1,000" },
         ]
     },
   1961: {
+        compare: 'dictUnorderedLists',
         functionNames: ['get_words_with_same_length'],
         tests: [
             { args: [["a","ab","a","abc","ab"]], expected: {"1":["a","a"],"2":["ab","ab"],"3":["abc"]} },
+            { args: [["hi","to","code"]], expected: {"2":["hi","to"],"4":["code"]} },
         ]
     },
   1962: {
@@ -14524,30 +14616,35 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['get_sublist_sum'],
         tests: [
             { args: [[1,2,3,4,5],1,3], expected: 5 },
+            { args: [[10,20,30,40],1,4], expected: 90 },
         ]
     },
   1964: {
         functionNames: ['format_time_12hour'],
         tests: [
             { args: [14], expected: "2 PM" },
+            { args: [0], expected: "12 AM" },
         ]
     },
   1965: {
         functionNames: ['get_elements_between_values'],
         tests: [
             { args: [[1,5,10,15,20],5,15], expected: [10] },
+            { args: [[10,20,30,40,50],15,45], expected: [20,30,40] },
         ]
     },
   1966: {
         functionNames: ['count_substring_occurrences'],
         tests: [
             { args: ["abababa","aba"], expected: 3 },
+            { args: ["ababab","aba"], expected: 2 },
         ]
     },
   1967: {
         functionNames: ['format_list_as_string'],
         tests: [
             { args: [[1,2,3],", "], expected: "[1, 2, 3]" },
+            { args: [["a","b"]," | "], expected: "[a | b]" },
         ]
     },
   1968: {
@@ -14555,6 +14652,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
       expected: [[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5]]
+    }, {
+      args: [[1, 2], ["a", "b"]],
+      expected: [[1, "a"], [1, "b"], [2, "a"], [2, "b"]]
     }]
   },
   1969: {
@@ -14575,6 +14675,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['format_name_initials'],
         tests: [
             { args: ["John","F","Kennedy"], expected: "J.F.K." },
+            { args: ["John","Michael","Doe"], expected: "J.M.D." },
         ]
     },
   1972: {
@@ -14589,12 +14690,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'float',
         tests: [
             { args: [[['rectangle', [5, 3]], ['circle', [2]]]], expected: 27.566370614359172 },
+            { args: [[['rectangle', [2, 4]]]], expected: 8 },
         ]
     },
   1974: {
         functionNames: ['get_words_with_repeated_chars'],
         tests: [
             { args: ["hello world aabb"], expected: ["hello","aabb"] },
+            { args: ["cat moon sky"], expected: ["moon"] },
         ]
     },
   1975: {
@@ -14602,24 +14705,31 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello", [1, 2, 3]],
       expected: "Name: hello, Scores: 1, 2, 3"
+    }, {
+      args: ["Alice", [85, 90, 88]],
+      expected: "Name: Alice, Scores: 85, 90, 88"
     }]
   },
   1976: {
         functionNames: ['get_symmetric_difference'],
+        compare: 'unorderedList',
         tests: [
             { args: [[1,2,3],[2,3,4]], expected: [1,4] },
+            { args: [[1,2,3,4],[3,4,5,6]], expected: [1,2,5,6] },
         ]
     },
   1977: {
         functionNames: ['count_words_by_first_letter'],
         tests: [
             { args: ["apple banana apricot"], expected: {"a":2,"b":1} },
+            { args: ["apple apricot banana cherry"], expected: {"a":2,"b":1,"c":1} },
         ]
     },
   1978: {
         functionNames: ['format_decimal_places'],
         tests: [
             { args: [3.14159,2], expected: "3.14" },
+            { args: [3.14159,3], expected: "3.142" },
         ]
     },
   1979: {
@@ -14633,12 +14743,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['calculate_net_price'],
         tests: [
             { args: [100,20,0], expected: 80 },
+            { args: [100,20,10], expected: 88 },
         ]
     },
   1981: {
         functionNames: ['get_strings_with_all_vowels'],
         tests: [
             { args: [["education","hello","aerious"]], expected: ["education","aerious"] },
+            { args: [["education","hello","facetious"]], expected: ["education","facetious"] },
         ]
     },
   1982: {
@@ -14646,36 +14758,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: ["$1.00", "$2.00", "$3.00", "$4.00", "$5.00"]
+    }, {
+      args: [[10.5, 20.75, 30.25]],
+      expected: ["$10.50", "$20.75", "$30.25"]
     }]
   },
   1983: {
         functionNames: ['get_consecutive_pairs'],
         tests: [
             { args: [[1,2,3,4]], expected: [[1,2],[2,3],[3,4]] },
+            { args: [["a","b","c"]], expected: [["a","b"],["b","c"]] },
         ]
     },
   1984: {
         functionNames: ['calculate_geometric_mean'],
+        compare: 'float',
         tests: [
             { args: [[2,8]], expected: 4 },
+            { args: [[2,8,32]], expected: 8 },
         ]
     },
   1985: {
         functionNames: ['get_words_sorted_by_vowels'],
         tests: [
             { args: ["hello ai world"], expected: ["world","hello","ai"] },
+            { args: ["hello world python programming"], expected: ["world","python","hello","programming"] },
         ]
     },
   1986: {
         functionNames: ['format_name_age_grade'],
         tests: [
             { args: ["Alice",15,"A"], expected: "Alice (Age: 15) - Grade: A" },
+            { args: ["Bob",20,"B"], expected: "Bob (Age: 20) - Grade: B" },
         ]
     },
   1987: {
         functionNames: ['get_elements_with_max_frequency'],
+        compare: 'unorderedList',
         tests: [
             { args: [[1,2,2,3,3,3]], expected: [3] },
+            { args: [[1,2,2,3,3,3,4,4,4]], expected: [3,4] },
         ]
     },
   1988: {
@@ -14683,6 +14805,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: 2.18978102189781
+    }, {
+      args: [[2, 4, 8]],
+      expected: 3.4285714285714284
     }]
   },
   1989: {
@@ -14690,6 +14815,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: "Item 1: 1, Item 2: 2, Item 3: 3, Item 4: 4, Item 5: 5"
+    }, {
+      args: [["apple", "banana", "cherry"]],
+      expected: "Item 1: apple, Item 2: banana, Item 3: cherry"
     }]
   },
   1990: {
@@ -14704,25 +14832,34 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [5, 2, 3],
       expected: 5.306040000000001
+    }, {
+      args: [1000, 5, 3],
+      expected: 1157.6250000000002
     }]
   },
   1992: {
     functionNames: ["get_elements_by_frequency_range"],
+    compare: 'unorderedList',
     tests: [{
       args: [[1, 2, 3, 4, 5], 5, 5],
       expected: []
+    }, {
+      args: [[1, 2, 2, 3, 3, 3, 4, 4, 4, 4], 2, 3],
+      expected: [2, 3]
     }]
   },
   1993: {
         functionNames: ['format_table_data'],
         tests: [
             { args: [[["Alice", 85], ["Bob", 90], ["Charlie", 75]]], expected: "Alice      | 85\nBob        | 90\nCharlie    | 75" },
+            { args: [[["Ann", 1], ["Bob", 22]]], expected: "Ann        | 1\nBob        | 22" },
         ]
     },
   1994: {
         functionNames: ['get_words_with_unique_chars'],
         tests: [
             { args: ["hello world abc"], expected: ["world","abc"] },
+            { args: ["cat moon sky"], expected: ["cat","sky"] },
         ]
     },
   1995: {
@@ -14739,6 +14876,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello", "hello", 3, "{1, 2, 3}", {"a": 1, "b": 2}],
       expected: "hello\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}"
+    }, {
+      args: ["Ada", "9 Elm", "Austin", "TX", "73301"],
+      expected: "Ada\n9 Elm\nAustin, TX 73301"
     }]
   },
   1997: {
@@ -14753,6 +14893,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: {"mean": 3, "median": 3, "min": 1, "max": 5, "range": 4}
+    }, {
+      args: [[10, 20, 30, 40, 50]],
+      expected: {"mean": 30, "median": 30, "min": 10, "max": 50, "range": 40}
     }]
   },
   1999: {
@@ -14761,6 +14904,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: ["hello", 5, 3, {"a": 1, "b": 2}],
       expected: "Name: hello\nPhone: 5\nEmail: 3\nAddress: {'a': 1, 'b': 2}"
+    }, {
+      args: ["Alice", "555-1234", "alice@example.com", "123 Main St"],
+      expected: "Name: Alice\nPhone: 555-1234\nEmail: alice@example.com\nAddress: 123 Main St"
     }]
   },
   2000: {
@@ -14768,6 +14914,9 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     tests: [{
       args: [[1, 2, 3, 4, 5]],
       expected: {"sum": 15, "average": 3, "min": 1, "max": 5, "count": 5, "standard_deviation": 1.4142135623730951}
+    }, {
+      args: [[10, 20, 30, 40, 50]],
+      expected: {"sum": 150, "average": 30, "min": 10, "max": 50, "count": 5, "standard_deviation": 14.142135623730951}
     }]
   }
 
