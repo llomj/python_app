@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-# Generate comment-formatted syntax docs for every problem.
+# Generate syntax docs using real Python code snippets + minimal # headers.
+# CodeMirror will syntax-highlight the code naturally.
 #
-# Output lines are Python comments (#) so CodeMirror renders them
-# in the theme's comment color (gray), not mixed colors.
-#
-# Four sections per problem:
-#   SYNTAX          — what Python features this code uses
-#   EVALUATION ORDER — how each expression is broken down step-by-step
-#   EXECUTION ORDER  — what runs and in what sequence
-#   EXECUTION FLOW   — how control jumps (function calls, loops, branches)
+# Output: level1_{500,1000,1500,2000}_syntax.py
+# Format:  """ Problem N: """ markers (same as requirements files)
 
 import ast
 import re
@@ -63,11 +58,53 @@ def _name(node: ast.AST) -> str:
         return f"[{', '.join(_name(e) for e in node.elts)}]"
     if isinstance(node, ast.Tuple):
         return f"({', '.join(_name(e) for e in node.elts)})"
-    if isinstance(node, ast.Dict):
-        return '{...}'
-    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
-        return f"-{_name(node.operand)}"
     return '?'
+
+
+def first_code_section(code: str) -> str:
+    """Extract the first main approach from a multi-alternative solution."""
+    markers = ['# Using built-in approach', '# Using manual approach',
+               '# Script approach', '# Direct approach',
+               '# Using function approach']
+    pos = None
+    for m in markers:
+        p = code.find(m)
+        if p != -1 and (pos is None or p < pos):
+            pos = p
+    if pos and pos > 0:
+        return code[:pos].strip()
+    return code.strip()
+
+
+def _func_sig(f: ast.FunctionDef) -> str:
+    params = [a.arg for a in f.args.args]
+    return f"def {f.name}({', '.join(params)}):"
+
+
+def _code_line(node: ast.AST) -> str:
+    """Return a compact source-code representation of a top-level statement."""
+    if isinstance(node, ast.FunctionDef):
+        return _func_sig(node)
+    if isinstance(node, ast.ClassDef):
+        bases = [b.id if isinstance(b, ast.Name) else '' for b in node.bases]
+        return f"class {node.name}({', '.join(bases)})" if bases else f"class {node.name}"
+    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+        return _call_str(node.value)
+    if isinstance(node, ast.Assign):
+        ts = ', '.join(t.id if isinstance(t, ast.Name) else '?' for t in node.targets)
+        return f"{ts} = ..."
+    if isinstance(node, ast.For):
+        target = ast.unparse(node.target)
+        return f"for {target} in {_name(node.iter)}:"
+    if isinstance(node, ast.While):
+        return "while ...:"
+    if isinstance(node, ast.If):
+        return "if ...:"
+    if isinstance(node, ast.Import):
+        return f"import {', '.join(a.name for a in node.names)}"
+    if isinstance(node, ast.ImportFrom):
+        return f"from {node.module} import {', '.join(a.name for a in node.names)}"
+    return ''
 
 
 def _call_str(node: ast.Call) -> str:
@@ -86,344 +123,228 @@ def _call_str(node: ast.Call) -> str:
     return f"{_name(node.func)}({', '.join(args)})"
 
 
-def first_code_section(code: str) -> str:
-    """Extract the first main approach from a multi-alternative solution."""
-    markers = ['# Using built-in approach', '# Using manual approach',
-               '# Script approach', '# Direct approach',
-               '# Using function approach']
-    pos = None
-    for m in markers:
-        p = code.find(m)
-        if p != -1 and (pos is None or p < pos):
-            pos = p
-    if pos and pos > 0:
-        return code[:pos].strip()
-    return code.strip()
-
-
-def _func_signature(f: ast.FunctionDef) -> str:
-    params = [a.arg for a in f.args.args]
-    return f"def {f.name}({', '.join(params)})"
-
-
-# ── Section generators ──────────────────────────────────────────────
+# ── Section generators (return real Python code) ────────────────────
 
 def gen_syntax(tree: ast.Module) -> str:
-    """What Python features are used."""
     lines = []
-    lines.append("#")
-    lines.append("# ===== SYNTAX =====")
+    lines.append("# Syntax")
+    lines.append("")
 
     funcs = [n for n in tree.body if isinstance(n, ast.FunctionDef)]
     classes = [n for n in tree.body if isinstance(n, ast.ClassDef)]
 
     if classes:
         for c in classes:
-            methods = [n.name for n in c.body if isinstance(n, ast.FunctionDef)]
-            bases = [b.id if isinstance(b, ast.Name) else '?' for b in c.bases]
+            bases = [b.id if isinstance(b, ast.Name) else '' for b in c.bases]
             if bases:
-                lines.append(f"#   class {c.name}({', '.join(bases)}) — inherits from parent")
+                lines.append(f"class {c.name}({', '.join(bases)}):")
             else:
-                lines.append(f"#   class {c.name} — defines a new type")
-            for m in methods:
-                lines.append(f"#     def {m} — method of {c.name}")
+                lines.append(f"class {c.name}:")
+            for m in c.body:
+                if isinstance(m, ast.FunctionDef):
+                    lines.append(f"    {_func_sig(m)}")
+                    for stmt in m.body:
+                        body_code = ast.unparse(stmt)
+                        for line in body_code.split('\n'):
+                            lines.append(f"        {line}")
+            lines.append("")
 
     if funcs:
-        lines.append(f"#   {_func_signature(funcs[0])}")
-        seen_returns = False
-        seen_calls = set()
-        for f in funcs:
-            returns = any(isinstance(n, ast.Return) for n in ast.walk(f))
-            if returns and not seen_returns:
-                lines.append(f"#   return — exits the function and sends back a value")
-                seen_returns = True
-            calls = [n for n in ast.walk(f) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)]
-            for c in calls:
-                if c.func.id == 'print':
-                    continue
-                if c.func.id not in seen_calls:
-                    lines.append(f"#   {c.func.id}() — built-in function call")
-                    seen_calls.add(c.func.id)
-            if not returns:
-                lines.append(f"#   (no return — the function prints directly instead of returning)")
+        f = funcs[0]
+        lines.append(_func_sig(f))
+        for stmt in f.body:
+            body_code = ast.unparse(stmt)
+            for line in body_code.split('\n'):
+                lines.append(f"    {line}")
+        lines.append("")
 
-    # Gather keywords & operators from AST
-    def _walk_keywords():
-        ks = set()
-        for n in ast.walk(tree):
-            if isinstance(n, ast.For): ks.add('for'); ks.add('in')
-            elif isinstance(n, ast.While): ks.add('while')
-            elif isinstance(n, ast.If): ks.add('if/elif/else')
-            elif isinstance(n, ast.Try): ks.add('try/except')
-            elif isinstance(n, ast.Lambda): ks.add('lambda')
-            elif isinstance(n, ast.With): ks.add('with')
-            elif isinstance(n, ast.Break): ks.add('break')
-            elif isinstance(n, ast.Continue): ks.add('continue')
-            elif isinstance(n, (ast.ListComp, ast.DictComp, ast.GeneratorExp)): ks.add('comprehension')
-        return ks
-    for k in sorted(_walk_keywords()):
-        lines.append(f"#   {k}")
+    # Keywords and operators as comments
+    kw_parts = []
+    for n in ast.walk(tree):
+        if isinstance(n, ast.For): kw_parts.append('for'); break
+    for n in ast.walk(tree):
+        if isinstance(n, ast.While): kw_parts.append('while'); break
+    for n in ast.walk(tree):
+        if isinstance(n, ast.If): kw_parts.append('if/else'); break
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Try): kw_parts.append('try/except'); break
+    if kw_parts:
+        lines.append(f"# keywords: {' | '.join(kw_parts)}")
 
-    # Check operators
-    def _walk_ops():
-        ops = set()
-        for n in ast.walk(tree):
-            if isinstance(n, ast.BinOp): ops.add(_op_name(n.op))
-            elif isinstance(n, ast.Compare):
-                for op in n.ops:
-                    cls_map = {ast.Eq: '==', ast.NotEq: '!=', ast.Lt: '<', ast.LtE: '<=',
+    # Operators
+    ops = set()
+    for n in ast.walk(tree):
+        if isinstance(n, ast.BinOp): ops.add(_op_name(n.op))
+        elif isinstance(n, ast.Compare):
+            for op in n.ops:
+                for cls, s in {ast.Eq: '==', ast.NotEq: '!=', ast.Lt: '<', ast.LtE: '<=',
                                ast.Gt: '>', ast.GtE: '>=', ast.In: 'in', ast.NotIn: 'not in',
-                               ast.Is: 'is', ast.IsNot: 'is not'}
-                    for cls, s in cls_map.items():
-                        if isinstance(op, cls): ops.add(s)
-            elif isinstance(n, ast.BoolOp):
-                ops.add('and' if isinstance(n.op, ast.And) else 'or')
-        return ops
-    ops = [o for o in ['+', '-', '*', '/', '//', '%', '**', '==', '!=', '<', '>', '<=', '>=',
-                        'and', 'or', 'not', 'in', 'is']
-           if o in _walk_ops()]
+                               ast.Is: 'is', ast.IsNot: 'is not'}.items():
+                    if isinstance(op, cls): ops.add(s)
+        elif isinstance(n, ast.BoolOp):
+            ops.add('and' if isinstance(n.op, ast.And) else 'or')
     if ops:
-        lines.append(f"#   operators: {' '.join(ops)}")
+        lines.append(f"# operators: {' '.join(sorted(ops, key=lambda x: (len(x), x)))}")
+
+    # Built-in calls (excluding user-defined functions and print)
+    user_funcs = {f.name for f in tree.body if isinstance(f, (ast.FunctionDef, ast.AsyncFunctionDef))}
+    calls = set()
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id not in ('print',) and n.func.id not in user_funcs:
+            calls.add(n.func.id)
+    if calls:
+        lines.append(f"# builtins: {', '.join(sorted(calls))}()")
 
     return '\n'.join(lines)
 
 
-def gen_evaluation_order(tree: ast.Module, code: str = '') -> str:
-    """Step-by-step expression breakdown."""
+def gen_evaluation_order(tree: ast.Module) -> str:
     lines = []
-    lines.append("#")
-    lines.append("# ===== EVALUATION ORDER =====")
+    lines.append("# Evaluation Order")
+    lines.append("")
 
-    func_names = {f.name: f for f in tree.body if isinstance(f, ast.FunctionDef)}
-    has_expr = False
+    func_names = {f.name for f in tree.body if isinstance(f, ast.FunctionDef)}
+    shown = set()
 
+    # Show key expressions from the code
     for n in ast.walk(tree):
         if isinstance(n, ast.BinOp):
-            has_expr = True
-            left = _name(n.left)
-            right = _name(n.right)
-            op = _op_name(n.op)
-            lines.append(f"#   {left} {op} {right}: first get {left}, then get {right}, then compute {left} {op} {right}")
+            code = ast.unparse(n)
+            if code not in shown:
+                shown.add(code)
+                lines.append(f"{code}  # {_name(n.left)} → {_name(n.right)} → {_op_name(n.op)}")
         elif isinstance(n, ast.Call) and isinstance(n.func, ast.Name):
             if n.func.id in func_names:
-                has_expr = True
-                args_desc = []
-                for a in n.args:
-                    if isinstance(a, ast.Constant):
-                        args_desc.append(f"gets the literal {repr(a.value)}")
-                    elif isinstance(a, ast.Name):
-                        args_desc.append(f"looks up variable '{a.id}'")
-                    elif isinstance(a, ast.BinOp):
-                        args_desc.append(f"computes the expression first")
-                    else:
-                        args_desc.append("resolves the value")
-                prefix = f" {', '.join(args_desc)}, then runs the function body" if args_desc else " — no arguments needed"
-                lines.append(f"#   {_call_str(n)}:{prefix}")
-            elif n.func.id == 'print' and any(isinstance(a, ast.Call) for a in n.args):
-                has_expr = True
-                for a in n.args:
-                    if isinstance(a, ast.Call):
-                        inner_name = _name(a.func)
-                        if inner_name in func_names:
-                            lines.append(f"#   print({_call_str(a)}): the inner {inner_name}() executes FIRST, then print() outputs the result")
-                        else:
-                            lines.append(f"#   print({_call_str(a)}): inner expression resolves first, then print() outputs")
+                code = ast.unparse(n)
+                if code not in shown:
+                    shown.add(code)
+                    lines.append(f"{code}  # evaluate args first, then run body")
+            elif n.func.id == 'print' and n.args:
+                inner = n.args[0]
+                if isinstance(inner, ast.Call):
+                    code = ast.unparse(n)
+                    if code not in shown:
+                        shown.add(code)
+                        inner_name = _name(inner.func)
+                        lines.append(f"{code}  # {inner_name}() runs first, then print()")
+        elif isinstance(n, ast.Compare):
+            code = ast.unparse(n)
+            if code not in shown:
+                shown.add(code)
+                lines.append(f"{code}  # evaluates to True or False")
 
-    # Conditions
-    for n in ast.walk(tree):
-        if isinstance(n, ast.If):
-            has_expr = True
-            for child in ast.walk(n):
-                if isinstance(child, ast.Compare):
-                    left = _name(child.left)
-                    for i, op in enumerate(child.ops):
-                        cls_map = {ast.Eq: '==', ast.NotEq: '!=', ast.Lt: '<', ast.LtE: '<=',
-                                   ast.Gt: '>', ast.GtE: '>=', ast.In: 'in', ast.NotIn: 'not in'}
-                        op_s = ''
-                        for cls, s in cls_map.items():
-                            if isinstance(op, cls): op_s = s
-                        if i < len(child.comparators):
-                            right = _name(child.comparators[i])
-                            lines.append(f"#   {left} {op_s} {right}: is this True or False? The answer picks which branch")
-
-    if not has_expr:
-        lines.append(f"#   expressions evaluate left-to-right, inner calls first")
+    if not shown:
+        lines.append("# (simple expressions — evaluated left to right)")
 
     return '\n'.join(lines)
 
 
-def gen_execution_order(tree: ast.Module, code: str = '') -> str:
-    """Top-to-bottom statement sequence."""
+def gen_execution_order(tree: ast.Module) -> str:
     lines = []
-    lines.append("#")
-    lines.append("# ===== EXECUTION ORDER =====")
+    lines.append("# Execution Order")
+    lines.append("")
 
     func_map = {f.name: f for f in tree.body if isinstance(f, ast.FunctionDef)}
 
     for i, stmt in enumerate(tree.body, 1):
-        desc = _stmt_desc(stmt)
-        lines.append(f"#   {i}. {desc}")
+        code = _code_line(stmt)
+        if not code:
+            continue
 
-        # If it's a function call, show what happens inside
         if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
             call = stmt.value
             name = _name(call.func)
-            # The call might be print(some_func(...)) — trace the inner call
-            inner_call = None
-            if call.args and isinstance(call.args[0], ast.Call):
-                inner_call = call.args[0]
-            target_func = func_map.get(name) or (func_map.get(_name(inner_call.func)) if inner_call else None)
-            if target_func and target_func != name:
-                pass  # We'll handle it below with inner_call
-            
-            if name in func_map:
-                f = func_map[name]
-                params = [a.arg for a in f.args.args]
-                if params:
-                    arg_values = [f"{p}={_name(a)}" for p, a in zip(params, call.args)]
-                    lines.append(f"#       with: {', '.join(arg_values)}")
-                for j, body_stmt in enumerate(f.body, 1):
-                    body_desc = _stmt_desc(body_stmt)
-                    lines.append(f"#         {i}.{j} {body_desc}")
-            elif inner_call and _name(inner_call.func) in func_map:
-                f = func_map[_name(inner_call.func)]
-                params = [a.arg for a in f.args.args]
-                if params:
-                    arg_values = [f"{p}={_name(a)}" for p, a in zip(params, inner_call.args)]
-                    lines.append(f"#       calls {_name(inner_call.func)} with: {', '.join(arg_values)}")
-                for j, body_stmt in enumerate(f.body, 1):
-                    body_desc = _stmt_desc(body_stmt)
-                    lines.append(f"#         {i}.{j} {body_desc}")
+            inner = call.args[0] if call.args and isinstance(call.args[0], ast.Call) else None
+            target = func_map.get(name) or (func_map.get(_name(inner.func)) if inner and _name(inner.func) in func_map else None)
+
+            lines.append(f"# {i}. {code}")
+            if target:
+                params = [a.arg for a in target.args.args]
+                the_call = inner if name not in func_map else call
+                if params and the_call.args:
+                    binds = ', '.join(f"{p}={_name(a)}" for p, a in zip(params, the_call.args))
+                    lines.append(f"#    → calls with {binds}")
+                for j, bs in enumerate(target.body, 1):
+                    body = ast.unparse(bs)
+                    for bline in body.split('\n'):
+                        lines.append(f"#    → {i}.{j} {bline}")
+        elif isinstance(stmt, ast.FunctionDef):
+            lines.append(f"# {i}. {code}  # stored, not run yet")
         elif isinstance(stmt, ast.For):
-            # Show loop body steps
-            for j, body_stmt in enumerate(stmt.body, 1):
-                body_desc = _stmt_desc(body_stmt)
-                lines.append(f"#       {i}.{j} {body_desc}")
+            lines.append(f"# {i}. for ... in {_name(stmt.iter)}:  # loops over each item")
+            for j, bs in enumerate(stmt.body, 1):
+                body = _code_line(bs)
+                if body:
+                    lines.append(f"#    {i}.{j} {body}")
+        else:
+            lines.append(f"# {i}. {code}")
 
     return '\n'.join(lines)
 
 
-def _stmt_desc(node: ast.AST) -> str:
-    if isinstance(node, ast.FunctionDef):
-        return f"Define {_func_signature(node)} — stored for later"
-    if isinstance(node, ast.ClassDef):
-        bases = [b.id if isinstance(b, ast.Name) else '?' for b in node.bases]
-        return f"Define class {node.name}({', '.join(bases)})" if bases else f"Define class {node.name}"
-    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
-        return f"Run {_call_str(node.value)}"
-    if isinstance(node, ast.Assign):
-        targets = [t.id if isinstance(t, ast.Name) else '?' for t in node.targets]
-        return f"Assign to {', '.join(targets)}"
-    if isinstance(node, ast.AugAssign):
-        t = node.target.id if isinstance(node.target, ast.Name) else '?'
-        return f"Update {t} {_op_name(node.op)}= ..."
-    if isinstance(node, ast.For):
-        return f"For loop over {_name(node.iter)}"
-    if isinstance(node, ast.While):
-        return "While loop"
-    if isinstance(node, ast.If):
-        return "If statement (one branch runs)"
-    if isinstance(node, ast.Try):
-        return "Try block (error handling)"
-    if isinstance(node, ast.Return):
-        return "Return from function"
-    if isinstance(node, ast.Import):
-        return f"Import {', '.join(a.name for a in node.names)}"
-    if isinstance(node, ast.ImportFrom):
-        return f"Import {', '.join(a.name for a in node.names)} from {node.module}"
-    if isinstance(node, ast.Pass):
-        return "Pass (placeholder)"
-    if isinstance(node, ast.Break):
-        return "Break out of loop"
-    if isinstance(node, ast.Continue):
-        return "Continue to next iteration"
-    if isinstance(node, ast.Expr):
-        return "Evaluate expression"
-    return str(type(node).__name__)
-
-
 def gen_execution_flow(tree: ast.Module) -> str:
-    """How control jumps around at runtime."""
     lines = []
-    lines.append("#")
-    lines.append("# ===== EXECUTION FLOW =====")
+    lines.append("# Execution Flow")
+    lines.append("")
 
-    funcs = [n for n in tree.body if isinstance(n, ast.FunctionDef)]
-    classes = [n for n in tree.body if isinstance(n, ast.ClassDef)]
-    imports = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
-    top_code = [n for n in tree.body if not isinstance(n, (ast.FunctionDef, ast.ClassDef, ast.Import, ast.ImportFrom))]
-
-    if imports:
-        lines.append(f"#   Python loads {len(imports)} import(s) first")
-
-    if classes:
-        lines.append(f"#   Class definitions are processed (methods stored)")
-        for c in classes:
-            inits = [n for n in c.body if isinstance(n, ast.FunctionDef) and n.name == '__init__']
-            if inits:
-                lines.append(f"#   {c.name}.__init__ runs automatically when you create an instance")
-
-    if funcs:
-        names = [f.name for f in funcs]
-        lines.append(f"#   def lines are SKIPPED during execution — functions {', '.join(names)} are just stored")
-    if not top_code:
-        lines.append(f"#   Nothing runs at the top level — functions are only called externally")
-    else:
-        lines.append(f"#   Execution starts at the non-def lines below:")
+    func_names = {f.name for f in tree.body if isinstance(f, ast.FunctionDef)}
+    class_names = {c.name for c in tree.body if isinstance(c, ast.ClassDef)}
+    top_code = [n for n in tree.body
+                if not isinstance(n, (ast.FunctionDef, ast.ClassDef, ast.Import, ast.ImportFrom))]
 
     has_loop = any(isinstance(n, (ast.For, ast.While)) for n in ast.walk(tree))
     has_if = any(isinstance(n, ast.If) for n in ast.walk(tree))
 
-    # Describe each top-level action
-    func_names = {f.name for f in funcs}
-    for stmt in top_code:
-        desc = ""
-        if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
-            call = stmt.value
-            name = _name(call.func)
-            if name in func_names:
-                desc = f"   {_call_str(call)} → jumps into function, runs body, returns result → printed"
-            elif name == 'print':
-                inner = ''
-                if call.args and isinstance(call.args[0], ast.Call):
-                    inner_call = call.args[0]
-                    inner_name = _name(inner_call.func)
-                    if inner_name in func_names:
-                        desc = f"   print({_call_str(inner_call)}) → function runs first, then print shows the result"
-                    else:
-                        desc = f"   {_call_str(call)}"
-                else:
-                    desc = f"   {_call_str(call)}"
-            else:
-                desc = f"   {_call_str(call)}"
-        elif isinstance(stmt, ast.For):
-            desc = f"   for loop runs its body once per item"
-        elif isinstance(stmt, ast.While):
-            desc = f"   while loop repeats until condition is False"
-        elif isinstance(stmt, ast.If):
-            desc = f"   if checks a condition and runs ONE branch"
-        elif isinstance(stmt, ast.Assign):
-            targets = [t.id if isinstance(t, ast.Name) else '?' for t in stmt.targets]
-            desc = f"   {', '.join(targets)} = ... (stored in memory)"
-        else:
-            desc = f"   top-level statement runs"
+    if class_names:
+        lines.append(f"# Classes {', '.join(class_names)} are defined (methods stored)")
+        lines.append("")
 
-        if desc:
-            lines.append(f"#   {desc}")
+    if func_names:
+        lines.append(f"# def lines are skipped — {', '.join(func_names)} are just stored in memory")
+        lines.append("")
+
+    if not top_code:
+        lines.append("# No top-level execution (functions must be called externally)")
+    else:
+        lines.append("# Runtime starts here (top-level code runs top to bottom):")
+        lines.append("")
+        for stmt in top_code:
+            code = _code_line(stmt)
+            if not code:
+                continue
+
+            if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
+                call = stmt.value
+                name = _name(call.func)
+                inner = call.args[0] if call.args and isinstance(call.args[0], ast.Call) else None
+                if name in func_names:
+                    lines.append(f"{ast.unparse(call)}  # jumps into {name}(), runs body, returns")
+                elif inner and _name(inner.func) in func_names:
+                    iname = _name(inner.func)
+                    lines.append(f"{ast.unparse(call)}  # {iname}() runs first, then print() outputs")
+                else:
+                    lines.append(ast.unparse(call))
+            elif isinstance(stmt, ast.For):
+                lines.append(f"for ... in {_name(stmt.iter)}:  # repeats N times")
+            elif isinstance(stmt, ast.While):
+                lines.append(f"while ...:  # loops until condition is False")
+            elif isinstance(stmt, ast.If):
+                lines.append(f"if ...:  # only one branch executes")
+            else:
+                lines.append(code)
 
     if has_loop:
-        lines.append(f"#")
+        lines.append("")
         for n in ast.walk(tree):
             if isinstance(n, ast.For):
-                lines.append(f"#   Loop: grabs one item from {_name(n.iter)} each round")
+                lines.append(f"# Loop: one item from {_name(n.iter)} each iteration")
                 break
-        for n in ast.walk(tree):
-            if isinstance(n, ast.While):
-                lines.append(f"#   Loop: checks condition → if True runs body, then checks again")
+            elif isinstance(n, ast.While):
+                lines.append(f"# Loop: check condition → run body → check again")
                 break
 
     if has_if:
-        lines.append(f"#   Branch: only the True branch executes; the rest is skipped")
+        lines.append("# Branch: condition determines which block runs")
 
     return '\n'.join(lines)
 
@@ -463,7 +384,6 @@ def main():
         else:
             tier = 2000
 
-        # Try to parse full code, fall back to first section
         try:
             tree = ast.parse(code)
         except SyntaxError:
@@ -475,9 +395,16 @@ def main():
                 continue
 
         parts = [
+            "#" + "=" * 50,
             gen_syntax(tree),
+            "",
+            "#" + "=" * 50,
             gen_evaluation_order(tree),
+            "",
+            "#" + "=" * 50,
             gen_execution_order(tree),
+            "",
+            "#" + "=" * 50,
             gen_execution_flow(tree),
         ]
 
