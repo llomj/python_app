@@ -12734,18 +12734,21 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['round_number'],
         tests: [
             { args: [3.14159], expected: 3 },
+            { args: [8.6], expected: 9 },
         ]
     },
   1703: {
         functionNames: ['get_maximum'],
         tests: [
             { args: [3,7,5], expected: 7 },
+            { args: [-1,-5,-3], expected: -1 },
         ]
     },
   1704: {
         functionNames: ['get_minimum'],
         tests: [
             { args: [3,7,5], expected: 3 },
+            { args: [-1,-5,-3], expected: -5 },
         ]
     },
   1705: {
@@ -12759,12 +12762,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['convert_to_string'],
         tests: [
             { args: [123], expected: "123" },
+            { args: [-4.5], expected: "-4.5" },
         ]
     },
   1707: {
         functionNames: ['convert_to_integer'],
         tests: [
             { args: ["123"], expected: 123 },
+            { args: ["-7"], expected: -7 },
         ]
     },
   1708: {
@@ -12772,97 +12777,107 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'float',
         tests: [
             { args: ["3.14"], expected: 3.14 },
+            { args: ["-2.5"], expected: -2.5 },
         ]
     },
   1709: {
     functionNames: ["get_type"],
-    tests: [{
-      args: [1],
-      expected: "int"
-    }]
+    tests: [
+      { args: [1], expected: "int" },
+      { args: ["hello"], expected: "str" },
+      { args: [[1, 2]], expected: "list" }
+    ]
   },
   1710: {
         functionNames: ['check_is_integer'],
         tests: [
             { args: [5], expected: true },
+            { args: ["5"], expected: false },
         ]
     },
   1711: {
         functionNames: ['check_is_string'],
         tests: [
             { args: ["hello"], expected: true },
+            { args: [5], expected: false },
         ]
     },
   1712: {
         functionNames: ['check_is_list'],
         tests: [
             { args: [[1,2]], expected: true },
+            { args: ["hello"], expected: false },
         ]
     },
   1713: {
         functionNames: ['format_greeting'],
         tests: [
             { args: ["Alice"], expected: "Hello, Alice!" },
+            { args: ["Noll"], expected: "Hello, Noll!" },
         ]
     },
   1714: {
         functionNames: ['format_age_message'],
         tests: [
             { args: ["Bob", 25], expected: "Bob is 25 years old." },
+            { args: ["Noll", 7], expected: "Noll is 7 years old." },
         ]
     },
   1715: {
         functionNames: ['format_calculation'],
         tests: [
             { args: [5,3], expected: "5 + 3 = 8" },
+            { args: [-2,5], expected: "-2 + 5 = 3" },
         ]
     },
   1716: {
         functionNames: ['calculate_perimeter_rectangle'],
         tests: [
             { args: [4,5], expected: 18 },
+            { args: [0,5], expected: 10 },
         ]
     },
   1717: {
         functionNames: ['calculate_perimeter_square'],
         tests: [
             { args: [4], expected: 16 },
+            { args: [0], expected: 0 },
         ]
     },
   1718: {
     functionNames: ["calculate_circle_circumference"],
-    tests: [{
-      args: [1],
-      expected: 6.28
-    }]
+    tests: [
+      { args: [1], expected: 6.28 },
+      { args: [2], expected: 12.56 }
+    ]
   },
   1719: {
     functionNames: ["convert_km_to_miles"],
-    tests: [{
-      args: [1],
-      expected: 0.621371
-    }]
+    tests: [
+      { args: [1], expected: 0.621371 },
+      { args: [0], expected: 0 }
+    ]
   },
   1720: {
     functionNames: ["convert_miles_to_km"],
-    tests: [{
-      args: [1],
-      expected: 1.6093444978925633
-    }]
+    tests: [
+      { args: [1], expected: 1.6093444978925633 },
+      { args: [0], expected: 0 }
+    ]
   },
   1721: {
     functionNames: ["convert_kg_to_pounds"],
-    tests: [{
-      args: [1],
-      expected: 2.20462
-    }]
+    tests: [
+      { args: [1], expected: 2.20462 },
+      { args: [0], expected: 0 }
+    ]
   },
   1722: {
     functionNames: ["convert_pounds_to_kg"],
-    tests: [{
-      args: [5],
-      expected: 2.267964547178199
-    }]
+    tests: [
+      { args: [5], expected: 2.267964547178199 },
+      { args: [0], expected: 0 }
+    ]
   },
   1723: {
         functionNames: ['check_vowel'],
@@ -12910,12 +12925,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['find_char_index'],
         tests: [
             { args: ["hello","l"], expected: 2 },
+            { args: ["hello","x"], expected: -1 },
         ]
     },
   1730: {
         functionNames: ['count_char_in_string'],
         tests: [
             { args: ["hello","l"], expected: 2 },
+            { args: ["banana","a"], expected: 3 },
         ]
     },
   1731: {
@@ -12936,96 +12953,112 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['replace_char'],
         tests: [
             { args: ["hello","l","x"], expected: "hexxo" },
+            { args: ["banana","a","o"], expected: "bonono" },
         ]
     },
   1734: {
         functionNames: ['remove_char'],
         tests: [
             { args: ["hello","l"], expected: "heo" },
+            { args: ["banana","a"], expected: "bnn" },
         ]
     },
   1735: {
         functionNames: ['get_substring'],
         tests: [
             { args: ["hello",1,3], expected: "el" },
+            { args: ["abcdef",2,5], expected: "cde" },
         ]
     },
   1736: {
         functionNames: ['reverse_list'],
         tests: [
             { args: [[1,2,3,4]], expected: [4,3,2,1] },
+            { args: [["a","b"]], expected: ["b","a"] },
         ]
     },
   1737: {
         functionNames: ['get_list_length'],
         tests: [
             { args: [[1,2,3]], expected: 3 },
+            { args: [[]], expected: 0 },
         ]
     },
   1738: {
         functionNames: ['check_element_in_list'],
         tests: [
             { args: [[1,2,3],2], expected: true },
+            { args: [[1,2,3],9], expected: false },
         ]
     },
   1739: {
         functionNames: ['get_element_count'],
         tests: [
             { args: [[1,2,2,3],2], expected: 2 },
+            { args: [["a","b","a"],"a"], expected: 2 },
         ]
     },
   1740: {
         functionNames: ['get_element_index'],
         tests: [
             { args: [[1,2,3],2], expected: 1 },
+            { args: [[1,2,3],9], expected: -1 },
         ]
     },
   1741: {
         functionNames: ['get_even_numbers'],
         tests: [
             { args: [[1,2,3,4,5,6]], expected: [2,4,6] },
+            { args: [[-2,-1,0,3]], expected: [-2,0] },
         ]
     },
   1742: {
         functionNames: ['get_odd_numbers'],
         tests: [
             { args: [[1,2,3,4,5,6]], expected: [1,3,5] },
+            { args: [[-2,-1,0,3]], expected: [-1,3] },
         ]
     },
   1743: {
         functionNames: ['get_positive_numbers'],
         tests: [
             { args: [[-1,0,1,2]], expected: [1,2] },
+            { args: [[0,-3,-1]], expected: [] },
         ]
     },
   1744: {
         functionNames: ['get_negative_numbers'],
         tests: [
             { args: [[-1,0,1,-2]], expected: [-1,-2] },
+            { args: [[0,3,1]], expected: [] },
         ]
     },
   1745: {
         functionNames: ['get_numbers_greater_than'],
         tests: [
             { args: [[1,5,3,8],3], expected: [5,8] },
+            { args: [[1,2,3],5], expected: [] },
         ]
     },
   1746: {
         functionNames: ['get_numbers_less_than'],
         tests: [
             { args: [[1,5,3,8],5], expected: [1,3] },
+            { args: [[7,8],5], expected: [] },
         ]
     },
   1747: {
         functionNames: ['calculate_sum_of_list'],
         tests: [
             { args: [[1,2,3]], expected: 6 },
+            { args: [[-1,1,5]], expected: 5 },
         ]
     },
   1748: {
         functionNames: ['calculate_product_of_list'],
         tests: [
             { args: [[2,3,4]], expected: 24 },
+            { args: [[-1,5,0]], expected: 0 },
         ]
     },
   1749: {
@@ -13033,156 +13066,186 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'float',
         tests: [
             { args: [[1,2,3,4]], expected: 2.5 },
+            { args: [[10,20]], expected: 15 },
         ]
     },
   1750: {
         functionNames: ['create_dictionary'],
         tests: [
             { args: [["a","b"],[1,2]], expected: {"a":1,"b":2} },
+            { args: [["x"],[9]], expected: {"x":9} },
         ]
     },
   1751: {
         functionNames: ['get_dictionary_value'],
         tests: [
             { args: [{"a":1,"b":2},"a"], expected: 1 },
+            { args: [{"a":1},"z"], expected: null },
         ]
     },
   1752: {
         functionNames: ['get_dictionary_keys'],
         tests: [
             { args: [{"a":1,"b":2}], expected: ["a","b"] },
+            { args: [{"x":9}], expected: ["x"] },
         ]
     },
   1753: {
         functionNames: ['get_dictionary_values'],
         tests: [
             { args: [{"a":1,"b":2}], expected: [1,2] },
+            { args: [{"x":9}], expected: [9] },
         ]
     },
   1754: {
         functionNames: ['check_key_in_dictionary'],
         tests: [
             { args: [{"a":1},"a"], expected: true },
+            { args: [{"a":1},"z"], expected: false },
         ]
     },
   1755: {
         functionNames: ['add_to_dictionary'],
         tests: [
             { args: [{"a":1},"b",2], expected: {"a":1,"b":2} },
+            { args: [{},"x",9], expected: {"x":9} },
         ]
     },
   1756: {
         functionNames: ['create_tuple'],
         tests: [
             { args: [1,2,3], expected: [1,2,3] },
+            { args: [], expected: [] },
         ]
     },
   1757: {
         functionNames: ['get_tuple_element'],
         tests: [
             { args: [[1,2,3],1], expected: 2 },
+            { args: [["a","b"],0], expected: "a" },
         ]
     },
   1758: {
         functionNames: ['unpack_tuple'],
         tests: [
             { args: [[1,2]], expected: [1,2] },
+            { args: [["x","y"]], expected: ["x","y"] },
         ]
     },
   1759: {
         functionNames: ['create_set'],
+        compare: 'unorderedList',
         tests: [
             { args: [[1,2,2,3]], expected: [1,2,3] },
+            { args: [["a","a","b"]], expected: ["a","b"] },
         ]
     },
   1760: {
         functionNames: ['check_element_in_set'],
         tests: [
             { args: [[1,2,3],2], expected: true },
+            { args: [[1,2,3],9], expected: false },
         ]
     },
   1761: {
         functionNames: ['union_sets'],
+        compare: 'unorderedList',
         tests: [
             { args: [], argExpressions: ["{1, 2}", "{2, 3}"], expected: [1,2,3] },
+            { args: [], argExpressions: ["{'a'}", "{'b'}"], expected: ["a","b"] },
         ]
     },
   1762: {
         functionNames: ['intersection_sets'],
+        compare: 'unorderedList',
         tests: [
             { args: [], argExpressions: ["{1, 2, 3}", "{2, 3, 4}"], expected: [2,3] },
+            { args: [], argExpressions: ["{'a', 'b'}", "{'b', 'c'}"], expected: ["b"] },
         ]
     },
   1763: {
         functionNames: ['difference_sets'],
+        compare: 'unorderedList',
         tests: [
             { args: [], argExpressions: ["{1, 2, 3}", "{2, 3}"], expected: [1] },
+            { args: [], argExpressions: ["{'a', 'b'}", "{'b'}"], expected: ["a"] },
         ]
     },
   1764: {
         functionNames: ['read_file_content'],
         tests: [
             { args: ["example.txt"], setupFiles: { "example.txt": "Hello file" }, expected: "Hello file" },
+            { args: ["notes.txt"], setupFiles: { "notes.txt": "Second file" }, expected: "Second file" },
         ]
     },
   1765: {
         functionNames: ['write_to_file'],
         tests: [
             { args: ["output.txt", "Hello, World!"], getFiles: ["output.txt"], expected: { "output.txt": "Hello, World!" } },
+            { args: ["second.txt", "More"], getFiles: ["second.txt"], expected: { "second.txt": "More" } },
         ]
     },
   1766: {
         functionNames: ['append_to_file'],
         tests: [
             { args: ["append.txt", " plus more"], setupFiles: { "append.txt": "start" }, getFiles: ["append.txt"], expected: { "append.txt": "start plus more" } },
+            { args: ["append2.txt", " tail"], setupFiles: { "append2.txt": "head" }, getFiles: ["append2.txt"], expected: { "append2.txt": "head tail" } },
         ]
     },
   1767: {
         functionNames: ['safe_divide'],
         tests: [
             { args: [6,3], expected: 2 },
+            { args: [6,0], expected: null },
         ]
     },
   1768: {
         functionNames: ['safe_convert_to_int'],
         tests: [
             { args: ["123"], expected: 123 },
+            { args: ["abc"], expected: null },
         ]
     },
   1769: {
         functionNames: ['safe_get_list_element'],
         tests: [
             { args: [[1,2,3],1], expected: 2 },
+            { args: [[1,2,3],9], expected: null },
         ]
     },
   1770: {
         functionNames: ['join_strings'],
         tests: [
             { args: [["a","b","c"], ""], expected: "abc" },
+            { args: [["a","b","c"], "-"], expected: "a-b-c" },
         ]
     },
   1771: {
         functionNames: ['split_string'],
         tests: [
             { args: ["a,b,c",","], expected: ["a","b","c"] },
+            { args: ["a-b","-"], expected: ["a","b"] },
         ]
     },
   1772: {
         functionNames: ['strip_whitespace'],
         tests: [
             { args: ["  hello  "], expected: "hello" },
+            { args: ["\nNoll\t"], expected: "Noll" },
         ]
     },
   1773: {
         functionNames: ['capitalize_first_letter'],
         tests: [
             { args: ["hello"], expected: "Hello" },
+            { args: ["hELLO"], expected: "Hello" },
         ]
     },
   1774: {
         functionNames: ['swap_case'],
         tests: [
             { args: ["Hello"], expected: "hELLO" },
+            { args: ["Py3"], expected: "pY3" },
         ]
     },
   1775: {
