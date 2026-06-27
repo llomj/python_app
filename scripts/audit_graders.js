@@ -46,6 +46,7 @@ const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const exerciseById = new Map(EXERCISES.map(exercise => [exercise.id, exercise]));
 const distribution = new Map();
 const weakFunctionGraders = [];
+const singleCaseNoArgFunctionGraders = [];
 const singleCaseScriptGraders = [];
 const emptyGraders = [];
 const invalidGraders = [];
@@ -84,6 +85,15 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   }
 
   if (testCount < MIN_FUNCTION_TESTS) {
+    const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
+    if (firstArgs.length === 0) {
+      singleCaseNoArgFunctionGraders.push({
+        id,
+        title: exerciseById.get(id)?.title || `Problem ${id}`,
+        functionNames: grader.functionNames || [],
+      });
+      continue;
+    }
     weakFunctionGraders.push({
       id,
       title: exerciseById.get(id)?.title || `Problem ${id}`,
@@ -104,7 +114,8 @@ console.log('Grader quality audit');
 console.log(`Exercises: ${EXERCISES.length}`);
 console.log(`Graders: ${Object.keys(AUTO_GRADERS).length}`);
 console.log(`Test-count distribution: ${sortedDistribution.map(([count, total]) => `${count}:${total}`).join(', ')}`);
-console.log(`Function graders below ${MIN_FUNCTION_TESTS} tests: ${weakFunctionGraders.length}`);
+console.log(`Parameterized function graders below ${MIN_FUNCTION_TESTS} tests: ${weakFunctionGraders.length}`);
+console.log(`Single-case no-arg function graders: ${singleCaseNoArgFunctionGraders.length}`);
 console.log(`Single-case script graders: ${singleCaseScriptGraders.length}`);
 console.log(`Empty graders: ${emptyGraders.length}`);
 console.log(`Invalid grader definitions: ${invalidGraders.length}`);
@@ -118,6 +129,10 @@ if (weakFunctionGraders.length) {
   for (const item of weakFunctionGraders.slice(0, 25)) {
     console.log(`${item.id}: ${item.title} [${item.functionNames.join(', ')}]`);
   }
+}
+
+if (singleCaseNoArgFunctionGraders.length && showAll) {
+  console.log(`Single-case no-arg function grader IDs: ${singleCaseNoArgFunctionGraders.map(item => item.id).join(', ')}`);
 }
 
 if (invalidGraders.length) {

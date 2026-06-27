@@ -2918,6 +2918,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['find_largest_file'],
         tests: [
             { args: [["small.txt", "large.txt"]], setupFiles: { "small.txt": "small", "large.txt": "this is larger" }, expected: "large.txt" },
+            { args: [["tiny.txt", "medium.txt", "huge.txt"]], setupFiles: { "tiny.txt": "x", "medium.txt": "medium", "huge.txt": "this file has the most bytes" }, expected: "huge.txt" },
         ]
     },
   395: {
@@ -3702,9 +3703,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   505: {
-        functionNames: ['Bicycle'],
+        functionNames: ['Bicycle', 'Vehicle'],
         tests: [
-            { args: [], callMethod: 'drive', expected: 'Pedal' }
+            { args: [], functionName: 'Bicycle', callMethod: 'drive', expected: 'Pedal' },
+            { args: [], functionName: 'Vehicle', callMethod: 'drive', expected: 'Are you ready to drive?' },
         ]
     },
   506: {
@@ -3771,21 +3773,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   515: {
-        functionNames: ['Electrician'],
+        functionNames: ['Electrician', 'Worker'],
         tests: [
-            { args: [], callMethod: 'work', expected: 'Fix wires' }
+            { args: [], functionName: 'Electrician', callMethod: 'work', expected: 'Fix wires' },
+            { args: [], functionName: 'Worker', callMethod: 'work', expected: 'Working on general tasks.' },
         ]
     },
   516: {
-        functionNames: ['Lion'],
+        functionNames: ['Lion', 'Animal'],
         tests: [
-            { args: [], callMethod: 'eat', expected: 'Eat meat' }
+            { args: [], functionName: 'Lion', callMethod: 'eat', expected: 'Eat meat' },
+            { args: [], functionName: 'Animal', callMethod: 'eat', expected: 'Eating food.' },
         ]
     },
   517: {
-        functionNames: ['Fan'],
+        functionNames: ['Fan', 'Appliance'],
         tests: [
-            { args: [], callMethod: 'run', expected: 'Spin blades' }
+            { args: [], functionName: 'Fan', callMethod: 'run', expected: 'Spin blades' },
+            { args: [], functionName: 'Appliance', callMethod: 'run', expected: 'Running appliance.' },
         ]
     },
   518: {
@@ -3796,15 +3801,17 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   519: {
-        functionNames: ['Motorcycle'],
+        functionNames: ['Motorcycle', 'Vehicle'],
         tests: [
-            { args: [], getAttrs: ['wheels'], expected: {wheels: 2} }
+            { args: [], functionName: 'Motorcycle', getAttrs: ['wheels'], expected: {wheels: 2} },
+            { args: [4], functionName: 'Vehicle', getAttrs: ['wheels'], expected: {wheels: 4} },
         ]
     },
   520: {
-        functionNames: ['Hammer'],
+        functionNames: ['Hammer', 'Tool'],
         tests: [
-            { args: [], callMethod: 'use', expected: 'Hammer nails' }
+            { args: [], functionName: 'Hammer', callMethod: 'use', expected: 'Hammer nails' },
+            { args: [], functionName: 'Tool', callMethod: 'use', expected: 'Using the tool.' },
         ]
     },
   521: {
@@ -3815,9 +3822,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   522: {
-        functionNames: ['Sword'],
+        functionNames: ['Sword', 'Weapon'],
         tests: [
-            { args: [], callMethod: 'attack', expected: 'Slash' }
+            { args: [], functionName: 'Sword', callMethod: 'attack', expected: 'Slash' },
+            { args: [], functionName: 'Weapon', callMethod: 'attack', expected: 'Weapon attack' },
         ]
     },
   523: {
@@ -3828,21 +3836,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   524: {
-        functionNames: ['ElectricCar'],
+        functionNames: ['ElectricCar', 'Vehicle'],
         tests: [
-            { args: [], callMethod: 'start', expected: 'Silent start' }
+            { args: [], functionName: 'ElectricCar', callMethod: 'start', expected: 'Silent start' },
+            { args: [], functionName: 'Vehicle', callMethod: 'start', expected: 'Starting vehicle' },
         ]
     },
   525: {
-        functionNames: ['Cat'],
+        functionNames: ['Cat', 'Pet'],
         tests: [
-            { args: [], callMethod: 'make_sound', expected: 'Meow' }
+            { args: [], functionName: 'Cat', callMethod: 'make_sound', expected: 'Meow' },
+            { args: [], functionName: 'Pet', callMethod: 'make_sound', expected: 'Some generic pet sound' },
         ]
     },
   526: {
-        functionNames: ['PastryChef'],
+        functionNames: ['PastryChef', 'Chef'],
         tests: [
-            { args: [], callMethod: 'cook', expected: 'Bake cake' }
+            { args: [], functionName: 'PastryChef', callMethod: 'cook', expected: 'Bake cake' },
+            { args: [], functionName: 'Chef', callMethod: 'cook', expected: 'Cook food' },
         ]
     },
   527: {
@@ -3853,15 +3864,17 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   528: {
-        functionNames: ['Soccer'],
+        functionNames: ['Soccer', 'Game'],
         tests: [
-            { args: [], getAttrs: ['players'], expected: {players: 22} }
+            { args: [], functionName: 'Soccer', getAttrs: ['players'], expected: {players: 22} },
+            { args: [10], functionName: 'Game', getAttrs: ['players'], expected: {players: 10} },
         ]
     },
   529: {
-        functionNames: ['Pianist'],
+        functionNames: ['Pianist', 'Musician'],
         tests: [
-            { args: [], callMethod: 'play_instrument', expected: 'Play piano' }
+            { args: [], functionName: 'Pianist', callMethod: 'play_instrument', expected: 'Play piano' },
+            { args: [], functionName: 'Musician', callMethod: 'play_instrument', expected: 'Play instrument' },
         ]
     },
   530: {
@@ -3879,17 +3892,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
   532: {
-        functionNames: ['FitnessTrainer'],
+        functionNames: ['FitnessTrainer', 'Trainer'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], callMethod: 'train', expected: 'Train body' }
+            { args: [], functionName: 'FitnessTrainer', callMethod: 'train', expected: 'Train body' },
+            { args: [], functionName: 'Trainer', callMethod: 'train', expected: 'Training session' },
         ]
     },
   533: {
-        functionNames: ['ComicBook'],
+        functionNames: ['ComicBook', 'Book'],
         compare: 'printedOrReturn',
         tests: [
-            { args: [], callMethod: 'read', expected: 'Read with pictures' }
+            { args: [], functionName: 'ComicBook', callMethod: 'read', expected: 'Read with pictures' },
+            { args: [], functionName: 'Book', callMethod: 'read', expected: 'Read the book' },
         ]
     },
   534: {
@@ -11769,6 +11784,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'typeName',
         tests: [
             { args: [3, 4], callMethod: "__hash__", expected: "int" },
+            { args: [7, 9], callMethod: "__hash__", expected: "int" },
         ]
     },
   1576: {
@@ -11790,6 +11806,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         compare: 'typeName',
         tests: [
             { args: [], callMethod: "__enter__", expected: "Timer" },
+            { args: [], setAttrs: { start: 0 }, callMethod: "__exit__", callMethodArgs: [null, null, null], expected: "NoneType" },
         ]
     },
   1579: {
