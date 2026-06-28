@@ -8099,6 +8099,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8114,6 +8115,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8143,6 +8145,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8151,6 +8154,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "40" }
     ]
@@ -8173,6 +8177,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8188,6 +8193,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8196,6 +8202,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "The smallest number in the list is: 7" }
     ]
@@ -8204,6 +8211,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8226,6 +8234,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "helloworld" }
     ]
@@ -8234,6 +8243,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "3" }
     ]
@@ -8242,6 +8252,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "15" }
     ]
@@ -8250,6 +8261,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8265,6 +8277,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8287,6 +8300,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8316,6 +8330,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -8338,6 +8353,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
       { args: [], expected: "True" }
     ]
