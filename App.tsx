@@ -7166,7 +7166,6 @@ const App: React.FC = () => {
     const [idLogInput, setIdLogInput] = useState('');
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
     const [deleteConfirmType, setDeleteConfirmType] = useState<'saved' | 'idlog' | null>(null);
-    const [copiedProblemId, setCopiedProblemId] = useState<number | null>(null);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_saved_problems', JSON.stringify(savedProblems));
@@ -8365,34 +8364,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             >
                                 <SkipForward size={14} />
                                 <span>Next</span>
-                            </button>
-                            <button
-                                onClick={async () => {
-                                    try {
-                                        await navigator.clipboard.writeText(exercise.description);
-                                        setCopiedProblemId(exercise.id);
-                                        setTimeout(() => setCopiedProblemId(null), 2000);
-                                    } catch {}
-                                }}
-                                style={{
-                                    backgroundColor: copiedProblemId === exercise.id ? 'rgba(74, 222, 128, 0.15)' : 'transparent',
-                                    border: copiedProblemId === exercise.id ? '1px solid #4ade80' : '1px solid #1d2d44',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.25rem 0.5rem',
-                                    color: copiedProblemId === exercise.id ? '#4ade80' : '#3b82f6',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.25rem',
-                                    fontSize: '0.75rem',
-                                    flexShrink: 0,
-                                    pointerEvents: 'auto',
-                                    transition: 'all 0.2s ease'
-                                }}
-                                title="Copy problem description"
-                            >
-                                {copiedProblemId === exercise.id ? <Check size={14} /> : <Copy size={14} />}
-                                <span>{copiedProblemId === exercise.id ? 'Copied' : 'Copy'}</span>
                             </button>
                         </div>
                     </div>
