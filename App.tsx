@@ -7127,7 +7127,7 @@ const App: React.FC = () => {
     const [idLogInput, setIdLogInput] = useState('');
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
     const [deleteConfirmType, setDeleteConfirmType] = useState<'saved' | 'idlog' | null>(null);
-    const [copiedProblem, setCopiedProblem] = useState(false);
+    const [copiedProblemId, setCopiedProblemId] = useState<number | null>(null);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_saved_problems', JSON.stringify(savedProblems));
@@ -7270,7 +7270,6 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
-    const problemLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [headerHeight, setHeaderHeight] = useState(265);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
@@ -8238,7 +8237,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 style={{
                     top: 0,
                     backgroundColor: 'rgba(4, 11, 22, 0.18)',
-                    pointerEvents: 'none',
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
@@ -8318,6 +8316,34 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 <SkipForward size={14} />
                                 <span>Next</span>
                             </button>
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        await navigator.clipboard.writeText(exercise.description);
+                                        setCopiedProblemId(exercise.id);
+                                        setTimeout(() => setCopiedProblemId(null), 2000);
+                                    } catch {}
+                                }}
+                                style={{
+                                    backgroundColor: copiedProblemId === exercise.id ? 'rgba(74, 222, 128, 0.15)' : 'transparent',
+                                    border: copiedProblemId === exercise.id ? '1px solid #4ade80' : '1px solid #1d2d44',
+                                    borderRadius: '0.5rem',
+                                    padding: '0.25rem 0.5rem',
+                                    color: copiedProblemId === exercise.id ? '#4ade80' : '#3b82f6',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    fontSize: '0.75rem',
+                                    flexShrink: 0,
+                                    pointerEvents: 'auto',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                title="Copy problem description"
+                            >
+                                {copiedProblemId === exercise.id ? <Check size={14} /> : <Copy size={14} />}
+                                <span>{copiedProblemId === exercise.id ? 'Copied' : 'Copy'}</span>
+                            </button>
                         </div>
                     </div>
                     <pre
@@ -8339,58 +8365,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             userSelect: 'text',
                             WebkitUserSelect: 'text'
                         }}
-                        onTouchStart={() => {
-                            problemLongPressRef.current = setTimeout(async () => {
-                                try {
-                                    await navigator.clipboard.writeText(exercise.description);
-                                    setCopiedProblem(true);
-                                    setTimeout(() => setCopiedProblem(false), 2000);
-                                } catch {}
-                            }, 500);
-                        }}
-                        onTouchEnd={() => {
-                            if (problemLongPressRef.current) {
-                                clearTimeout(problemLongPressRef.current);
-                                problemLongPressRef.current = null;
-                            }
-                        }}
-                        onTouchMove={() => {
-                            if (problemLongPressRef.current) {
-                                clearTimeout(problemLongPressRef.current);
-                                problemLongPressRef.current = null;
-                            }
-                        }}
-                        onMouseDown={() => {
-                            problemLongPressRef.current = setTimeout(async () => {
-                                try {
-                                    await navigator.clipboard.writeText(exercise.description);
-                                    setCopiedProblem(true);
-                                    setTimeout(() => setCopiedProblem(false), 2000);
-                                } catch {}
-                            }, 500);
-                        }}
-                        onMouseUp={() => {
-                            if (problemLongPressRef.current) {
-                                clearTimeout(problemLongPressRef.current);
-                                problemLongPressRef.current = null;
-                            }
-                        }}
-                        onMouseLeave={() => {
-                            if (problemLongPressRef.current) {
-                                clearTimeout(problemLongPressRef.current);
-                                problemLongPressRef.current = null;
-                            }
-                        }}
                     >
                         {exercise.description}
                     </pre>
                 </div>
             </div>
-            {copiedProblem && (
-                <div className="fixed left-1/2 z-[200] -translate-x-1/2 text-center px-4 py-2 rounded-lg text-sm text-[#4ade80] font-bold bg-[#050c18]/90 border border-[#4ade80]/30 shadow-xl pointer-events-none" style={{ top: '120px' }}>
-                    Copied!
-                </div>
-            )}
             <div
                 className="fixed left-1/2 z-[110] w-full max-w-2xl -translate-x-1/2 px-4"
                 style={{
@@ -9138,29 +9117,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         pointerEvents: 'auto',
                                         userSelect: 'text',
                                         WebkitUserSelect: 'text'
-                                    }}
-                                        onTouchStart={() => {
-                                            problemLongPressRef.current = setTimeout(async () => {
-                                                try {
-                                                    await navigator.clipboard.writeText(exercise.description);
-                                                    setCopiedProblem(true);
-                                                    setTimeout(() => setCopiedProblem(false), 2000);
-                                                } catch {}
-                                            }, 500);
-                                        }}
-                                        onTouchEnd={() => {
-                                            if (problemLongPressRef.current) {
-                                                clearTimeout(problemLongPressRef.current);
-                                                problemLongPressRef.current = null;
-                                            }
-                                        }}
-                                        onTouchMove={() => {
-                                            if (problemLongPressRef.current) {
-                                                clearTimeout(problemLongPressRef.current);
-                                                problemLongPressRef.current = null;
-                                            }
-                                        }}
-                                    >
+                                    }}>
                                         {exercise.description}
                                     </pre>
                                 </div>
