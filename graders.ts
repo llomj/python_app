@@ -10228,6 +10228,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[1, 4]" }
     ]
@@ -10236,6 +10238,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "['apple', 'banana']" }
     ]
@@ -10244,6 +10248,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10252,6 +10257,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10260,6 +10266,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10275,6 +10282,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}, {functionName: "all"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10283,6 +10291,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
+    requiredNodePatterns: [{nodeType: "ListComp", minCount: 2}],
     tests: [
       { args: [], expected: "[1, 2, 3]\n['one', 'two', 'three']" }
     ]
@@ -10299,6 +10309,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "isinstance"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10307,6 +10318,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "keys"}, {functionName: "isinstance"}, {functionName: "all"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10315,6 +10327,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "values"}, {functionName: "isinstance"}, {functionName: "all"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10323,6 +10336,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "hasattr"}, {functionName: "callable"}],
+    requiredNodePatterns: [{nodeType: "ClassDef"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -10331,6 +10346,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "{'a': 1, 'c': 3}" }
     ]
@@ -10339,6 +10355,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "10" }
     ]
@@ -10347,6 +10364,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "[1, 2, 3]" }
     ]
@@ -10355,6 +10373,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "[10, 30, 40]" }
     ]
@@ -10363,6 +10382,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "7" }
     ]
@@ -10371,6 +10391,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
+    requiredNodePatterns: [{nodeType: "While"}],
     tests: [
       { args: [], expected: "3\n2\n1" }
     ]
@@ -10388,6 +10410,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop", minArgs: 2}],
     tests: [
       { args: [], expected: "Not Found" }
     ]
@@ -10405,6 +10428,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "popitem"}],
+    requiredNodePatterns: [{nodeType: "While"}],
     tests: [
       { args: [], expected: "('k2', 2)\n('k1', 1)" }
     ]
@@ -10413,6 +10438,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "3" }
     ]
@@ -10421,6 +10447,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop", minArgs: 1}],
     tests: [
       { args: [], expected: "10" }
     ]
@@ -10429,6 +10456,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "6" }
     ]
@@ -10437,6 +10465,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "Alice" }
     ]
@@ -10445,6 +10474,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}, {functionName: "range"}],
+    requiredNodePatterns: [{nodeType: "For"}],
     tests: [
       { args: [], expected: "[1, 2]" }
     ]
@@ -10453,6 +10484,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "500" }
     ]
@@ -10468,6 +10500,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}, {functionName: "append"}],
     tests: [
       { args: [], expected: "[7]" }
     ]
@@ -10476,6 +10509,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "save" }
     ]
@@ -10484,6 +10518,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "pop"}],
     tests: [
       { args: [], expected: "[5, 6]" }
     ]
