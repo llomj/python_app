@@ -6704,6 +6704,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}, {nodeType: "Tuple"}],
     tests: [
       { args: [], expected: "[10, 20, 30]" }
     ]
@@ -6719,6 +6720,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "split"}],
+    requiredNodePatterns: [{nodeType: "Tuple"}],
     tests: [
       { args: [], expected: "3 + 5 - 2 * 4" }
     ]
@@ -6727,6 +6730,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "values"}],
+    requiredNodePatterns: [{nodeType: "Tuple", minCount: 2}],
     tests: [
       { args: [], expected: "30 10 20" }
     ]
@@ -6735,6 +6740,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "split"}],
+    requiredNodePatterns: [{nodeType: "Tuple"}],
     tests: [
       { args: [], expected: "john.doe example.com" }
     ]
@@ -6743,6 +6750,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "For"}, {nodeType: "Tuple", minCount: 2}],
     tests: [
       { args: [], expected: "1 2 3\n4 5 6" }
     ]
@@ -6751,6 +6759,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "divmod"}],
+    requiredNodePatterns: [{nodeType: "Tuple"}],
     tests: [
       { args: [], expected: "3 2" }
     ]
