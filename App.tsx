@@ -7127,6 +7127,7 @@ const App: React.FC = () => {
     const [idLogInput, setIdLogInput] = useState('');
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
     const [deleteConfirmType, setDeleteConfirmType] = useState<'saved' | 'idlog' | null>(null);
+    const [copiedProblem, setCopiedProblem] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_saved_problems', JSON.stringify(savedProblems));
@@ -7269,6 +7270,7 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
+    const problemLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [headerHeight, setHeaderHeight] = useState(265);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
@@ -8256,14 +8258,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                 <div
                     ref={problemPanelRef}
-                    className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
+                    className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-y-auto"
                     style={{
                         minHeight: '120px',
+                        maxHeight: '40vh',
                         backgroundColor: 'rgba(8, 18, 34, 0.08)',
                         backdropFilter: 'blur(8px)',
                         WebkitBackdropFilter: 'blur(8px)',
-                        borderColor: 'rgba(88, 118, 160, 0.25)',
-                        pointerEvents: 'none'
+                        borderColor: 'rgba(88, 118, 160, 0.25)'
                     }}
                 >
                     <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
@@ -8330,28 +8332,65 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             whiteSpace: 'pre-wrap',
                             wordWrap: 'break-word',
                             overflowWrap: 'break-word',
-                            maxHeight: '28vh',
-                            minHeight: '84px',
-                            overflowY: 'auto',
-                            overflowX: 'hidden',
                             padding: '0.5rem 1rem 1rem',
                             margin: 0,
                             fontFamily: 'inherit',
-                            textOverflow: 'clip',
-                            display: 'block',
-                            WebkitLineClamp: 'unset',
-                            lineClamp: 'unset',
                             width: '100%',
-                            WebkitOverflowScrolling: 'touch',
-                            touchAction: 'pan-y',
-                            overscrollBehavior: 'contain'
+                            userSelect: 'text',
+                            WebkitUserSelect: 'text'
+                        }}
+                        onTouchStart={() => {
+                            problemLongPressRef.current = setTimeout(async () => {
+                                try {
+                                    await navigator.clipboard.writeText(exercise.description);
+                                    setCopiedProblem(true);
+                                    setTimeout(() => setCopiedProblem(false), 2000);
+                                } catch {}
+                            }, 500);
+                        }}
+                        onTouchEnd={() => {
+                            if (problemLongPressRef.current) {
+                                clearTimeout(problemLongPressRef.current);
+                                problemLongPressRef.current = null;
+                            }
+                        }}
+                        onTouchMove={() => {
+                            if (problemLongPressRef.current) {
+                                clearTimeout(problemLongPressRef.current);
+                                problemLongPressRef.current = null;
+                            }
+                        }}
+                        onMouseDown={() => {
+                            problemLongPressRef.current = setTimeout(async () => {
+                                try {
+                                    await navigator.clipboard.writeText(exercise.description);
+                                    setCopiedProblem(true);
+                                    setTimeout(() => setCopiedProblem(false), 2000);
+                                } catch {}
+                            }, 500);
+                        }}
+                        onMouseUp={() => {
+                            if (problemLongPressRef.current) {
+                                clearTimeout(problemLongPressRef.current);
+                                problemLongPressRef.current = null;
+                            }
+                        }}
+                        onMouseLeave={() => {
+                            if (problemLongPressRef.current) {
+                                clearTimeout(problemLongPressRef.current);
+                                problemLongPressRef.current = null;
+                            }
                         }}
                     >
                         {exercise.description}
                     </pre>
                 </div>
             </div>
-
+            {copiedProblem && (
+                <div className="fixed left-1/2 z-[200] -translate-x-1/2 text-center px-4 py-2 rounded-lg text-sm text-[#4ade80] font-bold bg-[#050c18]/90 border border-[#4ade80]/30 shadow-xl pointer-events-none" style={{ top: '120px' }}>
+                    Copied!
+                </div>
+            )}
             <div
                 className="fixed left-1/2 z-[110] w-full max-w-2xl -translate-x-1/2 px-4"
                 style={{
@@ -9095,8 +9134,33 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         fontFamily: 'inherit',
                                         whiteSpace: 'pre-wrap',
                                         wordWrap: 'break-word',
-                                        overflowWrap: 'break-word'
-                                    }}>
+                                        overflowWrap: 'break-word',
+                                        pointerEvents: 'auto',
+                                        userSelect: 'text',
+                                        WebkitUserSelect: 'text'
+                                    }}
+                                        onTouchStart={() => {
+                                            problemLongPressRef.current = setTimeout(async () => {
+                                                try {
+                                                    await navigator.clipboard.writeText(exercise.description);
+                                                    setCopiedProblem(true);
+                                                    setTimeout(() => setCopiedProblem(false), 2000);
+                                                } catch {}
+                                            }, 500);
+                                        }}
+                                        onTouchEnd={() => {
+                                            if (problemLongPressRef.current) {
+                                                clearTimeout(problemLongPressRef.current);
+                                                problemLongPressRef.current = null;
+                                            }
+                                        }}
+                                        onTouchMove={() => {
+                                            if (problemLongPressRef.current) {
+                                                clearTimeout(problemLongPressRef.current);
+                                                problemLongPressRef.current = null;
+                                            }
+                                        }}
+                                    >
                                         {exercise.description}
                                     </pre>
                                 </div>
