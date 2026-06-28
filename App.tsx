@@ -8944,9 +8944,43 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </div>
                         )}
                         {showModal === 'hint' && (
-                            <div className="flex flex-col">
-                                <h2 className="text-lg font-bold mb-3 text-[#8b5cf6]">AI Analysis</h2>
-                                <div className="bg-[#0d1b2a] p-3 rounded-xl border border-[#1d2d44] text-gray-200 italic mb-3 text-xs">{aiHintText}</div>
+                            <div className="flex h-full min-h-0 flex-col">
+                                <h2 className="mb-3 text-lg font-bold text-[#3b82f6]">AI Review</h2>
+                                <div className="min-h-0 flex-1 overflow-y-auto rounded-2xl border border-[#1d2d44] bg-[#071225]/90 p-4 text-sm text-gray-200">
+                                    {aiReviewRunning ? (
+                                        <p className="text-[#93c5fd]">Reviewing code...</p>
+                                    ) : latestAiReviewResult ? (
+                                        <div className="space-y-3">
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <span className="rounded-full border border-[#3b82f6]/40 bg-[#3b82f6]/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#93c5fd]">
+                                                    {latestAiReviewResult.verdict.replace('_', ' ')}
+                                                </span>
+                                                <span className="text-xs text-gray-400">
+                                                    Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {latestAiReviewResult.source}
+                                                </span>
+                                            </div>
+                                            <p className="whitespace-pre-wrap leading-relaxed">{latestAiReviewResult.explanation}</p>
+                                            {latestAiReviewResult.suggestedFix && (
+                                                <p className="rounded-xl border border-[#f59e0b]/30 bg-[#f59e0b]/10 p-3 text-[#fde68a]">
+                                                    {latestAiReviewResult.suggestedFix}
+                                                </p>
+                                            )}
+                                            {latestAiReviewResult.verdict === 'likely_correct' && !latestAiReviewRequest?.graderPassed && (
+                                                <p className="rounded-xl border border-[#22c55e]/35 bg-[#22c55e]/10 p-3 text-[#86efac]">
+                                                    AI Suggested Win: review this answer and use the manual Win button if you agree.
+                                                </p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className="whitespace-pre-wrap">{aiHintText || 'Press Run first for the strongest review, or press AI again to analyze the current code.'}</p>
+                                    )}
+                                </div>
+                                {latestAiReviewRequest?.graderMessage && (
+                                    <div className="mt-3 rounded-2xl border border-[#ef4444]/30 bg-[#ef4444]/10 p-3 text-xs text-[#fecaca]">
+                                        <div className="mb-1 font-black uppercase tracking-[0.12em]">Grader Message</div>
+                                        <div className="whitespace-pre-wrap">{latestAiReviewRequest.graderMessage}</div>
+                                    </div>
+                                )}
                             </div>
                         )}
                         {showModal === 'customize' && (
