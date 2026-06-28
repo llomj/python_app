@@ -43,7 +43,7 @@ import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult } from './aiReviewTypes';
-import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
+import { DEFAULT_OFFLINE_AI_STATE, loadOfflineAiState, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -7185,6 +7185,7 @@ const App: React.FC = () => {
     const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
+    const [offlineAiState, setOfflineAiState] = useState(() => loadOfflineAiState());
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
@@ -7398,6 +7399,10 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_tool_panel_colors', JSON.stringify(toolPanelColors));
     }, [toolPanelColors]);
+
+    useEffect(() => {
+        saveOfflineAiState(offlineAiState);
+    }, [offlineAiState]);
 
     useEffect(() => {
         keyboardHapticsRef.current = keyboardHaptics;
@@ -8093,9 +8098,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setAiHintText('Reviewing code...');
         try {
             setLatestAiReviewRequest(request);
-            const diagnostic = buildDiagnosticReview(request);
-            setLatestAiReviewResult(diagnostic);
-            setAiHintText(`${diagnostic.verdict.replace('_', ' ').toUpperCase()}\n\n${diagnostic.explanation}${diagnostic.suggestedFix ? `\n\nSuggested fix: ${diagnostic.suggestedFix}` : ''}`);
+            const review = await reviewWithAvailableAi(request, offlineAiState);
+            setLatestAiReviewResult(review);
+            setAiHintText(`${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`);
         } finally {
             setAiReviewRunning(false);
         }
@@ -9210,6 +9215,48 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </div>
                                             );
                                         })}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/80 p-4">
+                                    <div className="mb-3 flex items-center justify-between gap-3">
+                                        <div>
+                                            <h3 className="text-sm font-black uppercase tracking-[0.14em] text-[#93c5fd]">Offline AI Reviewer</h3>
+                                            <p className="mt-1 text-xs text-gray-400">{offlineAiState.message}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => setOfflineAiState(prev => ({
+                                                ...prev,
+                                                enabled: !prev.enabled,
+                                                message: !prev.enabled ? 'Offline AI reviewer enabled. Model is not installed yet.' : 'Offline AI reviewer disabled.',
+                                            }))}
+                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] ${offlineAiState.enabled ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
+                                        >
+                                            {offlineAiState.enabled ? 'On' : 'Off'}
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                        <button
+                                            onClick={() => setOfflineAiState(prev => ({
+                                                ...prev,
+                                                enabled: true,
+                                                status: 'not_installed',
+                                                message: 'Model download will be available after the offline runtime is installed.',
+                                                progress: 0,
+                                            }))}
+                                            className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd]"
+                                        >
+                                            Prepare Download
+                                        </button>
+                                        <button
+                                            onClick={() => setOfflineAiState(DEFAULT_OFFLINE_AI_STATE)}
+                                            className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca]"
+                                        >
+                                            Remove Offline AI
+                                        </button>
+                                    </div>
+                                    <div className="mt-3 text-xs text-gray-400">
+                                        Status: {offlineAiState.status} · Model: {offlineAiState.modelId}
                                     </div>
                                 </div>
 
