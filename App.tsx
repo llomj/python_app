@@ -8092,6 +8092,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setAiReviewRunning(true);
         setAiHintText('Reviewing code...');
         try {
+            setLatestAiReviewRequest(request);
             const diagnostic = buildDiagnosticReview(request);
             setLatestAiReviewResult(diagnostic);
             setAiHintText(`${diagnostic.verdict.replace('_', ' ').toUpperCase()}\n\n${diagnostic.explanation}${diagnostic.suggestedFix ? `\n\nSuggested fix: ${diagnostic.suggestedFix}` : ''}`);
@@ -8965,7 +8966,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                     {latestAiReviewResult.suggestedFix}
                                                 </p>
                                             )}
-                                            {latestAiReviewResult.verdict === 'likely_correct' && !latestAiReviewRequest?.graderPassed && (
+                                            {latestAiReviewResult.verdict === 'likely_correct' && latestAiReviewRequest?.graderPassed === false && (
                                                 <p className="rounded-xl border border-[#22c55e]/35 bg-[#22c55e]/10 p-3 text-[#86efac]">
                                                     AI Suggested Win: review this answer and use the manual Win button if you agree.
                                                 </p>
