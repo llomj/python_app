@@ -7339,6 +7339,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "int"}],
     tests: [
       { args: [], expected: "42" }
     ]
@@ -7347,6 +7348,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "float"}],
     tests: [
       { args: [], expected: "3.14" }
     ]
@@ -7355,6 +7357,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "lower"}],
     tests: [
       { args: [], expected: "True" }
     ]
@@ -7363,6 +7366,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "split"}, {functionName: "map"}],
     tests: [
       { args: [], expected: "[10, 20, 30, 40]" }
     ]
@@ -7371,6 +7375,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "strptime"}],
     tests: [
       { args: [], expected: "2024-03-22 00:00:00" }
     ]
@@ -7379,6 +7384,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "['12345', '67890']" }
     ]
@@ -7387,6 +7393,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "loads"}],
     tests: [
       { args: [], expected: "{'name': 'Alice', 'age': 25, 'city': 'New York'}" }
     ]
@@ -7395,6 +7402,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "dumps"}],
     tests: [
       { args: [], expected: "{\"name\": \"Bob\", \"age\": 30, \"city\": \"London\"}" }
     ]
@@ -7403,6 +7411,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "fromstring"}, {functionName: "find"}],
     tests: [
       { args: [], expected: "Charlie" }
     ]
@@ -7411,6 +7420,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "parse_qs"}],
     tests: [
       { args: [], expected: "{'name': ['David'], 'age': ['35'], 'city': ['Paris']}" }
     ]
@@ -7419,6 +7429,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "reader"}, {functionName: "StringIO"}],
     tests: [
       { args: [], expected: "[['name', 'age', 'city'], ['Alice', '25', 'New York'], ['Bob', '30', 'London']]" }
     ]
@@ -7427,6 +7438,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ClassDef"}],
+    requiredCallPatterns: [{functionName: "feed"}],
     tests: [
       { args: [], expected: "['https://example.com', 'https://google.com']" }
     ]
@@ -7435,6 +7448,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "strptime"}, {functionName: "time"}],
     tests: [
       { args: [], expected: "14:30:45" }
     ]
@@ -7443,6 +7457,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "int", minArgs: 2}],
     tests: [
       { args: [], expected: "26" }
     ]
@@ -7451,6 +7466,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "int", minArgs: 2}],
     tests: [
       { args: [], expected: "10" }
     ]
@@ -7459,6 +7475,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "float"}],
     tests: [
       { args: [], expected: "35000.0" }
     ]
@@ -7467,6 +7484,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "ConfigParser"}, {functionName: "read_string"}],
     tests: [
       { args: [], expected: "admin" }
     ]
@@ -7475,6 +7493,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "['Hello World']" }
     ]
@@ -7483,6 +7502,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "splitlines"}, {functionName: "split"}],
+    requiredNodePatterns: [{nodeType: "For"}],
     tests: [
       { args: [], expected: "{'name': 'Alice', 'age': 25, 'city': 'New York'}" }
     ]
@@ -7491,6 +7512,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "loads"}],
     tests: [
       { args: [], expected: "[1, 2, 3, 4, 5]" }
     ]
@@ -7499,6 +7521,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "sub"}, {functionName: "float"}],
     tests: [
       { args: [], expected: "123.45" }
     ]
@@ -7507,6 +7530,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "ArgumentParser"}, {functionName: "add_argument"}, {functionName: "parse_args"}],
     tests: [
       { args: [], expected: "Alice" }
     ]
