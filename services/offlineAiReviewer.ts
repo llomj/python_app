@@ -50,8 +50,8 @@ export const downloadOfflineAiModel = async (
     return ready;
 };
 
-export const removeOfflineAiModel = async () => {
-    await resetWebLlmReviewer();
+export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.modelId) => {
+    await resetWebLlmReviewer(modelId);
     saveOfflineAiState(DEFAULT_OFFLINE_AI_STATE);
     return DEFAULT_OFFLINE_AI_STATE;
 };

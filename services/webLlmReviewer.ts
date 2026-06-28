@@ -56,7 +56,7 @@ export const loadWebLlmReviewer = async (modelId: string, onProgress?: (progress
         throw new Error('WebGPU is not available on this device/browser.');
     }
     if (!enginePromise) {
-        enginePromise = import('@mlc-ai/web-llm').then(async (webllm: EngineModule) => {
+        const loadPromise = import('@mlc-ai/web-llm').then(async (webllm: EngineModule) => {
             const engine = await webllm.CreateMLCEngine(modelId, {
                 initProgressCallback: (report: any) => {
                     const progress = typeof report?.progress === 'number' ? report.progress : 0;
@@ -66,6 +66,13 @@ export const loadWebLlmReviewer = async (modelId: string, onProgress?: (progress
             });
             return engine;
         });
+        const guardedPromise = loadPromise.catch(error => {
+            if (enginePromise === guardedPromise) {
+                enginePromise = null;
+            }
+            throw error;
+        });
+        enginePromise = guardedPromise;
     }
     return enginePromise;
 };
@@ -84,12 +91,21 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
     return parseReviewJson(response?.choices?.[0]?.message?.content || '');
 };
 
-export const resetWebLlmReviewer = async () => {
-    if (enginePromise) {
-        const engine = await enginePromise.catch(() => null);
+export const resetWebLlmReviewer = async (modelId?: string) => {
+    const pendingEngine = enginePromise;
+    enginePromise = null;
+
+    if (pendingEngine) {
+        const engine = await pendingEngine.catch(() => null);
         if (engine?.unload) {
             await engine.unload();
         }
     }
-    enginePromise = null;
+
+    if (modelId) {
+        const webllm = await import('@mlc-ai/web-llm');
+        if (typeof webllm.deleteModelAllInfoInCache === 'function') {
+            await webllm.deleteModelAllInfoInCache(modelId);
+        }
+    }
 };

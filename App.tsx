@@ -7186,6 +7186,7 @@ const App: React.FC = () => {
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
     const [offlineAiState, setOfflineAiState] = useState(() => loadOfflineAiState());
+    const offlineAiOperationRef = useRef(0);
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
@@ -9225,12 +9226,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             <p className="mt-1 text-xs text-gray-400">{offlineAiState.message}</p>
                                         </div>
                                         <button
-                                            onClick={() => setOfflineAiState(prev => ({
-                                                ...prev,
-                                                enabled: !prev.enabled,
-                                                message: !prev.enabled ? 'Offline AI reviewer enabled. Model is not installed yet.' : 'Offline AI reviewer disabled.',
-                                            }))}
-                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] ${offlineAiState.enabled ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
+                                            onClick={() => {
+                                                if (offlineAiState.status === 'downloading') return;
+                                                setOfflineAiState(prev => ({
+                                                    ...prev,
+                                                    enabled: !prev.enabled,
+                                                    message: !prev.enabled ? 'Offline AI reviewer enabled. Model is not installed yet.' : 'Offline AI reviewer disabled.',
+                                                }));
+                                            }}
+                                            disabled={offlineAiState.status === 'downloading'}
+                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
                                         >
                                             {offlineAiState.enabled ? 'On' : 'Off'}
                                         </button>
@@ -9238,24 +9243,46 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                                         <button
                                             onClick={() => {
-                                                downloadOfflineAiModel(offlineAiState, setOfflineAiState).catch(error => {
-                                                    setOfflineAiState(prev => ({
-                                                        ...prev,
-                                                        status: 'failed',
-                                                        message: String(error?.message || error || 'Offline AI download failed.'),
-                                                        progress: 0,
-                                                    }));
+                                                if (offlineAiState.status === 'downloading') return;
+                                                const operationId = ++offlineAiOperationRef.current;
+                                                downloadOfflineAiModel(offlineAiState, next => {
+                                                    if (operationId === offlineAiOperationRef.current) {
+                                                        setOfflineAiState(next);
+                                                    }
+                                                }).catch(error => {
+                                                    if (operationId !== offlineAiOperationRef.current) return;
+                                                    setOfflineAiState(prev => {
+                                                        if (prev.status !== 'downloading') return prev;
+                                                        return {
+                                                            ...prev,
+                                                            status: 'failed',
+                                                            message: String(error?.message || error || 'Offline AI download failed.'),
+                                                            progress: 0,
+                                                        };
+                                                    });
                                                 });
                                             }}
-                                            className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd]"
+                                            disabled={offlineAiState.status === 'downloading'}
+                                            className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd] disabled:cursor-not-allowed disabled:opacity-50"
                                         >
                                             Prepare Download
                                         </button>
                                         <button
                                             onClick={() => {
-                                                removeOfflineAiModel().then(setOfflineAiState).catch(() => setOfflineAiState(DEFAULT_OFFLINE_AI_STATE));
+                                                if (offlineAiState.status === 'downloading') return;
+                                                const operationId = ++offlineAiOperationRef.current;
+                                                removeOfflineAiModel(offlineAiState.modelId).then(next => {
+                                                    if (operationId === offlineAiOperationRef.current) {
+                                                        setOfflineAiState(next);
+                                                    }
+                                                }).catch(() => {
+                                                    if (operationId === offlineAiOperationRef.current) {
+                                                        setOfflineAiState(DEFAULT_OFFLINE_AI_STATE);
+                                                    }
+                                                });
                                             }}
-                                            className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca]"
+                                            disabled={offlineAiState.status === 'downloading'}
+                                            className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca] disabled:cursor-not-allowed disabled:opacity-50"
                                         >
                                             Remove Offline AI
                                         </button>
