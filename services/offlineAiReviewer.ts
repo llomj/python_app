@@ -1,5 +1,6 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
+import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm } from './webLlmReviewer';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 
@@ -28,9 +29,44 @@ export const saveOfflineAiState = (state: OfflineAiState) => {
     }
 };
 
+export const downloadOfflineAiModel = async (
+    state: OfflineAiState,
+    onState: (next: OfflineAiState) => void,
+) => {
+    if (!supportsWebLlm()) {
+        const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for offline AI.', progress: 0 };
+        onState(next);
+        saveOfflineAiState(next);
+        return next;
+    }
+    const downloading = { ...state, enabled: true, status: 'downloading' as const, message: 'Downloading offline AI model...', progress: 0 };
+    onState(downloading);
+    await loadWebLlmReviewer(state.modelId, (progress, message) => {
+        onState({ ...downloading, status: 'downloading', progress, message });
+    });
+    const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline AI reviewer is ready.', progress: 1 };
+    onState(ready);
+    saveOfflineAiState(ready);
+    return ready;
+};
+
+export const removeOfflineAiModel = async () => {
+    await resetWebLlmReviewer();
+    saveOfflineAiState(DEFAULT_OFFLINE_AI_STATE);
+    return DEFAULT_OFFLINE_AI_STATE;
+};
+
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
-    if (!state.enabled || state.status !== 'ready') {
-        return buildDiagnosticReview(request);
+    if (state.enabled && state.status === 'ready') {
+        try {
+            return await reviewWithWebLlm(request, state.modelId);
+        } catch (error) {
+            const diagnostic = buildDiagnosticReview(request);
+            return {
+                ...diagnostic,
+                explanation: `Offline AI failed, so diagnostic review was used. ${diagnostic.explanation}`,
+            };
+        }
     }
     return buildDiagnosticReview(request);
 };

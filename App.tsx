@@ -43,7 +43,7 @@ import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult } from './aiReviewTypes';
-import { DEFAULT_OFFLINE_AI_STATE, loadOfflineAiState, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
+import { DEFAULT_OFFLINE_AI_STATE, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -9237,19 +9237,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     </div>
                                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                                         <button
-                                            onClick={() => setOfflineAiState(prev => ({
-                                                ...prev,
-                                                enabled: true,
-                                                status: 'not_installed',
-                                                message: 'Model download will be available after the offline runtime is installed.',
-                                                progress: 0,
-                                            }))}
+                                            onClick={() => {
+                                                downloadOfflineAiModel(offlineAiState, setOfflineAiState).catch(error => {
+                                                    setOfflineAiState(prev => ({
+                                                        ...prev,
+                                                        status: 'failed',
+                                                        message: String(error?.message || error || 'Offline AI download failed.'),
+                                                        progress: 0,
+                                                    }));
+                                                });
+                                            }}
                                             className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd]"
                                         >
                                             Prepare Download
                                         </button>
                                         <button
-                                            onClick={() => setOfflineAiState(DEFAULT_OFFLINE_AI_STATE)}
+                                            onClick={() => {
+                                                removeOfflineAiModel().then(setOfflineAiState).catch(() => setOfflineAiState(DEFAULT_OFFLINE_AI_STATE));
+                                            }}
                                             className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca]"
                                         >
                                             Remove Offline AI
