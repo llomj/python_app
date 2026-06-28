@@ -71,7 +71,7 @@ interface AutoGradeResult {
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
 type StatsByMode = Record<DifficultyMode, Stats>;
-type CustomizeModalTab = 'count' | 'ide';
+type CustomizeModalTab = 'count' | 'ide' | 'tools';
 
 interface CountRowColorSettings {
     background: string;
@@ -81,6 +81,20 @@ interface CountRowColorSettings {
     fail: string;
     rate: string;
     icon: string;
+}
+
+interface ToolPanelColorSettings {
+    panelBackground: string;
+    panelBorder: string;
+    toggleBackground: string;
+    toggleText: string;
+    info: string;
+    solution: string;
+    ai: string;
+    custom: string;
+    win: string;
+    failed: string;
+    reset: string;
 }
 
 const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
@@ -93,8 +107,31 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
     icon: '#9ca3af',
 };
 
+const DEFAULT_TOOL_PANEL_COLORS: ToolPanelColorSettings = {
+    panelBackground: '#071225',
+    panelBorder: '#1d2d44',
+    toggleBackground: '#071225',
+    toggleText: '#d1d5db',
+    info: '#f59e0b',
+    solution: '#3b82f6',
+    ai: '#8b5cf6',
+    custom: '#14b8a6',
+    win: '#22c55e',
+    failed: '#ef4444',
+    reset: '#f97316',
+};
+
 const sanitizeHexColor = (value: unknown, fallback: string) => {
     return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value) ? value : fallback;
+};
+
+const hexToRgba = (hex: string, alpha: number) => {
+    const normalized = sanitizeHexColor(hex, '#ffffff').slice(1);
+    const value = Number.parseInt(normalized, 16);
+    const red = (value >> 16) & 255;
+    const green = (value >> 8) & 255;
+    const blue = value & 255;
+    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 };
 
 const loadColorSettings = <T extends Record<string, string>>(storageKey: string, defaults: T): T => {
@@ -7125,6 +7162,7 @@ const App: React.FC = () => {
     const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => getSavedDifficultyMode());
     const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
+    const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadColorSettings('python_tool_panel_colors', DEFAULT_TOOL_PANEL_COLORS));
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
@@ -7330,6 +7368,10 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_editor_colors', JSON.stringify(editorColors));
     }, [editorColors]);
+
+    useEffect(() => {
+        localStorage.setItem('python_tool_panel_colors', JSON.stringify(toolPanelColors));
+    }, [toolPanelColors]);
 
     useEffect(() => {
         keyboardHapticsRef.current = keyboardHaptics;
@@ -8636,23 +8678,27 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </button>
                             </div>
                         )}
-                        <div className="border-t border-[#1d2d44] bg-[#071225]">
+                        <div
+                            className="border-t"
+                            style={{ backgroundColor: toolPanelColors.panelBackground, borderColor: toolPanelColors.panelBorder }}
+                        >
                             <button
                                 onClick={() => setShowActionPanel(prev => !prev)}
-                                className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-gray-300 hover:text-[#3b82f6] transition-colors"
+                                className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] transition-colors"
+                                style={{ backgroundColor: toolPanelColors.toggleBackground, color: toolPanelColors.toggleText }}
                             >
                                 <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
                                 {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
                             </button>
                             {showActionPanel && (
                                 <div className="flex justify-center gap-2 sm:gap-3 px-2 pb-3 animate-in fade-in slide-in-from-top-1 duration-200">
-                                    <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                                    <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
-                                    <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
-                                    <ActionButton icon={<SlidersHorizontal size={16} />} color="rgba(20, 184, 166, 0.15)" borderColor="rgba(20, 184, 166, 0.3)" iconColor="#14b8a6" description="Custom" onClick={() => setShowModal('customize')} />
-                                    <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
-                                    <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
-                                    <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
+                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => setShowModal('solution')} />
+                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={handleAiHint} />
+                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => setShowModal('customize')} />
+                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={handleMarkSuccess} />
+                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={handleMarkFailed} />
+                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
                                 </div>
                             )}
                         </div>
@@ -8839,6 +8885,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 <div className="mb-4 flex flex-shrink-0 gap-3 border-b border-[#1d2d44]">
                                     <TabButton active={customizeTab === 'count'} onClick={() => setCustomizeTab('count')} label="Count Row" />
                                     <TabButton active={customizeTab === 'ide'} onClick={() => setCustomizeTab('ide')} label="IDE" />
+                                    <TabButton active={customizeTab === 'tools'} onClick={() => setCustomizeTab('tools')} label="Tools" />
                                 </div>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
                                     {customizeTab === 'count' && (
@@ -8913,6 +8960,59 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
                                             >
                                                 Reset IDE Defaults
+                                            </button>
+                                        </div>
+                                    )}
+                                    {customizeTab === 'tools' && (
+                                        <div className="space-y-4">
+                                            <div
+                                                className="rounded-2xl border p-3"
+                                                style={{ backgroundColor: toolPanelColors.panelBackground, borderColor: toolPanelColors.panelBorder }}
+                                            >
+                                                <div
+                                                    className="mb-3 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em]"
+                                                    style={{ backgroundColor: toolPanelColors.toggleBackground, color: toolPanelColors.toggleText }}
+                                                >
+                                                    <span>Hide Tools</span>
+                                                    <ChevronDown size={14} />
+                                                </div>
+                                                <div className="flex flex-wrap justify-center gap-2">
+                                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => undefined} />
+                                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => undefined} />
+                                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={() => undefined} />
+                                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => undefined} />
+                                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={() => undefined} />
+                                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={() => undefined} />
+                                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => undefined} />
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                                {([
+                                                    ['panelBackground', 'Panel Background'],
+                                                    ['panelBorder', 'Panel Border'],
+                                                    ['toggleBackground', 'Toggle Background'],
+                                                    ['toggleText', 'Toggle Text'],
+                                                    ['info', 'Info Tool'],
+                                                    ['solution', 'Solution Tool'],
+                                                    ['ai', 'AI Tool'],
+                                                    ['custom', 'Customize Tool'],
+                                                    ['win', 'Win Tool'],
+                                                    ['failed', 'Failed Tool'],
+                                                    ['reset', 'Reset Tool'],
+                                                ] as Array<[keyof ToolPanelColorSettings, string]>).map(([key, label]) => (
+                                                    <ColorField
+                                                        key={key}
+                                                        label={label}
+                                                        value={toolPanelColors[key]}
+                                                        onChange={(value) => setToolPanelColors(prev => ({ ...prev, [key]: value }))}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <button
+                                                onClick={() => setToolPanelColors(DEFAULT_TOOL_PANEL_COLORS)}
+                                                className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
+                                            >
+                                                Reset Tools Defaults
                                             </button>
                                         </div>
                                     )}
@@ -9266,8 +9366,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     );
 };
 
-const ActionButton: React.FC<{ icon: React.ReactNode, color: string, borderColor: string, iconColor: string, description: string, onClick: () => void }> = ({ icon, color, borderColor, iconColor, description, onClick }) => (
-    <button onClick={onClick} style={{ backgroundColor: color, borderColor: borderColor, color: iconColor, pointerEvents: 'auto' }} className="w-[42px] h-[42px] rounded-full flex flex-col items-center justify-center shadow-lg active:scale-90 transition-all border border-white/5">
+const ActionButton: React.FC<{ icon: React.ReactNode, iconColor: string, description: string, onClick: () => void }> = ({ icon, iconColor, description, onClick }) => (
+    <button
+        onClick={onClick}
+        style={{
+            backgroundColor: hexToRgba(iconColor, 0.15),
+            borderColor: hexToRgba(iconColor, 0.3),
+            color: iconColor,
+            pointerEvents: 'auto'
+        }}
+        className="w-[42px] h-[42px] rounded-full flex flex-col items-center justify-center shadow-lg active:scale-90 transition-all border border-white/5"
+    >
         {icon}
         <span className="text-[6px] font-bold mt-0.5 uppercase tracking-tighter">{description}</span>
     </button>
