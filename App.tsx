@@ -8058,6 +8058,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setFiles(updatedFiles);
         if (pendingNextProblem) setPendingNextProblem(false);
         setLatestAiReviewResult(null);
+        setLatestAiReviewRequest(null);
     };
 
     const handleMarkSuccess = () => {
@@ -8071,7 +8072,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     };
 
     const handleAiHint = async () => {
-        const request: AiReviewRequest = latestAiReviewRequest || {
+        const reusableReviewRequest =
+            latestAiReviewRequest?.problemId === exercise.id &&
+            latestAiReviewRequest.userCode === files[activeFileIndex].content
+                ? latestAiReviewRequest
+                : null;
+        const request: AiReviewRequest = reusableReviewRequest || {
             problemId: exercise.id,
             title: exercise.title,
             description: exercise.description,
