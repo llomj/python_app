@@ -400,6 +400,40 @@ def declaration_variants(source):
             unique.append(variant)
     return unique or [source]
 
+def call_name(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
+
+def source_requirements_ok(source, grader):
+    patterns = grader.get("requiredCallPatterns", [])
+    if not patterns:
+        return True
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return False
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
+    for pattern in patterns:
+        function_name = pattern.get("functionName")
+        keyword = pattern.get("keyword")
+        min_args = pattern.get("minArgs")
+        matched = False
+        for call in calls:
+            if call_name(call.func) != function_name:
+                continue
+            if keyword and not any(item.arg == keyword for item in call.keywords):
+                continue
+            if min_args is not None and len(call.args) < int(min_args):
+                continue
+            matched = True
+            break
+        if not matched:
+            return False
+    return True
+
 def accepts_args(candidate, args, kwargs=None):
     try:
         inspect.signature(candidate).bind(*args, **(kwargs or {}))
@@ -426,6 +460,8 @@ def run_grader(source, grader):
                 last_solution = ""
                 for solution in runnable_variants(source, prefer_markers=True):
                     last_solution = solution
+                    if not source_requirements_ok(solution, grader):
+                        continue
                     with time_limit(1.0):
                         if run_script_tests(solution, tests, compare):
                             return True, "", solution
@@ -436,6 +472,8 @@ def run_grader(source, grader):
     last_solution = ""
     for solution in runnable_variants(source):
         for candidate_solution in declaration_variants(solution):
+            if not source_requirements_ok(candidate_solution, grader):
+                continue
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             old_stdout = sys.stdout
             old_input = builtins.input

@@ -65,6 +65,24 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
     invalidGraders.push(`${id}: function graders must declare functionNames`);
   }
 
+  if (grader.requiredCallPatterns !== undefined) {
+    if (!Array.isArray(grader.requiredCallPatterns)) {
+      invalidGraders.push(`${id}: requiredCallPatterns must be an array`);
+    } else {
+      grader.requiredCallPatterns.forEach((pattern, index) => {
+        if (!pattern || typeof pattern.functionName !== 'string' || !pattern.functionName.trim()) {
+          invalidGraders.push(`${id}: requiredCallPatterns ${index + 1} must declare functionName`);
+        }
+        if (pattern.keyword !== undefined && typeof pattern.keyword !== 'string') {
+          invalidGraders.push(`${id}: requiredCallPatterns ${index + 1} keyword must be a string`);
+        }
+        if (pattern.minArgs !== undefined && (!Number.isInteger(pattern.minArgs) || pattern.minArgs < 0)) {
+          invalidGraders.push(`${id}: requiredCallPatterns ${index + 1} minArgs must be a non-negative integer`);
+        }
+      });
+    }
+  }
+
   tests.forEach((test, index) => {
     if (!Object.prototype.hasOwnProperty.call(test, 'expected') && !Object.prototype.hasOwnProperty.call(test, 'expectedException')) {
       invalidGraders.push(`${id}: test ${index + 1} must declare expected or expectedException`);

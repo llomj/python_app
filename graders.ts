@@ -37,6 +37,7 @@ export interface AutoGrader {
     functionNames: string[];
     mode?: 'function' | 'script';
     compare?: CompareMode;
+    requiredCallPatterns?: Array<{ functionName: string; keyword?: string; minArgs?: number }>;
     tests: AutoTestCase[];
 }
 
@@ -11105,6 +11106,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "max", keyword: "default" }],
     tests: [
       { args: [], expected: "0" }
     ]
@@ -11113,6 +11115,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "min", keyword: "default" }],
     tests: [
       { args: [], expected: "-1" }
     ]
@@ -11121,6 +11124,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "max", keyword: "default" }],
     tests: [
       { args: [], expected: "None" }
     ]
@@ -11129,6 +11133,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "next", minArgs: 2 }],
     tests: [
       { args: [], expected: "-1" }
     ]
@@ -11137,6 +11142,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "next", minArgs: 2 }],
     tests: [
       { args: [], expected: "No item" }
     ]
@@ -11145,6 +11151,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "max", keyword: "default" }],
     tests: [
       { args: [], expected: "None" }
     ]
@@ -11153,6 +11160,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "min", keyword: "default" }],
     tests: [
       { args: [], expected: "-1" }
     ]
@@ -11161,6 +11169,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "next", minArgs: 2 }],
     tests: [
       { args: [], expected: "Not found" }
     ]
@@ -11169,6 +11178,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "max", keyword: "default" }],
     tests: [
       { args: [], expected: "empty" }
     ]
@@ -11177,6 +11187,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "next", minArgs: 2 }],
     tests: [
       { args: [], expected: "Empty" }
     ]

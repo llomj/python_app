@@ -395,6 +395,45 @@ def __auto_grader_load_function_namespace():
     source = __auto_grader_declarations_only(__auto_grader_source)
     exec(compile(source, __auto_grader_source_name, "exec"), globals())
 
+def __auto_grader_call_name(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
+
+def __auto_grader_check_source_requirements():
+    patterns = __auto_grader_spec.get("requiredCallPatterns", [])
+    if not patterns:
+        return None
+    try:
+        tree = ast.parse(__auto_grader_source)
+    except SyntaxError as exc:
+        return f"Could not inspect source syntax: {exc}"
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
+    for pattern in patterns:
+        function_name = pattern.get("functionName")
+        keyword = pattern.get("keyword")
+        min_args = pattern.get("minArgs")
+        matched = False
+        for call in calls:
+            if __auto_grader_call_name(call.func) != function_name:
+                continue
+            if keyword and not any(item.arg == keyword for item in call.keywords):
+                continue
+            if min_args is not None and len(call.args) < int(min_args):
+                continue
+            matched = True
+            break
+        if not matched:
+            detail = function_name + "()"
+            if keyword:
+                detail += f" with {keyword}="
+            if min_args is not None:
+                detail += f" with at least {min_args} positional arguments"
+            return "Missing required source pattern: " + detail
+    return None
+
 def __auto_grader_clean_text(value):
     return "\\n".join(line.rstrip() for line in str(value).strip().splitlines())
 
@@ -528,6 +567,13 @@ def __auto_grader_find_callable(function_names, args, required_name=None, kwargs
     return None, None
 
 def __auto_grader_run():
+    source_requirement_error = __auto_grader_check_source_requirements()
+    if source_requirement_error:
+        return {
+            "passed": False,
+            "message": source_requirement_error
+        }
+
     if __auto_grader_spec.get("mode") == "script":
         return __auto_grader_run_script()
 
