@@ -6949,6 +6949,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Cannot divide by zero" }
     ]
@@ -6957,6 +6958,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Index out of range" }
     ]
@@ -6965,6 +6967,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Key not found" }
     ]
@@ -6973,6 +6976,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Invalid integer conversion" }
     ]
@@ -6981,6 +6985,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Type mismatch error" }
     ]
@@ -6989,6 +6994,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "File not found" }
     ]
@@ -6997,6 +7003,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Attribute not found" }
     ]
@@ -7005,6 +7012,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Variable not defined" }
     ]
@@ -7013,6 +7021,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], permissionDeniedPaths: ["/root/protected.txt"], expected: "Permission denied" }
     ]
@@ -7021,6 +7030,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Division successful: 5.0" }
     ]
@@ -7029,6 +7039,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Execution completed\nCannot divide by zero" }
     ]
@@ -7044,6 +7055,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "An error occurred" }
     ]
@@ -7052,6 +7064,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Assert"}],
     tests: [
       { args: [], expected: "Negative number not allowed" }
     ]
@@ -7060,6 +7073,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Raise"}],
     tests: [
       { args: [], expected: "Memory limit exceeded" }
     ]
@@ -7074,6 +7088,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Module not found" }
     ]
@@ -7082,6 +7097,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Error reading file" }
     ]
@@ -7090,6 +7106,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Raise"}],
     tests: [
       { args: [], expected: "Process interrupted by user" }
     ]
@@ -10148,6 +10165,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "List is empty" }
     ]
@@ -10164,6 +10182,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Key not found" }
     ]
@@ -10666,6 +10685,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "suppress"}],
     tests: [
       { args: [], expected: "Continues after exception" }
     ]
@@ -10802,6 +10822,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Key not found" }
     ]
@@ -12105,6 +12126,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{nodeType: "ClassDef"}, {nodeType: "Try"}, {nodeType: "Raise"}],
         tests: [
             { args: [], expected: "Caught: This is a custom error" },
         ]
@@ -12113,6 +12135,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Raise"}],
         tests: [
             { args: [], expected: "Error: Conversion failed, caused by: invalid literal for int() with base 10: 'not a number'" },
         ]
@@ -12432,6 +12455,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{nodeType: "Try"}],
         tests: [
             { args: [], expected: "Result: 5.0" },
         ]
@@ -12440,6 +12464,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{nodeType: "Try"}],
         tests: [
             { args: [], expected: "Caught division by zero\nThis always executes" },
         ]
@@ -12448,6 +12473,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+        requiredCallPatterns: [{functionName: "suppress"}],
         tests: [
             { args: [], expected: "Continues after suppressed exception" },
         ]
