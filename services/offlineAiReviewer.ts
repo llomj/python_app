@@ -21,7 +21,11 @@ export const loadOfflineAiState = (): OfflineAiState => {
 };
 
 export const saveOfflineAiState = (state: OfflineAiState) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {
+        // Ignore storage failures; offline AI can still use in-memory state.
+    }
 };
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
