@@ -4,6 +4,7 @@ export type OfflineAiStatus =
     | 'not_installed'
     | 'unsupported'
     | 'downloading'
+    | 'removing'
     | 'ready'
     | 'failed'
     | 'disabled';

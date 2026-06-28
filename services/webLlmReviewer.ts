@@ -93,7 +93,6 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
 
 export const resetWebLlmReviewer = async (modelId?: string) => {
     const pendingEngine = enginePromise;
-    enginePromise = null;
 
     if (pendingEngine) {
         const engine = await pendingEngine.catch(() => null);
@@ -107,5 +106,9 @@ export const resetWebLlmReviewer = async (modelId?: string) => {
         if (typeof webllm.deleteModelAllInfoInCache === 'function') {
             await webllm.deleteModelAllInfoInCache(modelId);
         }
+    }
+
+    if (enginePromise === pendingEngine) {
+        enginePromise = null;
     }
 };
