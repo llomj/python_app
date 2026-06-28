@@ -9255,16 +9255,13 @@ const ColorField: React.FC<{ label: string; value: string; onChange: (value: str
             <span className="block text-xs font-bold text-gray-200">{label}</span>
             <span className="mt-1 block font-mono text-[10px] uppercase text-gray-500">{value}</span>
         </span>
-        <span className="flex items-center gap-2">
-            <input
-                type="color"
-                value={value}
-                onChange={(event) => onChange(event.target.value)}
-                className="h-9 w-12 rounded-lg border border-[#1d2d44] bg-transparent p-0"
-                aria-label={`${label} color`}
-            />
-            <span className="h-9 w-9 rounded-lg border border-white/10" style={{ backgroundColor: value }} />
-        </span>
+        <input
+            type="color"
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            className="h-10 w-14 cursor-pointer rounded-xl border border-white/10 bg-transparent p-0"
+            aria-label={`${label} color`}
+        />
     </label>
 );
 
