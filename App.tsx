@@ -7309,7 +7309,7 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
-    const problemCopyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const problemTouchStartRef = useRef(0);
     const [headerHeight, setHeaderHeight] = useState(265);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
@@ -8389,30 +8389,25 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             WebkitUserSelect: 'text'
                         }}
                         onTouchStart={() => {
-                            problemCopyTimerRef.current = setTimeout(() => {
-                                const el = problemDescriptionRef.current;
-                                if (!el) return;
-                                const range = document.createRange();
-                                range.selectNodeContents(el);
-                                const sel = window.getSelection();
-                                sel?.removeAllRanges();
-                                sel?.addRange(range);
-                                navigator.clipboard.writeText(exercise.description).catch(() => {});
-                                setDescCopied(true);
-                                setTimeout(() => setDescCopied(false), 1200);
-                            }, 400);
+                            problemTouchStartRef.current = Date.now();
                         }}
                         onTouchEnd={() => {
-                            if (problemCopyTimerRef.current) {
-                                clearTimeout(problemCopyTimerRef.current);
-                                problemCopyTimerRef.current = null;
-                            }
+                            if (Date.now() - problemTouchStartRef.current < 400) return;
+                            problemTouchStartRef.current = 0;
+                            const el = problemDescriptionRef.current;
+                            if (!el) return;
+                            const range = document.createRange();
+                            range.selectNodeContents(el);
+                            const sel = window.getSelection();
+                            sel?.removeAllRanges();
+                            sel?.addRange(range);
+                            document.execCommand('copy');
+                            navigator.clipboard.writeText(exercise.description).catch(() => {});
+                            setDescCopied(true);
+                            setTimeout(() => setDescCopied(false), 1200);
                         }}
                         onTouchMove={() => {
-                            if (problemCopyTimerRef.current) {
-                                clearTimeout(problemCopyTimerRef.current);
-                                problemCopyTimerRef.current = null;
-                            }
+                            problemTouchStartRef.current = 0;
                         }}
                     >
                         {exercise.description}
