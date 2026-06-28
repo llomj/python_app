@@ -6219,6 +6219,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], randomValues: [5, 8, 14], expected: "5\n8" },
@@ -6723,6 +6724,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [42], expected: "42" }
     ]
@@ -6731,6 +6733,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "random"}],
     tests: [
       { args: [], randomFloatValues: [0.25], expected: "0.25" }
     ]
@@ -6739,6 +6742,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randrange"}],
     tests: [
       { args: [], randomValues: [24], expected: "24" }
     ]
@@ -6747,6 +6751,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: ["green"], expected: "green" }
     ]
@@ -6755,6 +6760,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "shuffle"}],
     tests: [
       { args: [], randomShuffleValues: [[5, 4, 3, 2, 1]], expected: "[5, 4, 3, 2, 1]" }
     ]
@@ -6763,6 +6769,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "sample"}],
     tests: [
       { args: [], randomSampleValues: [[3, 7, 11]], expected: "[3, 7, 11]" }
     ]
@@ -6771,6 +6778,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "uniform"}],
     tests: [
       { args: [], randomFloatValues: [7.5], expected: "7.5" }
     ]
@@ -6779,6 +6787,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: ["Q"], expected: "Q" }
     ]
@@ -6787,6 +6796,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [6], expected: "6" }
     ]
@@ -6795,6 +6805,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: ["Heads"], expected: "Heads" }
     ]
@@ -6803,6 +6814,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice",minArgs: 1}],
     tests: [
       { args: [], randomChoiceValues: ["Alice", "Brown"], expected: "Alice Brown" }
     ]
@@ -6811,6 +6823,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "sample"}],
     tests: [
       { args: [], randomSampleValues: [["A", "b", "3", "!", "Z", "9", "?", "q"]], expected: "Ab3!Z9?q" }
     ]
@@ -6819,6 +6832,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: [true], expected: "True" }
     ]
@@ -6827,6 +6841,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [4, 8, 15, 16, 23], expected: "[4, 8, 15, 16, 23]" }
     ]
@@ -6835,6 +6850,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "sample"}],
     tests: [
       { args: [], randomSampleValues: [[2, 4, 6, 8]], expected: "[2, 4, 6, 8]" }
     ]
@@ -6843,6 +6859,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [31], expected: "2023-02-01" }
     ]
@@ -6851,6 +6868,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: ["banana"], expected: "banana" }
     ]
@@ -6859,6 +6877,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [654321], expected: "654321" }
     ]
@@ -6867,6 +6886,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [11259375], expected: "#abcdef" }
     ]
@@ -6875,6 +6895,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [123, 456, 7890], expected: "(123) 456-7890" }
     ]
@@ -6883,6 +6904,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [2468], expected: "2468" }
     ]
@@ -6891,6 +6913,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [2, 5], expected: "2 5" }
     ]
@@ -6899,6 +6922,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [192, 168, 1, 10], expected: "192.168.1.10" }
     ]
@@ -6907,6 +6931,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choices"}],
     tests: [
       { args: [], randomChoiceValues: ["A", "b", "3", "!", "Z", "9", "?", "q", "R", "7", "$", "m"], expected: "Ab3!Z9?qR7$m" }
     ]
@@ -6915,6 +6940,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: ["elephant"], expected: "elephant" }
     ]
