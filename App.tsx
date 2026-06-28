@@ -43,7 +43,7 @@ import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { getAiHint } from './services/geminiService';
-import { customPythonTheme } from './editorTheme';
+import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
@@ -71,6 +71,42 @@ interface AutoGradeResult {
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
 type StatsByMode = Record<DifficultyMode, Stats>;
+type CustomizeModalTab = 'count' | 'ide';
+
+interface CountRowColorSettings {
+    background: string;
+    border: string;
+    count: string;
+    wins: string;
+    fail: string;
+    rate: string;
+    icon: string;
+}
+
+const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
+    background: '#0a1628',
+    border: '#1d2d44',
+    count: '#3b82f6',
+    wins: '#22c55e',
+    fail: '#ef4444',
+    rate: '#f59e0b',
+    icon: '#9ca3af',
+};
+
+const sanitizeHexColor = (value: unknown, fallback: string) => {
+    return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value) ? value : fallback;
+};
+
+const loadColorSettings = <T extends Record<string, string>>(storageKey: string, defaults: T): T => {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        return Object.fromEntries(
+            Object.entries(defaults).map(([key, value]) => [key, sanitizeHexColor(parsed?.[key], value)])
+        ) as T;
+    } catch {
+        return defaults;
+    }
+};
 
 const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
     { id: 'normal', label: 'Normal', description: 'All problems mixed' },
@@ -7077,15 +7113,18 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize'>('none');
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
+    const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [aiHintText, setAiHintText] = useState<string>('');
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => getSavedDifficultyMode());
+    const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
+    const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
@@ -7282,6 +7321,14 @@ const App: React.FC = () => {
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
+
+    useEffect(() => {
+        localStorage.setItem('python_count_row_colors', JSON.stringify(countRowColors));
+    }, [countRowColors]);
+
+    useEffect(() => {
+        localStorage.setItem('python_editor_colors', JSON.stringify(editorColors));
+    }, [editorColors]);
 
     useEffect(() => {
         keyboardHapticsRef.current = keyboardHaptics;
@@ -8182,8 +8229,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         holdBackspaceExtension,
         autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
         EditorView.lineWrapping,
-        ...customPythonTheme
-    ], [pythonCompletionSource]);
+        ...createCustomPythonTheme(editorColors)
+    ], [pythonCompletionSource, editorColors]);
 
     if (bootStage !== 'launched') {
         return (
@@ -8244,13 +8291,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }}
             >
                 <div className="flex items-center justify-center mb-3">
-                    <div className="flex gap-3 sm:gap-5 items-center bg-[#0a1628] border border-[#1d2d44] px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight" style={{ pointerEvents: 'auto' }}>
-                        <button onClick={() => setShowModal('api_key')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="API key settings"><Key size={14} /></button>
-                        <div className="flex items-center"><span className="text-[#3b82f6] mr-1 uppercase">Count:</span><span>{currentStats.shots}</span></div>
-                        <div className="flex items-center"><span className="text-[#22c55e] mr-1 uppercase">Wins:</span><span>{currentStats.success}</span></div>
-                        <div className="flex items-center"><span className="text-[#ef4444] mr-1 uppercase">Fail:</span><span>{currentStats.failed}</span></div>
-                        <div className="flex items-center border-l border-[#1d2d44] pl-3 ml-1"><span className="text-[#f59e0b] mr-1 uppercase">Rate:</span><span>{rate}%</span></div>
-                        <button onClick={() => setShowModal('settings')} className="text-gray-400 hover:text-[#3b82f6] transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" title="Settings"><Settings size={14} /></button>
+                    <div
+                        className="flex gap-3 sm:gap-5 items-center px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight"
+                        style={{ pointerEvents: 'auto', backgroundColor: countRowColors.background, border: `1px solid ${countRowColors.border}` }}
+                    >
+                        <button onClick={() => setShowModal('api_key')} className="transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" style={{ color: countRowColors.icon }} title="API key settings"><Key size={14} /></button>
+                        <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span>{currentStats.shots}</span></div>
+                        <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>Wins:</span><span>{currentStats.success}</span></div>
+                        <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span>{currentStats.failed}</span></div>
+                        <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${countRowColors.border}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>Rate:</span><span>{rate}%</span></div>
+                        <button onClick={() => setShowModal('settings')} className="transition-all bg-[#050c18] p-1.5 rounded-full border border-[#1d2d44]" style={{ color: countRowColors.icon }} title="Settings"><Settings size={14} /></button>
                     </div>
                 </div>
 
@@ -8600,6 +8650,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <ActionButton icon={<Book size={16} />} color="rgba(245, 158, 11, 0.15)" borderColor="rgba(245, 158, 11, 0.3)" iconColor="#f59e0b" description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
                                     <ActionButton icon={<Lightbulb size={16} />} color="rgba(59, 130, 246, 0.15)" borderColor="rgba(59, 130, 246, 0.3)" iconColor="#3b82f6" description="Sol" onClick={() => setShowModal('solution')} />
                                     <ActionButton icon={<Bot size={16} />} color="rgba(139, 92, 246, 0.15)" borderColor="rgba(139, 92, 246, 0.3)" iconColor="#8b5cf6" description="AI" onClick={handleAiHint} />
+                                    <ActionButton icon={<SlidersHorizontal size={16} />} color="rgba(20, 184, 166, 0.15)" borderColor="rgba(20, 184, 166, 0.3)" iconColor="#14b8a6" description="Custom" onClick={() => setShowModal('customize')} />
                                     <ActionButton icon={<CheckCircle size={16} />} color="rgba(34, 197, 94, 0.15)" borderColor="rgba(34, 197, 94, 0.3)" iconColor="#22c55e" description="Win" onClick={handleMarkSuccess} />
                                     <ActionButton icon={<XCircle size={16} />} color="rgba(239, 68, 68, 0.15)" borderColor="rgba(239, 68, 68, 0.3)" iconColor="#ef4444" description="Failed" onClick={handleMarkFailed} />
                                     <ActionButton icon={<RotateCcw size={16} />} color="rgba(249, 115, 22, 0.15)" borderColor="rgba(249, 115, 22, 0.3)" iconColor="#f97316" description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
@@ -8781,6 +8832,92 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             <div className="flex flex-col">
                                 <h2 className="text-lg font-bold mb-3 text-[#8b5cf6]">AI Analysis</h2>
                                 <div className="bg-[#0d1b2a] p-3 rounded-xl border border-[#1d2d44] text-gray-200 italic mb-3 text-xs">{aiHintText}</div>
+                            </div>
+                        )}
+                        {showModal === 'customize' && (
+                            <div className="flex h-full min-h-0 flex-col py-2">
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Customize</h2>
+                                <div className="mb-4 flex flex-shrink-0 gap-3 border-b border-[#1d2d44]">
+                                    <TabButton active={customizeTab === 'count'} onClick={() => setCustomizeTab('count')} label="Count Row" />
+                                    <TabButton active={customizeTab === 'ide'} onClick={() => setCustomizeTab('ide')} label="IDE" />
+                                </div>
+                                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
+                                    {customizeTab === 'count' && (
+                                        <div className="space-y-4">
+                                            <div
+                                                className="flex flex-wrap items-center justify-center gap-3 rounded-2xl px-4 py-3 text-xs font-black"
+                                                style={{ backgroundColor: countRowColors.background, border: `1px solid ${countRowColors.border}` }}
+                                            >
+                                                <span style={{ color: countRowColors.icon }}><Key size={14} /></span>
+                                                <span><span className="uppercase" style={{ color: countRowColors.count }}>Count:</span> 12</span>
+                                                <span><span className="uppercase" style={{ color: countRowColors.wins }}>Wins:</span> 8</span>
+                                                <span><span className="uppercase" style={{ color: countRowColors.fail }}>Fail:</span> 4</span>
+                                                <span className="pl-3" style={{ borderLeft: `1px solid ${countRowColors.border}` }}><span className="uppercase" style={{ color: countRowColors.rate }}>Rate:</span> 67%</span>
+                                                <span style={{ color: countRowColors.icon }}><Settings size={14} /></span>
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                                {([
+                                                    ['background', 'Row Background'],
+                                                    ['border', 'Row Border'],
+                                                    ['count', 'Count Text'],
+                                                    ['wins', 'Wins Text'],
+                                                    ['fail', 'Fail Text'],
+                                                    ['rate', 'Rate Text'],
+                                                    ['icon', 'Icon Color'],
+                                                ] as Array<[keyof CountRowColorSettings, string]>).map(([key, label]) => (
+                                                    <ColorField
+                                                        key={key}
+                                                        label={label}
+                                                        value={countRowColors[key]}
+                                                        onChange={(value) => setCountRowColors(prev => ({ ...prev, [key]: value }))}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <button
+                                                onClick={() => setCountRowColors(DEFAULT_COUNT_ROW_COLORS)}
+                                                className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
+                                            >
+                                                Reset Count Row Defaults
+                                            </button>
+                                        </div>
+                                    )}
+                                    {customizeTab === 'ide' && (
+                                        <div className="space-y-4">
+                                            <div className="rounded-2xl border border-[#1d2d44] bg-[#050c18] p-3">
+                                                <div className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-gray-400">Live IDE Preview</div>
+                                                <CodeMirror
+                                                    value={"# comment\nnumber = 42\ntext = 'Python'\nprint(text)\nif number > 10:\n    return True"}
+                                                    height="150px"
+                                                    readOnly={true}
+                                                    extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                                {([
+                                                    ['comment', 'Comment'],
+                                                    ['identifier', 'Identifier'],
+                                                    ['builtin', 'Built-in'],
+                                                    ['keyword', 'Keyword'],
+                                                    ['number', 'Number'],
+                                                    ['string', 'String'],
+                                                ] as Array<[keyof EditorColorSettings, string]>).map(([key, label]) => (
+                                                    <ColorField
+                                                        key={key}
+                                                        label={label}
+                                                        value={editorColors[key]}
+                                                        onChange={(value) => setEditorColors(prev => ({ ...prev, [key]: value }))}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <button
+                                                onClick={() => setEditorColors(DEFAULT_EDITOR_COLORS)}
+                                                className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
+                                            >
+                                                Reset IDE Defaults
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                         {showModal === 'settings' && (
@@ -9139,6 +9276,25 @@ const ActionButton: React.FC<{ icon: React.ReactNode, color: string, borderColor
 
 const TabButton: React.FC<{ active: boolean, onClick: () => void, label: string }> = ({ active: isActive, onClick, label }) => (
     <button onClick={onClick} className={`pb-2 px-1 font-bold transition-all text-xs ${isActive ? 'text-white border-b-2 border-[#3b82f6]' : 'text-gray-500'}`}>{label}</button>
+);
+
+const ColorField: React.FC<{ label: string; value: string; onChange: (value: string) => void }> = ({ label, value, onChange }) => (
+    <label className="flex items-center justify-between gap-3 rounded-xl border border-[#1d2d44] bg-[#050c18]/80 px-3 py-3">
+        <span className="min-w-0">
+            <span className="block text-xs font-bold text-gray-200">{label}</span>
+            <span className="mt-1 block font-mono text-[10px] uppercase text-gray-500">{value}</span>
+        </span>
+        <span className="flex items-center gap-2">
+            <input
+                type="color"
+                value={value}
+                onChange={(event) => onChange(event.target.value)}
+                className="h-9 w-12 rounded-lg border border-[#1d2d44] bg-transparent p-0"
+                aria-label={`${label} color`}
+            />
+            <span className="h-9 w-9 rounded-lg border border-white/10" style={{ backgroundColor: value }} />
+        </span>
+    </label>
 );
 
 const X = ({ size, className }: { size: number, className?: string }) => (

@@ -14,21 +14,41 @@ const PYTHON_BUILTINS = new Set([
   'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', '__import__',
 ]);
 
-const orangeMark = Decoration.mark({ attributes: { style: 'color:#FF9700' } });
-const redMark = Decoration.mark({ attributes: { style: 'color:#FF1900' } });
+export interface EditorColorSettings {
+  comment: string;
+  identifier: string;
+  builtin: string;
+  keyword: string;
+  number: string;
+  string: string;
+}
 
-const varHighlightField = StateField.define<DecorationSet>({
-  create(state) {
-    return computeVarDecorations(state);
-  },
-  update(deco, tr) {
-    if (!tr.docChanged) return deco;
-    return computeVarDecorations(tr.state);
-  },
-  provide: f => EditorView.decorations.from(f),
-});
+export const DEFAULT_EDITOR_COLORS: EditorColorSettings = {
+  comment: "#858585",
+  identifier: "#FF1900",
+  builtin: "#FF9700",
+  keyword: "#389EDB",
+  number: "#FF00FF",
+  string: "#00AD89",
+};
 
-function computeVarDecorations(state) {
+const createVarHighlightField = (colors: EditorColorSettings) => {
+  const builtinMark = Decoration.mark({ attributes: { style: `color:${colors.builtin}` } });
+  const identifierMark = Decoration.mark({ attributes: { style: `color:${colors.identifier}` } });
+
+  return StateField.define<DecorationSet>({
+    create(state) {
+      return computeVarDecorations(state, builtinMark, identifierMark);
+    },
+    update(deco, tr) {
+      if (!tr.docChanged) return deco;
+      return computeVarDecorations(tr.state, builtinMark, identifierMark);
+    },
+    provide: f => EditorView.decorations.from(f),
+  });
+};
+
+function computeVarDecorations(state, builtinMark, identifierMark) {
   const decos = [];
   syntaxTree(state).iterate({
     enter(node) {
@@ -37,12 +57,12 @@ function computeVarDecorations(state) {
         if (parent && parent.name === 'CallExpression') {
           const name = state.sliceDoc(node.from, node.to);
           if (PYTHON_BUILTINS.has(name)) {
-            decos.push(orangeMark.range(node.from, node.to));
+            decos.push(builtinMark.range(node.from, node.to));
           } else {
-            decos.push(redMark.range(node.from, node.to));
+            decos.push(identifierMark.range(node.from, node.to));
           }
         } else {
-          decos.push(redMark.range(node.from, node.to));
+          decos.push(identifierMark.range(node.from, node.to));
         }
       }
     },
@@ -64,17 +84,19 @@ export const editorUiTheme = EditorView.theme({
   }
 }, { dark: true });
 
-export const pythonHighlightStyle = HighlightStyle.define([
-  { tag: t.comment, color: "#858585" },
-  { tag: t.keyword, color: "#389EDB" },
-  { tag: t.number, color: "#FF00FF" },
-  { tag: t.string, color: "#00AD89" },
-  { tag: t.escape, color: "#00AD89" },
-  { tag: t.invalid, color: "#00AD89" },
+export const createPythonHighlightStyle = (colors: EditorColorSettings) => HighlightStyle.define([
+  { tag: t.comment, color: colors.comment },
+  { tag: t.keyword, color: colors.keyword },
+  { tag: t.number, color: colors.number },
+  { tag: t.string, color: colors.string },
+  { tag: t.escape, color: colors.string },
+  { tag: t.invalid, color: colors.string },
 ]);
 
-export const customPythonTheme = [
+export const createCustomPythonTheme = (colors: EditorColorSettings = DEFAULT_EDITOR_COLORS) => [
   editorUiTheme,
-  syntaxHighlighting(pythonHighlightStyle),
-  varHighlightField,
+  syntaxHighlighting(createPythonHighlightStyle(colors)),
+  createVarHighlightField(colors),
 ];
+
+export const customPythonTheme = createCustomPythonTheme();
