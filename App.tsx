@@ -42,7 +42,8 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
-import { getAiHint } from './services/geminiService';
+import { AiReviewRequest, AiReviewResult } from './aiReviewTypes';
+import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -7173,6 +7174,9 @@ const App: React.FC = () => {
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [aiHintText, setAiHintText] = useState<string>('');
+    const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
+    const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
+    const [aiReviewRunning, setAiReviewRunning] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -7267,6 +7271,8 @@ const App: React.FC = () => {
             setOutputStatus('idle');
             setPendingNextProblem(false);
             setAiHintText('');
+            setLatestAiReviewRequest(null);
+            setLatestAiReviewResult(null);
             setShowModal('none');
         }
     };
@@ -7310,6 +7316,8 @@ const App: React.FC = () => {
             setOutputStatus('idle');
             setPendingNextProblem(false);
             setAiHintText('');
+            setLatestAiReviewRequest(null);
+            setLatestAiReviewResult(null);
             setShowModal('none');
         }
     };
@@ -7820,6 +7828,8 @@ const App: React.FC = () => {
         setWaitingForInput(false);
         setInputPrompt('');
         setAiHintText('');
+        setLatestAiReviewRequest(null);
+        setLatestAiReviewResult(null);
     };
 
     const loadRandomExercise = useCallback((mode: DifficultyMode = difficultyMode) => {
@@ -7933,6 +7943,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 `);
                 pyodide.runPython(buildAutoGradeScript(autoGrader, activeFile.content, activeFile.name));
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
+                const reviewRequest: AiReviewRequest = {
+                    problemId: exercise.id,
+                    title: exercise.title,
+                    description: exercise.description,
+                    userCode: activeFile.content,
+                    graderMessage: gradeResult.message,
+                    graderPassed: gradeResult.passed,
+                    programOutput: stdout || '',
+                    visibleSolution: exercise.solution,
+                };
+                setLatestAiReviewRequest(reviewRequest);
+                setLatestAiReviewResult(null);
 
                 if (gradeResult.passed) {
                     updateCurrentModeStats('success');
@@ -7967,6 +7989,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             setStdinValues([]);
             if (autoGrader) {
                 updateCurrentModeStats('failed');
+                const reviewRequest: AiReviewRequest = {
+                    problemId: exercise.id,
+                    title: exercise.title,
+                    description: exercise.description,
+                    userCode: files[activeFileIndex].content,
+                    graderMessage: errorMessage,
+                    graderPassed: false,
+                    programOutput: stdout || '',
+                    visibleSolution: exercise.solution,
+                };
+                setLatestAiReviewRequest(reviewRequest);
+                setLatestAiReviewResult(null);
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
                 setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
@@ -8023,6 +8057,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         updatedFiles[activeFileIndex].content = val;
         setFiles(updatedFiles);
         if (pendingNextProblem) setPendingNextProblem(false);
+        setLatestAiReviewResult(null);
     };
 
     const handleMarkSuccess = () => {
@@ -8036,15 +8071,26 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     };
 
     const handleAiHint = async () => {
-        if (!apiKey || apiKey.trim() === '') {
-            setShowModal('api_key');
-            return;
-        }
+        const request: AiReviewRequest = latestAiReviewRequest || {
+            problemId: exercise.id,
+            title: exercise.title,
+            description: exercise.description,
+            userCode: files[activeFileIndex].content,
+            graderMessage: 'Run has not been pressed for this code yet.',
+            graderPassed: false,
+            programOutput: output,
+            visibleSolution: exercise.solution,
+        };
+
         setShowModal('hint');
-        if (!aiHintText) {
-            setAiHintText('Asking Gemini...');
-            const hint = await getAiHint(exercise.description, files[activeFileIndex].content, apiKey);
-            setAiHintText(hint);
+        setAiReviewRunning(true);
+        setAiHintText('Reviewing code...');
+        try {
+            const diagnostic = buildDiagnosticReview(request);
+            setLatestAiReviewResult(diagnostic);
+            setAiHintText(`${diagnostic.verdict.replace('_', ' ').toUpperCase()}\n\n${diagnostic.explanation}${diagnostic.suggestedFix ? `\n\nSuggested fix: ${diagnostic.suggestedFix}` : ''}`);
+        } finally {
+            setAiReviewRunning(false);
         }
     };
 
