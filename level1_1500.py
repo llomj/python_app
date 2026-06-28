@@ -5648,6 +5648,19 @@ Use `default=` with the `max()` function to return a default when the list is em
 nums = []
 print(max(nums, default=0))  # Expected: 0
 
+# More examples:
+# nums = [4, 9, 2]
+# print(max(nums, default=0))  # Expected: 9
+#
+# nums = [-10, -3, -7]
+# print(max(nums, default=0))  # Expected: -3
+#
+# def safe_max(nums):
+#     return max(nums, default=0)
+#
+# print(safe_max([]))         # Expected: 0
+# print(safe_max([1, 5, 2]))  # Expected: 5
+
 
 """ 
 Problem: 1492  
@@ -5655,6 +5668,19 @@ Use `default=` with the `min()` function to avoid an error on an empty sequence.
 """
 values = []
 print(min(values, default=-1))  # Expected: -1
+
+# More examples:
+# values = [8, 3, 10]
+# print(min(values, default=-1))  # Expected: 3
+#
+# values = [-4, -9, -1]
+# print(min(values, default=-1))  # Expected: -9
+#
+# def safe_min(values):
+#     return min(values, default=-1)
+#
+# print(safe_min([]))         # Expected: -1
+# print(safe_min([6, 2, 9]))  # Expected: 2
 
 
 """ 
@@ -5688,6 +5714,19 @@ Use `default=` with `next()` to get the first even number or -1.
 lst = [1, 3, 5]
 print(next((x for x in lst if x % 2 == 0), default=-1))  # Expected: -1
 
+# More examples:
+# lst = [1, 4, 6]
+# print(next((x for x in lst if x % 2 == 0), -1))  # Expected: 4
+#
+# lst = [9, 8, 6, 4]
+# print(next((x for x in lst if x % 2 == 0), -1))  # Expected: 8
+#
+# def first_even(numbers):
+#     return next((x for x in numbers if x % 2 == 0), -1)
+#
+# print(first_even([1, 3, 5]))  # Expected: -1
+# print(first_even([7, 10]))    # Expected: 10
+
 
 """ 
 Problem: 1495  
@@ -5695,6 +5734,21 @@ Use `default=` in `next()` to safely access an item in a generator.
 """
 gen = (x for x in range(5) if x > 10)
 print(next(gen, default="No item"))  # Expected: "No item"
+
+# More examples:
+# gen = (x for x in range(5) if x > 2)
+# print(next(gen, "No item"))  # Expected: 3
+#
+# gen = (x for x in range(5) if x > 2)
+# print(next(gen, "No item"))  # Expected: 3
+# print(next(gen, "No item"))  # Expected: 4
+# print(next(gen, "No item"))  # Expected: "No item"
+#
+# def first_over_ten(values):
+#     return next((x for x in values if x > 10), "No item")
+#
+# print(first_over_ten([1, 2, 3]))    # Expected: "No item"
+# print(first_over_ten([4, 12, 20]))  # Expected: 12
 
 
 """ 
@@ -5704,6 +5758,19 @@ Use `default=` with `max()` on a filtered list to handle no matches.
 nums = [1, 3, 5]
 print(max((x for x in nums if x % 2 == 0), default=None))  # Expected: None
 
+# More examples:
+# nums = [1, 4, 10, 3]
+# print(max((x for x in nums if x % 2 == 0), default=None))  # Expected: 10
+#
+# nums = [-5, -8, -2]
+# print(max((x for x in nums if x % 2 == 0), default=None))  # Expected: -2
+#
+# def largest_even(nums):
+#     return max((x for x in nums if x % 2 == 0), default=None)
+#
+# print(largest_even([1, 3, 5]))  # Expected: None
+# print(largest_even([2, 7, 8]))  # Expected: 8
+
 
 """ 
 Problem: 1497  
@@ -5711,6 +5778,19 @@ Use `default=` in `min()` to get a fallback value when no condition matches.
 """
 nums = [1, 3, 5]
 print(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -1
+
+# More examples:
+# nums = [7, 4, 10, 2]
+# print(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: 2
+#
+# nums = [-3, -8, -2]
+# print(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -8
+#
+# def smallest_even(nums):
+#     return min((x for x in nums if x % 2 == 0), default=-1)
+#
+# print(smallest_even([1, 3, 5]))  # Expected: -1
+# print(smallest_even([6, 4, 9]))  # Expected: 4
 
 
 """ 
@@ -5720,6 +5800,19 @@ Use `default=` with `next()` to find the first name starting with "Z".
 names = ["Alice", "Bob"]
 print(next((name for name in names if name.startswith("Z")), default="Not found"))  # Expected: "Not found"
 
+# More examples:
+# names = ["Alice", "Zara", "Zoe"]
+# print(next((name for name in names if name.startswith("Z")), "Not found"))  # Expected: "Zara"
+#
+# names = ["zara", "Zoe"]
+# print(next((name for name in names if name.startswith("Z")), "Not found"))  # Expected: "Zoe"
+#
+# def first_z_name(names):
+#     return next((name for name in names if name.lower().startswith("z")), "Not found")
+#
+# print(first_z_name(["Alice", "Bob"]))  # Expected: "Not found"
+# print(first_z_name(["zara", "Mia"]))   # Expected: "zara"
+
 
 """ 
 Problem: 1499  
@@ -5728,6 +5821,19 @@ Use `default=` with `max()` to find the max in a sublist or return a placeholder
 data = []
 print(max(data, default="empty"))  # Expected: "empty"
 
+# More examples:
+# data = [3, 9, 1]
+# print(max(data, default="empty"))  # Expected: 9
+#
+# data = ["apple", "pear", "banana"]
+# print(max(data, default="empty"))  # Expected: "pear"
+#
+# def safe_sublist_max(items):
+#     return max(items, default="empty")
+#
+# print(safe_sublist_max([]))         # Expected: "empty"
+# print(safe_sublist_max([2, 5, 1]))  # Expected: 5
+
 
 """ 
 Problem: 1500  
@@ -5735,6 +5841,16 @@ Use `default=` in `next()` to handle an empty comprehension.
 """
 print(next((x for x in []), default="Empty"))  # Expected: "Empty"
 
+# More examples:
+# print(next((x for x in [10, 20]), "Empty"))  # Expected: 10
+#
+# print(next((x for x in [1, 3, 5] if x % 2 == 0), "Empty"))  # Expected: "Empty"
+#
+# def first_item_or_empty(items):
+#     return next((x for x in items), "Empty")
+#
+# print(first_item_or_empty([]))     # Expected: "Empty"
+# print(first_item_or_empty(["a"]))  # Expected: "a"
 
 
 

@@ -13245,7 +13245,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1491",
         "description": "Use `default=` with the `max()` function to return a default when the list is empty.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nnums = []\nprint(max(nums, default=0))  # Expected: 0",
+        "solution": "# Using function approach\n# Goal: return a safe fallback when max() receives an empty list.\nnums = []\nprint(max(nums, default=0))  # Expected: 0\n\n# Why default= matters:\n# max([]) would raise ValueError because there is no largest item.\n# default=0 tells Python what to return when the iterable is empty.\n\n# Example 2: non-empty lists ignore the default and return the real maximum.\n# nums = [4, 9, 2]\n# print(max(nums, default=0))  # Expected: 9\n\n# Example 3: negative values still work normally.\n# nums = [-10, -3, -7]\n# print(max(nums, default=0))  # Expected: -3\n\n# Example 4: use a function when this logic is repeated.\n# def safe_max(nums):\n#     return max(nums, default=0)\n#\n# print(safe_max([]))        # Expected: 0\n# print(safe_max([1, 5, 2])) # Expected: 5",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13254,7 +13254,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1492",
         "description": "Use `default=` with the `min()` function to avoid an error on an empty sequence.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nvalues = []\nprint(min(values, default=-1))  # Expected: -1",
+        "solution": "# Using function approach\n# Goal: return a safe fallback when min() receives an empty list.\nvalues = []\nprint(min(values, default=-1))  # Expected: -1\n\n# Why default= matters:\n# min([]) would raise ValueError because there is no smallest item.\n# default=-1 tells Python what to return when the iterable is empty.\n\n# Example 2: non-empty lists return the real minimum.\n# values = [8, 3, 10]\n# print(min(values, default=-1))  # Expected: 3\n\n# Example 3: negative values still compare normally.\n# values = [-4, -9, -1]\n# print(min(values, default=-1))  # Expected: -9\n\n# Example 4: put the behavior in a reusable helper.\n# def safe_min(values):\n#     return min(values, default=-1)\n#\n# print(safe_min([]))         # Expected: -1\n# print(safe_min([6, 2, 9]))  # Expected: 2",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13272,7 +13272,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1494",
         "description": "Use `default=` with `next()` to get the first even number or -1.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nlst = [1, 3, 5]\nprint(next((x for x in lst if x % 2 == 0), -1))  # Expected: -1",
+        "solution": "# Using function approach\n# Goal: find the first even number, or return -1 if none exists.\nlst = [1, 3, 5]\nprint(next((x for x in lst if x % 2 == 0), -1))  # Expected: -1\n\n# Why default matters:\n# next(generator) raises StopIteration if the generator has no item.\n# The second argument, -1, is the fallback value.\n\n# Example 2: when an even number exists, next() returns the first one.\n# lst = [1, 4, 6]\n# print(next((x for x in lst if x % 2 == 0), -1))  # Expected: 4\n\n# Example 3: the first matching item is returned, not all matches.\n# lst = [9, 8, 6, 4]\n# print(next((x for x in lst if x % 2 == 0), -1))  # Expected: 8\n\n# Example 4: reusable function form.\n# def first_even(numbers):\n#     return next((x for x in numbers if x % 2 == 0), -1)\n#\n# print(first_even([1, 3, 5]))  # Expected: -1\n# print(first_even([7, 10]))    # Expected: 10",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13281,7 +13281,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1495",
         "description": "Use `default=` in `next()` to safely access an item in a generator.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\ngen = (x for x in range(5) if x > 10)\nprint(next(gen, 'No item'))  # Expected: 'No item'",
+        "solution": "# Using function approach\n# Goal: safely read from a generator that might not produce a value.\ngen = (x for x in range(5) if x > 10)\nprint(next(gen, 'No item'))  # Expected: 'No item'\n\n# Why default matters:\n# next(gen) raises StopIteration if the generator is empty.\n# next(gen, 'No item') returns the fallback instead.\n\n# Example 2: when the generator has a value, that value is returned.\n# gen = (x for x in range(5) if x > 2)\n# print(next(gen, 'No item'))  # Expected: 3\n\n# Example 3: the generator continues after the first next() call.\n# gen = (x for x in range(5) if x > 2)\n# print(next(gen, 'No item'))  # Expected: 3\n# print(next(gen, 'No item'))  # Expected: 4\n# print(next(gen, 'No item'))  # Expected: 'No item'\n\n# Example 4: reusable helper.\n# def first_over_ten(values):\n#     return next((x for x in values if x > 10), 'No item')\n#\n# print(first_over_ten([1, 2, 3]))   # Expected: 'No item'\n# print(first_over_ten([4, 12, 20])) # Expected: 12",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13290,7 +13290,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1496",
         "description": "Use `default=` with `max()` on a filtered list to handle no matches.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nnums = [1, 3, 5]\nprint(max((x for x in nums if x % 2 == 0), default=None))  # Expected: None",
+        "solution": "# Using function approach\n# Goal: find the largest even number, or None if no even number exists.\nnums = [1, 3, 5]\nprint(max((x for x in nums if x % 2 == 0), default=None))  # Expected: None\n\n# Why default= matters:\n# The generator may produce no values after filtering.\n# max(..., default=None) prevents ValueError and returns None instead.\n\n# Example 2: if even numbers exist, max() returns the largest even number.\n# nums = [1, 4, 10, 3]\n# print(max((x for x in nums if x % 2 == 0), default=None))  # Expected: 10\n\n# Example 3: negative even numbers still work.\n# nums = [-5, -8, -2]\n# print(max((x for x in nums if x % 2 == 0), default=None))  # Expected: -2\n\n# Example 4: reusable helper.\n# def largest_even(nums):\n#     return max((x for x in nums if x % 2 == 0), default=None)\n#\n# print(largest_even([1, 3, 5]))  # Expected: None\n# print(largest_even([2, 7, 8]))  # Expected: 8",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13299,7 +13299,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1497",
         "description": "Use `default=` in `min()` to get a fallback value when no condition matches.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nnums = [1, 3, 5]\nprint(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -1",
+        "solution": "# Using function approach\n# Goal: find the smallest even number, or -1 if no even number exists.\nnums = [1, 3, 5]\nprint(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -1\n\n# Why default= matters:\n# Filtering can leave an empty generator.\n# min(..., default=-1) avoids ValueError and returns the fallback.\n\n# Example 2: if even numbers exist, min() returns the smallest even number.\n# nums = [7, 4, 10, 2]\n# print(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: 2\n\n# Example 3: negative even numbers still compare normally.\n# nums = [-3, -8, -2]\n# print(min((x for x in nums if x % 2 == 0), default=-1))  # Expected: -8\n\n# Example 4: reusable helper.\n# def smallest_even(nums):\n#     return min((x for x in nums if x % 2 == 0), default=-1)\n#\n# print(smallest_even([1, 3, 5]))  # Expected: -1\n# print(smallest_even([6, 4, 9]))  # Expected: 4",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13308,7 +13308,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1498",
         "description": "Use `default=` with `next()` to find the first name starting with \"Z\".",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nnames = ['Alice', 'Bob']\nprint(next((name for name in names if name.startswith('Z')), 'Not found'))  # Expected: 'Not found'",
+        "solution": "# Using function approach\n# Goal: find the first name that starts with Z, or return a fallback.\nnames = ['Alice', 'Bob']\nprint(next((name for name in names if name.startswith('Z')), 'Not found'))  # Expected: 'Not found'\n\n# Why default matters:\n# next() needs a fallback when no name matches the condition.\n\n# Example 2: when a matching name exists, it is returned.\n# names = ['Alice', 'Zara', 'Zoe']\n# print(next((name for name in names if name.startswith('Z')), 'Not found'))  # Expected: 'Zara'\n\n# Example 3: matching is case-sensitive by default.\n# names = ['zara', 'Zoe']\n# print(next((name for name in names if name.startswith('Z')), 'Not found'))  # Expected: 'Zoe'\n\n# Example 4: case-insensitive reusable helper.\n# def first_z_name(names):\n#     return next((name for name in names if name.lower().startswith('z')), 'Not found')\n#\n# print(first_z_name(['Alice', 'Bob']))   # Expected: 'Not found'\n# print(first_z_name(['zara', 'Mia']))    # Expected: 'zara'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13317,7 +13317,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1499",
         "description": "Use `default=` with `max()` to find the max in a sublist or return a placeholder.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\ndata = []\nprint(max(data, default='empty'))  # Expected: 'empty'",
+        "solution": "# Using function approach\n# Goal: return a placeholder when a list/sublist is empty.\ndata = []\nprint(max(data, default='empty'))  # Expected: 'empty'\n\n# Why default= matters:\n# max([]) raises ValueError unless a default fallback is provided.\n\n# Example 2: non-empty data returns the maximum item.\n# data = [3, 9, 1]\n# print(max(data, default='empty'))  # Expected: 9\n\n# Example 3: works with strings too.\n# data = ['apple', 'pear', 'banana']\n# print(max(data, default='empty'))  # Expected: 'pear'\n\n# Example 4: reusable helper for sublists.\n# def safe_sublist_max(items):\n#     return max(items, default='empty')\n#\n# print(safe_sublist_max([]))        # Expected: 'empty'\n# print(safe_sublist_max([2, 5, 1])) # Expected: 5",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
@@ -13326,7 +13326,7 @@ export const EXERCISES: Exercise[] = [
         "title": "Problem 1500",
         "description": "Use `default=` in `next()` to handle an empty comprehension.",
         "initialCode": "# Write your solution here",
-        "solution": "# Using function approach\nprint(next((x for x in []), 'Empty'))  # Expected: 'Empty'",
+        "solution": "# Using function approach\n# Goal: safely handle an empty comprehension/generator.\nprint(next((x for x in []), 'Empty'))  # Expected: 'Empty'\n\n# Why default matters:\n# The generator expression produces no values, so next() returns 'Empty'.\n\n# Example 2: non-empty generator returns the first value.\n# print(next((x for x in [10, 20]), 'Empty'))  # Expected: 10\n\n# Example 3: filtering can also make a generator empty.\n# print(next((x for x in [1, 3, 5] if x % 2 == 0), 'Empty'))  # Expected: 'Empty'\n\n# Example 4: reusable helper.\n# def first_item_or_empty(items):\n#     return next((x for x in items), 'Empty')\n#\n# print(first_item_or_empty([]))       # Expected: 'Empty'\n# print(first_item_or_empty(['a']))    # Expected: 'a'",
         "hint": "Check the description for requirements.",
         "category": "Level 1"
     },
