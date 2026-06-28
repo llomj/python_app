@@ -80,6 +80,13 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
     if (state.enabled && state.status === 'ready') {
+        if (!supportsWebLlm()) {
+            const diagnostic = buildDiagnosticReview(request);
+            return {
+                ...diagnostic,
+                explanation: `Offline AI is marked ready, but this browser does not expose WebGPU. Diagnostic review was used instead. ${diagnostic.explanation}`,
+            };
+        }
         try {
             return await reviewWithWebLlm(request, state.modelId);
         } catch (error) {

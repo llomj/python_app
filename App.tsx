@@ -8101,8 +8101,26 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         try {
             setLatestAiReviewRequest(request);
             const review = await reviewWithAvailableAi(request, offlineAiState);
-            setLatestAiReviewResult(review);
-            setAiHintText(`${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`);
+            const setupNote = offlineAiState.status !== 'ready'
+                ? `Offline model status: ${offlineAiState.status}. Using built-in diagnostic review.\n\n`
+                : '';
+            const result = review.source === 'diagnostic' && setupNote
+                ? { ...review, explanation: `${setupNote}${review.explanation}` }
+                : review;
+            setLatestAiReviewResult(result);
+            setAiHintText(`${result.verdict.replace('_', ' ').toUpperCase()}\n\n${result.explanation}${result.suggestedFix ? `\n\nSuggested fix: ${result.suggestedFix}` : ''}`);
+        } catch (error: any) {
+            const fallback = buildDiagnosticReview({
+                ...request,
+                graderMessage: `AI review failed: ${String(error?.message || error || 'Unknown error')}`,
+                graderPassed: false,
+            });
+            const result = {
+                ...fallback,
+                explanation: `AI review failed, so built-in diagnostic review was used. ${fallback.explanation}`,
+            };
+            setLatestAiReviewResult(result);
+            setAiHintText(`${result.verdict.replace('_', ' ').toUpperCase()}\n\n${result.explanation}${result.suggestedFix ? `\n\nSuggested fix: ${result.suggestedFix}` : ''}`);
         } finally {
             setAiReviewRunning(false);
         }
