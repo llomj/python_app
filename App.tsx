@@ -7166,6 +7166,7 @@ const App: React.FC = () => {
     const [idLogInput, setIdLogInput] = useState('');
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
     const [deleteConfirmType, setDeleteConfirmType] = useState<'saved' | 'idlog' | null>(null);
+    const [descCopied, setDescCopied] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_saved_problems', JSON.stringify(savedProblems));
@@ -8396,6 +8397,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 const sel = window.getSelection();
                                 sel?.removeAllRanges();
                                 sel?.addRange(range);
+                                navigator.clipboard.writeText(exercise.description).catch(() => {});
+                                setDescCopied(true);
+                                setTimeout(() => setDescCopied(false), 1200);
                             }, 400);
                         }}
                         onTouchEnd={() => {
@@ -8415,6 +8419,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </pre>
                 </div>
             </div>
+            {descCopied && (
+                <div className="fixed left-1/2 z-[200] -translate-x-1/2 top-24 text-center px-4 py-2 rounded-lg text-xs text-[#4ade80] font-bold bg-[#050c18]/90 border border-[#4ade80]/30 shadow-xl pointer-events-none">
+                    Problem copied to clipboard
+                </div>
+            )}
             <div
                 className="fixed left-1/2 z-[110] w-full max-w-2xl -translate-x-1/2 px-4"
                 style={{
