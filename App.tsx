@@ -8810,7 +8810,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
                     >
-                        <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10"><X size={24} /></button>
+                        <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10" aria-label="Close modal"><X size={24} /></button>
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full overflow-hidden">
                                 <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
@@ -8977,7 +8977,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     )}
                                 </div>
                                 {latestAiReviewRequest?.graderMessage && (
-                                    <div className="mt-3 rounded-2xl border border-[#ef4444]/30 bg-[#ef4444]/10 p-3 text-xs text-[#fecaca]">
+                                    <div className="mt-3 max-h-36 overflow-y-auto rounded-2xl border border-[#ef4444]/30 bg-[#ef4444]/10 p-3 text-xs text-[#fecaca]">
                                         <div className="mb-1 font-black uppercase tracking-[0.12em]">Grader Message</div>
                                         <div className="whitespace-pre-wrap">{latestAiReviewRequest.graderMessage}</div>
                                     </div>
