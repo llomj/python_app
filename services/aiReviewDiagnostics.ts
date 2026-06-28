@@ -17,6 +17,7 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
             verdict: 'likely_correct',
             confidence: 0.99,
             explanation: 'The deterministic grader already passed this solution.',
+            suggestedFix: 'No fix needed; the deterministic grader already accepted this solution.',
             source: 'diagnostic',
         };
     }
