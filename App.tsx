@@ -121,6 +121,24 @@ const DEFAULT_TOOL_PANEL_COLORS: ToolPanelColorSettings = {
     reset: '#f97316',
 };
 
+const loadToolPanelColorSettings = () => {
+    const settings = loadColorSettings('python_tool_panel_colors', DEFAULT_TOOL_PANEL_COLORS);
+    try {
+        const migrationKey = 'python_tool_panel_colors_v195_migrated';
+        if (localStorage.getItem(migrationKey) !== 'true') {
+            localStorage.setItem(migrationKey, 'true');
+            return {
+                ...settings,
+                ai: settings.ai === '#8b5cf6' ? DEFAULT_TOOL_PANEL_COLORS.ai : settings.ai,
+                custom: settings.custom === '#14b8a6' ? DEFAULT_TOOL_PANEL_COLORS.custom : settings.custom,
+            };
+        }
+    } catch {
+        // Keep loaded settings if storage migration is unavailable.
+    }
+    return settings;
+};
+
 const sanitizeHexColor = (value: unknown, fallback: string) => {
     return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value) ? value : fallback;
 };
@@ -7162,7 +7180,7 @@ const App: React.FC = () => {
     const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => getSavedDifficultyMode());
     const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
-    const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadColorSettings('python_tool_panel_colors', DEFAULT_TOOL_PANEL_COLORS));
+    const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
