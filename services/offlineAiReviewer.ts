@@ -15,7 +15,29 @@ export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
 export const loadOfflineAiState = (): OfflineAiState => {
     try {
         const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        return { ...DEFAULT_OFFLINE_AI_STATE, ...parsed };
+        const persisted = { ...DEFAULT_OFFLINE_AI_STATE, ...parsed };
+
+        if (persisted.status === 'downloading') {
+            return {
+                ...persisted,
+                enabled: true,
+                status: 'failed',
+                message: 'Previous offline AI download was interrupted. Start the download again to finish setup.',
+                progress: 0,
+            };
+        }
+
+        if (persisted.status === 'removing') {
+            return {
+                ...persisted,
+                enabled: false,
+                status: 'failed',
+                message: 'Previous offline AI removal was interrupted. Retry removal or download the model again.',
+                progress: 0,
+            };
+        }
+
+        return persisted;
     } catch {
         return DEFAULT_OFFLINE_AI_STATE;
     }
