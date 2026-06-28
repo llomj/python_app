@@ -7763,6 +7763,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]" }
     ]
@@ -7771,6 +7772,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[2, 4, 6, 8, 10, 12, 14, 16, 18, 20]" }
     ]
@@ -7779,6 +7781,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]" }
     ]
@@ -7787,6 +7790,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "['P', 'i', 'a', 'p', 'p', 'l']" }
     ]
@@ -7795,6 +7799,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "['bright', 'today']" }
     ]
@@ -7803,6 +7808,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[(1, 1), (2, 4), (3, 9), (4, 16), (5, 25), (6, 36), (7, 49), (8, 64), (9, 81), (10, 100)]" }
     ]
@@ -7811,6 +7817,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[6, 10, 14, 18]" }
     ]
@@ -7819,6 +7826,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[3, 6, 7, 9, 12, 14, 15, 18, 21, 24, 27, 28, 30, 33, 35, 36, 39, 42, 45, 48, 49, 51, 54, 56, 57, 60, 63, 66, 69, 70, 72, 75, 77, 78, 81, 84, 87, 90, 91, 93, 96, 98, 99]" }
     ]
@@ -7827,6 +7835,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
+    requiredCallPatterns: [{functionName: "upper"}],
     tests: [
       { args: [], expected: "['HELLO', 'WORLD', 'PYTHON']" }
     ]
@@ -7835,6 +7845,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9]" }
     ]
@@ -7843,6 +7854,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
+    requiredCallPatterns: [{functionName: "lower"}],
     tests: [
       { args: [], expected: "['i', 'o', 'e', 'e', 'i', 'o', 'i', 'o', 'e', 'u']" }
     ]
@@ -7851,6 +7864,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
+    requiredCallPatterns: [{functionName: "isinstance"}],
     tests: [
       { args: [], expected: "[10, 15.5, 30]" }
     ]
@@ -7859,6 +7874,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]" }
     ]
@@ -7867,6 +7883,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]" }
     ]
@@ -7875,6 +7892,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
+    requiredCallPatterns: [{functionName: "lower"}],
     tests: [
       { args: [], expected: "['The', 'apple', 'the', 'tree']" }
     ]
@@ -7883,6 +7902,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
+    requiredCallPatterns: [{functionName: "islower"}],
     tests: [
       { args: [], expected: "['y', 't', 'h', 'o', 'n', 'i', 's', 't', 'o', 'm', 'p', 'r', 'e', 'h', 'e', 'n', 's', 'i', 'o', 'n']" }
     ]
@@ -7891,6 +7912,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
+    requiredCallPatterns: [{functionName: "len"}],
     tests: [
       { args: [], expected: "[('List', 4), ('comprehension', 13), ('makes', 5), ('Python', 6), ('concise', 7)]" }
     ]
@@ -7899,6 +7922,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{functionName: "fromkeys"}],
     tests: [
       { args: [], expected: "[1, 2, 3, 4, 5]" }
     ]
@@ -7907,6 +7931,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "['apple', 'grape', 'peach']" }
     ]
