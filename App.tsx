@@ -403,15 +403,17 @@ def __auto_grader_call_name(node):
     return None
 
 def __auto_grader_check_source_requirements():
-    patterns = __auto_grader_spec.get("requiredCallPatterns", [])
-    if not patterns:
+    call_patterns = __auto_grader_spec.get("requiredCallPatterns", [])
+    node_patterns = __auto_grader_spec.get("requiredNodePatterns", [])
+    if not call_patterns and not node_patterns:
         return None
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
         return f"Could not inspect source syntax: {exc}"
     calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
-    for pattern in patterns:
+    all_nodes = list(ast.walk(tree))
+    for pattern in call_patterns:
         function_name = pattern.get("functionName")
         keyword = pattern.get("keyword")
         min_args = pattern.get("minArgs")
@@ -432,6 +434,12 @@ def __auto_grader_check_source_requirements():
             if min_args is not None:
                 detail += f" with at least {min_args} positional arguments"
             return "Missing required source pattern: " + detail
+    for pattern in node_patterns:
+        node_type = pattern.get("nodeType")
+        min_count = int(pattern.get("minCount", 1))
+        count = sum(1 for node in all_nodes if type(node).__name__ == node_type)
+        if count < min_count:
+            return f"Missing required syntax: at least {min_count} {node_type} node(s)"
     return None
 
 def __auto_grader_clean_text(value):

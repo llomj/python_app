@@ -83,6 +83,21 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
     }
   }
 
+  if (grader.requiredNodePatterns !== undefined) {
+    if (!Array.isArray(grader.requiredNodePatterns)) {
+      invalidGraders.push(`${id}: requiredNodePatterns must be an array`);
+    } else {
+      grader.requiredNodePatterns.forEach((pattern, index) => {
+        if (!pattern || typeof pattern.nodeType !== 'string' || !pattern.nodeType.trim()) {
+          invalidGraders.push(`${id}: requiredNodePatterns ${index + 1} must declare nodeType`);
+        }
+        if (pattern.minCount !== undefined && (!Number.isInteger(pattern.minCount) || pattern.minCount < 1)) {
+          invalidGraders.push(`${id}: requiredNodePatterns ${index + 1} minCount must be a positive integer`);
+        }
+      });
+    }
+  }
+
   tests.forEach((test, index) => {
     if (!Object.prototype.hasOwnProperty.call(test, 'expected') && !Object.prototype.hasOwnProperty.call(test, 'expectedException')) {
       invalidGraders.push(`${id}: test ${index + 1} must declare expected or expectedException`);

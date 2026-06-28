@@ -38,6 +38,7 @@ export interface AutoGrader {
     mode?: 'function' | 'script';
     compare?: CompareMode;
     requiredCallPatterns?: Array<{ functionName: string; keyword?: string; minArgs?: number }>;
+    requiredNodePatterns?: Array<{ nodeType: string; minCount?: number }>;
     tests: AutoTestCase[];
 }
 
@@ -1822,6 +1823,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [{ args: [], expected: '* * * * *\n* * * * *\n* * * * *\n* * * * *\n* * * * *' }]
   },
     235: {
@@ -6012,6 +6014,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10" }
     ]
@@ -6020,6 +6023,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "2\n4\n6\n8\n10\n12\n14\n16\n18\n20" }
     ]
@@ -6028,6 +6032,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1" }
     ]
@@ -6036,6 +6041,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["3"], expected: "Hello\nHello\nHello" },
       { args: [], inputValues: ["1"], expected: "Hello" }
@@ -6053,6 +6059,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "1\n2\n4\n8\n16\n32\n64\n128\n256\n512" }
     ]
@@ -6061,6 +6068,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "5\n10\n15\n20\n25\n30\n35\n40\n45\n50" }
     ]
@@ -6069,6 +6077,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["20", "15", "18"], expected: "53" },
       { args: [], inputValues: ["51"], expected: "51" }
@@ -6078,6 +6087,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["3", "5", "8"], expected: "" }
     ]
@@ -6086,6 +6096,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["5", "7", "0"], expected: "12" },
       { args: [], inputValues: ["0"], expected: "0" }
@@ -6095,6 +6106,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "0\n1\n1\n2\n3\n5\n8\n13\n21\n34" }
     ]
@@ -6103,6 +6115,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["1", "9", "7"], expected: "" }
     ]
@@ -6111,6 +6124,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["Education"], expected: "5" },
       { args: [], inputValues: ["rhythm"], expected: "0" }
@@ -6120,6 +6134,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["code"], expected: "code\ncod\nco\nc" }
     ]
@@ -6128,6 +6143,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["4"], expected: "4\n3\n2\n1\n0" }
     ]
@@ -6136,6 +6152,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["4", "6", "2", "-1"], expected: "12" },
       { args: [], inputValues: ["-5"], expected: "0" }
@@ -6145,6 +6162,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["3", "9", "4", "stop"], expected: "9" },
       { args: [], inputValues: ["-2", "-5", "stop"], expected: "-2" }
@@ -6154,6 +6172,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["wrong", "python"], expected: "" }
     ]
@@ -6162,6 +6181,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "2\n4\n16\n256" }
     ]
@@ -6170,6 +6190,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["12345"], expected: "54321" },
       { args: [], inputValues: ["900"], expected: "9" }
@@ -6179,6 +6200,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["10", "20", "30", "done"], expected: "20.0" },
       { args: [], inputValues: ["5", "done"], expected: "5.0" }
@@ -6188,6 +6210,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["4"], expected: "4\n3\n2\n1" }
     ]
@@ -6196,6 +6219,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], randomValues: [5, 8, 14], expected: "5\n8" },
       { args: [], randomValues: [21], expected: "" }
@@ -6213,6 +6237,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["Education"], expected: "dctn" },
       { args: [], inputValues: ["rhythm"], expected: "rhythm" }
@@ -6222,6 +6247,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["12345"], expected: "5" },
       { args: [], inputValues: ["7"], expected: "1" }
@@ -6231,6 +6257,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" }
     ]
@@ -6239,6 +6266,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["8"], expected: "8\n4.0\n2.0\n1.0" },
       { args: [], inputValues: ["1"], expected: "1" }
@@ -6248,6 +6276,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["red", "blue", "stop"], expected: "['red', 'blue']" },
       { args: [], inputValues: ["stop"], expected: "[]" }
@@ -6257,6 +6286,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["30"], expected: "900\n961" },
       { args: [], inputValues: ["32"], expected: "" }
@@ -6266,6 +6296,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'numberList',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: [1, 2, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19, 20, 22, 23, 25, 26, 28, 29, 31, 32, 34, 35, 37, 38, 40, 41, 43, 44, 46, 47, 49, 50] }
     ]
@@ -6274,6 +6305,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'numberList',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100] }
     ]
@@ -6282,6 +6314,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "1\n2\n3\n4\n5" }
     ]
@@ -6290,6 +6323,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "2500" }
     ]
@@ -6298,6 +6332,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "9" }
     ]
@@ -6306,6 +6341,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["121", "12", "quit"], expected: "121 is a palindrome\n12 is not a palindrome" }
     ]
@@ -6314,6 +6350,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nLift off!" }
     ]
@@ -6331,6 +6368,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["1", "2", "3", "4", "5"], expected: "120" },
       { args: [], inputValues: ["2", "3", "4", "5", "6"], expected: "720" }
@@ -11735,6 +11773,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: "Remaining: 5\nRemaining: 4\nRemaining: 3\nRemaining: 2\nRemaining: 1" },
         ]
@@ -12689,6 +12728,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: "1\n2\n3\n4\n5" },
         ]
@@ -12697,6 +12737,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: "55" },
         ]
@@ -12705,6 +12746,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: "2\n4\n6\n8\n10\n12\n14\n16\n18\n20" },
         ]
@@ -12713,6 +12755,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: [],
         mode: 'script',
         compare: 'printedOrReturn',
+    requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1" },
         ]

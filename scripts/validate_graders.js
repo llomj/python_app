@@ -408,15 +408,17 @@ def call_name(node):
     return None
 
 def source_requirements_ok(source, grader):
-    patterns = grader.get("requiredCallPatterns", [])
-    if not patterns:
+    call_patterns = grader.get("requiredCallPatterns", [])
+    node_patterns = grader.get("requiredNodePatterns", [])
+    if not call_patterns and not node_patterns:
         return True
     try:
         tree = ast.parse(source)
     except SyntaxError:
         return False
     calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
-    for pattern in patterns:
+    all_nodes = list(ast.walk(tree))
+    for pattern in call_patterns:
         function_name = pattern.get("functionName")
         keyword = pattern.get("keyword")
         min_args = pattern.get("minArgs")
@@ -431,6 +433,12 @@ def source_requirements_ok(source, grader):
             matched = True
             break
         if not matched:
+            return False
+    for pattern in node_patterns:
+        node_type = pattern.get("nodeType")
+        min_count = int(pattern.get("minCount", 1))
+        count = sum(1 for node in all_nodes if type(node).__name__ == node_type)
+        if count < min_count:
             return False
     return True
 
