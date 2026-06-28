@@ -7308,6 +7308,7 @@ const App: React.FC = () => {
     const headerRef = useRef<HTMLDivElement>(null);
     const problemPanelRef = useRef<HTMLDivElement>(null);
     const problemDescriptionRef = useRef<HTMLDivElement>(null);
+    const problemCopyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [headerHeight, setHeaderHeight] = useState(265);
     const [problemPanelHeight, setProblemPanelHeight] = useState(200);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
@@ -8385,6 +8386,29 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             width: '100%',
                             userSelect: 'text',
                             WebkitUserSelect: 'text'
+                        }}
+                        onTouchStart={() => {
+                            problemCopyTimerRef.current = setTimeout(() => {
+                                const el = problemDescriptionRef.current;
+                                if (!el) return;
+                                const range = document.createRange();
+                                range.selectNodeContents(el);
+                                const sel = window.getSelection();
+                                sel?.removeAllRanges();
+                                sel?.addRange(range);
+                            }, 400);
+                        }}
+                        onTouchEnd={() => {
+                            if (problemCopyTimerRef.current) {
+                                clearTimeout(problemCopyTimerRef.current);
+                                problemCopyTimerRef.current = null;
+                            }
+                        }}
+                        onTouchMove={() => {
+                            if (problemCopyTimerRef.current) {
+                                clearTimeout(problemCopyTimerRef.current);
+                                problemCopyTimerRef.current = null;
+                            }
                         }}
                     >
                         {exercise.description}
