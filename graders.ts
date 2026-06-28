@@ -8776,6 +8776,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}],
     tests: [
       { args: [], expected: "10" }
     ]
@@ -8784,6 +8785,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
       { args: [], expected: "Local variable: 10\nGlobal variable: 20" }
     ]
@@ -8792,6 +8794,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Global"}],
     tests: [
       { args: [], expected: "30" }
     ]
@@ -8800,6 +8803,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Nonlocal"}],
     tests: [
       { args: [], expected: "20" }
     ]
@@ -8808,6 +8812,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
       { args: [], expected: "Local x: 50\nGlobal x: 100" }
     ]
@@ -8839,6 +8844,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "For"}],
     tests: [
       { args: [], expected: "Inside loop: 0\nInside loop: 1\nInside loop: 2\nOutside loop: 2" }
     ]
@@ -8847,6 +8853,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Try"}],
     tests: [
       { args: [], expected: "x is not defined" }
     ]
@@ -8855,6 +8862,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}],
     tests: [
       { args: [], expected: "Inner function: x = 10, y = 20\nOuter function: x = 10" }
     ]
@@ -8884,6 +8892,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
       { args: [], expected: "New value of x: 10" }
     ]
@@ -8892,6 +8901,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}],
     tests: [
       { args: [], expected: "Function One: 50\nFunction Two: 40" }
     ]
@@ -8900,6 +8910,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Global"}],
     tests: [
       { args: [], expected: "Global variable x: 12" }
     ]
@@ -8908,6 +8919,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Nonlocal"}],
     tests: [
       { args: [], expected: "Inner function: x = 25\nOuter function: x = 25" }
     ]
@@ -8924,6 +8936,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "For"}],
     tests: [
       { args: [], expected: "In the loop: y = 0\nIn the loop: y = 1\nIn the loop: y = 2\nAfter the loop: y = 2" }
     ]
@@ -8932,6 +8945,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
       { args: [], expected: "Global variable x inside function: 10" }
     ]
@@ -8940,6 +8954,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Subscript"}],
     tests: [
       { args: [], expected: "Mutable variable: [100, 2, 3]\nImmutable variable: 20" }
     ]
@@ -8948,6 +8963,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "List comprehension result: [0, 1, 4, 9, 16]" }
     ]
@@ -8964,6 +8980,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "For"}],
     tests: [
       { args: [], expected: "In the loop: x = 0\nIn the loop: x = 1\nIn the loop: x = 2\nOutside the loop: x = 2" }
     ]
@@ -8972,6 +8989,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Global"}],
     tests: [
       { args: [], expected: "Global x after modification: 50" }
     ]
@@ -8980,6 +8998,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 3}],
     tests: [
       { args: [], expected: "Inner function: x = 5, y = 10, z = 15" }
     ]
