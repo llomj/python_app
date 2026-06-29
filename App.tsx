@@ -8828,11 +8828,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {/* Fixed footer - centered version button */}
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
                 <div className="relative flex items-center justify-center">
-                    <button onClick={() => setShowModal('settings')} className="flex items-center gap-2 text-gray-400 hover:text-[#3b82f6] transition-colors px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628] hover:border-[#3b82f6]/50" title="Open settings">
-                        <RefreshCw size={18} />
+                     <button onClick={() => setShowModal('settings')} className="flex items-center gap-2 text-gray-400 hover:brightness-125 transition-all px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628]" title="Open settings" style={{ color: countRowColors.icon }}
+                         onMouseEnter={(e) => { e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); e.currentTarget.style.color = countRowColors.count; }}
+                         onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1d2d44'; e.currentTarget.style.color = countRowColors.icon; }}>
+                         <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
                         <span className="text-base" title={`Rank: ${userRank.name}`}>{userRank.icon}</span>
-                        <span className="rounded-full border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#93c5fd]">{selectedModeLabel}</span>
+                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}>{selectedModeLabel}</span>
                     </button>
                 </div>
             </div>
@@ -9073,9 +9075,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <button
                                                 onClick={() => setCountRowColors(DEFAULT_COUNT_ROW_COLORS)}
-                                                className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
-                                            >
-                                                Reset Count Row Defaults
+                                                className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all hover:brightness-125"
+                                                style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}
+                                             >
+                                                 Reset Count Row Defaults
                                             </button>
                                         </div>
                                     )}
@@ -9109,9 +9112,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <button
                                                 onClick={() => setEditorColors(DEFAULT_EDITOR_COLORS)}
-                                                className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
-                                            >
-                                                Reset IDE Defaults
+                                                className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all hover:brightness-125"
+                                                style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}
+                                             >
+                                                 Reset IDE Defaults
                                             </button>
                                         </div>
                                     )}
@@ -9162,9 +9166,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <button
                                                 onClick={() => setToolPanelColors(DEFAULT_TOOL_PANEL_COLORS)}
-                                                className="w-full rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#93c5fd] transition-colors hover:bg-[#3b82f6]/20"
-                                            >
-                                                Reset Tools Defaults
+                                                className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all hover:brightness-125"
+                                                style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}
+                                             >
+                                                 Reset Tools Defaults
                                             </button>
                                         </div>
                                     )}
@@ -9193,7 +9198,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             return (
                                                 <div
                                                     key={rank.name}
-                                                    className={`w-1.5 h-1.5 rounded-full transition-all ${isActive ? 'bg-[#3b82f6] w-3' : 'bg-[#1d2d44]'}`}
+                                                    className="w-1.5 h-1.5 rounded-full transition-all"
+                                                    style={{ backgroundColor: isActive ? countRowColors.count : '#1d2d44', width: isActive ? '0.75rem' : '0.375rem', height: '0.375rem' }}
                                                     title={rank.name}
                                                 />
                                             );
@@ -9201,8 +9207,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     </div>
                                 </div>
 
-                                <div className="mb-6 rounded-2xl border border-red-500/25 bg-red-500/10 p-4">
-                                    <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-red-300">
+                                <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.25), backgroundColor: hexToRgba(toolPanelColors.failed, 0.1) }}>
+                                    <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.failed }}>
                                         <Trash2 size={14} /> App Cache
                                     </h3>
                                     <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
@@ -9211,7 +9217,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <button
                                         onClick={clearAppCacheAndReload}
                                         disabled={cacheClearBusy}
-                                        className="w-full rounded-xl border border-red-500/35 bg-red-500/15 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-red-300 transition-colors hover:bg-red-500/25 disabled:opacity-60"
+                                        className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.35), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
                                     >
                                         {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
                                     </button>
@@ -9228,7 +9235,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <button
                                                     key={mode.id}
                                                     onClick={() => handleDifficultyModeSelect(mode.id)}
-                                                    className={`w-full rounded-xl border px-3 py-2 text-left transition-all ${isSelected ? 'border-[#3b82f6] bg-[#3b82f6]/25 text-white' : 'border-[#1d2d44] bg-[#071225]/70 text-gray-300 hover:border-[#3b82f6]/50'}`}
+                                                    className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
+                                                    style={isSelected ? { borderColor: countRowColors.count, backgroundColor: hexToRgba(countRowColors.count, 0.25), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#9ca3af' }}
                                                 >
                                                     <span className="flex items-center justify-between gap-3">
                                                         <span className="text-xs font-black uppercase tracking-[0.16em]">{mode.label}</span>
@@ -9348,10 +9356,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <div className="grid grid-cols-2 gap-2">
                                         <button
                                             onClick={() => setKeyboardHaptics(prev => !prev)}
-                                            className={`rounded-xl border px-3 py-3 text-left transition-all ${keyboardHaptics ? 'border-[#22c55e]/60 bg-[#22c55e]/15 text-white' : 'border-[#1d2d44] bg-[#050c18]/70 text-gray-400'}`}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={keyboardHaptics ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
                                         >
                                             <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Vibrate size={15} className={keyboardHaptics ? 'text-[#22c55e]' : 'text-gray-500'} />
+                                                <Vibrate size={15} style={{ color: keyboardHaptics ? countRowColors.wins : '#6b7280' }} />
                                                 <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
                                             </span>
                                             <span className="block text-xs font-bold">Haptic</span>
@@ -9359,10 +9368,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         </button>
                                         <button
                                             onClick={() => setKeyboardSound(prev => !prev)}
-                                            className={`rounded-xl border px-3 py-3 text-left transition-all ${keyboardSound ? 'border-[#22c55e]/60 bg-[#22c55e]/15 text-white' : 'border-[#1d2d44] bg-[#050c18]/70 text-gray-400'}`}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={keyboardSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
                                         >
                                             <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Volume2 size={15} className={keyboardSound ? 'text-[#22c55e]' : 'text-gray-500'} />
+                                                <Volume2 size={15} style={{ color: keyboardSound ? countRowColors.wins : '#6b7280' }} />
                                                 <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
                                             </span>
                                             <span className="block text-xs font-bold">Sound</span>
@@ -9373,7 +9383,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
-                                        <Bookmark size={14} className="text-[#3b82f6]" /> Saved Problems
+                                        <Bookmark size={14} style={{ color: countRowColors.count }} /> Saved Problems
                                     </h3>
                                     {savedProblems.length === 0 ? (
                                         <p className="text-[11px] text-gray-400 italic">No saved problems yet. Press Save on any problem to add it here.</p>
@@ -9383,13 +9393,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <div
                                                     key={problem.exerciseId}
                                                     onClick={() => loadSavedProblem(problem)}
-                                                    className="flex items-center justify-between gap-2 rounded-lg border border-[#1d2d44] bg-[#050c18] px-3 py-2 cursor-pointer hover:border-[#3b82f6]/50 transition-colors"
+                                                    className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 cursor-pointer transition-all"
+                                                    style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}
+                                                    onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); }}
+                                                    onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
                                                 >
                                                     <div className="flex-1 text-left min-w-0">
                                                         <span className="text-[11px] font-bold text-gray-200 block truncate">
                                                             Problem {problem.exerciseId}
                                                             {problem.mastered && (
-                                                                <span className="ml-2 text-[10px] text-[#22c55e] font-black uppercase tracking-wider">Mastered</span>
+                                                                <span className="ml-2 text-[10px] font-black uppercase tracking-wider" style={{ color: countRowColors.wins }}>Mastered</span>
                                                             )}
                                                         </span>
                                                         <span className="text-[10px] text-gray-400 block truncate">
@@ -9401,18 +9414,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                             <button
                                                                 onClick={() => markSavedProblemMastered(problem.exerciseId)}
                                                                 title="Mark as mastered"
-                                                                className="p-1.5 rounded-md hover:bg-[#22c55e]/20 text-[#22c55e] transition-colors"
+                                                                className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                style={{ color: countRowColors.wins }}
                                                             >
                                                                 <CheckCircle size={14} />
                                                             </button>
                                                         )}
-                                                        <button
-                                                            onClick={() => handleDeleteConfirm(problem.exerciseId, 'saved')}
-                                                            title="Remove"
-                                                            className="p-1.5 rounded-md hover:bg-red-500/20 text-red-500 transition-colors"
-                                                        >
-                                                            <Trash2 size={14} />
-                                                        </button>
+                                                            <button
+                                                                onClick={() => handleDeleteConfirm(problem.exerciseId, 'saved')}
+                                                                title="Remove"
+                                                                className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                style={{ color: toolPanelColors.failed }}
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -9422,7 +9437,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
-                                        <FileText size={14} className="text-[#f59e0b]" /> ID Log
+                                        <FileText size={14} style={{ color: countRowColors.rate }} /> ID Log
                                     </h3>
                                     <div className="mb-3 flex gap-2">
                                         <input
@@ -9433,12 +9448,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             onChange={(e) => setIdLogInput(e.target.value)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleIdLogSubmit()}
                                             placeholder="Enter problem ID (1-2000)"
-                                            className="flex-1 bg-[#050c18] border border-[#1d2d44] rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#f59e0b]/50"
+                                            className="flex-1 bg-[#050c18] border border-[#1d2d44] rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
+                                            style={{ borderColor: '#1d2d44' }}
+                                            onFocus={(e) => e.target.style.borderColor = countRowColors.rate}
+                                            onBlur={(e) => e.target.style.borderColor = '#1d2d44'}
                                         />
                                         <button
                                             onClick={handleIdLogSubmit}
                                             disabled={!idLogInput || parseInt(idLogInput) < 1 || parseInt(idLogInput) > 2000}
-                                            className="px-4 py-2 rounded-lg bg-[#f59e0b]/20 border border-[#f59e0b]/40 text-[#f59e0b] text-xs font-bold hover:bg-[#f59e0b]/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                            className="px-4 py-2 rounded-lg text-xs font-bold transition-all hover:brightness-125 disabled:opacity-30 disabled:cursor-not-allowed"
+                                            style={{ backgroundColor: hexToRgba(countRowColors.rate, 0.2), border: `1px solid ${hexToRgba(countRowColors.rate, 0.4)}`, color: countRowColors.rate }}
                                         >
                                             Add
                                         </button>
@@ -9451,13 +9470,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <div
                                                     key={problem.exerciseId}
                                                     onClick={() => loadIdLogProblem(problem)}
-                                                    className="flex items-center justify-between gap-2 rounded-lg border border-[#1d2d44] bg-[#050c18] px-3 py-2 cursor-pointer hover:border-[#f59e0b]/50 transition-colors"
+                                                    className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 cursor-pointer transition-all hover:brightness-125"
+                                                    style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}
+                                                    onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.rate, 0.5); }}
+                                                    onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
                                                 >
                                                     <div className="flex-1 text-left min-w-0">
                                                         <span className="text-[11px] font-bold text-gray-200 block truncate">
                                                             Problem {problem.exerciseId}
                                                             {problem.mastered && (
-                                                                <span className="ml-2 text-[10px] text-[#22c55e] font-black uppercase tracking-wider">Mastered</span>
+                                                                <span className="ml-2 text-[10px] font-black uppercase tracking-wider" style={{ color: countRowColors.wins }}>Mastered</span>
                                                             )}
                                                         </span>
                                                         <span className="text-[10px] text-gray-400 block truncate">
@@ -9469,7 +9491,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                             <button
                                                                 onClick={() => markIdLogProblemMastered(problem.exerciseId)}
                                                                 title="Mark as mastered"
-                                                                className="p-1.5 rounded-md hover:bg-[#22c55e]/20 text-[#22c55e] transition-colors"
+                                                                className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                style={{ color: countRowColors.wins }}
                                                             >
                                                                 <CheckCircle size={14} />
                                                             </button>
@@ -9477,7 +9500,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                         <button
                                                             onClick={() => handleDeleteConfirm(problem.exerciseId, 'idlog')}
                                                             title="Remove"
-                                                            className="p-1.5 rounded-md hover:bg-red-500/20 text-red-500 transition-colors"
+                                                            className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                            style={{ color: toolPanelColors.failed }}
                                                         >
                                                             <Trash2 size={14} />
                                                         </button>
@@ -9490,7 +9514,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 </div>
 
-                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border border-red-500/30 text-red-500 py-3 rounded-xl hover:bg-red-500/10 transition-colors">Reset Progress</button>
+                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border py-3 rounded-xl transition-all hover:brightness-125" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.3), color: toolPanelColors.failed, backgroundColor: hexToRgba(toolPanelColors.failed, 0.05) }}>Reset Progress</button>
                             </div>
                         )}
                         {showModal === 'api_key' && (
@@ -9505,11 +9529,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         value={apiKey}
                                         onChange={(e) => setApiKey(e.target.value)}
                                         placeholder="Paste your API key here..."
-                                        className="w-full bg-[#0d1b2a] border border-[#1d2d44] text-white px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-[#3b82f6] transition-colors"
+                                        className="w-full bg-[#0d1b2a] border border-[#1d2d44] text-white px-4 py-3 rounded-xl text-sm font-mono transition-all"
+                                        style={{ borderColor: '#1d2d44' }}
+                                        onFocus={(e) => e.target.style.borderColor = countRowColors.count}
+                                        onBlur={(e) => e.target.style.borderColor = '#1d2d44'}
                                     />
                                     <p className="text-[10px] text-gray-400 mt-2 leading-relaxed">
                                         Get your API key from{' '}
-                                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-[#3b82f6] underline inline-flex items-center gap-0.5">
+                                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="underline inline-flex items-center gap-0.5" style={{ color: countRowColors.count }}>
                                             Google AI Studio <ExternalLink size={10} />
                                         </a>
                                     </p>
@@ -9519,7 +9546,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         localStorage.setItem('gemini_api_key', apiKey);
                                         setShowModal('none');
                                     }}
-                                    className="w-full bg-[#3b82f6] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[#3b82f6]/90 transition-colors"
+                                    className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:brightness-125"
+                                    style={{ backgroundColor: countRowColors.count }}
                                 >
                                     <Check size={18} /> Save API Key
                                 </button>
@@ -9541,7 +9569,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         }
                                         setResetConfirmArmed(true);
                                     }}
-                                    className={`w-full py-4 rounded-xl font-bold mb-3 ${resetConfirmArmed ? 'bg-red-600 text-white' : 'bg-red-500/20 text-red-300 border border-red-500/40'}`}
+                                    className="w-full py-4 rounded-xl font-bold mb-3 transition-all hover:brightness-125"
+                                    style={resetConfirmArmed ? { backgroundColor: toolPanelColors.failed, color: '#ffffff' } : { backgroundColor: hexToRgba(toolPanelColors.failed, 0.2), color: toolPanelColors.failed, border: `1px solid ${hexToRgba(toolPanelColors.failed, 0.4)}` }}
                                 >
                                     {resetConfirmArmed ? 'Yes, Reset Everything' : 'Reset Now'}
                                 </button>
@@ -9550,17 +9579,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         )}
                         {showModal === 'delete_confirm' && (
                             <div className="text-center py-4">
-                                <h2 className="text-lg font-bold mb-2 text-red-400">⚠️ Confirm Delete</h2>
+                                <h2 className="text-lg font-bold mb-2" style={{ color: toolPanelColors.failed }}>⚠️ Confirm Delete</h2>
                                 <p className="text-xs text-gray-300 mb-4 leading-relaxed">
                                     Are you sure you want to remove Problem {deleteConfirmId} from your {deleteConfirmType === 'saved' ? 'Saved Problems' : 'ID Log'}?
                                 </p>
                                 <button
                                     onClick={handleDeleteExecute}
-                                    className="w-full py-4 rounded-xl font-bold mb-3 bg-red-600 text-white hover:bg-red-700 transition-colors"
+                                    className="w-full py-4 rounded-xl font-bold mb-3 text-white transition-all hover:brightness-125"
+                                    style={{ backgroundColor: toolPanelColors.failed }}
                                 >
                                     Yes, Delete
                                 </button>
-                                <button onClick={handleDeleteCancel} className="w-full bg-[#1d2d44] py-4 rounded-xl hover:bg-[#253a54] transition-colors">Cancel</button>
+                                <button onClick={handleDeleteCancel} className="w-full py-4 rounded-xl transition-all hover:brightness-125" style={{ backgroundColor: countRowColors.background, border: `1px solid ${countRowColors.border}`, color: '#9ca3af' }}>Cancel</button>
                             </div>
                         )}
                         {showModal === 'problem_full' && (
