@@ -16,6 +16,7 @@ export interface AiReviewRequest {
     userCode: string;
     graderMessage: string;
     graderPassed: boolean;
+    graderSpec?: unknown;
     programOutput?: string;
     visibleSolution?: string;
 }

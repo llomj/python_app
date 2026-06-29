@@ -84,6 +84,17 @@ const getOfflineAiStatusLabel = (status: OfflineAiStatus) => {
     }
 };
 
+const getAiReviewSourceLabel = (source: AiReviewResult['source']) => {
+    switch (source) {
+        case 'offline_model':
+            return 'offline model';
+        case 'diagnostic':
+            return 'built-in offline';
+        default:
+            return source;
+    }
+};
+
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
 type StatsByMode = Record<DifficultyMode, Stats>;
@@ -7988,6 +7999,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     userCode: activeFile.content,
                     graderMessage: gradeResult.message,
                     graderPassed: gradeResult.passed,
+                    graderSpec: autoGrader,
                     programOutput: stdout || gradeResult.output || '',
                     visibleSolution: exercise.solution,
                 };
@@ -8038,6 +8050,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     userCode: files[activeFileIndex].content,
                     graderMessage: errorMessage,
                     graderPassed: false,
+                    graderSpec: autoGrader,
                     programOutput: stdout || '',
                     visibleSolution: exercise.solution,
                 };
@@ -9041,7 +9054,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                     {latestAiReviewResult.verdict.replace('_', ' ')}
                                                 </span>
                                                 <span className="text-xs text-gray-400">
-                                                    Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {latestAiReviewResult.source}
+                                                    Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source)}
                                                 </span>
                                             </div>
                                             <p className="whitespace-pre-wrap leading-relaxed">{latestAiReviewResult.explanation}</p>
