@@ -2,6 +2,7 @@ import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewType
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
 import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer } from './webLlmReviewer';
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
+import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
@@ -214,6 +215,21 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
     const diagnostic = buildDiagnosticReview(request);
+
+    const ollamaOnline = await isOllamaRunning();
+    if (ollamaOnline) {
+        const ollamaModel = await findAvailableCodeModel();
+        if (ollamaModel) {
+            try {
+                const ollamaResult = await reviewWithOllama(request, ollamaModel);
+                if (ollamaResult.verdict !== 'unclear' && ollamaResult.explanation.length > 20) {
+                    return ollamaResult;
+                }
+            } catch {
+                // Ollama failed, fall through
+            }
+        }
+    }
 
     if (hasGeminiKey()) {
         try {
