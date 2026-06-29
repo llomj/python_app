@@ -4,10 +4,26 @@ import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebL
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
+const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 180000;
+const OFFLINE_AI_REVIEW_TIMEOUT_MS = 20000;
 const LEGACY_MODEL_IDS = new Set([
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Llama-3.2-1B-Instruct-q4f32_1-MLC',
 ]);
+
+const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error(message)), timeoutMs);
+    });
+    try {
+        return await Promise.race([promise, timeout]);
+    } finally {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+    }
+};
 
 const formatOfflineAiError = (error: unknown) => {
     const message = String((error as { message?: unknown })?.message || error || 'Offline AI setup failed.');
@@ -87,9 +103,13 @@ export const downloadOfflineAiModel = async (
     const downloading = { ...state, enabled: true, status: 'downloading' as const, message: 'Downloading offline AI model...', progress: 0 };
     onState(downloading);
     try {
-        await loadWebLlmReviewer(state.modelId, (progress, message) => {
-            onState({ ...downloading, status: 'downloading', progress, message });
-        });
+        await withTimeout(
+            loadWebLlmReviewer(state.modelId, (progress, message) => {
+                onState({ ...downloading, status: 'downloading', progress, message });
+            }),
+            OFFLINE_AI_DOWNLOAD_TIMEOUT_MS,
+            'Offline AI model download timed out. Built-in AI review still works.',
+        );
         const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline AI reviewer is ready.', progress: 1 };
         onState(ready);
         saveOfflineAiState(ready);
@@ -124,12 +144,16 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
             };
         }
         try {
-            return await reviewWithWebLlm(request, state.modelId);
+            return await withTimeout(
+                reviewWithWebLlm(request, state.modelId),
+                OFFLINE_AI_REVIEW_TIMEOUT_MS,
+                'Offline AI review timed out.',
+            );
         } catch (error) {
             const diagnostic = buildDiagnosticReview(request);
             return {
                 ...diagnostic,
-                explanation: `Offline AI failed, so diagnostic review was used. ${diagnostic.explanation}`,
+                explanation: `Offline AI failed or timed out, so diagnostic review was used. ${diagnostic.explanation}`,
             };
         }
     }
