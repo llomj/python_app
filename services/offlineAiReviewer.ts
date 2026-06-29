@@ -1,13 +1,14 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
 import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer } from './webLlmReviewer';
+import { hasGeminiKey, reviewWithGemini } from './geminiService';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
 const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 180000;
 const OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS = 60000;
 const OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS = 30000;
-const OFFLINE_AI_REVIEW_TIMEOUT_MS = 45000;
+const OFFLINE_AI_REVIEW_TIMEOUT_MS = 8000;
 const LEGACY_MODEL_IDS = new Set([
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Llama-3.2-1B-Instruct-q4f32_1-MLC',
@@ -213,6 +214,20 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
     const diagnostic = buildDiagnosticReview(request);
+
+    if (hasGeminiKey()) {
+        try {
+            const geminiResult = await reviewWithGemini(request);
+            if (geminiResult.verdict !== 'unclear' || geminiResult.explanation.length > 20) {
+                return {
+                    ...geminiResult,
+                    confidence: Math.max(geminiResult.confidence, diagnostic.confidence),
+                };
+            }
+        } catch {
+            // Gemini failed, fall through
+        }
+    }
 
     if (state.enabled && state.status === 'ready') {
         if (!supportsWebLlm()) {

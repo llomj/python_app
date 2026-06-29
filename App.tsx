@@ -88,6 +88,8 @@ const getAiReviewSourceLabel = (source: AiReviewResult['source']) => {
     switch (source) {
         case 'offline_model':
             return 'offline model';
+        case 'gemini':
+            return 'Gemini AI';
         case 'diagnostic':
             return 'built-in offline';
         default:
