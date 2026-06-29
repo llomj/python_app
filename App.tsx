@@ -67,6 +67,7 @@ interface AutoGradeResult {
     passed: boolean;
     message: string;
     functionName?: string;
+    output?: string;
 }
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
@@ -978,6 +979,7 @@ def __auto_grader_run_script():
     compare = __auto_grader_spec.get("compare", "printedOrReturn")
     tests = __auto_grader_spec.get("tests", [])
     compiled = compile(__auto_grader_source, __auto_grader_source_name, "exec")
+    sample_output = None
 
     for index, case in enumerate(tests, start=1):
         expected = case.get("expected")
@@ -1102,6 +1104,8 @@ def __auto_grader_run_script():
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
+            if sample_output is None:
+                sample_output = printed
         except Exception as exc:
             return {
                 "passed": False,
@@ -1138,7 +1142,8 @@ def __auto_grader_run_script():
 
     return {
         "passed": True,
-        "message": f"All {len(tests)} script tests passed."
+        "message": f"All {len(tests)} script tests passed.",
+        "output": sample_output or ""
     }
 
 __auto_grader_result = __auto_grader_run()
@@ -7950,6 +7955,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 `);
                 pyodide.runPython(buildAutoGradeScript(autoGrader, activeFile.content, activeFile.name));
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
+                const graderOutput = gradeResult.output?.trim()
+                    ? `Program output:\n${gradeResult.output.trim()}\n\n`
+                    : '';
+                const displayOutput = userOutput || graderOutput;
                 const reviewRequest: AiReviewRequest = {
                     problemId: exercise.id,
                     title: exercise.title,
@@ -7957,7 +7966,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     userCode: activeFile.content,
                     graderMessage: gradeResult.message,
                     graderPassed: gradeResult.passed,
-                    programOutput: stdout || '',
+                    programOutput: stdout || gradeResult.output || '',
                     visibleSolution: exercise.solution,
                 };
                 setLatestAiReviewRequest(reviewRequest);
@@ -7967,12 +7976,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
                     setPendingNextProblem(true);
-                    setOutput(`${userOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
+                    setOutput(`${displayOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
                     updateCurrentModeStats('failed');
                     setOutputStatus('fail');
                     setPendingNextProblem(true);
-                    setOutput(`${userOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                    setOutput(`${displayOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
                 }
             } else {
                 setOutputStatus('info');

@@ -4,6 +4,17 @@ import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebL
 
 const STORAGE_KEY = 'python_offline_ai_state';
 
+const formatOfflineAiError = (error: unknown) => {
+    const message = String((error as { message?: unknown })?.message || error || 'Offline AI setup failed.');
+    if (/importing a module script failed|failed to fetch dynamically imported module|error loading dynamically imported module|load failed/i.test(message)) {
+        return 'Offline AI runtime could not load in this browser/app. Built-in AI review still works; refresh after the update or try a browser with WebGPU support.';
+    }
+    if (/webgpu|gpu/i.test(message)) {
+        return 'This browser does not expose WebGPU for offline AI. Built-in AI review will still work.';
+    }
+    return message;
+};
+
 export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
     enabled: false,
     status: 'not_installed',
@@ -63,13 +74,26 @@ export const downloadOfflineAiModel = async (
     }
     const downloading = { ...state, enabled: true, status: 'downloading' as const, message: 'Downloading offline AI model...', progress: 0 };
     onState(downloading);
-    await loadWebLlmReviewer(state.modelId, (progress, message) => {
-        onState({ ...downloading, status: 'downloading', progress, message });
-    });
-    const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline AI reviewer is ready.', progress: 1 };
-    onState(ready);
-    saveOfflineAiState(ready);
-    return ready;
+    try {
+        await loadWebLlmReviewer(state.modelId, (progress, message) => {
+            onState({ ...downloading, status: 'downloading', progress, message });
+        });
+        const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline AI reviewer is ready.', progress: 1 };
+        onState(ready);
+        saveOfflineAiState(ready);
+        return ready;
+    } catch (error) {
+        const failed = {
+            ...state,
+            enabled: false,
+            status: 'failed' as const,
+            message: formatOfflineAiError(error),
+            progress: 0,
+        };
+        onState(failed);
+        saveOfflineAiState(failed);
+        return failed;
+    }
 };
 
 export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.modelId) => {
