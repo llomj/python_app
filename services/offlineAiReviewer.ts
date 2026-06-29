@@ -1,6 +1,6 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm } from './webLlmReviewer';
+import { isAppleMobileBrowser, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm } from './webLlmReviewer';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 
@@ -66,6 +66,18 @@ export const downloadOfflineAiModel = async (
     state: OfflineAiState,
     onState: (next: OfflineAiState) => void,
 ) => {
+    if (isAppleMobileBrowser()) {
+        const next = {
+            ...state,
+            enabled: false,
+            status: 'unsupported' as const,
+            message: 'Offline model download is disabled on iPhone/iPad right now because the local LLM runtime can reload or crash the app. Built-in AI review still works offline.',
+            progress: 0,
+        };
+        onState(next);
+        saveOfflineAiState(next);
+        return next;
+    }
     if (!supportsWebLlm()) {
         const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for offline AI.', progress: 0 };
         onState(next);
@@ -104,6 +116,13 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
     if (state.enabled && state.status === 'ready') {
+        if (isAppleMobileBrowser()) {
+            const diagnostic = buildDiagnosticReview(request);
+            return {
+                ...diagnostic,
+                explanation: `Offline model download is disabled on iPhone/iPad because the local LLM runtime is not stable in this app yet. Diagnostic review was used instead. ${diagnostic.explanation}`,
+            };
+        }
         if (!supportsWebLlm()) {
             const diagnostic = buildDiagnosticReview(request);
             return {

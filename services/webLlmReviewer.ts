@@ -4,8 +4,20 @@ type EngineModule = typeof import('@mlc-ai/web-llm');
 
 let enginePromise: Promise<any> | null = null;
 
+export const isAppleMobileBrowser = () => {
+    if (typeof navigator === 'undefined') {
+        return false;
+    }
+    const userAgent = navigator.userAgent || '';
+    const platform = navigator.platform || '';
+    return (
+        /iPad|iPhone|iPod/i.test(userAgent)
+        || (platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    );
+};
+
 export const supportsWebLlm = () => {
-    return typeof navigator !== 'undefined' && 'gpu' in navigator;
+    return typeof navigator !== 'undefined' && !isAppleMobileBrowser() && 'gpu' in navigator;
 };
 
 const buildPrompt = (request: AiReviewRequest) => `
@@ -101,7 +113,7 @@ export const resetWebLlmReviewer = async (modelId?: string) => {
         }
     }
 
-    if (modelId) {
+    if (modelId && supportsWebLlm()) {
         const webllm = await import('@mlc-ai/web-llm');
         if (typeof webllm.deleteModelAllInfoInCache === 'function') {
             await webllm.deleteModelAllInfoInCache(modelId);
