@@ -131,16 +131,34 @@ const extractReviewSignals = (request: AiReviewRequest) => {
     return Array.from(signals).slice(0, 30);
 };
 
+const extractCodeSignals = (code: string) => {
+    const signals = new Set<string>();
+    for (const match of code.matchAll(/\b(?:def\s+([A-Za-z_][A-Za-z0-9_]*)|from\s+([A-Za-z_][A-Za-z0-9_.]*)|import\s+([A-Za-z_][A-Za-z0-9_.]*)|([A-Za-z_][A-Za-z0-9_]*)\s*=|\b(pass|return|print|input)\b)/g)) {
+        const value = match[1] || match[2] || match[3] || match[4] || match[5];
+        if (value && !/^(if|for|while|range|len|str|int|float|list|dict|set)$/i.test(value)) {
+            signals.add(value.toLowerCase());
+        }
+    }
+    return Array.from(signals);
+};
+
 const isSpecificModelReview = (review: AiReviewResult, request: AiReviewRequest) => {
     const explanation = `${review.explanation || ''}\n${review.suggestedFix || ''}`.toLowerCase();
     if (review.verdict === 'unclear' || explanation.length < 120) return false;
     if (/generic answer|cannot determine|not enough information|unable to/i.test(explanation)) return false;
 
+    const userCode = request.userCode.toLowerCase();
+    if (/\bpass\b/.test(userCode) && !/\b(pass|placeholder|blank|empty|no implementation|does not implement)\b/.test(explanation)) {
+        return false;
+    }
+
     const signals = extractReviewSignals(request);
+    const codeSignals = extractCodeSignals(request.userCode);
     const signalHits = signals.filter(signal => explanation.includes(signal)).length;
+    const codeSignalHits = codeSignals.filter(signal => explanation.includes(signal)).length;
     const hasLineReference = /\bline\s+\d+\b/.test(explanation);
     const hasGraderReference = /(grader|expected|got|passed|failed|output|return|none|missing)/i.test(explanation);
-    return signalHits >= 2 && (hasLineReference || hasGraderReference);
+    return signalHits >= 2 && codeSignalHits >= 1 && (hasLineReference || hasGraderReference);
 };
 
 export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {

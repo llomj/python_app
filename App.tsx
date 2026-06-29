@@ -7218,7 +7218,33 @@ const looksLikePythonCode = (text: string) => {
     return /\n/.test(trimmed) && /\b(def|class|return|if|for|while|import|from|print)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
 };
 
-function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean }) {
+const splitAiReviewSteps = (text: string) => {
+    const normalized = text
+        .replace(/\n\s*---\s*\n/g, '\n\n')
+        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
+        .replace(/\s+(?=The deterministic grader|A function that reaches|If this is|For this grader)/g, '\n\n')
+        .trim();
+
+    const explicitSections = normalized
+        .split(/\n\s*\n+/)
+        .map(section => section.trim())
+        .filter(Boolean);
+
+    if (explicitSections.length > 1) {
+        return explicitSections
+            .map(section => section.replace(/^\d+[.)]\s*/, '').trim())
+            .filter(section => !/^(Specific built-in analysis|Built-in analysis):?$/i.test(section));
+    }
+
+    const sentenceSections = normalized
+        .split(/(?<=[.!?])\s+(?=[A-Z])/)
+        .map(section => section.trim())
+        .filter(Boolean);
+
+    return sentenceSections.length > 1 ? sentenceSections : [normalized];
+};
+
+function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false, numbered = false }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean; numbered?: boolean }) {
     const parts = parseAiTextParts(text);
     const renderCode = (code: string, key: string) => (
         <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
@@ -7245,6 +7271,23 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
             {parts.map((part, index) => {
                 if (part.type === 'code' || (detectBareCode && looksLikePythonCode(part.value))) {
                     return renderCode(part.value, `ai-code-${index}`);
+                }
+                if (numbered) {
+                    const steps = splitAiReviewSteps(part.value);
+                    return (
+                        <div key={`ai-numbered-${index}`} className="space-y-2.5">
+                            {steps.map((step, stepIndex) => (
+                                <div key={`ai-step-${index}-${stepIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: 'rgba(88, 118, 160, 0.22)', backgroundColor: 'rgba(8, 18, 34, 0.34)' }}>
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accentColor, 0.16), color: accentColor }}>
+                                        {stepIndex + 1}
+                                    </div>
+                                    <p className="whitespace-pre-wrap pt-0.5 text-gray-200">
+                                        {step}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    );
                 }
                 return (
                     <p key={`ai-text-${index}`} className="whitespace-pre-wrap">
@@ -9354,7 +9397,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                             Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source)}
                                                         </span>
                                                     </div>
-                                                    <AiReviewText text={latestAiReviewResult.explanation} editorColors={editorColors} accentColor={toolPanelColors.ai} />
+                                                    <AiReviewText text={latestAiReviewResult.explanation} editorColors={editorColors} accentColor={toolPanelColors.ai} numbered={true} />
                                                     {latestAiReviewResult.suggestedFix && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
                                                             <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>Suggested Fix</div>
