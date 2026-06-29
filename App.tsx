@@ -32,7 +32,8 @@ import {
     X,
     ChevronDown,
     ChevronUp,
-    Bookmark
+    Bookmark,
+    Terminal
 } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
@@ -7167,7 +7168,11 @@ const pythonSnippets = (context: CompletionContext) => {
 const App: React.FC = () => {
     const initialExercise = useMemo(() => getInitialExercise(), []);
     const [exercise, setExercise] = useState<Exercise>(initialExercise);
-    const [files, setFiles] = useState<ProjectFile[]>([{ name: 'main.py', content: initialExercise.initialCode }]);
+    const [files, setFiles] = useState<ProjectFile[]>(() =>
+        localStorage.getItem('python_plain_mode') === 'true'
+            ? [{ name: 'main.py', content: '' }]
+            : [{ name: 'main.py', content: initialExercise.initialCode }]
+    );
     const [activeFileIndex, setActiveFileIndex] = useState(0);
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [newName, setNewName] = useState('');
@@ -7208,6 +7213,7 @@ const App: React.FC = () => {
     const offlineAiBusy = offlineAiState.status === 'downloading' || offlineAiState.status === 'removing';
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
+    const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
     const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
@@ -7433,6 +7439,10 @@ const App: React.FC = () => {
         keyboardSoundRef.current = keyboardSound;
         localStorage.setItem('python_keyboard_sound', String(keyboardSound));
     }, [keyboardSound]);
+
+    useEffect(() => {
+        localStorage.setItem('python_plain_mode', String(plainMode));
+    }, [plainMode]);
 
     const playKeyboardFeedback = useCallback(() => {
         const now = performance.now();
@@ -7894,7 +7904,7 @@ const App: React.FC = () => {
     const runCode = async () => {
         if (isRunning) return;
         if (!pyodide) return;
-        const autoGrader = AUTO_GRADERS[exercise.id];
+        const autoGrader = !plainMode ? AUTO_GRADERS[exercise.id] : null;
         setIsRunning(true);
         setOutputStatus('running');
         setOutput('Executing...');
@@ -7951,17 +7961,16 @@ builtins.input = __app_input
 
             const activeFile = files[activeFileIndex];
             let stdout = '';
-            if (autoGrader?.mode !== 'script') {
-                // CRITICAL FIX: Use exec with filename context so imports work
-                const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
-                await pyodide.runPythonAsync(code);
-                stdout = pyodide.runPython("sys.stdout.getvalue()");
-            }
-            const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+            const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
+            await pyodide.runPythonAsync(code);
+            stdout = pyodide.runPython("sys.stdout.getvalue()");
             stdinValuesRef.current = [];
             setStdinValues([]);
 
-            if (autoGrader) {
+            if (plainMode) {
+                setOutput(stdout?.trim() || 'Success (No output).');
+                setOutputStatus('info');
+            } else if (autoGrader) {
                 pyodide.runPython(`
 import builtins
 builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADER_INPUT_UNAVAILABLE__" + str(prompt)))
@@ -7985,6 +7994,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setLatestAiReviewRequest(reviewRequest);
                 setLatestAiReviewResult(null);
 
+                const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
                 if (gradeResult.passed) {
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
@@ -8016,7 +8026,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
             stdinValuesRef.current = [];
             setStdinValues([]);
-            if (autoGrader) {
+            if (plainMode) {
+                setOutputStatus('fail');
+                setOutput(`${stdout || ''}\n${errorMessage}`);
+            } else if (autoGrader) {
                 updateCurrentModeStats('failed');
                 const reviewRequest: AiReviewRequest = {
                     problemId: exercise.id,
@@ -8465,114 +8478,136 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                 </div>
 
-                <div
-                    ref={problemPanelRef}
-                    className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-y-auto"
-                    style={{
-                        minHeight: '120px',
-                        maxHeight: '40vh',
-                        backgroundColor: 'rgba(8, 18, 34, 0.08)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                        borderColor: 'rgba(88, 118, 160, 0.25)'
-                    }}
-                >
-                    <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
-                        <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={saveCurrentProblem}
-                                title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'}
-                                style={{
-                                    backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-                                    border: '1px solid #1d2d44',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.25rem 0.5rem',
-                                    color: '#3b82f6',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.25rem',
-                                    fontSize: '0.75rem',
-                                    flexShrink: 0,
-                                    pointerEvents: 'auto',
-                                    opacity: isProblemSaved(exercise.id) ? 1 : 0.7,
-                                    transition: 'all 0.2s ease'
-                                }}
-                            >
-                                <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
-                                <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setPendingNextProblem(false);
-                                    loadRandomExercise();
-                                }}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    border: '1px solid #1d2d44',
-                                    borderRadius: '0.5rem',
-                                    padding: '0.25rem 0.5rem',
-                                    color: '#3b82f6',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.25rem',
-                                    fontSize: '0.75rem',
-                                    flexShrink: 0,
-                                    pointerEvents: 'auto'
-                                }}
-                                title="Load next problem"
-                            >
-                                <SkipForward size={14} />
-                                <span>Next</span>
-                            </button>
-                        </div>
-                    </div>
-                    <pre
-                        data-problem-description
-                        className="problem-description-scroll"
-                        id={`problem-desc-${exercise.id}`}
-                        ref={problemDescriptionRef}
+                {plainMode ? (
+                    <div
+                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
                         style={{
-                            color: '#d1d5db',
-                            fontSize: '0.875rem',
-                            lineHeight: '1.75',
-                            whiteSpace: 'pre-wrap',
-                            wordWrap: 'break-word',
-                            overflowWrap: 'break-word',
-                            padding: '0.5rem 1rem 1rem',
-                            margin: 0,
-                            fontFamily: 'inherit',
-                            width: '100%',
-                            userSelect: 'text',
-                            WebkitUserSelect: 'text'
-                        }}
-                        onTouchStart={() => {
-                            problemTouchStartRef.current = Date.now();
-                        }}
-                        onTouchEnd={() => {
-                            if (Date.now() - problemTouchStartRef.current < 400) return;
-                            problemTouchStartRef.current = 0;
-                            const el = problemDescriptionRef.current;
-                            if (!el) return;
-                            const range = document.createRange();
-                            range.selectNodeContents(el);
-                            const sel = window.getSelection();
-                            sel?.removeAllRanges();
-                            sel?.addRange(range);
-                            document.execCommand('copy');
-                            navigator.clipboard.writeText(exercise.description).catch(() => {});
-                            setDescCopied(true);
-                            setTimeout(() => setDescCopied(false), 1200);
-                        }}
-                        onTouchMove={() => {
-                            problemTouchStartRef.current = 0;
+                            minHeight: '64px',
+                            maxHeight: '64px',
+                            backgroundColor: 'rgba(8, 18, 34, 0.08)',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            borderColor: 'rgba(88, 118, 160, 0.25)'
                         }}
                     >
-                        {exercise.description}
-                    </pre>
-                </div>
+                        <div className="flex items-center justify-between gap-3 px-4 py-3">
+                            <div className="flex items-center gap-2">
+                                <Terminal size={16} style={{ color: countRowColors.count }} />
+                                <h2 className="text-sm font-black uppercase tracking-[0.16em] text-gray-200 m-0">Plain IDE</h2>
+                            </div>
+                            <span className="text-[10px] text-gray-400">Free Python environment</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div
+                        ref={problemPanelRef}
+                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-y-auto"
+                        style={{
+                            minHeight: '120px',
+                            maxHeight: '40vh',
+                            backgroundColor: 'rgba(8, 18, 34, 0.08)',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            borderColor: 'rgba(88, 118, 160, 0.25)'
+                        }}
+                    >
+                        <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
+                            <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={saveCurrentProblem}
+                                    title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'}
+                                    style={{
+                                        backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+                                        border: '1px solid #1d2d44',
+                                        borderRadius: '0.5rem',
+                                        padding: '0.25rem 0.5rem',
+                                        color: '#3b82f6',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem',
+                                        fontSize: '0.75rem',
+                                        flexShrink: 0,
+                                        pointerEvents: 'auto',
+                                        opacity: isProblemSaved(exercise.id) ? 1 : 0.7,
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                >
+                                    <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
+                                    <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setPendingNextProblem(false);
+                                        loadRandomExercise();
+                                    }}
+                                    style={{
+                                        backgroundColor: 'transparent',
+                                        border: '1px solid #1d2d44',
+                                        borderRadius: '0.5rem',
+                                        padding: '0.25rem 0.5rem',
+                                        color: '#3b82f6',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem',
+                                        fontSize: '0.75rem',
+                                        flexShrink: 0,
+                                        pointerEvents: 'auto'
+                                    }}
+                                    title="Load next problem"
+                                >
+                                    <SkipForward size={14} />
+                                    <span>Next</span>
+                                </button>
+                            </div>
+                        </div>
+                        <pre
+                            data-problem-description
+                            className="problem-description-scroll"
+                            id={`problem-desc-${exercise.id}`}
+                            ref={problemDescriptionRef}
+                            style={{
+                                color: '#d1d5db',
+                                fontSize: '0.875rem',
+                                lineHeight: '1.75',
+                                whiteSpace: 'pre-wrap',
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word',
+                                padding: '0.5rem 1rem 1rem',
+                                margin: 0,
+                                fontFamily: 'inherit',
+                                width: '100%',
+                                userSelect: 'text',
+                                WebkitUserSelect: 'text'
+                            }}
+                            onTouchStart={() => {
+                                problemTouchStartRef.current = Date.now();
+                            }}
+                            onTouchEnd={() => {
+                                if (Date.now() - problemTouchStartRef.current < 400) return;
+                                problemTouchStartRef.current = 0;
+                                const el = problemDescriptionRef.current;
+                                if (!el) return;
+                                const range = document.createRange();
+                                range.selectNodeContents(el);
+                                const sel = window.getSelection();
+                                sel?.removeAllRanges();
+                                sel?.addRange(range);
+                                document.execCommand('copy');
+                                navigator.clipboard.writeText(exercise.description).catch(() => {});
+                                setDescCopied(true);
+                                setTimeout(() => setDescCopied(false), 1200);
+                            }}
+                            onTouchMove={() => {
+                                problemTouchStartRef.current = 0;
+                            }}
+                        >
+                            {exercise.description}
+                        </pre>
+                    </div>
+                )}
             </div>
             {descCopied && (
                 <div className="fixed left-1/2 z-[200] -translate-x-1/2 top-24 text-center px-4 py-2 rounded-lg text-xs text-[#4ade80] font-bold bg-[#050c18]/90 border border-[#4ade80]/30 shadow-xl pointer-events-none">
@@ -9204,6 +9239,38 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 />
                                             );
                                         })}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                        <Terminal size={14} style={{ color: countRowColors.count }} /> Mode
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => { setPlainMode(false); setExercise(getInitialExercise()); setFiles([{ name: 'main.py', content: getInitialExercise().initialCode }]); }}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={!plainMode ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <span className="text-xs font-black uppercase tracking-[0.14em]">Play</span>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode ? countRowColors.wins : '#6b7280' }}>On</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Exercises</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Practice with problems.</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { setPlainMode(true); setFiles([{ name: 'main.py', content: '' }]); setOutput(''); setOutputStatus('idle'); }}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={plainMode ? { borderColor: hexToRgba(countRowColors.count, 0.6), backgroundColor: hexToRgba(countRowColors.count, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <span className="text-xs font-black uppercase tracking-[0.14em]">Plain</span>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>On</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Free IDE</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">No problems, just code.</span>
+                                        </button>
                                     </div>
                                 </div>
 
