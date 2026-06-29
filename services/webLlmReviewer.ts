@@ -29,15 +29,18 @@ const clampText = (text: string, maxLength: number) => (
 );
 
 const buildPrompt = (request: AiReviewRequest) => `
-Review this beginner Python answer. Return compact JSON only:
-{"verdict":"likely_correct|likely_incorrect|unclear","confidence":0.0,"explanation":"short reason","suggestedFix":"short fix"}
+Review this beginner Python answer against the problem and solution. Return JSON only:
+{"verdict":"likely_correct|likely_incorrect|unclear","confidence":0.0,"explanation":"what the user did wrong and step-by-step fix","suggestedFix":"concise fix"}
 
-Problem ${request.problemId}: ${clampText(request.title || request.description, 1200)}
+Problem ${request.problemId}
+Title: ${clampText(request.title, 300)}
+Description: ${clampText(request.description, 1200)}
 Grader passed: ${request.graderPassed ? 'yes' : 'no'}
 Grader message: ${clampText(request.graderMessage, 500)}
 Output: ${clampText(request.programOutput || '', 500)}
-Code:
+User code:
 ${clampText(request.userCode, 1800)}
+${request.visibleSolution ? `Expected solution:\n${clampText(request.visibleSolution, 600)}` : ''}
 `;
 
 const parseReviewJson = (text: string): AiReviewResult => {
@@ -99,8 +102,8 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
             { role: 'system', content: 'You are a concise Python tutor. Return JSON only.' },
             { role: 'user', content: buildPrompt(request) },
         ],
-        temperature: 0,
-        max_tokens: 140,
+        temperature: 0.1,
+        max_tokens: 320,
     });
     return parseReviewJson(response?.choices?.[0]?.message?.content || '');
 };

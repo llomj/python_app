@@ -8166,6 +8166,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             latestAiReviewRequest.userCode === files[activeFileIndex].content
                 ? latestAiReviewRequest
                 : null;
+        const currentGrader = AUTO_GRADERS[exercise.id] || null;
         const request: AiReviewRequest = reusableReviewRequest || {
             problemId: exercise.id,
             title: exercise.title,
@@ -8173,6 +8174,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             userCode: files[activeFileIndex].content,
             graderMessage: 'Run has not been pressed for this code yet.',
             graderPassed: false,
+            graderSpec: currentGrader,
             programOutput: output,
             visibleSolution: exercise.solution,
         };
