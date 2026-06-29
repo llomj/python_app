@@ -3,6 +3,7 @@ import { AiReviewRequest, AiReviewResult } from '../aiReviewTypes';
 type EngineModule = typeof import('@mlc-ai/web-llm');
 
 let enginePromise: Promise<any> | null = null;
+let engineModelId: string | null = null;
 
 export const isAppleMobileBrowser = () => {
     if (typeof navigator === 'undefined') {
@@ -22,6 +23,22 @@ export const supportsWebLlm = () => {
     }
     const nav = navigator as Navigator & { gpu?: { requestAdapter?: unknown } };
     return Boolean(nav.gpu && typeof nav.gpu.requestAdapter === 'function');
+};
+
+export const verifyWebLlmSupport = async () => {
+    if (!supportsWebLlm()) {
+        throw new Error('WebGPU is not available on this device/browser.');
+    }
+
+    const nav = navigator as Navigator & { gpu?: { requestAdapter?: () => Promise<unknown> } };
+    const adapter = await Promise.race([
+        nav.gpu?.requestAdapter?.(),
+        new Promise<null>(resolve => setTimeout(() => resolve(null), 5000)),
+    ]);
+
+    if (!adapter) {
+        throw new Error('WebGPU is present but did not provide a usable adapter in this browser.');
+    }
 };
 
 const clampText = (text: string, maxLength: number) => (
@@ -79,10 +96,12 @@ const parseReviewJson = (text: string): AiReviewResult => {
 };
 
 export const loadWebLlmReviewer = async (modelId: string, onProgress?: (progress: number, message: string) => void) => {
-    if (!supportsWebLlm()) {
-        throw new Error('WebGPU is not available on this device/browser.');
+    await verifyWebLlmSupport();
+    if (enginePromise && engineModelId !== modelId) {
+        await resetWebLlmReviewer(engineModelId || undefined).catch(() => undefined);
     }
     if (!enginePromise) {
+        engineModelId = modelId;
         const loadPromise = import('@mlc-ai/web-llm').then(async (webllm: EngineModule) => {
             const engine = await webllm.CreateMLCEngine(modelId, {
                 initProgressCallback: (report: any) => {
@@ -96,6 +115,7 @@ export const loadWebLlmReviewer = async (modelId: string, onProgress?: (progress
         const guardedPromise = loadPromise.catch(error => {
             if (enginePromise === guardedPromise) {
                 enginePromise = null;
+                engineModelId = null;
             }
             throw error;
         });
@@ -137,6 +157,7 @@ export const testWebLlmReviewer = async (modelId: string) => {
 export const resetWebLlmReviewer = async (modelId?: string) => {
     const pendingEngine = enginePromise;
     enginePromise = null;
+    engineModelId = null;
 
     if (pendingEngine) {
         pendingEngine

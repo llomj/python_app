@@ -1,13 +1,17 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer } from './webLlmReviewer';
+import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC';
+const FALLBACK_MODEL_IDS = [
+    'Qwen2.5-0.5B-Instruct-q4f16_1-MLC',
+    'SmolLM2-360M-Instruct-q4f16_1-MLC',
+];
 const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 180000;
-const OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS = 60000;
+const OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS = 30000;
 const OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS = 30000;
 const OFFLINE_AI_REVIEW_TIMEOUT_MS = 45000;
 const LEGACY_MODEL_IDS = new Set([
@@ -15,7 +19,6 @@ const LEGACY_MODEL_IDS = new Set([
     'SmolLM2-135M-Instruct-q0f32-MLC',
     'SmolLM2-360M-Instruct-q0f16-MLC',
     'SmolLM2-360M-Instruct-q0f32-MLC',
-    'SmolLM2-360M-Instruct-q4f16_1-MLC',
     'SmolLM2-360M-Instruct-q4f32_1-MLC',
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Llama-3.2-1B-Instruct-q4f32_1-MLC',
@@ -87,6 +90,22 @@ const formatOfflineAiError = (error: unknown) => {
 const isUnsupportedOfflineAiError = (error: unknown) => {
     const message = String((error as { message?: unknown })?.message || error || '');
     return /importing a module script failed|failed to fetch dynamically imported module|error loading dynamically imported module|load failed|webgpu|gpu/i.test(message);
+};
+
+const getInstallCandidateModelIds = (state: OfflineAiState) => {
+    const modelIds = [
+        LEGACY_MODEL_IDS.has(String(state.modelId)) ? DEFAULT_MODEL_ID : state.modelId,
+        DEFAULT_MODEL_ID,
+        ...FALLBACK_MODEL_IDS,
+    ];
+    return Array.from(new Set(modelIds.filter(Boolean)));
+};
+
+const getModelLabel = (modelId: string) => {
+    if (modelId === DEFAULT_MODEL_ID) return 'coding model';
+    if (modelId.includes('Qwen2.5-0.5B')) return 'compatible Qwen model';
+    if (modelId.includes('SmolLM2-360M')) return 'fast fallback model';
+    return 'offline model';
 };
 
 export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
@@ -163,54 +182,113 @@ export const downloadOfflineAiModel = async (
         saveOfflineAiState(next);
         return next;
     }
-    const downloading = { ...state, enabled: false, status: 'downloading' as const, message: 'Preparing offline model. Built-in offline review still works while this downloads.', progress: 0, startedAt: Date.now() };
-    onState(downloading);
-    let acceptProgress = true;
-    let latestProgress = 0;
-    let latestMessage = downloading.message;
     try {
-        await withActivityTimeout(
-            loadWebLlmReviewer(state.modelId, (progress, message) => {
-                latestProgress = progress;
-                latestMessage = message;
-                if (acceptProgress) {
-                    onState({ ...downloading, status: 'downloading', progress, message });
-                }
-            }),
-            () => `${Math.round(latestProgress * 1000)}:${latestMessage}`,
-            OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS,
-            OFFLINE_AI_DOWNLOAD_TIMEOUT_MS,
-            'Offline model download made no visible progress for 60 seconds. Built-in offline review is active; try again on Wi-Fi.',
-            'Offline model setup is taking too long. Built-in offline review is active; try Prepare Download again on Wi-Fi.',
-        );
-        if (acceptProgress) {
-            onState({ ...downloading, status: 'downloading', progress: Math.max(downloading.progress, 0.96), message: 'Testing offline model response...' });
-        }
-        await withTimeout(
-            testWebLlmReviewer(state.modelId),
-            OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS,
-            'Offline model loaded but did not answer the test prompt in time. Built-in offline review is active.',
-        );
-        acceptProgress = false;
-        const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline model installed and tested. Model review is on.', progress: 1, startedAt: undefined };
-        onState(ready);
-        saveOfflineAiState(ready);
-        return ready;
+        await verifyWebLlmSupport();
     } catch (error) {
-        acceptProgress = false;
-        await resetWebLlmReviewer(state.modelId).catch(() => undefined);
-        const failed = {
-            ...state,
-            enabled: false,
-            status: isUnsupportedOfflineAiError(error) ? 'unsupported' as const : 'failed' as const,
-            message: formatOfflineAiError(error),
-            progress: 0,
-            startedAt: undefined,
-        };
-        onState(failed);
-        saveOfflineAiState(failed);
-        return failed;
+        const next = { ...state, enabled: false, status: 'unsupported' as const, message: formatOfflineAiError(error), progress: 0, startedAt: undefined };
+        onState(next);
+        saveOfflineAiState(next);
+        return next;
     }
+
+    const candidates = getInstallCandidateModelIds(state);
+    let lastError: unknown;
+    let lastModelId = candidates[0] || DEFAULT_MODEL_ID;
+
+    const startedAt = Date.now();
+
+    for (let index = 0; index < candidates.length; index += 1) {
+        const modelId = candidates[index];
+        lastModelId = modelId;
+        const modelLabel = getModelLabel(modelId);
+        const downloading = {
+            ...state,
+            modelId,
+            enabled: false,
+            status: 'downloading' as const,
+            message: `Preparing ${modelLabel}${index > 0 ? ' after the previous model failed' : ''}. Built-in offline review still works while this downloads.`,
+            progress: 0,
+            startedAt,
+        };
+        onState(downloading);
+        saveOfflineAiState(downloading);
+
+        let acceptProgress = true;
+        let latestProgress = 0;
+        let latestMessage = downloading.message;
+
+        try {
+            await withActivityTimeout(
+                loadWebLlmReviewer(modelId, (progress, message) => {
+                    latestProgress = progress;
+                    latestMessage = message;
+                    if (acceptProgress) {
+                        onState({
+                            ...downloading,
+                            status: 'downloading',
+                            progress,
+                            message: `${getModelLabel(modelId)}: ${message}`,
+                        });
+                    }
+                }),
+                () => `${modelId}:${Math.round(latestProgress * 1000)}:${latestMessage}`,
+                OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS,
+                OFFLINE_AI_DOWNLOAD_TIMEOUT_MS,
+                `${modelLabel} made no visible progress for 30 seconds.`,
+                `${modelLabel} setup is taking too long.`,
+            );
+            if (acceptProgress) {
+                onState({ ...downloading, status: 'downloading', progress: Math.max(downloading.progress, 0.96), message: `Testing ${modelLabel} response...` });
+            }
+            await withTimeout(
+                testWebLlmReviewer(modelId),
+                OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS,
+                `${modelLabel} loaded but did not answer the test prompt in time.`,
+            );
+            acceptProgress = false;
+            const ready = { ...state, modelId, enabled: true, status: 'ready' as const, message: `${modelLabel} installed and tested. Model review is on.`, progress: 1, startedAt: undefined };
+            onState(ready);
+            saveOfflineAiState(ready);
+            return ready;
+        } catch (error) {
+            acceptProgress = false;
+            lastError = error;
+            await resetWebLlmReviewer(modelId).catch(() => undefined);
+
+            if (isUnsupportedOfflineAiError(error)) {
+                break;
+            }
+
+            if (index < candidates.length - 1) {
+                const nextModelId = candidates[index + 1];
+                const fallingBack = {
+                    ...state,
+                    modelId: nextModelId,
+                    enabled: false,
+                    status: 'downloading' as const,
+                    message: `${modelLabel} failed: ${formatOfflineAiError(error)} Trying ${getModelLabel(nextModelId)} now.`,
+                    progress: 0,
+                    startedAt,
+                };
+                onState(fallingBack);
+                saveOfflineAiState(fallingBack);
+                continue;
+            }
+        }
+    }
+
+    const failed = {
+        ...state,
+        modelId: lastModelId,
+        enabled: false,
+        status: isUnsupportedOfflineAiError(lastError) ? 'unsupported' as const : 'failed' as const,
+        message: `${formatOfflineAiError(lastError)} Built-in offline review is still active.`,
+        progress: 0,
+        startedAt: undefined,
+    };
+    onState(failed);
+    saveOfflineAiState(failed);
+    return failed;
 };
 
 export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.modelId) => {
