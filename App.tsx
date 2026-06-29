@@ -7218,10 +7218,43 @@ const looksLikePythonCode = (text: string) => {
     return /\n/.test(trimmed) && /\b(def|class|return|if|for|while|import|from|print)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
 };
 
+const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSettings) => {
+    if (/^#/.test(token)) return editorColors.comment;
+    if (/^(['"]).*\1$/.test(token)) return editorColors.string;
+    if (/^\d+(?:\.\d+)?$/.test(token)) return editorColors.number;
+    if (PYTHON_KEYWORDS.includes(token)) return editorColors.keyword;
+    if (PYTHON_BUILTINS.includes(token)) return editorColors.builtin;
+    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(token)) return editorColors.identifier;
+    return '#e5e7eb';
+};
+
+const renderInlinePythonCode = (code: string, editorColors: EditorColorSettings, keyPrefix: string) => {
+    const tokens = code.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b|\s+|./g) || [code];
+    return (
+        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em]">
+            {tokens.map((token, index) => (
+                <span key={`${keyPrefix}-${index}`} style={{ color: /^\s+$/.test(token) ? undefined : getInlinePythonTokenColor(token, editorColors) }}>
+                    {token}
+                </span>
+            ))}
+        </code>
+    );
+};
+
+const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, keyPrefix: string) => {
+    const parts = text.split(/(`[^`]+`)/g).filter(Boolean);
+    return parts.map((part, index) => {
+        if (part.startsWith('`') && part.endsWith('`')) {
+            return renderInlinePythonCode(part.slice(1, -1), editorColors, `${keyPrefix}-code-${index}`);
+        }
+        return <React.Fragment key={`${keyPrefix}-text-${index}`}>{part}</React.Fragment>;
+    });
+};
+
 const splitAiReviewSteps = (text: string) => {
     const normalized = text
         .replace(/\n\s*---\s*\n/g, '\n\n')
-        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
+        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|Expected solution workflow|Function workflow|Execution order|Order of operation|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
         .replace(/\s+(?=The deterministic grader|A function that reaches|If this is|For this grader)/g, '\n\n')
         .trim();
 
@@ -7282,7 +7315,7 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                                         {stepIndex + 1}
                                     </div>
                                     <p className="whitespace-pre-wrap pt-0.5 text-gray-200">
-                                        {step}
+                                        {renderAiParagraphText(step, editorColors, `ai-step-text-${index}-${stepIndex}`)}
                                     </p>
                                 </div>
                             ))}
@@ -7291,7 +7324,7 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                 }
                 return (
                     <p key={`ai-text-${index}`} className="whitespace-pre-wrap">
-                        {part.value.trim()}
+                        {renderAiParagraphText(part.value.trim(), editorColors, `ai-text-${index}`)}
                     </p>
                 );
             })}

@@ -150,25 +150,8 @@ const describeCodeLine = (line: string) => {
     return 'runs this statement';
 };
 
-const summarizeCodeLines = (code: string) => {
-    const lines = code.split('\n');
-    const importantLines = lines
-        .map((line, index) => ({ line: line.trim(), number: index + 1 }))
-        .filter(item => item.line && !item.line.startsWith('#'))
-        .slice(0, 8);
-
-    if (!importantLines.length) {
-        return 'Code inspection: the editor is empty, so there are no lines to grade yet.';
-    }
-
-    return `Line-by-line code inspection: ${importantLines.map(item => `line ${item.number} "${item.line}" ${describeCodeLine(item.line)}`).join('; ')}.`;
-};
-
-const visibleSolutionFix = (request: AiReviewRequest) => {
-    const solution = (request.visibleSolution || '').trim();
-    if (!solution) return '';
-
-    const lines = solution.split('\n');
+const extractPrimarySolutionLines = (solution: string) => {
+    const lines = solution.trim().split('\n');
     const imports = lines.filter(line => /^\s*(?:from|import)\s+/.test(line)).slice(0, 4);
     const firstDefIndex = lines.findIndex(line => /^\s*def\s+/.test(line));
     if (firstDefIndex >= 0) {
@@ -182,13 +165,55 @@ const visibleSolutionFix = (request: AiReviewRequest) => {
                 block.push(line);
             }
         }
-        const concise = [...imports, ...block].filter((line, index, arr) => line.trim() || (index > 0 && arr[index - 1].trim())).join('\n').trim();
-        if (concise) {
-            return `Use this structure for this exact problem:\n\`\`\`python\n${concise}\n\`\`\``;
-        }
+        return [...imports, ...block].filter((line, index, arr) => line.trim() || (index > 0 && arr[index - 1].trim()));
+    }
+    return lines.filter(line => !/^\s*#/.test(line)).slice(0, 12);
+};
+
+const summarizeCodeLines = (code: string) => {
+    const lines = code.split('\n');
+    const importantLines = lines
+        .map((line, index) => ({ line: line.trim(), number: index + 1 }))
+        .filter(item => item.line && !item.line.startsWith('#'))
+        .slice(0, 8);
+
+    if (!importantLines.length) {
+        return 'Code inspection: the editor is empty, so there are no lines to grade yet.';
     }
 
-    const concise = lines.filter(line => !/^\s*#/.test(line)).slice(0, 12).join('\n').trim();
+    return `Line-by-line code inspection: ${importantLines.map(item => `line ${item.number} \`${item.line}\` ${describeCodeLine(item.line)}`).join('; ')}.`;
+};
+
+const summarizeExpectedWorkflow = (solution: string) => {
+    const primaryLines = extractPrimarySolutionLines(solution)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .slice(0, 8);
+
+    if (!primaryLines.length) return '';
+
+    const hasNestedFunction = primaryLines.some((line, index) => index > 0 && /^\s+def\s+/.test(line));
+    const workflow = primaryLines.map((line, index) => {
+        if (/^def\s+/.test(line)) return `step ${index + 1}: \`${line}\` builds the function boundary and defines what the grader can call`;
+        if (/^from\s+|^import\s+/.test(line)) return `step ${index + 1}: \`${line}\` loads the tool/module needed before the function runs`;
+        if (/=/.test(line) && !/[=!<>]=/.test(line)) return `step ${index + 1}: \`${line}\` creates an intermediate value used by the later return/output`;
+        if (/^return\b/.test(line)) return `step ${index + 1}: \`${line}\` sends the final value back to the grader`;
+        if (/^print\s*\(/.test(line)) return `step ${index + 1}: \`${line}\` displays the final value`;
+        return `step ${index + 1}: \`${line}\` is part of the required execution flow`;
+    });
+
+    const closureNote = hasNestedFunction
+        ? ' Function workflow note: because this solution defines a function inside another function, the inner function can close over values from the outer scope; that is the closure relationship.'
+        : ' Function workflow note: execution starts outside the function, but the function body only runs when the grader or script calls it.';
+
+    return `Expected solution workflow: ${workflow.join('; ')}.${closureNote}`;
+};
+
+const visibleSolutionFix = (request: AiReviewRequest) => {
+    const solution = (request.visibleSolution || '').trim();
+    if (!solution) return '';
+
+    const concise = extractPrimarySolutionLines(solution).join('\n').trim();
     return concise ? `Use this structure for this exact problem:\n\`\`\`python\n${concise}\n\`\`\`` : '';
 };
 
@@ -331,10 +356,11 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
         graderMessage !== '';
 
     if (request.graderPassed) {
+        const expectedWorkflow = request.visibleSolution ? summarizeExpectedWorkflow(request.visibleSolution) : '';
         return {
             verdict: 'likely_correct',
             confidence: 0.99,
-            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
+            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
             suggestedFix: 'No fix needed; the deterministic grader already accepted this solution.',
             source: 'diagnostic',
         };
@@ -345,6 +371,14 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
     }
 
     notes.push(summarizeCodeLines(code));
+
+    if (request.visibleSolution) {
+        const expectedWorkflow = summarizeExpectedWorkflow(request.visibleSolution);
+        if (expectedWorkflow) {
+            notes.push(expectedWorkflow);
+            notes.push('Execution order: Python loads imports first, records function definitions next, then runs the function body only when the grader or script calls it. Intermediate assignments prepare values; the final return/output is what decides whether the answer passes.');
+        }
+    }
 
     if (/\bpass\b/.test(code)) {
         verdict = 'likely_incorrect';
