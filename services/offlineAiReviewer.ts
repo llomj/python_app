@@ -1,8 +1,13 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { isAppleMobileBrowser, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm } from './webLlmReviewer';
+import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm } from './webLlmReviewer';
 
 const STORAGE_KEY = 'python_offline_ai_state';
+const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
+const LEGACY_MODEL_IDS = new Set([
+    'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    'Llama-3.2-1B-Instruct-q4f32_1-MLC',
+]);
 
 const formatOfflineAiError = (error: unknown) => {
     const message = String((error as { message?: unknown })?.message || error || 'Offline AI setup failed.');
@@ -18,7 +23,7 @@ const formatOfflineAiError = (error: unknown) => {
 export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
     enabled: false,
     status: 'not_installed',
-    modelId: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    modelId: DEFAULT_MODEL_ID,
     message: 'Offline AI reviewer is not installed.',
     progress: 0,
 };
@@ -27,6 +32,13 @@ export const loadOfflineAiState = (): OfflineAiState => {
     try {
         const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
         const persisted = { ...DEFAULT_OFFLINE_AI_STATE, ...parsed };
+
+        if (LEGACY_MODEL_IDS.has(String(persisted.modelId))) {
+            return {
+                ...DEFAULT_OFFLINE_AI_STATE,
+                message: 'Offline AI was switched to the lightweight phone model. Press Prepare Download to install it.',
+            };
+        }
 
         if (persisted.status === 'downloading') {
             return {
@@ -66,18 +78,6 @@ export const downloadOfflineAiModel = async (
     state: OfflineAiState,
     onState: (next: OfflineAiState) => void,
 ) => {
-    if (isAppleMobileBrowser()) {
-        const next = {
-            ...state,
-            enabled: false,
-            status: 'unsupported' as const,
-            message: 'Offline model download is disabled on iPhone/iPad right now because the local LLM runtime can reload or crash the app. Built-in AI review still works offline.',
-            progress: 0,
-        };
-        onState(next);
-        saveOfflineAiState(next);
-        return next;
-    }
     if (!supportsWebLlm()) {
         const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for offline AI.', progress: 0 };
         onState(next);
@@ -116,13 +116,6 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
     if (state.enabled && state.status === 'ready') {
-        if (isAppleMobileBrowser()) {
-            const diagnostic = buildDiagnosticReview(request);
-            return {
-                ...diagnostic,
-                explanation: `Offline model download is disabled on iPhone/iPad because the local LLM runtime is not stable in this app yet. Diagnostic review was used instead. ${diagnostic.explanation}`,
-            };
-        }
         if (!supportsWebLlm()) {
             const diagnostic = buildDiagnosticReview(request);
             return {

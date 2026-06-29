@@ -17,7 +17,7 @@ export const isAppleMobileBrowser = () => {
 };
 
 export const supportsWebLlm = () => {
-    return typeof navigator !== 'undefined' && !isAppleMobileBrowser() && 'gpu' in navigator;
+    return typeof navigator !== 'undefined' && 'gpu' in navigator;
 };
 
 const buildPrompt = (request: AiReviewRequest) => `
@@ -97,7 +97,7 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
             { role: 'user', content: buildPrompt(request) },
         ],
         temperature: 0.1,
-        max_tokens: 350,
+        max_tokens: 220,
         response_format: { type: 'json_object' },
     });
     return parseReviewJson(response?.choices?.[0]?.message?.content || '');
