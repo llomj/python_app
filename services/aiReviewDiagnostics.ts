@@ -94,10 +94,9 @@ const extractVariableNames = (code: string) => {
 const extractKeyPhrases = (text: string) => {
     const phrases: string[] = [];
     const patterns = [
-        /Write a Python program to ([^.]+)/i,
+        /Write a Python(?:ic)? (?:way|program) to ([^.]+)/i,
         /Create a function(?: called)? `?([A-Za-z_][A-Za-z0-9_]*)`?/i,
         /define\s+(?:a\s+)?function(?: called)? `?([A-Za-z_][A-Za-z0-9_]*)`?/i,
-        /using\s+([A-Za-z_][A-Za-z0-9_]*)/gi,
     ];
     for (const pattern of patterns) {
         const matches = text.matchAll(pattern);
@@ -106,6 +105,31 @@ const extractKeyPhrases = (text: string) => {
         }
     }
     return phrases;
+};
+
+const extractRequiredSyntax = (text: string) => {
+    const patterns: Array<{ regex: RegExp; label: string }> = [
+        { regex: /`list\.extend\(\)`|list\.extend|\.extend\(/i, label: '.extend()' },
+        { regex: /`list\.append\(\)`|list\.append|\.append\(/i, label: '.append()' },
+        { regex: /`list\.index\(\)`|list\.index|\.index\(/i, label: '.index()' },
+        { regex: /`list\.sort\(\)`|list\.sort|\.sort\(/i, label: '.sort()' },
+        { regex: /`list\.reverse\(\)`|list\.reverse|\.reverse\(/i, label: '.reverse()' },
+        { regex: /`list\.pop\(\)`|list\.pop|\.pop\(/i, label: '.pop()' },
+        { regex: /`list\.remove\(\)`|list\.remove|\.remove\(/i, label: '.remove()' },
+        { regex: /`list\.insert\(\)`|list\.insert|\.insert\(/i, label: '.insert()' },
+        { regex: /`list\.copy\(\)`|list\.copy|\.copy\(/i, label: '.copy()' },
+        { regex: /`list\.clear\(\)`|list\.clear|\.clear\(/i, label: '.clear()' },
+        { regex: /`dict\.(?:get|keys|values|items)\(\)`|dict\.(?:get|keys|values|items)\(/i, label: 'dict method' },
+        { regex: /`str\.(?:join|split|replace|strip|find)\(\)`|str\.(?:join|split|replace|strip|find)\(/i, label: 'string method' },
+        { regex: /`set`|`frozenset`/i, label: 'set/frozenset' },
+        { regex: /slicing/i, label: 'slicing' },
+        { regex: /comprehension/i, label: 'comprehension' },
+        { regex: /lambda/i, label: 'lambda' },
+        { regex: /decorator/i, label: 'decorator' },
+        { regex: /generator/i, label: 'generator' },
+        { regex: /recursion/i, label: 'recursion' },
+    ];
+    return patterns.filter(p => p.regex.test(text)).map(p => p.label);
 };
 
 const buildCodeComparisonReview = (userCode: string, solution: string, description: string): { notes: string[]; fixes: string[] } => {
@@ -205,6 +229,18 @@ const buildCodeComparisonReview = (userCode: string, solution: string, descripti
             if (solMatching) {
                 notes.push(`The problem mentions '${phrase}', but your code does not use that approach. The solution uses concepts related to: ${phrase}.`);
                 break;
+            }
+        }
+    }
+
+    const requiredSyntax = extractRequiredSyntax(description);
+    for (const syntax of requiredSyntax) {
+        const escapedSyntax = syntax.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        if (!new RegExp(escapedSyntax, 'i').test(userCode)) {
+            const solutionUsesIt = new RegExp(escapedSyntax, 'i').test(solution);
+            if (solutionUsesIt) {
+                notes.push(`The problem asks you to use ${syntax}, but your code does not contain ${syntax}. The solution uses ${syntax} to solve it.`);
+                fixes.push(`Use ${syntax} in your code as required by the problem statement.`);
             }
         }
     }

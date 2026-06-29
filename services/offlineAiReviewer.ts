@@ -212,27 +212,34 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 };
 
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
+    const diagnostic = buildDiagnosticReview(request);
+
     if (state.enabled && state.status === 'ready') {
         if (!supportsWebLlm()) {
-            const diagnostic = buildDiagnosticReview(request);
             return {
                 ...diagnostic,
-                explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead. ${diagnostic.explanation}`,
+                explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead.\n\n${diagnostic.explanation}`,
             };
         }
         try {
-            return await withTimeout(
+            const offlineResult = await withTimeout(
                 reviewWithWebLlm(request, state.modelId),
                 OFFLINE_AI_REVIEW_TIMEOUT_MS,
                 'Offline AI review timed out.',
             );
-        } catch (error) {
-            const diagnostic = buildDiagnosticReview(request);
-            return {
-                ...diagnostic,
-                explanation: `Offline model did not complete in time, so built-in offline review checked this code instead. ${diagnostic.explanation}`,
-            };
+            if (offlineResult.verdict !== 'unclear' && offlineResult.explanation.length > 20) {
+                return {
+                    ...diagnostic,
+                    confidence: Math.max(diagnostic.confidence, offlineResult.confidence),
+                    explanation: `${offlineResult.explanation}\n\n---\nBuilt-in analysis: ${diagnostic.explanation}`,
+                    suggestedFix: offlineResult.suggestedFix || diagnostic.suggestedFix,
+                    source: diagnostic.source,
+                };
+            }
+            return diagnostic;
+        } catch {
+            return diagnostic;
         }
     }
-    return buildDiagnosticReview(request);
+    return diagnostic;
 };
