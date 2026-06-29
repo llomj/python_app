@@ -9184,43 +9184,87 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </div>
                         )}
                         {showModal === 'hint' && (
-                            <div className="flex h-full min-h-0 flex-col">
-                                <h2 className="mb-3 text-lg font-bold text-[#3b82f6]">AI Review</h2>
-                                <div className="min-h-0 flex-1 overflow-y-auto rounded-2xl border border-[#1d2d44] bg-[#071225]/90 p-4 text-sm text-gray-200">
+                            <div className="flex h-full min-h-0 flex-col gap-3">
+                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>AI Review</h2>
+                                <div className="min-h-0 flex-1 overflow-y-auto -mx-1 px-1 space-y-3">
                                     {aiReviewRunning ? (
-                                        <p className="text-[#93c5fd]">Reviewing code...</p>
-                                    ) : latestAiReviewResult ? (
-                                        <div className="space-y-3">
-                                            <div className="flex flex-wrap items-center gap-2">
-                                                <span className="rounded-full border border-[#3b82f6]/40 bg-[#3b82f6]/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#93c5fd]">
-                                                    {latestAiReviewResult.verdict.replace('_', ' ')}
-                                                </span>
-                                                <span className="text-xs text-gray-400">
-                                                    Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source)}
-                                                </span>
-                                            </div>
-                                            <p className="whitespace-pre-wrap leading-relaxed">{latestAiReviewResult.explanation}</p>
-                                            {latestAiReviewResult.suggestedFix && (
-                                                <p className="rounded-xl border border-[#f59e0b]/30 bg-[#f59e0b]/10 p-3 text-[#fde68a]">
-                                                    {latestAiReviewResult.suggestedFix}
-                                                </p>
-                                            )}
-                                            {latestAiReviewResult.verdict === 'likely_correct' && latestAiReviewRequest?.graderPassed === false && (
-                                                <p className="rounded-xl border border-[#22c55e]/35 bg-[#22c55e]/10 p-3 text-[#86efac]">
-                                                    AI Suggested Win: review this answer and use the manual Win button if you agree.
-                                                </p>
-                                            )}
+                                        <div className="flex items-center justify-center py-12">
+                                            <p className="text-sm" style={{ color: hexToRgba(toolPanelColors.ai, 0.7) }}>Reviewing code...</p>
                                         </div>
                                     ) : (
-                                        <p className="whitespace-pre-wrap">{aiHintText || 'Press Run first for the strongest review, or press AI again to analyze the current code.'}</p>
+                                        <>
+                                            {/* Problem section */}
+                                            {exercise && (
+                                                <div className="rounded-2xl border p-3" style={{ borderColor: 'rgba(88, 118, 160, 0.25)', backgroundColor: 'rgba(8, 18, 34, 0.4)' }}>
+                                                    <div className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: countRowColors.rate }}>Problem {exercise.id}</div>
+                                                    <p className="text-[13px] leading-relaxed text-gray-200">{exercise.description}</p>
+                                                </div>
+                                            )}
+
+                                            {/* User code section */}
+                                            {latestAiReviewRequest?.userCode && (
+                                                <div className="rounded-2xl border overflow-hidden" style={{ borderColor: 'rgba(88, 118, 160, 0.25)' }}>
+                                                    <div className="flex items-center justify-between px-3 py-1.5" style={{ backgroundColor: 'rgba(8, 18, 34, 0.6)', borderBottom: '1px solid rgba(88, 118, 160, 0.15)' }}>
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Your Code</span>
+                                                        <span className="text-[10px] text-gray-500">{latestAiReviewRequest.userCode.split('\n').length} lines</span>
+                                                    </div>
+                                                    <div className="max-h-[240px] overflow-y-auto" style={{ backgroundColor: 'rgba(5, 12, 24, 0.5)' }}>
+                                                        <CodeMirror
+                                                            value={latestAiReviewRequest.userCode}
+                                                            height="auto"
+                                                            readOnly={true}
+                                                            extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                                                            theme="none"
+                                                            basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Analysis section */}
+                                            {latestAiReviewResult ? (
+                                                <div className="space-y-3">
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <span className="rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em]"
+                                                            style={{
+                                                                borderColor: latestAiReviewResult.verdict === 'likely_correct' ? 'rgba(34, 197, 94, 0.4)' : latestAiReviewResult.verdict === 'likely_incorrect' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(251, 191, 36, 0.4)',
+                                                                backgroundColor: latestAiReviewResult.verdict === 'likely_correct' ? 'rgba(34, 197, 94, 0.15)' : latestAiReviewResult.verdict === 'likely_incorrect' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(251, 191, 36, 0.15)',
+                                                                color: latestAiReviewResult.verdict === 'likely_correct' ? '#86efac' : latestAiReviewResult.verdict === 'likely_incorrect' ? '#fca5a5' : '#fde68a',
+                                                            }}
+                                                        >
+                                                            {latestAiReviewResult.verdict.replace('_', ' ')}
+                                                        </span>
+                                                        <span className="text-xs text-gray-400">
+                                                            Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source)}
+                                                        </span>
+                                                    </div>
+                                                    <p className="whitespace-pre-wrap leading-relaxed text-sm text-gray-200">{latestAiReviewResult.explanation}</p>
+                                                    {latestAiReviewResult.suggestedFix && (
+                                                        <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
+                                                            <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>Suggested Fix</div>
+                                                            <p className="whitespace-pre-wrap text-sm" style={{ color: '#fde68a' }}>{latestAiReviewResult.suggestedFix}</p>
+                                                        </div>
+                                                    )}
+                                                    {latestAiReviewResult.verdict === 'likely_correct' && latestAiReviewRequest?.graderPassed === false && (
+                                                        <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(34, 197, 94, 0.35)', backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>
+                                                            <p className="text-sm" style={{ color: '#86efac' }}>AI Suggested Win: review this answer and use the manual Win button if you agree.</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <p className="whitespace-pre-wrap text-sm text-gray-400">{aiHintText || 'Press Run first for the strongest review, or press AI again to analyze the current code.'}</p>
+                                            )}
+
+                                            {/* Grader message section */}
+                                            {latestAiReviewRequest?.graderMessage && (
+                                                <div className="rounded-2xl border max-h-36 overflow-y-auto p-3" style={{ borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.08)' }}>
+                                                    <div className="mb-1 text-[10px] font-black uppercase tracking-[0.12em]" style={{ color: '#fecaca' }}>Grader Message</div>
+                                                    <div className="whitespace-pre-wrap text-xs" style={{ color: '#fecaca' }}>{latestAiReviewRequest.graderMessage}</div>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
-                                {latestAiReviewRequest?.graderMessage && (
-                                    <div className="mt-3 max-h-36 overflow-y-auto rounded-2xl border border-[#ef4444]/30 bg-[#ef4444]/10 p-3 text-xs text-[#fecaca]">
-                                        <div className="mb-1 font-black uppercase tracking-[0.12em]">Grader Message</div>
-                                        <div className="whitespace-pre-wrap">{latestAiReviewRequest.graderMessage}</div>
-                                    </div>
-                                )}
                             </div>
                         )}
                         {showModal === 'customize' && (
