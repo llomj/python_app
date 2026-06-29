@@ -9467,16 +9467,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
-                                    <div className="space-y-2">
+                                    <div className="grid grid-cols-[1fr_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Shots</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
                                         {DIFFICULTY_MODES.map(mode => {
                                             const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
                                             const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
-                                            return (
-                                                <div key={mode.id} className="flex items-center justify-between gap-3 text-[11px] text-gray-300">
-                                                    <span className="font-bold uppercase tracking-[0.12em] text-gray-200">{mode.label}</span>
-                                                    <span className="font-mono">S:{modeStats.shots} W:{modeStats.success} F:{modeStats.failed} R:{modeRate}%</span>
-                                                </div>
-                                            );
+                                            return [
+                                                <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.12em] text-gray-200 truncate">{mode.label}</span>,
+                                                <span key={`${mode.id}-shots`} className="font-mono text-right">{modeStats.shots}</span>,
+                                                <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{modeStats.success}</span>,
+                                                <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{modeStats.failed}</span>,
+                                                <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: modeStats.shots > 0 ? countRowColors.rate : 'inherit' }}>{modeRate}%</span>,
+                                            ];
                                         })}
                                     </div>
                                 </div>
