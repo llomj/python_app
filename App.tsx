@@ -42,7 +42,7 @@ import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
-import { AiReviewRequest, AiReviewResult } from './aiReviewTypes';
+import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
@@ -69,6 +69,19 @@ interface AutoGradeResult {
     functionName?: string;
     output?: string;
 }
+
+const getOfflineAiStatusLabel = (status: OfflineAiStatus) => {
+    switch (status) {
+        case 'failed':
+            return 'model unavailable';
+        case 'unsupported':
+            return 'unsupported here';
+        case 'not_installed':
+            return 'not installed';
+        default:
+            return status;
+    }
+};
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
@@ -8111,7 +8124,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             setLatestAiReviewRequest(request);
             const review = await reviewWithAvailableAi(request, offlineAiState);
             const setupNote = offlineAiState.status !== 'ready'
-                ? `Offline model status: ${offlineAiState.status}. Using built-in diagnostic review.\n\n`
+                ? `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status)}. Built-in offline review is active.\n\n`
                 : '';
             const result = review.source === 'diagnostic' && setupNote
                 ? { ...review, explanation: `${setupNote}${review.explanation}` }
@@ -8126,7 +8139,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             });
             const result = {
                 ...fallback,
-                explanation: `AI review failed, so built-in diagnostic review was used. ${fallback.explanation}`,
+                explanation: `AI review could not complete, so built-in offline review checked this code instead. ${fallback.explanation}`,
             };
             setLatestAiReviewResult(result);
             setAiHintText(`${result.verdict.replace('_', ' ').toUpperCase()}\n\n${result.explanation}${result.suggestedFix ? `\n\nSuggested fix: ${result.suggestedFix}` : ''}`);
@@ -9323,7 +9336,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         </button>
                                     </div>
                                     <div className="mt-3 text-xs text-gray-400">
-                                        Status: {offlineAiState.status} · Model: {offlineAiState.modelId}
+                                        Status: {getOfflineAiStatusLabel(offlineAiState.status)} · Model: {offlineAiState.modelId}
                                     </div>
                                 </div>
 
@@ -9619,10 +9632,6 @@ const ColorField: React.FC<{ label: string; value: string; onChange: (value: str
             aria-label={`${label} color`}
         />
     </label>
-);
-
-const X = ({ size, className }: { size: number, className?: string }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
 );
 
 export default App;

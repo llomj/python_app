@@ -4,7 +4,7 @@ import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebL
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
-const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 180000;
+const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 90000;
 const OFFLINE_AI_REVIEW_TIMEOUT_MS = 20000;
 const LEGACY_MODEL_IDS = new Set([
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
@@ -28,12 +28,17 @@ const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, message: 
 const formatOfflineAiError = (error: unknown) => {
     const message = String((error as { message?: unknown })?.message || error || 'Offline AI setup failed.');
     if (/importing a module script failed|failed to fetch dynamically imported module|error loading dynamically imported module|load failed/i.test(message)) {
-        return 'Offline AI runtime could not load in this browser/app. Built-in AI review still works; refresh after the update or try a browser with WebGPU support.';
+        return 'Offline model is unavailable in this browser/app. Built-in offline review is active.';
     }
     if (/webgpu|gpu/i.test(message)) {
-        return 'This browser does not expose WebGPU for offline AI. Built-in AI review will still work.';
+        return 'This browser does not expose WebGPU for the offline model. Built-in offline review is active.';
     }
     return message;
+};
+
+const isUnsupportedOfflineAiError = (error: unknown) => {
+    const message = String((error as { message?: unknown })?.message || error || '');
+    return /importing a module script failed|failed to fetch dynamically imported module|error loading dynamically imported module|load failed|webgpu|gpu/i.test(message);
 };
 
 export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
@@ -95,30 +100,35 @@ export const downloadOfflineAiModel = async (
     onState: (next: OfflineAiState) => void,
 ) => {
     if (!supportsWebLlm()) {
-        const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for offline AI.', progress: 0 };
+        const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for the offline model. Built-in offline review is active.', progress: 0 };
         onState(next);
         saveOfflineAiState(next);
         return next;
     }
-    const downloading = { ...state, enabled: true, status: 'downloading' as const, message: 'Downloading offline AI model...', progress: 0 };
+    const downloading = { ...state, enabled: true, status: 'downloading' as const, message: 'Preparing offline model. Built-in offline review still works while this downloads.', progress: 0 };
     onState(downloading);
+    let acceptProgress = true;
     try {
         await withTimeout(
             loadWebLlmReviewer(state.modelId, (progress, message) => {
-                onState({ ...downloading, status: 'downloading', progress, message });
+                if (acceptProgress) {
+                    onState({ ...downloading, status: 'downloading', progress, message });
+                }
             }),
             OFFLINE_AI_DOWNLOAD_TIMEOUT_MS,
-            'Offline AI model download timed out. Built-in AI review still works.',
+            'Offline model setup is taking too long. Built-in offline review is active; try Prepare Download again on Wi-Fi.',
         );
+        acceptProgress = false;
         const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline AI reviewer is ready.', progress: 1 };
         onState(ready);
         saveOfflineAiState(ready);
         return ready;
     } catch (error) {
+        acceptProgress = false;
         const failed = {
             ...state,
             enabled: false,
-            status: 'failed' as const,
+            status: isUnsupportedOfflineAiError(error) ? 'unsupported' as const : 'failed' as const,
             message: formatOfflineAiError(error),
             progress: 0,
         };
@@ -140,7 +150,7 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
             const diagnostic = buildDiagnosticReview(request);
             return {
                 ...diagnostic,
-                explanation: `Offline AI is marked ready, but this browser does not expose WebGPU. Diagnostic review was used instead. ${diagnostic.explanation}`,
+                explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead. ${diagnostic.explanation}`,
             };
         }
         try {
@@ -153,7 +163,7 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
             const diagnostic = buildDiagnosticReview(request);
             return {
                 ...diagnostic,
-                explanation: `Offline AI failed or timed out, so diagnostic review was used. ${diagnostic.explanation}`,
+                explanation: `Offline model did not complete in time, so built-in offline review checked this code instead. ${diagnostic.explanation}`,
             };
         }
     }
