@@ -7225,7 +7225,12 @@ const App: React.FC = () => {
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
-    const [plainLogContent, setPlainLogContent] = useState(() => localStorage.getItem('python_plain_log') || '');
+    const [logExpanded, setLogExpanded] = useState(false);
+    const [showSnippetSaveInput, setShowSnippetSaveInput] = useState(false);
+    const [snippetNameInput, setSnippetNameInput] = useState('');
+    const [savedSnippets, setSavedSnippets] = useState<Array<{ id: number; name: string; content: string; savedAt: string }>>(() => {
+        try { return JSON.parse(localStorage.getItem('python_saved_snippets') || '[]'); } catch { return []; }
+    });
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
     const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
@@ -7457,8 +7462,8 @@ const App: React.FC = () => {
     }, [plainMode]);
 
     useEffect(() => {
-        localStorage.setItem('python_plain_log', plainLogContent);
-    }, [plainLogContent]);
+        localStorage.setItem('python_saved_snippets', JSON.stringify(savedSnippets));
+    }, [savedSnippets]);
 
     const playKeyboardFeedback = useCallback(() => {
         const now = performance.now();
@@ -8526,28 +8531,86 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             borderColor: 'rgba(88, 118, 160, 0.25)'
                         }}
                     >
-                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1">
-                            <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-between gap-3 px-4 py-3">
+                            <button
+                                onClick={() => { setLogExpanded(prev => !prev); setShowSnippetSaveInput(false); }}
+                                className="flex items-center gap-2 flex-1 text-left"
+                            >
                                 <FileText size={14} style={{ color: countRowColors.rate }} />
                                 <h3 className="text-[11px] font-black uppercase tracking-[0.16em] text-gray-300">Log</h3>
-                            </div>
-                            <button
-                                onClick={() => setPlainLogContent('')}
-                                className="text-[10px] px-2 py-1 rounded-md transition-all hover:brightness-125"
-                                style={{ color: toolPanelColors.failed, border: `1px solid ${hexToRgba(toolPanelColors.failed, 0.3)}` }}
-                                title="Clear log"
-                            >
-                                Clear
+                                {savedSnippets.length > 0 && (
+                                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: hexToRgba(countRowColors.rate, 0.2), color: countRowColors.rate }}>{savedSnippets.length}</span>
+                                )}
+                                <ChevronDown size={12} className="text-gray-500" style={{ transform: logExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
                             </button>
+                            {showSnippetSaveInput ? (
+                                <div className="flex items-center gap-1">
+                                    <input
+                                        autoFocus
+                                        value={snippetNameInput}
+                                        onChange={(e) => setSnippetNameInput(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && snippetNameInput.trim()) {
+                                                setSavedSnippets(prev => [...prev, { id: Date.now(), name: snippetNameInput.trim(), content: files[activeFileIndex]?.content || '', savedAt: new Date().toISOString() }]);
+                                                setSnippetNameInput('');
+                                                setShowSnippetSaveInput(false);
+                                            }
+                                            if (e.key === 'Escape') { setShowSnippetSaveInput(false); setSnippetNameInput(''); }
+                                        }}
+                                        placeholder="Snippet name..."
+                                        className="bg-[#050c18] border border-[#1d2d44] rounded px-2 py-1 text-[10px] text-white outline-none w-24"
+                                    />
+                                    <button
+                                        onClick={() => { setShowSnippetSaveInput(false); setSnippetNameInput(''); }}
+                                        className="text-[10px] px-1.5 py-1 rounded-md transition-all hover:brightness-125 text-gray-400"
+                                    >
+                                        <X size={12} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => { setSnippetNameInput(''); setShowSnippetSaveInput(true); }}
+                                    className="text-[10px] px-3 py-1.5 rounded-lg transition-all hover:brightness-125 font-bold"
+                                    style={{ backgroundColor: hexToRgba(countRowColors.count, 0.15), color: countRowColors.count, border: `1px solid ${hexToRgba(countRowColors.count, 0.35)}` }}
+                                >
+                                    Save
+                                </button>
+                            )}
                         </div>
-                        <textarea
-                            value={plainLogContent}
-                            onChange={(e) => setPlainLogContent(e.target.value)}
-                            className="w-full bg-transparent text-[11px] font-mono text-gray-300 px-4 py-2 outline-none resize-none"
-                            style={{ minHeight: '80px', maxHeight: '200px' }}
-                            placeholder="Paste notes, snippets, or log your code here..."
-                            spellCheck={false}
-                        />
+                        {logExpanded && (
+                            <div className="border-t border-[#1d2d44] max-h-[240px] overflow-y-auto">
+                                {savedSnippets.length === 0 ? (
+                                    <p className="text-[11px] text-gray-400 italic px-4 py-3">No saved snippets yet. Press Save to save your current code.</p>
+                                ) : (
+                                    savedSnippets.map(snippet => (
+                                        <div
+                                            key={snippet.id}
+                                            className="flex items-center justify-between gap-2 px-4 py-2 cursor-pointer transition-all hover:bg-[#0d1b2a]/50 border-b border-[#1d2d44]/50 last:border-b-0"
+                                            onClick={() => {
+                                                const updatedFiles = [...files];
+                                                if (updatedFiles[activeFileIndex]) {
+                                                    updatedFiles[activeFileIndex].content = snippet.content;
+                                                    setFiles(updatedFiles);
+                                                }
+                                            }}
+                                        >
+                                            <div className="flex-1 min-w-0">
+                                                <span className="text-[11px] font-bold text-gray-200 block truncate">{snippet.name}</span>
+                                                <span className="text-[9px] text-gray-500 block truncate">{snippet.content.slice(0, 80)}{snippet.content.length > 80 ? '...' : ''}</span>
+                                            </div>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setSavedSnippets(prev => prev.filter(s => s.id !== snippet.id)); }}
+                                                className="p-1 rounded-md transition-all hover:brightness-125 flex-shrink-0"
+                                                style={{ color: toolPanelColors.failed }}
+                                                title="Delete snippet"
+                                            >
+                                                <Trash2 size={12} />
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
                     </div>
                     </>
                 ) : (
