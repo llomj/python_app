@@ -1,11 +1,13 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm } from './webLlmReviewer';
+import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer } from './webLlmReviewer';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
-const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 90000;
-const OFFLINE_AI_REVIEW_TIMEOUT_MS = 20000;
+const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 180000;
+const OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS = 60000;
+const OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS = 30000;
+const OFFLINE_AI_REVIEW_TIMEOUT_MS = 45000;
 const LEGACY_MODEL_IDS = new Set([
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Llama-3.2-1B-Instruct-q4f32_1-MLC',
@@ -25,6 +27,41 @@ const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, message: 
     }
 };
 
+const withActivityTimeout = async <T,>(
+    promise: Promise<T>,
+    getActivityKey: () => string,
+    stallTimeoutMs: number,
+    totalTimeoutMs: number,
+    stallMessage: string,
+    totalMessage: string,
+): Promise<T> => {
+    let monitorId: ReturnType<typeof setInterval> | undefined;
+    let totalId: ReturnType<typeof setTimeout> | undefined;
+    let lastActivityKey = getActivityKey();
+    let lastActivityAt = Date.now();
+
+    const timeout = new Promise<never>((_, reject) => {
+        monitorId = setInterval(() => {
+            const nextActivityKey = getActivityKey();
+            if (nextActivityKey !== lastActivityKey) {
+                lastActivityKey = nextActivityKey;
+                lastActivityAt = Date.now();
+            }
+            if (Date.now() - lastActivityAt >= stallTimeoutMs) {
+                reject(new Error(stallMessage));
+            }
+        }, 1000);
+        totalId = setTimeout(() => reject(new Error(totalMessage)), totalTimeoutMs);
+    });
+
+    try {
+        return await Promise.race([promise, timeout]);
+    } finally {
+        if (monitorId) clearInterval(monitorId);
+        if (totalId) clearTimeout(totalId);
+    }
+};
+
 const formatOfflineAiError = (error: unknown) => {
     const message = String((error as { message?: unknown })?.message || error || 'Offline AI setup failed.');
     if (/importing a module script failed|failed to fetch dynamically imported module|error loading dynamically imported module|load failed/i.test(message)) {
@@ -32,6 +69,9 @@ const formatOfflineAiError = (error: unknown) => {
     }
     if (/webgpu|gpu/i.test(message)) {
         return 'This browser does not expose WebGPU for the offline model. Built-in offline review is active.';
+    }
+    if (/progress|taking too long|did not answer/i.test(message)) {
+        return message;
     }
     return message;
 };
@@ -47,6 +87,7 @@ export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
     modelId: DEFAULT_MODEL_ID,
     message: 'Offline AI reviewer is not installed.',
     progress: 0,
+    startedAt: undefined,
 };
 
 export const loadOfflineAiState = (): OfflineAiState => {
@@ -64,10 +105,11 @@ export const loadOfflineAiState = (): OfflineAiState => {
         if (persisted.status === 'downloading') {
             return {
                 ...persisted,
-                enabled: true,
+                enabled: false,
                 status: 'failed',
                 message: 'Previous offline AI download was interrupted. Start the download again to finish setup.',
                 progress: 0,
+                startedAt: undefined,
             };
         }
 
@@ -78,6 +120,14 @@ export const loadOfflineAiState = (): OfflineAiState => {
                 status: 'failed',
                 message: 'Previous offline AI removal was interrupted. Retry removal or download the model again.',
                 progress: 0,
+                startedAt: undefined,
+            };
+        }
+
+        if (persisted.status !== 'ready' && persisted.enabled) {
+            return {
+                ...persisted,
+                enabled: false,
             };
         }
 
@@ -100,37 +150,54 @@ export const downloadOfflineAiModel = async (
     onState: (next: OfflineAiState) => void,
 ) => {
     if (!supportsWebLlm()) {
-        const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for the offline model. Built-in offline review is active.', progress: 0 };
+        const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for the offline model. Built-in offline review is active.', progress: 0, startedAt: undefined };
         onState(next);
         saveOfflineAiState(next);
         return next;
     }
-    const downloading = { ...state, enabled: true, status: 'downloading' as const, message: 'Preparing offline model. Built-in offline review still works while this downloads.', progress: 0 };
+    const downloading = { ...state, enabled: false, status: 'downloading' as const, message: 'Preparing offline model. Built-in offline review still works while this downloads.', progress: 0, startedAt: Date.now() };
     onState(downloading);
     let acceptProgress = true;
+    let latestProgress = 0;
+    let latestMessage = downloading.message;
     try {
-        await withTimeout(
+        await withActivityTimeout(
             loadWebLlmReviewer(state.modelId, (progress, message) => {
+                latestProgress = progress;
+                latestMessage = message;
                 if (acceptProgress) {
                     onState({ ...downloading, status: 'downloading', progress, message });
                 }
             }),
+            () => `${Math.round(latestProgress * 1000)}:${latestMessage}`,
+            OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS,
             OFFLINE_AI_DOWNLOAD_TIMEOUT_MS,
+            'Offline model download made no visible progress for 60 seconds. Built-in offline review is active; try again on Wi-Fi.',
             'Offline model setup is taking too long. Built-in offline review is active; try Prepare Download again on Wi-Fi.',
         );
+        if (acceptProgress) {
+            onState({ ...downloading, status: 'downloading', progress: Math.max(downloading.progress, 0.96), message: 'Testing offline model response...' });
+        }
+        await withTimeout(
+            testWebLlmReviewer(state.modelId),
+            OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS,
+            'Offline model loaded but did not answer the test prompt in time. Built-in offline review is active.',
+        );
         acceptProgress = false;
-        const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline AI reviewer is ready.', progress: 1 };
+        const ready = { ...state, enabled: true, status: 'ready' as const, message: 'Offline model installed and tested. Model review is on.', progress: 1, startedAt: undefined };
         onState(ready);
         saveOfflineAiState(ready);
         return ready;
     } catch (error) {
         acceptProgress = false;
+        await resetWebLlmReviewer(state.modelId).catch(() => undefined);
         const failed = {
             ...state,
             enabled: false,
             status: isUnsupportedOfflineAiError(error) ? 'unsupported' as const : 'failed' as const,
             message: formatOfflineAiError(error),
             progress: 0,
+            startedAt: undefined,
         };
         onState(failed);
         saveOfflineAiState(failed);

@@ -30,7 +30,6 @@ import {
     Volume2,
     Vibrate,
     X,
-    Check,
     ChevronDown,
     ChevronUp,
     Bookmark,
@@ -94,6 +93,23 @@ const getAiReviewSourceLabel = (source: AiReviewResult['source']) => {
         default:
             return source;
     }
+};
+
+const getOfflineAiProgressLabel = (status: OfflineAiStatus, progress: number) => {
+    if (status === 'ready') return '100%';
+    if (status === 'downloading') {
+        const percent = Math.max(0, Math.min(99, Math.round((progress || 0) * 100)));
+        return percent > 0 ? `${percent}%` : 'starting...';
+    }
+    return '0%';
+};
+
+const getOfflineAiElapsedLabel = (startedAt?: number, now = Date.now()) => {
+    if (!startedAt) return '';
+    const elapsedSeconds = Math.max(0, Math.floor((now - startedAt) / 1000));
+    const minutes = Math.floor(elapsedSeconds / 60);
+    const seconds = elapsedSeconds % 60;
+    return minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 };
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
@@ -7221,6 +7237,7 @@ const App: React.FC = () => {
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
     const [offlineAiState, setOfflineAiState] = useState(() => loadOfflineAiState());
+    const [offlineAiNow, setOfflineAiNow] = useState(() => Date.now());
     const offlineAiOperationRef = useRef(0);
     const offlineAiBusy = offlineAiState.status === 'downloading' || offlineAiState.status === 'removing';
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
@@ -7447,6 +7464,12 @@ const App: React.FC = () => {
     useEffect(() => {
         saveOfflineAiState(offlineAiState);
     }, [offlineAiState]);
+
+    useEffect(() => {
+        if (offlineAiState.status !== 'downloading') return;
+        const intervalId = window.setInterval(() => setOfflineAiNow(Date.now()), 1000);
+        return () => window.clearInterval(intervalId);
+    }, [offlineAiState.status]);
 
     useEffect(() => {
         keyboardHapticsRef.current = keyboardHaptics;
@@ -9627,17 +9650,65 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         <button
                                             onClick={() => {
                                                 if (offlineAiBusy) return;
-                                                setOfflineAiState(prev => ({
-                                                    ...prev,
-                                                    enabled: !prev.enabled,
-                                                    message: !prev.enabled ? 'Offline AI reviewer enabled. Model is not installed yet.' : 'Offline AI reviewer disabled.',
-                                                }));
+                                                setOfflineAiState(prev => {
+                                                    if (prev.status !== 'ready' && !prev.enabled) {
+                                                        return {
+                                                            ...prev,
+                                                            enabled: false,
+                                                            message: 'Download and test the offline model before turning model review on.',
+                                                        };
+                                                    }
+                                                    return {
+                                                        ...prev,
+                                                        enabled: !prev.enabled,
+                                                        message: !prev.enabled ? 'Offline model review is on.' : 'Offline model review is off. Built-in offline review remains active.',
+                                                    };
+                                                });
                                             }}
                                             disabled={offlineAiBusy}
-                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
+                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled && offlineAiState.status === 'ready' ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
                                         >
-                                            {offlineAiState.enabled ? 'On' : 'Off'}
+                                            Model {offlineAiState.enabled && offlineAiState.status === 'ready' ? 'On' : 'Off'}
                                         </button>
+                                    </div>
+                                    <div className="mb-3 grid grid-cols-2 gap-2 text-[11px] font-black uppercase tracking-[0.12em]">
+                                        <div className="rounded-xl border border-[#1d2d44] bg-[#020817]/60 p-3 text-gray-300">
+                                            <div className="text-gray-500">Installed</div>
+                                            <div className={offlineAiState.status === 'ready' ? 'mt-1 text-[#86efac]' : 'mt-1 text-[#fca5a5]'}>
+                                                {offlineAiState.status === 'ready' ? 'Yes' : 'No'}
+                                            </div>
+                                        </div>
+                                        <div className="rounded-xl border border-[#1d2d44] bg-[#020817]/60 p-3 text-gray-300">
+                                            <div className="text-gray-500">Using Model</div>
+                                            <div className={offlineAiState.enabled && offlineAiState.status === 'ready' ? 'mt-1 text-[#86efac]' : 'mt-1 text-gray-400'}>
+                                                {offlineAiState.enabled && offlineAiState.status === 'ready' ? 'On' : 'Off'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-3 rounded-2xl border border-[#1d2d44] bg-[#020817]/60 p-3">
+                                        <div className="mb-2 flex items-center justify-between gap-3 text-[11px] font-black uppercase tracking-[0.12em] text-gray-400">
+                                            <span>Download / Test</span>
+                                            <span>
+                                                {getOfflineAiProgressLabel(offlineAiState.status, offlineAiState.progress)}
+                                                {offlineAiState.status === 'downloading' && offlineAiState.startedAt ? ` · ${getOfflineAiElapsedLabel(offlineAiState.startedAt, offlineAiNow)}` : ''}
+                                            </span>
+                                        </div>
+                                        <div className="h-3 overflow-hidden rounded-full bg-[#0f172a] ring-1 ring-[#1d2d44]">
+                                            <div
+                                                className={`h-full rounded-full bg-gradient-to-r from-[#38bdf8] via-[#3b82f6] to-[#22c55e] transition-all duration-500 ${offlineAiState.status === 'downloading' && !offlineAiState.progress ? 'animate-pulse' : ''}`}
+                                                style={{
+                                                    width: offlineAiState.status === 'ready'
+                                                        ? '100%'
+                                                        : offlineAiState.status === 'downloading'
+                                                            ? `${Math.max(8, Math.min(99, Math.round((offlineAiState.progress || 0) * 100)))}%`
+                                                            : '0%',
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="mt-2 text-[11px] leading-relaxed text-gray-400">
+                                            Status: {getOfflineAiStatusLabel(offlineAiState.status)} · Model: {offlineAiState.modelId}
+                                            {offlineAiState.status === 'downloading' ? ' · Built-in review stays active during setup.' : ''}
+                                        </div>
                                     </div>
                                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                                         <button
@@ -9664,10 +9735,19 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             disabled={offlineAiBusy}
                                             className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd] disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            Prepare Download
+                                            {offlineAiState.status === 'ready' ? 'Re-Test Download' : offlineAiState.status === 'downloading' ? 'Preparing...' : 'Prepare Download'}
                                         </button>
                                         <button
                                             onClick={() => {
+                                                if (offlineAiState.status === 'downloading') {
+                                                    ++offlineAiOperationRef.current;
+                                                    setOfflineAiState({
+                                                        ...DEFAULT_OFFLINE_AI_STATE,
+                                                        message: 'Offline model setup canceled. Built-in offline review is active.',
+                                                    });
+                                                    void removeOfflineAiModel(offlineAiState.modelId).catch(() => undefined);
+                                                    return;
+                                                }
                                                 if (offlineAiBusy) return;
                                                 const operationId = ++offlineAiOperationRef.current;
                                                 setOfflineAiState(prev => ({
@@ -9687,14 +9767,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                     }
                                                 });
                                             }}
-                                            disabled={offlineAiBusy}
+                                            disabled={offlineAiState.status === 'removing'}
                                             className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca] disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            Remove Offline AI
+                                            {offlineAiState.status === 'downloading' ? 'Cancel Setup' : 'Remove Offline AI'}
                                         </button>
-                                    </div>
-                                    <div className="mt-3 text-xs text-gray-400">
-                                        Status: {getOfflineAiStatusLabel(offlineAiState.status)} · Model: {offlineAiState.modelId}
                                     </div>
                                 </div>
 

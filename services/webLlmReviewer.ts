@@ -17,24 +17,27 @@ export const isAppleMobileBrowser = () => {
 };
 
 export const supportsWebLlm = () => {
-    return typeof navigator !== 'undefined' && 'gpu' in navigator;
+    if (typeof navigator === 'undefined') {
+        return false;
+    }
+    const nav = navigator as Navigator & { gpu?: { requestAdapter?: unknown } };
+    return Boolean(nav.gpu && typeof nav.gpu.requestAdapter === 'function');
 };
 
-const buildPrompt = (request: AiReviewRequest) => `
-You are an offline Python code reviewer inside a learning app.
-Return only JSON with keys: verdict, confidence, explanation, suggestedFix.
-Allowed verdict values: likely_correct, likely_incorrect, unclear.
-Do not award points. Do not claim certainty.
+const clampText = (text: string, maxLength: number) => (
+    text.length > maxLength ? `${text.slice(0, maxLength)}...` : text
+);
 
-Problem ${request.problemId}: ${request.title}
-Description: ${request.description}
-Grader passed: ${request.graderPassed}
-Grader message: ${request.graderMessage}
-Program output: ${request.programOutput || ''}
-User code:
-\`\`\`python
-${request.userCode}
-\`\`\`
+const buildPrompt = (request: AiReviewRequest) => `
+Review this beginner Python answer. Return compact JSON only:
+{"verdict":"likely_correct|likely_incorrect|unclear","confidence":0.0,"explanation":"short reason","suggestedFix":"short fix"}
+
+Problem ${request.problemId}: ${clampText(request.title || request.description, 1200)}
+Grader passed: ${request.graderPassed ? 'yes' : 'no'}
+Grader message: ${clampText(request.graderMessage, 500)}
+Output: ${clampText(request.programOutput || '', 500)}
+Code:
+${clampText(request.userCode, 1800)}
 `;
 
 const parseReviewJson = (text: string): AiReviewResult => {
@@ -93,24 +96,40 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You review beginner Python code and return strict JSON only.' },
+            { role: 'system', content: 'You are a concise Python tutor. Return JSON only.' },
             { role: 'user', content: buildPrompt(request) },
         ],
-        temperature: 0.1,
-        max_tokens: 220,
-        response_format: { type: 'json_object' },
+        temperature: 0,
+        max_tokens: 140,
     });
     return parseReviewJson(response?.choices?.[0]?.message?.content || '');
 };
 
+export const testWebLlmReviewer = async (modelId: string) => {
+    const engine = await loadWebLlmReviewer(modelId);
+    const response = await engine.chat.completions.create({
+        messages: [
+            { role: 'system', content: 'Return only the word ready.' },
+            { role: 'user', content: 'Health check.' },
+        ],
+        temperature: 0,
+        max_tokens: 8,
+    });
+    const text = String(response?.choices?.[0]?.message?.content || '').trim();
+    if (!text) {
+        throw new Error('Offline model loaded but did not return a test response.');
+    }
+    return text;
+};
+
 export const resetWebLlmReviewer = async (modelId?: string) => {
     const pendingEngine = enginePromise;
+    enginePromise = null;
 
     if (pendingEngine) {
-        const engine = await pendingEngine.catch(() => null);
-        if (engine?.unload) {
-            await engine.unload();
-        }
+        pendingEngine
+            .then(engine => engine?.unload?.())
+            .catch(() => undefined);
     }
 
     if (modelId && supportsWebLlm()) {
@@ -118,9 +137,5 @@ export const resetWebLlmReviewer = async (modelId?: string) => {
         if (typeof webllm.deleteModelAllInfoInCache === 'function') {
             await webllm.deleteModelAllInfoInCache(modelId);
         }
-    }
-
-    if (enginePromise === pendingEngine) {
-        enginePromise = null;
     }
 };

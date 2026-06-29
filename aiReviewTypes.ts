@@ -35,4 +35,5 @@ export interface OfflineAiState {
     modelId: string;
     message: string;
     progress: number;
+    startedAt?: number;
 }
