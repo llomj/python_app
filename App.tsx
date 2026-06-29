@@ -30,6 +30,7 @@ import {
     Volume2,
     Vibrate,
     X,
+    Check,
     ChevronDown,
     ChevronUp,
     Bookmark,
@@ -8560,6 +8561,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         placeholder="Snippet name..."
                                         className="bg-[#050c18] border border-[#1d2d44] rounded px-2 py-1 text-[10px] text-white outline-none w-24"
                                     />
+                                    <button
+                                        onClick={() => {
+                                            if (snippetNameInput.trim()) {
+                                                setSavedSnippets(prev => [...prev, { id: Date.now(), name: snippetNameInput.trim(), content: files[activeFileIndex]?.content || '', savedAt: new Date().toISOString() }]);
+                                                setSnippetNameInput('');
+                                                setShowSnippetSaveInput(false);
+                                            }
+                                        }}
+                                        className="text-[10px] px-1.5 py-1 rounded-md transition-all hover:brightness-125"
+                                        style={{ color: countRowColors.count }}
+                                        title="Save snippet"
+                                    >
+                                        <Check size={12} />
+                                    </button>
                                     <button
                                         onClick={() => { setShowSnippetSaveInput(false); setSnippetNameInput(''); }}
                                         className="text-[10px] px-1.5 py-1 rounded-md transition-all hover:brightness-125 text-gray-400"
