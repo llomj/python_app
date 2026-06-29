@@ -94,9 +94,9 @@ const extractVariableNames = (code: string) => {
 const extractKeyPhrases = (text: string) => {
     const phrases: string[] = [];
     const patterns = [
-        /Write a Python(?:ic)? (?:way|program) to ([^.]+)/i,
-        /Create a function(?: called)? `?([A-Za-z_][A-Za-z0-9_]*)`?/i,
-        /define\s+(?:a\s+)?function(?: called)? `?([A-Za-z_][A-Za-z0-9_]*)`?/i,
+        /Write a Python(?:ic)? (?:way|program) to ([^.]+)/gi,
+        /Create a function(?: called)? `?([A-Za-z_][A-Za-z0-9_]*)`?/gi,
+        /define\s+(?:a\s+)?function(?: called)? `?([A-Za-z_][A-Za-z0-9_]*)`?/gi,
     ];
     for (const pattern of patterns) {
         const matches = text.matchAll(pattern);

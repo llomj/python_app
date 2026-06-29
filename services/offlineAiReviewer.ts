@@ -5,12 +5,18 @@ import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 
 const STORAGE_KEY = 'python_offline_ai_state';
-const DEFAULT_MODEL_ID = 'SmolLM2-135M-Instruct-q0f16-MLC';
+const DEFAULT_MODEL_ID = 'Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC';
 const OFFLINE_AI_DOWNLOAD_TIMEOUT_MS = 180000;
 const OFFLINE_AI_DOWNLOAD_STALL_TIMEOUT_MS = 60000;
 const OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS = 30000;
-const OFFLINE_AI_REVIEW_TIMEOUT_MS = 8000;
+const OFFLINE_AI_REVIEW_TIMEOUT_MS = 45000;
 const LEGACY_MODEL_IDS = new Set([
+    'SmolLM2-135M-Instruct-q0f16-MLC',
+    'SmolLM2-135M-Instruct-q0f32-MLC',
+    'SmolLM2-360M-Instruct-q0f16-MLC',
+    'SmolLM2-360M-Instruct-q0f32-MLC',
+    'SmolLM2-360M-Instruct-q4f16_1-MLC',
+    'SmolLM2-360M-Instruct-q4f32_1-MLC',
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Llama-3.2-1B-Instruct-q4f32_1-MLC',
 ]);
@@ -100,7 +106,7 @@ export const loadOfflineAiState = (): OfflineAiState => {
         if (LEGACY_MODEL_IDS.has(String(persisted.modelId))) {
             return {
                 ...DEFAULT_OFFLINE_AI_STATE,
-                message: 'Offline AI was switched to the lightweight phone model. Press Prepare Download to install it.',
+                message: 'Offline AI was switched to the coding model. Press Prepare Download to install it.',
             };
         }
 
@@ -216,6 +222,34 @@ export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.mo
 export const reviewWithAvailableAi = async (request: AiReviewRequest, state: OfflineAiState): Promise<AiReviewResult> => {
     const diagnostic = buildDiagnosticReview(request);
 
+    if (state.enabled && state.status === 'ready') {
+        if (!supportsWebLlm()) {
+            return {
+                ...diagnostic,
+                explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead.\n\n${diagnostic.explanation}`,
+            };
+        }
+        try {
+            const offlineResult = await withTimeout(
+                reviewWithWebLlm(request, state.modelId),
+                OFFLINE_AI_REVIEW_TIMEOUT_MS,
+                'Offline AI review timed out.',
+            );
+            if (offlineResult.verdict !== 'unclear' && offlineResult.explanation.length > 20) {
+                return {
+                    ...offlineResult,
+                    confidence: Math.max(offlineResult.confidence, diagnostic.confidence),
+                    explanation: `${offlineResult.explanation}\n\n---\nBuilt-in analysis: ${diagnostic.explanation}`,
+                    suggestedFix: offlineResult.suggestedFix || diagnostic.suggestedFix,
+                    source: 'offline_model',
+                };
+            }
+            return diagnostic;
+        } catch {
+            return diagnostic;
+        }
+    }
+
     const ollamaOnline = await isOllamaRunning();
     if (ollamaOnline) {
         const ollamaModel = await findAvailableCodeModel();
@@ -245,32 +279,5 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
         }
     }
 
-    if (state.enabled && state.status === 'ready') {
-        if (!supportsWebLlm()) {
-            return {
-                ...diagnostic,
-                explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead.\n\n${diagnostic.explanation}`,
-            };
-        }
-        try {
-            const offlineResult = await withTimeout(
-                reviewWithWebLlm(request, state.modelId),
-                OFFLINE_AI_REVIEW_TIMEOUT_MS,
-                'Offline AI review timed out.',
-            );
-            if (offlineResult.verdict !== 'unclear' && offlineResult.explanation.length > 20) {
-                return {
-                    ...diagnostic,
-                    confidence: Math.max(diagnostic.confidence, offlineResult.confidence),
-                    explanation: `${offlineResult.explanation}\n\n---\nBuilt-in analysis: ${diagnostic.explanation}`,
-                    suggestedFix: offlineResult.suggestedFix || diagnostic.suggestedFix,
-                    source: diagnostic.source,
-                };
-            }
-            return diagnostic;
-        } catch {
-            return diagnostic;
-        }
-    }
     return diagnostic;
 };

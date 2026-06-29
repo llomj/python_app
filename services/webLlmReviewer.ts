@@ -29,8 +29,15 @@ const clampText = (text: string, maxLength: number) => (
 );
 
 const buildPrompt = (request: AiReviewRequest) => `
-Review this beginner Python answer against the problem and solution. Return JSON only:
-{"verdict":"likely_correct|likely_incorrect|unclear","confidence":0.0,"explanation":"what the user did wrong and step-by-step fix","suggestedFix":"concise fix"}
+Review this beginner Python answer against the exact problem, grader result, and program output.
+Return JSON only:
+{"verdict":"likely_correct|likely_incorrect|unclear","confidence":0.0,"explanation":"specific review","suggestedFix":"specific fix or empty"}
+
+Rules:
+- If the grader passed, explain why the code satisfies the prompt.
+- If the grader failed, identify the exact mismatch between prompt, code, output, and expected behavior.
+- Mention missing return values, wrong function names, wrong parameters, forbidden APIs, and edge cases when relevant.
+- Put corrected Python code in suggestedFix when useful.
 
 Problem ${request.problemId}
 Title: ${clampText(request.title, 300)}
@@ -45,7 +52,9 @@ ${request.visibleSolution ? `Expected solution:\n${clampText(request.visibleSolu
 
 const parseReviewJson = (text: string): AiReviewResult => {
     try {
-        const parsed = JSON.parse(text);
+        const cleaned = text.replace(/```json|```/g, '').trim();
+        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : cleaned);
         const verdict = parsed.verdict === 'likely_correct' || parsed.verdict === 'likely_incorrect' || parsed.verdict === 'unclear'
             ? parsed.verdict
             : 'unclear';
@@ -99,11 +108,11 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a concise Python tutor. Return JSON only.' },
+            { role: 'system', content: 'You are a precise Python tutor and code reviewer. Return valid JSON only.' },
             { role: 'user', content: buildPrompt(request) },
         ],
         temperature: 0.1,
-        max_tokens: 320,
+        max_tokens: 420,
     });
     return parseReviewJson(response?.choices?.[0]?.message?.content || '');
 };

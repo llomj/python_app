@@ -45,6 +45,7 @@ import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
+import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -114,6 +115,20 @@ const getOfflineAiElapsedLabel = (startedAt?: number, now = Date.now()) => {
     const minutes = Math.floor(elapsedSeconds / 60);
     const seconds = elapsedSeconds % 60;
     return minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+};
+
+const AI_REVIEW_UI_TIMEOUT_MS = 55000;
+
+const withAiReviewTimeout = async <T,>(promise: Promise<T>): Promise<T> => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error('AI review timed out.')), AI_REVIEW_UI_TIMEOUT_MS);
+    });
+    try {
+        return await Promise.race([promise, timeout]);
+    } finally {
+        if (timeoutId) clearTimeout(timeoutId);
+    }
 };
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
@@ -7173,6 +7188,74 @@ function SyntaxDocumentationPanel({ content }: { content: string }) {
     );
 }
 
+type AiTextPart =
+    | { type: 'text'; value: string }
+    | { type: 'code'; value: string };
+
+const parseAiTextParts = (text: string): AiTextPart[] => {
+    const parts: AiTextPart[] = [];
+    const fencePattern = /```(?:python|py)?\s*([\s\S]*?)```/gi;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = fencePattern.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+            parts.push({ type: 'text', value: text.slice(lastIndex, match.index) });
+        }
+        parts.push({ type: 'code', value: match[1].trim() });
+        lastIndex = fencePattern.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+        parts.push({ type: 'text', value: text.slice(lastIndex) });
+    }
+
+    return parts.filter(part => part.value.trim());
+};
+
+const looksLikePythonCode = (text: string) => {
+    const trimmed = text.trim();
+    return /\n/.test(trimmed) && /\b(def|class|return|if|for|while|import|from|print)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
+};
+
+function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean }) {
+    const parts = parseAiTextParts(text);
+    const renderCode = (code: string, key: string) => (
+        <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
+            <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
+                Python
+            </div>
+            <CodeMirror
+                value={code}
+                height="auto"
+                readOnly={true}
+                extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                theme="none"
+                basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
+            />
+        </div>
+    );
+
+    if (detectBareCode && parts.length === 1 && parts[0].type === 'text' && looksLikePythonCode(parts[0].value)) {
+        return renderCode(parts[0].value, 'ai-code-only');
+    }
+
+    return (
+        <div className="space-y-2 text-sm leading-relaxed text-gray-200">
+            {parts.map((part, index) => {
+                if (part.type === 'code' || (detectBareCode && looksLikePythonCode(part.value))) {
+                    return renderCode(part.value, `ai-code-${index}`);
+                }
+                return (
+                    <p key={`ai-text-${index}`} className="whitespace-pre-wrap">
+                        {part.value.trim()}
+                    </p>
+                );
+            })}
+        </div>
+    );
+}
+
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
@@ -8184,11 +8267,40 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         };
 
         setShowModal('hint');
-        setAiReviewRunning(true);
-        setAiHintText('Reviewing code...');
+        setLatestAiReviewRequest(request);
+
+        const diagnosticResult = (() => {
+            try {
+                return buildDiagnosticReview(request);
+            } catch (error: any) {
+                return {
+                    verdict: 'unclear' as const,
+                    confidence: 0.25,
+                    explanation: `Built-in review could not inspect this code automatically: ${String(error?.message || error || 'Unknown error')}`,
+                    suggestedFix: 'Run the code first, then press AI Review again so the reviewer can compare the code, output, and grader result.',
+                    source: 'diagnostic' as const,
+                };
+            }
+        })();
+        const setupNote = offlineAiState.status !== 'ready'
+            ? `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status)}. Built-in offline review is active.\n\n`
+            : 'Built-in review is shown immediately while the local model checks the code.\n\n';
+        const immediateResult = {
+            ...diagnosticResult,
+            explanation: `${setupNote}${diagnosticResult.explanation}`,
+        };
+        setLatestAiReviewResult(immediateResult);
+        setAiHintText(`${immediateResult.verdict.replace('_', ' ').toUpperCase()}\n\n${immediateResult.explanation}${immediateResult.suggestedFix ? `\n\nSuggested fix: ${immediateResult.suggestedFix}` : ''}`);
+
+        const shouldTryModelReview = offlineAiState.enabled && offlineAiState.status === 'ready';
+        if (!shouldTryModelReview) {
+            setAiReviewRunning(false);
+            return;
+        }
+
+        setAiReviewRunning(false);
         try {
-            setLatestAiReviewRequest(request);
-            const review = await reviewWithAvailableAi(request, offlineAiState);
+            const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
             const setupNote = offlineAiState.status !== 'ready'
                 ? `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status)}. Built-in offline review is active.\n\n`
                 : '';
@@ -9242,11 +9354,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                             Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source)}
                                                         </span>
                                                     </div>
-                                                    <p className="whitespace-pre-wrap leading-relaxed text-sm text-gray-200">{latestAiReviewResult.explanation}</p>
+                                                    <AiReviewText text={latestAiReviewResult.explanation} editorColors={editorColors} accentColor={toolPanelColors.ai} />
                                                     {latestAiReviewResult.suggestedFix && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
                                                             <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>Suggested Fix</div>
-                                                            <p className="whitespace-pre-wrap text-sm" style={{ color: '#fde68a' }}>{latestAiReviewResult.suggestedFix}</p>
+                                                            <AiReviewText text={latestAiReviewResult.suggestedFix} editorColors={editorColors} accentColor="#fbbf24" detectBareCode={true} />
                                                         </div>
                                                     )}
                                                     {latestAiReviewResult.verdict === 'likely_correct' && latestAiReviewRequest?.graderPassed === false && (
