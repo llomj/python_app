@@ -9207,7 +9207,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     </div>
                                 </div>
 
-                                <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.25), backgroundColor: hexToRgba(toolPanelColors.failed, 0.1) }}>
+                                <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.3), backgroundColor: hexToRgba(toolPanelColors.failed, 0.08) }}>
                                     <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.failed }}>
                                         <Trash2 size={14} /> App Cache
                                     </h3>
@@ -9218,7 +9218,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         onClick={clearAppCacheAndReload}
                                         disabled={cacheClearBusy}
                                         className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
-                                        style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.35), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
+                                        style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
                                     >
                                         {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
                                     </button>
@@ -9514,7 +9514,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 </div>
 
-                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border py-3 rounded-xl transition-all hover:brightness-125" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.3), color: toolPanelColors.failed, backgroundColor: hexToRgba(toolPanelColors.failed, 0.05) }}>Reset Progress</button>
+                                <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border py-3 rounded-xl transition-all hover:brightness-125" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), color: toolPanelColors.failed, backgroundColor: hexToRgba(toolPanelColors.failed, 0.15) }}>Reset Progress</button>
                             </div>
                         )}
                         {showModal === 'api_key' && (
@@ -9570,7 +9570,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         setResetConfirmArmed(true);
                                     }}
                                     className="w-full py-4 rounded-xl font-bold mb-3 transition-all hover:brightness-125"
-                                    style={resetConfirmArmed ? { backgroundColor: toolPanelColors.failed, color: '#ffffff' } : { backgroundColor: hexToRgba(toolPanelColors.failed, 0.2), color: toolPanelColors.failed, border: `1px solid ${hexToRgba(toolPanelColors.failed, 0.4)}` }}
+                                    style={resetConfirmArmed ? { backgroundColor: toolPanelColors.failed, color: '#ffffff' } : { backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed, border: `1px solid ${hexToRgba(toolPanelColors.failed, 0.4)}` }}
                                 >
                                     {resetConfirmArmed ? 'Yes, Reset Everything' : 'Reset Now'}
                                 </button>
