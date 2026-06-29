@@ -108,6 +108,41 @@ const getModelLabel = (modelId: string) => {
     return 'offline model';
 };
 
+const extractReviewSignals = (request: AiReviewRequest) => {
+    const signals = new Set<string>();
+    const addWords = (text: string, minLength = 4) => {
+        for (const word of text.match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g) || []) {
+            if (word.length >= minLength && !/^(this|that|with|from|your|code|problem|python|return|value|output|expected|actual|line|function|student)$/i.test(word)) {
+                signals.add(word.toLowerCase());
+            }
+        }
+    };
+
+    addWords(request.title || '');
+    addWords(request.description || '');
+    addWords(request.graderMessage || '');
+    addWords(request.programOutput || '', 2);
+    for (const match of request.userCode.matchAll(/\b(?:def\s+([A-Za-z_][A-Za-z0-9_]*)|([A-Za-z_][A-Za-z0-9_]*)\s*=|([A-Za-z_][A-Za-z0-9_]*)\s*\()/g)) {
+        const value = match[1] || match[2] || match[3];
+        if (value && !/^(if|for|while|print|return|input|range|len|str|int|float|list|dict|set)$/i.test(value)) {
+            signals.add(value.toLowerCase());
+        }
+    }
+    return Array.from(signals).slice(0, 30);
+};
+
+const isSpecificModelReview = (review: AiReviewResult, request: AiReviewRequest) => {
+    const explanation = `${review.explanation || ''}\n${review.suggestedFix || ''}`.toLowerCase();
+    if (review.verdict === 'unclear' || explanation.length < 120) return false;
+    if (/generic answer|cannot determine|not enough information|unable to/i.test(explanation)) return false;
+
+    const signals = extractReviewSignals(request);
+    const signalHits = signals.filter(signal => explanation.includes(signal)).length;
+    const hasLineReference = /\bline\s+\d+\b/.test(explanation);
+    const hasGraderReference = /(grader|expected|got|passed|failed|output|return|none|missing)/i.test(explanation);
+    return signalHits >= 2 && (hasLineReference || hasGraderReference);
+};
+
 export const DEFAULT_OFFLINE_AI_STATE: OfflineAiState = {
     enabled: false,
     status: 'not_installed',
@@ -313,7 +348,7 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
                 OFFLINE_AI_REVIEW_TIMEOUT_MS,
                 'Offline AI review timed out.',
             );
-            if (offlineResult.verdict !== 'unclear' && offlineResult.explanation.length > 20) {
+            if (isSpecificModelReview(offlineResult, request)) {
                 return {
                     ...offlineResult,
                     confidence: Math.max(offlineResult.confidence, diagnostic.confidence),
@@ -322,7 +357,10 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
                     source: 'offline_model',
                 };
             }
-            return diagnostic;
+            return {
+                ...diagnostic,
+                explanation: `The local model response was too generic for this problem, so it was rejected. Specific built-in analysis: ${diagnostic.explanation}`,
+            };
         } catch {
             return diagnostic;
         }

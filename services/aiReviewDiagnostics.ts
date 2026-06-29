@@ -132,6 +132,66 @@ const extractRequiredSyntax = (text: string) => {
     return patterns.filter(p => p.regex.test(text)).map(p => p.label);
 };
 
+const summarizeProblemRequirement = (request: AiReviewRequest) => {
+    const description = (request.description || request.title || '').replace(/\s+/g, ' ').trim();
+    return description.length > 220 ? `${description.slice(0, 220)}...` : description;
+};
+
+const describeCodeLine = (line: string) => {
+    if (/^from\s+/.test(line) || /^import\s+/.test(line)) return 'imports a module';
+    if (/^def\s+/.test(line)) return 'defines the function the grader will call';
+    if (line === 'pass') return 'is only a placeholder and does not implement or return anything';
+    if (/^return\b/.test(line)) return 'returns a value to the grader';
+    if (/^print\s*\(/.test(line)) return 'prints output to the console';
+    if (/\binput\s*\(/.test(line)) return 'asks the user for interactive input';
+    if (/=/.test(line) && !/[=!<>]=/.test(line)) return 'assigns a value';
+    if (/^(if|elif|else)\b/.test(line)) return 'branches based on a condition';
+    if (/^(for|while)\b/.test(line)) return 'loops over values';
+    return 'runs this statement';
+};
+
+const summarizeCodeLines = (code: string) => {
+    const lines = code.split('\n');
+    const importantLines = lines
+        .map((line, index) => ({ line: line.trim(), number: index + 1 }))
+        .filter(item => item.line && !item.line.startsWith('#'))
+        .slice(0, 8);
+
+    if (!importantLines.length) {
+        return 'Code inspection: the editor is empty, so there are no lines to grade yet.';
+    }
+
+    return `Line-by-line code inspection: ${importantLines.map(item => `line ${item.number} "${item.line}" ${describeCodeLine(item.line)}`).join('; ')}.`;
+};
+
+const visibleSolutionFix = (request: AiReviewRequest) => {
+    const solution = (request.visibleSolution || '').trim();
+    if (!solution) return '';
+
+    const lines = solution.split('\n');
+    const imports = lines.filter(line => /^\s*(?:from|import)\s+/.test(line)).slice(0, 4);
+    const firstDefIndex = lines.findIndex(line => /^\s*def\s+/.test(line));
+    if (firstDefIndex >= 0) {
+        const block: string[] = [];
+        for (let index = firstDefIndex; index < lines.length; index += 1) {
+            const line = lines[index];
+            if (index > firstDefIndex && line.trim() && !/^\s/.test(line)) {
+                break;
+            }
+            if (!/^\s*#/.test(line)) {
+                block.push(line);
+            }
+        }
+        const concise = [...imports, ...block].filter((line, index, arr) => line.trim() || (index > 0 && arr[index - 1].trim())).join('\n').trim();
+        if (concise) {
+            return `Use this structure for this exact problem:\n\`\`\`python\n${concise}\n\`\`\``;
+        }
+    }
+
+    const concise = lines.filter(line => !/^\s*#/.test(line)).slice(0, 12).join('\n').trim();
+    return concise ? `Use this structure for this exact problem:\n\`\`\`python\n${concise}\n\`\`\`` : '';
+};
+
 const buildCodeComparisonReview = (userCode: string, solution: string, description: string): { notes: string[]; fixes: string[] } => {
     const notes: string[] = [];
     const fixes: string[] = [];
@@ -274,10 +334,23 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
         return {
             verdict: 'likely_correct',
             confidence: 0.99,
-            explanation: 'The deterministic grader already passed this solution.',
+            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
             suggestedFix: 'No fix needed; the deterministic grader already accepted this solution.',
             source: 'diagnostic',
         };
+    }
+
+    if (request.description || request.title) {
+        notes.push(`Problem requirement: ${summarizeProblemRequirement(request)}`);
+    }
+
+    notes.push(summarizeCodeLines(code));
+
+    if (/\bpass\b/.test(code)) {
+        verdict = 'likely_incorrect';
+        confidence = Math.max(confidence, 0.86);
+        notes.push('The code still contains pass, so the required function body is blank. A function that reaches pass returns None, which cannot satisfy a problem that asks for a computed result.');
+        fixes.push(visibleSolutionFix(request) || 'Replace pass with the actual logic and return the required result from the function.');
     }
 
     if (hasUsefulGraderMessage) {
@@ -350,6 +423,13 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
             confidence = Math.max(confidence, 0.82);
             notes.push(`The code crashes during grading with ${raisedError.errorType}${raisedError.detail ? `: ${raisedError.detail}` : ''}.`);
             fixes.push(`Fix the ${raisedError.errorType} before checking the final answer.`);
+        }
+
+        if (/Cannot access|before initialization|ReferenceError|TypeError|SyntaxError|NameError/i.test(graderMessage) && !raisedError) {
+            verdict = 'likely_incorrect';
+            confidence = Math.max(confidence, 0.82);
+            notes.push(`The grader/run system reported this concrete failure: ${graderMessage}`);
+            fixes.push(visibleSolutionFix(request) || 'Fix the runtime error first, then rerun so the grader can compare the actual return value/output.');
         }
     }
 
