@@ -9016,7 +9016,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {/* Fixed footer - centered version button */}
             <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
                 <div className="relative flex items-center justify-center">
-                     <button onClick={() => setShowModal('settings')} className="flex items-center gap-2 text-gray-400 hover:brightness-125 transition-all px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628]" title="Open settings" style={{ color: countRowColors.icon }}
+                     <button onClick={() => window.location.reload()} className="flex items-center gap-2 text-gray-400 hover:brightness-125 transition-all px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628]" title="Reload app" style={{ color: countRowColors.icon }}
                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); e.currentTarget.style.color = countRowColors.count; }}
                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1d2d44'; e.currentTarget.style.color = countRowColors.icon; }}>
                          <RefreshCw size={18} />
