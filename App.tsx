@@ -7225,6 +7225,7 @@ const App: React.FC = () => {
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
+    const [plainLogContent, setPlainLogContent] = useState(() => localStorage.getItem('python_plain_log') || '');
     const [isOutputExpanded, setIsOutputExpanded] = useState(false);
     const [showActionPanel, setShowActionPanel] = useState(false);
     const [outputHeight, setOutputHeight] = useState(85);
@@ -7454,6 +7455,10 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_plain_mode', String(plainMode));
     }, [plainMode]);
+
+    useEffect(() => {
+        localStorage.setItem('python_plain_log', plainLogContent);
+    }, [plainLogContent]);
 
     const playKeyboardFeedback = useCallback(() => {
         const now = performance.now();
@@ -8492,6 +8497,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 </div>
 
                 {plainMode ? (
+                    <>
                     <div
                         className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
                         style={{
@@ -8511,6 +8517,39 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             <span className="text-[10px] text-gray-400">Free Python environment</span>
                         </div>
                     </div>
+                    <div
+                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden mt-2"
+                        style={{
+                            backgroundColor: 'rgba(8, 18, 34, 0.08)',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            borderColor: 'rgba(88, 118, 160, 0.25)'
+                        }}
+                    >
+                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1">
+                            <div className="flex items-center gap-2">
+                                <FileText size={14} style={{ color: countRowColors.rate }} />
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.16em] text-gray-300">Log</h3>
+                            </div>
+                            <button
+                                onClick={() => setPlainLogContent('')}
+                                className="text-[10px] px-2 py-1 rounded-md transition-all hover:brightness-125"
+                                style={{ color: toolPanelColors.failed, border: `1px solid ${hexToRgba(toolPanelColors.failed, 0.3)}` }}
+                                title="Clear log"
+                            >
+                                Clear
+                            </button>
+                        </div>
+                        <textarea
+                            value={plainLogContent}
+                            onChange={(e) => setPlainLogContent(e.target.value)}
+                            className="w-full bg-transparent text-[11px] font-mono text-gray-300 px-4 py-2 outline-none resize-none"
+                            style={{ minHeight: '80px', maxHeight: '200px' }}
+                            placeholder="Paste notes, snippets, or log your code here..."
+                            spellCheck={false}
+                        />
+                    </div>
+                    </>
                 ) : (
                     <div
                         ref={problemPanelRef}
