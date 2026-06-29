@@ -9389,21 +9389,37 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     </div>
                                 </div>
 
-                                <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.3), backgroundColor: hexToRgba(toolPanelColors.failed, 0.08) }}>
-                                    <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.failed }}>
-                                        <Trash2 size={14} /> App Cache
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                        <SlidersHorizontal size={14} className="text-[#3b82f6]" />
+                                        Customize
                                     </h3>
-                                    <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
-                                        If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.
-                                    </p>
-                                    <button
-                                        onClick={clearAppCacheAndReload}
-                                        disabled={cacheClearBusy}
-                                        className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
-                                        style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
-                                    >
-                                        {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
-                                    </button>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => setKeyboardHaptics(prev => !prev)}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={keyboardHaptics ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Vibrate size={15} style={{ color: keyboardHaptics ? countRowColors.wins : '#6b7280' }} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Haptic</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setKeyboardSound(prev => !prev)}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={keyboardSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Volume2 size={15} style={{ color: keyboardSound ? countRowColors.wins : '#6b7280' }} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Sound</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="mb-6">
@@ -9447,119 +9463,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </div>
                                             );
                                         })}
-                                    </div>
-                                </div>
-
-                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/80 p-4">
-                                    <div className="mb-3 flex items-center justify-between gap-3">
-                                        <div>
-                                            <h3 className="text-sm font-black uppercase tracking-[0.14em] text-[#93c5fd]">Offline AI Reviewer</h3>
-                                            <p className="mt-1 text-xs text-gray-400">{offlineAiState.message}</p>
-                                        </div>
-                                        <button
-                                            onClick={() => {
-                                                if (offlineAiBusy) return;
-                                                setOfflineAiState(prev => ({
-                                                    ...prev,
-                                                    enabled: !prev.enabled,
-                                                    message: !prev.enabled ? 'Offline AI reviewer enabled. Model is not installed yet.' : 'Offline AI reviewer disabled.',
-                                                }));
-                                            }}
-                                            disabled={offlineAiBusy}
-                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
-                                        >
-                                            {offlineAiState.enabled ? 'On' : 'Off'}
-                                        </button>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                                        <button
-                                            onClick={() => {
-                                                if (offlineAiBusy) return;
-                                                const operationId = ++offlineAiOperationRef.current;
-                                                downloadOfflineAiModel(offlineAiState, next => {
-                                                    if (operationId === offlineAiOperationRef.current) {
-                                                        setOfflineAiState(next);
-                                                    }
-                                                }).catch(error => {
-                                                    if (operationId !== offlineAiOperationRef.current) return;
-                                                    setOfflineAiState(prev => {
-                                                        if (prev.status !== 'downloading') return prev;
-                                                        return {
-                                                            ...prev,
-                                                            status: 'failed',
-                                                            message: String(error?.message || error || 'Offline AI download failed.'),
-                                                            progress: 0,
-                                                        };
-                                                    });
-                                                });
-                                            }}
-                                            disabled={offlineAiBusy}
-                                            className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd] disabled:cursor-not-allowed disabled:opacity-50"
-                                        >
-                                            Prepare Download
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                if (offlineAiBusy) return;
-                                                const operationId = ++offlineAiOperationRef.current;
-                                                setOfflineAiState(prev => ({
-                                                    ...prev,
-                                                    enabled: false,
-                                                    status: 'removing',
-                                                    message: 'Removing offline AI model...',
-                                                    progress: 0,
-                                                }));
-                                                removeOfflineAiModel(offlineAiState.modelId).then(next => {
-                                                    if (operationId === offlineAiOperationRef.current) {
-                                                        setOfflineAiState(next);
-                                                    }
-                                                }).catch(() => {
-                                                    if (operationId === offlineAiOperationRef.current) {
-                                                        setOfflineAiState(DEFAULT_OFFLINE_AI_STATE);
-                                                    }
-                                                });
-                                            }}
-                                            disabled={offlineAiBusy}
-                                            className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca] disabled:cursor-not-allowed disabled:opacity-50"
-                                        >
-                                            Remove Offline AI
-                                        </button>
-                                    </div>
-                                    <div className="mt-3 text-xs text-gray-400">
-                                        Status: {getOfflineAiStatusLabel(offlineAiState.status)} · Model: {offlineAiState.modelId}
-                                    </div>
-                                </div>
-
-                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
-                                        <SlidersHorizontal size={14} className="text-[#3b82f6]" />
-                                        Customize
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button
-                                            onClick={() => setKeyboardHaptics(prev => !prev)}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={keyboardHaptics ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Vibrate size={15} style={{ color: keyboardHaptics ? countRowColors.wins : '#6b7280' }} />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Haptic</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
-                                        </button>
-                                        <button
-                                            onClick={() => setKeyboardSound(prev => !prev)}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={keyboardSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Volume2 size={15} style={{ color: keyboardSound ? countRowColors.wins : '#6b7280' }} />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Sound</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
-                                        </button>
                                     </div>
                                 </div>
 
@@ -9692,6 +9595,103 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             ))}
                                         </div>
                                     )}
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/80 p-4">
+                                    <div className="mb-3 flex items-center justify-between gap-3">
+                                        <div>
+                                            <h3 className="text-sm font-black uppercase tracking-[0.14em] text-[#93c5fd]">Offline AI Reviewer</h3>
+                                            <p className="mt-1 text-xs text-gray-400">{offlineAiState.message}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                if (offlineAiBusy) return;
+                                                setOfflineAiState(prev => ({
+                                                    ...prev,
+                                                    enabled: !prev.enabled,
+                                                    message: !prev.enabled ? 'Offline AI reviewer enabled. Model is not installed yet.' : 'Offline AI reviewer disabled.',
+                                                }));
+                                            }}
+                                            disabled={offlineAiBusy}
+                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
+                                        >
+                                            {offlineAiState.enabled ? 'On' : 'Off'}
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                        <button
+                                            onClick={() => {
+                                                if (offlineAiBusy) return;
+                                                const operationId = ++offlineAiOperationRef.current;
+                                                downloadOfflineAiModel(offlineAiState, next => {
+                                                    if (operationId === offlineAiOperationRef.current) {
+                                                        setOfflineAiState(next);
+                                                    }
+                                                }).catch(error => {
+                                                    if (operationId !== offlineAiOperationRef.current) return;
+                                                    setOfflineAiState(prev => {
+                                                        if (prev.status !== 'downloading') return prev;
+                                                        return {
+                                                            ...prev,
+                                                            status: 'failed',
+                                                            message: String(error?.message || error || 'Offline AI download failed.'),
+                                                            progress: 0,
+                                                        };
+                                                    });
+                                                });
+                                            }}
+                                            disabled={offlineAiBusy}
+                                            className="rounded-xl border border-[#3b82f6]/35 bg-[#3b82f6]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#93c5fd] disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                            Prepare Download
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                if (offlineAiBusy) return;
+                                                const operationId = ++offlineAiOperationRef.current;
+                                                setOfflineAiState(prev => ({
+                                                    ...prev,
+                                                    enabled: false,
+                                                    status: 'removing',
+                                                    message: 'Removing offline AI model...',
+                                                    progress: 0,
+                                                }));
+                                                removeOfflineAiModel(offlineAiState.modelId).then(next => {
+                                                    if (operationId === offlineAiOperationRef.current) {
+                                                        setOfflineAiState(next);
+                                                    }
+                                                }).catch(() => {
+                                                    if (operationId === offlineAiOperationRef.current) {
+                                                        setOfflineAiState(DEFAULT_OFFLINE_AI_STATE);
+                                                    }
+                                                });
+                                            }}
+                                            disabled={offlineAiBusy}
+                                            className="rounded-xl border border-[#ef4444]/35 bg-[#ef4444]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[#fecaca] disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                            Remove Offline AI
+                                        </button>
+                                    </div>
+                                    <div className="mt-3 text-xs text-gray-400">
+                                        Status: {getOfflineAiStatusLabel(offlineAiState.status)} · Model: {offlineAiState.modelId}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.3), backgroundColor: hexToRgba(toolPanelColors.failed, 0.08) }}>
+                                    <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.failed }}>
+                                        <Trash2 size={14} /> App Cache
+                                    </h3>
+                                    <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
+                                        If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.
+                                    </p>
+                                    <button
+                                        onClick={clearAppCacheAndReload}
+                                        disabled={cacheClearBusy}
+                                        className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
+                                    >
+                                        {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
+                                    </button>
                                 </div>
 
                                 </div>
