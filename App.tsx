@@ -8368,11 +8368,7 @@ const App: React.FC = () => {
     const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
-    const problemPanelRef = useRef<HTMLDivElement>(null);
-    const problemDescriptionRef = useRef<HTMLDivElement>(null);
-    const problemTouchStartRef = useRef(0);
-    const [headerHeight, setHeaderHeight] = useState(265);
-    const [problemPanelHeight, setProblemPanelHeight] = useState(200);
+    const [headerHeight, setHeaderHeight] = useState(70);
     const editorToolbarTop = Math.max(headerHeight + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
@@ -8496,27 +8492,17 @@ const App: React.FC = () => {
                 setHeaderHeight(rect.bottom);
             }
         };
-        const updateProblemPanelHeight = () => {
-            if (problemPanelRef.current) {
-                const height = problemPanelRef.current.getBoundingClientRect().height;
-                setProblemPanelHeight(height);
-            }
-        };
         // Immediate update
         updateHeaderHeight();
-        updateProblemPanelHeight();
         // Update after a short delay to ensure DOM is ready
         const timeoutId1 = setTimeout(() => {
             updateHeaderHeight();
-            updateProblemPanelHeight();
         }, 50);
         const timeoutId2 = setTimeout(() => {
             updateHeaderHeight();
-            updateProblemPanelHeight();
         }, 200);
         const handleResize = () => {
             updateHeaderHeight();
-            updateProblemPanelHeight();
         };
         window.addEventListener('resize', handleResize);
 
@@ -9481,7 +9467,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                 </div>
 
-                {plainMode ? (
+                {plainMode && (
                     <>
                     <div
                         className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden"
@@ -9607,20 +9593,33 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         )}
                     </div>
                     </>
-                ) : (
+                )}
+            </div>
+
+            {!plainMode && (
+                <div
+                    className="fixed z-20 w-full max-w-2xl"
+                    style={{
+                        left: 0,
+                        right: 0,
+                        margin: '0 auto',
+                        top: `${Math.max(headerHeight + 8, 78)}px`,
+                        paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
+                        paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
+                    }}
+                >
                     <div
-                        ref={problemPanelRef}
                         style={{
                             height: '190px',
-                            overflow: 'auto',
-                            backgroundColor: 'rgba(8, 18, 34, 0.08)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            backgroundColor: 'rgba(8, 18, 34, 0.95)',
                             border: '1px solid rgba(88, 118, 160, 0.25)',
                             borderRadius: '0.75rem',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                            WebkitOverflowScrolling: 'touch',
                         }}
                     >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', backgroundColor: 'rgba(8, 18, 34, 0.95)', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
+                        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
                             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff', margin: 0 }}>Problem {exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
@@ -9633,12 +9632,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </button>
                             </div>
                         </div>
-                        <div style={{ color: '#d1d5db', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text' }}>
+                        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: '#d1d5db', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
                             {exercise.description}
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+
             {descCopied && (
                 <div className="fixed left-1/2 z-[200] -translate-x-1/2 top-24 text-center px-4 py-2 rounded-lg text-xs text-[#4ade80] font-bold bg-[#050c18]/90 border border-[#4ade80]/30 shadow-xl pointer-events-none">
                     Problem copied to clipboard
