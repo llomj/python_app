@@ -47,6 +47,7 @@ const exerciseById = new Map(EXERCISES.map(exercise => [exercise.id, exercise]))
 const distribution = new Map();
 const weakFunctionGraders = [];
 const singleCaseNoArgFunctionGraders = [];
+const unguardedSingleCaseNoArgFunctionGraders = [];
 const singleCaseScriptGraders = [];
 const unguardedSingleCaseScriptGraders = [];
 const hardcodeRiskScriptGraders = [];
@@ -162,6 +163,10 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (testCount < MIN_FUNCTION_TESTS) {
     const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
     if (firstArgs.length === 0) {
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0;
+      if (!hasSourceRequirements) {
+        unguardedSingleCaseNoArgFunctionGraders.push(id);
+      }
       singleCaseNoArgFunctionGraders.push({
         id,
         title: exerciseById.get(id)?.title || `Problem ${id}`,
@@ -182,6 +187,7 @@ const weakIds = weakFunctionGraders.map(item => item.id);
 const showAll = process.argv.includes('--all') || process.argv.includes('--show');
 const shownWeakIds = showAll ? weakIds : weakIds.slice(0, 100);
 const maxWeakFunctions = readNumberFlag('max-weak-functions');
+const maxUnguardedSingleCaseNoArgFunctions = readNumberFlag('max-unguarded-single-case-no-arg-functions');
 const maxSingleCaseScripts = readNumberFlag('max-single-case-scripts');
 const maxUnguardedSingleCaseScripts = readNumberFlag('max-unguarded-single-case-scripts');
 const maxHardcodeRiskScripts = readNumberFlag('max-hardcode-risk-scripts');
@@ -193,6 +199,7 @@ console.log(`Graders: ${Object.keys(AUTO_GRADERS).length}`);
 console.log(`Test-count distribution: ${sortedDistribution.map(([count, total]) => `${count}:${total}`).join(', ')}`);
 console.log(`Parameterized function graders below ${MIN_FUNCTION_TESTS} tests: ${weakFunctionGraders.length}`);
 console.log(`Single-case no-arg function graders: ${singleCaseNoArgFunctionGraders.length}`);
+console.log(`Unguarded single-case no-arg function graders: ${unguardedSingleCaseNoArgFunctionGraders.length}`);
 console.log(`Single-case script graders: ${singleCaseScriptGraders.length}`);
 console.log(`Unguarded single-case script graders: ${unguardedSingleCaseScriptGraders.length}`);
 console.log(`Hardcode-risk single-case script graders: ${hardcodeRiskScriptGraders.length}`);
@@ -212,6 +219,7 @@ if (weakFunctionGraders.length) {
 
 if (singleCaseNoArgFunctionGraders.length && showAll) {
   console.log(`Single-case no-arg function grader IDs: ${singleCaseNoArgFunctionGraders.map(item => item.id).join(', ')}`);
+  console.log(`Unguarded single-case no-arg function grader IDs: ${unguardedSingleCaseNoArgFunctionGraders.join(', ')}`);
   console.log('First single-case no-arg function graders:');
   for (const item of singleCaseNoArgFunctionGraders.slice(0, 25)) {
     console.log(`${item.id}: ${item.title} [${item.functionNames.join(', ')}]`);
@@ -252,6 +260,9 @@ if (emptyGraders.length > maxEmptyGraders) {
 }
 if (maxWeakFunctions !== null && weakFunctionGraders.length > maxWeakFunctions) {
   gateFailures.push(`${weakFunctionGraders.length} weak function graders exceeds max ${maxWeakFunctions}`);
+}
+if (maxUnguardedSingleCaseNoArgFunctions !== null && unguardedSingleCaseNoArgFunctionGraders.length > maxUnguardedSingleCaseNoArgFunctions) {
+  gateFailures.push(`${unguardedSingleCaseNoArgFunctionGraders.length} unguarded single-case no-arg function graders exceeds max ${maxUnguardedSingleCaseNoArgFunctions}`);
 }
 if (maxSingleCaseScripts !== null && singleCaseScriptGraders.length > maxSingleCaseScripts) {
   gateFailures.push(`${singleCaseScriptGraders.length} single-case script graders exceeds max ${maxSingleCaseScripts}`);

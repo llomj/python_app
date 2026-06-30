@@ -1834,6 +1834,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     235: {
         functionNames: ['increasing_triangle'],
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{ nodeType: "For" }],
         tests: [
             { args: [], expected: '*\n**\n***\n****\n*****' }
         ]
@@ -1841,6 +1842,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     236: {
         functionNames: ['decreasing_triangle'],
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{ nodeType: "For" }],
         tests: [
             { args: [], expected: '*****\n****\n***\n**\n*' }
         ]
@@ -1856,6 +1858,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     238: {
         functionNames: ['left_triangle'],
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{ nodeType: "For" }],
         tests: [
             { args: [], expected: '    *\n   **\n  ***\n ****\n*****' }
         ]
@@ -2180,12 +2183,14 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     285: {
         functionNames: ['print_1_to_10'],
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: '1\n2\n3\n4\n5\n6\n7\n8\n9\n10' }
         ]
     },
     286: {
         functionNames: ['sum_first_10_natural_numbers'],
+        requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: 55 }
         ]
@@ -2193,6 +2198,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     287: {
         functionNames: ['print_even_numbers'],
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: '2\n4\n6\n8\n10\n12\n14\n16\n18\n20' }
         ]
@@ -2200,6 +2206,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     288: {
         functionNames: ['print_odd_numbers'],
         compare: 'printedOrReturn',
+        requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
             { args: [], expected: '1\n3\n5\n7\n9\n11\n13\n15\n17\n19' }
         ]
