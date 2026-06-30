@@ -860,6 +860,81 @@ def __auto_grader_find_callable(function_names, args, required_name=None, kwargs
         return fallback_matches[0]
     return None, None
 
+def __auto_grader_is_simple_case(case):
+    special_keys = {
+        "inputValues", "setupRemove", "setupDirs", "setupFiles", "setupSymlinks",
+        "permissionDeniedPaths", "getFiles", "randomValues", "randomFloatValues",
+        "randomChoiceValues", "randomSampleValues", "randomShuffleValues",
+        "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
+        "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
+        "argExpressions", "argFunctionNames", "functionListArgNames",
+        "expectedException", "kwargs", "functionName"
+    }
+    return not any(case.get(key) for key in special_keys)
+
+def __auto_grader_metamorphic_cases(function_names, tests):
+    if not tests or not all(__auto_grader_is_simple_case(case) for case in tests):
+        return []
+    first_args = tests[0].get("args", [])
+    if len(first_args) != 1:
+        return []
+    name_set = set(function_names)
+    sample = first_args[0]
+    first_expected = tests[0].get("expected")
+    if name_set & {"calculate_square", "cal_square"} and isinstance(sample, (int, float)) and not isinstance(sample, bool):
+        return [([7], 49), ([-3], 9)]
+    if "is_even" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12], True), ([13], False)]
+    if "is_odd" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12], False), ([13], True)]
+    if "reverse_string" in name_set and isinstance(sample, str):
+        return [(["abc def"], "fed cba"), (["Python"], "nohtyP")]
+    if "count_vowels" in name_set and isinstance(sample, str):
+        if isinstance(first_expected, dict):
+            return [
+                (["AEIOUxyz"], {"a": 1, "e": 1, "i": 1, "o": 1, "u": 1}),
+                (["rhythm"], {"a": 0, "e": 0, "i": 0, "o": 0, "u": 0})
+            ]
+        return [(["AEIOUxyz"], 5), (["rhythm"], 0)]
+    if (name_set & {"find_max", "find_min", "find_minimum", "calculate_sum", "cal_sum", "sum_of_list"}) and isinstance(sample, list):
+        if "find_max" in name_set:
+            return [([[9, -2, 4]], 9), ([[0]], 0)]
+        if name_set & {"find_min", "find_minimum"}:
+            return [([[9, -2, 4]], -2), ([[0]], 0)]
+        if name_set & {"calculate_sum", "cal_sum", "sum_of_list"}:
+            return [([[9, -2, 4]], 11), ([[]], 0)]
+    if name_set & {"remove_spaces", "remove_space"} and isinstance(sample, str):
+        return [(["a b  c"], "abc"), ([" no spaces "], "nospaces")]
+    if "capitalize_words" in name_set and isinstance(sample, str):
+        return [(["hello world"], "Hello World"), (["python code"], "Python Code")]
+    if "factorial" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([0], 1), ([6], 720)]
+    if "is_palindrome" in name_set and isinstance(sample, str):
+        return [(["racecar"], True), (["python"], False)]
+    return []
+
+def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tests, compare):
+    for index, (args, expected) in enumerate(__auto_grader_metamorphic_cases(function_names, tests), start=1):
+        if not __auto_grader_accepts_args(target, args):
+            continue
+        old_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        try:
+            returned = target(*args)
+            printed = sys.stdout.getvalue().strip()
+        except Exception as exc:
+            return f"extra generated test {index} raised {type(exc).__name__}: {exc}"
+        finally:
+            sys.stdout = old_stdout
+        returned_ok = __auto_grader_same(returned, expected, compare)
+        printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)
+        if not printed_ok and (compare == "printedOrReturn" or returned is None):
+            printed_ok = bool(printed) and __auto_grader_same(printed, expected, "printedOrReturn")
+        if not returned_ok and not printed_ok:
+            actual = printed if printed else returned
+            return f"extra generated test {index} failed for args={args}. Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
+    return None
+
 def __auto_grader_run():
     source_requirement_error = __auto_grader_check_source_requirements()
     if source_requirement_error:
@@ -1161,6 +1236,14 @@ def __auto_grader_run():
                     f"Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
                 )
             }
+
+    metamorphic_error = __auto_grader_run_metamorphic_tests(target, target_name, function_names, tests, compare)
+    if metamorphic_error:
+        return {
+            "passed": False,
+            "functionName": target_name,
+            "message": metamorphic_error
+        }
 
     return {
         "passed": True,

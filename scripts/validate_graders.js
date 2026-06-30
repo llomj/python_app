@@ -587,6 +587,80 @@ def find_callable(namespace, function_names, args, required_name=None, kwargs=No
         return fallback_matches[0]
     return None, None
 
+def is_simple_case(case):
+    special_keys = {
+        "inputValues", "setupRemove", "setupDirs", "setupFiles", "setupSymlinks",
+        "permissionDeniedPaths", "getFiles", "randomValues", "randomFloatValues",
+        "randomChoiceValues", "randomSampleValues", "randomShuffleValues",
+        "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
+        "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
+        "argExpressions", "argFunctionNames", "functionListArgNames",
+        "expectedException", "kwargs", "functionName"
+    }
+    return not any(case.get(key) for key in special_keys)
+
+def metamorphic_cases(function_names, tests):
+    if not tests or not all(is_simple_case(case) for case in tests):
+        return []
+    first_args = tests[0].get("args", [])
+    if len(first_args) != 1:
+        return []
+    name_set = set(function_names)
+    sample = first_args[0]
+    first_expected = tests[0].get("expected")
+    if name_set & {"calculate_square", "cal_square"} and isinstance(sample, (int, float)) and not isinstance(sample, bool):
+        return [([7], 49), ([-3], 9)]
+    if "is_even" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12], True), ([13], False)]
+    if "is_odd" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12], False), ([13], True)]
+    if "reverse_string" in name_set and isinstance(sample, str):
+        return [(["abc def"], "fed cba"), (["Python"], "nohtyP")]
+    if "count_vowels" in name_set and isinstance(sample, str):
+        if isinstance(first_expected, dict):
+            return [
+                (["AEIOUxyz"], {"a": 1, "e": 1, "i": 1, "o": 1, "u": 1}),
+                (["rhythm"], {"a": 0, "e": 0, "i": 0, "o": 0, "u": 0})
+            ]
+        return [(["AEIOUxyz"], 5), (["rhythm"], 0)]
+    if (name_set & {"find_max", "find_min", "find_minimum", "calculate_sum", "cal_sum", "sum_of_list"}) and isinstance(sample, list):
+        if "find_max" in name_set:
+            return [([[9, -2, 4]], 9), ([[0]], 0)]
+        if name_set & {"find_min", "find_minimum"}:
+            return [([[9, -2, 4]], -2), ([[0]], 0)]
+        if name_set & {"calculate_sum", "cal_sum", "sum_of_list"}:
+            return [([[9, -2, 4]], 11), ([[]], 0)]
+    if name_set & {"remove_spaces", "remove_space"} and isinstance(sample, str):
+        return [(["a b  c"], "abc"), ([" no spaces "], "nospaces")]
+    if "capitalize_words" in name_set and isinstance(sample, str):
+        return [(["hello world"], "Hello World"), (["python code"], "Python Code")]
+    if "factorial" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([0], 1), ([6], 720)]
+    if "is_palindrome" in name_set and isinstance(sample, str):
+        return [(["racecar"], True), (["python"], False)]
+    return []
+
+def run_metamorphic_tests(target, function_names, tests, compare):
+    for args, expected in metamorphic_cases(function_names, tests):
+        if not accepts_args(target, args):
+            continue
+        old_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        try:
+            returned = target(*args)
+            printed = sys.stdout.getvalue().strip()
+        except BaseException:
+            return False
+        finally:
+            sys.stdout = old_stdout
+        returned_ok = same(returned, expected, compare)
+        printed_ok = bool(printed) and same(printed, expected, compare)
+        if not printed_ok and returned is None:
+            printed_ok = bool(printed) and same(printed, expected, "printedOrReturn")
+        if not returned_ok and not printed_ok:
+            return False
+    return True
+
 def run_grader(source, grader):
     compare = grader.get("compare", "exact")
     tests = grader.get("tests", [])
@@ -828,6 +902,8 @@ def run_function_tests(namespace, grader, tests, compare):
             printed_ok = bool(printed) and same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok:
             return False
+    if not run_metamorphic_tests(target, function_names, tests, compare):
+        return False
     return True
 
 results = []
