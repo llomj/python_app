@@ -8230,6 +8230,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 const graderOutput = gradeResult.output?.trim()
                     ? `Program output:\n${gradeResult.output.trim()}\n\n`
                     : '';
+                const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
                 const displayOutput = userOutput || graderOutput;
                 const reviewRequest: AiReviewRequest = {
                     problemId: exercise.id,
@@ -8245,7 +8246,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setLatestAiReviewRequest(reviewRequest);
                 setLatestAiReviewResult(null);
 
-                const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
                 if (gradeResult.passed) {
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
