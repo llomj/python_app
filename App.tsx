@@ -7315,6 +7315,7 @@ const getAiStepTitle = (step: string, index: number) => {
     const normalized = step.toLowerCase();
     if (normalized.includes('problem requirement')) return 'Problem Requirement';
     if (normalized.includes('line-by-line') || normalized.includes('code inspection')) return 'Code Check';
+    if (normalized.includes('output analysis')) return 'Output Analysis';
     if (normalized.includes('code explanation') || normalized.includes('syntax explanation') || normalized.includes('concept explanation')) return 'Code Explanation';
     if (normalized.includes('expected solution workflow') || normalized.includes('function workflow')) return 'Solution Workflow';
     if (normalized.includes('execution order') || normalized.includes('order of operation')) return 'Execution Order';
@@ -7322,6 +7323,31 @@ const getAiStepTitle = (step: string, index: number) => {
     if (normalized.includes('built-in review') || normalized.includes('local model')) return 'Review Status';
     if (normalized.includes('suggested fix') || normalized.includes('what to change')) return 'What To Change';
     return `Review Point ${index + 1}`;
+};
+
+const getAiStepTone = (step: string, accentColor: string) => {
+    const normalized = step.toLowerCase();
+    if (normalized.includes('output analysis')) {
+        if (normalized.includes('incorrect')) {
+            return {
+                color: '#ef4444',
+                borderColor: 'rgba(239, 68, 68, 0.38)',
+                backgroundColor: 'rgba(127, 29, 29, 0.22)',
+            };
+        }
+        if (normalized.includes('correct')) {
+            return {
+                color: '#22c55e',
+                borderColor: 'rgba(34, 197, 94, 0.38)',
+                backgroundColor: 'rgba(20, 83, 45, 0.22)',
+            };
+        }
+    }
+    return {
+        color: accentColor,
+        borderColor: 'rgba(88, 118, 160, 0.22)',
+        backgroundColor: 'rgba(8, 18, 34, 0.34)',
+    };
 };
 
 const splitAiStepParagraphs = (step: string) => {
@@ -7345,7 +7371,7 @@ const splitAiStepParagraphs = (step: string) => {
 const splitAiReviewSteps = (text: string) => {
     const normalized = text
         .replace(/\n\s*---\s*\n/g, '\n\n')
-        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|Code explanation|Syntax explanation|Concept explanation|Expected solution workflow|Function workflow|Execution order|Order of operation|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
+        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|Output analysis|Code explanation|Syntax explanation|Concept explanation|Expected solution workflow|Function workflow|Execution order|Order of operation|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
         .replace(/\s+(?=The deterministic grader|A function that reaches|If this is|For this grader)/g, '\n\n')
         .trim();
 
@@ -7400,13 +7426,15 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                     const steps = splitAiReviewSteps(part.value);
                     return (
                         <div key={`ai-numbered-${index}`} className="space-y-2.5">
-                            {steps.map((step, stepIndex) => (
-                                <div key={`ai-step-${index}-${stepIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: 'rgba(88, 118, 160, 0.22)', backgroundColor: 'rgba(8, 18, 34, 0.34)' }}>
-                                    <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accentColor, 0.16), color: accentColor }}>
+                            {steps.map((step, stepIndex) => {
+                                const tone = getAiStepTone(step, accentColor);
+                                return (
+                                <div key={`ai-step-${index}-${stepIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: tone.borderColor, backgroundColor: tone.backgroundColor }}>
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(tone.color, 0.16), color: tone.color }}>
                                         {stepIndex + 1}
                                     </div>
                                     <div className="min-w-0 space-y-2">
-                                        <div className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: accentColor }}>
+                                        <div className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: tone.color }}>
                                             {getAiStepTitle(step, stepIndex)}
                                         </div>
                                         <div className="space-y-1.5">
@@ -7421,7 +7449,8 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     );
                 }

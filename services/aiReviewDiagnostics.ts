@@ -299,6 +299,40 @@ const summarizeCodeExplanation = (userCode: string, solution: string) => {
     return `Code explanation:\n${concepts.map((text, index) => `part ${index + 1}: ${text}`).join('\n')}`;
 };
 
+const conciseOutput = (value: string | undefined, fallback = 'No visible output') => {
+    const text = String(value || '').trim();
+    if (!text) return fallback;
+    return text.length > 180 ? `${text.slice(0, 180)}...` : text;
+};
+
+const summarizeOutputAnalysis = (
+    request: AiReviewRequest,
+    expectedGot: ReturnType<typeof extractExpectedGot>,
+    raisedError: ReturnType<typeof extractRaisedError>,
+) => {
+    const visibleOutput = conciseOutput(request.programOutput);
+
+    if (request.graderPassed) {
+        return `Output analysis: Correct. The grader accepted this answer. User output: \`${visibleOutput}\`. This means the final \`return\` value or printed output matched the tests for this problem.`;
+    }
+
+    if (expectedGot) {
+        const caseText = expectedGot.args ? ` For ${expectedGot.args},` : '';
+        return `Output analysis: Incorrect.${caseText} expected \`${expectedGot.expected}\`, but the user output/result was \`${expectedGot.actual}\`. The code is close only if the approach is right, but the final value does not match what the problem requires. Fix the line that creates the final \`return\` value or printed output, then rerun.`;
+    }
+
+    if (raisedError) {
+        return `Output analysis: Incorrect. The code did not produce a valid final answer because it crashed with \`${raisedError.errorType}\`${raisedError.detail ? `: \`${raisedError.detail}\`` : ''}. Fix that runtime error first, then check the output again.`;
+    }
+
+    const message = conciseOutput(request.graderMessage, 'The grader did not return a detailed mismatch.');
+    if (/Run has not been pressed/i.test(message)) {
+        return `Output analysis: Not checked yet. Press \`RUN\` first so the app can compare the user output against this problem's grader.`;
+    }
+
+    return `Output analysis: Incorrect. User output: \`${visibleOutput}\`. Grader message: \`${message}\`. The answer did not satisfy the tests, so inspect the final \`return\` or \`print\` and compare it with the problem requirement.`;
+};
+
 const extractPrimarySolutionLines = (solution: string) => {
     const lines = solution.trim().split('\n');
     const imports = lines.filter(line => /^\s*(?:from|import)\s+/.test(line)).slice(0, 4);
@@ -507,10 +541,11 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
     if (request.graderPassed) {
         const expectedWorkflow = request.visibleSolution ? summarizeExpectedWorkflow(request.visibleSolution) : '';
         const codeExplanation = summarizeCodeExplanation(code, request.visibleSolution || '');
+        const outputAnalysis = summarizeOutputAnalysis(request, expectedGot, raisedError);
         return {
             verdict: 'likely_correct',
             confidence: 0.99,
-            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} ${codeExplanation} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
+            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} ${outputAnalysis} ${codeExplanation} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
             suggestedFix: 'No fix needed; the deterministic grader already accepted this solution.',
             source: 'diagnostic',
         };
@@ -521,6 +556,7 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
     }
 
     notes.push(summarizeCodeLines(code));
+    notes.push(summarizeOutputAnalysis(request, expectedGot, raisedError));
     notes.push(summarizeCodeExplanation(code, request.visibleSolution || ''));
 
     if (request.visibleSolution) {
