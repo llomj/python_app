@@ -512,6 +512,15 @@ def accepts_args(candidate, args, kwargs=None):
     except Exception:
         return False
 
+def is_user_function(namespace, name, candidate):
+    if name.startswith("__"):
+        return False
+    if inspect.isclass(candidate) or inspect.ismodule(candidate):
+        return False
+    if not callable(candidate):
+        return False
+    return inspect.isfunction(candidate) and getattr(candidate, "__globals__", None) is namespace
+
 def find_callable(namespace, function_names, args, required_name=None, kwargs=None):
     names = [required_name] if required_name else function_names
     for name in names:
@@ -520,13 +529,16 @@ def find_callable(namespace, function_names, args, required_name=None, kwargs=No
             return name, candidate
     if required_name:
         return None, None
+    fallback_matches = []
     for name, candidate in namespace.items():
-        if name.startswith("__") or name in function_names:
+        if name in function_names:
             continue
-        if inspect.isclass(candidate) or inspect.ismodule(candidate):
+        if not is_user_function(namespace, name, candidate):
             continue
-        if callable(candidate) and accepts_args(candidate, args, kwargs):
-            return name, candidate
+        if accepts_args(candidate, args, kwargs):
+            fallback_matches.append((name, candidate))
+    if len(fallback_matches) == 1:
+        return fallback_matches[0]
     return None, None
 
 def run_grader(source, grader):

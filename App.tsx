@@ -785,6 +785,15 @@ def __auto_grader_accepts_args(candidate, args, kwargs=None):
     except Exception:
         return False
 
+def __auto_grader_is_user_function(name, candidate):
+    if name.startswith("__"):
+        return False
+    if isinstance(candidate, (type, types.ModuleType)):
+        return False
+    if not callable(candidate):
+        return False
+    return inspect.isfunction(candidate) and getattr(candidate, "__globals__", None) is globals()
+
 def __auto_grader_find_callable(function_names, args, required_name=None, kwargs=None):
     names = [required_name] if required_name else function_names
     for name in names:
@@ -793,15 +802,16 @@ def __auto_grader_find_callable(function_names, args, required_name=None, kwargs
             return name, candidate
     if required_name:
         return None, None
+    fallback_matches = []
     for name, candidate in globals().items():
-        if name.startswith("__") or name in function_names:
+        if name in function_names:
             continue
-        if isinstance(candidate, type):
-            continue
-        if isinstance(candidate, types.ModuleType):
+        if not __auto_grader_is_user_function(name, candidate):
             continue
         if callable(candidate) and __auto_grader_accepts_args(candidate, args, kwargs):
-            return name, candidate
+            fallback_matches.append((name, candidate))
+    if len(fallback_matches) == 1:
+        return fallback_matches[0]
     return None, None
 
 def __auto_grader_run():
