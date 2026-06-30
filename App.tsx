@@ -7251,6 +7251,36 @@ const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, 
     });
 };
 
+const getAiStepTitle = (step: string, index: number) => {
+    const normalized = step.toLowerCase();
+    if (normalized.includes('problem requirement')) return 'Problem Requirement';
+    if (normalized.includes('line-by-line') || normalized.includes('code inspection')) return 'Code Check';
+    if (normalized.includes('expected solution workflow') || normalized.includes('function workflow')) return 'Solution Workflow';
+    if (normalized.includes('execution order') || normalized.includes('order of operation')) return 'Execution Order';
+    if (normalized.includes('grader') || normalized.includes('mismatch') || normalized.includes('failed') || normalized.includes('rejected')) return 'Result / Error';
+    if (normalized.includes('built-in review') || normalized.includes('local model')) return 'Review Status';
+    if (normalized.includes('suggested fix') || normalized.includes('what to change')) return 'What To Change';
+    return `Review Point ${index + 1}`;
+};
+
+const splitAiStepParagraphs = (step: string) => {
+    const cleaned = step
+        .replace(/\s*;\s*(?=step\s+\d+:)/gi, '\n')
+        .replace(/\s+(?=step\s+\d+:)/gi, '\n')
+        .trim();
+    const semicolonParts = cleaned
+        .split(/;\s+(?=(?:step\s+\d+:|line\s+\d+|[A-Z]))/i)
+        .map(part => part.trim())
+        .filter(Boolean);
+
+    if (semicolonParts.length > 2) return semicolonParts;
+
+    return cleaned
+        .split(/\n+/)
+        .map(part => part.trim())
+        .filter(Boolean);
+};
+
 const splitAiReviewSteps = (text: string) => {
     const normalized = text
         .replace(/\n\s*---\s*\n/g, '\n\n')
@@ -7314,9 +7344,21 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                                     <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accentColor, 0.16), color: accentColor }}>
                                         {stepIndex + 1}
                                     </div>
-                                    <p className="whitespace-pre-wrap pt-0.5 text-gray-200">
-                                        {renderAiParagraphText(step, editorColors, `ai-step-text-${index}-${stepIndex}`)}
-                                    </p>
+                                    <div className="min-w-0 space-y-2">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: accentColor }}>
+                                            {getAiStepTitle(step, stepIndex)}
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            {splitAiStepParagraphs(step).map((paragraph, paragraphIndex, paragraphs) => (
+                                                <p key={`ai-step-text-${index}-${stepIndex}-${paragraphIndex}`} className="whitespace-pre-wrap text-gray-200">
+                                                    {paragraphs.length > 1 && (
+                                                        <span className="mr-2 text-gray-500">•</span>
+                                                    )}
+                                                    {renderAiParagraphText(paragraph, editorColors, `ai-step-text-${index}-${stepIndex}-${paragraphIndex}`)}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
