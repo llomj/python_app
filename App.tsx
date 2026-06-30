@@ -7229,6 +7229,31 @@ const looksLikePythonCode = (text: string) => {
     return /\n/.test(trimmed) && /\b(def|class|return|if|for|while|import|from|print)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
 };
 
+const isSolutionHeading = (line: string) => /^#\s*(Using|Script|Direct|Built|Manual|Alternative|Try|Another|Equivalent|Convert|Modify|Consider)\b/i.test(line.trim());
+
+const normalizeSolutionHeadings = (solution: string) => {
+    const lines = solution.split('\n');
+    const normalized = [...lines];
+
+    for (let index = 0; index < lines.length; index += 1) {
+        const heading = lines[index].trim();
+        if (!/^#\s*Using function approach\b/i.test(heading)) continue;
+
+        const body: string[] = [];
+        for (let next = index + 1; next < lines.length; next += 1) {
+            if (isSolutionHeading(lines[next])) break;
+            body.push(lines[next]);
+        }
+
+        const bodyText = body.join('\n');
+        if (!/\bdef\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/.test(bodyText) && !/\bclass\s+[A-Za-z_][A-Za-z0-9_]*\b/.test(bodyText)) {
+            normalized[index] = lines[index].replace(/Using function approach/i, 'Using script approach');
+        }
+    }
+
+    return normalized.join('\n');
+};
+
 const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSettings) => {
     if (/^#/.test(token)) return editorColors.comment;
     if (/^(['"]).*\1$/.test(token)) return editorColors.string;
@@ -7661,6 +7686,7 @@ const App: React.FC = () => {
     const selectedModeLabel = getDifficultyLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
+    const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
@@ -8252,7 +8278,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     graderPassed: gradeResult.passed,
                     graderSpec: autoGrader,
                     programOutput: stdout || gradeResult.output || '',
-                    visibleSolution: exercise.solution,
+                    visibleSolution: displaySolution,
                 };
                 setLatestAiReviewRequest(reviewRequest);
                 setLatestAiReviewResult(null);
@@ -8302,7 +8328,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     graderPassed: false,
                     graderSpec: autoGrader,
                     programOutput: stdout || '',
-                    visibleSolution: exercise.solution,
+                    visibleSolution: displaySolution,
                 };
                 setLatestAiReviewRequest(reviewRequest);
                 setLatestAiReviewResult(null);
@@ -8392,7 +8418,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             graderPassed: false,
             graderSpec: currentGrader,
             programOutput: output,
-            visibleSolution: exercise.solution,
+            visibleSolution: displaySolution,
         };
 
         setShowModal('hint');
@@ -9370,10 +9396,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     {solutionTab === 'code' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={exercise.solution} />
+                                                <CopyButton text={displaySolution} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={exercise.solution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
                                             </div>
                                         </div>
                                     )}

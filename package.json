@@ -8,7 +8,8 @@
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",
         "audit:graders": "node scripts/audit_graders.js",
-        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-single-case-scripts 526 --max-empty-graders 0"
+        "audit:solutions": "node scripts/audit_solution_sections.js",
+        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-single-case-scripts 526 --max-empty-graders 0 && npm run audit:solutions -- --max-mislabeled=494"
     },
     "dependencies": {
         "@codemirror/autocomplete": "^6.11.1",
