@@ -1017,6 +1017,16 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([7, -2], 5), ([1.5, 2.25], 3.75)]
         if "sort_dicts_by_key" in name_set and isinstance(left, list) and isinstance(right, str):
             return [([[{"name": "B", "score": 2}, {"name": "A", "score": 5}], "name"], [{"name": "A", "score": 5}, {"name": "B", "score": 2}])]
+        if "length_of_value" in name_set and isinstance(left, list) and isinstance(right, str):
+            return [([[{"code": "zz"}, {"code": "a"}, {"code": "mmmm"}], "code"], [{"code": "a"}, {"code": "zz"}, {"code": "mmmm"}])]
+        if "find_person" in name_set and isinstance(left, list) and isinstance(right, str):
+            return [([[{"name": "Ann"}, {"name": "Christopher"}], "name"], {"name": "Christopher"})]
+        if "longest_string_letter" in name_set and isinstance(left, list) and isinstance(right, str):
+            return [([["sun", "moon", "star"], "n"], "moon"), ([["apple", "grape", "date"], "e"], "apple")]
+        if "count_floating_numbers" in name_set and isinstance(left, list):
+            return [([[1.1, 1.1, 2.2], 1.1], 2), ([[1, 2, 3], 4], 0)]
+        if "calculate_integers" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
+            return [([8, 4], [32, 12, 2]), ([7, 2], [14, 9, 3.5])]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -1261,6 +1271,97 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([["zebra", "yak", "ant"]], "zebra")]
     if "reverse" in name_set and isinstance(sample, list):
         return [([[1, 2, 3, 4]], [4, 3, 2, 1]), ([["a", "b"]], ["b", "a"])]
+    if "floating_point" in name_set and isinstance(sample, list):
+        return [([[2.6, 1.2, 3.8]], [1.2, 2.6, 3.8])]
+    if "first_element_decending_order" in name_set and isinstance(sample, list):
+        return [([[[10, "a"], [5, "b"], [20, "c"]]], [[20, "c"], [10, "a"], [5, "b"]])]
+    if "number_of_consonants" in name_set and isinstance(sample, list):
+        if isinstance(first_expected, str):
+            return [([["aeiou", "cat", "sky"]], "aeiou")]
+        return [([["ai", "cat", "strength"]], ["ai", "cat", "strength"])]
+    if "min_string" in name_set and isinstance(sample, list):
+        return [([["long", "to", "a"]], "a"), ([["bbb", "cc"]], "cc")]
+    if "main" in name_set and isinstance(sample, list):
+        if isinstance(first_expected, list) and all(isinstance(value, int) for value in first_expected):
+            return [([[10, 11, 12, 13], 3], [12, 10, 13, 11])]
+    if "sort_by_year" in name_set and isinstance(sample, list):
+        return [([["1999-12-31", "2024-01-01", "2001-06-15"]], ["1999-12-31", "2001-06-15", "2024-01-01"])]
+    if "sort_by_a_count" in name_set and isinstance(sample, list):
+        return [([["bbb", "atlas", "aardvark"]], ["bbb", "atlas", "aardvark"])]
+    if name_set & {"sort_sqaure", "sqaure_numbers_lst"} and isinstance(sample, list):
+        return [([[-3, 2, -1]], [-1, 2, -3]), ([[0, -4, 1]], [0, 1, -4])]
+    if "length_of_first_element" in name_set and isinstance(sample, list):
+        return [([[["aa", 1], ["b", 2], ["cccc", 3]]], [["b", 2], ["aa", 1], ["cccc", 3]])]
+    if "number_of_spaces" in name_set and isinstance(sample, list):
+        return [([["two spaces here", "one space", "zero"]], ["zero", "one space", "two spaces here"])]
+    if "most_vowels" in name_set and isinstance(sample, list):
+        return [([["sky", "audio", "tree"]], "audio")]
+    if "sort_lst_integers" in name_set and isinstance(sample, list):
+        return [([[-10, 3, 200, -4]], [3, -4, -10, 200])]
+    if "sort_tuples_by_difference" in name_set and isinstance(sample, list):
+        return [([[[5, 5], [2, 8], [9, 7]]], [[5, 5], [9, 7], [2, 8]])]
+    if "sort_strings_by_ascii" in name_set and isinstance(sample, list):
+        return [([["zoo", "ant", "Dog"]], ["Dog", "ant", "zoo"])]
+    if "sort_lists_by_sum" in name_set and isinstance(sample, list):
+        return [([[[5], [1, 1, 1], [2, 2]]], [[1, 1, 1], [2, 2], [5]])]
+    if "sort_files_by_extension" in name_set and isinstance(sample, list):
+        return [([["a.zip", "b.csv", "c.txt"]], ["b.csv", "c.txt", "a.zip"])]
+    if "sort_second_letter" in name_set and isinstance(sample, list):
+        return [([["za", "ab", "cc"]], ["za", "ab", "cc"])]
+    if name_set & {"people_age", "sort_people_by_age"} and isinstance(sample, list):
+        return [([[{"name": "Old", "age": 80}, {"name": "Young", "age": 10}]], [{"name": "Young", "age": 10}, {"name": "Old", "age": 80}])]
+    if "sort_by_binary_representation" in name_set and isinstance(sample, list):
+        return [([[8, 5, 1]], [1, 8, 5])]
+    if "sort_keys_by_value" in name_set and isinstance(sample, dict):
+        return [([{"a": 3, "b": 1, "c": 2}], ["b", "c", "a"])]
+    if "sort_fractions_by_decimal" in name_set and isinstance(sample, list):
+        return [([[10, 2, 6]], [2, 6, 10])]
+    if "count_spaces" in name_set and isinstance(sample, str):
+        return [(["hello world python"], 2), (["nospaces"], 0)]
+    if "filters_even_numbers" in name_set and isinstance(sample, list):
+        return [([[1, 3, 8, 10]], [8, 10])]
+    if "palindromes" in name_set and isinstance(sample, list):
+        return [([["noon", "python", "madam"]], ["noon", "madam"])]
+    if "sum_of_lst" in name_set and isinstance(sample, list):
+        if first_expected == math.prod(sample):
+            return [([[2, 5, 3]], 30)]
+        return [([[-2, 5, 7]], 10)]
+    if "capitalize_string" in name_set and isinstance(sample, list):
+        return [([["python", "CODE"]], ["Python", "Code"])]
+    if "number_lst" in name_set and isinstance(sample, list):
+        return [([[9, -2, 4]], -2)]
+    if "lst_numbers" in name_set and isinstance(sample, list) and isinstance(first_expected, (int, float)) and not isinstance(first_expected, bool):
+        return [([[2, 4]], 20)]
+    if "apply_lsts" in name_set and isinstance(sample, list):
+        return [([[2, 3, 6]], [9])]
+    if "sum_nested_list" in name_set and isinstance(sample, list):
+        return [([[[10], [-2, 3]]], 11)]
+    if "fibonacci_n_numbers" in name_set and isinstance(sample, int):
+        return [([6], [0, 1, 1, 2, 3, 5]), ([3], [0, 1, 1])]
+    if "lst_string" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and all(isinstance(value, int) for value in first_expected):
+        return [([["aei", "sky"]], [3, 0])]
+    if "sum_even_numbers" in name_set and isinstance(sample, list):
+        return [([[2, 8, 9]], 10)]
+    if "lst_num" in name_set and isinstance(sample, list):
+        return [([[5, -2, 1]], [5, 3, 4])]
+    if "filter_primes" in name_set and isinstance(sample, list):
+        return [([[8, 9, 10, 11, 12, 13]], [11, 13])]
+    if "sort_string_len" in name_set and isinstance(sample, list):
+        return [([["aa", "b", "cccc"]], ["b", "aa", "cccc"])]
+    if "lst_tuples_second" in name_set and isinstance(sample, list):
+        return [([[[1, 3], [2, 1], [3, 2]]], [[2, 1], [3, 2], [1, 3]])]
+    if "sort_last_names" in name_set and isinstance(sample, list):
+        return [([["Ada Lovelace", "Grace Hopper"]], ["Grace Hopper", "Ada Lovelace"])]
+    if "sort_ignore_case" in name_set and isinstance(sample, list):
+        return [([["Zoo", "ant", "Bee"]], ["ant", "Bee", "Zoo"])]
+    if "list_floats" in name_set and isinstance(sample, list):
+        return [([[0.5, -1.2, 2]], [2, 0.5, -1.2])]
+    if "lst_words" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and first_expected == sorted(sample, key=lambda word: sum(1 for char in str(word).lower() if char in "aeiou")):
+        return [([["sky", "tree", "audio"]], ["sky", "tree", "audio"])]
+    if "lst_integers" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and first_expected == sorted(sample, key=lambda value: sum(int(digit) for digit in str(abs(value)))):
+        return [([[5666, 566, 56, 6]], [6, 56, 566, 5666])]
+    if "lst_products" in name_set and isinstance(sample, list):
+        return [([[{"name": "X", "price": 3}, {"name": "Y", "price": 1}]], [{"name": "Y", "price": 1}, {"name": "X", "price": 3}])]
     return []
 
 def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tests, compare):

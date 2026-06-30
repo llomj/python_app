@@ -10,7 +10,7 @@
         "audit:graders": "node scripts/audit_graders.js",
         "audit:metamorphic": "node scripts/audit_metamorphic_graders.js",
         "audit:solutions": "node scripts/audit_solution_sections.js",
-        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-unguarded-single-case-no-arg-functions 0 --max-single-case-scripts 526 --max-unguarded-single-case-scripts 0 --max-hardcode-risk-scripts 0 --max-empty-graders 0 && npm run audit:metamorphic -- --min-covered 282 && npm run audit:solutions -- --max-mislabeled=0"
+        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-unguarded-single-case-no-arg-functions 0 --max-single-case-scripts 526 --max-unguarded-single-case-scripts 0 --max-hardcode-risk-scripts 0 --max-empty-graders 0 && npm run audit:metamorphic -- --min-covered 336 && npm run audit:solutions -- --max-mislabeled=0"
     },
     "dependencies": {
         "@codemirror/autocomplete": "^6.11.1",

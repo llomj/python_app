@@ -139,6 +139,11 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('sum_of_primes') && [left, right].every(Number.isInteger)) return 'sum_of_primes';
     if (['calculate_sum', 'sum_of_two'].some(name => names.has(name)) && [left, right].every(value => typeof value === 'number')) return 'add_numbers_nested';
     if (names.has('sort_dicts_by_key') && Array.isArray(left) && typeof right === 'string') return 'sort_dicts_by_key';
+    if (names.has('length_of_value') && Array.isArray(left) && typeof right === 'string') return 'sort_dicts_by_value_length';
+    if (names.has('find_person') && Array.isArray(left) && typeof right === 'string') return 'max_dict_value_length';
+    if (names.has('longest_string_letter') && Array.isArray(left) && typeof right === 'string') return 'longest_string_ending_letter';
+    if (names.has('count_floating_numbers') && Array.isArray(left)) return 'count_value';
+    if (names.has('calculate_integers') && [left, right].every(value => typeof value === 'number')) return 'product_sum_division';
     return null;
   }
   if (firstArgs.length === 3) {
@@ -273,6 +278,55 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('filter_string') && Array.isArray(sample)) return 'filter_len_three';
   if (names.has('max_string_alpha') && Array.isArray(sample)) return 'max_string_alpha';
   if (names.has('reverse') && Array.isArray(sample)) return 'reverse_list';
+  if (names.has('floating_point') && Array.isArray(sample)) return 'sort_float_ascending';
+  if (names.has('first_element_decending_order') && Array.isArray(sample)) return 'sort_first_element_desc';
+  if (names.has('number_of_consonants') && Array.isArray(sample)) return typeof firstExpected === 'string' ? 'min_consonants_word' : 'sort_by_consonants';
+  if (names.has('min_string') && Array.isArray(sample)) return 'shortest_word';
+  if (names.has('main') && Array.isArray(sample) && Array.isArray(firstExpected) && firstExpected.every(value => Number.isInteger(value))) return 'sort_by_remainder';
+  if (names.has('sort_by_year') && Array.isArray(sample)) return 'sort_by_year';
+  if (names.has('sort_by_a_count') && Array.isArray(sample)) return 'sort_by_a_count';
+  if (['sort_sqaure', 'sqaure_numbers_lst'].some(name => names.has(name)) && Array.isArray(sample)) return 'sort_by_square';
+  if (names.has('length_of_first_element') && Array.isArray(sample)) return 'sort_by_first_element_length';
+  if (names.has('number_of_spaces') && Array.isArray(sample)) return 'sort_by_space_count';
+  if (names.has('most_vowels') && Array.isArray(sample)) return 'max_vowels_word';
+  if (names.has('sort_lst_integers') && Array.isArray(sample)) return 'sort_by_digit_count';
+  if (names.has('sort_tuples_by_difference') && Array.isArray(sample)) return 'sort_tuples_by_difference';
+  if (names.has('sort_strings_by_ascii') && Array.isArray(sample)) return 'sort_strings_by_ascii';
+  if (names.has('sort_lists_by_sum') && Array.isArray(sample)) return 'sort_lists_by_sum';
+  if (names.has('sort_files_by_extension') && Array.isArray(sample)) return 'sort_files_by_extension';
+  if (names.has('sort_second_letter') && Array.isArray(sample)) return 'sort_second_letter';
+  if (['people_age', 'sort_people_by_age'].some(name => names.has(name)) && Array.isArray(sample)) return 'sort_people_by_age';
+  if (names.has('sort_by_binary_representation') && Array.isArray(sample)) return 'sort_by_binary_representation';
+  if (names.has('sort_keys_by_value') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_by_value';
+  if (names.has('sort_fractions_by_decimal') && Array.isArray(sample)) return 'sort_numeric';
+  if (names.has('count_spaces') && typeof sample === 'string') return 'count_spaces';
+  if (names.has('filters_even_numbers') && Array.isArray(sample)) return 'keep_even_numbers';
+  if (names.has('palindromes') && Array.isArray(sample)) return 'filter_palindromes';
+  if (names.has('sum_of_lst') && Array.isArray(sample)) return firstExpected === sample.reduce((a, b) => a * b, 1) ? 'product_list' : 'sum_list';
+  if (names.has('capitalize_string') && Array.isArray(sample)) return 'capitalize_words_list';
+  if (names.has('number_lst') && Array.isArray(sample)) return 'find_min';
+  if (names.has('lst_numbers') && Array.isArray(sample) && typeof firstExpected === 'number') return 'sum_squares';
+  if (names.has('apply_lsts') && Array.isArray(sample)) return 'square_then_filter_odd';
+  if (names.has('sum_nested_list') && Array.isArray(sample)) return 'sum_nested_list';
+  if (names.has('fibonacci_n_numbers') && Number.isInteger(sample)) return 'fibonacci';
+  if (names.has('lst_string') && Array.isArray(sample) && Array.isArray(firstExpected) && firstExpected.every(Number.isInteger)) return 'map_count_vowels';
+  if (names.has('sum_even_numbers') && Array.isArray(sample)) return 'sum_even_numbers';
+  if (names.has('lst_num') && Array.isArray(sample)) return 'cumulative_sum';
+  if (names.has('filter_primes') && Array.isArray(sample)) return 'filter_prime';
+  if (names.has('sort_string_len') && Array.isArray(sample)) return 'sort_strings_by_length';
+  if (names.has('lst_tuples_second') && Array.isArray(sample)) return 'sort_tuples_by_second';
+  if (names.has('sort_last_names') && Array.isArray(sample)) return 'sort_last_names';
+  if (names.has('sort_ignore_case') && Array.isArray(sample)) return 'sort_ignore_case';
+  if (names.has('list_floats') && Array.isArray(sample)) return 'sort_descending';
+  if (names.has('lst_words') && Array.isArray(sample) && Array.isArray(firstExpected) && JSON.stringify(firstExpected) === JSON.stringify([...sample].sort((a, b) => {
+    const countVowels = word => String(word).toLowerCase().split('').filter(char => 'aeiou'.includes(char)).length;
+    return countVowels(a) - countVowels(b);
+  }))) return 'sort_by_vowel_count';
+  if (names.has('lst_integers') && Array.isArray(sample) && Array.isArray(firstExpected) && JSON.stringify(firstExpected) === JSON.stringify([...sample].sort((a, b) => {
+    const digitSum = value => String(Math.abs(value)).split('').reduce((total, digit) => total + Number(digit), 0);
+    return digitSum(a) - digitSum(b);
+  }))) return 'sort_by_digit_sum';
+  if (names.has('lst_products') && Array.isArray(sample)) return 'sort_products_by_price';
   return null;
 }
 
