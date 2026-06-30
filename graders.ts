@@ -6058,6 +6058,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["hello", "again", "exit"], expected: "" }
@@ -6095,6 +6096,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["3", "5", "8"], expected: "" }
@@ -6123,6 +6125,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["1", "9", "7"], expected: "" }
@@ -6180,6 +6183,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["wrong", "python"], expected: "" }
@@ -6295,6 +6299,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["30"], expected: "900\n961" },
@@ -6368,6 +6373,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
+    requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["hello", "Python", "exit"], expected: "5\n6" },
       { args: [], inputValues: ["exit"], expected: "" }
