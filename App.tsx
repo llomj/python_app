@@ -1103,7 +1103,7 @@ def __auto_grader_run():
 
         returned_ok = __auto_grader_same(returned, expected, compare)
         printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)
-        if not printed_ok and compare == "printedOrReturn":
+        if not printed_ok and (compare == "printedOrReturn" or returned is None):
             printed_ok = __auto_grader_same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok:
             actual = printed if printed else returned

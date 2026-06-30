@@ -774,7 +774,11 @@ def run_function_tests(namespace, grader, tests, compare):
             builtins.open = old_open
         if case.get("expectedException"):
             return False
-        if not same(returned, expected, compare) and not (printed and same(printed, expected, compare)):
+        returned_ok = same(returned, expected, compare)
+        printed_ok = bool(printed) and same(printed, expected, compare)
+        if not printed_ok and returned is None:
+            printed_ok = bool(printed) and same(printed, expected, "printedOrReturn")
+        if not returned_ok and not printed_ok:
             return False
     return True
 
