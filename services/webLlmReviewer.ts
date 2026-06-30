@@ -52,6 +52,7 @@ Return JSON only:
 
 Rules:
 - Do not give a generic answer. You must mention the exact problem requirement and at least one exact line, function name, variable, output value, or grader message from the student's code.
+- In the Problem Requirement section, do not only repeat the prompt. State the exact detected issue first when there is one: missing comma, missing colon, indentation error, wrong function name, wrong variable name, wrong method, wrong number of parameters, missing return, expected-vs-actual output mismatch, or runtime error.
 - Analyze line by line when possible: say what each important line does and whether it helps solve this specific problem.
 - Add a dedicated Output Analysis section. If the output/grader is correct, start that section with "Output analysis: Correct". If it is wrong or crashed, start with "Output analysis: Incorrect" and explain exactly what expected value/output differs from the user's output.
 - Add a dedicated Code Explanation section. Explain important Python syntax and APIs in beginner language: indexing like \`[-1]\`, slicing like \`[start:stop:step]\` and \`[::-1]\`, list/dict/set literals, comprehensions, loops, conditionals, \`return\` vs \`print\`, built-in functions, methods, imports, regex, JSON, files, and any operator used by the submitted code.

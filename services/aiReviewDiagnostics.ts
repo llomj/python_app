@@ -132,9 +132,132 @@ const extractRequiredSyntax = (text: string) => {
     return patterns.filter(p => p.regex.test(text)).map(p => p.label);
 };
 
-const summarizeProblemRequirement = (request: AiReviewRequest) => {
+const getLineText = (code: string, lineNumber: number | null) => {
+    if (!lineNumber || lineNumber < 1) return '';
+    return code.split('\n')[lineNumber - 1]?.trim() || '';
+};
+
+const extractErrorLineNumber = (message: string) => {
+    const match = message.match(/line\s+(\d+)/i);
+    return match ? Number(match[1]) : null;
+};
+
+const detectLikelySyntaxIssue = (code: string, message: string) => {
+    const lineNumber = extractErrorLineNumber(message);
+    const lineText = getLineText(code, lineNumber);
+    const lineHint = lineNumber ? ` on line ${lineNumber}${lineText ? `: \`${lineText}\`` : ''}` : '';
+
+    if (/IndentationError|unexpected indent|expected an indented block|unindent does not match/i.test(message)) {
+        return `Specific issue: indentation is wrong${lineHint}. Python uses indentation to decide what belongs inside a function, loop, or if-block.`;
+    }
+    if (/TabError/i.test(message)) {
+        return `Specific issue: tabs and spaces are mixed${lineHint}. Use spaces consistently for indentation.`;
+    }
+    if (/forgot a comma|perhaps you forgot a comma/i.test(message)) {
+        return `Specific issue: Python thinks a comma is missing${lineHint}. Check lists, tuples, function arguments, and dictionary entries around that line.`;
+    }
+    if (/invalid syntax|SyntaxError/i.test(message)) {
+        const missingColonLine = code
+            .split('\n')
+            .map((line, index) => ({ line: line.trim(), number: index + 1 }))
+            .find(item => /^(def|if|elif|else|for|while|try|except|finally|with|class)\b/.test(item.line) && !item.line.endsWith(':'));
+        if (missingColonLine) {
+            return `Specific issue: missing colon \`:\` on line ${missingColonLine.number}: \`${missingColonLine.line}\`. Lines that start blocks, like \`def\`, \`if\`, \`for\`, and \`while\`, must end with \`:\`.`;
+        }
+        const bracketBalance = {
+            round: (code.match(/\(/g) || []).length - (code.match(/\)/g) || []).length,
+            square: (code.match(/\[/g) || []).length - (code.match(/\]/g) || []).length,
+            curly: (code.match(/\{/g) || []).length - (code.match(/\}/g) || []).length,
+        };
+        if (bracketBalance.round || bracketBalance.square || bracketBalance.curly) {
+            return `Specific issue: brackets do not balance${lineHint}. Check that every \`(\`, \`[\`, or \`{\` has the matching closing bracket.`;
+        }
+        return `Specific issue: invalid Python syntax${lineHint}. Check punctuation first: commas, colons, quotes, and brackets.`;
+    }
+    return '';
+};
+
+const summarizeSpecificIssue = (
+    request: AiReviewRequest,
+    expectedGot: ReturnType<typeof extractExpectedGot>,
+    raisedError: ReturnType<typeof extractRaisedError>,
+    expectedFunctionNames: string[],
+) => {
+    const code = request.userCode || '';
+    const message = request.graderMessage || '';
+    if (request.graderPassed) {
+        return 'Specific issue: none detected. The grader accepted the output/return value for this problem.';
+    }
+
+    const syntaxIssue = detectLikelySyntaxIssue(code, message);
+    if (syntaxIssue) return syntaxIssue;
+
+    if (expectedGot) {
+        return expectedGot.args
+            ? `Specific issue: output mismatch for ${expectedGot.args}. Expected \`${expectedGot.expected}\`, but the code produced \`${expectedGot.actual}\`.`
+            : `Specific issue: output mismatch. Expected \`${expectedGot.expected}\`, but the code produced \`${expectedGot.actual}\`.`;
+    }
+
+    if (/Missing required source pattern|Missing required syntax/i.test(message)) {
+        return `Specific issue: the required method/syntax is missing. ${message}`;
+    }
+
+    if (/Could not find a callable|Missing function/i.test(message)) {
+        if (expectedFunctionNames.length) {
+            return `Specific issue: wrong or missing function name. The grader is looking for \`${expectedFunctionNames.join('()` or `')}()\`.`;
+        }
+        const required = extractRequiredFunctionName(`${request.title}\n${request.description}`);
+        return required
+            ? `Specific issue: wrong or missing function name. The prompt expects \`${required}()\`.`
+            : 'Specific issue: the grader could not find the function it needs to call.';
+    }
+
+    const nameError = message.match(/NameError:\s*name ['"]([^'"]+)['"] is not defined/i);
+    if (nameError?.[1]) {
+        return `Specific issue: variable/function \`${nameError[1]}\` is used before it is defined. Check spelling and make sure it is assigned before use.`;
+    }
+
+    const attributeError = message.match(/AttributeError:\s*['"]?([^'"]+)['"]? object has no attribute ['"]([^'"]+)['"]/i);
+    if (attributeError?.[2]) {
+        return `Specific issue: wrong method/property name \`.${attributeError[2]}\`. That object does not provide this method, so check the required method spelling/type.`;
+    }
+
+    if (/TypeError/i.test(message)) {
+        if (/missing .* positional argument/i.test(message)) {
+            return `Specific issue: function parameters do not match how the grader calls the function. ${message}`;
+        }
+        if (/takes .* positional argument/i.test(message)) {
+            return `Specific issue: wrong number of function arguments. ${message}`;
+        }
+        if (/unsupported operand|not supported between/i.test(message)) {
+            return `Specific issue: wrong data type for an operation. ${message}`;
+        }
+        return `Specific issue: type error. ${message}`;
+    }
+
+    if (raisedError) {
+        return `Specific issue: runtime error \`${raisedError.errorType}\`${raisedError.detail ? `: \`${raisedError.detail}\`` : ''}.`;
+    }
+
+    if (/\bpass\b/.test(code)) {
+        return 'Specific issue: the code still contains `pass`, so the required logic has not been written yet.';
+    }
+
+    return message && !/Run has not been pressed/i.test(message)
+        ? `Specific issue: the grader rejected the answer with this message: \`${message}\`.`
+        : 'Specific issue: not checked yet. Press `RUN` first so the review can identify the exact problem.';
+};
+
+const summarizeProblemRequirement = (
+    request: AiReviewRequest,
+    expectedGot?: ReturnType<typeof extractExpectedGot>,
+    raisedError?: ReturnType<typeof extractRaisedError>,
+    expectedFunctionNames: string[] = [],
+) => {
     const description = (request.description || request.title || '').replace(/\s+/g, ' ').trim();
-    return description.length > 220 ? `${description.slice(0, 220)}...` : description;
+    const conciseDescription = description.length > 220 ? `${description.slice(0, 220)}...` : description;
+    const issue = summarizeSpecificIssue(request, expectedGot || null, raisedError || null, expectedFunctionNames);
+    return `${conciseDescription} ${issue}`;
 };
 
 const describeCodeLine = (line: string) => {
@@ -545,14 +668,14 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
         return {
             verdict: 'likely_correct',
             confidence: 0.99,
-            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} ${outputAnalysis} ${codeExplanation} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
+            explanation: `Problem requirement: ${summarizeProblemRequirement(request, expectedGot, raisedError, expectedFunctionNames)} ${summarizeCodeLines(code)} ${outputAnalysis} ${codeExplanation} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
             suggestedFix: 'No fix needed; the deterministic grader already accepted this solution.',
             source: 'diagnostic',
         };
     }
 
     if (request.description || request.title) {
-        notes.push(`Problem requirement: ${summarizeProblemRequirement(request)}`);
+        notes.push(`Problem requirement: ${summarizeProblemRequirement(request, expectedGot, raisedError, expectedFunctionNames)}`);
     }
 
     notes.push(summarizeCodeLines(code));
