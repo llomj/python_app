@@ -618,6 +618,24 @@ def __auto_grader_check_source_requirements():
             return f"Missing required syntax: at least {min_count} {node_type} node(s)"
     return None
 
+def __auto_grader_hardcoded_expected_error(expected):
+    if not isinstance(expected, str):
+        return None
+    expected_text = __auto_grader_clean_text(expected)
+    if len(expected_text) < 20 or "\\n" not in expected_text:
+        return None
+    try:
+        tree = ast.parse(__auto_grader_source)
+    except SyntaxError:
+        return None
+    expected_compact = __auto_grader_compact_pattern(expected_text)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            literal_text = __auto_grader_clean_text(node.value)
+            if literal_text == expected_text or __auto_grader_compact_pattern(literal_text) == expected_compact:
+                return "Hard-coded output detected: build the result with the required logic instead of pasting the expected output."
+    return None
+
 def __auto_grader_clean_text(value):
     return "\\n".join(line.rstrip() for line in str(value).strip().splitlines())
 
@@ -1130,6 +1148,12 @@ def __auto_grader_run_script():
 
     for index, case in enumerate(tests, start=1):
         expected = case.get("expected")
+        hardcoded_error = __auto_grader_hardcoded_expected_error(expected)
+        if hardcoded_error:
+            return {
+                "passed": False,
+                "message": hardcoded_error
+            }
         input_values = list(case.get("inputValues", []))
         random_values = list(case.get("randomValues", []))
         random_float_values = list(case.get("randomFloatValues", []))

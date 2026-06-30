@@ -505,6 +505,24 @@ def source_requirements_ok(source, grader):
             return False
     return True
 
+def has_hardcoded_expected_output(source, expected):
+    if not isinstance(expected, str):
+        return False
+    expected_text = clean_text(expected)
+    if len(expected_text) < 20 or "\n" not in expected_text:
+        return False
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return False
+    expected_compact = compact_pattern(expected_text)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            literal_text = clean_text(node.value)
+            if literal_text == expected_text or compact_pattern(literal_text) == expected_compact:
+                return True
+    return False
+
 def accepts_args(candidate, args, kwargs=None):
     try:
         inspect.signature(candidate).bind(*args, **(kwargs or {}))
@@ -603,6 +621,8 @@ def run_script_tests(solution, tests, compare):
     compiled = compile(solution, "<solution>", "exec")
     for index, case in enumerate(tests, start=1):
         expected = case.get("expected")
+        if has_hardcoded_expected_output(solution, expected):
+            return False
         input_values = iter(list(case.get("inputValues", [])))
         old_stdout = sys.stdout
         old_input = builtins.input

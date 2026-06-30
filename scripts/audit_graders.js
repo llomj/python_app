@@ -49,8 +49,37 @@ const weakFunctionGraders = [];
 const singleCaseNoArgFunctionGraders = [];
 const singleCaseScriptGraders = [];
 const unguardedSingleCaseScriptGraders = [];
+const hardcodeRiskScriptGraders = [];
 const emptyGraders = [];
 const invalidGraders = [];
+
+function hasDynamicScriptSignal(grader, tests) {
+  const callNames = new Set((grader.requiredCallPatterns || []).map(pattern => pattern.functionName));
+  const nodeNames = new Set((grader.requiredNodePatterns || []).map(pattern => pattern.nodeType));
+  const hasInputValues = tests.some(test => Array.isArray(test.inputValues) && test.inputValues.length > 0);
+  const hasRandomValues = tests.some(test =>
+    (Array.isArray(test.randomValues) && test.randomValues.length > 0) ||
+    (Array.isArray(test.randomFloatValues) && test.randomFloatValues.length > 0) ||
+    (Array.isArray(test.randomChoiceValues) && test.randomChoiceValues.length > 0) ||
+    (Array.isArray(test.randomSampleValues) && test.randomSampleValues.length > 0) ||
+    (Array.isArray(test.randomShuffleValues) && test.randomShuffleValues.length > 0)
+  );
+  const hasSetupOrFiles = tests.some(test =>
+    (test.setupFiles && Object.keys(test.setupFiles).length > 0) ||
+    (Array.isArray(test.setupDirs) && test.setupDirs.length > 0) ||
+    (Array.isArray(test.setupRemove) && test.setupRemove.length > 0) ||
+    (Array.isArray(test.getFiles) && test.getFiles.length > 0)
+  );
+  const dynamicCalls = ['input', 'randint', 'randrange', 'random', 'uniform', 'choice', 'sample', 'shuffle', 'choices', 'open'];
+  const algorithmNodes = ['For', 'While', 'ListComp', 'DictComp', 'SetComp', 'GeneratorExp'];
+  return (
+    hasInputValues ||
+    hasRandomValues ||
+    hasSetupOrFiles ||
+    dynamicCalls.some(name => callNames.has(name)) ||
+    algorithmNodes.some(name => nodeNames.has(name))
+  );
+}
 
 for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   const id = Number(rawId);
@@ -118,6 +147,9 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
       singleCaseScriptGraders.push(id);
       const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0;
       if (!hasSourceRequirements) unguardedSingleCaseScriptGraders.push(id);
+      if (!hasDynamicScriptSignal(grader, tests)) {
+        hardcodeRiskScriptGraders.push(id);
+      }
     }
     continue;
   }
@@ -147,6 +179,7 @@ const shownWeakIds = showAll ? weakIds : weakIds.slice(0, 100);
 const maxWeakFunctions = readNumberFlag('max-weak-functions');
 const maxSingleCaseScripts = readNumberFlag('max-single-case-scripts');
 const maxUnguardedSingleCaseScripts = readNumberFlag('max-unguarded-single-case-scripts');
+const maxHardcodeRiskScripts = readNumberFlag('max-hardcode-risk-scripts');
 const maxEmptyGraders = readNumberFlag('max-empty-graders') ?? 0;
 
 console.log('Grader quality audit');
@@ -157,6 +190,7 @@ console.log(`Parameterized function graders below ${MIN_FUNCTION_TESTS} tests: $
 console.log(`Single-case no-arg function graders: ${singleCaseNoArgFunctionGraders.length}`);
 console.log(`Single-case script graders: ${singleCaseScriptGraders.length}`);
 console.log(`Unguarded single-case script graders: ${unguardedSingleCaseScriptGraders.length}`);
+console.log(`Hardcode-risk single-case script graders: ${hardcodeRiskScriptGraders.length}`);
 console.log(`Empty graders: ${emptyGraders.length}`);
 console.log(`Invalid grader definitions: ${invalidGraders.length}`);
 
@@ -182,6 +216,7 @@ if (singleCaseNoArgFunctionGraders.length && showAll) {
 if (singleCaseScriptGraders.length && showAll) {
   console.log(`Single-case script grader IDs: ${singleCaseScriptGraders.join(', ')}`);
   console.log(`Unguarded single-case script grader IDs: ${unguardedSingleCaseScriptGraders.join(', ')}`);
+  console.log(`Hardcode-risk single-case script grader IDs: ${hardcodeRiskScriptGraders.join(', ')}`);
   console.log('First single-case script graders:');
   for (const id of singleCaseScriptGraders.slice(0, 40)) {
     const exercise = exerciseById.get(id);
@@ -218,6 +253,9 @@ if (maxSingleCaseScripts !== null && singleCaseScriptGraders.length > maxSingleC
 }
 if (maxUnguardedSingleCaseScripts !== null && unguardedSingleCaseScriptGraders.length > maxUnguardedSingleCaseScripts) {
   gateFailures.push(`${unguardedSingleCaseScriptGraders.length} unguarded single-case script graders exceeds max ${maxUnguardedSingleCaseScripts}`);
+}
+if (maxHardcodeRiskScripts !== null && hardcodeRiskScriptGraders.length > maxHardcodeRiskScripts) {
+  gateFailures.push(`${hardcodeRiskScriptGraders.length} hardcode-risk single-case script graders exceeds max ${maxHardcodeRiskScripts}`);
 }
 
 if (gateFailures.length) {
