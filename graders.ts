@@ -6048,6 +6048,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["3"], expected: "Hello\nHello\nHello" },
@@ -6086,6 +6087,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["20", "15", "18"], expected: "53" },
@@ -6106,6 +6108,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["5", "7", "0"], expected: "12" },
@@ -6135,6 +6138,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["Education"], expected: "5" },
@@ -6145,6 +6149,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["code"], expected: "code\ncod\nco\nc" }
@@ -6154,6 +6159,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["4"], expected: "4\n3\n2\n1\n0" }
@@ -6163,6 +6169,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["4", "6", "2", "-1"], expected: "12" },
@@ -6173,6 +6180,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["3", "9", "4", "stop"], expected: "9" },
@@ -6202,6 +6210,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["12345"], expected: "54321" },
@@ -6212,6 +6221,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["10", "20", "30", "done"], expected: "20.0" },
@@ -6222,6 +6232,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["4"], expected: "4\n3\n2\n1" }
@@ -6250,6 +6261,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["Education"], expected: "dctn" },
@@ -6260,6 +6272,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["12345"], expected: "5" },
@@ -6270,6 +6283,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" }
@@ -6279,6 +6293,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["8"], expected: "8\n4.0\n2.0\n1.0" },
@@ -6289,6 +6304,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["red", "blue", "stop"], expected: "['red', 'blue']" },
@@ -6355,6 +6371,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["121", "12", "quit"], expected: "121 is a palindrome\n12 is not a palindrome" }
@@ -6384,6 +6401,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: [],
     mode: 'script',
     compare: 'printedOrReturn',
+    requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], inputValues: ["1", "2", "3", "4", "5"], expected: "120" },
