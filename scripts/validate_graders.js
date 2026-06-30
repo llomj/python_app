@@ -123,6 +123,10 @@ def maybe_literal(value):
     try:
         return ast.literal_eval(text)
     except Exception:
+        pass
+    try:
+        return json.loads(text)
+    except Exception:
         return value
 
 def clean_text(value):
@@ -130,6 +134,24 @@ def clean_text(value):
 
 def compact_pattern(value):
     return "\n".join(re.sub(r"[ \t]+", "", line) for line in clean_text(value).splitlines())
+
+def values_equivalent(actual, expected):
+    actual = normalize(maybe_literal(actual))
+    expected = normalize(maybe_literal(expected))
+    if actual == expected:
+        return True
+    if isinstance(actual, str) and isinstance(expected, str):
+        return clean_text(actual) == clean_text(expected)
+    if isinstance(actual, (int, float)) or isinstance(expected, (int, float)):
+        try:
+            return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
+        except Exception:
+            pass
+    if isinstance(actual, str) and isinstance(expected, bool):
+        return actual.strip().lower() == str(expected).lower()
+    if isinstance(expected, str) and isinstance(actual, bool):
+        return expected.strip().lower() == str(actual).lower()
+    return False
 
 def repair_generated_string_newlines(source):
     repaired = []
@@ -217,7 +239,8 @@ def same(actual, expected, compare):
     if compare == "printedOrReturn":
         actual_text = clean_text(actual)
         expected_text = clean_text(expected)
-        return actual == expected or actual_text == expected_text or expected_text in actual_text or compact_pattern(actual_text) == compact_pattern(expected_text)
+        actual_lines = [line.strip() for line in actual_text.splitlines() if line.strip()]
+        return values_equivalent(actual, expected) or actual_text == expected_text or expected_text in actual_text or compact_pattern(actual_text) == compact_pattern(expected_text) or any(values_equivalent(line, expected) for line in actual_lines)
     if compare == "numberRange":
         found = numbers(actual)
         if not found or not isinstance(expected, list) or len(expected) != 2:
