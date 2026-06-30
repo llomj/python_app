@@ -884,6 +884,12 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([7, -2], 5), ([1.5, 2.25], 3.75)]
         if "merge_lists" in name_set and isinstance(left, list) and isinstance(right, list):
             return [([[1, 4], [2, 3]], [1, 2, 3, 4]), ([[], [2]], [2])]
+        if "sum_of_2_lst" in name_set and isinstance(left, list) and isinstance(right, list):
+            return [([[1, 2], [3, 4]], [4, 6]), ([[-1, 5], [1, -2]], [0, 3])]
+        if name_set & {"maxium_element_wise", "maximum_element_wise"} and isinstance(left, list) and isinstance(right, list):
+            return [([[1, 5], [2, 4]], [2, 5]), ([[10, -1], [3, 9]], [10, 9])]
+        if "euclidean_distance" in name_set and isinstance(left, list) and isinstance(right, list):
+            return [([[0, 0], [6, 8]], 10), ([[3, 4], [6, 8]], 5)]
         if "is_anagram" in name_set and isinstance(left, str) and isinstance(right, str):
             return [(["Listen", "Silent"], True), (["hello", "world"], False)]
         if "common_char" in name_set and isinstance(left, str) and isinstance(right, str):
@@ -894,6 +900,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([48, 18], 6), ([17, 13], 1)]
         if "lcm" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([12, 18], 36), ([5, 7], 35)]
+        if "sum_of_squares" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
+            return [([3, 4], 25), ([1, 2], 5)]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -934,28 +942,60 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[9, -2, 4]], 11), ([[]], 0)]
     if "find_min_max" in name_set and isinstance(sample, list):
         return [([[5, -2, 10]], [-2, 10]), ([[7]], [7, 7])]
+    if "l_s" in name_set and isinstance(sample, list):
+        return [([[5, -1, 0]], [5, -1]), ([[7]], [7, 7])]
     if name_set & {"largest_smallest", "smallest_largest", "smallest_biggest"} and isinstance(sample, list):
         if isinstance(first_expected, list) and len(first_expected) == len(sample):
             expected_desc = first_expected == sorted(first_expected, reverse=True)
             return [([[5, -1, 0]], [5, 0, -1] if expected_desc else [-1, 0, 5])]
         if isinstance(first_expected, list) and len(first_expected) == 2:
             return [([[5, -1, 0]], [-1, 5]), ([[7]], [7, 7])]
+    if "seconded_largest_number" in name_set and isinstance(sample, list):
+        return [([[10, 5, 8, 3, 12]], 10), ([[7, 7, 3]], 7)]
+    if "fourth_largest_number" in name_set and isinstance(sample, list):
+        return [([[10, 5, 8, 3, 12, 7]], 7)]
+    if "smallest_and_third" in name_set and isinstance(sample, list):
+        return [([[5, 9, 2, 7, 11, 3]], [2, 7])]
     if name_set & {"calculate_average", "cal_average", "find_average", "find_average_lst"} and isinstance(sample, list):
         return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
     if name_set & {"square_list", "square_lst", "square_elements"} and isinstance(sample, list):
         return [([[3, -2, 0]], [9, 4, 0]), ([[]], [])]
+    if name_set & {"square_numbers"} and isinstance(sample, list):
+        return [([[3, -2, 0]], [9, 4, 0]), ([[]], [])]
+    if "square_roots" in name_set and isinstance(sample, list):
+        return [([[4, 9, 16]], [2, 3, 4]), ([[1, 25]], [1, 5])]
     if name_set & {"ascending_order_numbers", "sort_list", "sort_lst"} and isinstance(sample, list):
         return [([[5, -1, 0]], [-1, 0, 5]), ([[]], [])]
     if "big_small" in name_set and isinstance(sample, list):
         return [([["4", "10", "2"]], ["10", "4", "2"])]
     if name_set & {"reverse_list", "reverse_lst"} and isinstance(sample, list):
         return [([[1, 2, 3, 4]], [4, 3, 2, 1]), ([["a", "b"]], ["b", "a"])]
+    if "reverse_strings" in name_set and isinstance(sample, list):
+        return [([["hello", "ab"]], ["olleh", "ba"])]
+    if "strip_whitespace" in name_set and isinstance(sample, list):
+        return [([["  a", "b  "]], ["a", "b"])]
+    if "number_and_square" in name_set and isinstance(sample, list):
+        return [([[3, -2, 0]], [[3, 9], [-2, 4], [0, 0]])]
     if name_set & {"remove_duplicates", "remove_duplicate"} and isinstance(sample, list):
         if any("case_insensitive" in name for name in name_set):
             return []
         return [([[3, 1, 3, 2, 1]], [3, 1, 2]), ([["a", "b", "a"]], ["a", "b"])]
     if "has_duplicates" in name_set and isinstance(sample, list):
         return [([[1, 2, 1]], True), ([[1, 2, 3]], False)]
+    if "filter_even_numbers" in name_set and isinstance(sample, list):
+        return [([[1, 2, 3, 4]], [1, 3]), ([[2, 4]], [])]
+    if "filter_odd_numbers" in name_set and isinstance(sample, list):
+        if isinstance(first_expected, list) and all(isinstance(value, int) and value % 2 != 0 for value in first_expected):
+            return [([[1, 2, 3, 4]], [1, 3]), ([[2, 4, 7]], [7])]
+        return [([[1, 2, 3, 4]], [2, 4]), ([[1, 3]], [])]
+    if "filter_palindromes" in name_set and isinstance(sample, list):
+        return [([["madam", "hello", "noon"]], ["madam", "noon"])]
+    if "filter_prime" in name_set and isinstance(sample, list):
+        return [([[1, 2, 3, 4, 5]], [2, 3, 5])]
+    if "sum_odd_indexed_elements" in name_set and isinstance(sample, list):
+        return [([[1, 2, 3, 4, 5, 6]], 12), ([[10, 20, 30]], 20)]
+    if "sort_tuples_by_second" in name_set and isinstance(sample, list):
+        return [([[["a", 3], ["b", 1], ["c", 2]]], [["b", 1], ["c", 2], ["a", 3]])]
     if name_set & {"remove_spaces", "remove_space"} and isinstance(sample, str):
         return [(["a b  c"], "abc"), ([" no spaces "], "nospaces")]
     if "capitalize_words" in name_set and isinstance(sample, str):
@@ -1012,6 +1052,16 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[2, 1, 4]], True), ([[1, 10, 2]], False)]
     if name_set & {"largest_element", "max_in_list"} and isinstance(sample, list):
         return [([[5, -1, 0]], 5), ([[7]], 7)]
+    if name_set & {"max_of_three", "max_of_list"} and isinstance(sample, list):
+        return [([[5, -1, 0]], 5), ([[7]], 7)]
+    if "sum_elements" in name_set and isinstance(sample, list):
+        return [([[1, 2, 3]], 6), ([[]], 0)]
+    if "find_longest_word" in name_set and isinstance(sample, list):
+        if isinstance(first_expected, int):
+            return [([["cat", "elephant", "dog"]], 8), ([["a", "abc", "def"]], 3)]
+        return [([["cat", "elephant", "dog"]], "elephant"), ([["a", "abc", "def"]], "abc")]
+    if "find_max_and_index" in name_set and isinstance(sample, list):
+        return [([[10, 20, 30, 25]], [2, 30]), ([[5, 3, 9]], [2, 9])]
     if "max_value_key" in name_set and isinstance(sample, dict):
         return [([{"a": 1, "b": 5}], "b"), ([{}], None)]
     if "merge_list_of_dicts" in name_set and isinstance(sample, list):

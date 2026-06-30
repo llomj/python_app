@@ -66,11 +66,15 @@ function metamorphicRule(functionNames, tests) {
     const [left, right] = firstArgs;
     if (['add_numbers', 'add_number', 'add_num'].some(name => names.has(name)) && [left, right].every(value => typeof value === 'number')) return 'add_numbers';
     if (names.has('merge_lists') && Array.isArray(left) && Array.isArray(right)) return 'merge_lists';
+    if (names.has('sum_of_2_lst') && Array.isArray(left) && Array.isArray(right)) return 'sum_two_lists';
+    if (['maxium_element_wise', 'maximum_element_wise'].some(name => names.has(name)) && Array.isArray(left) && Array.isArray(right)) return 'elementwise_max';
+    if (names.has('euclidean_distance') && Array.isArray(left) && Array.isArray(right)) return 'euclidean_distance';
     if (names.has('is_anagram') && typeof left === 'string' && typeof right === 'string') return 'anagram';
     if (names.has('common_char') && typeof left === 'string' && typeof right === 'string') return 'common_chars';
     if (names.has('common_keys_max_values') && left && right && typeof left === 'object' && typeof right === 'object' && !Array.isArray(left) && !Array.isArray(right)) return 'common_keys_max_values';
     if (names.has('gcd') && [left, right].every(Number.isInteger)) return 'gcd';
     if (names.has('lcm') && [left, right].every(Number.isInteger)) return 'lcm';
+    if (names.has('sum_of_squares') && [left, right].every(value => typeof value === 'number')) return 'sum_of_squares';
     return null;
   }
   if (firstArgs.length === 3) {
@@ -97,14 +101,33 @@ function metamorphicRule(functionNames, tests) {
     if (['find_min', 'find_minimum'].some(name => names.has(name))) return 'find_min';
     if (['calculate_sum', 'cal_sum', 'sum_of_list'].some(name => names.has(name))) return 'sum_list';
     if (names.has('find_min_max')) return 'find_min_max';
+    if (names.has('l_s')) return 'largest_smallest_reversed';
     if (['largest_smallest', 'smallest_largest', 'smallest_biggest'].some(name => names.has(name))) return 'largest_smallest_variant';
+    if (names.has('seconded_largest_number')) return 'second_largest';
+    if (names.has('fourth_largest_number')) return 'fourth_largest';
+    if (names.has('smallest_and_third')) return 'smallest_and_third';
     if (['calculate_average', 'cal_average', 'find_average', 'find_average_lst'].some(name => names.has(name))) return 'average';
     if (['square_list', 'square_lst', 'square_elements'].some(name => names.has(name))) return 'square_list';
+    if (names.has('square_numbers')) return 'square_numbers';
+    if (names.has('square_roots')) return 'square_roots';
     if (['ascending_order_numbers', 'sort_list', 'sort_lst'].some(name => names.has(name))) return 'sort_ascending';
     if (names.has('big_small')) return 'sort_numeric_strings_desc';
     if (['reverse_list', 'reverse_lst'].some(name => names.has(name))) return 'reverse_list';
+    if (names.has('reverse_strings')) return 'reverse_strings';
+    if (names.has('strip_whitespace')) return 'strip_whitespace';
+    if (names.has('number_and_square')) return 'number_and_square';
     if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && ![...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_list';
     if (names.has('has_duplicates')) return 'has_duplicates';
+    if (names.has('filter_even_numbers')) return 'filter_even_numbers';
+    if (names.has('filter_odd_numbers')) {
+      return Array.isArray(firstExpected) && firstExpected.every(value => Number.isInteger(value) && value % 2 !== 0)
+        ? 'keep_odd_numbers'
+        : 'filter_odd_numbers';
+    }
+    if (names.has('filter_palindromes')) return 'filter_palindromes';
+    if (names.has('filter_prime')) return 'filter_prime';
+    if (names.has('sum_odd_indexed_elements')) return 'sum_odd_indexed_elements';
+    if (names.has('sort_tuples_by_second')) return 'sort_tuples_by_second';
   }
   if (['remove_spaces', 'remove_space'].some(name => names.has(name)) && typeof sample === 'string') return 'remove_spaces';
   if (names.has('capitalize_words') && typeof sample === 'string') return 'capitalize_words';
@@ -141,6 +164,10 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('all_odd_numbers') && Array.isArray(sample)) return 'sum_odd_numbers';
   if (names.has('is_even_index_sum') && Array.isArray(sample)) return 'even_index_sum_bool';
   if (['largest_element', 'max_in_list'].some(name => names.has(name)) && Array.isArray(sample)) return 'largest_element';
+  if (['max_of_three', 'max_of_list'].some(name => names.has(name)) && Array.isArray(sample)) return 'max_list';
+  if (names.has('sum_elements') && Array.isArray(sample)) return 'sum_elements';
+  if (names.has('find_longest_word') && Array.isArray(sample)) return typeof firstExpected === 'number' ? 'longest_word_length' : 'longest_word';
+  if (names.has('find_max_and_index') && Array.isArray(sample)) return 'max_and_index';
   if (names.has('max_value_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_value_key';
   if (names.has('merge_list_of_dicts') && Array.isArray(sample)) return 'merge_list_of_dicts';
   if (names.has('remove_duplicates_from_values') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'dedupe_dict_values';
