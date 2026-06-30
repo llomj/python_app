@@ -5711,6 +5711,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   782: {
     functionNames: ["square_dic"],
+    requiredCallPatterns: [{ functionName: "range" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "For" }],
     tests: [
       { args: [], expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25} }
     ]
@@ -5824,6 +5826,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   798: {
     functionNames: ["value_cubes"],
+    requiredCallPatterns: [{ functionName: "range" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "For" }],
     tests: [
       { args: [], expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125} }
     ]
@@ -5865,6 +5869,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   804: {
     functionNames: ["nested_dic"],
+    requiredCallPatterns: [{ functionName: "range" }],
+    requiredNodePatterns: [{ nodeType: "Dict", minCount: 2 }, { nodeType: "For" }],
     tests: [
       { args: [], expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}, "4": {"square": 16, "cube": 64}, "5": {"square": 25, "cube": 125}} }
     ]
@@ -6475,6 +6481,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   873: {
     functionNames: ["get_coordinates"],
+    requiredNodePatterns: [{ nodeType: "Tuple" }],
     tests: [{
       args: [],
       expected: [5, 10]
@@ -6617,6 +6624,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   888: {
     functionNames: ["get_user"],
+    requiredNodePatterns: [{ nodeType: "Tuple" }],
     tests: [{
       args: [],
       expected: ["Alice", 25]
@@ -7165,6 +7173,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   948: {
     functionNames: ["infinite_recursion"],
+    requiredNodePatterns: [{ nodeType: "Call" }],
     tests: [
       { args: [], expected: null, expectedException: "RecursionError" }
     ]
@@ -9094,6 +9103,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1181: {
         functionNames: ['python_version'],
         compare: 'typeName',
+        requiredNodePatterns: [{ nodeType: "Attribute" }],
         tests: [
             { args: [], expected: "str" },
         ]
@@ -9132,6 +9142,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1186: {
     functionNames: ["measure_time"],
     compare: 'numberRange',
+    requiredCallPatterns: [{ functionName: "time" }],
     tests: [{
       args: [],
       expected: [0, 5]
@@ -12808,6 +12819,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1617: {
     functionNames: ["get_name_age"],
+    requiredNodePatterns: [{ nodeType: "Tuple" }],
     tests: [{
       args: [],
       expected: ["Alice", 30]
