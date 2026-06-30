@@ -726,6 +726,17 @@ def __auto_grader_find_callable(function_names, args, required_name=None, kwargs
         candidate = globals().get(name)
         if callable(candidate) and __auto_grader_accepts_args(candidate, args, kwargs):
             return name, candidate
+    if required_name:
+        return None, None
+    for name, candidate in globals().items():
+        if name.startswith("__") or name in function_names:
+            continue
+        if isinstance(candidate, type):
+            continue
+        if isinstance(candidate, types.ModuleType):
+            continue
+        if callable(candidate) and __auto_grader_accepts_args(candidate, args, kwargs):
+            return name, candidate
     return None, None
 
 def __auto_grader_run():

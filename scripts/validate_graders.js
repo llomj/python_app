@@ -455,6 +455,15 @@ def find_callable(namespace, function_names, args, required_name=None, kwargs=No
         candidate = namespace.get(name)
         if callable(candidate) and accepts_args(candidate, args, kwargs):
             return name, candidate
+    if required_name:
+        return None, None
+    for name, candidate in namespace.items():
+        if name.startswith("__") or name in function_names:
+            continue
+        if inspect.isclass(candidate) or inspect.ismodule(candidate):
+            continue
+        if callable(candidate) and accepts_args(candidate, args, kwargs):
+            return name, candidate
     return None, None
 
 def run_grader(source, grader):
