@@ -581,14 +581,29 @@ def __auto_grader_call_name(node):
 def __auto_grader_check_source_requirements():
     call_patterns = __auto_grader_spec.get("requiredCallPatterns", [])
     node_patterns = __auto_grader_spec.get("requiredNodePatterns", [])
-    if not call_patterns and not node_patterns:
-        return None
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
         return f"Could not inspect source syntax: {exc}"
     calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
     all_nodes = list(ast.walk(tree))
+    tests = __auto_grader_spec.get("tests", [])
+    needs_input = any(case.get("inputValues") for case in tests)
+    if needs_input and not any(__auto_grader_call_name(call.func) == "input" for call in calls):
+        return "Missing required input(): this problem must read the supplied test input instead of using fixed values."
+    random_call_names = {"randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"}
+    needs_random = any(
+        case.get("randomValues") or
+        case.get("randomFloatValues") or
+        case.get("randomChoiceValues") or
+        case.get("randomSampleValues") or
+        case.get("randomShuffleValues")
+        for case in tests
+    )
+    if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
+        return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
+    if not call_patterns and not node_patterns:
+        return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
         keyword = pattern.get("keyword")

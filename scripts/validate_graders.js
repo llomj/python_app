@@ -473,14 +473,29 @@ def call_name(node):
 def source_requirements_ok(source, grader):
     call_patterns = grader.get("requiredCallPatterns", [])
     node_patterns = grader.get("requiredNodePatterns", [])
-    if not call_patterns and not node_patterns:
-        return True
     try:
         tree = ast.parse(source)
     except SyntaxError:
         return False
     calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)]
     all_nodes = list(ast.walk(tree))
+    tests = grader.get("tests", [])
+    needs_input = any(case.get("inputValues") for case in tests)
+    if needs_input and not any(call_name(call.func) == "input" for call in calls):
+        return False
+    random_call_names = {"randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"}
+    needs_random = any(
+        case.get("randomValues") or
+        case.get("randomFloatValues") or
+        case.get("randomChoiceValues") or
+        case.get("randomSampleValues") or
+        case.get("randomShuffleValues")
+        for case in tests
+    )
+    if needs_random and not any(call_name(call.func) in random_call_names for call in calls):
+        return False
+    if not call_patterns and not node_patterns:
+        return True
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
         keyword = pattern.get("keyword")
