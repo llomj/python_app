@@ -9621,110 +9621,35 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ) : (
                     <div
                         ref={problemPanelRef}
-                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-y-auto"
                         style={{
                             height: '190px',
+                            overflowY: 'auto',
+                            overflowX: 'hidden',
                             backgroundColor: 'rgba(8, 18, 34, 0.08)',
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
-                            borderColor: 'rgba(88, 118, 160, 0.25)'
+                            border: '1px solid rgba(88, 118, 160, 0.25)',
+                            borderRadius: '0.75rem',
+                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            WebkitOverflowScrolling: 'touch',
                         }}
                     >
-                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1 sticky top-0 z-10 bg-[#0a1628]/95 rounded-t-xl" style={{ backgroundColor: 'rgba(8, 18, 34, 0.95)' }}>
-                            <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={saveCurrentProblem}
-                                    title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'}
-                                    style={{
-                                        backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
-                                        border: '1px solid #1d2d44',
-                                        borderRadius: '0.5rem',
-                                        padding: '0.25rem 0.5rem',
-                                        color: '#3b82f6',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.25rem',
-                                        fontSize: '0.75rem',
-                                        flexShrink: 0,
-                                        pointerEvents: 'auto',
-                                        opacity: isProblemSaved(exercise.id) ? 1 : 0.7,
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'rgba(8, 18, 34, 0.95)', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
+                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff', margin: 0 }}>Problem {exercise.id}</h2>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
                                 </button>
-                                <button
-                                    onClick={() => {
-                                        setPendingNextProblem(false);
-                                        loadRandomExercise();
-                                    }}
-                                    style={{
-                                        backgroundColor: 'transparent',
-                                        border: '1px solid #1d2d44',
-                                        borderRadius: '0.5rem',
-                                        padding: '0.25rem 0.5rem',
-                                        color: '#3b82f6',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.25rem',
-                                        fontSize: '0.75rem',
-                                        flexShrink: 0,
-                                        pointerEvents: 'auto'
-                                    }}
-                                    title="Load next problem"
-                                >
+                                <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
                                     <span>Next</span>
                                 </button>
                             </div>
                         </div>
-                        <pre
-                            data-problem-description
-                            className="problem-description-scroll"
-                            id={`problem-desc-${exercise.id}`}
-                            ref={problemDescriptionRef}
-                            style={{
-                                color: '#d1d5db',
-                                fontSize: '0.875rem',
-                                lineHeight: '1.75',
-                                whiteSpace: 'pre-wrap',
-                                wordWrap: 'break-word',
-                                overflowWrap: 'break-word',
-                                padding: '0.25rem 1rem 0.75rem',
-                                margin: 0,
-                                fontFamily: 'inherit',
-                                width: '100%',
-                                userSelect: 'text',
-                                WebkitUserSelect: 'text'
-                            }}
-                            onTouchStart={() => {
-                                problemTouchStartRef.current = Date.now();
-                            }}
-                            onTouchEnd={() => {
-                                if (Date.now() - problemTouchStartRef.current < 400) return;
-                                problemTouchStartRef.current = 0;
-                                const el = problemDescriptionRef.current;
-                                if (!el) return;
-                                const range = document.createRange();
-                                range.selectNodeContents(el);
-                                const sel = window.getSelection();
-                                sel?.removeAllRanges();
-                                sel?.addRange(range);
-                                document.execCommand('copy');
-                                navigator.clipboard.writeText(exercise.description).catch(() => {});
-                                setDescCopied(true);
-                                setTimeout(() => setDescCopied(false), 1200);
-                            }}
-                            onTouchMove={() => {
-                                problemTouchStartRef.current = 0;
-                            }}
-                        >
+                        <div style={{ color: '#d1d5db', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text' }}>
                             {exercise.description}
-                        </pre>
+                        </div>
                     </div>
                 )}
             </div>
