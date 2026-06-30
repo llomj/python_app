@@ -9621,17 +9621,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ) : (
                     <div
                         ref={problemPanelRef}
-                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-y-auto"
+                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl"
                         style={{
-                            minHeight: '120px',
-                            maxHeight: '40vh',
+                            height: '190px',
+                            display: 'flex',
+                            flexDirection: 'column',
                             backgroundColor: 'rgba(8, 18, 34, 0.08)',
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
                             borderColor: 'rgba(88, 118, 160, 0.25)'
                         }}
                     >
-                        <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2">
+                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1 flex-shrink-0">
                             <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
                             <div className="flex items-center gap-2">
                                 <button
@@ -9689,13 +9690,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             id={`problem-desc-${exercise.id}`}
                             ref={problemDescriptionRef}
                             style={{
+                                flex: 1,
+                                minHeight: 0,
+                                overflowY: 'auto',
+                                overflowX: 'hidden',
                                 color: '#d1d5db',
                                 fontSize: '0.875rem',
                                 lineHeight: '1.75',
                                 whiteSpace: 'pre-wrap',
                                 wordWrap: 'break-word',
                                 overflowWrap: 'break-word',
-                                padding: '0.5rem 1rem 1rem',
+                                padding: '0.25rem 1rem 0.75rem',
                                 margin: 0,
                                 fontFamily: 'inherit',
                                 width: '100%',
