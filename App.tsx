@@ -8369,7 +8369,10 @@ const App: React.FC = () => {
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(70);
-    const editorToolbarTop = Math.max(headerHeight + 4, 270);
+    const totalFixedEnd = !plainMode
+        ? Math.max(headerHeight + 8, 78) + 190
+        : headerHeight;
+    const editorToolbarTop = Math.max(totalFixedEnd + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
