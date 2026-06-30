@@ -60,10 +60,17 @@ function isSimpleCase(testCase) {
 function metamorphicRule(functionNames, tests) {
   if (!Array.isArray(tests) || tests.length === 0 || !tests.every(isSimpleCase)) return null;
   const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
-  if (firstArgs.length !== 1) return null;
   const names = new Set(functionNames || []);
-  const sample = firstArgs[0];
   const firstExpected = tests[0]?.expected;
+  if (firstArgs.length === 2) {
+    const [left, right] = firstArgs;
+    if (['add_numbers', 'add_number', 'add_num'].some(name => names.has(name)) && [left, right].every(value => typeof value === 'number')) return 'add_numbers';
+    if (names.has('gcd') && [left, right].every(Number.isInteger)) return 'gcd';
+    if (names.has('lcm') && [left, right].every(Number.isInteger)) return 'lcm';
+    return null;
+  }
+  if (firstArgs.length !== 1) return null;
+  const sample = firstArgs[0];
   if (['calculate_square', 'cal_square'].some(name => names.has(name)) && typeof sample === 'number') return 'square';
   if (names.has('is_even') && Number.isInteger(sample)) return 'even';
   if (names.has('is_odd') && Number.isInteger(sample)) return 'odd';
@@ -77,11 +84,23 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('find_max')) return 'find_max';
     if (['find_min', 'find_minimum'].some(name => names.has(name))) return 'find_min';
     if (['calculate_sum', 'cal_sum', 'sum_of_list'].some(name => names.has(name))) return 'sum_list';
+    if (['calculate_average', 'cal_average', 'find_average', 'find_average_lst'].some(name => names.has(name))) return 'average';
+    if (['square_list', 'square_lst', 'square_elements'].some(name => names.has(name))) return 'square_list';
+    if (['ascending_order_numbers', 'sort_list', 'sort_lst'].some(name => names.has(name))) return 'sort_ascending';
+    if (['reverse_list', 'reverse_lst'].some(name => names.has(name))) return 'reverse_list';
+    if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && ![...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_list';
   }
   if (['remove_spaces', 'remove_space'].some(name => names.has(name)) && typeof sample === 'string') return 'remove_spaces';
   if (names.has('capitalize_words') && typeof sample === 'string') return 'capitalize_words';
+  if (names.has('count_words') && typeof sample === 'string') {
+    return firstExpected && typeof firstExpected === 'object' && !Array.isArray(firstExpected)
+      ? 'count_words_dict'
+      : 'count_words_number';
+  }
   if (names.has('factorial') && Number.isInteger(sample)) return 'factorial';
   if (names.has('is_palindrome') && typeof sample === 'string') return 'palindrome';
+  if (names.has('is_prime') && Number.isInteger(sample)) return 'prime';
+  if (names.has('fibonacci') && Number.isInteger(sample) && Array.isArray(firstExpected)) return 'fibonacci';
   return null;
 }
 
