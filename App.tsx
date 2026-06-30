@@ -9621,7 +9621,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ) : (
                     <div
                         ref={problemPanelRef}
-                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl"
+                        className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-y-auto"
                         style={{
                             height: '190px',
                             backgroundColor: 'rgba(8, 18, 34, 0.08)',
@@ -9630,7 +9630,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             borderColor: 'rgba(88, 118, 160, 0.25)'
                         }}
                     >
-                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1">
+                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1 sticky top-0 z-10 bg-[#0a1628]/95 rounded-t-xl" style={{ backgroundColor: 'rgba(8, 18, 34, 0.95)' }}>
                             <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
                             <div className="flex items-center gap-2">
                                 <button
@@ -9688,9 +9688,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             id={`problem-desc-${exercise.id}`}
                             ref={problemDescriptionRef}
                             style={{
-                                maxHeight: '142px',
-                                overflowY: 'auto',
-                                overflowX: 'hidden',
                                 color: '#d1d5db',
                                 fontSize: '0.875rem',
                                 lineHeight: '1.75',
