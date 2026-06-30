@@ -47,6 +47,57 @@ function getSections(solution) {
   return sections;
 }
 
+function normalizeSolutionHeadings(solution) {
+  const lines = String(solution || '').split('\n');
+  const normalized = [...lines];
+  let changed = false;
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const heading = lines[index].trim();
+    if (!/^#\s*Using function approach\b/i.test(heading)) continue;
+
+    const body = [];
+    for (let next = index + 1; next < lines.length; next += 1) {
+      if (isSolutionHeading(lines[next])) break;
+      body.push(lines[next]);
+    }
+
+    const bodyText = body.join('\n');
+    const hasCallable = /\bdef\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/.test(bodyText)
+      || /\bclass\s+[A-Za-z_][A-Za-z0-9_]*\b/.test(bodyText);
+    if (!hasCallable) {
+      normalized[index] = lines[index].replace(/Using function approach/i, 'Using script approach');
+      changed = true;
+    }
+  }
+
+  return {
+    changed,
+    solution: normalized.join('\n'),
+  };
+}
+
+function fixExerciseSource() {
+  const filePath = path.join(root, 'exercises.ts');
+  const source = fs.readFileSync(filePath, 'utf8');
+  let changedCount = 0;
+  const updated = source.replace(/"solution":\s*"((?:\\.|[^"\\])*)"/g, (match, rawSolution) => {
+    const solution = JSON.parse(`"${rawSolution}"`);
+    const normalized = normalizeSolutionHeadings(solution);
+    if (!normalized.changed) return match;
+    changedCount += 1;
+    return `"solution": ${JSON.stringify(normalized.solution)}`;
+  });
+
+  if (changedCount > 0) fs.writeFileSync(filePath, updated);
+  return changedCount;
+}
+
+if (process.argv.includes('--fix')) {
+  const changedCount = fixExerciseSource();
+  console.log(`Updated ${changedCount} exercise solution records.`);
+}
+
 const { EXERCISES } = loadTsExports('exercises.ts');
 const mislabeledFunctionSections = [];
 
