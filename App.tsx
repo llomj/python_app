@@ -7621,6 +7621,8 @@ const App: React.FC = () => {
         }
     });
 
+    const [expandedSavedProblem, setExpandedSavedProblem] = useState<number | null>(null);
+    const [expandedIdLogProblem, setExpandedIdLogProblem] = useState<number | null>(null);
     const [idLogInput, setIdLogInput] = useState('');
     const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
     const [deleteConfirmType, setDeleteConfirmType] = useState<'saved' | 'idlog' | null>(null);
@@ -9928,49 +9930,75 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     {savedProblems.length === 0 ? (
                                         <p className="text-[11px] text-gray-400 italic">No saved problems yet. Press Save on any problem to add it here.</p>
                                     ) : (
-                                        <div className="space-y-2 max-h-[240px] overflow-y-auto pr-1">
-                                            {savedProblems.map(problem => (
-                                                <div
-                                                    key={problem.exerciseId}
-                                                    onClick={() => loadSavedProblem(problem)}
-                                                    className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 cursor-pointer transition-all"
-                                                    style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}
-                                                    onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); }}
-                                                    onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
-                                                >
-                                                    <div className="flex-1 text-left min-w-0">
-                                                        <span className="text-[11px] font-bold text-gray-200 block truncate">
-                                                            Problem {problem.exerciseId}
-                                                            {problem.mastered && (
-                                                                <span className="ml-2 text-[10px] font-black uppercase tracking-wider" style={{ color: countRowColors.wins }}>Mastered</span>
-                                                            )}
-                                                        </span>
-                                                        <span className="text-[10px] text-gray-400 block truncate">
-                                                            {problem.description.split('\n')[0]}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-                                                        {!problem.mastered && (
-                                                            <button
-                                                                onClick={() => markSavedProblemMastered(problem.exerciseId)}
-                                                                title="Mark as mastered"
-                                                                className="p-1.5 rounded-md transition-all hover:brightness-125"
-                                                                style={{ color: countRowColors.wins }}
-                                                            >
-                                                                <CheckCircle size={14} />
-                                                            </button>
+                                        <div className="space-y-1 max-h-[280px] overflow-y-auto pr-1">
+                                            {savedProblems.map(problem => {
+                                                const isExpanded = expandedSavedProblem === problem.exerciseId;
+                                                return (
+                                                    <div key={problem.exerciseId} className="rounded-lg border overflow-hidden" style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}>
+                                                        <div
+                                                            onClick={() => {
+                                                                if (isExpanded) {
+                                                                    setExpandedSavedProblem(null);
+                                                                } else {
+                                                                    setExpandedSavedProblem(problem.exerciseId);
+                                                                }
+                                                            }}
+                                                            className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer transition-all hover:brightness-125"
+                                                            onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); }}
+                                                            onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
+                                                        >
+                                                            <div className="flex-1 text-left min-w-0">
+                                                                <span className="text-[11px] font-bold text-gray-200 block truncate">
+                                                                    Problem {problem.exerciseId}
+                                                                    {problem.mastered && (
+                                                                        <span className="ml-2 text-[10px] font-black uppercase tracking-wider" style={{ color: countRowColors.wins }}>Mastered</span>
+                                                                    )}
+                                                                </span>
+                                                                <span className="text-[10px] text-gray-400 block truncate">
+                                                                    {problem.description.split('\n')[0]}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                                {!problem.mastered && (
+                                                                    <button
+                                                                        onClick={() => markSavedProblemMastered(problem.exerciseId)}
+                                                                        title="Mark as mastered"
+                                                                        className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                        style={{ color: countRowColors.wins }}
+                                                                    >
+                                                                        <CheckCircle size={14} />
+                                                                    </button>
+                                                                )}
+                                                                <button
+                                                                    onClick={() => handleDeleteConfirm(problem.exerciseId, 'saved')}
+                                                                    title="Remove"
+                                                                    className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                    style={{ color: toolPanelColors.failed }}
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                                <span className="text-gray-500 ml-0.5" style={{ color: hexToRgba(countRowColors.count, 0.5) }}>
+                                                                    {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        {isExpanded && (
+                                                            <div className="border-t border-[#1d2d44] px-3 py-2.5 space-y-2" style={{ backgroundColor: 'rgba(5, 12, 24, 0.5)' }}>
+                                                                <p className="text-[12px] leading-relaxed text-gray-300">{problem.description}</p>
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        onClick={() => loadSavedProblem(problem)}
+                                                                        className="flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-125"
+                                                                        style={{ backgroundColor: hexToRgba(countRowColors.count, 0.15), border: `1px solid ${hexToRgba(countRowColors.count, 0.3)}`, color: countRowColors.count }}
+                                                                    >
+                                                                        Load
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         )}
-                                                            <button
-                                                                onClick={() => handleDeleteConfirm(problem.exerciseId, 'saved')}
-                                                                title="Remove"
-                                                                className="p-1.5 rounded-md transition-all hover:brightness-125"
-                                                                style={{ color: toolPanelColors.failed }}
-                                                            >
-                                                                <Trash2 size={14} />
-                                                            </button>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </div>
@@ -10005,49 +10033,75 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     {idLogProblems.length === 0 ? (
                                         <p className="text-[11px] text-gray-400 italic">No problems in ID Log yet. Enter a problem ID above to add it.</p>
                                     ) : (
-                                        <div className="space-y-2 max-h-[240px] overflow-y-auto pr-1">
-                                            {idLogProblems.map(problem => (
-                                                <div
-                                                    key={problem.exerciseId}
-                                                    onClick={() => loadIdLogProblem(problem)}
-                                                    className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 cursor-pointer transition-all hover:brightness-125"
-                                                    style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}
-                                                    onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.rate, 0.5); }}
-                                                    onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
-                                                >
-                                                    <div className="flex-1 text-left min-w-0">
-                                                        <span className="text-[11px] font-bold text-gray-200 block truncate">
-                                                            Problem {problem.exerciseId}
-                                                            {problem.mastered && (
-                                                                <span className="ml-2 text-[10px] font-black uppercase tracking-wider" style={{ color: countRowColors.wins }}>Mastered</span>
-                                                            )}
-                                                        </span>
-                                                        <span className="text-[10px] text-gray-400 block truncate">
-                                                            {problem.description.split('\n')[0]}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-                                                        {!problem.mastered && (
-                                                            <button
-                                                                onClick={() => markIdLogProblemMastered(problem.exerciseId)}
-                                                                title="Mark as mastered"
-                                                                className="p-1.5 rounded-md transition-all hover:brightness-125"
-                                                                style={{ color: countRowColors.wins }}
-                                                            >
-                                                                <CheckCircle size={14} />
-                                                            </button>
-                                                        )}
-                                                        <button
-                                                            onClick={() => handleDeleteConfirm(problem.exerciseId, 'idlog')}
-                                                            title="Remove"
-                                                            className="p-1.5 rounded-md transition-all hover:brightness-125"
-                                                            style={{ color: toolPanelColors.failed }}
+                                        <div className="space-y-1 max-h-[280px] overflow-y-auto pr-1">
+                                            {idLogProblems.map(problem => {
+                                                const isExpanded = expandedIdLogProblem === problem.exerciseId;
+                                                return (
+                                                    <div key={problem.exerciseId} className="rounded-lg border overflow-hidden" style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}>
+                                                        <div
+                                                            onClick={() => {
+                                                                if (isExpanded) {
+                                                                    setExpandedIdLogProblem(null);
+                                                                } else {
+                                                                    setExpandedIdLogProblem(problem.exerciseId);
+                                                                }
+                                                            }}
+                                                            className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer transition-all hover:brightness-125"
+                                                            onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.rate, 0.5); }}
+                                                            onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
                                                         >
-                                                            <Trash2 size={14} />
-                                                        </button>
+                                                            <div className="flex-1 text-left min-w-0">
+                                                                <span className="text-[11px] font-bold text-gray-200 block truncate">
+                                                                    Problem {problem.exerciseId}
+                                                                    {problem.mastered && (
+                                                                        <span className="ml-2 text-[10px] font-black uppercase tracking-wider" style={{ color: countRowColors.wins }}>Mastered</span>
+                                                                    )}
+                                                                </span>
+                                                                <span className="text-[10px] text-gray-400 block truncate">
+                                                                    {problem.description.split('\n')[0]}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                                {!problem.mastered && (
+                                                                    <button
+                                                                        onClick={() => markIdLogProblemMastered(problem.exerciseId)}
+                                                                        title="Mark as mastered"
+                                                                        className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                        style={{ color: countRowColors.wins }}
+                                                                    >
+                                                                        <CheckCircle size={14} />
+                                                                    </button>
+                                                                )}
+                                                                <button
+                                                                    onClick={() => handleDeleteConfirm(problem.exerciseId, 'idlog')}
+                                                                    title="Remove"
+                                                                    className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                    style={{ color: toolPanelColors.failed }}
+                                                                >
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                                <span className="text-gray-500 ml-0.5" style={{ color: hexToRgba(countRowColors.rate, 0.5) }}>
+                                                                    {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        {isExpanded && (
+                                                            <div className="border-t border-[#1d2d44] px-3 py-2.5 space-y-2" style={{ backgroundColor: 'rgba(5, 12, 24, 0.5)' }}>
+                                                                <p className="text-[12px] leading-relaxed text-gray-300">{problem.description}</p>
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        onClick={() => loadIdLogProblem(problem)}
+                                                                        className="flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-125"
+                                                                        style={{ backgroundColor: hexToRgba(countRowColors.rate, 0.15), border: `1px solid ${hexToRgba(countRowColors.rate, 0.3)}`, color: countRowColors.rate }}
+                                                                    >
+                                                                        Load
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                </div>
-                                            ))}
+                                                );
+                                            })}
                                         </div>
                                     )}
                                 </div>
