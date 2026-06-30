@@ -73,14 +73,20 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('lcm') && [left, right].every(Number.isInteger)) return 'lcm';
     return null;
   }
+  if (firstArgs.length === 3) {
+    if (names.has('max_of_three') && firstArgs.every(value => typeof value === 'number')) return 'max_of_three';
+    return null;
+  }
   if (firstArgs.length !== 1) return null;
   const sample = firstArgs[0];
   if (['calculate_square', 'cal_square'].some(name => names.has(name)) && typeof sample === 'number') return 'square';
   if (names.has('is_even') && Number.isInteger(sample)) return 'even';
   if (names.has('is_odd') && Number.isInteger(sample)) return 'odd';
   if (names.has('reverse_string') && typeof sample === 'string') return 'reverse_string';
+  if (names.has('reverse') && typeof sample === 'string') return 'reverse';
   if (['reverse_words', 'reverse_word'].some(name => names.has(name)) && typeof sample === 'string') return 'reverse_words';
   if (names.has('remove_vowels') && typeof sample === 'string') return 'remove_vowels';
+  if (names.has('find_vowels') && typeof sample === 'string') return 'find_vowels';
   if (names.has('count_vowels') && typeof sample === 'string') {
     return firstExpected && typeof firstExpected === 'object' && !Array.isArray(firstExpected)
       ? 'count_vowels_dict'
@@ -98,6 +104,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('big_small')) return 'sort_numeric_strings_desc';
     if (['reverse_list', 'reverse_lst'].some(name => names.has(name))) return 'reverse_list';
     if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && ![...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_list';
+    if (names.has('has_duplicates')) return 'has_duplicates';
   }
   if (['remove_spaces', 'remove_space'].some(name => names.has(name)) && typeof sample === 'string') return 'remove_spaces';
   if (names.has('capitalize_words') && typeof sample === 'string') return 'capitalize_words';
@@ -106,17 +113,33 @@ function metamorphicRule(functionNames, tests) {
       ? 'count_words_dict'
       : 'count_words_number';
   }
+  if (names.has('alphabetically_ordered') && typeof sample === 'string') return 'sort_words';
+  if (names.has('correct') && typeof sample === 'string') return 'correct_spacing';
+  if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && typeof sample === 'string') {
+    if (typeof firstExpected === 'string') return 'remove_duplicates_string';
+    if (Array.isArray(firstExpected) && sample.includes(' ')) {
+      const uniqueWords = [];
+      for (const word of sample.split(/\s+/).filter(Boolean)) {
+        if (!uniqueWords.includes(word)) uniqueWords.push(word);
+      }
+      return JSON.stringify(firstExpected) === JSON.stringify(uniqueWords) ? 'unique_words' : 'duplicate_words';
+    }
+    if (Array.isArray(firstExpected)) return 'unique_chars_list';
+  }
   if (names.has('count_uppercase') && typeof sample === 'string') return 'count_uppercase';
   if (names.has('factorial') && Number.isInteger(sample)) return 'factorial';
   if (names.has('is_palindrome') && typeof sample === 'string') return 'palindrome';
+  if (names.has('palindromes') && typeof sample === 'string') return 'palindrome';
   if (names.has('is_prime') && Number.isInteger(sample)) return 'prime';
   if (names.has('prime_factors') && Number.isInteger(sample)) return 'prime_factors';
   if (names.has('is_perfect_square') && !names.has('is_perfect_number') && Number.isInteger(sample)) return 'perfect_square';
+  if (names.has('is_perfect_number') && Number.isInteger(sample)) return 'perfect_number';
   if (names.has('reverse_number') && Number.isInteger(sample)) return 'reverse_number';
   if (names.has('is_armstrong') && Number.isInteger(sample)) return 'armstrong';
   if (names.has('fibonacci') && Number.isInteger(sample) && Array.isArray(firstExpected)) return 'fibonacci';
   if (names.has('sum_even_indices') && Array.isArray(sample)) return 'sum_even_indices';
   if (names.has('all_odd_numbers') && Array.isArray(sample)) return 'sum_odd_numbers';
+  if (names.has('is_even_index_sum') && Array.isArray(sample)) return 'even_index_sum_bool';
   if (['largest_element', 'max_in_list'].some(name => names.has(name)) && Array.isArray(sample)) return 'largest_element';
   if (names.has('max_value_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_value_key';
   if (names.has('merge_list_of_dicts') && Array.isArray(sample)) return 'merge_list_of_dicts';

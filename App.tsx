@@ -895,6 +895,10 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         if "lcm" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([12, 18], 36), ([5, 7], 35)]
         return []
+    if len(first_args) == 3:
+        if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
+            return [([10, 25, 15], 25), ([-10, -2, -5], -2)]
+        return []
     if len(first_args) != 1:
         return []
     sample = first_args[0]
@@ -906,10 +910,14 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([12], False), ([13], True)]
     if "reverse_string" in name_set and isinstance(sample, str):
         return [(["abc def"], "fed cba"), (["Python"], "nohtyP")]
+    if "reverse" in name_set and isinstance(sample, str):
+        return [(["abc def"], "fed cba"), ([""], "")]
     if name_set & {"reverse_words", "reverse_word"} and isinstance(sample, str):
         return [(["one two three"], "three two one"), (["solo"], "solo")]
     if "remove_vowels" in name_set and isinstance(sample, str):
         return [(["Beautiful"], "Btfl"), (["rhythm"], "rhythm")]
+    if "find_vowels" in name_set and isinstance(sample, str):
+        return [(["Python"], ["o"]), (["AEIOUxyz"], ["A", "E", "I", "O", "U"])]
     if "count_vowels" in name_set and isinstance(sample, str):
         if isinstance(first_expected, dict):
             return [
@@ -946,6 +954,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         if any("case_insensitive" in name for name in name_set):
             return []
         return [([[3, 1, 3, 2, 1]], [3, 1, 2]), ([["a", "b", "a"]], ["a", "b"])]
+    if "has_duplicates" in name_set and isinstance(sample, list):
+        return [([[1, 2, 1]], True), ([[1, 2, 3]], False)]
     if name_set & {"remove_spaces", "remove_space"} and isinstance(sample, str):
         return [(["a b  c"], "abc"), ([" no spaces "], "nospaces")]
     if "capitalize_words" in name_set and isinstance(sample, str):
@@ -954,18 +964,39 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         if isinstance(first_expected, dict):
             return [(["One two one"], {"one": 2, "two": 1}), (["solo"], {"solo": 1})]
         return [(["one two  three"], 3), (["solo"], 1)]
+    if "alphabetically_ordered" in name_set and isinstance(sample, str):
+        return [(["banana apple cherry"], "apple banana cherry"), (["zebra cat dog"], "cat dog zebra")]
+    if "correct" in name_set and isinstance(sample, str):
+        return [(["Hello.World"], "Hello. World"), (["This  is ok"], "This is ok")]
+    if name_set & {"remove_duplicates", "remove_duplicate"} and isinstance(sample, str):
+        if isinstance(first_expected, str):
+            return [(["banana"], "ban"), (["abc"], "abc")]
+        if isinstance(first_expected, list) and " " in sample:
+            sample_unique_words = []
+            for word in sample.split():
+                if word not in sample_unique_words:
+                    sample_unique_words.append(word)
+            if first_expected == sample_unique_words:
+                return [(["hot cold hot warm cold"], ["hot", "cold", "warm"])]
+            return [(["hot cold hot warm cold"], ["hot", "cold"])]
+        if isinstance(first_expected, list):
+            return [(["banana"], ["b", "a", "n"]), (["abc"], ["a", "b", "c"])]
     if "count_uppercase" in name_set and isinstance(sample, str):
         return [(["ABC xyz"], 3), (["none"], 0)]
     if "factorial" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([0], 1), ([6], 720)]
     if "is_palindrome" in name_set and isinstance(sample, str):
         return [(["racecar"], True), (["python"], False)]
+    if "palindromes" in name_set and isinstance(sample, str):
+        return [(["level"], True), (["python"], False)]
     if "is_prime" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([29], True), ([21], False)]
     if "prime_factors" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([84], [2, 2, 3, 7]), ([13], [13])]
     if "is_perfect_square" in name_set and "is_perfect_number" not in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([25], True), ([26], False)]
+    if "is_perfect_number" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([28], True), ([12], False)]
     if "reverse_number" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([1200], 21), ([987], 789)]
     if "is_armstrong" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
@@ -977,6 +1008,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[10, 20, 30, 40, 50]], 90), ([[]], 0)]
         if "all_odd_numbers" in name_set:
             return [([[10, 15, 20, 25]], 40), ([[2, 4]], 0)]
+    if "is_even_index_sum" in name_set and isinstance(sample, list):
+        return [([[2, 1, 4]], True), ([[1, 10, 2]], False)]
     if name_set & {"largest_element", "max_in_list"} and isinstance(sample, list):
         return [([[5, -1, 0]], 5), ([[7]], 7)]
     if "max_value_key" in name_set and isinstance(sample, dict):
