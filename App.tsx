@@ -624,6 +624,46 @@ def __auto_grader_clean_text(value):
 def __auto_grader_compact_pattern(value):
     return "\\n".join(re.sub(r"[ \\t]+", "", line) for line in __auto_grader_clean_text(value).splitlines())
 
+def __auto_grader_meaningful_text_matches(actual_text, expected):
+    actual_text = __auto_grader_clean_text(actual_text)
+    expected_value = __auto_grader_normalize(__auto_grader_maybe_literal(expected))
+    expected_text = __auto_grader_clean_text(expected)
+    lines = [line.strip() for line in actual_text.splitlines() if line.strip()]
+    if not lines:
+        return False
+
+    candidates = []
+    for line in lines:
+        candidates.append(line)
+        for separator in (":", "=", "->"):
+            if separator in line:
+                candidates.append(line.rsplit(separator, 1)[-1].strip())
+        tokens = re.findall(r"True|False|-?\\d+(?:\\.\\d+)?|['\\\"][^'\\\"]+['\\\"]", line, re.IGNORECASE)
+        if tokens:
+            last_token = tokens[-1]
+            candidates.append(last_token if isinstance(last_token, str) else str(last_token))
+
+    for candidate in candidates:
+        if __auto_grader_values_equivalent(candidate, expected_value):
+            return True
+        if expected_text and __auto_grader_clean_text(candidate).lower() == expected_text.lower():
+            return True
+
+    last_line = lines[-1]
+    if isinstance(expected_value, bool):
+        bool_tokens = re.findall(r"\\b(true|false)\\b", last_line, re.IGNORECASE)
+        return bool(bool_tokens and (bool_tokens[-1].lower() == str(expected_value).lower()))
+    if isinstance(expected_value, (int, float)) and not isinstance(expected_value, bool):
+        found_numbers = __auto_grader_numbers(last_line)
+        if found_numbers:
+            try:
+                return math.isclose(float(found_numbers[-1]), float(expected_value), rel_tol=1e-9, abs_tol=1e-9)
+            except Exception:
+                return False
+    if isinstance(expected_value, str) and expected_value:
+        return expected_value.lower() in actual_text.lower()
+    return False
+
 def __auto_grader_same(actual, expected, compare):
     if compare == "typeName":
         return type(actual).__name__ == expected
@@ -646,6 +686,7 @@ def __auto_grader_same(actual, expected, compare):
             or expected_text in actual_text
             or __auto_grader_compact_pattern(actual_text) == __auto_grader_compact_pattern(expected_text)
             or any(__auto_grader_values_equivalent(line, expected) for line in actual_lines)
+            or __auto_grader_meaningful_text_matches(actual_text, expected)
         )
     if compare == "numberRange":
         numbers = __auto_grader_numbers(actual)
