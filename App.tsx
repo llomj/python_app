@@ -888,6 +888,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [(["Listen", "Silent"], True), (["hello", "world"], False)]
         if "common_char" in name_set and isinstance(left, str) and isinstance(right, str):
             return [(["abc", "bcd"], ["b", "c"]), (["abc", "xyz"], [])]
+        if "common_keys_max_values" in name_set and isinstance(left, dict) and isinstance(right, dict):
+            return [([{"a": 1, "b": 5}, {"b": 3, "c": 2}], {"b": 5}), ([{"x": 1}, {"y": 2}], {})]
         if "gcd" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([48, 18], 6), ([17, 13], 1)]
         if "lcm" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
@@ -924,12 +926,20 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[9, -2, 4]], 11), ([[]], 0)]
     if "find_min_max" in name_set and isinstance(sample, list):
         return [([[5, -2, 10]], [-2, 10]), ([[7]], [7, 7])]
+    if name_set & {"largest_smallest", "smallest_largest", "smallest_biggest"} and isinstance(sample, list):
+        if isinstance(first_expected, list) and len(first_expected) == len(sample):
+            expected_desc = first_expected == sorted(first_expected, reverse=True)
+            return [([[5, -1, 0]], [5, 0, -1] if expected_desc else [-1, 0, 5])]
+        if isinstance(first_expected, list) and len(first_expected) == 2:
+            return [([[5, -1, 0]], [-1, 5]), ([[7]], [7, 7])]
     if name_set & {"calculate_average", "cal_average", "find_average", "find_average_lst"} and isinstance(sample, list):
         return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
     if name_set & {"square_list", "square_lst", "square_elements"} and isinstance(sample, list):
         return [([[3, -2, 0]], [9, 4, 0]), ([[]], [])]
     if name_set & {"ascending_order_numbers", "sort_list", "sort_lst"} and isinstance(sample, list):
         return [([[5, -1, 0]], [-1, 0, 5]), ([[]], [])]
+    if "big_small" in name_set and isinstance(sample, list):
+        return [([["4", "10", "2"]], ["10", "4", "2"])]
     if name_set & {"reverse_list", "reverse_lst"} and isinstance(sample, list):
         return [([[1, 2, 3, 4]], [4, 3, 2, 1]), ([["a", "b"]], ["b", "a"])]
     if name_set & {"remove_duplicates", "remove_duplicate"} and isinstance(sample, list):
@@ -952,6 +962,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [(["racecar"], True), (["python"], False)]
     if "is_prime" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([29], True), ([21], False)]
+    if "prime_factors" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([84], [2, 2, 3, 7]), ([13], [13])]
     if "is_perfect_square" in name_set and "is_perfect_number" not in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([25], True), ([26], False)]
     if "reverse_number" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
@@ -965,6 +977,16 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[10, 20, 30, 40, 50]], 90), ([[]], 0)]
         if "all_odd_numbers" in name_set:
             return [([[10, 15, 20, 25]], 40), ([[2, 4]], 0)]
+    if name_set & {"largest_element", "max_in_list"} and isinstance(sample, list):
+        return [([[5, -1, 0]], 5), ([[7]], 7)]
+    if "max_value_key" in name_set and isinstance(sample, dict):
+        return [([{"a": 1, "b": 5}], "b"), ([{}], None)]
+    if "merge_list_of_dicts" in name_set and isinstance(sample, list):
+        return [([[{"a": 1}, {"a": 2, "b": 3}]], {"a": 2, "b": 3})]
+    if "remove_duplicates_from_values" in name_set and isinstance(sample, dict):
+        return [([{"a": [1, 1, 2], "b": ["x", "x"]}], {"a": [1, 2], "b": ["x"]})]
+    if "average_values" in name_set and isinstance(sample, list):
+        return [([[{"a": 2}, {"a": 4, "b": 10}]], {"a": 3, "b": 10})]
     return []
 
 def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tests, compare):

@@ -68,6 +68,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('merge_lists') && Array.isArray(left) && Array.isArray(right)) return 'merge_lists';
     if (names.has('is_anagram') && typeof left === 'string' && typeof right === 'string') return 'anagram';
     if (names.has('common_char') && typeof left === 'string' && typeof right === 'string') return 'common_chars';
+    if (names.has('common_keys_max_values') && left && right && typeof left === 'object' && typeof right === 'object' && !Array.isArray(left) && !Array.isArray(right)) return 'common_keys_max_values';
     if (names.has('gcd') && [left, right].every(Number.isInteger)) return 'gcd';
     if (names.has('lcm') && [left, right].every(Number.isInteger)) return 'lcm';
     return null;
@@ -90,9 +91,11 @@ function metamorphicRule(functionNames, tests) {
     if (['find_min', 'find_minimum'].some(name => names.has(name))) return 'find_min';
     if (['calculate_sum', 'cal_sum', 'sum_of_list'].some(name => names.has(name))) return 'sum_list';
     if (names.has('find_min_max')) return 'find_min_max';
+    if (['largest_smallest', 'smallest_largest', 'smallest_biggest'].some(name => names.has(name))) return 'largest_smallest_variant';
     if (['calculate_average', 'cal_average', 'find_average', 'find_average_lst'].some(name => names.has(name))) return 'average';
     if (['square_list', 'square_lst', 'square_elements'].some(name => names.has(name))) return 'square_list';
     if (['ascending_order_numbers', 'sort_list', 'sort_lst'].some(name => names.has(name))) return 'sort_ascending';
+    if (names.has('big_small')) return 'sort_numeric_strings_desc';
     if (['reverse_list', 'reverse_lst'].some(name => names.has(name))) return 'reverse_list';
     if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && ![...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_list';
   }
@@ -107,12 +110,18 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('factorial') && Number.isInteger(sample)) return 'factorial';
   if (names.has('is_palindrome') && typeof sample === 'string') return 'palindrome';
   if (names.has('is_prime') && Number.isInteger(sample)) return 'prime';
+  if (names.has('prime_factors') && Number.isInteger(sample)) return 'prime_factors';
   if (names.has('is_perfect_square') && !names.has('is_perfect_number') && Number.isInteger(sample)) return 'perfect_square';
   if (names.has('reverse_number') && Number.isInteger(sample)) return 'reverse_number';
   if (names.has('is_armstrong') && Number.isInteger(sample)) return 'armstrong';
   if (names.has('fibonacci') && Number.isInteger(sample) && Array.isArray(firstExpected)) return 'fibonacci';
   if (names.has('sum_even_indices') && Array.isArray(sample)) return 'sum_even_indices';
   if (names.has('all_odd_numbers') && Array.isArray(sample)) return 'sum_odd_numbers';
+  if (['largest_element', 'max_in_list'].some(name => names.has(name)) && Array.isArray(sample)) return 'largest_element';
+  if (names.has('max_value_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_value_key';
+  if (names.has('merge_list_of_dicts') && Array.isArray(sample)) return 'merge_list_of_dicts';
+  if (names.has('remove_duplicates_from_values') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'dedupe_dict_values';
+  if (names.has('average_values') && Array.isArray(sample)) return 'average_dict_values';
   return null;
 }
 
