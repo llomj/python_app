@@ -9070,6 +9070,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1178: {
         functionNames: ['generate_random_number'],
         compare: 'numberRange',
+        requiredCallPatterns: [{ functionName: "randint" }],
         tests: [
             { args: [], expected: [1, 100] },
         ]
@@ -9077,6 +9078,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1179: {
         functionNames: ['current_datetime'],
         compare: 'typeName',
+        requiredCallPatterns: [{ functionName: "now" }],
         tests: [
             { args: [], expected: "datetime" },
         ]
@@ -9084,6 +9086,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1180: {
         functionNames: ['current_working_directory'],
         compare: 'typeName',
+        requiredCallPatterns: [{ functionName: "getcwd" }],
         tests: [
             { args: [], expected: "str" },
         ]
@@ -9097,6 +9100,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1182: {
     functionNames: ["dict_to_json"],
+    requiredCallPatterns: [{ functionName: "dumps" }],
     tests: [{
       args: [],
       expected: "{\"name\": \"Alice\", \"age\": 30}"
@@ -9143,6 +9147,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1188: {
         functionNames: ['get_pi_value'],
         compare: 'float',
+        requiredNodePatterns: [{ nodeType: "Attribute" }],
         tests: [
             { args: [], expected: 3.141592653589793 },
         ]
@@ -9179,6 +9184,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1193: {
         functionNames: ['format_current_date'],
         compare: 'length',
+        requiredCallPatterns: [{ functionName: "strftime" }],
         tests: [
             { args: [], expected: 10 },
         ]
