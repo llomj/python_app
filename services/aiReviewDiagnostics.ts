@@ -150,6 +150,155 @@ const describeCodeLine = (line: string) => {
     return 'runs this statement';
 };
 
+const explainPythonConcepts = (code: string) => {
+    const explanations: string[] = [];
+    const seen = new Set<string>();
+    const add = (key: string, text: string) => {
+        if (seen.has(key)) return;
+        seen.add(key);
+        explanations.push(text);
+    };
+
+    if (/\[[^\]\n]*\]/.test(code)) {
+        add('list-literal', '`[...]` can create a list, or when it appears after a value like `name[...]` it indexes/slices that sequence.');
+    }
+    if (/\[[^\]\n]*:-?\d+[^\]\n]*\]|\[[^\]\n]*-?\d+:[^\]\n]*\]|\[[^\]\n]*:[^\]\n]*:[^\]\n]*\]/.test(code)) {
+        add('slice', '`sequence[start:stop:step]` is slicing: `start` is where to begin, `stop` is excluded, and `step` controls how far to move each time.');
+    }
+    if (/\[-1\]/.test(code)) {
+        add('negative-index', '`[-1]` means the last item in a string, list, or tuple. `[-2]` would mean the second-last item.');
+    }
+    if (/\[::-1\]/.test(code)) {
+        add('reverse-slice', '`[::-1]` means take the whole sequence with a step of `-1`, so it reverses a string/list/tuple.');
+    }
+    if (/\[[^\]\n]*\bfor\b[^\]\n]*\bin\b[^\]\n]*\]/.test(code)) {
+        add('list-comprehension', '`[expression for item in iterable]` is a list comprehension. It builds a new list by running the expression once for each item.');
+    }
+    if (/\{[^}\n]*:[^}\n]*\}/.test(code)) {
+        add('dict-literal', '`{key: value}` creates a dictionary. Dictionaries store lookup pairs, so `data[key]` retrieves the value for that key.');
+    }
+    if (/\{[^}\n]*\bfor\b[^}\n]*\bin\b[^}\n]*\}/.test(code)) {
+        add('dict-comprehension', '`{key: value for item in iterable}` is a dictionary comprehension. It builds a dictionary by looping and creating key/value pairs.');
+    }
+    if (/\{[^}:{}\n]*(?:,\s*[^}:{}\n]+)+\}/.test(code)) {
+        add('set-literal', '`{a, b, c}` creates a set when there are no `key: value` pairs. Sets store unique values and are useful for membership checks.');
+    }
+    if (/\([^)\n]*\bfor\b[^)\n]*\bin\b[^)\n]*\)/.test(code)) {
+        add('generator', '`(expression for item in iterable)` is a generator expression. It produces values lazily instead of building a full list immediately.');
+    }
+    if (/\blambda\b/.test(code)) {
+        add('lambda', '`lambda` creates a small anonymous function, often used as a `key=` function for sorting or filtering.');
+    }
+    if (/\bdef\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/.test(code)) {
+        add('def', '`def name(...):` defines a function. Python records the function first; the indented body runs later when the function is called.');
+    }
+    if (/\breturn\b/.test(code)) {
+        add('return', '`return` sends a value back to the caller/grader. Code after `return` in the same block usually will not run.');
+    }
+    if (/\bprint\s*\(/.test(code)) {
+        add('print', '`print(...)` displays text in the output panel. It does not return that value to the grader unless the problem is output-based.');
+    }
+    if (/\binput\s*\(/.test(code)) {
+        add('input', '`input(...)` pauses for user text and returns that text as a string. Convert it with `int()` or `float()` when numbers are needed.');
+    }
+    if (/\bfor\s+/.test(code)) {
+        add('for', '`for item in iterable:` repeats the indented block once for each item in the iterable.');
+    }
+    if (/\bwhile\s+/.test(code)) {
+        add('while', '`while condition:` repeats while the condition stays true. The loop must update something or it can run forever.');
+    }
+    if (/\bif\s+/.test(code)) {
+        add('if', '`if` checks a condition. `elif` checks another condition, and `else` runs when the earlier conditions are false.');
+    }
+    if (/\bwith\s+/.test(code)) {
+        add('with', '`with` opens a context safely, such as a file. Python automatically runs cleanup when the block finishes.');
+    }
+    if (/\btry\s*:/.test(code)) {
+        add('try', '`try` runs code that might fail. `except` catches selected errors so the program can handle them.');
+    }
+    if (/==|!=|<=|>=|<|>/.test(code)) {
+        add('comparison', 'Comparison operators like `==`, `!=`, `<`, and `>` produce `True` or `False` and are commonly used in `if` or `while` logic.');
+    }
+    if (/\bis\b|\bis not\b/.test(code)) {
+        add('identity', '`is` checks object identity, meaning whether two names point to the exact same object. Use `==` when you want value equality.');
+    }
+    if (/%/.test(code)) {
+        add('modulo', '`%` is modulo. It returns the remainder, so `number % 2 == 0` checks whether a number is even.');
+    }
+    if (/\*\*/.test(code)) {
+        add('power', '`**` is exponentiation. For example, `number ** 2` squares a number.');
+    }
+    if (/\/\//.test(code)) {
+        add('floor-division', '`//` is floor division. It divides and rounds down to an integer-like result.');
+    }
+
+    const builtinExplanations: Array<[RegExp, string, string]> = [
+        [/\blen\s*\(/, 'len', '`len(x)` returns how many items are in a string, list, tuple, dict, or other sized object.'],
+        [/\brange\s*\(/, 'range', '`range(...)` creates a sequence of numbers, often used by `for` loops.'],
+        [/\bsum\s*\(/, 'sum', '`sum(iterable)` adds numeric values together.'],
+        [/\bmax\s*\(/, 'max', '`max(iterable)` returns the largest value. With `key=`, it chooses the item whose key value is largest.'],
+        [/\bmin\s*\(/, 'min', '`min(iterable)` returns the smallest value. With `key=`, it chooses the item whose key value is smallest.'],
+        [/\bsorted\s*\(/, 'sorted', '`sorted(iterable)` returns a new sorted list and does not mutate the original object.'],
+        [/\bmap\s*\(/, 'map', '`map(function, iterable)` applies a function to every item and returns an iterator.'],
+        [/\bfilter\s*\(/, 'filter', '`filter(function, iterable)` keeps only items where the function returns truthy.'],
+        [/\bzip\s*\(/, 'zip', '`zip(a, b)` pairs items from multiple iterables by position.'],
+        [/\benumerate\s*\(/, 'enumerate', '`enumerate(iterable)` gives `(index, value)` pairs while looping.'],
+        [/\bstr\s*\(/, 'str', '`str(x)` converts a value to text.'],
+        [/\bint\s*\(/, 'int', '`int(x)` converts text or a number to an integer.'],
+        [/\bfloat\s*\(/, 'float', '`float(x)` converts text or a number to a decimal number.'],
+        [/\blist\s*\(/, 'list', '`list(x)` converts an iterable into a list.'],
+        [/\bdict\s*\(/, 'dict', '`dict(...)` creates a dictionary or converts key/value pairs into a dictionary.'],
+        [/\bset\s*\(/, 'set', '`set(x)` creates a collection of unique values.'],
+        [/\bbool\s*\(/, 'bool', '`bool(x)` converts a value to `True` or `False`. Empty values are usually `False`.'],
+        [/\babs\s*\(/, 'abs', '`abs(x)` returns the positive distance from zero.'],
+        [/\bround\s*\(/, 'round', '`round(x, n)` rounds a number, optionally to `n` decimal places.'],
+    ];
+
+    for (const [regex, key, text] of builtinExplanations) {
+        if (regex.test(code)) add(key, text);
+    }
+
+    const methodExplanations: Array<[RegExp, string, string]> = [
+        [/\.\s*append\s*\(/, 'append', '`.append(x)` adds one item to the end of a list and mutates that list.'],
+        [/\.\s*extend\s*\(/, 'extend', '`.extend(items)` adds each item from another iterable to the end of a list.'],
+        [/\.\s*pop\s*\(/, 'pop', '`.pop()` removes and returns an item. On lists it defaults to the last item; on dicts it removes a key.'],
+        [/\.\s*remove\s*\(/, 'remove', '`.remove(x)` removes the first matching value from a list.'],
+        [/\.\s*sort\s*\(/, 'sort', '`.sort()` sorts a list in place and returns `None`.'],
+        [/\.\s*split\s*\(/, 'split', '`.split(...)` breaks a string into a list of smaller strings.'],
+        [/\.\s*join\s*\(/, 'join', '`separator.join(items)` combines strings with the separator between them.'],
+        [/\.\s*strip\s*\(/, 'strip', '`.strip()` removes whitespace from the start and end of a string.'],
+        [/\.\s*replace\s*\(/, 'replace', '`.replace(old, new)` returns text with matching parts changed.'],
+        [/\.\s*lower\s*\(/, 'lower', '`.lower()` returns lowercase text.'],
+        [/\.\s*upper\s*\(/, 'upper', '`.upper()` returns uppercase text.'],
+        [/\.\s*items\s*\(/, 'items', '`.items()` on a dictionary gives `(key, value)` pairs for looping.'],
+        [/\.\s*keys\s*\(/, 'keys', '`.keys()` on a dictionary gives its keys.'],
+        [/\.\s*values\s*\(/, 'values', '`.values()` on a dictionary gives its values.'],
+        [/\.\s*get\s*\(/, 'get', '`.get(key, default)` reads a dictionary key without crashing if the key is missing.'],
+        [/\.\s*read_text\s*\(/, 'read_text', '`Path(...).read_text()` reads a whole text file and returns its content as a string.'],
+        [/\.\s*write_text\s*\(/, 'write_text', '`Path(...).write_text(text)` writes text to a file and returns the number of characters written.'],
+        [/\.\s*glob\s*\(/, 'glob', '`Path(...).glob(pattern)` finds paths matching a filename pattern such as `*.py`.'],
+    ];
+
+    for (const [regex, key, text] of methodExplanations) {
+        if (regex.test(code)) add(key, text);
+    }
+
+    if (/\bjson\.dump\s*\(/.test(code)) add('json-dump', '`json.dump(data, file)` writes a Python object into an open file as JSON text.');
+    if (/\bjson\.load\s*\(/.test(code)) add('json-load', '`json.load(file)` reads JSON text from an open file and converts it back to Python data.');
+    if (/\bre\.(?:findall|search|match|fullmatch|sub)\s*\(/.test(code)) add('regex', '`re` functions use regular expressions. They match patterns in strings instead of only exact text.');
+
+    return explanations;
+};
+
+const summarizeCodeExplanation = (userCode: string, solution: string) => {
+    const source = userCode.trim() ? userCode : solution;
+    const concepts = explainPythonConcepts(source).slice(0, 10);
+    if (!concepts.length) {
+        return 'Code explanation: This code uses straightforward Python statements. Read it from top to bottom: assignments prepare values, expressions compute results, and the final `return` or `print` is what the app checks.';
+    }
+    return `Code explanation:\n${concepts.map((text, index) => `part ${index + 1}: ${text}`).join('\n')}`;
+};
+
 const extractPrimarySolutionLines = (solution: string) => {
     const lines = solution.trim().split('\n');
     const imports = lines.filter(line => /^\s*(?:from|import)\s+/.test(line)).slice(0, 4);
@@ -357,10 +506,11 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
 
     if (request.graderPassed) {
         const expectedWorkflow = request.visibleSolution ? summarizeExpectedWorkflow(request.visibleSolution) : '';
+        const codeExplanation = summarizeCodeExplanation(code, request.visibleSolution || '');
         return {
             verdict: 'likely_correct',
             confidence: 0.99,
-            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
+            explanation: `Problem requirement: ${summarizeProblemRequirement(request)} ${summarizeCodeLines(code)} ${codeExplanation} ${expectedWorkflow} Execution order: Python reads imports and function definitions first; the function body runs only when called; the final \`return\` or printed output is what the grader checks. The deterministic grader passed this exact code, so the submitted behavior matches the hidden tests for this problem.`,
             suggestedFix: 'No fix needed; the deterministic grader already accepted this solution.',
             source: 'diagnostic',
         };
@@ -371,6 +521,7 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
     }
 
     notes.push(summarizeCodeLines(code));
+    notes.push(summarizeCodeExplanation(code, request.visibleSolution || ''));
 
     if (request.visibleSolution) {
         const expectedWorkflow = summarizeExpectedWorkflow(request.visibleSolution);

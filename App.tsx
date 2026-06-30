@@ -7315,6 +7315,7 @@ const getAiStepTitle = (step: string, index: number) => {
     const normalized = step.toLowerCase();
     if (normalized.includes('problem requirement')) return 'Problem Requirement';
     if (normalized.includes('line-by-line') || normalized.includes('code inspection')) return 'Code Check';
+    if (normalized.includes('code explanation') || normalized.includes('syntax explanation') || normalized.includes('concept explanation')) return 'Code Explanation';
     if (normalized.includes('expected solution workflow') || normalized.includes('function workflow')) return 'Solution Workflow';
     if (normalized.includes('execution order') || normalized.includes('order of operation')) return 'Execution Order';
     if (normalized.includes('grader') || normalized.includes('mismatch') || normalized.includes('failed') || normalized.includes('rejected')) return 'Result / Error';
@@ -7344,7 +7345,7 @@ const splitAiStepParagraphs = (step: string) => {
 const splitAiReviewSteps = (text: string) => {
     const normalized = text
         .replace(/\n\s*---\s*\n/g, '\n\n')
-        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|Expected solution workflow|Function workflow|Execution order|Order of operation|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
+        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|Code explanation|Syntax explanation|Concept explanation|Expected solution workflow|Function workflow|Execution order|Order of operation|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
         .replace(/\s+(?=The deterministic grader|A function that reaches|If this is|For this grader)/g, '\n\n')
         .trim();
 
