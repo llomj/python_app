@@ -70,8 +70,19 @@ function hasDynamicScriptSignal(grader, tests) {
     (Array.isArray(test.setupRemove) && test.setupRemove.length > 0) ||
     (Array.isArray(test.getFiles) && test.getFiles.length > 0)
   );
-  const dynamicCalls = ['input', 'randint', 'randrange', 'random', 'uniform', 'choice', 'sample', 'shuffle', 'choices', 'open'];
-  const algorithmNodes = ['For', 'While', 'ListComp', 'DictComp', 'SetComp', 'GeneratorExp'];
+  const dynamicCalls = [
+    'input', 'randint', 'randrange', 'random', 'uniform', 'choice', 'sample', 'shuffle', 'choices', 'open',
+    'upper', 'lower', 'count', 'startswith', 'replace', 'split', 'join', 'strip', 'index', 'sort', 'reverse',
+    'append', 'pop', 'remove', 'keys', 'values', 'update', 'clear', 'int', 'float', 'strptime', 'findall',
+    'loads', 'dumps', 'fromstring', 'find', 'parse_qs', 'reader', 'StringIO', 'feed', 'ConfigParser',
+    'read_string', 'divmod', 'range', 'zip', 'items', 'sorted', 'isinstance', 'all', 'any', 'next',
+    'max', 'min', 'sum', 'len', 'defaultdict', 'fromkeys', 'fullmatch', 'sub'
+  ];
+  const algorithmNodes = [
+    'For', 'While', 'ListComp', 'DictComp', 'SetComp', 'GeneratorExp',
+    'Lambda', 'Try', 'ExceptHandler', 'Raise', 'Assert', 'FunctionDef', 'ClassDef',
+    'Subscript', 'Compare', 'BoolOp', 'IfExp'
+  ];
   return (
     hasInputValues ||
     hasRandomValues ||
