@@ -9624,15 +9624,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl"
                         style={{
                             height: '190px',
-                            display: 'flex',
-                            flexDirection: 'column',
                             backgroundColor: 'rgba(8, 18, 34, 0.08)',
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
                             borderColor: 'rgba(88, 118, 160, 0.25)'
                         }}
                     >
-                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1 flex-shrink-0">
+                        <div className="flex items-center justify-between gap-3 px-4 pt-3 pb-1">
                             <h2 className="text-lg font-bold text-white m-0">Problem {exercise.id}</h2>
                             <div className="flex items-center gap-2">
                                 <button
@@ -9690,8 +9688,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             id={`problem-desc-${exercise.id}`}
                             ref={problemDescriptionRef}
                             style={{
-                                flex: 1,
-                                minHeight: 0,
+                                maxHeight: '142px',
                                 overflowY: 'auto',
                                 overflowX: 'hidden',
                                 color: '#d1d5db',
