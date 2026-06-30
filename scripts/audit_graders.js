@@ -48,6 +48,7 @@ const distribution = new Map();
 const weakFunctionGraders = [];
 const singleCaseNoArgFunctionGraders = [];
 const singleCaseScriptGraders = [];
+const unguardedSingleCaseScriptGraders = [];
 const emptyGraders = [];
 const invalidGraders = [];
 
@@ -113,7 +114,11 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   }
 
   if (grader.mode === 'script') {
-    if (testCount === 1) singleCaseScriptGraders.push(id);
+    if (testCount === 1) {
+      singleCaseScriptGraders.push(id);
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0;
+      if (!hasSourceRequirements) unguardedSingleCaseScriptGraders.push(id);
+    }
     continue;
   }
 
@@ -137,10 +142,11 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
 
 const sortedDistribution = [...distribution.entries()].sort((a, b) => a[0] - b[0]);
 const weakIds = weakFunctionGraders.map(item => item.id);
-const showAll = process.argv.includes('--all');
+const showAll = process.argv.includes('--all') || process.argv.includes('--show');
 const shownWeakIds = showAll ? weakIds : weakIds.slice(0, 100);
 const maxWeakFunctions = readNumberFlag('max-weak-functions');
 const maxSingleCaseScripts = readNumberFlag('max-single-case-scripts');
+const maxUnguardedSingleCaseScripts = readNumberFlag('max-unguarded-single-case-scripts');
 const maxEmptyGraders = readNumberFlag('max-empty-graders') ?? 0;
 
 console.log('Grader quality audit');
@@ -150,6 +156,7 @@ console.log(`Test-count distribution: ${sortedDistribution.map(([count, total]) 
 console.log(`Parameterized function graders below ${MIN_FUNCTION_TESTS} tests: ${weakFunctionGraders.length}`);
 console.log(`Single-case no-arg function graders: ${singleCaseNoArgFunctionGraders.length}`);
 console.log(`Single-case script graders: ${singleCaseScriptGraders.length}`);
+console.log(`Unguarded single-case script graders: ${unguardedSingleCaseScriptGraders.length}`);
 console.log(`Empty graders: ${emptyGraders.length}`);
 console.log(`Invalid grader definitions: ${invalidGraders.length}`);
 
@@ -166,6 +173,24 @@ if (weakFunctionGraders.length) {
 
 if (singleCaseNoArgFunctionGraders.length && showAll) {
   console.log(`Single-case no-arg function grader IDs: ${singleCaseNoArgFunctionGraders.map(item => item.id).join(', ')}`);
+  console.log('First single-case no-arg function graders:');
+  for (const item of singleCaseNoArgFunctionGraders.slice(0, 25)) {
+    console.log(`${item.id}: ${item.title} [${item.functionNames.join(', ')}]`);
+  }
+}
+
+if (singleCaseScriptGraders.length && showAll) {
+  console.log(`Single-case script grader IDs: ${singleCaseScriptGraders.join(', ')}`);
+  console.log(`Unguarded single-case script grader IDs: ${unguardedSingleCaseScriptGraders.join(', ')}`);
+  console.log('First single-case script graders:');
+  for (const id of singleCaseScriptGraders.slice(0, 40)) {
+    const exercise = exerciseById.get(id);
+    const grader = AUTO_GRADERS[id];
+    const expected = grader.tests?.[0]?.expected;
+    const requiredCalls = (grader.requiredCallPatterns || []).map(pattern => pattern.functionName).join(', ');
+    const requiredNodes = (grader.requiredNodePatterns || []).map(pattern => `${pattern.nodeType}:${pattern.minCount || 1}`).join(', ');
+    console.log(`${id}: ${exercise?.title || `Problem ${id}`} expected=${JSON.stringify(expected)} calls=[${requiredCalls}] nodes=[${requiredNodes}]`);
+  }
 }
 
 if (invalidGraders.length) {
@@ -190,6 +215,9 @@ if (maxWeakFunctions !== null && weakFunctionGraders.length > maxWeakFunctions) 
 }
 if (maxSingleCaseScripts !== null && singleCaseScriptGraders.length > maxSingleCaseScripts) {
   gateFailures.push(`${singleCaseScriptGraders.length} single-case script graders exceeds max ${maxSingleCaseScripts}`);
+}
+if (maxUnguardedSingleCaseScripts !== null && unguardedSingleCaseScriptGraders.length > maxUnguardedSingleCaseScripts) {
+  gateFailures.push(`${unguardedSingleCaseScriptGraders.length} unguarded single-case script graders exceeds max ${maxUnguardedSingleCaseScripts}`);
 }
 
 if (gateFailures.length) {

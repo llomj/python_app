@@ -7314,7 +7314,7 @@ export const EXERCISES: Exercise[] = [
             "title": "Problem 831",
             "description": "Write a Python program that keeps asking the user for input until they type “exit”.",
             "initialCode": "# Write your solution here",
-            "solution": "# Using script approach\nuser_input = ''\nwhile user_input != 'exit':\n    user_input = input('Enter something (type 'exit' to stop): ')\n# Direct approach\nprint(fn())\n\n# Script approach\nvalues = []\nresult = fn(values)\nprint(result)",
+            "solution": "# Using script approach\nuser_input = ''\nwhile user_input != 'exit':\n    user_input = input(\"Enter something (type 'exit' to stop): \")\n\n# Using function approach\ndef wait_until_exit():\n    user_input = ''\n    while user_input != 'exit':\n        user_input = input(\"Enter something (type 'exit' to stop): \")\n\n# Script approach\nuser_input = ''\nwhile user_input != 'exit':\n    user_input = input(\"Enter something (type 'exit' to stop): \")\n\n# Direct approach\nwhile input(\"Enter something (type 'exit' to stop): \") != 'exit':\n    pass",
             "hint": "Check the description for requirements.",
             "category": "Level 1"
     },
@@ -14469,7 +14469,7 @@ export const EXERCISES: Exercise[] = [
             "title": "Problem 1627",
             "description": "Write a Pythonic way to use `pathlib.Path.read_text()` to read the entire contents of a text file.",
             "initialCode": "from pathlib import Path\n# Write your solution here",
-            "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: content = Path('file.txt').read_text()\n# Using script approach\nprint(\"Demonstration: Path('file.txt').read_text() reads file content\")\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
+            "solution": "from pathlib import Path\n\n# Using script approach\ncontent = Path('file.txt').read_text()\nprint(content)\n\n# Using built-in approach\ndef solve():\n    return Path('file.txt').read_text()\n\n# Using manual approach\ndef solve():\n    file_path = Path('file.txt')\n    return file_path.read_text()\n\n# Script approach\ncontent = Path('file.txt').read_text()\nprint(content)\n\n# Direct approach\nprint(Path('file.txt').read_text())",
             "hint": "Check the description for requirements.",
             "category": "Level 1"
     },
@@ -14478,7 +14478,7 @@ export const EXERCISES: Exercise[] = [
             "title": "Problem 1628",
             "description": "Write a Pythonic way to use `pathlib.Path.write_text()` to write text to a file.",
             "initialCode": "from pathlib import Path\n# Write your solution here",
-            "solution": "from pathlib import Path\n\n# Note: This is a demonstration - file may not exist\n# In practice: Path('file.txt').write_text('Hello, World!')\n# Using script approach\nprint(\"Demonstration: Path('file.txt').write_text('Hello, World!') writes to file\")\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
+            "solution": "from pathlib import Path\n\n# Using script approach\npath = Path('file.txt')\npath.write_text('Hello, World!')\nprint(path.read_text())\n\n# Using built-in approach\ndef solve():\n    path = Path('file.txt')\n    path.write_text('Hello, World!')\n    return path.read_text()\n\n# Using manual approach\ndef solve():\n    file_path = Path('file.txt')\n    file_path.write_text('Hello, World!')\n    return file_path.read_text()\n\n# Script approach\npath = Path('file.txt')\npath.write_text('Hello, World!')\nprint(path.read_text())\n\n# Direct approach\nprint(Path('file.txt').write_text('Hello, World!'))",
             "hint": "Check the description for requirements.",
             "category": "Level 1"
     },
@@ -14487,7 +14487,7 @@ export const EXERCISES: Exercise[] = [
             "title": "Problem 1629",
             "description": "Write a Pythonic way to use `pathlib.Path.glob()` to find all files matching a pattern.",
             "initialCode": "from pathlib import Path\n# Write your solution here",
-            "solution": "from pathlib import Path\n\n# Note: This is a demonstration\n# In practice: files = list(Path('.').glob('*.py'))\n# Using script approach\nprint(\"Demonstration: Path('.').glob('*.py') finds all .py files\")\n\n# Using built-in approach\ndef solve():\n    from pathlib import Path\n\n# Using manual approach\ndef solve():\n    from pathlib import Path\n\n# Script approach\nfrom pathlib import Path\n\n# Direct approach\nfrom pathlib import Path",
+            "solution": "from pathlib import Path\n\n# Using script approach\nfiles = sorted(path.name for path in Path('.').glob('*.py'))\nprint(files)\n\n# Using built-in approach\ndef solve():\n    return sorted(path.name for path in Path('.').glob('*.py'))\n\n# Using manual approach\ndef solve():\n    result = []\n    for path in Path('.').glob('*.py'):\n        result.append(path.name)\n    return sorted(result)\n\n# Script approach\nfiles = sorted(path.name for path in Path('.').glob('*.py'))\nprint(files)\n\n# Direct approach\nprint(sorted(path.name for path in Path('.').glob('*.py')))",
             "hint": "Check the description for requirements.",
             "category": "Level 1"
     },
@@ -14496,7 +14496,7 @@ export const EXERCISES: Exercise[] = [
             "title": "Problem 1630",
             "description": "Write a Python program using `json.dump()` to write a Python object to a JSON file.",
             "initialCode": "import json\nfrom pathlib import Path\n# Write your solution here",
-            "solution": "import json\nfrom pathlib import Path\n\n# Using script approach\ndata = {'name': 'Alice', 'age': 30}\n# Note: In practice: json.dump(data, open('data.json', 'w'))\nprint(\"Demonstration: json.dump(data, open('data.json', 'w')) writes JSON to file\")\n\n# Using built-in approach\ndef solve():\n    import json\n    from pathlib import Path\n    data = {'name': 'Alice', 'age': 30}\n\n# Using manual approach\ndef solve():\n    import json\n    from pathlib import Path\n    data_2 = {'name': 'Alice', 'age': 30}\n\n# Script approach\nimport json\nfrom pathlib import Path\ndata = {'name': 'Alice', 'age': 30}\n\n# Direct approach\nimport json\nfrom pathlib import Path\ndata = {'name': 'Alice', 'age': 30}",
+            "solution": "import json\n\n# Using script approach\ndata = {'name': 'Alice', 'age': 30}\nwith open('data.json', 'w') as file:\n    json.dump(data, file, sort_keys=True)\nwith open('data.json') as file:\n    print(file.read())\n\n# Using built-in approach\ndef solve():\n    data = {'name': 'Alice', 'age': 30}\n    with open('data.json', 'w') as file:\n        json.dump(data, file, sort_keys=True)\n    with open('data.json') as file:\n        return file.read()\n\n# Using manual approach\ndef solve():\n    data = {'name': 'Alice', 'age': 30}\n    file = open('data.json', 'w')\n    json.dump(data, file, sort_keys=True)\n    file.close()\n    file = open('data.json')\n    content = file.read()\n    file.close()\n    return content\n\n# Script approach\ndata = {'name': 'Alice', 'age': 30}\nwith open('data.json', 'w') as file:\n    json.dump(data, file, sort_keys=True)\nprint(open('data.json').read())\n\n# Direct approach\nprint(json.dumps({'name': 'Alice', 'age': 30}, sort_keys=True))",
             "hint": "Check the description for requirements.",
             "category": "Level 1"
     },
@@ -14505,7 +14505,7 @@ export const EXERCISES: Exercise[] = [
             "title": "Problem 1631",
             "description": "Write a Python program using `json.load()` to read a JSON file and parse it into a Python object.",
             "initialCode": "import json\n# Write your solution here",
-            "solution": "import json\n\n# Note: In practice: data = json.load(open('data.json'))\n# Using script approach\nprint(\"Demonstration: json.load(open('data.json')) reads and parses JSON file\")\n\n# Using built-in approach\ndef solve():\n    import json\n\n# Using manual approach\ndef solve():\n    import json\n\n# Script approach\nimport json\n\n# Direct approach\nimport json",
+            "solution": "import json\n\n# Using script approach\nwith open('data.json') as file:\n    data = json.load(file)\nprint(dict(sorted(data.items())))\n\n# Using built-in approach\ndef solve():\n    with open('data.json') as file:\n        data = json.load(file)\n    return dict(sorted(data.items()))\n\n# Using manual approach\ndef solve():\n    file = open('data.json')\n    data = json.load(file)\n    file.close()\n    return dict(sorted(data.items()))\n\n# Script approach\nwith open('data.json') as file:\n    data = json.load(file)\nprint(dict(sorted(data.items())))\n\n# Direct approach\nprint(json.load(open('data.json')))",
             "hint": "Check the description for requirements.",
             "category": "Level 1"
     },
