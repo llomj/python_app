@@ -609,6 +609,12 @@ def metamorphic_cases(function_names, tests):
         left, right = first_args
         if name_set & {"add_numbers", "add_number", "add_num"} and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
             return [([7, -2], 5), ([1.5, 2.25], 3.75)]
+        if "merge_lists" in name_set and isinstance(left, list) and isinstance(right, list):
+            return [([[1, 4], [2, 3]], [1, 2, 3, 4]), ([[], [2]], [2])]
+        if "is_anagram" in name_set and isinstance(left, str) and isinstance(right, str):
+            return [(["Listen", "Silent"], True), (["hello", "world"], False)]
+        if "common_char" in name_set and isinstance(left, str) and isinstance(right, str):
+            return [(["abc", "bcd"], ["b", "c"]), (["abc", "xyz"], [])]
         if "gcd" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([48, 18], 6), ([17, 13], 1)]
         if "lcm" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
@@ -625,6 +631,10 @@ def metamorphic_cases(function_names, tests):
         return [([12], False), ([13], True)]
     if "reverse_string" in name_set and isinstance(sample, str):
         return [(["abc def"], "fed cba"), (["Python"], "nohtyP")]
+    if name_set & {"reverse_words", "reverse_word"} and isinstance(sample, str):
+        return [(["one two three"], "three two one"), (["solo"], "solo")]
+    if "remove_vowels" in name_set and isinstance(sample, str):
+        return [(["Beautiful"], "Btfl"), (["rhythm"], "rhythm")]
     if "count_vowels" in name_set and isinstance(sample, str):
         if isinstance(first_expected, dict):
             return [
@@ -639,6 +649,8 @@ def metamorphic_cases(function_names, tests):
             return [([[9, -2, 4]], -2), ([[0]], 0)]
         if name_set & {"calculate_sum", "cal_sum", "sum_of_list"}:
             return [([[9, -2, 4]], 11), ([[]], 0)]
+    if "find_min_max" in name_set and isinstance(sample, list):
+        return [([[5, -2, 10]], [-2, 10]), ([[7]], [7, 7])]
     if name_set & {"calculate_average", "cal_average", "find_average", "find_average_lst"} and isinstance(sample, list):
         return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
     if name_set & {"square_list", "square_lst", "square_elements"} and isinstance(sample, list):
@@ -659,14 +671,27 @@ def metamorphic_cases(function_names, tests):
         if isinstance(first_expected, dict):
             return [(["One two one"], {"one": 2, "two": 1}), (["solo"], {"solo": 1})]
         return [(["one two  three"], 3), (["solo"], 1)]
+    if "count_uppercase" in name_set and isinstance(sample, str):
+        return [(["ABC xyz"], 3), (["none"], 0)]
     if "factorial" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([0], 1), ([6], 720)]
     if "is_palindrome" in name_set and isinstance(sample, str):
         return [(["racecar"], True), (["python"], False)]
     if "is_prime" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([29], True), ([21], False)]
+    if "is_perfect_square" in name_set and "is_perfect_number" not in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([25], True), ([26], False)]
+    if "reverse_number" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([1200], 21), ([987], 789)]
+    if "is_armstrong" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([153], True), ([123], False)]
     if "fibonacci" in name_set and isinstance(sample, int) and isinstance(first_expected, list):
         return [([5], [0, 1, 1, 2, 3]), ([2], [0, 1])]
+    if name_set & {"sum_even_indices", "all_odd_numbers"} and isinstance(sample, list):
+        if "sum_even_indices" in name_set:
+            return [([[10, 20, 30, 40, 50]], 90), ([[]], 0)]
+        if "all_odd_numbers" in name_set:
+            return [([[10, 15, 20, 25]], 40), ([[2, 4]], 0)]
     return []
 
 def run_metamorphic_tests(target, function_names, tests, compare):

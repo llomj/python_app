@@ -65,6 +65,9 @@ function metamorphicRule(functionNames, tests) {
   if (firstArgs.length === 2) {
     const [left, right] = firstArgs;
     if (['add_numbers', 'add_number', 'add_num'].some(name => names.has(name)) && [left, right].every(value => typeof value === 'number')) return 'add_numbers';
+    if (names.has('merge_lists') && Array.isArray(left) && Array.isArray(right)) return 'merge_lists';
+    if (names.has('is_anagram') && typeof left === 'string' && typeof right === 'string') return 'anagram';
+    if (names.has('common_char') && typeof left === 'string' && typeof right === 'string') return 'common_chars';
     if (names.has('gcd') && [left, right].every(Number.isInteger)) return 'gcd';
     if (names.has('lcm') && [left, right].every(Number.isInteger)) return 'lcm';
     return null;
@@ -75,6 +78,8 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('is_even') && Number.isInteger(sample)) return 'even';
   if (names.has('is_odd') && Number.isInteger(sample)) return 'odd';
   if (names.has('reverse_string') && typeof sample === 'string') return 'reverse_string';
+  if (['reverse_words', 'reverse_word'].some(name => names.has(name)) && typeof sample === 'string') return 'reverse_words';
+  if (names.has('remove_vowels') && typeof sample === 'string') return 'remove_vowels';
   if (names.has('count_vowels') && typeof sample === 'string') {
     return firstExpected && typeof firstExpected === 'object' && !Array.isArray(firstExpected)
       ? 'count_vowels_dict'
@@ -84,6 +89,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('find_max')) return 'find_max';
     if (['find_min', 'find_minimum'].some(name => names.has(name))) return 'find_min';
     if (['calculate_sum', 'cal_sum', 'sum_of_list'].some(name => names.has(name))) return 'sum_list';
+    if (names.has('find_min_max')) return 'find_min_max';
     if (['calculate_average', 'cal_average', 'find_average', 'find_average_lst'].some(name => names.has(name))) return 'average';
     if (['square_list', 'square_lst', 'square_elements'].some(name => names.has(name))) return 'square_list';
     if (['ascending_order_numbers', 'sort_list', 'sort_lst'].some(name => names.has(name))) return 'sort_ascending';
@@ -97,10 +103,16 @@ function metamorphicRule(functionNames, tests) {
       ? 'count_words_dict'
       : 'count_words_number';
   }
+  if (names.has('count_uppercase') && typeof sample === 'string') return 'count_uppercase';
   if (names.has('factorial') && Number.isInteger(sample)) return 'factorial';
   if (names.has('is_palindrome') && typeof sample === 'string') return 'palindrome';
   if (names.has('is_prime') && Number.isInteger(sample)) return 'prime';
+  if (names.has('is_perfect_square') && !names.has('is_perfect_number') && Number.isInteger(sample)) return 'perfect_square';
+  if (names.has('reverse_number') && Number.isInteger(sample)) return 'reverse_number';
+  if (names.has('is_armstrong') && Number.isInteger(sample)) return 'armstrong';
   if (names.has('fibonacci') && Number.isInteger(sample) && Array.isArray(firstExpected)) return 'fibonacci';
+  if (names.has('sum_even_indices') && Array.isArray(sample)) return 'sum_even_indices';
+  if (names.has('all_odd_numbers') && Array.isArray(sample)) return 'sum_odd_numbers';
   return null;
 }
 
