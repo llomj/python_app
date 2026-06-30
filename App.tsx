@@ -629,11 +629,24 @@ def __auto_grader_hardcoded_expected_error(expected):
     except SyntaxError:
         return None
     expected_compact = __auto_grader_compact_pattern(expected_text)
+    expected_lines = [
+        __auto_grader_compact_pattern(line)
+        for line in expected_text.splitlines()
+        if line.strip()
+    ]
+    literal_lines = set()
     for node in ast.walk(tree):
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             literal_text = __auto_grader_clean_text(node.value)
             if literal_text == expected_text or __auto_grader_compact_pattern(literal_text) == expected_compact:
                 return "Hard-coded output detected: build the result with the required logic instead of pasting the expected output."
+            for literal_line in literal_text.splitlines():
+                if literal_line.strip():
+                    literal_lines.add(__auto_grader_compact_pattern(literal_line))
+    if len(expected_lines) >= 8 and literal_lines:
+        matched_lines = sum(1 for line in expected_lines if line in literal_lines)
+        if matched_lines >= 8 and matched_lines / len(expected_lines) >= 0.8:
+            return "Hard-coded output lines detected: generate the output with Python logic instead of printing the expected lines one by one."
     return None
 
 def __auto_grader_clean_text(value):
