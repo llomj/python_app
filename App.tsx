@@ -8522,29 +8522,18 @@ const App: React.FC = () => {
 
         // Use ResizeObserver to watch for content changes
         let headerObserver: ResizeObserver | null = null;
-        let problemObserver: ResizeObserver | null = null;
         if (headerRef.current && typeof ResizeObserver !== 'undefined') {
             headerObserver = new ResizeObserver(() => {
                 updateHeaderHeight();
             });
             headerObserver.observe(headerRef.current);
         }
-        if (problemPanelRef.current && typeof ResizeObserver !== 'undefined') {
-            problemObserver = new ResizeObserver(() => {
-                updateProblemPanelHeight();
-            });
-            problemObserver.observe(problemPanelRef.current);
-        }
-
         return () => {
             clearTimeout(timeoutId1);
             clearTimeout(timeoutId2);
             window.removeEventListener('resize', handleResize);
             if (headerObserver) {
                 headerObserver.disconnect();
-            }
-            if (problemObserver) {
-                problemObserver.disconnect();
             }
         };
     }, [exercise, bootStage]);
@@ -9623,18 +9612,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         ref={problemPanelRef}
                         style={{
                             height: '190px',
-                            overflowY: 'auto',
-                            overflowX: 'hidden',
+                            overflow: 'auto',
                             backgroundColor: 'rgba(8, 18, 34, 0.08)',
-                            backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
                             border: '1px solid rgba(88, 118, 160, 0.25)',
                             borderRadius: '0.75rem',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                             WebkitOverflowScrolling: 'touch',
                         }}
                     >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'rgba(8, 18, 34, 0.95)', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', backgroundColor: 'rgba(8, 18, 34, 0.95)', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
                             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff', margin: 0 }}>Problem {exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
@@ -9710,7 +9696,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
                     paddingTop: `${editorContentTop}px`,
-                    paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + problemPanelHeight + 300, 620)}px))`,
+                    paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + 490, 620)}px))`,
                     scrollPaddingTop: `${editorContentTop}px`,
                     WebkitOverflowScrolling: 'touch',
                     overscrollBehaviorY: 'contain'
