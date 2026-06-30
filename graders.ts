@@ -9212,24 +9212,29 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1197: {
         functionNames: ['access_value'],
+        requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "Subscript" }],
         tests: [
             { args: [], expected: 'Alice' },
         ]
     },
   1198: {
         functionNames: ['add_key_value'],
+        requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "Subscript" }],
         tests: [
             { args: [], expected: {"name": "Alice", "age": 30, "city": "New York"} },
         ]
     },
   1199: {
         functionNames: ['remove_key'],
+        requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "Delete" }],
         tests: [
             { args: [], expected: {"name": "Alice", "age": 30} },
         ]
     },
   1200: {
     functionNames: ["get_keys"],
+    requiredCallPatterns: [{ functionName: "keys" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }],
     tests: [{
       args: [],
       expected: ['name', 'age', 'city']
@@ -9237,6 +9242,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1201: {
     functionNames: ["get_values"],
+    requiredCallPatterns: [{ functionName: "values" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }],
     tests: [{
       args: [],
       expected: ['Alice', 30, 'New York']
@@ -9244,6 +9251,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1202: {
         functionNames: ['check_key'],
+        requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "Compare" }],
         tests: [
             { args: [], expected: true },
         ]
@@ -9257,18 +9265,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   1204: {
         functionNames: ['clear_dict'],
+        requiredCallPatterns: [{ functionName: "clear" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: {} },
         ]
     },
   1205: {
         functionNames: ['copy_dict'],
+        requiredCallPatterns: [{ functionName: "copy" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: {"name": "Alice", "age": 30} },
         ]
     },
   1206: {
         functionNames: ['merge_dicts'],
+        requiredCallPatterns: [{ functionName: "update" }],
+        requiredNodePatterns: [{ nodeType: "Dict", minCount: 2 }],
         tests: [
             { args: [], expected: {"name": "Alice", "age": 30, "city": "New York", "job": "Engineer"} },
         ]
@@ -9285,30 +9299,39 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1208: {
         functionNames: ['dict_length'],
+        requiredCallPatterns: [{ functionName: "len" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: 3 },
         ]
     },
   1209: {
         functionNames: ['reverse_dict'],
+        requiredCallPatterns: [{ functionName: "items" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: {"Alice": "name", "30": "age", "New York": "city"} },
         ]
     },
   1210: {
         functionNames: ['create_dict_from_lists'],
+        requiredCallPatterns: [{ functionName: "dict" }, { functionName: "zip" }],
         tests: [
             { args: [], expected: {"name": "Alice", "age": 30, "city": "New York"} },
         ]
     },
   1211: {
         functionNames: ['sum_values'],
+        requiredCallPatterns: [{ functionName: "sum" }, { functionName: "values" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: 60 },
         ]
     },
   1212: {
     functionNames: ["filter_dict"],
+    requiredCallPatterns: [{ functionName: "items" }, { functionName: "isinstance" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }],
     tests: [{
       args: [],
       expected: {"name": "Alice", "city": "New York"}
@@ -9316,18 +9339,24 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1213: {
         functionNames: ['max_value'],
+        requiredCallPatterns: [{ functionName: "max" }, { functionName: "values" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: 30 },
         ]
     },
   1214: {
         functionNames: ['is_dict_empty'],
+        requiredCallPatterns: [{ functionName: "len" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "Compare" }],
         tests: [
             { args: [], expected: true },
         ]
     },
   1215: {
     functionNames: ["remove_value"],
+    requiredCallPatterns: [{ functionName: "items" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }],
     tests: [{
       args: [],
       expected: {"b": 20}
@@ -9335,6 +9364,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1216: {
     functionNames: ["find_key_by_value"],
+    requiredCallPatterns: [{ functionName: "items" }],
+    requiredNodePatterns: [{ nodeType: "Dict" }],
     tests: [{
       args: [],
       expected: ["b"]
@@ -9342,6 +9373,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1217: {
     functionNames: ["create_defaultdict"],
+    requiredCallPatterns: [{ functionName: "defaultdict" }],
     tests: [{
       args: [],
       expected: {"a": 1, "b": 2}
@@ -9349,18 +9381,23 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1218: {
         functionNames: ['first_key_value'],
+        requiredCallPatterns: [{ functionName: "items" }],
+        requiredNodePatterns: [{ nodeType: "Dict" }],
         tests: [
             { args: [], expected: ["a", 10] },
         ]
     },
   1219: {
         functionNames: ['merge_multiple_dicts'],
+        requiredNodePatterns: [{ nodeType: "Dict", minCount: 3 }],
         tests: [
             { args: [], expected: {"a": 10, "b": 20, "c": 30, "d": 40, "e": 50} },
         ]
     },
   1220: {
     functionNames: ["list_to_dict"],
+    requiredCallPatterns: [{ functionName: "dict" }],
+    requiredNodePatterns: [{ nodeType: "Tuple" }],
     tests: [{
       args: [],
       expected: {"a": 1, "b": 2, "c": 3}
