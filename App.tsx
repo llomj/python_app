@@ -872,6 +872,115 @@ def __auto_grader_is_simple_case(case):
     }
     return not any(case.get(key) for key in special_keys)
 
+def __auto_grader_is_generated_input_case(case):
+    if case.get("args", []) != []:
+        return False
+    if not case.get("inputValues"):
+        return False
+    special_keys = {
+        "setupRemove", "setupDirs", "setupFiles", "setupSymlinks",
+        "permissionDeniedPaths", "getFiles", "randomValues", "randomFloatValues",
+        "randomChoiceValues", "randomSampleValues", "randomShuffleValues",
+        "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
+        "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
+        "argExpressions", "argFunctionNames", "functionListArgNames",
+        "expectedException", "kwargs", "functionName"
+    }
+    return not any(case.get(key) for key in special_keys)
+
+def __auto_grader_input_generated_cases(function_names, tests):
+    if not tests or not all(__auto_grader_is_generated_input_case(case) for case in tests):
+        return []
+    name_set = set(function_names)
+    first_inputs = tests[0].get("inputValues", [])
+    first_expected = tests[0].get("expected")
+    cases = []
+    def add(input_values, expected, label):
+        cases.append({"args": [], "inputValues": input_values, "expected": expected, "label": label})
+
+    if "area_rectangle" in name_set and len(first_inputs) == 2:
+        add(["7", "2"], "14.0", "generated input: rectangle area")
+        add(["3.5", "2"], "7.0", "generated input: decimal rectangle area")
+    elif "even_odd" in name_set:
+        add(["12"], "Number is even", "generated input: even number")
+        add(["13"], "Number is odd", "generated input: odd number")
+    elif "fibonacci_series" in name_set:
+        add(["7"], "0 1 1 2 3 5", "generated input: fibonacci series")
+    elif name_set & {"max_number", "max_of_three", "max_of_list"}:
+        add(["5 -1 0"], "5", "generated input: maximum with negatives")
+    elif "is_palindrome" in name_set:
+        add(["level"], True, "generated input: palindrome true")
+        add(["python"], False, "generated input: palindrome false")
+    elif "count_vowels" in name_set:
+        add(["Education"], "5", "generated input: vowel count")
+        add(["rhythm"], "0", "generated input: no vowels")
+    elif "factorial" in name_set:
+        add(["6"], "720", "generated input: factorial")
+        add(["1"], "1", "generated input: factorial one")
+    elif "sum_of_all_numbers" in name_set:
+        if first_inputs and isinstance(first_inputs[0], str) and " " in first_inputs[0]:
+            add(["1 2 -3"], "0", "generated input: list sum")
+        else:
+            add(["4"], "10", "generated input: range sum")
+    elif "is_leap_year" in name_set:
+        add(["2400"], True, "generated input: leap year century")
+        add(["2100"], False, "generated input: non-leap century")
+    elif "length_string" in name_set:
+        add(["hello world"], "11", "generated input: string length")
+    elif name_set & {"are_anagrams", "pal"}:
+        add(["triangle", "integral"], True, "generated input: anagram true")
+        add(["python", "typhonx"], False, "generated input: anagram false")
+    elif "decimal_to_binary" in name_set:
+        add(["6"], "110", "generated input: binary conversion")
+    elif "square_root" in name_set:
+        add(["25"], "5", "generated input: square root")
+    elif name_set & {"digits_string", "sum_digits"}:
+        if first_inputs and isinstance(first_inputs[0], str) and " " in first_inputs[0]:
+            add(["4 5 6"], "15", "generated input: spaced digit sum")
+        else:
+            add(["1234"], "10", "generated input: digit sum")
+    elif name_set & {"sum_of_odd_numbers", "sum_of_all_odd", "sum_of_odd"}:
+        add(["10 15 20 25"], "40", "generated input: odd sum")
+        add(["2 4"], "0", "generated input: no odd numbers")
+    elif name_set & {"remove_duplicates", "remove_duplicate"} and isinstance(first_expected, list):
+        add(["mississippi"], ["m", "i", "s", "p"], "generated input: unique characters")
+    elif "int_str" in name_set:
+        add(["7 8 9"], ["7", "8", "9"], "generated input: string split")
+    elif name_set & {"type_smallest_biggest", "small_big"}:
+        add(["3 -2 10"], [-2, 3, 10], "generated input: numeric sort")
+    elif name_set & {"common", "intersection"}:
+        add(["red blue green", "green red gold"], ["red", "green"], "generated input: intersection")
+    elif name_set & {"find_last_element", "find_second_last_element"}:
+        add(["red blue green"], "blue", "generated input: second last item")
+    elif "third_largest" in name_set:
+        add(["9 1 5 7"], "5", "generated input: third largest")
+    elif name_set & {"find_min", "find_min_num"}:
+        add(["5 2 9 -1"], "-1", "generated input: minimum")
+    elif "largest_element" in name_set:
+        add(["cat elephant dog"], "elephant", "generated input: longest word")
+    elif "second_largest_element" in name_set:
+        add(["cat elephant zebra dog"], "zebra", "generated input: second longest word")
+    elif "centimeters_inches" in name_set:
+        add(["20"], [7.873, 7.875], "generated input: centimeters to inches")
+    elif "find_min_max" in name_set:
+        add(["5 -1 0"], [-1, 5], "generated input: min max")
+    elif "remove_vowels" in name_set:
+        add(["Beautiful"], "Btfl", "generated input: remove vowels")
+    elif "group_by_first_letter" in name_set:
+        add(["ant ape bee"], "{'a': ['ant', 'ape'], 'b': ['bee']}", "generated input: group words")
+    elif "second_largest_number" in name_set:
+        if isinstance(first_expected, str) and "Not enough" in first_expected:
+            add(["9 9 2 5"], "5", "generated input: second largest unique")
+            add(["4 4"], "Not enough unique numbers", "generated input: insufficient unique numbers")
+        else:
+            add(["9 1 5 7"], "7", "generated input: second largest")
+    elif "greet" in name_set:
+        add(["Ada"], "Hello, Ada!", "generated input: greeting")
+    elif "count_occurrences" in name_set:
+        add(["abracadabra", "a"], "The character 'a' occurs 5 times.", "generated input: character count")
+        add(["banana", "aa"], "Please enter exactly one character.", "generated input: invalid character count")
+    return cases
+
 def __auto_grader_metamorphic_cases(function_names, tests):
     if not tests or not all(__auto_grader_is_simple_case(case) for case in tests):
         return []
@@ -1132,7 +1241,8 @@ def __auto_grader_run():
             "message": "Missing function. Expected one of: " + ", ".join(function_names)
         }
 
-    for index, case in enumerate(__auto_grader_spec.get("tests", []), start=1):
+    test_cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests)
+    for index, case in enumerate(test_cases, start=1):
         args = case.get("args", [])
         kwargs = case.get("kwargs", {})
         arg_function_names = case.get("argFunctionNames", [])
@@ -1407,7 +1517,7 @@ def __auto_grader_run():
     return {
         "passed": True,
         "functionName": target_name,
-        "message": f"All {len(__auto_grader_spec.get('tests', []))} tests passed using {target_name}()."
+        "message": f"All {len(test_cases)} tests passed using {target_name}()."
     }
 
 def __auto_grader_run_script():

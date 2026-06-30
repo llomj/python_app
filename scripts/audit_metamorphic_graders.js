@@ -57,7 +57,68 @@ function isSimpleCase(testCase) {
   });
 }
 
+function isGeneratedInputCase(testCase) {
+  if (!Array.isArray(testCase?.args) || testCase.args.length !== 0) return false;
+  if (!Array.isArray(testCase?.inputValues) || testCase.inputValues.length === 0) return false;
+  const specialKeys = [
+    'setupRemove', 'setupDirs', 'setupFiles', 'setupSymlinks',
+    'permissionDeniedPaths', 'getFiles', 'randomValues', 'randomFloatValues',
+    'randomChoiceValues', 'randomSampleValues', 'randomShuffleValues',
+    'callReturnedWith', 'callMethod', 'callMethodArgs', 'callMethodArgExpressions',
+    'getAttrs', 'setAttrs', 'deleteAttrs', 'setItems', 'deleteItems',
+    'argExpressions', 'argFunctionNames', 'functionListArgNames',
+    'expectedException', 'kwargs', 'functionName',
+  ];
+  return !specialKeys.some(key => {
+    const value = testCase?.[key];
+    if (Array.isArray(value)) return value.length > 0;
+    if (value && typeof value === 'object') return Object.keys(value).length > 0;
+    return Boolean(value);
+  });
+}
+
+function inputGeneratedRule(functionNames, tests) {
+  if (!Array.isArray(tests) || tests.length === 0 || !tests.every(isGeneratedInputCase)) return null;
+  const names = new Set(functionNames || []);
+  const firstExpected = tests[0]?.expected;
+  const has = (...items) => items.some(name => names.has(name));
+  if (has('area_rectangle')) return 'input_area_rectangle';
+  if (has('even_odd')) return 'input_even_odd';
+  if (has('fibonacci_series')) return 'input_fibonacci_series';
+  if (has('max_number', 'max_of_three', 'max_of_list')) return 'input_maximum';
+  if (has('is_palindrome')) return 'input_palindrome';
+  if (has('count_vowels')) return 'input_count_vowels';
+  if (has('factorial')) return 'input_factorial';
+  if (has('sum_of_all_numbers')) return 'input_sum_numbers';
+  if (has('is_leap_year')) return 'input_leap_year';
+  if (has('length_string')) return 'input_length_string';
+  if (has('are_anagrams', 'pal')) return 'input_anagram';
+  if (has('decimal_to_binary')) return 'input_decimal_to_binary';
+  if (has('square_root')) return 'input_square_root';
+  if (has('digits_string', 'sum_digits')) return 'input_digit_sum';
+  if (has('sum_of_odd_numbers', 'sum_of_all_odd', 'sum_of_odd')) return 'input_odd_sum';
+  if (has('remove_duplicates', 'remove_duplicate') && Array.isArray(firstExpected)) return 'input_unique_characters';
+  if (has('int_str')) return 'input_split_strings';
+  if (has('type_smallest_biggest', 'small_big')) return 'input_sort_numbers';
+  if (has('common', 'intersection')) return 'input_intersection';
+  if (has('find_last_element', 'find_second_last_element')) return 'input_second_last';
+  if (has('third_largest')) return 'input_third_largest';
+  if (has('find_min', 'find_min_num')) return 'input_minimum';
+  if (has('largest_element')) return 'input_longest_word';
+  if (has('second_largest_element')) return 'input_second_longest_word';
+  if (has('centimeters_inches')) return 'input_cm_to_inches';
+  if (has('find_min_max')) return 'input_min_max';
+  if (has('remove_vowels')) return 'input_remove_vowels';
+  if (has('group_by_first_letter')) return 'input_group_by_first_letter';
+  if (has('second_largest_number')) return 'input_second_largest_number';
+  if (has('greet')) return 'input_greet';
+  if (has('count_occurrences')) return 'input_count_occurrences';
+  return null;
+}
+
 function metamorphicRule(functionNames, tests) {
+  const inputRule = inputGeneratedRule(functionNames, tests);
+  if (inputRule) return inputRule;
   if (!Array.isArray(tests) || tests.length === 0 || !tests.every(isSimpleCase)) return null;
   const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
   const names = new Set(functionNames || []);
