@@ -1161,6 +1161,84 @@ def metamorphic_cases(function_names, tests):
         return [([[{"name": "X", "price": 3}, {"name": "Y", "price": 1}]], [{"name": "Y", "price": 1}, {"name": "X", "price": 3}])]
     return []
 
+def named_metamorphic_cases(function_names, tests):
+    if not tests:
+        return []
+    normalized_cases = []
+    for case in tests:
+        if not case.get("functionName"):
+            return []
+        simple_copy = {key: value for key, value in case.items() if key != "functionName"}
+        if not is_simple_case(simple_copy):
+            return []
+        normalized_cases.append(case)
+    name_set = set(function_names)
+    cases = []
+    def add(function_name, args, expected):
+        if function_name in name_set:
+            cases.append({"functionName": function_name, "args": args, "expected": expected, "label": "generated helper metamorphic"})
+    if name_set >= {"sum_list", "add"}:
+        add("sum_list", [[10, -3, 5]], 12)
+        add("add", [-4, 9], 5)
+    if name_set >= {"is_even", "filter_even_numbers"}:
+        add("filter_even_numbers", [[0, 1, 8, 9, 10]], [0, 8, 10])
+        add("is_even", [12], True)
+    if name_set >= {"word_list", "capitalize_first_letter"}:
+        add("word_list", [["alpha", "bETA"]], ["Alpha", "Beta"])
+        add("capitalize_first_letter", ["codex"], "Codex")
+    if name_set >= {"lst_numbers", "find_max"}:
+        add("lst_numbers", [[-9, -2, -5]], -2)
+        add("find_max", [[3, 99, 1]], 99)
+    if name_set >= {"string_lst", "reverse_string"}:
+        add("string_lst", [["codex", "app"]], ["xedoc", "ppa"])
+        add("reverse_string", ["level"], "level")
+    if name_set >= {"lst_words", "count_vowels"}:
+        add("lst_words", [["sky", "queue", "tree"]], "queue")
+        add("count_vowels", ["rhythm"], 0)
+    if name_set >= {"lst_of_word", "is_palindrome"}:
+        add("lst_of_word", [["noon", "code", "radar"]], ["noon", "radar"])
+        add("is_palindrome", ["level"], True)
+    if name_set >= {"lst_numbers", "sqaure_number"}:
+        add("lst_numbers", [[-3, 0, 4]], [9, 0, 16])
+        add("sqaure_number", [-5], 25)
+    if name_set >= {"find_gcd", "gcd_of_pairs"}:
+        add("find_gcd", [84, 30], 6)
+        add("gcd_of_pairs", [[[21, 14], [17, 13]]], [7, 1])
+    if name_set >= {"lst_words", "sort_lst"}:
+        add("lst_words", [[3, 1, 2], ["b", "a"]], [[1, 2, 3], ["a", "b"]])
+        add("sort_lst", [["z", "a", "m"]], ["a", "m", "z"])
+    if name_set >= {"lst_sites", "remove_duplicates"}:
+        add("lst_sites", [["x", "y", "x", "z"]], ["x", "y", "z"])
+        add("remove_duplicates", [[3, 3, 2, 1, 2]], [3, 2, 1])
+    if name_set >= {"filter_primes", "is_prime"}:
+        add("filter_primes", [[0, 1, 2, 13, 15]], [2, 13])
+        add("is_prime", [13], True)
+    if name_set >= {"lst_of_numbers", "calculate_factorial"}:
+        add("lst_of_numbers", [[0, 3, 6]], [1, 6, 720])
+        add("calculate_factorial", [0], 1)
+    if name_set >= {"sort_dict_by_value", "get_value"}:
+        add("sort_dict_by_value", [{"b": 2, "a": 1, "c": 3}], {"a": 1, "b": 2, "c": 3})
+        add("get_value", [["name", 42]], 42)
+    if name_set >= {"main", "generate_fibonacci"}:
+        add("generate_fibonacci", [5], [0, 1, 1, 2, 3])
+        add("main", [4], [0, 1, 1, 2])
+    if name_set >= {"main", "calculate_average"}:
+        add("calculate_average", [[2, 4, 9]], 5)
+        add("main", [[2, 4], [10, 20, 30]], [3, 20])
+    if name_set >= {"main", "remove_whitespace"}:
+        add("remove_whitespace", [" a b c "], "abc")
+        add("main", [" spaced text "], "spacedtext")
+    if name_set >= {"main", "check_even_odd"}:
+        add("main", [[0, 1, 2]], ["Even", "Odd", "Even"])
+        add("check_even_odd", [9], "Odd")
+    if name_set >= {"main", "sum_of_list"}:
+        add("main", [[-2, 5, 7]], 10)
+        add("sum_of_list", [[]], 0)
+    if name_set >= {"main", "merge_sorted_lists"}:
+        add("merge_sorted_lists", [[5, 1], [4, 2]], [1, 2, 4, 5])
+        add("main", [[10, 0], [5, -1]], [-1, 0, 5, 10])
+    return cases
+
 def run_metamorphic_tests(target, function_names, tests, compare):
     for args, expected in metamorphic_cases(function_names, tests):
         if not accepts_args(target, args):
@@ -1253,6 +1331,7 @@ def run_grader(source, grader):
 
 def function_script_test_cases(function_names, tests):
     cases = list(tests) + input_generated_cases(function_names, tests)
+    cases += named_metamorphic_cases(function_names, tests)
     for args, expected in metamorphic_cases(function_names, tests):
         cases.append({"args": args, "expected": expected, "label": "generated script fallback"})
     return cases
@@ -1573,7 +1652,7 @@ def run_function_tests(namespace, grader, tests, compare):
     target_name, target = find_callable(namespace, function_names, first_args, kwargs=first_kwargs)
     if target is None:
         return False
-    test_cases = list(tests) + input_generated_cases(function_names, tests)
+    test_cases = list(tests) + input_generated_cases(function_names, tests) + named_metamorphic_cases(function_names, tests)
     for index, case in enumerate(test_cases, start=1):
         args = list(case.get("args", []))
         kwargs = case.get("kwargs", {})

@@ -369,6 +369,39 @@ function metamorphicRule(functionNames, tests) {
   return null;
 }
 
+function namedMetamorphicRule(functionNames, tests) {
+  if (!Array.isArray(tests) || tests.length === 0) return null;
+  if (!tests.every(testCase => {
+    if (!testCase?.functionName) return false;
+    const copy = { ...testCase };
+    delete copy.functionName;
+    return isSimpleCase(copy);
+  })) return null;
+  const names = new Set(functionNames || []);
+  const hasAll = (...items) => items.every(name => names.has(name));
+  if (hasAll('sum_list', 'add')) return 'helper_sum_and_add';
+  if (hasAll('is_even', 'filter_even_numbers')) return 'helper_even_filter';
+  if (hasAll('word_list', 'capitalize_first_letter')) return 'helper_capitalize_words';
+  if (hasAll('lst_numbers', 'find_max')) return 'helper_find_max';
+  if (hasAll('string_lst', 'reverse_string')) return 'helper_reverse_strings';
+  if (hasAll('lst_words', 'count_vowels')) return 'helper_max_vowels';
+  if (hasAll('lst_of_word', 'is_palindrome')) return 'helper_filter_palindromes';
+  if (hasAll('lst_numbers', 'sqaure_number')) return 'helper_square_numbers';
+  if (hasAll('find_gcd', 'gcd_of_pairs')) return 'helper_gcd_pairs';
+  if (hasAll('lst_words', 'sort_lst')) return 'helper_sort_lists';
+  if (hasAll('lst_sites', 'remove_duplicates')) return 'helper_remove_duplicates';
+  if (hasAll('filter_primes', 'is_prime')) return 'helper_filter_primes';
+  if (hasAll('lst_of_numbers', 'calculate_factorial')) return 'helper_factorial_list';
+  if (hasAll('sort_dict_by_value', 'get_value')) return 'helper_sort_dict_values';
+  if (hasAll('main', 'generate_fibonacci')) return 'helper_fibonacci';
+  if (hasAll('main', 'calculate_average')) return 'helper_average';
+  if (hasAll('main', 'remove_whitespace')) return 'helper_remove_whitespace';
+  if (hasAll('main', 'check_even_odd')) return 'helper_even_odd';
+  if (hasAll('main', 'sum_of_list')) return 'helper_sum_list';
+  if (hasAll('main', 'merge_sorted_lists')) return 'helper_merge_sorted';
+  return null;
+}
+
 const { EXERCISES } = loadTsExports('exercises.ts');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const exerciseById = new Map(EXERCISES.map(exercise => [exercise.id, exercise]));
@@ -392,7 +425,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   const functionNames = Array.isArray(grader.functionNames) ? grader.functionNames : [];
   if (!functionNames.length) continue;
   functionGraders.push(id);
-  const rule = metamorphicRule(functionNames, grader.tests);
+  const rule = metamorphicRule(functionNames, grader.tests) || namedMetamorphicRule(functionNames, grader.tests);
   if (rule) {
     covered.push({ id, rule, functionNames });
     ruleCounts.set(rule, (ruleCounts.get(rule) || 0) + 1);
