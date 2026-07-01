@@ -105,6 +105,9 @@ const sumMultiplyGrader = AUTO_GRADERS[118];
 const closureGrader = AUTO_GRADERS[429];
 const oopMethodGrader = AUTO_GRADERS[495];
 const oopAttrsGrader = AUTO_GRADERS[496];
+const printKwargsGrader = AUTO_GRADERS[1371];
+const sumKwargsGrader = AUTO_GRADERS[1378];
+const updateDictKwargsGrader = AUTO_GRADERS[1381];
 
 const scriptAnswer = `
 result = number ** 2
@@ -165,6 +168,31 @@ print(result)
 const oopAttrsScriptResult = runAutoGrade(buildAutoGradeScript(oopAttrsGrader, oopAttrsScriptAnswer));
 if (!oopAttrsScriptResult.passed) {
   throw new Error(`Expected OOP attribute script answer to pass, got: ${JSON.stringify(oopAttrsScriptResult)}`);
+}
+
+const printKwargsScriptAnswer = `
+print(kwargs)
+`;
+const printKwargsScriptResult = runAutoGrade(buildAutoGradeScript(printKwargsGrader, printKwargsScriptAnswer));
+if (!printKwargsScriptResult.passed) {
+  throw new Error(`Expected printed kwargs script answer to pass, got: ${JSON.stringify(printKwargsScriptResult)}`);
+}
+
+const sumKwargsScriptAnswer = `
+result = sum(value for value in kwargs.values() if isinstance(value, (int, float)) and not isinstance(value, bool))
+`;
+const sumKwargsScriptResult = runAutoGrade(buildAutoGradeScript(sumKwargsGrader, sumKwargsScriptAnswer));
+if (!sumKwargsScriptResult.passed) {
+  throw new Error(`Expected numeric kwargs script answer to pass, got: ${JSON.stringify(sumKwargsScriptResult)}`);
+}
+
+const updateDictKwargsScriptAnswer = `
+result = arg1.copy()
+result.update(kwargs)
+`;
+const updateDictKwargsScriptResult = runAutoGrade(buildAutoGradeScript(updateDictKwargsGrader, updateDictKwargsScriptAnswer));
+if (!updateDictKwargsScriptResult.passed) {
+  throw new Error(`Expected dict/update kwargs script answer to pass, got: ${JSON.stringify(updateDictKwargsScriptResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');
