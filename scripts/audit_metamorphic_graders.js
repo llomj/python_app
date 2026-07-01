@@ -147,11 +147,15 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('calculate_integers') && [left, right].every(value => typeof value === 'number')) return 'product_sum_division';
     if (names.has('calculate_percentage') && Array.isArray(left) && typeof right === 'number') return 'percentages';
     if (names.has('example_function') && [left, right].every(value => typeof value === 'number')) return 'sum_sentence';
+    if (names.has('format_calculation') && [left, right].every(value => typeof value === 'number')) return 'format_sum_sentence';
+    if (names.has('calculate_sum_range') && [left, right].every(Number.isInteger)) return 'sum_inclusive_range';
     return null;
   }
   if (firstArgs.length === 3) {
     if (names.has('max_of_three') && firstArgs.every(value => typeof value === 'number')) return 'max_of_three';
+    if (names.has('get_maximum') && firstArgs.every(value => typeof value === 'number')) return 'max_of_three';
     if (names.has('find_minimum') && firstArgs.every(value => typeof value === 'number')) return 'min_of_three';
+    if (names.has('get_minimum') && firstArgs.every(value => typeof value === 'number')) return 'min_of_three';
     return null;
   }
   if (firstArgs.length !== 1) return null;
@@ -322,6 +326,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('generate_squares') && Number.isInteger(sample)) return 'generate_squares';
   if (names.has('calculate_square_root') && typeof sample === 'number') return 'square_root';
   if (names.has('perimeter_of_square') && typeof sample === 'number') return 'square_perimeter';
+  if (names.has('calculate_perimeter_square') && typeof sample === 'number') return 'square_perimeter';
   if (names.has('square_of_number') && typeof sample === 'number') return 'square';
   if (names.has('closest_to_zero') && Array.isArray(sample)) return 'closest_to_zero';
   if (names.has('print_odd_index_elements') && Array.isArray(sample)) return 'print_odd_index_elements';
@@ -367,7 +372,13 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('palindrome_generator') && Array.isArray(sample)) return 'generator_palindromes';
   if (names.has('even_index_generator') && Array.isArray(sample)) return 'generator_even_index_elements';
   if (names.has('sum_numbers') && Array.isArray(sample)) return 'sum_list';
+  if (names.has('calculate_sum_of_list') && Array.isArray(sample)) return 'sum_list';
+  if (names.has('get_average_of_list') && Array.isArray(sample)) return 'average';
   if (names.has('get_middle_element') && Array.isArray(sample)) return 'middle_element';
+  if (names.has('get_even_numbers') && Array.isArray(sample)) return 'keep_even_numbers';
+  if (names.has('get_even_numbers_comprehension') && Array.isArray(sample)) return 'keep_even_numbers';
+  if (names.has('get_odd_numbers') && Array.isArray(sample)) return 'keep_odd_numbers';
+  if (names.has('get_squared_numbers') && Array.isArray(sample)) return 'square_list';
   if (['sort_sqaure', 'sqaure_numbers_lst'].some(name => names.has(name)) && Array.isArray(sample)) return 'sort_by_square';
   if (names.has('length_of_first_element') && Array.isArray(sample)) return 'sort_by_first_element_length';
   if (names.has('number_of_spaces') && Array.isArray(sample)) return 'sort_by_space_count';
@@ -402,6 +413,9 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('get_first_word') && typeof sample === 'string') return 'first_word';
   if (names.has('get_last_word') && typeof sample === 'string') return 'last_word';
   if (names.has('count_characters') && typeof sample === 'string' && typeof firstExpected === 'number') return 'count_non_space_chars';
+  if (names.has('check_vowel') && typeof sample === 'string') return 'is_vowel';
+  if (names.has('strip_whitespace') && typeof sample === 'string') return 'strip_whitespace_string';
+  if (names.has('capitalize_first_letter') && typeof sample === 'string') return 'capitalize_first_letter';
   if (names.has('filters_even_numbers') && Array.isArray(sample)) return 'keep_even_numbers';
   if (names.has('palindromes') && Array.isArray(sample)) return 'filter_palindromes';
   if (names.has('sum_of_lst') && Array.isArray(sample)) return firstExpected === sample.reduce((a, b) => a * b, 1) ? 'product_list' : 'sum_list';
@@ -468,6 +482,23 @@ function namedMetamorphicRule(functionNames, tests) {
   return null;
 }
 
+function kwargsMetamorphicRule(functionNames, tests) {
+  if (!Array.isArray(tests) || tests.length === 0 || !tests.every(testCase => {
+    const kwargs = testCase?.kwargs;
+    if (!kwargs || typeof kwargs !== 'object' || Array.isArray(kwargs)) return false;
+    const copy = { ...testCase, kwargs: {} };
+    return isSimpleCase(copy);
+  })) return null;
+  const names = new Set(functionNames || []);
+  if (names.has('sum_kwargs')) return 'kwargs_sum_numeric';
+  if (names.has('even_kwargs')) return 'kwargs_even_values';
+  if (names.has('sorted_kwargs')) return 'kwargs_sorted_keys';
+  if (names.has('reverse_kwargs')) return 'kwargs_reverse_dict';
+  if (names.has('max_numeric')) return 'kwargs_max_numeric';
+  if (names.has('even_or_odd_kwargs')) return 'kwargs_count_even_odd';
+  return null;
+}
+
 const { EXERCISES } = loadTsExports('exercises.ts');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const exerciseById = new Map(EXERCISES.map(exercise => [exercise.id, exercise]));
@@ -491,7 +522,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   const functionNames = Array.isArray(grader.functionNames) ? grader.functionNames : [];
   if (!functionNames.length) continue;
   functionGraders.push(id);
-  const rule = metamorphicRule(functionNames, grader.tests) || namedMetamorphicRule(functionNames, grader.tests);
+  const rule = metamorphicRule(functionNames, grader.tests) || namedMetamorphicRule(functionNames, grader.tests) || kwargsMetamorphicRule(functionNames, grader.tests);
   if (rule) {
     covered.push({ id, rule, functionNames });
     ruleCounts.set(rule, (ruleCounts.get(rule) || 0) + 1);

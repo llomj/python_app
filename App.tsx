@@ -1033,11 +1033,19 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[40, 80, 100], 200], [20, 40, 50]), ([[3, 6], 12], [25, 50])]
         if "example_function" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
             return [([2, 9], "The sum of 2 and 9 is 11"), ([-3, 5], "The sum of -3 and 5 is 2")]
+        if "format_calculation" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
+            return [([2, 9], "2 + 9 = 11"), ([-3, 5], "-3 + 5 = 2")]
+        if "calculate_sum_range" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
+            return [([3, 6], 18), ([-1, 1], 0)]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
             return [([10, 25, 15], 25), ([-10, -2, -5], -2)]
+        if "get_maximum" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
+            return [([10, 25, 15], 25), ([-10, -2, -5], -2)]
         if "find_minimum" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
+            return [([10, -2, 5], -2), ([3, 3, 8], 3)]
+        if "get_minimum" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
             return [([10, -2, 5], -2), ([3, 3, 8], 3)]
         return []
     if len(first_args) != 1:
@@ -1297,8 +1305,20 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[1, 2, -3]], 0), ([[10]], 10)]
     if "sum_numbers" in name_set and isinstance(sample, list):
         return [([[1, 2, -3]], 0), ([[10]], 10)]
+    if "calculate_sum_of_list" in name_set and isinstance(sample, list):
+        return [([[1, 2, -3]], 0), ([[10]], 10)]
+    if "get_average_of_list" in name_set and isinstance(sample, list):
+        return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
     if "get_middle_element" in name_set and isinstance(sample, list):
         return [([[9, 8, 7, 6, 5]], 7), ([[1, 2]], 2)]
+    if "get_even_numbers" in name_set and isinstance(sample, list):
+        return [([[1, 3, 8, 10]], [8, 10])]
+    if "get_even_numbers_comprehension" in name_set and isinstance(sample, list):
+        return [([[1, 3, 8, 10]], [8, 10])]
+    if "get_odd_numbers" in name_set and isinstance(sample, list):
+        return [([[1, 2, 8, 9]], [1, 9])]
+    if "get_squared_numbers" in name_set and isinstance(sample, list):
+        return [([[3, -2, 0]], [9, 4, 0])]
     if "find_longest_word" in name_set and isinstance(sample, list):
         if isinstance(first_expected, int):
             return [([["cat", "elephant", "dog"]], 8), ([["a", "abc", "def"]], 3)]
@@ -1354,6 +1374,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
     if "calculate_square_root" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
         return [([25], 5), ([2.25], 1.5)]
     if "perimeter_of_square" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
+        return [([7], 28), ([2.5], 10)]
+    if "calculate_perimeter_square" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
         return [([7], 28), ([2.5], 10)]
     if "square_of_number" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
         return [([7], 49), ([-3], 9)]
@@ -1509,6 +1531,12 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [(["alpha beta gamma"], "gamma")]
     if "count_characters" in name_set and isinstance(sample, str) and isinstance(first_expected, int):
         return [(["a b c"], 3), ([" spaced text "], 10)]
+    if "check_vowel" in name_set and isinstance(sample, str):
+        return [(["e"], True), (["z"], False)]
+    if "strip_whitespace" in name_set and isinstance(sample, str):
+        return [(["  a"], "a"), (["b  "], "b")]
+    if "capitalize_first_letter" in name_set and isinstance(sample, str):
+        return [(["python"], "Python"), (["pYTHON"], "Python")]
     if "filters_even_numbers" in name_set and isinstance(sample, list):
         return [([[1, 3, 8, 10]], [8, 10])]
     if "palindromes" in name_set and isinstance(sample, list):
@@ -1640,6 +1668,27 @@ def __auto_grader_named_metamorphic_cases(function_names, tests):
         add("square_odd_number_generator", [9], [1, 9, 25, 49, 81])
     return cases
 
+def __auto_grader_kwargs_metamorphic_cases(function_names, tests):
+    if not tests:
+        return []
+    for case in tests:
+        if not isinstance(case.get("kwargs"), dict) or not __auto_grader_is_simple_case({**case, "kwargs": {}}):
+            return []
+    name_set = set(function_names)
+    if "sum_kwargs" in name_set:
+        return [{"args": [], "kwargs": {"one": 1, "two": 2.5, "skip": "x"}, "expected": 3.5, "label": "generated kwargs metamorphic"}]
+    if "even_kwargs" in name_set:
+        return [{"args": [], "kwargs": {"a": 2, "b": 3, "c": 6, "d": "8"}, "expected": "a: 2\\nc: 6", "label": "generated kwargs metamorphic"}]
+    if "sorted_kwargs" in name_set:
+        return [{"args": [], "kwargs": {"gamma": 3, "alpha": 1, "beta": 2}, "expected": "alpha: 1\\nbeta: 2\\ngamma: 3", "label": "generated kwargs metamorphic"}]
+    if "reverse_kwargs" in name_set:
+        return [{"args": [], "kwargs": {"left": "L", "right": "R"}, "expected": {"L": "left", "R": "right"}, "label": "generated kwargs metamorphic"}]
+    if "max_numeric" in name_set:
+        return [{"args": [], "kwargs": {"a": -10, "b": 3.25, "c": "x"}, "expected": 3.25, "label": "generated kwargs metamorphic"}]
+    if "even_or_odd_kwargs" in name_set:
+        return [{"args": [], "kwargs": {"a": 1, "b": 2, "c": 3, "d": 4}, "expected": "Even", "label": "generated kwargs metamorphic"}]
+    return []
+
 def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tests, compare):
     for index, (args, expected) in enumerate(__auto_grader_metamorphic_cases(function_names, tests), start=1):
         if not __auto_grader_accepts_args(target, args):
@@ -1665,6 +1714,7 @@ def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tes
 def __auto_grader_function_script_test_cases(function_names, tests):
     cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests)
     cases += __auto_grader_named_metamorphic_cases(function_names, tests)
+    cases += __auto_grader_kwargs_metamorphic_cases(function_names, tests)
     for args, expected in __auto_grader_metamorphic_cases(function_names, tests):
         cases.append({"args": args, "expected": expected, "label": "generated script fallback"})
     return cases
@@ -2054,7 +2104,7 @@ def __auto_grader_run():
             "message": "Missing function. Expected one of: " + ", ".join(function_names) + ". A script answer is also accepted if it passes every visible and generated test."
         }
 
-    test_cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests) + __auto_grader_named_metamorphic_cases(function_names, tests)
+    test_cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests) + __auto_grader_named_metamorphic_cases(function_names, tests) + __auto_grader_kwargs_metamorphic_cases(function_names, tests)
     for index, case in enumerate(test_cases, start=1):
         args = case.get("args", [])
         kwargs = case.get("kwargs", {})
