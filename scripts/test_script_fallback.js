@@ -111,6 +111,13 @@ const updateDictKwargsGrader = AUTO_GRADERS[1381];
 const setExpressionGrader = AUTO_GRADERS[1761];
 const lambdaExpressionGrader = AUTO_GRADERS[1972];
 const writeFileGrader = AUTO_GRADERS[1765];
+const composeHelperGrader = AUTO_GRADERS[598];
+const mapWithIndexHelperGrader = AUTO_GRADERS[601];
+const composeListHelperGrader = AUTO_GRADERS[604];
+const stackMutationGrader = AUTO_GRADERS[1576];
+const dictItemMutationGrader = AUTO_GRADERS[1622];
+const listDeleteMutationGrader = AUTO_GRADERS[1623];
+const methodExpressionGrader = AUTO_GRADERS[1574];
 
 const scriptAnswer = `
 result = number ** 2
@@ -221,6 +228,70 @@ with open(arg1, "w", encoding="utf-8") as handle:
 const writeFileScriptResult = runAutoGrade(buildAutoGradeScript(writeFileGrader, writeFileScriptAnswer));
 if (!writeFileScriptResult.passed) {
   throw new Error(`Expected file-output script answer to pass, got: ${JSON.stringify(writeFileScriptResult)}`);
+}
+
+const composeHelperScriptAnswer = `
+result = arg2(arg1(call_arg1))
+`;
+const composeHelperScriptResult = runAutoGrade(buildAutoGradeScript(composeHelperGrader, composeHelperScriptAnswer));
+if (!composeHelperScriptResult.passed) {
+  throw new Error(`Expected compose helper script answer to pass, got: ${JSON.stringify(composeHelperScriptResult)}`);
+}
+
+const mapWithIndexHelperScriptAnswer = `
+result = [arg2(index, value) for index, value in enumerate(arg1)]
+`;
+const mapWithIndexHelperScriptResult = runAutoGrade(buildAutoGradeScript(mapWithIndexHelperGrader, mapWithIndexHelperScriptAnswer));
+if (!mapWithIndexHelperScriptResult.passed) {
+  throw new Error(`Expected map-with-index helper script answer to pass, got: ${JSON.stringify(mapWithIndexHelperScriptResult)}`);
+}
+
+const composeListHelperScriptAnswer = `
+result = arg2
+for func in arg1:
+    result = func(result)
+`;
+const composeListHelperScriptResult = runAutoGrade(buildAutoGradeScript(composeListHelperGrader, composeListHelperScriptAnswer));
+if (!composeListHelperScriptResult.passed) {
+  throw new Error(`Expected compose-list helper script answer to pass, got: ${JSON.stringify(composeListHelperScriptResult)}`);
+}
+
+const stackMutationScriptAnswer = `
+result = len(set_attrs.get("items", []))
+`;
+const stackMutationScriptResult = runAutoGrade(buildAutoGradeScript(stackMutationGrader, stackMutationScriptAnswer));
+if (!stackMutationScriptResult.passed) {
+  throw new Error(`Expected stack mutation script answer to pass, got: ${JSON.stringify(stackMutationScriptResult)}`);
+}
+
+const dictItemMutationScriptAnswer = `
+store = {}
+for spec in set_items:
+    store[spec["key"]] = spec["value"]
+result = store[method_arg1]
+`;
+const dictItemMutationScriptResult = runAutoGrade(buildAutoGradeScript(dictItemMutationGrader, dictItemMutationScriptAnswer));
+if (!dictItemMutationScriptResult.passed) {
+  throw new Error(`Expected dict item mutation script answer to pass, got: ${JSON.stringify(dictItemMutationScriptResult)}`);
+}
+
+const listDeleteMutationScriptAnswer = `
+values = arg1.copy()
+for index in sorted(delete_items, reverse=True):
+    del values[index]
+result = {"items": values}
+`;
+const listDeleteMutationScriptResult = runAutoGrade(buildAutoGradeScript(listDeleteMutationGrader, listDeleteMutationScriptAnswer));
+if (!listDeleteMutationScriptResult.passed) {
+  throw new Error(`Expected list delete mutation script answer to pass, got: ${JSON.stringify(listDeleteMutationScriptResult)}`);
+}
+
+const methodExpressionScriptAnswer = `
+result = args == method_expression_args[0]
+`;
+const methodExpressionScriptResult = runAutoGrade(buildAutoGradeScript(methodExpressionGrader, methodExpressionScriptAnswer));
+if (!methodExpressionScriptResult.passed) {
+  throw new Error(`Expected method-expression script answer to pass, got: ${JSON.stringify(methodExpressionScriptResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

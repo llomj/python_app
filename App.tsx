@@ -1394,19 +1394,38 @@ def __auto_grader_function_script_test_cases(function_names, tests):
 
 def __auto_grader_is_function_script_case(case):
     blocked_keys = {
-        "argFunctionNames", "functionListArgNames",
-        "callMethodArgExpressions", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
         "expectedException"
     }
     return not any(case.get(key) for key in blocked_keys)
 
-def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=None, method_name=None, method_args=None, attr_names=None, kwargs=None, expression_args=None, get_files=None):
+def __auto_grader_script_helper_function(name):
+    if name == "add_one":
+        return lambda value: value + 1
+    if name == "multiply_by_two":
+        return lambda value: value * 2
+    if name == "example_func":
+        return lambda index, value: index * value
+    return None
+
+def __auto_grader_script_method_expression_args(expression):
+    parsed = ast.parse(expression, mode="eval").body
+    if not isinstance(parsed, ast.Call):
+        raise ValueError("method expression must be a call")
+    return [ast.literal_eval(arg) for arg in parsed.args]
+
+def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=None, method_name=None, method_args=None, attr_names=None, kwargs=None, expression_args=None, get_files=None, helper_functions=None, set_attrs=None, delete_attrs=None, set_items=None, delete_items=None, method_expression_args=None):
     call_args = list(call_args or [])
     method_args = list(method_args or [])
     attr_names = list(attr_names or [])
     kwargs = dict(kwargs or {})
     expression_args = list(expression_args or [])
     get_files = list(get_files or [])
+    helper_functions = dict(helper_functions or {})
+    set_attrs = dict(set_attrs or {})
+    delete_attrs = list(delete_attrs or [])
+    set_items = list(set_items or [])
+    delete_items = list(delete_items or [])
+    method_expression_args = list(method_expression_args or [])
     namespace = {
         "__name__": "__main__",
         "re": re,
@@ -1431,6 +1450,14 @@ def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=
         "expr_args": expression_args,
         "get_files": get_files,
         "file_names": get_files,
+        "helper_functions": helper_functions,
+        "helpers": helper_functions,
+        "set_attrs": set_attrs,
+        "delete_attrs": delete_attrs,
+        "set_items": set_items,
+        "delete_items": delete_items,
+        "method_expression_args": method_expression_args,
+        "method_expr_args": method_expression_args,
         "function_name": required_name,
         "required_function_name": required_name,
         "target_name": required_name,
@@ -1466,6 +1493,9 @@ def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=
     if method_args:
         namespace.update({"method_value": method_args[0]})
     for key, value in kwargs.items():
+        if isinstance(key, str) and key.isidentifier() and not key.startswith("__") and key not in namespace:
+            namespace[key] = value
+    for key, value in helper_functions.items():
         if isinstance(key, str) and key.isidentifier() and not key.startswith("__") and key not in namespace:
             namespace[key] = value
     return namespace
@@ -1514,12 +1544,26 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
         args = list(case.get("args", []))
         expression_args = [eval(expression, {"math": math, "re": re, "json": json}) for expression in case.get("argExpressions", [])]
         args = args + expression_args
+        helper_names = list(case.get("argFunctionNames", []))
+        helper_functions = {name: __auto_grader_script_helper_function(name) for name in helper_names}
+        function_list_names = list(case.get("functionListArgNames", []))
+        function_list = [__auto_grader_script_helper_function(name) for name in function_list_names]
+        if any(function is None for function in helper_functions.values()) or any(function is None for function in function_list):
+            return None
+        if function_list_names:
+            args = [function_list] + args
+        args = args + [helper_functions[name] for name in helper_names]
         call_args = list(case.get("callReturnedWith", []))
         method_name = case.get("callMethod")
         method_args = list(case.get("callMethodArgs", []))
         attr_names = list(case.get("getAttrs", []))
         kwargs = dict(case.get("kwargs", {}))
         get_files = list(case.get("getFiles", []))
+        set_attrs = dict(case.get("setAttrs", {}))
+        delete_attrs = list(case.get("deleteAttrs", []))
+        set_items = list(case.get("setItems", []))
+        delete_items = list(case.get("deleteItems", []))
+        method_expression_args = [__auto_grader_script_method_expression_args(expression) for expression in case.get("callMethodArgExpressions", [])]
         input_values = list(case.get("inputValues", []))
         random_values = list(case.get("randomValues", []))
         random_float_values = list(case.get("randomFloatValues", []))
@@ -1622,7 +1666,7 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
                 os.symlink(target_name, link_name)
             if permission_denied_paths:
                 builtins.open = __fallback_guarded_open
-            namespace = __auto_grader_script_namespace_for_args(args, case.get("functionName"), call_args, method_name, method_args, attr_names, kwargs, expression_args, get_files)
+            namespace = __auto_grader_script_namespace_for_args(args, case.get("functionName"), call_args, method_name, method_args, attr_names, kwargs, expression_args, get_files, helper_functions, set_attrs, delete_attrs, set_items, delete_items, method_expression_args)
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
             file_result = __auto_grader_read_case_files(get_files) if get_files else None
