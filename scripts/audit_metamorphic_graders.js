@@ -259,6 +259,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('count_uppercase') && typeof sample === 'string') return 'count_uppercase';
   if (names.has('factorial') && Number.isInteger(sample)) return 'factorial';
   if (names.has('is_palindrome') && typeof sample === 'string') return 'palindrome';
+  if (names.has('is_palindrome') && Number.isInteger(sample)) return 'palindrome_number';
   if (names.has('palindromes') && typeof sample === 'string') return 'palindrome';
   if (names.has('is_prime') && Number.isInteger(sample)) return 'prime';
   if (names.has('prime_factors') && Number.isInteger(sample)) return 'prime_factors';
@@ -270,6 +271,19 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('fibonacci') && Number.isInteger(sample) && Array.isArray(firstExpected)) return 'fibonacci';
   if (names.has('fibonacci') && Number.isInteger(sample) && typeof firstExpected === 'number') return 'fibonacci_nth';
   if (names.has('fibonacci_sequence') && Number.isInteger(sample)) return 'fibonacci_sequence_printed';
+  if (names.has('sum_n') && Number.isInteger(sample)) return 'sum_to_n';
+  if (names.has('print_reverse') && Number.isInteger(sample)) return 'print_reverse_numbers';
+  if (names.has('square_generator') && Number.isInteger(sample)) return 'generator_squares_zero_based';
+  if (names.has('fibonacci_generator') && Number.isInteger(sample)) return 'generator_fibonacci_up_to_n';
+  if (names.has('even_number_generator') && Number.isInteger(sample)) return 'generator_even_numbers';
+  if (names.has('square_even_generator') && Number.isInteger(sample)) return 'generator_even_squares';
+  if (names.has('prime_generator') && Number.isInteger(sample)) return 'generator_first_primes';
+  if (names.has('factorial_generator') && Number.isInteger(sample)) return 'generator_factorials';
+  if (names.has('square_number_generator') && Number.isInteger(sample)) return 'generator_squares_one_based';
+  if (names.has('even_fibonacci_generator') && Number.isInteger(sample)) return 'generator_even_fibonacci';
+  if (names.has('check_even_odd') && Number.isInteger(sample)) return 'even_odd_word';
+  if (names.has('prime_numbers_up_to_n') && Number.isInteger(sample)) return 'primes_up_to_n';
+  if (names.has('even_and_greater_than_10') && Number.isInteger(sample)) return 'even_and_gt_10';
   if (names.has('sum_even_indices') && Array.isArray(sample)) return 'sum_even_indices';
   if (names.has('all_odd_numbers') && Array.isArray(sample)) return 'sum_odd_numbers';
   if (names.has('is_even_index_sum') && Array.isArray(sample)) return 'even_index_sum_bool';
@@ -279,6 +293,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('list_sum') && Array.isArray(sample)) return 'list_sum';
   if (names.has('find_longest_word') && Array.isArray(sample)) return typeof firstExpected === 'number' ? 'longest_word_length' : 'longest_word';
   if (names.has('longest_word') && Array.isArray(sample)) return 'longest_word';
+  if (names.has('longest_string') && Array.isArray(sample)) return 'longest_word';
   if (names.has('min_len') && Array.isArray(sample)) return 'shortest_word';
   if (names.has('find_max_and_index') && Array.isArray(sample)) return 'max_and_index';
   if (names.has('max_value_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_value_key';
@@ -330,6 +345,21 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('main') && Array.isArray(sample) && Array.isArray(firstExpected) && firstExpected.every(value => Number.isInteger(value))) return 'sort_by_remainder';
   if (names.has('sort_by_year') && Array.isArray(sample)) return 'sort_by_year';
   if (names.has('sort_by_a_count') && Array.isArray(sample)) return 'sort_by_a_count';
+  if (names.has('sort_by_first_element_desc') && Array.isArray(sample)) return 'sort_first_element_desc';
+  if (names.has('sort_by_length') && Array.isArray(sample)) return 'sort_strings_by_length';
+  if (names.has('sum_of_elements') && Array.isArray(sample)) return 'sum_list';
+  if (names.has('sum_of_even') && Array.isArray(sample)) return 'sum_even_numbers';
+  if (names.has('create_square_root_tuples') && Array.isArray(sample)) return 'square_root_tuples';
+  if (names.has('average_of_odds') && Array.isArray(sample)) return 'average_odd_numbers';
+  if (names.has('square_odd_numbers') && Array.isArray(sample)) return 'square_odd_numbers';
+  if (names.has('sum_of_cubes') && Array.isArray(sample)) return 'sum_cubes';
+  if (names.has('consecutive_pair_sum') && Array.isArray(sample)) return 'generator_consecutive_pair_sum';
+  if (names.has('odd_filter_generator') && Array.isArray(sample)) return 'generator_even_filter';
+  if (names.has('cumulative_sum_generator') && Array.isArray(sample)) return 'generator_cumulative_sum';
+  if (names.has('reverse_list_generator') && Array.isArray(sample)) return 'generator_reverse_list';
+  if (names.has('sum_with_index_generator') && Array.isArray(sample)) return 'generator_sum_with_index';
+  if (names.has('palindrome_generator') && Array.isArray(sample)) return 'generator_palindromes';
+  if (names.has('even_index_generator') && Array.isArray(sample)) return 'generator_even_index_elements';
   if (['sort_sqaure', 'sqaure_numbers_lst'].some(name => names.has(name)) && Array.isArray(sample)) return 'sort_by_square';
   if (names.has('length_of_first_element') && Array.isArray(sample)) return 'sort_by_first_element_length';
   if (names.has('number_of_spaces') && Array.isArray(sample)) return 'sort_by_space_count';
@@ -358,6 +388,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('smallest_value') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'key_of_smallest_value';
   if (names.has('sort_fractions_by_decimal') && Array.isArray(sample)) return 'sort_numeric';
   if (names.has('count_spaces') && typeof sample === 'string') return 'count_spaces';
+  if (names.has('even_length_word_generator') && typeof sample === 'string') return 'generator_even_length_words';
   if (names.has('filters_even_numbers') && Array.isArray(sample)) return 'keep_even_numbers';
   if (names.has('palindromes') && Array.isArray(sample)) return 'filter_palindromes';
   if (names.has('sum_of_lst') && Array.isArray(sample)) return firstExpected === sample.reduce((a, b) => a * b, 1) ? 'product_list' : 'sum_list';
@@ -418,6 +449,8 @@ function namedMetamorphicRule(functionNames, tests) {
   if (hasAll('main', 'check_even_odd')) return 'helper_even_odd';
   if (hasAll('main', 'sum_of_list')) return 'helper_sum_list';
   if (hasAll('main', 'merge_sorted_lists')) return 'helper_merge_sorted';
+  if (hasAll('main', 'get_even_numbers')) return 'helper_get_even_numbers';
+  if (hasAll('main', 'sort_values', 'sort_key')) return 'helper_sort_values';
   return null;
 }
 

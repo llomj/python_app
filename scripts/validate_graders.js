@@ -947,6 +947,8 @@ def metamorphic_cases(function_names, tests):
         return [([0], 1), ([6], 720)]
     if "is_palindrome" in name_set and isinstance(sample, str):
         return [(["racecar"], True), (["python"], False)]
+    if "is_palindrome" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12321], True), ([12345], False)]
     if "palindromes" in name_set and isinstance(sample, str):
         return [(["level"], True), (["python"], False)]
     if "is_prime" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
@@ -969,6 +971,32 @@ def metamorphic_cases(function_names, tests):
         return [([6], 8), ([8], 21)]
     if "fibonacci_sequence" in name_set and isinstance(sample, int):
         return [([6], "0\n1\n1\n2\n3\n5"), ([2], "0\n1")]
+    if "sum_n" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([7], 28), ([1], 1)]
+    if "print_reverse" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], "4\n3\n2\n1"), ([1], "1")]
+    if "square_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], [0, 1, 4, 9]), ([1], [0])]
+    if "fibonacci_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([8], [0, 1, 1, 2, 3, 5, 8]), ([1], [0, 1, 1])]
+    if "even_number_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([8], [2, 4, 6, 8]), ([1], [])]
+    if "square_even_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([8], [4, 16, 36, 64]), ([1], [])]
+    if "prime_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], [2, 3, 5, 7]), ([1], [2])]
+    if "factorial_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], [1, 2, 6, 24]), ([1], [1])]
+    if "square_number_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], [1, 4, 9, 16]), ([1], [1])]
+    if "even_fibonacci_generator" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], [0, 2, 8, 34]), ([1], [0])]
+    if "check_even_odd" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12], "Even"), ([13], "Odd")]
+    if "prime_numbers_up_to_n" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([20], [2, 3, 5, 7, 11, 13, 17, 19]), ([2], [2])]
+    if "even_and_greater_than_10" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([14], True), ([10], False)]
     if name_set & {"sum_even_indices", "all_odd_numbers"} and isinstance(sample, list):
         if "sum_even_indices" in name_set:
             return [([[10, 20, 30, 40, 50]], 90), ([[]], 0)]
@@ -990,6 +1018,8 @@ def metamorphic_cases(function_names, tests):
         return [([["cat", "elephant", "dog"]], "elephant"), ([["a", "abc", "def"]], "abc")]
     if name_set & {"longest_word"} and isinstance(sample, list):
         return [([["cat", "elephant", "dog"]], "elephant"), ([["a", "abc", "def"]], "abc")]
+    if "longest_string" in name_set and isinstance(sample, list):
+        return [([["cat", "elephant", "dog"]], "elephant"), ([["aa", "bbb", "cc"]], "bbb")]
     if "min_len" in name_set and isinstance(sample, list):
         return [([["long", "to", "a"]], "a"), ([["bbb", "cc"]], "cc")]
     if "find_max_and_index" in name_set and isinstance(sample, list):
@@ -1097,6 +1127,36 @@ def metamorphic_cases(function_names, tests):
         return [([["1999-12-31", "2024-01-01", "2001-06-15"]], ["1999-12-31", "2001-06-15", "2024-01-01"])]
     if "sort_by_a_count" in name_set and isinstance(sample, list):
         return [([["bbb", "atlas", "aardvark"]], ["bbb", "atlas", "aardvark"])]
+    if "sort_by_first_element_desc" in name_set and isinstance(sample, list):
+        return [([[[10, "a"], [5, "b"], [20, "c"]]], [[20, "c"], [10, "a"], [5, "b"]])]
+    if "sort_by_length" in name_set and isinstance(sample, list):
+        return [([["aaaa", "b", "cc"]], ["b", "cc", "aaaa"])]
+    if "sum_of_elements" in name_set and isinstance(sample, list):
+        return [([[10, -2, 5]], 13)]
+    if "sum_of_even" in name_set and isinstance(sample, list):
+        return [([[2, 8, 9]], 10), ([[1, 3]], 0)]
+    if "create_square_root_tuples" in name_set and isinstance(sample, list):
+        return [([[25, 36]], [[25, 5], [36, 6]])]
+    if "average_of_odds" in name_set and isinstance(sample, list):
+        return [([[1, 3, 8, 10]], 2), ([[2, 4, 9]], 9)]
+    if "square_odd_numbers" in name_set and isinstance(sample, list):
+        return [([[1, 2, 7]], [1, 49]), ([[2, 4]], [])]
+    if "sum_of_cubes" in name_set and isinstance(sample, list):
+        return [([[2, -3]], -19), ([[]], 0)]
+    if "consecutive_pair_sum" in name_set and isinstance(sample, list):
+        return [([[5, 1, 4]], [6, 5]), ([[9]], [])]
+    if "odd_filter_generator" in name_set and isinstance(sample, list):
+        return [([[1, 2, 8, 9]], [2, 8]), ([[1, 3]], [])]
+    if "cumulative_sum_generator" in name_set and isinstance(sample, list):
+        return [([[5, -2, 1]], [5, 3, 4])]
+    if "reverse_list_generator" in name_set and isinstance(sample, list):
+        return [([[1, 2, 3, 4]], [4, 3, 2, 1]), ([["a", "b"]], ["b", "a"])]
+    if "sum_with_index_generator" in name_set and isinstance(sample, list):
+        return [([[5, 5, 5]], [5, 6, 7])]
+    if "palindrome_generator" in name_set and isinstance(sample, list):
+        return [([["noon", "python", "madam"]], ["noon", "madam"])]
+    if "even_index_generator" in name_set and isinstance(sample, list):
+        return [([["a", "b", "c", "d"]], ["a", "c"])]
     if name_set & {"sort_sqaure", "sqaure_numbers_lst"} and isinstance(sample, list):
         return [([[-3, 2, -1]], [-1, 2, -3]), ([[0, -4, 1]], [0, 1, -4])]
     if "length_of_first_element" in name_set and isinstance(sample, list):
@@ -1148,6 +1208,8 @@ def metamorphic_cases(function_names, tests):
         return [([[10, 2, 6]], [2, 6, 10])]
     if "count_spaces" in name_set and isinstance(sample, str):
         return [(["hello world python"], 2), (["nospaces"], 0)]
+    if "even_length_word_generator" in name_set and isinstance(sample, str):
+        return [(["one four six seven"], ["four"]), (["to be or not"], ["to", "be", "or"])]
     if "filters_even_numbers" in name_set and isinstance(sample, list):
         return [([[1, 3, 8, 10]], [8, 10])]
     if "palindromes" in name_set and isinstance(sample, list):
@@ -1270,6 +1332,12 @@ def named_metamorphic_cases(function_names, tests):
     if name_set >= {"main", "merge_sorted_lists"}:
         add("merge_sorted_lists", [[5, 1], [4, 2]], [1, 2, 4, 5])
         add("main", [[10, 0], [5, -1]], [-1, 0, 5, 10])
+    if name_set >= {"main", "get_even_numbers"}:
+        add("main", [[0, 1, 8, 9, 10]], [0, 8, 10])
+        add("get_even_numbers", [12], True)
+    if name_set >= {"main", "sort_values", "sort_key"}:
+        add("main", [{"low": 1, "high": 9, "mid": 5}], {"low": 1, "mid": 5, "high": 9})
+        add("sort_key", [["item", 42]], 42)
     return cases
 
 def run_metamorphic_tests(target, function_names, tests, compare):
