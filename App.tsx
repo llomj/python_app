@@ -1037,6 +1037,14 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([2, 9], "2 + 9 = 11"), ([-3, 5], "-3 + 5 = 2")]
         if "calculate_sum_range" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([3, 6], 18), ([-1, 1], 0)]
+        if "get_even_range" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
+            return [([3, 9], [4, 6, 8]), ([4, 4], [4])]
+        if "get_odd_range" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
+            return [([3, 9], [3, 5, 7, 9]), ([4, 4], [])]
+        if "add_lists" in name_set and isinstance(left, list) and isinstance(right, list):
+            return [([[1, -2, 3], [4, 5, -6]], [5, 3, -3])]
+        if "filter_by_length" in name_set and isinstance(left, list) and isinstance(right, int):
+            return [([["a", "abcd", "xy", "python"], 4], ["abcd", "python"])]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -1047,6 +1055,12 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([10, -2, 5], -2), ([3, 3, 8], 3)]
         if "get_minimum" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
             return [([10, -2, 5], -2), ([3, 3, 8], 3)]
+        if "get_words_by_length_range" in name_set and isinstance(first_args[0], str) and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args[1:]):
+            return [(["a aa aaa aaaa aaaaa", 3, 5], ["aaa", "aaaa", "aaaaa"])]
+        if "check_in_range" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
+            return [([5, 5, 5], True), ([4, 5, 10], False)]
+        if "format_time" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args):
+            return [([0, 5, 9], "00:05:09"), ([23, 59, 1], "23:59:01")]
         return []
     if len(first_args) != 1:
         return []
@@ -1246,6 +1260,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([84], [2, 2, 3, 7]), ([13], [13])]
     if "is_perfect_square" in name_set and "is_perfect_number" not in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([25], True), ([26], False)]
+    if "check_perfect_square" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([25], True), ([26], False)]
     if "is_perfect_number" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([28], True), ([12], False)]
     if "reverse_number" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
@@ -1256,6 +1272,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([153], True), ([123], False)]
     if "fibonacci" in name_set and isinstance(sample, int) and isinstance(first_expected, list):
         return [([5], [0, 1, 1, 2, 3]), ([2], [0, 1])]
+    if "get_fibonacci_sequence" in name_set and isinstance(sample, int):
+        return [([6], [0, 1, 1, 2, 3, 5]), ([2], [0, 1])]
     if "fibonacci" in name_set and isinstance(sample, int) and isinstance(first_expected, int):
         return [([6], 8), ([8], 21)]
     if "fibonacci_sequence" in name_set and isinstance(sample, int):
@@ -1319,6 +1337,26 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[1, 2, 8, 9]], [1, 9])]
     if "get_squared_numbers" in name_set and isinstance(sample, list):
         return [([[3, -2, 0]], [9, 4, 0])]
+    if "remove_duplicates_from_list" in name_set and isinstance(sample, list):
+        return [([[3, 1, 3, 2, 1]], [3, 1, 2])]
+    if "remove_duplicates_preserve_order" in name_set and isinstance(sample, list):
+        return [([[3, 1, 3, 2, 1]], [3, 1, 2])]
+    if "sort_list_ascending" in name_set and isinstance(sample, list):
+        return [([[5, -1, 0]], [-1, 0, 5])]
+    if "get_index_of_max" in name_set and isinstance(sample, list):
+        return [([[10, 20, 30, 25]], 2)]
+    if "get_index_of_min" in name_set and isinstance(sample, list):
+        return [([[10, -2, 30, -5]], 3)]
+    if "get_min_max" in name_set and isinstance(sample, list):
+        return [([[5, -2, 10]], [-2, 10])]
+    if "filter_and_transform" in name_set and isinstance(sample, list):
+        return [([[1, 2, 8, 9]], [4, 16])]
+    if "find_duplicate_elements" in name_set and isinstance(sample, list):
+        return [([[3, 1, 3, 2, 1, 3]], [3, 1])]
+    if "get_even_indices" in name_set and isinstance(sample, list):
+        return [([["a", "b", "c", "d", "e"]], ["a", "c", "e"])]
+    if "get_odd_indices" in name_set and isinstance(sample, list):
+        return [([["a", "b", "c", "d", "e"]], ["b", "d"])]
     if "find_longest_word" in name_set and isinstance(sample, list):
         if isinstance(first_expected, int):
             return [([["cat", "elephant", "dog"]], 8), ([["a", "abc", "def"]], 3)]
@@ -1537,6 +1575,28 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [(["  a"], "a"), (["b  "], "b")]
     if "capitalize_first_letter" in name_set and isinstance(sample, str):
         return [(["python"], "Python"), (["pYTHON"], "Python")]
+    if "capitalize_all_words" in name_set and isinstance(sample, str):
+        return [(["hello codex app"], "Hello Codex App")]
+    if "get_longest_word" in name_set and isinstance(sample, str):
+        return [(["cat elephant dog"], "elephant")]
+    if "get_shortest_word" in name_set and isinstance(sample, str):
+        return [(["long to a"], "a")]
+    if "remove_vowels_from_string" in name_set and isinstance(sample, str):
+        return [(["Beautiful"], "Btfl"), (["rhythm"], "rhythm")]
+    if "remove_consonants_from_string" in name_set and isinstance(sample, str):
+        return [(["Beautiful"], "eauiu"), (["rhythm"], "")]
+    if "count_vowels_in_string" in name_set and isinstance(sample, str):
+        return [(["Beautiful"], 5), (["rhythm"], 0)]
+    if "swap_first_last_words" in name_set and isinstance(sample, str):
+        return [(["alpha beta gamma"], "gamma beta alpha"), (["solo"], "solo")]
+    if "get_middle_word" in name_set and isinstance(sample, str):
+        return [(["one two three four five"], "three"), (["one two three four"], "three")]
+    if "get_words_starting_with_vowel" in name_set and isinstance(sample, str):
+        return [(["apple pear orange ice"], ["apple", "orange", "ice"])]
+    if "count_vowels_and_consonants" in name_set and isinstance(sample, str):
+        return [(["codex ai"], [4, 3]), (["rhythm"], [0, 6])]
+    if "check_palindrome_and_length" in name_set and isinstance(sample, str):
+        return [(["level"], [True, 5]), (["python"], [False, 6])]
     if "filters_even_numbers" in name_set and isinstance(sample, list):
         return [([[1, 3, 8, 10]], [8, 10])]
     if "palindromes" in name_set and isinstance(sample, list):
