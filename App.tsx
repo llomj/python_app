@@ -8177,6 +8177,7 @@ const App: React.FC = () => {
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
     const [logExpanded, setLogExpanded] = useState(false);
+    const [showBreakdownFor, setShowBreakdownFor] = useState<number | null>(null);
     const [showSnippetSaveInput, setShowSnippetSaveInput] = useState(false);
     const [snippetNameInput, setSnippetNameInput] = useState('');
     const [savedSnippets, setSavedSnippets] = useState<Array<{ id: number; name: string; content: string; savedAt: string }>>(() => {
@@ -9629,6 +9630,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
                                 </button>
+                                {exercise.breakdown && (
+                                    <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Step-by-step breakdown" style={{ backgroundColor: showBreakdownFor === exercise.id ? 'rgba(251, 191, 36, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#fbbf24', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                        <Lightbulb size={14} fill={showBreakdownFor === exercise.id ? 'currentColor' : 'none'} />
+                                        <span>Guide</span>
+                                    </button>
+                                )}
                                 <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
                                     <span>Next</span>
@@ -9637,6 +9644,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         </div>
                         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: '#d1d5db', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
                             {exercise.description}
+                            {showBreakdownFor === exercise.id && exercise.breakdown && (
+                                <div style={{ marginTop: '0.75rem', borderTop: '1px solid rgba(251, 191, 36, 0.2)', paddingTop: '0.5rem' }}>
+                                    <h4 style={{ fontSize: '0.7rem', fontWeight: 700, color: '#fbbf24', margin: '0 0 0.35rem', display: 'flex', alignItems: 'center', gap: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                                        <Lightbulb size={11} /> Guide
+                                    </h4>
+                                    <div style={{ color: '#c8cdd5', fontSize: '0.8125rem', lineHeight: 1.7 }}>
+                                        {exercise.breakdown}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
