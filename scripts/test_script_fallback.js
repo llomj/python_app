@@ -103,6 +103,8 @@ const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const squareGrader = AUTO_GRADERS[8];
 const sumMultiplyGrader = AUTO_GRADERS[118];
 const closureGrader = AUTO_GRADERS[429];
+const oopMethodGrader = AUTO_GRADERS[495];
+const oopAttrsGrader = AUTO_GRADERS[496];
 
 const scriptAnswer = `
 result = number ** 2
@@ -142,6 +144,27 @@ print(result)
 const closureScriptResult = runAutoGrade(buildAutoGradeScript(closureGrader, closureScriptAnswer));
 if (!closureScriptResult.passed) {
   throw new Error(`Expected closure-style script answer to pass, got: ${JSON.stringify(closureScriptResult)}`);
+}
+
+const oopMethodScriptAnswer = `
+if function_name == "Dog" and method_name == "speak":
+    result = "Bark"
+elif function_name == "Cat" and method_name == "speak":
+    result = "Meow"
+print(result)
+`;
+const oopMethodScriptResult = runAutoGrade(buildAutoGradeScript(oopMethodGrader, oopMethodScriptAnswer));
+if (!oopMethodScriptResult.passed) {
+  throw new Error(`Expected OOP method script answer to pass, got: ${JSON.stringify(oopMethodScriptResult)}`);
+}
+
+const oopAttrsScriptAnswer = `
+result = {name: value for name, value in zip(attr_names, args)}
+print(result)
+`;
+const oopAttrsScriptResult = runAutoGrade(buildAutoGradeScript(oopAttrsGrader, oopAttrsScriptAnswer));
+if (!oopAttrsScriptResult.passed) {
+  throw new Error(`Expected OOP attribute script answer to pass, got: ${JSON.stringify(oopAttrsScriptResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

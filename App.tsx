@@ -1395,14 +1395,15 @@ def __auto_grader_function_script_test_cases(function_names, tests):
 def __auto_grader_is_function_script_case(case):
     blocked_keys = {
         "argExpressions", "argFunctionNames", "functionListArgNames",
-        "callMethod", "callMethodArgs", "callMethodArgExpressions",
-        "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
+        "callMethodArgExpressions", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
         "getFiles", "expectedException", "kwargs"
     }
     return not any(case.get(key) for key in blocked_keys)
 
-def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=None):
+def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=None, method_name=None, method_args=None, attr_names=None):
     call_args = list(call_args or [])
+    method_args = list(method_args or [])
+    attr_names = list(attr_names or [])
     namespace = {
         "__name__": "__main__",
         "re": re,
@@ -1413,6 +1414,12 @@ def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=
         "inputs": list(args),
         "call_args": call_args,
         "call_arguments": call_args,
+        "method_name": method_name,
+        "call_method": method_name,
+        "method_args": method_args,
+        "method_arguments": method_args,
+        "attr_names": attr_names,
+        "attribute_names": attr_names,
         "function_name": required_name,
         "required_function_name": required_name,
         "target_name": required_name,
@@ -1423,6 +1430,8 @@ def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=
         namespace[name] = value
     for index, value in enumerate(call_args, start=1):
         namespace[f"call_arg{index}"] = value
+    for index, value in enumerate(method_args, start=1):
+        namespace[f"method_arg{index}"] = value
     if args:
         first = args[0]
         namespace.update({
@@ -1440,6 +1449,8 @@ def __auto_grader_script_namespace_for_args(args, required_name=None, call_args=
             namespace.update({"dct": first, "dict": first, "dictionary": first})
     if call_args:
         namespace.update({"call_value": call_args[0], "inner_value": call_args[0], "suffix": call_args[0]})
+    if method_args:
+        namespace.update({"method_value": method_args[0]})
     return namespace
 
 def __auto_grader_script_result_matches(namespace, printed, expected, compare):
@@ -1475,6 +1486,9 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
             }
         args = list(case.get("args", []))
         call_args = list(case.get("callReturnedWith", []))
+        method_name = case.get("callMethod")
+        method_args = list(case.get("callMethodArgs", []))
+        attr_names = list(case.get("getAttrs", []))
         input_values = list(case.get("inputValues", []))
         random_values = list(case.get("randomValues", []))
         random_float_values = list(case.get("randomFloatValues", []))
@@ -1577,7 +1591,7 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
                 os.symlink(target_name, link_name)
             if permission_denied_paths:
                 builtins.open = __fallback_guarded_open
-            namespace = __auto_grader_script_namespace_for_args(args, case.get("functionName"), call_args)
+            namespace = __auto_grader_script_namespace_for_args(args, case.get("functionName"), call_args, method_name, method_args, attr_names)
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
             if sample_output is None:
