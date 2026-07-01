@@ -144,6 +144,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('longest_string_letter') && Array.isArray(left) && typeof right === 'string') return 'longest_string_ending_letter';
     if (names.has('count_floating_numbers') && Array.isArray(left)) return 'count_value';
     if (names.has('calculate_integers') && [left, right].every(value => typeof value === 'number')) return 'product_sum_division';
+    if (names.has('calculate_percentage') && Array.isArray(left) && typeof right === 'number') return 'percentages';
     return null;
   }
   if (firstArgs.length === 3) {
@@ -207,6 +208,28 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('lst_names')) return 'sort_strings_by_length';
     if (names.has('temperture')) return 'sort_ascending';
     if (names.has('last_letter')) return 'sort_strings_by_last_character';
+    if (names.has('sort_by_hire_date')) return 'sort_by_second_value';
+    if (names.has('lst_of_sentences')) return 'sort_strings_by_length';
+    if (names.has('frequency_first_letter')) return 'sort_by_first_letter_frequency';
+    if (names.has('reverse_order')) return null;
+    if (names.has('sort_scores')) return 'sort_ascending';
+    if (names.has('sort_emails')) return 'sort_emails_by_domain';
+    if (['sort_cities_by_population', 'sort_students_by_grades', 'sort_books_by_year'].some(name => names.has(name))) return 'sort_by_second_value';
+    if (names.has('sort_movies_by_release_date')) return 'sort_dicts_by_release_date';
+    if (names.has('sort_sentences_by_unique_words')) return 'sort_by_unique_word_count';
+    if (names.has('lst_words') && Array.isArray(firstExpected) && JSON.stringify(firstExpected) === JSON.stringify(sample.map(value => String(value).split('').reverse().join('')))) return 'reverse_strings';
+    if (names.has('lst_integers') && Array.isArray(firstExpected) && firstExpected.every(value => value === 'Even' || value === 'Odd')) return 'even_odd_labels';
+    if (names.has('negate_booleans')) return 'negate_booleans';
+    if (names.has('lst_sentence') && Array.isArray(firstExpected) && firstExpected.every(value => typeof value === 'string')) {
+      return firstExpected.some(value => String(value).includes(' ')) ? null : sample.some(value => String(value).includes(' '))
+        ? 'remove_spaces_list'
+        : 'capitalize_words_list';
+    }
+    if (names.has('factorial_lst')) return 'factorial_list';
+    if (names.has('reverse_words_in_sentences')) return 'reverse_each_word_in_sentences';
+    if (names.has('square_floats')) return 'square_list';
+    if (names.has('lst_squares_and_cubes')) return 'squares_and_cubes';
+    if (names.has('calculate_square_roots')) return 'square_roots';
   }
   if (['remove_spaces', 'remove_space'].some(name => names.has(name)) && typeof sample === 'string') return 'remove_spaces';
   if (names.has('vowels_consonates') && typeof sample === 'string') return 'vowel_consonant_counts';

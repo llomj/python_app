@@ -1027,6 +1027,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[1.1, 1.1, 2.2], 1.1], 2), ([[1, 2, 3], 4], 0)]
         if "calculate_integers" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
             return [([8, 4], [32, 12, 2]), ([7, 2], [14, 9, 3.5])]
+        if "calculate_percentage" in name_set and isinstance(left, list) and isinstance(right, (int, float)) and not isinstance(right, bool):
+            return [([[40, 80, 100], 200], [20, 40, 50]), ([[3, 6], 12], [25, 50])]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -1139,6 +1141,44 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[12, -5, 30]], [-5, 12, 30])]
     if "last_letter" in name_set and isinstance(sample, list):
         return [([["dog", "banana", "apple"]], ["banana", "apple", "dog"])]
+    if "sort_by_hire_date" in name_set and isinstance(sample, list):
+        return [([ [["Nia", "2024-01-05"], ["Oli", "2020-09-10"], ["Paz", "2022-03-01"]] ], [["Oli", "2020-09-10"], ["Paz", "2022-03-01"], ["Nia", "2024-01-05"]])]
+    if "lst_of_sentences" in name_set and isinstance(sample, list):
+        return [([["tiny", "a much longer line", "medium text"]], ["tiny", "medium text", "a much longer line"])]
+    if "frequency_first_letter" in name_set and isinstance(sample, list):
+        return [([["ape", "ant", "bee", "cat", "cow"]], ["bee", "ape", "ant", "cat", "cow"])]
+    if "reverse_order" in name_set and isinstance(sample, list):
+        return []
+    if "sort_scores" in name_set and isinstance(sample, list):
+        return [([[12, -7, 0, 5]], [-7, 0, 5, 12])]
+    if "sort_emails" in name_set and isinstance(sample, list):
+        return [([["z@beta.com", "a@alpha.com", "m@gamma.com"]], ["a@alpha.com", "z@beta.com", "m@gamma.com"])]
+    if name_set & {"sort_cities_by_population", "sort_students_by_grades", "sort_books_by_year"} and isinstance(sample, list):
+        return [([ [["High", 99], ["Low", 10], ["Mid", 50]] ], [["Low", 10], ["Mid", 50], ["High", 99]])]
+    if "sort_movies_by_release_date" in name_set and isinstance(sample, list):
+        return [([[{"title": "Late", "release_date": "2025"}, {"title": "Early", "release_date": "1995"}, {"title": "Middle", "release_date": "2010"}]], [{"title": "Early", "release_date": "1995"}, {"title": "Middle", "release_date": "2010"}, {"title": "Late", "release_date": "2025"}])]
+    if "sort_sentences_by_unique_words" in name_set and isinstance(sample, list):
+        return [([["red red red", "red blue", "red blue green"]], ["red red red", "red blue", "red blue green"])]
+    if "lst_words" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and first_expected == [str(value)[::-1] for value in sample]:
+        return [([["codex", "AI"]], ["xedoc", "IA"])]
+    if "lst_integers" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and all(value in ("Even", "Odd") for value in first_expected):
+        return [([[10, -3, 0]], ["Even", "Odd", "Even"])]
+    if "negate_booleans" in name_set and isinstance(sample, list):
+        return [([[True, True, False]], [False, False, True])]
+    if "lst_sentence" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and all(isinstance(value, str) for value in first_expected):
+        if any(" " in str(value) for value in sample):
+            return [([["a b", " spaced text "]], ["ab", "spacedtext"])]
+        return [([["codex", "pYTHON"]], ["Codex", "Python"])]
+    if "factorial_lst" in name_set and isinstance(sample, list):
+        return [([[0, 4, 6]], [1, 24, 720])]
+    if "reverse_words_in_sentences" in name_set and isinstance(sample, list):
+        return [([["codex app", "learn python"]], ["xedoc ppa", "nrael nohtyp"])]
+    if "square_floats" in name_set and isinstance(sample, list):
+        return [([[1.5, -3.0, 0]], [2.25, 9.0, 0])]
+    if "lst_squares_and_cubes" in name_set and isinstance(sample, list):
+        return [([[-3, 4]], [[9, -27], [16, 64]])]
+    if "calculate_square_roots" in name_set and isinstance(sample, list):
+        return [([[36, 49, 81]], [6, 7, 9])]
     if name_set & {"remove_spaces", "remove_space"} and isinstance(sample, str):
         return [(["a b  c"], "abc"), ([" no spaces "], "nospaces")]
     if "vowels_consonates" in name_set and isinstance(sample, str):
