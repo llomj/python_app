@@ -1188,9 +1188,7 @@ def function_script_test_cases(function_names, tests):
     return cases
 
 def is_function_script_case(case):
-    blocked_keys = {
-        "expectedException"
-    }
+    blocked_keys = set()
     return not any(case.get(key) for key in blocked_keys)
 
 def script_helper_function(name):
@@ -1306,6 +1304,8 @@ def read_case_files(file_names):
     return files
 
 def script_result_matches(namespace, printed, expected, compare):
+    if expected is None and not printed and not any(name in namespace for name in ["result", "answer", "output", "final", "res", "solution"]):
+        return True
     if printed and (same(printed, expected, compare) or same(printed, expected, "printedOrReturn")):
         return True
     result_names = ["result", "answer", "output", "total", "count", "value", "final", "res", "solution"]
@@ -1319,11 +1319,14 @@ def run_function_script_tests(solution, grader, tests, compare):
     test_cases = function_script_test_cases(function_names, tests)
     if not test_cases or not all(is_function_script_case(case) for case in test_cases):
         return False
+    if all(case.get("expectedException") for case in test_cases):
+        return False
     compiled = compile(solution, "<solution>", "exec")
     for case in test_cases:
         expected = case.get("expected")
         if has_hardcoded_expected_output(solution, expected):
             return False
+        expected_exception = case.get("expectedException")
         args = list(case.get("args", []))
         expression_args = [eval(expression, {"math": math, "re": re, "json": json}) for expression in case.get("argExpressions", [])]
         args = args + expression_args
@@ -1355,6 +1358,9 @@ def run_function_script_tests(solution, grader, tests, compare):
         old_random = {}
         with tempfile.TemporaryDirectory() as temp_dir:
             sys.stdout = io.StringIO()
+            printed = ""
+            file_result = None
+            exception_name = None
             builtins.input = lambda prompt='': next(input_values)
             denied = set(case.get("permissionDeniedPaths", []))
             def guarded_open(file, *open_args, **open_kwargs):
@@ -1371,14 +1377,21 @@ def run_function_script_tests(solution, grader, tests, compare):
                 exec(compiled, namespace)
                 printed = sys.stdout.getvalue().strip()
                 file_result = read_case_files(get_files) if get_files else None
-            except BaseException:
-                return False
+            except BaseException as exc:
+                printed = sys.stdout.getvalue().strip()
+                exception_name = type(exc).__name__
             finally:
                 restore_random(old_random)
                 os.chdir(old_cwd)
                 sys.stdout = old_stdout
                 builtins.input = old_input
                 builtins.open = old_open
+        if expected_exception:
+            if exception_name != expected_exception:
+                return False
+            continue
+        if exception_name:
+            return False
         file_ok = get_files and same(file_result, expected, compare)
         if not file_ok and not script_result_matches(namespace, printed, expected, compare):
             return False

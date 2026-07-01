@@ -46,9 +46,7 @@ function hasValue(value) {
 }
 
 function scriptFallbackBlockedReason(testCase) {
-  const blockedKeys = [
-    'expectedException',
-  ];
+  const blockedKeys = [];
   const key = blockedKeys.find(item => hasValue(testCase?.[item]));
   return key || null;
 }
@@ -60,6 +58,9 @@ function fallbackKind(grader) {
     return { kind: 'blocked', reason: 'missing functionNames' };
   }
   if (tests.length === 0) return { kind: 'blocked', reason: 'empty tests' };
+  if (tests.every(test => hasValue(test.expectedException))) {
+    return { kind: 'blocked', reason: 'expectedException' };
+  }
   const blockedReasons = new Set();
   for (const test of tests) {
     const reason = scriptFallbackBlockedReason(test);

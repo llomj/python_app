@@ -118,6 +118,9 @@ const stackMutationGrader = AUTO_GRADERS[1576];
 const dictItemMutationGrader = AUTO_GRADERS[1622];
 const listDeleteMutationGrader = AUTO_GRADERS[1623];
 const methodExpressionGrader = AUTO_GRADERS[1574];
+const mixedExceptionGrader = AUTO_GRADERS[944];
+const attrExceptionGrader = AUTO_GRADERS[1571];
+const pureExceptionGrader = AUTO_GRADERS[948];
 
 const scriptAnswer = `
 result = number ** 2
@@ -292,6 +295,36 @@ result = args == method_expression_args[0]
 const methodExpressionScriptResult = runAutoGrade(buildAutoGradeScript(methodExpressionGrader, methodExpressionScriptAnswer));
 if (!methodExpressionScriptResult.passed) {
   throw new Error(`Expected method-expression script answer to pass, got: ${JSON.stringify(methodExpressionScriptResult)}`);
+}
+
+const mixedExceptionScriptAnswer = `
+class NegativeNumberError(Exception):
+    pass
+
+if number < 0:
+    raise NegativeNumberError("negative")
+`;
+const mixedExceptionScriptResult = runAutoGrade(buildAutoGradeScript(mixedExceptionGrader, mixedExceptionScriptAnswer));
+if (!mixedExceptionScriptResult.passed) {
+  throw new Error(`Expected mixed exception script answer to pass, got: ${JSON.stringify(mixedExceptionScriptResult)}`);
+}
+
+const attrExceptionScriptAnswer = `
+if set_attrs.get("celsius", 0) < -273.15:
+    raise ValueError("temperature below absolute zero")
+result = set_attrs if set_attrs else None
+`;
+const attrExceptionScriptResult = runAutoGrade(buildAutoGradeScript(attrExceptionGrader, attrExceptionScriptAnswer));
+if (!attrExceptionScriptResult.passed) {
+  throw new Error(`Expected attribute exception script answer to pass, got: ${JSON.stringify(attrExceptionScriptResult)}`);
+}
+
+const pureExceptionScriptAnswer = `
+raise RecursionError("fake")
+`;
+const pureExceptionScriptResult = runAutoGrade(buildAutoGradeScript(pureExceptionGrader, pureExceptionScriptAnswer));
+if (pureExceptionScriptResult.passed) {
+  throw new Error(`Expected pure exception-only script answer to stay blocked, got: ${JSON.stringify(pureExceptionScriptResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

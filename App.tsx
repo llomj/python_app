@@ -1393,9 +1393,7 @@ def __auto_grader_function_script_test_cases(function_names, tests):
     return cases
 
 def __auto_grader_is_function_script_case(case):
-    blocked_keys = {
-        "expectedException"
-    }
+    blocked_keys = set()
     return not any(case.get(key) for key in blocked_keys)
 
 def __auto_grader_script_helper_function(name):
@@ -1511,9 +1509,13 @@ def __auto_grader_read_case_files(file_names):
     return files
 
 def __auto_grader_script_result_matches(namespace, printed, expected, compare):
+    result_names = ["result", "answer", "output", "total", "count", "value", "final", "res", "solution"]
+    explicit_result_names = ["result", "answer", "output", "final", "res", "solution"]
+    if expected is None and not printed and not any(name in namespace for name in explicit_result_names):
+        return True
     if printed and (__auto_grader_same(printed, expected, compare) or __auto_grader_same(printed, expected, "printedOrReturn")):
         return True
-    for name in ["result", "answer", "output", "total", "count", "value", "final", "res", "solution"]:
+    for name in result_names:
         if name in namespace and (
             __auto_grader_same(namespace[name], expected, compare) or
             __auto_grader_same(namespace[name], expected, "printedOrReturn")
@@ -1524,6 +1526,8 @@ def __auto_grader_script_result_matches(namespace, printed, expected, compare):
 def __auto_grader_run_function_script_fallback(function_names, tests, compare):
     test_cases = __auto_grader_function_script_test_cases(function_names, tests)
     if not test_cases or not all(__auto_grader_is_function_script_case(case) for case in test_cases):
+        return None
+    if all(case.get("expectedException") for case in test_cases):
         return None
     try:
         compiled = compile(__auto_grader_source, __auto_grader_source_name, "exec")
@@ -1541,6 +1545,7 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
                 "passed": False,
                 "message": hardcoded_error
             }
+        expected_exception = case.get("expectedException")
         args = list(case.get("args", []))
         expression_args = [eval(expression, {"math": math, "re": re, "json": json}) for expression in case.get("argExpressions", [])]
         args = args + expression_args
@@ -1585,6 +1590,10 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
         temp_dir = tempfile.mkdtemp(prefix="auto_grader_script_")
         old_random_methods = {}
         sys.stdout = io.StringIO()
+        printed = ""
+        file_result = None
+        exception_name = None
+        exception_message = ""
         input_iter = iter(input_values)
         random_iter = iter(random_values)
         random_float_iter = iter(random_float_values)
@@ -1673,10 +1682,9 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
             if sample_output is None:
                 sample_output = printed
         except Exception as exc:
-            return {
-                "passed": False,
-                "message": f"{label} raised {type(exc).__name__}: {exc}"
-            }
+            printed = sys.stdout.getvalue().strip()
+            exception_name = type(exc).__name__
+            exception_message = str(exc)
         finally:
             try:
                 import random
@@ -1696,6 +1704,19 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
                 shutil.rmtree(temp_dir)
             except Exception:
                 pass
+        if expected_exception:
+            if exception_name != expected_exception:
+                actual_exception = exception_name or "no exception"
+                return {
+                    "passed": False,
+                    "message": f"{label} expected {expected_exception}, got {actual_exception}."
+                }
+            continue
+        if exception_name:
+            return {
+                "passed": False,
+                "message": f"{label} raised {exception_name}: {exception_message}"
+            }
         file_ok = bool(get_files) and __auto_grader_same(file_result, expected, compare)
         if not file_ok and not __auto_grader_script_result_matches(namespace, printed, expected, compare):
             actual = file_result if get_files else printed if printed else namespace.get("result", None)
