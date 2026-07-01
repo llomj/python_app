@@ -1045,6 +1045,14 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([[1, -2, 3], [4, 5, -6]], [5, 3, -3])]
         if "filter_by_length" in name_set and isinstance(left, list) and isinstance(right, int):
             return [([["a", "abcd", "xy", "python"], 4], ["abcd", "python"])]
+        if "calculate_lcm" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
+            return [([21, 6], 42), ([8, 12], 24)]
+        if "calculate_weighted_average" in name_set and isinstance(left, list) and isinstance(right, list):
+            return [([[10, 20, 30], [1, 1, 2]], 22.5)]
+        if "get_pairs_summing_to" in name_set and isinstance(left, list) and isinstance(right, (int, float)) and not isinstance(right, bool):
+            return [([[2, 4, 5, 6, 8], 10], [[2, 8], [4, 6]])]
+        if "get_words_with_vowel_count" in name_set and isinstance(left, str) and isinstance(right, int) and not isinstance(right, bool):
+            return [(["code sky audio tree", 2], ["code", "tree"])]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -1061,6 +1069,18 @@ def __auto_grader_metamorphic_cases(function_names, tests):
             return [([5, 5, 5], True), ([4, 5, 10], False)]
         if "format_time" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args):
             return [([0, 5, 9], "00:05:09"), ([23, 59, 1], "23:59:01")]
+        if "calculate_age" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args):
+            return [([2023, 1, 1], 1), ([2023, 1, 2], 0)]
+        if "get_numbers_in_range" in name_set and isinstance(first_args[0], list) and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args[1:]):
+            return [([[2, 4, 6, 8, 10], 4, 8], [4, 6, 8])]
+        if "get_strings_with_length_range" in name_set and isinstance(first_args[0], list) and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args[1:]):
+            return [([["a", "able", "bee", "python"], 3, 4], ["able", "bee"])]
+        if "get_sublist_sum" in name_set and isinstance(first_args[0], list) and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args[1:]):
+            return [([[5, 10, 15, 20], 0, 2], 15), ([[5, 10, 15, 20], 2, 4], 35)]
+        if "get_numbers_summing_to_range" in name_set and isinstance(first_args[0], list) and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args[1:]):
+            return [([[1, 3, 4, 6], 7, 9], [[1, 6], [3, 4], [3, 6]])]
+        if "get_elements_by_frequency_range" in name_set and isinstance(first_args[0], list) and all(isinstance(value, int) and not isinstance(value, bool) for value in first_args[1:]):
+            return [([["a", "a", "b", "b", "b", "c"], 2, 3], ["a", "b"])]
         return []
     if len(first_args) != 1:
         return []
@@ -1300,6 +1320,10 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([4], [0, 2, 8, 34]), ([1], [0])]
     if "check_even_odd" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([12], "Even"), ([13], "Odd")]
+    if "get_season" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([2], "Winter"), ([7], "Summer"), ([11], "Fall")]
+    if "check_all_conditions" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([12], True), ([9], False), ([0], False)]
     if "prime_numbers_up_to_n" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([20], [2, 3, 5, 7, 11, 13, 17, 19]), ([2], [2])]
     if "even_and_greater_than_10" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
@@ -1480,6 +1504,15 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[[10, "a"], [5, "b"], [20, "c"]]], [[20, "c"], [10, "a"], [5, "b"]])]
     if "sort_by_length" in name_set and isinstance(sample, list):
         return [([["aaaa", "b", "cc"]], ["b", "cc", "aaaa"])]
+    if "sort_by_multiple_criteria" in name_set and isinstance(sample, list):
+        return [([[
+            ["Zed", 30, 88],
+            ["Ana", 20, 90],
+            ["Bo", 20, 70],
+            ["Cy", 30, 80],
+        ]], [["Bo", 20, 70], ["Ana", 20, 90], ["Cy", 30, 80], ["Zed", 30, 88]])]
+    if "calculate_statistics" in name_set and isinstance(sample, list):
+        return [([[4, 8, 12]], {"sum": 24, "average": 8, "min": 4, "max": 12})]
     if "sum_of_elements" in name_set and isinstance(sample, list):
         return [([[10, -2, 5]], 13)]
     if "sum_of_even" in name_set and isinstance(sample, list):
@@ -1621,6 +1654,38 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([["aei", "sky"]], [3, 0])]
     if "sum_even_numbers" in name_set and isinstance(sample, list):
         return [([[2, 8, 9]], 10)]
+    if "get_sum_of_squares" in name_set and isinstance(sample, list):
+        return [([[3, -4, 1]], 26)]
+    if "get_product_of_even" in name_set and isinstance(sample, list):
+        return [([[2, 3, 4, 6]], 48)]
+    if "get_sum_of_odd" in name_set and isinstance(sample, list):
+        return [([[2, 3, 5, 8, 9]], 17)]
+    if "get_elements_greater_than_average" in name_set and isinstance(sample, list):
+        return [([[2, 4, 10, 12]], [10, 12])]
+    if "get_elements_less_than_average" in name_set and isinstance(sample, list):
+        return [([[2, 4, 10, 12]], [2, 4])]
+    if "calculate_median" in name_set and isinstance(sample, list):
+        return [([[9, 1, 5]], 5), ([[9, 1, 5, 7]], 6)]
+    if "calculate_weighted_average" in name_set and isinstance(sample, list):
+        return [([[10, 20, 30], [1, 1, 2]], 22.5)]
+    if "get_strings_sorted_by_length" in name_set and isinstance(sample, list):
+        return [([["aaaa", "b", "cc"]], ["b", "cc", "aaaa"])]
+    if "get_pairs_summing_to" in name_set and isinstance(sample, list):
+        return [([[2, 4, 5, 6, 8], 10], [[2, 8], [4, 6]])]
+    if "get_numbers_summing_to_range" in name_set and isinstance(sample, list):
+        return [([[1, 3, 4, 6], 7, 9], [[1, 6], [3, 4], [3, 6]])]
+    if "get_frequency_dict" in name_set and isinstance(sample, list):
+        return [([["x", "y", "x", "z", "y", "x"]], {"x": 3, "y": 2, "z": 1})]
+    if "get_strings_with_all_vowels" in name_set and isinstance(sample, list):
+        return [([["sequoia", "rhythm", "education", "hello"]], ["sequoia", "education"])]
+    if "get_elements_with_max_frequency" in name_set and isinstance(sample, list):
+        return [([[1, 1, 2, 2, 3]], [1, 2])]
+    if "get_elements_by_frequency_range" in name_set and isinstance(sample, list):
+        return [([["a", "a", "b", "b", "b", "c"], 2, 3], ["a", "b"])]
+    if "calculate_statistical_summary" in name_set and isinstance(sample, list):
+        return [([[2, 4, 6, 8]], {"mean": 5, "median": 5, "min": 2, "max": 8, "range": 6})]
+    if "get_comprehensive_statistics" in name_set and isinstance(sample, list):
+        return [([[2, 4, 6]], {"sum": 12, "average": 4, "min": 2, "max": 6, "count": 3, "standard_deviation": 1.632993161855452})]
     if "lst_num" in name_set and isinstance(sample, list):
         return [([[5, -2, 1]], [5, 3, 4])]
     if "filter_primes" in name_set and isinstance(sample, list):
@@ -1641,6 +1706,16 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[5666, 566, 56, 6]], [6, 56, 566, 5666])]
     if "lst_products" in name_set and isinstance(sample, list):
         return [([[{"name": "X", "price": 3}, {"name": "Y", "price": 1}]], [{"name": "Y", "price": 1}, {"name": "X", "price": 3}])]
+    if "count_vowels_per_word" in name_set and isinstance(sample, str):
+        return [(["code sky audio"], {"code": 2, "sky": 0, "audio": 4})]
+    if "get_words_with_vowel_count" in name_set and isinstance(sample, str):
+        return [(["code sky audio tree", 2], ["code", "tree"])]
+    if "count_character_types" in name_set and isinstance(sample, str):
+        return [(["A b2!"], {"vowels": 1, "consonants": 1, "digits": 1, "spaces": 1})]
+    if "get_words_by_vowel_count" in name_set and isinstance(sample, str):
+        return [(["sky code audio tree"], {0: ["sky"], 2: ["code", "tree"], 4: ["audio"]})]
+    if "get_words_sorted_by_vowels" in name_set and isinstance(sample, str):
+        return [(["audio sky code"], ["sky", "code", "audio"])]
     return []
 
 def __auto_grader_named_metamorphic_cases(function_names, tests):

@@ -153,6 +153,10 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('get_odd_range') && [left, right].every(Number.isInteger)) return 'odd_range';
     if (names.has('add_lists') && Array.isArray(left) && Array.isArray(right)) return 'add_lists';
     if (names.has('filter_by_length') && Array.isArray(left) && Number.isInteger(right)) return 'filter_by_min_length';
+    if (names.has('calculate_lcm') && [left, right].every(Number.isInteger)) return 'calculate_lcm';
+    if (names.has('calculate_weighted_average') && Array.isArray(left) && Array.isArray(right)) return 'weighted_average';
+    if (names.has('get_pairs_summing_to') && Array.isArray(left) && typeof right === 'number') return 'pairs_summing_to';
+    if (names.has('get_words_with_vowel_count') && typeof left === 'string' && Number.isInteger(right)) return 'words_with_vowel_count';
     return null;
   }
   if (firstArgs.length === 3) {
@@ -163,6 +167,12 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('get_words_by_length_range') && typeof firstArgs[0] === 'string' && firstArgs.slice(1).every(Number.isInteger)) return 'words_by_length_range';
     if (names.has('check_in_range') && firstArgs.every(value => typeof value === 'number')) return 'in_range';
     if (names.has('format_time') && firstArgs.every(Number.isInteger)) return 'format_time';
+    if (names.has('calculate_age') && firstArgs.every(Number.isInteger)) return 'calculate_age';
+    if (names.has('get_numbers_in_range') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(value => typeof value === 'number')) return 'numbers_in_range';
+    if (names.has('get_strings_with_length_range') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(Number.isInteger)) return 'strings_length_range';
+    if (names.has('get_sublist_sum') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(Number.isInteger)) return 'sublist_sum';
+    if (names.has('get_numbers_summing_to_range') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(value => typeof value === 'number')) return 'pairs_sum_range';
+    if (names.has('get_elements_by_frequency_range') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(Number.isInteger)) return 'elements_by_frequency_range';
     return null;
   }
   if (firstArgs.length !== 1) return null;
@@ -298,6 +308,8 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('square_number_generator') && Number.isInteger(sample)) return 'generator_squares_one_based';
   if (names.has('even_fibonacci_generator') && Number.isInteger(sample)) return 'generator_even_fibonacci';
   if (names.has('check_even_odd') && Number.isInteger(sample)) return 'even_odd_word';
+  if (names.has('get_season') && Number.isInteger(sample)) return 'season_from_month';
+  if (names.has('check_all_conditions') && Number.isInteger(sample)) return 'positive_even_divisible_by_3';
   if (names.has('check_palindrome_number') && Number.isInteger(sample)) return 'palindrome_number';
   if (names.has('check_perfect_square') && Number.isInteger(sample)) return 'perfect_square';
   if (names.has('prime_numbers_up_to_n') && Number.isInteger(sample)) return 'primes_up_to_n';
@@ -368,6 +380,8 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('sort_by_a_count') && Array.isArray(sample)) return 'sort_by_a_count';
   if (names.has('sort_by_first_element_desc') && Array.isArray(sample)) return 'sort_first_element_desc';
   if (names.has('sort_by_length') && Array.isArray(sample)) return 'sort_strings_by_length';
+  if (names.has('sort_by_multiple_criteria') && Array.isArray(sample)) return 'sort_by_multiple_criteria';
+  if (names.has('calculate_statistics') && Array.isArray(sample)) return 'statistics_summary';
   if (names.has('sum_of_elements') && Array.isArray(sample)) return 'sum_list';
   if (names.has('sum_of_even') && Array.isArray(sample)) return 'sum_even_numbers';
   if (names.has('create_square_root_tuples') && Array.isArray(sample)) return 'square_root_tuples';
@@ -458,6 +472,22 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('fibonacci_n_numbers') && Number.isInteger(sample)) return 'fibonacci';
   if (names.has('lst_string') && Array.isArray(sample) && Array.isArray(firstExpected) && firstExpected.every(Number.isInteger)) return 'map_count_vowels';
   if (names.has('sum_even_numbers') && Array.isArray(sample)) return 'sum_even_numbers';
+  if (names.has('get_sum_of_squares') && Array.isArray(sample)) return 'sum_squares';
+  if (names.has('get_product_of_even') && Array.isArray(sample)) return 'product_even_numbers';
+  if (names.has('get_sum_of_odd') && Array.isArray(sample)) return 'sum_odd_numbers';
+  if (names.has('get_elements_greater_than_average') && Array.isArray(sample)) return 'elements_gt_average';
+  if (names.has('get_elements_less_than_average') && Array.isArray(sample)) return 'elements_lt_average';
+  if (names.has('calculate_median') && Array.isArray(sample)) return 'median';
+  if (names.has('calculate_weighted_average') && Array.isArray(sample)) return 'weighted_average';
+  if (names.has('get_strings_sorted_by_length') && Array.isArray(sample)) return 'sort_strings_by_length';
+  if (names.has('get_pairs_summing_to') && Array.isArray(sample)) return 'pairs_summing_to';
+  if (names.has('get_numbers_summing_to_range') && Array.isArray(sample)) return 'pairs_sum_range';
+  if (names.has('get_frequency_dict') && Array.isArray(sample)) return 'frequency_dict';
+  if (names.has('get_strings_with_all_vowels') && Array.isArray(sample)) return 'strings_with_all_vowels';
+  if (names.has('get_elements_with_max_frequency') && Array.isArray(sample)) return 'elements_with_max_frequency';
+  if (names.has('get_elements_by_frequency_range') && Array.isArray(sample)) return 'elements_by_frequency_range';
+  if (names.has('calculate_statistical_summary') && Array.isArray(sample)) return 'statistical_summary';
+  if (names.has('get_comprehensive_statistics') && Array.isArray(sample)) return 'comprehensive_statistics';
   if (names.has('lst_num') && Array.isArray(sample)) return 'cumulative_sum';
   if (names.has('filter_primes') && Array.isArray(sample)) return 'filter_prime';
   if (names.has('sort_string_len') && Array.isArray(sample)) return 'sort_strings_by_length';
@@ -474,6 +504,11 @@ function metamorphicRule(functionNames, tests) {
     return digitSum(a) - digitSum(b);
   }))) return 'sort_by_digit_sum';
   if (names.has('lst_products') && Array.isArray(sample)) return 'sort_products_by_price';
+  if (names.has('count_vowels_per_word') && typeof sample === 'string') return 'vowels_per_word';
+  if (names.has('get_words_with_vowel_count') && typeof sample === 'string') return 'words_with_vowel_count';
+  if (names.has('count_character_types') && typeof sample === 'string') return 'character_type_counts';
+  if (names.has('get_words_by_vowel_count') && typeof sample === 'string') return 'words_by_vowel_count';
+  if (names.has('get_words_sorted_by_vowels') && typeof sample === 'string') return 'words_sorted_by_vowels';
   return null;
 }
 
