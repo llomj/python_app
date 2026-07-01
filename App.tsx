@@ -9652,7 +9652,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         <Lightbulb size={11} /> Guide
                                     </h4>
                                     <div style={{ color: '#c8cdd5', fontSize: '0.8125rem', lineHeight: 1.7 }}>
-                                        {exercise.breakdown}
+                                        {(() => {
+                                            const steps = exercise.breakdown.split('\n');
+                                            return steps.map((step, i) => (
+                                                <div key={`guide-step-${i}`} style={{ marginBottom: i < steps.length - 1 ? '0.75rem' : 0, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                                                    {renderAiParagraphText(step, editorColors, `guide-step-${i}`)}
+                                                </div>
+                                            ));
+                                        })()}
                                     </div>
                                 </div>
                             )}
