@@ -148,6 +148,7 @@ function metamorphicRule(functionNames, tests) {
   }
   if (firstArgs.length === 3) {
     if (names.has('max_of_three') && firstArgs.every(value => typeof value === 'number')) return 'max_of_three';
+    if (names.has('find_minimum') && firstArgs.every(value => typeof value === 'number')) return 'min_of_three';
     return null;
   }
   if (firstArgs.length !== 1) return null;
@@ -176,6 +177,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('fourth_largest_number')) return 'fourth_largest';
     if (names.has('smallest_and_third')) return 'smallest_and_third';
     if (['calculate_average', 'cal_average', 'find_average', 'find_average_lst'].some(name => names.has(name))) return 'average';
+    if (names.has('average')) return 'average';
     if (['square_list', 'square_lst', 'square_elements'].some(name => names.has(name))) return 'square_list';
     if (names.has('square_numbers')) return 'square_numbers';
     if (names.has('square_roots')) return 'square_roots';
@@ -185,6 +187,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('reverse_strings')) return 'reverse_strings';
     if (names.has('strip_whitespace')) return 'strip_whitespace';
     if (names.has('number_and_square')) return 'number_and_square';
+    if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && [...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_case_insensitive';
     if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && ![...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_list';
     if (names.has('has_duplicates')) return 'has_duplicates';
     if (names.has('filter_even_numbers')) return 'filter_even_numbers';
@@ -197,8 +200,17 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('filter_prime')) return 'filter_prime';
     if (names.has('sum_odd_indexed_elements')) return 'sum_odd_indexed_elements';
     if (names.has('sort_tuples_by_second')) return 'sort_tuples_by_second';
+    if (names.has('earliest_date')) return 'earliest_date';
+    if (names.has('sort_dates')) return 'sort_dates';
+    if (names.has('sort_strings_alphabetically')) return 'sort_strings_alphabetically';
+    if (names.has('lst_tuples') && Array.isArray(firstExpected)) return 'sort_tuples_lexicographic';
+    if (names.has('lst_names')) return 'sort_strings_by_length';
+    if (names.has('temperture')) return 'sort_ascending';
+    if (names.has('last_letter')) return 'sort_strings_by_last_character';
   }
   if (['remove_spaces', 'remove_space'].some(name => names.has(name)) && typeof sample === 'string') return 'remove_spaces';
+  if (names.has('vowels_consonates') && typeof sample === 'string') return 'vowel_consonant_counts';
+  if (names.has('get_surname') && typeof sample === 'string') return 'surname';
   if (names.has('capitalize_words') && typeof sample === 'string') return 'capitalize_words';
   if (names.has('count_words') && typeof sample === 'string') {
     return firstExpected && typeof firstExpected === 'object' && !Array.isArray(firstExpected)
@@ -244,10 +256,14 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('min_len') && Array.isArray(sample)) return 'shortest_word';
   if (names.has('find_max_and_index') && Array.isArray(sample)) return 'max_and_index';
   if (names.has('max_value_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_value_key';
+  if (names.has('max_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_key_numeric_string';
+  if (names.has('reverse_keys') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'reverse_keys';
+  if (names.has('palindromic_keys') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'palindromic_keys';
   if (names.has('merge_list_of_dicts') && Array.isArray(sample)) return 'merge_list_of_dicts';
   if (names.has('remove_duplicates_from_values') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'dedupe_dict_values';
   if (names.has('average_values') && Array.isArray(sample)) return 'average_dict_values';
   if (names.has('average_of_list') && Array.isArray(sample)) return 'average';
+  if (names.has('total') && Array.isArray(sample)) return 'sum_and_product';
   if (names.has('check_even') && Number.isInteger(sample)) return 'even';
   if (names.has('even_or_odd') && Number.isInteger(sample)) return typeof firstExpected === 'string' && String(sample) && firstExpected.includes(String(sample)) ? 'even_odd_sentence' : 'even_odd_word';
   if (names.has('check_prime') && Number.isInteger(sample)) return 'prime';

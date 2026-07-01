@@ -758,6 +758,8 @@ def metamorphic_cases(function_names, tests):
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
             return [([10, 25, 15], 25), ([-10, -2, -5], -2)]
+        if "find_minimum" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
+            return [([10, -2, 5], -2), ([3, 3, 8], 3)]
         return []
     if len(first_args) != 1:
         return []
@@ -810,6 +812,8 @@ def metamorphic_cases(function_names, tests):
         return [([[5, 9, 2, 7, 11, 3]], [2, 7])]
     if name_set & {"calculate_average", "cal_average", "find_average", "find_average_lst"} and isinstance(sample, list):
         return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
+    if "average" in name_set and isinstance(sample, list):
+        return [([[2, 4, 9]], 5), ([[]], 0)]
     if name_set & {"square_list", "square_lst", "square_elements"} and isinstance(sample, list):
         return [([[3, -2, 0]], [9, 4, 0]), ([[]], [])]
     if name_set & {"square_numbers"} and isinstance(sample, list):
@@ -830,7 +834,7 @@ def metamorphic_cases(function_names, tests):
         return [([[3, -2, 0]], [[3, 9], [-2, 4], [0, 0]])]
     if name_set & {"remove_duplicates", "remove_duplicate"} and isinstance(sample, list):
         if any("case_insensitive" in name for name in name_set):
-            return []
+            return [([["Apple", "apple", "BANANA", "banana", "Cherry"]], ["Apple", "BANANA", "Cherry"])]
         return [([[3, 1, 3, 2, 1]], [3, 1, 2]), ([["a", "b", "a"]], ["a", "b"])]
     if "has_duplicates" in name_set and isinstance(sample, list):
         return [([[1, 2, 1]], True), ([[1, 2, 3]], False)]
@@ -848,8 +852,26 @@ def metamorphic_cases(function_names, tests):
         return [([[1, 2, 3, 4, 5, 6]], 12), ([[10, 20, 30]], 20)]
     if "sort_tuples_by_second" in name_set and isinstance(sample, list):
         return [([[["a", 3], ["b", 1], ["c", 2]]], [["b", 1], ["c", 2], ["a", 3]])]
+    if "earliest_date" in name_set and isinstance(sample, list):
+        return [([["2025-05-01", "2024-12-31", "2025-01-01"]], "2024-12-31")]
+    if "sort_dates" in name_set and isinstance(sample, list):
+        return [([["2025-05-01", "2024-12-31", "2025-01-01"]], ["2024-12-31", "2025-01-01", "2025-05-01"])]
+    if "sort_strings_alphabetically" in name_set and isinstance(sample, list):
+        return [([["zebra", "Ant", "bee"]], ["Ant", "bee", "zebra"])]
+    if "lst_tuples" in name_set and isinstance(sample, list) and isinstance(first_expected, list):
+        return [([[[2, 1], [1, 9], [1, 2]]], [[1, 2], [1, 9], [2, 1]])]
+    if "lst_names" in name_set and isinstance(sample, list):
+        return [([["Charlotte", "Al", "Zoe"]], ["Al", "Zoe", "Charlotte"])]
+    if "temperture" in name_set and isinstance(sample, list):
+        return [([[12, -5, 30]], [-5, 12, 30])]
+    if "last_letter" in name_set and isinstance(sample, list):
+        return [([["dog", "banana", "apple"]], ["banana", "apple", "dog"])]
     if name_set & {"remove_spaces", "remove_space"} and isinstance(sample, str):
         return [(["a b  c"], "abc"), ([" no spaces "], "nospaces")]
+    if "vowels_consonates" in name_set and isinstance(sample, str):
+        return [(["codex ai"], {"vowels": 4, "consonants": 3}), (["rhythm"], {"vowels": 0, "consonants": 6})]
+    if "get_surname" in name_set and isinstance(sample, str):
+        return [(["Ada Lovelace"], "Lovelace"), (["Grace Brewster Hopper"], "Hopper")]
     if "capitalize_words" in name_set and isinstance(sample, str):
         return [(["hello world"], "Hello World"), (["python code"], "Python Code")]
     if "count_words" in name_set and isinstance(sample, str):
@@ -928,6 +950,12 @@ def metamorphic_cases(function_names, tests):
         return [([[10, 20, 30, 25]], [2, 30]), ([[5, 3, 9]], [2, 9])]
     if "max_value_key" in name_set and isinstance(sample, dict):
         return [([{"a": 1, "b": 5}], "b"), ([{}], None)]
+    if "max_key" in name_set and isinstance(sample, dict):
+        return [([{"2": "x", "10": "y", "3": "z"}], "10")]
+    if "reverse_keys" in name_set and isinstance(sample, dict):
+        return [([{"first": 1, "second": 2, "third": 3}], ["third", "second", "first"])]
+    if "palindromic_keys" in name_set and isinstance(sample, dict):
+        return [([{"level": 1, "code": 2, "radar": 3}], ["level", "radar"])]
     if "merge_list_of_dicts" in name_set and isinstance(sample, list):
         return [([[{"a": 1}, {"a": 2, "b": 3}]], {"a": 2, "b": 3})]
     if "remove_duplicates_from_values" in name_set and isinstance(sample, dict):
@@ -936,6 +964,8 @@ def metamorphic_cases(function_names, tests):
         return [([[{"a": 2}, {"a": 4, "b": 10}]], {"a": 3, "b": 10})]
     if name_set & {"average_of_list"} and isinstance(sample, list):
         return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
+    if "total" in name_set and isinstance(sample, list):
+        return [([[2, -3, 4]], [3, -24]), ([[]], [0, 1])]
     if name_set & {"check_even"} and isinstance(sample, int) and not isinstance(sample, bool):
         return [([12], True), ([13], False)]
     if name_set & {"even_or_odd"} and isinstance(sample, int) and not isinstance(sample, bool):
