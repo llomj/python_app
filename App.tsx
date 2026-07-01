@@ -1127,6 +1127,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[1, 2, 3, 4, 5, 6]], 12), ([[10, 20, 30]], 20)]
     if "sort_tuples_by_second" in name_set and isinstance(sample, list):
         return [([[["a", 3], ["b", 1], ["c", 2]]], [["b", 1], ["c", 2], ["a", 3]])]
+    if "lst_of_tuples" in name_set and isinstance(sample, list) and isinstance(first_expected, list) and all(isinstance(value, list) for value in first_expected):
+        return [([[[4, "x"], [-1, "y"], [-3, "z"]]], [[-1, "y"], [-3, "z"], [4, "x"]])]
     if "earliest_date" in name_set and isinstance(sample, list):
         return [([["2025-05-01", "2024-12-31", "2025-01-01"]], "2024-12-31")]
     if "sort_dates" in name_set and isinstance(sample, list):
@@ -1135,6 +1137,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([["zebra", "Ant", "bee"]], ["Ant", "bee", "zebra"])]
     if "lst_tuples" in name_set and isinstance(sample, list) and isinstance(first_expected, list):
         return [([[[2, 1], [1, 9], [1, 2]]], [[1, 2], [1, 9], [2, 1]])]
+    if "lst_of_numbers" in name_set and isinstance(sample, list) and isinstance(first_expected, list):
+        return [([[9, 8, 9, 7, 7, 7]], [8, 9, 9, 7, 7, 7])]
     if "lst_names" in name_set and isinstance(sample, list):
         return [([["Charlotte", "Al", "Zoe"]], ["Al", "Zoe", "Charlotte"])]
     if "temperture" in name_set and isinstance(sample, list):
@@ -1187,6 +1191,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [(["Ada Lovelace"], "Lovelace"), (["Grace Brewster Hopper"], "Hopper")]
     if "capitalize_words" in name_set and isinstance(sample, str):
         return [(["hello world"], "Hello World"), (["python code"], "Python Code")]
+    if "capitalize_words" in name_set and isinstance(sample, list):
+        return [([["alpha", "bETA"]], ["Alpha", "Beta"])]
     if "count_words" in name_set and isinstance(sample, str):
         if isinstance(first_expected, dict):
             return [(["One two one"], {"one": 2, "two": 1}), (["solo"], {"solo": 1})]
@@ -1265,9 +1271,11 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([{"a": 1, "b": 5}], "b"), ([{}], None)]
     if "max_key" in name_set and isinstance(sample, dict):
         return [([{"2": "x", "10": "y", "3": "z"}], "10")]
+    if "key_max" in name_set and isinstance(sample, dict):
+        return [([{"alpha": 1, "zulu": 2, "mid": 3}], "zulu")]
     if "reverse_keys" in name_set and isinstance(sample, dict):
         return [([{"first": 1, "second": 2, "third": 3}], ["third", "second", "first"])]
-    if "palindromic_keys" in name_set and isinstance(sample, dict):
+    if (name_set & {"palindromic_keys", "palindrome_keys"}) and isinstance(sample, dict):
         return [([{"level": 1, "code": 2, "radar": 3}], ["level", "radar"])]
     if "merge_list_of_dicts" in name_set and isinstance(sample, list):
         return [([[{"a": 1}, {"a": 2, "b": 3}]], {"a": 2, "b": 3})]
@@ -1275,6 +1283,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([{"a": [1, 1, 2], "b": ["x", "x"]}], {"a": [1, 2], "b": ["x"]})]
     if "average_values" in name_set and isinstance(sample, list):
         return [([[{"a": 2}, {"a": 4, "b": 10}]], {"a": 3, "b": 10})]
+    if "average_values" in name_set and isinstance(sample, dict):
+        return [([{"a": 2, "b": 4, "c": 9}], 5)]
     if name_set & {"average_of_list"} and isinstance(sample, list):
         return [([[2, 4, 9]], 5), ([[-2, 2, 6]], 2)]
     if "total" in name_set and isinstance(sample, list):
@@ -1293,6 +1303,8 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [(["racecar"], True), (["python"], False)]
     if name_set & {"is_sorted", "check_sorted"} and isinstance(sample, list):
         return [([[1, 2, 3]], True), ([[1, 3, 2]], False)]
+    if "min_max" in name_set and isinstance(sample, list):
+        return [([[5, -2, 10]], [-2, 10]), ([[7]], [7, 7])]
     if "generate_squares" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([4], [1, 4, 9, 16]), ([1], [1])]
     if "perimeter_of_square" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
@@ -1384,6 +1396,27 @@ def __auto_grader_metamorphic_cases(function_names, tests):
         return [([[8, 5, 1]], [1, 8, 5])]
     if "sort_keys_by_value" in name_set and isinstance(sample, dict):
         return [([{"a": 3, "b": 1, "c": 2}], ["b", "c", "a"])]
+    if (name_set & {"name_age", "sports_by_popularity"}) and isinstance(sample, dict):
+        return [([{"middle": 50, "young": 5, "old": 90}], ["young", "middle", "old"])]
+    if (name_set & {"sorted_students_grades", "movies", "sorted_movie_titles"}) and isinstance(sample, dict):
+        return [([{"zeta": 1, "alpha": 2, "mid": 3}], ["alpha", "mid", "zeta"])]
+    if "students_grades" in name_set and isinstance(sample, dict) and isinstance(first_expected, str):
+        return [([{"zeta": 1, "alpha": 2, "mid": 3}], "alpha\\nmid\\nzeta")]
+    if "colors_hex" in name_set and isinstance(sample, dict):
+        return [([{"first": 1, "second": 2, "third": 3}], ["third", "second", "first"])]
+    if "sort_dic" in name_set and isinstance(sample, dict):
+        sorted_by_key = dict(sorted(sample.items(), key=lambda item: item[0]))
+        if first_expected == sorted_by_key:
+            return [([{"z": 1, "a": 2, "m": 3}], {"a": 2, "m": 3, "z": 1})]
+        sorted_by_value_desc = dict(sorted(sample.items(), key=lambda item: item[1], reverse=True))
+        if first_expected == sorted_by_value_desc:
+            return [([{"low": 1, "high": 9, "mid": 5}], {"high": 9, "mid": 5, "low": 1})]
+    if "remove_duplicates_values" in name_set and isinstance(sample, dict):
+        return [([{"a": 1, "b": 2, "c": 1, "d": 3}], {"a": 1, "b": 2, "d": 3})]
+    if "largest_value" in name_set and isinstance(sample, dict):
+        return [([{"low": 1, "high": 9, "mid": 5}], "high")]
+    if "smallest_value" in name_set and isinstance(sample, dict):
+        return [([{"low": 1, "high": 9, "mid": 5}], "low")]
     if "sort_fractions_by_decimal" in name_set and isinstance(sample, list):
         return [([[10, 2, 6]], [2, 6, 10])]
     if "count_spaces" in name_set and isinstance(sample, str):

@@ -201,10 +201,12 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('filter_prime')) return 'filter_prime';
     if (names.has('sum_odd_indexed_elements')) return 'sum_odd_indexed_elements';
     if (names.has('sort_tuples_by_second')) return 'sort_tuples_by_second';
+    if (names.has('lst_of_tuples') && Array.isArray(firstExpected) && firstExpected.every(value => Array.isArray(value))) return 'sort_tuples_by_abs_first';
     if (names.has('earliest_date')) return 'earliest_date';
     if (names.has('sort_dates')) return 'sort_dates';
     if (names.has('sort_strings_alphabetically')) return 'sort_strings_alphabetically';
     if (names.has('lst_tuples') && Array.isArray(firstExpected)) return 'sort_tuples_lexicographic';
+    if (names.has('lst_of_numbers') && Array.isArray(firstExpected)) return 'sort_by_frequency';
     if (names.has('lst_names')) return 'sort_strings_by_length';
     if (names.has('temperture')) return 'sort_ascending';
     if (names.has('last_letter')) return 'sort_strings_by_last_character';
@@ -235,6 +237,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('vowels_consonates') && typeof sample === 'string') return 'vowel_consonant_counts';
   if (names.has('get_surname') && typeof sample === 'string') return 'surname';
   if (names.has('capitalize_words') && typeof sample === 'string') return 'capitalize_words';
+  if (names.has('capitalize_words') && Array.isArray(sample)) return 'capitalize_words_list';
   if (names.has('count_words') && typeof sample === 'string') {
     return firstExpected && typeof firstExpected === 'object' && !Array.isArray(firstExpected)
       ? 'count_words_dict'
@@ -280,11 +283,13 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('find_max_and_index') && Array.isArray(sample)) return 'max_and_index';
   if (names.has('max_value_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_value_key';
   if (names.has('max_key') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_key_numeric_string';
+  if (names.has('key_max') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'max_key_lexicographic';
   if (names.has('reverse_keys') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'reverse_keys';
-  if (names.has('palindromic_keys') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'palindromic_keys';
+  if (['palindromic_keys', 'palindrome_keys'].some(name => names.has(name)) && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'palindromic_keys';
   if (names.has('merge_list_of_dicts') && Array.isArray(sample)) return 'merge_list_of_dicts';
   if (names.has('remove_duplicates_from_values') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'dedupe_dict_values';
   if (names.has('average_values') && Array.isArray(sample)) return 'average_dict_values';
+  if (names.has('average_values') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'average_dict_numeric_values';
   if (names.has('average_of_list') && Array.isArray(sample)) return 'average';
   if (names.has('total') && Array.isArray(sample)) return 'sum_and_product';
   if (names.has('check_even') && Number.isInteger(sample)) return 'even';
@@ -293,6 +298,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('calculate_factorial') && Number.isInteger(sample)) return 'factorial';
   if (names.has('check_palindrome') && typeof sample === 'string') return 'palindrome';
   if (['is_sorted', 'check_sorted'].some(name => names.has(name)) && Array.isArray(sample)) return 'is_sorted';
+  if (names.has('min_max') && Array.isArray(sample)) return 'find_min_max';
   if (names.has('generate_squares') && Number.isInteger(sample)) return 'generate_squares';
   if (names.has('perimeter_of_square') && typeof sample === 'number') return 'square_perimeter';
   if (names.has('square_of_number') && typeof sample === 'number') return 'square';
@@ -337,6 +343,19 @@ function metamorphicRule(functionNames, tests) {
   if (['people_age', 'sort_people_by_age'].some(name => names.has(name)) && Array.isArray(sample)) return 'sort_people_by_age';
   if (names.has('sort_by_binary_representation') && Array.isArray(sample)) return 'sort_by_binary_representation';
   if (names.has('sort_keys_by_value') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_by_value';
+  if (['name_age', 'sports_by_popularity'].some(name => names.has(name)) && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_by_value';
+  if (['sorted_students_grades', 'movies', 'sorted_movie_titles'].some(name => names.has(name)) && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_alphabetically';
+  if (names.has('students_grades') && sample && typeof sample === 'object' && !Array.isArray(sample) && typeof firstExpected === 'string') return 'print_keys_alphabetically';
+  if (names.has('colors_hex') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'reverse_keys';
+  if (names.has('sort_dic') && sample && typeof sample === 'object' && !Array.isArray(sample)) {
+    const sortedByKey = Object.fromEntries(Object.entries(sample).sort(([a], [b]) => a.localeCompare(b)));
+    if (JSON.stringify(firstExpected) === JSON.stringify(sortedByKey)) return 'sort_dict_by_key';
+    const sortedByValueDesc = Object.fromEntries(Object.entries(sample).sort((a, b) => b[1] - a[1]));
+    if (JSON.stringify(firstExpected) === JSON.stringify(sortedByValueDesc)) return 'sort_dict_by_value_desc';
+  }
+  if (names.has('remove_duplicates_values') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'dedupe_dict_scalar_values';
+  if (names.has('largest_value') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'key_of_largest_value';
+  if (names.has('smallest_value') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'key_of_smallest_value';
   if (names.has('sort_fractions_by_decimal') && Array.isArray(sample)) return 'sort_numeric';
   if (names.has('count_spaces') && typeof sample === 'string') return 'count_spaces';
   if (names.has('filters_even_numbers') && Array.isArray(sample)) return 'keep_even_numbers';
