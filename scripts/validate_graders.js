@@ -1190,13 +1190,14 @@ def function_script_test_cases(function_names, tests):
 def is_function_script_case(case):
     blocked_keys = {
         "argExpressions", "argFunctionNames", "functionListArgNames",
-        "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
+        "callMethod", "callMethodArgs", "callMethodArgExpressions",
         "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
         "getFiles", "expectedException", "kwargs"
     }
     return not any(case.get(key) for key in blocked_keys)
 
-def script_namespace_for_args(args, required_name=None):
+def script_namespace_for_args(args, required_name=None, call_args=None):
+    call_args = list(call_args or [])
     namespace = {
         "__name__": "__main__",
         "re": re,
@@ -1205,6 +1206,8 @@ def script_namespace_for_args(args, required_name=None):
         "args": list(args),
         "arguments": list(args),
         "inputs": list(args),
+        "call_args": call_args,
+        "call_arguments": call_args,
         "function_name": required_name,
         "required_function_name": required_name,
         "target_name": required_name,
@@ -1213,6 +1216,8 @@ def script_namespace_for_args(args, required_name=None):
         namespace[f"arg{index}"] = value
     for name, value in zip(["a", "b", "c", "d", "x", "y", "z"], args):
         namespace[name] = value
+    for index, value in enumerate(call_args, start=1):
+        namespace[f"call_arg{index}"] = value
     if args:
         first = args[0]
         namespace.update({
@@ -1228,6 +1233,8 @@ def script_namespace_for_args(args, required_name=None):
             namespace.update({"s": first, "string": first, "text": first, "word": first})
         if isinstance(first, dict):
             namespace.update({"dct": first, "dict": first, "dictionary": first})
+    if call_args:
+        namespace.update({"call_value": call_args[0], "inner_value": call_args[0], "suffix": call_args[0]})
     return namespace
 
 def script_result_matches(namespace, printed, expected, compare):
@@ -1250,6 +1257,7 @@ def run_function_script_tests(solution, grader, tests, compare):
         if has_hardcoded_expected_output(solution, expected):
             return False
         args = list(case.get("args", []))
+        call_args = list(case.get("callReturnedWith", []))
         input_values = iter(list(case.get("inputValues", [])))
         old_stdout = sys.stdout
         old_input = builtins.input
@@ -1270,7 +1278,7 @@ def run_function_script_tests(solution, grader, tests, compare):
                 install_random(case, old_random)
                 if denied:
                     builtins.open = guarded_open
-                namespace = script_namespace_for_args(args, case.get("functionName"))
+                namespace = script_namespace_for_args(args, case.get("functionName"), call_args)
                 exec(compiled, namespace)
                 printed = sys.stdout.getvalue().strip()
             except BaseException:

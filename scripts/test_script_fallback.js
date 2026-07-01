@@ -102,6 +102,7 @@ const { buildAutoGradeScript } = loadTsExports('App.tsx');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const squareGrader = AUTO_GRADERS[8];
 const sumMultiplyGrader = AUTO_GRADERS[118];
+const closureGrader = AUTO_GRADERS[429];
 
 const scriptAnswer = `
 result = number ** 2
@@ -132,6 +133,15 @@ print(result)
 const multiFunctionResult = runAutoGrade(buildAutoGradeScript(sumMultiplyGrader, multiFunctionScriptAnswer));
 if (!multiFunctionResult.passed) {
   throw new Error(`Expected multi-function script answer to pass, got: ${JSON.stringify(multiFunctionResult)}`);
+}
+
+const closureScriptAnswer = `
+result = n * call_arg1
+print(result)
+`;
+const closureScriptResult = runAutoGrade(buildAutoGradeScript(closureGrader, closureScriptAnswer));
+if (!closureScriptResult.passed) {
+  throw new Error(`Expected closure-style script answer to pass, got: ${JSON.stringify(closureScriptResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

@@ -48,7 +48,7 @@ function hasValue(value) {
 function scriptFallbackBlockedReason(testCase) {
   const blockedKeys = [
     'argExpressions', 'argFunctionNames', 'functionListArgNames',
-    'callReturnedWith', 'callMethod', 'callMethodArgs', 'callMethodArgExpressions',
+    'callMethod', 'callMethodArgs', 'callMethodArgExpressions',
     'getAttrs', 'setAttrs', 'deleteAttrs', 'setItems', 'deleteItems',
     'getFiles', 'expectedException', 'kwargs',
   ];
