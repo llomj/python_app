@@ -734,6 +734,8 @@ def metamorphic_cases(function_names, tests):
             return [([{"a": 1, "b": 5}, {"b": 3, "c": 2}], {"b": 5}), ([{"x": 1}, {"y": 2}], {})]
         if "gcd" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([48, 18], 6), ([17, 13], 1)]
+        if "calculate_gcd" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
+            return [([84, 30], 6), ([17, 13], 1)]
         if "lcm" in name_set and all(isinstance(value, int) and not isinstance(value, bool) for value in [left, right]):
             return [([12, 18], 36), ([5, 7], 35)]
         if "sum_of_squares" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
@@ -756,6 +758,8 @@ def metamorphic_cases(function_names, tests):
             return [([8, 4], [32, 12, 2]), ([7, 2], [14, 9, 3.5])]
         if "calculate_percentage" in name_set and isinstance(left, list) and isinstance(right, (int, float)) and not isinstance(right, bool):
             return [([[40, 80, 100], 200], [20, 40, 50]), ([[3, 6], 12], [25, 50])]
+        if "example_function" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in [left, right]):
+            return [([2, 9], "The sum of 2 and 9 is 11"), ([-3, 5], "The sum of -3 and 5 is 2")]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -945,6 +949,10 @@ def metamorphic_cases(function_names, tests):
         return [(["ABC xyz"], 3), (["none"], 0)]
     if "factorial" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([0], 1), ([6], 720)]
+    if "factorial_while" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([0], 1), ([6], 720)]
+    if "factorial_recursive" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([6], 720), ([3], 6)]
     if "is_palindrome" in name_set and isinstance(sample, str):
         return [(["racecar"], True), (["python"], False)]
     if "is_palindrome" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
@@ -997,6 +1005,8 @@ def metamorphic_cases(function_names, tests):
         return [([20], [2, 3, 5, 7, 11, 13, 17, 19]), ([2], [2])]
     if "even_and_greater_than_10" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([14], True), ([10], False)]
+    if "is_perfect_square_and_armstrong" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([1], True), ([153], False), ([16], False)]
     if name_set & {"sum_even_indices", "all_odd_numbers"} and isinstance(sample, list):
         if "sum_even_indices" in name_set:
             return [([[10, 20, 30, 40, 50]], 90), ([[]], 0)]
@@ -1012,6 +1022,10 @@ def metamorphic_cases(function_names, tests):
         return [([[1, 2, 3]], 6), ([[]], 0)]
     if "list_sum" in name_set and isinstance(sample, list):
         return [([[1, 2, -3]], 0), ([[10]], 10)]
+    if "sum_numbers" in name_set and isinstance(sample, list):
+        return [([[1, 2, -3]], 0), ([[10]], 10)]
+    if "get_middle_element" in name_set and isinstance(sample, list):
+        return [([[9, 8, 7, 6, 5]], 7), ([[1, 2]], 2)]
     if "find_longest_word" in name_set and isinstance(sample, list):
         if isinstance(first_expected, int):
             return [([["cat", "elephant", "dog"]], 8), ([["a", "abc", "def"]], 3)]
@@ -1064,6 +1078,8 @@ def metamorphic_cases(function_names, tests):
         return [([[5, -2, 10]], [-2, 10]), ([[7]], [7, 7])]
     if "generate_squares" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([4], [1, 4, 9, 16]), ([1], [1])]
+    if "calculate_square_root" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
+        return [([25], 5), ([2.25], 1.5)]
     if "perimeter_of_square" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
         return [([7], 28), ([2.5], 10)]
     if "square_of_number" in name_set and isinstance(sample, (int, float)) and not isinstance(sample, bool):
@@ -1210,6 +1226,16 @@ def metamorphic_cases(function_names, tests):
         return [(["hello world python"], 2), (["nospaces"], 0)]
     if "even_length_word_generator" in name_set and isinstance(sample, str):
         return [(["one four six seven"], ["four"]), (["to be or not"], ["to", "be", "or"])]
+    if "fibonacci_up_to_n" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([8], "0 1 1 2 3 5 8"), ([1], "0 1 1")]
+    if "get_middle_char" in name_set and isinstance(sample, str):
+        return [(["abcde"], "c"), (["abcdef"], "d")]
+    if "get_first_word" in name_set and isinstance(sample, str):
+        return [(["alpha beta gamma"], "alpha")]
+    if "get_last_word" in name_set and isinstance(sample, str):
+        return [(["alpha beta gamma"], "gamma")]
+    if "count_characters" in name_set and isinstance(sample, str) and isinstance(first_expected, int):
+        return [(["a b c"], 3), ([" spaced text "], 10)]
     if "filters_even_numbers" in name_set and isinstance(sample, list):
         return [([[1, 3, 8, 10]], [8, 10])]
     if "palindromes" in name_set and isinstance(sample, list):
@@ -1338,6 +1364,9 @@ def named_metamorphic_cases(function_names, tests):
     if name_set >= {"main", "sort_values", "sort_key"}:
         add("main", [{"low": 1, "high": 9, "mid": 5}], {"low": 1, "mid": 5, "high": 9})
         add("sort_key", [["item", 42]], 42)
+    if name_set >= {"main", "square_odd_number_generator"}:
+        add("main", [6], [1, 9, 25])
+        add("square_odd_number_generator", [9], [1, 9, 25, 49, 81])
     return cases
 
 def run_metamorphic_tests(target, function_names, tests, compare):
