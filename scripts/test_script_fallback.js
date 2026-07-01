@@ -101,6 +101,7 @@ function runAutoGrade(script) {
 const { buildAutoGradeScript } = loadTsExports('App.tsx');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const squareGrader = AUTO_GRADERS[8];
+const sumMultiplyGrader = AUTO_GRADERS[118];
 
 const scriptAnswer = `
 result = number ** 2
@@ -117,6 +118,20 @@ print(25)
 const hardcodedResult = runAutoGrade(buildAutoGradeScript(squareGrader, hardcodedAnswer));
 if (hardcodedResult.passed) {
   throw new Error(`Expected hard-coded script answer to fail, got: ${JSON.stringify(hardcodedResult)}`);
+}
+
+const multiFunctionScriptAnswer = `
+if function_name == "multiply":
+    result = 1
+    for item in lst:
+        result *= item
+else:
+    result = sum(lst)
+print(result)
+`;
+const multiFunctionResult = runAutoGrade(buildAutoGradeScript(sumMultiplyGrader, multiFunctionScriptAnswer));
+if (!multiFunctionResult.passed) {
+  throw new Error(`Expected multi-function script answer to pass, got: ${JSON.stringify(multiFunctionResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

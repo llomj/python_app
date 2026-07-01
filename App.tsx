@@ -1397,11 +1397,11 @@ def __auto_grader_is_function_script_case(case):
         "argExpressions", "argFunctionNames", "functionListArgNames",
         "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
         "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
-        "getFiles", "expectedException", "functionName", "kwargs"
+        "getFiles", "expectedException", "kwargs"
     }
     return not any(case.get(key) for key in blocked_keys)
 
-def __auto_grader_script_namespace_for_args(args):
+def __auto_grader_script_namespace_for_args(args, required_name=None):
     namespace = {
         "__name__": "__main__",
         "re": re,
@@ -1410,6 +1410,9 @@ def __auto_grader_script_namespace_for_args(args):
         "args": list(args),
         "arguments": list(args),
         "inputs": list(args),
+        "function_name": required_name,
+        "required_function_name": required_name,
+        "target_name": required_name,
     }
     for index, value in enumerate(args, start=1):
         namespace[f"arg{index}"] = value
@@ -1566,7 +1569,7 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
                 os.symlink(target_name, link_name)
             if permission_denied_paths:
                 builtins.open = __fallback_guarded_open
-            namespace = __auto_grader_script_namespace_for_args(args)
+            namespace = __auto_grader_script_namespace_for_args(args, case.get("functionName"))
             exec(compiled, namespace)
             printed = sys.stdout.getvalue().strip()
             if sample_output is None:

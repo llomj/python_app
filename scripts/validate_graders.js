@@ -1192,11 +1192,11 @@ def is_function_script_case(case):
         "argExpressions", "argFunctionNames", "functionListArgNames",
         "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
         "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
-        "getFiles", "expectedException", "functionName", "kwargs"
+        "getFiles", "expectedException", "kwargs"
     }
     return not any(case.get(key) for key in blocked_keys)
 
-def script_namespace_for_args(args):
+def script_namespace_for_args(args, required_name=None):
     namespace = {
         "__name__": "__main__",
         "re": re,
@@ -1205,6 +1205,9 @@ def script_namespace_for_args(args):
         "args": list(args),
         "arguments": list(args),
         "inputs": list(args),
+        "function_name": required_name,
+        "required_function_name": required_name,
+        "target_name": required_name,
     }
     for index, value in enumerate(args, start=1):
         namespace[f"arg{index}"] = value
@@ -1267,7 +1270,7 @@ def run_function_script_tests(solution, grader, tests, compare):
                 install_random(case, old_random)
                 if denied:
                     builtins.open = guarded_open
-                namespace = script_namespace_for_args(args)
+                namespace = script_namespace_for_args(args, case.get("functionName"))
                 exec(compiled, namespace)
                 printed = sys.stdout.getvalue().strip()
             except BaseException:

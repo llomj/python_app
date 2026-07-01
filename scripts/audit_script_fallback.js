@@ -50,7 +50,7 @@ function scriptFallbackBlockedReason(testCase) {
     'argExpressions', 'argFunctionNames', 'functionListArgNames',
     'callReturnedWith', 'callMethod', 'callMethodArgs', 'callMethodArgExpressions',
     'getAttrs', 'setAttrs', 'deleteAttrs', 'setItems', 'deleteItems',
-    'getFiles', 'expectedException', 'functionName', 'kwargs',
+    'getFiles', 'expectedException', 'kwargs',
   ];
   const key = blockedKeys.find(item => hasValue(testCase?.[item]));
   return key || null;
