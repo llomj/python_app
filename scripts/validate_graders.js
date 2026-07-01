@@ -1168,7 +1168,119 @@ def run_grader(source, grader):
                     os.chdir(old_cwd)
                     sys.stdout = old_stdout
                     builtins.input = old_input
+    if source_requirements_ok(source, grader):
+        for solution in runnable_variants(source):
+            last_solution = solution
+            try:
+                with time_limit(1.0):
+                    if run_function_script_tests(solution, grader, tests, compare):
+                        return True, "", solution
+                last_error = "grader mismatch"
+            except BaseException as exc:
+                last_error = f"script fallback raised {type(exc).__name__}: {exc}"
+                continue
     return False, last_error, last_solution
+
+def function_script_test_cases(function_names, tests):
+    cases = list(tests) + input_generated_cases(function_names, tests)
+    for args, expected in metamorphic_cases(function_names, tests):
+        cases.append({"args": args, "expected": expected, "label": "generated script fallback"})
+    return cases
+
+def is_function_script_case(case):
+    blocked_keys = {
+        "argExpressions", "argFunctionNames", "functionListArgNames",
+        "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
+        "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
+        "getFiles", "expectedException", "functionName", "kwargs"
+    }
+    return not any(case.get(key) for key in blocked_keys)
+
+def script_namespace_for_args(args):
+    namespace = {
+        "__name__": "__main__",
+        "re": re,
+        "math": math,
+        "json": json,
+        "args": list(args),
+        "arguments": list(args),
+        "inputs": list(args),
+    }
+    for index, value in enumerate(args, start=1):
+        namespace[f"arg{index}"] = value
+    for name, value in zip(["a", "b", "c", "d", "x", "y", "z"], args):
+        namespace[name] = value
+    if args:
+        first = args[0]
+        namespace.update({
+            "n": first,
+            "num": first,
+            "number": first,
+            "value": first,
+            "item": first,
+        })
+        if isinstance(first, list):
+            namespace.update({"lst": first, "list": first, "numbers": first, "items": first, "data": first})
+        if isinstance(first, str):
+            namespace.update({"s": first, "string": first, "text": first, "word": first})
+        if isinstance(first, dict):
+            namespace.update({"dct": first, "dict": first, "dictionary": first})
+    return namespace
+
+def script_result_matches(namespace, printed, expected, compare):
+    if printed and (same(printed, expected, compare) or same(printed, expected, "printedOrReturn")):
+        return True
+    result_names = ["result", "answer", "output", "total", "count", "value", "final", "res", "solution"]
+    for name in result_names:
+        if name in namespace and (same(namespace[name], expected, compare) or same(namespace[name], expected, "printedOrReturn")):
+            return True
+    return False
+
+def run_function_script_tests(solution, grader, tests, compare):
+    function_names = grader.get("functionNames", [])
+    test_cases = function_script_test_cases(function_names, tests)
+    if not test_cases or not all(is_function_script_case(case) for case in test_cases):
+        return False
+    compiled = compile(solution, "<solution>", "exec")
+    for case in test_cases:
+        expected = case.get("expected")
+        if has_hardcoded_expected_output(solution, expected):
+            return False
+        args = list(case.get("args", []))
+        input_values = iter(list(case.get("inputValues", [])))
+        old_stdout = sys.stdout
+        old_input = builtins.input
+        old_open = builtins.open
+        old_cwd = os.getcwd()
+        old_random = {}
+        with tempfile.TemporaryDirectory() as temp_dir:
+            sys.stdout = io.StringIO()
+            builtins.input = lambda prompt='': next(input_values)
+            denied = set(case.get("permissionDeniedPaths", []))
+            def guarded_open(file, *open_args, **open_kwargs):
+                if str(file) in denied:
+                    raise PermissionError("Permission denied")
+                return old_open(file, *open_args, **open_kwargs)
+            try:
+                os.chdir(temp_dir)
+                setup_case(case)
+                install_random(case, old_random)
+                if denied:
+                    builtins.open = guarded_open
+                namespace = script_namespace_for_args(args)
+                exec(compiled, namespace)
+                printed = sys.stdout.getvalue().strip()
+            except BaseException:
+                return False
+            finally:
+                restore_random(old_random)
+                os.chdir(old_cwd)
+                sys.stdout = old_stdout
+                builtins.input = old_input
+                builtins.open = old_open
+        if not script_result_matches(namespace, printed, expected, compare):
+            return False
+    return True
 
 def run_script_tests(solution, tests, compare):
     compiled = compile(solution, "<solution>", "exec")

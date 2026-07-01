@@ -464,7 +464,7 @@ const getInitialExercise = (): Exercise => {
     return getRandomExerciseForMode(savedMode);
 };
 
-const buildAutoGradeScript = (grader: AutoGrader, sourceCode = '', sourceName = 'main.py') => `
+export const buildAutoGradeScript = (grader: AutoGrader, sourceCode = '', sourceName = 'main.py') => `
 import json
 import math
 import sys
@@ -1173,7 +1173,7 @@ def __auto_grader_metamorphic_cases(function_names, tests):
     if "fibonacci" in name_set and isinstance(sample, int) and isinstance(first_expected, int):
         return [([6], 8), ([8], 21)]
     if "fibonacci_sequence" in name_set and isinstance(sample, int):
-        return [([6], "0\n1\n1\n2\n3\n5"), ([2], "0\n1")]
+        return [([6], "0\\n1\\n1\\n2\\n3\\n5"), ([2], "0\\n1")]
     if name_set & {"sum_even_indices", "all_odd_numbers"} and isinstance(sample, list):
         if "sum_even_indices" in name_set:
             return [([[10, 20, 30, 40, 50]], 90), ([[]], 0)]
@@ -1232,15 +1232,15 @@ def __auto_grader_metamorphic_cases(function_names, tests):
     if "closest_to_zero" in name_set and isinstance(sample, list):
         return [([[-8, -3, 5, 2]], 2), ([[4, -1, 9]], -1)]
     if "print_odd_index_elements" in name_set and isinstance(sample, list):
-        return [([["a", "b", "c", "d"]], "b\nd"), ([["x", "y"]], "y")]
+        return [([["a", "b", "c", "d"]], "b\\nd"), ([["x", "y"]], "y")]
     if "index_element_if_vowel" in name_set and isinstance(sample, list):
         return [([["apple", "berry", "orange"]], [[0, "apple"], [2, "orange"]]), ([["egg", "fish"]], [[0, "egg"]])]
     if "print_index_squared" in name_set and isinstance(sample, list):
-        return [([[2, -3]], "Index: 0, Squared: 4\nIndex: 1, Squared: 9")]
+        return [([[2, -3]], "Index: 0, Squared: 4\\nIndex: 1, Squared: 9")]
     if "replace_based_on_index" in name_set and isinstance(sample, list):
         return [([["a", "b", "c"]], ["Even", "Odd", "Even"]), ([[1, 2]], ["Even", "Odd"])]
     if "enumerate_lst" in name_set and isinstance(sample, list) and isinstance(first_expected, str) and "index" not in first_expected.lower():
-        return [([["a", "b", "c", "d", "e"]], "0 a\n2 c\n4 e")]
+        return [([["a", "b", "c", "d", "e"]], "0 a\\n2 c\\n4 e")]
     if name_set & {"sort_strings_by_length", "len_lst"} and isinstance(sample, list):
         return [([["aaaa", "b", "cc"]], ["b", "cc", "aaaa"])]
     if "sort_list_descending" in name_set and isinstance(sample, list):
@@ -1386,6 +1386,231 @@ def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tes
             return f"extra generated test {index} failed for args={args}. Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
     return None
 
+def __auto_grader_function_script_test_cases(function_names, tests):
+    cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests)
+    for args, expected in __auto_grader_metamorphic_cases(function_names, tests):
+        cases.append({"args": args, "expected": expected, "label": "generated script fallback"})
+    return cases
+
+def __auto_grader_is_function_script_case(case):
+    blocked_keys = {
+        "argExpressions", "argFunctionNames", "functionListArgNames",
+        "callReturnedWith", "callMethod", "callMethodArgs", "callMethodArgExpressions",
+        "getAttrs", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
+        "getFiles", "expectedException", "functionName", "kwargs"
+    }
+    return not any(case.get(key) for key in blocked_keys)
+
+def __auto_grader_script_namespace_for_args(args):
+    namespace = {
+        "__name__": "__main__",
+        "re": re,
+        "math": math,
+        "json": json,
+        "args": list(args),
+        "arguments": list(args),
+        "inputs": list(args),
+    }
+    for index, value in enumerate(args, start=1):
+        namespace[f"arg{index}"] = value
+    for name, value in zip(["a", "b", "c", "d", "x", "y", "z"], args):
+        namespace[name] = value
+    if args:
+        first = args[0]
+        namespace.update({
+            "n": first,
+            "num": first,
+            "number": first,
+            "value": first,
+            "item": first,
+        })
+        if isinstance(first, list):
+            namespace.update({"lst": first, "list": first, "numbers": first, "items": first, "data": first})
+        if isinstance(first, str):
+            namespace.update({"s": first, "string": first, "text": first, "word": first})
+        if isinstance(first, dict):
+            namespace.update({"dct": first, "dict": first, "dictionary": first})
+    return namespace
+
+def __auto_grader_script_result_matches(namespace, printed, expected, compare):
+    if printed and (__auto_grader_same(printed, expected, compare) or __auto_grader_same(printed, expected, "printedOrReturn")):
+        return True
+    for name in ["result", "answer", "output", "total", "count", "value", "final", "res", "solution"]:
+        if name in namespace and (
+            __auto_grader_same(namespace[name], expected, compare) or
+            __auto_grader_same(namespace[name], expected, "printedOrReturn")
+        ):
+            return True
+    return False
+
+def __auto_grader_run_function_script_fallback(function_names, tests, compare):
+    test_cases = __auto_grader_function_script_test_cases(function_names, tests)
+    if not test_cases or not all(__auto_grader_is_function_script_case(case) for case in test_cases):
+        return None
+    try:
+        compiled = compile(__auto_grader_source, __auto_grader_source_name, "exec")
+    except Exception as exc:
+        return {
+            "passed": False,
+            "message": f"Script answer could not compile: {type(exc).__name__}: {exc}"
+        }
+    sample_output = None
+    for index, case in enumerate(test_cases, start=1):
+        expected = case.get("expected")
+        hardcoded_error = __auto_grader_hardcoded_expected_error(expected)
+        if hardcoded_error:
+            return {
+                "passed": False,
+                "message": hardcoded_error
+            }
+        args = list(case.get("args", []))
+        input_values = list(case.get("inputValues", []))
+        random_values = list(case.get("randomValues", []))
+        random_float_values = list(case.get("randomFloatValues", []))
+        random_choice_values = list(case.get("randomChoiceValues", []))
+        random_sample_values = list(case.get("randomSampleValues", []))
+        random_shuffle_values = list(case.get("randomShuffleValues", []))
+        setup_remove = case.get("setupRemove", [])
+        setup_dirs = case.get("setupDirs", [])
+        setup_files = case.get("setupFiles", {})
+        setup_symlinks = case.get("setupSymlinks", {})
+        permission_denied_paths = set(case.get("permissionDeniedPaths", []))
+        label = case.get("label") or ("script fallback test " + str(index))
+
+        old_stdout = sys.stdout
+        old_input = builtins.input
+        old_open = builtins.open
+        old_cwd = os.getcwd()
+        old_sys_path = list(sys.path)
+        temp_dir = tempfile.mkdtemp(prefix="auto_grader_script_")
+        old_random_methods = {}
+        sys.stdout = io.StringIO()
+        input_iter = iter(input_values)
+        random_iter = iter(random_values)
+        random_float_iter = iter(random_float_values)
+        random_choice_iter = iter(random_choice_values)
+        random_sample_iter = iter(random_sample_values)
+        random_shuffle_iter = iter(random_shuffle_values)
+        builtins.input = lambda prompt='': next(input_iter)
+
+        def __fallback_guarded_open(file, *open_args, **open_kwargs):
+            if str(file) in permission_denied_paths:
+                raise PermissionError("Permission denied")
+            return old_open(file, *open_args, **open_kwargs)
+        try:
+            os.chdir(temp_dir)
+            if __auto_grader_project_root not in sys.path:
+                sys.path.insert(0, __auto_grader_project_root)
+            import random
+            for __name in ("randint", "randrange", "random", "uniform", "choice", "sample", "shuffle", "choices"):
+                old_random_methods[__name] = getattr(random, __name)
+            if random_values:
+                def __fallback_randint(_start, _end):
+                    try:
+                        return next(random_iter)
+                    except StopIteration:
+                        return random_values[-1]
+                random.randint = __fallback_randint
+                random.randrange = lambda *_args: __fallback_randint(0, 0)
+            if random_float_values:
+                def __fallback_random():
+                    try:
+                        return next(random_float_iter)
+                    except StopIteration:
+                        return random_float_values[-1]
+                random.random = __fallback_random
+                random.uniform = lambda _start, _end: __fallback_random()
+            if random_choice_values:
+                def __fallback_choice(_items):
+                    try:
+                        return next(random_choice_iter)
+                    except StopIteration:
+                        return random_choice_values[-1]
+                random.choice = __fallback_choice
+                random.choices = lambda _items, k=1: [__fallback_choice(_items) for _ in range(k)]
+            if random_sample_values:
+                def __fallback_sample(_items, _count):
+                    try:
+                        return list(next(random_sample_iter))
+                    except StopIteration:
+                        return list(random_sample_values[-1])
+                random.sample = __fallback_sample
+            if random_shuffle_values:
+                def __fallback_shuffle(items):
+                    try:
+                        replacement = list(next(random_shuffle_iter))
+                    except StopIteration:
+                        replacement = list(random_shuffle_values[-1])
+                    items[:] = replacement
+                    return None
+                random.shuffle = __fallback_shuffle
+            for path_name in setup_remove:
+                if os.path.islink(path_name) or os.path.isfile(path_name):
+                    os.remove(path_name)
+                elif os.path.isdir(path_name):
+                    shutil.rmtree(path_name)
+            for dir_name in setup_dirs:
+                os.makedirs(dir_name, exist_ok=True)
+            for file_name, file_content in setup_files.items():
+                dir_name = os.path.dirname(file_name)
+                if dir_name:
+                    os.makedirs(dir_name, exist_ok=True)
+                with open(file_name, "w", encoding="utf-8") as setup_file:
+                    setup_file.write(file_content)
+            for link_name, target_name in setup_symlinks.items():
+                dir_name = os.path.dirname(link_name)
+                if dir_name:
+                    os.makedirs(dir_name, exist_ok=True)
+                if os.path.lexists(link_name):
+                    os.remove(link_name)
+                os.symlink(target_name, link_name)
+            if permission_denied_paths:
+                builtins.open = __fallback_guarded_open
+            namespace = __auto_grader_script_namespace_for_args(args)
+            exec(compiled, namespace)
+            printed = sys.stdout.getvalue().strip()
+            if sample_output is None:
+                sample_output = printed
+        except Exception as exc:
+            return {
+                "passed": False,
+                "message": f"{label} raised {type(exc).__name__}: {exc}"
+            }
+        finally:
+            try:
+                import random
+                for __name, __method in old_random_methods.items():
+                    setattr(random, __name, __method)
+            except Exception:
+                pass
+            try:
+                os.chdir(old_cwd)
+            except Exception:
+                pass
+            sys.path[:] = old_sys_path
+            sys.stdout = old_stdout
+            builtins.input = old_input
+            builtins.open = old_open
+            try:
+                shutil.rmtree(temp_dir)
+            except Exception:
+                pass
+        if not __auto_grader_script_result_matches(namespace, printed, expected, compare):
+            actual = printed if printed else namespace.get("result", None)
+            return {
+                "passed": False,
+                "message": (
+                    f"{label} failed as script answer. "
+                    f"Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
+                )
+            }
+    return {
+        "passed": True,
+        "functionName": "script answer",
+        "message": f"All {len(test_cases)} tests passed as a script answer.",
+        "output": sample_output or ""
+    }
+
 def __auto_grader_run():
     source_requirement_error = __auto_grader_check_source_requirements()
     if source_requirement_error:
@@ -1419,9 +1644,12 @@ def __auto_grader_run():
     target_name, target = __auto_grader_find_callable(function_names, first_args, kwargs=first_kwargs)
 
     if target is None:
+        script_result = __auto_grader_run_function_script_fallback(function_names, tests, compare)
+        if script_result and script_result.get("passed"):
+            return script_result
         return {
             "passed": False,
-            "message": "Missing function. Expected one of: " + ", ".join(function_names)
+            "message": "Missing function. Expected one of: " + ", ".join(function_names) + ". A script answer is also accepted if it passes every visible and generated test."
         }
 
     test_cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests)
