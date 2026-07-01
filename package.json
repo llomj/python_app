@@ -12,7 +12,7 @@
         "audit:script-fallback": "node scripts/audit_script_fallback.js",
         "audit:solutions": "node scripts/audit_solution_sections.js",
         "test:script-fallback": "node scripts/test_script_fallback.js",
-        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-unguarded-single-case-no-arg-functions 0 --max-single-case-scripts 526 --max-unguarded-single-case-scripts 0 --max-hardcode-risk-scripts 0 --max-empty-graders 0 && npm run audit:metamorphic -- --min-covered 546 && npm run audit:script-fallback -- --min-eligible 1438 --max-blocked 1 && npm run audit:solutions -- --max-mislabeled=0 && npm run test:script-fallback"
+        "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-unguarded-single-case-no-arg-functions 0 --max-single-case-scripts 526 --max-unguarded-single-case-scripts 0 --max-hardcode-risk-scripts 0 --max-empty-graders 0 && npm run audit:metamorphic -- --min-covered 558 && npm run audit:script-fallback -- --min-eligible 1438 --max-blocked 1 && npm run audit:solutions -- --max-mislabeled=0 && npm run test:script-fallback"
     },
     "dependencies": {
         "@codemirror/autocomplete": "^6.11.1",

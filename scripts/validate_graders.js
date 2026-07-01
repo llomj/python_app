@@ -780,6 +780,8 @@ def metamorphic_cases(function_names, tests):
             return [([[2, 4, 5, 6, 8], 10], [[2, 8], [4, 6]])]
         if "get_words_with_vowel_count" in name_set and isinstance(left, str) and isinstance(right, int) and not isinstance(right, bool):
             return [(["code sky audio tree", 2], ["code", "tree"])]
+        if "main" in name_set and isinstance(left, list) and isinstance(right, int) and not isinstance(right, bool):
+            return [([[7, 8, 9, 10, 11], 4], [8, 9, 10, 7, 11])]
         return []
     if len(first_args) == 3:
         if "max_of_three" in name_set and all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in first_args):
@@ -1210,6 +1212,8 @@ def metamorphic_cases(function_names, tests):
         return [([["zebra", "yak", "ant"]], "zebra")]
     if "reverse" in name_set and isinstance(sample, list):
         return [([[1, 2, 3, 4]], [4, 3, 2, 1]), ([["a", "b"]], ["b", "a"])]
+    if "reverse_order" in name_set and isinstance(sample, list):
+        return [([["alpha", "zulu", "beta"]], ["zulu", "beta", "alpha"])]
     if "floating_point" in name_set and isinstance(sample, list):
         return [([[2.6, 1.2, 3.8]], [1.2, 2.6, 3.8])]
     if "first_element_decending_order" in name_set and isinstance(sample, list):
@@ -1321,6 +1325,23 @@ def metamorphic_cases(function_names, tests):
         return [(["one four six seven"], ["four"]), (["to be or not"], ["to", "be", "or"])]
     if "fibonacci_up_to_n" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
         return [([8], "0 1 1 2 3 5 8"), ([1], "0 1 1")]
+    if name_set & {"square_pattern", "print_square_pattern"} and isinstance(sample, int) and not isinstance(sample, bool):
+        first_line = str(first_expected).splitlines()[0] if first_expected is not None else ""
+        if set(first_line.replace(" ", "")) == {"*"}:
+            return [([4], "****\n****\n****\n****")]
+        return [([4], "1 2 3 4\n1 2 3 4\n1 2 3 4\n1 2 3 4")]
+    if "print_hollow_square" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], "****\n*  *\n*  *\n****")]
+    if "print_reverse_pyramid" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], "1 2 3 4\n1 2 3\n1 2\n1")]
+    if "print_cross" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([7], "*     *\n *   * \n  * *  \n   *   \n  * *  \n *   * \n*     *")]
+    if "print_reverse_hill_pattern" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], "*******\n *****\n  ***\n   *")]
+    if "print_reverse_star_pattern" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([4], "****\n***\n**\n*")]
+    if "print_number_square" in name_set and isinstance(sample, int) and not isinstance(sample, bool):
+        return [([3], "1 2 3\n4 5 6\n7 8 9")]
     if "get_middle_char" in name_set and isinstance(sample, str):
         return [(["abcde"], "c"), (["abcdef"], "d")]
     if "get_first_word" in name_set and isinstance(sample, str):
@@ -1464,6 +1485,12 @@ def named_metamorphic_cases(function_names, tests):
     if name_set >= {"sum_list", "add"}:
         add("sum_list", [[10, -3, 5]], 12)
         add("add", [-4, 9], 5)
+    if name_set >= {"sum", "multiply"}:
+        add("sum", [[10, -3, 5]], 12)
+        add("multiply", [[-2, 4, 5]], -40)
+    if name_set >= {"max_func", "max_in_list"}:
+        add("max_func", [-8, -3], -3)
+        add("max_in_list", [[-10, 0, 7, 3]], 7)
     if name_set >= {"is_even", "filter_even_numbers"}:
         add("filter_even_numbers", [[0, 1, 8, 9, 10]], [0, 8, 10])
         add("is_even", [12], True)

@@ -157,6 +157,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('calculate_weighted_average') && Array.isArray(left) && Array.isArray(right)) return 'weighted_average';
     if (names.has('get_pairs_summing_to') && Array.isArray(left) && typeof right === 'number') return 'pairs_summing_to';
     if (names.has('get_words_with_vowel_count') && typeof left === 'string' && Number.isInteger(right)) return 'words_with_vowel_count';
+    if (names.has('main') && Array.isArray(left) && Number.isInteger(right)) return 'sort_by_remainder';
     return null;
   }
   if (firstArgs.length === 3) {
@@ -236,7 +237,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('sort_by_hire_date')) return 'sort_by_second_value';
     if (names.has('lst_of_sentences')) return 'sort_strings_by_length';
     if (names.has('frequency_first_letter')) return 'sort_by_first_letter_frequency';
-    if (names.has('reverse_order')) return null;
+    if (names.has('reverse_order')) return 'reverse_alphabetical';
     if (names.has('sort_scores')) return 'sort_ascending';
     if (names.has('sort_emails')) return 'sort_emails_by_domain';
     if (['sort_cities_by_population', 'sort_students_by_grades', 'sort_books_by_year'].some(name => names.has(name))) return 'sort_by_second_value';
@@ -371,6 +372,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('filter_string') && Array.isArray(sample)) return 'filter_len_three';
   if (names.has('max_string_alpha') && Array.isArray(sample)) return 'max_string_alpha';
   if (names.has('reverse') && Array.isArray(sample)) return 'reverse_list';
+  if (names.has('reverse_order') && Array.isArray(sample)) return 'reverse_alphabetical';
   if (names.has('floating_point') && Array.isArray(sample)) return 'sort_float_ascending';
   if (names.has('first_element_decending_order') && Array.isArray(sample)) return 'sort_first_element_desc';
   if (names.has('number_of_consonants') && Array.isArray(sample)) return typeof firstExpected === 'string' ? 'min_consonants_word' : 'sort_by_consonants';
@@ -443,6 +445,16 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('count_spaces') && typeof sample === 'string') return 'count_spaces';
   if (names.has('even_length_word_generator') && typeof sample === 'string') return 'generator_even_length_words';
   if (names.has('fibonacci_up_to_n') && Number.isInteger(sample)) return 'fibonacci_up_to_n_printed';
+  if (['square_pattern', 'print_square_pattern'].some(name => names.has(name)) && Number.isInteger(sample)) {
+    const firstLine = String(firstExpected ?? '').split('\n')[0];
+    return new Set(firstLine.replace(/\s/g, '').split('')).has('*') ? 'star_square_pattern' : 'number_square_pattern';
+  }
+  if (names.has('print_hollow_square') && Number.isInteger(sample)) return 'hollow_square_pattern';
+  if (names.has('print_reverse_pyramid') && Number.isInteger(sample)) return 'reverse_number_pyramid';
+  if (names.has('print_cross') && Number.isInteger(sample)) return 'cross_pattern';
+  if (names.has('print_reverse_hill_pattern') && Number.isInteger(sample)) return 'reverse_hill_pattern';
+  if (names.has('print_reverse_star_pattern') && Number.isInteger(sample)) return 'reverse_star_pattern';
+  if (names.has('print_number_square') && Number.isInteger(sample)) return 'sequential_number_square';
   if (names.has('get_middle_char') && typeof sample === 'string') return 'middle_char';
   if (names.has('get_first_word') && typeof sample === 'string') return 'first_word';
   if (names.has('get_last_word') && typeof sample === 'string') return 'last_word';
@@ -523,6 +535,8 @@ function namedMetamorphicRule(functionNames, tests) {
   const names = new Set(functionNames || []);
   const hasAll = (...items) => items.every(name => names.has(name));
   if (hasAll('sum_list', 'add')) return 'helper_sum_and_add';
+  if (hasAll('sum', 'multiply')) return 'helper_sum_and_multiply';
+  if (hasAll('max_func', 'max_in_list')) return 'helper_reduce_max';
   if (hasAll('is_even', 'filter_even_numbers')) return 'helper_even_filter';
   if (hasAll('word_list', 'capitalize_first_letter')) return 'helper_capitalize_words';
   if (hasAll('lst_numbers', 'find_max')) return 'helper_find_max';
