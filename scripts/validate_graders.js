@@ -1189,17 +1189,19 @@ def function_script_test_cases(function_names, tests):
 
 def is_function_script_case(case):
     blocked_keys = {
-        "argExpressions", "argFunctionNames", "functionListArgNames",
+        "argFunctionNames", "functionListArgNames",
         "callMethodArgExpressions", "setAttrs", "deleteAttrs", "setItems", "deleteItems",
-        "getFiles", "expectedException"
+        "expectedException"
     }
     return not any(case.get(key) for key in blocked_keys)
 
-def script_namespace_for_args(args, required_name=None, call_args=None, method_name=None, method_args=None, attr_names=None, kwargs=None):
+def script_namespace_for_args(args, required_name=None, call_args=None, method_name=None, method_args=None, attr_names=None, kwargs=None, expression_args=None, get_files=None):
     call_args = list(call_args or [])
     method_args = list(method_args or [])
     attr_names = list(attr_names or [])
     kwargs = dict(kwargs or {})
+    expression_args = list(expression_args or [])
+    get_files = list(get_files or [])
     namespace = {
         "__name__": "__main__",
         "re": re,
@@ -1220,6 +1222,10 @@ def script_namespace_for_args(args, required_name=None, call_args=None, method_n
         "keyword_args": kwargs,
         "keywords": kwargs,
         "kw": kwargs,
+        "expression_args": expression_args,
+        "expr_args": expression_args,
+        "get_files": get_files,
+        "file_names": get_files,
         "function_name": required_name,
         "required_function_name": required_name,
         "target_name": required_name,
@@ -1232,6 +1238,9 @@ def script_namespace_for_args(args, required_name=None, call_args=None, method_n
         namespace[f"call_arg{index}"] = value
     for index, value in enumerate(method_args, start=1):
         namespace[f"method_arg{index}"] = value
+    for index, value in enumerate(expression_args, start=1):
+        namespace[f"expression_arg{index}"] = value
+        namespace[f"expr_arg{index}"] = value
     if args:
         first = args[0]
         namespace.update({
@@ -1256,6 +1265,16 @@ def script_namespace_for_args(args, required_name=None, call_args=None, method_n
             namespace[key] = value
     return namespace
 
+def read_case_files(file_names):
+    files = {}
+    for file_name in file_names:
+        try:
+            with open(file_name, "r", encoding="utf-8") as result_file:
+                files[file_name] = result_file.read()
+        except FileNotFoundError:
+            files[file_name] = None
+    return files
+
 def script_result_matches(namespace, printed, expected, compare):
     if printed and (same(printed, expected, compare) or same(printed, expected, "printedOrReturn")):
         return True
@@ -1276,11 +1295,14 @@ def run_function_script_tests(solution, grader, tests, compare):
         if has_hardcoded_expected_output(solution, expected):
             return False
         args = list(case.get("args", []))
+        expression_args = [eval(expression, {"math": math, "re": re, "json": json}) for expression in case.get("argExpressions", [])]
+        args = args + expression_args
         call_args = list(case.get("callReturnedWith", []))
         method_name = case.get("callMethod")
         method_args = list(case.get("callMethodArgs", []))
         attr_names = list(case.get("getAttrs", []))
         kwargs = dict(case.get("kwargs", {}))
+        get_files = list(case.get("getFiles", []))
         input_values = iter(list(case.get("inputValues", [])))
         old_stdout = sys.stdout
         old_input = builtins.input
@@ -1301,9 +1323,10 @@ def run_function_script_tests(solution, grader, tests, compare):
                 install_random(case, old_random)
                 if denied:
                     builtins.open = guarded_open
-                namespace = script_namespace_for_args(args, case.get("functionName"), call_args, method_name, method_args, attr_names, kwargs)
+                namespace = script_namespace_for_args(args, case.get("functionName"), call_args, method_name, method_args, attr_names, kwargs, expression_args, get_files)
                 exec(compiled, namespace)
                 printed = sys.stdout.getvalue().strip()
+                file_result = read_case_files(get_files) if get_files else None
             except BaseException:
                 return False
             finally:
@@ -1312,7 +1335,8 @@ def run_function_script_tests(solution, grader, tests, compare):
                 sys.stdout = old_stdout
                 builtins.input = old_input
                 builtins.open = old_open
-        if not script_result_matches(namespace, printed, expected, compare):
+        file_ok = get_files and same(file_result, expected, compare)
+        if not file_ok and not script_result_matches(namespace, printed, expected, compare):
             return False
     return True
 

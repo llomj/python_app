@@ -108,6 +108,9 @@ const oopAttrsGrader = AUTO_GRADERS[496];
 const printKwargsGrader = AUTO_GRADERS[1371];
 const sumKwargsGrader = AUTO_GRADERS[1378];
 const updateDictKwargsGrader = AUTO_GRADERS[1381];
+const setExpressionGrader = AUTO_GRADERS[1761];
+const lambdaExpressionGrader = AUTO_GRADERS[1972];
+const writeFileGrader = AUTO_GRADERS[1765];
 
 const scriptAnswer = `
 result = number ** 2
@@ -193,6 +196,31 @@ result.update(kwargs)
 const updateDictKwargsScriptResult = runAutoGrade(buildAutoGradeScript(updateDictKwargsGrader, updateDictKwargsScriptAnswer));
 if (!updateDictKwargsScriptResult.passed) {
   throw new Error(`Expected dict/update kwargs script answer to pass, got: ${JSON.stringify(updateDictKwargsScriptResult)}`);
+}
+
+const setExpressionScriptAnswer = `
+result = arg1 | arg2
+`;
+const setExpressionScriptResult = runAutoGrade(buildAutoGradeScript(setExpressionGrader, setExpressionScriptAnswer));
+if (!setExpressionScriptResult.passed) {
+  throw new Error(`Expected set expression script answer to pass, got: ${JSON.stringify(setExpressionScriptResult)}`);
+}
+
+const lambdaExpressionScriptAnswer = `
+result = [item for item in lst if arg2(item)]
+`;
+const lambdaExpressionScriptResult = runAutoGrade(buildAutoGradeScript(lambdaExpressionGrader, lambdaExpressionScriptAnswer));
+if (!lambdaExpressionScriptResult.passed) {
+  throw new Error(`Expected lambda expression script answer to pass, got: ${JSON.stringify(lambdaExpressionScriptResult)}`);
+}
+
+const writeFileScriptAnswer = `
+with open(arg1, "w", encoding="utf-8") as handle:
+    handle.write(arg2)
+`;
+const writeFileScriptResult = runAutoGrade(buildAutoGradeScript(writeFileGrader, writeFileScriptAnswer));
+if (!writeFileScriptResult.passed) {
+  throw new Error(`Expected file-output script answer to pass, got: ${JSON.stringify(writeFileScriptResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');
