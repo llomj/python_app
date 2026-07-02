@@ -68,6 +68,7 @@ function classifyIntent(description) {
 }
 
 function sourceOnlySafeReason(exercise, grader, intent) {
+  const description = (exercise.description || '').toLowerCase();
   const nodeNames = new Set((grader.requiredNodePatterns || []).map(pattern => pattern.nodeType));
   const callNames = new Set((grader.requiredCallPatterns || []).map(pattern => pattern.functionName));
 
@@ -85,6 +86,27 @@ function sourceOnlySafeReason(exercise, grader, intent) {
   }
   if (intent === 'random-demo' && callNames.size > 0) {
     return 'random API demonstration with required random call';
+  }
+  if (callNames.has('isinstance') && /\bisinstance\b|\btype\b|\bcheck\b/.test(description)) {
+    return 'type-check demo with required isinstance call';
+  }
+  if ((callNames.has('pop') || callNames.has('popitem')) && /\bpop(?:item)?\b/.test(description)) {
+    return 'pop demo with required pop call';
+  }
+  if (callNames.has('all') && /\ball\(\)|\ball\b/.test(description)) {
+    return 'all() demo with required all call';
+  }
+  if (
+    /default=/.test(description) &&
+    (callNames.has('min') || callNames.has('max') || callNames.has('next') || callNames.has('sorted'))
+  ) {
+    return 'default argument demo with required call';
+  }
+  if (
+    nodeNames.has('Compare') &&
+    /\bis\b|\bidentity\b|\bnone\b|\bsame object\b|\bsingleton\b|\btrue\b|\bfalse\b/.test(description)
+  ) {
+    return 'identity comparison demo with required Compare node';
   }
   return null;
 }
