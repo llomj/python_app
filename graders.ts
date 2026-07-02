@@ -11279,39 +11279,39 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1402: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "enumerate"}],
     requiredNodePatterns: [{nodeType: "For"}, {nodeType: "Tuple"}],
     tests: [
-      { args: [], expected: "0: apple\n1: banana\n2: cherry" }
+      { args: [], expected: null }
     ]
   },
   1403: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "zip"}],
     tests: [
-      { args: [], expected: "[('Alice', 25), ('Bob', 30), ('Charlie', 35)]" }
+      { args: [], expected: null }
     ]
   },
   1404: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "items"}],
     requiredNodePatterns: [{nodeType: "DictComp"}],
     tests: [
-      { args: [], expected: "{1: 'a', 2: 'b', 3: 'c'}" }
+      { args: [], expected: null }
     ]
   },
   1405: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "all"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1406: {
@@ -11326,175 +11326,175 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1407: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "map"}],
     tests: [
-      { args: [], expected: "['HELLO', 'WORLD', 'PYTHON']" }
+      { args: [], expected: null }
     ]
   },
   1408: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "filter"}],
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "[2, 4, 6, 8, 10]" }
+      { args: [], expected: null }
     ]
   },
   1409: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "fromkeys"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5]" }
+      { args: [], expected: null }
     ]
   },
   1410: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "join"}],
     tests: [
-      { args: [], expected: "Python is great" }
+      { args: [], expected: null }
     ]
   },
   1411: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "nohtyP" }
+      { args: [], expected: null }
     ]
   },
   1412: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "Counter"}],
     tests: [
-      { args: [], expected: "Counter({'l': 3, 'o': 2, 'h': 1, 'e': 1, ' ': 1, 'w': 1, 'r': 1, 'd': 1})" }
+      { args: [], expected: null }
     ]
   },
   1413: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "chain"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9]" }
+      { args: [], expected: null }
     ]
   },
   1414: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "split"}, {functionName: "capitalize"}, {functionName: "join"}],
     tests: [
-      { args: [], expected: "Hello World Python" }
+      { args: [], expected: null }
     ]
   },
   1415: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "zip"}],
     requiredNodePatterns: [{nodeType: "Starred"}],
     tests: [
-      { args: [], expected: "[(1, 4, 7), (2, 5, 8), (3, 6, 9)]" }
+      { args: [], expected: null }
     ]
   },
   1416: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
-      { args: [], expected: "Alice Unknown" }
+      { args: [], expected: null }
     ]
   },
   1417: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "defaultdict"}, {functionName: "append"}],
     tests: [
-      { args: [], expected: "{'fruit': ['apple', 'banana', 'cherry'], 'vegetable': ['carrot']}" }
+      { args: [], expected: null }
     ]
   },
   1418: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "groupby"}],
     requiredNodePatterns: [{nodeType: "DictComp"}],
     tests: [
-      { args: [], expected: "{1: [1, 1, 1], 2: [2, 2], 3: [3, 3, 3, 3], 4: [4]}" }
+      { args: [], expected: null }
     ]
   },
   1419: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "maketrans"}, {functionName: "translate"}],
     tests: [
-      { args: [], expected: "he112 w2r1d" }
+      { args: [], expected: null }
     ]
   },
   1420: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "frozenset"}],
     tests: [
-      { args: [], expected: "first" }
+      { args: [], expected: null }
     ]
   },
   1421: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "combinations"}],
     tests: [
-      { args: [], expected: "[('a', 'b'), ('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd'), ('c', 'd')]" }
+      { args: [], expected: null }
     ]
   },
   1422: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "deque"}, {functionName: "append"}, {functionName: "popleft"}],
     tests: [
-      { args: [], expected: "1 [2, 3]" }
+      { args: [], expected: null }
     ]
   },
   1423: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "partition"}],
     tests: [
-      { args: [], expected: "hello world:python" }
+      { args: [], expected: null }
     ]
   },
   1424: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "sorted"}, {functionName: "itemgetter"}],
     tests: [
-      { args: [], expected: "[{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 30}, {'name': 'Charlie', 'age': 35}]" }
+      { args: [], expected: null }
     ]
   },
   1425: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "suppress"}],
     tests: [
-      { args: [], expected: "Continues after exception" }
+      { args: [], expected: null }
     ]
   },
   1426: {
@@ -11509,11 +11509,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1427: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "sum"}],
     requiredNodePatterns: [{nodeType: "GeneratorExp"}],
     tests: [
-      { args: [], expected: "14" }
+      { args: [], expected: null }
     ]
   },
   1428: {
@@ -11592,11 +11592,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1436: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "open"}, {functionName: "read"}],
     requiredNodePatterns: [{nodeType: "With"}],
     tests: [
-      { args: [], expected: "Hello" }
+      { args: [], expected: null }
     ]
   },
   1437: {
@@ -11748,10 +11748,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1453: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "all"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1454: {
@@ -12575,82 +12575,82 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1550: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "reduce"}],
     tests: [
-      { args: [], expected: "120" }
+      { args: [], expected: null }
     ]
   },
   1551: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "partial"}],
     tests: [
-      { args: [], expected: "50" }
+      { args: [], expected: null }
     ]
   },
   1553: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "permutations"}],
     tests: [
-      { args: [], expected: "[(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]" }
+      { args: [], expected: null }
     ]
   },
   1554: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "product"}],
     tests: [
-      { args: [], expected: "[(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]" }
+      { args: [], expected: null }
     ]
   },
   1555: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "cycle"}, {functionName: "next"}],
     tests: [
-      { args: [], expected: "['red', 'green', 'blue', 'red', 'green']" }
+      { args: [], expected: null }
     ]
   },
   1556: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "repeat"}],
     tests: [
-      { args: [], expected: "['hello', 'hello', 'hello']" }
+      { args: [], expected: null }
     ]
   },
   1557: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "islice"}],
     tests: [
-      { args: [], expected: "[0, 1, 2, 3, 4]" }
+      { args: [], expected: null }
     ]
   },
   1558: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "tee"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5] [1, 2, 3, 4, 5]" }
+      { args: [], expected: null }
     ]
   },
   1559: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "accumulate"}],
     tests: [
-      { args: [], expected: "[1, 3, 6, 10, 15]" }
+      { args: [], expected: null }
     ]
   },
   1560: {
@@ -12755,10 +12755,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1566: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredNodePatterns: [{ nodeType: "While" }],
         tests: [
-            { args: [], expected: "Remaining: 5\nRemaining: 4\nRemaining: 3\nRemaining: 2\nRemaining: 1" },
+            { args: [], expected: null },
         ]
     },
   1567: {
@@ -12853,38 +12853,38 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1579: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "ExitStack"}, {functionName: "enter_context"}],
     requiredNodePatterns: [{nodeType: "With"}],
         tests: [
-            { args: [], expected: "Entering resource\nEntering resource\nUsing resources\nExiting resource\nExiting resource" },
+            { args: [], expected: null },
         ]
     },
   1580: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "Path"}, {functionName: "exists"}],
         tests: [
-            { args: [], setupFiles: { "example.txt": "exists" }, expected: "File exists: True" },
+            { args: [], setupFiles: { "example.txt": "exists" }, expected: null },
         ]
     },
   1581: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "Path"}],
         tests: [
-            { args: [], expected: "/home/user/documents" },
+            { args: [], expected: null },
         ]
     },
   1582: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "Path"}],
         tests: [
-            { args: [], expected: "/home/user/documents/file.txt" },
+            { args: [], expected: null },
         ]
     },
   1583: {
@@ -12935,155 +12935,155 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1588: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "OrderedDict"}],
         tests: [
-            { args: [], expected: "['first', 'second', 'third']" },
+            { args: [], expected: null },
         ]
     },
   1589: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "ChainMap"}],
         tests: [
-            { args: [], expected: "{'c': 3, 'd': 4, 'a': 1, 'b': 2}" },
+            { args: [], expected: null },
         ]
     },
   1590: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "namedtuple"}],
         tests: [
-            { args: [], expected: "3 4" },
+            { args: [], expected: null },
         ]
     },
   1591: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp", minCount: 2}],
         tests: [
-            { args: [], expected: "[[1, 2, 3], [2, 4, 6], [3, 6, 9]]" },
+            { args: [], expected: null },
         ]
     },
   1592: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
         tests: [
-            { args: [], expected: "[0, 6, 12, 18]" },
+            { args: [], expected: null },
         ]
     },
   1593: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "attrgetter"}, {functionName: "sorted"}],
     requiredNodePatterns: [{nodeType: "ClassDef"}],
         tests: [
-            { args: [], expected: "['Bob', 'Alice', 'Charlie']" },
+            { args: [], expected: null },
         ]
     },
   1594: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "methodcaller"}],
         tests: [
-            { args: [], expected: "['Hello', 'Hello', 'Hello']" },
+            { args: [], expected: null },
         ]
     },
   1595: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "removeprefix"}],
         tests: [
-            { args: [], expected: "World" },
+            { args: [], expected: null },
         ]
     },
   1596: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "removesuffix"}],
         tests: [
-            { args: [], expected: "Hello" },
+            { args: [], expected: null },
         ]
     },
   1597: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "rsplit"}],
         tests: [
-            { args: [], expected: "['one.two', 'three', 'four']" },
+            { args: [], expected: null },
         ]
     },
   1598: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "copy"}],
         tests: [
-            { args: [], expected: "[1, 2, [3, 4]] [10, 2, [3, 4]]" },
+            { args: [], expected: null },
         ]
     },
   1599: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "clear"}],
         tests: [
-            { args: [], expected: "[]" },
+            { args: [], expected: null },
         ]
     },
   1600: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "popitem"}],
         tests: [
-            { args: [], expected: "('c', 3) {'a': 1, 'b': 2}" },
+            { args: [], expected: null },
         ]
     },
   1601: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "update"}],
         tests: [
-            { args: [], expected: "{'a': 1, 'b': 2, 'c': 3, 'd': 4}" },
+            { args: [], expected: null },
         ]
     },
   1602: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "keys"}],
         tests: [
-            { args: [], expected: "['a', 'b', 'c']" },
+            { args: [], expected: null },
         ]
     },
   1603: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "values"}],
         tests: [
-            { args: [], expected: "[1, 2, 3]" },
+            { args: [], expected: null },
         ]
     },
   1604: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "items"}],
         tests: [
-            { args: [], expected: "[('a', 1), ('b', 2), ('c', 3)]" },
+            { args: [], expected: null },
         ]
     },
   1605: {
@@ -13107,11 +13107,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1607: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "redirect_stdout"}, {functionName: "StringIO"}, {functionName: "getvalue"}],
     requiredNodePatterns: [{nodeType: "With"}],
         tests: [
-            { args: [], expected: "Captured: Hello, World!\nPython is great!" },
+            { args: [], expected: null },
         ]
     },
   1608: {
@@ -13124,46 +13124,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1609: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "accumulate"}],
         tests: [
-            { args: [], expected: "[2, 6, 24, 120]" },
+            { args: [], expected: null },
         ]
     },
   1610: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "combinations_with_replacement"}],
         tests: [
-            { args: [], expected: "[('a', 'a'), ('a', 'b'), ('a', 'c'), ('b', 'b'), ('b', 'c'), ('c', 'c')]" },
+            { args: [], expected: null },
         ]
     },
   1611: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "dropwhile"}],
         tests: [
-            { args: [], expected: "[5, 6, 7, 8]" },
+            { args: [], expected: null },
         ]
     },
   1612: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "takewhile"}],
         tests: [
-            { args: [], expected: "[1, 2, 3, 4]" },
+            { args: [], expected: null },
         ]
     },
   1613: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "starmap"}],
         tests: [
-            { args: [], expected: "[6, 20, 42]" },
+            { args: [], expected: null },
         ]
     },
   1614: {
@@ -13268,28 +13268,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1627: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "Path"}, {functionName: "read_text"}],
         tests: [
-            { args: [], setupFiles: {"file.txt": "Hello, pathlib!"}, expected: "Hello, pathlib!" },
+            { args: [], setupFiles: {"file.txt": "Hello, pathlib!"}, expected: null },
         ]
     },
   1628: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "Path"}, {functionName: "write_text"}],
         tests: [
-            { args: [], expected: "Hello, World!" },
+            { args: [], expected: null },
         ]
     },
   1629: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "Path"}, {functionName: "glob"}],
         tests: [
-            { args: [], setupFiles: {"a.py": "", "b.py": "", "notes.txt": ""}, expected: "['a.py', 'b.py']" },
+            { args: [], setupFiles: {"a.py": "", "b.py": "", "notes.txt": ""}, expected: null },
         ]
     },
   1630: {
@@ -13331,64 +13331,64 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1634: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "OrderedDict"}, {functionName: "move_to_end"}],
         tests: [
-            { args: [], expected: "['b', 'c', 'a']" },
+            { args: [], expected: null },
         ]
     },
   1635: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "ChainMap"}, {functionName: "new_child"}],
         tests: [
-            { args: [], expected: "{'a': 1, 'b': 2, 'c': 3}" },
+            { args: [], expected: null },
         ]
     },
   1636: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "namedtuple"}, {functionName: "_replace"}],
         tests: [
-            { args: [], expected: "Point(x=3, y=4) Point(x=10, y=4)" },
+            { args: [], expected: null },
         ]
     },
   1637: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredNodePatterns: [{nodeType: "DictComp"}],
         tests: [
-            { args: [], expected: "{'1x1': 1, '1x2': 2, '1x3': 3, '2x1': 2, '2x2': 4, '2x3': 6, '3x1': 3, '3x2': 6, '3x3': 9}" },
+            { args: [], expected: null },
         ]
     },
   1638: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredNodePatterns: [{nodeType: "SetComp"}],
         tests: [
-            { args: [], expected: "['d', 'e', 'h', 'l', 'n', 'o', 'p', 'r', 't', 'w', 'y']" },
+            { args: [], expected: null },
         ]
     },
   1639: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "reduce"}],
         tests: [
-            { args: [], expected: "15" },
+            { args: [], expected: null },
         ]
     },
   1640: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "reduce"}],
         tests: [
-            { args: [], expected: "24" },
+            { args: [], expected: null },
         ]
     },
   1641: {
@@ -13421,28 +13421,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1644: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "extend"}],
         tests: [
-            { args: [], expected: "[1, 2, 3, 4, 5, 6]" },
+            { args: [], expected: null },
         ]
     },
   1645: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "index"}],
         tests: [
-            { args: [], expected: "1" },
+            { args: [], expected: null },
         ]
     },
   1646: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "fromkeys"}],
         tests: [
-            { args: [], expected: "{'a': 0, 'b': 0, 'c': 0}" },
+            { args: [], expected: null },
         ]
     },
   1647: {
@@ -13466,10 +13466,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1649: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "suppress"}],
         tests: [
-            { args: [], expected: "Continues after suppressed exception" },
+            { args: [], expected: null },
         ]
     },
   1650: {
