@@ -589,12 +589,37 @@ const minCovered = readNumberFlag('min-covered');
 const functionGraders = [];
 const covered = [];
 const uncoveredCommon = [];
+const guardedFixedCommon = [];
+const guardedObjectCommon = [];
 const ruleCounts = new Map();
 const commonSignals = [
   'square', 'even', 'odd', 'reverse', 'vowel', 'max', 'min', 'sum',
   'space', 'capitalize', 'factorial', 'palindrome', 'duplicate', 'sort',
   'average', 'prime', 'fibonacci', 'gcd', 'lcm',
 ];
+
+function hasSourceRequirements(grader) {
+  return (
+    (grader.requiredCallPatterns?.length || 0) > 0 ||
+    (grader.requiredNodePatterns?.length || 0) > 0 ||
+    (grader.requiredClassInheritance?.length || 0) > 0 ||
+    (grader.requiredBoolOps?.length || 0) > 0 ||
+    (grader.requiredAstOperators?.length || 0) > 0
+  );
+}
+
+function isFixedNoArgCommon(grader) {
+  const tests = Array.isArray(grader.tests) ? grader.tests : [];
+  return tests.length === 1 && Array.isArray(tests[0]?.args) && tests[0].args.length === 0;
+}
+
+function isGuardedObjectCommon(grader) {
+  const tests = Array.isArray(grader.tests) ? grader.tests : [];
+  return (
+    (grader.requiredClassInheritance?.length || 0) > 0 ||
+    tests.some(testCase => Array.isArray(testCase?.getAttrs) && testCase.getAttrs.length > 0)
+  );
+}
 
 for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   const id = Number(rawId);
@@ -610,6 +635,14 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   }
   const searchable = `${functionNames.join(' ')} ${exerciseById.get(id)?.title || ''} ${exerciseById.get(id)?.description || ''}`.toLowerCase();
   if (commonSignals.some(signal => searchable.includes(signal))) {
+    if (isGuardedObjectCommon(grader)) {
+      guardedObjectCommon.push({ id, functionNames, title: exerciseById.get(id)?.title || `Problem ${id}` });
+      continue;
+    }
+    if (isFixedNoArgCommon(grader) && hasSourceRequirements(grader)) {
+      guardedFixedCommon.push({ id, functionNames, title: exerciseById.get(id)?.title || `Problem ${id}` });
+      continue;
+    }
     uncoveredCommon.push({ id, functionNames, title: exerciseById.get(id)?.title || `Problem ${id}` });
   }
 }
@@ -618,13 +651,25 @@ console.log('Metamorphic grader audit');
 console.log(`Function graders: ${functionGraders.length}`);
 console.log(`Covered by generated metamorphic tests: ${covered.length}`);
 console.log(`Uncovered common-pattern function graders: ${uncoveredCommon.length}`);
+console.log(`Guarded fixed no-arg common-pattern graders: ${guardedFixedCommon.length}`);
+console.log(`Guarded object/class common-pattern graders: ${guardedObjectCommon.length}`);
 console.log(`Rule distribution: ${[...ruleCounts.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([rule, total]) => `${rule}:${total}`).join(', ')}`);
 
 if (showAll) {
   console.log(`Covered IDs: ${covered.map(item => `${item.id}:${item.rule}`).join(', ')}`);
   console.log(`Uncovered common-pattern IDs: ${uncoveredCommon.map(item => item.id).join(', ')}`);
+  console.log(`Guarded fixed common-pattern IDs: ${guardedFixedCommon.map(item => item.id).join(', ')}`);
+  console.log(`Guarded object common-pattern IDs: ${guardedObjectCommon.map(item => item.id).join(', ')}`);
   console.log('First uncovered common-pattern graders:');
   for (const item of uncoveredCommon.slice(0, 50)) {
+    console.log(`${item.id}: ${item.title} [${item.functionNames.join(', ')}]`);
+  }
+  console.log('First guarded fixed common-pattern graders:');
+  for (const item of guardedFixedCommon.slice(0, 50)) {
+    console.log(`${item.id}: ${item.title} [${item.functionNames.join(', ')}]`);
+  }
+  console.log('First guarded object common-pattern graders:');
+  for (const item of guardedObjectCommon.slice(0, 50)) {
     console.log(`${item.id}: ${item.title} [${item.functionNames.join(', ')}]`);
   }
 }
