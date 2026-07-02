@@ -132,7 +132,7 @@ const withAiReviewTimeout = async <T,>(promise: Promise<T>): Promise<T> => {
 };
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
-type DifficultyMode = 'beginner' | 'intermediate' | 'expert' | 'legend';
+type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
 type StatsByMode = Record<DifficultyMode, Stats>;
 type CustomizeModalTab = 'count' | 'ide' | 'tools';
 
@@ -227,13 +227,14 @@ const loadColorSettings = <T extends Record<string, string>>(storageKey: string,
 };
 
 const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
+    { id: 'normal', label: 'Normal', description: 'All problems mixed' },
     { id: 'beginner', label: 'Beginner', description: 'Simple functions, strings, lists' },
     { id: 'intermediate', label: 'Intermediate', description: 'Loops, dictionaries, patterns' },
     { id: 'expert', label: 'Expert', description: 'Nested data, constraints, algorithms' },
     { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
 ];
 
-const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Beginner';
+const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
 
 // Ranking system
 interface Rank {
@@ -274,7 +275,7 @@ const getUserRank = (statsByMode: StatsByMode): Rank => {
 
 const getSavedDifficultyMode = (): DifficultyMode => {
     const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
-    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'beginner';
+    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
 };
 
 const scoreExerciseDifficulty = (exercise: Exercise): number => {
@@ -425,7 +426,7 @@ const loadStatsByMode = (): StatsByMode => {
     }
 };
 
-const classifyExerciseDifficulty = (exercise: Exercise): DifficultyMode => {
+const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
     const score = scoreExerciseDifficulty(exercise);
 
     if (score > 24) return 'legend';
@@ -440,6 +441,7 @@ const getExerciseById = (id: number | null): Exercise | null => {
 };
 
 const getExercisePoolForMode = (mode: DifficultyMode): Exercise[] => {
+    if (mode === 'normal') return EXERCISES;
     const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
     return pool.length > 0 ? pool : EXERCISES;
 };
@@ -455,7 +457,7 @@ const getInitialExercise = (): Exercise => {
     const savedId = Number(localStorage.getItem('python_current_problem_id'));
     const savedExercise = getExerciseById(Number.isFinite(savedId) ? savedId : null);
 
-    if (savedExercise && classifyExerciseDifficulty(savedExercise) === savedMode) {
+    if (savedExercise && (savedMode === 'normal' || classifyExerciseDifficulty(savedExercise) === savedMode)) {
         return savedExercise;
     }
 
