@@ -581,6 +581,8 @@ def __auto_grader_call_name(node):
 def __auto_grader_check_source_requirements():
     call_patterns = __auto_grader_spec.get("requiredCallPatterns", [])
     node_patterns = __auto_grader_spec.get("requiredNodePatterns", [])
+    inheritance_patterns = __auto_grader_spec.get("requiredClassInheritance", [])
+    bool_ops = __auto_grader_spec.get("requiredBoolOps", [])
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
@@ -602,7 +604,7 @@ def __auto_grader_check_source_requirements():
     )
     if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
         return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
-    if not call_patterns and not node_patterns:
+    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops:
         return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -631,6 +633,20 @@ def __auto_grader_check_source_requirements():
         count = sum(1 for node in all_nodes if type(node).__name__ == node_type)
         if count < min_count:
             return f"Missing required syntax: at least {min_count} {node_type} node(s)"
+    class_defs = {node.name: node for node in all_nodes if isinstance(node, ast.ClassDef)}
+    for pattern in inheritance_patterns:
+        class_name = pattern.get("className")
+        base_name = pattern.get("baseName")
+        class_node = class_defs.get(class_name)
+        if not class_node:
+            return f"Missing required class: {class_name}"
+        base_names = {__auto_grader_call_name(base) for base in class_node.bases}
+        if base_name not in base_names:
+            return f"Missing required inheritance: {class_name} must inherit from {base_name}"
+    present_bool_ops = {type(node.op).__name__ for node in all_nodes if isinstance(node, ast.BoolOp)}
+    for required in bool_ops:
+        if required not in present_bool_ops:
+            return f"Missing required boolean operator: {required}"
     return None
 
 def __auto_grader_hardcoded_expected_error(expected):

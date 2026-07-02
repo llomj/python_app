@@ -72,6 +72,8 @@ function hasDynamicScriptSignal(grader, tests) {
     (Array.isArray(test.getFiles) && test.getFiles.length > 0)
   );
   const hasRequiredCall = callNames.size > 0;
+  const hasRequiredInheritance = (grader.requiredClassInheritance?.length || 0) > 0;
+  const hasRequiredBoolOps = (grader.requiredBoolOps?.length || 0) > 0;
   const algorithmNodes = [
     'For', 'While', 'ListComp', 'DictComp', 'SetComp', 'GeneratorExp',
     'Lambda', 'Try', 'ExceptHandler', 'Raise', 'Assert', 'FunctionDef', 'ClassDef',
@@ -83,6 +85,8 @@ function hasDynamicScriptSignal(grader, tests) {
     hasRandomValues ||
     hasSetupOrFiles ||
     hasRequiredCall ||
+    hasRequiredInheritance ||
+    hasRequiredBoolOps ||
     algorithmNodes.some(name => nodeNames.has(name))
   );
 }
@@ -134,6 +138,33 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
     }
   }
 
+  if (grader.requiredClassInheritance !== undefined) {
+    if (!Array.isArray(grader.requiredClassInheritance)) {
+      invalidGraders.push(`${id}: requiredClassInheritance must be an array`);
+    } else {
+      grader.requiredClassInheritance.forEach((pattern, index) => {
+        if (!pattern || typeof pattern.className !== 'string' || !pattern.className.trim()) {
+          invalidGraders.push(`${id}: requiredClassInheritance ${index + 1} must declare className`);
+        }
+        if (!pattern || typeof pattern.baseName !== 'string' || !pattern.baseName.trim()) {
+          invalidGraders.push(`${id}: requiredClassInheritance ${index + 1} must declare baseName`);
+        }
+      });
+    }
+  }
+
+  if (grader.requiredBoolOps !== undefined) {
+    if (!Array.isArray(grader.requiredBoolOps)) {
+      invalidGraders.push(`${id}: requiredBoolOps must be an array`);
+    } else {
+      grader.requiredBoolOps.forEach((operator, index) => {
+        if (operator !== 'And' && operator !== 'Or') {
+          invalidGraders.push(`${id}: requiredBoolOps ${index + 1} must be And or Or`);
+        }
+      });
+    }
+  }
+
   tests.forEach((test, index) => {
     if (!Object.prototype.hasOwnProperty.call(test, 'expected') && !Object.prototype.hasOwnProperty.call(test, 'expectedException')) {
       invalidGraders.push(`${id}: test ${index + 1} must declare expected or expectedException`);
@@ -151,7 +182,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (grader.mode === 'script') {
     if (testCount === 1) {
       singleCaseScriptGraders.push(id);
-      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0;
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0;
       if (!hasSourceRequirements) unguardedSingleCaseScriptGraders.push(id);
       if (!hasDynamicScriptSignal(grader, tests)) {
         hardcodeRiskScriptGraders.push(id);
@@ -163,7 +194,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (testCount < MIN_FUNCTION_TESTS) {
     const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
     if (firstArgs.length === 0) {
-      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0;
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0;
       if (!hasSourceRequirements) {
         unguardedSingleCaseNoArgFunctionGraders.push(id);
       }

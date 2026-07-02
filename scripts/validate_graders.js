@@ -473,6 +473,8 @@ def call_name(node):
 def source_requirements_ok(source, grader):
     call_patterns = grader.get("requiredCallPatterns", [])
     node_patterns = grader.get("requiredNodePatterns", [])
+    inheritance_patterns = grader.get("requiredClassInheritance", [])
+    bool_ops = grader.get("requiredBoolOps", [])
     try:
         tree = ast.parse(source)
     except SyntaxError:
@@ -494,7 +496,7 @@ def source_requirements_ok(source, grader):
     )
     if needs_random and not any(call_name(call.func) in random_call_names for call in calls):
         return False
-    if not call_patterns and not node_patterns:
+    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops:
         return True
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -518,6 +520,19 @@ def source_requirements_ok(source, grader):
         count = sum(1 for node in all_nodes if type(node).__name__ == node_type)
         if count < min_count:
             return False
+    class_defs = {node.name: node for node in all_nodes if isinstance(node, ast.ClassDef)}
+    for pattern in inheritance_patterns:
+        class_name = pattern.get("className")
+        base_name = pattern.get("baseName")
+        class_node = class_defs.get(class_name)
+        if not class_node:
+            return False
+        base_names = {call_name(base) for base in class_node.bases}
+        if base_name not in base_names:
+            return False
+    present_bool_ops = {type(node.op).__name__ for node in all_nodes if isinstance(node, ast.BoolOp)}
+    if any(required not in present_bool_ops for required in bool_ops):
+        return False
     return True
 
 def has_hardcoded_expected_output(source, expected):

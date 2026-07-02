@@ -39,6 +39,8 @@ export interface AutoGrader {
     compare?: CompareMode;
     requiredCallPatterns?: Array<{ functionName: string; keyword?: string; minArgs?: number }>;
     requiredNodePatterns?: Array<{ nodeType: string; minCount?: number }>;
+    requiredClassInheritance?: Array<{ className: string; baseName: string }>;
+    requiredBoolOps?: Array<'And' | 'Or'>;
     tests: AutoTestCase[];
 }
 
@@ -3706,6 +3708,8 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     },
   502: {
         functionNames: ['EBook'],
+        requiredNodePatterns: [{ nodeType: "ClassDef", minCount: 2 }],
+        requiredClassInheritance: [{ className: "EBook", baseName: "Book" }],
         tests: [
             { args: ['Python Programming', 'John Doe', 2.5], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Python Programming', author: 'John Doe', file_size: 2.5} },
             { args: ['Clean Code', 'Robert Martin', 1.8], getAttrs: ['title', 'author', 'file_size'], expected: {title: 'Clean Code', author: 'Robert Martin', file_size: 1.8} }
@@ -9657,6 +9661,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1252: {
     functionNames: ["check_number"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
     tests: [{
       args: [],
       expected: true
@@ -9721,6 +9726,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1260: {
     functionNames: ["check_string_length"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
     tests: [{
       args: [],
       expected: false
@@ -9761,6 +9767,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1265: {
     functionNames: ["check_prime_and_greater_than_10"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
     tests: [{
       args: [],
       expected: true
@@ -9769,6 +9776,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1266: {
     functionNames: ["check_odd_and_positive"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
     tests: [{
       args: [],
       expected: true
@@ -9792,6 +9800,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1269: {
     functionNames: ["check_range_and_odd"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
     tests: [{
       args: [],
       expected: true
@@ -9928,6 +9937,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1286: {
     functionNames: ["check_perfect_square_or_cube"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
     tests: [{
       args: [],
       expected: true
@@ -9944,6 +9954,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1288: {
     functionNames: ["check_list_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
     tests: [{
       args: [],
       expected: true
@@ -9975,6 +9986,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1292: {
     functionNames: ["check_string_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
     tests: [{
       args: [],
       expected: true
@@ -9991,6 +10003,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1294: {
     functionNames: ["check_even_or_divisible_by_3"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
     tests: [{
       args: [],
       expected: true
