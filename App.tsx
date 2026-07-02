@@ -132,7 +132,7 @@ const withAiReviewTimeout = async <T,>(promise: Promise<T>): Promise<T> => {
 };
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
-type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
+type DifficultyMode = 'beginner' | 'intermediate' | 'expert' | 'legend';
 type StatsByMode = Record<DifficultyMode, Stats>;
 type CustomizeModalTab = 'count' | 'ide' | 'tools';
 
@@ -227,44 +227,43 @@ const loadColorSettings = <T extends Record<string, string>>(storageKey: string,
 };
 
 const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
-    { id: 'normal', label: 'Normal', description: 'All problems mixed' },
     { id: 'beginner', label: 'Beginner', description: 'Simple functions, strings, lists' },
     { id: 'intermediate', label: 'Intermediate', description: 'Loops, dictionaries, patterns' },
     { id: 'expert', label: 'Expert', description: 'Nested data, constraints, algorithms' },
     { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
 ];
 
-const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
+const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Beginner';
 
 // Ranking system
 interface Rank {
     name: string;
     icon: string;
-    minShots: number;
-    minWinRate: number;
+    minScore: number;
 }
 
 const RANKS: Rank[] = [
-    { name: 'Plankton', icon: '🦠', minShots: 0, minWinRate: 0 },
-    { name: 'Shrimp', icon: '🦐', minShots: 5, minWinRate: 0 },
-    { name: 'Crab', icon: '🦀', minShots: 15, minWinRate: 10 },
-    { name: 'Small Fish', icon: '🐟', minShots: 30, minWinRate: 20 },
-    { name: 'Octopus', icon: '🐙', minShots: 60, minWinRate: 30 },
-    { name: 'Seal', icon: '🦭', minShots: 100, minWinRate: 35 },
-    { name: 'Dolphin', icon: '🐬', minShots: 150, minWinRate: 45 },
-    { name: 'Shark', icon: '🦈', minShots: 250, minWinRate: 55 },
-    { name: 'Whale', icon: '🐋', minShots: 400, minWinRate: 65 },
-    { name: 'God Whale', icon: '👑🐋', minShots: 600, minWinRate: 75 },
+    { name: 'Plankton', icon: '🦠', minScore: 0 },
+    { name: 'Shrimp', icon: '🦐', minScore: 5 },
+    { name: 'Crab', icon: '🦀', minScore: 15 },
+    { name: 'Small Fish', icon: '🐟', minScore: 35 },
+    { name: 'Octopus', icon: '🐙', minScore: 70 },
+    { name: 'Seal', icon: '🦭', minScore: 120 },
+    { name: 'Dolphin', icon: '🐬', minScore: 200 },
+    { name: 'Shark', icon: '🦈', minScore: 350 },
+    { name: 'Whale', icon: '🐋', minScore: 500 },
+    { name: 'God Whale', icon: '👑🐋', minScore: 750 },
 ];
 
 const getUserRank = (statsByMode: StatsByMode): Rank => {
     const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
     const totalWins = Object.values(statsByMode).reduce((sum, s) => sum + s.success, 0);
     const winRate = totalShots > 0 ? (totalWins / totalShots) * 100 : 0;
+    const score = totalShots * (winRate / 100);
 
     let currentRank = RANKS[0];
     for (const rank of RANKS) {
-        if (totalShots >= rank.minShots && winRate >= rank.minWinRate) {
+        if (score >= rank.minScore) {
             currentRank = rank;
         } else {
             break;
@@ -275,7 +274,7 @@ const getUserRank = (statsByMode: StatsByMode): Rank => {
 
 const getSavedDifficultyMode = (): DifficultyMode => {
     const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
-    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
+    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'beginner';
 };
 
 const scoreExerciseDifficulty = (exercise: Exercise): number => {
@@ -426,7 +425,7 @@ const loadStatsByMode = (): StatsByMode => {
     }
 };
 
-const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
+const classifyExerciseDifficulty = (exercise: Exercise): DifficultyMode => {
     const score = scoreExerciseDifficulty(exercise);
 
     if (score > 24) return 'legend';
@@ -441,7 +440,6 @@ const getExerciseById = (id: number | null): Exercise | null => {
 };
 
 const getExercisePoolForMode = (mode: DifficultyMode): Exercise[] => {
-    if (mode === 'normal') return EXERCISES;
     const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
     return pool.length > 0 ? pool : EXERCISES;
 };
@@ -457,7 +455,7 @@ const getInitialExercise = (): Exercise => {
     const savedId = Number(localStorage.getItem('python_current_problem_id'));
     const savedExercise = getExerciseById(Number.isFinite(savedId) ? savedId : null);
 
-    if (savedExercise && (savedMode === 'normal' || classifyExerciseDifficulty(savedExercise) === savedMode)) {
+    if (savedExercise && classifyExerciseDifficulty(savedExercise) === savedMode) {
         return savedExercise;
     }
 
