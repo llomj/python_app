@@ -604,7 +604,8 @@ function hasSourceRequirements(grader) {
     (grader.requiredNodePatterns?.length || 0) > 0 ||
     (grader.requiredClassInheritance?.length || 0) > 0 ||
     (grader.requiredBoolOps?.length || 0) > 0 ||
-    (grader.requiredAstOperators?.length || 0) > 0
+    (grader.requiredAstOperators?.length || 0) > 0 ||
+    (grader.requiredUnpackPatterns?.length || 0) > 0
   );
 }
 

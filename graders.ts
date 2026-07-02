@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'sourceOnly' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -42,6 +42,7 @@ export interface AutoGrader {
     requiredClassInheritance?: Array<{ className: string; baseName: string }>;
     requiredBoolOps?: Array<'And' | 'Or'>;
     requiredAstOperators?: string[];
+    requiredUnpackPatterns?: Array<{ targetCount: number; sourceType?: 'Any' | 'List' | 'Tuple'; allowStarred?: boolean }>;
     optionalTests?: AutoTestCase[];
     tests: AutoTestCase[];
 }
@@ -6475,38 +6476,41 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   869: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Tuple"}],
+    requiredUnpackPatterns: [{ targetCount: 3, sourceType: "List" }],
     tests: [
-      { args: [], expected: "1 2 3" }
+      { args: [], expected: null }
     ]
   },
   870: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Starred"}],
+    requiredUnpackPatterns: [{ targetCount: 3, sourceType: "List", allowStarred: true }],
     tests: [
-      { args: [], expected: "10 [20, 30, 40] 50" }
+      { args: [], expected: null }
     ]
   },
   871: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Tuple", minCount: 2}],
+    requiredUnpackPatterns: [{ targetCount: 2, sourceType: "Any" }],
     tests: [
-      { args: [], expected: "10 5" }
+      { args: [], expected: null }
     ]
   },
   872: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "zip"}, {functionName: "items"}],
     requiredNodePatterns: [{nodeType: "Starred"}],
     tests: [
-      { args: [], expected: "('name', 'age', 'city') ('Alice', 25, 'New York')" }
+      { args: [], expected: null }
     ]
   },
   873: {
@@ -6520,48 +6524,53 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   874: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Starred"}],
+    requiredUnpackPatterns: [{ targetCount: 3, sourceType: "Any", allowStarred: true }],
     tests: [
-      { args: [], expected: "P y thon" }
+      { args: [], expected: null }
     ]
   },
   875: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Starred"}],
+    requiredUnpackPatterns: [{ targetCount: 3, sourceType: "Tuple", allowStarred: true }],
     tests: [
-      { args: [], expected: "100 500" }
+      { args: [], expected: null }
     ]
   },
   876: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Tuple", minCount: 2}],
+    requiredUnpackPatterns: [{ targetCount: 2, sourceType: "Any" }],
     tests: [
-      { args: [], expected: "1 2 3 4" }
+      { args: [], expected: null }
     ]
   },
   877: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "range"}],
     requiredNodePatterns: [{nodeType: "Tuple"}],
+    requiredUnpackPatterns: [{ targetCount: 3, sourceType: "Any" }],
     tests: [
-      { args: [], expected: "0 1 2" }
+      { args: [], expected: null }
     ]
   },
   878: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "split"}],
     requiredNodePatterns: [{nodeType: "Tuple"}],
+    requiredUnpackPatterns: [{ targetCount: 2, sourceType: "Any" }],
     tests: [
-      { args: [], expected: "John Doe" }
+      { args: [], expected: null }
     ]
   },
   879: {
@@ -6575,10 +6584,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   880: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Starred", minCount: 2}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5, 6]" }
+      { args: [], expected: null }
     ]
   },
   881: {

@@ -479,6 +479,7 @@ def source_requirements_ok(source, grader):
     inheritance_patterns = grader.get("requiredClassInheritance", [])
     bool_ops = grader.get("requiredBoolOps", [])
     ast_operators = grader.get("requiredAstOperators", [])
+    unpack_patterns = grader.get("requiredUnpackPatterns", [])
     try:
         tree = ast.parse(source)
     except SyntaxError:
@@ -500,7 +501,7 @@ def source_requirements_ok(source, grader):
     )
     if needs_random and not any(call_name(call.func) in random_call_names for call in calls):
         return False
-    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators:
+    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
         return True
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -549,6 +550,51 @@ def source_requirements_ok(source, grader):
             present_operators.add(type(node.op).__name__)
     if any(required not in present_operators for required in ast_operators):
         return False
+    if not unpack_patterns_ok(tree, unpack_patterns):
+        return False
+    return True
+
+def unpack_patterns_ok(tree, patterns):
+    if not patterns:
+        return True
+    list_names = set()
+    tuple_names = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and isinstance(node.value, (ast.List, ast.Tuple)):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    if isinstance(node.value, ast.List):
+                        list_names.add(target.id)
+                    else:
+                        tuple_names.add(target.id)
+    assigns = [node for node in ast.walk(tree) if isinstance(node, ast.Assign)]
+    for pattern in patterns:
+        target_count = int(pattern.get("targetCount", 0))
+        source_type = pattern.get("sourceType", "Any")
+        allow_starred = bool(pattern.get("allowStarred", False))
+        matched = False
+        for assign in assigns:
+            for target in assign.targets:
+                if not isinstance(target, (ast.Tuple, ast.List)):
+                    continue
+                if len(target.elts) != target_count:
+                    continue
+                has_starred = any(isinstance(elt, ast.Starred) for elt in target.elts)
+                if has_starred and not allow_starred:
+                    continue
+                value = assign.value
+                if source_type == "Any":
+                    matched = True
+                elif source_type == "List":
+                    matched = isinstance(value, ast.List) or (isinstance(value, ast.Name) and value.id in list_names) or (isinstance(value, ast.Call) and call_name(value.func) == "list")
+                elif source_type == "Tuple":
+                    matched = isinstance(value, ast.Tuple) or (isinstance(value, ast.Name) and value.id in tuple_names) or (isinstance(value, ast.Call) and call_name(value.func) == "tuple")
+                if matched:
+                    break
+            if matched:
+                break
+        if not matched:
+            return False
     return True
 
 def has_hardcoded_expected_output(source, expected):
@@ -1953,6 +1999,8 @@ def run_script_tests(solution, tests, compare):
             sys.stdout = old_stdout
             builtins.input = old_input
             builtins.open = old_open
+        if compare == "sourceOnly":
+            continue
         if not same(printed, expected, compare):
             return False
     return True

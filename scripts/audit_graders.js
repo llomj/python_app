@@ -76,6 +76,7 @@ function hasDynamicScriptSignal(grader, tests) {
   const hasRequiredInheritance = (grader.requiredClassInheritance?.length || 0) > 0;
   const hasRequiredBoolOps = (grader.requiredBoolOps?.length || 0) > 0;
   const hasRequiredAstOperators = (grader.requiredAstOperators?.length || 0) > 0;
+  const hasRequiredUnpackPatterns = (grader.requiredUnpackPatterns?.length || 0) > 0;
   const algorithmNodes = [
     'For', 'While', 'ListComp', 'DictComp', 'SetComp', 'GeneratorExp',
     'Lambda', 'Try', 'ExceptHandler', 'Raise', 'Assert', 'FunctionDef', 'ClassDef',
@@ -90,6 +91,7 @@ function hasDynamicScriptSignal(grader, tests) {
     hasRequiredInheritance ||
     hasRequiredBoolOps ||
     hasRequiredAstOperators ||
+    hasRequiredUnpackPatterns ||
     algorithmNodes.some(name => nodeNames.has(name))
   );
 }
@@ -180,6 +182,24 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
     }
   }
 
+  if (grader.requiredUnpackPatterns !== undefined) {
+    if (!Array.isArray(grader.requiredUnpackPatterns)) {
+      invalidGraders.push(`${id}: requiredUnpackPatterns must be an array`);
+    } else {
+      grader.requiredUnpackPatterns.forEach((pattern, index) => {
+        if (!pattern || !Number.isInteger(pattern.targetCount) || pattern.targetCount < 1) {
+          invalidGraders.push(`${id}: requiredUnpackPatterns ${index + 1} targetCount must be a positive integer`);
+        }
+        if (pattern.sourceType !== undefined && !['Any', 'List', 'Tuple'].includes(pattern.sourceType)) {
+          invalidGraders.push(`${id}: requiredUnpackPatterns ${index + 1} sourceType must be Any, List, or Tuple`);
+        }
+        if (pattern.allowStarred !== undefined && typeof pattern.allowStarred !== 'boolean') {
+          invalidGraders.push(`${id}: requiredUnpackPatterns ${index + 1} allowStarred must be boolean`);
+        }
+      });
+    }
+  }
+
   if (grader.optionalTests !== undefined) {
     if (!Array.isArray(grader.optionalTests)) {
       invalidGraders.push(`${id}: optionalTests must be an array`);
@@ -212,7 +232,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (grader.mode === 'script') {
     if (testCount === 1) {
       singleCaseScriptGraders.push(id);
-      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0;
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0 || (grader.requiredUnpackPatterns?.length || 0) > 0;
       if (!hasSourceRequirements) unguardedSingleCaseScriptGraders.push(id);
       if (!hasDynamicScriptSignal(grader, tests)) {
         hardcodeRiskScriptGraders.push(id);
@@ -224,7 +244,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (testCount < MIN_FUNCTION_TESTS) {
     const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
     if (firstArgs.length === 0) {
-      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0;
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0 || (grader.requiredUnpackPatterns?.length || 0) > 0;
       if (!hasSourceRequirements) {
         unguardedSingleCaseNoArgFunctionGraders.push(id);
       }

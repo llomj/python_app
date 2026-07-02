@@ -584,6 +584,7 @@ def __auto_grader_check_source_requirements():
     inheritance_patterns = __auto_grader_spec.get("requiredClassInheritance", [])
     bool_ops = __auto_grader_spec.get("requiredBoolOps", [])
     ast_operators = __auto_grader_spec.get("requiredAstOperators", [])
+    unpack_patterns = __auto_grader_spec.get("requiredUnpackPatterns", [])
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
@@ -605,7 +606,7 @@ def __auto_grader_check_source_requirements():
     )
     if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
         return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
-    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators:
+    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
         return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -661,6 +662,54 @@ def __auto_grader_check_source_requirements():
     for required in ast_operators:
         if required not in present_operators:
             return f"Missing required operator: {required}"
+    unpack_error = __auto_grader_unpack_patterns_error(tree, unpack_patterns)
+    if unpack_error:
+        return unpack_error
+    return None
+
+def __auto_grader_unpack_patterns_error(tree, patterns):
+    if not patterns:
+        return None
+    list_names = set()
+    tuple_names = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and isinstance(node.value, (ast.List, ast.Tuple)):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    if isinstance(node.value, ast.List):
+                        list_names.add(target.id)
+                    else:
+                        tuple_names.add(target.id)
+    assigns = [node for node in ast.walk(tree) if isinstance(node, ast.Assign)]
+    for pattern in patterns:
+        target_count = int(pattern.get("targetCount", 0))
+        source_type = pattern.get("sourceType", "Any")
+        allow_starred = bool(pattern.get("allowStarred", False))
+        matched = False
+        for assign in assigns:
+            for target in assign.targets:
+                if not isinstance(target, (ast.Tuple, ast.List)):
+                    continue
+                if len(target.elts) != target_count:
+                    continue
+                has_starred = any(isinstance(elt, ast.Starred) for elt in target.elts)
+                if has_starred and not allow_starred:
+                    continue
+                value = assign.value
+                if source_type == "Any":
+                    matched = True
+                elif source_type == "List":
+                    matched = isinstance(value, ast.List) or (isinstance(value, ast.Name) and value.id in list_names) or (isinstance(value, ast.Call) and __auto_grader_call_name(value.func) == "list")
+                elif source_type == "Tuple":
+                    matched = isinstance(value, ast.Tuple) or (isinstance(value, ast.Name) and value.id in tuple_names) or (isinstance(value, ast.Call) and __auto_grader_call_name(value.func) == "tuple")
+                if matched:
+                    break
+            if matched:
+                break
+        if not matched:
+            source_label = source_type.lower() if source_type != "Any" else "sequence"
+            starred_label = " with starred unpacking" if allow_starred else ""
+            return f"Missing required unpacking: unpack a {source_label} into {target_count} variables{starred_label}."
     return None
 
 def __auto_grader_hardcoded_expected_error(expected):
@@ -2038,6 +2087,8 @@ def __auto_grader_read_case_files(file_names):
     return files
 
 def __auto_grader_script_result_matches(namespace, printed, expected, compare):
+    if compare == "sourceOnly":
+        return True
     result_names = ["result", "answer", "output", "total", "count", "value", "final", "res", "solution"]
     explicit_result_names = ["result", "answer", "output", "final", "res", "solution"]
     if expected is None and not printed and not any(name in namespace for name in explicit_result_names):
