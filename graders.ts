@@ -7627,181 +7627,181 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   994: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "Hello" }
+      { args: [], expected: null }
     ]
   },
   995: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "ming" }
+      { args: [], expected: null }
     ]
   },
   996: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[30, 40, 50]" }
+      { args: [], expected: null }
     ]
   },
   997: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[4, 5, 6]" }
+      { args: [], expected: null }
     ]
   },
   998: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "PtoSiig" }
+      { args: [], expected: null }
     ]
   },
   999: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "yhnlcn" }
+      { args: [], expected: null }
     ]
   },
   1000: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "fedcba" }
+      { args: [], expected: null }
     ]
   },
   1001: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[5, 4, 3, 2, 1]" }
+      { args: [], expected: null }
     ]
   },
   1002: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[10, 40, 70]" }
+      { args: [], expected: null }
     ]
   },
   1003: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "jhfdb" }
+      { args: [], expected: null }
     ]
   },
   1004: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "cde" }
+      { args: [], expected: null }
     ]
   },
   1005: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "ytho" }
+      { args: [], expected: null }
     ]
   },
   1006: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "abcd" }
+      { args: [], expected: null }
     ]
   },
   1007: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "efgh" }
+      { args: [], expected: null }
     ]
   },
   1008: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "cd" }
+      { args: [], expected: null }
     ]
   },
   1009: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[4, 5, 6]" }
+      { args: [], expected: null }
     ]
   },
   1010: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "(10, 20, 30)" }
+      { args: [], expected: null }
     ]
   },
   1011: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[1, 3, 5, 7]" }
+      { args: [], expected: null }
     ]
   },
   1012: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "honPr" }
+      { args: [], expected: null }
     ]
   },
   1013: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "(300, 400, 500, 600)" }
+      { args: [], expected: null }
     ]
   },
   1014: {
