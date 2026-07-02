@@ -9679,6 +9679,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1246: {
     functionNames: ["check_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [true, true], expected: true },
+      { args: [true, false], expected: false },
+      { args: [false, true], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9687,6 +9693,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1247: {
     functionNames: ["check_range"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [10], expected: true },
+      { args: [15], expected: true },
+      { args: [21], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9695,6 +9707,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1248: {
     functionNames: ["check_string"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: ["cat", "a"], expected: true },
+      { args: ["", "a"], expected: false },
+      { args: ["dog", "a"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9711,6 +9729,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1250: {
     functionNames: ["check_list"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [[6, 1]], expected: true },
+      { args: [[]], expected: false },
+      { args: [[5, 9]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9719,6 +9743,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1251: {
     functionNames: ["check_leap_year"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [2024], expected: true },
+      { args: [2023], expected: false },
+      { args: [1900], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9729,6 +9759,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["And"],
     requiredAstOperators: ["Mod", "Gt", "Eq"],
+    optionalTests: [
+      { args: [8], expected: true },
+      { args: [-8], expected: false },
+      { args: [6], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9737,6 +9772,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1253: {
     functionNames: ["check_list_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [[6, 1, 2]], expected: true },
+      { args: [[6, 1]], expected: false },
+      { args: [[5, 1, 2]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9745,6 +9786,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1254: {
     functionNames: ["check_string_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: ["code"], expected: true },
+      { args: ["Code"], expected: false },
+      { args: ["abc"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9753,6 +9800,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1255: {
     functionNames: ["check_range_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [25], expected: true },
+      { args: [10], expected: false },
+      { args: [50], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9761,6 +9814,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1256: {
     functionNames: ["check_multiples"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [77], expected: true },
+      { args: [14], expected: false },
+      { args: [22], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9769,6 +9828,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1257: {
     functionNames: ["check_voting_eligibility"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [19, true], expected: true },
+      { args: [17, true], expected: false },
+      { args: [25, false], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9777,6 +9842,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1258: {
     functionNames: ["check_divisibility_all"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [30], expected: true },
+      { args: [10], expected: false },
+      { args: [18], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9785,6 +9856,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1259: {
     functionNames: ["check_dict_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [{"score": 80}, "score", 50], expected: true },
+      { args: [{"score": 40}, "score", 50], expected: false },
+      { args: [{"age": 80}, "score", 50], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9796,6 +9873,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["And"],
     requiredAstOperators: ["Mod", "Eq"],
+    optionalTests: [
+      { args: ["code"], expected: true },
+      { args: [""], expected: false },
+      { args: ["cat"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: false
@@ -9804,6 +9886,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1261: {
     functionNames: ["check_range_inclusive"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [20], expected: true },
+      { args: [100], expected: true },
+      { args: [101], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9812,6 +9900,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1262: {
     functionNames: ["check_divisible_by_2_and_7"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [14], expected: true },
+      { args: [7], expected: false },
+      { args: [10], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9820,6 +9914,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1263: {
     functionNames: ["check_negative_and_divisible"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [-10], expected: true },
+      { args: [10], expected: false },
+      { args: [-11], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9828,6 +9928,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1264: {
     functionNames: ["check_digit_string"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: ["123456"], expected: true },
+      { args: ["12345"], expected: false },
+      { args: ["12345a"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9838,6 +9944,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["And"],
     requiredAstOperators: ["Gt"],
+    optionalTests: [
+      { args: [11], expected: true },
+      { args: [7], expected: false },
+      { args: [12], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9848,6 +9959,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["And"],
     requiredAstOperators: ["Mod", "Gt", "NotEq"],
+    optionalTests: [
+      { args: [7], expected: true },
+      { args: [-7], expected: false },
+      { args: [8], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9863,6 +9979,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1268: {
     functionNames: ["check_list_length_and_last_element"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["And"],
+    optionalTests: [
+      { args: [[1, 2, 3, 4, 11]], expected: true },
+      { args: [[1, 2, 3, 4]], expected: false },
+      { args: [[1, 2, 3, 4, 10]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9873,6 +9995,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["And"],
     requiredAstOperators: ["Mod", "LtE", "NotEq"],
+    optionalTests: [
+      { args: [7], expected: true },
+      { args: [11], expected: false },
+      { args: [8], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9881,6 +10008,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1270: {
     functionNames: ["check_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [true, false], expected: true },
+      { args: [false, true], expected: true },
+      { args: [false, false], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9889,6 +10022,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1271: {
     functionNames: ["check_range"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [5], expected: true },
+      { args: [25], expected: true },
+      { args: [15], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9897,6 +10036,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1272: {
     functionNames: ["check_string"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: ["", "a"], expected: true },
+      { args: ["cat", "a"], expected: true },
+      { args: ["dog", "a"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9905,6 +10050,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1273: {
     functionNames: ["check_divisibility"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [9], expected: true },
+      { args: [10], expected: true },
+      { args: [7], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9913,6 +10064,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1274: {
     functionNames: ["check_list"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [[]], expected: true },
+      { args: [[6, 1]], expected: true },
+      { args: [[5, 9]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9921,6 +10078,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1275: {
     functionNames: ["check_leap_year"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [2024], expected: true },
+      { args: [1900], expected: true },
+      { args: [2023], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9929,6 +10092,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1276: {
     functionNames: ["check_number"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [5], expected: true },
+      { args: [-7], expected: true },
+      { args: [-5], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9937,6 +10106,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1277: {
     functionNames: ["check_string_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: ["abc"], expected: true },
+      { args: ["Code"], expected: true },
+      { args: ["AB"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9945,6 +10120,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1278: {
     functionNames: ["check_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [25], expected: true },
+      { args: [14], expected: true },
+      { args: [9], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9953,6 +10134,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1279: {
     functionNames: ["check_multiples"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [14], expected: true },
+      { args: [22], expected: true },
+      { args: [13], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9961,6 +10148,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1280: {
     functionNames: ["check_voting_eligibility"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [19, false], expected: true },
+      { args: [17, true], expected: true },
+      { args: [17, false], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9969,6 +10162,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1281: {
     functionNames: ["check_divisibility_all"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [4], expected: true },
+      { args: [9], expected: true },
+      { args: [5], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9977,6 +10176,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1282: {
     functionNames: ["check_dict_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [{"score": 80}, "score", 90], expected: true },
+      { args: [{"age": 100}, "score", 90], expected: false },
+      { args: [{"score": 80}, "score", 50], expected: true }
+    ],
     tests: [{
       args: [],
       expected: false
@@ -9985,6 +10190,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1283: {
     functionNames: ["check_string_empty_or_number"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [""], expected: true },
+      { args: ["abc1"], expected: true },
+      { args: ["abc"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -9993,6 +10204,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1284: {
     functionNames: ["check_negative_or_divisible_by_3"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [-1], expected: true },
+      { args: [9], expected: true },
+      { args: [10], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10001,6 +10218,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1285: {
     functionNames: ["check_list_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [[]], expected: true },
+      { args: [[1, 2, 3, 4, 5, 6]], expected: true },
+      { args: [[1, 2, 3]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: false
@@ -10010,6 +10233,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["check_perfect_square_or_cube"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [16], expected: true },
+      { args: [27], expected: true },
+      { args: [20], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10018,6 +10246,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1287: {
     functionNames: ["check_string_type"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: ["abc"], expected: true },
+      { args: ["123"], expected: true },
+      { args: ["abc123"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10029,6 +10263,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["Or"],
     requiredAstOperators: ["Eq", "Gt"],
+    optionalTests: [
+      { args: [[1, 2, 3]], expected: true },
+      { args: [[20, 20, 20]], expected: true },
+      { args: [[1, 2]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10037,6 +10276,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1289: {
     functionNames: ["check_divisible_by_2_or_5"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [4], expected: true },
+      { args: [25], expected: true },
+      { args: [7], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10052,6 +10297,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1291: {
     functionNames: ["check_number"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [101], expected: true },
+      { args: [9], expected: true },
+      { args: [50], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10063,6 +10314,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["Or"],
     requiredAstOperators: ["Mod", "Eq"],
+    optionalTests: [
+      { args: ["ABC"], expected: true },
+      { args: ["ab"], expected: true },
+      { args: ["abc"], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10071,6 +10327,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1293: {
     functionNames: ["check_list_conditions"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: [[1]], expected: true },
+      { args: [[1, 11]], expected: true },
+      { args: [[]], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10081,6 +10343,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
     requiredBoolOps: ["Or"],
     requiredAstOperators: ["Mod", "Eq"],
+    optionalTests: [
+      { args: [4], expected: true },
+      { args: [9], expected: true },
+      { args: [5], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
@@ -10089,6 +10356,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1295: {
     functionNames: ["check_string"],
     requiredNodePatterns: [{ nodeType: "BoolOp" }],
+    requiredBoolOps: ["Or"],
+    optionalTests: [
+      { args: ["hello"], expected: true },
+      { args: ["cat"], expected: true },
+      { args: [""], expected: false }
+    ],
     tests: [{
       args: [],
       expected: true
