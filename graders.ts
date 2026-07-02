@@ -6855,73 +6855,73 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   908: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [42], expected: "42" }
+      { args: [], randomValues: [42], expected: null }
     ]
   },
   909: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "random"}],
     tests: [
-      { args: [], randomFloatValues: [0.25], expected: "0.25" }
+      { args: [], randomFloatValues: [0.25], expected: null }
     ]
   },
   910: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randrange"}],
     tests: [
-      { args: [], randomValues: [24], expected: "24" }
+      { args: [], randomValues: [24], expected: null }
     ]
   },
   911: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choice"}],
     tests: [
-      { args: [], randomChoiceValues: ["green"], expected: "green" }
+      { args: [], randomChoiceValues: ["green"], expected: null }
     ]
   },
   912: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "shuffle"}],
     tests: [
-      { args: [], randomShuffleValues: [[5, 4, 3, 2, 1]], expected: "[5, 4, 3, 2, 1]" }
+      { args: [], randomShuffleValues: [[5, 4, 3, 2, 1]], expected: null }
     ]
   },
   913: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "sample"}],
     tests: [
-      { args: [], randomSampleValues: [[3, 7, 11]], expected: "[3, 7, 11]" }
+      { args: [], randomSampleValues: [[3, 7, 11]], expected: null }
     ]
   },
   914: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "uniform"}],
     tests: [
-      { args: [], randomFloatValues: [7.5], expected: "7.5" }
+      { args: [], randomFloatValues: [7.5], expected: null }
     ]
   },
   915: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choice"}],
     tests: [
-      { args: [], randomChoiceValues: ["Q"], expected: "Q" }
+      { args: [], randomChoiceValues: ["Q"], expected: null }
     ]
   },
   916: {
@@ -6945,145 +6945,145 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   918: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choice",minArgs: 1}],
     tests: [
-      { args: [], randomChoiceValues: ["Alice", "Brown"], expected: "Alice Brown" }
+      { args: [], randomChoiceValues: ["Alice", "Brown"], expected: null }
     ]
   },
   919: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "sample"}],
     tests: [
-      { args: [], randomSampleValues: [["A", "b", "3", "!", "Z", "9", "?", "q"]], expected: "Ab3!Z9?q" }
+      { args: [], randomSampleValues: [["A", "b", "3", "!", "Z", "9", "?", "q"]], expected: null }
     ]
   },
   920: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choice"}],
     tests: [
-      { args: [], randomChoiceValues: [true], expected: "True" }
+      { args: [], randomChoiceValues: [true], expected: null }
     ]
   },
   921: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [4, 8, 15, 16, 23], expected: "[4, 8, 15, 16, 23]" }
+      { args: [], randomValues: [4, 8, 15, 16, 23], expected: null }
     ]
   },
   922: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "sample"}],
     tests: [
-      { args: [], randomSampleValues: [[2, 4, 6, 8]], expected: "[2, 4, 6, 8]" }
+      { args: [], randomSampleValues: [[2, 4, 6, 8]], expected: null }
     ]
   },
   923: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [31], expected: "2023-02-01" }
+      { args: [], randomValues: [31], expected: null }
     ]
   },
   924: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choice"}],
     tests: [
-      { args: [], randomChoiceValues: ["banana"], expected: "banana" }
+      { args: [], randomChoiceValues: ["banana"], expected: null }
     ]
   },
   925: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [654321], expected: "654321" }
+      { args: [], randomValues: [654321], expected: null }
     ]
   },
   926: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [11259375], expected: "#abcdef" }
+      { args: [], randomValues: [11259375], expected: null }
     ]
   },
   927: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [123, 456, 7890], expected: "(123) 456-7890" }
+      { args: [], randomValues: [123, 456, 7890], expected: null }
     ]
   },
   928: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [2468], expected: "2468" }
+      { args: [], randomValues: [2468], expected: null }
     ]
   },
   929: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [2, 5], expected: "2 5" }
+      { args: [], randomValues: [2, 5], expected: null }
     ]
   },
   930: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
-      { args: [], randomValues: [192, 168, 1, 10], expected: "192.168.1.10" }
+      { args: [], randomValues: [192, 168, 1, 10], expected: null }
     ]
   },
   931: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choices"}],
     tests: [
-      { args: [], randomChoiceValues: ["A", "b", "3", "!", "Z", "9", "?", "q", "R", "7", "$", "m"], expected: "Ab3!Z9?qR7$m" }
+      { args: [], randomChoiceValues: ["A", "b", "3", "!", "Z", "9", "?", "q", "R", "7", "$", "m"], expected: null }
     ]
   },
   932: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "choice"}],
     tests: [
-      { args: [], randomChoiceValues: ["elephant"], expected: "elephant" }
+      { args: [], randomChoiceValues: ["elephant"], expected: null }
     ]
   },
   933: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Cannot divide by zero" }
+      { args: [], expected: null }
     ]
   },
   934: {
@@ -7116,10 +7116,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   937: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Type mismatch error" }
+      { args: [], expected: null }
     ]
   },
   938: {
@@ -7161,19 +7161,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   942: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Division successful: 5.0" }
+      { args: [], expected: null }
     ]
   },
   943: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Execution completed\nCannot divide by zero" }
+      { args: [], expected: null }
     ]
   },
   944: {
@@ -7186,10 +7186,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   945: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "An error occurred" }
+      { args: [], expected: null }
     ]
   },
   946: {
@@ -7204,10 +7204,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   947: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Raise"}],
     tests: [
-      { args: [], expected: "Memory limit exceeded" }
+      { args: [], expected: null }
     ]
   },
   948: {
@@ -7229,19 +7229,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   950: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Error reading file" }
+      { args: [], expected: null }
     ]
   },
   951: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Raise"}],
     tests: [
-      { args: [], expected: "Process interrupted by user" }
+      { args: [], expected: null }
     ]
   },
   952: {
@@ -7427,201 +7427,201 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   972: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "int"}],
     tests: [
-      { args: [], expected: "42" }
+      { args: [], expected: null }
     ]
   },
   973: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "float"}],
     tests: [
-      { args: [], expected: "3.14" }
+      { args: [], expected: null }
     ]
   },
   974: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "lower"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   975: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "split"}, {functionName: "map"}],
     tests: [
-      { args: [], expected: "[10, 20, 30, 40]" }
+      { args: [], expected: null }
     ]
   },
   976: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "strptime"}],
     tests: [
-      { args: [], expected: "2024-03-22 00:00:00" }
+      { args: [], expected: null }
     ]
   },
   977: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['12345', '67890']" }
+      { args: [], expected: null }
     ]
   },
   978: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "loads"}],
     tests: [
-      { args: [], expected: "{'name': 'Alice', 'age': 25, 'city': 'New York'}" }
+      { args: [], expected: null }
     ]
   },
   979: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "dumps"}],
     tests: [
-      { args: [], expected: "{\"name\": \"Bob\", \"age\": 30, \"city\": \"London\"}" }
+      { args: [], expected: null }
     ]
   },
   980: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "fromstring"}, {functionName: "find"}],
     tests: [
-      { args: [], expected: "Charlie" }
+      { args: [], expected: null }
     ]
   },
   981: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "parse_qs"}],
     tests: [
-      { args: [], expected: "{'name': ['David'], 'age': ['35'], 'city': ['Paris']}" }
+      { args: [], expected: null }
     ]
   },
   982: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "reader"}, {functionName: "StringIO"}],
     tests: [
-      { args: [], expected: "[['name', 'age', 'city'], ['Alice', '25', 'New York'], ['Bob', '30', 'London']]" }
+      { args: [], expected: null }
     ]
   },
   983: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ClassDef"}],
     requiredCallPatterns: [{functionName: "feed"}],
     tests: [
-      { args: [], expected: "['https://example.com', 'https://google.com']" }
+      { args: [], expected: null }
     ]
   },
   984: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "strptime"}, {functionName: "time"}],
     tests: [
-      { args: [], expected: "14:30:45" }
+      { args: [], expected: null }
     ]
   },
   985: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "int", minArgs: 2}],
     tests: [
-      { args: [], expected: "26" }
+      { args: [], expected: null }
     ]
   },
   986: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "int", minArgs: 2}],
     tests: [
-      { args: [], expected: "10" }
+      { args: [], expected: null }
     ]
   },
   987: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "float"}],
     tests: [
-      { args: [], expected: "35000.0" }
+      { args: [], expected: null }
     ]
   },
   988: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "ConfigParser"}, {functionName: "read_string"}],
     tests: [
-      { args: [], expected: "admin" }
+      { args: [], expected: null }
     ]
   },
   989: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['Hello World']" }
+      { args: [], expected: null }
     ]
   },
   990: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "splitlines"}, {functionName: "split"}],
     requiredNodePatterns: [{nodeType: "For"}],
     tests: [
-      { args: [], expected: "{'name': 'Alice', 'age': 25, 'city': 'New York'}" }
+      { args: [], expected: null }
     ]
   },
   991: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "loads"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5]" }
+      { args: [], expected: null }
     ]
   },
   992: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "sub"}, {functionName: "float"}],
     tests: [
-      { args: [], expected: "123.45" }
+      { args: [], expected: null }
     ]
   },
   993: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "ArgumentParser"}, {functionName: "add_argument"}, {functionName: "parse_args"}],
     tests: [
-      { args: [], expected: "Alice" }
+      { args: [], expected: null }
     ]
   },
   994: {
@@ -7815,28 +7815,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1015: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "ing" }
+      { args: [], expected: null }
     ]
   },
   1016: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "[10, 20, 30, 40, 50]" }
+      { args: [], expected: null }
     ]
   },
   1017: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "(5, 10, 15, 20)" }
+      { args: [], expected: null }
     ]
   },
   1018: {
@@ -8864,46 +8864,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1148: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}],
     tests: [
-      { args: [], expected: "10" }
+      { args: [], expected: null }
     ]
   },
   1149: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
-      { args: [], expected: "Local variable: 10\nGlobal variable: 20" }
+      { args: [], expected: null }
     ]
   },
   1150: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Global"}],
     tests: [
-      { args: [], expected: "30" }
+      { args: [], expected: null }
     ]
   },
   1151: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Nonlocal"}],
     tests: [
-      { args: [], expected: "20" }
+      { args: [], expected: null }
     ]
   },
   1152: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
-      { args: [], expected: "Local x: 50\nGlobal x: 100" }
+      { args: [], expected: null }
     ]
   },
   1153: {
@@ -8932,28 +8932,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1156: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "For"}],
     tests: [
-      { args: [], expected: "Inside loop: 0\nInside loop: 1\nInside loop: 2\nOutside loop: 2" }
+      { args: [], expected: null }
     ]
   },
   1157: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedFlex',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Try"}],
     tests: [
-      { args: [], expected: "x is not defined" }
+      { args: [], expected: null }
     ]
   },
   1158: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}],
     tests: [
-      { args: [], expected: "Inner function: x = 10, y = 20\nOuter function: x = 10" }
+      { args: [], expected: null }
     ]
   },
   1159: {
@@ -8980,37 +8980,37 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1162: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedFlex',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
-      { args: [], expected: "New value of x: 10" }
+      { args: [], expected: null }
     ]
   },
   1163: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}],
     tests: [
-      { args: [], expected: "Function One: 50\nFunction Two: 40" }
+      { args: [], expected: null }
     ]
   },
   1164: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedFlex',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Global"}],
     tests: [
-      { args: [], expected: "Global variable x: 12" }
+      { args: [], expected: null }
     ]
   },
   1165: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Nonlocal"}],
     tests: [
-      { args: [], expected: "Inner function: x = 25\nOuter function: x = 25" }
+      { args: [], expected: null }
     ]
   },
   1166: {
@@ -9024,28 +9024,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1167: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "For"}],
     tests: [
-      { args: [], expected: "In the loop: y = 0\nIn the loop: y = 1\nIn the loop: y = 2\nAfter the loop: y = 2" }
+      { args: [], expected: null }
     ]
   },
   1168: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedFlex',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
-      { args: [], expected: "Global variable x inside function: 10" }
+      { args: [], expected: null }
     ]
   },
   1169: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Subscript"}],
     tests: [
-      { args: [], expected: "Mutable variable: [100, 2, 3]\nImmutable variable: 20" }
+      { args: [], expected: null }
     ]
   },
   1170: {
@@ -9068,28 +9068,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1172: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "For"}],
     tests: [
-      { args: [], expected: "In the loop: x = 0\nIn the loop: x = 1\nIn the loop: x = 2\nOutside the loop: x = 2" }
+      { args: [], expected: null }
     ]
   },
   1173: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Global"}],
     tests: [
-      { args: [], expected: "Global x after modification: 50" }
+      { args: [], expected: null }
     ]
   },
   1174: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 3}],
     tests: [
-      { args: [], expected: "Inner function: x = 5, y = 10, z = 15" }
+      { args: [], expected: null }
     ]
   },
   1175: {
@@ -10379,10 +10379,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1296: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['Hello', 'World', 'Python']" }
+      { args: [], expected: null }
     ]
   },
   1297: {
@@ -10415,19 +10415,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1300: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['#Python', '#coding']" }
+      { args: [], expected: null }
     ]
   },
   1301: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['example.com', 'test.org']" }
+      { args: [], expected: null }
     ]
   },
   1302: {
@@ -10460,19 +10460,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1328: {
     functionNames: [],
     mode: 'script',
-    compare: 'unorderedList',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: ["r", "g", "m"] }
+      { args: [], expected: null }
     ]
   },
   1305: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['2024-06-01', '2025-07-04']" }
+      { args: [], expected: null }
     ]
   },
   1306: {
@@ -10487,19 +10487,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1307: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['running', 'jumping', 'singing']" }
+      { args: [], expected: null }
     ]
   },
   1308: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "search"}, {functionName: "group"}],
     tests: [
-      { args: [], expected: "pdf" }
+      { args: [], expected: null }
     ]
   },
   1309: {
@@ -10514,10 +10514,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1310: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['Alice', 'Bob', 'New', 'York', 'City', 'Monday']" }
+      { args: [], expected: null }
     ]
   },
   1311: {
@@ -10532,10 +10532,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1312: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['21.5', '60', '0.25']" }
+      { args: [], expected: null }
     ]
   },
   1313: {
@@ -10559,10 +10559,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1315: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['with content', 'another one']" }
+      { args: [], expected: null }
     ]
   },
   1316: {
@@ -10622,10 +10622,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1322: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "match"}, {functionName: "group"}],
     tests: [
-      { args: [], expected: "john.doe" }
+      { args: [], expected: null }
     ]
   },
   1323: {
@@ -10640,10 +10640,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1324: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['@python', '@realpython', '@openai']" }
+      { args: [], expected: null }
     ]
   },
   1325: {
@@ -10658,19 +10658,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1326: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['02:30 PM', '07:45 AM']" }
+      { args: [], expected: null }
     ]
   },
   1327: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['$20.99', '$3.50', '$100']" }
+      { args: [], expected: null }
     ]
   },
   1329: {
@@ -10685,10 +10685,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1330: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
-      { args: [], expected: "['Hello', 'How are you?']" }
+      { args: [], expected: null }
     ]
   },
   1331: {
@@ -10948,10 +10948,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1359: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Key not found" }
+      { args: [], expected: null }
     ]
   },
   1360: {
@@ -11500,10 +11500,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1426: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "any"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1427: {
@@ -11537,10 +11537,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1430: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "isdigit"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1431: {
@@ -11555,19 +11555,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1432: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "zip"}, {functionName: "keys"}, {functionName: "values"}],
     tests: [
-      { args: [], expected: "[('a', 1), ('b', 2)]" }
+      { args: [], expected: null }
     ]
   },
   1433: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "defaultdict"}],
     tests: [
-      { args: [], expected: "1" }
+      { args: [], expected: null }
     ]
   },
   1434: {
@@ -11611,46 +11611,46 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1438: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Tuple"}],
     tests: [
-      { args: [], expected: "1 2 3" }
+      { args: [], expected: null }
     ]
   },
   1439: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "dict"}, {functionName: "zip"}],
     tests: [
-      { args: [], expected: "{'a': 1, 'b': 2}" }
+      { args: [], expected: null }
     ]
   },
   1440: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "pop", minArgs: 2}],
     tests: [
-      { args: [], expected: "{'a': 1}" }
+      { args: [], expected: null }
     ]
   },
   1441: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Compare"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1442: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
-      { args: [], expected: "Key not found" }
+      { args: [], expected: null }
     ]
   },
   1443: {
@@ -11692,29 +11692,29 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1447: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "any"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1448: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "index"}],
     tests: [
-      { args: [], expected: "1" }
+      { args: [], expected: null }
     ]
   },
   1449: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "items"}],
     requiredNodePatterns: [{nodeType: "DictComp"}],
     tests: [
-      { args: [], expected: "{'b': 15}" }
+      { args: [], expected: null }
     ]
   },
   1450: {
@@ -12893,19 +12893,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1583: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "dumps"}],
         tests: [
-            { args: [], expected: "{\"name\": \"Alice\", \"age\": 30, \"city\": \"New York\"}" },
+            { args: [], expected: null },
         ]
     },
   1584: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "loads"}],
         tests: [
-            { args: [], expected: "{'name': 'Alice', 'age': 30}" },
+            { args: [], expected: null },
         ]
     },
   1585: {
@@ -12929,10 +12929,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1587: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "search"}, {functionName: "group"}],
         tests: [
-            { args: [], expected: "John Doe 30" },
+            { args: [], expected: null },
         ]
     },
   1588: {
@@ -13092,19 +13092,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1605: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredNodePatterns: [{nodeType: "ClassDef"}, {nodeType: "Try"}, {nodeType: "Raise"}],
         tests: [
-            { args: [], expected: "Caught: This is a custom error" },
+            { args: [], expected: null },
         ]
     },
   1606: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Raise"}],
         tests: [
-            { args: [], expected: "Error: Conversion failed, caused by: invalid literal for int() with base 10: 'not a number'" },
+            { args: [], expected: null },
         ]
     },
   1607: {
@@ -13298,37 +13298,37 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1630: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "dump"}, {functionName: "open"}],
         tests: [
-            { args: [], expected: "{\"age\": 30, \"name\": \"Alice\"}" },
+            { args: [], expected: null },
         ]
     },
   1631: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "load"}, {functionName: "open"}],
         tests: [
-            { args: [], setupFiles: {"data.json": "{\"name\": \"Alice\", \"age\": 30}"}, expected: "{'age': 30, 'name': 'Alice'}" },
+            { args: [], setupFiles: {"data.json": "{\"name\": \"Alice\", \"age\": 30}"}, expected: null },
         ]
     },
   1632: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "compile"}, {functionName: "findall"}],
         tests: [
-            { args: [], expected: "['3', '2']" },
+            { args: [], expected: null },
         ]
     },
   1633: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredCallPatterns: [{functionName: "split"}],
         tests: [
-            { args: [], expected: "['apple', 'banana', 'cherry', 'date']" },
+            { args: [], expected: null },
         ]
     },
   1634: {
@@ -13451,19 +13451,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1647: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredNodePatterns: [{nodeType: "Try"}],
         tests: [
-            { args: [], expected: "Result: 5.0" },
+            { args: [], expected: null },
         ]
     },
   1648: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceOnly',
         requiredNodePatterns: [{nodeType: "Try"}],
         tests: [
-            { args: [], expected: "Caught division by zero\nThis always executes" },
+            { args: [], expected: null },
         ]
     },
   1649: {
