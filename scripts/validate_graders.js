@@ -478,6 +478,7 @@ def source_requirements_ok(source, grader):
     node_patterns = grader.get("requiredNodePatterns", [])
     inheritance_patterns = grader.get("requiredClassInheritance", [])
     bool_ops = grader.get("requiredBoolOps", [])
+    ast_operators = grader.get("requiredAstOperators", [])
     try:
         tree = ast.parse(source)
     except SyntaxError:
@@ -499,7 +500,7 @@ def source_requirements_ok(source, grader):
     )
     if needs_random and not any(call_name(call.func) in random_call_names for call in calls):
         return False
-    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops:
+    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators:
         return True
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -535,6 +536,18 @@ def source_requirements_ok(source, grader):
             return False
     present_bool_ops = {type(node.op).__name__ for node in all_nodes if isinstance(node, ast.BoolOp)}
     if any(required not in present_bool_ops for required in bool_ops):
+        return False
+    present_operators = set()
+    for node in all_nodes:
+        if isinstance(node, ast.BinOp):
+            present_operators.add(type(node.op).__name__)
+        elif isinstance(node, ast.UnaryOp):
+            present_operators.add(type(node.op).__name__)
+        elif isinstance(node, ast.Compare):
+            present_operators.update(type(op).__name__ for op in node.ops)
+        elif isinstance(node, ast.AugAssign):
+            present_operators.add(type(node.op).__name__)
+    if any(required not in present_operators for required in ast_operators):
         return False
     return True
 

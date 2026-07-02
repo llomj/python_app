@@ -583,6 +583,7 @@ def __auto_grader_check_source_requirements():
     node_patterns = __auto_grader_spec.get("requiredNodePatterns", [])
     inheritance_patterns = __auto_grader_spec.get("requiredClassInheritance", [])
     bool_ops = __auto_grader_spec.get("requiredBoolOps", [])
+    ast_operators = __auto_grader_spec.get("requiredAstOperators", [])
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
@@ -604,7 +605,7 @@ def __auto_grader_check_source_requirements():
     )
     if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
         return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
-    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops:
+    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators:
         return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -647,6 +648,19 @@ def __auto_grader_check_source_requirements():
     for required in bool_ops:
         if required not in present_bool_ops:
             return f"Missing required boolean operator: {required}"
+    present_operators = set()
+    for node in all_nodes:
+        if isinstance(node, ast.BinOp):
+            present_operators.add(type(node.op).__name__)
+        elif isinstance(node, ast.UnaryOp):
+            present_operators.add(type(node.op).__name__)
+        elif isinstance(node, ast.Compare):
+            present_operators.update(type(op).__name__ for op in node.ops)
+        elif isinstance(node, ast.AugAssign):
+            present_operators.add(type(node.op).__name__)
+    for required in ast_operators:
+        if required not in present_operators:
+            return f"Missing required operator: {required}"
     return None
 
 def __auto_grader_hardcoded_expected_error(expected):
