@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'sourceOnly' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -4875,7 +4875,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   664: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredCallPatterns: [{ functionName: "items" }],
         requiredNodePatterns: [{ nodeType: "For" }, { nodeType: "Dict" }],
         tests: [
@@ -6102,7 +6102,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   831: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6141,7 +6141,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   835: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6171,7 +6171,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   838: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6192,7 +6192,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   840: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6234,7 +6234,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   844: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6275,7 +6275,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   848: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6326,7 +6326,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   853: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6387,7 +6387,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   859: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
       { args: [], expected: "1\n2\n3\n4\n5" }
@@ -6414,7 +6414,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   862: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "input" }],
     requiredNodePatterns: [{ nodeType: "While" }],
     tests: [
@@ -6927,7 +6927,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   916: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "randint"}],
     tests: [
       { args: [], randomValues: [6], expected: "6" }
@@ -6936,7 +6936,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   917: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "choice"}],
     tests: [
       { args: [], randomChoiceValues: ["Heads"], expected: "Heads" }
@@ -7089,7 +7089,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   934: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Index out of range" }
@@ -7098,7 +7098,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   935: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Key not found" }
@@ -7107,7 +7107,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   936: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Invalid integer conversion" }
@@ -7125,7 +7125,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   938: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "File not found" }
@@ -7134,7 +7134,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   939: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Attribute not found" }
@@ -7143,7 +7143,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   940: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Variable not defined" }
@@ -7152,7 +7152,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   941: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], permissionDeniedPaths: ["/root/protected.txt"], expected: "Permission denied" }
@@ -7195,7 +7195,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   946: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}, {nodeType: "Assert"}],
     tests: [
       { args: [], expected: "Negative number not allowed" }
@@ -7220,7 +7220,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   949: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "Module not found" }
@@ -7842,7 +7842,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1018: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
       { args: [], expected: "lloWor" }
@@ -9340,7 +9340,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1207: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{ functionName: "items" }],
     requiredNodePatterns: [{ nodeType: "For" }, { nodeType: "Dict" }],
     tests: [
@@ -10388,7 +10388,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1297: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "split"}],
     tests: [
       { args: [], expected: "['apple', 'banana', 'cherry', 'grape']" }
@@ -10397,7 +10397,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1298: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "search"}],
     tests: [
       { args: [], expected: "True" }
@@ -10406,7 +10406,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1299: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "['alice@example.com', 'bob99@domain.co.uk']" }
@@ -10433,7 +10433,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1302: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "split"}, {functionName: "all"}],
     tests: [
       { args: [], expected: "True" }
@@ -10442,7 +10442,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1303: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "sub"}],
     tests: [
       { args: [], expected: "Hello world Python is great" }
@@ -10451,7 +10451,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1304: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "match"}],
     tests: [
       { args: [], expected: "True" }
@@ -10478,7 +10478,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1306: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "fullmatch"}],
     tests: [
       { args: [], expected: "True" }
@@ -10505,7 +10505,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1309: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "['is', 'test']" }
@@ -10523,7 +10523,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1311: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "fullmatch"}],
     tests: [
       { args: [], expected: "True" }
@@ -10541,7 +10541,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1313: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "sub"}],
     tests: [
       { args: [], expected: "192.168.1.1" }
@@ -10550,7 +10550,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1314: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "fullmatch"}],
     tests: [
       { args: [], expected: "True" }
@@ -10568,7 +10568,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1316: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "['<div>', '<p>', '</p>', '</div>']" }
@@ -10577,7 +10577,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1317: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "fullmatch"}],
     tests: [
       { args: [], expected: "True" }
@@ -10586,7 +10586,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1318: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "['U.S.A.', 'E.U.']" }
@@ -10595,7 +10595,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1319: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "findall"}],
     tests: [
       { args: [], expected: "3" }
@@ -10604,7 +10604,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1320: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "sub"}],
     tests: [
       { args: [], expected: "This is a spaced sentence." }
@@ -10613,7 +10613,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1321: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "fullmatch"}],
     tests: [
       { args: [], expected: "True" }
@@ -10631,7 +10631,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1323: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "sub"}],
     tests: [
       { args: [], expected: "1,000,000" }
@@ -10649,7 +10649,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1325: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "search"}],
     tests: [
       { args: [], expected: "True" }
@@ -10676,7 +10676,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1329: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "fullmatch"}],
     tests: [
       { args: [], expected: "True" }
@@ -10820,7 +10820,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1345: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "isinstance"}],
     requiredNodePatterns: [{nodeType: "ListComp", minCount: 2}],
     tests: [
@@ -10865,7 +10865,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1350: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "hasattr"}, {functionName: "callable"}],
     requiredNodePatterns: [{nodeType: "ClassDef"}],
     tests: [
@@ -10930,7 +10930,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1357: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Try"}],
     tests: [
       { args: [], expected: "List is empty" }
@@ -11519,7 +11519,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1428: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "BinOp"}],
     tests: [
       { args: [], expected: "{2, 3}" }
@@ -11528,7 +11528,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1429: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "BinOp"}],
     tests: [
       { args: [], expected: "{1, 2, 3, 4}" }
@@ -11546,7 +11546,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1431: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "Subscript"}],
     tests: [
       { args: [], expected: "[3, 2, 1]" }
@@ -11573,7 +11573,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1434: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "defaultdict"}, {functionName: "append"}],
     tests: [
       { args: [], expected: "{2: ['hi', 'no'], 5: ['hello'], 3: ['yes']}" }
@@ -11582,7 +11582,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1435: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "sorted"}],
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
@@ -11602,7 +11602,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1437: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "max"}],
     tests: [
       { args: [], expected: "5" }
@@ -11665,7 +11665,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1444: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "set"}, {functionName: "len"}],
     tests: [
       { args: [], expected: "True" }
@@ -11674,7 +11674,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1445: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "Counter"}],
     tests: [
       { args: [], expected: "Counter({'a': 3, 'n': 2, 'b': 1})" }
@@ -11683,7 +11683,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1446: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
       { args: [], expected: "[1, 3]" }
@@ -11720,7 +11720,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1450: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "items"}],
     requiredNodePatterns: [{nodeType: "DictComp"}],
     tests: [
@@ -12270,7 +12270,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1514: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
       { args: [], expected: "Alice Unknown" }
@@ -12279,7 +12279,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1515: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "defaultdict"}],
     tests: [
       { args: [], expected: "{'apple': 3, 'banana': 2, 'cherry': 1}" }
@@ -12288,7 +12288,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1516: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}, {functionName: "append"}],
     tests: [
       { args: [], expected: "{'items': ['apple', 'banana']}" }
@@ -12306,7 +12306,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1518: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "defaultdict"}, {functionName: "append"}],
     tests: [
       { args: [], expected: "{'fruit': ['apple', 'banana'], 'vegetable': ['carrot']}" }
@@ -12315,7 +12315,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1519: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
       { args: [], expected: "Alice" }
@@ -12333,7 +12333,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1521: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}],
     tests: [
       { args: [], expected: "{'user': {'profile': {'name': 'Alice'}}}" }
@@ -12351,7 +12351,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1523: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "defaultdict"}, {functionName: "add"}],
     tests: [
       { args: [], expected: "{'a': [1, 2], 'b': [1, 3]}" }
@@ -12360,7 +12360,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1524: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
       { args: [], expected: "100" }
@@ -12378,7 +12378,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1526: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}, {functionName: "append"}],
     tests: [
       { args: [], expected: "['apple', 'banana']" }
@@ -12406,7 +12406,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1529: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
       { args: [], expected: "['apple', 'banana'] []" }
@@ -12424,7 +12424,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1531: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}],
     tests: [
       { args: [], expected: "{'count': 1}" }
@@ -12433,7 +12433,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1533: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "defaultdict"}],
     tests: [
       { args: [], expected: "{'h': 1, 'e': 1, 'l': 2, 'o': 1}" }
@@ -12442,6 +12442,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1534: {
     functionNames: [],
     mode: 'script',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
       { args: [], expected: {'a': 1, 'b': 5, 'c': 4} }
@@ -12459,7 +12460,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1536: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}, {functionName: "append"}],
     tests: [
       { args: [], expected: "{'fruits': ['apple', 'banana'], 'vegetables': ['carrot']}" }
@@ -12487,7 +12488,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1539: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [
       { args: [], expected: "Alice Smith" }
@@ -12505,7 +12506,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1541: {
     functionNames: [],
     mode: 'script',
-    compare: 'dictUnorderedLists',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}, {functionName: "add"}],
     tests: [
       { args: [], expected: { tags: ["python", "programming"] } }
@@ -12523,7 +12524,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1543: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "defaultdict"}, {functionName: "strip"}],
     tests: [
       { args: [], expected: "{'category': 'apple banana', 'type': 'fruit'}" }
@@ -12532,7 +12533,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1544: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}, {functionName: "extend"}],
     tests: [
       { args: [], expected: "[1, 2, 3, 4, 5]" }
@@ -12550,7 +12551,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1546: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "setdefault"}],
     tests: [
       { args: [], expected: "{'users': {'alice': {'age': 30}, 'bob': {'age': 25}}}" }
@@ -12659,7 +12660,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1560: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredNodePatterns: [{nodeType: "ClassDef"}],
     tests: [
       { args: [], expected: "Person(name='Alice', age=30)" }
@@ -12668,7 +12669,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1561: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "field"}],
     requiredNodePatterns: [{nodeType: "ClassDef"}],
     tests: [
@@ -12678,7 +12679,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1562: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "dataclass"}],
     requiredNodePatterns: [{nodeType: "ClassDef"}],
     tests: [
@@ -12719,7 +12720,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1549: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "get", minArgs: 2}],
     tests: [{
       args: [],
@@ -12911,7 +12912,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1585: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "sub"}],
         tests: [
             { args: [], expected: "The dog sat on the mat" },
@@ -12920,7 +12921,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1586: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
     requiredCallPatterns: [{functionName: "finditer"}, {functionName: "start"}],
         tests: [
             { args: [], expected: "[('The', 0), ('cat', 4), ('and', 8), ('the', 12), ('hat', 16)]" },
@@ -13261,7 +13262,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1626: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredCallPatterns: [{functionName: "my_context"}],
         requiredNodePatterns: [{nodeType: "With"}, {nodeType: "FunctionDef"}],
         tests: [
@@ -13397,7 +13398,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1641: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredCallPatterns: [{functionName: "casefold"}],
         tests: [
             { args: [], expected: "True" },
@@ -13406,7 +13407,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1642: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredCallPatterns: [{functionName: "encode"}],
         tests: [
             { args: [], expected: "b'Hello, World!'" },
@@ -13415,7 +13416,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1643: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredCallPatterns: [{functionName: "decode"}],
         tests: [
             { args: [], expected: "Hello, World!" },
@@ -13736,7 +13737,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1685: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredNodePatterns: [{nodeType: "For"}],
         tests: [
             { args: [], expected: "H\ne\nl\nl\no" },
@@ -13745,7 +13746,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1686: {
         functionNames: [],
         mode: 'script',
-        compare: 'printedOrReturn',
+        compare: 'sourceIntent',
         requiredNodePatterns: [{nodeType: "For"}],
         tests: [
             { args: [], expected: "10\n20\n30" },

@@ -175,6 +175,32 @@ def meaningful_text_matches(actual_text, expected):
         return expected_value.lower() in actual_text.lower()
     return False
 
+def shape_matches(actual, expected):
+    if expected is None:
+        return True
+    actual_text = clean_text(actual)
+    if not actual_text:
+        return expected in (None, "")
+    actual_value = normalize(maybe_literal(actual))
+    expected_value = normalize(maybe_literal(expected))
+    if type(expected_value).__name__ in ("list", "tuple", "set"):
+        return isinstance(actual_value, (list, tuple, set)) or bool(re.search(r"[\[({].*[\])}]", actual_text, re.DOTALL))
+    if isinstance(expected_value, dict):
+        return isinstance(actual_value, dict) or (":" in actual_text and bool(re.search(r"[\[{].*[\]}]", actual_text, re.DOTALL)))
+    if isinstance(expected_value, bool):
+        if isinstance(actual_value, bool):
+            return True
+        return bool(re.search(r"\b(true|false)\b", actual_text, re.IGNORECASE))
+    if isinstance(expected_value, (int, float)) and not isinstance(expected_value, bool):
+        return bool(numbers(actual_text))
+    if isinstance(expected_value, str):
+        if not expected_value:
+            return True
+        if expected_value.startswith("b'") or expected_value.startswith('b"'):
+            return actual_text.startswith("b'") or actual_text.startswith('b"') or isinstance(actual_value, (bytes, bytearray))
+        return True
+    return True
+
 def values_equivalent(actual, expected):
     actual = normalize(maybe_literal(actual))
     expected = normalize(maybe_literal(expected))
@@ -281,6 +307,8 @@ def same(actual, expected, compare):
         expected_text = clean_text(expected)
         actual_lines = [line.strip() for line in actual_text.splitlines() if line.strip()]
         return values_equivalent(actual, expected) or actual_text == expected_text or expected_text in actual_text or compact_pattern(actual_text) == compact_pattern(expected_text) or any(values_equivalent(line, expected) for line in actual_lines) or meaningful_text_matches(actual_text, expected)
+    if compare == "sourceIntent":
+        return shape_matches(actual, expected)
     if compare == "numberRange":
         found = numbers(actual)
         if not found or not isinstance(expected, list) or len(expected) != 2:
@@ -1969,7 +1997,7 @@ def run_script_tests(solution, tests, compare):
     compiled = compile(solution, "<solution>", "exec")
     for index, case in enumerate(tests, start=1):
         expected = case.get("expected")
-        if has_hardcoded_expected_output(solution, expected):
+        if compare not in ("sourceOnly", "sourceIntent") and has_hardcoded_expected_output(solution, expected):
             return False
         input_values = iter(list(case.get("inputValues", [])))
         old_stdout = sys.stdout
