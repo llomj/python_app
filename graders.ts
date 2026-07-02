@@ -8187,10 +8187,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1058: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1059: {
@@ -8203,10 +8203,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1060: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1061: {
@@ -8233,19 +8233,19 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1064: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1065: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "40" }
+      { args: [], expected: null }
     ]
   },
   1066: {
@@ -8265,10 +8265,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1068: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1069: {
@@ -8281,28 +8281,28 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1070: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1071: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "The smallest number in the list is: 7" }
+      { args: [], expected: null }
     ]
   },
   1072: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1073: {
@@ -8322,37 +8322,37 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1075: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "helloworld" }
+      { args: [], expected: null }
     ]
   },
   1076: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "3" }
+      { args: [], expected: null }
     ]
   },
   1077: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "15" }
+      { args: [], expected: null }
     ]
   },
   1078: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1079: {
@@ -8365,10 +8365,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1080: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1081: {
@@ -8388,10 +8388,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1083: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1084: {
@@ -8418,10 +8418,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1087: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1088: {
@@ -8441,10 +8441,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1090: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "True" }
+      { args: [], expected: null }
     ]
   },
   1091: {
@@ -12396,10 +12396,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1528: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "defaultdict"}, {functionName: "append"}],
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "{'a': ['apple', 'apricot'], 'b': ['banana', 'blueberry'], 'c': ['cherry']}" }
+      { args: [], expected: null }
     ]
   },
   1529: {
@@ -12476,10 +12477,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1538: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "defaultdict"}],
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "{'a': {'x': 2, 'y': 1}, 'b': {'x': 1}}" }
+      { args: [], expected: null }
     ]
   },
   1539: {
@@ -12566,10 +12568,11 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1548: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "defaultdict"}],
+    requiredNodePatterns: [{nodeType: "Lambda"}],
     tests: [
-      { args: [], expected: "{'item1': {'count': 1, 'total': 10}, 'item2': {'count': 1, 'total': 20}}" }
+      { args: [], expected: null }
     ]
   },
   1550: {
