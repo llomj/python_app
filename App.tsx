@@ -9334,6 +9334,7 @@ const App: React.FC = () => {
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
+    const [showHowToUse, setShowHowToUse] = useState(false);
     const [aiHintText, setAiHintText] = useState<string>('');
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
@@ -11607,7 +11608,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-200">
-                                        Problem Mode
+                                        <span>Problem Mode</span>
+                                        <button onClick={() => setShowHowToUse(!showHowToUse)} className="inline-flex items-center ml-2 align-middle transition-all hover:brightness-125" title="How to use this app">
+                                            <Info size={14} style={{ color: countRowColors.count }} />
+                                        </button>
                                     </label>
                                     <div className="grid grid-cols-1 gap-2">
                                         {DIFFICULTY_MODES.map(mode => {
@@ -11628,6 +11632,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             );
                                         })}
                                     </div>
+                                    {showHowToUse && (
+                                        <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
+                                            <p className="font-bold text-white text-xs">How to use this app</p>
+                                            <p>Choose a mode above — Beginner, Intermediate, Expert, or Legend — to filter problems by difficulty, or use Normal to see everything mixed together.</p>
+                                            <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
+                                            <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <CheckCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.win }} /> <strong>Win</strong> and <XCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.failed }} /> <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked — the more you get right, and the more problems you do, the higher your rank climbs.</p>
+                                            <p className="font-bold text-white text-xs mt-3">Settings</p>
+                                            <p>Customize colors, haptic feedback, keyboard sound, and tool panel appearance from the <SlidersHorizontal size={12} className="inline align-text-top" /> Customize section above. Your progress is saved automatically in this browser.</p>
+                                            <p className="font-bold text-white text-xs mt-3">Ranking</p>
+                                            <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
+                                        </div>
+                                    )}
                                     <p className="mt-2 text-[10px] text-gray-300">
                                         Current mode has {modeExerciseCount} matching problems. Normal mode uses all problems.
                                     </p>
