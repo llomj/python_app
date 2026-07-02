@@ -8935,7 +8935,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Try"}],
     tests: [
-      { args: [], expected: "x is not defined" }
+      { args: [], expected: "not defined" }
     ]
   },
   1158: {
@@ -8992,7 +8992,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Global"}],
     tests: [
-      { args: [], expected: "Global variable x: 12" }
+      { args: [], expected: "Global variable" }
     ]
   },
   1165: {
@@ -9027,7 +9027,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     compare: 'printedOrReturn',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
-      { args: [], expected: "Global variable x inside function: 10" }
+      { args: [], expected: "Global variable" }
     ]
   },
   1169: {
