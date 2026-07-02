@@ -375,6 +375,9 @@ def runnable_variants(source, prefer_markers=False):
     )
     for _position, marker in marker_positions:
         candidates.append(source.split(marker, 1)[0])
+    for index, (position, _marker) in enumerate(marker_positions):
+        next_position = marker_positions[index + 1][0] if index + 1 < len(marker_positions) else len(source)
+        candidates.append(source[position:next_position])
     candidates.append(source)
     lines = source.splitlines()
     for i in range(len(lines), 0, -1):
