@@ -11469,7 +11469,7 @@ export const EXERCISES: Exercise[] = [
             "solution": "# Using function approach\ndef parse_boolean(string):\n    return string.lower() == 'true'\n\nprint(parse_boolean('True'))\n\n# Using script approach\nbool_str = 'True'\nboolean_value = bool_str.lower() == 'true'\nprint(boolean_value)  # Expected output: True\n\n# Using built-in approach\ndef solve():\n    bool_str = 'True'\n    boolean_value = bool_str.lower() == 'true'\n    print(boolean_value)  # Expected output: True\n\n# Using manual approach\ndef solve():\n    bool_str = 'True'\n    boolean_value = bool_str.lower() == 'true'\n    return boolean_value\n\n# Script approach\nbool_str = 'True'\nboolean_value = bool_str.lower() == 'true'\nprint(boolean_value)  # Expected output: True\n\n# Direct approach\nbool_str = 'True'\nboolean_value = bool_str.lower() == 'true'\nprint(boolean_value)  # Expected output: True",
 
             "hint": "Check the description for requirements.",
-            "breakdown": "1. Define a function named `parse_boolean` that takes one parameter, `input_string`.\n2. Inside the function, use the `bool()` function to convert the input string to a boolean.\n3. Return the result of the conversion.\n4. Example output:\n5. True",
+            "breakdown": "1. Define a function named `parse_boolean` that takes one parameter, `input_string`.\n2. Clean the string with `.strip().lower()` so spacing and capitalization do not matter.\n3. Compare the cleaned string to `'true'` to create a real boolean value.\n4. Return or print the boolean result.\n5. Do not use `bool(input_string)` because any non-empty string, including `'False'`, becomes True.",
 
             "category": "Level 1"
     },

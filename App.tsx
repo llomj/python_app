@@ -8921,20 +8921,99 @@ const getGuideConceptHints = (exercise: Exercise) => {
     return hints.slice(0, 5);
 };
 
+const getSpecificGuideGoal = (exercise: Exercise, promptLine: string) => {
+    const text = `${exercise.description}\n${exercise.initialCode}`.toLowerCase();
+    if (/parse\s+a?\s*boolean|boolean\s+from\s+a\s+string/.test(text)) {
+        return [
+            'Convert text such as `"True"` or `"False"` into the real Python boolean values `True` or `False`.',
+            'Do not use `bool(text)` for this task: `bool("False")` is still `True` because non-empty strings are truthy.',
+            'Normalize the text with `.strip().lower()`, then compare it to accepted true words like `"true"`.',
+        ];
+    }
+    if (/convert .*string.*(integer|int)|parse .*integer|integer from a string/.test(text)) {
+        return ['Turn numeric text into an actual integer value using `int()`, then use or print that number as requested.'];
+    }
+    if (/convert .*string.*float|parse .*float|float from a string/.test(text)) {
+        return ['Turn decimal text into an actual floating-point number using `float()`, then use or print that number as requested.'];
+    }
+    if (/reverse.*string/.test(text)) {
+        return ['Create the same string in reverse order. The first character becomes last, and the last character becomes first.'];
+    }
+    if (/palindrome/.test(text)) {
+        return ['Check whether the value reads the same forward and backward. Usually you compare the cleaned value with its reverse.'];
+    }
+    if (/count.*vowel/.test(text)) {
+        return ['Count only vowel characters (`a`, `e`, `i`, `o`, `u`) in the input, usually ignoring case.'];
+    }
+    if (/sum.*values.*dictionary|sum of all values in a dictionary/.test(text)) {
+        return ['Add together the numeric values stored inside the dictionary, not the keys.'];
+    }
+    if (/reverse.*keys.*values|keys and values in a dictionary/.test(text)) {
+        return ['Build a new dictionary where each original value becomes a key and each original key becomes its value.'];
+    }
+    if (/maximum value in a dictionary|max value/.test(text)) {
+        return ['Find the largest number among the dictionary values. The keys are only labels; compare the values.'];
+    }
+    if (/perfect square.*perfect cube/.test(text)) {
+        return ['Check two possibilities: whether the number is a perfect square or whether it is a perfect cube. Return true if either test passes.'];
+    }
+    if (/divisible/.test(text)) {
+        return ['Use the remainder operator `%`. A number is divisible by another number when the remainder is `0`.'];
+    }
+    if (/between|range/.test(text)) {
+        return ['Check the lower boundary and the upper boundary separately, then combine those comparisons as the prompt says.'];
+    }
+    return [promptLine];
+};
+
+const getSpecificGuideSteps = (exercise: Exercise, fallbackLines: string[]) => {
+    const text = `${exercise.description}\n${exercise.initialCode}`.toLowerCase();
+    if (/parse\s+a?\s*boolean|boolean\s+from\s+a\s+string/.test(text)) {
+        return [
+            'Start with the string value, for example `value = "True"`.',
+            'Clean the input with `value.strip().lower()` so `" TRUE "` and `"true"` are treated the same.',
+            'Compare the cleaned string to `"true"` to produce a real boolean result.',
+            'Print or return the boolean result, so the output is `True` or `False` without quotes.',
+        ];
+    }
+    return fallbackLines;
+};
+
+const getSpecificGuideHints = (exercise: Exercise) => {
+    const text = `${exercise.description}\n${exercise.initialCode}`.toLowerCase();
+    if (/parse\s+a?\s*boolean|boolean\s+from\s+a\s+string/.test(text)) {
+        return [
+            '`bool("False")` is a trap: it returns `True` because the string is not empty.',
+            'Use comparison instead: `text.strip().lower() == "true"`.',
+            'The result should be a boolean value, not the string `"True"`.',
+        ];
+    }
+    return [];
+};
+
 const buildExerciseGuideSections = (exercise: Exercise): GuideSection[] => {
     const descriptionLines = exercise.description.split('\n').map(line => line.trim()).filter(Boolean);
     const promptLine = descriptionLines.find(line => !/^examples?:/i.test(line) && !/(→|->|=>)/.test(line)) ?? exercise.description.trim();
     const signatures = extractFunctionSignatures(exercise.initialCode);
     const classNames = extractClassNames(exercise.initialCode);
     const examples = extractGuideExamples(exercise.description);
+    const specificGoalLines = getSpecificGuideGoal(exercise, promptLine);
     const rawBreakdownLines = (exercise.breakdown ?? '')
         .split('\n')
         .map(normalizeGuideLine)
         .filter(Boolean)
         .filter(line => !/^\[?input\(\)\]?$/i.test(line))
+        .filter(line => !(specificGoalLines.some(goal => /boolean/i.test(goal)) && /\bbool\(\)/i.test(line)))
         .filter((line, index, arr) => arr.findIndex(item => item.toLowerCase() === line.toLowerCase()) === index)
         .slice(0, 8);
+    const stepLines = getSpecificGuideSteps(exercise, rawBreakdownLines.length ? rawBreakdownLines : [
+        'Create the required function or script structure first.',
+        'Store the input values in clearly named variables.',
+        'Apply the operation described in the prompt.',
+        'Return or print the final result exactly as requested.',
+    ]);
     const conceptHints = getGuideConceptHints(exercise);
+    const specificHints = getSpecificGuideHints(exercise);
     const customHint = exercise.hint && !/^check the description for requirements\.?$/i.test(exercise.hint.trim())
         ? exercise.hint.trim()
         : '';
@@ -8951,7 +9030,7 @@ const buildExerciseGuideSections = (exercise: Exercise): GuideSection[] => {
         {
             title: 'What The Problem Wants',
             tone: 'goal',
-            lines: [promptLine],
+            lines: specificGoalLines,
         },
         {
             title: 'Must-Have Requirements',
@@ -8961,17 +9040,12 @@ const buildExerciseGuideSections = (exercise: Exercise): GuideSection[] => {
         {
             title: 'How To Build It',
             tone: 'steps',
-            lines: rawBreakdownLines.length ? rawBreakdownLines : [
-                'Create the required function or script structure first.',
-                'Store the input values in clearly named variables.',
-                'Apply the operation described in the prompt.',
-                'Return or print the final result exactly as requested.',
-            ],
+            lines: stepLines,
         },
         {
             title: 'Hints To Avoid Mistakes',
             tone: 'hints',
-            lines: [customHint, ...conceptHints].filter(Boolean).slice(0, 6),
+            lines: [customHint, ...specificHints, ...conceptHints].filter(Boolean).slice(0, 6),
         },
     ].filter(section => section.lines.length > 0);
 };
