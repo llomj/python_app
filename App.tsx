@@ -2254,14 +2254,13 @@ def __auto_grader_run_function_script_fallback(function_names, tests, compare):
     }
 
 def __auto_grader_run():
-    source_requirement_error = __auto_grader_check_source_requirements()
-    if source_requirement_error:
-        return {
-            "passed": False,
-            "message": source_requirement_error
-        }
-
     if __auto_grader_spec.get("mode") == "script":
+        source_requirement_error = __auto_grader_check_source_requirements()
+        if source_requirement_error:
+            return {
+                "passed": False,
+                "message": source_requirement_error
+            }
         return __auto_grader_run_script()
 
     try:
@@ -2275,6 +2274,7 @@ def __auto_grader_run():
     function_names = __auto_grader_spec.get("functionNames", [])
     compare = __auto_grader_spec.get("compare", "exact")
     tests = __auto_grader_spec.get("tests", [])
+    optional_tests = __auto_grader_spec.get("optionalTests", [])
     first_args = tests[0].get("args", []) if tests else []
     first_kwargs = tests[0].get("kwargs", {}) if tests else {}
     if tests and tests[0].get("argFunctionNames"):
@@ -2284,6 +2284,23 @@ def __auto_grader_run():
     if tests and tests[0].get("functionListArgNames"):
         first_args = [None] + first_args
     target_name, target = __auto_grader_find_callable(function_names, first_args, kwargs=first_kwargs)
+    active_tests = tests
+    use_optional_tests = False
+    if target is None and optional_tests:
+        optional_first_args = optional_tests[0].get("args", [])
+        optional_first_kwargs = optional_tests[0].get("kwargs", {})
+        target_name, target = __auto_grader_find_callable(function_names, optional_first_args, kwargs=optional_first_kwargs)
+        if target is not None:
+            active_tests = optional_tests
+            use_optional_tests = True
+
+    if not use_optional_tests:
+        source_requirement_error = __auto_grader_check_source_requirements()
+        if source_requirement_error:
+            return {
+                "passed": False,
+                "message": source_requirement_error
+            }
 
     if target is None:
         script_result = __auto_grader_run_function_script_fallback(function_names, tests, compare)
@@ -2296,7 +2313,10 @@ def __auto_grader_run():
             "message": "Missing function. Expected one of: " + ", ".join(function_names) + ". A script answer is also accepted if it passes every visible and generated test."
         }
 
-    test_cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests) + __auto_grader_named_metamorphic_cases(function_names, tests) + __auto_grader_kwargs_metamorphic_cases(function_names, tests)
+    if use_optional_tests:
+        test_cases = list(active_tests)
+    else:
+        test_cases = list(active_tests) + __auto_grader_input_generated_cases(function_names, active_tests) + __auto_grader_named_metamorphic_cases(function_names, active_tests) + __auto_grader_kwargs_metamorphic_cases(function_names, active_tests)
     for index, case in enumerate(test_cases, start=1):
         args = case.get("args", [])
         kwargs = case.get("kwargs", {})
@@ -2561,7 +2581,7 @@ def __auto_grader_run():
                 )
             }
 
-    metamorphic_error = __auto_grader_run_metamorphic_tests(target, target_name, function_names, tests, compare)
+    metamorphic_error = None if use_optional_tests else __auto_grader_run_metamorphic_tests(target, target_name, function_names, active_tests, compare)
     if metamorphic_error:
         return {
             "passed": False,

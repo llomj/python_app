@@ -2014,6 +2014,7 @@ def restore_random(old_random):
 
 def run_function_tests(namespace, grader, tests, compare):
     function_names = grader.get("functionNames", [])
+    optional_tests = grader.get("optionalTests", [])
     first_args = tests[0].get("args", []) if tests else []
     first_kwargs = tests[0].get("kwargs", {}) if tests else {}
     if tests and tests[0].get("argFunctionNames"):
@@ -2023,9 +2024,21 @@ def run_function_tests(namespace, grader, tests, compare):
     if tests and tests[0].get("functionListArgNames"):
         first_args = [None] + first_args
     target_name, target = find_callable(namespace, function_names, first_args, kwargs=first_kwargs)
+    active_tests = tests
+    use_optional_tests = False
+    if target is None and optional_tests:
+        optional_first_args = optional_tests[0].get("args", [])
+        optional_first_kwargs = optional_tests[0].get("kwargs", {})
+        target_name, target = find_callable(namespace, function_names, optional_first_args, kwargs=optional_first_kwargs)
+        if target is not None:
+            active_tests = optional_tests
+            use_optional_tests = True
     if target is None:
         return False
-    test_cases = list(tests) + input_generated_cases(function_names, tests) + named_metamorphic_cases(function_names, tests) + kwargs_metamorphic_cases(function_names, tests)
+    if use_optional_tests:
+        test_cases = list(active_tests)
+    else:
+        test_cases = list(active_tests) + input_generated_cases(function_names, active_tests) + named_metamorphic_cases(function_names, active_tests) + kwargs_metamorphic_cases(function_names, active_tests)
     for index, case in enumerate(test_cases, start=1):
         args = list(case.get("args", []))
         kwargs = case.get("kwargs", {})
@@ -2103,7 +2116,7 @@ def run_function_tests(namespace, grader, tests, compare):
             printed_ok = bool(printed) and same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok:
             return False
-    if not run_metamorphic_tests(target, function_names, tests, compare):
+    if not use_optional_tests and not run_metamorphic_tests(target, function_names, active_tests, compare):
         return False
     return True
 

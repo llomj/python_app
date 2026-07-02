@@ -47,6 +47,7 @@ const exerciseById = new Map(EXERCISES.map(exercise => [exercise.id, exercise]))
 const distribution = new Map();
 const weakFunctionGraders = [];
 const singleCaseNoArgFunctionGraders = [];
+const singleCaseNoArgFunctionGradersWithOptionalTests = [];
 const unguardedSingleCaseNoArgFunctionGraders = [];
 const singleCaseScriptGraders = [];
 const unguardedSingleCaseScriptGraders = [];
@@ -179,6 +180,21 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
     }
   }
 
+  if (grader.optionalTests !== undefined) {
+    if (!Array.isArray(grader.optionalTests)) {
+      invalidGraders.push(`${id}: optionalTests must be an array`);
+    } else {
+      grader.optionalTests.forEach((test, index) => {
+        if (!Object.prototype.hasOwnProperty.call(test, 'expected') && !Object.prototype.hasOwnProperty.call(test, 'expectedException')) {
+          invalidGraders.push(`${id}: optional test ${index + 1} must declare expected or expectedException`);
+        }
+        if (!Object.prototype.hasOwnProperty.call(test, 'args')) {
+          invalidGraders.push(`${id}: optional test ${index + 1} must declare args`);
+        }
+      });
+    }
+  }
+
   tests.forEach((test, index) => {
     if (!Object.prototype.hasOwnProperty.call(test, 'expected') && !Object.prototype.hasOwnProperty.call(test, 'expectedException')) {
       invalidGraders.push(`${id}: test ${index + 1} must declare expected or expectedException`);
@@ -217,6 +233,9 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
         title: exerciseById.get(id)?.title || `Problem ${id}`,
         functionNames: grader.functionNames || [],
       });
+      if ((grader.optionalTests?.length || 0) > 0) {
+        singleCaseNoArgFunctionGradersWithOptionalTests.push(id);
+      }
       continue;
     }
     weakFunctionGraders.push({
@@ -244,6 +263,7 @@ console.log(`Graders: ${Object.keys(AUTO_GRADERS).length}`);
 console.log(`Test-count distribution: ${sortedDistribution.map(([count, total]) => `${count}:${total}`).join(', ')}`);
 console.log(`Parameterized function graders below ${MIN_FUNCTION_TESTS} tests: ${weakFunctionGraders.length}`);
 console.log(`Single-case no-arg function graders: ${singleCaseNoArgFunctionGraders.length}`);
+console.log(`Single-case no-arg function graders with optional dynamic tests: ${singleCaseNoArgFunctionGradersWithOptionalTests.length}`);
 console.log(`Unguarded single-case no-arg function graders: ${unguardedSingleCaseNoArgFunctionGraders.length}`);
 console.log(`Single-case script graders: ${singleCaseScriptGraders.length}`);
 console.log(`Unguarded single-case script graders: ${unguardedSingleCaseScriptGraders.length}`);
@@ -264,6 +284,7 @@ if (weakFunctionGraders.length) {
 
 if (singleCaseNoArgFunctionGraders.length && showAll) {
   console.log(`Single-case no-arg function grader IDs: ${singleCaseNoArgFunctionGraders.map(item => item.id).join(', ')}`);
+  console.log(`Single-case no-arg function grader IDs with optional dynamic tests: ${singleCaseNoArgFunctionGradersWithOptionalTests.join(', ')}`);
   console.log(`Unguarded single-case no-arg function grader IDs: ${unguardedSingleCaseNoArgFunctionGraders.join(', ')}`);
   console.log('First single-case no-arg function graders:');
   for (const item of singleCaseNoArgFunctionGraders.slice(0, 25)) {

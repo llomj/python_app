@@ -42,6 +42,7 @@ export interface AutoGrader {
     requiredClassInheritance?: Array<{ className: string; baseName: string }>;
     requiredBoolOps?: Array<'And' | 'Or'>;
     requiredAstOperators?: string[];
+    optionalTests?: AutoTestCase[];
     tests: AutoTestCase[];
 }
 
@@ -2194,6 +2195,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     286: {
         functionNames: ['sum_first_10_natural_numbers'],
         requiredNodePatterns: [{ nodeType: "While" }],
+        optionalTests: [
+            { args: [5], expected: 15 },
+            { args: [20], expected: 210 }
+        ],
         tests: [
             { args: [], expected: 55 }
         ]
@@ -2202,6 +2207,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['print_even_numbers'],
         compare: 'printedOrReturn',
         requiredNodePatterns: [{ nodeType: "While" }],
+        optionalTests: [
+            { args: [10], expected: '2\n4\n6\n8\n10' },
+            { args: [6], expected: '2\n4\n6' }
+        ],
         tests: [
             { args: [], expected: '2\n4\n6\n8\n10\n12\n14\n16\n18\n20' }
         ]
@@ -2210,6 +2219,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['print_odd_numbers'],
         compare: 'printedOrReturn',
         requiredNodePatterns: [{ nodeType: "While" }],
+        optionalTests: [
+            { args: [10], expected: '1\n3\n5\n7\n9' },
+            { args: [7], expected: '1\n3\n5\n7' }
+        ],
         tests: [
             { args: [], expected: '1\n3\n5\n7\n9\n11\n13\n15\n17\n19' }
         ]
@@ -5718,6 +5731,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["square_dic"],
     requiredCallPatterns: [{ functionName: "range" }],
     requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "For" }],
+    optionalTests: [
+      { args: [3], expected: {"1": 1, "2": 4, "3": 9} },
+      { args: [6], expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25, "6": 36} }
+    ],
     tests: [
       { args: [], expected: {"1": 1, "2": 4, "3": 9, "4": 16, "5": 25} }
     ]
@@ -5833,6 +5850,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["value_cubes"],
     requiredCallPatterns: [{ functionName: "range" }],
     requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "For" }],
+    optionalTests: [
+      { args: [3], expected: {"1": 1, "2": 8, "3": 27} },
+      { args: [6], expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125, "6": 216} }
+    ],
     tests: [
       { args: [], expected: {"1": 1, "2": 8, "3": 27, "4": 64, "5": 125} }
     ]
@@ -5876,6 +5897,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["nested_dic"],
     requiredCallPatterns: [{ functionName: "range" }],
     requiredNodePatterns: [{ nodeType: "Dict", minCount: 2 }, { nodeType: "For" }],
+    optionalTests: [
+      { args: [3], expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}} },
+      { args: [1], expected: {"1": {"square": 1, "cube": 1}} }
+    ],
     tests: [
       { args: [], expected: {"1": {"square": 1, "cube": 1}, "2": {"square": 4, "cube": 8}, "3": {"square": 9, "cube": 27}, "4": {"square": 16, "cube": 64}, "5": {"square": 25, "cube": 125}} }
     ]
@@ -9317,6 +9342,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['dict_length'],
         requiredCallPatterns: [{ functionName: "len" }],
         requiredNodePatterns: [{ nodeType: "Dict" }],
+        optionalTests: [
+            { args: [{"a": 1}], expected: 1 },
+            { args: [{"x": 1, "y": 2, "z": 3, "w": 4}], expected: 4 },
+        ],
         tests: [
             { args: [], expected: 3 },
         ]
@@ -9325,6 +9354,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['reverse_dict'],
         requiredCallPatterns: [{ functionName: "items" }],
         requiredNodePatterns: [{ nodeType: "Dict" }],
+        optionalTests: [
+            { args: [{"a": 1, "b": 2}], expected: {"1": "a", "2": "b"} },
+            { args: [{"x": "left", "y": "right"}], expected: {"left": "x", "right": "y"} },
+        ],
         tests: [
             { args: [], expected: {"Alice": "name", "30": "age", "New York": "city"} },
         ]
@@ -9340,6 +9373,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['sum_values'],
         requiredCallPatterns: [{ functionName: "sum" }, { functionName: "values" }],
         requiredNodePatterns: [{ nodeType: "Dict" }],
+        optionalTests: [
+            { args: [{"a": 5, "b": -2, "c": 10}], expected: 13 },
+            { args: [{"x": 0, "y": 4}], expected: 4 },
+        ],
         tests: [
             { args: [], expected: 60 },
         ]
@@ -9357,6 +9394,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['max_value'],
         requiredCallPatterns: [{ functionName: "max" }, { functionName: "values" }],
         requiredNodePatterns: [{ nodeType: "Dict" }],
+        optionalTests: [
+            { args: [{"a": 5, "b": -2, "c": 10}], expected: 10 },
+            { args: [{"x": -8, "y": -4}], expected: -4 },
+        ],
         tests: [
             { args: [], expected: 30 },
         ]
@@ -9365,6 +9406,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['is_dict_empty'],
         requiredCallPatterns: [{ functionName: "len" }],
         requiredNodePatterns: [{ nodeType: "Dict" }, { nodeType: "Compare" }],
+        optionalTests: [
+            { args: [{}], expected: true },
+            { args: [{"a": 1}], expected: false },
+        ],
         tests: [
             { args: [], expected: true },
         ]
@@ -9373,6 +9418,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["remove_value"],
     requiredCallPatterns: [{ functionName: "items" }],
     requiredNodePatterns: [{ nodeType: "Dict" }],
+    optionalTests: [
+      { args: [{"a": 10, "b": 20, "c": 10}, 10], expected: {"b": 20} },
+      { args: [{"x": 1, "y": 2}, 3], expected: {"x": 1, "y": 2} }
+    ],
     tests: [{
       args: [],
       expected: {"b": 20}
@@ -9382,6 +9431,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["find_key_by_value"],
     requiredCallPatterns: [{ functionName: "items" }],
     requiredNodePatterns: [{ nodeType: "Dict" }],
+    optionalTests: [
+      { args: [{"a": 10, "b": 20, "c": 10}, 10], expected: ["a", "c"] },
+      { args: [{"x": 1, "y": 2}, 3], expected: [] }
+    ],
     tests: [{
       args: [],
       expected: ["b"]
@@ -9399,6 +9452,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         functionNames: ['first_key_value'],
         requiredCallPatterns: [{ functionName: "items" }],
         requiredNodePatterns: [{ nodeType: "Dict" }],
+        optionalTests: [
+            { args: [{"x": 1, "y": 2}], expected: ["x", 1] },
+            { args: [{"first": "yes"}], expected: ["first", "yes"] },
+        ],
         tests: [
             { args: [], expected: ["a", 10] },
         ]
@@ -9406,6 +9463,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1219: {
         functionNames: ['merge_multiple_dicts'],
         requiredNodePatterns: [{ nodeType: "Dict", minCount: 3 }],
+        optionalTests: [
+            { args: [{"a": 1}, {"b": 2}, {"c": 3}], expected: {"a": 1, "b": 2, "c": 3} },
+            { args: [{"a": 1}, {"a": 9}, {"b": 2}], expected: {"a": 9, "b": 2} },
+        ],
         tests: [
             { args: [], expected: {"a": 10, "b": 20, "c": 30, "d": 40, "e": 50} },
         ]
@@ -9414,6 +9475,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     functionNames: ["list_to_dict"],
     requiredCallPatterns: [{ functionName: "dict" }],
     requiredNodePatterns: [{ nodeType: "Tuple" }],
+    optionalTests: [
+      { args: [[["x", 1], ["y", 2]]], expected: {"x": 1, "y": 2} },
+      { args: [[["name", "Ada"]]], expected: {"name": "Ada"} }
+    ],
     tests: [{
       args: [],
       expected: {"a": 1, "b": 2, "c": 3}
