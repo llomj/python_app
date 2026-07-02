@@ -208,7 +208,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 18,
             "title": "Problem 18",
-            "description": "Write a Python function called `find_min` that takes a list of numbers as an input argument and returns the minimum number in the list.\nExamples:\n  find_min() → type number:\n  find_min() → ?\n  find_min() → ?",
+            "description": "Write a Python function called `find_min` that takes a list of numbers as an input argument and returns the minimum number in the list.\nExamples:\n  find_min() → type number:\n  find_min() → ?",
             "initialCode": "def find_min():\n    pass\n\ndef find_min(numbers):\n    pass\n\ndef find_minimum(numbers):\n    pass",
             "solution": "# Using function approach\ndef find_min():\n    user = input('type number: ').split()\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))\n    min_num = sorted(int_number)[0]\n    for number in int_number:\n        if min_num < 0:  # BUG: This condition is wrong\n            min_num = number\n    print(min_num)  # Print the result\nfind_min()  # Call the function\ndef find_min(numbers):\n    return min(numbers)\nlst = [1, 56, 68]\nprint(find_min(lst))  # Output: 1\ndef find_minimum(numbers):\n    min_number = numbers[0]\n    for number in numbers:\n        if number < min_number:\n            min_number = number  # Update min_number to the new minimum\n    return min_number  # Return the minimum value found\nmin_number = [45, 6, 1]\nprint(find_minimum(min_number))  # Output: 1\n# Using built-in approach\ndef find_min():\n    user = input('type number: ').split()\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))\n    min_num = sorted(int_number)[0]\n    for number in int_number:\n        if min_num < 0:  # BUG: This condition is wrong\n            min_num = number\n    return min_num\n# Using manual approach\ndef find_min():\n    user = input('type number: ').split()\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))\n    min_num = sorted(int_number)[0]\n    for number in int_number:\n        if min_num < 0:  # BUG: This condition is wrong\n            min_num = number\n    result = min_num\n    return result\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = find_min(numbers)\nprint(result)\n# Direct approach\nprint(find_min([4, 1, 8, 6, 3]))",
 
@@ -544,7 +544,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 46,
             "title": "Problem 46",
-            "description": "Write a Python function called merge_lists that takes two sorted lists as input and returns a new sorted list containing all the elements from both input lists.\nExamples:\n  merge_lists([1, 3, 5], [2, 4, 6]) → [1, 2, 3, 4, 5, 6]\n  merge_lists([1, 3, 5], [2, 4, 6]) → [1, 2, 3, 4, 5, 6]",
+            "description": "Write a Python function called merge_lists that takes two sorted lists as input and returns a new sorted list containing all the elements from both input lists.\nExamples:\n  merge_lists([1, 3, 5], [2, 4, 6]) → [1, 2, 3, 4, 5, 6]",
             "initialCode": "def merge_lists():\n    pass",
             "solution": "# Using function approach\ndef merge_lists():\n    lst1 = sorted(input('Type the first sorted list: ').split())  # Sorts again\n    lst2 = sorted(input('Type the second sorted list: ').split())  # Sorts again\n    merged_list = sorted(lst1 + lst2)  # Concatenate and sort\n    print(merged_list)  # Print the merged and sorted list\nmerge_lists()  # Call the function\n# Alternative solution using + operator and sorted()\ndef merge_lists(lst1, lst2):\n    return sorted(lst1 + lst2)\nprint(merge_lists([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]\n# Alternative solution using heapq.merge for already sorted lists\ndef merge_lists(lst1, lst2):\n    import heapq\n    return list(heapq.merge(lst1, lst2))\nprint(merge_lists([1, 3, 5], [2, 4, 6]))  # Output: [1, 2, 3, 4, 5, 6]\n# Using built-in approach\ndef merge_lists():\n    lst1 = sorted(input('Type the first sorted list: ').split())  # Sorts again\n    lst2 = sorted(input('Type the second sorted list: ').split())  # Sorts again\n    merged_list = sorted(lst1 + lst2)  # Concatenate and sort\n    return merged_list\n# Using manual approach\ndef merge_lists():\n    lst1 = sorted(input('Type the first sorted list: ').split())  # Sorts again\n    lst2 = sorted(input('Type the second sorted list: ').split())  # Sorts again\n    merged_list = sorted(lst1 + lst2)  # Concatenate and sort\n    result = merged_list\n    return result\n# Script approach\nlst1 = [1, 3, 5]\nlst2 = [2, 4, 6]\nresult = merge_lists(lst1, lst2)\nprint(result)\n# Direct approach\nprint(merge_lists([2, 4, 6], [1, 3, 5]))",
 
@@ -616,7 +616,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 52,
             "title": "Problem 52",
-            "description": "Write a Python function called is_anagram that takes two strings as input and returns True if they are anagrams of each other, and False otherwise. Two strings are anagrams if they can be rearranged to form the same word (e.g., “listen” and “silent”).\nExamples:\n  is_anagram('listen', 'silent') → True\n  is_anagram('hello', 'world') → False\n  is_anagram('Triangle', 'Integral') → True\n  is_anagram('listen', 'silent') → True",
+            "description": "Write a Python function called is_anagram that takes two strings as input and returns True if they are anagrams of each other, and False otherwise. Two strings are anagrams if they can be rearranged to form the same word (e.g., “listen” and “silent”).\nExamples:\n  is_anagram('listen', 'silent') → True\n  is_anagram('hello', 'world') → False\n  is_anagram('Triangle', 'Integral') → True",
             "initialCode": "def main():\n    pass\n\ndef is_anagram(str1, str2):\n    pass\n\ndef is_anagram(lst1, lst2):\n    pass",
             "solution": "# Using function approach\ndef main():\n    string1 = input('type string: ').lower()  # e.g., 'Listen' \\u2192 'listen'\n    string2 = input('type string: ').lower()  # e.g., 'Silent' \\u2192 'silent'\n    sorted1 = sorted(string1)\n    sorted2 = sorted(string2)\n    if sorted1 == sorted2:\n        return True  # Strings are anagrams\n    return False  # Strings are not anagrams\nmain()\ndef is_anagram(str1, str2):\n    str1 = str1.lower()  # 'Listen' \\u2192 'listen'\n    str2 = str2.lower()  # 'Silent' \\u2192 'silent'\n    return sorted(str1) == sorted(str2)  # Returns True if anagrams, False otherwise\nprint(is_anagram('listen', 'silent'))  # Output: True\nprint(is_anagram('hello', 'world'))  # Output: False\nprint(is_anagram('Triangle', 'Integral'))  # Output: True\ndef is_anagram(lst1, lst2):\n    sorted_lst1 = sorted(lst1)  # 'qwer' \\u2192 ['e', 'q', 'r', 'w']\n    sorted_lst2 = sorted(lst2)  # 'rewq' \\u2192 ['e', 'q', 'r', 'w']\n    if sorted_lst1 == sorted_lst2:\n        return True  # Strings are anagrams\n    return False  # Strings are not anagrams\nlst1 = 'qwer'\nlst2 = 'rewq'\nprint(is_anagram(lst1, lst2))  # Output: True\n# Alternative solution using Counter\ndef is_anagram(str1, str2):\n    from collections import Counter\n    return Counter(str1.lower()) == Counter(str2.lower())\nprint(is_anagram('listen', 'silent'))  # Output: True\n# Alternative solution using character counting\ndef is_anagram(str1, str2):\n    str1, str2 = str1.lower(), str2.lower()\n    if len(str1) != len(str2):\n        return False\n    for char in str1:\n        if str1.count(char) != str2.count(char):\n            return False\n    return True\nprint(is_anagram('hello', 'olleh'))  # Output: True\n# Using built-in approach\ndef main():\n    result = True\n    return result\n# Using manual approach\ndef main():\n    return True\n# Script approach\nstr1 = 'hello'\nstr2 = 'world'\nresult = is_anagram(str1, str2)\nprint(result)\n# Direct approach\nprint(is_anagram('world', 'python'))",
 
@@ -652,7 +652,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 55,
             "title": "Problem 55",
-            "description": "Write a Python program to calculate the area of a rectangle. Prompt the user to enter the length and width.\nExamples:\n  area_rectangle() → Enter length:\n  area_rectangle() → ?\n  area_rectangle() → ?",
+            "description": "Write a Python program to calculate the area of a rectangle. Prompt the user to enter the length and width.\nExamples:\n  area_rectangle() → Enter length:\n  area_rectangle() → ?",
             "initialCode": "def area_rectangle():\n    pass",
             "solution": "# Using function approach\ndef area_rectangle():\n    length = float(input('Enter length: '))\n    width = float(input('Enter width: '))\n    print(length * width)\narea_rectangle()\n# Using built-in approach\ndef area_rectangle():\n    length = float(input('Enter length: '))\n    width = float(input('Enter width: '))\n    return length * width\n# Using manual approach\ndef area_rectangle():\n    length = float(input('Enter length: '))\n    width = float(input('Enter width: '))\n    result = length * width\n    return result\n# Script approach\nlength = 5\nwidth = 5\nprint(length * width)\n# Direct approach\nlength = 10\nwidth = 10\nprint(length * width)",
 
@@ -736,7 +736,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 62,
             "title": "Problem 62",
-            "description": "Write a Python program to calculate the factorial of a number. Prompt the user to enter a number.\nExamples:\n  factorial() → 120\n  factorial() → None\n  factorial() → 120",
+            "description": "Write a Python program to calculate the factorial of a number. Prompt the user to enter a number.\nExamples:\n  factorial() → 120\n  factorial() → None",
             "initialCode": "def factorial():\n    pass\n\ndef factorial():\n    pass",
             "solution": "# Using function approach\ndef factorial():\n    result = 1  # Initialize result\n    for i in range(1, 6):\n        result *= i  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 4 \\u00d7 5 = 120\n    print(f'{result}')  # Always prints 120\nfactorial()  # Call the function\ndef factorial():\n    number = int(input('Enter a number: '))  # e.g., 5\n    result = 1\n    for i in range(1, number + 1):  # range(1, 6) = 1, 2, 3, 4, 5\n        result *= i  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 4 \\u00d7 5 = 120\n    print(f'The factorial of {number} is {result}')  # Prints: The factorial of 5 is 120\nfactorial()  # Call the function\n# Alternative solution using recursion\ndef factorial():\n    def fact(n):\n        if n <= 1:\n            return 1\n        return n * fact(n - 1)\n    number = int(input('Enter a number: '))\n    print(f'The factorial of {number} is {fact(number)}')\nfactorial()\n# Alternative solution using math.factorial\ndef factorial():\n    import math\n    number = int(input('Enter a number: '))\n    print(f'The factorial of {number} is {math.factorial(number)}')\nfactorial()\n# Using built-in approach\ndef factorial():\n    result = 1  # Initialize result\n    for i in range(1, 6):\n        result *= i  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 4 \\u00d7 5 = 120\n    return f'{result}'\n# Using manual approach\ndef factorial():\n    result = 1  # Initialize result\n    for i in range(1, 6):\n        result *= i  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 4 \\u00d7 5 = 120\n    result = f'{result}'\n    return result\n# Script approach\nresult = 1  # Initialize result\nfor i in range(1, 6):\n    result *= i  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 4 \\u00d7 5 = 120\nprint(f'{result}')  # Always prints 120\n# Direct approach\nresult = 1  # Initialize result\nfor i in range(1, 6):\n    result *= i  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 4 \\u00d7 5 = 120\nprint(f'{result}')  # Always prints 120",
 
@@ -748,7 +748,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 63,
             "title": "Problem 63",
-            "description": "Write a Python program to calculate the sum of all numbers from 1 to a given number. Prompt the user to enter a number.\nExamples:\n  sum_of_all_numbers() → Enter a number:\n  sum_of_all_numbers() → ?\n  sum_of_all_numbers() → ?",
+            "description": "Write a Python program to calculate the sum of all numbers from 1 to a given number. Prompt the user to enter a number.\nExamples:\n  sum_of_all_numbers() → Enter a number:\n  sum_of_all_numbers() → ?",
             "initialCode": "def sum_of_all_numbers():\n    pass",
             "solution": "# Using function approach\ndef sum_of_all_numbers():\n    n = int(input('Enter a number: '))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    print(total)\nsum_of_all_numbers()\n# Using built-in approach\ndef sum_of_all_numbers():\n    n = int(input('Enter a number: '))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    return total\n# Using manual approach\ndef sum_of_all_numbers():\n    n = int(input('Enter a number: '))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    result = total\n    return result\n# Script approach\nn = 5\ntotal = 0\nfor number in range(1, n + 1):\n    total += number\nprint(total)\n# Direct approach\nn = 10\ntotal = 0\nfor number in range(1, n + 1):\n    total += number\nprint(total)",
 
@@ -760,7 +760,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 64,
             "title": "Problem 64",
-            "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers.\nExamples:\n  find_largest() → type number:\n  find_largest() → ?\n  find_largest() → ?",
+            "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers.\nExamples:\n  find_largest() → type number:\n  find_largest() → ?",
             "initialCode": "def find_largest():\n    pass\n\ndef find_largest():\n    pass\n\ndef largest_element(numbers):\n    pass\n\ndef largest_element(numbers):\n    pass",
             "solution": "# Using function approach\ndef find_largest():\n    user = input('type number: ').split()  # '2 56 75 4566 3' \\u2192 ['2', '56', ...]\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))  # [2, 56, 75, 4566, 3]\n    sort = sorted(int_number)  # [2, 3, 56, 75, 4566]\n    largest = sort[-1]  # 4566\n    print(largest)  # Display the largest number\nfind_largest()  # Call the function\ndef find_largest():\n    user = input('type number: ').split()\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n    sort = sorted(int_number, reverse=True)  # [4566, 75, 56, 3, 2]\n    largest = sort[0]  # 4566\n    print(largest)  # Display the largest number\nfind_largest()  # Call the function\ndef largest_element(numbers):\n    return max(numbers)\nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))  # Output: 4566\ndef largest_element(numbers):\n    largest = numbers[0]  # Assume first is largest\n    for number in numbers:\n        if number > largest:  # 56 > 2, so largest = 56; 75 > 56, so largest = 75, etc.\n            largest = number  # Update maximum\n    return largest  # Return the largest number\nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))  # Output: 4566\n# Using built-in approach\ndef find_largest():\n    user = input('type number: ').split()  # '2 56 75 4566 3' \\u2192 ['2', '56', ...]\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))  # [2, 56, 75, 4566, 3]\n    sort = sorted(int_number)  # [2, 3, 56, 75, 4566]\n    largest = sort[-1]  # 4566\n    return largest\n# Using manual approach\ndef find_largest():\n    user = input('type number: ').split()  # '2 56 75 4566 3' \\u2192 ['2', '56', ...]\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))  # [2, 56, 75, 4566, 3]\n    sort = sorted(int_number)  # [2, 3, 56, 75, 4566]\n    largest = sort[-1]  # 4566\n    result = largest\n    return result\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = largest_element(numbers)\nprint(result)\n# Direct approach\nprint(largest_element([4, 1, 8, 6, 3]))",
 
@@ -808,7 +808,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 68,
             "title": "Problem 68",
-            "description": "Write a Python program to find the length of a string without using the built-in len() function. Prompt the user to enter a string.\nExamples:\n  length_string() → Enter a string:\n  length_string() → ?\n  length_string() → ?",
+            "description": "Write a Python program to find the length of a string without using the built-in len() function. Prompt the user to enter a string.\nExamples:\n  length_string() → Enter a string:\n  length_string() → ?",
             "initialCode": "def length_string():\n    pass",
             "solution": "# Using function approach\ndef length_string():\n    text = input('Enter a string: ')\n    count = 0\n    for _ in text:\n        count += 1\n    print(count)\nlength_string()\n# Using built-in approach\ndef length_string():\n    text = input('Enter a string: ')\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n# Using manual approach\ndef length_string():\n    text = input('Enter a string: ')\n    count = 0\n    for _ in text:\n        count += 1\n    result = count\n    return result\n# Script approach\ntext = 'hello'\ncount = 0\nfor _ in text:\n    count += 1\nprint(count)\n# Direct approach\ntext = 'world'\ncount = 0\nfor _ in text:\n    count += 1\nprint(count)",
 
@@ -832,7 +832,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 71,
             "title": "Problem 71",
-            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sec_lar() → Enter numbers:\n  sec_lar() → ?\n  sec_lar() → ?",
+            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sec_lar() → Enter numbers:\n  sec_lar() → ?",
             "initialCode": "def sec_lar():\n    pass\n\ndef second_largest_number(numbers):\n    pass\n\ndef second_largest_number(numbers):\n    pass\n\ndef second_largest_number(numbers):\n    pass",
             "solution": "# Using function approach\ndef second_largest_number(numbers):\n    unique_numbers = sorted(set(numbers), reverse=True)\n    if len(unique_numbers) < 2:\n        return None\n    return unique_numbers[1]\ndef sec_lar():\n    numbers = list(map(int, input('Enter numbers: ').split()))\n    print(second_largest_number(numbers))\n# Using built-in approach\ndef second_largest_number(numbers):\n    result = None\n    return result\n# Using manual approach\ndef second_largest_number(numbers):\n    return None\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = second_largest_number(numbers)\nprint(result)\n# Direct approach\nprint(second_largest_number([4, 1, 8, 6, 3]))",
 
@@ -868,7 +868,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 74,
             "title": "Problem 74",
-            "description": "Write a Python program to check if two strings are anagrams of each other. Prompt the user to enter two strings\nExamples:\n  are_anagrams() → Enter the first string:\n  are_anagrams() → ?\n  are_anagrams() → ?",
+            "description": "Write a Python program to check if two strings are anagrams of each other. Prompt the user to enter two strings\nExamples:\n  are_anagrams() → Enter the first string:\n  are_anagrams() → ?",
             "initialCode": "def are_anagrams():\n    pass\n\ndef pal():\n    pass",
             "solution": "# Using function approach\ndef are_anagrams():\n    first = input('Enter the first string: ').replace(' ', '').lower()\n    second = input('Enter the second string: ').replace(' ', '').lower()\n    print(sorted(first) == sorted(second))\nare_anagrams()\n# Using built-in approach\ndef are_anagrams():\n    first = input('Enter the first string: ').replace(' ', '').lower()\n    second = input('Enter the second string: ').replace(' ', '').lower()\n    return sorted(first) == sorted(second)\n# Using manual approach\ndef are_anagrams():\n    first = input('Enter the first string: ').replace(' ', '').lower()\n    second = input('Enter the second string: ').replace(' ', '').lower()\n    result = sorted(first) == sorted(second)\n    return result\n# Script approach\nfirst = 'hello'\nsecond = 'hello'\nprint(sorted(first) == sorted(second))\n# Direct approach\nfirst = 'world'\nsecond = 'world'\nprint(sorted(first) == sorted(second))",
 
@@ -916,7 +916,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 78,
             "title": "Problem 78",
-            "description": "Write a Python program to convert a decimal number to binary. Prompt the user to enter a decimal number.\nExamples:\n  decimal_to_binary() → Enter a decimal number:\n  decimal_to_binary() → ?\n  decimal_to_binary() → ?",
+            "description": "Write a Python program to convert a decimal number to binary. Prompt the user to enter a decimal number.\nExamples:\n  decimal_to_binary() → Enter a decimal number:\n  decimal_to_binary() → ?",
             "initialCode": "def decimal_to_binary():\n    pass",
             "solution": "# Using function approach\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))  # e.g., 5\n    binary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\n    print(f'The binary representation of {decimal_number} is {binary_number}')  # Prints: 'The binary representation of 5 is 101'\ndecimal_to_binary()  # Call the function\n# Alternative solution using loop\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))\n    if decimal_number == 0:\n        return '0'\n    binary = ''\n    num = decimal_number\n    while num > 0:\n        binary = str(num % 2) + binary\n        num //= 2\n    print(f'The binary representation of {decimal_number} is {binary}')\ndecimal_to_binary()\n# Alternative solution using format\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))\n    binary_number = format(decimal_number, 'b')\n    print(f'The binary representation of {decimal_number} is {binary_number}')\ndecimal_to_binary()\n# Using built-in approach\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))  # e.g., 5\n    binary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\n    return f'The binary representation of {decimal_number} is {binary_number}'\n# Using manual approach\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))  # e.g., 5\n    binary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\n    result = f'The binary representation of {decimal_number} is {binary_number}'\n    return result\n# Script approach\ndecimal_number = 5\nbinary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\nprint(f'The binary representation of {decimal_number} is {binary_number}')  # Prints: 'The binary representation of 5 is 101'\n# Direct approach\ndecimal_number = 10\nbinary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\nprint(f'The binary representation of {decimal_number} is {binary_number}')  # Prints: 'The binary representation of 5 is 101'",
 
@@ -940,7 +940,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 80,
             "title": "Problem 80",
-            "description": "Write a Python program to generate a random number between a given range. Prompt the user to enter the lower and upper limits.\nExamples:\n  generate_random_number() → Enter the lower limit:\n  generate_random_number() → ?\n  generate_random_number() → ?",
+            "description": "Write a Python program to generate a random number between a given range. Prompt the user to enter the lower and upper limits.\nExamples:\n  generate_random_number() → Enter the lower limit:\n  generate_random_number() → ?",
             "initialCode": "import random\ndef generate_random_number():\n    pass",
             "solution": "import random\n# Using function approach\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))  # e.g., 1\n    upper_limit = int(input('Enter the upper limit: '))  # e.g., 10\n    random_number = random.randint(lower_limit, upper_limit)  # e.g., 7\n    print(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')  # Prints: 'The random number between 1 and 10 is: 7'\ngenerate_random_number()  # Call the function\n# Alternative solution using random.randrange\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))\n    upper_limit = int(input('Enter the upper limit: '))\n    random_number = random.randrange(lower_limit, upper_limit + 1)\n    print(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')\ngenerate_random_number()\n# Alternative solution using random.uniform for floats\ndef generate_random_number():\n    lower_limit = float(input('Enter the lower limit: '))\n    upper_limit = float(input('Enter the upper limit: '))\n    random_number = random.uniform(lower_limit, upper_limit)\n    print(f'The random float between {lower_limit} and {upper_limit} is: {random_number:.2f}')\ngenerate_random_number()\n# Using built-in approach\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))  # e.g., 1\n    upper_limit = int(input('Enter the upper limit: '))  # e.g., 10\n    random_number = random.randint(lower_limit, upper_limit)  # e.g., 7\n    return f'The random number between {lower_limit} and {upper_limit} is: {random_number}'\n# Using manual approach\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))  # e.g., 1\n    upper_limit = int(input('Enter the upper limit: '))  # e.g., 10\n    random_number = random.randint(lower_limit, upper_limit)  # e.g., 7\n    result = f'The random number between {lower_limit} and {upper_limit} is: {random_number}'\n    return result\n# Script approach\nlower_limit = 5\nupper_limit = 5\nrandom_number = random.randint(lower_limit, upper_limit)  # e.g., 7\nprint(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')  # Prints: 'The random number between 1 and 10 is: 7'\n# Direct approach\nlower_limit = 10\nupper_limit = 10\nrandom_number = random.randint(lower_limit, upper_limit)  # e.g., 7\nprint(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')  # Prints: 'The random number between 1 and 10 is: 7'",
 
@@ -952,7 +952,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 81,
             "title": "Problem 81",
-            "description": "Write a Python program to find the square root of a number. Prompt the user to enter a number.\nExamples:\n  square_root() → type num:\n  square_root() → ?\n  square_root() → ?",
+            "description": "Write a Python program to find the square root of a number. Prompt the user to enter a number.\nExamples:\n  square_root() → type num:\n  square_root() → ?",
             "initialCode": "def square_root():\n    pass\n\ndef square_root():\n    pass",
             "solution": "# Using function approach\ndef square_root():\n    num = float(input('type num: '))  # e.g., 9.0\n    return num ** 0.5  # 9.0 ** 0.5 = 3.0\nprint(square_root())  # Call function and print result\ndef square_root():\n    num = float(input('type num: '))  # e.g., 16.0\n    print(num ** 0.5)  # Prints: 4.0\nsquare_root()  # Call the function\n# Alternative solution using math.sqrt\ndef square_root():\n    import math\n    num = float(input('type num: '))\n    return math.sqrt(num)\nprint(square_root())\n# Alternative solution using Newton's method\ndef square_root():\n    num = float(input('type num: '))\n    if num < 0:\n        return 'Cannot calculate square root of negative number'\n    guess = num / 2\n    for _ in range(10):\n        guess = (guess + num / guess) / 2\n    return guess\nprint(square_root())\n# Using built-in approach\ndef square_root():\n    result = num ** 0.5\n    return result\n# Using manual approach\ndef square_root():\n    return num ** 0.5\n# Script approach\nnum = 5\nresult = num ** 0.5\nprint(result)\n# Direct approach\nnum = 10\nresult = num ** 0.5\nprint(result)",
 
@@ -964,7 +964,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 82,
             "title": "Problem 82",
-            "description": "Write a Python program to find the area of a circle. Prompt the user to enter the radius.\nExamples:\n  circle() → type number:\n  circle() → ?\n  circle() → ?",
+            "description": "Write a Python program to find the area of a circle. Prompt the user to enter the radius.\nExamples:\n  circle() → type number:\n  circle() → ?",
             "initialCode": "import math\ndef circle():\n    pass\n\ndef calculate_circle_area():\n    pass\n\nimport math\ndef calculate_circle_area(radius):\n    pass\n\ndef main():\n    pass",
             "solution": "import math\n# Using function approach\ndef circle():\n    radius = float(input('type number: '))  # e.g., 5.0\n    area = math.pi * radius ** 2  # math.pi \\u00d7 5\\u00b2 = 25\\u03c0 \\u2248 78.54\n    print(area)  # Display the area\ncircle()  # Call the function\ndef calculate_circle_area():\n    radius = float(input('Enter the radius of the circle: '))  # e.g., 10.0\n    area = math.pi * radius ** 2  # \\u03c0 \\u00d7 10\\u00b2 = 100\\u03c0 \\u2248 314.16\n    print(f'The area of the circle with radius {radius} is {area:.2f}')  # Prints: 'The area of the circle with radius 10.0 is 314.16'\ncalculate_circle_area()  # Call the function\nimport math\ndef calculate_circle_area(radius):\n    return math.pi * radius ** 2  # Returns area value\ndef main():\n    radius = float(input('Enter the radius of the circle: '))\n    area = calculate_circle_area(radius)  # Call calculation function\n    print(f'The area of the circle with radius {radius} is {area:.2f}')\nif __name__ == '__main__':\n    main()  # Call main function\n# Alternative solution using lambda\ncalculate_circle_area = lambda radius: math.pi * radius ** 2\nprint(f'Area: {calculate_circle_area(7):.2f}')  # Output: Area: 153.94\n# Alternative solution with class\nclass Circle:\n    def __init__(self, radius):\n        self.radius = radius\n    def area(self):\n        return math.pi * self.radius ** 2\ncircle = Circle(10)\nprint(f'Area: {circle.area():.2f}')  # Output: Area: 314.16\n# Using built-in approach\ndef circle():\n    radius = float(input('type number: '))  # e.g., 5.0\n    area = math.pi * radius ** 2  # math.pi \\u00d7 5\\u00b2 = 25\\u03c0 \\u2248 78.54\n    return area\n# Using manual approach\ndef circle():\n    radius = float(input('type number: '))  # e.g., 5.0\n    area = math.pi * radius ** 2  # math.pi \\u00d7 5\\u00b2 = 25\\u03c0 \\u2248 78.54\n    result = area\n    return result\n# Script approach\nradius = 7\nresult = calculate_circle_area(radius)\nprint(result)\n# Direct approach\nprint(calculate_circle_area(14))",
 
@@ -1096,7 +1096,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 93,
             "title": "Problem 93",
-            "description": "Write a Python program to find the factorial of a number using a loop. Prompt the user to enter a number.\nExamples:\n  factorial() → type number:\n  factorial() → ?\n  factorial() → ?",
+            "description": "Write a Python program to find the factorial of a number using a loop. Prompt the user to enter a number.\nExamples:\n  factorial() → type number:\n  factorial() → ?",
             "initialCode": "def factorial():\n    pass\n\ndef factorial():\n    pass",
             "solution": "# Using function approach\ndef factorial():\n    user = int(input('type number: '))\n    result = 1  # Start with 1 (multiplicative identity)\n    for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n\n        result *= number  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 ... \\u00d7 n\n    print(result)\nfactorial()\ndef factorial():\n    user = int(input('type number: '))\n    result = 1\n    for number in range(1, user + 1):\n        result *= number\n    return result\nprint(factorial())\n# Alternative solution using math.factorial\nimport math\ndef factorial():\n    n = int(input('Enter a number: '))\n    print(math.factorial(n))\nfactorial()\n# Alternative solution using recursion\ndef factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\nn = int(input('Enter a number: '))\nprint(factorial(n))\n# Using built-in approach\ndef factorial():\n    user = int(input('type number: '))\n    result = 1  # Start with 1 (multiplicative identity)\n    for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n\n        result *= number  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 ... \\u00d7 n\n    return result\n# Using manual approach\ndef factorial():\n    user = int(input('type number: '))\n    result = 1  # Start with 1 (multiplicative identity)\n    for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n\n        result *= number  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 ... \\u00d7 n\n    result = result\n    return result\n# Script approach\nn = 6\nresult = factorial(n)\nprint(result)\n# Direct approach\nprint(factorial(15))",
 
@@ -1156,7 +1156,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 98,
             "title": "Problem 98",
-            "description": "Write a Python program to find the sum of the digits in a string. Prompt the user to enter a string containing seperate numbers. eg \"2\", \"8\" should return 10\nExamples:\n  digits_string() → Type numbers separated by spaces:\n  digits_string() → ?\n  digits_string() → ?",
+            "description": "Write a Python program to find the sum of the digits in a string. Prompt the user to enter a string containing seperate numbers. eg \"2\", \"8\" should return 10\nExamples:\n  digits_string() → Type numbers separated by spaces:\n  digits_string() → ?",
             "initialCode": "def digits_string():\n    pass\n\ndef digits_string():\n    pass",
             "solution": "# Using function approach\ndef digits_string():\n    user = input('Type numbers separated by spaces: ').split()  # Split into list of strings\n    total = 0\n    for number in user:\n        total += int(number)  # Convert to int and add\n    print(total)\ndigits_string()\ndef digits_string():\n    user = input('type numbers: ').split()\n    total = 0\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n    for number in int_number:\n        total += number\n    print(total)\ndigits_string()\n# Alternative solution using sum with map\ndef digits_string():\n    numbers = input('Enter numbers separated by spaces: ').split()\n    print(sum(map(int, numbers)))\ndigits_string()\n# Alternative solution using sum with generator\ndef digits_string():\n    print(sum(int(x) for x in input('Enter numbers: ').split()))\ndigits_string()\n# Using built-in approach\ndef digits_string():\n    user = input('Type numbers separated by spaces: ').split()  # Split into list of strings\n    total = 0\n    for number in user:\n        total += int(number)  # Convert to int and add\n    return total\n# Using manual approach\ndef digits_string():\n    user = input('Type numbers separated by spaces: ').split()  # Split into list of strings\n    total = 0\n    for number in user:\n        total += int(number)  # Convert to int and add\n    result = total\n    return result\n# Script approach\nuser = 5\ntotal = 0\nfor number in user:\n    total += int(number)  # Convert to int and add\nprint(total)\n# Direct approach\nuser = 10\ntotal = 0\nfor number in user:\n    total += int(number)  # Convert to int and add\nprint(total)",
 
@@ -1240,7 +1240,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 106,
             "title": "Problem 106",
-            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sum_of_odd_numbers() → Enter a list of numbers separated by spaces:\n  sum_of_odd_numbers() → ?\n  sum_of_odd_numbers() → ?",
+            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sum_of_odd_numbers() → Enter a list of numbers separated by spaces:\n  sum_of_odd_numbers() → ?",
             "initialCode": "def sum_of_odd_numbers():\n    pass\n\ndef sum_of_all_odd():\n    pass",
             "solution": "# Using function approach\ndef sum_of_odd_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))\n    odd_sum = 0\n    for num in int_numbers:\n        if num % 2 != 0:  # Check if odd\n            odd_sum += num\n    print('The sum of all odd numbers is:', odd_sum)\nsum_of_odd_numbers()\ndef sum_of_all_odd():\n    user = input('Enter numbers separated by spaces: ').split()\n    total = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:\n            total += number\n    print(total)\nsum_of_all_odd()\n# Alternative using sum with generator\ndef sum_of_odd_numbers():\n    numbers = [int(x) for x in input('Enter numbers: ').split()]\n    print(sum(n for n in numbers if n % 2 != 0))\nsum_of_odd_numbers()\n# Alternative using filter\ndef sum_of_all_odd():\n    numbers = list(map(int, input('Enter numbers: ').split()))\n    print(sum(filter(lambda x: x % 2 != 0, numbers)))\nsum_of_all_odd()\n# Using built-in approach\ndef sum_of_odd_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))\n    odd_sum = 0\n    for num in int_numbers:\n        if num % 2 != 0:  # Check if odd\n            odd_sum += num\n    return 'The sum of all odd numbers is:', odd_sum\n# Using manual approach\ndef sum_of_odd_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))\n    odd_sum = 0\n    for num in int_numbers:\n        if num % 2 != 0:  # Check if odd\n            odd_sum += num\n    result = 'The sum of all odd numbers is:', odd_sum\n    return result\n# Script approach\nuser_input = 5\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))\nodd_sum = 0\nfor num in int_numbers:\n    if num % 2 != 0:  # Check if odd\n        odd_sum += num\nprint('The sum of all odd numbers is:', odd_sum)\n# Direct approach\nuser_input = 10\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))\nodd_sum = 0\nfor num in int_numbers:\n    if num % 2 != 0:  # Check if odd\n        odd_sum += num\nprint('The sum of all odd numbers is:', odd_sum)",
 
@@ -1264,7 +1264,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 108,
             "title": "Problem 108",
-            "description": "Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string\nExamples:\n  remove_duplicates() → type string:\n  remove_duplicates() → ?\n  remove_duplicates() → ?",
+            "description": "Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string\nExamples:\n  remove_duplicates() → type string:\n  remove_duplicates() → ?",
             "initialCode": "def remove_duplicates():\n    pass\n\ndef remove_duplicates():\n    pass",
             "solution": "# Using function approach\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # Set to track unique characters\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n    print(''.join(unique_user))  # join() converts set to string (order may vary)\nremove_duplicates()\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # For fast lookup\n    result = []  # For maintaining order\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n            result.append(char)  # Add to list to preserve order\n    print(''.join(result))  # Join list to get ordered string\nremove_duplicates()\n# Alternative solution using dict.fromkeys()\ndef remove_duplicates():\n    user = input('type string: ')\n    print(''.join(dict.fromkeys(user)))\nremove_duplicates()\n# Alternative solution using list comprehension with seen set\ndef remove_duplicates():\n    user = input('type string: ')\n    seen = set()\n    result = ''.join([c for c in user if not (c in seen or seen.add(c))])\n    print(result)\nremove_duplicates()\n# Using built-in approach\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # Set to track unique characters\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n    return ''.join(unique_user)\n# Using manual approach\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # Set to track unique characters\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n    result = ''.join(unique_user)\n    return result\n# Script approach\nuser = 'hello'\nunique_user = set()  # Set to track unique characters\nfor char in user:\n    if char not in unique_user:\n        unique_user.add(char)\nprint(''.join(unique_user))  # join() converts set to string (order may vary)\n# Direct approach\nuser = 'world'\nunique_user = set()  # Set to track unique characters\nfor char in user:\n    if char not in unique_user:\n        unique_user.add(char)\nprint(''.join(unique_user))  # join() converts set to string (order may vary)",
 
@@ -1540,7 +1540,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 134,
             "title": "Problem 134",
-            "description": "Write a Python program to find the sum of all numbers in a list. Prompt the user to enter a list of numbers in a input function\nExamples:\n  sum_of_all_numbers() → Enter a list of numbers separated by spaces:\n  sum_of_all_numbers() → ?\n  sum_of_all_numbers() → ?",
+            "description": "Write a Python program to find the sum of all numbers in a list. Prompt the user to enter a list of numbers in a input function\nExamples:\n  sum_of_all_numbers() → Enter a list of numbers separated by spaces:\n  sum_of_all_numbers() → ?",
             "initialCode": "def sum_of_all_numbers():\n    pass",
             "solution": "# Using function approach\ndef sum_of_all_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    print(total_sum)\nsum_of_all_numbers()\n# Alternative solution using map with sum\ndef sum_of_all_numbers():\n    numbers = list(map(int, input('Enter numbers: ').split()))\n    print(sum(numbers))\nsum_of_all_numbers()\n# Alternative solution using generator\ndef sum_of_all_numbers():\n    print(sum(int(x) for x in input('Enter numbers: ').split()))\nsum_of_all_numbers()\n# Using built-in approach\ndef sum_of_all_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    return total_sum\n# Using manual approach\ndef sum_of_all_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    result = total_sum\n    return result\n# Script approach\nuser_input = 5\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))  # Convert strings to integers\ntotal_sum = sum(int_numbers)  # Built-in sum() function\nprint(total_sum)\n# Direct approach\nuser_input = 10\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))  # Convert strings to integers\ntotal_sum = sum(int_numbers)  # Built-in sum() function\nprint(total_sum)",
 
@@ -1648,7 +1648,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 143,
             "title": "Problem 143",
-            "description": "Write a function with user input that coverts 1 2 3 (int) into a \"1\" \"2\" \"3\" (str).\nExamples:\n  int_str() → type:\n  int_str() → ?\n  int_str() → ?",
+            "description": "Write a function with user input that coverts 1 2 3 (int) into a \"1\" \"2\" \"3\" (str).\nExamples:\n  int_str() → type:\n  int_str() → ?",
             "initialCode": "def int_str():\n    pass",
             "solution": "# Using function approach\ndef int_str():\n    user_lst = []\n    user = input('type: ')  # e.g., '1 2 3'\n    split_str = user.split()  # ['1', '2', '3'] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    print(user_lst)  # Prints list of strings\nint_str()\n# Alternative solution using list comprehension\ndef int_str():\n    print([x for x in input('type: ').split()])\nint_str()\n# Alternative solution using split() directly\ndef int_str():\n    print(input('type: ').split())\nint_str()\n# Using built-in approach\ndef int_str():\n    user_lst = []\n    user = input('type: ')  # e.g., '1 2 3'\n    split_str = user.split()  # ['1', '2', '3'] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    return user_lst\n# Using manual approach\ndef int_str():\n    user_lst = []\n    user = input('type: ')  # e.g., '1 2 3'\n    split_str = user.split()  # ['1', '2', '3'] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    result = user_lst\n    return result\n# Script approach\nuser_lst = []\nuser = 5\nsplit_str = user.split()  # ['1', '2', '3'] (already strings)\nfor word in split_str:\n    user_lst.append(word)  # Appends strings (no conversion)\nprint(user_lst)  # Prints list of strings\n# Direct approach\nuser_lst = []\nuser = 10\nsplit_str = user.split()  # ['1', '2', '3'] (already strings)\nfor word in split_str:\n    user_lst.append(word)  # Appends strings (no conversion)\nprint(user_lst)  # Prints list of strings",
 
@@ -1696,7 +1696,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 147,
             "title": "Problem 147",
-            "description": "Write a function where user types a list of numbers in string and returns a list of numbers from smallest to biggest.\nExamples:\n  type_smallest_biggest() → type number list:\n  type_smallest_biggest() → ?\n  type_smallest_biggest() → ?",
+            "description": "Write a function where user types a list of numbers in string and returns a list of numbers from smallest to biggest.\nExamples:\n  type_smallest_biggest() → type number list:\n  type_smallest_biggest() → ?",
             "initialCode": "def type_smallest_biggest():\n    pass\n\ndef small_big():\n    pass",
             "solution": "# Using function approach\ndef type_smallest_biggest():\n    user = input('type number list: ').split()\n    sort_number = sorted(user)  # String sort: '10' comes before '2'\n    print(sort_number)\ntype_smallest_biggest()\ndef small_big():\n    user_string = input('type number followed by spaces: ')\n    user_split = user_string.split()\n    int_list = []\n    for number in user_split:\n        int_list.append(int(number))  # Convert to int\n    int_list.sort()  # Sort numerically\n    sorted_str = []\n    for number in int_list:\n        sorted_str.append(str(number))  # Convert back to strings\n    return ' '.join(sorted_str)  # Join with spaces\nprint(small_big())\n# Alternative solution using map and sorted\ndef small_big():\n    nums = list(map(int, input('Enter numbers: ').split()))\n    nums.sort()\n    return ' '.join(map(str, nums))\nprint(small_big())\n# Alternative solution using key=int in sorted\ndef type_smallest_biggest():\n    print(' '.join(sorted(input('Enter numbers: ').split(), key=int)))\ntype_smallest_biggest()\n# Using built-in approach\ndef type_smallest_biggest():\n    user = input('type number list: ').split()\n    sort_number = sorted(user)  # String sort: '10' comes before '2'\n    return sort_number\n# Using manual approach\ndef type_smallest_biggest():\n    user = input('type number list: ').split()\n    sort_number = sorted(user)  # String sort: '10' comes before '2'\n    result = sort_number\n    return result\n# Script approach\nuser = 5\nsort_number = sorted(user)  # String sort: '10' comes before '2'\nprint(sort_number)\n# Direct approach\nuser = 10\nsort_number = sorted(user)  # String sort: '10' comes before '2'\nprint(sort_number)",
 
@@ -1720,7 +1720,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 149,
             "title": "Problem 149",
-            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists using 2 for loops.\nExamples:\n  common() → type lst:\n  common() → ?\n  common() → ?",
+            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists using 2 for loops.\nExamples:\n  common() → type lst:\n  common() → ?",
             "initialCode": "def common():\n    pass",
             "solution": "# Using function approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    result = []\n    for i in lst1:  # Outer loop\n        for j in lst2:  # Inner loop (nested)\n            if i == j and i not in result:\n                result.append(i)\n    return result\ncommon()\n# Alternative solution using set intersection\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    return list(set(lst1) & set(lst2))\nprint(common())\n# Alternative solution using list comprehension\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    return list(dict.fromkeys([x for x in lst1 if x in lst2]))\nprint(common())\n# Using built-in approach\ndef common():\n    return [i for i in lst1]\n# Using manual approach\ndef common():\n    return list(map(lambda i: i, lst1))\n# Script approach\nlst1 = 5\nlst2 = 5\nresult = []\nfor i in lst1:  # Outer loop\n    for j in lst2:  # Inner loop (nested)\n        if i == j and i not in result:\n            result.append(i)\nresult = result\nprint(result)\n# Direct approach\nlst1 = 10\nlst2 = 10\nresult = []\nfor i in lst1:  # Outer loop\n    for j in lst2:  # Inner loop (nested)\n        if i == j and i not in result:\n            result.append(i)\nresult = result\nprint(result)",
 
@@ -1732,7 +1732,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 150,
             "title": "Problem 150",
-            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists without using for loops.\nExamples:\n  common() → type lst:\n  common() → ?\n  common() → ?",
+            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists without using for loops.\nExamples:\n  common() → type lst:\n  common() → ?",
             "initialCode": "def common():\n    pass",
             "solution": "# Using function approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n    print(common_element)\ncommon()\n# Alternative solution using & operator\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    print(set(lst1) & set(lst2))\ncommon()\n# Alternative solution returning list\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    print(list(set(lst1).intersection(set(lst2))))\ncommon()\n# Using built-in approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n    return common_element\n# Using manual approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n    result = common_element\n    return result\n# Script approach\nlst1 = 5\nlst2 = 5\nset1 = set(lst1)  # Convert to set\nset2 = set(lst2)\ncommon_element = set1.intersection(set2)  # Set intersection operator finds common elements\nprint(common_element)\n# Direct approach\nlst1 = 10\nlst2 = 10\nset1 = set(lst1)  # Convert to set\nset2 = set(lst2)\ncommon_element = set1.intersection(set2)  # Set intersection operator finds common elements\nprint(common_element)",
 
@@ -1816,7 +1816,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 157,
             "title": "Problem 157",
-            "description": "Write a Python function called remove_duplicates that takes a string as input and returns the duplicates removed into a string.\nExamples:\n  remove_duplicates('and here is was and in the') → and here is was in the\n  remove_duplicates('and here is was and in the') → and here is was in the",
+            "description": "Write a Python function called remove_duplicates that takes a string as input and returns the duplicates removed into a string.\nExamples:\n  remove_duplicates('and here is was and in the') → and here is was in the",
             "initialCode": "def main(string):\n    pass\n\ndef remove_duplicates(string):\n    pass",
             "solution": "# Using function approach\ndef main(string):\n    lst = []\n    duplicates = []\n    split_string = string.split()\n    for word in split_string:\n        if word not in lst:\n            lst.append(word)  # Track unique words\n        else:\n            duplicates.append(word)  # Add to duplicates if seen before\n    return duplicates  # Returns duplicates, not string with duplicates removed\nstring = 'so what's happening duplicates duplicates today? It's hot duplicates duplicates.'\nmain(string)\ndef remove_duplicates(string):\n    split_word = string.split()\n    seen = set()  # Track seen words\n    duplicates = set()  # Track duplicate words\n    for word in split_word:\n        if word in seen:\n            duplicates.add(word)  # Add to duplicates\n        else:\n            seen.add(word)  # Mark as seen\n    return ' '.join(duplicates)  # Returns duplicates, not string with duplicates removed\nlst = 'and here is was and in the'\nprint(remove_duplicates(lst))\n# Alternative solution returning string with duplicates removed (preserving order)\ndef remove_duplicates(string):\n    seen = set()\n    result = []\n    for word in string.split():\n        if word not in seen:\n            seen.add(word)\n            result.append(word)\n    return ' '.join(result)\nprint(remove_duplicates('and here is was and in the'))  # Output: and here is was in the\n# Alternative solution using dict.fromkeys\ndef remove_duplicates(string):\n    return ' '.join(dict.fromkeys(string.split()))\nprint(remove_duplicates('and here is was and in the'))  # Output: and here is was in the\n# Using built-in approach\ndef main(string):\n    return [word for word in split_string]\n# Using manual approach\ndef main(string):\n    return list(map(lambda word: word, split_string))\n# Script approach\nstring = 'hello'\nresult = main(string)\nprint(result)\n# Direct approach\nprint(main('world'))",
 
@@ -2332,7 +2332,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 200,
             "title": "Problem 200",
-            "description": "Write a Python program to find the common number in a lists. for this exercise do not use set.\nExamples:\n  common_numbers([43, 2, 45, 567, 666, 2, 45]) → [2, 45]\n  common_numbers([43, 2, 45, 567, 666, 2, 45]) → [2, 45]\n  common_numbers([1, 2, 2, 3, 4, 4, 5]) → [2, 4]",
+            "description": "Write a Python program to find the common number in a lists. for this exercise do not use set.\nExamples:\n  common_numbers([43, 2, 45, 567, 666, 2, 45]) → [2, 45]\n  common_numbers([1, 2, 2, 3, 4, 4, 5]) → [2, 4]",
             "initialCode": "def common_numbers(lst):\n    pass",
             "solution": "# Using function approach\ndef common_numbers(lst):\n    seen = []  # Track numbers we've seen\n    common = []  # Track duplicate numbers\n    for number in lst:\n        if number in seen and number not in common:  # Found duplicate\n            common.append(number)  # Add to common (duplicates)\n        else:\n            seen.append(number)  # Mark as seen (first occurrence)\n    return common  # Returns list of numbers that appear more than once\nlst = [43, 2, 45, 567, 666, 2, 45]  # Duplicates: 2 and 45\nprint(common_numbers(lst))  # Output: [2, 45]\n# Alternative using dictionary counter\ndef common_numbers(lst):\n    from collections import Counter\n    return [k for k, v in Counter(lst).items() if v > 1]\nprint(common_numbers([43, 2, 45, 567, 666, 2, 45]))  # Output: [2, 45]\n# Alternative using list comprehension with count\ndef common_numbers(lst):\n    return list({x for x in lst if lst.count(x) > 1})\nprint(common_numbers([43, 2, 45, 567, 666, 2, 45]))  # Output: [2, 45]\n# Alternative using dict.get()\ndef common_numbers(lst):\n    count = {}\n    for x in lst:\n        count[x] = count.get(x, 0) + 1\n    return [k for k, v in count.items() if v > 1]\nprint(common_numbers([1, 2, 2, 3, 4, 4, 5]))  # Output: [2, 4]\n# Using built-in approach\ndef common_numbers(lst):\n    return [number for number in lst]\n# Using manual approach\ndef common_numbers(lst):\n    return list(map(lambda number: number, lst))\n# Script approach\nlst = [2, 4, 6, 8]\nresult = common_numbers(lst)\nprint(result)\n# Direct approach\nprint(common_numbers([1, 3, 5, 7]))",
 
@@ -2404,7 +2404,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 206,
             "title": "Problem 206",
-            "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().\nExamples:\n  max_of_three() → Enter three numbers:\n  max_of_three() → ?\n  max_of_three() → ?",
+            "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().\nExamples:\n  max_of_three() → Enter three numbers:\n  max_of_three() → ?",
             "initialCode": "def max_of_three():\n    pass",
             "solution": "# Using function approach\ndef max_of_three():\n    numbers = [int(value) for value in input('Enter three numbers: ').split()]\n    if len(numbers) != 3:\n        print('not enough numbers')\n        return\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number > largest:\n            largest = number\n    print(largest)\nmax_of_three()\n# Script approach\nnumbers = 5\nif len(numbers) != 3:\n    print('not enough numbers')\n    return\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number > largest:\n        largest = number\nprint(largest)\n# Direct approach\nnumbers = 10\nif len(numbers) != 3:\n    print('not enough numbers')\n    return\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number > largest:\n        largest = number\nprint(largest)",
 
@@ -2680,7 +2680,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 231,
             "title": "Problem 231",
-            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible.\nExamples:\n  sum_of_odd() → type numbers:\n  sum_of_odd() → ?\n  sum_of_odd() → ?",
+            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible.\nExamples:\n  sum_of_odd() → type numbers:\n  sum_of_odd() → ?",
             "initialCode": "def sum_of_odd():\n    pass",
             "solution": "# Using function approach\ndef sum_of_odd():\n    user = input('type numbers: ').split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    print(count)\nsum_of_odd()\n# Alternative using sum with generator\ndef sum_of_odd(nums):\n    return sum(n for n in nums if n % 2 != 0)\nprint(sum_of_odd([1, 2, 3, 4, 5]))\n# Alternative using filter and sum\ndef sum_of_odd(nums):\n    return sum(filter(lambda x: x % 2 != 0, nums))\nprint(sum_of_odd([2, 4, 6, 7, 9]))\n# Alternative using list comprehension\ndef sum_of_odd(nums):\n    return sum([n for n in nums if n % 2])\nprint(sum_of_odd([10, 15, 20, 25]))\n# Using built-in approach\ndef sum_of_odd():\n    user = input('type numbers: ').split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    return count\n# Using manual approach\ndef sum_of_odd():\n    user = input('type numbers: ').split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    result = count\n    return result\n# Script approach\nnums = [3, 7, 2, 9, 1]\nresult = sum_of_odd(nums)\nprint(result)\n# Direct approach\nprint(sum_of_odd([4, 1, 8, 6, 3]))",
 
@@ -3316,7 +3316,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 286,
             "title": "Problem 286",
-            "description": "Write a Python program to find the sum of the first 10 natural numbers using a `while` loop.\nExamples:\n  sum_first_10_natural_numbers() → 55\n  sum_first_10_natural_numbers() → 55\n  sum_first_10_natural_numbers() → 55",
+            "description": "Write a Python program to find the sum of the first 10 natural numbers using a `while` loop.\nExamples:\n  sum_first_10_natural_numbers() → 55",
             "initialCode": "def sum_first_10_natural_numbers():\n    pass",
             "solution": "# Using function approach\ndef sum_first_10_natural_numbers():\n    i = 1\n    total = 0\n    while i <= 10:\n        total += i\n        i += 1\n    return total\nresult = sum_first_10_natural_numbers()\nprint(result)\n# Alternative using built-in sum and range\ndef sum_first_10_natural_numbers():\n    return sum(range(1, 11))\nprint(sum_first_10_natural_numbers())\n# Alternative using formula (n * (n + 1)) // 2\ndef sum_first_10_natural_numbers():\n    return 10 * 11 // 2\nprint(sum_first_10_natural_numbers())\n# Alternative using for loop\ndef sum_first_10_natural_numbers():\n    total = 0\n    for i in range(1, 11):\n        total += i\n    return total\nprint(sum_first_10_natural_numbers())\n# Alternative using reduce\nfrom functools import reduce\ndef sum_first_10_natural_numbers():\n    return reduce(lambda acc, x: acc + x, range(1, 11), 0)\nprint(sum_first_10_natural_numbers())\n# Using built-in approach\ndef sum_first_10_natural_numbers():\n    result = total\n    return result\n# Using manual approach\ndef sum_first_10_natural_numbers():\n    return total\n# Script approach\ni = 1\ntotal = 0\nwhile i <= 10:\n    total += i\n    i += 1\nresult = total\nprint(result)\n# Direct approach\ni = 1\ntotal = 0\nwhile i <= 10:\n    total += i\n    i += 1\nresult = total\nprint(result)",
 
@@ -3532,7 +3532,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 304,
             "title": "Problem 304",
-            "description": "Write a Python program to repeatedly ask for user input until a specific condition is met using a `while` loop.\nExamples:\n  ask_until_condition() → Enter a number greater than 10:\n  ask_until_condition() → ?\n  ask_until_condition() → ?",
+            "description": "Write a Python program to repeatedly ask for user input until a specific condition is met using a `while` loop.\nExamples:\n  ask_until_condition() → Enter a number greater than 10:\n  ask_until_condition() → ?",
             "initialCode": "def ask_until_condition():\n    pass",
             "solution": "# Using function approach\ndef ask_until_condition():\n    while True:\n        user_input = input('Enter a number greater than 10: ')\n        if int(user_input) > 10:\n            break\nask_until_condition()\n# Alternative using while loop with flag\ndef ask_until_condition():\n    valid = False\n    while not valid:\n        user_input = input('Enter a number greater than 10: ')\n        if int(user_input) > 10:\n            valid = True\nask_until_condition()\n# Alternative using while True with return\ndef ask_until_condition():\n    while True:\n        user_input = input('Enter a number greater than 10: ')\n        if int(user_input) > 10:\n            return\nask_until_condition()\n# Alternative using while with conditional\ndef ask_until_condition():\n    user_input = input('Enter a number greater than 10: ')\n    while int(user_input) <= 10:\n        user_input = input('Enter a number greater than 10: ')\nask_until_condition()\n# Script approach\nwhile True:\n    user_input = 5\n    if int(user_input) > 10:\n        break\n# Direct approach\nwhile True:\n    user_input = 10\n    if int(user_input) > 10:\n        break",
 
@@ -3544,7 +3544,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 307,
             "title": "Problem 307",
-            "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort() or max() or min().\nExamples:\n  find_min_max() → Enter numbers:\n  find_min_max() → ?\n  find_min_max() → ?",
+            "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort() or max() or min().\nExamples:\n  find_min_max() → Enter numbers:\n  find_min_max() → ?",
             "initialCode": "def find_min_max():\n    pass",
             "solution": "# Using function approach\ndef find_min_max():\n    numbers = [int(value) for value in input('Enter numbers: ').split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    print(smallest, largest)\nfind_min_max()\n# Using built-in approach\ndef find_min_max():\n    numbers = [int(value) for value in input('Enter numbers: ').split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    return smallest, largest\n# Using manual approach\ndef find_min_max():\n    numbers = [int(value) for value in input('Enter numbers: ').split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    result = smallest, largest\n    return result\n# Script approach\nnumbers = 5\nsmallest = numbers[0]\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number < smallest:\n        smallest = number\n    if number > largest:\n        largest = number\nprint(smallest, largest)\n# Direct approach\nnumbers = 10\nsmallest = numbers[0]\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number < smallest:\n        smallest = number\n    if number > largest:\n        largest = number\nprint(smallest, largest)",
 
@@ -3556,7 +3556,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 308,
             "title": "Problem 308",
-            "description": "Write a function group_by_first_letter that takes a list of strings as input and returns a dictionary. The dictionary should group the strings by their first letter. Each key in the dictionary should be a first letter, and the corresponding value should be a list of strings that start with that letter. User should type list as input():\nExamples:\n  group_by_first_letter() → type word list:\n  group_by_first_letter() → ?\n  group_by_first_letter() → ?",
+            "description": "Write a function group_by_first_letter that takes a list of strings as input and returns a dictionary. The dictionary should group the strings by their first letter. Each key in the dictionary should be a first letter, and the corresponding value should be a list of strings that start with that letter. User should type list as input():\nExamples:\n  group_by_first_letter() → type word list:\n  group_by_first_letter() → ?",
             "initialCode": "def group_by_first_letter():\n    pass",
             "solution": "# Using function approach\ndef group_by_first_letter():\n    lst = input('type word list: ').split()\n    result = {}\n    for word in lst:\n        first_letter = word[0]\n        if first_letter not in result:\n            result[first_letter] = [word]\n        else:\n            result[first_letter].append(word)\n    print(result)\ngroup_by_first_letter()\n# Using built-in approach\ndef group_by_first_letter():\n    lst = input('type word list: ').split()\n    result = {}\n    for word in lst:\n        first_letter = word[0]\n        if first_letter not in result:\n            result[first_letter] = [word]\n        else:\n            result[first_letter].append(word)\n    return result\n# Using manual approach\ndef group_by_first_letter():\n    lst = input('type word list: ').split()\n    result = {}\n    for word in lst:\n        first_letter = word[0]\n        if first_letter not in result:\n            result[first_letter] = [word]\n        else:\n            result[first_letter].append(word)\n    result = result\n    return result\n# Script approach\nlst = 'hello'\nresult = {}\nfor word in lst:\n    first_letter = word[0]\n    if first_letter not in result:\n        result[first_letter] = [word]\n    else:\n        result[first_letter].append(word)\nprint(result)\n# Direct approach\nlst = 'world'\nresult = {}\nfor word in lst:\n    first_letter = word[0]\n    if first_letter not in result:\n        result[first_letter] = [word]\n    else:\n        result[first_letter].append(word)\nprint(result)",
 
@@ -3592,7 +3592,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 312,
             "title": "Problem 312",
-            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop.\nExamples:\n  second_largest_number() → Type numbers separated by spaces:\n  second_largest_number() → ?\n  second_largest_number() → ?",
+            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop.\nExamples:\n  second_largest_number() → Type numbers separated by spaces:\n  second_largest_number() → ?",
             "initialCode": "def second_largest_number():\n    pass",
             "solution": "# Using function approach\ndef second_largest_number():\n    user = input('Type numbers separated by spaces: ').split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n    print(second_largest)\nsecond_largest_number()\n# Using built-in approach\ndef second_largest_number():\n    user = input('Type numbers separated by spaces: ').split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n    return second_largest\n# Using manual approach\ndef second_largest_number():\n    user = input('Type numbers separated by spaces: ').split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n    result = second_largest\n    return result\n# Script approach\nuser = 5\nuser_int = list(map(int, user))\nuser_int.sort()  \nsecond_largest = user_int[-2]  \nprint(second_largest)\n# Direct approach\nuser = 10\nuser_int = list(map(int, user))\nuser_int.sort()  \nsecond_largest = user_int[-2]  \nprint(second_largest)",
 
@@ -3772,7 +3772,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 328,
             "title": "Problem 328",
-            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop, do not use map().\nExamples:\n  second_largest_number() → Type numbers separated by spaces:\n  second_largest_number() → ?\n  second_largest_number() → ?",
+            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop, do not use map().\nExamples:\n  second_largest_number() → Type numbers separated by spaces:\n  second_largest_number() → ?",
             "initialCode": "def second_largest_number():\n    pass",
             "solution": "# Using function approach\ndef second_largest_number():\n    user_input = input('Type numbers separated by spaces: ').split()\n    user_int = []\n    for num in user_input:\n        user_int.append(int(num))\n    unique_numbers = set(user_int)\n    unique_numbers = list(unique_numbers)\n    unique_numbers.sort()\n    if len(unique_numbers) > 1:\n        second_largest = unique_numbers[-2]\n    else:\n        second_largest = 'Not enough unique numbers'\n    print(second_largest)\nsecond_largest_number()\n# Using built-in approach\ndef second_largest_number():\n    user_input = input('Type numbers separated by spaces: ').split()\n    user_int = []\n    for num in user_input:\n        user_int.append(int(num))\n    unique_numbers = set(user_int)\n    unique_numbers = list(unique_numbers)\n    unique_numbers.sort()\n    if len(unique_numbers) > 1:\n        second_largest = unique_numbers[-2]\n    else:\n        second_largest = 'Not enough unique numbers'\n    return second_largest\n# Using manual approach\ndef second_largest_number():\n    user_input = input('Type numbers separated by spaces: ').split()\n    user_int = []\n    for num in user_input:\n        user_int.append(int(num))\n    unique_numbers = set(user_int)\n    unique_numbers = list(unique_numbers)\n    unique_numbers.sort()\n    if len(unique_numbers) > 1:\n        second_largest = unique_numbers[-2]\n    else:\n        second_largest = 'Not enough unique numbers'\n    result = second_largest\n    return result\n# Script approach\nuser_input = 5\nuser_int = []\nfor num in user_input:\n    user_int.append(int(num))\nunique_numbers = set(user_int)\nunique_numbers = list(unique_numbers)\nunique_numbers.sort()\nif len(unique_numbers) > 1:\n    second_largest = unique_numbers[-2]\nelse:\n    second_largest = 'Not enough unique numbers'\nprint(second_largest)\n# Direct approach\nuser_input = 10\nuser_int = []\nfor num in user_input:\n    user_int.append(int(num))\nunique_numbers = set(user_int)\nunique_numbers = list(unique_numbers)\nunique_numbers.sort()\nif len(unique_numbers) > 1:\n    second_largest = unique_numbers[-2]\nelse:\n    second_largest = 'Not enough unique numbers'\nprint(second_largest)",
 
@@ -3988,7 +3988,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 347,
             "title": "Problem 347",
-            "description": "Write a Python program that defines a function `greet()` which contains a nested function `get_name()` to prompt the user for their name. The `greet()` function should return a greeting message using the name.\nExamples:\n  greet() → What is your name?\n  greet() → ?\n  greet() → ?",
+            "description": "Write a Python program that defines a function `greet()` which contains a nested function `get_name()` to prompt the user for their name. The `greet()` function should return a greeting message using the name.\nExamples:\n  greet() → What is your name?\n  greet() → ?",
             "initialCode": "def greet():\n    pass",
             "solution": "# Using function approach\ndef greet():\n    def get_name():\n        return input('What is your name? ')\n    name = get_name()\n    return f'Hello, {name}!'\nresult = greet()\nprint(result)\n# Using built-in approach\ndef greet():\n    result = input('What is your name? ')\n    return result\n# Using manual approach\ndef greet():\n    return input('What is your name? ')",
 
@@ -4180,7 +4180,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 363,
             "title": "Problem 363",
-            "description": "Write a Python program that defines a function `reverse_string()` which contains a nested function `reverse()` that reverses a given string.\nExamples:\n  reverse_string() → <function reverse_string.<locals>.reverse at 0x107598e00>\n  reverse_string() → <function reverse_string.<locals>.reverse at 0x107598e00>\n  reverse_string() → <function reverse_string.<locals>.reverse at 0x107598e00>",
+            "description": "Write a Python program that defines a function `reverse_string()` which contains a nested function `reverse()` that reverses a given string.\nExamples:\n  reverse_string() → <function reverse_string.<locals>.reverse at 0x107598e00>",
             "initialCode": "def reverse_string():\n    pass\n\ndef reverse_string(string):\n    pass",
             "solution": "# Using function approach\ndef reverse_string():\n    def reverse(s):\n        return s[::-1]\n    return reverse\nreverse_func = reverse_string()\nprint(reverse_func('Hello, World!'))  \ndef reverse_string(string):\n    def reverse(s):\n        reversed_str = ''\n        for char in s:\n            reversed_str = char + reversed_str\n        return reversed_str\n    return reverse(string)\nresult = reverse_string('Hello')\nprint(result)\n# Using built-in approach\ndef reverse_string():\n    return ''.join(reversed(s))\n# Using manual approach\ndef reverse_string():\n    result = ''\n    for char in s:\n        result = char + result\n    return result\n# Script approach\nstring = 'hello'\nresult = reverse_string(string)\nprint(result)\n# Direct approach\nprint(reverse_string('world'))",
 
@@ -5728,7 +5728,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 495,
             "title": "Problem 495",
-            "description": "Create a base class Animal with a method speak() and a derived class Dog that overrides the speak() method to print “Bark”.\nExamples:\n  → Animal sound\n  → Animal sound\n  → Animal sound",
+            "description": "Create a base class Animal with a method speak() and a derived class Dog that overrides the speak() method to print “Bark”.\nExamples:\n  → Animal sound",
             "initialCode": "class Animal:\n    pass\n\nclass Dog(Animal):\n    pass\n\nclass Cat(Animal):\n    pass",
             "solution": "# Using function approach\nclass Animal:\n    def speak(self):\n        return 'Animal sound'\nclass Dog(Animal):\n    def speak(self):\n        return 'Bark'\nclass Cat(Animal):\n    def speak(self):\n        return 'Meow'\ndog = Dog()\ncat = Cat()\nprint(dog.speak())\nprint(cat.speak())\n# Using built-in approach\ndef solve():\n    class Animal:\n        def speak(self):\n            return 'Animal sound'\n    class Dog(Animal):\n        def speak(self):\n            return 'Bark'\n    class Cat(Animal):\n        def speak(self):\n            return 'Meow'\n    dog = Dog()\n    cat = Cat()\n    print(dog.speak())\n    print(cat.speak())\n# Using manual approach\ndef solve():\n    class Animal:\n        def speak(self):\n            return 'Animal sound'\n    class Dog(Animal):\n        def speak(self):\n            return 'Bark'\n    class Cat(Animal):\n        def speak(self):\n            return 'Meow'\n    dog_2 = Dog()\n    cat_2 = Cat()\n    print(dog_2.speak())\n    print(cat_2.speak())\n# Script approach\nobj = Animal()\nprint(obj)\n# Direct approach\nprint(Animal())",
 
@@ -5800,7 +5800,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 501,
             "title": "Problem 501",
-            "description": "Create a base class Bird with a method fly(). Create a derived class Penguin that overrides the fly() method to print “Cannot fly”.\nExamples:\n  → I can fly!\n  → I can fly!\n  → I can fly!",
+            "description": "Create a base class Bird with a method fly(). Create a derived class Penguin that overrides the fly() method to print “Cannot fly”.\nExamples:\n  → I can fly!",
             "initialCode": "class Bird:\n    pass\n\nclass Penguin(Bird):\n    pass",
             "solution": "# Using function approach\nclass Bird:\n    def fly(self):\n        return 'I can fly!'\nclass Penguin(Bird):\n    def fly(self):\n        return 'Cannot fly'\ngeneric_bird = Bird()\nprint(generic_bird.fly())\npenguin = Penguin()\nprint(penguin.fly())\n# Using built-in approach\ndef solve():\n    class Bird:\n        def fly(self):\n            return 'I can fly!'\n    class Penguin(Bird):\n        def fly(self):\n            return 'Cannot fly'\n    generic_bird = Bird()\n    print(generic_bird.fly())\n    penguin = Penguin()\n    print(penguin.fly())\n# Using manual approach\ndef solve():\n    class Bird:\n        def fly(self):\n            return 'I can fly!'\n    class Penguin(Bird):\n        def fly(self):\n            return 'Cannot fly'\n    generic_bird_2 = Bird()\n    print(generic_bird_2.fly())\n    penguin_2 = Penguin()\n    print(penguin_2.fly())\n# Script approach\nobj = Bird()\nprint(obj)\n# Direct approach\nprint(Bird())",
 
@@ -5824,7 +5824,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 503,
             "title": "Problem 503",
-            "description": "Create a base class Instrument with a method play(). Create a derived class Guitar that overrides the play() method to print “Strum”.\nExamples:\n  → Playing an instrument.\n  → Playing an instrument.\n  → Playing an instrument.",
+            "description": "Create a base class Instrument with a method play(). Create a derived class Guitar that overrides the play() method to print “Strum”.\nExamples:\n  → Playing an instrument.",
             "initialCode": "class Instrument:\n    pass\n\nclass Guitar(Instrument):\n    pass",
             "solution": "# Using function approach\nclass Instrument:\n    def play(self):\n        return 'Playing an instrument.'\nclass Guitar(Instrument):\n    def play(self):\n        return 'Strum'\ngeneric_instrument = Instrument()\nprint(generic_instrument.play())\nguitar = Guitar()\nprint(guitar.play())\n# Using built-in approach\ndef solve():\n    class Instrument:\n        def play(self):\n            return 'Playing an instrument.'\n    class Guitar(Instrument):\n        def play(self):\n            return 'Strum'\n    generic_instrument = Instrument()\n    print(generic_instrument.play())\n    guitar = Guitar()\n    print(guitar.play())\n# Using manual approach\ndef solve():\n    class Instrument:\n        def play(self):\n            return 'Playing an instrument.'\n    class Guitar(Instrument):\n        def play(self):\n            return 'Strum'\n    generic_instrument_2 = Instrument()\n    print(generic_instrument_2.play())\n    guitar_2 = Guitar()\n    print(guitar_2.play())\n# Script approach\nobj = Instrument()\nprint(obj)\n# Direct approach\nprint(Instrument())",
 
@@ -5836,7 +5836,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 504,
             "title": "Problem 504",
-            "description": "Create a base class Game with a method start(). Create a derived class Chess that overrides the start() method to print “Start Chess”.\nExamples:\n  → Starting the game.\n  → Starting the game.\n  → Starting the game.",
+            "description": "Create a base class Game with a method start(). Create a derived class Chess that overrides the start() method to print “Start Chess”.\nExamples:\n  → Starting the game.",
             "initialCode": "class Game:\n    pass\n\nclass Chess(Game):\n    pass",
             "solution": "# Using function approach\nclass Game:\n    def start(self):\n        return 'Starting the game.'\nclass Chess(Game):\n    def start(self):\n        return 'Start Chess'\ngeneric_game = Game()\nprint(generic_game.start())\nchess_game = Chess()\nprint(chess_game.start())\n# Using built-in approach\ndef solve():\n    class Game:\n        def start(self):\n            return 'Starting the game.'\n    class Chess(Game):\n        def start(self):\n            return 'Start Chess'\n    generic_game = Game()\n    print(generic_game.start())\n    chess_game = Chess()\n    print(chess_game.start())\n# Using manual approach\ndef solve():\n    class Game:\n        def start(self):\n            return 'Starting the game.'\n    class Chess(Game):\n        def start(self):\n            return 'Start Chess'\n    generic_game_2 = Game()\n    print(generic_game_2.start())\n    chess_game_2 = Chess()\n    print(chess_game_2.start())\n# Script approach\nobj = Game()\nprint(obj)\n# Direct approach\nprint(Game())",
 
@@ -5884,7 +5884,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 508,
             "title": "Problem 508",
-            "description": "Create a base class Parent with a method display(). Create a derived class Child that overrides the display() method to print “This is a child”.\nExamples:\n  → This is the parent.\n  → This is the parent.\n  → This is the parent.",
+            "description": "Create a base class Parent with a method display(). Create a derived class Child that overrides the display() method to print “This is a child”.\nExamples:\n  → This is the parent.",
             "initialCode": "class Parent:\n    pass\n\nclass Child(Parent):\n    pass",
             "solution": "# Using function approach\nclass Parent:\n    def display(self):\n        return 'This is the parent.'\nclass Child(Parent):\n    def display(self):\n        return 'This is a child'\nparent = Parent()\nprint(parent.display()) \nchild = Child()\nprint(child.display())\n# Using built-in approach\ndef solve():\n    class Parent:\n        def display(self):\n            return 'This is the parent.'\n    class Child(Parent):\n        def display(self):\n            return 'This is a child'\n    parent = Parent()\n    print(parent.display()) \n    child = Child()\n    print(child.display())\n# Using manual approach\ndef solve():\n    class Parent:\n        def display(self):\n            return 'This is the parent.'\n    class Child(Parent):\n        def display(self):\n            return 'This is a child'\n    parent_2 = Parent()\n    print(parent_2.display()) \n    child_2 = Child()\n    print(child_2.display())\n# Script approach\nobj = Parent()\nprint(obj)\n# Direct approach\nprint(Parent())",
 
@@ -5908,7 +5908,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 510,
             "title": "Problem 510",
-            "description": "Create a base class Plant with a method grow(). Create a derived class Flower that overrides the grow() method to print “Bloom”.\nExamples:\n  → The plant is growing.\n  → The plant is growing.\n  → The plant is growing.",
+            "description": "Create a base class Plant with a method grow(). Create a derived class Flower that overrides the grow() method to print “Bloom”.\nExamples:\n  → The plant is growing.",
             "initialCode": "class Plant:\n    pass\n\nclass Flower(Plant):\n    pass",
             "solution": "# Using function approach\nclass Plant:\n    def grow(self):\n        return 'The plant is growing.'\nclass Flower(Plant):\n    def grow(self):\n        return 'Bloom'\nplant = Plant()\nprint(plant.grow())  # Output: The plant is growing.\nflower = Flower()\nprint(flower.grow())  # Output: Bloom\n# Using built-in approach\ndef solve():\n    class Plant:\n        def grow(self):\n            return 'The plant is growing.'\n    class Flower(Plant):\n        def grow(self):\n            return 'Bloom'\n    plant = Plant()\n    print(plant.grow())  # Output: The plant is growing.\n    flower = Flower()\n    print(flower.grow())  # Output: Bloom\n# Using manual approach\ndef solve():\n    class Plant:\n        def grow(self):\n            return 'The plant is growing.'\n    class Flower(Plant):\n        def grow(self):\n            return 'Bloom'\n    plant_2 = Plant()\n    print(plant_2.grow())  # Output: The plant_2 is growing.\n    flower_2 = Flower()\n    print(flower_2.grow())  # Output: Bloom\n# Script approach\nobj = Plant()\nprint(obj)\n# Direct approach\nprint(Plant())",
 
@@ -5944,7 +5944,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 513,
             "title": "Problem 513",
-            "description": "Create a base class Appliance with a method use(). Create a derived class Oven that overrides the use() method to print “Bake”\nExamples:\n  → Using the appliance.\n  → Using the appliance.\n  → Using the appliance.",
+            "description": "Create a base class Appliance with a method use(). Create a derived class Oven that overrides the use() method to print “Bake”\nExamples:\n  → Using the appliance.",
             "initialCode": "class Appliance:\n    pass\n\nclass Oven(Appliance):\n    pass",
             "solution": "# Using function approach\nclass Appliance:\n    def use(self):\n        return 'Using the appliance.'\n# Derived class Oven that inherits from Appliance\nclass Oven(Appliance):\n    def use(self):\n        return 'Bake'\nappliance = Appliance()\nprint(appliance.use())\noven = Oven()\nprint(oven.use())\n# Using built-in approach\ndef solve():\n    class Appliance:\n        def use(self):\n            return 'Using the appliance.'\n    class Oven(Appliance):\n        def use(self):\n            return 'Bake'\n    appliance = Appliance()\n    print(appliance.use())\n    oven = Oven()\n    print(oven.use())\n# Using manual approach\ndef solve():\n    class Appliance:\n        def use(self):\n            return 'Using the appliance.'\n    class Oven(Appliance):\n        def use(self):\n            return 'Bake'\n    appliance_2 = Appliance()\n    print(appliance_2.use())\n    oven_2 = Oven()\n    print(oven_2.use())\n# Script approach\nobj = Appliance()\nprint(obj)\n# Direct approach\nprint(Appliance())",
 
@@ -9160,7 +9160,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 782,
             "title": "Problem 782",
-            "description": "Write a Python program to create a dictionary where the keys are numbers from 1 to 5, and the values are the squares of the keys.\nExamples:\n  square_dic() → {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}\n  square_dic() → {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}\n  square_dic() → {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}",
+            "description": "Write a Python program to create a dictionary where the keys are numbers from 1 to 5, and the values are the squares of the keys.\nExamples:\n  square_dic() → {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}",
             "initialCode": "def square_dic():\n    pass",
             "solution": "# Using function approach\ndef square_dic():\n    result = {}\n    for key in range(1, 6):\n        result[key] = key ** 2\n    return result\nprint(square_dic())\n# Using built-in approach\ndef square_dic():\n    result = result\n    return result\n# Using manual approach\ndef square_dic():\n    return result\n# Script approach\nresult = {}\nfor key in range(1, 6):\n    result[key] = key ** 2\nresult = result\nprint(result)\n# Direct approach\nresult = {}\nfor key in range(1, 6):\n    result[key] = key ** 2\nresult = result\nprint(result)",
 
@@ -9352,7 +9352,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 798,
             "title": "Problem 798",
-            "description": "Write a Python program to create a dictionary with keys as numbers from 1 to 10 and values as their cubes.\nExamples:\n  value_cubes() → {1: 1, 2: 8, 3: 27, 4: 64, 5: 125}\n  value_cubes() → {1: 1, 2: 8, 3: 27, 4: 64, 5: 125}\n  value_cubes() → {1: 1, 2: 8, 3: 27, 4: 64, 5: 125}",
+            "description": "Write a Python program to create a dictionary with keys as numbers from 1 to 10 and values as their cubes.\nExamples:\n  value_cubes() → {1: 1, 2: 8, 3: 27, 4: 64, 5: 125}",
             "initialCode": "def value_cubes():\n    pass",
             "solution": "# Using function approach\ndef value_cubes():\n    result = {}\n    for num in range(1, 6):\n        result[num] = num ** 3\n    return result\nprint(value_cubes())\n# Using built-in approach\ndef value_cubes():\n    result = result\n    return result\n# Using manual approach\ndef value_cubes():\n    return result\n# Script approach\nresult = {}\nfor num in range(1, 6):\n    result[num] = num ** 3\nresult = result\nprint(result)\n# Direct approach\nresult = {}\nfor num in range(1, 6):\n    result[num] = num ** 3\nresult = result\nprint(result)",
 
@@ -9424,7 +9424,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 804,
             "title": "Problem 804",
-            "description": "Write a Python program to create a nested dictionary where keys are numbers and values are dictionaries containing the squares and cubes of the keys.\nExamples:\n  nested_dic() → {1: {'square': 1, 'cube': 1}, 2: {'square': 4, 'cube': 8}, 3: {'square': 9, 'cube': 27}, 4: {'square': 16, 'cube': 64}, 5: {'square': 25, 'cube': 125}}\n  nested_dic() → {1: {'square': 1, 'cube': 1}, 2: {'square': 4, 'cube': 8}, 3: {'square': 9, 'cube': 27}, 4: {'square': 16, 'cube': 64}, 5: {'square': 25, 'cube': 125}}\n  nested_dic() → {1: {'square': 1, 'cube': 1}, 2: {'square': 4, 'cube': 8}, 3: {'square': 9, 'cube': 27}, 4: {'square': 16, 'cube': 64}, 5: {'square': 25, 'cube': 125}}",
+            "description": "Write a Python program to create a nested dictionary where keys are numbers and values are dictionaries containing the squares and cubes of the keys.\nExamples:\n  nested_dic() → {1: {'square': 1, 'cube': 1}, 2: {'square': 4, 'cube': 8}, 3: {'square': 9, 'cube': 27}, 4: {'square': 16, 'cube': 64}, 5: {'square': 25, 'cube': 125}}",
             "initialCode": "def nested_dic():\n    pass\n\ndef nested_dic():\n    pass",
             "solution": "# Using function approach\ndef nested_dic():\n    result = {}\n    for key in range(1, 6):\n        result[key] = {'square': key ** 2, 'cube': key ** 3}\n    return result\nprint(nested_dic())\ndef nested_dic():\n    result = {}\n    for key in range(1, 6):\n        result[key] = {'square': key ** 2, 'cube': key ** 3}\n    return result\nresult = nested_dic()\nfor key, value in result.items():\n    print(f'{key}: {value}')\n# Using built-in approach\ndef nested_dic():\n    result = result\n    return result\n# Using manual approach\ndef nested_dic():\n    return result\n# Script approach\nresult = {}\nfor key in range(1, 6):\n    result[key] = {'square': key ** 2, 'cube': key ** 3}\nresult = result\nprint(result)\n# Direct approach\nresult = {}\nfor key in range(1, 6):\n    result[key] = {'square': key ** 2, 'cube': key ** 3}\nresult = result\nprint(result)",
 
@@ -10252,7 +10252,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 873,
             "title": "Problem 873",
-            "description": "Write a Python program to assign multiple return values from a function to separate variables using unpacking.\nExamples:\n  get_coordinates() → (5, 10)\n  get_coordinates() → (5, 10)\n  get_coordinates() → (5, 10)",
+            "description": "Write a Python program to assign multiple return values from a function to separate variables using unpacking.\nExamples:\n  get_coordinates() → (5, 10)",
             "initialCode": "def get_coordinates():\n    pass",
             "solution": "# Using function approach\ndef get_coordinates():\n    return (5, 10)\nx, y = get_coordinates()\nprint(x, y)  # Expected output: 5 10\n# Using built-in approach\ndef get_coordinates():\n    result = (5, 10)\n    return result\n# Using manual approach\ndef get_coordinates():\n    return (5, 10)\n# Script approach\nresult = (5, 10)\nprint(result)\n# Direct approach\nresult = (5, 10)\nprint(result)",
 
@@ -10432,7 +10432,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 888,
             "title": "Problem 888",
-            "description": "Write a Python program to unpack a tuple returned from a function.\nExamples:\n  get_user() → ('Alice', 25)\n  get_user() → ('Alice', 25)\n  get_user() → ('Alice', 25)",
+            "description": "Write a Python program to unpack a tuple returned from a function.\nExamples:\n  get_user() → ('Alice', 25)",
             "initialCode": "def get_user():\n    pass",
             "solution": "# Using function approach\ndef get_user():\n    return 'Alice', 25\nname, age = get_user()\nprint(name, age)  # Expected output: Alice 25\n# Using built-in approach\ndef get_user():\n    result = 'Alice', 25\n    return result\n# Using manual approach\ndef get_user():\n    return 'Alice', 25\n# Script approach\nresult = 'Alice', 25\nprint(result)\n# Direct approach\nresult = 'Alice', 25\nprint(result)",
 
@@ -11152,7 +11152,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 948,
             "title": "Problem 948",
-            "description": "Write a Python program to catch a RecursionError when a function calls itself infinitely.\nExamples:\n  infinite_recursion() → ?\n  infinite_recursion() → ?\n  infinite_recursion() → ?",
+            "description": "Write a Python program to catch a RecursionError when a function calls itself infinitely.\nExamples:\n  infinite_recursion() → ?",
             "initialCode": "def infinite_recursion():\n    pass",
             "solution": "# Using function approach\ndef infinite_recursion():\n    return infinite_recursion()\ntry:\n    infinite_recursion()\nexcept RecursionError:\n    print('Recursion limit exceeded')  # Expected output: Recursion limit exceeded\n# Using built-in approach\ndef infinite_recursion():\n    result = infinite_recursion()\n    return result\n# Using manual approach\ndef infinite_recursion():\n    return infinite_recursion()\n# Script approach\nresult = infinite_recursion()\nprint(result)\n# Direct approach\nresult = infinite_recursion()\nprint(result)",
 
@@ -13552,7 +13552,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1148,
             "title": "Problem 1148",
-            "description": "Write a Python program to demonstrate variable scope in a function. Scope.\nExamples:\n  outer_function() → 10\n  outer_function() → None\n  outer_function() → 10",
+            "description": "Write a Python program to demonstrate variable scope in a function. Scope.\nExamples:\n  outer_function() → 10\n  outer_function() → None",
             "initialCode": "def outer_function():\n    pass",
             "solution": "# Using function approach\ndef outer_function():\n    x = 10  # Local variable\n    def inner_function():\n        print(x)  # Accessing the outer function's variable\n    inner_function()\nouter_function()\n# Using inner function\n    # Inline version available\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef solve():\n    def outer_function():\n        x = 10  # Local variable\n        def inner_function():\n            print(x)  # Accessing the outer function's variable\n        inner_function()\n    outer_function()\n# Using manual approach\ndef solve():\n    def outer_function():\n        x = 10  # Local variable\n        def inner_function():\n            return x\n        inner_function()\n    outer_function()\n# Script approach\nx = 10  # Local variable\ndef inner_function():\n    print(x)  # Accessing the outer function's variable\ninner_function()\n# Direct approach\nx = 10  # Local variable\ndef inner_function():\n    print(x)  # Accessing the outer function's variable\ninner_function()",
 
@@ -13564,7 +13564,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1149,
             "title": "Problem 1149",
-            "description": "Write a Python program to show the difference between global and local variables. Scope.\nExamples:\n  test_scope() → Local variable: 10\n  test_scope() → None\n  test_scope() → Local variable: 10",
+            "description": "Write a Python program to show the difference between global and local variables. Scope.\nExamples:\n  test_scope() → Local variable: 10\n  test_scope() → None",
             "initialCode": "def test_scope():\n    pass",
             "solution": "# Using function approach\nx = 20  # Global variable\ndef test_scope():\n    x = 10  # Local variable\n    print(f'Local variable: {x}')\ntest_scope()\nprint(f'Global variable: {x}')\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef test_scope():\n    x = 10  # Local variable\n    return f'Local variable: {x}'\n# Using manual approach\ndef test_scope():\n    x = 10  # Local variable\n    result = f'Local variable: {x}'\n    return result\n# Script approach\nx = 10  # Local variable\nprint(f'Local variable: {x}')\n# Direct approach\nx = 10  # Local variable\nprint(f'Local variable: {x}')",
 
@@ -13576,7 +13576,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1150,
             "title": "Problem 1150",
-            "description": "Write a Python program to demonstrate the use of the `global` keyword. Scope.\nExamples:\n  modify_global_variable() → None\n  modify_global_variable() → None\n  modify_global_variable() → None",
+            "description": "Write a Python program to demonstrate the use of the `global` keyword. Scope.\nExamples:\n  modify_global_variable() → None",
             "initialCode": "def modify_global_variable():\n    pass",
             "solution": "# Using function approach\ndef modify_global_variable():\n    global x\n    x = 30  # Modifies the global variable\nx = 10\nmodify_global_variable()\nprint(x)\n# Using built-in approach\ndef solve():\n    def modify_global_variable():\n        global x\n        x = 30  # Modifies the global variable\n    x = 10\n    modify_global_variable()\n    print(x)\n# Using manual approach\ndef solve():\n    def modify_global_variable():\n        global x\n        x = 30  # Modifies the global variable\n    x = 10\n    modify_global_variable()\n    return x\n# Script approach\nglobal x\nx = 30  # Modifies the global variable\n# Direct approach\nglobal x\nx = 30  # Modifies the global variable",
 
@@ -13588,7 +13588,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1151,
             "title": "Problem 1151",
-            "description": "Write a Python program to demonstrate the use of `nonlocal` keyword. Scope.\nExamples:\n  outer_function() → 20\n  outer_function() → None\n  outer_function() → 20",
+            "description": "Write a Python program to demonstrate the use of `nonlocal` keyword. Scope.\nExamples:\n  outer_function() → 20\n  outer_function() → None",
             "initialCode": "def outer_function():\n    pass",
             "solution": "# Using function approach\ndef outer_function():\n    x = 10\n    def inner_function():\n        nonlocal x\n        x = 20  # Modifies the variable in the outer function's scope\n    inner_function()\n    print(x)\nouter_function()\n# Using inner function\n    # Inline version available\n# Using built-in approach\ndef outer_function():\n    x = 10\n    def inner_function():\n        nonlocal x\n        x = 20  # Modifies the variable in the outer function's scope\n    inner_function()\n    return x\n# Using manual approach\ndef outer_function():\n    x = 10\n    def inner_function():\n        nonlocal x\n        x = 20  # Modifies the variable in the outer function's scope\n    inner_function()\n    result = x\n    return result\n# Script approach\nx = 10\ndef inner_function():\n    nonlocal x\n    x = 20  # Modifies the variable in the outer function's scope\ninner_function()\nprint(x)\n# Direct approach\nx = 10\ndef inner_function():\n    nonlocal x\n    x = 20  # Modifies the variable in the outer function's scope\ninner_function()\nprint(x)",
 
@@ -13600,7 +13600,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1152,
             "title": "Problem 1152",
-            "description": "Write a Python program to demonstrate variable shadowing. Scope.\nExamples:\n  shadowing_example() → Local x: 50\n  shadowing_example() → None\n  shadowing_example() → Local x: 50",
+            "description": "Write a Python program to demonstrate variable shadowing. Scope.\nExamples:\n  shadowing_example() → Local x: 50\n  shadowing_example() → None",
             "initialCode": "def shadowing_example():\n    pass",
             "solution": "# Using function approach\nx = 100  # Global variable\ndef shadowing_example():\n    x = 50  # Local variable, shadows the global variable\n    print(f'Local x: {x}')\nshadowing_example()\nprint(f'Global x: {x}')\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef shadowing_example():\n    x = 50  # Local variable, shadows the global variable\n    return f'Local x: {x}'\n# Using manual approach\ndef shadowing_example():\n    x = 50  # Local variable, shadows the global variable\n    result = f'Local x: {x}'\n    return result\n# Script approach\nx = 50  # Local variable, shadows the global variable\nprint(f'Local x: {x}')\n# Direct approach\nx = 50  # Local variable, shadows the global variable\nprint(f'Local x: {x}')",
 
@@ -13660,7 +13660,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1157,
             "title": "Problem 1157",
-            "description": "Write a Python program to check if a variable is defined. Scope.\nExamples:\n  check_variable() → x is not defined\n  check_variable() → None\n  check_variable() → x is not defined",
+            "description": "Write a Python program to check if a variable is defined. Scope.\nExamples:\n  check_variable() → x is not defined\n  check_variable() → None",
             "initialCode": "def check_variable():\n    pass",
             "solution": "# Using function approach\ndef check_variable():\n    try:\n        print(x)\n    except NameError:\n        print('x is not defined')\ncheck_variable()\n# Using if check\n    # Check condition instead of try/except\n# Using built-in approach\ndef solve():\n    def check_variable():\n        try:\n            print(x)\n        except NameError:\n            print('x is not defined')\n    check_variable()\n# Using manual approach\ndef solve():\n    def check_variable():\n        try:\n            print(x)\n        except NameError:\n            print('x is not defined')\n    check_variable()\n# Script approach\ntry:\n    print(x)\nexcept NameError:\n    print('x is not defined')\n# Direct approach\ntry:\n    print(x)\nexcept NameError:\n    print('x is not defined')",
 
@@ -13720,7 +13720,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1162,
             "title": "Problem 1162",
-            "description": "Write a Python program to show the effect of reusing the same variable in a function. Scope.\nExamples:\n  reuse_variable() → New value of x: 10\n  reuse_variable() → None\n  reuse_variable() → New value of x: 10",
+            "description": "Write a Python program to show the effect of reusing the same variable in a function. Scope.\nExamples:\n  reuse_variable() → New value of x: 10\n  reuse_variable() → None",
             "initialCode": "def reuse_variable():\n    pass",
             "solution": "# Using function approach\ndef reuse_variable():\n    x = 5\n    x = x * 2  # Reuses the variable\n    print(f'New value of x: {x}')\nreuse_variable()\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef reuse_variable():\n    x = 5\n    x = x * 2  # Reuses the variable\n    return f'New value of x: {x}'\n# Using manual approach\ndef reuse_variable():\n    x = 5\n    x = x * 2  # Reuses the variable\n    result = f'New value of x: {x}'\n    return result\n# Script approach\nx = 5\nx = x * 2  # Reuses the variable\nprint(f'New value of x: {x}')\n# Direct approach\nx = 5\nx = x * 2  # Reuses the variable\nprint(f'New value of x: {x}')",
 
@@ -13732,7 +13732,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1163,
             "title": "Problem 1163",
-            "description": "Write a Python program to demonstrate variable scope in different functions. Scope.\nExamples:\n  function_one() → ?\n  function_one() → ?\n  function_one() → ?",
+            "description": "Write a Python program to demonstrate variable scope in different functions. Scope.\nExamples:\n  function_one() → ?",
             "initialCode": "def function_one():\n    pass\n\ndef function_two():\n    pass",
             "solution": "# Using function approach\nx = 50  # Global variable\ndef function_one():\n    print(f'Function One: {x}')\ndef function_two():\n    x = 40\n    print(f'Function Two: {x}')\nfunction_one()\nfunction_two()\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef function_one():\n    return f'Function One: {x}'\n# Using manual approach\ndef function_one():\n    result = f'Function One: {x}'\n    return result\n# Script approach\nprint(f'Function One: {x}')\n# Direct approach\nprint(f'Function One: {x}')",
 
@@ -13744,7 +13744,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1164,
             "title": "Problem 1164",
-            "description": "Write a Python program to demonstrate the use of `global` for modifying variables in different functions. Scope.\nExamples:\n  function_one() → ?\n  function_one() → ?\n  function_one() → ?",
+            "description": "Write a Python program to demonstrate the use of `global` for modifying variables in different functions. Scope.\nExamples:\n  function_one() → ?",
             "initialCode": "def function_one():\n    pass\n\ndef function_two():\n    pass",
             "solution": "# Using function approach\nx = 10  # Global variable\ndef function_one():\n    global x\n    x += 5\ndef function_two():\n    global x\n    x -= 3\nfunction_one()\nfunction_two()\nprint(f'Global variable x: {x}')\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef solve():\n    x = 10  # Global variable\n    def function_one():\n        global x\n        x += 5\n    def function_two():\n        global x\n        x -= 3\n    function_one()\n    function_two()\n    print(f'Global variable x: {x}')\n# Using manual approach\ndef solve():\n    x = 10  # Global variable\n    def function_one():\n        global x\n        x += 5\n    def function_two():\n        global x\n        x -= 3\n    function_one()\n    function_two()\n    return f'Global variable x: {x}'\n# Script approach\nglobal x\nx += 5\n# Direct approach\nglobal x\nx += 5",
 
@@ -13768,7 +13768,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1166,
             "title": "Problem 1166",
-            "description": "Write a Python program to demonstrate the use of variable arguments in functions. Scope.\nExamples:\n  print_arguments() → None\n  print_arguments() → None\n  print_arguments() → None",
+            "description": "Write a Python program to demonstrate the use of variable arguments in functions. Scope.\nExamples:\n  print_arguments() → None",
             "initialCode": "def print_arguments(*args):\n    pass",
             "solution": "# Using function approach\ndef print_arguments(*args):\n    for arg in args:\n        print(arg)\nprint_arguments(1, 2, 3, 'hello', [1, 2, 3])\n# Using alternative loop\n    # Consider using while loop or list comprehension\n# Using built-in approach\ndef solve():\n    def print_arguments(*args):\n        for arg in args:\n            print(arg)\n    print_arguments(1, 2, 3, 'hello', [1, 2, 3])\n# Using manual approach\ndef solve():\n    def print_arguments(*args):\n        for arg in args:\n            return arg\n    print_arguments(1, 2, 3, 'hello', [1, 2, 3])\n# Script approach\n*args = 15\nresult = print_arguments(*args)\nprint(result)\n# Direct approach\nprint(print_arguments(25))",
 
@@ -13792,7 +13792,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1168,
             "title": "Problem 1168",
-            "description": "Write a Python program to show the behavior of variables in global scope inside functions. Scope.\nExamples:\n  global_inside_function() → ?\n  global_inside_function() → ?\n  global_inside_function() → ?",
+            "description": "Write a Python program to show the behavior of variables in global scope inside functions. Scope.\nExamples:\n  global_inside_function() → ?",
             "initialCode": "def global_inside_function():\n    pass",
             "solution": "# Using function approach\ndef global_inside_function():\n    print(f'Global variable x inside function: {x}')\nx = 10  # Global variable\nglobal_inside_function()\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef global_inside_function():\n    return f'Global variable x inside function: {x}'\n# Using manual approach\ndef global_inside_function():\n    result = f'Global variable x inside function: {x}'\n    return result\n# Script approach\nprint(f'Global variable x inside function: {x}')\n# Direct approach\nprint(f'Global variable x inside function: {x}')",
 
@@ -13816,7 +13816,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1170,
             "title": "Problem 1170",
-            "description": "Write a Python program to show the behavior of variables declared in a list comprehension. Scope.\nExamples:\n  list_comprehension_variable_scope() → List comprehension result: [0, 1, 4, 9, 16]\n  list_comprehension_variable_scope() → None\n  list_comprehension_variable_scope() → List comprehension result: [0, 1, 4, 9, 16]",
+            "description": "Write a Python program to show the behavior of variables declared in a list comprehension. Scope.\nExamples:\n  list_comprehension_variable_scope() → List comprehension result: [0, 1, 4, 9, 16]\n  list_comprehension_variable_scope() → None",
             "initialCode": "def list_comprehension_variable_scope():\n    pass",
             "solution": "# Using function approach\ndef list_comprehension_variable_scope():\n    lst = [x**2 for x in range(5)]\n    print(f'List comprehension result: {lst}')\nlist_comprehension_variable_scope()\n# Using built-in approach\ndef list_comprehension_variable_scope():\n    lst = [x**2 for x in range(5)]\n    return f'List comprehension result: {lst}'\n# Using manual approach\ndef list_comprehension_variable_scope():\n    lst = [x**2 for x in range(5)]\n    result = f'List comprehension result: {lst}'\n    return result\n# Script approach\nlst = [x**2 for x in range(5)]\nprint(f'List comprehension result: {lst}')\n# Direct approach\nlst = [x**2 for x in range(5)]\nprint(f'List comprehension result: {lst}')",
 
@@ -13852,7 +13852,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1173,
             "title": "Problem 1173",
-            "description": "Write a Python program to demonstrate the impact of changing a global variable inside a function. Scope.\nExamples:\n  change_global_variable() → None\n  change_global_variable() → None\n  change_global_variable() → None",
+            "description": "Write a Python program to demonstrate the impact of changing a global variable inside a function. Scope.\nExamples:\n  change_global_variable() → None",
             "initialCode": "def change_global_variable():\n    pass",
             "solution": "# Using function approach\nx = 100\ndef change_global_variable():\n    global x\n    x = 50\nchange_global_variable()\nprint(f'Global x after modification: {x}')\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef solve():\n    x = 100\n    def change_global_variable():\n        global x\n        x = 50\n    change_global_variable()\n    print(f'Global x after modification: {x}')\n# Using manual approach\ndef solve():\n    x = 100\n    def change_global_variable():\n        global x\n        x = 50\n    change_global_variable()\n    return f'Global x after modification: {x}'\n# Script approach\nglobal x\nx = 50\n# Direct approach\nglobal x\nx = 50",
 
@@ -13864,7 +13864,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1174,
             "title": "Problem 1174",
-            "description": "Write a Python program to demonstrate variable accessibility within different levels of nested functions. Scope.\nExamples:\n  outer_function() → Inner function: x = 5, y = 10, z = 15\n  outer_function() → None\n  outer_function() → Inner function: x = 5, y = 10, z = 15",
+            "description": "Write a Python program to demonstrate variable accessibility within different levels of nested functions. Scope.\nExamples:\n  outer_function() → Inner function: x = 5, y = 10, z = 15\n  outer_function() → None",
             "initialCode": "def outer_function():\n    pass",
             "solution": "# Using function approach\ndef outer_function():\n    x = 5\n    def middle_function():\n        y = 10\n        def inner_function():\n            z = 15\n            print(f'Inner function: x = {x}, y = {y}, z = {z}')\n        inner_function()\n    middle_function()\nouter_function()\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef solve():\n    def outer_function():\n        x = 5\n        def middle_function():\n            y = 10\n            def inner_function():\n                z = 15\n                print(f'Inner function: x = {x}, y = {y}, z = {z}')\n            inner_function()\n        middle_function()\n    outer_function()\n# Using manual approach\ndef solve():\n    def outer_function():\n        x = 5\n        def middle_function():\n            y = 10\n            def inner_function():\n                z = 15\n                return f'Inner function: x = {x}, y = {y}, z = {z}'\n            inner_function()\n        middle_function()\n    outer_function()\n# Script approach\nx = 5\ndef middle_function():\n    y = 10\n    def inner_function():\n        z = 15\n        print(f'Inner function: x = {x}, y = {y}, z = {z}')\n    inner_function()\nmiddle_function()\n# Direct approach\nx = 5\ndef middle_function():\n    y = 10\n    def inner_function():\n        z = 15\n        print(f'Inner function: x = {x}, y = {y}, z = {z}')\n    inner_function()\nmiddle_function()",
 
@@ -13912,7 +13912,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1178,
             "title": "Problem 1178",
-            "description": "Write a Python program to use the `random` module to generate a random number between 1 and 100. Module.\nExamples:\n  generate_random_number() → ?\n  generate_random_number() → ?\n  generate_random_number() → ?",
+            "description": "Write a Python program to use the `random` module to generate a random number between 1 and 100. Module.\nExamples:\n  generate_random_number() → ?",
             "initialCode": "import random\ndef generate_random_number():\n    pass",
             "solution": "import random\n# Using function approach\ndef generate_random_number():\n    return random.randint(1, 100)\nrandom_number = generate_random_number()\nprint(f'Random number between 1 and 100: {random_number}')\n# Using built-in approach\ndef generate_random_number():\n    result = random.randint(1, 100)\n    return result\n# Using manual approach\ndef generate_random_number():\n    return random.randint(1, 100)\n# Script approach\nresult = random.randint(1, 100)\nprint(result)\n# Direct approach\nresult = random.randint(1, 100)\nprint(result)",
 
@@ -13924,7 +13924,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1179,
             "title": "Problem 1179",
-            "description": "Write a Python program to use the `datetime` module to get the current date and time. Module.\nExamples:\n  current_datetime() → ?\n  current_datetime() → ?\n  current_datetime() → ?",
+            "description": "Write a Python program to use the `datetime` module to get the current date and time. Module.\nExamples:\n  current_datetime() → ?",
             "initialCode": "import datetime\ndef current_datetime():\n    pass",
             "solution": "import datetime\n# Using function approach\ndef current_datetime():\n    return datetime.datetime.now()\nnow = current_datetime()\nprint(f'Current date and time: {now}')\n# Using built-in approach\ndef current_datetime():\n    result = datetime.datetime.now()\n    return result\n# Using manual approach\ndef current_datetime():\n    return datetime.datetime.now()\n# Script approach\nresult = datetime.datetime.now()\nprint(result)\n# Direct approach\nresult = datetime.datetime.now()\nprint(result)",
 
@@ -13936,7 +13936,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1180,
             "title": "Problem 1180",
-            "description": "Write a Python program to use the `os` module to get the current working directory. Module.\nExamples:\n  current_working_directory() → ?\n  current_working_directory() → ?\n  current_working_directory() → ?",
+            "description": "Write a Python program to use the `os` module to get the current working directory. Module.\nExamples:\n  current_working_directory() → ?",
             "initialCode": "import os\ndef current_working_directory():\n    pass",
             "solution": "import os\n# Using function approach\ndef current_working_directory():\n    return os.getcwd()\ncwd = current_working_directory()\nprint(f'Current working directory: {cwd}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef current_working_directory():\n    result = os.getcwd()\n    return result\n# Using manual approach\ndef current_working_directory():\n    return os.getcwd()\n# Script approach\nresult = os.getcwd()\nprint(result)\n# Direct approach\nresult = os.getcwd()\nprint(result)",
 
@@ -13948,7 +13948,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1181,
             "title": "Problem 1181",
-            "description": "Write a Python program to use the `sys` module to get the Python version. Module.\nExamples:\n  python_version() → ?\n  python_version() → ?\n  python_version() → ?",
+            "description": "Write a Python program to use the `sys` module to get the Python version. Module.\nExamples:\n  python_version() → ?",
             "initialCode": "import sys\ndef python_version():\n    pass",
             "solution": "import sys\n# Using function approach\ndef python_version():\n    return sys.version\nversion = python_version()\nprint(f'Python version: {version}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef python_version():\n    result = sys.version\n    return result\n# Using manual approach\ndef python_version():\n    return sys.version\n# Script approach\nresult = sys.version\nprint(result)\n# Direct approach\nresult = sys.version\nprint(result)",
 
@@ -13960,7 +13960,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1182,
             "title": "Problem 1182",
-            "description": "Write a Python program to use the `json` module to convert a Python dictionary to a JSON string. Module.\nExamples:\n  dict_to_json() → ?\n  dict_to_json() → ?\n  dict_to_json() → ?",
+            "description": "Write a Python program to use the `json` module to convert a Python dictionary to a JSON string. Module.\nExamples:\n  dict_to_json() → ?",
             "initialCode": "import json\ndef dict_to_json():\n    pass",
             "solution": "import json\n# Using function approach\ndef dict_to_json():\n    sample_dict = {'name': 'Alice', 'age': 30}\n    return json.dumps(sample_dict)\njson_str = dict_to_json()\nprint(f'JSON string: {json_str}')\n# Using eval()\n    # Warning: only for trusted data\n    return eval(json_str)\n# Using built-in approach\ndef dict_to_json():\n    result = json.dumps(sample_dict)\n    return result\n# Using manual approach\ndef dict_to_json():\n    return json.dumps(sample_dict)\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = json.dumps(sample_dict)\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = json.dumps(sample_dict)\nprint(result)",
 
@@ -14008,7 +14008,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1186,
             "title": "Problem 1186",
-            "description": "Write a Python program to use the `time` module to measure the execution time of a block of code. Module.\nExamples:\n  measure_time() → ?\n  measure_time() → ?\n  measure_time() → ?",
+            "description": "Write a Python program to use the `time` module to measure the execution time of a block of code. Module.\nExamples:\n  measure_time() → ?",
             "initialCode": "import time\ndef measure_time():\n    pass",
             "solution": "import time\n# Using function approach\ndef measure_time():\n    start_time = time.time()\n    sum(range(1000000))\n    end_time = time.time()\n    return end_time - start_time\nexecution_time = measure_time()\nprint(f'Execution time: {execution_time} seconds')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef measure_time():\n    return end_time + (-start_time)\n# Using manual approach\ndef measure_time():\n    import operator\n    return operator.sub(end_time, start_time)\n# Script approach\nstart_time = time.time()\nsum(range(1000000))\nend_time = time.time()\nresult = end_time - start_time\nprint(result)\n# Direct approach\nstart_time = time.time()\nsum(range(1000000))\nend_time = time.time()\nresult = end_time - start_time\nprint(result)",
 
@@ -14032,7 +14032,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1188,
             "title": "Problem 1188",
-            "description": "Write a Python program to use the `math` module to find the value of pi. Module.\nExamples:\n  get_pi_value() → ?\n  get_pi_value() → ?\n  get_pi_value() → ?",
+            "description": "Write a Python program to use the `math` module to find the value of pi. Module.\nExamples:\n  get_pi_value() → ?",
             "initialCode": "import math\ndef get_pi_value():\n    pass",
             "solution": "import math\n# Using function approach\ndef get_pi_value():\n    return math.pi\npi_value = get_pi_value()\nprint(f'The value of pi is {pi_value}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef get_pi_value():\n    result = math.pi\n    return result\n# Using manual approach\ndef get_pi_value():\n    return math.pi\n# Script approach\nresult = math.pi\nprint(result)\n# Direct approach\nresult = math.pi\nprint(result)",
 
@@ -14092,7 +14092,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1193,
             "title": "Problem 1193",
-            "description": "Write a Python program to use the `datetime` module to format the current date. Module.\nExamples:\n  format_current_date() → ?\n  format_current_date() → ?\n  format_current_date() → ?",
+            "description": "Write a Python program to use the `datetime` module to format the current date. Module.\nExamples:\n  format_current_date() → ?",
             "initialCode": "import datetime\ndef format_current_date():\n    pass",
             "solution": "import datetime\n# Using function approach\ndef format_current_date():\n    return datetime.datetime.now().strftime('%Y-%m-%d')\nformatted_date = format_current_date()\nprint(f'Formatted current date: {formatted_date}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef format_current_date():\n    result = datetime.datetime.now().strftime('%Y-%m-%d')\n    return result\n# Using manual approach\ndef format_current_date():\n    return datetime.datetime.now().strftime('%Y-%m-%d')\n# Script approach\nresult = datetime.datetime.now().strftime('%Y-%m-%d')\nprint(result)\n# Direct approach\nresult = datetime.datetime.now().strftime('%Y-%m-%d')\nprint(result)",
 
@@ -14140,7 +14140,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1197,
             "title": "Problem 1197",
-            "description": "Write a Python program to create a dictionary and access its value using a key. Dictionary operations.\nExamples:\n  access_value() → Alice\n  access_value() → Alice\n  access_value() → Alice",
+            "description": "Write a Python program to create a dictionary and access its value using a key. Dictionary operations.\nExamples:\n  access_value() → Alice",
             "initialCode": "def access_value():\n    pass",
             "solution": "# Using function approach\ndef access_value():\n    sample_dict = {'name': 'Alice', 'age': 30}\n    return sample_dict['name']\nresult = access_value()\nprint(f'Value accessed: {result}')\n# Using built-in approach\ndef access_value():\n    result = sample_dict['name']\n    return result\n# Using manual approach\ndef access_value():\n    return sample_dict['name']\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = sample_dict['name']\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = sample_dict['name']\nprint(result)",
 
@@ -14152,7 +14152,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1198,
             "title": "Problem 1198",
-            "description": "Write a Python program to add a key-value pair to an existing dictionary. Dictionary operations.\nExamples:\n  add_key_value() → {'name': 'Alice', 'age': 30, 'city': 'New York'}\n  add_key_value() → {'name': 'Alice', 'age': 30, 'city': 'New York'}\n  add_key_value() → {'name': 'Alice', 'age': 30, 'city': 'New York'}",
+            "description": "Write a Python program to add a key-value pair to an existing dictionary. Dictionary operations.\nExamples:\n  add_key_value() → {'name': 'Alice', 'age': 30, 'city': 'New York'}",
             "initialCode": "def add_key_value():\n    pass",
             "solution": "# Using function approach\ndef add_key_value():\n    sample_dict = {'name': 'Alice', 'age': 30}\n    sample_dict['city'] = 'New York'\n    return sample_dict\nupdated_dict = add_key_value()\nprint(f'Updated dictionary: {updated_dict}')\n# Using built-in approach\ndef add_key_value():\n    result = sample_dict\n    return result\n# Using manual approach\ndef add_key_value():\n    return sample_dict\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30}\nsample_dict['city'] = 'New York'\nresult = sample_dict\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30}\nsample_dict['city'] = 'New York'\nresult = sample_dict\nprint(result)",
 
@@ -14164,7 +14164,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1199,
             "title": "Problem 1199",
-            "description": "Write a Python program to remove a key-value pair from a dictionary. Dictionary operations.\nExamples:\n  remove_key() → {'name': 'Alice', 'age': 30}\n  remove_key() → {'name': 'Alice', 'age': 30}\n  remove_key() → {'name': 'Alice', 'age': 30}",
+            "description": "Write a Python program to remove a key-value pair from a dictionary. Dictionary operations.\nExamples:\n  remove_key() → {'name': 'Alice', 'age': 30}",
             "initialCode": "def remove_key():\n    pass",
             "solution": "# Using function approach\ndef remove_key():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    del sample_dict['city']\n    return sample_dict\nupdated_dict = remove_key()\nprint(f'Dictionary after removal: {updated_dict}')\n# Using built-in approach\ndef remove_key():\n    result = sample_dict\n    return result\n# Using manual approach\ndef remove_key():\n    return sample_dict\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\ndel sample_dict['city']\nresult = sample_dict\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\ndel sample_dict['city']\nresult = sample_dict\nprint(result)",
 
@@ -14176,7 +14176,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1200,
             "title": "Problem 1200",
-            "description": "Write a Python program to get all the keys from a dictionary. Dictionary operations.\nExamples:\n  get_keys() → dict_keys(['name', 'age', 'city'])\n  get_keys() → dict_keys(['name', 'age', 'city'])\n  get_keys() → dict_keys(['name', 'age', 'city'])",
+            "description": "Write a Python program to get all the keys from a dictionary. Dictionary operations.\nExamples:\n  get_keys() → dict_keys(['name', 'age', 'city'])",
             "initialCode": "def get_keys():\n    pass",
             "solution": "# Using function approach\ndef get_keys():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    return sample_dict.keys()\nkeys = get_keys()\nprint(f'Keys in dictionary: {keys}')\n# Using built-in approach\ndef get_keys():\n    result = sample_dict.keys()\n    return result\n# Using manual approach\ndef get_keys():\n    return sample_dict.keys()\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = sample_dict.keys()\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = sample_dict.keys()\nprint(result)",
 
@@ -14188,7 +14188,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1201,
             "title": "Problem 1201",
-            "description": "Write a Python program to get all the values from a dictionary. Dictionary operations.\nExamples:\n  get_values() → dict_values(['Alice', 30, 'New York'])\n  get_values() → dict_values(['Alice', 30, 'New York'])\n  get_values() → dict_values(['Alice', 30, 'New York'])",
+            "description": "Write a Python program to get all the values from a dictionary. Dictionary operations.\nExamples:\n  get_values() → dict_values(['Alice', 30, 'New York'])",
             "initialCode": "def get_values():\n    pass",
             "solution": "# Using function approach\ndef get_values():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    return sample_dict.values()\nvalues = get_values()\nprint(f'Values in dictionary: {values}')\n# Using built-in approach\ndef get_values():\n    result = sample_dict.values()\n    return result\n# Using manual approach\ndef get_values():\n    return sample_dict.values()\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = sample_dict.values()\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = sample_dict.values()\nprint(result)",
 
@@ -14200,7 +14200,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1202,
             "title": "Problem 1202",
-            "description": "Write a Python program to check if a key exists in a dictionary. Dictionary operations.\nExamples:\n  check_key() → True\n  check_key() → True\n  check_key() → True",
+            "description": "Write a Python program to check if a key exists in a dictionary. Dictionary operations.\nExamples:\n  check_key() → True",
             "initialCode": "def check_key():\n    pass",
             "solution": "# Using function approach\ndef check_key():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    return 'age' in sample_dict\nresult = check_key()\nprint(f'Key exists: {result}')\n# Using built-in approach\ndef check_key():\n    result = 'age' in sample_dict\n    return result\n# Using manual approach\ndef check_key():\n    return 'age' in sample_dict\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = 'age' in sample_dict\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = 'age' in sample_dict\nprint(result)",
 
@@ -14224,7 +14224,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1204,
             "title": "Problem 1204",
-            "description": "Write a Python program to clear all items from a dictionary. Dictionary operations.\nExamples:\n  clear_dict() → {}\n  clear_dict() → {}\n  clear_dict() → {}",
+            "description": "Write a Python program to clear all items from a dictionary. Dictionary operations.\nExamples:\n  clear_dict() → {}",
             "initialCode": "def clear_dict():\n    pass",
             "solution": "# Using function approach\ndef clear_dict():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    sample_dict.clear()\n    return sample_dict\nupdated_dict = clear_dict()\nprint(f'Dictionary after clearing: {updated_dict}')\n# Using built-in approach\ndef clear_dict():\n    result = sample_dict\n    return result\n# Using manual approach\ndef clear_dict():\n    return sample_dict\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nsample_dict.clear()\nresult = sample_dict\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nsample_dict.clear()\nresult = sample_dict\nprint(result)",
 
@@ -14236,7 +14236,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1205,
             "title": "Problem 1205",
-            "description": "Write a Python program to copy a dictionary. Dictionary operations.\nExamples:\n  copy_dict() → {'name': 'Alice', 'age': 30}\n  copy_dict() → {'name': 'Alice', 'age': 30}\n  copy_dict() → {'name': 'Alice', 'age': 30}",
+            "description": "Write a Python program to copy a dictionary. Dictionary operations.\nExamples:\n  copy_dict() → {'name': 'Alice', 'age': 30}",
             "initialCode": "def copy_dict():\n    pass",
             "solution": "# Using function approach\ndef copy_dict():\n    sample_dict = {'name': 'Alice', 'age': 30}\n    return sample_dict.copy()\ncopied_dict = copy_dict()\nprint(f'Copied dictionary: {copied_dict}')\n# Using built-in approach\ndef copy_dict():\n    result = sample_dict.copy()\n    return result\n# Using manual approach\ndef copy_dict():\n    return sample_dict.copy()\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = sample_dict.copy()\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = sample_dict.copy()\nprint(result)",
 
@@ -14248,7 +14248,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1206,
             "title": "Problem 1206",
-            "description": "Write a Python program to merge two dictionaries. Dictionary operations.\nExamples:\n  merge_dicts() → {'name': 'Alice', 'age': 30, 'city': 'New York', 'job': 'Engineer'}\n  merge_dicts() → {'name': 'Alice', 'age': 30, 'city': 'New York', 'job': 'Engineer'}\n  merge_dicts() → {'name': 'Alice', 'age': 30, 'city': 'New York', 'job': 'Engineer'}",
+            "description": "Write a Python program to merge two dictionaries. Dictionary operations.\nExamples:\n  merge_dicts() → {'name': 'Alice', 'age': 30, 'city': 'New York', 'job': 'Engineer'}",
             "initialCode": "def merge_dicts():\n    pass",
             "solution": "# Using function approach\ndef merge_dicts():\n    dict1 = {'name': 'Alice', 'age': 30}\n    dict2 = {'city': 'New York', 'job': 'Engineer'}\n    dict1.update(dict2)\n    return dict1\nmerged_dict = merge_dicts()\nprint(f'Merged dictionary: {merged_dict}')\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef merge_dicts():\n    result = dict1\n    return result\n# Using manual approach\ndef merge_dicts():\n    return dict1\n# Script approach\ndict1 = {'name': 'Alice', 'age': 30}\ndict2 = {'city': 'New York', 'job': 'Engineer'}\ndict1.update(dict2)\nresult = dict1\nprint(result)\n# Direct approach\ndict1 = {'name': 'Alice', 'age': 30}\ndict2 = {'city': 'New York', 'job': 'Engineer'}\ndict1.update(dict2)\nresult = dict1\nprint(result)",
 
@@ -14272,7 +14272,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1208,
             "title": "Problem 1208",
-            "description": "Write a Python program to find the length of a dictionary. Dictionary operations.\nExamples:\n  dict_length() → 3\n  dict_length() → 3\n  dict_length() → 3",
+            "description": "Write a Python program to find the length of a dictionary. Dictionary operations.\nExamples:\n  dict_length() → 3",
             "initialCode": "def dict_length():\n    pass",
             "solution": "# Using function approach\ndef dict_length():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    return len(sample_dict)\nlength = dict_length()\nprint(f'Length of dictionary: {length}')\n# Using built-in approach\ndef dict_length():\n    count = 0\n    for _ in sample_dict:\n        count += 1\n    return count\n# Using manual approach\ndef dict_length():\n    return sum(1 for _ in sample_dict)\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = len(sample_dict)\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = len(sample_dict)\nprint(result)",
 
@@ -14284,7 +14284,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1209,
             "title": "Problem 1209",
-            "description": "Write a Python program to reverse the keys and values in a dictionary. Dictionary operations.\nExamples:\n  reverse_dict() → {'Alice': 'name', 30: 'age', 'New York': 'city'}\n  reverse_dict() → {'Alice': 'name', 30: 'age', 'New York': 'city'}\n  reverse_dict() → {'Alice': 'name', 30: 'age', 'New York': 'city'}",
+            "description": "Write a Python program to reverse the keys and values in a dictionary. Dictionary operations.\nExamples:\n  reverse_dict() → {'Alice': 'name', 30: 'age', 'New York': 'city'}",
             "initialCode": "def reverse_dict():\n    pass",
             "solution": "# Using function approach\ndef reverse_dict():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    return {v: k for k, v in sample_dict.items()}\nreversed_dict = reverse_dict()\nprint(f'Reversed dictionary: {reversed_dict}')\n# Using built-in approach\ndef reverse_dict():\n    result = {v: k for k, v in sample_dict.items()}\n    return result\n# Using manual approach\ndef reverse_dict():\n    return {v: k for k, v in sample_dict.items()}\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = {v: k for k, v in sample_dict.items()}\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = {v: k for k, v in sample_dict.items()}\nprint(result)",
 
@@ -14296,7 +14296,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1210,
             "title": "Problem 1210",
-            "description": "Write a Python program to create a dictionary from two lists, one for keys and one for values. Dictionary operations.\nExamples:\n  create_dict_from_lists() → {'name': 'Alice', 'age': 30, 'city': 'New York'}\n  create_dict_from_lists() → {'name': 'Alice', 'age': 30, 'city': 'New York'}\n  create_dict_from_lists() → {'name': 'Alice', 'age': 30, 'city': 'New York'}",
+            "description": "Write a Python program to create a dictionary from two lists, one for keys and one for values. Dictionary operations.\nExamples:\n  create_dict_from_lists() → {'name': 'Alice', 'age': 30, 'city': 'New York'}",
             "initialCode": "def create_dict_from_lists():\n    pass",
             "solution": "# Using function approach\ndef create_dict_from_lists():\n    keys = ['name', 'age', 'city']\n    values = ['Alice', 30, 'New York']\n    return dict(zip(keys, values))\ncreated_dict = create_dict_from_lists()\nprint(f'Created dictionary: {created_dict}')\n# Using built-in approach\ndef create_dict_from_lists():\n    result = dict(zip(keys, values))\n    return result\n# Using manual approach\ndef create_dict_from_lists():\n    return dict(zip(keys, values))\n# Script approach\nkeys = ['name', 'age', 'city']\nvalues = ['Alice', 30, 'New York']\nresult = dict(zip(keys, values))\nprint(result)\n# Direct approach\nkeys = ['name', 'age', 'city']\nvalues = ['Alice', 30, 'New York']\nresult = dict(zip(keys, values))\nprint(result)",
 
@@ -14308,7 +14308,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1211,
             "title": "Problem 1211",
-            "description": "Write a Python program to get the sum of all values in a dictionary. Dictionary operations.\nExamples:\n  sum_values() → 60\n  sum_values() → 60\n  sum_values() → 60",
+            "description": "Write a Python program to get the sum of all values in a dictionary. Dictionary operations.\nExamples:\n  sum_values() → 60",
             "initialCode": "def sum_values():\n    pass",
             "solution": "# Using function approach\ndef sum_values():\n    sample_dict = {'a': 10, 'b': 20, 'c': 30}\n    return sum(sample_dict.values())\ntotal = sum_values()\nprint(f'Sum of values: {total}')\n# Using built-in approach\ndef sum_values():\n    result = sum(sample_dict.values())\n    return result\n# Using manual approach\ndef sum_values():\n    return sum(sample_dict.values())\n# Script approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nresult = sum(sample_dict.values())\nprint(result)\n# Direct approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nresult = sum(sample_dict.values())\nprint(result)",
 
@@ -14320,7 +14320,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1212,
             "title": "Problem 1212",
-            "description": "Write a Python program to filter a dictionary based on a condition. Dictionary operations.\nExamples:\n  filter_dict() → {'name': 'Alice', 'city': 'New York'}\n  filter_dict() → {'name': 'Alice', 'city': 'New York'}\n  filter_dict() → {'name': 'Alice', 'city': 'New York'}",
+            "description": "Write a Python program to filter a dictionary based on a condition. Dictionary operations.\nExamples:\n  filter_dict() → {'name': 'Alice', 'city': 'New York'}",
             "initialCode": "def filter_dict():\n    pass",
             "solution": "# Using function approach\ndef filter_dict():\n    sample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\n    return {key: value for key, value in sample_dict.items() if isinstance(value, str)}\nfiltered_dict = filter_dict()\nprint(f'Filtered dictionary: {filtered_dict}')\n# Using built-in approach\ndef filter_dict():\n    result = {key: value for key, value in sample_dict.items() if isinstance(value, str)}\n    return result\n# Using manual approach\ndef filter_dict():\n    return {key: value for key, value in sample_dict.items() if isinstance(value, str)}\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = {key: value for key, value in sample_dict.items() if isinstance(value, str)}\nprint(result)\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30, 'city': 'New York'}\nresult = {key: value for key, value in sample_dict.items() if isinstance(value, str)}\nprint(result)",
 
@@ -14332,7 +14332,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1213,
             "title": "Problem 1213",
-            "description": "Write a Python program to find the maximum value in a dictionary. Dictionary operations.\nExamples:\n  max_value() → 30\n  max_value() → 30\n  max_value() → 30",
+            "description": "Write a Python program to find the maximum value in a dictionary. Dictionary operations.\nExamples:\n  max_value() → 30",
             "initialCode": "def max_value():\n    pass",
             "solution": "# Using function approach\ndef max_value():\n    sample_dict = {'a': 10, 'b': 20, 'c': 30}\n    return max(sample_dict.values())\nmax_val = max_value()\nprint(f'Maximum value: {max_val}')\n# Using built-in approach\ndef max_value():\n    result = max(sample_dict.values())\n    return result\n# Using manual approach\ndef max_value():\n    return max(sample_dict.values())\n# Script approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nresult = max(sample_dict.values())\nprint(result)\n# Direct approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nresult = max(sample_dict.values())\nprint(result)",
 
@@ -14344,7 +14344,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1214,
             "title": "Problem 1214",
-            "description": "Write a Python program to check if a dictionary is empty. Dictionary operations.\nExamples:\n  is_dict_empty() → True\n  is_dict_empty() → True\n  is_dict_empty() → True",
+            "description": "Write a Python program to check if a dictionary is empty. Dictionary operations.\nExamples:\n  is_dict_empty() → True",
             "initialCode": "def is_dict_empty():\n    pass",
             "solution": "# Using function approach\ndef is_dict_empty():\n    sample_dict = {}\n    return len(sample_dict) == 0\nresult = is_dict_empty()\nprint(f'Is dictionary empty? {result}')\n# Using built-in approach\ndef is_dict_empty():\n    result = len(sample_dict) == 0\n    return result\n# Using manual approach\ndef is_dict_empty():\n    return len(sample_dict) == 0\n# Script approach\nsample_dict = {}\nresult = len(sample_dict) == 0\nprint(result)\n# Direct approach\nsample_dict = {}\nresult = len(sample_dict) == 0\nprint(result)",
 
@@ -14356,7 +14356,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1215,
             "title": "Problem 1215",
-            "description": "Write a Python program to remove all occurrences of a value in a dictionary. Dictionary operations.\nExamples:\n  remove_value() → {'b': 20}\n  remove_value() → {'b': 20}\n  remove_value() → {'b': 20}",
+            "description": "Write a Python program to remove all occurrences of a value in a dictionary. Dictionary operations.\nExamples:\n  remove_value() → {'b': 20}",
             "initialCode": "def remove_value():\n    pass",
             "solution": "# Using function approach\ndef remove_value():\n    sample_dict = {'a': 10, 'b': 20, 'c': 10}\n    sample_dict = {k: v for k, v in sample_dict.items() if v != 10}\n    return sample_dict\nupdated_dict = remove_value()\nprint(f'Dictionary after removal: {updated_dict}')\n# Using built-in approach\ndef remove_value():\n    result = sample_dict\n    return result\n# Using manual approach\ndef remove_value():\n    return sample_dict\n# Script approach\nsample_dict = {'a': 10, 'b': 20, 'c': 10}\nsample_dict = {k: v for k, v in sample_dict.items() if v != 10}\nresult = sample_dict\nprint(result)\n# Direct approach\nsample_dict = {'a': 10, 'b': 20, 'c': 10}\nsample_dict = {k: v for k, v in sample_dict.items() if v != 10}\nresult = sample_dict\nprint(result)",
 
@@ -14368,7 +14368,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1216,
             "title": "Problem 1216",
-            "description": "Write a Python program to find the key associated with a given value in a dictionary. Dictionary operations.\nExamples:\n  find_key_by_value() → ['b']\n  find_key_by_value() → ['b']\n  find_key_by_value() → ['b']",
+            "description": "Write a Python program to find the key associated with a given value in a dictionary. Dictionary operations.\nExamples:\n  find_key_by_value() → ['b']",
             "initialCode": "def find_key_by_value():\n    pass",
             "solution": "# Using function approach\ndef find_key_by_value():\n    sample_dict = {'a': 10, 'b': 20, 'c': 30}\n    return [k for k, v in sample_dict.items() if v == 20]\nkey = find_key_by_value()\nprint(f'Key for value 20: {key}')\n# Using built-in approach\ndef find_key_by_value():\n    result = [k for k, v in sample_dict.items() if v == 20]\n    return result\n# Using manual approach\ndef find_key_by_value():\n    return [k for k, v in sample_dict.items() if v == 20]\n# Script approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nresult = [k for k, v in sample_dict.items() if v == 20]\nprint(result)\n# Direct approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nresult = [k for k, v in sample_dict.items() if v == 20]\nprint(result)",
 
@@ -14380,7 +14380,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1217,
             "title": "Problem 1217",
-            "description": "Write a Python program to create a dictionary with default values using `defaultdict`. Dictionary operations.\nExamples:\n  create_defaultdict() → ?\n  create_defaultdict() → ?\n  create_defaultdict() → ?",
+            "description": "Write a Python program to create a dictionary with default values using `defaultdict`. Dictionary operations.\nExamples:\n  create_defaultdict() → ?",
             "initialCode": "from collections import defaultdict\ndef create_defaultdict():\n    pass",
             "solution": "from collections import defaultdict\n# Using function approach\ndef create_defaultdict():\n    sample_dict = defaultdict(int)\n    sample_dict['a'] += 1\n    sample_dict['b'] += 2\n    return dict(sample_dict)\ndefault_dict = create_defaultdict()\nprint(f'Default dictionary: {default_dict}')\n# Using alternative approach\n    # Implement manually without import\n# Using built-in approach\ndef create_defaultdict():\n    result = dict(sample_dict)\n    return result\n# Using manual approach\ndef create_defaultdict():\n    return dict(sample_dict)\n# Script approach\nsample_dict = defaultdict(int)\nsample_dict['a'] += 1\nsample_dict['b'] += 2\nresult = dict(sample_dict)\nprint(result)\n# Direct approach\nsample_dict = defaultdict(int)\nsample_dict['a'] += 1\nsample_dict['b'] += 2\nresult = dict(sample_dict)\nprint(result)",
 
@@ -14392,7 +14392,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1218,
             "title": "Problem 1218",
-            "description": "Write a Python program to get the first key-value pair from a dictionary. Dictionary operations.\nExamples:\n  first_key_value() → ('a', 10)\n  first_key_value() → ('a', 10)\n  first_key_value() → ('a', 10)",
+            "description": "Write a Python program to get the first key-value pair from a dictionary. Dictionary operations.\nExamples:\n  first_key_value() → ('a', 10)",
             "initialCode": "def first_key_value():\n    pass",
             "solution": "# Using function approach\ndef first_key_value():\n    sample_dict = {'a': 10, 'b': 20, 'c': 30}\n    first_item = list(sample_dict.items())[0]\n    return first_item\nfirst_item = first_key_value()\nprint(f'First key-value pair: {first_item}')\n# Using built-in approach\ndef first_key_value():\n    result = first_item\n    return result\n# Using manual approach\ndef first_key_value():\n    return first_item\n# Script approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nfirst_item = list(sample_dict.items())[0]\nresult = first_item\nprint(result)\n# Direct approach\nsample_dict = {'a': 10, 'b': 20, 'c': 30}\nfirst_item = list(sample_dict.items())[0]\nresult = first_item\nprint(result)",
 
@@ -14404,7 +14404,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1219,
             "title": "Problem 1219",
-            "description": "Write a Python program to merge multiple dictionaries into one. Dictionary operations.\nExamples:\n  merge_multiple_dicts() → {'a': 10, 'b': 20, 'c': 30, 'd': 40, 'e': 50}\n  merge_multiple_dicts() → {'a': 10, 'b': 20, 'c': 30, 'd': 40, 'e': 50}\n  merge_multiple_dicts() → {'a': 10, 'b': 20, 'c': 30, 'd': 40, 'e': 50}",
+            "description": "Write a Python program to merge multiple dictionaries into one. Dictionary operations.\nExamples:\n  merge_multiple_dicts() → {'a': 10, 'b': 20, 'c': 30, 'd': 40, 'e': 50}",
             "initialCode": "def merge_multiple_dicts():\n    pass",
             "solution": "# Using function approach\ndef merge_multiple_dicts():\n    dict1 = {'a': 10, 'b': 20}\n    dict2 = {'c': 30, 'd': 40}\n    dict3 = {'e': 50}\n    merged_dict = {**dict1, **dict2, **dict3}\n    return merged_dict\nmerged_dict = merge_multiple_dicts()\nprint(f'Merged dictionary: {merged_dict}')\n# Using built-in approach\ndef merge_multiple_dicts():\n    result = merged_dict\n    return result\n# Using manual approach\ndef merge_multiple_dicts():\n    return merged_dict\n# Script approach\ndict1 = {'a': 10, 'b': 20}\ndict2 = {'c': 30, 'd': 40}\ndict3 = {'e': 50}\nmerged_dict = {**dict1, **dict2, **dict3}\nresult = merged_dict\nprint(result)\n# Direct approach\ndict1 = {'a': 10, 'b': 20}\ndict2 = {'c': 30, 'd': 40}\ndict3 = {'e': 50}\nmerged_dict = {**dict1, **dict2, **dict3}\nresult = merged_dict\nprint(result)",
 
@@ -14416,7 +14416,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1220,
             "title": "Problem 1220",
-            "description": "Write a Python program to convert a list of tuples into a dictionary. Dictionary operations.\nExamples:\n  list_to_dict() → {'a': 1, 'b': 2, 'c': 3}\n  list_to_dict() → {'a': 1, 'b': 2, 'c': 3}\n  list_to_dict() → {'a': 1, 'b': 2, 'c': 3}",
+            "description": "Write a Python program to convert a list of tuples into a dictionary. Dictionary operations.\nExamples:\n  list_to_dict() → {'a': 1, 'b': 2, 'c': 3}",
             "initialCode": "def list_to_dict():\n    pass",
             "solution": "# Using function approach\ndef list_to_dict():\n    sample_list = [('a', 1), ('b', 2), ('c', 3)]\n    return dict(sample_list)\nconverted_dict = list_to_dict()\nprint(f'Converted dictionary: {converted_dict}')\n# Using built-in approach\ndef list_to_dict():\n    result = dict(sample_list)\n    return result\n# Using manual approach\ndef list_to_dict():\n    return dict(sample_list)\n# Script approach\nsample_list = [('a', 1), ('b', 2), ('c', 3)]\nresult = dict(sample_list)\nprint(result)\n# Direct approach\nsample_list = [('a', 1), ('b', 2), ('c', 3)]\nresult = dict(sample_list)\nprint(result)",
 
@@ -14428,7 +14428,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1221,
             "title": "Problem 1221",
-            "description": "Write a Python program to create a Path object using the `pathlib` module.\nExamples:\n  create_path() → ?\n  create_path() → ?\n  create_path() → ?",
+            "description": "Write a Python program to create a Path object using the `pathlib` module.\nExamples:\n  create_path() → ?",
             "initialCode": "from pathlib import Path\ndef create_path():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef create_path():\n    p = Path('example_directory')\n    return p\npath = create_path()\nprint(f'Created path: {path}')\n# Using built-in approach\ndef create_path():\n    result = p\n    return result\n# Using manual approach\ndef create_path():\n    return p\n# Script approach\np = Path('example_directory')\nresult = p\nprint(result)\n# Direct approach\np = Path('example_directory')\nresult = p\nprint(result)",
 
@@ -14440,7 +14440,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1222,
             "title": "Problem 1222",
-            "description": "Write a Python program to check if a path exists using `pathlib`.\nExamples:\n  check_path_exists() → ?\n  check_path_exists() → ?\n  check_path_exists() → ?",
+            "description": "Write a Python program to check if a path exists using `pathlib`.\nExamples:\n  check_path_exists() → ?",
             "initialCode": "from pathlib import Path\ndef check_path_exists():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_path_exists():\n    p = Path('example_directory')\n    return p.exists()\nexists = check_path_exists()\nprint(f'Path exists: {exists}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef check_path_exists():\n    result = p.exists()\n    return result\n# Using manual approach\ndef check_path_exists():\n    return p.exists()\n# Script approach\np = Path('example_directory')\nresult = p.exists()\nprint(result)\n# Direct approach\np = Path('example_directory')\nresult = p.exists()\nprint(result)",
 
@@ -14452,7 +14452,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1223,
             "title": "Problem 1223",
-            "description": "Write a Python program to check if a path is a file using `pathlib`.\nExamples:\n  check_if_file() → ?\n  check_if_file() → ?\n  check_if_file() → ?",
+            "description": "Write a Python program to check if a path is a file using `pathlib`.\nExamples:\n  check_if_file() → ?",
             "initialCode": "from pathlib import Path\ndef check_if_file():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_if_file():\n    p = Path('example_file.txt')\n    return p.is_file()\nis_file = check_if_file()\nprint(f'Is it a file? {is_file}')\n# Using built-in approach\ndef check_if_file():\n    result = p.is_file()\n    return result\n# Using manual approach\ndef check_if_file():\n    return p.is_file()\n# Script approach\np = Path('example_file.txt')\nresult = p.is_file()\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.is_file()\nprint(result)",
 
@@ -14464,7 +14464,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1224,
             "title": "Problem 1224",
-            "description": "Write a Python program to check if a path is a directory using `pathlib`.\nExamples:\n  check_if_directory() → ?\n  check_if_directory() → ?\n  check_if_directory() → ?",
+            "description": "Write a Python program to check if a path is a directory using `pathlib`.\nExamples:\n  check_if_directory() → ?",
             "initialCode": "from pathlib import Path\ndef check_if_directory():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_if_directory():\n    p = Path('example_directory')\n    return p.is_dir()\nis_directory = check_if_directory()\nprint(f'Is it a directory? {is_directory}')\n# Using built-in approach\ndef check_if_directory():\n    result = p.is_dir()\n    return result\n# Using manual approach\ndef check_if_directory():\n    return p.is_dir()\n# Script approach\np = Path('example_directory')\nresult = p.is_dir()\nprint(result)\n# Direct approach\np = Path('example_directory')\nresult = p.is_dir()\nprint(result)",
 
@@ -14476,7 +14476,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1225,
             "title": "Problem 1225",
-            "description": "Write a Python program to get the file name from a path using `pathlib`.\nExamples:\n  get_file_name() → ?\n  get_file_name() → ?\n  get_file_name() → ?",
+            "description": "Write a Python program to get the file name from a path using `pathlib`.\nExamples:\n  get_file_name() → ?",
             "initialCode": "from pathlib import Path\ndef get_file_name():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_file_name():\n    p = Path('example_directory/example_file.txt')\n    return p.name\nfile_name = get_file_name()\nprint(f'File name: {file_name}')\n# Using built-in approach\ndef get_file_name():\n    result = p.name\n    return result\n# Using manual approach\ndef get_file_name():\n    return p.name\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.name\nprint(result)\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.name\nprint(result)",
 
@@ -14488,7 +14488,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1226,
             "title": "Problem 1226",
-            "description": "Write a Python program to get the parent directory of a path using `pathlib`.\nExamples:\n  get_parent_directory() → ?\n  get_parent_directory() → ?\n  get_parent_directory() → ?",
+            "description": "Write a Python program to get the parent directory of a path using `pathlib`.\nExamples:\n  get_parent_directory() → ?",
             "initialCode": "from pathlib import Path\ndef get_parent_directory():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_parent_directory():\n    p = Path('example_directory/example_file.txt')\n    return p.parent\nparent_directory = get_parent_directory()\nprint(f'Parent directory: {parent_directory}')\n# Using built-in approach\ndef get_parent_directory():\n    result = p.parent\n    return result\n# Using manual approach\ndef get_parent_directory():\n    return p.parent\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.parent\nprint(result)\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.parent\nprint(result)",
 
@@ -14500,7 +14500,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1227,
             "title": "Problem 1227",
-            "description": "Write a Python program to join two paths using `pathlib`.\nExamples:\n  join_paths() → ?\n  join_paths() → ?\n  join_paths() → ?",
+            "description": "Write a Python program to join two paths using `pathlib`.\nExamples:\n  join_paths() → ?",
             "initialCode": "from pathlib import Path\ndef join_paths():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef join_paths():\n    p1 = Path('example_directory')\n    p2 = 'example_file.txt'\n    return p1 / p2\njoined_path = join_paths()\nprint(f'Joined path: {joined_path}')\n# Using built-in approach\ndef join_paths():\n    return p1 * (1 / p2)\n# Using manual approach\ndef join_paths():\n    from fractions import Fraction\n    return float(Fraction(p1, p2))\n# Script approach\np1 = Path('example_directory')\np2 = 'example_file.txt'\nresult = p1 / p2\nprint(result)\n# Direct approach\np1 = Path('example_directory')\np2 = 'example_file.txt'\nresult = p1 / p2\nprint(result)",
 
@@ -14512,7 +14512,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1228,
             "title": "Problem 1228",
-            "description": "Write a Python program to get the file extension of a path using `pathlib`.\nExamples:\n  get_file_extension() → ?\n  get_file_extension() → ?\n  get_file_extension() → ?",
+            "description": "Write a Python program to get the file extension of a path using `pathlib`.\nExamples:\n  get_file_extension() → ?",
             "initialCode": "from pathlib import Path\ndef get_file_extension():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_file_extension():\n    p = Path('example_file.txt')\n    return p.suffix\nfile_extension = get_file_extension()\nprint(f'File extension: {file_extension}')\n# Using built-in approach\ndef get_file_extension():\n    result = p.suffix\n    return result\n# Using manual approach\ndef get_file_extension():\n    return p.suffix\n# Script approach\np = Path('example_file.txt')\nresult = p.suffix\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.suffix\nprint(result)",
 
@@ -14524,7 +14524,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1229,
             "title": "Problem 1229",
-            "description": "Write a Python program to get the size of a file using `pathlib`.\nExamples:\n  get_file_size() → ?\n  get_file_size() → ?\n  get_file_size() → ?",
+            "description": "Write a Python program to get the size of a file using `pathlib`.\nExamples:\n  get_file_size() → ?",
             "initialCode": "from pathlib import Path\ndef get_file_size():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_file_size():\n    p = Path('example_file.txt')\n    return p.stat().st_size\nfile_size = get_file_size()\nprint(f'File size: {file_size} bytes')\n# Using built-in approach\ndef get_file_size():\n    result = p.stat().st_size\n    return result\n# Using manual approach\ndef get_file_size():\n    return p.stat().st_size\n# Script approach\np = Path('example_file.txt')\nresult = p.stat().st_size\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.stat().st_size\nprint(result)",
 
@@ -14536,7 +14536,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1230,
             "title": "Problem 1230",
-            "description": "Write a Python program to rename a file using `pathlib`.\nExamples:\n  rename_file() → ?\n  rename_file() → ?\n  rename_file() → ?",
+            "description": "Write a Python program to rename a file using `pathlib`.\nExamples:\n  rename_file() → ?",
             "initialCode": "from pathlib import Path\ndef rename_file():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef rename_file():\n    old_path = Path('old_file.txt')\n    new_path = Path('new_file.txt')\n    old_path.rename(new_path)\n    return new_path\nrenamed_file = rename_file()\nprint(f'Renamed file: {renamed_file}')\n# Using built-in approach\ndef rename_file():\n    result = new_path\n    return result\n# Using manual approach\ndef rename_file():\n    return new_path\n# Script approach\nold_path = Path('old_file.txt')\nnew_path = Path('new_file.txt')\nold_path.rename(new_path)\nresult = new_path\nprint(result)\n# Direct approach\nold_path = Path('old_file.txt')\nnew_path = Path('new_file.txt')\nold_path.rename(new_path)\nresult = new_path\nprint(result)",
 
@@ -14548,7 +14548,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1231,
             "title": "Problem 1231",
-            "description": "Write a Python program to create a new directory using `pathlib`.\nExamples:\n  create_directory() → ?\n  create_directory() → ?\n  create_directory() → ?",
+            "description": "Write a Python program to create a new directory using `pathlib`.\nExamples:\n  create_directory() → ?",
             "initialCode": "from pathlib import Path\ndef create_directory():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef create_directory():\n    p = Path('new_directory')\n    p.mkdir(parents=True, exist_ok=True)\n    return p\ncreated_directory = create_directory()\nprint(f'Created directory: {created_directory}')\n# Using built-in approach\ndef create_directory():\n    result = p\n    return result\n# Using manual approach\ndef create_directory():\n    return p\n# Script approach\np = Path('new_directory')\np.mkdir(parents=True, exist_ok=True)\nresult = p\nprint(result)\n# Direct approach\np = Path('new_directory')\np.mkdir(parents=True, exist_ok=True)\nresult = p\nprint(result)",
 
@@ -14560,7 +14560,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1232,
             "title": "Problem 1232",
-            "description": "Write a Python program to remove a directory using `pathlib`.\nExamples:\n  remove_directory() → ?\n  remove_directory() → ?\n  remove_directory() → ?",
+            "description": "Write a Python program to remove a directory using `pathlib`.\nExamples:\n  remove_directory() → ?",
             "initialCode": "from pathlib import Path\ndef remove_directory():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef remove_directory():\n    p = Path('new_directory')\n    p.rmdir()\n    return f'Directory {p} removed'\nremoved_directory = remove_directory()\nprint(removed_directory)\n# Using built-in approach\ndef remove_directory():\n    return 'Directory {} removed'.format(p)\n# Using manual approach\ndef remove_directory():\n    return 'Directory %s removed' % (p)\n# Script approach\np = Path('new_directory')\np.rmdir()\nresult = f'Directory {p} removed'\nprint(result)\n# Direct approach\np = Path('new_directory')\np.rmdir()\nresult = f'Directory {p} removed'\nprint(result)",
 
@@ -14572,7 +14572,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1233,
             "title": "Problem 1233",
-            "description": "Write a Python program to remove a file using `pathlib`.\nExamples:\n  remove_file() → ?\n  remove_file() → ?\n  remove_file() → ?",
+            "description": "Write a Python program to remove a file using `pathlib`.\nExamples:\n  remove_file() → ?",
             "initialCode": "from pathlib import Path\ndef remove_file():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef remove_file():\n    p = Path('example_file.txt')\n    p.unlink()\n    return f'File {p} removed'\nremoved_file = remove_file()\nprint(removed_file)\n# Using built-in approach\ndef remove_file():\n    return 'File {} removed'.format(p)\n# Using manual approach\ndef remove_file():\n    return 'File %s removed' % (p)\n# Script approach\np = Path('example_file.txt')\np.unlink()\nresult = f'File {p} removed'\nprint(result)\n# Direct approach\np = Path('example_file.txt')\np.unlink()\nresult = f'File {p} removed'\nprint(result)",
 
@@ -14584,7 +14584,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1234,
             "title": "Problem 1234",
-            "description": "Write a Python program to get the absolute path of a file using `pathlib`.\nExamples:\n  get_absolute_path() → ?\n  get_absolute_path() → ?\n  get_absolute_path() → ?",
+            "description": "Write a Python program to get the absolute path of a file using `pathlib`.\nExamples:\n  get_absolute_path() → ?",
             "initialCode": "from pathlib import Path\ndef get_absolute_path():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_absolute_path():\n    p = Path('example_file.txt')\n    return p.resolve()\nabsolute_path = get_absolute_path()\nprint(f'Absolute path: {absolute_path}')\n# Using built-in approach\ndef get_absolute_path():\n    result = p.resolve()\n    return result\n# Using manual approach\ndef get_absolute_path():\n    return p.resolve()\n# Script approach\np = Path('example_file.txt')\nresult = p.resolve()\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.resolve()\nprint(result)",
 
@@ -14596,7 +14596,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1235,
             "title": "Problem 1235",
-            "description": "Write a Python program to check if a path is a symbolic link using `pathlib`.\nExamples:\n  check_if_symlink() → ?\n  check_if_symlink() → ?\n  check_if_symlink() → ?",
+            "description": "Write a Python program to check if a path is a symbolic link using `pathlib`.\nExamples:\n  check_if_symlink() → ?",
             "initialCode": "from pathlib import Path\ndef check_if_symlink():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_if_symlink():\n    p = Path('example_symlink')\n    return p.is_symlink()\nis_symlink = check_if_symlink()\nprint(f'Is it a symbolic link? {is_symlink}')\n# Using built-in approach\ndef check_if_symlink():\n    result = p.is_symlink()\n    return result\n# Using manual approach\ndef check_if_symlink():\n    return p.is_symlink()\n# Script approach\np = Path('example_symlink')\nresult = p.is_symlink()\nprint(result)\n# Direct approach\np = Path('example_symlink')\nresult = p.is_symlink()\nprint(result)",
 
@@ -14608,7 +14608,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1236,
             "title": "Problem 1236",
-            "description": "Write a Python program to create a symbolic link using `pathlib`.\nExamples:\n  create_symlink() → ?\n  create_symlink() → ?\n  create_symlink() → ?",
+            "description": "Write a Python program to create a symbolic link using `pathlib`.\nExamples:\n  create_symlink() → ?",
             "initialCode": "from pathlib import Path\ndef create_symlink():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef create_symlink():\n    target = Path('example_file.txt')\n    symlink = Path('example_symlink')\n    symlink.symlink_to(target)\n    return symlink\nsymlink = create_symlink()\nprint(f'Created symlink: {symlink}')\n# Using built-in approach\ndef create_symlink():\n    result = symlink\n    return result\n# Using manual approach\ndef create_symlink():\n    return symlink\n# Script approach\ntarget = Path('example_file.txt')\nsymlink = Path('example_symlink')\nsymlink.symlink_to(target)\nresult = symlink\nprint(result)\n# Direct approach\ntarget = Path('example_file.txt')\nsymlink = Path('example_symlink')\nsymlink.symlink_to(target)\nresult = symlink\nprint(result)",
 
@@ -14620,7 +14620,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1237,
             "title": "Problem 1237",
-            "description": "Write a Python program to check if a path is a directory and if it contains files using `pathlib`.\nExamples:\n  check_directory_and_files() → ?\n  check_directory_and_files() → ?\n  check_directory_and_files() → ?",
+            "description": "Write a Python program to check if a path is a directory and if it contains files using `pathlib`.\nExamples:\n  check_directory_and_files() → ?",
             "initialCode": "from pathlib import Path\ndef check_directory_and_files():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_directory_and_files():\n    p = Path('example_directory')\n    if p.is_dir():\n        return [file.name for file in p.iterdir()]\n    return []\ndirectory_files = check_directory_and_files()\nprint(f'Files in directory: {directory_files}')\n# Using built-in approach\ndef check_directory_and_files():\n    result = [file.name for file in p.iterdir()]\n    return result\n# Using manual approach\ndef check_directory_and_files():\n    return [file.name for file in p.iterdir()]",
 
@@ -14632,7 +14632,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1238,
             "title": "Problem 1238",
-            "description": "Write a Python program to get the last modified time of a file using `pathlib`.\nExamples:\n  get_last_modified_time() → ?\n  get_last_modified_time() → ?\n  get_last_modified_time() → ?",
+            "description": "Write a Python program to get the last modified time of a file using `pathlib`.\nExamples:\n  get_last_modified_time() → ?",
             "initialCode": "from pathlib import Path\nimport time\ndef get_last_modified_time():\n    pass",
             "solution": "from pathlib import Path\nimport time\n# Using function approach\ndef get_last_modified_time():\n    p = Path('example_file.txt')\n    timestamp = p.stat().st_mtime\n    return time.ctime(timestamp)\nlast_modified_time = get_last_modified_time()\nprint(f'Last modified time: {last_modified_time}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef get_last_modified_time():\n    result = time.ctime(timestamp)\n    return result\n# Using manual approach\ndef get_last_modified_time():\n    return time.ctime(timestamp)\n# Script approach\np = Path('example_file.txt')\ntimestamp = p.stat().st_mtime\nresult = time.ctime(timestamp)\nprint(result)\n# Direct approach\np = Path('example_file.txt')\ntimestamp = p.stat().st_mtime\nresult = time.ctime(timestamp)\nprint(result)",
 
@@ -14643,7 +14643,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1239,
             "title": "Problem 1239",
-            "description": "Write a Python program to get the directory name from a path using `pathlib`.\nExamples:\n  get_directory_name() → ?\n  get_directory_name() → ?\n  get_directory_name() → ?",
+            "description": "Write a Python program to get the directory name from a path using `pathlib`.\nExamples:\n  get_directory_name() → ?",
             "initialCode": "from pathlib import Path\ndef get_directory_name():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_directory_name():\n    p = Path('example_directory/example_file.txt')\n    return p.parent.name\ndirectory_name = get_directory_name()\nprint(f'Directory name: {directory_name}')\n# Using built-in approach\ndef get_directory_name():\n    result = p.parent.name\n    return result\n# Using manual approach\ndef get_directory_name():\n    return p.parent.name\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.name\nprint(result)\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.name\nprint(result)",
 
@@ -14655,7 +14655,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1240,
             "title": "Problem 1240",
-            "description": "Write a Python program to check if a path is empty (no files) using `pathlib`.\nExamples:\n  check_if_empty() → ?\n  check_if_empty() → ?\n  check_if_empty() → ?",
+            "description": "Write a Python program to check if a path is empty (no files) using `pathlib`.\nExamples:\n  check_if_empty() → ?",
             "initialCode": "from pathlib import Path\ndef check_if_empty():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_if_empty():\n    p = Path('example_directory')\n    return len(list(p.iterdir())) == 0\nis_empty = check_if_empty()\nprint(f'Is directory empty? {is_empty}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef check_if_empty():\n    result = len(list(p.iterdir())) == 0\n    return result\n# Using manual approach\ndef check_if_empty():\n    return len(list(p.iterdir())) == 0\n# Script approach\np = Path('example_directory')\nresult = len(list(p.iterdir())) == 0\nprint(result)\n# Direct approach\np = Path('example_directory')\nresult = len(list(p.iterdir())) == 0\nprint(result)",
 
@@ -14667,7 +14667,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1241,
             "title": "Problem 1241",
-            "description": "Write a Python program to iterate over all files in a directory using `pathlib`.\nExamples:\n  iterate_files() → ?\n  iterate_files() → ?\n  iterate_files() → ?",
+            "description": "Write a Python program to iterate over all files in a directory using `pathlib`.\nExamples:\n  iterate_files() → ?",
             "initialCode": "from pathlib import Path\ndef iterate_files():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef iterate_files():\n    p = Path('example_directory')\n    return [file.name for file in p.iterdir() if file.is_file()]\nfiles_in_directory = iterate_files()\nprint(f'Files in directory: {files_in_directory}')\n# Using built-in approach\ndef iterate_files():\n    result = [file.name for file in p.iterdir() if file.is_file()]\n    return result\n# Using manual approach\ndef iterate_files():\n    return [file.name for file in p.iterdir() if file.is_file()]\n# Script approach\np = Path('example_directory')\nresult = [file.name for file in p.iterdir() if file.is_file()]\nprint(result)\n# Direct approach\np = Path('example_directory')\nresult = [file.name for file in p.iterdir() if file.is_file()]\nprint(result)",
 
@@ -14679,7 +14679,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1242,
             "title": "Problem 1242",
-            "description": "Write a Python program to find the path to the parent directory using `pathlib`.\nExamples:\n  get_parent_directory() → ?\n  get_parent_directory() → ?\n  get_parent_directory() → ?",
+            "description": "Write a Python program to find the path to the parent directory using `pathlib`.\nExamples:\n  get_parent_directory() → ?",
             "initialCode": "from pathlib import Path\ndef get_parent_directory():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_parent_directory():\n    p = Path('example_directory/example_file.txt')\n    return p.parent.parent\nparent_directory = get_parent_directory()\nprint(f'Parent directory: {parent_directory}')\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef get_parent_directory():\n    result = p.parent.parent\n    return result\n# Using manual approach\ndef get_parent_directory():\n    return p.parent.parent\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.parent\nprint(result)\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.parent\nprint(result)",
 
@@ -14691,7 +14691,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1243,
             "title": "Problem 1243",
-            "description": "Write a Python program to check if a file has a certain extension using `pathlib`.\nExamples:\n  check_file_extension() → ?\n  check_file_extension() → ?\n  check_file_extension() → ?",
+            "description": "Write a Python program to check if a file has a certain extension using `pathlib`.\nExamples:\n  check_file_extension() → ?",
             "initialCode": "from pathlib import Path\ndef check_file_extension():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_file_extension():\n    p = Path('example_file.txt')\n    return p.suffix == '.txt'\nhas_extension = check_file_extension()\nprint(f'Has .txt extension? {has_extension}')\n# Using built-in approach\ndef check_file_extension():\n    result = p.suffix == '.txt'\n    return result\n# Using manual approach\ndef check_file_extension():\n    return p.suffix == '.txt'\n# Script approach\np = Path('example_file.txt')\nresult = p.suffix == '.txt'\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.suffix == '.txt'\nprint(result)",
 
@@ -14703,7 +14703,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1244,
             "title": "Problem 1244",
-            "description": "Write a Python program to get the file size using `pathlib` in human-readable format.\nExamples:\n  get_human_readable_size() → ?\n  get_human_readable_size() → ?\n  get_human_readable_size() → ?",
+            "description": "Write a Python program to get the file size using `pathlib` in human-readable format.\nExamples:\n  get_human_readable_size() → ?",
             "initialCode": "from pathlib import Path\ndef get_human_readable_size():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef get_human_readable_size():\n    p = Path('example_file.txt')\n    size_in_bytes = p.stat().st_size\n    return f'{size_in_bytes / 1024:.2f} KB'\nsize = get_human_readable_size()\nprint(f'File size: {size}')\n# Using built-in approach\ndef get_human_readable_size():\n    result = f'{size_in_bytes / 1024:.2f} KB'\n    return result\n# Using manual approach\ndef get_human_readable_size():\n    return f'{size_in_bytes / 1024:.2f} KB'\n# Script approach\np = Path('example_file.txt')\nsize_in_bytes = p.stat().st_size\nresult = f'{size_in_bytes / 1024:.2f} KB'\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nsize_in_bytes = p.stat().st_size\nresult = f'{size_in_bytes / 1024:.2f} KB'\nprint(result)",
 
@@ -14715,7 +14715,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1245,
             "title": "Problem 1245",
-            "description": "Write a Python program to change the current working directory using `pathlib`.\nExamples:\n  change_working_directory() → ?\n  change_working_directory() → ?\n  change_working_directory() → ?",
+            "description": "Write a Python program to change the current working directory using `pathlib`.\nExamples:\n  change_working_directory() → ?",
             "initialCode": "from pathlib import Path\ndef change_working_directory():\n    pass",
             "solution": "from pathlib import Path\nimport os\n# Using function approach\ndef change_working_directory():\n    p = Path('example_directory')\n    os.chdir(p)\n    return f'Changed working directory to: {p}'\nchanged_directory = change_working_directory()\nprint(changed_directory)\n# Using built-in approach\ndef change_working_directory():\n    return 'Changed working directory to: {}'.format(p)\n# Using manual approach\ndef change_working_directory():\n    return 'Changed working directory to: %s' % (p)\n# Script approach\np = Path('example_directory')\nos.chdir(p)\nresult = f'Changed working directory to: {p}'\nprint(result)\n# Direct approach\np = Path('example_directory')\nos.chdir(p)\nresult = f'Changed working directory to: {p}'\nprint(result)",
 
@@ -14727,7 +14727,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1246,
             "title": "Problem 1246",
-            "description": "Write a Python program to check if two conditions are true using the `and` operator.\nExamples:\n  check_conditions() → True\n  check_conditions() → True\n  check_conditions() → True",
+            "description": "Write a Python program to check if two conditions are true using the `and` operator.\nExamples:\n  check_conditions() → True",
             "initialCode": "def check_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_conditions():\n    a = 5\n    b = 10\n    return a > 3 and b < 15\nresult = check_conditions()\nprint(f'Both conditions are true: {result}')\n# Using built-in approach\ndef check_conditions():\n    result = a > 3 and b < 15\n    return result\n# Using manual approach\ndef check_conditions():\n    return a > 3 and b < 15\n# Script approach\na = 5\nb = 10\nresult = a > 3 and b < 15\nprint(result)\n# Direct approach\na = 5\nb = 10\nresult = a > 3 and b < 15\nprint(result)",
 
@@ -14739,7 +14739,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1247,
             "title": "Problem 1247",
-            "description": "Write a Python program to check if a number is between 10 and 20 (both inclusive) using the `and` operator.\nExamples:\n  check_range() → True\n  check_range() → True\n  check_range() → True",
+            "description": "Write a Python program to check if a number is between 10 and 20 (both inclusive) using the `and` operator.\nExamples:\n  check_range() → True",
             "initialCode": "def check_range():\n    pass",
             "solution": "# Using function approach\ndef check_range():\n    num = 15\n    return num >= 10 and num <= 20\nresult = check_range()\nprint(f'Number is between 10 and 20: {result}')\n# Using built-in approach\ndef check_range():\n    result = num >= 10 and num <= 20\n    return result\n# Using manual approach\ndef check_range():\n    return num >= 10 and num <= 20\n# Script approach\nnum = 15\nresult = num >= 10 and num <= 20\nprint(result)\n# Direct approach\nnum = 15\nresult = num >= 10 and num <= 20\nprint(result)",
 
@@ -14751,7 +14751,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1248,
             "title": "Problem 1248",
-            "description": "Write a Python program to check if a string is non-empty and contains a specific character using the `and` operator.\nExamples:\n  check_string() → True\n  check_string() → True\n  check_string() → True",
+            "description": "Write a Python program to check if a string is non-empty and contains a specific character using the `and` operator.\nExamples:\n  check_string() → True",
             "initialCode": "def check_string():\n    pass",
             "solution": "# Using function approach\ndef check_string():\n    text = 'hello'\n    return len(text) > 0 and 'e' in text\nresult = check_string()\nprint(f'String is non-empty and contains 'e': {result}')\n# Using built-in approach\ndef check_string():\n    result = len(text) > 0 and 'e' in text\n    return result\n# Using manual approach\ndef check_string():\n    return len(text) > 0 and 'e' in text\n# Script approach\ntext = 'hello'\nresult = len(text) > 0 and 'e' in text\nprint(result)\n# Direct approach\ntext = 'hello'\nresult = len(text) > 0 and 'e' in text\nprint(result)",
 
@@ -14775,7 +14775,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1250,
             "title": "Problem 1250",
-            "description": "Write a Python program to check if a list is non-empty and the first element is greater than 5 using the `and` operator.\nExamples:\n  check_list() → True\n  check_list() → True\n  check_list() → True",
+            "description": "Write a Python program to check if a list is non-empty and the first element is greater than 5 using the `and` operator.\nExamples:\n  check_list() → True",
             "initialCode": "def check_list():\n    pass",
             "solution": "# Using function approach\ndef check_list():\n    lst = [6, 2, 8]\n    return len(lst) > 0 and lst[0] > 5\nresult = check_list()\nprint(f'List is non-empty and first element is greater than 5: {result}')\n# Using built-in approach\ndef check_list():\n    result = len(lst) > 0 and lst[0] > 5\n    return result\n# Using manual approach\ndef check_list():\n    return len(lst) > 0 and lst[0] > 5\n# Script approach\nlst = [6, 2, 8]\nresult = len(lst) > 0 and lst[0] > 5\nprint(result)\n# Direct approach\nlst = [6, 2, 8]\nresult = len(lst) > 0 and lst[0] > 5\nprint(result)",
 
@@ -14787,7 +14787,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1251,
             "title": "Problem 1251",
-            "description": "Write a Python program to check if a year is a leap year using the `and` operator.\nExamples:\n  check_leap_year() → True\n  check_leap_year() → True\n  check_leap_year() → True",
+            "description": "Write a Python program to check if a year is a leap year using the `and` operator.\nExamples:\n  check_leap_year() → True",
             "initialCode": "def check_leap_year():\n    pass",
             "solution": "# Using function approach\ndef check_leap_year():\n    year = 2024\n    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nresult = check_leap_year()\nprint(f'Year is a leap year: {result}')\n# Using built-in approach\ndef check_leap_year():\n    result = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\n    return result\n# Using manual approach\ndef check_leap_year():\n    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\n# Script approach\nyear = 2024\nresult = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nprint(result)\n# Direct approach\nyear = 2024\nresult = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nprint(result)",
 
@@ -14799,7 +14799,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1252,
             "title": "Problem 1252",
-            "description": "Write a Python program to check if a number is positive, even, and divisible by 4 using the `and` operator.\nExamples:\n  check_number() → True\n  check_number() → True\n  check_number() → True",
+            "description": "Write a Python program to check if a number is positive, even, and divisible by 4 using the `and` operator.\nExamples:\n  check_number() → True",
             "initialCode": "def check_number():\n    pass",
             "solution": "# Using function approach\ndef check_number():\n    num = 8\n    return num > 0 and num % 2 == 0 and num % 4 == 0\nresult = check_number()\nprint(f'Number is positive, even, and divisible by 4: {result}')\n# Using built-in approach\ndef check_number():\n    result = num > 0 and num % 2 == 0 and num % 4 == 0\n    return result\n# Using manual approach\ndef check_number():\n    return num > 0 and num % 2 == 0 and num % 4 == 0\n# Script approach\nnum = 8\nresult = num > 0 and num % 2 == 0 and num % 4 == 0\nprint(result)\n# Direct approach\nnum = 8\nresult = num > 0 and num % 2 == 0 and num % 4 == 0\nprint(result)",
 
@@ -14811,7 +14811,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1253,
             "title": "Problem 1253",
-            "description": "Write a Python program to check if a list contains exactly three elements, and the first element is greater than 5 using the `and` operator.\nExamples:\n  check_list_conditions() → True\n  check_list_conditions() → True\n  check_list_conditions() → True",
+            "description": "Write a Python program to check if a list contains exactly three elements, and the first element is greater than 5 using the `and` operator.\nExamples:\n  check_list_conditions() → True",
             "initialCode": "def check_list_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_list_conditions():\n    lst = [6, 2, 8]\n    return len(lst) == 3 and lst[0] > 5\nresult = check_list_conditions()\nprint(f'List has three elements and first is greater than 5: {result}')\n# Using built-in approach\ndef check_list_conditions():\n    result = len(lst) == 3 and lst[0] > 5\n    return result\n# Using manual approach\ndef check_list_conditions():\n    return len(lst) == 3 and lst[0] > 5\n# Script approach\nlst = [6, 2, 8]\nresult = len(lst) == 3 and lst[0] > 5\nprint(result)\n# Direct approach\nlst = [6, 2, 8]\nresult = len(lst) == 3 and lst[0] > 5\nprint(result)",
 
@@ -14823,7 +14823,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1254,
             "title": "Problem 1254",
-            "description": "Write a Python program to check if a string is lowercase and its length is greater than 3 using the `and` operator.\nExamples:\n  check_string_conditions() → True\n  check_string_conditions() → True\n  check_string_conditions() → True",
+            "description": "Write a Python program to check if a string is lowercase and its length is greater than 3 using the `and` operator.\nExamples:\n  check_string_conditions() → True",
             "initialCode": "def check_string_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_string_conditions():\n    text = 'hello'\n    return text.islower() and len(text) > 3\nresult = check_string_conditions()\nprint(f'String is lowercase and its length is greater than 3: {result}')\n# Using built-in approach\ndef check_string_conditions():\n    result = text.islower() and len(text) > 3\n    return result\n# Using manual approach\ndef check_string_conditions():\n    return text.islower() and len(text) > 3\n# Script approach\ntext = 'hello'\nresult = text.islower() and len(text) > 3\nprint(result)\n# Direct approach\ntext = 'hello'\nresult = text.islower() and len(text) > 3\nprint(result)",
 
@@ -14835,7 +14835,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1255,
             "title": "Problem 1255",
-            "description": "Write a Python program to check if a number is greater than 10 and less than 50 using the `and` operator.\nExamples:\n  check_range_conditions() → True\n  check_range_conditions() → True\n  check_range_conditions() → True",
+            "description": "Write a Python program to check if a number is greater than 10 and less than 50 using the `and` operator.\nExamples:\n  check_range_conditions() → True",
             "initialCode": "def check_range_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_range_conditions():\n    num = 30\n    return num > 10 and num < 50\nresult = check_range_conditions()\nprint(f'Number is between 10 and 50: {result}')\n# Using built-in approach\ndef check_range_conditions():\n    result = num > 10 and num < 50\n    return result\n# Using manual approach\ndef check_range_conditions():\n    return num > 10 and num < 50\n# Script approach\nnum = 30\nresult = num > 10 and num < 50\nprint(result)\n# Direct approach\nnum = 30\nresult = num > 10 and num < 50\nprint(result)",
 
@@ -14847,7 +14847,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1256,
             "title": "Problem 1256",
-            "description": "Write a Python program to check if a number is both a multiple of 7 and 11 using the `and` operator.\nExamples:\n  check_multiples() → True\n  check_multiples() → True\n  check_multiples() → True",
+            "description": "Write a Python program to check if a number is both a multiple of 7 and 11 using the `and` operator.\nExamples:\n  check_multiples() → True",
             "initialCode": "def check_multiples():\n    pass",
             "solution": "# Using function approach\ndef check_multiples():\n    num = 77\n    return num % 7 == 0 and num % 11 == 0\nresult = check_multiples()\nprint(f'Number is a multiple of both 7 and 11: {result}')\n# Using built-in approach\ndef check_multiples():\n    result = num % 7 == 0 and num % 11 == 0\n    return result\n# Using manual approach\ndef check_multiples():\n    return num % 7 == 0 and num % 11 == 0\n# Script approach\nnum = 77\nresult = num % 7 == 0 and num % 11 == 0\nprint(result)\n# Direct approach\nnum = 77\nresult = num % 7 == 0 and num % 11 == 0\nprint(result)",
 
@@ -14859,7 +14859,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1257,
             "title": "Problem 1257",
-            "description": "Write a Python program to check if a person is eligible to vote, meaning the age is greater than 18 and they are a citizen, using the `and` operator.\nExamples:\n  check_voting_eligibility() → True\n  check_voting_eligibility() → True\n  check_voting_eligibility() → True",
+            "description": "Write a Python program to check if a person is eligible to vote, meaning the age is greater than 18 and they are a citizen, using the `and` operator.\nExamples:\n  check_voting_eligibility() → True",
             "initialCode": "def check_voting_eligibility():\n    pass",
             "solution": "# Using function approach\ndef check_voting_eligibility():\n    age = 20\n    is_citizen = True\n    return age > 18 and is_citizen\nresult = check_voting_eligibility()\nprint(f'Person is eligible to vote: {result}')\n# Using built-in approach\ndef check_voting_eligibility():\n    result = age > 18 and is_citizen\n    return result\n# Using manual approach\ndef check_voting_eligibility():\n    return age > 18 and is_citizen\n# Script approach\nage = 20\nis_citizen = True\nresult = age > 18 and is_citizen\nprint(result)\n# Direct approach\nage = 20\nis_citizen = True\nresult = age > 18 and is_citizen\nprint(result)",
 
@@ -14871,7 +14871,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1258,
             "title": "Problem 1258",
-            "description": "Write a Python program to check if a number is divisible by 2, 3, and 5 using the `and` operator.\nExamples:\n  check_divisibility_all() → True\n  check_divisibility_all() → True\n  check_divisibility_all() → True",
+            "description": "Write a Python program to check if a number is divisible by 2, 3, and 5 using the `and` operator.\nExamples:\n  check_divisibility_all() → True",
             "initialCode": "def check_divisibility_all():\n    pass",
             "solution": "# Using function approach\ndef check_divisibility_all():\n    num = 30\n    return num % 2 == 0 and num % 3 == 0 and num % 5 == 0\nresult = check_divisibility_all()\nprint(f'Number is divisible by 2, 3, and 5: {result}')\n# Using built-in approach\ndef check_divisibility_all():\n    result = num % 2 == 0 and num % 3 == 0 and num % 5 == 0\n    return result\n# Using manual approach\ndef check_divisibility_all():\n    return num % 2 == 0 and num % 3 == 0 and num % 5 == 0\n# Script approach\nnum = 30\nresult = num % 2 == 0 and num % 3 == 0 and num % 5 == 0\nprint(result)\n# Direct approach\nnum = 30\nresult = num % 2 == 0 and num % 3 == 0 and num % 5 == 0\nprint(result)",
 
@@ -14883,7 +14883,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1259,
             "title": "Problem 1259",
-            "description": "Write a Python program to check if a dictionary contains a specific key and the value is greater than a specified number using the `and` operator.\nExamples:\n  check_dict_conditions() → True\n  check_dict_conditions() → True\n  check_dict_conditions() → True",
+            "description": "Write a Python program to check if a dictionary contains a specific key and the value is greater than a specified number using the `and` operator.\nExamples:\n  check_dict_conditions() → True",
             "initialCode": "def check_dict_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_dict_conditions():\n    sample_dict = {'age': 30, 'city': 'New York'}\n    return 'age' in sample_dict and sample_dict['age'] > 25\nresult = check_dict_conditions()\nprint(f'Dictionary contains 'age' and its value is greater than 25: {result}')\n# Using built-in approach\ndef check_dict_conditions():\n    result = 'age' in sample_dict and sample_dict['age'] > 25\n    return result\n# Using manual approach\ndef check_dict_conditions():\n    return 'age' in sample_dict and sample_dict['age'] > 25\n# Script approach\nsample_dict = {'age': 30, 'city': 'New York'}\nresult = 'age' in sample_dict and sample_dict['age'] > 25\nprint(result)\n# Direct approach\nsample_dict = {'age': 30, 'city': 'New York'}\nresult = 'age' in sample_dict and sample_dict['age'] > 25\nprint(result)",
 
@@ -14895,7 +14895,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1260,
             "title": "Problem 1260",
-            "description": "Write a Python program to check if a string is not empty and its length is an even number using the `and` operator.\nExamples:\n  check_string_length() → False\n  check_string_length() → False\n  check_string_length() → False",
+            "description": "Write a Python program to check if a string is not empty and its length is an even number using the `and` operator.\nExamples:\n  check_string_length() → False",
             "initialCode": "def check_string_length():\n    pass",
             "solution": "# Using function approach\ndef check_string_length():\n    text = 'hello'\n    return len(text) > 0 and len(text) % 2 == 0\nresult = check_string_length()\nprint(f'String is not empty and its length is even: {result}')\n# Using built-in approach\ndef check_string_length():\n    result = len(text) > 0 and len(text) % 2 == 0\n    return result\n# Using manual approach\ndef check_string_length():\n    return len(text) > 0 and len(text) % 2 == 0\n# Script approach\ntext = 'hello'\nresult = len(text) > 0 and len(text) % 2 == 0\nprint(result)\n# Direct approach\ntext = 'hello'\nresult = len(text) > 0 and len(text) % 2 == 0\nprint(result)",
 
@@ -14907,7 +14907,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1261,
             "title": "Problem 1261",
-            "description": "Write a Python program to check if a number is within the range of 20 to 100 (inclusive) using the `and` operator.\nExamples:\n  check_range_inclusive() → True\n  check_range_inclusive() → True\n  check_range_inclusive() → True",
+            "description": "Write a Python program to check if a number is within the range of 20 to 100 (inclusive) using the `and` operator.\nExamples:\n  check_range_inclusive() → True",
             "initialCode": "def check_range_inclusive():\n    pass",
             "solution": "# Using function approach\ndef check_range_inclusive():\n    num = 50\n    return num >= 20 and num <= 100\nresult = check_range_inclusive()\nprint(f'Number is between 20 and 100 (inclusive): {result}')\n# Using built-in approach\ndef check_range_inclusive():\n    result = num >= 20 and num <= 100\n    return result\n# Using manual approach\ndef check_range_inclusive():\n    return num >= 20 and num <= 100\n# Script approach\nnum = 50\nresult = num >= 20 and num <= 100\nprint(result)\n# Direct approach\nnum = 50\nresult = num >= 20 and num <= 100\nprint(result)",
 
@@ -14919,7 +14919,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1262,
             "title": "Problem 1262",
-            "description": "Write a Python program to check if a number is divisible by both 2 and 7 using the `and` operator.\nExamples:\n  check_divisible_by_2_and_7() → True\n  check_divisible_by_2_and_7() → True\n  check_divisible_by_2_and_7() → True",
+            "description": "Write a Python program to check if a number is divisible by both 2 and 7 using the `and` operator.\nExamples:\n  check_divisible_by_2_and_7() → True",
             "initialCode": "def check_divisible_by_2_and_7():\n    pass",
             "solution": "# Using function approach\ndef check_divisible_by_2_and_7():\n    num = 14\n    return num % 2 == 0 and num % 7 == 0\nresult = check_divisible_by_2_and_7()\nprint(f'Number is divisible by both 2 and 7: {result}')\n# Using built-in approach\ndef check_divisible_by_2_and_7():\n    result = num % 2 == 0 and num % 7 == 0\n    return result\n# Using manual approach\ndef check_divisible_by_2_and_7():\n    return num % 2 == 0 and num % 7 == 0\n# Script approach\nnum = 14\nresult = num % 2 == 0 and num % 7 == 0\nprint(result)\n# Direct approach\nnum = 14\nresult = num % 2 == 0 and num % 7 == 0\nprint(result)",
 
@@ -14931,7 +14931,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1263,
             "title": "Problem 1263",
-            "description": "Write a Python program to check if a number is negative and divisible by 5 using the `and` operator.\nExamples:\n  check_negative_and_divisible() → True\n  check_negative_and_divisible() → True\n  check_negative_and_divisible() → True",
+            "description": "Write a Python program to check if a number is negative and divisible by 5 using the `and` operator.\nExamples:\n  check_negative_and_divisible() → True",
             "initialCode": "def check_negative_and_divisible():\n    pass",
             "solution": "# Using function approach\ndef check_negative_and_divisible():\n    num = -25\n    return num < 0 and num % 5 == 0\nresult = check_negative_and_divisible()\nprint(f'Number is negative and divisible by 5: {result}')\n# Using built-in approach\ndef check_negative_and_divisible():\n    result = num < 0 and num % 5 == 0\n    return result\n# Using manual approach\ndef check_negative_and_divisible():\n    return num < 0 and num % 5 == 0\n# Script approach\nnum = -25\nresult = num < 0 and num % 5 == 0\nprint(result)\n# Direct approach\nnum = -25\nresult = num < 0 and num % 5 == 0\nprint(result)",
 
@@ -14943,7 +14943,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1264,
             "title": "Problem 1264",
-            "description": "Write a Python program to check if a string contains only digits and its length is greater than 5 using the `and` operator.\nExamples:\n  check_digit_string() → True\n  check_digit_string() → True\n  check_digit_string() → True",
+            "description": "Write a Python program to check if a string contains only digits and its length is greater than 5 using the `and` operator.\nExamples:\n  check_digit_string() → True",
             "initialCode": "def check_digit_string():\n    pass",
             "solution": "# Using function approach\ndef check_digit_string():\n    text = '123456'\n    return text.isdigit() and len(text) > 5\nresult = check_digit_string()\nprint(f'String contains only digits and its length is greater than 5: {result}')\n# Using built-in approach\ndef check_digit_string():\n    result = text.isdigit() and len(text) > 5\n    return result\n# Using manual approach\ndef check_digit_string():\n    return text.isdigit() and len(text) > 5\n# Script approach\ntext = '123456'\nresult = text.isdigit() and len(text) > 5\nprint(result)\n# Direct approach\ntext = '123456'\nresult = text.isdigit() and len(text) > 5\nprint(result)",
 
@@ -14955,7 +14955,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1265,
             "title": "Problem 1265",
-            "description": "Write a Python program to check if a number is a prime number and greater than 10 using the `and` operator.\nExamples:\n  check_prime_and_greater_than_10() → True\n  check_prime_and_greater_than_10() → True\n  check_prime_and_greater_than_10() → True",
+            "description": "Write a Python program to check if a number is a prime number and greater than 10 using the `and` operator.\nExamples:\n  check_prime_and_greater_than_10() → True",
             "initialCode": "def check_prime_and_greater_than_10():\n    pass",
             "solution": "# Using function approach\ndef check_prime_and_greater_than_10():\n    num = 13\n    return num > 10 and all(num % i != 0 for i in range(2, num))\nresult = check_prime_and_greater_than_10()\nprint(f'Number is prime and greater than 10: {result}')\n# Using built-in approach\ndef check_prime_and_greater_than_10():\n    result = num > 10 and all(num % i != 0 for i in range(2, num))\n    return result\n# Using manual approach\ndef check_prime_and_greater_than_10():\n    return num > 10 and all(num % i != 0 for i in range(2, num))\n# Script approach\nnum = 13\nresult = num > 10 and all(num % i != 0 for i in range(2, num))\nprint(result)\n# Direct approach\nnum = 13\nresult = num > 10 and all(num % i != 0 for i in range(2, num))\nprint(result)",
 
@@ -14967,7 +14967,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1266,
             "title": "Problem 1266",
-            "description": "Write a Python program to check if a number is odd and greater than 0 using the `and` operator.\nExamples:\n  check_odd_and_positive() → True\n  check_odd_and_positive() → True\n  check_odd_and_positive() → True",
+            "description": "Write a Python program to check if a number is odd and greater than 0 using the `and` operator.\nExamples:\n  check_odd_and_positive() → True",
             "initialCode": "def check_odd_and_positive():\n    pass",
             "solution": "# Using function approach\ndef check_odd_and_positive():\n    num = 7\n    return num % 2 != 0 and num > 0\nresult = check_odd_and_positive()\nprint(f'Number is odd and positive: {result}')\n# Using built-in approach\ndef check_odd_and_positive():\n    result = num % 2 != 0 and num > 0\n    return result\n# Using manual approach\ndef check_odd_and_positive():\n    return num % 2 != 0 and num > 0\n# Script approach\nnum = 7\nresult = num % 2 != 0 and num > 0\nprint(result)\n# Direct approach\nnum = 7\nresult = num % 2 != 0 and num > 0\nprint(result)",
 
@@ -14979,7 +14979,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1267,
             "title": "Problem 1267",
-            "description": "Write a Python program to check if a file exists and its size is greater than 100 KB using the `and` operator.\nExamples:\n  check_file_exists_and_size() → ?\n  check_file_exists_and_size() → ?\n  check_file_exists_and_size() → ?",
+            "description": "Write a Python program to check if a file exists and its size is greater than 100 KB using the `and` operator.\nExamples:\n  check_file_exists_and_size() → ?",
             "initialCode": "from pathlib import Path\ndef check_file_exists_and_size():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_file_exists_and_size():\n    p = Path('example_file.txt')\n    return p.exists() and p.stat().st_size > 100 * 1024\nresult = check_file_exists_and_size()\nprint(f'File exists and its size is greater than 100 KB: {result}')\n# Using built-in approach\ndef check_file_exists_and_size():\n    result = p.exists() and p.stat().st_size > 100 * 1024\n    return result\n# Using manual approach\ndef check_file_exists_and_size():\n    return p.exists() and p.stat().st_size > 100 * 1024\n# Script approach\np = Path('example_file.txt')\nresult = p.exists() and p.stat().st_size > 100 * 1024\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.exists() and p.stat().st_size > 100 * 1024\nprint(result)",
 
@@ -14991,7 +14991,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1268,
             "title": "Problem 1268",
-            "description": "Write a Python program to check if a list contains exactly 5 elements and the last element is greater than 10 using the `and` operator.\nExamples:\n  check_list_length_and_last_element() → True\n  check_list_length_and_last_element() → True\n  check_list_length_and_last_element() → True",
+            "description": "Write a Python program to check if a list contains exactly 5 elements and the last element is greater than 10 using the `and` operator.\nExamples:\n  check_list_length_and_last_element() → True",
             "initialCode": "def check_list_length_and_last_element():\n    pass",
             "solution": "# Using function approach\ndef check_list_length_and_last_element():\n    lst = [1, 2, 3, 4, 12]\n    return len(lst) == 5 and lst[-1] > 10\nresult = check_list_length_and_last_element()\nprint(f'List contains exactly 5 elements and last element is greater than 10: {result}')\n# Using built-in approach\ndef check_list_length_and_last_element():\n    result = len(lst) == 5 and lst[-1] > 10\n    return result\n# Using manual approach\ndef check_list_length_and_last_element():\n    return len(lst) == 5 and lst[-1] > 10\n# Script approach\nlst = [1, 2, 3, 4, 12]\nresult = len(lst) == 5 and lst[-1] > 10\nprint(result)\n# Direct approach\nlst = [1, 2, 3, 4, 12]\nresult = len(lst) == 5 and lst[-1] > 10\nprint(result)",
 
@@ -15003,7 +15003,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1269,
             "title": "Problem 1269",
-            "description": "Write a Python program to check if a number is between 1 and 10 (inclusive) and is odd using the `and` operator.\nExamples:\n  check_range_and_odd() → True\n  check_range_and_odd() → True\n  check_range_and_odd() → True",
+            "description": "Write a Python program to check if a number is between 1 and 10 (inclusive) and is odd using the `and` operator.\nExamples:\n  check_range_and_odd() → True",
             "initialCode": "def check_range_and_odd():\n    pass",
             "solution": "# Using function approach\ndef check_range_and_odd():\n    num = 7\n    return num >= 1 and num <= 10 and num % 2 != 0\nresult = check_range_and_odd()\nprint(f'Number is between 1 and 10 and odd: {result}')\n# Using built-in approach\ndef check_range_and_odd():\n    result = num >= 1 and num <= 10 and num % 2 != 0\n    return result\n# Using manual approach\ndef check_range_and_odd():\n    return num >= 1 and num <= 10 and num % 2 != 0\n# Script approach\nnum = 7\nresult = num >= 1 and num <= 10 and num % 2 != 0\nprint(result)\n# Direct approach\nnum = 7\nresult = num >= 1 and num <= 10 and num % 2 != 0\nprint(result)",
 
@@ -15015,7 +15015,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1270,
             "title": "Problem 1270",
-            "description": "Write a Python program to check if at least one of two conditions is true using the `or` operator.\nExamples:\n  check_conditions() → True\n  check_conditions() → True\n  check_conditions() → True",
+            "description": "Write a Python program to check if at least one of two conditions is true using the `or` operator.\nExamples:\n  check_conditions() → True",
             "initialCode": "def check_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_conditions():\n    a = 5\n    b = 10\n    return a > 10 or b < 15\nresult = check_conditions()\nprint(f'At least one condition is true: {result}')\n# Using built-in approach\ndef check_conditions():\n    result = a > 10 or b < 15\n    return result\n# Using manual approach\ndef check_conditions():\n    return a > 10 or b < 15\n# Script approach\na = 5\nb = 10\nresult = a > 10 or b < 15\nprint(result)\n# Direct approach\na = 5\nb = 10\nresult = a > 10 or b < 15\nprint(result)",
 
@@ -15027,7 +15027,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1271,
             "title": "Problem 1271",
-            "description": "Write a Python program to check if a number is either less than 10 or greater than 20 using the `or` operator.\nExamples:\n  check_range() → True\n  check_range() → True\n  check_range() → True",
+            "description": "Write a Python program to check if a number is either less than 10 or greater than 20 using the `or` operator.\nExamples:\n  check_range() → True",
             "initialCode": "def check_range():\n    pass",
             "solution": "# Using function approach\ndef check_range():\n    num = 5\n    return num < 10 or num > 20\nresult = check_range()\nprint(f'Number is either less than 10 or greater than 20: {result}')\n# Using built-in approach\ndef check_range():\n    result = num < 10 or num > 20\n    return result\n# Using manual approach\ndef check_range():\n    return num < 10 or num > 20\n# Script approach\nnum = 5\nresult = num < 10 or num > 20\nprint(result)\n# Direct approach\nnum = 5\nresult = num < 10 or num > 20\nprint(result)",
 
@@ -15039,7 +15039,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1272,
             "title": "Problem 1272",
-            "description": "Write a Python program to check if a string is empty or contains a specific character using the `or` operator.\nExamples:\n  check_string() → True\n  check_string() → True\n  check_string() → True",
+            "description": "Write a Python program to check if a string is empty or contains a specific character using the `or` operator.\nExamples:\n  check_string() → True",
             "initialCode": "def check_string():\n    pass",
             "solution": "# Using function approach\ndef check_string():\n    text = 'hello'\n    return len(text) == 0 or 'e' in text\nresult = check_string()\nprint(f'String is empty or contains 'e': {result}')\n# Using built-in approach\ndef check_string():\n    result = len(text) == 0 or 'e' in text\n    return result\n# Using manual approach\ndef check_string():\n    return len(text) == 0 or 'e' in text\n# Script approach\ntext = 'hello'\nresult = len(text) == 0 or 'e' in text\nprint(result)\n# Direct approach\ntext = 'hello'\nresult = len(text) == 0 or 'e' in text\nprint(result)",
 
@@ -15051,7 +15051,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1273,
             "title": "Problem 1273",
-            "description": "Write a Python program to check if a number is divisible by 3 or 5 using the `or` operator.\nExamples:\n  check_divisibility() → True\n  check_divisibility() → True\n  check_divisibility() → True",
+            "description": "Write a Python program to check if a number is divisible by 3 or 5 using the `or` operator.\nExamples:\n  check_divisibility() → True",
             "initialCode": "def check_divisibility():\n    pass",
             "solution": "# Using function approach\ndef check_divisibility():\n    num = 9\n    return num % 3 == 0 or num % 5 == 0\nresult = check_divisibility()\nprint(f'Number is divisible by 3 or 5: {result}')\n# Using built-in approach\ndef check_divisibility():\n    result = num % 3 == 0 or num % 5 == 0\n    return result\n# Using manual approach\ndef check_divisibility():\n    return num % 3 == 0 or num % 5 == 0\n# Script approach\nnum = 9\nresult = num % 3 == 0 or num % 5 == 0\nprint(result)\n# Direct approach\nnum = 9\nresult = num % 3 == 0 or num % 5 == 0\nprint(result)",
 
@@ -15063,7 +15063,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1274,
             "title": "Problem 1274",
-            "description": "Write a Python program to check if a list is empty or its first element is greater than 5 using the `or` operator.\nExamples:\n  check_list() → True\n  check_list() → True\n  check_list() → True",
+            "description": "Write a Python program to check if a list is empty or its first element is greater than 5 using the `or` operator.\nExamples:\n  check_list() → True",
             "initialCode": "def check_list():\n    pass",
             "solution": "# Using function approach\ndef check_list():\n    lst = [6, 2, 8]\n    return len(lst) == 0 or lst[0] > 5\nresult = check_list()\nprint(f'List is empty or its first element is greater than 5: {result}')\n# Using built-in approach\ndef check_list():\n    result = len(lst) == 0 or lst[0] > 5\n    return result\n# Using manual approach\ndef check_list():\n    return len(lst) == 0 or lst[0] > 5\n# Script approach\nlst = [6, 2, 8]\nresult = len(lst) == 0 or lst[0] > 5\nprint(result)\n# Direct approach\nlst = [6, 2, 8]\nresult = len(lst) == 0 or lst[0] > 5\nprint(result)",
 
@@ -15075,7 +15075,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1275,
             "title": "Problem 1275",
-            "description": "Write a Python program to check if a year is a leap year or divisible by 100 using the `or` operator.\nExamples:\n  check_leap_year() → True\n  check_leap_year() → True\n  check_leap_year() → True",
+            "description": "Write a Python program to check if a year is a leap year or divisible by 100 using the `or` operator.\nExamples:\n  check_leap_year() → True",
             "initialCode": "def check_leap_year():\n    pass",
             "solution": "# Using function approach\ndef check_leap_year():\n    year = 2024\n    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nresult = check_leap_year()\nprint(f'Year is a leap year or divisible by 100: {result}')\n# Using built-in approach\ndef check_leap_year():\n    result = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\n    return result\n# Using manual approach\ndef check_leap_year():\n    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\n# Script approach\nyear = 2024\nresult = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nprint(result)\n# Direct approach\nyear = 2024\nresult = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)\nprint(result)",
 
@@ -15087,7 +15087,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1276,
             "title": "Problem 1276",
-            "description": "Write a Python program to check if a number is positive or divisible by 7 using the `or` operator.\nExamples:\n  check_number() → True\n  check_number() → True\n  check_number() → True",
+            "description": "Write a Python program to check if a number is positive or divisible by 7 using the `or` operator.\nExamples:\n  check_number() → True",
             "initialCode": "def check_number():\n    pass",
             "solution": "# Using function approach\ndef check_number():\n    num = 10\n    return num > 0 or num % 7 == 0\nresult = check_number()\nprint(f'Number is positive or divisible by 7: {result}')\n# Using built-in approach\ndef check_number():\n    result = num > 0 or num % 7 == 0\n    return result\n# Using manual approach\ndef check_number():\n    return num > 0 or num % 7 == 0\n# Script approach\nnum = 10\nresult = num > 0 or num % 7 == 0\nprint(result)\n# Direct approach\nnum = 10\nresult = num > 0 or num % 7 == 0\nprint(result)",
 
@@ -15099,7 +15099,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1277,
             "title": "Problem 1277",
-            "description": "Write a Python program to check if a string is lowercase or its length is greater than 3 using the `or` operator.\nExamples:\n  check_string_conditions() → True\n  check_string_conditions() → True\n  check_string_conditions() → True",
+            "description": "Write a Python program to check if a string is lowercase or its length is greater than 3 using the `or` operator.\nExamples:\n  check_string_conditions() → True",
             "initialCode": "def check_string_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_string_conditions():\n    text = 'HELLO'\n    return text.islower() or len(text) > 3\nresult = check_string_conditions()\nprint(f'String is lowercase or its length is greater than 3: {result}')\n# Using built-in approach\ndef check_string_conditions():\n    result = text.islower() or len(text) > 3\n    return result\n# Using manual approach\ndef check_string_conditions():\n    return text.islower() or len(text) > 3\n# Script approach\ntext = 'HELLO'\nresult = text.islower() or len(text) > 3\nprint(result)\n# Direct approach\ntext = 'HELLO'\nresult = text.islower() or len(text) > 3\nprint(result)",
 
@@ -15111,7 +15111,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1278,
             "title": "Problem 1278",
-            "description": "Write a Python program to check if a number is between 10 and 50 or divisible by 7 using the `or` operator.\nExamples:\n  check_conditions() → True\n  check_conditions() → True\n  check_conditions() → True",
+            "description": "Write a Python program to check if a number is between 10 and 50 or divisible by 7 using the `or` operator.\nExamples:\n  check_conditions() → True",
             "initialCode": "def check_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_conditions():\n    num = 30\n    return (num >= 10 and num <= 50) or num % 7 == 0\nresult = check_conditions()\nprint(f'Number is between 10 and 50 or divisible by 7: {result}')\n# Using built-in approach\ndef check_conditions():\n    result = (num >= 10 and num <= 50) or num % 7 == 0\n    return result\n# Using manual approach\ndef check_conditions():\n    return (num >= 10 and num <= 50) or num % 7 == 0\n# Script approach\nnum = 30\nresult = (num >= 10 and num <= 50) or num % 7 == 0\nprint(result)\n# Direct approach\nnum = 30\nresult = (num >= 10 and num <= 50) or num % 7 == 0\nprint(result)",
 
@@ -15123,7 +15123,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1279,
             "title": "Problem 1279",
-            "description": "Write a Python program to check if a number is a multiple of 7 or 11 using the `or` operator.\nExamples:\n  check_multiples() → True\n  check_multiples() → True\n  check_multiples() → True",
+            "description": "Write a Python program to check if a number is a multiple of 7 or 11 using the `or` operator.\nExamples:\n  check_multiples() → True",
             "initialCode": "def check_multiples():\n    pass",
             "solution": "# Using function approach\ndef check_multiples():\n    num = 77\n    return num % 7 == 0 or num % 11 == 0\nresult = check_multiples()\nprint(f'Number is a multiple of 7 or 11: {result}')\n# Using built-in approach\ndef check_multiples():\n    result = num % 7 == 0 or num % 11 == 0\n    return result\n# Using manual approach\ndef check_multiples():\n    return num % 7 == 0 or num % 11 == 0\n# Script approach\nnum = 77\nresult = num % 7 == 0 or num % 11 == 0\nprint(result)\n# Direct approach\nnum = 77\nresult = num % 7 == 0 or num % 11 == 0\nprint(result)",
 
@@ -15135,7 +15135,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1280,
             "title": "Problem 1280",
-            "description": "Write a Python program to check if a person is eligible to vote, meaning the age is greater than 18 or they are a citizen, using the `or` operator.\nExamples:\n  check_voting_eligibility() → True\n  check_voting_eligibility() → True\n  check_voting_eligibility() → True",
+            "description": "Write a Python program to check if a person is eligible to vote, meaning the age is greater than 18 or they are a citizen, using the `or` operator.\nExamples:\n  check_voting_eligibility() → True",
             "initialCode": "def check_voting_eligibility():\n    pass",
             "solution": "# Using function approach\ndef check_voting_eligibility():\n    age = 17\n    is_citizen = True\n    return age > 18 or is_citizen\nresult = check_voting_eligibility()\nprint(f'Person is eligible to vote: {result}')\n# Using built-in approach\ndef check_voting_eligibility():\n    result = age > 18 or is_citizen\n    return result\n# Using manual approach\ndef check_voting_eligibility():\n    return age > 18 or is_citizen\n# Script approach\nage = 17\nis_citizen = True\nresult = age > 18 or is_citizen\nprint(result)\n# Direct approach\nage = 17\nis_citizen = True\nresult = age > 18 or is_citizen\nprint(result)",
 
@@ -15147,7 +15147,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1281,
             "title": "Problem 1281",
-            "description": "Write a Python program to check if a number is divisible by 2 or 3 using the `or` operator.\nExamples:\n  check_divisibility_all() → True\n  check_divisibility_all() → True\n  check_divisibility_all() → True",
+            "description": "Write a Python program to check if a number is divisible by 2 or 3 using the `or` operator.\nExamples:\n  check_divisibility_all() → True",
             "initialCode": "def check_divisibility_all():\n    pass",
             "solution": "# Using function approach\ndef check_divisibility_all():\n    num = 9\n    return num % 2 == 0 or num % 3 == 0\nresult = check_divisibility_all()\nprint(f'Number is divisible by 2 or 3: {result}')\n# Using built-in approach\ndef check_divisibility_all():\n    result = num % 2 == 0 or num % 3 == 0\n    return result\n# Using manual approach\ndef check_divisibility_all():\n    return num % 2 == 0 or num % 3 == 0\n# Script approach\nnum = 9\nresult = num % 2 == 0 or num % 3 == 0\nprint(result)\n# Direct approach\nnum = 9\nresult = num % 2 == 0 or num % 3 == 0\nprint(result)",
 
@@ -15159,7 +15159,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1282,
             "title": "Problem 1282",
-            "description": "Write a Python program to check if a dictionary contains a specific key or if the value is greater than a specified number using the `or` operator.\nExamples:\n  check_dict_conditions() → False\n  check_dict_conditions() → False\n  check_dict_conditions() → False",
+            "description": "Write a Python program to check if a dictionary contains a specific key or if the value is greater than a specified number using the `or` operator.\nExamples:\n  check_dict_conditions() → False",
             "initialCode": "def check_dict_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_dict_conditions():\n    sample_dict = {'age': 20, 'city': 'New York'}\n    return 'name' in sample_dict or sample_dict['age'] > 25\nresult = check_dict_conditions()\nprint(f'Dictionary contains 'name' or age is greater than 25: {result}')\n# Using built-in approach\ndef check_dict_conditions():\n    result = 'name' in sample_dict or sample_dict['age'] > 25\n    return result\n# Using manual approach\ndef check_dict_conditions():\n    return 'name' in sample_dict or sample_dict['age'] > 25\n# Script approach\nsample_dict = {'age': 20, 'city': 'New York'}\nresult = 'name' in sample_dict or sample_dict['age'] > 25\nprint(result)\n# Direct approach\nsample_dict = {'age': 20, 'city': 'New York'}\nresult = 'name' in sample_dict or sample_dict['age'] > 25\nprint(result)",
 
@@ -15171,7 +15171,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1283,
             "title": "Problem 1283",
-            "description": "Write a Python program to check if a string is empty or contains a number using the `or` operator.\nExamples:\n  check_string_empty_or_number() → True\n  check_string_empty_or_number() → True\n  check_string_empty_or_number() → True",
+            "description": "Write a Python program to check if a string is empty or contains a number using the `or` operator.\nExamples:\n  check_string_empty_or_number() → True",
             "initialCode": "def check_string_empty_or_number():\n    pass",
             "solution": "# Using function approach\ndef check_string_empty_or_number():\n    text = 'hello123'\n    return len(text) == 0 or any(char.isdigit() for char in text)\nresult = check_string_empty_or_number()\nprint(f'String is empty or contains a number: {result}')\n# Using built-in approach\ndef check_string_empty_or_number():\n    result = len(text) == 0 or any(char.isdigit() for char in text)\n    return result\n# Using manual approach\ndef check_string_empty_or_number():\n    return len(text) == 0 or any(char.isdigit() for char in text)\n# Script approach\ntext = 'hello123'\nresult = len(text) == 0 or any(char.isdigit() for char in text)\nprint(result)\n# Direct approach\ntext = 'hello123'\nresult = len(text) == 0 or any(char.isdigit() for char in text)\nprint(result)",
 
@@ -15183,7 +15183,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1284,
             "title": "Problem 1284",
-            "description": "Write a Python program to check if a number is either negative or divisible by 3 using the `or` operator.\nExamples:\n  check_negative_or_divisible_by_3() → True\n  check_negative_or_divisible_by_3() → True\n  check_negative_or_divisible_by_3() → True",
+            "description": "Write a Python program to check if a number is either negative or divisible by 3 using the `or` operator.\nExamples:\n  check_negative_or_divisible_by_3() → True",
             "initialCode": "def check_negative_or_divisible_by_3():\n    pass",
             "solution": "# Using function approach\ndef check_negative_or_divisible_by_3():\n    num = -15\n    return num < 0 or num % 3 == 0\nresult = check_negative_or_divisible_by_3()\nprint(f'Number is negative or divisible by 3: {result}')\n# Using built-in approach\ndef check_negative_or_divisible_by_3():\n    result = num < 0 or num % 3 == 0\n    return result\n# Using manual approach\ndef check_negative_or_divisible_by_3():\n    return num < 0 or num % 3 == 0\n# Script approach\nnum = -15\nresult = num < 0 or num % 3 == 0\nprint(result)\n# Direct approach\nnum = -15\nresult = num < 0 or num % 3 == 0\nprint(result)",
 
@@ -15195,7 +15195,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1285,
             "title": "Problem 1285",
-            "description": "Write a Python program to check if a list is empty or contains more than 5 elements using the `or` operator.\nExamples:\n  check_list_conditions() → False\n  check_list_conditions() → False\n  check_list_conditions() → False",
+            "description": "Write a Python program to check if a list is empty or contains more than 5 elements using the `or` operator.\nExamples:\n  check_list_conditions() → False",
             "initialCode": "def check_list_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_list_conditions():\n    lst = [1, 2, 3]\n    return len(lst) == 0 or len(lst) > 5\nresult = check_list_conditions()\nprint(f'List is empty or contains more than 5 elements: {result}')\n# Using built-in approach\ndef check_list_conditions():\n    result = len(lst) == 0 or len(lst) > 5\n    return result\n# Using manual approach\ndef check_list_conditions():\n    return len(lst) == 0 or len(lst) > 5\n# Script approach\nlst = [1, 2, 3]\nresult = len(lst) == 0 or len(lst) > 5\nprint(result)\n# Direct approach\nlst = [1, 2, 3]\nresult = len(lst) == 0 or len(lst) > 5\nprint(result)",
 
@@ -15207,7 +15207,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1286,
             "title": "Problem 1286",
-            "description": "Write a Python program to check if a number is a perfect square or a perfect cube using the `or` operator.\nExamples:\n  check_perfect_square_or_cube() → ?\n  check_perfect_square_or_cube() → ?\n  check_perfect_square_or_cube() → ?",
+            "description": "Write a Python program to check if a number is a perfect square or a perfect cube using the `or` operator.\nExamples:\n  check_perfect_square_or_cube() → ?",
             "initialCode": "import math\ndef check_perfect_square_or_cube():\n    pass",
             "solution": "import math\n# Using function approach\ndef check_perfect_square_or_cube():\n    num = 16\n    return math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\nresult = check_perfect_square_or_cube()\nprint(f'Number is a perfect square or cube: {result}')\n# Using built-in approach\ndef check_perfect_square_or_cube():\n    result = math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\n    return result\n# Using manual approach\ndef check_perfect_square_or_cube():\n    return math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\n# Script approach\nnum = 16\nresult = math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\nprint(result)\n# Direct approach\nnum = 16\nresult = math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\nprint(result)",
 
@@ -15219,7 +15219,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1287,
             "title": "Problem 1287",
-            "description": "Write a Python program to check if a string contains only letters or only digits using the `or` operator.\nExamples:\n  check_string_type() → True\n  check_string_type() → True\n  check_string_type() → True",
+            "description": "Write a Python program to check if a string contains only letters or only digits using the `or` operator.\nExamples:\n  check_string_type() → True",
             "initialCode": "def check_string_type():\n    pass",
             "solution": "# Using function approach\ndef check_string_type():\n    text = '1234'\n    return text.isalpha() or text.isdigit()\nresult = check_string_type()\nprint(f'String contains only letters or digits: {result}')\n# Using built-in approach\ndef check_string_type():\n    result = text.isalpha() or text.isdigit()\n    return result\n# Using manual approach\ndef check_string_type():\n    return text.isalpha() or text.isdigit()\n# Script approach\ntext = '1234'\nresult = text.isalpha() or text.isdigit()\nprint(result)\n# Direct approach\ntext = '1234'\nresult = text.isalpha() or text.isdigit()\nprint(result)",
 
@@ -15231,7 +15231,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1288,
             "title": "Problem 1288",
-            "description": "Write a Python program to check if a list contains exactly 3 elements or its sum is greater than 50 using the `or` operator.\nExamples:\n  check_list_conditions() → True\n  check_list_conditions() → True\n  check_list_conditions() → True",
+            "description": "Write a Python program to check if a list contains exactly 3 elements or its sum is greater than 50 using the `or` operator.\nExamples:\n  check_list_conditions() → True",
             "initialCode": "def check_list_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_list_conditions():\n    lst = [6, 2, 8]\n    return len(lst) == 3 or sum(lst) > 50\nresult = check_list_conditions()\nprint(f'List has exactly 3 elements or its sum is greater than 50: {result}')\n# Using built-in approach\ndef check_list_conditions():\n    result = len(lst) == 3 or sum(lst) > 50\n    return result\n# Using manual approach\ndef check_list_conditions():\n    return len(lst) == 3 or sum(lst) > 50\n# Script approach\nlst = [6, 2, 8]\nresult = len(lst) == 3 or sum(lst) > 50\nprint(result)\n# Direct approach\nlst = [6, 2, 8]\nresult = len(lst) == 3 or sum(lst) > 50\nprint(result)",
 
@@ -15243,7 +15243,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1289,
             "title": "Problem 1289",
-            "description": "Write a Python program to check if a number is divisible by 2 or 5 using the `or` operator.\nExamples:\n  check_divisible_by_2_or_5() → True\n  check_divisible_by_2_or_5() → True\n  check_divisible_by_2_or_5() → True",
+            "description": "Write a Python program to check if a number is divisible by 2 or 5 using the `or` operator.\nExamples:\n  check_divisible_by_2_or_5() → True",
             "initialCode": "def check_divisible_by_2_or_5():\n    pass",
             "solution": "# Using function approach\ndef check_divisible_by_2_or_5():\n    num = 10\n    return num % 2 == 0 or num % 5 == 0\nresult = check_divisible_by_2_or_5()\nprint(f'Number is divisible by 2 or 5: {result}')\n# Using built-in approach\ndef check_divisible_by_2_or_5():\n    result = num % 2 == 0 or num % 5 == 0\n    return result\n# Using manual approach\ndef check_divisible_by_2_or_5():\n    return num % 2 == 0 or num % 5 == 0\n# Script approach\nnum = 10\nresult = num % 2 == 0 or num % 5 == 0\nprint(result)\n# Direct approach\nnum = 10\nresult = num % 2 == 0 or num % 5 == 0\nprint(result)",
 
@@ -15255,7 +15255,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1290,
             "title": "Problem 1290",
-            "description": "Write a Python program to check if a file exists or if it is writable using the `or` operator.\nExamples:\n  check_file_conditions() → ?\n  check_file_conditions() → ?\n  check_file_conditions() → ?",
+            "description": "Write a Python program to check if a file exists or if it is writable using the `or` operator.\nExamples:\n  check_file_conditions() → ?",
             "initialCode": "from pathlib import Path\ndef check_file_conditions():\n    pass",
             "solution": "from pathlib import Path\n# Using function approach\ndef check_file_conditions():\n    p = Path('example_file.txt')\n    return p.exists() or p.is_file()\nresult = check_file_conditions()\nprint(f'File exists or is a file: {result}')\n# Using built-in approach\ndef check_file_conditions():\n    result = p.exists() or p.is_file()\n    return result\n# Using manual approach\ndef check_file_conditions():\n    return p.exists() or p.is_file()\n# Script approach\np = Path('example_file.txt')\nresult = p.exists() or p.is_file()\nprint(result)\n# Direct approach\np = Path('example_file.txt')\nresult = p.exists() or p.is_file()\nprint(result)",
 
@@ -15267,7 +15267,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1291,
             "title": "Problem 1291",
-            "description": "Write a Python program to check if a number is greater than 100 or less than 10 using the `or` operator.\nExamples:\n  check_number() → True\n  check_number() → True\n  check_number() → True",
+            "description": "Write a Python program to check if a number is greater than 100 or less than 10 using the `or` operator.\nExamples:\n  check_number() → True",
             "initialCode": "def check_number():\n    pass",
             "solution": "# Using function approach\ndef check_number():\n    num = 5\n    return num > 100 or num < 10\nresult = check_number()\nprint(f'Number is greater than 100 or less than 10: {result}')\n# Using built-in approach\ndef check_number():\n    result = num > 100 or num < 10\n    return result\n# Using manual approach\ndef check_number():\n    return num > 100 or num < 10\n# Script approach\nnum = 5\nresult = num > 100 or num < 10\nprint(result)\n# Direct approach\nnum = 5\nresult = num > 100 or num < 10\nprint(result)",
 
@@ -15279,7 +15279,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1292,
             "title": "Problem 1292",
-            "description": "Write a Python program to check if a string is uppercase or its length is even using the `or` operator.\nExamples:\n  check_string_conditions() → True\n  check_string_conditions() → True\n  check_string_conditions() → True",
+            "description": "Write a Python program to check if a string is uppercase or its length is even using the `or` operator.\nExamples:\n  check_string_conditions() → True",
             "initialCode": "def check_string_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_string_conditions():\n    text = 'HELLO'\n    return text.isupper() or len(text) % 2 == 0\nresult = check_string_conditions()\nprint(f'String is uppercase or its length is even: {result}')\n# Using built-in approach\ndef check_string_conditions():\n    result = text.isupper() or len(text) % 2 == 0\n    return result\n# Using manual approach\ndef check_string_conditions():\n    return text.isupper() or len(text) % 2 == 0\n# Script approach\ntext = 'HELLO'\nresult = text.isupper() or len(text) % 2 == 0\nprint(result)\n# Direct approach\ntext = 'HELLO'\nresult = text.isupper() or len(text) % 2 == 0\nprint(result)",
 
@@ -15291,7 +15291,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1293,
             "title": "Problem 1293",
-            "description": "Write a Python program to check if a list is non-empty or its last element is greater than 10 using the `or` operator.\nExamples:\n  check_list_conditions() → True\n  check_list_conditions() → True\n  check_list_conditions() → True",
+            "description": "Write a Python program to check if a list is non-empty or its last element is greater than 10 using the `or` operator.\nExamples:\n  check_list_conditions() → True",
             "initialCode": "def check_list_conditions():\n    pass",
             "solution": "# Using function approach\ndef check_list_conditions():\n    lst = [6, 2, 8]\n    return len(lst) > 0 or lst[-1] > 10\nresult = check_list_conditions()\nprint(f'List is non-empty or its last element is greater than 10: {result}')\n# Using built-in approach\ndef check_list_conditions():\n    result = len(lst) > 0 or lst[-1] > 10\n    return result\n# Using manual approach\ndef check_list_conditions():\n    return len(lst) > 0 or lst[-1] > 10\n# Script approach\nlst = [6, 2, 8]\nresult = len(lst) > 0 or lst[-1] > 10\nprint(result)\n# Direct approach\nlst = [6, 2, 8]\nresult = len(lst) > 0 or lst[-1] > 10\nprint(result)",
 
@@ -15303,7 +15303,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1294,
             "title": "Problem 1294",
-            "description": "Write a Python program to check if a number is even or divisible by 3 using the `or` operator.\nExamples:\n  check_even_or_divisible_by_3() → True\n  check_even_or_divisible_by_3() → True\n  check_even_or_divisible_by_3() → True",
+            "description": "Write a Python program to check if a number is even or divisible by 3 using the `or` operator.\nExamples:\n  check_even_or_divisible_by_3() → True",
             "initialCode": "def check_even_or_divisible_by_3():\n    pass",
             "solution": "# Using function approach\ndef check_even_or_divisible_by_3():\n    num = 8\n    return num % 2 == 0 or num % 3 == 0\nresult = check_even_or_divisible_by_3()\nprint(f'Number is even or divisible by 3: {result}')\n# Using built-in approach\ndef check_even_or_divisible_by_3():\n    result = num % 2 == 0 or num % 3 == 0\n    return result\n# Using manual approach\ndef check_even_or_divisible_by_3():\n    return num % 2 == 0 or num % 3 == 0\n# Script approach\nnum = 8\nresult = num % 2 == 0 or num % 3 == 0\nprint(result)\n# Direct approach\nnum = 8\nresult = num % 2 == 0 or num % 3 == 0\nprint(result)",
 
@@ -15315,7 +15315,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1295,
             "title": "Problem 1295",
-            "description": "Write a Python program to check if a string is not empty or contains the character 'a' using the `or` operator.\nExamples:\n  check_string() → True\n  check_string() → True\n  check_string() → True",
+            "description": "Write a Python program to check if a string is not empty or contains the character 'a' using the `or` operator.\nExamples:\n  check_string() → True",
             "initialCode": "def check_string():\n    pass",
             "solution": "# Using function approach\ndef check_string():\n    text = 'apple'\n    return len(text) > 0 or 'a' in text\nresult = check_string()\nprint(f'String is not empty or contains 'a': {result}')\n# Using built-in approach\ndef check_string():\n    result = len(text) > 0 or 'a' in text\n    return result\n# Using manual approach\ndef check_string():\n    return len(text) > 0 or 'a' in text\n# Script approach\ntext = 'apple'\nresult = len(text) > 0 or 'a' in text\nprint(result)\n# Direct approach\ntext = 'apple'\nresult = len(text) > 0 or 'a' in text\nprint(result)",
 
@@ -15975,7 +15975,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1350,
             "title": "Problem 1350",
-            "description": "Write a Python program to check if an object is a file-like object (has read method).\nExamples:\n  → True\n  → None\n  → None",
+            "description": "Write a Python program to check if an object is a file-like object (has read method).\nExamples:\n  → True\n  → None",
             "initialCode": "class FakeFile:\n    pass",
             "solution": "# Using function approach\nclass FakeFile:\n    def read(self):\n        pass\n\nf = FakeFile()\nprint(hasattr(f, 'read') and callable(f.read))  # Expected: True\n\n# Using lambda\n\n# Using function\n    # Alternative: implement as a function returning the value\n\n# Script approach\nobj = FakeFile()\nprint(obj)\n\n# Direct approach\nprint(FakeFile())",
 
@@ -16227,7 +16227,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1371,
             "title": "Problem 1371",
-            "description": "Write a Python program with a function that accepts arbitrary keyword arguments and prints them.\nExamples:\n  print_kwargs() → {}\n  print_kwargs() → None\n  print_kwargs() → {}",
+            "description": "Write a Python program with a function that accepts arbitrary keyword arguments and prints them.\nExamples:\n  print_kwargs() → {}\n  print_kwargs() → None",
             "initialCode": "def print_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef print_kwargs(**kwargs):\n    print(kwargs)\nprint_kwargs(a=1, b=2)  # Expected: {'a': 1, 'b': 2}\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef print_kwargs(**kwargs):\n    return kwargs\n# Using manual approach\ndef print_kwargs(**kwargs):\n    result = kwargs\n    return result\n# Script approach\nprint(kwargs)\n# Direct approach\nprint(kwargs)",
 
@@ -16239,7 +16239,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1372,
             "title": "Problem 1372",
-            "description": "Write a Python function that prints each key-value pair in **kwargs on a separate line.\nExamples:\n  display_kwargs() → None\n  display_kwargs() → None\n  display_kwargs() → None",
+            "description": "Write a Python function that prints each key-value pair in **kwargs on a separate line.\nExamples:\n  display_kwargs() → None",
             "initialCode": "def display_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef display_kwargs(**kwargs):\n    for key, value in kwargs.items():\n        print(f'{key}: {value}')\ndisplay_kwargs(name='Alice', age=30)\n# Expected:\n# name: Alice\n# age: 30\n# Using alternative loop\n    # Consider using while loop or list comprehension\n# Using return list\n    # Collect results in list and return\n# Using built-in approach\ndef solve():\n    def display_kwargs(**kwargs):\n        for key, value in kwargs.items():\n            print(f'{key}: {value}')\n    display_kwargs(name='Alice', age=30)\n# Using manual approach\ndef solve():\n    def display_kwargs(**kwargs):\n        for key, value in kwargs.items():\n            return f'{key}: {value}'\n    display_kwargs(name='Alice', age=30)\n# Script approach\nfor key, value in kwargs.items():\n    print(f'{key}: {value}')\n# Direct approach\nfor key, value in kwargs.items():\n    print(f'{key}: {value}')",
 
@@ -16251,7 +16251,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1373,
             "title": "Problem 1373",
-            "description": "Write a Python program to count the number of keyword arguments passed to a function.\nExamples:\n  count_kwargs() → 0\n  count_kwargs() → None\n  count_kwargs() → 0",
+            "description": "Write a Python program to count the number of keyword arguments passed to a function.\nExamples:\n  count_kwargs() → 0\n  count_kwargs() → None",
             "initialCode": "def count_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef count_kwargs(**kwargs):\n    print(len(kwargs))\ncount_kwargs(a=1, b=2, c=3)  # Expected: 3\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef count_kwargs(**kwargs):\n    return len(kwargs)\n# Using manual approach\ndef count_kwargs(**kwargs):\n    result = len(kwargs)\n    return result\n# Script approach\nprint(len(kwargs))\n# Direct approach\nprint(len(kwargs))",
 
@@ -16263,7 +16263,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1374,
             "title": "Problem 1374",
-            "description": "Write a Python function that returns the keys of **kwargs as a list.\nExamples:\n  kwargs_keys() → []\n  kwargs_keys() → []\n  kwargs_keys() → []",
+            "description": "Write a Python function that returns the keys of **kwargs as a list.\nExamples:\n  kwargs_keys() → []",
             "initialCode": "def kwargs_keys(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef kwargs_keys(**kwargs):\n    return list(kwargs.keys())\nprint(kwargs_keys(x=10, y=20))  # Expected: ['x', 'y']\n# Using built-in approach\ndef kwargs_keys(**kwargs):\n    result = list(kwargs.keys())\n    return result\n# Using manual approach\ndef kwargs_keys(**kwargs):\n    return list(kwargs.keys())\n# Script approach\nresult = list(kwargs.keys())\nprint(result)\n# Direct approach\nresult = list(kwargs.keys())\nprint(result)",
 
@@ -16275,7 +16275,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1375,
             "title": "Problem 1375",
-            "description": "Write a Python function that returns the values of **kwargs as a list.\nExamples:\n  kwargs_values() → []\n  kwargs_values() → []\n  kwargs_values() → []",
+            "description": "Write a Python function that returns the values of **kwargs as a list.\nExamples:\n  kwargs_values() → []",
             "initialCode": "def kwargs_values(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef kwargs_values(**kwargs):\n    return list(kwargs.values())\nprint(kwargs_values(x=10, y=20))  # Expected: [10, 20]\n# Using built-in approach\ndef kwargs_values(**kwargs):\n    result = list(kwargs.values())\n    return result\n# Using manual approach\ndef kwargs_values(**kwargs):\n    return list(kwargs.values())\n# Script approach\nresult = list(kwargs.values())\nprint(result)\n# Direct approach\nresult = list(kwargs.values())\nprint(result)",
 
@@ -16287,7 +16287,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1376,
             "title": "Problem 1376",
-            "description": "Write a Python function that returns True if 'id' is in **kwargs.\nExamples:\n  has_id() → False\n  has_id() → False\n  has_id() → False",
+            "description": "Write a Python function that returns True if 'id' is in **kwargs.\nExamples:\n  has_id() → False",
             "initialCode": "def has_id(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef has_id(**kwargs):\n    return 'id' in kwargs\nprint(has_id(name='A', id=123))  # Expected: True\n# Using built-in approach\ndef has_id(**kwargs):\n    result = 'id' in kwargs\n    return result\n# Using manual approach\ndef has_id(**kwargs):\n    return 'id' in kwargs\n# Script approach\nresult = 'id' in kwargs\nprint(result)\n# Direct approach\nresult = 'id' in kwargs\nprint(result)",
 
@@ -16299,7 +16299,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1377,
             "title": "Problem 1377",
-            "description": "Write a Python function that returns the value of a keyword argument 'name' if it exists, else return 'Unknown'.\nExamples:\n  get_name() → Unknown\n  get_name() → Unknown\n  get_name() → Unknown",
+            "description": "Write a Python function that returns the value of a keyword argument 'name' if it exists, else return 'Unknown'.\nExamples:\n  get_name() → Unknown",
             "initialCode": "def get_name(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef get_name(**kwargs):\n    return kwargs.get('name', 'Unknown')\nprint(get_name(age=22))  # Expected: 'Unknown'\n# Using built-in approach\ndef get_name(**kwargs):\n    result = kwargs.get('name', 'Unknown')\n    return result\n# Using manual approach\ndef get_name(**kwargs):\n    return kwargs.get('name', 'Unknown')\n# Script approach\nresult = kwargs.get('name', 'Unknown')\nprint(result)\n# Direct approach\nresult = kwargs.get('name', 'Unknown')\nprint(result)",
 
@@ -16311,7 +16311,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1378,
             "title": "Problem 1378",
-            "description": "Write a Python function that sums all numeric values in **kwargs.\nExamples:\n  sum_kwargs() → 0\n  sum_kwargs() → 0\n  sum_kwargs() → 0",
+            "description": "Write a Python function that sums all numeric values in **kwargs.\nExamples:\n  sum_kwargs() → 0",
             "initialCode": "def sum_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef sum_kwargs(**kwargs):\n    return sum(v for v in kwargs.values() if isinstance(v, (int, float)))\nprint(sum_kwargs(a=10, b=5.5, c='x'))  # Expected: 15.5\n# Using built-in approach\ndef sum_kwargs(**kwargs):\n    result = sum(v for v in kwargs.values() if isinstance(v, (int, float)))\n    return result\n# Using manual approach\ndef sum_kwargs(**kwargs):\n    return sum(v for v in kwargs.values() if isinstance(v, (int, float)))\n# Script approach\nresult = sum(v for v in kwargs.values() if isinstance(v, (int, float)))\nprint(result)\n# Direct approach\nresult = sum(v for v in kwargs.values() if isinstance(v, (int, float)))\nprint(result)",
 
@@ -16323,7 +16323,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1379,
             "title": "Problem 1379",
-            "description": "Write a Python function that filters and returns keyword arguments where values are strings.\nExamples:\n  string_kwargs() → {}\n  string_kwargs() → {}\n  string_kwargs() → {}",
+            "description": "Write a Python function that filters and returns keyword arguments where values are strings.\nExamples:\n  string_kwargs() → {}",
             "initialCode": "def string_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef string_kwargs(**kwargs):\n    return {k: v for k, v in kwargs.items() if isinstance(v, str)}\nprint(string_kwargs(a='hi', b=2, c='hello'))  # Expected: {'a': 'hi', 'c': 'hello'}\n# Using built-in approach\ndef string_kwargs(**kwargs):\n    result = {k: v for k, v in kwargs.items() if isinstance(v, str)}\n    return result\n# Using manual approach\ndef string_kwargs(**kwargs):\n    return {k: v for k, v in kwargs.items() if isinstance(v, str)}\n# Script approach\nresult = {k: v for k, v in kwargs.items() if isinstance(v, str)}\nprint(result)\n# Direct approach\nresult = {k: v for k, v in kwargs.items() if isinstance(v, str)}\nprint(result)",
 
@@ -16335,7 +16335,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1380,
             "title": "Problem 1380",
-            "description": "Write a Python function that prints a formatted string from **kwargs using name and age keys.\nExamples:\n  greet() → Hello Guest, age N/A\n  greet() → None\n  greet() → Hello Guest, age N/A",
+            "description": "Write a Python function that prints a formatted string from **kwargs using name and age keys.\nExamples:\n  greet() → Hello Guest, age N/A\n  greet() → None",
             "initialCode": "def greet(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef greet(**kwargs):\n    print(f'Hello {kwargs.get('name', 'Guest')}, age {kwargs.get('age', 'N/A')}')\ngreet(name='Bob', age=40)  # Expected: Hello Bob, age 40\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef greet(**kwargs):\n    return f'Hello {kwargs.get('name', 'Guest')}, age {kwargs.get('age', 'N/A')}'\n# Using manual approach\ndef greet(**kwargs):\n    result = f'Hello {kwargs.get('name', 'Guest')}, age {kwargs.get('age', 'N/A')}'\n    return result\n# Script approach\nprint(f'Hello {kwargs.get('name', 'Guest')}, age {kwargs.get('age', 'N/A')}')\n# Direct approach\nprint(f'Hello {kwargs.get('name', 'Guest')}, age {kwargs.get('age', 'N/A')}')",
 
@@ -16371,7 +16371,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1383,
             "title": "Problem 1383",
-            "description": "Write a Python function that prints only the keyword arguments with even integer values.\nExamples:\n  even_kwargs() → None\n  even_kwargs() → None\n  even_kwargs() → None",
+            "description": "Write a Python function that prints only the keyword arguments with even integer values.\nExamples:\n  even_kwargs() → None",
             "initialCode": "def even_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef even_kwargs(**kwargs):\n    for k, v in kwargs.items():\n        if isinstance(v, int) and v % 2 == 0:\n            print(f'{k}: {v}')\neven_kwargs(a=1, b=2, c=4)\n# Expected:\n# b: 2\n# c: 4\n# Using alternative loop\n    # Consider using while loop or list comprehension\n# Using return list\n    # Collect results in list and return\n# Using built-in approach\ndef solve():\n    def even_kwargs(**kwargs):\n        for k, v in kwargs.items():\n            if isinstance(v, int) and v % 2 == 0:\n                print(f'{k}: {v}')\n    even_kwargs(a=1, b=2, c=4)\n# Using manual approach\ndef solve():\n    def even_kwargs(**kwargs):\n        for k, v in kwargs.items():\n            if isinstance(v, int) and v % 2 == 0:\n                return f'{k}: {v}'\n    even_kwargs(a=1, b=2, c=4)\n# Script approach\nfor k, v in kwargs.items():\n    if isinstance(v, int) and v % 2 == 0:\n        print(f'{k}: {v}')\n# Direct approach\nfor k, v in kwargs.items():\n    if isinstance(v, int) and v % 2 == 0:\n        print(f'{k}: {v}')",
 
@@ -16383,7 +16383,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1384,
             "title": "Problem 1384",
-            "description": "Write a Python function that accepts any number of keyword arguments and prints them sorted by key.\nExamples:\n  sorted_kwargs() → None\n  sorted_kwargs() → None\n  sorted_kwargs() → None",
+            "description": "Write a Python function that accepts any number of keyword arguments and prints them sorted by key.\nExamples:\n  sorted_kwargs() → None",
             "initialCode": "def sorted_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef sorted_kwargs(**kwargs):\n    for k in sorted(kwargs.keys()):\n        print(f'{k}: {kwargs[k]}')\nsorted_kwargs(z=9, a=1, m=5)\n# Expected:\n# a: 1\n# m: 5\n# z: 9\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef solve():\n    def sorted_kwargs(**kwargs):\n        for k in sorted(kwargs.keys()):\n            print(f'{k}: {kwargs[k]}')\n    sorted_kwargs(z=9, a=1, m=5)\n# Using manual approach\ndef solve():\n    def sorted_kwargs(**kwargs):\n        for k in sorted(kwargs.keys()):\n            return f'{k}: {kwargs[k]}'\n    sorted_kwargs(z=9, a=1, m=5)\n# Script approach\nfor k in sorted(kwargs.keys()):\n    print(f'{k}: {kwargs[k]}')\n# Direct approach\nfor k in sorted(kwargs.keys()):\n    print(f'{k}: {kwargs[k]}')",
 
@@ -16395,7 +16395,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1385,
             "title": "Problem 1385",
-            "description": "Write a Python function that prints the number of string values in **kwargs.\nExamples:\n  count_strings() → 0\n  count_strings() → None\n  count_strings() → 0",
+            "description": "Write a Python function that prints the number of string values in **kwargs.\nExamples:\n  count_strings() → 0\n  count_strings() → None",
             "initialCode": "def count_strings(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef count_strings(**kwargs):\n    print(sum(1 for v in kwargs.values() if isinstance(v, str)))\ncount_strings(a='one', b=2, c='three')  # Expected: 2\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef count_strings(**kwargs):\n    return sum(1 for v in kwargs.values() if isinstance(v, str))\n# Using manual approach\ndef count_strings(**kwargs):\n    result = sum(1 for v in kwargs.values() if isinstance(v, str))\n    return result\n# Script approach\nprint(sum(1 for v in kwargs.values() if isinstance(v, str)))\n# Direct approach\nprint(sum(1 for v in kwargs.values() if isinstance(v, str)))",
 
@@ -16407,7 +16407,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1386,
             "title": "Problem 1386",
-            "description": "Write a Python function that prints whether each value in **kwargs is truthy or falsy.\nExamples:\n  check_truthy() → None\n  check_truthy() → None\n  check_truthy() → None",
+            "description": "Write a Python function that prints whether each value in **kwargs is truthy or falsy.\nExamples:\n  check_truthy() → None",
             "initialCode": "def check_truthy(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef check_truthy(**kwargs):\n    for k, v in kwargs.items():\n        print(f'{k}: {'Truthy' if v else 'Falsy'}')\ncheck_truthy(a=0, b='hello', c=[])  \n# Expected:\n# a: Falsy\n# b: Truthy\n# c: Falsy\n# Using alternative loop\n    # Consider using while loop or list comprehension\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using built-in approach\ndef solve():\n    def check_truthy(**kwargs):\n        for k, v in kwargs.items():\n            print(f'{k}: {'Truthy' if v else 'Falsy'}')\n    check_truthy(a=0, b='hello', c=[])  \n# Using manual approach\ndef solve():\n    def check_truthy(**kwargs):\n        for k, v in kwargs.items():\n            return f'{k}: {'Truthy' if v else 'Falsy'}'\n    check_truthy(a=0, b='hello', c=[])  \n# Script approach\nfor k, v in kwargs.items():\n    print(f'{k}: {'Truthy' if v else 'Falsy'}')\n# Direct approach\nfor k, v in kwargs.items():\n    print(f'{k}: {'Truthy' if v else 'Falsy'}')",
 
@@ -16419,7 +16419,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1387,
             "title": "Problem 1387",
-            "description": "Write a Python function that prints all key-value pairs in **kwargs where the key starts with 'a'.\nExamples:\n  starts_with_a() → None\n  starts_with_a() → None\n  starts_with_a() → None",
+            "description": "Write a Python function that prints all key-value pairs in **kwargs where the key starts with 'a'.\nExamples:\n  starts_with_a() → None",
             "initialCode": "def starts_with_a(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef starts_with_a(**kwargs):\n    for k, v in kwargs.items():\n        if k.startswith('a'):\n            print(f'{k}: {v}')\nstarts_with_a(apple=1, banana=2, ant=3)\n# Expected:\n# apple: 1\n# ant: 3\n# Using alternative loop\n    # Consider using while loop or list comprehension\n# Using built-in approach\ndef solve():\n    def starts_with_a(**kwargs):\n        for k, v in kwargs.items():\n            if k.startswith('a'):\n                print(f'{k}: {v}')\n    starts_with_a(apple=1, banana=2, ant=3)\n# Using manual approach\ndef solve():\n    def starts_with_a(**kwargs):\n        for k, v in kwargs.items():\n            if k.startswith('a'):\n                return f'{k}: {v}'\n    starts_with_a(apple=1, banana=2, ant=3)\n# Script approach\nfor k, v in kwargs.items():\n    if k.startswith('a'):\n        print(f'{k}: {v}')\n# Direct approach\nfor k, v in kwargs.items():\n    if k.startswith('a'):\n        print(f'{k}: {v}')",
 
@@ -16431,7 +16431,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1388,
             "title": "Problem 1388",
-            "description": "Write a Python function that returns a reversed dictionary built from **kwargs.\nExamples:\n  reverse_kwargs() → {}\n  reverse_kwargs() → {}\n  reverse_kwargs() → {}",
+            "description": "Write a Python function that returns a reversed dictionary built from **kwargs.\nExamples:\n  reverse_kwargs() → {}",
             "initialCode": "def reverse_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef reverse_kwargs(**kwargs):\n    return {v: k for k, v in kwargs.items()}\nprint(reverse_kwargs(a=1, b=2))  # Expected: {1: 'a', 2: 'b'}\n# Using built-in approach\ndef reverse_kwargs(**kwargs):\n    result = {v: k for k, v in kwargs.items()}\n    return result\n# Using manual approach\ndef reverse_kwargs(**kwargs):\n    return {v: k for k, v in kwargs.items()}\n# Script approach\nresult = {v: k for k, v in kwargs.items()}\nprint(result)\n# Direct approach\nresult = {v: k for k, v in kwargs.items()}\nprint(result)",
 
@@ -16443,7 +16443,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1389,
             "title": "Problem 1389",
-            "description": "Write a Python function that returns the longest key in **kwargs.\nExamples:\n  longest_key() → ?\n  longest_key() → ?\n  longest_key() → ?",
+            "description": "Write a Python function that returns the longest key in **kwargs.\nExamples:\n  longest_key() → ?",
             "initialCode": "def longest_key(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef longest_key(**kwargs):\n    return max(kwargs, key=len)\nprint(longest_key(short=1, muchlonger=2))  # Expected: 'muchlonger'\n# Using built-in approach\ndef longest_key(**kwargs):\n    result = max(kwargs, key=len)\n    return result\n# Using manual approach\ndef longest_key(**kwargs):\n    return max(kwargs, key=len)\n# Script approach\nresult = max(kwargs, key=len)\nprint(result)\n# Direct approach\nresult = max(kwargs, key=len)\nprint(result)",
 
@@ -16455,7 +16455,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1390,
             "title": "Problem 1390",
-            "description": "Write a Python function that creates a string from **kwargs as key=value pairs joined by commas.\nExamples:\n  stringify_kwargs() → ?\n  stringify_kwargs() → ?\n  stringify_kwargs() → ?",
+            "description": "Write a Python function that creates a string from **kwargs as key=value pairs joined by commas.\nExamples:\n  stringify_kwargs() → ?",
             "initialCode": "def stringify_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef stringify_kwargs(**kwargs):\n    return ', '.join(f'{k}={v}' for k, v in kwargs.items())\nprint(stringify_kwargs(x=10, y=20))  # Expected: 'x=10, y=20'\n# Using built-in approach\ndef stringify_kwargs(**kwargs):\n    result = ', '.join(f'{k}={v}' for k, v in kwargs.items())\n    return result\n# Using manual approach\ndef stringify_kwargs(**kwargs):\n    return ', '.join(f'{k}={v}' for k, v in kwargs.items())\n# Script approach\nresult = ', '.join(f'{k}={v}' for k, v in kwargs.items())\nprint(result)\n# Direct approach\nresult = ', '.join(f'{k}={v}' for k, v in kwargs.items())\nprint(result)",
 
@@ -16467,7 +16467,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1391,
             "title": "Problem 1391",
-            "description": "Write a Python function that checks if all values in **kwargs are integers.\nExamples:\n  all_ints() → True\n  all_ints() → True\n  all_ints() → True",
+            "description": "Write a Python function that checks if all values in **kwargs are integers.\nExamples:\n  all_ints() → True",
             "initialCode": "def all_ints(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef all_ints(**kwargs):\n    return all(isinstance(v, int) for v in kwargs.values())\nprint(all_ints(a=1, b=2))  # Expected: True\n# Using built-in approach\ndef all_ints(**kwargs):\n    result = all(isinstance(v, int) for v in kwargs.values())\n    return result\n# Using manual approach\ndef all_ints(**kwargs):\n    return all(isinstance(v, int) for v in kwargs.values())\n# Script approach\nresult = all(isinstance(v, int) for v in kwargs.values())\nprint(result)\n# Direct approach\nresult = all(isinstance(v, int) for v in kwargs.values())\nprint(result)",
 
@@ -16479,7 +16479,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1392,
             "title": "Problem 1392",
-            "description": "Write a Python function that finds and returns the maximum numeric value in **kwargs.\nExamples:\n  max_numeric() → None\n  max_numeric() → None\n  max_numeric() → None",
+            "description": "Write a Python function that finds and returns the maximum numeric value in **kwargs.\nExamples:\n  max_numeric() → None",
             "initialCode": "def max_numeric(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef max_numeric(**kwargs):\n    nums = [v for v in kwargs.values() if isinstance(v, (int, float))]\n    return max(nums) if nums else None\nprint(max_numeric(a=1, b=3.5, c='x'))  # Expected: 3.5\n# Using built-in approach\ndef max_numeric(**kwargs):\n    result = max(nums) if nums else None\n    return result\n# Using manual approach\ndef max_numeric(**kwargs):\n    return max(nums) if nums else None\n# Script approach\nnums = [v for v in kwargs.values() if isinstance(v, (int, float))]\nresult = max(nums) if nums else None\nprint(result)\n# Direct approach\nnums = [v for v in kwargs.values() if isinstance(v, (int, float))]\nresult = max(nums) if nums else None\nprint(result)",
 
@@ -16491,7 +16491,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1393,
             "title": "Problem 1393",
-            "description": "Write a Python function that counts the keyword arguments whose value is None.\nExamples:\n  count_none() → 0\n  count_none() → 0\n  count_none() → 0",
+            "description": "Write a Python function that counts the keyword arguments whose value is None.\nExamples:\n  count_none() → 0",
             "initialCode": "def count_none(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef count_none(**kwargs):\n    return sum(1 for v in kwargs.values() if v is None)\nprint(count_none(a=None, b=1, c=None))  # Expected: 2\n# Using built-in approach\ndef count_none(**kwargs):\n    result = sum(1 for v in kwargs.values() if v is None)\n    return result\n# Using manual approach\ndef count_none(**kwargs):\n    return sum(1 for v in kwargs.values() if v is None)\n# Script approach\nresult = sum(1 for v in kwargs.values() if v is None)\nprint(result)\n# Direct approach\nresult = sum(1 for v in kwargs.values() if v is None)\nprint(result)",
 
@@ -16503,7 +16503,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1394,
             "title": "Problem 1394",
-            "description": "Write a Python function that prints the types of values in **kwargs.\nExamples:\n  print_types() → None\n  print_types() → None\n  print_types() → None",
+            "description": "Write a Python function that prints the types of values in **kwargs.\nExamples:\n  print_types() → None",
             "initialCode": "def print_types(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef print_types(**kwargs):\n    for k, v in kwargs.items():\n        print(f'{k}: {type(v).__name__}')\nprint_types(a=1, b='str', c=3.14)\n# Expected:\n# a: int\n# b: str\n# c: float\n# Using return instead of print\n   # Modify to return value instead of printing\n# Script approach\nfor k, v in kwargs.items():\n    print(f'{k}: {type(v).__name__}')\n# Direct approach\nfor k, v in kwargs.items():\n    print(f'{k}: {type(v).__name__}')",
 
@@ -16515,7 +16515,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1395,
             "title": "Problem 1395",
-            "description": "Write a Python function that creates a list of key-value pairs (tuples) from **kwargs.\nExamples:\n  kv_pairs() → []\n  kv_pairs() → []\n  kv_pairs() → []",
+            "description": "Write a Python function that creates a list of key-value pairs (tuples) from **kwargs.\nExamples:\n  kv_pairs() → []",
             "initialCode": "def kv_pairs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef kv_pairs(**kwargs):\n    return list(kwargs.items())\nprint(kv_pairs(a=1, b=2))  # Expected: [('a', 1), ('b', 2)]\n# Using built-in approach\ndef kv_pairs(**kwargs):\n    result = list(kwargs.items())\n    return result\n# Using manual approach\ndef kv_pairs(**kwargs):\n    return list(kwargs.items())\n# Script approach\nresult = list(kwargs.items())\nprint(result)\n# Direct approach\nresult = list(kwargs.items())\nprint(result)",
 
@@ -16527,7 +16527,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1396,
             "title": "Problem 1396",
-            "description": "Write a Python function that filters out keyword arguments with falsy values.\nExamples:\n  remove_falsy() → {}\n  remove_falsy() → {}\n  remove_falsy() → {}",
+            "description": "Write a Python function that filters out keyword arguments with falsy values.\nExamples:\n  remove_falsy() → {}",
             "initialCode": "def remove_falsy(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef remove_falsy(**kwargs):\n    return {k: v for k, v in kwargs.items() if v}\nprint(remove_falsy(a=0, b=1, c=''))  # Expected: {'b': 1}\n# Using built-in approach\ndef remove_falsy(**kwargs):\n    result = {k: v for k, v in kwargs.items() if v}\n    return result\n# Using manual approach\ndef remove_falsy(**kwargs):\n    return {k: v for k, v in kwargs.items() if v}\n# Script approach\nresult = {k: v for k, v in kwargs.items() if v}\nprint(result)\n# Direct approach\nresult = {k: v for k, v in kwargs.items() if v}\nprint(result)",
 
@@ -16539,7 +16539,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1397,
             "title": "Problem 1397",
-            "description": "Write a Python function that returns True if at least one value in **kwargs is a list.\nExamples:\n  has_list() → False\n  has_list() → False\n  has_list() → False",
+            "description": "Write a Python function that returns True if at least one value in **kwargs is a list.\nExamples:\n  has_list() → False",
             "initialCode": "def has_list(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef has_list(**kwargs):\n    return any(isinstance(v, list) for v in kwargs.values())\nprint(has_list(a=[1,2], b='x'))  # Expected: True\n# Using built-in approach\ndef has_list(**kwargs):\n    result = any(isinstance(v, list) for v in kwargs.values())\n    return result\n# Using manual approach\ndef has_list(**kwargs):\n    return any(isinstance(v, list) for v in kwargs.values())\n# Script approach\nresult = any(isinstance(v, list) for v in kwargs.values())\nprint(result)\n# Direct approach\nresult = any(isinstance(v, list) for v in kwargs.values())\nprint(result)",
 
@@ -16551,7 +16551,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1398,
             "title": "Problem 1398",
-            "description": "Write a Python function that prints whether the number of keyword arguments is even or odd.\nExamples:\n  even_or_odd_kwargs() → Even\n  even_or_odd_kwargs() → None\n  even_or_odd_kwargs() → Even",
+            "description": "Write a Python function that prints whether the number of keyword arguments is even or odd.\nExamples:\n  even_or_odd_kwargs() → Even\n  even_or_odd_kwargs() → None",
             "initialCode": "def even_or_odd_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef even_or_odd_kwargs(**kwargs):\n    print('Even' if len(kwargs) % 2 == 0 else 'Odd')\neven_or_odd_kwargs(a=1, b=2, c=3)  # Expected: Odd\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef even_or_odd_kwargs(**kwargs):\n    return 'Even' if len(kwargs) % 2 == 0 else 'Odd'\n# Using manual approach\ndef even_or_odd_kwargs(**kwargs):\n    result = 'Even' if len(kwargs) % 2 == 0 else 'Odd'\n    return result\n# Script approach\nprint('Even' if len(kwargs) % 2 == 0 else 'Odd')\n# Direct approach\nprint('Even' if len(kwargs) % 2 == 0 else 'Odd')",
 
@@ -16563,7 +16563,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1399,
             "title": "Problem 1399",
-            "description": "Write a Python function that accepts **kwargs and renames any keys that start with 'temp_' by removing the prefix.\nExamples:\n  clean_temp_keys() → {}\n  clean_temp_keys() → {}\n  clean_temp_keys() → {}",
+            "description": "Write a Python function that accepts **kwargs and renames any keys that start with 'temp_' by removing the prefix.\nExamples:\n  clean_temp_keys() → {}",
             "initialCode": "def clean_temp_keys(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef clean_temp_keys(**kwargs):\n    return {k[5:] if k.startswith('temp_') else k: v for k, v in kwargs.items()}\nprint(clean_temp_keys(temp_x=1, y=2))  # Expected: {'x': 1, 'y': 2}\n# Using built-in approach\ndef clean_temp_keys(**kwargs):\n    result = {k[5:] if k.startswith('temp_') else k: v for k, v in kwargs.items()}\n    return result\n# Using manual approach\ndef clean_temp_keys(**kwargs):\n    return {k[5:] if k.startswith('temp_') else k: v for k, v in kwargs.items()}\n# Script approach\nresult = {k[5:] if k.startswith('temp_') else k: v for k, v in kwargs.items()}\nprint(result)\n# Direct approach\nresult = {k[5:] if k.startswith('temp_') else k: v for k, v in kwargs.items()}\nprint(result)",
 
@@ -16575,7 +16575,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1400,
             "title": "Problem 1400",
-            "description": "Write a Python function that accepts **kwargs and returns only those key-value pairs where the key is uppercase.\nExamples:\n  uppercase_keys_only() → {}\n  uppercase_keys_only() → {}\n  uppercase_keys_only() → {}",
+            "description": "Write a Python function that accepts **kwargs and returns only those key-value pairs where the key is uppercase.\nExamples:\n  uppercase_keys_only() → {}",
             "initialCode": "def uppercase_keys_only(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef uppercase_keys_only(**kwargs):\n    return {k: v for k, v in kwargs.items() if k.isupper()}\nprint(uppercase_keys_only(AGE=30, name='Ann'))  # Expected: {'AGE': 30}\n# Using built-in approach\ndef uppercase_keys_only(**kwargs):\n    result = {k: v for k, v in kwargs.items() if k.isupper()}\n    return result\n# Using manual approach\ndef uppercase_keys_only(**kwargs):\n    return {k: v for k, v in kwargs.items() if k.isupper()}\n# Script approach\nresult = {k: v for k, v in kwargs.items() if k.isupper()}\nprint(result)\n# Direct approach\nresult = {k: v for k, v in kwargs.items() if k.isupper()}\nprint(result)",
 
@@ -17487,7 +17487,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1477,
             "title": "Problem 1477",
-            "description": "Check if a function return value is `None` using `is`.\nExamples:\n  do_nothing() → None\n  do_nothing() → None\n  do_nothing() → None",
+            "description": "Check if a function return value is `None` using `is`.\nExamples:\n  do_nothing() → None",
             "initialCode": "def do_nothing():\n    pass",
             "solution": "# Using function approach\ndef do_nothing():\n    pass\n\nprint(do_nothing() is None)  # Expected: True\n# Direct approach\nprint(None())\n\n# Script approach\nvalues = []\nresult = None(values)\nprint(result)",
 
@@ -18327,7 +18327,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1547,
             "title": "Problem 1547",
-            "description": "Use `default=` with `next()` to safely get the first item from a generator, or return a sentinel value.\nExamples:\n  number_gen() → <generator object number_gen at 0x107438280>\n  number_gen() → <generator object number_gen at 0x107438280>\n  number_gen() → <generator object number_gen at 0x107438280>",
+            "description": "Use `default=` with `next()` to safely get the first item from a generator, or return a sentinel value.\nExamples:\n  number_gen() → <generator object number_gen at 0x107438280>",
             "initialCode": "def number_gen():\n    pass",
             "solution": "# Using function approach\ndef number_gen():\n    yield 1\n    yield 2\n    yield 3\ngen = number_gen()\nfirst = next(gen, 'END')\nempty_gen = iter([])\nempty_result = next(empty_gen, 'END')\nprint(first, empty_result)  # Expected: 1 END\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef solve():\n    def number_gen():\n        yield 1\n        yield 2\n        yield 3\n    gen = number_gen()\n    first = next(gen, 'END')\n    empty_gen = iter([])\n    empty_result = next(empty_gen, 'END')\n    print(first, empty_result)  # Expected: 1 END\n# Using manual approach\ndef solve():\n    def number_gen():\n        yield 1\n        yield 2\n        yield 3\n    gen = number_gen()\n    first = next(gen, 'END')\n    empty_gen = iter([])\n    empty_result = next(empty_gen, 'END')\n    return first, empty_result\n# Script approach\nyield 1\nyield 2\nyield 3\n# Direct approach\nyield 1\nyield 2\nyield 3",
 
@@ -18351,7 +18351,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1549,
             "title": "Problem 1549",
-            "description": "Use `dict.get()` with a default function call to lazily initialize dictionary values only when accessed.\nExamples:\n  create_list() → []\n  create_list() → []\n  create_list() → []",
+            "description": "Use `dict.get()` with a default function call to lazily initialize dictionary values only when accessed.\nExamples:\n  create_list() → []",
             "initialCode": "def create_list():\n    pass",
             "solution": "# Using function approach\ndef create_list():\n    return []\ndata = {}\n# Using get with a callable default (note: dict.get doesn't support callables directly)\n# This is a pattern where we check and initialize if needed\nif 'items' not in data:\n    data['items'] = create_list()\nitems = data.get('items', create_list())\nitems.append('apple')\nprint(data)  # Expected: {'items': ['apple']}\n# Using built-in approach\ndef create_list():\n    result = []\n    return result\n# Using manual approach\ndef create_list():\n    return []\n# Script approach\nresult = []\nprint(result)\n# Direct approach\nresult = []\nprint(result)",
 
@@ -18625,7 +18625,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1572,
             "title": "Problem 1572",
-            "description": "Write a Python class implementing `__str__` magic method to customize string representation.\nExamples:\n  __str__() → ?\n  __str__() → ?\n  __str__() → ?",
+            "description": "Write a Python class implementing `__str__` magic method to customize string representation.\nExamples:\n  __str__() → ?",
             "initialCode": "class Book:\n    pass",
             "solution": "# Using function approach\nclass Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n    def __str__(self):\n        return f'{self.title} by {self.author}'\nbook = Book('Python Guide', 'John Doe')\nprint(str(book))  # Expected: Python Guide by John Doe\n# Script approach\nobj = Book(15, 15)\nprint(obj)\n# Direct approach\nprint(Book(25, 25))",
 
@@ -18637,7 +18637,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1573,
             "title": "Problem 1573",
-            "description": "Write a Python class implementing `__repr__` magic method to provide a developer-friendly representation.\nExamples:\n  __repr__() → ?\n  __repr__() → ?\n  __repr__() → ?",
+            "description": "Write a Python class implementing `__repr__` magic method to provide a developer-friendly representation.\nExamples:\n  __repr__() → ?",
             "initialCode": "class Point:\n    pass",
             "solution": "# Using function approach\nclass Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __repr__(self):\n        return f'Point(x={self.x}, y={self.y})'\npoint = Point(3, 4)\nprint(repr(point))  # Expected: Point(x=3, y=4)\n# Script approach\nobj = Point(7, 3)\nprint(obj)\n# Direct approach\nprint(Point(3, 14))",
 
@@ -18661,7 +18661,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1575,
             "title": "Problem 1575",
-            "description": "Write a Python class implementing `__hash__` magic method to make an object hashable.\nExamples:\n  __hash__() → ?\n  __hash__() → ?\n  __hash__() → ?",
+            "description": "Write a Python class implementing `__hash__` magic method to make an object hashable.\nExamples:\n  __hash__() → ?",
             "initialCode": "class Point:\n    pass",
             "solution": "# Using function approach\nclass Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __hash__(self):\n        return hash((self.x, self.y))\n    def __eq__(self, other):\n        return isinstance(other, Point) and self.x == other.x and self.y == other.y\npoint = Point(3, 4)\npoints_set = {point}\nprint(len(points_set))  # Expected: 1\n# Script approach\nobj = Point(7, 3)\nprint(obj)\n# Direct approach\nprint(Point(3, 14))",
 
@@ -18673,7 +18673,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1576,
             "title": "Problem 1576",
-            "description": "Write a Python class implementing `__len__` magic method to make an object work with `len()`.\nExamples:\n  __len__() → ?\n  __len__() → ?\n  __len__() → ?",
+            "description": "Write a Python class implementing `__len__` magic method to make an object work with `len()`.\nExamples:\n  __len__() → ?",
             "initialCode": "class Stack:\n    pass",
             "solution": "# Using function approach\nclass Stack:\n    def __init__(self):\n        self.items = []\n    def push(self, item):\n        self.items.append(item)\n    def __len__(self):\n        return len(self.items)\nstack = Stack()\nstack.push(1)\nstack.push(2)\nprint(len(stack))  # Expected: 2\n# Script approach\nobj = Stack()\nprint(obj)\n# Direct approach\nprint(Stack())",
 
@@ -18697,7 +18697,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1578,
             "title": "Problem 1578",
-            "description": "Write a Python program using a custom context manager class with `__enter__` and `__exit__` methods.\nExamples:\n  __enter__() → ?\n  __enter__() → ?\n  __enter__() → ?",
+            "description": "Write a Python program using a custom context manager class with `__enter__` and `__exit__` methods.\nExamples:\n  __enter__() → ?",
             "initialCode": "class Timer:\n    pass",
             "solution": "# Using function approach\nclass Timer:\n    def __enter__(self):\n        import time\n        self.start = time.time()\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        import time\n        self.elapsed = time.time() - self.start\n        print(f'Elapsed time: {self.elapsed:.2f} seconds')\nwith Timer():\n    sum(range(1000000))  # Expected: Elapsed time: ~0.XX seconds\n# Using built-in approach\ndef solve():\n    class Timer:\n        def __enter__(self):\n            import time\n            self.start = time.time()\n            return self\n        def __exit__(self, exc_type, exc_val, exc_tb):\n            import time\n            self.elapsed = time.time() - self.start\n            print(f'Elapsed time: {self.elapsed:.2f} seconds')\n    with Timer():\n        sum(range(1000000))  # Expected: Elapsed time: ~0.XX seconds\n# Using manual approach\ndef solve():\n    class Timer:\n        def __enter__(self):\n            import time\n            self.start = time.time()\n            return self\n        def __exit__(self, exc_type, exc_val, exc_tb):\n            import time\n            self.elapsed = time.time() - self.start\n            return f'Elapsed time: {self.elapsed:.2f} seconds'\n    with Timer():\n        sum(range(1000000))  # Expected: Elapsed time: ~0.XX seconds\n# Script approach\nobj = Timer()\nprint(obj)\n# Direct approach\nprint(Timer())",
 
@@ -19164,7 +19164,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1617,
             "title": "Problem 1617",
-            "description": "Write a Python program using `typing.Tuple` to specify a function that returns a tuple of specific types.\nExamples:\n  get_name_age() → ('Alice', 30)\n  get_name_age() → ('Alice', 30)\n  get_name_age() → ('Alice', 30)",
+            "description": "Write a Python program using `typing.Tuple` to specify a function that returns a tuple of specific types.\nExamples:\n  get_name_age() → ('Alice', 30)",
             "initialCode": "from typing import Tuple\ndef get_name_age() -> Tuple[str, int]:\n    pass",
             "solution": "from typing import Tuple\n# Using function approach\ndef get_name_age() -> Tuple[str, int]:\n    return ('Alice', 30)\nname, age = get_name_age()\nprint(f'{name} is {age}')  # Expected: Alice is 30\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef get_name_age():\n    result = ('Alice', 30)\n    return result\n# Using manual approach\ndef get_name_age():\n    return ('Alice', 30)\n# Script approach\nresult = ('Alice', 30)\nprint(result)\n# Direct approach\nresult = ('Alice', 30)\nprint(result)",
 
@@ -19259,7 +19259,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1625,
             "title": "Problem 1625",
-            "description": "Write a Python class implementing `__iter__` and `__next__` magic methods to create a custom iterator.\nExamples:\n  __iter__() → ?\n  __iter__() → ?\n  __iter__() → ?",
+            "description": "Write a Python class implementing `__iter__` and `__next__` magic methods to create a custom iterator.\nExamples:\n  __iter__() → ?",
             "initialCode": "class CountDown:\n    pass",
             "solution": "# Using function approach\nclass CountDown:\n    def __init__(self, start):\n        self.current = start\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if self.current <= 0:\n            raise StopIteration\n        self.current -= 1\n        return self.current + 1\ncounter = CountDown(5)\nprint(list(counter))  # Expected: [5, 4, 3, 2, 1]\n# Script approach\nobj = CountDown(1)\nprint(obj)\n# Direct approach\nprint(CountDown(3))",
 
@@ -19271,7 +19271,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1626,
             "title": "Problem 1626",
-            "description": "Write a Python program using `contextlib.contextmanager` decorator to create a context manager from a generator function.\nExamples:\n  my_context() → <generator object my_context at 0x107438580>\n  my_context() → <generator object my_context at 0x107438580>\n  my_context() → <generator object my_context at 0x107438580>",
+            "description": "Write a Python program using `contextlib.contextmanager` decorator to create a context manager from a generator function.\nExamples:\n  my_context() → <generator object my_context at 0x107438580>",
             "initialCode": "from contextlib import contextmanager\ndef my_context():\n    pass",
             "solution": "from contextlib import contextmanager\n# Using function approach\n@contextmanager\ndef my_context():\n    print('Entering context')\n    yield 'context value'\n    print('Exiting context')\nwith my_context() as value:\n    print(f'Inside context: {value}')  # Expected: Entering context, Inside context: context value, Exiting context\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n# Using built-in approach\ndef my_context():\n    return 'Exiting context'\n    yield 'context value'\n    return 'Exiting context'\n# Using manual approach\ndef my_context():\n    return 'Exiting context'\n    yield 'context value'\n    result = 'Exiting context'\n    return result\n# Script approach\nprint('Entering context')\nyield 'context value'\nprint('Exiting context')\n# Direct approach\nprint('Entering context')\nyield 'context value'\nprint('Exiting context')",
 
@@ -20831,7 +20831,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1756,
             "title": "Problem 1756",
-            "description": "Write a Python function called `create_tuple` that takes any number of arguments and returns a tuple containing those arguments.\nExamples:\n  create_tuple() → ()\n  create_tuple() → ()\n  create_tuple() → ()",
+            "description": "Write a Python function called `create_tuple` that takes any number of arguments and returns a tuple containing those arguments.\nExamples:\n  create_tuple() → ()",
             "initialCode": "def create_tuple(*args):\n    pass",
             "solution": "# Using function approach\ndef create_tuple(*args):\n    return tuple(args)\nresult = create_tuple(1, 2, 3, 4)\nprint(result)  # Expected: (1, 2, 3, 4)\n# Using built-in approach\ndef create_tuple(*args):\n    result = tuple(args)\n    return result\n# Using manual approach\ndef create_tuple(*args):\n    return tuple(args)\n# Script approach\n*args = 15\nresult = create_tuple(*args)\nprint(result)\n# Direct approach\nprint(create_tuple(25))",
 
