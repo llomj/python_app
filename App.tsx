@@ -764,6 +764,16 @@ def __auto_grader_same(actual, expected, compare):
             or any(__auto_grader_values_equivalent(line, expected) for line in actual_lines)
             or __auto_grader_meaningful_text_matches(actual_text, expected)
         )
+    if compare == "printedFlex":
+        actual_text = __auto_grader_clean_text(actual)
+        expected_text = __auto_grader_clean_text(expected)
+        try:
+            pat = re.escape(expected_text)
+            pat = re.sub(r'\b[a-zA-Z]\b', r'\\w+', pat)
+            pat = pat.replace(r'\ ', r'\\s+')
+            return bool(re.search(pat, actual_text, re.IGNORECASE))
+        except Exception:
+            return actual_text == expected_text
     if compare == "numberRange":
         numbers = __auto_grader_numbers(actual)
         if not numbers or not isinstance(expected, list) or len(expected) != 2:

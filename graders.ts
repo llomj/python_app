@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -8932,10 +8932,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1157: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'printedFlex',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "Try"}],
     tests: [
-      { args: [], expected: "not defined" }
+      { args: [], expected: "x is not defined" }
     ]
   },
   1158: {
@@ -8971,7 +8971,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1162: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'printedFlex',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
       { args: [], expected: "New value of x: 10" }
@@ -8989,10 +8989,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1164: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'printedFlex',
     requiredNodePatterns: [{nodeType: "FunctionDef", minCount: 2}, {nodeType: "Global"}],
     tests: [
-      { args: [], expected: "Global variable" }
+      { args: [], expected: "Global variable x: 12" }
     ]
   },
   1165: {
@@ -9024,10 +9024,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1168: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'printedFlex',
     requiredNodePatterns: [{nodeType: "FunctionDef"}],
     tests: [
-      { args: [], expected: "Global variable" }
+      { args: [], expected: "Global variable x inside function: 10" }
     ]
   },
   1169: {
@@ -9050,7 +9050,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   1171: {
     functionNames: ["print_variable_in_function"],
-    compare: 'printedOrReturn',
+    compare: 'printedFlex',
     tests: [
       { args: [5], expected: "Function variable y: 10" },
       { args: [9], expected: "Function variable y: 18" }
