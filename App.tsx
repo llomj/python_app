@@ -8841,6 +8841,156 @@ const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, 
     });
 };
 
+interface GuideSection {
+    title: string;
+    tone: 'goal' | 'requirements' | 'steps' | 'hints';
+    lines: string[];
+}
+
+const normalizeGuideLine = (line: string) => line
+    .replace(/^\s*\d+[.)]\s*/, '')
+    .replace(/^\s*[-*]\s*/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const extractGuideExamples = (description: string) => {
+    const lines = description.split('\n').map(line => line.trim()).filter(Boolean);
+    const examples: string[] = [];
+    let inExamples = false;
+    for (const line of lines) {
+        if (/^examples?:/i.test(line)) {
+            inExamples = true;
+            const inline = line.replace(/^examples?:\s*/i, '').trim();
+            if (inline) examples.push(inline);
+            continue;
+        }
+        if (inExamples && /(→|->|=>)/.test(line)) {
+            examples.push(line);
+        }
+    }
+    return examples.slice(0, 3);
+};
+
+const extractFunctionSignatures = (initialCode: string) => {
+    const signatures: string[] = [];
+    const seen = new Set<string>();
+    const regex = /^\s*def\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)\s*:/gm;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(initialCode)) !== null) {
+        const signature = `def ${match[1]}(${match[2].trim()}):`;
+        if (!seen.has(signature)) {
+            seen.add(signature);
+            signatures.push(signature);
+        }
+    }
+    return signatures;
+};
+
+const extractClassNames = (initialCode: string) => {
+    const classNames: string[] = [];
+    const seen = new Set<string>();
+    const regex = /^\s*class\s+([A-Za-z_][A-Za-z0-9_]*)/gm;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(initialCode)) !== null) {
+        if (!seen.has(match[1])) {
+            seen.add(match[1]);
+            classNames.push(match[1]);
+        }
+    }
+    return classNames;
+};
+
+const getGuideConceptHints = (exercise: Exercise) => {
+    const text = `${exercise.description}\n${exercise.initialCode}`.toLowerCase();
+    const hints: string[] = [];
+    const add = (condition: boolean, hint: string) => {
+        if (condition && !hints.includes(hint)) hints.push(hint);
+    };
+    add(text.includes('input(') || text.includes('prompt the user'), 'If the problem asks for user input, read it with `input()` and convert it with `int()`, `float()`, or `.split()` before using it.');
+    add(text.includes('return'), 'If the problem says “returns”, use `return`, not only `print()`. Printing can look correct but fail function tests.');
+    add(text.includes('print'), 'If the problem says “print”, make sure the visible output format matches the example line by line.');
+    add(text.includes('list'), 'For list problems, check whether you should return a new list, a number from the list, or a filtered list.');
+    add(text.includes('dictionary') || text.includes('dict'), 'For dictionary problems, be clear whether the task needs keys, values, items, or a new dictionary.');
+    add(text.includes('string'), 'For string problems, watch spaces, uppercase/lowercase, and whether the result should be a string, list, or boolean.');
+    add(text.includes('while loop'), 'Because the problem asks for a `while` loop, use a counter and update it inside the loop so it does not run forever.');
+    add(text.includes('for loop'), 'Because the problem asks for a `for` loop, iterate over the range or collection directly instead of hard-coding the answer.');
+    add(text.includes('and operator'), 'For `and`, every condition must be true. Test at least one case where each condition fails.');
+    add(text.includes('or operator'), 'For `or`, one true condition is enough. Also test a case where all conditions are false.');
+    add(text.includes('class '), 'For class problems, define `__init__`, store attributes with `self`, and create methods only if the prompt asks for them.');
+    add(text.includes('recursion'), 'For recursion, write a base case first, then make the recursive call move closer to that base case.');
+    return hints.slice(0, 5);
+};
+
+const buildExerciseGuideSections = (exercise: Exercise): GuideSection[] => {
+    const descriptionLines = exercise.description.split('\n').map(line => line.trim()).filter(Boolean);
+    const promptLine = descriptionLines.find(line => !/^examples?:/i.test(line) && !/(→|->|=>)/.test(line)) ?? exercise.description.trim();
+    const signatures = extractFunctionSignatures(exercise.initialCode);
+    const classNames = extractClassNames(exercise.initialCode);
+    const examples = extractGuideExamples(exercise.description);
+    const rawBreakdownLines = (exercise.breakdown ?? '')
+        .split('\n')
+        .map(normalizeGuideLine)
+        .filter(Boolean)
+        .filter(line => !/^\[?input\(\)\]?$/i.test(line))
+        .filter((line, index, arr) => arr.findIndex(item => item.toLowerCase() === line.toLowerCase()) === index)
+        .slice(0, 8);
+    const conceptHints = getGuideConceptHints(exercise);
+    const customHint = exercise.hint && !/^check the description for requirements\.?$/i.test(exercise.hint.trim())
+        ? exercise.hint.trim()
+        : '';
+
+    const requirementLines = [
+        signatures.length ? `Use the expected function signature: ${signatures.map(signature => `\`${signature}\``).join(', ')}` : '',
+        classNames.length ? `Define the required class${classNames.length > 1 ? 'es' : ''}: ${classNames.map(name => `\`${name}\``).join(', ')}` : '',
+        examples.length ? `Match the example behavior: ${examples.map(example => `\`${example}\``).join(' | ')}` : '',
+        /return/i.test(promptLine) ? 'The final value should be returned from the function.' : '',
+        /print/i.test(promptLine) ? 'The output should be printed in the same format as the example.' : '',
+    ].filter(Boolean);
+
+    return [
+        {
+            title: 'What The Problem Wants',
+            tone: 'goal',
+            lines: [promptLine],
+        },
+        {
+            title: 'Must-Have Requirements',
+            tone: 'requirements',
+            lines: requirementLines.length ? requirementLines : ['Identify the required inputs, the expected output, and whether the answer should use `return` or `print()`.'],
+        },
+        {
+            title: 'How To Build It',
+            tone: 'steps',
+            lines: rawBreakdownLines.length ? rawBreakdownLines : [
+                'Create the required function or script structure first.',
+                'Store the input values in clearly named variables.',
+                'Apply the operation described in the prompt.',
+                'Return or print the final result exactly as requested.',
+            ],
+        },
+        {
+            title: 'Hints To Avoid Mistakes',
+            tone: 'hints',
+            lines: [customHint, ...conceptHints].filter(Boolean).slice(0, 6),
+        },
+    ].filter(section => section.lines.length > 0);
+};
+
+const getGuideSectionStyle = (tone: GuideSection['tone']) => {
+    switch (tone) {
+        case 'goal':
+            return { color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.28)', backgroundColor: 'rgba(8, 47, 73, 0.24)' };
+        case 'requirements':
+            return { color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.30)', backgroundColor: 'rgba(69, 26, 3, 0.22)' };
+        case 'steps':
+            return { color: '#22c55e', borderColor: 'rgba(34, 197, 94, 0.26)', backgroundColor: 'rgba(20, 83, 45, 0.20)' };
+        case 'hints':
+            return { color: '#a78bfa', borderColor: 'rgba(167, 139, 250, 0.26)', backgroundColor: 'rgba(49, 46, 129, 0.20)' };
+        default:
+            return { color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.26)', backgroundColor: 'rgba(8, 18, 34, 0.34)' };
+    }
+};
+
 const getAiStepTitle = (step: string, index: number) => {
     const normalized = step.toLowerCase();
     if (normalized.includes('problem requirement')) return 'Problem Requirement';
@@ -10524,12 +10674,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
                                 </button>
-                                {exercise.breakdown && (
-                                    <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Step-by-step breakdown" style={{ backgroundColor: showBreakdownFor === exercise.id ? 'rgba(245, 158, 11, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#f59e0b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
-                                        <Lightbulb size={14} fill={showBreakdownFor === exercise.id ? 'currentColor' : 'none'} />
-                                        <span>Guide</span>
-                                    </button>
-                                )}
+                                <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Problem guide and hints" style={{ backgroundColor: showBreakdownFor === exercise.id ? 'rgba(245, 158, 11, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#f59e0b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                    <Lightbulb size={14} fill={showBreakdownFor === exercise.id ? 'currentColor' : 'none'} />
+                                    <span>Guide</span>
+                                </button>
                                 <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
                                     <span>Next</span>
@@ -10538,19 +10686,40 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         </div>
                         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: '#d1d5db', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
                             {exercise.description}
-                            {showBreakdownFor === exercise.id && exercise.breakdown && (
+                            {showBreakdownFor === exercise.id && (
                                 <div style={{ marginTop: '0.75rem', borderTop: '1px solid rgba(245, 158, 11, 0.2)', paddingTop: '0.5rem' }}>
                                     <h4 style={{ fontSize: '0.7rem', fontWeight: 700, color: '#f59e0b', margin: '0 0 0.35rem', display: 'flex', alignItems: 'center', gap: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                                         <Lightbulb size={11} /> Guide
                                     </h4>
-                                    <div style={{ color: '#c8cdd5', fontSize: '0.8125rem', lineHeight: 1.7 }}>
+                                    <div style={{ display: 'grid', gap: '0.55rem', color: '#c8cdd5', fontSize: '0.8125rem', lineHeight: 1.65 }}>
                                         {(() => {
-                                            const steps = exercise.breakdown.split('\n');
-                                            return steps.map((step, i) => (
-                                                <div key={`guide-step-${i}`} style={{ marginBottom: i < steps.length - 1 ? '0.75rem' : 0, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                                                    {renderAiParagraphText(step, editorColors, `guide-step-${i}`)}
+                                            const sections = buildExerciseGuideSections(exercise);
+                                            return sections.map((section, sectionIndex) => {
+                                                const sectionStyle = getGuideSectionStyle(section.tone);
+                                                return (
+                                                <div
+                                                    key={`guide-section-${section.title}`}
+                                                    style={{
+                                                        border: `1px solid ${sectionStyle.borderColor}`,
+                                                        backgroundColor: sectionStyle.backgroundColor,
+                                                        borderRadius: '0.7rem',
+                                                        padding: '0.55rem 0.65rem',
+                                                    }}
+                                                >
+                                                    <div style={{ color: sectionStyle.color, fontSize: '0.66rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                                                        {section.title}
+                                                    </div>
+                                                    <div style={{ display: 'grid', gap: '0.35rem' }}>
+                                                        {section.lines.map((line, lineIndex) => (
+                                                            <div key={`guide-line-${sectionIndex}-${lineIndex}`} style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                                                                <span style={{ color: sectionStyle.color, fontSize: '0.7rem', lineHeight: 1.7, flexShrink: 0 }}>{section.tone === 'steps' ? `${lineIndex + 1}.` : '•'}</span>
+                                                                <span>{renderAiParagraphText(line, editorColors, `guide-line-${sectionIndex}-${lineIndex}`)}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            ));
+                                                );
+                                            });
                                         })()}
                                     </div>
                                 </div>
