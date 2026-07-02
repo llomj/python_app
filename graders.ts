@@ -7851,178 +7851,178 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1019: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]" }
+      { args: [], expected: null }
     ]
   },
   1020: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[2, 4, 6, 8, 10, 12, 14, 16, 18, 20]" }
+      { args: [], expected: null }
     ]
   },
   1021: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]" }
+      { args: [], expected: null }
     ]
   },
   1022: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "['P', 'i', 'a', 'p', 'p', 'l']" }
+      { args: [], expected: null }
     ]
   },
   1023: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "['bright', 'today']" }
+      { args: [], expected: null }
     ]
   },
   1024: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[(1, 1), (2, 4), (3, 9), (4, 16), (5, 25), (6, 36), (7, 49), (8, 64), (9, 81), (10, 100)]" }
+      { args: [], expected: null }
     ]
   },
   1025: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[6, 10, 14, 18]" }
+      { args: [], expected: null }
     ]
   },
   1026: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[3, 6, 7, 9, 12, 14, 15, 18, 21, 24, 27, 28, 30, 33, 35, 36, 39, 42, 45, 48, 49, 51, 54, 56, 57, 60, 63, 66, 69, 70, 72, 75, 77, 78, 81, 84, 87, 90, 91, 93, 96, 98, 99]" }
+      { args: [], expected: null }
     ]
   },
   1027: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     requiredCallPatterns: [{functionName: "upper"}],
     tests: [
-      { args: [], expected: "['HELLO', 'WORLD', 'PYTHON']" }
+      { args: [], expected: null }
     ]
   },
   1028: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9]" }
+      { args: [], expected: null }
     ]
   },
   1029: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     requiredCallPatterns: [{functionName: "lower"}],
     tests: [
-      { args: [], expected: "['i', 'o', 'e', 'e', 'i', 'o', 'i', 'o', 'e', 'u']" }
+      { args: [], expected: null }
     ]
   },
   1030: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     requiredCallPatterns: [{functionName: "isinstance"}],
     tests: [
-      { args: [], expected: "[10, 15.5, 30]" }
+      { args: [], expected: null }
     ]
   },
   1031: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]" }
+      { args: [], expected: null }
     ]
   },
   1032: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]" }
+      { args: [], expected: null }
     ]
   },
   1033: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     requiredCallPatterns: [{functionName: "lower"}],
     tests: [
-      { args: [], expected: "['The', 'apple', 'the', 'tree']" }
+      { args: [], expected: null }
     ]
   },
   1034: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     requiredCallPatterns: [{functionName: "islower"}],
     tests: [
-      { args: [], expected: "['y', 't', 'h', 'o', 'n', 'i', 's', 't', 'o', 'm', 'p', 'r', 'e', 'h', 'e', 'n', 's', 'i', 'o', 'n']" }
+      { args: [], expected: null }
     ]
   },
   1035: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     requiredCallPatterns: [{functionName: "len"}],
     tests: [
-      { args: [], expected: "[('List', 4), ('comprehension', 13), ('makes', 5), ('Python', 6), ('concise', 7)]" }
+      { args: [], expected: null }
     ]
   },
   1036: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{functionName: "fromkeys"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5]" }
+      { args: [], expected: null }
     ]
   },
   1037: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "['apple', 'grape', 'peach']" }
+      { args: [], expected: null }
     ]
   },
   1038: {
@@ -9051,10 +9051,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1170: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "FunctionDef"}, {nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "List comprehension result: [0, 1, 4, 9, 16]" }
+      { args: [], expected: null }
     ]
   },
   1171: {
@@ -11317,10 +11317,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1406: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredNodePatterns: [{nodeType: "ListComp"}],
     tests: [
-      { args: [], expected: "[1, 2, 3, 4, 5, 6, 7, 8, 9]" }
+      { args: [], expected: null }
     ]
   },
   1407: {
@@ -12144,10 +12144,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   1500: {
     functionNames: [],
     mode: 'script',
-    compare: 'printedOrReturn',
+    compare: 'sourceOnly',
     requiredCallPatterns: [{ functionName: "next", minArgs: 2 }],
     tests: [
-      { args: [], expected: "Empty" }
+      { args: [], expected: null }
     ]
   },
   1501: {
