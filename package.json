@@ -8,6 +8,8 @@
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",
         "audit:graders": "node scripts/audit_graders.js",
+        "harden:graders": "node scripts/harden_graders_by_intent.js",
+        "source-intent:graders": "node scripts/apply_source_intent_graders.js",
         "audit:metamorphic": "node scripts/audit_metamorphic_graders.js",
         "audit:script-fallback": "node scripts/audit_script_fallback.js",
         "audit:solutions": "node scripts/audit_solution_sections.js",

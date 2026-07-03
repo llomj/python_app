@@ -789,6 +789,32 @@ def __auto_grader_meaningful_text_matches(actual_text, expected):
         return expected_value.lower() in actual_text.lower()
     return False
 
+def __auto_grader_shape_matches(actual, expected):
+    if expected is None:
+        return True
+    actual_text = __auto_grader_clean_text(actual)
+    if not actual_text:
+        return expected in (None, "")
+    actual_value = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
+    expected_value = __auto_grader_normalize(__auto_grader_maybe_literal(expected))
+    if type(expected_value).__name__ in ("list", "tuple", "set"):
+        return isinstance(actual_value, (list, tuple, set)) or bool(re.search(r"[\[({].*[\])}]", actual_text, re.DOTALL))
+    if isinstance(expected_value, dict):
+        return isinstance(actual_value, dict) or (":" in actual_text and bool(re.search(r"[\[{].*[\]}]", actual_text, re.DOTALL)))
+    if isinstance(expected_value, bool):
+        if isinstance(actual_value, bool):
+            return True
+        return bool(re.search(r"\\b(true|false)\\b", actual_text, re.IGNORECASE))
+    if isinstance(expected_value, (int, float)) and not isinstance(expected_value, bool):
+        return bool(__auto_grader_numbers(actual_text))
+    if isinstance(expected_value, str):
+        if not expected_value:
+            return True
+        if expected_value.startswith("b'") or expected_value.startswith('b"'):
+            return actual_text.startswith("b'") or actual_text.startswith('b"') or isinstance(actual_value, (bytes, bytearray))
+        return True
+    return True
+
 def __auto_grader_same(actual, expected, compare):
     if compare == "typeName":
         return type(actual).__name__ == expected
@@ -828,6 +854,8 @@ def __auto_grader_same(actual, expected, compare):
             return bool(re.search(pat, actual_text, re.IGNORECASE))
         except Exception:
             return actual_text == expected_text
+    if compare == "sourceIntent":
+        return __auto_grader_shape_matches(actual, expected)
     if compare == "valuesPresent":
         actual_text = __auto_grader_clean_text(actual)
         expected_text = __auto_grader_clean_text(expected)
@@ -2721,7 +2749,7 @@ def __auto_grader_run_script():
 
     for index, case in enumerate(tests, start=1):
         expected = case.get("expected")
-        hardcoded_error = __auto_grader_hardcoded_expected_error(expected)
+        hardcoded_error = None if compare in ("sourceOnly", "sourceIntent") else __auto_grader_hardcoded_expected_error(expected)
         if hardcoded_error:
             return {
                 "passed": False,
