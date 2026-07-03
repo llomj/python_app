@@ -547,6 +547,12 @@ def __auto_grader_maybe_literal(value):
     text = value.strip()
     if not text:
         return value
+    if text == "True":
+        return True
+    if text == "False":
+        return False
+    if text == "None":
+        return None
     try:
         return ast.literal_eval(text)
     except Exception:
@@ -554,7 +560,17 @@ def __auto_grader_maybe_literal(value):
     try:
         return json.loads(text)
     except Exception:
-        return value
+        pass
+    try:
+        return json.loads(text.replace("'", '"'))
+    except Exception:
+        pass
+    try:
+        if text.startswith("(") and text.endswith(")"):
+            return ast.literal_eval(text)
+    except Exception:
+        pass
+    return value
 
 def __auto_grader_values_equivalent(actual, expected):
     actual = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
