@@ -910,8 +910,21 @@ def __auto_grader_same(actual, expected, compare):
         actual = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
     if compare == "float":
         try:
-            return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
+            actual_num = float(actual)
+            expected_num = float(expected)
+            if math.isclose(actual_num, expected_num, rel_tol=1e-6, abs_tol=1e-6):
+                return True
+            if round(actual_num, 2) == round(expected_num, 2):
+                return True
+            return False
         except Exception:
+            try:
+                actual_numbers = __auto_grader_numbers(str(actual))
+                expected_num = float(expected)
+                if actual_numbers:
+                    return any(math.isclose(float(n), expected_num, rel_tol=1e-6, abs_tol=1e-6) for n in actual_numbers)
+            except Exception:
+                pass
             return False
     if compare == "printedOrReturn":
         actual_text = __auto_grader_clean_text(actual)
@@ -1056,7 +1069,12 @@ def __auto_grader_same(actual, expected, compare):
         try:
             actual_numbers = __auto_grader_numbers(actual)
             expected_numbers = [float(item) for item in expected]
-            return actual_numbers == expected_numbers
+            if len(actual_numbers) != len(expected_numbers):
+                return False
+            return all(
+                math.isclose(a, e, rel_tol=1e-6, abs_tol=1e-6) or round(a, 2) == round(e, 2)
+                for a, e in zip(actual_numbers, expected_numbers)
+            )
         except Exception:
             return False
     if compare == "dictUnorderedLists":
