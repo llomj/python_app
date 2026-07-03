@@ -818,11 +818,68 @@ def __auto_grader_same(actual, expected, compare):
         expected_text = __auto_grader_clean_text(expected)
         try:
             pat = re.escape(expected_text)
+            # Make single-letter variables flexible
             pat = re.sub(r'\b[a-zA-Z]\b', r'\\w+', pat)
+            # Make multi-letter variable-like words flexible (words followed by : or =)
+            pat = re.sub(r'\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*[:=])', r'\\w+', pat)
+            # Make values after labels flexible (e.g., "Name: Alice" → "Name: \\w+")
+            pat = re.sub(r'(:\\s*)([a-zA-Z_][a-zA-Z0-9_]*)(?=\\s|$|,)', r'\\1\\w+', pat)
             pat = pat.replace(r'\ ', r'\\s+')
             return bool(re.search(pat, actual_text, re.IGNORECASE))
         except Exception:
             return actual_text == expected_text
+    if compare == "valuesPresent":
+        actual_text = __auto_grader_clean_text(actual)
+        expected_text = __auto_grader_clean_text(expected)
+        # Extract all values from expected
+        expected_numbers = __auto_grader_numbers(expected_text)
+        expected_strings = re.findall(r"['\"]([^'\"]+)['\"]", expected_text)
+        # Check all numbers appear in actual
+        actual_numbers = __auto_grader_numbers(actual_text)
+        for num in expected_numbers:
+            if not any(math.isclose(float(a), float(num), rel_tol=1e-9, abs_tol=1e-9) for a in actual_numbers):
+                return False
+        # Check all strings appear in actual (case-insensitive)
+        actual_lower = actual_text.lower()
+        for s in expected_strings:
+            if s.lower() not in actual_lower:
+                return False
+        return True
+    if compare == "structuralMatch":
+        try:
+            actual_struct = __auto_grader_maybe_literal(actual)
+            expected_struct = __auto_grader_maybe_literal(expected)
+            # Check structure matches (same type, same keys for dicts, same length for lists)
+            if type(actual_struct) != type(expected_struct):
+                return False
+            if isinstance(expected_struct, dict):
+                if set(actual_struct.keys()) != set(expected_struct.keys()):
+                    return False
+                # Recursively check values
+                for key in expected_struct:
+                    if not __auto_grader_same(actual_struct[key], expected_struct[key], "structuralMatch"):
+                        return False
+                return True
+            if isinstance(expected_struct, (list, tuple)):
+                if len(actual_struct) != len(expected_struct):
+                    return False
+                for a, e in zip(actual_struct, expected_struct):
+                    if not __auto_grader_same(a, e, "structuralMatch"):
+                        return False
+                return True
+            # For primitives, use exact comparison
+            return actual_struct == expected_struct
+        except Exception:
+            return False
+    if compare == "lenient":
+        # Try multiple strategies — if ANY pass, the test passes
+        return (
+            __auto_grader_same(actual, expected, "exact")
+            or __auto_grader_same(actual, expected, "printedOrReturn")
+            or __auto_grader_same(actual, expected, "printedFlex")
+            or __auto_grader_same(actual, expected, "valuesPresent")
+            or __auto_grader_same(actual, expected, "structuralMatch")
+        )
     if compare == "numberRange":
         numbers = __auto_grader_numbers(actual)
         if not numbers or not isinstance(expected, list) or len(expected) != 2:

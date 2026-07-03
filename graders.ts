@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'sourceOnly' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
