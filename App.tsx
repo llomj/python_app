@@ -2130,7 +2130,53 @@ def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tes
         if not returned_ok and not printed_ok:
             actual = printed if printed else returned
             return f"extra generated test {index} failed for args={args}. Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
+    if tests and len(tests) < 3:
+        first_args = tests[0].get("args", [])
+        if first_args and len(first_args) >= 1:
+            probe_inputs = __auto_grader_generate_probe_inputs(first_args)
+            if probe_inputs:
+                outputs = []
+                for probe_args in probe_inputs:
+                    if not __auto_grader_accepts_args(target, probe_args):
+                        continue
+                    old_stdout = sys.stdout
+                    sys.stdout = io.StringIO()
+                    try:
+                        result = target(*probe_args)
+                        output = sys.stdout.getvalue().strip()
+                    except Exception:
+                        result = None
+                        output = ""
+                    finally:
+                        sys.stdout = old_stdout
+                    outputs.append((result, output))
+                if len(outputs) >= 2:
+                    all_same = all(
+                        __auto_grader_deep_normalize(str(r)) == __auto_grader_deep_normalize(str(outputs[0][0]))
+                        and __auto_grader_deep_normalize(o) == __auto_grader_deep_normalize(outputs[0][1])
+                        for r, o in outputs[1:]
+                    )
+                    if all_same and outputs[0][0] is not None:
+                        first_expected = tests[0].get("expected")
+                        if not isinstance(first_expected, bool) and first_expected is not None:
+                            return f"Hardcoded answer suspected: your function returned the same value {outputs[0][0]!r} for {len(outputs)} different inputs. Make sure your function computes the answer dynamically."
     return None
+
+def __auto_grader_generate_probe_inputs(first_args):
+    probes = []
+    if all(isinstance(a, (int, float)) and not isinstance(a, bool) for a in first_args):
+        probes.append([a * 2 + 1 for a in first_args])
+        probes.append([a + 7 for a in first_args])
+        probes.append([-a for a in first_args])
+    elif all(isinstance(a, str) for a in first_args):
+        probes.append([s + "x" for s in first_args])
+        probes.append([s.upper() if s.islower() else s.lower() for s in first_args])
+        probes.append(["test" + s for s in first_args])
+    elif isinstance(first_args[0], list):
+        probes.append([first_args[0] + [99]] + list(first_args[1:]))
+        probes.append([first_args[0][::-1]] + list(first_args[1:]))
+        probes.append([[]] + list(first_args[1:]))
+    return probes[:3] if probes else []
 
 def __auto_grader_function_script_test_cases(function_names, tests):
     cases = list(tests) + __auto_grader_input_generated_cases(function_names, tests)
