@@ -2797,10 +2797,10 @@ print(result)
 
 """
 Problem: 118
-Define a function sum() and a function multiply() that sums and multiplies (respectively) all the numbers in a list of numbers. For example, sum([1, 2, 3, 4]) should return 10, and multiply([1, 2, 3, 4]) should return 24.
+Define a function calculate_sum() and a function multiply() that sums and multiplies (respectively) all the numbers in a list of numbers. For example, calculate_sum([1, 2, 3, 4]) should return 10, and multiply([1, 2, 3, 4]) should return 24.
 """
 
-def sum(numbers):
+def calculate_sum(numbers):
     total = 0  # Start with 0 (additive identity)
     for number in numbers:
         total += number
@@ -2813,7 +2813,7 @@ def multiply(numbers):
     return result
 
 numbers = [1, 2, 3, 4]
-print("Sum:", sum(numbers))
+print("Sum:", calculate_sum(numbers))
 print("Multiply:", multiply(numbers))
 
 """
@@ -4064,21 +4064,21 @@ Problem 184:
 Write a function that takes numbers integer 123 and return 2.
 """
 
-def int(number):  # Should use different name like get_digit or extract_digit
+def get_second_digit(number):
     number = str(number)  # Convert to string: 123 → "123"
     list_number = list(number)[1]  # Convert to list and get index 1: ["1","2","3"][1] → "2"
 
     return list_number  # Returns string "2", not integer 2
 
 number = 123
-print(int(number))  # Output: "2" (string)
+print(get_second_digit(number))  # Output: "2" (string)
 
 """
 Problem 185:
 Write a function that takes numbers integer 12345678 and return 2, 4, 8.
 """
 
-def int(number):  # Should use different name
+def get_indexed_digits(number):
     number = str(number)  # Convert to string: 12345678 → "12345678"
     num2 = number[1]  # Index 1: second digit "2"
     num4 = number[3]  # Index 3: fourth digit "4"
@@ -4087,7 +4087,7 @@ def int(number):  # Should use different name
     return num2, num4, num8  # Returns tuple of strings: ("2", "4", "8")
 
 number = 12345678
-print(int(number))  # Output: ("2", "4", "8")
+print(get_indexed_digits(number))  # Output: ("2", "4", "8")
 
 """
 Problem 186:
