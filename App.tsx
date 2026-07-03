@@ -1049,9 +1049,19 @@ def __auto_grader_same(actual, expected, compare):
             return False
     if compare == "unorderedList":
         try:
-            actual = __auto_grader_maybe_literal(actual)
-            expected = __auto_grader_maybe_literal(expected)
-            return sorted(list(actual)) == sorted(list(expected))
+            actual = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
+            expected = __auto_grader_normalize(__auto_grader_maybe_literal(expected))
+            if not isinstance(actual, (list, tuple)):
+                actual = __auto_grader_normalize(__auto_grader_maybe_literal(str(actual)))
+            if not isinstance(expected, (list, tuple)):
+                expected = __auto_grader_normalize(__auto_grader_maybe_literal(str(expected)))
+            if not isinstance(actual, (list, tuple)) or not isinstance(expected, (list, tuple)):
+                return False
+            if len(actual) != len(expected):
+                return False
+            actual_sorted = sorted(actual, key=lambda x: str(x))
+            expected_sorted = sorted(expected, key=lambda x: str(x))
+            return all(__auto_grader_values_equivalent(a, e) for a, e in zip(actual_sorted, expected_sorted))
         except Exception:
             return False
     if compare == "unorderedWords":
@@ -1059,10 +1069,16 @@ def __auto_grader_same(actual, expected, compare):
             actual = __auto_grader_maybe_literal(actual)
             expected = __auto_grader_maybe_literal(expected)
             if isinstance(actual, str):
-                actual = actual.split()
+                actual = re.split(r'[,\s]+', actual.strip('[](){}'))
             if isinstance(expected, str):
-                expected = expected.split()
-            return sorted(list(actual)) == sorted(list(expected))
+                expected = re.split(r'[,\s]+', expected.strip('[](){}'))
+            if not isinstance(actual, (list, tuple)):
+                actual = list(actual) if hasattr(actual, '__iter__') else [actual]
+            if not isinstance(expected, (list, tuple)):
+                expected = list(expected) if hasattr(expected, '__iter__') else [expected]
+            actual_strs = sorted(str(x).strip().lower() for x in actual if str(x).strip())
+            expected_strs = sorted(str(x).strip().lower() for x in expected if str(x).strip())
+            return actual_strs == expected_strs
         except Exception:
             return False
     if compare == "numberList":
