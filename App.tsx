@@ -1093,25 +1093,37 @@ def __auto_grader_same(actual, expected, compare):
             return False
     if compare == "letterCounts":
         if isinstance(actual, dict):
-            upper = actual.get("upper", actual.get("uppercase"))
-            lower = actual.get("lower", actual.get("lowercase"))
-            return upper == expected.get("upper") and lower == expected.get("lower")
+            actual_lower_keys = {k.lower().replace("_", "").replace(" ", ""): v for k, v in actual.items()}
+            upper = actual_lower_keys.get("upper") or actual_lower_keys.get("uppercase") or actual_lower_keys.get("uppercount") or actual_lower_keys.get("numupper")
+            lower = actual_lower_keys.get("lower") or actual_lower_keys.get("lowercase") or actual_lower_keys.get("lowercount") or actual_lower_keys.get("numlower")
+            if upper is not None and lower is not None:
+                return upper == expected.get("upper") and lower == expected.get("lower")
         if isinstance(actual, (list, tuple)) and len(actual) == 2:
             return list(actual) in ([expected.get("upper"), expected.get("lower")], [expected.get("lower"), expected.get("upper")])
         text = str(actual).lower()
         lower_match = re.search(r"lower\\D+(\\d+)", text)
         upper_match = re.search(r"upper\\D+(\\d+)", text)
+        if not lower_match:
+            lower_match = re.search(r"(\\d+)\\D*lower", text)
+        if not upper_match:
+            upper_match = re.search(r"(\\d+)\\D*upper", text)
         return bool(lower_match and upper_match and int(lower_match.group(1)) == expected.get("lower") and int(upper_match.group(1)) == expected.get("upper"))
     if compare == "vowelConsonantCounts":
         if isinstance(actual, dict):
-            vowels = actual.get("vowels", actual.get("vowel"))
-            consonants = actual.get("consonants", actual.get("consonant"))
-            return vowels == expected.get("vowels") and consonants == expected.get("consonants")
+            actual_lower_keys = {k.lower().replace("_", "").replace(" ", ""): v for k, v in actual.items()}
+            vowels = actual_lower_keys.get("vowels") or actual_lower_keys.get("vowel") or actual_lower_keys.get("vowelcount") or actual_lower_keys.get("numvowels")
+            consonants = actual_lower_keys.get("consonants") or actual_lower_keys.get("consonant") or actual_lower_keys.get("consonantcount") or actual_lower_keys.get("numconsonants")
+            if vowels is not None and consonants is not None:
+                return vowels == expected.get("vowels") and consonants == expected.get("consonants")
         if isinstance(actual, (list, tuple)) and len(actual) == 2:
-            return list(actual) == [expected.get("vowels"), expected.get("consonants")]
+            return list(actual) in ([expected.get("vowels"), expected.get("consonants")], [expected.get("consonants"), expected.get("vowels")])
         text = str(actual).lower()
         vowel_match = re.search(r"vowels?\\D+(\\d+)", text)
         consonant_match = re.search(r"consonants?\\D+(\\d+)", text)
+        if not vowel_match:
+            vowel_match = re.search(r"(\\d+)\\D*vowels?", text)
+        if not consonant_match:
+            consonant_match = re.search(r"(\\d+)\\D*consonants?", text)
         return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
     if __auto_grader_deep_normalize(actual) == __auto_grader_deep_normalize(expected):
         return True
