@@ -819,18 +819,21 @@ def __auto_grader_meaningful_text_matches(actual_text, expected):
     candidates = []
     for line in lines:
         candidates.append(line)
-        for separator in (":", "=", "->"):
+        for separator in (":", "=", "->", "=>", "|", "is", "was"):
             if separator in line:
                 candidates.append(line.rsplit(separator, 1)[-1].strip())
         tokens = re.findall(r"True|False|-?\\d+(?:\\.\\d+)?|['\\\"][^'\\\"]+['\\\"]", line, re.IGNORECASE)
         if tokens:
-            last_token = tokens[-1]
-            candidates.append(last_token if isinstance(last_token, str) else str(last_token))
+            for token in tokens:
+                candidates.append(token if isinstance(token, str) else str(token))
+            candidates.append(tokens[-1] if isinstance(tokens[-1], str) else str(tokens[-1]))
 
     for candidate in candidates:
         if __auto_grader_values_equivalent(candidate, expected_value):
             return True
         if expected_text and __auto_grader_clean_text(candidate).lower() == expected_text.lower():
+            return True
+        if __auto_grader_deep_normalize(candidate) == __auto_grader_deep_normalize(expected):
             return True
 
     last_line = lines[-1]
@@ -841,11 +844,19 @@ def __auto_grader_meaningful_text_matches(actual_text, expected):
         found_numbers = __auto_grader_numbers(last_line)
         if found_numbers:
             try:
-                return math.isclose(float(found_numbers[-1]), float(expected_value), rel_tol=1e-9, abs_tol=1e-9)
+                return any(math.isclose(float(n), float(expected_value), rel_tol=1e-9, abs_tol=1e-9) for n in found_numbers)
             except Exception:
                 return False
     if isinstance(expected_value, str) and expected_value:
         return expected_value.lower() in actual_text.lower()
+    if isinstance(expected_value, (list, tuple)):
+        actual_literal = __auto_grader_normalize(__auto_grader_maybe_literal(actual_text))
+        if isinstance(actual_literal, (list, tuple)):
+            return __auto_grader_values_equivalent(actual_literal, expected_value)
+    if isinstance(expected_value, dict):
+        actual_literal = __auto_grader_normalize(__auto_grader_maybe_literal(actual_text))
+        if isinstance(actual_literal, dict):
+            return __auto_grader_values_equivalent(actual_literal, expected_value)
     return False
 
 def __auto_grader_shape_matches(actual, expected):
