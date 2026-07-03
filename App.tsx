@@ -491,6 +491,30 @@ def __auto_grader_jsonable(value):
         return repr(value)
 
 def __auto_grader_normalize(value):
+    if value is None:
+        return "None"
+    if isinstance(value, bytes):
+        try:
+            return value.decode('utf-8')
+        except Exception:
+            return str(value)
+    if isinstance(value, bytearray):
+        try:
+            return value.decode('utf-8')
+        except Exception:
+            return str(value)
+    if type(value).__name__ == "Decimal":
+        try:
+            return float(value)
+        except Exception:
+            return str(value)
+    if type(value).__name__ == "Fraction":
+        try:
+            return float(value)
+        except Exception:
+            return str(value)
+    if isinstance(value, complex):
+        return str(value)
     if hasattr(value, "isoformat") and callable(value.isoformat):
         try:
             return value.isoformat()
@@ -507,7 +531,9 @@ def __auto_grader_normalize(value):
     if isinstance(value, list):
         return [__auto_grader_normalize(item) for item in value]
     if isinstance(value, set):
-        return [__auto_grader_normalize(item) for item in value]
+        return sorted([__auto_grader_normalize(item) for item in value], key=str)
+    if isinstance(value, frozenset):
+        return sorted([__auto_grader_normalize(item) for item in value], key=str)
     if isinstance(value, dict):
         return {str(key): __auto_grader_normalize(item) for key, item in value.items()}
     return value
@@ -2769,12 +2795,26 @@ def __auto_grader_run():
             printed_ok = bool(printed) and __auto_grader_same(printed, expected, "lenient")
         if not returned_ok and not printed_ok:
             actual = printed if printed else returned
+            hint = ""
+            if returned is None and printed and __auto_grader_same(printed, expected, "printedOrReturn"):
+                hint = " Hint: your function printed the answer instead of returning it. Use 'return' instead of 'print'."
+            elif returned is None and not printed:
+                hint = " Hint: your function returned None and printed nothing. Make sure to use a 'return' statement."
+            elif isinstance(returned, str) and isinstance(expected, (int, float)) and not isinstance(expected, bool):
+                try:
+                    if math.isclose(float(returned), float(expected), rel_tol=1e-6, abs_tol=1e-6):
+                        hint = " Hint: your answer is correct but returned as a string. Try returning a number instead of printing it."
+                except Exception:
+                    pass
+            elif isinstance(expected, str) and isinstance(returned, (int, float)) and not isinstance(returned, bool):
+                hint = " Hint: expected a string but got a number. Try converting with str()."
             return {
                 "passed": False,
                 "functionName": case_target_name,
                 "message": (
                     f"{label} failed for args={args}. "
                     f"Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
+                    + hint
                 )
             }
 
@@ -2956,11 +2996,17 @@ def __auto_grader_run_script():
 
         if not __auto_grader_same(printed, expected, compare):
             if not __auto_grader_same(printed, expected, "lenient"):
+                hint = ""
+                if not printed:
+                    hint = " Hint: your code produced no output. Make sure to use print() to display the result."
+                elif expected and isinstance(expected, str) and printed.lower() == expected.lower():
+                    hint = " Hint: check capitalization — your output matches case-insensitively."
                 return {
                     "passed": False,
                     "message": (
                         f"{label} failed. "
                         f"Expected output {expected!r}, got {__auto_grader_jsonable(printed)!r}."
+                        + hint
                     )
                 }
 
