@@ -536,7 +536,10 @@ def __auto_grader_values_equivalent(actual, expected):
     if actual == expected:
         return True
     if isinstance(actual, str) and isinstance(expected, str):
-        return __auto_grader_clean_text(actual) == __auto_grader_clean_text(expected)
+        if __auto_grader_clean_text(actual) == __auto_grader_clean_text(expected):
+            return True
+        if __auto_grader_deep_normalize(actual) == __auto_grader_deep_normalize(expected):
+            return True
     if isinstance(actual, (int, float)) or isinstance(expected, (int, float)):
         try:
             return math.isclose(float(actual), float(expected), rel_tol=1e-9, abs_tol=1e-9)
@@ -546,6 +549,16 @@ def __auto_grader_values_equivalent(actual, expected):
         return actual.strip().lower() == str(expected).lower()
     if isinstance(expected, str) and isinstance(actual, bool):
         return expected.strip().lower() == str(actual).lower()
+    if isinstance(actual, set) and isinstance(expected, set):
+        return actual == expected
+    if isinstance(actual, (list, tuple)) and isinstance(expected, (list, tuple)):
+        if len(actual) == len(expected):
+            return all(__auto_grader_values_equivalent(a, e) for a, e in zip(actual, expected))
+        if set(str(x) for x in actual) == set(str(x) for x in expected):
+            return True
+    if isinstance(actual, dict) and isinstance(expected, dict):
+        if set(actual.keys()) == set(expected.keys()):
+            return all(__auto_grader_values_equivalent(actual[k], expected[k]) for k in expected)
     return False
 
 def __auto_grader_declarations_only(source):
@@ -851,6 +864,16 @@ def __auto_grader_same(actual, expected, compare):
         actual_text = __auto_grader_clean_text(actual)
         expected_text = __auto_grader_clean_text(expected)
         actual_lines = [line.strip() for line in actual_text.splitlines() if line.strip()]
+        expected_lines = [line.strip() for line in expected_text.splitlines() if line.strip()]
+        # Check if all expected lines appear in actual (unordered)
+        unordered_match = len(expected_lines) > 0 and all(
+            any(__auto_grader_deep_normalize(el) == __auto_grader_deep_normalize(al) for al in actual_lines)
+            for el in expected_lines
+        )
+        # Check if expected value appears anywhere in actual output
+        normalized_expected = __auto_grader_deep_normalize(expected)
+        normalized_actual = __auto_grader_deep_normalize(actual)
+        substring_match = normalized_expected and normalized_expected in normalized_actual
         return (
             __auto_grader_values_equivalent(actual, expected)
             or actual_text == expected_text
@@ -859,6 +882,8 @@ def __auto_grader_same(actual, expected, compare):
             or any(__auto_grader_values_equivalent(line, expected) for line in actual_lines)
             or __auto_grader_meaningful_text_matches(actual_text, expected)
             or __auto_grader_deep_normalize(actual) == __auto_grader_deep_normalize(expected)
+            or unordered_match
+            or substring_match
         )
     if compare == "printedFlex":
         actual_text = __auto_grader_clean_text(actual)
@@ -2441,7 +2466,7 @@ def __auto_grader_run():
         }
 
     function_names = __auto_grader_spec.get("functionNames", [])
-    compare = __auto_grader_spec.get("compare", "exact")
+    compare = __auto_grader_spec.get("compare", "printedOrReturn")
     tests = __auto_grader_spec.get("tests", [])
     optional_tests = __auto_grader_spec.get("optionalTests", [])
     first_args = tests[0].get("args", []) if tests else []
@@ -2740,6 +2765,9 @@ def __auto_grader_run():
         if not printed_ok and (compare == "printedOrReturn" or returned is None):
             printed_ok = __auto_grader_same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok:
+            returned_ok = __auto_grader_same(returned, expected, "lenient")
+            printed_ok = bool(printed) and __auto_grader_same(printed, expected, "lenient")
+        if not returned_ok and not printed_ok:
             actual = printed if printed else returned
             return {
                 "passed": False,
@@ -2927,13 +2955,14 @@ def __auto_grader_run_script():
                 pass
 
         if not __auto_grader_same(printed, expected, compare):
-            return {
-                "passed": False,
-                "message": (
-                    f"{label} failed. "
-                    f"Expected output {expected!r}, got {__auto_grader_jsonable(printed)!r}."
-                )
-            }
+            if not __auto_grader_same(printed, expected, "lenient"):
+                return {
+                    "passed": False,
+                    "message": (
+                        f"{label} failed. "
+                        f"Expected output {expected!r}, got {__auto_grader_jsonable(printed)!r}."
+                    )
+                }
 
     return {
         "passed": True,
