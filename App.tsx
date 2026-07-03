@@ -1094,15 +1094,27 @@ def __auto_grader_same(actual, expected, compare):
         except Exception:
             return False
     if compare == "dictUnorderedLists":
-        actual = __auto_grader_maybe_literal(actual)
-        expected = __auto_grader_maybe_literal(expected)
+        actual = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
+        expected = __auto_grader_normalize(__auto_grader_maybe_literal(expected))
         if not isinstance(actual, dict) or not isinstance(expected, dict):
             return False
-        if set(actual.keys()) != set(expected.keys()):
+        actual_str_keys = {str(k): v for k, v in actual.items()}
+        expected_str_keys = {str(k): v for k, v in expected.items()}
+        if set(actual_str_keys.keys()) != set(expected_str_keys.keys()):
             return False
         try:
-            for key in expected:
-                if sorted(list(actual[key])) != sorted(list(expected[key])):
+            for key in expected_str_keys:
+                actual_list = actual_str_keys.get(key, [])
+                expected_list = expected_str_keys[key]
+                if not isinstance(actual_list, (list, tuple)):
+                    actual_list = [actual_list]
+                if not isinstance(expected_list, (list, tuple)):
+                    expected_list = [expected_list]
+                if len(actual_list) != len(expected_list):
+                    return False
+                actual_sorted = sorted(actual_list, key=lambda x: str(x))
+                expected_sorted = sorted(expected_list, key=lambda x: str(x))
+                if not all(__auto_grader_values_equivalent(a, e) for a, e in zip(actual_sorted, expected_sorted)):
                     return False
             return True
         except Exception:
