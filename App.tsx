@@ -746,6 +746,26 @@ def __auto_grader_hardcoded_expected_error(expected):
 def __auto_grader_clean_text(value):
     return "\\n".join(line.rstrip() for line in str(value).strip().splitlines())
 
+def __auto_grader_deep_normalize(value):
+    text = __auto_grader_clean_text(value)
+    if not text:
+        return text
+    lines = []
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        normalized = line
+        normalized = normalized.replace('"', "'")
+        normalized = re.sub(r'\\btrue\\b', 'True', normalized, flags=re.IGNORECASE)
+        normalized = re.sub(r'\\bfalse\\b', 'False', normalized, flags=re.IGNORECASE)
+        normalized = re.sub(r'\\bnone\\b', 'None', normalized, flags=re.IGNORECASE)
+        normalized = re.sub(r'(?<![\\w.])\\d+\\.0+(?![\\w.])', lambda m: str(int(float(m.group()))), normalized)
+        normalized = re.sub(r'(?<![\\w.])\\d+\\.0(?=[^\\d]|$)', lambda m: str(int(float(m.group()))), normalized)
+        normalized = re.sub(r'\\s+', ' ', normalized).strip()
+        normalized = normalized.rstrip('.,;:')
+        lines.append(normalized)
+    return "\\n".join(lines)
+
 def __auto_grader_compact_pattern(value):
     return "\\n".join(re.sub(r"[ \\t]+", "", line) for line in __auto_grader_clean_text(value).splitlines())
 
@@ -838,6 +858,7 @@ def __auto_grader_same(actual, expected, compare):
             or __auto_grader_compact_pattern(actual_text) == __auto_grader_compact_pattern(expected_text)
             or any(__auto_grader_values_equivalent(line, expected) for line in actual_lines)
             or __auto_grader_meaningful_text_matches(actual_text, expected)
+            or __auto_grader_deep_normalize(actual) == __auto_grader_deep_normalize(expected)
         )
     if compare == "printedFlex":
         actual_text = __auto_grader_clean_text(actual)
@@ -996,6 +1017,8 @@ def __auto_grader_same(actual, expected, compare):
         vowel_match = re.search(r"vowels?\\D+(\\d+)", text)
         consonant_match = re.search(r"consonants?\\D+(\\d+)", text)
         return bool(vowel_match and consonant_match and int(vowel_match.group(1)) == expected.get("vowels") and int(consonant_match.group(1)) == expected.get("consonants"))
+    if __auto_grader_deep_normalize(actual) == __auto_grader_deep_normalize(expected):
+        return True
     return actual == expected
 
 def __auto_grader_accepts_args(candidate, args, kwargs=None):
