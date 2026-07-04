@@ -10566,7 +10566,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setAiHintText(formatAiReviewHintText(diagnosticReview));
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
-                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI review has identified the likely issue. Fix your code and press RUN again, or use the Next button in the problem panel.`);
+                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI REVIEW\n${diagnosticReview.explanation}${diagnosticReview.suggestedFix ? `\n\nSuggested fix:\n${diagnosticReview.suggestedFix}` : ''}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
             } else {
                 setOutputStatus('fail');
                 setOutput(`${userOutput}${errorMessage}`);

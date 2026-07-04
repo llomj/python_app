@@ -137,6 +137,13 @@ const getLineText = (code: string, lineNumber: number | null) => {
     return code.split('\n')[lineNumber - 1]?.trim() || '';
 };
 
+const findReturnAssignmentLine = (code: string) => {
+    return code
+        .split('\n')
+        .map((line, index) => ({ line: line.trim(), number: index + 1 }))
+        .find(item => /^return\b/.test(item.line) && /=(?!=)/.test(item.line) && !/[!<>]=/.test(item.line));
+};
+
 const extractErrorLineNumber = (message: string) => {
     const match = message.match(/line\s+(\d+)/i);
     return match ? Number(match[1]) : null;
@@ -157,6 +164,10 @@ const detectLikelySyntaxIssue = (code: string, message: string) => {
         return `Specific issue: Python thinks a comma is missing${lineHint}. Check lists, tuples, function arguments, and dictionary entries around that line.`;
     }
     if (/invalid syntax|SyntaxError/i.test(message)) {
+        const returnAssignmentLine = findReturnAssignmentLine(code);
+        if (returnAssignmentLine) {
+            return `Specific issue: invalid assignment inside a return statement on line ${returnAssignmentLine.number}: \`${returnAssignmentLine.line}\`. Python cannot do \`return x = value\`; assign first, then return the changed object.`;
+        }
         const missingColonLine = code
             .split('\n')
             .map((line, index) => ({ line: line.trim(), number: index + 1 }))
@@ -773,7 +784,12 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
             verdict = 'likely_incorrect';
             confidence = Math.max(confidence, 0.82);
             notes.push(`The grader/run system reported this concrete failure: ${graderMessage}`);
-            fixes.push(visibleSolutionFix(request) || 'Fix the runtime error first, then rerun so the grader can compare the actual return value/output.');
+            const returnAssignmentLine = findReturnAssignmentLine(code);
+            fixes.push(
+                returnAssignmentLine
+                    ? 'Split the assignment and return into separate lines, for example: `dic["c"] = 88` on one line, then `return dic` on the next line.'
+                    : visibleSolutionFix(request) || 'Fix the runtime error first, then rerun so the grader can compare the actual return value/output.'
+            );
         }
     }
 
