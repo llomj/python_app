@@ -1121,6 +1121,19 @@ def __auto_grader_same(actual, expected, compare):
             return True
         except Exception:
             return False
+    if compare == "dictAddedPair":
+        actual = __auto_grader_normalize(__auto_grader_maybe_literal(actual))
+        expected = __auto_grader_normalize(__auto_grader_maybe_literal(expected))
+        if not isinstance(actual, dict) or not isinstance(expected, dict):
+            return False
+        if len(actual) <= len(expected):
+            return False
+        actual_str_keys = {str(k): v for k, v in actual.items()}
+        expected_str_keys = {str(k): v for k, v in expected.items()}
+        for key, value in expected_str_keys.items():
+            if key not in actual_str_keys or not __auto_grader_values_equivalent(actual_str_keys[key], value):
+                return False
+        return True
     if compare == "letterCounts":
         if isinstance(actual, dict):
             actual_lower_keys = {k.lower().replace("_", "").replace(" ", ""): v for k, v in actual.items()}
@@ -2926,7 +2939,7 @@ def __auto_grader_run():
         printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)
         if not printed_ok and (compare == "printedOrReturn" or returned is None):
             printed_ok = __auto_grader_same(printed, expected, "printedOrReturn")
-        if not returned_ok and not printed_ok:
+        if not returned_ok and not printed_ok and compare not in ("dictAddedPair",):
             returned_ok = __auto_grader_same(returned, expected, "lenient")
             printed_ok = bool(printed) and __auto_grader_same(printed, expected, "lenient")
         if not returned_ok and not printed_ok:
@@ -10537,10 +10550,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     visibleSolution: displaySolution,
                 };
                 setLatestAiReviewRequest(reviewRequest);
-                setLatestAiReviewResult(null);
+                const diagnosticReview = buildDiagnosticReview(reviewRequest);
+                setLatestAiReviewResult(diagnosticReview);
+                setAiHintText(`${diagnosticReview.verdict.replace('_', ' ').toUpperCase()}\n\n${diagnosticReview.explanation}${diagnosticReview.suggestedFix ? `\n\nSuggested fix: ${diagnosticReview.suggestedFix}` : ''}`);
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
-                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI review has identified the likely issue. Fix your code and press RUN again, or use the Next button in the problem panel.`);
             } else {
                 setOutputStatus('fail');
                 setOutput(`${userOutput}${errorMessage}`);

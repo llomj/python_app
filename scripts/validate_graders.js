@@ -365,6 +365,16 @@ def same(actual, expected, compare):
             return all(sorted(list(actual[key])) == sorted(list(expected[key])) for key in expected)
         except Exception:
             return False
+    if compare == "dictAddedPair":
+        actual = normalize(maybe_literal(actual))
+        expected = normalize(maybe_literal(expected))
+        if not isinstance(actual, dict) or not isinstance(expected, dict):
+            return False
+        if len(actual) <= len(expected):
+            return False
+        actual_str_keys = {str(k): v for k, v in actual.items()}
+        expected_str_keys = {str(k): v for k, v in expected.items()}
+        return all(key in actual_str_keys and values_equivalent(actual_str_keys[key], value) for key, value in expected_str_keys.items())
     if compare == "letterCounts":
         if isinstance(actual, dict):
             return actual.get("upper", actual.get("uppercase")) == expected.get("upper") and actual.get("lower", actual.get("lowercase")) == expected.get("lower")

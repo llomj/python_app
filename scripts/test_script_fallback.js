@@ -121,6 +121,7 @@ const methodExpressionGrader = AUTO_GRADERS[1574];
 const mixedExceptionGrader = AUTO_GRADERS[944];
 const attrExceptionGrader = AUTO_GRADERS[1571];
 const pureExceptionGrader = AUTO_GRADERS[948];
+const addKeyValuePairGrader = AUTO_GRADERS[797];
 
 const scriptAnswer = `
 result = number ** 2
@@ -325,6 +326,34 @@ raise RecursionError("fake")
 const pureExceptionScriptResult = runAutoGrade(buildAutoGradeScript(pureExceptionGrader, pureExceptionScriptAnswer));
 if (pureExceptionScriptResult.passed) {
   throw new Error(`Expected pure exception-only script answer to stay blocked, got: ${JSON.stringify(pureExceptionScriptResult)}`);
+}
+
+const addKeyValuePairAnswer = `
+def add_key_value_pair(dic):
+    dic["c"] = 88
+    return dic
+`;
+const addKeyValuePairResult = runAutoGrade(buildAutoGradeScript(addKeyValuePairGrader, addKeyValuePairAnswer));
+if (!addKeyValuePairResult.passed) {
+  throw new Error(`Expected add-key-value answer with arbitrary new pair to pass, got: ${JSON.stringify(addKeyValuePairResult)}`);
+}
+
+const addKeyValuePairNoop = `
+def add_key_value_pair(dic):
+    return dic
+`;
+const addKeyValuePairNoopResult = runAutoGrade(buildAutoGradeScript(addKeyValuePairGrader, addKeyValuePairNoop));
+if (addKeyValuePairNoopResult.passed) {
+  throw new Error(`Expected add-key-value no-op answer to fail, got: ${JSON.stringify(addKeyValuePairNoopResult)}`);
+}
+
+const addKeyValuePairInvalid = `
+def add_key_value_pair(dic):
+    return dic["c"] = 88
+`;
+const addKeyValuePairInvalidResult = runAutoGrade(buildAutoGradeScript(addKeyValuePairGrader, addKeyValuePairInvalid));
+if (addKeyValuePairInvalidResult.passed) {
+  throw new Error(`Expected invalid assignment-in-return answer to fail, got: ${JSON.stringify(addKeyValuePairInvalidResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

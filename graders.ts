@@ -1,4 +1,4 @@
-export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'letterCounts' | 'vowelConsonantCounts';
+export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'dictAddedPair' | 'letterCounts' | 'vowelConsonantCounts';
 
 export interface AutoTestCase {
     args: unknown[];
@@ -5842,9 +5842,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   },
   797: {
     functionNames: ["add_key_value_pair"],
+    compare: 'dictAddedPair',
     tests: [
-      { args: [{"name": "Alice"}], expected: {"name": "Alice", "new_key": "new_value"} },
-      { args: [{"x": 1}], expected: {"x": 1, "new_key": "new_value"} }
+      { args: [{"name": "Alice"}], expected: {"name": "Alice"} },
+      { args: [{"x": 1}], expected: {"x": 1} }
     ]
   },
   798: {
