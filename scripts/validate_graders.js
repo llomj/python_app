@@ -1590,6 +1590,9 @@ def named_metamorphic_cases(function_names, tests):
     if name_set >= {"sum_list", "add"}:
         add("sum_list", [[10, -3, 5]], 12)
         add("add", [-4, 9], 5)
+    if name_set >= {"calculate_sum", "multiply"}:
+        add("calculate_sum", [[10, -3, 5]], 12)
+        add("multiply", [[-2, 4, 5]], -40)
     if name_set >= {"sum", "multiply"}:
         add("sum", [[10, -3, 5]], 12)
         add("multiply", [[-2, 4, 5]], -40)

@@ -958,10 +958,10 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
     118: {
-        functionNames: ['sum', 'multiply'],
+        functionNames: ['calculate_sum', 'multiply'],
         tests: [
-            { functionName: 'sum', args: [[1, 2, 3, 4]], expected: 10 },
-            { functionName: 'sum', args: [[-2, 5, 0]], expected: 3 },
+            { functionName: 'calculate_sum', args: [[1, 2, 3, 4]], expected: 10 },
+            { functionName: 'calculate_sum', args: [[-2, 5, 0]], expected: 3 },
             { functionName: 'multiply', args: [[1, 2, 3, 4]], expected: 24 },
             { functionName: 'multiply', args: [[-2, 5, 3]], expected: -30 }
         ]

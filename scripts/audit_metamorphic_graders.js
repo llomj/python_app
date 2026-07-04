@@ -535,7 +535,7 @@ function namedMetamorphicRule(functionNames, tests) {
   const names = new Set(functionNames || []);
   const hasAll = (...items) => items.every(name => names.has(name));
   if (hasAll('sum_list', 'add')) return 'helper_sum_and_add';
-  if (hasAll('sum', 'multiply')) return 'helper_sum_and_multiply';
+  if (hasAll('calculate_sum', 'multiply') || hasAll('sum', 'multiply')) return 'helper_sum_and_multiply';
   if (hasAll('max_func', 'max_in_list')) return 'helper_reduce_max';
   if (hasAll('is_even', 'filter_even_numbers')) return 'helper_even_filter';
   if (hasAll('word_list', 'capitalize_first_letter')) return 'helper_capitalize_words';

@@ -72,6 +72,8 @@ interface AutoGradeResult {
     output?: string;
 }
 
+const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
+
 const getOfflineAiStatusLabel = (status: OfflineAiStatus) => {
     switch (status) {
         case 'failed':
@@ -973,7 +975,7 @@ def __auto_grader_same(actual, expected, compare):
         expected_text = __auto_grader_clean_text(expected)
         # Extract all values from expected
         expected_numbers = __auto_grader_numbers(expected_text)
-        expected_strings = re.findall(r"['\"]([^'\"]+)['\"]", expected_text)
+        expected_strings = re.findall(r"['\\\"]([^'\\\"]+)['\\\"]", expected_text)
         # Check all numbers appear in actual
         actual_numbers = __auto_grader_numbers(actual_text)
         for num in expected_numbers:
@@ -2089,6 +2091,9 @@ def __auto_grader_named_metamorphic_cases(function_names, tests):
     if name_set >= {"sum_list", "add"}:
         add("sum_list", [[10, -3, 5]], 12)
         add("add", [-4, 9], 5)
+    if name_set >= {"calculate_sum", "multiply"}:
+        add("calculate_sum", [[10, -3, 5]], 12)
+        add("multiply", [[-2, 4, 5]], -40)
     if name_set >= {"sum", "multiply"}:
         add("sum", [[10, -3, 5]], 12)
         add("multiply", [[-2, 4, 5]], -40)
@@ -10346,6 +10351,30 @@ const App: React.FC = () => {
         });
     };
 
+    const tryAiAutoWinFallback = async (request: AiReviewRequest) => {
+        if (!offlineAiState.enabled || offlineAiState.status !== 'ready') {
+            return null;
+        }
+        try {
+            const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
+            setLatestAiReviewResult(review);
+            setAiHintText(`${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`);
+            const canAutoWin =
+                review.source === 'offline_model' &&
+                review.verdict === 'likely_correct' &&
+                review.confidence >= AI_AUTO_WIN_MIN_CONFIDENCE;
+            return canAutoWin ? review : null;
+        } catch (error: any) {
+            const fallback = buildDiagnosticReview({
+                ...request,
+                graderMessage: `AI fallback failed: ${String(error?.message || error || 'Unknown error')}`,
+                graderPassed: false,
+            });
+            setLatestAiReviewResult(fallback);
+            return null;
+        }
+    };
+
     const handleRestartProgress = () => {
         setStatsByMode(createEmptyStatsByMode());
         loadRandomExercise();
@@ -10454,10 +10483,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     setPendingNextProblem(true);
                     setOutput(`${displayOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
-                    updateCurrentModeStats('failed');
-                    setOutputStatus('fail');
+                    const checkingMessage = offlineAiState.enabled && offlineAiState.status === 'ready'
+                        ? '\n\nDeterministic grader failed. Offline AI is checking whether this is still logically correct...'
+                        : '';
+                    setOutputStatus('info');
                     setPendingNextProblem(true);
-                    setOutput(`${displayOutput}AUTO FAILED\n${gradeResult.message}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                    setOutput(`${displayOutput}AUTO CHECK\n${gradeResult.message}${checkingMessage}`);
+                    const aiAutoWin = await tryAiAutoWinFallback(reviewRequest);
+                    if (aiAutoWin) {
+                        updateCurrentModeStats('success');
+                        setOutputStatus('win');
+                        setOutput(`${displayOutput}AI AUTO WIN\nDeterministic grader failed, but the offline model judged this answer logically correct with ${Math.round(aiAutoWin.confidence * 100)}% confidence.\n\nOriginal grader message:\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
+                    } else {
+                        updateCurrentModeStats('failed');
+                        setOutputStatus('fail');
+                        setOutput(`${displayOutput}AUTO FAILED\n${gradeResult.message}${offlineAiState.enabled && offlineAiState.status === 'ready' ? '\n\nOffline AI did not confirm this as correct.' : ''}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                    }
                 }
             } else {
                 setOutputStatus('info');
