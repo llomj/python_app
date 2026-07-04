@@ -73,6 +73,17 @@ interface AutoGradeResult {
 }
 
 const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
+const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini']);
+
+const isAiAutoWinReview = (review: AiReviewResult) => (
+    AI_AUTO_WIN_MODEL_SOURCES.has(review.source) &&
+    review.verdict === 'likely_correct' &&
+    review.confidence >= AI_AUTO_WIN_MIN_CONFIDENCE
+);
+
+const formatAiReviewHintText = (review: AiReviewResult) => (
+    `${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`
+);
 
 const getOfflineAiStatusLabel = (status: OfflineAiStatus) => {
     switch (status) {
@@ -10364,19 +10375,15 @@ const App: React.FC = () => {
         });
     };
 
-    const tryAiAutoWinFallback = async (request: AiReviewRequest) => {
-        if (!offlineAiState.enabled || offlineAiState.status !== 'ready') {
-            return null;
-        }
+    const tryAiAutoWinFallback = async (request: AiReviewRequest): Promise<{ review: AiReviewResult | null; autoWinReview: AiReviewResult | null }> => {
         try {
             const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
             setLatestAiReviewResult(review);
-            setAiHintText(`${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`);
-            const canAutoWin =
-                review.source === 'offline_model' &&
-                review.verdict === 'likely_correct' &&
-                review.confidence >= AI_AUTO_WIN_MIN_CONFIDENCE;
-            return canAutoWin ? review : null;
+            setAiHintText(formatAiReviewHintText(review));
+            return {
+                review,
+                autoWinReview: isAiAutoWinReview(review) ? review : null,
+            };
         } catch (error: any) {
             const fallback = buildDiagnosticReview({
                 ...request,
@@ -10384,7 +10391,8 @@ const App: React.FC = () => {
                 graderPassed: false,
             });
             setLatestAiReviewResult(fallback);
-            return null;
+            setAiHintText(formatAiReviewHintText(fallback));
+            return { review: fallback, autoWinReview: null };
         }
     };
 
@@ -10496,21 +10504,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     setPendingNextProblem(true);
                     setOutput(`${displayOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
-                    const checkingMessage = offlineAiState.enabled && offlineAiState.status === 'ready'
-                        ? '\n\nDeterministic grader failed. Offline AI is checking whether this is still logically correct...'
-                        : '';
                     setOutputStatus('info');
                     setPendingNextProblem(true);
-                    setOutput(`${displayOutput}AUTO CHECK\n${gradeResult.message}${checkingMessage}`);
-                    const aiAutoWin = await tryAiAutoWinFallback(reviewRequest);
-                    if (aiAutoWin) {
+                    setOutput(`${displayOutput}AUTO CHECK\n${gradeResult.message}\n\nDeterministic grader failed. AI reviewer is checking whether this is logically correct...`);
+                    const aiFallback = await tryAiAutoWinFallback(reviewRequest);
+                    if (aiFallback.autoWinReview) {
                         updateCurrentModeStats('success');
                         setOutputStatus('win');
-                        setOutput(`${displayOutput}AI AUTO WIN\nDeterministic grader failed, but the offline model judged this answer logically correct with ${Math.round(aiAutoWin.confidence * 100)}% confidence.\n\nOriginal grader message:\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
+                        setOutput(`${displayOutput}AI AUTO WIN\nDeterministic grader failed, but ${getAiReviewSourceLabel(aiFallback.autoWinReview.source)} judged this answer logically correct with ${Math.round(aiFallback.autoWinReview.confidence * 100)}% confidence.\n\nOriginal grader message:\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                     } else {
                         updateCurrentModeStats('failed');
                         setOutputStatus('fail');
-                        setOutput(`${displayOutput}AUTO FAILED\n${gradeResult.message}${offlineAiState.enabled && offlineAiState.status === 'ready' ? '\n\nOffline AI did not confirm this as correct.' : ''}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                        const review = aiFallback.review;
+                        const reviewNote = review
+                            ? review.source === 'diagnostic'
+                                ? '\n\nAI reviewer used built-in diagnostics only. No model-backed review confirmed this as correct.'
+                                : `\n\nAI reviewer returned ${review.verdict.replace('_', ' ')} with ${Math.round(review.confidence * 100)}% confidence from ${getAiReviewSourceLabel(review.source)}.`
+                            : '\n\nAI reviewer could not complete.';
+                        setOutput(`${displayOutput}AUTO FAILED\n${gradeResult.message}${reviewNote}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
                     }
                 }
             } else {
@@ -10552,7 +10563,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setLatestAiReviewRequest(reviewRequest);
                 const diagnosticReview = buildDiagnosticReview(reviewRequest);
                 setLatestAiReviewResult(diagnosticReview);
-                setAiHintText(`${diagnosticReview.verdict.replace('_', ' ').toUpperCase()}\n\n${diagnosticReview.explanation}${diagnosticReview.suggestedFix ? `\n\nSuggested fix: ${diagnosticReview.suggestedFix}` : ''}`);
+                setAiHintText(formatAiReviewHintText(diagnosticReview));
                 setOutputStatus('fail');
                 setPendingNextProblem(true);
                 setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI review has identified the likely issue. Fix your code and press RUN again, or use the Next button in the problem panel.`);
@@ -10666,13 +10677,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             explanation: `${setupNote}${diagnosticResult.explanation}`,
         };
         setLatestAiReviewResult(immediateResult);
-        setAiHintText(`${immediateResult.verdict.replace('_', ' ').toUpperCase()}\n\n${immediateResult.explanation}${immediateResult.suggestedFix ? `\n\nSuggested fix: ${immediateResult.suggestedFix}` : ''}`);
-
-        const shouldTryModelReview = offlineAiState.enabled && offlineAiState.status === 'ready';
-        if (!shouldTryModelReview) {
-            setAiReviewRunning(false);
-            return;
-        }
+        setAiHintText(formatAiReviewHintText(immediateResult));
 
         setAiReviewRunning(true);
         try {
@@ -10684,7 +10689,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ? { ...review, explanation: `${setupNote}${review.explanation}` }
                 : review;
             setLatestAiReviewResult(result);
-            setAiHintText(`${result.verdict.replace('_', ' ').toUpperCase()}\n\n${result.explanation}${result.suggestedFix ? `\n\nSuggested fix: ${result.suggestedFix}` : ''}`);
+            setAiHintText(formatAiReviewHintText(result));
         } catch (error: any) {
             const fallback = buildDiagnosticReview({
                 ...request,
@@ -10696,7 +10701,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 explanation: `AI review could not complete, so built-in offline review checked this code instead. ${fallback.explanation}`,
             };
             setLatestAiReviewResult(result);
-            setAiHintText(`${result.verdict.replace('_', ' ').toUpperCase()}\n\n${result.explanation}${result.suggestedFix ? `\n\nSuggested fix: ${result.suggestedFix}` : ''}`);
+            setAiHintText(formatAiReviewHintText(result));
         } finally {
             setAiReviewRunning(false);
         }
