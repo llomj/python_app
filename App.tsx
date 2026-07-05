@@ -189,8 +189,8 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
     border: '#1d2d44',
     count: '#3b82f6',
     wins: '#22c55e',
-    fail: '#ef4444',
-    rate: '#f59e0b',
+    fail: '#FF1900',
+    rate: '#FF9700',
     value: '#ffffff',
     icon: '#9ca3af',
     iconBackground: '#050c18',
@@ -210,13 +210,13 @@ const DEFAULT_TOOL_PANEL_COLORS: ToolPanelColorSettings = {
     footerText: '#9ca3af',
     fileText: '#d1d5db',
     panelLabelText: '#9ca3af',
-    info: '#f59e0b',
+    info: '#FF9700',
     solution: '#3b82f6',
     ai: '#3b82f6',
     custom: '#3b82f6',
     win: '#22c55e',
-    failed: '#ef4444',
-    reset: '#f97316',
+    failed: '#FF1900',
+    reset: '#FF9700',
 };
 
 const loadToolPanelColorSettings = () => {
@@ -9104,10 +9104,10 @@ const SYNTAX_SECTION_STYLES: Record<string, { border: string; bg: string; title:
         dot: 'bg-[#3b82f6]'
     },
     'EVALUATION ORDER': {
-        border: 'border-[#f59e0b]/35',
-        bg: 'bg-[#f59e0b]/10',
+        border: 'border-[#FF9700]/35',
+        bg: 'bg-[#FF9700]/10',
         title: 'text-[#fbbf24]',
-        dot: 'bg-[#f59e0b]'
+        dot: 'bg-[#FF9700]'
     },
     'EXECUTION ORDER': {
         border: 'border-[#22c55e]/35',
@@ -9688,13 +9688,13 @@ const getGuideSectionStyle = (tone: GuideSection['tone']) => {
         case 'goal':
             return { color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.28)', backgroundColor: 'rgba(8, 47, 73, 0.24)' };
         case 'requirements':
-            return { color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.30)', backgroundColor: 'rgba(69, 26, 3, 0.22)' };
+            return { color: '#FF9700', borderColor: 'rgba(255, 151, 0, 0.30)', backgroundColor: 'rgba(69, 26, 3, 0.22)' };
         case 'steps':
             return { color: '#22c55e', borderColor: 'rgba(34, 197, 94, 0.26)', backgroundColor: 'rgba(20, 83, 45, 0.20)' };
         case 'hints':
             return { color: '#a78bfa', borderColor: 'rgba(167, 139, 250, 0.26)', backgroundColor: 'rgba(49, 46, 129, 0.20)' };
         default:
-            return { color: '#f59e0b', borderColor: 'rgba(245, 158, 11, 0.26)', backgroundColor: 'rgba(8, 18, 34, 0.34)' };
+            return { color: '#FF9700', borderColor: 'rgba(255, 151, 0, 0.26)', backgroundColor: 'rgba(8, 18, 34, 0.34)' };
     }
 };
 
@@ -9717,8 +9717,8 @@ const getAiStepTone = (step: string, accentColor: string) => {
     if (normalized.includes('output analysis')) {
         if (normalized.includes('incorrect')) {
             return {
-                color: '#ef4444',
-                borderColor: 'rgba(239, 68, 68, 0.38)',
+                color: '#FF1900',
+                borderColor: 'rgba(255, 25, 0, 0.38)',
                 backgroundColor: 'rgba(127, 29, 29, 0.22)',
             };
         }
@@ -11452,8 +11452,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: editorColors.problemText, fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
                             {exercise.description}
                             {showBreakdownFor === exercise.id && (
-                                <div style={{ marginTop: '0.75rem', borderTop: '1px solid rgba(245, 158, 11, 0.2)', paddingTop: '0.5rem' }}>
-                                    <h4 style={{ fontSize: '0.7rem', fontWeight: 700, color: '#f59e0b', margin: '0 0 0.35rem', display: 'flex', alignItems: 'center', gap: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                                <div style={{ marginTop: '0.75rem', borderTop: '1px solid rgba(255, 151, 0, 0.2)', paddingTop: '0.5rem' }}>
+                                    <h4 style={{ fontSize: '0.7rem', fontWeight: 700, color: '#FF9700', margin: '0 0 0.35rem', display: 'flex', alignItems: 'center', gap: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                                         <Lightbulb size={11} /> Guide
                                     </h4>
                                     <div style={{ display: 'grid', gap: '0.55rem', color: '#c8cdd5', fontSize: '0.8125rem', lineHeight: 1.65 }}>
