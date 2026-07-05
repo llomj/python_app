@@ -199,7 +199,7 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
 const DEFAULT_PANEL_COLORS: PanelColorSettings = {
     background: '#081222',
     border: '#5876a0',
-    alpha: 8,
+    alpha: 40,
 };
 
 const DEFAULT_TOOL_PANEL_COLORS: ToolPanelColorSettings = {
@@ -11014,7 +11014,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     if (bootStage !== 'launched') {
         return (
-            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500" style={{ backgroundColor: panelColors.background }}>
+            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500" style={{ backgroundColor: '#050c18' }}>
                 <div className="relative mb-8 flex-shrink-0">
                     <div className="absolute inset-0 bg-[#3b82f6]/20 blur-3xl rounded-full animate-pulse"></div>
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" className={`w-20 h-20 relative z-10 ${bootStage === 'loading' ? 'animate-bounce' : 'scale-110'}`} alt="Python" />
@@ -11057,7 +11057,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     return (
         <div
             className="h-screen text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
-            style={{ backgroundColor: panelColors.background }}
+            style={{ backgroundColor: '#050c18' }}
         >
             <div
                 ref={headerRef}
@@ -11367,7 +11367,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                     data-editor-panel
                     className="mb-28 rounded-xl flex flex-col shadow-2xl border overflow-hidden"
-                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: panelColors.background, borderColor: panelColors.border }}
+                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelColors.border }}
                 >
                     <div
                         className="hidden"
@@ -11390,7 +11390,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                     <div
                         className="flex border-b overflow-x-auto no-scrollbar"
-                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: panelColors.background, borderColor: panelColors.border }}
+                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelColors.border }}
                     >
                         {files.map((f, idx) => (
                             <button
@@ -11398,7 +11398,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 onClick={() => setActiveFileIndex(idx)}
                                 className="px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r whitespace-nowrap"
                                 style={{
-                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : panelColors.background,
+                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : hexToRgba(panelColors.background, panelColors.alpha / 100),
                                     borderColor: panelColors.border,
                                     borderBottom: activeFileIndex === idx ? `2px solid ${countRowColors.count}` : `1px solid ${panelColors.border}`,
                                     color: activeFileIndex === idx ? toolPanelColors.fileText : editorColors.gutterText,
@@ -11411,7 +11411,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         ref={editorShellRef}
                         className="flex-grow relative border-b"
-                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, backgroundColor: panelColors.background, borderColor: panelColors.border }}
+                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelColors.border }}
                     >
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
@@ -11463,7 +11463,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </>
                         )}
                     </div>
-                    <div className="flex-shrink-0" style={{ backgroundColor: panelColors.background }}>
+                    <div className="flex-shrink-0" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100) }}>
                         <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: panelColors.border }}>
                             <span className="text-xs font-bold uppercase tracking-wider" style={{ color: toolPanelColors.panelLabelText }}>Output</span>
                             <button
@@ -11569,7 +11569,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {/* Fixed footer - centered version button */}
             <div
                 className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 border-t py-2 px-4"
-                style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))', backgroundColor: panelColors.background, borderColor: panelBorderSoft }}
+                style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))', backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelBorderSoft }}
             >
                 <div className="relative flex items-center justify-center">
                      <button onClick={() => window.location.reload()} className="flex items-center gap-2 hover:brightness-125 transition-all px-3 py-2 rounded-full border" title="Reload app" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: toolPanelColors.footerText }}
@@ -12008,7 +12008,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
-                                                <ColorField label="App + Panel Background" value={panelColors.background} onChange={(value) => setPanelColors(prev => ({ ...prev, background: value }))} />
+                                                <ColorField label="Panel Background" value={panelColors.background} onChange={(value) => setPanelColors(prev => ({ ...prev, background: value }))} />
                                                 <ColorField label="Panel Border" value={panelColors.border} onChange={(value) => setPanelColors(prev => ({ ...prev, border: value }))} />
                                                 <label className="flex items-center justify-between gap-3 rounded-xl border border-[#1d2d44] bg-[#050c18]/80 px-3 py-3">
                                                     <span className="min-w-0">
