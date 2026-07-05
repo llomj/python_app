@@ -20627,8 +20627,8 @@ Define a function sum() and a function multiply() that sums and multiplies (resp
 # The colon (:) at the end is REQUIRED - it tells Python that the function body follows.
 # The function body must be indented (typically 4 spaces) to show it belongs to this function.
 #==============================================================================
-# Built-in function 'sum()' adds all numbers in an iterable and returns the total.
-def sum(numbers):
+# Custom function: calculates sum of all numbers in a list
+def calculate_sum(numbers):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
 #------------------------------------------------------------------------------
@@ -29393,11 +29393,10 @@ Write a function that takes numbers integer 123 and return 2.
 """
 
 # Extracts digit at index 1 (second digit) from integer
-# WARNING: Function name 'int' shadows built-in int() function - bad practice!
 #==============================================================================
-# FUNCTION DEFINITION: 'int'
+# FUNCTION DEFINITION: 'get_second_digit'
 #------------------------------------------------------------------------------
-# Purpose: This line defines a reusable function named 'int'.
+# Purpose: This line defines a reusable function named 'get_second_digit'.
 # In Python, functions are defined using the 'def' keyword followed by the function name.
 # Functions allow us to organize code into reusable blocks that can be called multiple times.
 # Parameters: This function accepts 1 parameter(s): number
@@ -29406,7 +29405,7 @@ Write a function that takes numbers integer 123 and return 2.
 # The colon (:) at the end is REQUIRED - it tells Python that the function body follows.
 # The function body must be indented (typically 4 spaces) to show it belongs to this function.
 #==============================================================================
-def int(number):  # Should use different name like get_digit or extract_digit
+def get_second_digit(number):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
 #------------------------------------------------------------------------------
@@ -29464,11 +29463,10 @@ Write a function that takes numbers integer 12345678 and return 2, 4, 8.
 """
 
 # Extracts digits at specific indices using string indexing
-# WARNING: Function name 'int' shadows built-in int() function - bad practice!
 #==============================================================================
-# FUNCTION DEFINITION: 'int'
+# FUNCTION DEFINITION: 'get_indexed_digits'
 #------------------------------------------------------------------------------
-# Purpose: This line defines a reusable function named 'int'.
+# Purpose: This line defines a reusable function named 'get_indexed_digits'.
 # In Python, functions are defined using the 'def' keyword followed by the function name.
 # Functions allow us to organize code into reusable blocks that can be called multiple times.
 # Parameters: This function accepts 1 parameter(s): number
@@ -29477,7 +29475,7 @@ Write a function that takes numbers integer 12345678 and return 2, 4, 8.
 # The colon (:) at the end is REQUIRED - it tells Python that the function body follows.
 # The function body must be indented (typically 4 spaces) to show it belongs to this function.
 #==============================================================================
-def int(number):  # Should use different name
+def get_indexed_digits(number):
 # FUNCTION SUMMARY: This function is now defined and ready to be called.
 # To use it, call the function name followed by parentheses with any required arguments.
 #------------------------------------------------------------------------------

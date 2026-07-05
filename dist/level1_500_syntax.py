@@ -8909,7 +8909,7 @@ Problem 118:
 # Syntax describes the Python building blocks used in this code —
 # the keywords, operators, and structures that make it work.
 #
-def sum(numbers):  # defines a function with parameters numbers
+def calculate_sum(numbers):  # defines a function with parameters numbers
     total = 0
     for number in numbers:
         total += number
@@ -8917,15 +8917,14 @@ def sum(numbers):  # defines a function with parameters numbers
 #
 # Keywords: for
 # Operators: * +
-# Built-in functions: reduce()
 #
 # EVALUATION ORDER:
 # Evaluation Order traces how Python reads and evaluates expressions.
 # Inner expressions are evaluated first, then the outer ones.
 #
-print(sum(numbers))  # sum() runs first, then print() outputs the result
+print(calculate_sum(numbers))  # calculate_sum() runs first, then print() outputs the result
 print(multiply(numbers))  # multiply() runs first, then print() outputs the result
-print(sum(?))  # sum() runs first, then print() outputs the result
+print(calculate_sum(?))  # calculate_sum() runs first, then print() outputs the result
 print(multiply(?))  # multiply() runs first, then print() outputs the result
 x * y  # x → then y → then *
 x + y  # x → then y → then +
@@ -8934,32 +8933,31 @@ x + y  # x → then y → then +
 # Execution Order shows the sequence Python follows when running
 # the code. 'def' and 'class' blocks are just stored, not run yet.
 #
-def sum(numbers):  # stored in memory, not executed yet
+def calculate_sum(numbers):  # stored in memory, not executed yet
 def multiply(numbers):  # stored in memory, not executed yet
 numbers = ...  # assigns a value to the variable
-print('Sum:', sum(...))
+print('Sum:', calculate_sum(...))
 print('Multiply:', multiply(...))
-def sum(numbers):  # stored in memory, not executed yet
-import builtins
+def calculate_sum(numbers):  # stored in memory, not executed yet
 def multiply(numbers):  # stored in memory, not executed yet
-print(sum(...))  # sum() runs with numbers=[1, 2, 3, 4]
+print(calculate_sum(...))  # calculate_sum() runs with numbers=[1, 2, 3, 4]
 #   → return total
 print(multiply(...))  # multiply() runs with numbers=[1, 2, 3, 4]
 #   → from functools import reduce
 #   → return reduce(lambda x, y: x * y, numbers)
-def sum(numbers):  # stored in memory, not executed yet
+def calculate_sum(numbers):  # stored in memory, not executed yet
 def multiply(numbers):  # stored in memory, not executed yet
-print(sum(...))  # sum() runs with numbers=[5, 10, 15]
+print(calculate_sum(...))  # calculate_sum() runs with numbers=[5, 10, 15]
 #   → return total
 print(multiply(...))  # multiply() runs with numbers=[2, 3, 4]
 #   → from functools import reduce
 #   → return reduce(lambda x, y: x * y, numbers)
-def sum(numbers):  # stored in memory, not executed yet
-def sum(numbers):  # stored in memory, not executed yet
+def calculate_sum(numbers):  # stored in memory, not executed yet
+def calculate_sum(numbers):  # stored in memory, not executed yet
 numbers = ...  # assigns a value to the variable
 result = ...  # assigns a value to the variable
 print(result)
-print(sum(...))  # sum() runs with numbers=[4, 1, 8, 6, 3]
+print(calculate_sum(...))  # calculate_sum() runs with numbers=[4, 1, 8, 6, 3]
 #   → return total
 #
 # EXECUTION FLOW:
@@ -13802,7 +13800,7 @@ Problem 184:
 # Syntax describes the Python building blocks used in this code —
 # the keywords, operators, and structures that make it work.
 #
-def int(number):  # defines a function with parameters number
+def get_second_digit(number):  # defines a function with parameters number
     number = str(number)
     list_number = list(number)[1]
     return list_number  # return sends the result back to the caller
@@ -13814,10 +13812,10 @@ def int(number):  # defines a function with parameters number
 # Evaluation Order traces how Python reads and evaluates expressions.
 # Inner expressions are evaluated first, then the outer ones.
 #
-print(int(number))  # int() runs first, then print() outputs the result
+print(get_second_digit(number))  # get_second_digit() runs first, then print() outputs the result
 print(extract_digit(123))  # extract_digit() runs first, then print() outputs the result
 print(get_digit(123))  # get_digit() runs first, then print() outputs the result
-print(int(25))  # int() runs first, then print() outputs the result
+print(get_second_digit(25))  # get_second_digit() runs first, then print() outputs the result
 ? % 10  # ? → then 10 → then %
 number // 10  # number → then 10 → then //
 #
@@ -13825,9 +13823,9 @@ number // 10  # number → then 10 → then //
 # Execution Order shows the sequence Python follows when running
 # the code. 'def' and 'class' blocks are just stored, not run yet.
 #
-def int(number):  # stored in memory, not executed yet
+def get_second_digit(number):  # stored in memory, not executed yet
 number = ...  # assigns a value to the variable
-print(int(...))  # int() runs with number=number
+print(get_second_digit(...))  # get_second_digit() runs with number=number
 #   → return list_number
 def extract_digit(number):  # stored in memory, not executed yet
 print(extract_digit(...))  # extract_digit() runs with number=123
@@ -13835,19 +13833,19 @@ print(extract_digit(...))  # extract_digit() runs with number=123
 def get_digit(n):  # stored in memory, not executed yet
 print(get_digit(...))  # get_digit() runs with n=123
 #   → return str(n)[1]
-def int(number):  # stored in memory, not executed yet
-def int(number):  # stored in memory, not executed yet
+def get_second_digit(number):  # stored in memory, not executed yet
+def get_second_digit(number):  # stored in memory, not executed yet
 number = ...  # assigns a value to the variable
 result = ...  # assigns a value to the variable
 print(result)
-print(int(...))  # int() runs with number=25
+print(get_second_digit(...))  # get_second_digit() runs with number=25
 #   → return list_number
 #
 # EXECUTION FLOW:
 # Execution Flow tracks where Python jumps during runtime — which
 # blocks are skipped and which actually run.
 #
-# def blocks are skipped at runtime — extract_digit, get_digit, int are stored in memory
+# def blocks are skipped at runtime — extract_digit, get_digit, get_second_digit are stored in memory
 #
 # Execution starts at the top-level code (outside def/class):
 #   → number = ...  # stored in memory
@@ -13868,7 +13866,7 @@ Problem 185:
 # Syntax describes the Python building blocks used in this code —
 # the keywords, operators, and structures that make it work.
 #
-def int(number):  # defines a function with parameters number
+def get_indexed_digits(number):  # defines a function with parameters number
     number = str(number)
     num2 = number[1]
     num4 = number[3]
@@ -13881,18 +13879,18 @@ def int(number):  # defines a function with parameters number
 # Evaluation Order traces how Python reads and evaluates expressions.
 # Inner expressions are evaluated first, then the outer ones.
 #
-print(int(number))  # int() runs first, then print() outputs the result
+print(get_indexed_digits(number))  # get_indexed_digits() runs first, then print() outputs the result
 print(extract_digits(12345678))  # extract_digits() runs first, then print() outputs the result
 print(get_digits(12345678))  # get_digits() runs first, then print() outputs the result
-print(int(?))  # int() runs first, then print() outputs the result
+print(get_indexed_digits(?))  # get_indexed_digits() runs first, then print() outputs the result
 #
 # EXECUTION ORDER:
 # Execution Order shows the sequence Python follows when running
 # the code. 'def' and 'class' blocks are just stored, not run yet.
 #
-def int(number):  # stored in memory, not executed yet
+def get_indexed_digits(number):  # stored in memory, not executed yet
 number = ...  # assigns a value to the variable
-print(int(...))  # int() runs with number=number
+print(get_indexed_digits(...))  # get_indexed_digits() runs with number=number
 #   → return (num2, num4, num8)
 def extract_digits(number):  # stored in memory, not executed yet
 print(extract_digits(...))  # extract_digits() runs with number=12345678
@@ -13902,19 +13900,19 @@ def get_digits(num):  # stored in memory, not executed yet
 print(get_digits(...))  # get_digits() runs with num=12345678
 #   → s = str(num)
 #   → return tuple((s[i] for i in [1, 3, -1]))
-def int(number):  # stored in memory, not executed yet
-def int(number):  # stored in memory, not executed yet
+def get_indexed_digits(number):  # stored in memory, not executed yet
+def get_indexed_digits(number):  # stored in memory, not executed yet
 number = ...  # assigns a value to the variable
 result = ...  # assigns a value to the variable
 print(result)
-print(int(...))  # int() runs with number=[4, 1, 8, 6, 3]
+print(get_indexed_digits(...))  # get_indexed_digits() runs with number=[4, 1, 8, 6, 3]
 #   → return (num2, num4, num8)
 #
 # EXECUTION FLOW:
 # Execution Flow tracks where Python jumps during runtime — which
 # blocks are skipped and which actually run.
 #
-# def blocks are skipped at runtime — extract_digits, get_digits, int are stored in memory
+# def blocks are skipped at runtime — extract_digits, get_digits, get_indexed_digits are stored in memory
 #
 # Execution starts at the top-level code (outside def/class):
 #   → number = ...  # stored in memory
