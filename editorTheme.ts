@@ -15,6 +15,19 @@ const PYTHON_BUILTINS = new Set([
 ]);
 
 export interface EditorColorSettings {
+  appBackground: string;
+  problemBackground: string;
+  problemBorder: string;
+  problemText: string;
+  panelBackground: string;
+  panelBorder: string;
+  tabBackground: string;
+  activeTabBackground: string;
+  outputBackground: string;
+  background: string;
+  text: string;
+  gutterBackground: string;
+  gutterText: string;
   comment: string;
   identifier: string;
   builtin: string;
@@ -24,6 +37,19 @@ export interface EditorColorSettings {
 }
 
 export const DEFAULT_EDITOR_COLORS: EditorColorSettings = {
+  appBackground: "#040b16",
+  problemBackground: "#081222",
+  problemBorder: "#5f7fa6",
+  problemText: "#d1d5db",
+  panelBackground: "#0a1628",
+  panelBorder: "#5f7fa6",
+  tabBackground: "#0a1628",
+  activeTabBackground: "#050c18",
+  outputBackground: "#050c18",
+  background: "#050c18",
+  text: "#ffffff",
+  gutterBackground: "#050c18",
+  gutterText: "#2d4a77",
   comment: "#858585",
   identifier: "#FF1900",
   builtin: "#FF9700",
@@ -70,17 +96,30 @@ function computeVarDecorations(state, builtinMark, identifierMark) {
   return Decoration.set(decos);
 }
 
-export const editorUiTheme = (bgColor: string = "#050c18") => EditorView.theme({
+export const createEditorUiTheme = (colors: EditorColorSettings = DEFAULT_EDITOR_COLORS) => EditorView.theme({
   "&": {
-    backgroundColor: `${bgColor} !important`,
+    backgroundColor: `${colors.background} !important`,
     fontSize: "14px",
     height: "100%",
-    color: "#ffffff"
+    color: colors.text
+  },
+  ".cm-content": {
+    caretColor: colors.text,
+    color: colors.text,
+  },
+  ".cm-line": {
+    color: colors.text,
   },
   ".cm-gutters": {
-    backgroundColor: `${bgColor} !important`,
-    color: "#2d4a77",
+    backgroundColor: `${colors.gutterBackground} !important`,
+    color: colors.gutterText,
     border: "none"
+  },
+  ".cm-activeLine": {
+    backgroundColor: `${colors.panelBackground}55`,
+  },
+  ".cm-activeLineGutter": {
+    backgroundColor: `${colors.panelBackground}88`,
   }
 }, { dark: true });
 
@@ -93,8 +132,8 @@ export const createPythonHighlightStyle = (colors: EditorColorSettings) => Highl
   { tag: t.invalid, color: colors.string },
 ]);
 
-export const createCustomPythonTheme = (colors: EditorColorSettings = DEFAULT_EDITOR_COLORS, bgColor?: string) => [
-  editorUiTheme(bgColor),
+export const createCustomPythonTheme = (colors: EditorColorSettings = DEFAULT_EDITOR_COLORS) => [
+  createEditorUiTheme(colors),
   syntaxHighlighting(createPythonHighlightStyle(colors)),
   createVarHighlightField(colors),
 ];

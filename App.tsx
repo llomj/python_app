@@ -46,7 +46,7 @@ import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
-import { customPythonTheme, createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
+import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
@@ -10986,7 +10986,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     if (bootStage !== 'launched') {
         return (
-            <div className="fixed inset-0 z-[100] bg-[#040b16] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500">
+            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500" style={{ backgroundColor: editorColors.appBackground }}>
                 <div className="relative mb-8 flex-shrink-0">
                     <div className="absolute inset-0 bg-[#3b82f6]/20 blur-3xl rounded-full animate-pulse"></div>
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" className={`w-20 h-20 relative z-10 ${bootStage === 'loading' ? 'animate-bounce' : 'scale-110'}`} alt="Python" />
@@ -11028,14 +11028,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     return (
         <div
-            className="h-screen bg-[#040b16] text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
+            className="h-screen text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
+            style={{ backgroundColor: editorColors.appBackground }}
         >
             <div
                 ref={headerRef}
-                className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2 bg-[#040b16]"
+                className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2"
                 style={{
                     top: 0,
-                    backgroundColor: 'rgba(4, 11, 22, 0.18)',
+                    backgroundColor: hexToRgba(editorColors.appBackground, 0.18),
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
@@ -11202,32 +11203,32 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             height: '190px',
                             display: 'flex',
                             flexDirection: 'column',
-                            backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100),
+                            backgroundColor: hexToRgba(editorColors.problemBackground, panelColors.alpha / 100),
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
-                            border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`,
+                            border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.55)}`,
                             borderRadius: '0.75rem',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                         }}
                     >
                         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
-                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#fff', margin: 0 }}>Problem {exercise.id}</h2>
+                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>Problem {exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? 'rgba(59, 130, 246, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
+                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.45)}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
                                 </button>
-                                <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Problem guide and hints" style={{ backgroundColor: showBreakdownFor === exercise.id ? 'rgba(245, 158, 11, 0.15)' : 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#f59e0b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Problem guide and hints" style={{ backgroundColor: showBreakdownFor === exercise.id ? hexToRgba(countRowColors.rate, 0.15) : 'transparent', border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.45)}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.rate, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
                                     <Lightbulb size={14} fill={showBreakdownFor === exercise.id ? 'currentColor' : 'none'} />
                                     <span>Guide</span>
                                 </button>
-                                <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: '1px solid #1d2d44', borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
+                                <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.45)}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
                                     <span>Next</span>
                                 </button>
                             </div>
                         </div>
-                        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: '#d1d5db', fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
+                        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: editorColors.problemText, fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
                             {exercise.description}
                             {showBreakdownFor === exercise.id && (
                                 <div style={{ marginTop: '0.75rem', borderTop: '1px solid rgba(245, 158, 11, 0.2)', paddingTop: '0.5rem' }}>
@@ -11288,10 +11289,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         className="flex items-center justify-between rounded-xl border p-2 shadow-2xl shadow-black/40"
                     style={{
                         pointerEvents: 'auto',
-                        backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100),
+                        backgroundColor: hexToRgba(editorColors.panelBackground, 0.78),
                         backdropFilter: 'blur(8px)',
                         WebkitBackdropFilter: 'blur(8px)',
-                        borderColor: hexToRgba(panelColors.border, 0.35)
+                        borderColor: hexToRgba(editorColors.panelBorder, 0.65)
                     }}
                 >
                     <div className="flex items-center gap-2 overflow-hidden">
@@ -11338,7 +11339,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                     data-editor-panel
                     className="mb-28 rounded-xl flex flex-col shadow-2xl border overflow-hidden"
-                    style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.35), scrollMarginTop: `${editorContentTop + 12}px` }}
+                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: editorColors.panelBackground, borderColor: editorColors.panelBorder }}
                 >
                     <div
                         className="hidden"
@@ -11361,15 +11362,29 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                     <div
                         className="flex border-b overflow-x-auto no-scrollbar"
-                        style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.3), position: 'sticky', top: 0, zIndex: 50 }}
+                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: editorColors.tabBackground, borderColor: editorColors.panelBorder }}
                     >
                         {files.map((f, idx) => (
-                            <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
+                            <button
+                                key={idx}
+                                onClick={() => setActiveFileIndex(idx)}
+                                className="px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r whitespace-nowrap"
+                                style={{
+                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : editorColors.tabBackground,
+                                    borderColor: editorColors.panelBorder,
+                                    borderBottom: activeFileIndex === idx ? `2px solid ${countRowColors.count}` : `1px solid ${editorColors.panelBorder}`,
+                                    color: activeFileIndex === idx ? countRowColors.count : editorColors.gutterText,
+                                }}
+                            >
                                 {f.name}
                             </button>
                         ))}
                     </div>
-                    <div ref={editorShellRef} className="flex-grow relative border-b" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.35), minHeight: '320px', scrollMarginTop: `${editorContentTop}px` }}>
+                    <div
+                        ref={editorShellRef}
+                        className="flex-grow relative border-b"
+                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, backgroundColor: editorColors.background, borderColor: editorColors.panelBorder }}
+                    >
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
                             onCreateEditor={(view) => {
@@ -11420,9 +11435,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </>
                         )}
                     </div>
-                    <div className="flex-shrink-0" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100) }}>
-                        <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: hexToRgba(panelColors.border, 0.3) }}>
-                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
+                    <div className="flex-shrink-0" style={{ backgroundColor: editorColors.panelBackground }}>
+                        <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: editorColors.panelBorder }}>
+                            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: editorColors.gutterText }}>Output</span>
                             <button
                                 onClick={toggleOutputHeight}
                                 className="text-gray-400 hover:text-[#3b82f6] transition-all px-2 py-1 flex items-center gap-1 text-[11px] font-bold"
@@ -11453,7 +11468,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         ? 'rgba(64, 15, 20, 0.45)'
                                         : outputStatus === 'running'
                                             ? 'rgba(30, 41, 59, 0.45)'
-                                            : hexToRgba(panelColors.background, panelColors.alpha / 100),
+                                            : hexToRgba(editorColors.outputBackground, 0.78),
                                 boxShadow: outputStatus === 'win'
                                     ? '0 0 22px rgba(34, 197, 94, 0.18)'
                                     : outputStatus === 'fail'
@@ -11518,7 +11533,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </div>
                             )}
                         </div>
-                        <div className="h-2 flex-shrink-0 border-t" style={{ borderColor: hexToRgba(panelColors.border, 0.35), backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100) }} />
+                        <div className="h-2 flex-shrink-0 border-t" style={{ backgroundColor: editorColors.panelBorder, borderColor: editorColors.panelBorder }} />
                     </div>
                 </div>
             </div>
@@ -11539,8 +11554,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
             {showModal !== 'none' && (
                 <div
-                    className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-[120] animate-in fade-in duration-200"
+                    className="fixed inset-0 backdrop-blur-md flex items-center justify-center p-4 z-[120] animate-in fade-in duration-200"
                     style={{
+                        backgroundColor: hexToRgba(editorColors.appBackground, 0.82),
                         paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 1rem))',
                         paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 1rem))',
                         paddingLeft: 'max(1rem, calc(env(safe-area-inset-left) + 1rem))',
@@ -11550,9 +11566,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
                         style={{
-                            backgroundColor: showModal === 'settings' ? 'rgba(17, 34, 64, 0.20)' : '#112240',
-                            backdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
-                            WebkitBackdropFilter: showModal === 'settings' ? 'blur(18px)' : undefined,
+                            backgroundColor: hexToRgba(editorColors.panelBackground, showModal === 'settings' || showModal === 'customize' ? 0.82 : 0.96),
+                            borderColor: editorColors.panelBorder,
+                            backdropFilter: 'blur(18px)',
+                            WebkitBackdropFilter: 'blur(18px)',
                             height: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
                             maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
@@ -11574,7 +11591,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <CopyButton text={CHEAT_CONTENT} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={CHEAT_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={CHEAT_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -11584,7 +11601,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <CopyButton text={GLOSSARY_CONTENT} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={GLOSSARY_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={GLOSSARY_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -11594,7 +11611,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <CopyButton text={REGEX_CONTENT} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={REGEX_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={REGEX_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -11604,7 +11621,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <CopyButton text={BUILTIN_CONTENT} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={BUILTIN_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={BUILTIN_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -11614,7 +11631,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <CopyButton text={RULES_CONTENT} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={RULES_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={RULES_CONTENT} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -11636,7 +11653,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <CopyButton text={displaySolution} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                <CodeMirror value={displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -11647,7 +11664,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {logicContent ? (
-                                                    <CodeMirror value={logicContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                    <CodeMirror value={logicContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         Searching logic documentation...
@@ -11663,7 +11680,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {requirementsContent ? (
-                                                    <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...customPythonTheme]} />
+                                                    <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         Searching requirements...
@@ -11824,17 +11841,50 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     )}
                                     {customizeTab === 'ide' && (
                                         <div className="space-y-4">
-                                            <div className="rounded-2xl border border-[#1d2d44] bg-[#050c18] p-3">
-                                                <div className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-gray-400">Live IDE Preview</div>
+                                            <div
+                                                className="rounded-2xl border p-3"
+                                                style={{ backgroundColor: editorColors.problemBackground, borderColor: editorColors.problemBorder }}
+                                            >
+                                                <div className="mb-2 flex items-center justify-between">
+                                                    <div className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: editorColors.gutterText }}>Problem Panel Preview</div>
+                                                    <span className="rounded-lg border px-2 py-1 text-[10px] font-black" style={{ borderColor: hexToRgba(editorColors.problemBorder, 0.5), color: countRowColors.count }}>Next</span>
+                                                </div>
+                                                <p className="m-0 text-sm leading-6" style={{ color: editorColors.problemText }}>Write a Python function, test different variable names, and solve the problem using the required logic.</p>
+                                            </div>
+                                            <div
+                                                className="rounded-2xl border p-3"
+                                                style={{ backgroundColor: editorColors.panelBackground, borderColor: editorColors.panelBorder }}
+                                            >
+                                                <div className="mb-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: editorColors.gutterText }}>Live IDE Preview</div>
+                                                <div className="mb-2 flex overflow-hidden rounded-xl border text-[10px] font-bold" style={{ borderColor: editorColors.panelBorder, backgroundColor: editorColors.tabBackground }}>
+                                                    <span className="px-3 py-1.5" style={{ backgroundColor: editorColors.activeTabBackground, color: countRowColors.count, borderRight: `1px solid ${editorColors.panelBorder}` }}>main.py</span>
+                                                    <span className="px-3 py-1.5" style={{ color: editorColors.gutterText }}>helper.py</span>
+                                                </div>
                                                 <CodeMirror
                                                     value={"# comment\nnumber = 42\ntext = 'Python'\nprint(text)\nif number > 10:\n    return True"}
                                                     height="150px"
                                                     readOnly={true}
                                                     extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
                                                 />
+                                                <div className="mt-2 rounded-xl border px-3 py-2 font-mono text-[10px]" style={{ backgroundColor: editorColors.outputBackground, borderColor: editorColors.panelBorder, color: '#4ade80' }}>
+                                                    Output preview: code results appear here
+                                                </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                                 {([
+                                                    ['appBackground', 'App Background'],
+                                                    ['problemBackground', 'Problem Background'],
+                                                    ['problemBorder', 'Problem Border'],
+                                                    ['problemText', 'Problem Text'],
+                                                    ['panelBackground', 'Editor Panel'],
+                                                    ['panelBorder', 'Editor Border'],
+                                                    ['tabBackground', 'File Tab Background'],
+                                                    ['activeTabBackground', 'Active File Tab'],
+                                                    ['outputBackground', 'Output Background'],
+                                                    ['background', 'Code Background'],
+                                                    ['text', 'Code Text'],
+                                                    ['gutterBackground', 'Line Number Background'],
+                                                    ['gutterText', 'Line Number Text'],
                                                     ['comment', 'Comment'],
                                                     ['identifier', 'Identifier'],
                                                     ['builtin', 'Built-in'],
