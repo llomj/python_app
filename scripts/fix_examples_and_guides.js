@@ -5,6 +5,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const writeMode = process.argv.includes('--write');
+const forceExamples = process.argv.includes('--force-examples');
 
 function loadTsExports(fileName) {
   const source = fs.readFileSync(path.join(root, fileName), 'utf8');
@@ -47,6 +48,7 @@ function formatExpected(val) {
   if (val === null) return 'None';
   if (val === true) return 'True';
   if (val === false) return 'False';
+  if (typeof val === 'object') return JSON.stringify(val).replace(/"/g, "'");
   return String(val);
 }
 
@@ -54,9 +56,15 @@ function generateExamples(functionName, testCases) {
   const cases = Array.isArray(testCases) ? testCases.slice(0, 3) : [];
   if (!cases.length) return [];
   return cases.map(tc => {
+    if (Array.isArray(tc.inputValues) && tc.inputValues.length > 0) {
+      const inputs = tc.inputValues.map(formatExpected).join(', ');
+      const arrow = tc.expected !== undefined ? `\u2192 ${formatExpected(tc.expected)}` : '\u2192 shown output';
+      return `  input ${inputs} ${arrow}`;
+    }
     const args = Array.isArray(tc.args) ? tc.args.map(formatArg).join(', ') : '';
     const arrow = tc.expected !== undefined ? `\u2192 ${formatExpected(tc.expected)}` : '\u2192 ?';
-    return `  ${functionName}(${args}) ${arrow}`;
+    const name = tc.functionName || functionName;
+    return `  ${name}(${args}) ${arrow}`;
   });
 }
 
@@ -344,7 +352,9 @@ for (const ex of EXERCISES) {
   
   if (!fnMatch && !classMatch && !isScriptMode) continue;
 
-  const functionName = fnMatch ? fnMatch[1] : (classMatch ? classMatch[1] : 'solve');
+  const graderFunctionNames = Array.isArray(grader?.functionNames) ? grader.functionNames : [];
+  const preferredGraderFunction = graderFunctionNames.find(name => name !== 'main') || graderFunctionNames[0];
+  const functionName = preferredGraderFunction || (fnMatch ? fnMatch[1] : (classMatch ? classMatch[1] : 'solve'));
   const params = fnMatch ? fnMatch[2].split(',').map(p => p.trim()).filter(Boolean) : [];
   const description = ex.description || '';
 
@@ -386,7 +396,7 @@ for (const ex of EXERCISES) {
   let blockChanged = false;
 
   // ── Fix description examples ──
-  if (examplesNeedFix(description) && grader && Array.isArray(grader.tests) && fnMatch) {
+  if ((forceExamples || examplesNeedFix(description)) && grader && Array.isArray(grader.tests) && fnMatch) {
     const newExamples = generateExamples(functionName, grader.tests);
     if (newExamples.length) {
       const lines = description.split('\n');

@@ -10029,8 +10029,9 @@ const App: React.FC = () => {
     const loadSavedProblem = (problem: SavedProblem) => {
         const ex = EXERCISES.find(e => e.id === problem.exerciseId);
         if (ex) {
+            setPlainMode(false);
             setExercise(ex);
-            setFiles([{ name: 'main.py', content: problem.initialCode }]);
+            setFiles([{ name: 'main.py', content: ex.initialCode }]);
             setActiveFileIndex(0);
             setOutput('Run code to see output...');
             setOutputStatus('idle');
@@ -10074,8 +10075,9 @@ const App: React.FC = () => {
     const loadIdLogProblem = (problem: SavedProblem) => {
         const ex = EXERCISES.find(e => e.id === problem.exerciseId);
         if (ex) {
+            setPlainMode(false);
             setExercise(ex);
-            setFiles([{ name: 'main.py', content: problem.initialCode }]);
+            setFiles([{ name: 'main.py', content: ex.initialCode }]);
             setActiveFileIndex(0);
             setOutput('Run code to see output...');
             setOutputStatus('idle');
@@ -12515,13 +12517,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 return (
                                                     <div key={problem.exerciseId} className="rounded-lg border overflow-hidden" style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}>
                                                         <div
-                                                            onClick={() => {
-                                                                if (isExpanded) {
-                                                                    setExpandedSavedProblem(null);
-                                                                } else {
-                                                                    setExpandedSavedProblem(problem.exerciseId);
-                                                                }
-                                                            }}
+                                                            onClick={() => loadSavedProblem(problem)}
                                                             className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer transition-all hover:brightness-125"
                                                             onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); }}
                                                             onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
@@ -12556,9 +12552,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>
-                                                                <span className="text-gray-500 ml-0.5" style={{ color: hexToRgba(countRowColors.count, 0.5) }}>
+                                                                <button
+                                                                    onClick={() => setExpandedSavedProblem(isExpanded ? null : problem.exerciseId)}
+                                                                    title={isExpanded ? 'Hide details' : 'Show details'}
+                                                                    className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                    style={{ color: hexToRgba(countRowColors.count, 0.7) }}
+                                                                >
                                                                     {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                                                                </span>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         {isExpanded && (
@@ -12570,7 +12571,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                         className="flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-125"
                                                                         style={{ backgroundColor: hexToRgba(countRowColors.count, 0.15), border: `1px solid ${hexToRgba(countRowColors.count, 0.3)}`, color: countRowColors.count }}
                                                                     >
-                                                                        Load
+                                                                        Practice in IDE
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -12618,13 +12619,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 return (
                                                     <div key={problem.exerciseId} className="rounded-lg border overflow-hidden" style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}>
                                                         <div
-                                                            onClick={() => {
-                                                                if (isExpanded) {
-                                                                    setExpandedIdLogProblem(null);
-                                                                } else {
-                                                                    setExpandedIdLogProblem(problem.exerciseId);
-                                                                }
-                                                            }}
+                                                            onClick={() => loadIdLogProblem(problem)}
                                                             className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer transition-all hover:brightness-125"
                                                             onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.rate, 0.5); }}
                                                             onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
@@ -12659,9 +12654,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>
-                                                                <span className="text-gray-500 ml-0.5" style={{ color: hexToRgba(countRowColors.rate, 0.5) }}>
+                                                                <button
+                                                                    onClick={() => setExpandedIdLogProblem(isExpanded ? null : problem.exerciseId)}
+                                                                    title={isExpanded ? 'Hide details' : 'Show details'}
+                                                                    className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                    style={{ color: hexToRgba(countRowColors.rate, 0.7) }}
+                                                                >
                                                                     {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                                                                </span>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         {isExpanded && (
@@ -12673,7 +12673,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                         className="flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-125"
                                                                         style={{ backgroundColor: hexToRgba(countRowColors.rate, 0.15), border: `1px solid ${hexToRgba(countRowColors.rate, 0.3)}`, color: countRowColors.rate }}
                                                                     >
-                                                                        Load
+                                                                        Practice in IDE
                                                                     </button>
                                                                 </div>
                                                             </div>
