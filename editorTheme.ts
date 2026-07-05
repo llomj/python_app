@@ -70,15 +70,15 @@ function computeVarDecorations(state, builtinMark, identifierMark) {
   return Decoration.set(decos);
 }
 
-export const editorUiTheme = EditorView.theme({
+export const editorUiTheme = (bgColor: string = "#050c18") => EditorView.theme({
   "&": {
-    backgroundColor: "#050c18 !important",
+    backgroundColor: `${bgColor} !important`,
     fontSize: "14px",
     height: "100%",
     color: "#ffffff"
   },
   ".cm-gutters": {
-    backgroundColor: "#050c18 !important",
+    backgroundColor: `${bgColor} !important`,
     color: "#2d4a77",
     border: "none"
   }
@@ -93,8 +93,8 @@ export const createPythonHighlightStyle = (colors: EditorColorSettings) => Highl
   { tag: t.invalid, color: colors.string },
 ]);
 
-export const createCustomPythonTheme = (colors: EditorColorSettings = DEFAULT_EDITOR_COLORS) => [
-  editorUiTheme,
+export const createCustomPythonTheme = (colors: EditorColorSettings = DEFAULT_EDITOR_COLORS, bgColor?: string) => [
+  editorUiTheme(bgColor),
   syntaxHighlighting(createPythonHighlightStyle(colors)),
   createVarHighlightField(colors),
 ];

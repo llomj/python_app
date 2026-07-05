@@ -192,7 +192,7 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
 const DEFAULT_PANEL_COLORS: PanelColorSettings = {
     background: '#081222',
     border: '#5876a0',
-    alpha: 8,
+    alpha: 35,
 };
 
 const DEFAULT_TOOL_PANEL_COLORS: ToolPanelColorSettings = {
@@ -10981,8 +10981,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         holdBackspaceExtension,
         autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
         EditorView.lineWrapping,
-        ...createCustomPythonTheme(editorColors)
-    ], [pythonCompletionSource, editorColors]);
+        ...createCustomPythonTheme(editorColors, hexToRgba(panelColors.background, panelColors.alpha / 100))
+    ], [pythonCompletionSource, editorColors, panelColors]);
 
     if (bootStage !== 'launched') {
         return (
@@ -11338,7 +11338,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                     data-editor-panel
                     className="mb-28 rounded-xl flex flex-col shadow-2xl border overflow-hidden"
-                    style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.5, 1)), borderColor: hexToRgba(panelColors.border, 0.35), scrollMarginTop: `${editorContentTop + 12}px` }}
+                    style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.35), scrollMarginTop: `${editorContentTop + 12}px` }}
                 >
                     <div
                         className="hidden"
@@ -11361,7 +11361,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                     <div
                         className="flex border-b overflow-x-auto no-scrollbar"
-                        style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.5, 1)), borderColor: hexToRgba(panelColors.border, 0.3), position: 'sticky', top: 0, zIndex: 50 }}
+                        style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.3), position: 'sticky', top: 0, zIndex: 50 }}
                     >
                         {files.map((f, idx) => (
                             <button key={idx} onClick={() => setActiveFileIndex(idx)} className={`px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r border-[#1d2d44] whitespace-nowrap ${activeFileIndex === idx ? 'bg-[#050c18] text-[#3b82f6] border-b-2 border-b-[#3b82f6]' : 'text-gray-500'}`}>
@@ -11369,7 +11369,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </button>
                         ))}
                     </div>
-                    <div ref={editorShellRef} className="flex-grow relative border-b" style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.55, 1)), borderColor: hexToRgba(panelColors.border, 0.35), minHeight: '320px', scrollMarginTop: `${editorContentTop}px` }}>
+                    <div ref={editorShellRef} className="flex-grow relative border-b" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.35), minHeight: '320px', scrollMarginTop: `${editorContentTop}px` }}>
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
                             onCreateEditor={(view) => {
@@ -11420,7 +11420,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </>
                         )}
                     </div>
-                    <div className="flex-shrink-0" style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.5, 1)) }}>
+                    <div className="flex-shrink-0" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100) }}>
                         <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: hexToRgba(panelColors.border, 0.3) }}>
                             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Output</span>
                             <button
@@ -11453,7 +11453,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         ? 'rgba(64, 15, 20, 0.45)'
                                         : outputStatus === 'running'
                                             ? 'rgba(30, 41, 59, 0.45)'
-                                            : hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.37, 1)),
+                                            : hexToRgba(panelColors.background, panelColors.alpha / 100),
                                 boxShadow: outputStatus === 'win'
                                     ? '0 0 22px rgba(34, 197, 94, 0.18)'
                                     : outputStatus === 'fail'
@@ -11496,12 +11496,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         )}
                         <div
                             className="border-t"
-                            style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.12, 1)), borderColor: hexToRgba(panelColors.border, 0.3) }}
+                            style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.3) }}
                         >
                             <button
                                 onClick={() => setShowActionPanel(prev => !prev)}
                                 className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] transition-colors"
-                                style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.15, 1)), color: toolPanelColors.toggleText }}
+                                style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), color: toolPanelColors.toggleText }}
                             >
                                 <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
                                 {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
@@ -11925,7 +11925,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                     <span className="font-bold text-gray-200">main.py</span>
                                                     <span className="ml-3 uppercase text-[#22c55e]">▶ Run</span>
                                                 </div>
-                                                <div className="rounded-xl px-3 py-3 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, Math.min(panelColors.alpha / 100 + 0.5, 1)), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
+                                                <div className="rounded-xl px-3 py-3 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
                                                     <span className="font-bold text-gray-200">Output</span>
                                                     <div className="mt-1 font-mono text-[#4ade80]">ytho</div>
                                                 </div>
