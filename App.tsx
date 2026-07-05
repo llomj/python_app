@@ -199,7 +199,7 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
 const DEFAULT_PANEL_COLORS: PanelColorSettings = {
     background: '#081222',
     border: '#5876a0',
-    alpha: 35,
+    alpha: 8,
 };
 
 const DEFAULT_TOOL_PANEL_COLORS: ToolPanelColorSettings = {
@@ -12020,7 +12020,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                         min={0}
                                                         max={100}
                                                         value={panelColors.alpha}
-                                                        onInput={(event) => setPanelColors(prev => ({ ...prev, alpha: Number((event.currentTarget as HTMLInputElement).value) }))}
                                                         onChange={(event) => setPanelColors(prev => ({ ...prev, alpha: Number(event.target.value) }))}
                                                         className="h-2 w-24 cursor-pointer appearance-none rounded-full bg-[#1d2d44] accent-[#3b82f6]"
                                                         aria-label="Panel transparency"
