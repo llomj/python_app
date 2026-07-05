@@ -9387,6 +9387,9 @@ const getSpecificGuideGoal = (exercise: Exercise, promptLine: string) => {
     if (/reverse.*string/.test(text)) {
         return ['Create the same string in reverse order. The first character becomes last, and the last character becomes first.'];
     }
+    if (/reverse.*list/.test(text)) {
+        return ['Create a new list with elements in reverse order — last element first, first element last.'];
+    }
     if (/palindrome/.test(text)) {
         return ['Check whether the value reads the same forward and backward. Usually you compare the cleaned value with its reverse.'];
     }
@@ -9424,6 +9427,149 @@ const getSpecificGuideSteps = (exercise: Exercise, fallbackLines: string[]) => {
             'Print or return the boolean result, so the output is `True` or `False` without quotes.',
         ];
     }
+    if (/substring|slice.*(?:from|extract)/.test(text)) {
+        return [
+            'Identify the string parameter and the start/end index parameters from the function signature.',
+            'Use slicing: `text[start:end]` extracts characters from `start` up to (not including) `end`.',
+            'Python slicing is forgiving — if `end` is beyond the string length, no error occurs.',
+            'Return the extracted substring.',
+        ];
+    }
+    if (/replace.*char(?:acter)?/.test(text)) {
+        return [
+            'Identify the `text`, `old_char`, and `new_char` parameters.',
+            'Call `text.replace(old_char, new_char)` — this replaces all occurrences.',
+            'The `.replace()` method returns a NEW string; it does not modify the original.',
+            'Return the new string directly.',
+        ];
+    }
+    if (/remove.*char(?:acter)?/.test(text)) {
+        return [
+            'Identify the `text` and `char` parameters.',
+            'Call `text.replace(char, "")` to replace the character with an empty string, removing it.',
+            'This removes ALL occurrences of the character, not just the first one.',
+            'Return the cleaned string.',
+        ];
+    }
+    if (/reverse/.test(text)) {
+        if (/list/.test(text)) return [
+            'Use slicing `my_list[::-1]` to create a new list in reverse order.',
+            '`.reverse()` modifies in-place and returns `None` — avoid it here.',
+            'Return the reversed list.',
+        ];
+        if (/string/.test(text)) return [
+            'Use slicing `text[::-1]` to reverse the string.',
+            'Strings have no `.reverse()` method — slicing is the way.',
+            'Return the reversed string.',
+        ];
+    }
+    if (/len(?:gth)?/.test(text) && /list/.test(text)) {
+        return [
+            'Call `len(my_list)` directly on the list parameter.',
+            '`len()` works on any iterable — no loop needed.',
+            'Return the integer result.',
+        ];
+    }
+    if (/\b(?:check|return).*(?:if|whether).*(?:in the list|contain|present|exist|member)\b/.test(text)) {
+        return [
+            'Use `element in my_list` to test membership. The `in` operator returns a boolean.',
+            'Return the result directly — no `if True return True else return False` needed.',
+        ];
+    }
+    if (/\bhow many\b[\s\S]*?\b(?:time|appear)\w*\b|\bfrequency\b/.test(text)) {
+        return [
+            'Call `.count(element)` on the list to count how many times it appears.',
+            '`.count()` returns 0 if the element never appears — no separate check needed.',
+            'Return the integer count.',
+        ];
+    }
+    if (/\bindex\b[\s\S]*?\b(?:first|occurrence|position)\b/.test(text)) {
+        return [
+            'First check `if element in my_list` to avoid a `ValueError` if the element is missing.',
+            'If found, use `.index(element)` to get the position of the first occurrence.',
+            'If not found, return `-1` (or whatever the problem specifies for "not found").',
+        ];
+    }
+    if (/(?:even|odd)\s+number/.test(text) || /filter (?:even|odd)/.test(text) || /only the (?:even|odd)/.test(text)) {
+        const even = /even/.test(text);
+        const condition = even ? 'x % 2 == 0' : 'x % 2 != 0';
+        return [
+            `Use a list comprehension: \`[x for x in numbers if ${condition}]\`.`,
+            `This filters the list to keep only ${even ? 'even' : 'odd'} numbers.`,
+            'Return the filtered list.',
+        ];
+    }
+    if (/palindrome/.test(text)) {
+        return [
+            'Compare the input to its reverse: `text == text[::-1]`.',
+            'If equal, it is a palindrome (return `True`); otherwise return `False`.',
+            'Be careful about case — use `.lower()` if case should be ignored.',
+        ];
+    }
+    if (/prime/.test(text)) {
+        return [
+            'Numbers less than 2 are not prime.',
+            'Check divisors from 2 up to `int(sqrt(n))` using `%` operator.',
+            'If any divisor divides evenly, the number is not prime.',
+            'Return the boolean result.',
+        ];
+    }
+    if (/sort(?:ed)?\b/.test(text)) {
+        return [
+            'Call `sorted()` on the input to get a new sorted list (original stays unchanged).',
+            '`.sort()` sorts in-place and returns `None` — prefer `sorted()`.',
+            'Return the sorted result.',
+        ];
+    }
+    if (/factorial/.test(text)) {
+        return [
+            'Use a loop from 1 to n, multiplying each number into a running product.',
+            'Or use `math.factorial(n)` from the math module.',
+            'Return the factorial result.',
+        ];
+    }
+    if (/capitalize/.test(text)) {
+        return [
+            'Call `.capitalize()` on the string — makes first char uppercase, rest lowercase.',
+            'Return the capitalized string.',
+        ];
+    }
+    if (/upper(?:case)?/.test(text)) {
+        return [
+            'Call `.upper()` on the string — converts all characters to uppercase.',
+            'Return the uppercased string.',
+        ];
+    }
+    if (/lower(?:case)?/.test(text)) {
+        return [
+            'Call `.lower()` on the string — converts all characters to lowercase.',
+            'Return the lowercased string.',
+        ];
+    }
+    if (/set|union|intersection|difference/.test(text)) {
+        return [
+            'Convert lists to sets using `set()` for set operations.',
+            'Use `|` for union, `&` for intersection, `-` for difference.',
+            'Convert the result back to a list if needed.',
+            'Return the result.',
+        ];
+    }
+    if (/dictionary|dict/.test(text)) {
+        if (/invert|reverse|swap|key.*value|value.*key/.test(text)) return [
+            'Iterate over `d.items()` to access each key-value pair.',
+            'Build a new dictionary where each value becomes a key and each key becomes its value.',
+            'Return the inverted dictionary.',
+        ];
+        if (/merge|combine|update/.test(text)) return [
+            'Use `{**dict1, **dict2}` or `.update()` to merge the dictionaries.',
+            'Return the merged dictionary.',
+        ];
+        return [
+            'Use `.get(key, default)` for safe dictionary access.',
+            'Iterate with `.items()` when you need both keys and values.',
+            'Return the result.',
+        ];
+    }
     return fallbackLines;
 };
 
@@ -9435,6 +9581,45 @@ const getSpecificGuideHints = (exercise: Exercise) => {
             'Use comparison instead: `text.strip().lower() == "true"`.',
             'The result should be a boolean value, not the string `"True"`.',
         ];
+    }
+    if (/substring|slice/.test(text)) {
+        return ['Slicing with `[start:end]` does NOT include `end` index.', 'Negative indices count from the end of the string.'];
+    }
+    if (/replace.*char/.test(text)) {
+        return ['`.replace()` replaces ALL occurrences, not just the first.', 'It returns a new string — the original is unchanged.'];
+    }
+    if (/reverse/.test(text) && /string/.test(text)) {
+        return ['Strings have no `.reverse()` — use `[::-1]` slicing.', '`.reverse()` only exists for lists.'];
+    }
+    if (/reverse/.test(text) && /list/.test(text)) {
+        return ['`.reverse()` modifies in-place and returns `None`.', 'Use `[::-1]` slicing to get a reversed copy.'];
+    }
+    if (/\b(?:check|test|return).*(?:if|whether).*(?:in the list|contain|present)\b/.test(text)) {
+        return ['The `in` operator returns a boolean — use it directly.', 'Avoid `if element in list: return True else: return False` — just `return element in list`.'];
+    }
+    if (/\bhow many\b[\s\S]*?\b(?:time|appear)\w*\b|\bfrequency\b/.test(text)) {
+        return ['`.count(element)` returns 0 if element is missing — no extra check needed.', 'It counts ALL occurrences, not just the first one.'];
+    }
+    if (/\bindex\b[\s\S]*?\b(?:first|occurrence|position)\b/.test(text)) {
+        return ['`.index(element)` raises `ValueError` if not found — guard with `in` first.', 'It finds only the FIRST occurrence.'];
+    }
+    if (/(?:even|odd)\s+number/.test(text) || /filter (?:even|odd)/.test(text)) {
+        return ['Use `x % 2 == 0` for even, `x % 2 != 0` for odd.', 'A list comprehension is cleaner than a manual loop.'];
+    }
+    if (/palindrome/.test(text)) {
+        return ['`text == text[::-1]` is all you need.', 'Consider whether case matters — use `.lower()` if not.'];
+    }
+    if (/prime/.test(text)) {
+        return ['Only check divisors up to `sqrt(n)`.', 'Numbers less than 2 are not prime.'];
+    }
+    if (/factorial/.test(text)) {
+        return ['`0! = 1` — handle this edge case.', 'Use a loop or `math.factorial()`.'];
+    }
+    if (/sort(?:ed)?\b/.test(text)) {
+        return ['`.sort()` returns `None`; `sorted()` returns a new list.', 'Use `sorted()` to keep the original unchanged.'];
+    }
+    if (/dictionary|dict/.test(text) && /invert|reverse|swap/.test(text)) {
+        return ['Dictionary values must be hashable to become keys.', 'If duplicate values exist, the last one wins.'];
     }
     return [];
 };
