@@ -52,7 +52,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 5,
             "title": "Problem 5",
-            "description": "Write a Python function called `count_vowels` that takes a string as input and returns the count of vowels (a, e, i, o, u) in the string. Ignore case sensitivity.\nExamples:\n  count_vowels('Jonathan') → 3\n  count_vowels('Python') → 1",
+            "description": "Write a Python function called `count_vowels` that takes a string as input and returns the count of vowels (a, e, i, o, u) in the string. Ignore case sensitivity.\nExamples:\n  count_vowels('Jonathan') → 3\n  count_vowels('AEIOUxyz') → 5\n  count_vowels('rhythm') → 0",
             "initialCode": "def count_vowels(string):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(string):\n    count = 0\n    for char in string:\n        if char in 'aeiou':\n            count += 1  # Increment counter if vowel found\n    return count\nresult = 'Jonathan'\nprint(count_vowels(result))  # Output: 3\ndef count_vowels(string):\n    # Using list comprehension\n    return len([char for char in string.lower() if char in 'aeiou'])\nprint(count_vowels('Jonathan'))  # Output: 3\ndef count_vowels(string):\n    # Using sum with generator\n    return sum(1 for char in string.lower() if char in 'aeiou')\nprint(count_vowels('Python'))  # Output: 1\n\n# Using built-in approach\ndef count_vowels(string):\n    return sum(1 for char in string if char in 'aeiou')\n\n# Using manual approach\ndef count_vowels(string):\n    return len([char for char in string if char in 'aeiou'])\n\n# Script approach\nstring = 'hello'\nresult = count_vowels(string)\nprint(result)\n\n# Direct approach\nprint(count_vowels('world'))",
 
@@ -64,7 +64,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 6,
             "title": "Problem 6",
-            "description": "Write a Python function called `reverse_string` that takes a string as input and returns the reverse of that string.\nExamples:\n  reverse_string('hello') → olleh\n  reverse_string('Python') → nohtyP",
+            "description": "Write a Python function called `reverse_string` that takes a string as input and returns the reverse of that string.\nExamples:\n  reverse_string('Jonathan') → 'nahtanoJ'\n  reverse_string('abc def') → 'fed cba'\n  reverse_string('x') → 'x'",
             "initialCode": "def reverse_string(string):\n    pass",
             "solution": "# Using function approach\ndef reverse_string(string):\n    string = string[::-1]\n    return string  # Return the reversed string\nresult = 'Jonathan'\nprint(reverse_string(result))  # Output: nahtanoJ\ndef reverse_string(string):\n    # Using reversed() and join\n    return ''.join(reversed(string))\nprint(reverse_string('hello'))  # Output: olleh\ndef reverse_string(string):\n    # Using loop\n    result = ''\n    for char in string:\n        result = char + result\n    return result\nprint(reverse_string('Python'))  # Output: nohtyP\n\n# Using built-in approach\ndef reverse_string(string):\n    return ''.join(reversed(string))\n\n# Using manual approach\ndef reverse_string(string):\n    result = ''\n    for char in string:\n        result = char + result\n    return result\n\n# Script approach\nstring = 'hello'\nresult = reverse_string(string)\nprint(result)\n\n# Direct approach\nprint(reverse_string('world'))",
 
@@ -196,7 +196,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 17,
             "title": "Problem 17",
-            "description": "Write a Python function called `count_words` that takes a string as input and returns the number of words in the string. Assume that words are separated by spaces.\nExamples:\n  count_words('hello') → 1\n  count_words('world') → 1\n  count_words('python') → 1",
+            "description": "Write a Python function called `count_words` that takes a string as input and returns the number of words in the string. Assume that words are separated by spaces.\nExamples:\n  count_words('This is an example sentence.') → 5\n  count_words('hello') → 1\n  count_words('  extra   spaces here  ') → 3",
             "initialCode": "def count_words(string):\n    pass\n\ndef count_words(string):\n    pass\n\ndef count_words(string):\n    pass",
             "solution": "# Using function approach\ndef count_words(string):\n    words = string.split()\n    word_count = 0  # Initialize counter\n    for word in words:\n        word_count += 1  # Count each word\n    return word_count\nexample_string = 'This is an example sentence.'\nprint(count_words(example_string))  # Output: 5\ndef count_words(string):\n    words = string.split()  # Split string into list of words\n    return len(words)  # Return the length of the list (word count)\nexample_string = 'This is an example sentence.'\nprint(count_words(example_string))  # Output: 5\ndef count_words(string):\n    words = string.split()\n    return len(words)\narg = 'hello my friend'\nprint(count_words(arg))  # Output: 3\n# Using sum()\n\n# Using built-in approach\ndef count_words(string):\n    result = word_count\n    return result\n\n# Using manual approach\ndef count_words(string):\n    return word_count\n\n# Script approach\nstring = 'hello'\nresult = count_words(string)\nprint(result)\n\n# Direct approach\nprint(count_words('world'))",
 
@@ -208,7 +208,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 18,
             "title": "Problem 18",
-            "description": "Write a Python function called `find_min` that takes a list of numbers as an input argument and returns the minimum number in the list.\nExamples:\n  find_min() → type number:\n  find_min() → ?",
+            "description": "Write a Python function called `find_min` that takes a list of numbers as an input argument and returns the minimum number in the list.\nExamples:\n  find_min([45, 6, 1]) → 1\n  find_min([-3, -9, 2]) → -9\n  find_min([5]) → 5",
             "initialCode": "def find_min():\n    pass\n\ndef find_min(numbers):\n    pass\n\ndef find_minimum(numbers):\n    pass",
             "solution": "# Using function approach\ndef find_min():\n    user = input('type number: ').split()\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))\n    min_num = sorted(int_number)[0]\n    for number in int_number:\n        if min_num < 0:  # BUG: This condition is wrong\n            min_num = number\n    print(min_num)  # Print the result\nfind_min()  # Call the function\ndef find_min(numbers):\n    return min(numbers)\nlst = [1, 56, 68]\nprint(find_min(lst))  # Output: 1\ndef find_minimum(numbers):\n    min_number = numbers[0]\n    for number in numbers:\n        if number < min_number:\n            min_number = number  # Update min_number to the new minimum\n    return min_number  # Return the minimum value found\nmin_number = [45, 6, 1]\nprint(find_minimum(min_number))  # Output: 1\n\n# Using built-in approach\ndef find_min():\n    user = input('type number: ').split()\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))\n    min_num = sorted(int_number)[0]\n    for number in int_number:\n        if min_num < 0:  # BUG: This condition is wrong\n            min_num = number\n    return min_num\n\n# Using manual approach\ndef find_min():\n    user = input('type number: ').split()\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))\n    min_num = sorted(int_number)[0]\n    for number in int_number:\n        if min_num < 0:  # BUG: This condition is wrong\n            min_num = number\n    result = min_num\n    return result\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = find_min(numbers)\nprint(result)\n\n# Direct approach\nprint(find_min([4, 1, 8, 6, 3]))",
 
@@ -280,7 +280,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 24,
             "title": "Problem 24",
-            "description": "Write a Python function called `find_last_element` that takes a list if numbers and returns the last number of the list.\nExamples:\n  find_last_element('hello') → o\n  find_last_element('world') → d\n  find_last_element('python') → n",
+            "description": "Write a Python function called `find_last_element` that takes a list if numbers and returns the last number of the list.\nExamples:\n  find_last_element([1, 45, 66]) → 66\n  find_last_element(['a', 'b', 'c']) → 'c'\n  find_last_element([5]) → 5",
             "initialCode": "def find_last_element(string):\n    pass\n\ndef find_element(elements):\n    pass",
             "solution": "# Using function approach\ndef find_last_element(string):\n    return string[-1]\nlst = [1, 45, 66]\nprint(find_last_element(lst))  # Output: 66\ndef find_element(elements):\n    last = elements[-1]\n    for element in elements:\n        if element == last:\n            return last  # Return the last element\nlst = [1,5]\nprint(find_element(lst))  # Output: 5\n\n# Using built-in approach\ndef find_last_element(string):\n    result = string[-1]\n    return result\n\n# Using manual approach\ndef find_last_element(string):\n    return string[-1]\n\n# Script approach\nstring = 'hello'\nresult = find_last_element(string)\nprint(result)\n\n# Direct approach\nprint(find_last_element('world'))",
 
@@ -316,7 +316,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 27,
             "title": "Problem 27",
-            "description": "Write a Python function called `count_occurrences` that takes a list and an element as input and returns the number of times the element appears in the list.\nExamples:\n  count_occurrences([1, 2, 3, 2, 2], 2) → 3\n  count_occurrences(['a', 'b', 'a', 'c'], 'a') → 2",
+            "description": "Write a Python function called `count_occurrences` that takes a list and an element as input and returns the number of times the element appears in the list.\nExamples:\n  count_occurrences([1, 2, 2, 3, 2], 2) → 3\n  count_occurrences(['tree', 'house', 'tree'], 'tree') → 2\n  count_occurrences([1, 2, 3], 9) → 0",
             "initialCode": "def count_occurrences(elements, target):\n    pass\n\ndef count_occurrences(elements, target):\n    pass",
             "solution": "# Using function approach\ndef count_occurrences(elements, target):\n    count = 0  # Initialize counter\n    word = ''  # Variable to store the target word\n    for element in elements:\n        if element == target:\n            word = element  # Store the matching element\n            count += 1  # Increment counter\n    return f'The word {word} occures {count} times'\nelements = ['tree', 'house', 'tree', 'car']\ntarget = 'tree'\nprint(count_occurrences(elements, target))  # Output: The word tree occures 2 times\ndef count_occurrences(elements, target):\n    count = 0  # Initialize counter\n    for element in elements:\n        if element == target:\n            count += 1  # Increment for each match\n    return count  # Return the count as an integer\nlist_elements = [1, 2, 3, 4, 5, 2, 2, 3]\ntarget_element = 2\nprint(f'The element {target_element} appears {count_occurrences(list_elements, target_element)} times in the list.')  # Output: The element 2 appears 3 times in the list.\n\n# Alternative solution using list.count() method\ndef count_occurrences(elements, target):\n    return elements.count(target)\nprint(count_occurrences([1, 2, 3, 2, 2], 2))  # Output: 3\n\n# Alternative solution using sum with generator\ndef count_occurrences(elements, target):\n    return sum(1 for x in elements if x == target)\nprint(count_occurrences(['a', 'b', 'a', 'c'], 'a'))  # Output: 2\n\n# Using built-in approach\ndef count_occurrences(elements, target):\n    return 'The word {} occures {} times'.format(word, count)\n\n# Using manual approach\ndef count_occurrences(elements, target):\n    return 'The word %s occures %s times' % (word, count)\n\n# Script approach\nelements = [2, 7, 1, 9]\ntarget = 'target'\nresult = count_occurrences(elements, target)\nprint(result)\n\n# Direct approach\nprint(count_occurrences([5, 3, 8, 4], 'goal'))",
 
@@ -328,7 +328,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 28,
             "title": "Problem 28",
-            "description": "Write a Python function called `remove_vowels` that takes a string as input and returns a new string with all the vowels (a, e, i, o, u) removed.\nExamples:\n  remove_vowels('Python') → Pthn\n  remove_vowels('Hello World') → Hll Wrld",
+            "description": "Write a Python function called `remove_vowels` that takes a string as input and returns a new string with all the vowels (a, e, i, o, u) removed.\nExamples:\n  remove_vowels('Jonathan') → 'Jnthn'\n  remove_vowels('AEIOUxyz') → 'xyz'\n  remove_vowels('rhythm') → 'rhythm'",
             "initialCode": "def remove_vowels(string):\n    pass\n\ndef remove_vowels(string):\n    pass",
             "solution": "# Using function approach\ndef remove_vowels(string):\n    vowels = 'aeiouAEIOU'  # Define vowels (both cases)\n    result = ''\n    for char in string:\n        if char not in vowels:\n            result += char  # Append non-vowel character\n    return result  # Return string with vowels removed\n# Original: J-o-n-a-t-h-a-n\n# Vowels removed: o, a, a\nlst = 'Jonathan'\nprint(remove_vowels(lst))  # Output: Jnthn\ndef remove_vowels(string):\n    vowels = 'aeiou'  # Only lowercase vowels (missing uppercase)\n    vowels_removed = []  # List to collect non-vowel characters\n    for char in string:\n        if char not in vowels:\n            vowels_removed.append(char)  # Add to list\n    return ''.join(vowels_removed)  # Join list into string\nlst = 'Jonathan'\nprint(remove_vowels(lst))  # Output: Jnthn\n\n# Alternative solution using list comprehension\ndef remove_vowels(string):\n    return ''.join([c for c in string if c.lower() not in 'aeiou'])\nprint(remove_vowels('Python'))  # Output: Pthn\n\n# Alternative solution using regex\ndef remove_vowels(string):\n    import re\n    return re.sub(r'[aeiouAEIOU]', '', string)\nprint(remove_vowels('Hello World'))  # Output: Hll Wrld\n\n# Using built-in approach\ndef remove_vowels(string):\n    result = result\n    return result\n\n# Using manual approach\ndef remove_vowels(string):\n    return result\n\n# Script approach\nstring = 'hello'\nresult = remove_vowels(string)\nprint(result)\n\n# Direct approach\nprint(remove_vowels('world'))",
 
@@ -400,7 +400,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 34,
             "title": "Problem 34",
-            "description": "Write a Python function called find_longest_word that takes a string of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a Python function called find_longest_word that takes a string of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.\nExamples:\n  main('why dont you call Jonathan') → 'Jonathan'\n  main('tree cliff mountain grassy') → 'mountain'\n  main('same size test') → 'same'",
             "initialCode": "def main(lst):\n    pass\n\ndef main(lst):\n    pass\n\ndef find_longest_word(words):\n    pass\n\ndef find_longest_word(words):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return max(lst, key=len)\nlst = ['tree', 'cliff', 'mountain', 'tree','tree', 'grassy']\nmain(lst)  # Returns: 'mountain'\ndef main(lst):\n    largest_len = 0  # Track the length of the longest word found\n    largest_word = ''  # Track the longest word itself\n    for word in lst:\n        if len(word) > largest_len:\n            largest_len = len(word)  # Update the length\n            largest_word = word  # Update the word\n    return largest_word  # Return the longest word\nlst = ['tree', 'cliff', 'mountain', 'tree','tree', 'grassy']\nmain(lst)  # Returns: 'mountain'\ndef find_longest_word(words):\n    word_list = words.split()  # e.g., ['why', 'dont', 'you', 'call', 'Jonathan']\n    return max(word_list, key=len)  # Returns 'Jonathan'\ninput_string = 'why dont you call Jonathan'\nprint('Longest word:', find_longest_word(input_string))  # Output: Longest word: Jonathan\ndef find_longest_word(words):\n    split_word = words.split()  # e.g., ['why', 'dont', 'Jonathanthebest', 'finds', 'top']\n    count = 0  # Track the length of the longest word\n    longest_word = ''  # Track the longest word itself\n    for word in split_word:\n        if len(word) > count:\n            count = len(word)  # Update length\n            longest_word = word  # Update word\n    return longest_word  # Return the longest word\ninput_string = 'why dont Jonathanthebest finds top'\nprint('Longest word:', find_longest_word(input_string))  # Output: Longest word: Jonathanthebest\n\n# Using built-in approach\ndef main(lst):\n    result = max(lst, key=len)\n    return result\n\n# Using manual approach\ndef main(lst):\n    return max(lst, key=len)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -412,7 +412,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 35,
             "title": "Problem 35",
-            "description": "Write a Python function called find_vowels that takes a string as input and returns a list of vowels (a, e, i, o, u) present in the string. Ignore case sensitivity, meaning consider both uppercase and lowercase vowels.\nExamples:\n  find_vowels('Python') → ['o']\n  find_vowels('Hello World') → ['e', 'o', 'o']",
+            "description": "Write a Python function called find_vowels that takes a string as input and returns a list of vowels (a, e, i, o, u) present in the string. Ignore case sensitivity, meaning consider both uppercase and lowercase vowels.\nExamples:\n  find_vowels('Jonathan') → ['o', 'a', 'a']\n  find_vowels('AEIOUxyz') → ['A', 'E', 'I', 'O', 'U']\n  find_vowels('rhythm') → []",
             "initialCode": "def find_vowels(string):\n    pass\n\ndef find_vowels(string):\n    pass",
             "solution": "# Using function approach\ndef find_vowels(string):\n    vowels = 'aeiou'  # Only lowercase vowels (missing uppercase)\n    return_vowels = []  # List to store found vowels\n    for char in string:\n        if char in vowels:\n            return_vowels += char  # Add vowel to list\n    return return_vowels  # Return list of vowels found\nlst = 'Jonathan'\nprint(find_vowels(lst))  # Output: ['o', 'a', 'a']\ndef find_vowels(string):\n    vowels = 'aeiouAEIOU'  # Both lowercase and uppercase vowels\n    vowel_list = []  # List to store found vowels\n    for char in string:\n        if char in vowels:\n            vowel_list.append(char)  # Add vowel to list\n    return vowel_list  # Return list of all vowels found\nlst = 'Jonathan'\nprint(find_vowels(lst))  # Output: ['o', 'a', 'a']\n\n# Alternative solution using list comprehension\ndef find_vowels(string):\n    return [char for char in string if char.lower() in 'aeiou']\nprint(find_vowels('Python'))  # Output: ['o']\n\n# Alternative solution using filter\ndef find_vowels(string):\n    return list(filter(lambda c: c.lower() in 'aeiou', string))\nprint(find_vowels('Hello World'))  # Output: ['e', 'o', 'o']\n\n# Using built-in approach\ndef find_vowels(string):\n    result = return_vowels\n    return result\n\n# Using manual approach\ndef find_vowels(string):\n    return return_vowels\n\n# Script approach\nstring = 'hello'\nresult = find_vowels(string)\nprint(result)\n\n# Direct approach\nprint(find_vowels('world'))",
 
@@ -436,7 +436,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 37,
             "title": "Problem 37",
-            "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, while maintaining the original order of characters.\nExamples:\n  remove_duplicates('hello') → helo\n  remove_duplicates('aabbcc') → abc",
+            "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, while maintaining the original order of characters.\nExamples:\n  remove_duplicate('Jonathan') → 'Jonath'\n  remove_duplicate('banana') → 'ban'\n  remove_duplicate('abc') → 'abc'",
             "initialCode": "def remove_duplicate(strings):\n    pass\n\ndef remove_duplicates(string):\n    pass\n\ndef remove_dupicates(numbers):\n    pass",
             "solution": "# Using function approach\ndef remove_duplicate(strings):\n    return list(set(strings))  # Returns list, not string, and order may be lost\nlst = 'Jonathan'\nprint(remove_duplicate(lst))  # Output: ['J', 'o', 'n', 'a', 't', 'h'] (order may vary)\ndef remove_duplicates(string):\n    unique_chars = []  # List to store unique characters in order\n    for char in string:\n        if char not in unique_chars:\n            unique_chars.append(char)  # Add first occurrence\n    return ''.join(unique_chars)  # Return string with duplicates removed, order preserved\ninput_string = 'Jonathan'\nprint(remove_duplicates(input_string))  # Output: Jonath\ndef remove_dupicates(numbers):\n    duplicates = []  # List to store unique elements (note: variable name is misleading)\n    for number in numbers:\n        if number not in duplicates:\n            duplicates.append(number)  # Add first occurrence\n    return duplicates  # Return list with duplicates removed, order preserved\nlst = [3, 2, 2]\nprint(remove_dupicates(lst))  # Output: [3, 2]\n\n# Alternative solution using dict.fromkeys()\ndef remove_duplicates(string):\n    return ''.join(dict.fromkeys(string))\nprint(remove_duplicates('hello'))  # Output: helo\n\n# Alternative solution using list comprehension with seen set\ndef remove_duplicates(string):\n    seen = set()\n    return ''.join([c for c in string if not (c in seen or seen.add(c))])\nprint(remove_duplicates('aabbcc'))  # Output: abc\n\n# Using built-in approach\ndef remove_duplicate(strings):\n    result = list(set(strings))\n    return result\n\n# Using manual approach\ndef remove_duplicate(strings):\n    return list(set(strings))\n\n# Script approach\nstrings = 'hello'\nresult = remove_duplicate(strings)\nprint(result)\n\n# Direct approach\nprint(remove_duplicate('world'))",
 
@@ -484,7 +484,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 41,
             "title": "Problem 41",
-            "description": "Write a Python function called `count_occurrences` that takes a list and an element as input and returns the number of times the element appears in the list.\nDid you complete the exercise? (y/n)\nExamples:\n  count_occurrences(['Tom', 'Jerry', 'Tom', 'Alice'], 'Tom') → 2\n  count_occurrences([1, 2, 2, 3, 2], 2) → 3",
+            "description": "Write a Python function called `count_occurrences` that takes a list and an element as input and returns the number of times the element appears in the list.\nDid you complete the exercise? (y/n)\nExamples:\n  count_occurrences(['Tom', 'Jerry', 'Tom'], 'Tom') → 2\n  count_occurrences([1, 2, 2, 2], 2) → 3\n  count_occurrences(['a', 'b'], 'z') → 0",
             "initialCode": "def count_occurrences():\n    pass",
             "solution": "# Using function approach\ndef count_occurrences():\n    user = input('type lst: ').split()  # e.g., ['Tom', 'Jerry', 'Tom']\n    count = 0  # Initialize counter\n    for word in user:\n        if word == 'Tom':  # Only counts 'Tom', not a general element\n            count += 1  # Increment counter\n    return count  # Return count\ncount_occurrences()  # Prompts user for input\n\n# Alternative solution using list.count()\ndef count_occurrences(lst, target):\n    return lst.count(target)\nprint(count_occurrences(['Tom', 'Jerry', 'Tom', 'Alice'], 'Tom'))  # Output: 2\n\n# Alternative solution using sum with generator\ndef count_occurrences(lst, target):\n    return sum(1 for item in lst if item == target)\nprint(count_occurrences([1, 2, 2, 3, 2], 2))  # Output: 3\n\n# Using built-in approach\ndef count_occurrences():\n    result = count\n    return result\n\n# Using manual approach\ndef count_occurrences():\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\ntarget = 'target'\nresult = count_occurrences(lst, target)\nprint(result)\n\n# Direct approach\nprint(count_occurrences([1, 3, 5, 7], 'goal'))",
 
@@ -496,7 +496,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 42,
             "title": "Problem 42",
-            "description": "Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`.\"\nExamples:\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n  table(3) → '3 * 0 = 0\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n  table(5) → '5 * 0 = 0\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'",
+            "description": "Write a Python function called `table` that takes an integer `x` as input and prints the multiplication table for `x` from 0 to 10 (inclusive). Each line should show the multiplication of `x` with the number from 0 to 10 in the format `x * number = total`.\"\nExamples:\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'\n  table(3) → '3 * 0 = 0\n3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27\n3 * 10 = 30'\n  table(5) → '5 * 0 = 0\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15\n5 * 4 = 20\n5 * 5 = 25\n5 * 6 = 30\n5 * 7 = 35\n5 * 8 = 40\n5 * 9 = 45\n5 * 10 = 50'",
             "initialCode": "def table(x):\n    pass\n\ndef table(x):\n    pass\n\ndef table(x):\n    pass",
             "solution": "# Using function approach\ndef table(x):\n    lines = []\n    for number in range(11):\n        lines.append(f'{x} * {number} = {x * number}')\n    return '\n'.join(lines)\nprint(table(3))\n\n# Script approach\nx = 7\nresult = table(x)\nprint(result)\n\n# Direct approach\nprint(table(3))",
 
@@ -592,7 +592,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 50,
             "title": "Problem 50",
-            "description": "Write a Python function called is_palindrome that takes a string as input and returns True if the string is a palindrome (reads the same forwards and backwards), and False otherwise.\nExamples:\n  is_palindrome('madam') → True\n  is_palindrome('python') → False\n  is_palindrome('level') → True\n  is_palindrome('world') → False",
+            "description": "Write a Python function called is_palindrome that takes a string as input and returns True if the string is a palindrome (reads the same forwards and backwards), and False otherwise.\nExamples:\n  is_palindrome('racecar') → True\n  is_palindrome('hello') → False\n  is_palindrome('') → True",
             "initialCode": "def is_palindrome(s):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(s):\n    return s == s[::-1]  # One-liner palindrome check\ninput_string = 'racecar'\nprint('Is', input_string, 'a palindrome?', is_palindrome(input_string))  # Output: Is racecar a palindrome? True\ninput_string = 'hello'\nprint('Is', input_string, 'a palindrome?', is_palindrome(input_string))  # Output: Is hello a palindrome? False\n\n# Alternative solution using two pointers\ndef is_palindrome(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        if s[left] != s[right]:\n            return False\n        left += 1\n        right -= 1\n    return True\nprint(is_palindrome('madam'))  # Output: True\nprint(is_palindrome('python'))  # Output: False\n\n# Alternative solution using reversed()\ndef is_palindrome(s):\n    return s == ''.join(reversed(s))\nprint(is_palindrome('level'))  # Output: True\nprint(is_palindrome('world'))  # Output: False\n\n# Using built-in approach\ndef is_palindrome(s):\n    result = s == s[::-1]\n    return result\n\n# Using manual approach\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome([4, 1, 8, 6, 3]))",
 
@@ -616,7 +616,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 52,
             "title": "Problem 52",
-            "description": "Write a Python function called is_anagram that takes two strings as input and returns True if they are anagrams of each other, and False otherwise. Two strings are anagrams if they can be rearranged to form the same word (e.g., “listen” and “silent”).\nExamples:\n  is_anagram('listen', 'silent') → True\n  is_anagram('hello', 'world') → False\n  is_anagram('Triangle', 'Integral') → True",
+            "description": "Write a Python function called is_anagram that takes two strings as input and returns True if they are anagrams of each other, and False otherwise. Two strings are anagrams if they can be rearranged to form the same word (e.g., “listen” and “silent”).\nExamples:\n  main('listen', 'silent') → True\n  main('Triangle', 'Integral') → True\n  main('hello', 'world') → False",
             "initialCode": "def main():\n    pass\n\ndef is_anagram(str1, str2):\n    pass\n\ndef is_anagram(lst1, lst2):\n    pass",
             "solution": "# Using function approach\ndef main():\n    string1 = input('type string: ').lower()  # e.g., 'Listen' \\u2192 'listen'\n    string2 = input('type string: ').lower()  # e.g., 'Silent' \\u2192 'silent'\n    sorted1 = sorted(string1)\n    sorted2 = sorted(string2)\n    if sorted1 == sorted2:\n        return True  # Strings are anagrams\n    return False  # Strings are not anagrams\nmain()\ndef is_anagram(str1, str2):\n    str1 = str1.lower()  # 'Listen' \\u2192 'listen'\n    str2 = str2.lower()  # 'Silent' \\u2192 'silent'\n    return sorted(str1) == sorted(str2)  # Returns True if anagrams, False otherwise\nprint(is_anagram('listen', 'silent'))  # Output: True\nprint(is_anagram('hello', 'world'))  # Output: False\nprint(is_anagram('Triangle', 'Integral'))  # Output: True\ndef is_anagram(lst1, lst2):\n    sorted_lst1 = sorted(lst1)  # 'qwer' \\u2192 ['e', 'q', 'r', 'w']\n    sorted_lst2 = sorted(lst2)  # 'rewq' \\u2192 ['e', 'q', 'r', 'w']\n    if sorted_lst1 == sorted_lst2:\n        return True  # Strings are anagrams\n    return False  # Strings are not anagrams\nlst1 = 'qwer'\nlst2 = 'rewq'\nprint(is_anagram(lst1, lst2))  # Output: True\n\n# Alternative solution using Counter\ndef is_anagram(str1, str2):\n    from collections import Counter\n    return Counter(str1.lower()) == Counter(str2.lower())\nprint(is_anagram('listen', 'silent'))  # Output: True\n\n# Alternative solution using character counting\ndef is_anagram(str1, str2):\n    str1, str2 = str1.lower(), str2.lower()\n    if len(str1) != len(str2):\n        return False\n    for char in str1:\n        if str1.count(char) != str2.count(char):\n            return False\n    return True\nprint(is_anagram('hello', 'olleh'))  # Output: True\n\n# Using built-in approach\ndef main():\n    result = True\n    return result\n\n# Using manual approach\ndef main():\n    return True\n\n# Script approach\nstr1 = 'hello'\nstr2 = 'world'\nresult = is_anagram(str1, str2)\nprint(result)\n\n# Direct approach\nprint(is_anagram('world', 'python'))",
 
@@ -652,7 +652,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 55,
             "title": "Problem 55",
-            "description": "Write a Python program to calculate the area of a rectangle. Prompt the user to enter the length and width.\nExamples:\n  area_rectangle() → Enter length:\n  area_rectangle() → ?",
+            "description": "Write a Python program to calculate the area of a rectangle. Prompt the user to enter the length and width.\nExamples:\n  area_rectangle() → '15.0'\n  area_rectangle() → '8.0'",
             "initialCode": "def area_rectangle():\n    pass",
             "solution": "# Using function approach\ndef area_rectangle():\n    length = float(input('Enter length: '))\n    width = float(input('Enter width: '))\n    print(length * width)\narea_rectangle()\n\n# Using built-in approach\ndef area_rectangle():\n    length = float(input('Enter length: '))\n    width = float(input('Enter width: '))\n    return length * width\n\n# Using manual approach\ndef area_rectangle():\n    length = float(input('Enter length: '))\n    width = float(input('Enter width: '))\n    result = length * width\n    return result\n\n# Script approach\nlength = 5\nwidth = 5\nprint(length * width)\n\n# Direct approach\nlength = 10\nwidth = 10\nprint(length * width)",
 
@@ -700,7 +700,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 59,
             "title": "Problem 59",
-            "description": "Write a Python program to reverse a string. Prompt the user to enter a string.\nExamples:\n  reverse_string('python') → nohtyp\n  reverse_string('hello') → olleh",
+            "description": "Write a Python program to reverse a string. Prompt the user to enter a string.\nExamples:\n  reverse_string('Jonathan') → 'nahtanoJ'\n  reverse_string('hello') → 'olleh'",
             "initialCode": "def reverse_string():\n    pass\n\ndef reverse_string(string):\n    pass",
             "solution": "# Using function approach\ndef reverse_string():\n    user = input('type string: ')  # e.g., 'hello'\n    user = user[::-1]  # 'hello' \\u2192 'olleh'\n    print(user)  # Prints: olleh\nreverse_string()  # Call the function\ndef reverse_string(string):\n    return string[::-1]  # Returns reversed string\nlst = 'Jonathan'\nprint(reverse_string(lst))  # Output: nahtanoJ\n\n# Alternative solution using join and reversed\ndef reverse_string(s):\n    return ''.join(reversed(s))\nprint(reverse_string('python'))  # Output: nohtyp\n\n# Alternative solution using loop\ndef reverse_string(s):\n    result = ''\n    for char in s:\n        result = char + result\n    return result\nprint(reverse_string('hello'))  # Output: olleh\n\n# Using built-in approach\ndef reverse_string():\n    user = input('type string: ')  # e.g., 'hello'\n    user = user[::-1]  # 'hello' \\u2192 'olleh'\n    return user\n\n# Using manual approach\ndef reverse_string():\n    user = input('type string: ')  # e.g., 'hello'\n    user = user[::-1]  # 'hello' \\u2192 'olleh'\n    result = user\n    return result\n\n# Script approach\nstring = 'hello'\nresult = reverse_string(string)\nprint(result)\n\n# Direct approach\nprint(reverse_string('world'))",
 
@@ -712,7 +712,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 60,
             "title": "Problem 60",
-            "description": "Write a Python program to check if a given string is a palindrome. Prompt the user to enter a string.\nExamples:\n  is_palindrome('racecar') → True\n  is_palindrome('hello') → False\n  is_palindrome('madam') → True",
+            "description": "Write a Python program to check if a given string is a palindrome. Prompt the user to enter a string.\nExamples:\n  is_palindrome() → True\n  is_palindrome() → False",
             "initialCode": "def is_palindrome():\n    pass",
             "solution": "# Using function approach\ndef is_palindrome():\n    user = input('type word: ').lower().replace(' ', '')  # 'Race Car' \\u2192 'racecar'\n    return user == user[::-1]  # 'racecar' == 'racecar' \\u2192 True\nprint(is_palindrome())  # Call function and print result\n\n# Alternative solution with two pointers\ndef is_palindrome(s):\n    s = s.lower().replace(' ', '')\n    left, right = 0, len(s) - 1\n    while left < right:\n        if s[left] != s[right]:\n            return False\n        left += 1\n        right -= 1\n    return True\nprint(is_palindrome('racecar'))  # Output: True\nprint(is_palindrome('hello'))    # Output: False\n\n# Alternative solution using all()\ndef is_palindrome(s):\n    s = s.lower().replace(' ', '')\n    return all(s[i] == s[-(i+1)] for i in range(len(s)//2))\nprint(is_palindrome('madam'))  # Output: True\n\n# Using built-in approach\ndef is_palindrome():\n    result = user == user[::-1]\n    return result\n\n# Using manual approach\ndef is_palindrome():\n    return user == user[::-1]\n\n# Script approach\ns = 'hello'\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome('world'))",
 
@@ -724,7 +724,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 61,
             "title": "Problem 61",
-            "description": "Write a Python program to count the number of vowels in a given string. Prompt the user to enter a string.\nExamples:\n  count_vowels('Python') → 1\n  count_vowels('Hello World') → 3\n  count_vowels('Programming') → 3",
+            "description": "Write a Python program to count the number of vowels in a given string. Prompt the user to enter a string.\nExamples:\n  count_vowels() → '2'\n  count_vowels() → '0'",
             "initialCode": "def count_vowels():\n    pass",
             "solution": "# Using function approach\ndef count_vowels():\n    user = input('type string: ').lower()  # 'Hello' \\u2192 'hello'\n    vowels = 'aeiou'  # String containing all vowels\n    count = 0\n    for char in user:\n        if char in vowels:  # If char is 'a', 'e', 'i', 'o', or 'u'\n            count += 1  # Increment counter\n    print(count)  # Display the total count\ncount_vowels()  # Call the function\n\n# Alternative solution using list comprehension\ndef count_vowels(s):\n    return len([c for c in s.lower() if c in 'aeiou'])\nprint(count_vowels('Python'))  # Output: 1\nprint(count_vowels('Hello World'))  # Output: 3\n\n# Alternative solution using sum\ndef count_vowels(s):\n    return sum(1 for c in s.lower() if c in 'aeiou')\nprint(count_vowels('Programming'))  # Output: 3\n\n# Using built-in approach\ndef count_vowels():\n    user = input('type string: ').lower()  # 'Hello' \\u2192 'hello'\n    vowels = 'aeiou'  # String containing all vowels\n    count = 0\n    for char in user:\n        if char in vowels:  # If char is 'a', 'e', 'i', 'o', or 'u'\n            count += 1  # Increment counter\n    return count\n\n# Using manual approach\ndef count_vowels():\n    user = input('type string: ').lower()  # 'Hello' \\u2192 'hello'\n    vowels = 'aeiou'  # String containing all vowels\n    count = 0\n    for char in user:\n        if char in vowels:  # If char is 'a', 'e', 'i', 'o', or 'u'\n            count += 1  # Increment counter\n    result = count\n    return result\n\n# Script approach\ns = 'hello'\nresult = count_vowels(s)\nprint(result)\n\n# Direct approach\nprint(count_vowels('world'))",
 
@@ -748,7 +748,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 63,
             "title": "Problem 63",
-            "description": "Write a Python program to calculate the sum of all numbers from 1 to a given number. Prompt the user to enter a number.\nExamples:\n  sum_of_all_numbers() → Enter a number:\n  sum_of_all_numbers() → ?",
+            "description": "Write a Python program to calculate the sum of all numbers from 1 to a given number. Prompt the user to enter a number.\nExamples:\n  sum_of_all_numbers() → '15'\n  sum_of_all_numbers() → '6'",
             "initialCode": "def sum_of_all_numbers():\n    pass",
             "solution": "# Using function approach\ndef sum_of_all_numbers():\n    n = int(input('Enter a number: '))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    print(total)\nsum_of_all_numbers()\n\n# Using built-in approach\ndef sum_of_all_numbers():\n    n = int(input('Enter a number: '))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    return total\n\n# Using manual approach\ndef sum_of_all_numbers():\n    n = int(input('Enter a number: '))\n    total = 0\n    for number in range(1, n + 1):\n        total += number\n    result = total\n    return result\n\n# Script approach\nn = 5\ntotal = 0\nfor number in range(1, n + 1):\n    total += number\nprint(total)\n\n# Direct approach\nn = 10\ntotal = 0\nfor number in range(1, n + 1):\n    total += number\nprint(total)",
 
@@ -760,7 +760,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 64,
             "title": "Problem 64",
-            "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers.\nExamples:\n  find_largest() → type number:\n  find_largest() → ?",
+            "description": "Write a Python program to find the largest element in a list. Prompt the user to enter a list of numbers.\nExamples:\n  find_largest([2, 56, 75, 4566, 3]) → 4566\n  find_largest([-5, -2, -9]) → -2\n  find_largest([7]) → 7",
             "initialCode": "def find_largest():\n    pass\n\ndef find_largest():\n    pass\n\ndef largest_element(numbers):\n    pass\n\ndef largest_element(numbers):\n    pass",
             "solution": "# Using function approach\ndef find_largest():\n    user = input('type number: ').split()  # '2 56 75 4566 3' \\u2192 ['2', '56', ...]\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))  # [2, 56, 75, 4566, 3]\n    sort = sorted(int_number)  # [2, 3, 56, 75, 4566]\n    largest = sort[-1]  # 4566\n    print(largest)  # Display the largest number\nfind_largest()  # Call the function\ndef find_largest():\n    user = input('type number: ').split()\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n    sort = sorted(int_number, reverse=True)  # [4566, 75, 56, 3, 2]\n    largest = sort[0]  # 4566\n    print(largest)  # Display the largest number\nfind_largest()  # Call the function\ndef largest_element(numbers):\n    return max(numbers)\nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))  # Output: 4566\ndef largest_element(numbers):\n    largest = numbers[0]  # Assume first is largest\n    for number in numbers:\n        if number > largest:  # 56 > 2, so largest = 56; 75 > 56, so largest = 75, etc.\n            largest = number  # Update maximum\n    return largest  # Return the largest number\nnumbers = [2, 56, 75, 4566, 3]\nprint(largest_element(numbers))  # Output: 4566\n\n# Using built-in approach\ndef find_largest():\n    user = input('type number: ').split()  # '2 56 75 4566 3' \\u2192 ['2', '56', ...]\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))  # [2, 56, 75, 4566, 3]\n    sort = sorted(int_number)  # [2, 3, 56, 75, 4566]\n    largest = sort[-1]  # 4566\n    return largest\n\n# Using manual approach\ndef find_largest():\n    user = input('type number: ').split()  # '2 56 75 4566 3' \\u2192 ['2', '56', ...]\n    int_number = []  # List to store converted integers\n    for number in user:\n        int_number.append(int(number))  # [2, 56, 75, 4566, 3]\n    sort = sorted(int_number)  # [2, 3, 56, 75, 4566]\n    largest = sort[-1]  # 4566\n    result = largest\n    return result\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = largest_element(numbers)\nprint(result)\n\n# Direct approach\nprint(largest_element([4, 1, 8, 6, 3]))",
 
@@ -772,7 +772,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 65,
             "title": "Problem 65",
-            "description": "Write a Python program to find the largest element in a list (do not use numbers).\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a Python program to find the largest element in a list (do not use numbers).\nExamples:\n  main(['tree', 'cliff', 'mountain', 'grassy']) → 'mountain'\n  main(['house', 'counter', 'if']) → 'counter'\n  main(['same', 'size']) → 'same'",
             "initialCode": "def main(lst):\n    pass\n\ndef largest_elememt(lst):\n    pass\n\ndef largest_elememt(lst):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return max(lst, key=len)\nlst = ['tree', 'cliff', 'mountain', 'tree','tree', 'grassy']\nmain(lst)  # Returns: 'mountain'\ndef largest_elememt(lst):\n    count = 0  # Track the length of the longest string found\n    largest = ''  # Track the longest string itself\n    for word in lst:\n        if len(word) > count:  # Compare lengths\n            count = len(word)  # Update the length\n            largest = word  # Update the word\n    return largest  # Return the longest string\nlst = ['house', 'counter', 'if']\nprint(largest_elememt(lst))  # Output: counter\ndef largest_elememt(lst):\n    lst = sorted(lst, key=len)  # ['if', 'house', 'counter']\n    return lst[-1]  # Returns 'counter'\nlst = ['house', 'counter', 'if']\nprint(largest_elememt(lst))  # Output: counter\n# Using for loop\n\n# Using built-in approach\ndef main(lst):\n    result = max(lst, key=len)\n    return result\n\n# Using manual approach\ndef main(lst):\n    return max(lst, key=len)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -808,7 +808,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 68,
             "title": "Problem 68",
-            "description": "Write a Python program to find the length of a string without using the built-in len() function. Prompt the user to enter a string.\nExamples:\n  length_string() → Enter a string:\n  length_string() → ?",
+            "description": "Write a Python program to find the length of a string without using the built-in len() function. Prompt the user to enter a string.\nExamples:\n  length_string() → '5'\n  length_string() → '11'",
             "initialCode": "def length_string():\n    pass",
             "solution": "# Using function approach\ndef length_string():\n    text = input('Enter a string: ')\n    count = 0\n    for _ in text:\n        count += 1\n    print(count)\nlength_string()\n\n# Using built-in approach\ndef length_string():\n    text = input('Enter a string: ')\n    count = 0\n    for _ in text:\n        count += 1\n    return count\n\n# Using manual approach\ndef length_string():\n    text = input('Enter a string: ')\n    count = 0\n    for _ in text:\n        count += 1\n    result = count\n    return result\n\n# Script approach\ntext = 'hello'\ncount = 0\nfor _ in text:\n    count += 1\nprint(count)\n\n# Direct approach\ntext = 'world'\ncount = 0\nfor _ in text:\n    count += 1\nprint(count)",
 
@@ -832,7 +832,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 71,
             "title": "Problem 71",
-            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sec_lar() → Enter numbers:\n  sec_lar() → ?",
+            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sec_lar([10, 90, 45, 55, 222, 2]) → 90\n  sec_lar([5, 5, 4, 3]) → 4\n  sec_lar([-5, -1, -9]) → -5",
             "initialCode": "def sec_lar():\n    pass\n\ndef second_largest_number(numbers):\n    pass\n\ndef second_largest_number(numbers):\n    pass\n\ndef second_largest_number(numbers):\n    pass",
             "solution": "# Using function approach\ndef second_largest_number(numbers):\n    unique_numbers = sorted(set(numbers), reverse=True)\n    if len(unique_numbers) < 2:\n        return None\n    return unique_numbers[1]\ndef sec_lar():\n    numbers = list(map(int, input('Enter numbers: ').split()))\n    print(second_largest_number(numbers))\n\n# Using built-in approach\ndef second_largest_number(numbers):\n    result = None\n    return result\n\n# Using manual approach\ndef second_largest_number(numbers):\n    return None\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = second_largest_number(numbers)\nprint(result)\n\n# Direct approach\nprint(second_largest_number([4, 1, 8, 6, 3]))",
 
@@ -868,7 +868,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 74,
             "title": "Problem 74",
-            "description": "Write a Python program to check if two strings are anagrams of each other. Prompt the user to enter two strings\nExamples:\n  are_anagrams() → Enter the first string:\n  are_anagrams() → ?",
+            "description": "Write a Python program to check if two strings are anagrams of each other. Prompt the user to enter two strings\nExamples:\n  are_anagrams() → True\n  are_anagrams() → False",
             "initialCode": "def are_anagrams():\n    pass\n\ndef pal():\n    pass",
             "solution": "# Using function approach\ndef are_anagrams():\n    first = input('Enter the first string: ').replace(' ', '').lower()\n    second = input('Enter the second string: ').replace(' ', '').lower()\n    print(sorted(first) == sorted(second))\nare_anagrams()\n\n# Using built-in approach\ndef are_anagrams():\n    first = input('Enter the first string: ').replace(' ', '').lower()\n    second = input('Enter the second string: ').replace(' ', '').lower()\n    return sorted(first) == sorted(second)\n\n# Using manual approach\ndef are_anagrams():\n    first = input('Enter the first string: ').replace(' ', '').lower()\n    second = input('Enter the second string: ').replace(' ', '').lower()\n    result = sorted(first) == sorted(second)\n    return result\n\n# Script approach\nfirst = 'hello'\nsecond = 'hello'\nprint(sorted(first) == sorted(second))\n\n# Direct approach\nfirst = 'world'\nsecond = 'world'\nprint(sorted(first) == sorted(second))",
 
@@ -916,7 +916,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 78,
             "title": "Problem 78",
-            "description": "Write a Python program to convert a decimal number to binary. Prompt the user to enter a decimal number.\nExamples:\n  decimal_to_binary() → Enter a decimal number:\n  decimal_to_binary() → ?",
+            "description": "Write a Python program to convert a decimal number to binary. Prompt the user to enter a decimal number.\nExamples:\n  decimal_to_binary() → '1010'\n  decimal_to_binary() → '101'",
             "initialCode": "def decimal_to_binary():\n    pass",
             "solution": "# Using function approach\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))  # e.g., 5\n    binary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\n    print(f'The binary representation of {decimal_number} is {binary_number}')  # Prints: 'The binary representation of 5 is 101'\ndecimal_to_binary()  # Call the function\n\n# Alternative solution using loop\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))\n    if decimal_number == 0:\n        return '0'\n    binary = ''\n    num = decimal_number\n    while num > 0:\n        binary = str(num % 2) + binary\n        num //= 2\n    print(f'The binary representation of {decimal_number} is {binary}')\ndecimal_to_binary()\n\n# Alternative solution using format\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))\n    binary_number = format(decimal_number, 'b')\n    print(f'The binary representation of {decimal_number} is {binary_number}')\ndecimal_to_binary()\n\n# Using built-in approach\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))  # e.g., 5\n    binary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\n    return f'The binary representation of {decimal_number} is {binary_number}'\n\n# Using manual approach\ndef decimal_to_binary():\n    decimal_number = int(input('Enter a decimal number: '))  # e.g., 5\n    binary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\n    result = f'The binary representation of {decimal_number} is {binary_number}'\n    return result\n\n# Script approach\ndecimal_number = 5\nbinary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\nprint(f'The binary representation of {decimal_number} is {binary_number}')  # Prints: 'The binary representation of 5 is 101'\n\n# Direct approach\ndecimal_number = 10\nbinary_number = bin(decimal_number)[2:]  # '0b101'[2:] \\u2192 '101'\nprint(f'The binary representation of {decimal_number} is {binary_number}')  # Prints: 'The binary representation of 5 is 101'",
 
@@ -940,7 +940,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 80,
             "title": "Problem 80",
-            "description": "Write a Python program to generate a random number between a given range. Prompt the user to enter the lower and upper limits.\nExamples:\n  generate_random_number() → Enter the lower limit:\n  generate_random_number() → ?",
+            "description": "Write a Python program to generate a random number between a given range. Prompt the user to enter the lower and upper limits.\nExamples:\n  generate_random_number() → [1, 10]\n  generate_random_number() → [20, 25]",
             "initialCode": "import random\ndef generate_random_number():\n    pass",
             "solution": "import random\n\n# Using function approach\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))  # e.g., 1\n    upper_limit = int(input('Enter the upper limit: '))  # e.g., 10\n    random_number = random.randint(lower_limit, upper_limit)  # e.g., 7\n    print(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')  # Prints: 'The random number between 1 and 10 is: 7'\ngenerate_random_number()  # Call the function\n\n# Alternative solution using random.randrange\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))\n    upper_limit = int(input('Enter the upper limit: '))\n    random_number = random.randrange(lower_limit, upper_limit + 1)\n    print(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')\ngenerate_random_number()\n\n# Alternative solution using random.uniform for floats\ndef generate_random_number():\n    lower_limit = float(input('Enter the lower limit: '))\n    upper_limit = float(input('Enter the upper limit: '))\n    random_number = random.uniform(lower_limit, upper_limit)\n    print(f'The random float between {lower_limit} and {upper_limit} is: {random_number:.2f}')\ngenerate_random_number()\n\n# Using built-in approach\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))  # e.g., 1\n    upper_limit = int(input('Enter the upper limit: '))  # e.g., 10\n    random_number = random.randint(lower_limit, upper_limit)  # e.g., 7\n    return f'The random number between {lower_limit} and {upper_limit} is: {random_number}'\n\n# Using manual approach\ndef generate_random_number():\n    lower_limit = int(input('Enter the lower limit: '))  # e.g., 1\n    upper_limit = int(input('Enter the upper limit: '))  # e.g., 10\n    random_number = random.randint(lower_limit, upper_limit)  # e.g., 7\n    result = f'The random number between {lower_limit} and {upper_limit} is: {random_number}'\n    return result\n\n# Script approach\nlower_limit = 5\nupper_limit = 5\nrandom_number = random.randint(lower_limit, upper_limit)  # e.g., 7\nprint(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')  # Prints: 'The random number between 1 and 10 is: 7'\n\n# Direct approach\nlower_limit = 10\nupper_limit = 10\nrandom_number = random.randint(lower_limit, upper_limit)  # e.g., 7\nprint(f'The random number between {lower_limit} and {upper_limit} is: {random_number}')  # Prints: 'The random number between 1 and 10 is: 7'",
 
@@ -952,7 +952,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 81,
             "title": "Problem 81",
-            "description": "Write a Python program to find the square root of a number. Prompt the user to enter a number.\nExamples:\n  square_root() → type num:\n  square_root() → ?",
+            "description": "Write a Python program to find the square root of a number. Prompt the user to enter a number.\nExamples:\n  square_root() → '3'\n  square_root() → '4'",
             "initialCode": "def square_root():\n    pass\n\ndef square_root():\n    pass",
             "solution": "# Using function approach\ndef square_root():\n    num = float(input('type num: '))  # e.g., 9.0\n    return num ** 0.5  # 9.0 ** 0.5 = 3.0\nprint(square_root())  # Call function and print result\ndef square_root():\n    num = float(input('type num: '))  # e.g., 16.0\n    print(num ** 0.5)  # Prints: 4.0\nsquare_root()  # Call the function\n\n# Alternative solution using math.sqrt\ndef square_root():\n    import math\n    num = float(input('type num: '))\n    return math.sqrt(num)\nprint(square_root())\n\n# Alternative solution using Newton's method\ndef square_root():\n    num = float(input('type num: '))\n    if num < 0:\n        return 'Cannot calculate square root of negative number'\n    guess = num / 2\n    for _ in range(10):\n        guess = (guess + num / guess) / 2\n    return guess\nprint(square_root())\n\n# Using built-in approach\ndef square_root():\n    result = num ** 0.5\n    return result\n\n# Using manual approach\ndef square_root():\n    return num ** 0.5\n\n# Script approach\nnum = 5\nresult = num ** 0.5\nprint(result)\n\n# Direct approach\nnum = 10\nresult = num ** 0.5\nprint(result)",
 
@@ -1096,7 +1096,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 93,
             "title": "Problem 93",
-            "description": "Write a Python program to find the factorial of a number using a loop. Prompt the user to enter a number.\nExamples:\n  factorial() → type number:\n  factorial() → ?",
+            "description": "Write a Python program to find the factorial of a number using a loop. Prompt the user to enter a number.\nExamples:\n  factorial() → '120'\n  factorial() → '1'",
             "initialCode": "def factorial():\n    pass\n\ndef factorial():\n    pass",
             "solution": "# Using function approach\ndef factorial():\n    user = int(input('type number: '))\n    result = 1  # Start with 1 (multiplicative identity)\n    for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n\n        result *= number  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 ... \\u00d7 n\n    print(result)\nfactorial()\ndef factorial():\n    user = int(input('type number: '))\n    result = 1\n    for number in range(1, user + 1):\n        result *= number\n    return result\nprint(factorial())\n\n# Alternative solution using math.factorial\nimport math\ndef factorial():\n    n = int(input('Enter a number: '))\n    print(math.factorial(n))\nfactorial()\n\n# Alternative solution using recursion\ndef factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\nn = int(input('Enter a number: '))\nprint(factorial(n))\n\n# Using built-in approach\ndef factorial():\n    user = int(input('type number: '))\n    result = 1  # Start with 1 (multiplicative identity)\n    for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n\n        result *= number  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 ... \\u00d7 n\n    return result\n\n# Using manual approach\ndef factorial():\n    user = int(input('type number: '))\n    result = 1  # Start with 1 (multiplicative identity)\n    for number in range(1, user + 1):  # range(1, n+1) gives 1, 2, 3, ..., n\n        result *= number  # Multiply: 1 \\u00d7 2 \\u00d7 3 \\u00d7 ... \\u00d7 n\n    result = result\n    return result\n\n# Script approach\nn = 6\nresult = factorial(n)\nprint(result)\n\n# Direct approach\nprint(factorial(15))",
 
@@ -1156,7 +1156,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 98,
             "title": "Problem 98",
-            "description": "Write a Python program to find the sum of the digits in a string. Prompt the user to enter a string containing seperate numbers. eg \"2\", \"8\" should return 10\nExamples:\n  digits_string() → Type numbers separated by spaces:\n  digits_string() → ?",
+            "description": "Write a Python program to find the sum of the digits in a string. Prompt the user to enter a string containing seperate numbers. eg \"2\", \"8\" should return 10\nExamples:\n  digits_string() → '10'\n  digits_string() → '6'",
             "initialCode": "def digits_string():\n    pass\n\ndef digits_string():\n    pass",
             "solution": "# Using function approach\ndef digits_string():\n    user = input('Type numbers separated by spaces: ').split()  # Split into list of strings\n    total = 0\n    for number in user:\n        total += int(number)  # Convert to int and add\n    print(total)\ndigits_string()\ndef digits_string():\n    user = input('type numbers: ').split()\n    total = 0\n    int_number = []\n    for number in user:\n        int_number.append(int(number))\n    for number in int_number:\n        total += number\n    print(total)\ndigits_string()\n\n# Alternative solution using sum with map\ndef digits_string():\n    numbers = input('Enter numbers separated by spaces: ').split()\n    print(sum(map(int, numbers)))\ndigits_string()\n\n# Alternative solution using sum with generator\ndef digits_string():\n    print(sum(int(x) for x in input('Enter numbers: ').split()))\ndigits_string()\n\n# Using built-in approach\ndef digits_string():\n    user = input('Type numbers separated by spaces: ').split()  # Split into list of strings\n    total = 0\n    for number in user:\n        total += int(number)  # Convert to int and add\n    return total\n\n# Using manual approach\ndef digits_string():\n    user = input('Type numbers separated by spaces: ').split()  # Split into list of strings\n    total = 0\n    for number in user:\n        total += int(number)  # Convert to int and add\n    result = total\n    return result\n\n# Script approach\nuser = 5\ntotal = 0\nfor number in user:\n    total += int(number)  # Convert to int and add\nprint(total)\n\n# Direct approach\nuser = 10\ntotal = 0\nfor number in user:\n    total += int(number)  # Convert to int and add\nprint(total)",
 
@@ -1204,7 +1204,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 102,
             "title": "Problem 102",
-            "description": "Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings.\nExamples:\n  is_anagram('Listen', 'Silent') → True\n  is_anagram('hello', 'olleh') → True",
+            "description": "Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings.\nExamples:\n  is_anagram('listen', 'silent') → True\n  is_anagram('dormitory', 'dirty room') → True\n  is_anagram('hello', 'world') → False",
             "initialCode": "def is_anagram():\n    pass\n\ndef is_anagram(string1, string2):\n    pass",
             "solution": "# Using function approach\ndef is_anagram():\n    string1 = input('type string: ').replace(' ', '')  # Remove spaces\n    string2 = input('type string: ').replace(' ', '')\n    sort1 = sorted(string1)  # sorted() returns list of characters\n    sort2 = sorted(string2)\n    if sort1 == sort2:  # If sorted lists are equal, strings are anagrams\n        print('this is anagram')\n    else:\n        print('this is not anagram')\nis_anagram()\ndef is_anagram(string1, string2):\n    string1 = string1.replace(' ', '')\n    string2 = string2.replace(' ', '')\n    return sorted(string1) == sorted(string2)\nstring1 = 'listen'\nstring2 = 'silent'\nprint(is_anagram(string1, string2))\n\n# Alternative solution using Counter\ndef is_anagram(string1, string2):\n    from collections import Counter\n    return Counter(string1.replace(' ', '').lower()) == Counter(string2.replace(' ', '').lower())\nprint(is_anagram('Listen', 'Silent'))  # Output: True\n\n# Alternative solution using character counting\ndef is_anagram(string1, string2):\n    s1, s2 = string1.replace(' ', '').lower(), string2.replace(' ', '').lower()\n    if len(s1) != len(s2):\n        return False\n    for char in set(s1):\n        if s1.count(char) != s2.count(char):\n            return False\n    return True\nprint(is_anagram('hello', 'olleh'))  # Output: True\n\n# Script approach\nstring1 = 'hello'\nstring2 = 'world'\nresult = is_anagram(string1, string2)\nprint(result)\n\n# Direct approach\nprint(is_anagram('world', 'python'))",
 
@@ -1240,7 +1240,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 106,
             "title": "Problem 106",
-            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sum_of_odd_numbers() → Enter a list of numbers separated by spaces:\n  sum_of_odd_numbers() → ?",
+            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers.\nExamples:\n  sum_of_odd_numbers() → '9'\n  sum_of_odd_numbers() → '0'\n  sum_of_odd_numbers() → '2'",
             "initialCode": "def sum_of_odd_numbers():\n    pass\n\ndef sum_of_all_odd():\n    pass",
             "solution": "# Using function approach\ndef sum_of_odd_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))\n    odd_sum = 0\n    for num in int_numbers:\n        if num % 2 != 0:  # Check if odd\n            odd_sum += num\n    print('The sum of all odd numbers is:', odd_sum)\nsum_of_odd_numbers()\ndef sum_of_all_odd():\n    user = input('Enter numbers separated by spaces: ').split()\n    total = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:\n            total += number\n    print(total)\nsum_of_all_odd()\n\n# Alternative using sum with generator\ndef sum_of_odd_numbers():\n    numbers = [int(x) for x in input('Enter numbers: ').split()]\n    print(sum(n for n in numbers if n % 2 != 0))\nsum_of_odd_numbers()\n\n# Alternative using filter\ndef sum_of_all_odd():\n    numbers = list(map(int, input('Enter numbers: ').split()))\n    print(sum(filter(lambda x: x % 2 != 0, numbers)))\nsum_of_all_odd()\n\n# Using built-in approach\ndef sum_of_odd_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))\n    odd_sum = 0\n    for num in int_numbers:\n        if num % 2 != 0:  # Check if odd\n            odd_sum += num\n    return 'The sum of all odd numbers is:', odd_sum\n\n# Using manual approach\ndef sum_of_odd_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))\n    odd_sum = 0\n    for num in int_numbers:\n        if num % 2 != 0:  # Check if odd\n            odd_sum += num\n    result = 'The sum of all odd numbers is:', odd_sum\n    return result\n\n# Script approach\nuser_input = 5\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))\nodd_sum = 0\nfor num in int_numbers:\n    if num % 2 != 0:  # Check if odd\n        odd_sum += num\nprint('The sum of all odd numbers is:', odd_sum)\n\n# Direct approach\nuser_input = 10\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))\nodd_sum = 0\nfor num in int_numbers:\n    if num % 2 != 0:  # Check if odd\n        odd_sum += num\nprint('The sum of all odd numbers is:', odd_sum)",
 
@@ -1252,7 +1252,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 107,
             "title": "Problem 107",
-            "description": "Write a Python program to find the common characters between two strings. Prompt the user to enter two strings.\nExamples:\n  common_char('hello', 'world') → ['o', 'l']\n  common_char('programming', 'python') → ['p', 'r', 'o', 'g', 'n']",
+            "description": "Write a Python program to find the common characters between two strings. Prompt the user to enter two strings.\nExamples:\n  common_char('abc', 'bcd') → ['b', 'c']\n  common_char('hello', 'world') → ['l', 'o']\n  common_char('abc', 'xyz') → []",
             "initialCode": "def common_char():\n    pass\n\ndef common_char(string1, string2):\n    pass",
             "solution": "# Using function approach\ndef common_char():\n    user_input = input('Type 2 strings separated by a space: ').split()\n    if len(user_input) != 2:\n        print('Please enter exactly two strings.')\n        return\n    str1, str2 = user_input  # Tuple unpacking: assigns first two elements\n    common = []\n    for char in str1:\n        if char in str2 and char not in common:  # Check if in both strings and not already added\n            common.append(char)\n    return common\nprint(common_char())\ndef common_char(string1, string2):\n    characters = []\n    for char in string1:\n        if char in string2 and char not in characters:\n            characters.append(char)\n    return characters\nname1 = input('Enter the first string: ')\nname2 = input('Enter the second string: ')\nprint(common_char(name1, name2))\n\n# Alternative solution using set intersection\ndef common_char(string1, string2):\n    return list(set(string1) & set(string2))\nprint(common_char('hello', 'world'))  # Output: ['o', 'l']\n\n# Alternative solution using list comprehension\ndef common_char(string1, string2):\n    return list(dict.fromkeys([c for c in string1 if c in string2]))\nprint(common_char('programming', 'python'))  # Output: ['p', 'r', 'o', 'g', 'n']\n\n# Using built-in approach\ndef common_char():\n    return [char for char in str1]\n\n# Using manual approach\ndef common_char():\n    return list(map(lambda char: char, str1))\n\n# Script approach\nstring1 = 'hello'\nstring2 = 'world'\nresult = common_char(string1, string2)\nprint(result)\n\n# Direct approach\nprint(common_char('world', 'python'))",
 
@@ -1264,7 +1264,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 108,
             "title": "Problem 108",
-            "description": "Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string\nExamples:\n  remove_duplicates() → type string:\n  remove_duplicates() → ?",
+            "description": "Write a Python program to remove duplicates from a string using set(). Prompt the user to enter a string\nExamples:\n  remove_duplicates() → ['b', 'a', 'n']\n  remove_duplicates() → ['a', 'b', 'c']",
             "initialCode": "def remove_duplicates():\n    pass\n\ndef remove_duplicates():\n    pass",
             "solution": "# Using function approach\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # Set to track unique characters\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n    print(''.join(unique_user))  # join() converts set to string (order may vary)\nremove_duplicates()\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # For fast lookup\n    result = []  # For maintaining order\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n            result.append(char)  # Add to list to preserve order\n    print(''.join(result))  # Join list to get ordered string\nremove_duplicates()\n\n# Alternative solution using dict.fromkeys()\ndef remove_duplicates():\n    user = input('type string: ')\n    print(''.join(dict.fromkeys(user)))\nremove_duplicates()\n\n# Alternative solution using list comprehension with seen set\ndef remove_duplicates():\n    user = input('type string: ')\n    seen = set()\n    result = ''.join([c for c in user if not (c in seen or seen.add(c))])\n    print(result)\nremove_duplicates()\n\n# Using built-in approach\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # Set to track unique characters\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n    return ''.join(unique_user)\n\n# Using manual approach\ndef remove_duplicates():\n    user = input('type string: ')\n    unique_user = set()  # Set to track unique characters\n    for char in user:\n        if char not in unique_user:\n            unique_user.add(char)\n    result = ''.join(unique_user)\n    return result\n\n# Script approach\nuser = 'hello'\nunique_user = set()  # Set to track unique characters\nfor char in user:\n    if char not in unique_user:\n        unique_user.add(char)\nprint(''.join(unique_user))  # join() converts set to string (order may vary)\n\n# Direct approach\nuser = 'world'\nunique_user = set()  # Set to track unique characters\nfor char in user:\n    if char not in unique_user:\n        unique_user.add(char)\nprint(''.join(unique_user))  # join() converts set to string (order may vary)",
 
@@ -1288,7 +1288,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 110,
             "title": "Problem 110",
-            "description": "Write a Python program to find the number of vowels and consonants in a string. Prompt the user to enter a string.\nExamples:\n  vowels_consonates('Hello World!') → vowels = 3, consonants = 7\n  vowels_consonates('Python') → vowels = 1, consonants = 5",
+            "description": "Write a Python program to find the number of vowels and consonants in a string. Prompt the user to enter a string.\nExamples:\n  vowels_consonates('Hello World') → [object Object]\n  vowels_consonates('AEIOU xyz') → [object Object]\n  vowels_consonates('rhythm') → [object Object]",
             "initialCode": "def vowels_consonates(string):\n    pass",
             "solution": "# Using function approach\ndef vowels_consonates(string):\n    string = string.replace(' ', '')  # Remove spaces\n    vowels = 'aeiou'  # Only lowercase vowels (case-sensitive)\n    count_vowels = 0\n    consonates = 0\n    for char in string:\n        if char in vowels:\n            count_vowels += 1\n        if char not in vowels:  # Note: counts digits, punctuation as consonants\n            consonates += 1\n    return f'vowels = {count_vowels}\nconsonates = {consonates}'\nlst = 'Jonathan is there next best thing'\nprint(vowels_consonates(lst))\n\n# Alternative solution with proper case handling\ndef vowels_consonates(string):\n    vowels = set('aeiouAEIOU')\n    v = sum(1 for c in string if c in vowels)\n    c = sum(1 for c in string if c.isalpha() and c not in vowels)\n    return f'vowels = {v}\nconsonants = {c}'\nprint(vowels_consonates('Hello World!'))  # Output: vowels = 3, consonants = 7\n\n# Alternative solution using list comprehension\ndef vowels_consonates(string):\n    v = len([c for c in string if c.lower() in 'aeiou'])\n    c = len([c for c in string if c.isalpha() and c.lower() not in 'aeiou'])\n    return f'vowels = {v}\nconsonants = {c}'\nprint(vowels_consonates('Python'))  # Output: vowels = 1, consonants = 5\n\n# Using built-in approach\ndef vowels_consonates(string):\n    return sum(1 for char in string if char in vowels)\n\n# Using manual approach\ndef vowels_consonates(string):\n    return len([char for char in string if char in vowels])\n\n# Script approach\nstring = 'hello'\nresult = vowels_consonates(string)\nprint(result)\n\n# Direct approach\nprint(vowels_consonates('world'))",
 
@@ -1336,7 +1336,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 115,
             "title": "Problem 115",
-            "description": "Define a function that computes the length of a given list or string. (It is true that Python has the len() function built in, but writing it yourself is nevertheless a good exercise.)\nExamples:\n  length_string('hello') → 5\n  length_string('python') → 6\n  length_string('world') → 5",
+            "description": "Define a function that computes the length of a given list or string. (It is true that Python has the len() function built in, but writing it yourself is nevertheless a good exercise.)\nExamples:\n  length_string('hello') → 5\n  length_string([1, 2, 3]) → 3\n  length_string('') → 0",
             "initialCode": "def length_string(string):\n    pass\n\ndef length_list(string):  # Misleading name - works for lists too\n    pass",
             "solution": "# Using function approach\ndef length_string(string):\n    count = 0\n    for char in string:  # Iterate over characters\n        count += 1\n    return count\nname = 'Jonathan'\nprint(length_string(name))\ndef length_list(string):  # Misleading name - works for lists too\n    count = 0\n    for char in string:  # Iterates over elements (works for both strings and lists)\n        count += 1\n    return count\nlst = ['list', 'it', 'all']\nprint(length_list(lst))\n\n# Alternative solution using recursion\ndef length_string(s):\n    if s == '':\n        return 0\n    return 1 + length_string(s[1:])\nprint(length_string('hello'))  # Output: 5\n\n# Alternative solution using enumerate\ndef length_string(s):\n    for i, _ in enumerate(s):\n    return i + 1 if s else 0\nprint(length_string('python'))  # Output: 6\n\n# Alternative solution using sum\ndef length_string(s):\n    return sum(1 for _ in s)\nprint(length_string('world'))  # Output: 5\n\n# Using built-in approach\ndef length_string(string):\n    result = count\n    return result\n\n# Using manual approach\ndef length_string(string):\n    return count\n\n# Script approach\nstring = 'hello'\nresult = length_string(string)\nprint(result)\n\n# Direct approach\nprint(length_string('world'))",
 
@@ -1408,7 +1408,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 122,
             "title": "Problem 122",
-            "description": "Write a function is_member() that takes a value (i.e. a number, string, etc) x and a list of values a, and returns True if x is a member of a, False otherwise. (Note that this is exactly what the in operator does, but for the sake of the exercise you should pretend Python did not have this operator.\nExamples:\n  is_member(3, [1, 2, 3, 4]) → True\n  is_member(10, [1, 2, 3]) → False\n  is_member('a', ['b', 'c', 'a']) → True\n  is_member('z', ['a', 'b', 'c']) → False",
+            "description": "Write a function is_member() that takes a value (i.e. a number, string, etc) x and a list of values a, and returns True if x is a member of a, False otherwise. (Note that this is exactly what the in operator does, but for the sake of the exercise you should pretend Python did not have this operator.\nExamples:\n  is_member('a', ['b', 'a']) → True\n  is_member(3, [1, 2]) → False\n  is_member('x', []) → False",
             "initialCode": "def is_member(lst, x):\n    pass\n\ndef is_member(x, a):\n    pass",
             "solution": "# Using function approach\ndef is_member(lst, x):\n    return x in lst  # in operator checks membership\nlst = [2, 5, 6]\nx = 2\nprint(is_member(lst, x))\ndef is_member(x, a):\n    for item in a:\n        if item == x:  # Compare each element\n            return True\n    return False  # Not found\nx = input('Enter a value: ')\na = input('Enter a list of values (comma-separated): ').split(',')  # split(',') splits on comma\nresult = is_member(x, a)\nprint(result)\n\n# Alternative solution using any()\ndef is_member(x, a):\n    return any(item == x for item in a)\nprint(is_member(3, [1, 2, 3, 4]))  # Output: True\nprint(is_member(10, [1, 2, 3]))    # Output: False\n\n# Alternative solution using recursion\ndef is_member(x, a):\n    if not a:\n        return False\n    return a[0] == x or is_member(x, a[1:])\nprint(is_member('a', ['b', 'c', 'a']))  # Output: True\nprint(is_member('z', ['a', 'b', 'c']))  # Output: False\n\n# Using built-in approach\ndef is_member(lst, x):\n    for element in lst:\n        if element == x:\n            return True\n    return False\n\n# Using manual approach\ndef is_member(lst, x):\n    return any(element == x for element in lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nx = 7\nresult = is_member(lst, x)\nprint(result)\n\n# Direct approach\nprint(is_member([1, 3, 5, 7], 3))",
 
@@ -1456,7 +1456,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 126,
             "title": "Problem 126",
-            "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words.\nExamples:\n  map_words_to_lengths(['a', 'ab', 'abc']) → [1, 2, 3]\n  map_words_to_lengths(['hello', 'world']) → [5, 5]",
+            "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words.\nExamples:\n  map_words_to_lengths(['apple', 'banana', 'kiwi']) → [5, 6, 4]\n  map_words_to_lengths(['a', '', 'three']) → [1, 0, 5]",
             "initialCode": "def map_words_to_lengths(words):\n    pass",
             "solution": "# Using function approach\ndef map_words_to_lengths(words):\n    lengths = []\n    for word in words:\n        lengths.append(len(word))  # Append length of each word\n    return lengths\nwords = ['apple', 'banana', 'cherry', 'date']\nlengths = map_words_to_lengths(words)\nprint(lengths)\n\n# Alternative solution using list comprehension\ndef map_words_to_lengths(words):\n    return [len(word) for word in words]\nprint(map_words_to_lengths(['a', 'ab', 'abc']))  # Output: [1, 2, 3]\n\n# Alternative solution using map\ndef map_words_to_lengths(words):\n    return list(map(len, words))\nprint(map_words_to_lengths(['hello', 'world']))  # Output: [5, 5]\n\n# Using built-in approach\ndef map_words_to_lengths(words):\n    result = lengths\n    return result\n\n# Using manual approach\ndef map_words_to_lengths(words):\n    return lengths\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = map_words_to_lengths(words)\nprint(result)\n\n# Direct approach\nprint(map_words_to_lengths([4, 1, 8, 6, 3]))",
 
@@ -1468,7 +1468,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 127,
             "title": "Problem 127",
-            "description": "Write a function find_longest_word() that takes a list of words and returns the length of the longest one.\nExamples:\n  find_longest_word(['hi', 'hello', 'sup']) → 5\n  find_longest_word(['a', 'abc', 'ab']) → 3",
+            "description": "Write a function find_longest_word() that takes a list of words and returns the length of the longest one.\nExamples:\n  find_longest_word(['jo', 'banana', 'cat']) → 6\n  find_longest_word(['a', 'abcd', 'xy']) → 4\n  find_longest_word(['same', 'size']) → 4",
             "initialCode": "def find_longest_word(elements):\n    pass",
             "solution": "# Using function approach\ndef find_longest_word(elements):\n    longest_element = elements[0]\n    for element in elements:\n        if element > longest_element:  # String comparison, not length comparison\n            longest_element = element\n    return len(element)  # BUG: Returns len of last element in loop, not longest\nlst = ['jo', 'tre', 'Jonny', 'abracadabr'] \nprint(find_longest_word(lst))\n\n# Alternative solution using max with key\ndef find_longest_word(words):\n    return len(max(words, key=len))\nprint(find_longest_word(['hi', 'hello', 'sup']))  # Output: 5\n\n# Alternative solution using list comprehension\ndef find_longest_word(words):\n    return max(len(w) for w in words)\nprint(find_longest_word(['a', 'abc', 'ab']))  # Output: 3\n\n# Using built-in approach\ndef find_longest_word(elements):\n    count = 0\n    for _ in element:\n        count += 1\n    return count\n\n# Using manual approach\ndef find_longest_word(elements):\n    return sum(1 for _ in element)\n\n# Script approach\nelements = [2, 7, 1, 9]\nresult = find_longest_word(elements)\nprint(result)\n\n# Direct approach\nprint(find_longest_word([5, 3, 8, 4]))",
 
@@ -1480,12 +1480,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 128,
             "title": "Problem 128",
-            "description": "Write a function filter_long_words() that takes a list of words and an integer n and returns the list of words that are longer than n.\nExamples:\n  filter_long_words(['cat', 'elephant', 'dog', 'hippopotamus'], 4) → ['elephant', 'hippopotamus']\n  filter_long_words(['tiny', 'medium', 'longerword'], 5) → ['medium', 'longerword']",
+            "description": "Write a function filter_long_words() that takes a list of words and an integer n and returns the list of words that are longer than n.\nExamples:\n  filter_long_words(['one', 'three', 'seventeen', 'two'], 3) → ['three', 'seventeen']\n  filter_long_words(['a', 'ab', 'abc'], 2) → ['abc']\n  filter_long_words(['hi'], 5) → []",
             "initialCode": "def filter_long_words(lst, n):\n    pass",
             "solution": "# Using function approach\ndef filter_long_words(lst, n):\n    longest_words = []\n    for word in lst:\n        if len(word) > n:  # Check if word length > n\n            longest_words.append(word)\n    return longest_words\nlst = ['three', 'threebesthorses' 'hours', 'Jonathannollthebestintheworld']  # Note: missing comma between strings\nn = 6\nprint(filter_long_words(lst, n))\n\n# Alternative solution using list comprehension\ndef filter_long_words(lst, n):\n    return [word for word in lst if len(word) > n]\nprint(filter_long_words(['cat', 'elephant', 'dog', 'hippopotamus'], 4))  # Output: ['elephant', 'hippopotamus']\n\n# Alternative solution using filter\ndef filter_long_words(lst, n):\n    return list(filter(lambda w: len(w) > n, lst))\nprint(filter_long_words(['tiny', 'medium', 'longerword'], 5))  # Output: ['medium', 'longerword']\n\n# Using built-in approach\ndef filter_long_words(lst, n):\n    return [word for word in lst]\n\n# Using manual approach\ndef filter_long_words(lst, n):\n    return list(map(lambda word: word, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nn = 6\nresult = filter_long_words(lst, n)\nprint(result)\n\n# Direct approach\nprint(filter_long_words([1, 3, 5, 7], 15))",
 
             "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
-            "breakdown": "1. Define `filter_long_words(lst, n)` with parameters `lst`, `n`.\n2. Perform the required operation on the input parameter(s) as described in the prompt.\n3. Return the result using `return`.",
+            "breakdown": "1. Define `filter_long_words(lst, n)` with parameters `lst`, `n`.\n2. Use a list comprehension: `[x for x in numbers if x % 2 == 0]` to filter even numbers.\n3. Return the result using `return`.",
 
             "category": "Level 1"
     },
@@ -1540,7 +1540,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 134,
             "title": "Problem 134",
-            "description": "Write a Python program to find the sum of all numbers in a list. Prompt the user to enter a list of numbers in a input function\nExamples:\n  sum_of_all_numbers() → Enter a list of numbers separated by spaces:\n  sum_of_all_numbers() → ?",
+            "description": "Write a Python program to find the sum of all numbers in a list. Prompt the user to enter a list of numbers in a input function\nExamples:\n  sum_of_all_numbers() → '10'\n  sum_of_all_numbers() → '3'",
             "initialCode": "def sum_of_all_numbers():\n    pass",
             "solution": "# Using function approach\ndef sum_of_all_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    print(total_sum)\nsum_of_all_numbers()\n\n# Alternative solution using map with sum\ndef sum_of_all_numbers():\n    numbers = list(map(int, input('Enter numbers: ').split()))\n    print(sum(numbers))\nsum_of_all_numbers()\n\n# Alternative solution using generator\ndef sum_of_all_numbers():\n    print(sum(int(x) for x in input('Enter numbers: ').split()))\nsum_of_all_numbers()\n\n# Using built-in approach\ndef sum_of_all_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    return total_sum\n\n# Using manual approach\ndef sum_of_all_numbers():\n    user_input = input('Enter a list of numbers separated by spaces: ')\n    split_numbers = user_input.split()\n    int_numbers = []\n    for num in split_numbers:\n        int_numbers.append(int(num))  # Convert strings to integers\n    total_sum = sum(int_numbers)  # Built-in sum() function\n    result = total_sum\n    return result\n\n# Script approach\nuser_input = 5\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))  # Convert strings to integers\ntotal_sum = sum(int_numbers)  # Built-in sum() function\nprint(total_sum)\n\n# Direct approach\nuser_input = 10\nsplit_numbers = user_input.split()\nint_numbers = []\nfor num in split_numbers:\n    int_numbers.append(int(num))  # Convert strings to integers\ntotal_sum = sum(int_numbers)  # Built-in sum() function\nprint(total_sum)",
 
@@ -1648,7 +1648,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 143,
             "title": "Problem 143",
-            "description": "Write a function with user input that coverts 1 2 3 (int) into a \"1\" \"2\" \"3\" (str).\nExamples:\n  int_str() → type:\n  int_str() → ?",
+            "description": "Write a function with user input that coverts 1 2 3 (int) into a \"1\" \"2\" \"3\" (str).\nExamples:\n  int_str() → ['1', '2', '3']\n  int_str() → ['10', '20']",
             "initialCode": "def int_str():\n    pass",
             "solution": "# Using function approach\ndef int_str():\n    user_lst = []\n    user = input('type: ')  # e.g., '1 2 3'\n    split_str = user.split()  # ['1', '2', '3'] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    print(user_lst)  # Prints list of strings\nint_str()\n\n# Alternative solution using list comprehension\ndef int_str():\n    print([x for x in input('type: ').split()])\nint_str()\n\n# Alternative solution using split() directly\ndef int_str():\n    print(input('type: ').split())\nint_str()\n\n# Using built-in approach\ndef int_str():\n    user_lst = []\n    user = input('type: ')  # e.g., '1 2 3'\n    split_str = user.split()  # ['1', '2', '3'] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    return user_lst\n\n# Using manual approach\ndef int_str():\n    user_lst = []\n    user = input('type: ')  # e.g., '1 2 3'\n    split_str = user.split()  # ['1', '2', '3'] (already strings)\n    for word in split_str:\n        user_lst.append(word)  # Appends strings (no conversion)\n    result = user_lst\n    return result\n\n# Script approach\nuser_lst = []\nuser = 5\nsplit_str = user.split()  # ['1', '2', '3'] (already strings)\nfor word in split_str:\n    user_lst.append(word)  # Appends strings (no conversion)\nprint(user_lst)  # Prints list of strings\n\n# Direct approach\nuser_lst = []\nuser = 10\nsplit_str = user.split()  # ['1', '2', '3'] (already strings)\nfor word in split_str:\n    user_lst.append(word)  # Appends strings (no conversion)\nprint(user_lst)  # Prints list of strings",
 
@@ -1672,7 +1672,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 145,
             "title": "Problem 145",
-            "description": "Write a Python program to find the common number between two lists. Prompt the user to enter two lists, for this exercise do not use set.\nExamples:\n  common_numbers([1, 2, 3], [3, 4, 5]) → [3]\n  common_numbers(['a', 'b', 'c'], ['b', 'c', 'd']) → ['b', 'c']",
+            "description": "Write a Python program to find the common number between two lists. Prompt the user to enter two lists, for this exercise do not use set.\nExamples:\n  common_numbers([2, 24, 23, 27, 2], [56, 2, 27, 455, 1]) → [2, 27]\n  common_numbers([1, 2], [3, 4]) → []\n  common_numbers([5, 5, 6], [5, 7]) → [5]",
             "initialCode": "def common_numbers(lst1, lst2):\n    pass",
             "solution": "# Using function approach\ndef common_numbers(lst1, lst2):\n    result = []\n    for i in lst1:\n        for j in lst2:\n            if i == j and i not in result:  # Check if equal and not already added\n                result.append(i)\n    return result\nlst1 = [2, 24, 23, 27, 2]\nlst2 = [56, 2, 27, 455, 1]\nprint(common_numbers(lst1, lst2))\n\n# Alternative solution using list comprehension\ndef common_numbers(lst1, lst2):\n    return list(dict.fromkeys([x for x in lst1 if x in lst2]))\nprint(common_numbers([1, 2, 3], [3, 4, 5]))  # Output: [3]\n\n# Alternative solution using filter\ndef common_numbers(lst1, lst2):\n    return list(dict.fromkeys(filter(lambda x: x in lst2, lst1)))\nprint(common_numbers(['a', 'b', 'c'], ['b', 'c', 'd']))  # Output: ['b', 'c']\n\n# Using built-in approach\ndef common_numbers(lst1, lst2):\n    return [i for i in lst1]\n\n# Using manual approach\ndef common_numbers(lst1, lst2):\n    return list(map(lambda i: i, lst1))\n\n# Script approach\nlst1 = [1, 3, 5]\nlst2 = [2, 4, 6]\nresult = common_numbers(lst1, lst2)\nprint(result)\n\n# Direct approach\nprint(common_numbers([2, 4, 6], [1, 3, 5]))",
 
@@ -1696,7 +1696,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 147,
             "title": "Problem 147",
-            "description": "Write a function where user types a list of numbers in string and returns a list of numbers from smallest to biggest.\nExamples:\n  type_smallest_biggest() → type number list:\n  type_smallest_biggest() → ?",
+            "description": "Write a function where user types a list of numbers in string and returns a list of numbers from smallest to biggest.\nExamples:\n  type_smallest_biggest() → [1, 2, 10]\n  type_smallest_biggest() → [-1, 0, 5]",
             "initialCode": "def type_smallest_biggest():\n    pass\n\ndef small_big():\n    pass",
             "solution": "# Using function approach\ndef type_smallest_biggest():\n    user = input('type number list: ').split()\n    sort_number = sorted(user)  # String sort: '10' comes before '2'\n    print(sort_number)\ntype_smallest_biggest()\ndef small_big():\n    user_string = input('type number followed by spaces: ')\n    user_split = user_string.split()\n    int_list = []\n    for number in user_split:\n        int_list.append(int(number))  # Convert to int\n    int_list.sort()  # Sort numerically\n    sorted_str = []\n    for number in int_list:\n        sorted_str.append(str(number))  # Convert back to strings\n    return ' '.join(sorted_str)  # Join with spaces\nprint(small_big())\n\n# Alternative solution using map and sorted\ndef small_big():\n    nums = list(map(int, input('Enter numbers: ').split()))\n    nums.sort()\n    return ' '.join(map(str, nums))\nprint(small_big())\n\n# Alternative solution using key=int in sorted\ndef type_smallest_biggest():\n    print(' '.join(sorted(input('Enter numbers: ').split(), key=int)))\ntype_smallest_biggest()\n\n# Using built-in approach\ndef type_smallest_biggest():\n    user = input('type number list: ').split()\n    sort_number = sorted(user)  # String sort: '10' comes before '2'\n    return sort_number\n\n# Using manual approach\ndef type_smallest_biggest():\n    user = input('type number list: ').split()\n    sort_number = sorted(user)  # String sort: '10' comes before '2'\n    result = sort_number\n    return result\n\n# Script approach\nuser = 5\nsort_number = sorted(user)  # String sort: '10' comes before '2'\nprint(sort_number)\n\n# Direct approach\nuser = 10\nsort_number = sorted(user)  # String sort: '10' comes before '2'\nprint(sort_number)",
 
@@ -1720,7 +1720,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 149,
             "title": "Problem 149",
-            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists using 2 for loops.\nExamples:\n  common() → type lst:\n  common() → ?",
+            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists using 2 for loops.\nExamples:\n  common() → ['2', '3']\n  common() → []",
             "initialCode": "def common():\n    pass",
             "solution": "# Using function approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    result = []\n    for i in lst1:  # Outer loop\n        for j in lst2:  # Inner loop (nested)\n            if i == j and i not in result:\n                result.append(i)\n    return result\ncommon()\n\n# Alternative solution using set intersection\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    return list(set(lst1) & set(lst2))\nprint(common())\n\n# Alternative solution using list comprehension\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    return list(dict.fromkeys([x for x in lst1 if x in lst2]))\nprint(common())\n\n# Using built-in approach\ndef common():\n    return [i for i in lst1]\n\n# Using manual approach\ndef common():\n    return list(map(lambda i: i, lst1))\n\n# Script approach\nlst1 = 5\nlst2 = 5\nresult = []\nfor i in lst1:  # Outer loop\n    for j in lst2:  # Inner loop (nested)\n        if i == j and i not in result:\n            result.append(i)\nresult = result\nprint(result)\n\n# Direct approach\nlst1 = 10\nlst2 = 10\nresult = []\nfor i in lst1:  # Outer loop\n    for j in lst2:  # Inner loop (nested)\n        if i == j and i not in result:\n            result.append(i)\nresult = result\nprint(result)",
 
@@ -1732,7 +1732,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 150,
             "title": "Problem 150",
-            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists without using for loops.\nExamples:\n  common() → type lst:\n  common() → ?",
+            "description": "Write a Python program to find the common elements between two lists. Prompt the user to enter two lists without using for loops.\nExamples:\n  common() → ['2', '3']\n  common() → []",
             "initialCode": "def common():\n    pass",
             "solution": "# Using function approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n    print(common_element)\ncommon()\n\n# Alternative solution using & operator\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    print(set(lst1) & set(lst2))\ncommon()\n\n# Alternative solution returning list\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    print(list(set(lst1).intersection(set(lst2))))\ncommon()\n\n# Using built-in approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n    return common_element\n\n# Using manual approach\ndef common():\n    lst1 = input('type lst: ').split()\n    lst2 = input('type lst: ').split()\n    set1 = set(lst1)  # Convert to set\n    set2 = set(lst2)\n    common_element = set1.intersection(set2)  # Set intersection operator finds common elements\n    result = common_element\n    return result\n\n# Script approach\nlst1 = 5\nlst2 = 5\nset1 = set(lst1)  # Convert to set\nset2 = set(lst2)\ncommon_element = set1.intersection(set2)  # Set intersection operator finds common elements\nprint(common_element)\n\n# Direct approach\nlst1 = 10\nlst2 = 10\nset1 = set(lst1)  # Convert to set\nset2 = set(lst2)\ncommon_element = set1.intersection(set2)  # Set intersection operator finds common elements\nprint(common_element)",
 
@@ -1744,7 +1744,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 151,
             "title": "Problem 151",
-            "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.\nExamples:\n  find_longest_word(['hello', 'world', 'python']) → python\n  find_longest_word(['a', 'ab', 'abc']) → abc\n  find_longest_word(['short', 'longer', 'longest']) → longest",
+            "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered.\nExamples:\n  find_longest_word(['tree', 'mountain', 'sky']) → 'mountain'\n  find_longest_word(['same', 'size', 'tiny']) → 'same'\n  find_longest_word(['a']) → 'a'",
             "initialCode": "def find_longest_word(words):\n    pass",
             "solution": "# Using function approach\ndef find_longest_word(words):\n    count = 0  # Tracks length of longest word found\n    longest_word = ''\n    for word in words:\n        if len(word) > count:  # If current word is longer\n            count = len(word)  # Update length\n            longest_word = word  # Update word\n    return longest_word\nwords = ['tree', 'mountain', 'do', 'Jonathannollfrency']\nprint(find_longest_word(words))\n\n# Alternative solution using max() with key=len\ndef find_longest_word(words):\n    return max(words, key=len)\nprint(find_longest_word(['hello', 'world', 'python']))  # Output: python\n\n# Alternative solution using reduce\ndef find_longest_word(words):\n    from functools import reduce\n    return reduce(lambda a, b: a if len(a) >= len(b) else b, words)\nprint(find_longest_word(['a', 'ab', 'abc']))  # Output: abc\n\n# Alternative solution using sorted\ndef find_longest_word(words):\n    return sorted(words, key=len, reverse=True)[0]\nprint(find_longest_word(['short', 'longer', 'longest']))  # Output: longest\n\n# Using built-in approach\ndef find_longest_word(words):\n    result = longest_word\n    return result\n\n# Using manual approach\ndef find_longest_word(words):\n    return longest_word\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = find_longest_word(words)\nprint(result)\n\n# Direct approach\nprint(find_longest_word([4, 1, 8, 6, 3]))",
 
@@ -1804,7 +1804,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 156,
             "title": "Problem 156",
-            "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, without maintaining the original order of characters.\nExamples:\n  remove_duplicates('hello') → ehol (order may vary)\n  remove_duplicates('hello') → helo\n  remove_duplicates('aabbcc') → abc",
+            "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, without maintaining the original order of characters.\nExamples:\n  remove_duplicates('banana') → ['b', 'a', 'n']\n  remove_duplicates('abc') → ['a', 'b', 'c']",
             "initialCode": "def remove_duplicates(string):\n    pass",
             "solution": "# Using function approach\ndef remove_duplicates(string):\n    split_word = string.split()  # Splits into words (not characters)\n    set_word = set(split_word)  # Set removes duplicates (order not preserved)\n    return ' '.join(set_word)  # Join set (order may vary)\nlst = 'and here is was and in the'\nprint(remove_duplicates(lst))\n\n# Alternative solution using set() on characters (correct for char-level)\ndef remove_duplicates(string):\n    return ''.join(set(string))\nprint(remove_duplicates('hello'))  # Output: ehol (order may vary)\n\n# Alternative solution preserving order with dict.fromkeys\ndef remove_duplicates(string):\n    return ''.join(dict.fromkeys(string))\nprint(remove_duplicates('hello'))  # Output: helo\n\n# Alternative solution using list comprehension with seen set\ndef remove_duplicates(string):\n    seen = set()\n    return ''.join(c for c in string if not (c in seen or seen.add(c)))\nprint(remove_duplicates('aabbcc'))  # Output: abc\n\n# Using built-in approach\ndef remove_duplicates(string):\n    result = ' '.join(set_word)\n    return result\n\n# Using manual approach\ndef remove_duplicates(string):\n    return ' '.join(set_word)\n\n# Script approach\nstring = 'hello'\nresult = remove_duplicates(string)\nprint(result)\n\n# Direct approach\nprint(remove_duplicates('world'))",
 
@@ -1852,7 +1852,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 160,
             "title": "Problem 160",
-            "description": "Define a function that computes the length of a given list or string. (It is true that Python has the len() function built in, but writing it yourself is nevertheless a good exercise.)\nExamples:\n  find_length('Jonathan') → 8\n  find_length('hello') → 5\n  find_length('python') → 6",
+            "description": "Define a function that computes the length of a given list or string. (It is true that Python has the len() function built in, but writing it yourself is nevertheless a good exercise.)\nExamples:\n  find_length('hello') → 5\n  find_length([1, 2, 3]) → 3\n  find_length('') → 0",
             "initialCode": "def find_length(string):  # Works for both strings and lists (iterable)\n    pass",
             "solution": "# Using function approach\ndef find_length(string):  # Works for both strings and lists (iterable)\n    count = 0\n    for char in string:  # Iterate over elements\n        count += 1\n    return count\narg = 'Jonathan'\nprint(find_length(arg))\n\n# Alternative solution using sum with generator\ndef find_length(string):\n    return sum(1 for _ in string)\nprint(find_length('Jonathan'))  # Output: 8\n\n# Alternative solution using recursion\ndef find_length(string):\n    if string == '':\n        return 0\n    return 1 + find_length(string[1:])\nprint(find_length('hello'))  # Output: 5\n\n# Alternative solution using enumerate\ndef find_length(string):\n    for i, _ in enumerate(string):\n    return i + 1 if string else 0\nprint(find_length('python'))  # Output: 6\n\n# Using built-in approach\ndef find_length(string):\n    result = count\n    return result\n\n# Using manual approach\ndef find_length(string):\n    return count\n\n# Script approach\nstring = 'hello'\nresult = find_length(string)\nprint(result)\n\n# Direct approach\nprint(find_length('world'))",
 
@@ -1888,7 +1888,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 163,
             "title": "Problem 163",
-            "description": "Write a Python function `count_vowels` that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in the string. Ignore case, so 'A' and 'a' should be counted as the same vowel using list comprehension.\nExamples:\n  count_vowels('hello') → {'a': 0, 'e': 1, 'i': 0, 'o': 1, 'u': 0}\n  count_vowels('world') → {'a': 0, 'e': 0, 'i': 0, 'o': 1, 'u': 0}\n  count_vowels('python') → {'a': 0, 'e': 0, 'i': 0, 'o': 1, 'u': 0}",
+            "description": "Write a Python function `count_vowels` that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in the string. Ignore case, so 'A' and 'a' should be counted as the same vowel using list comprehension.\nExamples:\n  count_vowels('JOnathAn is the best') → [object Object]\n  count_vowels('AEIOU xyz') → [object Object]",
             "initialCode": "def count_vowels(string):\n    pass\n\ndef count_vowels(sentence):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(string):\n    vowels = 'aeiou'\n    result = {}  # Dictionary to store vowel counts\n    for vowel in vowels:\n        result[vowel] = 0  # Set initial count for each vowel\n    string = string.lower()  # Convert to lowercase for case-insensitive counting\n    for char in string:\n        if char in vowels:\n            result[char] += 1  # Increment count for found vowel\n    return result\nstring = 'JOnathAn is the best'\nprint(count_vowels(string))\ndef count_vowels(sentence):\n    sentence = sentence.lower()\n    vowels = 'aeiou'\n    vowel_counts = {number: 0 for number in vowels}  # {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}\n    for char in sentence:\n        if char in vowels:\n            vowel_counts[char] += 1\n    return vowel_counts\nstring = 'Jonathan is the best'    \nprint(count_vowels(string))\n\n# Alternative solution using collections.Counter\ndef count_vowels(string):\n    from collections import Counter\n    c = Counter(c for c in string.lower() if c in 'aeiou')\n    return {v: c.get(v, 0) for v in 'aeiou'}\nprint(count_vowels('Jonathan is the best'))\n\n# Alternative solution using str.count()\ndef count_vowels(string):\n    string = string.lower()\n    return {v: string.count(v) for v in 'aeiou'}\nprint(count_vowels('Jonathan is the best'))\n\n# Using built-in approach\ndef count_vowels(string):\n    result = result\n    return result\n\n# Using manual approach\ndef count_vowels(string):\n    return result\n\n# Script approach\nstring = 'hello'\nresult = count_vowels(string)\nprint(result)\n\n# Direct approach\nprint(count_vowels('world'))",
 
@@ -1900,7 +1900,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 164,
             "title": "Problem 164",
-            "description": "Write a Python function `count_vowels` that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in the string. Ignore case, so 'A' and 'a' should be counted as the same vowel without using list conprehension.\nExamples:\n  count_vowels('hello') → {'a': 0, 'e': 1, 'i': 0, 'o': 1, 'u': 0}\n  count_vowels('world') → {'a': 0, 'e': 0, 'i': 0, 'o': 1, 'u': 0}\n  count_vowels('python') → {'a': 0, 'e': 0, 'i': 0, 'o': 1, 'u': 0}",
+            "description": "Write a Python function `count_vowels` that takes a string as input and returns a dictionary with the counts of each vowel ('a', 'e', 'i', 'o', 'u') in the string. Ignore case, so 'A' and 'a' should be counted as the same vowel without using list conprehension.\nExamples:\n  count_vowels('Jonathan is the best') → [object Object]\n  count_vowels('rhythm') → [object Object]",
             "initialCode": "def count_vowels(sentence):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(sentence):\n    sentence = sentence.lower()\n    vowels = 'aeiou'\n    vowel_counts = {}\n    for number in vowels:\n        vowel_counts[number] = 0\n    for char in sentence:\n        if char in vowels:\n            vowel_counts[char] += 1\n    return vowel_counts\nstring = 'Jonathan is the best'\nprint(count_vowels(string))\n\n# Alternative solution using collections.Counter\ndef count_vowels(sentence):\n    from collections import Counter\n    c = Counter(c for c in sentence.lower() if c in 'aeiou')\n    return {v: c.get(v, 0) for v in 'aeiou'}\nprint(count_vowels('Jonathan is the best'))\n\n# Alternative solution using str.count()\ndef count_vowels(sentence):\n    sentence = sentence.lower()\n    return {v: sentence.count(v) for v in 'aeiou'}\nprint(count_vowels('Jonathan is the best'))\n\n# Using built-in approach\ndef count_vowels(sentence):\n    result = vowel_counts\n    return result\n\n# Using manual approach\ndef count_vowels(sentence):\n    return vowel_counts\n\n# Script approach\nsentence = 'Hello, World!'\nresult = count_vowels(sentence)\nprint(result)\n\n# Direct approach\nprint(count_vowels('Python is fun'))",
 
@@ -1972,7 +1972,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 170,
             "title": "Problem 170",
-            "description": "Write a function count_characters that takes a string as input and returns a dictionary where the keys are characters in the string and the values are the counts of those characters.\nExamples:\n  count_characters('hello') → {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n  count_characters('aabbcc') → {'a': 2, 'b': 2, 'c': 2}\n  count_characters('abcabc') → {'a': 2, 'b': 2, 'c': 2}",
+            "description": "Write a function count_characters that takes a string as input and returns a dictionary where the keys are characters in the string and the values are the counts of those characters.\nExamples:\n  count_characters('hello') → [object Object]\n  count_characters('aba') → [object Object]",
             "initialCode": "def count_characters(string):\n    pass",
             "solution": "# Using function approach\ndef count_characters(string):\n    counts = {}  # Dictionary to store character frequencies\n    for char in string:  # Iterate over each character\n        if char in counts:  # Dictionary membership check (O(1) average case)\n            counts[char] += 1  # Increment count if character exists\n        else:\n            counts[char] = 1\n    return counts\nstring = input('Enter a string: ')\nresult = count_characters(string)\nprint(result)\n\n# Alternative solution using collections.Counter\ndef count_characters(string):\n    from collections import Counter\n    return dict(Counter(string))\nprint(count_characters('hello'))  # Output: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n\n# Alternative solution using dict.get()\ndef count_characters(string):\n    counts = {}\n    for char in string:\n        counts[char] = counts.get(char, 0) + 1\n    return counts\nprint(count_characters('aabbcc'))  # Output: {'a': 2, 'b': 2, 'c': 2}\n\n# Alternative solution using setdefault\ndef count_characters(string):\n    counts = {}\n    for char in string:\n        counts.setdefault(char, 0)\n        counts[char] += 1\n    return counts\nprint(count_characters('abcabc'))  # Output: {'a': 2, 'b': 2, 'c': 2}\n\n# Using built-in approach\ndef count_characters(string):\n    result = counts\n    return result\n\n# Using manual approach\ndef count_characters(string):\n    return counts\n\n# Script approach\nstring = 'hello'\nresult = count_characters(string)\nprint(result)\n\n# Direct approach\nprint(count_characters('world'))",
 
@@ -2104,7 +2104,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 181,
             "title": "Problem 181",
-            "description": "Write a function merge_dicts_with_lists that takes a list of dictionaries as input. Each dictionary in the list has keys that are strings and values that are lists of integers. The function should merge these dictionaries into a single dictionary where the keys are preserved, and the values are merged lists containing all unique integers from the input dictionaries for each key.\nExamples:\n  merge_dicts_with_lists('hello') → ?\n  merge_dicts_with_lists('world') → ?\n  merge_dicts_with_lists('python') → ?",
+            "description": "Write a function merge_dicts_with_lists that takes a list of dictionaries as input. Each dictionary in the list has keys that are strings and values that are lists of integers. The function should merge these dictionaries into a single dictionary where the keys are preserved, and the values are merged lists containing all unique integers from the input dictionaries for each key.\nExamples:\n  merge_dicts_with_lists([{'a':[1,2,3],'b':[2,3]}, {'a':[3,4],'b':[4,5],'c':[6]}]) → [object Object]\n  merge_dicts_with_lists([{'x':[1,1]}, {'x':[2]}]) → [object Object]",
             "initialCode": "def merge_dicts_with_lists(dicts):\n    pass",
             "solution": "# Using function approach\ndef merge_dicts_with_lists(dicts):\n    merged = {}\n    for d in dicts:  # Iterate over each dictionary\n        for key, value in d.items():  # value is a list of integers\n            if key in merged:  # Key already exists\n                merged[key].update(value)  # Add elements from value list to set (removes duplicates)\n            else:  # First occurrence of key\n                merged[key] = set(value)  # Convert list to set (removes duplicates, allows efficient merging)\n    for key in merged:\n        merged[key] = list(merged[key])  # Convert set to list (order may vary)\n    return merged\ndicts = [{'a': [1, 2, 3], 'b': [2, 3]}, {'a': [3, 4], 'b': [4, 5], 'c': [6]}, {'c': [7, 8, 6]}]\nresult = merge_dicts_with_lists(dicts)  # Merges lists, removes duplicates\nprint(result)\n\n# Alternative solution using defaultdict\ndef merge_dicts_with_lists(dicts):\n    from collections import defaultdict\n    merged = defaultdict(set)\n    for d in dicts:\n        for k, v in d.items():\n            merged[k].update(v)\n    return {k: list(v) for k, v in merged.items()}\nprint(merge_dicts_with_lists([{'a': [1, 2]}, {'a': [2, 3], 'b': [4]}]))\n\n# Alternative solution using dict comprehension with set\ndef merge_dicts_with_lists(dicts):\n    all_keys = set(k for d in dicts for k in d)\n    return {k: list(set(v for d in dicts if k in d for v in d[k])) for k in all_keys}\nprint(merge_dicts_with_lists([{'x': [1, 2]}, {'x': [3], 'y': [4]}]))\n\n# Using built-in approach\ndef merge_dicts_with_lists(dicts):\n    result = merged\n    return result\n\n# Using manual approach\ndef merge_dicts_with_lists(dicts):\n    return merged\n\n# Script approach\ndicts = [3, 7, 2, 9, 1]\nresult = merge_dicts_with_lists(dicts)\nprint(result)\n\n# Direct approach\nprint(merge_dicts_with_lists([4, 1, 8, 6, 3]))",
 
@@ -2128,7 +2128,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 183,
             "title": "Problem 183",
-            "description": "Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().\nExamples:\n  is_anagram('listen', 'silent') → True\n  is_anagram('hello', 'olleh') → True\n  is_anagram('test', 'tent') → False",
+            "description": "Write a Python program to check if a string is an anagram of another string, ignoring whitespace. Prompt the user to enter two strings without using sorted().\nExamples:\n  is_anagram('listen', 'silent') → True\n  is_anagram('dormitory', 'dirty room') → True\n  is_anagram('hello', 'world') → False",
             "initialCode": "def is_anagram(string1, string2):\n    pass",
             "solution": "# Using function approach\ndef is_anagram(string1, string2):\n    string1 = string1.replace(' ', '').lower()\n    string2 = string2.replace(' ', '').lower()\n    if len(string1) != len(string2):\n        return False\n    char_count1 = {}\n    char_count2 = {}\n    for char in string1:\n        if char in char_count1:\n            char_count1[char] += 1\n        else:\n            char_count1[char] = 1\n    for char in string2:\n        if char in char_count2:\n            char_count2[char] += 1\n        else:\n            char_count2[char] = 1\n    return char_count1 == char_count2\nstring1 = input('Enter the first string: ')\nstring2 = input('Enter the second string: ')\nprint('Are the strings anagrams?:', is_anagram(string1, string2))\n\n# Alternative solution using Counter (without sorted)\ndef is_anagram(string1, string2):\n    from collections import Counter\n    return Counter(string1.replace(' ', '').lower()) == Counter(string2.replace(' ', '').lower())\nprint(is_anagram('listen', 'silent'))  # Output: True\n\n# Alternative solution using all() with count\ndef is_anagram(string1, string2):\n    s1, s2 = string1.replace(' ', '').lower(), string2.replace(' ', '').lower()\n    if len(s1) != len(s2):\n        return False\n    return all(s1.count(c) == s2.count(c) for c in set(s1))\nprint(is_anagram('hello', 'olleh'))  # Output: True\nprint(is_anagram('test', 'tent'))   # Output: False\n\n# Using built-in approach\ndef is_anagram(string1, string2):\n    result = False\n    return result\n\n# Using manual approach\ndef is_anagram(string1, string2):\n    return False\n\n# Script approach\nstring1 = 'hello'\nstring2 = 'world'\nresult = is_anagram(string1, string2)\nprint(result)\n\n# Direct approach\nprint(is_anagram('world', 'python'))",
 
@@ -2212,7 +2212,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 190,
             "title": "Problem 190",
-            "description": "Write a Python program to remove duplicates from a string and maintain the order of characters. Prompt the user to enter a string\nExamples:\n  remove_duplicate('hello') → 'helo'\n  remove_duplicate('banana') → 'ban'",
+            "description": "Write a Python program to remove duplicates from a string and maintain the order of characters. Prompt the user to enter a string\nExamples:\n  remove_duplicate() → ['b', 'a', 'n']\n  remove_duplicate() → ['a', 'b', 'c']",
             "initialCode": "def remove_duplicate():\n    pass",
             "solution": "# Using function approach\ndef remove_duplicate():\n    user = input('type string: ')\n    duplicate = []\n    for char in user:\n        if char not in duplicate:  # Check if character already seen\n            duplicate.append(char)  # Add first occurrence only (preserves order)\n    print(duplicate)  # Prints list, not string (could use ''.join(duplicate))\nremove_duplicate()\n\n# Alternative using dict.fromkeys (Python 3.7+ preserves insertion order)\ndef remove_duplicate(s):\n    return ''.join(dict.fromkeys(s))\nprint(remove_duplicate('hello'))  # Output: 'helo'\n\n# Alternative using OrderedDict\ndef remove_duplicate(s):\n    from collections import OrderedDict\n    return ''.join(OrderedDict.fromkeys(s))\nprint(remove_duplicate('banana'))  # Output: 'ban'\n\n# Using built-in approach\ndef remove_duplicate():\n    user = input('type string: ')\n    duplicate = []\n    for char in user:\n        if char not in duplicate:  # Check if character already seen\n            duplicate.append(char)  # Add first occurrence only (preserves order)\n    return duplicate\n\n# Using manual approach\ndef remove_duplicate():\n    user = input('type string: ')\n    duplicate = []\n    for char in user:\n        if char not in duplicate:  # Check if character already seen\n            duplicate.append(char)  # Add first occurrence only (preserves order)\n    result = duplicate\n    return result\n\n# Script approach\ns = 5\nresult = remove_duplicate(s)\nprint(result)\n\n# Direct approach\nprint(remove_duplicate(10))",
 
@@ -2236,7 +2236,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 192,
             "title": "Problem 192",
-            "description": "Write a Python function called count_occurrences that takes a list and an element as input and returns the number of times the element appears in the list.\nExamples:\n  count_occurrences([1, 2, 3, 1, 1, 4], 1) → 3\n  count_occurrences(['a', 'b', 'a', 'c', 'a'], 'a') → 3\n  count_occurrences([1, 2, 1, 3], 1) → 2",
+            "description": "Write a Python function called count_occurrences that takes a list and an element as input and returns the number of times the element appears in the list.\nExamples:\n  count_occurrences([1, 2, 3, 1, 1], 1) → 3\n  count_occurrences(['a', 'b', 'a'], 'a') → 2\n  count_occurrences([1, 2], 9) → 0",
             "initialCode": "def count_occurrences(lst, element):\n    pass\n\ndef main():\n    pass",
             "solution": "# Using function approach\ndef count_occurrences(lst, element):\n    count = 0\n    for item in lst:\n        if item == element:  # Compare each item with target element\n            count += 1  # Increment counter when match found\n    return count\ntest_list = [1, 2, 3, 4, 1, 2, 1, 5, 1]\nelement_to_count = 1\nprint('Number of occurrences of', element_to_count, ':', count_occurrences(test_list, element_to_count))\ndef main():\n    user = input('type element: ').lower()  # Convert input to lowercase\n    count = 0\n    for word in lst:  # lst must be defined outside function (global variable)\n        if word.lower() == user:  # Case-insensitive comparison\n            count += 1\n    if count == 0:\n        return 'not in lst'  # Return string if not found\n    else:\n        return count  # Return count\nlst = ['Jonathan', 'Christopher', 'Jeremy', 'Jonathan', 'bad']\nprint(main())\n\n# Alternative using list.count() method\ndef count_occurrences(lst, element):\n    return lst.count(element)\nprint(count_occurrences([1, 2, 3, 1, 1, 4], 1))  # Output: 3\n\n# Alternative using collections.Counter\ndef count_occurrences(lst, element):\n    from collections import Counter\n    return Counter(lst)[element]\nprint(count_occurrences(['a', 'b', 'a', 'c', 'a'], 'a'))  # Output: 3\n\n# Alternative using filter and len\ndef count_occurrences(lst, element):\n    return len(list(filter(lambda x: x == element, lst)))\nprint(count_occurrences([1, 2, 1, 3], 1))  # Output: 2\n\n# Using built-in approach\ndef count_occurrences(lst, element):\n    result = count\n    return result\n\n# Using manual approach\ndef count_occurrences(lst, element):\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nelement = 15\nresult = count_occurrences(lst, element)\nprint(result)\n\n# Direct approach\nprint(count_occurrences([1, 3, 5, 7], 25))",
 
@@ -2404,7 +2404,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 206,
             "title": "Problem 206",
-            "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().\nExamples:\n  max_of_three() → Enter three numbers:\n  max_of_three() → ?",
+            "description": "Write a Python program to find the maximum of three numbers. Prompt the user to enter three numbers. do not use max().\nExamples:\n  max_of_three() → '567'\n  max_of_three() → '-2'",
             "initialCode": "def max_of_three():\n    pass",
             "solution": "# Using function approach\ndef max_of_three():\n    numbers = [int(value) for value in input('Enter three numbers: ').split()]\n    if len(numbers) != 3:\n        print('not enough numbers')\n        return\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number > largest:\n            largest = number\n    print(largest)\nmax_of_three()\n\n# Script approach\nnumbers = 5\nif len(numbers) != 3:\n    print('not enough numbers')\n    return\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number > largest:\n        largest = number\nprint(largest)\n\n# Direct approach\nnumbers = 10\nif len(numbers) != 3:\n    print('not enough numbers')\n    return\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number > largest:\n        largest = number\nprint(largest)",
 
@@ -2512,7 +2512,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 215,
             "title": "Problem 215",
-            "description": "Write a Python program to print a square pattern of stars with a given side length.\nExamples:\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n  square_pattern(3) → '***\n***\n***'\n  square_pattern(2) → '**\n**'",
+            "description": "Write a Python program to print a square pattern of stars with a given side length.\nExamples:\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n***\n***'\n**'\n  square_pattern(3) → '***\n***\n***'\n  square_pattern(2) → '**\n**'",
             "initialCode": "def square_pattern(n):\n    pass\n\ndef print_square_pattern(side_length):\n    pass",
             "solution": "# Using function approach\ndef square_pattern(n):\n    for i in range(n):  # Outer loop: rows\n        for j in range(n):  # Inner loop: columns\n            print('*', end=' ')  # Print star with space, end='' prevents newline\n        print()  # Print newline after each row\nn = 5    \nprint(square_pattern(n))  # Prints square, then prints None\ndef print_square_pattern(side_length):\n    for i in range(side_length):  # Rows\n        for j in range(side_length):  # Columns\n            print('*', end=' ')  # end=' ' keeps stars on same line with space\n        print()  # Newline after each row completes\nside_length = int(input('Enter the side length of the square: '))\nprint_square_pattern(side_length)\n\n# Alternative using one-liner with join\ndef print_square_pattern(n):\n    print('\n'.join('* ' * n for _ in range(n)))\nprint_square_pattern(5)\n\n# Alternative using while loop\ndef square_pattern(n):\n    i = 0\n    while i < n:\n        print('* ' * n)\n        i += 1\nsquare_pattern(5)\n\n# Using built-in approach\ndef solve(enter):\n    def square_pattern(n):\n        for i in range(n):  # Outer loop: rows\n            for j in range(n):  # Inner loop: columns\n                print('*', end=' ')  # Print star with space, end='' prevents newline\n            print()  # Print newline after each row\n    n = 5    \n    print(square_pattern(n))  # Prints square, then prints None\n    def print_square_pattern(side_length):\n        for i in range(side_length):  # Rows\n            for j in range(side_length):  # Columns\n                print('*', end=' ')  # end=' ' keeps stars on same line with space\n            print()  # Newline after each row completes\n    side_length = enter\n    print_square_pattern(side_length)\n\n# Using manual approach\ndef solve(enter):\n    def square_pattern(n):\n        for i in range(n):  # Outer loop: rows\n            for j in range(n):  # Inner loop: columns\n                print('*', end=' ')  # Print star with space, end='' prevents newline\n            print()  # Print newline after each row\n    n_2 = 5    \n    print(square_pattern(n_2))  # Prints square, then prints None\n    def print_square_pattern(side_length):\n        for i in range(side_length):  # Rows\n            for j in range(side_length):  # Columns\n                print('*', end=' ')  # end=' ' keeps stars on same line with space\n            print()  # Newline after each row completes\n    side_length_2 = enter\n    print_square_pattern(side_length_2)\n\n# Script approach\nn = 6\nresult = square_pattern(n)\nprint(result)\n\n# Direct approach\nprint(square_pattern(15))",
 
@@ -2548,7 +2548,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 218,
             "title": "Problem 218",
-            "description": "Write a Python program to print a checkerboard pattern of given size.\nExamples:\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n  print_checkerboard(2) → '*\n *'\n  print_checkerboard(3) → '* *\n * \n* *'",
+            "description": "Write a Python program to print a checkerboard pattern of given size.\nExamples:\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n *'\n * \n* *'\n  print_checkerboard(2) → '*\n *'\n  print_checkerboard(3) → '* *\n * \n* *'",
             "initialCode": "def print_checkerboard(size):\n    pass",
             "solution": "# Using function approach\ndef print_checkerboard(size):\n    for i in range(size):  # Rows\n        for j in range(size):  # Columns\n            if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                print('*', end=' ')\n            else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                print(' ', end=' ')\n        print()  # Newline after each row\nsize = int(input('Enter the size of the checkerboard: '))\nprint_checkerboard(size)\n\n# Alternative using nested comprehension join\ndef print_checkerboard(size):\n    for i in range(size):\n        row = ' '.join('*' if (i + j) % 2 == 0 else ' ' for j in range(size))\n        print(row)\nprint_checkerboard(4)\n\n# Alternative using string multiplication (even rows)\ndef print_checkerboard(size):\n    for i in range(size):\n        if i % 2 == 0:\n            print('* ' * size)\n        else:\n            print(' *' * size)\nprint_checkerboard(4)\n\n# Using built-in approach\ndef solve(enter):\n    def print_checkerboard(size):\n        for i in range(size):  # Rows\n            for j in range(size):  # Columns\n                if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                    print('*', end=' ')\n                else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                    print(' ', end=' ')\n            print()  # Newline after each row\n    size = enter\n    print_checkerboard(size)\n\n# Using manual approach\ndef solve(enter):\n    def print_checkerboard(size):\n        for i in range(size):  # Rows\n            for j in range(size):  # Columns\n                if (i + j) % 2 == 0:  # Even sum: (0,0), (0,2), (1,1), (2,0), etc.\n                    print('*', end=' ')\n                else:  # Odd sum: (0,1), (1,0), (1,2), etc.\n                    print(' ', end=' ')\n            print()  # Newline after each row\n    size_2 = enter\n    print_checkerboard(size_2)\n\n# Script approach\nsize = 15\nresult = print_checkerboard(size)\nprint(result)\n\n# Direct approach\nprint(print_checkerboard(25))",
 
@@ -2560,7 +2560,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 219,
             "title": "Problem 219",
-            "description": "Write a Python program to print Floyd's Triangle.\\n1\\n2 3\\n4 5 6\\n7 8 9 10\nExamples:\n  print_floyds_triangle([1, 2, 3]) → ?\n  print_floyds_triangle([5, 8, 2]) → ?\n  print_floyds_triangle([3, 1, 4]) → ?",
+            "description": "Write a Python program to print Floyd's Triangle.\\n1\\n2 3\\n4 5 6\\n7 8 9 10\nExamples:\n2 3\n4 5 6\n7 8 9 10'\n2 3'\n  print_floyds_triangle(4) → '1\n2 3\n4 5 6\n7 8 9 10'\n  print_floyds_triangle(2) → '1\n2 3'",
             "initialCode": "def print_floyds_triangle(rows):\n    pass",
             "solution": "# Using function approach\ndef print_floyds_triangle(rows):\n    num = 1  # Counter for consecutive numbers\n    for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n        for j in range(i):  # Print i numbers in row i\n            print(num, end=' ')  # Print current number\n            num += 1  # Increment to next number\n        print()  # Newline after each row\nrows = 4\nprint_floyds_triangle(rows)\n\n# Alternative using while loop\ndef print_floyds_triangle(rows):\n    num = 1\n    r = 1\n    while r <= rows:\n        print(' '.join(str(num + c) for c in range(r)))\n        num += r\n        r += 1\nprint_floyds_triangle(4)\n\n# Alternative calculating numbers per row\ndef print_floyds_triangle(rows):\n    num = 1\n    for i in range(1, rows + 1):\n        print(' '.join(str(num + j) for j in range(i)))\n        num += i\nprint_floyds_triangle(4)\n\n# Using built-in approach\ndef solve():\n    def print_floyds_triangle(rows):\n        num = 1  # Counter for consecutive numbers\n        for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n            for j in range(i):  # Print i numbers in row i\n                print(num, end=' ')  # Print current number\n                num += 1  # Increment to next number\n            print()  # Newline after each row\n    rows = 4\n    print_floyds_triangle(rows)\n\n# Using manual approach\ndef solve():\n    def print_floyds_triangle(rows):\n        num_2 = 1  # Counter for consecutive numbers\n        for i in range(1, rows + 1):  # i = 1, 2, 3, 4 (row number)\n            for j in range(i):  # Print i numbers in row i\n                print(num_2, end=' ')  # Print current number\n                num_2 += 1  # Increment to next number\n            print()  # Newline after each row\n    rows_2 = 4\n    print_floyds_triangle(rows_2)\n\n# Script approach\nrows = 15\nresult = print_floyds_triangle(rows)\nprint(result)\n\n# Direct approach\nprint(print_floyds_triangle(25))",
 
@@ -2572,7 +2572,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 221,
             "title": "Problem 221",
-            "description": "Write a Python program to print a hollow square pattern of stars with a given side length.\\nFor example, for side length 5:\\n*****\\n*   *\\n*   *\\n*   *\\n*****\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n  print_hollow_square(5) → '*****\n*   *\n*   *\n*   *\n*****'\n  print_hollow_square(3) → '***\n* *\n***'",
+            "description": "Write a Python program to print a hollow square pattern of stars with a given side length.\\nFor example, for side length 5:\\n*****\\n*   *\\n*   *\\n*   *\\n*****\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n*   *\n*   *\n*   *\n*****'\n* *\n***'\n  print_hollow_square(5) → '*****\n*   *\n*   *\n*   *\n*****'\n  print_hollow_square(3) → '***\n* *\n***'",
             "initialCode": "def print_hollow_square(side_length):\n    pass",
             "solution": "# Using function approach\ndef print_hollow_square(side_length):\n    for i in range(side_length):  # Rows\n        if i == 0 or i == side_length - 1:  # First or last row\n            print('*' * side_length)  # Print full row of stars\n        else:  # Middle rows\n            # Print: star + spaces + star\n            print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\nside_length = 5\nprint_hollow_square(side_length)\n\n# Alternative using join with conditional\ndef print_hollow_square(n):\n    for i in range(n):\n        print('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*')\nprint_hollow_square(5)\n\n# Alternative using list comprehension\ndef print_hollow_square(n):\n    print('\n'.join('*' * n if i == 0 or i == n - 1 else '*' + ' ' * (n - 2) + '*' for i in range(n)))\nprint_hollow_square(5)\n\n# Using built-in approach\ndef solve():\n    def print_hollow_square(side_length):\n        for i in range(side_length):  # Rows\n            if i == 0 or i == side_length - 1:  # First or last row\n                print('*' * side_length)  # Print full row of stars\n            else:  # Middle rows\n                print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\n    side_length = 5\n    print_hollow_square(side_length)\n\n# Using manual approach\ndef solve():\n    def print_hollow_square(side_length):\n        for i in range(side_length):  # Rows\n            if i == 0 or i == side_length - 1:  # First or last row\n                print('*' * side_length)  # Print full row of stars\n            else:  # Middle rows\n                print('*' + ' ' * (side_length - 2) + '*')  # Hollow row\n    side_length_2 = 5\n    print_hollow_square(side_length_2)\n\n# Script approach\nside_length = 15\nresult = print_hollow_square(side_length)\nprint(result)\n\n# Direct approach\nprint(print_hollow_square(25))",
 
@@ -2584,7 +2584,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 222,
             "title": "Problem 222",
-            "description": "Write a Python program to print a reverse pyramid pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4\\n1 2 3\\n1 2\\n1\"\nExamples:\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n  print_reverse_pyramid(5) → '1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1'\n  print_reverse_pyramid(3) → '1 2 3\n1 2\n1'",
+            "description": "Write a Python program to print a reverse pyramid pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4\\n1 2 3\\n1 2\\n1\"\nExamples:\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n1 2 3 4\n1 2 3\n1 2\n1'\n1 2\n1'\n  print_reverse_pyramid(5) → '1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1'\n  print_reverse_pyramid(3) → '1 2 3\n1 2\n1'",
             "initialCode": "def print_reverse_pyramid(rows):\n    pass",
             "solution": "# Using function approach\ndef print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n        for j in range(1, i + 1):  # Print numbers 1 to i\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after each row\nrows = 5\nprint_reverse_pyramid(rows)\n\n# Alternative using join and map\ndef print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):\n        print(' '.join(map(str, range(1, i + 1))))\nprint_reverse_pyramid(5)\n\n# Alternative using string multiplication\ndef print_reverse_pyramid(rows):\n    for i in range(rows, 0, -1):\n        print(' '.join(str(j) for j in range(1, i + 1)))\nprint_reverse_pyramid(5)\n\n# Using built-in approach\ndef solve():\n    def print_reverse_pyramid(rows):\n        for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n            for j in range(1, i + 1):  # Print numbers 1 to i\n                print(j, end=' ')  # Print number with space\n            print()  # Newline after each row\n    rows = 5\n    print_reverse_pyramid(rows)\n\n# Using manual approach\ndef solve():\n    def print_reverse_pyramid(rows):\n        for i in range(rows, 0, -1):  # i = 5, 4, 3, 2, 1 (backwards)\n            for j in range(1, i + 1):  # Print numbers 1 to i\n                print(j, end=' ')  # Print number with space\n            print()  # Newline after each row\n    rows_2 = 5\n    print_reverse_pyramid(rows_2)\n\n# Script approach\nrows = 15\nresult = print_reverse_pyramid(rows)\nprint(result)\n\n# Direct approach\nprint(print_reverse_pyramid(25))",
 
@@ -2596,7 +2596,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 224,
             "title": "Problem 224",
-            "description": "description\": \"Write a Python program to print a triangle pattern of letters:\\nA\\nB B\\nC C C\\nD D D D\\nE E E E E\"\nExamples:\n  triangle_pattern([1, 2, 3]) → ?\n  triangle_pattern([5, 8, 2]) → ?\n  triangle_pattern([3, 1, 4]) → ?",
+            "description": "description\": \"Write a Python program to print a triangle pattern of letters:\\nA\\nB B\\nC C C\\nD D D D\\nE E E E E\"\nExamples:\nB B\nC C C\nD D D D\nE E E E E'\nB B\nC C C'\n  triangle_pattern(5) → 'A\nB B\nC C C\nD D D D\nE E E E E'\n  triangle_pattern(3) → 'A\nB B\nC C C'",
             "initialCode": "def triangle_pattern(rows):\n    pass\n\ndef triangle_pattern(rows):\n    pass",
             "solution": "# Using function approach\ndef triangle_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        letter = chr(65 + i)  # Get letter for current row\n        for j in range(i + 1):  # Print letter (i+1) times\n            print(letter, end=' ')  # Print letter with space\n        print()  # Newline after row\nrows = 5\ntriangle_pattern(rows)\ndef triangle_pattern(rows):\n    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n               'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n    for i in range(rows):\n        letter = letters[i]\n        for j in range(i + 1):\n            print(letter, end=' ')\n        print()\nrows = 5\ntriangle_pattern(rows)\n\n# Alternative using string indexing\ndef triangle_pattern(rows):\n    letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'\n    for i in range(rows):\n        print(' '.join(letters[i] for _ in range(i + 1)))\ntriangle_pattern(5)\n\n# Alternative using one-liner\ndef triangle_pattern(rows):\n    print('\n'.join(' '.join(chr(65 + i) for _ in range(i + 1)) for i in range(rows)))\ntriangle_pattern(5)\n\n# Using built-in approach\ndef solve():\n    def triangle_pattern(rows):\n        for i in range(rows):  # i = 0, 1, 2, 3, 4\n            letter = chr(65 + i)  # Get letter for current row\n            for j in range(i + 1):  # Print letter (i+1) times\n                print(letter, end=' ')  # Print letter with space\n            print()  # Newline after row\n    rows = 5\n    triangle_pattern(rows)\n    def triangle_pattern(rows):\n        letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n        for i in range(rows):\n            letter = letters[i]\n            for j in range(i + 1):\n                print(letter, end=' ')\n            print()\n    rows = 5\n    triangle_pattern(rows)\n\n# Using manual approach\ndef solve():\n    def triangle_pattern(rows):\n        for i in range(rows):  # i = 0, 1, 2, 3, 4\n            letter_2 = chr(65 + i)  # Get letter_2 for current row\n            for j in range(i + 1):  # Print letter_2 (i+1) times\n                print(letter_2, end=' ')  # Print letter_2 with space\n            print()  # Newline after row\n    rows_2 = 5\n    triangle_pattern(rows_2)\n    def triangle_pattern(rows_2):\n        letters_2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', \n                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']\n        for i in range(rows_2):\n            letter_2 = letters_2[i]\n            for j in range(i + 1):\n                print(letter_2, end=' ')\n            print()\n    rows_2 = 5\n    triangle_pattern(rows_2)\n\n# Script approach\nrows = 15\nresult = triangle_pattern(rows)\nprint(result)\n\n# Direct approach\nprint(triangle_pattern(25))",
 
@@ -2608,7 +2608,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 225,
             "title": "Problem 225",
-            "description": "Write a Python program to print a square pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\nExamples:\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n  print_square_pattern(5) → '1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n  print_square_pattern(3) → '1 2 3\n1 2 3\n1 2 3'",
+            "description": "Write a Python program to print a square pattern of numbers:\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\\n1 2 3 4 5\nExamples:\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n1 2 3\n1 2 3'\n  print_square_pattern(5) → '1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5'\n  print_square_pattern(3) → '1 2 3\n1 2 3\n1 2 3'",
             "initialCode": "def print_square_pattern(size):\n    pass",
             "solution": "# Using function approach\nr = 5 # r = row\nc = 5 # c = column\nfor n in range(r): # n = number (outer loop: rows)\n    for n in range(1, c + 1):  # BUG: 'n' reused, overwrites outer loop variable\n        print(n, end = ' ')  # Prints 1, 2, 3, 4, 5\n    print()  # Newline after each row\ndef print_square_pattern(size):\n    for i in range(size):  # Rows\n        for j in range(1, size + 1):  # Columns: numbers 1 to size\n            print(j, end=' ')  # Print number with space\n        print()  # Newline after row\nsize = 5\nprint_square_pattern(size)\n\n# Alternative using join with map\ndef print_square_pattern(size):\n    for _ in range(size):\n        print(' '.join(map(str, range(1, size + 1))))\nprint_square_pattern(5)\n\n# Alternative using one-liner\ndef print_square_pattern(size):\n    print('\n'.join(' '.join(str(j) for j in range(1, size + 1)) for _ in range(size)))\nprint_square_pattern(5)\n\n# Alternative using string multiplication\ndef print_square_pattern(size):\n    for _ in range(size):\n        print(' '.join(str(i) for i in range(1, size + 1)))\nprint_square_pattern(5)\n\n# Using built-in approach\ndef solve():\n    r = 5 # r = row\n    c = 5 # c = column\n    for n in range(r): # n = number (outer loop: rows)\n        for n in range(1, c + 1):  # BUG: 'n' reused, overwrites outer loop variable\n            print(n, end = ' ')  # Prints 1, 2, 3, 4, 5\n        print()  # Newline after each row\n    def print_square_pattern(size):\n        for i in range(size):  # Rows\n            for j in range(1, size + 1):  # Columns: numbers 1 to size\n                print(j, end=' ')  # Print number with space\n            print()  # Newline after row\n    size = 5\n    print_square_pattern(size)\n\n# Using manual approach\ndef solve():\n    r_2 = 5 # r_2 = row\n    c_2 = 5 # c_2 = column\n    for n in range(r_2): # n = number (outer loop: rows)\n        for n in range(1, c_2 + 1):  # BUG: 'n' reused, overwrites outer loop variable\n            print(n, end = ' ')  # Prints 1, 2, 3, 4, 5\n        print()  # Newline after each row\n    def print_square_pattern(size):\n        for i in range(size):  # Rows\n            for j in range(1, size + 1):  # Columns: numbers 1 to size\n                print(j, end=' ')  # Print number with space\n            print()  # Newline after row\n    size_2 = 5\n    print_square_pattern(size_2)\n\n# Script approach\nsize = 15\nresult = print_square_pattern(size)\nprint(result)\n\n# Direct approach\nprint(print_square_pattern(25))",
 
@@ -2620,7 +2620,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 226,
             "title": "Problem 226",
-            "description": "Write a Python program to print a hollow right-angled triangle of stars:\\n*\\n* *\\n*  *\\n*   *\\n*****\nExamples:\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n  print_hollow_right_triangle(5) → '*\n**\n* *\n*  *\n*****'\n  print_hollow_right_triangle(3) → '*\n**\n***'",
+            "description": "Write a Python program to print a hollow right-angled triangle of stars:\\n*\\n* *\\n*  *\\n*   *\\n*****\nExamples:\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n**\n* *\n*  *\n*****'\n**\n***'\n  print_hollow_right_triangle(5) → '*\n**\n* *\n*  *\n*****'\n  print_hollow_right_triangle(3) → '*\n**\n***'",
             "initialCode": "def print_hollow_right_triangle(height):\n    pass",
             "solution": "# Using function approach\ndef print_hollow_right_triangle(height):\n    for i in range(height):  # i = 0, 1, 2, 3, 4\n        if i == height - 1:  # Last row (i = 4 for height=5)\n            print('*' * (i + 1))  # Print full row of stars (5 stars)\n        else:  # Middle rows (i = 0, 1, 2, 3)\n            # Print: star + spaces + star\n            print('*' + ' ' * i + '*')  # Hollow row: '*', '* *', '*  *', '*   *'\nheight = 5\nprint_hollow_right_triangle(height)\n\n# Alternative using conditional expression\ndef print_hollow_right_triangle(n):\n    for i in range(n):\n        print('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1))\nprint_hollow_right_triangle(5)\n\n# Alternative using join\ndef print_hollow_right_triangle(n):\n    print('\n'.join('*' + ' ' * (i - 1) + '*' if 0 < i < n - 1 else '*' * (i + 1) for i in range(n)))\nprint_hollow_right_triangle(5)\n\n# Using built-in approach\ndef solve():\n    def print_hollow_right_triangle(height):\n        for i in range(height):  # i = 0, 1, 2, 3, 4\n            if i == height - 1:  # Last row (i = 4 for height=5)\n                print('*' * (i + 1))  # Print full row of stars (5 stars)\n            else:  # Middle rows (i = 0, 1, 2, 3)\n                print('*' + ' ' * i + '*')  # Hollow row: '*', '* *', '*  *', '*   *'\n    height = 5\n    print_hollow_right_triangle(height)\n\n# Using manual approach\ndef solve():\n    def print_hollow_right_triangle(height):\n        for i in range(height):  # i = 0, 1, 2, 3, 4\n            if i == height - 1:  # Last row (i = 4 for height=5)\n                print('*' * (i + 1))  # Print full row of stars (5 stars)\n            else:  # Middle rows (i = 0, 1, 2, 3)\n                print('*' + ' ' * i + '*')  # Hollow row: '*', '* *', '*  *', '*   *'\n    height_2 = 5\n    print_hollow_right_triangle(height_2)\n\n# Script approach\nheight = 10\nresult = print_hollow_right_triangle(height)\nprint(result)\n\n# Direct approach\nprint(print_hollow_right_triangle(20))",
 
@@ -2632,7 +2632,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 227,
             "title": "Problem 227",
-            "description": "Write a Python program to print a zigzag pattern of stars for a given number of rows.\\nFor example, for 5 rows:\\n*   *   *\\n * * * *\\n  *   *\\n * * * *\\n*   *   *\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  print_zigzag(5) → '*       * \n  *       \n*       * \n  *       \n*       *'\n  print_zigzag(3) → '*   *\n  *\n*   *'",
+            "description": "Write a Python program to print a zigzag pattern of stars for a given number of rows.\\nFor example, for 5 rows:\\n*   *   *\\n * * * *\\n  *   *\\n * * * *\\n*   *   *\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  *       \n*       * \n  *       \n*       *'\n  *\n*   *'\n  print_zigzag(5) → '*       * \n  *       \n*       * \n  *       \n*       *'\n  print_zigzag(3) → '*   *\n  *\n*   *'",
             "initialCode": "def print_zigzag(rows):\n    pass",
             "solution": "# Using function approach\ndef print_zigzag(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                print('*', end=' ')\n            else:\n                print(' ', end=' ')\n        print()\nrows = 5\nprint_zigzag(rows)\n\n# Alternative using simpler alternating rows\ndef print_zigzag(rows):\n    for i in range(rows):\n        if i % 2 == 0:\n            print('*   ' * (rows // 2 + 1))\n        else:\n            print(' * *' * (rows // 2 + 1))\nprint_zigzag(5)\n\n# Using built-in approach\ndef solve():\n    def print_zigzag(rows):\n        for i in range(rows):  # Rows\n            for j in range(rows):  # Columns\n                if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                    print('*', end=' ')\n                else:\n                    print(' ', end=' ')\n            print()\n    rows = 5\n    print_zigzag(rows)\n\n# Using manual approach\ndef solve():\n    def print_zigzag(rows):\n        for i in range(rows):  # Rows\n            for j in range(rows):  # Columns\n                if (i % 2 == 0 and j % (rows - 1) == 0) or (i % 2 == 1 and j % (rows - 1) == 1):\n                    print('*', end=' ')\n                else:\n                    print(' ', end=' ')\n            print()\n    rows_2 = 5\n    print_zigzag(rows_2)\n\n# Script approach\nrows = 15\nresult = print_zigzag(rows)\nprint(result)\n\n# Direct approach\nprint(print_zigzag(25))",
 
@@ -2644,7 +2644,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 228,
             "title": "Problem 228",
-            "description": "Write a Python program to print a cross pattern of stars for a given odd number of rows.\\nFor example, for 5 rows:\\n*   *\\n * *\\n  *\\n * *\\n*   *\"\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n  print_cross(5) → '*   *\n * * \n  *  \n * * \n*   *'\n  print_cross(3) → '* *\n * \n* *'",
+            "description": "Write a Python program to print a cross pattern of stars for a given odd number of rows.\\nFor example, for 5 rows:\\n*   *\\n * *\\n  *\\n * *\\n*   *\"\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n * * \n  *  \n * * \n*   *'\n * \n* *'\n  print_cross(5) → '*   *\n * * \n  *  \n * * \n*   *'\n  print_cross(3) → '* *\n * \n* *'",
             "initialCode": "def print_cross(rows):\n    pass",
             "solution": "# Using function approach\ndef print_cross(rows):\n    for i in range(rows):  # Rows\n        for j in range(rows):  # Columns\n            if j == i or j == (rows - 1 - i):  # On either diagonal\n                print('*', end='')  # Print star\n            else:\n                print(' ', end='')  # Print space\n        print()  # Newline after row\nrows = 5\nprint_cross(rows)\n\n# Alternative using abs() symmetry\ndef print_cross(rows):\n    for i in range(rows):\n        print(' ' * min(i, rows - 1 - i) + '*' + ' ' * (abs(rows // 2 - i) * 2 - 1) + ('' if i == rows // 2 else '*'))\nprint_cross(5)\n\n# Alternative using list comprehension with conditional\ndef print_cross(rows):\n    for i in range(rows):\n        print(''.join('*' if j == i or j == rows - 1 - i else ' ' for j in range(rows)))\nprint_cross(5)\n\n# Using built-in approach\ndef solve():\n    def print_cross(rows):\n        for i in range(rows):  # Rows\n            for j in range(rows):  # Columns\n                if j == i or j == (rows - 1 - i):  # On either diagonal\n                    print('*', end='')  # Print star\n                else:\n                    print(' ', end='')  # Print space\n            print()  # Newline after row\n    rows = 5\n    print_cross(rows)\n\n# Using manual approach\ndef solve():\n    def print_cross(rows):\n        for i in range(rows):  # Rows\n            for j in range(rows):  # Columns\n                if j == i or j == (rows - 1 - i):  # On either diagonal\n                    print('*', end='')  # Print star\n                else:\n                    print(' ', end='')  # Print space\n            print()  # Newline after row\n    rows_2 = 5\n    print_cross(rows_2)\n\n# Script approach\nrows = 15\nresult = print_cross(rows)\nprint(result)\n\n# Direct approach\nprint(print_cross(25))",
 
@@ -2656,7 +2656,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 229,
             "title": "Problem 229",
-            "description": "Write a Python program to print an hourglass pattern of stars:\\n*****\\n ***\\n  *\\n ***\\n*****\nExamples:\n  print_hourglass([1, 2, 3]) → ?\n  print_hourglass([5, 8, 2]) → ?\n  print_hourglass([3, 1, 4]) → ?",
+            "description": "Write a Python program to print an hourglass pattern of stars:\\n*****\\n ***\\n  *\\n ***\\n*****\nExamples:\n ***\n  *\n ***\n*****'\n *\n***'\n  print_hourglass(5) → '*****\n ***\n  *\n ***\n*****'\n  print_hourglass(3) → '***\n *\n***'",
             "initialCode": "def print_hourglass(rows):\n    pass",
             "solution": "# Using function approach\ndef print_hourglass(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3\n        print(' ' * i + '*' * (rows - i * 2))  # May produce incorrect pattern for some rows\nrows = 4\nprint_hourglass(rows)\n\n# Alternative using proper hourglass with odd rows\ndef print_hourglass(rows):\n    n = rows // 2\n    for i in range(n, -1, -1):\n        print(' ' * (n - i) + '*' * (2 * i + 1))\n    for i in range(1, n + 1):\n        print(' ' * (n - i) + '*' * (2 * i + 1))\nprint_hourglass(5)\n\n# Alternative using list comprehension\ndef print_hourglass(rows):\n    n = rows // 2\n    pattern = [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(n, -1, -1)]\n    pattern += [(' ' * (n - i) + '*' * (2 * i + 1)) for i in range(1, n + 1)]\n    print('\n'.join(pattern))\nprint_hourglass(5)\n\n# Script approach\nrows = 15\nresult = print_hourglass(rows)\nprint(result)\n\n# Direct approach\nprint(print_hourglass(25))",
 
@@ -2680,7 +2680,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 231,
             "title": "Problem 231",
-            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible.\nExamples:\n  sum_of_odd() → type numbers:\n  sum_of_odd() → ?",
+            "description": "Write a Python program to find the sum of all odd numbers in a list. Prompt the user to enter a list of numbers. Write the function as sort as possible.\nExamples:\n  sum_of_odd() → '9'\n  sum_of_odd() → '0'",
             "initialCode": "def sum_of_odd():\n    pass",
             "solution": "# Using function approach\ndef sum_of_odd():\n    user = input('type numbers: ').split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    print(count)\nsum_of_odd()\n\n# Alternative using sum with generator\ndef sum_of_odd(nums):\n    return sum(n for n in nums if n % 2 != 0)\nprint(sum_of_odd([1, 2, 3, 4, 5]))\n\n# Alternative using filter and sum\ndef sum_of_odd(nums):\n    return sum(filter(lambda x: x % 2 != 0, nums))\nprint(sum_of_odd([2, 4, 6, 7, 9]))\n\n# Alternative using list comprehension\ndef sum_of_odd(nums):\n    return sum([n for n in nums if n % 2])\nprint(sum_of_odd([10, 15, 20, 25]))\n\n# Using built-in approach\ndef sum_of_odd():\n    user = input('type numbers: ').split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    return count\n\n# Using manual approach\ndef sum_of_odd():\n    user = input('type numbers: ').split()\n    count = 0\n    for number in user:\n        number = int(number)  # Convert to int\n        if number % 2 != 0:  # Check if odd\n            count += number  # Add odd number to sum\n    result = count\n    return result\n\n# Script approach\nnums = [3, 7, 2, 9, 1]\nresult = sum_of_odd(nums)\nprint(result)\n\n# Direct approach\nprint(sum_of_odd([4, 1, 8, 6, 3]))",
 
@@ -2752,7 +2752,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 237,
             "title": "Problem 237",
-            "description": "Write a Python program that prints a right triangle pattern of stars.\nExamples:\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n  right_triangle(5) → '*\n**\n***\n****\n*****'\n  right_triangle(3) → '*\n**\n***'",
+            "description": "Write a Python program that prints a right triangle pattern of stars.\nExamples:\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n  right_triangle(5) → '*\n**\n***\n****\n*****'\n  right_triangle(3) → '*\n**\n***'",
             "initialCode": "def right_triangle(n): \n    pass",
             "solution": "# Using function approach\nfor i in range(1, 6):  # i = 1, 2, 3, 4, 5\n    print((('*') + ' ')* i)  # Prints: '* ', '* * ', '* * * ', etc.\ndef right_triangle(n): \n    for i in range(1, n + 1):  # Rows: 1 to n\n        for j in range(i):  # Print i stars\n            print('*', end=' ')  # Print star with space\n        print()  # Newline after row\nnumber = 5\nright_triangle(number)\n\n# Alternative using join\ndef right_triangle(n):\n    for i in range(1, n + 1):\n        print(' '.join('*' for _ in range(i)))\nright_triangle(5)\n\n# Alternative using string multiplication\ndef right_triangle(n):\n    print('\n'.join('* ' * i for i in range(1, n + 1)))\nright_triangle(5)\n\n# Using built-in approach\ndef solve():\n    for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n        print((('*') + ' ')* i)  # Prints: '* ', '* * ', '* * * ', etc.\n    def right_triangle(n): \n        for i in range(1, n + 1):  # Rows: 1 to n\n            for j in range(i):  # Print i stars\n                print('*', end=' ')  # Print star with space\n            print()  # Newline after row\n    number = 5\n    right_triangle(number)\n\n# Using manual approach\ndef solve():\n    for i in range(1, 6):  # i = 1, 2, 3, 4, 5\n        print((('*') + ' ')* i)  # Prints: '* ', '* * ', '* * * ', etc.\n    def right_triangle(n): \n        for i in range(1, n + 1):  # Rows: 1 to n\n            for j in range(i):  # Print i stars\n                print('*', end=' ')  # Print star with space\n            print()  # Newline after row\n    number_2 = 5\n    right_triangle(number_2)\n\n# Script approach\nn = 6\nresult = right_triangle(n)\nprint(result)\n\n# Direct approach\nprint(right_triangle(15))",
 
@@ -2776,7 +2776,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 239,
             "title": "Problem 239",
-            "description": "Write a Python program that prints a hill pattern of stars.\nExamples:\n  print_hill_pattern([1, 2, 3]) → ?\n  print_hill_pattern([5, 8, 2]) → ?\n  print_hill_pattern([3, 1, 4]) → ?",
+            "description": "Write a Python program that prints a hill pattern of stars.\nExamples:\n   ***\n  *****\n *******\n*********'\n ***\n*****'\n  print_hill_pattern(5) → '    *\n   ***\n  *****\n *******\n*********'\n  print_hill_pattern(3) → '  *\n ***\n*****'",
             "initialCode": "def print_hill_pattern(rows):\n    pass",
             "solution": "# Using function approach\ndef print_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * (rows - i - 1) + '*' * (2 * i + 1))\nrows = 5\nprint_hill_pattern(rows)\n\n# Alternative using center method\ndef print_hill_pattern(rows):\n    for i in range(rows):\n        print(('*' * (2 * i + 1)).center(rows * 2 - 1))\nprint_hill_pattern(5)\n\n# Alternative using list comprehension\ndef print_hill_pattern(rows):\n    print('\n'.join(('*' * (2 * i + 1)).center(rows * 2 - 1) for i in range(rows)))\nprint_hill_pattern(5)\n\n# Script approach\nrows = 15\nresult = print_hill_pattern(rows)\nprint(result)\n\n# Direct approach\nprint(print_hill_pattern(25))",
 
@@ -2788,7 +2788,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 240,
             "title": "Problem 240",
-            "description": "Write a Python program that prints a reverse hill pattern of stars.\nExamples:\n  print_reverse_hill_pattern([1, 2, 3]) → ?\n  print_reverse_hill_pattern([5, 8, 2]) → ?\n  print_reverse_hill_pattern([3, 1, 4]) → ?",
+            "description": "Write a Python program that prints a reverse hill pattern of stars.\nExamples:\n *******\n  *****\n   ***\n    *'\n ***\n  *'\n  print_reverse_hill_pattern(5) → '*********\n *******\n  *****\n   ***\n    *'\n  print_reverse_hill_pattern(3) → '*****\n ***\n  *'",
             "initialCode": "def print_reverse_hill_pattern(rows):\n    pass",
             "solution": "# Using function approach\ndef print_reverse_hill_pattern(rows):\n    for i in range(rows):  # i = 0, 1, 2, 3, 4\n        print(' ' * i + '*' * (2 * (rows - i) - 1))\nrows = 5\nprint_reverse_hill_pattern(rows)\n\n# Alternative using center method\ndef print_reverse_hill_pattern(rows):\n    for i in range(rows):\n        print(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1))\nprint_reverse_hill_pattern(5)\n\n# Alternative using list comprehension\ndef print_reverse_hill_pattern(rows):\n    print('\n'.join(('*' * (2 * (rows - i) - 1)).center(rows * 2 - 1) for i in range(rows)))\nprint_reverse_hill_pattern(5)\n\n# Script approach\nrows = 15\nresult = print_reverse_hill_pattern(rows)\nprint(result)\n\n# Direct approach\nprint(print_reverse_hill_pattern(25))",
 
@@ -2944,7 +2944,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 253,
             "title": "Problem 253",
-            "description": "Write a Python function to sort a list of tuples by the second element in each tuple using the key parameter.\nExamples:\n  sort_tuples_by_second([1, 2, 3]) → ?\n  sort_tuples_by_second([5, 8, 2]) → ?\n  sort_tuples_by_second([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of tuples by the second element in each tuple using the key parameter.\nExamples:\n  sort_tuples_by_second([['a', 3], ['b', 1], ['c', 2]]) → [['b', 1], ['c', 2], ['a', 3]]\n  sort_tuples_by_second([['x', -1], ['y', -3]]) → [['y', -3], ['x', -1]]",
             "initialCode": "def sort_tuples_by_second(tuples_list):\n    pass",
             "solution": "# Using function approach\ndef sort_tuples_by_second(tuples_list):\n    return sorted(tuples_list, key=lambda x: x[1])  # Sort by x[1] (second element)\ntuples_list = [(1, 3), (3, 2), (5, 1)]\nresult = sort_tuples_by_second(tuples_list)  # Sorted by second element: 3, 2, 1\nprint(result)\n\n# Alternative using itemgetter\nfrom operator import itemgetter\ndef sort_tuples_by_second(tuples_list):\n    return sorted(tuples_list, key=itemgetter(1))\nprint(sort_tuples_by_second([(1, 3), (3, 2), (5, 1)]))\n\n# Alternative using bubble sort\ndef sort_tuples_by_second(tuples_list):\n    lst = list(tuples_list)\n    for i in range(len(lst)):\n        for j in range(0, len(lst) - i - 1):\n            if lst[j][1] > lst[j + 1][1]:\n                lst[j], lst[j + 1] = lst[j + 1], lst[j]\n    return lst\nprint(sort_tuples_by_second([(1, 3), (3, 2), (5, 1)]))\n\n# Alternative using sort() in-place\ndef sort_tuples_by_second(tuples_list):\n    tuples_list.sort(key=lambda x: x[1])\n    return tuples_list\nprint(sort_tuples_by_second([(1, 3), (3, 2), (5, 1)]))\n\n# Using built-in approach\ndef sort_tuples_by_second(tuples_list):\n    result = sorted(tuples_list, key=lambda x: x[1])\n    return result\n\n# Using manual approach\ndef sort_tuples_by_second(tuples_list):\n    return sorted(tuples_list, key=lambda x: x[1])\n\n# Script approach\ntuples_list = [3, 7, 2, 9, 1]\nresult = sort_tuples_by_second(tuples_list)\nprint(result)\n\n# Direct approach\nprint(sort_tuples_by_second([4, 1, 8, 6, 3]))",
 
@@ -2980,7 +2980,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 256,
             "title": "Problem 256",
-            "description": "Write a Python program to transpose a 2D matrix (list of lists) using `zip()`.\nExamples:\n  transpose_matrix([1, 2, 3]) → ?\n  transpose_matrix([5, 8, 2]) → ?\n  transpose_matrix([3, 1, 4]) → ?",
+            "description": "Write a Python program to transpose a 2D matrix (list of lists) using `zip()`.\nExamples:\n  transpose_matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) → [[1, 4, 7], [2, 5, 8], [3, 6, 9]]\n  transpose_matrix([[1, 2], [3, 4]]) → [[1, 3], [2, 4]]",
             "initialCode": "def transpose_matrix(matrix):\n    pass",
             "solution": "# Using function approach\ndef transpose_matrix(matrix):\n    transposed = zip(*matrix)  # * operator unpacks iterable as arguments\n    result = []\n    for row in transposed:  # Each row is a tuple from zip()\n        result.append(list(row))  # Convert tuple to list\n    return result  # Returns: [[1,4,7], [2,5,8], [3,6,9]]\nmatrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9]\n]\nprint(transpose_matrix(matrix))\n\n# Alternative using list comprehension with zip(*)\ndef transpose_matrix(matrix):\n    return [list(row) for row in zip(*matrix)]\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(transpose_matrix(matrix))\n\n# Alternative using list comprehension with nested loops\ndef transpose_matrix(matrix):\n    return [[row[i] for row in matrix] for i in range(len(matrix[0]))]\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(transpose_matrix(matrix))\n\n# Alternative using nested for loops\ndef transpose_matrix(matrix):\n    rows = len(matrix)\n    cols = len(matrix[0])\n    result = [[0] * rows for _ in range(cols)]\n    for i in range(rows):\n        for j in range(cols):\n            result[j][i] = matrix[i][j]\n    return result\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(transpose_matrix(matrix))\n\n# Using built-in approach\ndef transpose_matrix(matrix):\n    result = result\n    return result\n\n# Using manual approach\ndef transpose_matrix(matrix):\n    return result\n\n# Script approach\nmatrix = 15\nresult = transpose_matrix(matrix)\nprint(result)\n\n# Direct approach\nprint(transpose_matrix(25))",
 
@@ -2992,7 +2992,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 257,
             "title": "Problem 257",
-            "description": "Write a Python program to unzip a list of tuples into individual lists using `zip()`.\nExamples:\n  list_tuples([1, 2, 3]) → ?\n  list_tuples([5, 8, 2]) → ?\n  list_tuples([3, 1, 4]) → ?",
+            "description": "Write a Python program to unzip a list of tuples into individual lists using `zip()`.\nExamples:\n  list_tuples([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) → [[1, 4, 7], [2, 5, 8], [3, 6, 9]]\n  list_tuples([['a', 'b'], ['c', 'd']]) → [['a', 'c'], ['b', 'd']]",
             "initialCode": "def list_tuples(lst):\n    pass",
             "solution": "# Using function approach\ndef list_tuples(lst):\n    unzipped = zip(*lst)  # Unzip: groups elements at same index\n    result = []\n    for x in unzipped:  # Each x is a tuple of elements at same position\n        result.append(list(x))  # Convert tuple to list\nlst = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]\nprint(list_tuples(lst))  # Prints None (function doesn't return)\n\n# Alternative using list comprehension\ndef list_tuples(lst):\n    return [list(t) for t in zip(*lst)]\nprint(list_tuples([(1, 2, 3), (4, 5, 6), (7, 8, 9)]))\n\n# Alternative using map()\ndef list_tuples(lst):\n    return list(map(list, zip(*lst)))\nprint(list_tuples([(1, 2, 3), (4, 5, 6), (7, 8, 9)]))\n\n# Alternative using manual unpacking\ndef list_tuples(lst):\n    result = [[], [], []]\n    for t in lst:\n        for i, val in enumerate(t):\n            result[i].append(val)\n    return result\nprint(list_tuples([(1, 2, 3), (4, 5, 6), (7, 8, 9)]))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = list_tuples(lst)\nprint(result)\n\n# Direct approach\nprint(list_tuples([1, 3, 5, 7]))",
 
@@ -3004,7 +3004,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 258,
             "title": "Problem 258",
-            "description": "Write a Python program to unzip a list of tuples into individual lists using `zip()`.\nExamples:\n  individualists([1, 2, 3]) → ?\n  individualists([5, 8, 2]) → ?\n  individualists([3, 1, 4]) → ?",
+            "description": "Write a Python program to unzip a list of tuples into individual lists using `zip()`.\nExamples:\n  individualists([[1, 2, 3], [4, 5, 6]]) → [[1, 4], [2, 5], [3, 6]]\n  individualists([['a', 'b'], ['c', 'd']]) → [['a', 'c'], ['b', 'd']]",
             "initialCode": "def individualists(lst):\n    pass",
             "solution": "# Using function approach\ndef individualists(lst):\n    result = []\n    for num in zip(*lst):\n        result.append(list(num))\n    return result\nlst = [(1, 2, 3), (4, 5, 6)]\nprint(individualists(lst))\n\n# Alternative using list comprehension\ndef individualists(lst):\n    return [list(t) for t in zip(*lst)]\nprint(individualists([(1, 2, 3), (4, 5, 6)]))\n\n# Alternative using map(list, zip(*))\ndef individualists(lst):\n    return list(map(list, zip(*lst)))\nprint(individualists([(1, 2, 3), (4, 5, 6)]))\n\n# Alternative using manual loop\ndef individualists(lst):\n    num_cols = len(lst[0])\n    result = [[] for _ in range(num_cols)]\n    for t in lst:\n        for i, val in enumerate(t):\n            result[i].append(val)\n    return result\nprint(individualists([(1, 2, 3), (4, 5, 6)]))\n\n# Using built-in approach\ndef individualists(lst):\n    result = result\n    return result\n\n# Using manual approach\ndef individualists(lst):\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = individualists(lst)\nprint(result)\n\n# Direct approach\nprint(individualists([1, 3, 5, 7]))",
 
@@ -3184,7 +3184,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 274,
             "title": "Problem 274",
-            "description": "Write a Python program to filter out all palindromes from a list of strings using `filter()`.\nExamples:\n  is_palindrome('hello') → False\n  is_palindrome('world') → False\n  is_palindrome('python') → False",
+            "description": "Write a Python program to filter out all palindromes from a list of strings using `filter()`.\nExamples:\n  is_palindrome(['madam', 'hello', 'racecar', 'world', 'level']) → ['madam', 'racecar', 'level']\n  is_palindrome(['abc', 'noon']) → ['noon']",
             "initialCode": "def is_palindrome(s):\n    pass\n\ndef filter_palindromes(lst):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(s):\n    return s == s[::-1]\ndef filter_palindromes(lst):\n    return list(filter(is_palindrome, lst))\nlst = ['madam', 'hello', 'racecar', 'world', 'level']\nresult = filter_palindromes(lst)\nprint(result)\n\n# Alternative using lambda\ndef filter_palindromes(lst):\n    return list(filter(lambda s: s == s[::-1], lst))\nprint(filter_palindromes(['madam', 'hello', 'racecar', 'world', 'level']))\n\n# Alternative using list comprehension\ndef filter_palindromes(lst):\n    return [s for s in lst if s == s[::-1]]\nprint(filter_palindromes(['madam', 'hello', 'racecar', 'world', 'level']))\n\n# Alternative using two-pointer check\ndef filter_palindromes(lst):\n    def is_pal(s):\n        left, right = 0, len(s) - 1\n        while left < right:\n            if s[left] != s[right]:\n                return False\n            left += 1\n            right -= 1\n        return True\n    return [s for s in lst if is_pal(s)]\nprint(filter_palindromes(['madam', 'hello', 'racecar', 'world', 'level']))\n\n# Using built-in approach\ndef is_palindrome(s):\n    result = s == s[::-1]\n    return result\n\n# Using manual approach\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome([4, 1, 8, 6, 3]))",
 
@@ -3220,7 +3220,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 278,
             "title": "Problem 278",
-            "description": "Write a Python program to filter out all non-empty strings from a list using `filter()`.\nExamples:\n  filter_non_empty('hello') → ['h', 'e', 'l', 'l', 'o']\n  filter_non_empty('world') → ['w', 'o', 'r', 'l', 'd']\n  filter_non_empty('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to filter out all non-empty strings from a list using `filter()`.\nExamples:\n  filter_non_empty(['apple', '', 'banana', '']) → ['apple', 'banana']\n  filter_non_empty(['']) → []",
             "initialCode": "def filter_non_empty(strings):\n    pass",
             "solution": "# Using function approach\ndef filter_non_empty(strings):\n    def is_non_empty(s):\n        return s != ''  # Returns True if string is not empty\n    return list(filter(is_non_empty, strings))  # Returns: ['apple', 'banana', 'cherry', 'date']\nstrings = ['apple', '', 'banana', '', 'cherry', 'date', '']\nresult = filter_non_empty(strings)\nprint(result)\n\n# Alternative using filter(None, strings) (falsy filter)\ndef filter_non_empty(strings):\n    return list(filter(None, strings))\nprint(filter_non_empty(['apple', '', 'banana', '', 'cherry', 'date', '']))\n\n# Alternative using list comprehension\ndef filter_non_empty(strings):\n    return [s for s in strings if s != '']\nprint(filter_non_empty(['apple', '', 'banana', '', 'cherry', 'date', '']))\n\n# Alternative using filter(bool, strings)\ndef filter_non_empty(strings):\n    return list(filter(bool, strings))\nprint(filter_non_empty(['apple', '', 'banana', '', 'cherry', 'date', '']))\n\n# Alternative using traditional for loop\ndef filter_non_empty(strings):\n    result = []\n    for s in strings:\n        if s != '':\n            result.append(s)\n    return result\nprint(filter_non_empty(['apple', '', 'banana', '', 'cherry', 'date', '']))\n\n# Using built-in approach\ndef filter_non_empty(strings):\n    result = s != ''\n    return result\n\n# Using manual approach\ndef filter_non_empty(strings):\n    return s != ''\n\n# Script approach\nstrings = 'hello'\nresult = filter_non_empty(strings)\nprint(result)\n\n# Direct approach\nprint(filter_non_empty('world'))",
 
@@ -3256,7 +3256,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 281,
             "title": "Problem 281",
-            "description": "Write a Python program to filter out all uppercase strings from a list using `filter()`.\nExamples:\n  filter_uppercase('hello') → ['h', 'e', 'l', 'l', 'o']\n  filter_uppercase('world') → ['w', 'o', 'r', 'l', 'd']\n  filter_uppercase('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to filter out all uppercase strings from a list using `filter()`.\nExamples:\n  filter_uppercase(['HELLO', 'world', 'PYTHON', 'code']) → ['world', 'code']\n  filter_uppercase(['ABC']) → []",
             "initialCode": "def filter_uppercase(strings):\n    pass",
             "solution": "# Using function approach\ndef filter_uppercase(strings):\n    def is_not_uppercase(s):\n        return not s.isupper()  # Returns True for 'world', 'code', 'example' (non-uppercase)\n    return list(filter(is_not_uppercase, strings))  # Returns: ['world', 'code', 'example']\nstrings = ['HELLO', 'world', 'PYTHON', 'code', 'CHATGPT', 'example']\nresult = filter_uppercase(strings)  # Filters out 'HELLO', 'PYTHON', 'CHATGPT'\nprint(result)\n\n# Alternative using lambda\ndef filter_uppercase(strings):\n    return list(filter(lambda s: not s.isupper(), strings))\nprint(filter_uppercase(['HELLO', 'world', 'PYTHON', 'code', 'CHATGPT', 'example']))\n\n# Alternative using list comprehension\ndef filter_uppercase(strings):\n    return [s for s in strings if not s.isupper()]\nprint(filter_uppercase(['HELLO', 'world', 'PYTHON', 'code', 'CHATGPT', 'example']))\n\n# Alternative using traditional for loop\ndef filter_uppercase(strings):\n    result = []\n    for s in strings:\n        if not s.isupper():\n            result.append(s)\n    return result\nprint(filter_uppercase(['HELLO', 'world', 'PYTHON', 'code', 'CHATGPT', 'example']))\n\n# Using built-in approach\ndef filter_uppercase(strings):\n    result = not s.isupper()\n    return result\n\n# Using manual approach\ndef filter_uppercase(strings):\n    return not s.isupper()\n\n# Script approach\nstrings = 'hello'\nresult = filter_uppercase(strings)\nprint(result)\n\n# Direct approach\nprint(filter_uppercase('world'))",
 
@@ -3268,7 +3268,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 282,
             "title": "Problem 282",
-            "description": "Write a Python program to filter out all uppercase strings from a list using `filter()`.\nExamples:\n  filter_uppercase_again('hello') → ['h', 'e', 'l', 'l', 'o']\n  filter_uppercase_again('world') → ['w', 'o', 'r', 'l', 'd']\n  filter_uppercase_again('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to filter out all uppercase strings from a list using `filter()`.\nExamples:\n  filter_uppercase_again(['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai']) → ['python', 'openai']\n  filter_uppercase_again(['UP', 'DOWN']) → []",
             "initialCode": "def filter_uppercase_again(strings):\n    pass",
             "solution": "# Using function approach\ndef filter_uppercase_again(strings):\n    def is_not_uppercase(s):\n        return not s.isupper()  # True for 'python', 'openai', 'example'\n    return list(filter(is_not_uppercase, strings))  # Returns: ['python', 'openai', 'example']\nstrings = ['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai', 'example']\nresult = filter_uppercase_again(strings)  # Removes 'HELLO', 'WORLD', 'CHATGPT'\nprint(result)\n\n# Alternative using lambda\ndef filter_uppercase_again(strings):\n    return list(filter(lambda s: not s.isupper(), strings))\nprint(filter_uppercase_again(['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai', 'example']))\n\n# Alternative using list comprehension\ndef filter_uppercase_again(strings):\n    return [s for s in strings if not s.isupper()]\nprint(filter_uppercase_again(['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai', 'example']))\n\n# Alternative using traditional for loop\ndef filter_uppercase_again(strings):\n    result = []\n    for s in strings:\n        if not s.isupper():\n            result.append(s)\n    return result\nprint(filter_uppercase_again(['HELLO', 'WORLD', 'python', 'CHATGPT', 'openai', 'example']))\n\n# Using built-in approach\ndef filter_uppercase_again(strings):\n    result = not s.isupper()\n    return result\n\n# Using manual approach\ndef filter_uppercase_again(strings):\n    return not s.isupper()\n\n# Script approach\nstrings = 'hello'\nresult = filter_uppercase_again(strings)\nprint(result)\n\n# Direct approach\nprint(filter_uppercase_again('world'))",
 
@@ -3292,7 +3292,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 284,
             "title": "Problem 284",
-            "description": "Write a Python program to filter out all elements from a list that contain a specific substring using `filter()`.\nExamples:\n  filter_by_substring([1, 2, 3], 'hello') → ?\n  filter_by_substring([5, 8, 2], 'world') → ?\n  filter_by_substring([3, 1, 4], 'python') → ?",
+            "description": "Write a Python program to filter out all elements from a list that contain a specific substring using `filter()`.\nExamples:\n  filter_by_substring(['apple', 'banana', 'grape'], 'ap') → ['banana']\n  filter_by_substring(['one', 'two'], 'z') → ['one', 'two']",
             "initialCode": "def filter_by_substring(items, substring):\n    pass",
             "solution": "# Using function approach\ndef filter_by_substring(items, substring):\n    def does_not_contain_substring(s):\n        return substring not in s  # Returns True for 'banana', 'cherry', 'grape'\n    return list(filter(does_not_contain_substring, items))  # Returns: ['banana', 'cherry', 'grape']\nitems = ['apple', 'banana', 'cherry', 'pineapple', 'grape']\nsubstring = 'apple'\nresult = filter_by_substring(items, substring)  # Removes 'apple' and 'pineapple'\nprint(result)\n\n# Alternative using filter with lambda\ndef filter_by_substring(items, substring):\n    return list(filter(lambda s: substring not in s, items))\nprint(filter_by_substring(['apple', 'banana', 'cherry', 'pineapple', 'grape'], 'apple'))\n\n# Alternative using list comprehension\ndef filter_by_substring(items, substring):\n    return [s for s in items if substring not in s]\nprint(filter_by_substring(['apple', 'banana', 'cherry', 'pineapple', 'grape'], 'apple'))\n\n# Alternative using traditional for loop\ndef filter_by_substring(items, substring):\n    result = []\n    for s in items:\n        if substring not in s:\n            result.append(s)\n    return result\nprint(filter_by_substring(['apple', 'banana', 'cherry', 'pineapple', 'grape'], 'apple'))\n\n# Using built-in approach\ndef filter_by_substring(items, substring):\n    result = substring not in s\n    return result\n\n# Using manual approach\ndef filter_by_substring(items, substring):\n    return substring not in s\n\n# Script approach\nitems = [5, 10, 15]\nsubstring = 'hello'\nresult = filter_by_substring(items, substring)\nprint(result)\n\n# Direct approach\nprint(filter_by_substring([2, 8, 3], 'world'))",
 
@@ -3388,7 +3388,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 292,
             "title": "Problem 292",
-            "description": "Write a Python program to print the multiplication table of a given number using a `while` loop.\nExamples:\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n  multiplication_table(5) → '5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n  multiplication_table(3) → '3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'",
+            "description": "Write a Python program to print the multiplication table of a given number using a `while` loop.\nExamples:\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'\n  multiplication_table(5) → '5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n  multiplication_table(3) → '3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n3 x 10 = 30'",
             "initialCode": "def multiplication_table(number):\n    pass",
             "solution": "# Using function approach\ndef multiplication_table(number):\n    i = 1\n    while i <= 10:\n        print(f'{number} x {i} = {number * i}')\n        i += 1\nnumber_to_multiply = 5\nprint(f'Multiplication table for {number_to_multiply}:')\nmultiplication_table(number_to_multiply)\nprint('\nMultiplication tables for numbers 1 to 5:')\nfor num in range(1, 6):\n    print(f'\nMultiplication table for {num}:')\n    multiplication_table(num)\n\n# Alternative using for loop with f-string\ndef multiplication_table(number):\n    for i in range(1, 11):\n        print(f'{number} x {i} = {number * i}')\nprint('Multiplication table for 5:')\nmultiplication_table(5)\n\n# Alternative using list comprehension and join\ndef multiplication_table(number):\n    return '\n'.join(f'{number} x {i} = {number * i}' for i in range(1, 11))\nprint('Multiplication table for 5:')\nprint(multiplication_table(5))\n\n# Alternative using while loop\ndef multiplication_table(number):\n    i = 1\n    while i <= 10:\n        print(f'{number} x {i} = {number * i}')\n        i += 1\nprint('Multiplication table for 5:')\nmultiplication_table(5)\n\n# Script approach\nnumber = 15\nresult = multiplication_table(number)\nprint(result)\n\n# Direct approach\nprint(multiplication_table(25))",
 
@@ -3436,7 +3436,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 296,
             "title": "Problem 296",
-            "description": "Write a Python program to print the Fibonacci sequence up to N terms using a `while` loop.\nExamples:\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n  fibonacci_sequence(5) → '0\n1\n1\n2\n3'\n  fibonacci_sequence(1) → '0'",
+            "description": "Write a Python program to print the Fibonacci sequence up to N terms using a `while` loop.\nExamples:\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n1\n1\n2\n3'\n  fibonacci_sequence(5) → '0\n1\n1\n2\n3'\n  fibonacci_sequence(1) → '0'",
             "initialCode": "def fibonacci_sequence(n):\n    pass",
             "solution": "# Using function approach\ndef fibonacci_sequence(n):\n    a, b = 0, 1\n    count = 0\n    while count < n:\n        print(a)\n        a, b = b, a + b\n        count += 1\nterms = 10\nprint(f'Fibonacci sequence up to {terms} terms:')\nfibonacci_sequence(terms)\nadditional_terms = 15\nprint(f'\nFibonacci sequence up to {additional_terms} terms:')\nfibonacci_sequence(additional_terms)\n\n# Alternative using list to store sequence\ndef fibonacci_sequence(n):\n    fib = [0, 1]\n    while len(fib) < n:\n        fib.append(fib[-1] + fib[-2])\n    return fib[:n]\nfor num in fibonacci_sequence(10):\n    print(num)\n\n# Alternative using for loop\ndef fibonacci_sequence(n):\n    a, b = 0, 1\n    for _ in range(n):\n        print(a)\n        a, b = b, a + b\nfibonacci_sequence(10)\n\n# Alternative using generator\ndef fibonacci_sequence(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b\nfor num in fibonacci_sequence(10):\n    print(num)\n\n# Script approach\nn = 6\nresult = fibonacci_sequence(n)\nprint(result)\n\n# Direct approach\nprint(fibonacci_sequence(15))",
 
@@ -3460,7 +3460,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 298,
             "title": "Problem 298",
-            "description": "Write a Python program to find the largest element in a list using a `while` loop.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a Python program to find the largest element in a list using a `while` loop.\nExamples:\n  main([5, 9, 1]) → 9\n  main([-5, -2, -9]) → -2",
             "initialCode": "def main(lst):\n    pass\n\ndef find_largest_element(numbers):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    i = 0\n    while i < len(lst):\n        return max(lst, key=len)\n        i += 1\nlst = ['tree', 'cliff', 'mountain', 'tree','tree', 'grassy']\nmain(lst)\ndef find_largest_element(numbers):\n    i = 1\n    largest = numbers[0]\n    while i < len(numbers):\n        if numbers[i] > largest:\n            largest = numbers[i]\n        i += 1\n    return largest\nnumbers_list = [5, 12, 3, 8, 20, 15]\nlargest_number = find_largest_element(numbers_list)\nprint(f'The largest element in the list is: {largest_number}')\nadditional_numbers_list = [-1, -5, -3, -8]\nlargest_number_in_negative = find_largest_element(additional_numbers_list)\nprint(f'The largest element in the list of negatives is: {largest_number_in_negative}')\n\n# Alternative using max() with key=len\ndef main(lst):\n    return max(lst, key=len)\nprint(main(['tree', 'cliff', 'mountain', 'tree', 'tree', 'grassy']))\ndef find_largest_element(numbers):\n    return max(numbers)\nprint(find_largest_element([5, 12, 3, 8, 20, 15]))\n\n# Alternative using for loop\ndef find_largest_element(numbers):\n    largest = numbers[0]\n    for n in numbers[1:]:\n        if n > largest:\n            largest = n\n    return largest\nprint(find_largest_element([5, 12, 3, 8, 20, 15]))\n\n# Alternative using sorted()\ndef find_largest_element(numbers):\n    return sorted(numbers)[-1]\nprint(find_largest_element([5, 12, 3, 8, 20, 15]))\n\n# Using built-in approach\ndef main(lst):\n    result = max(lst, key=len)\n    return result\n\n# Using manual approach\ndef main(lst):\n    return max(lst, key=len)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -3496,7 +3496,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 301,
             "title": "Problem 301",
-            "description": "Write a Python program to check if a given string is a palindrome using a `while` loop.\nExamples:\n  is_palindrome('hello') → False\n  is_palindrome('world') → False\n  is_palindrome('python') → False",
+            "description": "Write a Python program to check if a given string is a palindrome using a `while` loop.\nExamples:\n  is_palindrome('radar') → True\n  is_palindrome('hello') → False\n  is_palindrome('level') → True",
             "initialCode": "def is_palindrome(s):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(s):\n    i = 0\n    j = len(s) - 1\n    while i < j:\n        if s[i] != s[j]:\n            return False\n        i += 1\n        j -= 1\n    return True\ntest_string_1 = 'radar'\ntest_string_2 = 'hello'\ntest_string_3 = 'level'\ntest_string_4 = 'world'\nresult_1 = is_palindrome(test_string_1)\nresult_2 = is_palindrome(test_string_2)\nresult_3 = is_palindrome(test_string_3)\nresult_4 = is_palindrome(test_string_4)\nprint(f'Is '{test_string_1}' a palindrome? {result_1}')\nprint(f'Is '{test_string_2}' a palindrome? {result_2}')\nprint(f'Is '{test_string_3}' a palindrome? {result_3}')\nprint(f'Is '{test_string_4}' a palindrome? {result_4}')\n\n# Alternative using slicing\ndef is_palindrome(s):\n    return s == s[::-1]\nprint(is_palindrome('radar'))\nprint(is_palindrome('hello'))\n\n# Alternative using reversed() and join\ndef is_palindrome(s):\n    return s == ''.join(reversed(s))\nprint(is_palindrome('radar'))\nprint(is_palindrome('hello'))\n\n# Alternative using recursion\ndef is_palindrome(s):\n    if len(s) <= 1:\n        return True\n    if s[0] != s[-1]:\n        return False\n    return is_palindrome(s[1:-1])\nprint(is_palindrome('radar'))\nprint(is_palindrome('hello'))\n\n# Using built-in approach\ndef is_palindrome(s):\n    result = False\n    return result\n\n# Using manual approach\ndef is_palindrome(s):\n    return False\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome([4, 1, 8, 6, 3]))",
 
@@ -3508,7 +3508,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 302,
             "title": "Problem 302",
-            "description": "Write a Python program to count the number of vowels in a given string using a `while` loop.\nExamples:\n  count_vowels('hello') → 2\n  count_vowels('world') → 1\n  count_vowels('python') → 1",
+            "description": "Write a Python program to count the number of vowels in a given string using a `while` loop.\nExamples:\n  count_vowels('Hello, World!') → 3\n  count_vowels('Python programming') → 4\n  count_vowels('AEIOU') → 5",
             "initialCode": "def count_vowels(s):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(s):\n    vowels = 'aeiouAEIOU'\n    count = 0\n    i = 0\n    while i < len(s):\n        if s[i] in vowels:\n            count += 1\n        i += 1\n    return count\ntest_string_1 = 'Hello, World!'\ntest_string_2 = 'Python programming'\ntest_string_3 = 'Count the vowels'\ntest_string_4 = 'AEIOU and sometimes Y'\nresult_1 = count_vowels(test_string_1)\nresult_2 = count_vowels(test_string_2)\nresult_3 = count_vowels(test_string_3)\nresult_4 = count_vowels(test_string_4)\nprint(f'Number of vowels in '{test_string_1}': {result_1}')\nprint(f'Number of vowels in '{test_string_2}': {result_2}')\nprint(f'Number of vowels in '{test_string_3}': {result_3}')\nprint(f'Number of vowels in '{test_string_4}': {result_4}')\n\n# Alternative using list comprehension and sum()\ndef count_vowels(s):\n    return sum(1 for c in s if c.lower() in 'aeiou')\nprint(count_vowels('Hello, World!'))\nprint(count_vowels('Python programming'))\n\n# Alternative using count() for each vowel\ndef count_vowels(s):\n    s = s.lower()\n    return sum(s.count(v) for v in 'aeiou')\nprint(count_vowels('Hello, World!'))\nprint(count_vowels('Python programming'))\n\n# Alternative using filter()\ndef count_vowels(s):\n    return len(list(filter(lambda c: c.lower() in 'aeiou', s)))\nprint(count_vowels('Hello, World!'))\nprint(count_vowels('Python programming'))\n\n# Using built-in approach\ndef count_vowels(s):\n    result = count\n    return result\n\n# Using manual approach\ndef count_vowels(s):\n    return count\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = count_vowels(s)\nprint(result)\n\n# Direct approach\nprint(count_vowels([4, 1, 8, 6, 3]))",
 
@@ -3520,7 +3520,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 303,
             "title": "Problem 303",
-            "description": "Write a Python program to print each character of a given string using a `while` loop.\nExamples:\n  print_each_character('hello') → h\n  print_each_character('world') → e\n  print_each_character('python') → l",
+            "description": "Write a Python program to print each character of a given string using a `while` loop.\nExamples:\n  print_each_character('abc') → 'a\nb\nc'\n  print_each_character('Hi') → 'H\ni'",
             "initialCode": "def print_each_character(s):\n    pass",
             "solution": "# Using function approach\ndef print_each_character(s):\n    i = 0\n    while i < len(s):\n        print(s[i])\n        i += 1\ntest_string_1 = 'Hello, World!'\ntest_string_2 = 'Python'\ntest_string_3 = 'While loop example'\nprint('Characters in test_string_1:')\nprint_each_character(test_string_1)\nprint('\nCharacters in test_string_2:')\nprint_each_character(test_string_2)\nprint('\nCharacters in test_string_3:')\nprint_each_character(test_string_3)\n\n# Alternative using for loop\ndef print_each_character(s):\n    for char in s:\n        print(char)\nprint('Characters in test_string_1:')\nprint_each_character('Hello, World!')\n\n# Alternative using list comprehension and join\ndef print_each_character(s):\n    print('\n'.join(s))\nprint('Characters in test_string_1:')\nprint_each_character('Hello, World!')\n\n# Alternative using recursion\ndef print_each_character(s):\n    if s:\n        print(s[0])\n        print_each_character(s[1:])\nprint('Characters in test_string_1:')\nprint_each_character('Hello, World!')\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = print_each_character(s)\nprint(result)\n\n# Direct approach\nprint(print_each_character([4, 1, 8, 6, 3]))",
 
@@ -3532,7 +3532,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 304,
             "title": "Problem 304",
-            "description": "Write a Python program to repeatedly ask for user input until a specific condition is met using a `while` loop.\nExamples:\n  ask_until_condition() → Enter a number greater than 10:\n  ask_until_condition() → ?",
+            "description": "Write a Python program to repeatedly ask for user input until a specific condition is met using a `while` loop.\nExamples:\n  ask_until_condition() → None\n  ask_until_condition() → None",
             "initialCode": "def ask_until_condition():\n    pass",
             "solution": "# Using function approach\ndef ask_until_condition():\n    while True:\n        user_input = input('Enter a number greater than 10: ')\n        if int(user_input) > 10:\n            break\nask_until_condition()\n\n# Alternative using while loop with flag\ndef ask_until_condition():\n    valid = False\n    while not valid:\n        user_input = input('Enter a number greater than 10: ')\n        if int(user_input) > 10:\n            valid = True\nask_until_condition()\n\n# Alternative using while True with return\ndef ask_until_condition():\n    while True:\n        user_input = input('Enter a number greater than 10: ')\n        if int(user_input) > 10:\n            return\nask_until_condition()\n\n# Alternative using while with conditional\ndef ask_until_condition():\n    user_input = input('Enter a number greater than 10: ')\n    while int(user_input) <= 10:\n        user_input = input('Enter a number greater than 10: ')\nask_until_condition()\n\n# Script approach\nwhile True:\n    user_input = 5\n    if int(user_input) > 10:\n        break\n\n# Direct approach\nwhile True:\n    user_input = 10\n    if int(user_input) > 10:\n        break",
 
@@ -3544,7 +3544,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 307,
             "title": "Problem 307",
-            "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort() or max() or min().\nExamples:\n  find_min_max() → Enter numbers:\n  find_min_max() → ?",
+            "description": "Write a Python function called find_min_max that takes a list of numbers as input and returns a tuple containing the minimum and maximum numbers in the list, dont not call the fuction using print(find_min_max). Do not use sort() or max() or min().\nExamples:\n  find_min_max() → [2, 10]\n  find_min_max() → [-5, 9]",
             "initialCode": "def find_min_max():\n    pass",
             "solution": "# Using function approach\ndef find_min_max():\n    numbers = [int(value) for value in input('Enter numbers: ').split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    print(smallest, largest)\nfind_min_max()\n\n# Using built-in approach\ndef find_min_max():\n    numbers = [int(value) for value in input('Enter numbers: ').split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    return smallest, largest\n\n# Using manual approach\ndef find_min_max():\n    numbers = [int(value) for value in input('Enter numbers: ').split()]\n    smallest = numbers[0]\n    largest = numbers[0]\n    for number in numbers[1:]:\n        if number < smallest:\n            smallest = number\n        if number > largest:\n            largest = number\n    result = smallest, largest\n    return result\n\n# Script approach\nnumbers = 5\nsmallest = numbers[0]\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number < smallest:\n        smallest = number\n    if number > largest:\n        largest = number\nprint(smallest, largest)\n\n# Direct approach\nnumbers = 10\nsmallest = numbers[0]\nlargest = numbers[0]\nfor number in numbers[1:]:\n    if number < smallest:\n        smallest = number\n    if number > largest:\n        largest = number\nprint(smallest, largest)",
 
@@ -3556,7 +3556,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 308,
             "title": "Problem 308",
-            "description": "Write a function group_by_first_letter that takes a list of strings as input and returns a dictionary. The dictionary should group the strings by their first letter. Each key in the dictionary should be a first letter, and the corresponding value should be a list of strings that start with that letter. User should type list as input():\nExamples:\n  group_by_first_letter() → type word list:\n  group_by_first_letter() → ?",
+            "description": "Write a function group_by_first_letter that takes a list of strings as input and returns a dictionary. The dictionary should group the strings by their first letter. Each key in the dictionary should be a first letter, and the corresponding value should be a list of strings that start with that letter. User should type list as input():\nExamples:\n  group_by_first_letter() → '{'a': ['apple', 'ape'], 'b': ['bat']}'\n  group_by_first_letter() → '{'c': ['cat', 'cow'], 'd': ['dog']}'",
             "initialCode": "def group_by_first_letter():\n    pass",
             "solution": "# Using function approach\ndef group_by_first_letter():\n    lst = input('type word list: ').split()\n    result = {}\n    for word in lst:\n        first_letter = word[0]\n        if first_letter not in result:\n            result[first_letter] = [word]\n        else:\n            result[first_letter].append(word)\n    print(result)\ngroup_by_first_letter()\n\n# Using built-in approach\ndef group_by_first_letter():\n    lst = input('type word list: ').split()\n    result = {}\n    for word in lst:\n        first_letter = word[0]\n        if first_letter not in result:\n            result[first_letter] = [word]\n        else:\n            result[first_letter].append(word)\n    return result\n\n# Using manual approach\ndef group_by_first_letter():\n    lst = input('type word list: ').split()\n    result = {}\n    for word in lst:\n        first_letter = word[0]\n        if first_letter not in result:\n            result[first_letter] = [word]\n        else:\n            result[first_letter].append(word)\n    result = result\n    return result\n\n# Script approach\nlst = 'hello'\nresult = {}\nfor word in lst:\n    first_letter = word[0]\n    if first_letter not in result:\n        result[first_letter] = [word]\n    else:\n        result[first_letter].append(word)\nprint(result)\n\n# Direct approach\nlst = 'world'\nresult = {}\nfor word in lst:\n    first_letter = word[0]\n    if first_letter not in result:\n        result[first_letter] = [word]\n    else:\n        result[first_letter].append(word)\nprint(result)",
 
@@ -3568,7 +3568,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 310,
             "title": "Problem 310",
-            "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered. Do not use sorted().\nExamples:\n  find_longest_word(['cat', 'elephant', 'dog']) → 'elephant'\n  find_longest_word(['a', 'abc', 'def']) → 'abc'\n  find_longest_word(['hi', 'hello', 'hey']) → 'hello'",
+            "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered. Do not use sorted().\nExamples:\n  find_longest_word(['Jonathan', 'noll', 'it']) → 'Jonathan'\n  find_longest_word(['a', 'abc', 'def']) → 'abc'",
             "initialCode": "def find_longest_word(lst):\n    pass\n\ndef main(lst):\n    pass",
             "solution": "# Using function approach\ndef find_longest_word(lst):\n    longest_word = ''\n    count = 0\n    for word in lst:\n        if len(word) > count:\n            count = len(word)\n            longest_word = word\n    return longest_word\nlst = ['Jonathan', 'noll']    \nprint(find_longest_word(lst))\ndef main(lst):\n    return max(lst, key=len)\nlst = ['tree', 'cliff', 'mountain', 'tree','tree', 'grassy']\nmain(lst)\n\n# Using built-in approach\ndef find_longest_word(lst):\n    result = longest_word\n    return result\n\n# Using manual approach\ndef find_longest_word(lst):\n    return longest_word\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = find_longest_word(lst)\nprint(result)\n\n# Direct approach\nprint(find_longest_word([1, 3, 5, 7]))",
 
@@ -3580,7 +3580,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 311,
             "title": "Problem 311",
-            "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered. Do not use sorted()and len().\nExamples:\n  find_longest_word(['cat', 'elephant', 'dog']) → 'elephant'\n  find_longest_word(['a', 'abc', 'def']) → 'abc'\n  find_longest_word(['hi', 'hello', 'hey']) → 'hello'",
+            "description": "Write a Python function called find_longest_word that takes a list of words as input and returns the longest word in the list. If there are multiple longest words, return the first one encountered. Do not use sorted()and len().\nExamples:\n  find_longest_word(['Jonathan', 'noll', 'it']) → 'Jonathan'\n  find_longest_word(['a', 'ab', 'abc']) → 'abc'",
             "initialCode": "def find_longest_word(lst):\n    pass",
             "solution": "# Using function approach\ndef find_longest_word(lst):\n    longest_word = ''\n    max_length = 0\n    for word in lst:\n        current_length = 0\n        for char in word:\n            current_length += 1\n        if current_length > max_length:\n            max_length = current_length \n            longest_word = word\n    return longest_word\nlst = ['Jonathan', 'noll', 'it']    \nprint(find_longest_word(lst))\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef find_longest_word(lst):\n    result = longest_word\n    return result\n\n# Using manual approach\ndef find_longest_word(lst):\n    return longest_word\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = find_longest_word(lst)\nprint(result)\n\n# Direct approach\nprint(find_longest_word([1, 3, 5, 7]))",
 
@@ -3592,7 +3592,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 312,
             "title": "Problem 312",
-            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop.\nExamples:\n  second_largest_number() → Type numbers separated by spaces:\n  second_largest_number() → ?",
+            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop.\nExamples:\n  second_largest_number() → '5'\n  second_largest_number() → '7'",
             "initialCode": "def second_largest_number():\n    pass",
             "solution": "# Using function approach\ndef second_largest_number():\n    user = input('Type numbers separated by spaces: ').split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n    print(second_largest)\nsecond_largest_number()\n\n# Using built-in approach\ndef second_largest_number():\n    user = input('Type numbers separated by spaces: ').split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n    return second_largest\n\n# Using manual approach\ndef second_largest_number():\n    user = input('Type numbers separated by spaces: ').split()\n    user_int = list(map(int, user))\n    user_int.sort()  \n    second_largest = user_int[-2]  \n    result = second_largest\n    return result\n\n# Script approach\nuser = 5\nuser_int = list(map(int, user))\nuser_int.sort()  \nsecond_largest = user_int[-2]  \nprint(second_largest)\n\n# Direct approach\nuser = 10\nuser_int = list(map(int, user))\nuser_int.sort()  \nsecond_largest = user_int[-2]  \nprint(second_largest)",
 
@@ -3604,7 +3604,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 313,
             "title": "Problem 313",
-            "description": "Write a Python program to convert a list of strings to uppercase using `map()`.\nExamples:\n  convert_to_uppercase('hello') → ['H', 'E', 'L', 'L', 'O']\n  convert_to_uppercase('world') → ['W', 'O', 'R', 'L', 'D']\n  convert_to_uppercase('python') → ['P', 'Y', 'T', 'H', 'O', 'N']",
+            "description": "Write a Python program to convert a list of strings to uppercase using `map()`.\nExamples:\n  convert_to_uppercase(['hello', 'world', 'python']) → ['HELLO', 'WORLD', 'PYTHON']\n  convert_to_uppercase(['a', 'b']) → ['A', 'B']",
             "initialCode": "def convert_to_uppercase(strings):\n    pass",
             "solution": "# Using function approach\ndef convert_to_uppercase(strings):\n    def to_uppercase(s):\n        return s.upper()\n    return list(map(to_uppercase, strings))\nstrings = ['hello', 'world', 'python', 'programming']\nuppercase_strings = convert_to_uppercase(strings)\nprint('Original list:', strings)\nprint('Uppercase list:', uppercase_strings)\n\n# Using built-in approach\ndef convert_to_uppercase(strings):\n    return ''.join(chr(ord(c) - 32) if 'a' <= c <= 'z' else c for c in s)\n\n# Using manual approach\ndef convert_to_uppercase(strings):\n    return str(s).upper()\n\n# Script approach\nstrings = 'hello'\nresult = convert_to_uppercase(strings)\nprint(result)\n\n# Direct approach\nprint(convert_to_uppercase('world'))",
 
@@ -3616,12 +3616,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 314,
             "title": "Problem 314",
-            "description": "Write a Python program to convert a list of strings representing numbers to a list of integers using `map()`.\nExamples:\n  convert_to_integers('hello') → ?\n  convert_to_integers('world') → ?\n  convert_to_integers('python') → ?",
+            "description": "Write a Python program to convert a list of strings representing numbers to a list of integers using `map()`.\nExamples:\n  convert_to_integers(['1', '2', '3', '4', '5']) → [1, 2, 3, 4, 5]\n  convert_to_integers(['10', '20']) → [10, 20]",
             "initialCode": "def convert_to_integers(strings):\n    pass",
-            "solution": "# Using function approach\ndef convert_to_integers(strings):\n    def to_integer(s):\n        return int(s)\n    return list(map(to_integer, strings))\nstring_numbers = ['1', '2', '3', '4', '5']\ninteger_numbers = convert_to_integers(string_numbers)\nprint('Original list of strings:', string_numbers)\nprint('Converted list of integers:', integer_numbers)\n\n# Using built-in approach\ndef convert_to_integers(strings):\n    result = int(s)\n    return result\n\n# Using manual approach\ndef convert_to_integers(strings):\n    return int(s)\n\n# Script approach\nstrings = 'hello'\nresult = convert_to_integers(strings)\nprint(result)\n\n# Direct approach\nprint(convert_to_integers('world'))",
+            "solution": "# Using function approach\ndef convert_to_integers(strings):\n    def to_integer(value):\n        return int(value)\n    return list(map(to_integer, strings))\n\n# Using built-in approach\ndef convert_to_integers(strings):\n    return list(map(int, strings))\n\n# Using manual approach\ndef convert_to_integers(strings):\n    integers = []\n    for value in strings:\n        integers.append(int(value))\n    return integers\n\n# Script approach\nstrings = ['1', '2', '3', '4', '5']\nintegers = list(map(int, strings))\nprint(integers)\n\n# Direct approach\nprint(list(map(int, ['10', '20'])))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
-            "breakdown": "1. Define `convert_to_integers(strings)` with parameters `strings`.\n2. Perform the required operation on the input parameter(s) as described in the prompt.\n3. Return the result using `return`.",
+            "hint": "Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.",
+            "breakdown": "1. Define `convert_to_integers(strings)` with parameters `strings`.\n2. Use `map(int, strings)` to convert each numeric string into an integer without writing a manual loop.\n3. Wrap the map object with `list(...)` so the function returns a real list of integers.\n4. Return the result using `return`.",
 
             "category": "Level 1"
     },
@@ -3632,7 +3632,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def square_numbers(numbers):\n    pass",
             "solution": "# Using function approach\ndef square_numbers(numbers):\n    def square(x):\n        return x * x\n    return list(map(square, numbers))\noriginal_numbers = [1, 2, 3, 4, 5]\nsquared_numbers = square_numbers(original_numbers)\nprint('Original list of numbers:', original_numbers)\nprint('Squared list of numbers:', squared_numbers)\n\n# Using built-in approach\ndef square_numbers(numbers):\n    result = 0\n    for _ in range(x):\n        result += x\n    return result\n\n# Using manual approach\ndef square_numbers(numbers):\n    return pow(x, x)\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = square_numbers(numbers)\nprint(result)\n\n# Direct approach\nprint(square_numbers([4, 1, 8, 6, 3]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
+            "hint": "With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.",
             "breakdown": "1. Define `square_numbers(numbers)` with parameters `numbers`.\n2. Use `**` operator or `pow()` to perform exponentiation.\n3. Return the result.",
 
             "category": "Level 1"
@@ -3640,7 +3640,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 316,
             "title": "Problem 316",
-            "description": "Write a Python program to find the length of each string in a list using `map()`.\nExamples:\n  string_lengths('hello') → [1, 1, 1, 1, 1]\n  string_lengths('world') → [1, 1, 1, 1, 1]\n  string_lengths('python') → [1, 1, 1, 1, 1, 1]",
+            "description": "Write a Python program to find the length of each string in a list using `map()`.\nExamples:\n  string_lengths(['apple', 'banana', 'cherry', 'date']) → [5, 6, 6, 4]\n  string_lengths(['a', 'ab', 'abc']) → [1, 2, 3]",
             "initialCode": "def string_lengths(strings):\n    pass",
             "solution": "# Using function approach\ndef string_lengths(strings):\n    def length(s):\n        return len(s)\n    return list(map(length, strings))\nstring_list = ['apple', 'banana', 'cherry', 'date']\nlengths = string_lengths(string_list)\nprint('Original list of strings:', string_list)\nprint('Lengths of each string:', lengths)\n\n# Using built-in approach\ndef string_lengths(strings):\n    count = 0\n    for _ in s:\n        count += 1\n    return count\n\n# Using manual approach\ndef string_lengths(strings):\n    return sum(1 for _ in s)\n\n# Script approach\nstrings = 'hello'\nresult = string_lengths(strings)\nprint(result)\n\n# Direct approach\nprint(string_lengths('world'))",
 
@@ -3688,7 +3688,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 321,
             "title": "Problem 321",
-            "description": "Write a Python program to convert a list of strings to a list of their lengths using `map()`.\nExamples:\n  lengths_of_strings('hello') → [1, 1, 1, 1, 1]\n  lengths_of_strings('world') → [1, 1, 1, 1, 1]\n  lengths_of_strings('python') → [1, 1, 1, 1, 1, 1]",
+            "description": "Write a Python program to convert a list of strings to a list of their lengths using `map()`.\nExamples:\n  lengths_of_strings(['apple', 'banana', 'cherry', 'date']) → [5, 6, 6, 4]\n  lengths_of_strings(['hi', 'hello', 'hey']) → [2, 5, 3]",
             "initialCode": "def lengths_of_strings(strings):\n    pass",
             "solution": "# Using function approach\ndef lengths_of_strings(strings):\n    def length(s):\n        return len(s)\n    return list(map(length, strings))\nstring_list = ['apple', 'banana', 'cherry', 'date']\nlengths = lengths_of_strings(string_list)\nprint('Original strings:', string_list)\nprint('Lengths of strings:', lengths)\n\n# Using built-in approach\ndef lengths_of_strings(strings):\n    count = 0\n    for _ in s:\n        count += 1\n    return count\n\n# Using manual approach\ndef lengths_of_strings(strings):\n    return sum(1 for _ in s)\n\n# Script approach\nstrings = 'hello'\nresult = lengths_of_strings(strings)\nprint(result)\n\n# Direct approach\nprint(lengths_of_strings('world'))",
 
@@ -3712,7 +3712,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 323,
             "title": "Problem 323",
-            "description": "Write a Python program to reverse each string in a list using `map()`.\nExamples:\n  reverse_strings('hello') → ['h', 'e', 'l', 'l', 'o']\n  reverse_strings('world') → ['w', 'o', 'r', 'l', 'd']\n  reverse_strings('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to reverse each string in a list using `map()`.\nExamples:\n  reverse_strings(['hello', 'world', 'python']) → ['olleh', 'dlrow', 'nohtyp']\n  reverse_strings(['a', 'ab']) → ['a', 'ba']",
             "initialCode": "def reverse_strings(strings):\n    pass",
             "solution": "# Using function approach\ndef reverse_strings(strings):\n    def reverse(s):\n        return s[::-1]\n    return list(map(reverse, strings))\nstring_list = ['hello', 'world', 'python', 'programming']\nreversed_strings = reverse_strings(string_list)\nprint('Original strings:', string_list)\nprint('Reversed strings:', reversed_strings)\n\n# Using built-in approach\ndef reverse_strings(strings):\n    return ''.join(reversed(s))\n\n# Using manual approach\ndef reverse_strings(strings):\n    result = ''\n    for char in s:\n        result = char + result\n    return result\n\n# Script approach\nstrings = 'hello'\nresult = reverse_strings(strings)\nprint(result)\n\n# Direct approach\nprint(reverse_strings('world'))",
 
@@ -3736,7 +3736,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 325,
             "title": "Problem 325",
-            "description": "Write a Python program to remove leading and trailing whitespace from each string in a list using `map()`.\nExamples:\n  strip_whitespace('hello') → ['h', 'e', 'l', 'l', 'o']\n  strip_whitespace('world') → ['w', 'o', 'r', 'l', 'd']\n  strip_whitespace('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to remove leading and trailing whitespace from each string in a list using `map()`.\nExamples:\n  strip_whitespace(['  Hello  ', '  World  ', '  Python  ']) → ['Hello', 'World', 'Python']\n  strip_whitespace(['  a', 'b  ']) → ['a', 'b']",
             "initialCode": "def strip_whitespace(strings):\n    pass",
             "solution": "# Using function approach\ndef strip_whitespace(strings):\n    def strip(s):\n        return s.strip()\n    return list(map(strip, strings))\nstring_list = ['  Hello  ', '  World  ', '  Python  ', '  Programming  ']\nstripped_strings = strip_whitespace(string_list)\nprint('Original strings:', string_list)\nprint('Stripped strings:', stripped_strings)\n\n# Using built-in approach\ndef strip_whitespace(strings):\n    result = s.strip()\n    return result\n\n# Using manual approach\ndef strip_whitespace(strings):\n    return s.strip()\n\n# Script approach\nstrings = 'hello'\nresult = strip_whitespace(strings)\nprint(result)\n\n# Direct approach\nprint(strip_whitespace('world'))",
 
@@ -3752,7 +3752,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def number_and_square(numbers):\n    pass",
             "solution": "# Using function approach\ndef number_and_square(numbers):\n    def create_tuple(x):\n        return (x, x * x)\n    return list(map(create_tuple, numbers))\nnumbers_list = [1, 2, 3, 4, 5]\nsquared_tuples = number_and_square(numbers_list)\nprint('Numbers and their squares:', squared_tuples)\n\n# Using built-in approach\ndef number_and_square(numbers):\n    result = (x, x * x)\n    return result\n\n# Using manual approach\ndef number_and_square(numbers):\n    return (x, x * x)\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = number_and_square(numbers)\nprint(result)\n\n# Direct approach\nprint(number_and_square([4, 1, 8, 6, 3]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
+            "hint": "With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.",
             "breakdown": "1. Define `number_and_square(numbers)` with parameters `numbers`.\n2. Use `**` operator or `pow()` to perform exponentiation.\n3. Return the result.",
 
             "category": "Level 1"
@@ -3760,19 +3760,19 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 327,
             "title": "Problem 327",
-            "description": "Write a Python program to convert a list of strings to title case using `map()`.\nExamples:\n  to_title_case('hello') → ['H', 'E', 'L', 'L', 'O']\n  to_title_case('world') → ['W', 'O', 'R', 'L', 'D']\n  to_title_case('python') → ['P', 'Y', 'T', 'H', 'O', 'N']",
+            "description": "Write a Python program to convert a list of strings to title case using `map()`.\nExamples:\n  to_title_case(['hello world', 'python programming']) → ['Hello World', 'Python Programming']\n  to_title_case(['a b c']) → ['A B C']",
             "initialCode": "def to_title_case(strings):\n    pass",
             "solution": "# Using function approach\ndef to_title_case(strings):\n    def title_case(s):\n        return s.title()\n    return list(map(title_case, strings))\nwords = ['hello world', 'python programming', 'enumerate function']\nresult = to_title_case(words)\nprint(result)  # ['Hello World', 'Python Programming', 'Enumerate Function']\n\n# Using built-in approach\ndef to_title_case(strings):\n    return s.title()\n\n# Using manual approach\ndef to_title_case(strings):\n    return str(s).title()\n\n# Script approach\nstrings = 'hello'\nresult = to_title_case(strings)\nprint(result)\n\n# Direct approach\nprint(to_title_case('world'))",
 
             "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
-            "breakdown": "1. Define `to_title_case(strings)` with parameters `strings`.\n2. Perform the required operation on the input parameter(s) as described in the prompt.\n3. Return the result using `return`.",
+            "breakdown": "1. Define `to_title_case(strings)` with parameters `strings`.\n2. Call `min()` on the input to find the smallest value.\n3. Return the result using `return`.",
 
             "category": "Level 1"
     },
     {
             "id": 328,
             "title": "Problem 328",
-            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop, do not use map().\nExamples:\n  second_largest_number() → Type numbers separated by spaces:\n  second_largest_number() → ?",
+            "description": "Write a Python program to find the second largest number in a list. Prompt the user to enter a list of numbers, do not use a for loop, do not use map().\nExamples:\n  second_largest_number() → '3'\n  second_largest_number() → 'Not enough unique numbers'",
             "initialCode": "def second_largest_number():\n    pass",
             "solution": "# Using function approach\ndef second_largest_number():\n    user_input = input('Type numbers separated by spaces: ').split()\n    user_int = []\n    for num in user_input:\n        user_int.append(int(num))\n    unique_numbers = set(user_int)\n    unique_numbers = list(unique_numbers)\n    unique_numbers.sort()\n    if len(unique_numbers) > 1:\n        second_largest = unique_numbers[-2]\n    else:\n        second_largest = 'Not enough unique numbers'\n    print(second_largest)\nsecond_largest_number()\n\n# Using built-in approach\ndef second_largest_number():\n    user_input = input('Type numbers separated by spaces: ').split()\n    user_int = []\n    for num in user_input:\n        user_int.append(int(num))\n    unique_numbers = set(user_int)\n    unique_numbers = list(unique_numbers)\n    unique_numbers.sort()\n    if len(unique_numbers) > 1:\n        second_largest = unique_numbers[-2]\n    else:\n        second_largest = 'Not enough unique numbers'\n    return second_largest\n\n# Using manual approach\ndef second_largest_number():\n    user_input = input('Type numbers separated by spaces: ').split()\n    user_int = []\n    for num in user_input:\n        user_int.append(int(num))\n    unique_numbers = set(user_int)\n    unique_numbers = list(unique_numbers)\n    unique_numbers.sort()\n    if len(unique_numbers) > 1:\n        second_largest = unique_numbers[-2]\n    else:\n        second_largest = 'Not enough unique numbers'\n    result = second_largest\n    return result\n\n# Script approach\nuser_input = 5\nuser_int = []\nfor num in user_input:\n    user_int.append(int(num))\nunique_numbers = set(user_int)\nunique_numbers = list(unique_numbers)\nunique_numbers.sort()\nif len(unique_numbers) > 1:\n    second_largest = unique_numbers[-2]\nelse:\n    second_largest = 'Not enough unique numbers'\nprint(second_largest)\n\n# Direct approach\nuser_input = 10\nuser_int = []\nfor num in user_input:\n    user_int.append(int(num))\nunique_numbers = set(user_int)\nunique_numbers = list(unique_numbers)\nunique_numbers.sort()\nif len(unique_numbers) > 1:\n    second_largest = unique_numbers[-2]\nelse:\n    second_largest = 'Not enough unique numbers'\nprint(second_largest)",
 
@@ -3832,7 +3832,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 333,
             "title": "Problem 333",
-            "description": "Write a Python program to print each element with its index in a list of strings using `enumerate()`.\nExamples:\n  print_with_index('hello') → 0 h\n  print_with_index('world') → 1 e\n  print_with_index('python') → 2 l",
+            "description": "Write a Python program to print each element with its index in a list of strings using `enumerate()`.\nExamples:\n  print_with_index(['apple', 'banana']) → '0 apple\n1 banana'\n  print_with_index(['x']) → '0 x'",
             "initialCode": "def print_with_index(strings):\n    pass",
             "solution": "# Using function approach\ndef print_with_index(strings):\n    for index, value in enumerate(strings):\n        print(index, value)\nstrings = ['apple', 'banana', 'cherry', 'date', 'fig']\nprint_with_index(strings)\n\n# Using built-in approach\ndef solve():\n    def print_with_index(strings):\n        for index, value in enumerate(strings):\n            print(index, value)\n    strings = ['apple', 'banana', 'cherry', 'date', 'fig']\n    print_with_index(strings)\n\n# Using manual approach\ndef solve():\n    def print_with_index(strings):\n        for index, value in enumerate(strings):\n            return index, value\n    strings = ['apple', 'banana', 'cherry', 'date', 'fig']\n    print_with_index(strings)\n\n# Script approach\nstrings = 'hello'\nresult = print_with_index(strings)\nprint(result)\n\n# Direct approach\nprint(print_with_index('world'))",
 
@@ -3880,7 +3880,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 337,
             "title": "Problem 337",
-            "description": "Write a Python program to create a list of strings where each string includes its index with a custom prefix using `enumerate()`.\nExamples:\n  create_indexed_strings([1, 2, 3], 'hello') → ['hello0: 1', 'hello1: 2', 'hello2: 3']\n  create_indexed_strings([5, 8, 2], 'world') → ['world0: 5', 'world1: 8', 'world2: 2']\n  create_indexed_strings([3, 1, 4], 'python') → ['python0: 3', 'python1: 1', 'python2: 4']",
+            "description": "Write a Python program to create a list of strings where each string includes its index with a custom prefix using `enumerate()`.\nExamples:\n  create_indexed_strings(['apple', 'banana', 'cherry'], 'Item ') → ['Item 0: apple', 'Item 1: banana', 'Item 2: cherry']\n  create_indexed_strings(['a', 'b'], 'idx') → ['idx0: a', 'idx1: b']",
             "initialCode": "def create_indexed_strings(lst, prefix):\n    pass",
             "solution": "# Using function approach\ndef create_indexed_strings(lst, prefix):\n    result = []\n    for index, element in enumerate(lst):\n        result.append(f'{prefix}{index}: {element}')\n    return result\nlst = ['apple', 'banana', 'cherry']\nresult = create_indexed_strings(lst, 'Item ')\nprint(result)  # ['Item 0: apple', 'Item 1: banana', 'Item 2: cherry']\n\n# Using built-in approach\ndef create_indexed_strings(lst, prefix):\n    result = result\n    return result\n\n# Using manual approach\ndef create_indexed_strings(lst, prefix):\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nprefix = 'Hello, '\nresult = create_indexed_strings(lst, prefix)\nprint(result)\n\n# Direct approach\nprint(create_indexed_strings([1, 3, 5, 7], 'Hi, '))",
 
@@ -3892,7 +3892,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 338,
             "title": "Problem 338",
-            "description": "Write a Python program to modify elements in a list based on their index using `enumerate()`.\nExamples:\n  modify_elements([1, 2, 3]) → ?\n  modify_elements([5, 8, 2]) → ?\n  modify_elements([3, 1, 4]) → ?",
+            "description": "Write a Python program to modify elements in a list based on their index using `enumerate()`.\nExamples:\n  modify_elements(['apple', 'banana', 'cherry', 'date']) → ['APPLE', 'banana', 'CHERRY', 'date']\n  modify_elements(['a', 'b', 'c']) → ['A', 'b', 'C']",
             "initialCode": "def modify_elements(lst):\n    pass",
             "solution": "# Using function approach\ndef modify_elements(lst):\n    for index, element in enumerate(lst):\n        if index % 2 == 0:  # Modify elements at even indices\n            lst[index] = element.upper()\n    return lst\nlst = ['apple', 'banana', 'cherry', 'date']\nresult = modify_elements(lst)\nprint(result)  # ['APPLE', 'banana', 'CHERRY', 'date']\n\n# Using built-in approach\ndef modify_elements(lst):\n    result = lst\n    return result\n\n# Using manual approach\ndef modify_elements(lst):\n    return lst\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = modify_elements(lst)\nprint(result)\n\n# Direct approach\nprint(modify_elements([1, 3, 5, 7]))",
 
@@ -3916,7 +3916,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 341,
             "title": "Problem 341",
-            "description": "Write a Python program to create a list of tuples where each tuple contains an index and element from a list, but only if the element starts with a vowel, using `enumerate()`.\nExamples:\n  index_element_if_vowel([1, 2, 3]) → ?\n  index_element_if_vowel([5, 8, 2]) → ?\n  index_element_if_vowel([3, 1, 4]) → ?",
+            "description": "Write a Python program to create a list of tuples where each tuple contains an index and element from a list, but only if the element starts with a vowel, using `enumerate()`.\nExamples:\n  index_element_if_vowel(['apple', 'banana', 'orange', 'grape']) → [[0, 'apple'], [2, 'orange']]\n  index_element_if_vowel(['egg', 'fish']) → [[0, 'egg']]",
             "initialCode": "def index_element_if_vowel(lst):\n    pass",
             "solution": "# Using function approach\ndef index_element_if_vowel(lst):\n    result = []\n    vowels = 'aeiouAEIOU'\n    for index, element in enumerate(lst):\n        if element[0] in vowels:\n            result.append((index, element))\n    return result\nlst = ['apple', 'banana', 'orange', 'grape']\nresult = index_element_if_vowel(lst)\nprint(result)  # [(0, 'apple'), (2, 'orange')]\n\n# Using built-in approach\ndef index_element_if_vowel(lst):\n    result = result\n    return result\n\n# Using manual approach\ndef index_element_if_vowel(lst):\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = index_element_if_vowel(lst)\nprint(result)\n\n# Direct approach\nprint(index_element_if_vowel([1, 3, 5, 7]))",
 
@@ -3988,7 +3988,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 347,
             "title": "Problem 347",
-            "description": "Write a Python program that defines a function `greet()` which contains a nested function `get_name()` to prompt the user for their name. The `greet()` function should return a greeting message using the name.\nExamples:\n  greet() → What is your name?\n  greet() → ?",
+            "description": "Write a Python program that defines a function `greet()` which contains a nested function `get_name()` to prompt the user for their name. The `greet()` function should return a greeting message using the name.\nExamples:\n  greet() → 'Hello, Ada!'\n  greet() → 'Hello, Jonathan!'",
             "initialCode": "def greet():\n    pass",
             "solution": "# Using function approach\ndef greet():\n    def get_name():\n        return input('What is your name? ')\n    name = get_name()\n    return f'Hello, {name}!'\nresult = greet()\nprint(result)\n\n# Using built-in approach\ndef greet():\n    result = input('What is your name? ')\n    return result\n\n# Using manual approach\ndef greet():\n    return input('What is your name? ')",
 
@@ -4012,7 +4012,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 349,
             "title": "Problem 349",
-            "description": "Write a Python program that defines a function `add_prefix()` which contains a nested function `prefix_string()` that adds a given prefix to a string. The `add_prefix()` function should return the prefixed string.\nExamples:\n  add_prefix('hello') → None\n  add_prefix('world') → None\n  add_prefix('python') → None",
+            "description": "Write a Python program that defines a function `add_prefix()` which contains a nested function `prefix_string()` that adds a given prefix to a string. The `add_prefix()` function should return the prefixed string.\nExamples:\n  add_prefix('pre-') → 'pre-fix'\n  add_prefix('un') → 'unknown'",
             "initialCode": "def add_prefix(prefix):\n    pass\n\ndef add_prefix(prefix):\n    pass",
             "solution": "# Using function approach\ndef add_prefix(prefix):\n    def prefix_string(string):\n        return prefix + string\n    return prefix_string\nprefix_func = add_prefix('pre-')\nresult = prefix_func('fix') \nprint(result)\ndef add_prefix(prefix):\n    def prefix_string(string):\n        return prefix + string\n    return prefix_string\nprefix_func = add_prefix('pre-')\nresult1 = prefix_func('fix')\nresult2 = prefix_func('view')\nresult3 = prefix_func('dict')\nprint(result1)  # Output: 'pre-fix'\nprint(result2)  # Output: 'pre-view'\nprint(result3)  # Output: 'pre-dict'\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef add_prefix(prefix):\n    return ''.join([prefix, string])\n\n# Using manual approach\ndef add_prefix(prefix):\n    return '%s%s' % (prefix, string)\n\n# Script approach\nprefix = 'Hello, '\nresult = add_prefix(prefix)\nprint(result)\n\n# Direct approach\nprint(add_prefix('Hi, '))",
 
@@ -4048,7 +4048,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 352,
             "title": "Problem 352",
-            "description": "Write a Python program that defines a function `area_circle()` which contains a nested function `calculate_area()` that computes the area of a circle given its radius. The `area_circle()` function should return the area.\nExamples:\n  area_circle([1, 2, 3]) → ?\n  area_circle([5, 8, 2]) → ?\n  area_circle([3, 1, 4]) → ?",
+            "description": "Write a Python program that defines a function `area_circle()` which contains a nested function `calculate_area()` that computes the area of a circle given its radius. The `area_circle()` function should return the area.\nExamples:\n  area_circle(5) → 78.53981633974483\n  area_circle(1) → 3.141592653589793",
             "initialCode": "def area_circle(radius):\n    pass\n\ndef main():\n    pass",
             "solution": "import math\n\n# Using function approach\ndef area_circle(radius):\n    def calculate_area(r):\n        return math.pi * r * r\n    return calculate_area(radius)\nprint(area_circle(5))\n\n# Using built-in approach\ndef area_circle(radius):\n    result = math.pi * r * r\n    return result\n\n# Using manual approach\ndef area_circle(radius):\n    return math.pi * r * r\n\n# Script approach\nradius = 7\nresult = area_circle(radius)\nprint(result)\n\n# Direct approach\nprint(area_circle(14))",
 
@@ -4060,7 +4060,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 353,
             "title": "Problem 353",
-            "description": "Write a Python program that defines a function `capitalize_words()` which contains a nested function `capitalize()` that capitalizes a word. The `capitalize_words()` function should return a string with each word capitalized.\nExamples:\n  capitalize_words('hello') → Hello\n  capitalize_words('world') → World\n  capitalize_words('python') → Python",
+            "description": "Write a Python program that defines a function `capitalize_words()` which contains a nested function `capitalize()` that capitalizes a word. The `capitalize_words()` function should return a string with each word capitalized.\nExamples:\n  capitalize_words('hello world from python') → 'Hello World From Python'\n  capitalize_words('a b c') → 'A B C'",
             "initialCode": "def capitalize_words(sentence):\n    pass",
             "solution": "# Using function approach\ndef capitalize_words(sentence):\n    def capitalize(word):\n        return word.capitalize()\n    words = sentence.split()\n    capitalized_words = []\n    for word in words:\n        capitalized_words.append(capitalize(word))\n    return ' '.join(capitalized_words)\nresult = capitalize_words('hello world from python')\nprint(result)\n\n# Using built-in approach\ndef capitalize_words(sentence):\n    return word.capitalize()\n\n# Using manual approach\ndef capitalize_words(sentence):\n    return str(word).capitalize()\n\n# Script approach\nsentence = 'Hello, World!'\nresult = capitalize_words(sentence)\nprint(result)\n\n# Direct approach\nprint(capitalize_words('Python is fun'))",
 
@@ -4072,7 +4072,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 354,
             "title": "Problem 354",
-            "description": "Write a Python program that defines a function `is_palindrome()` which contains a nested function `reverse_string()` that checks if a string is a palindrome.\nExamples:\n  is_palindrome('hello') → False\n  is_palindrome('world') → False\n  is_palindrome('python') → False",
+            "description": "Write a Python program that defines a function `is_palindrome()` which contains a nested function `reverse_string()` that checks if a string is a palindrome.\nExamples:\n  is_palindrome('radar') → True\n  is_palindrome('hello') → False\n  is_palindrome('racecar') → True",
             "initialCode": "def is_palindrome(word):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(word):\n    def reverse_string(s):\n        return s[::-1]\n    return word == reverse_string(word)\nresult = is_palindrome('radar')\nprint(result)\n\n# Using built-in approach\ndef is_palindrome(word):\n    return ''.join(reversed(s))\n\n# Using manual approach\ndef is_palindrome(word):\n    result = ''\n    for char in s:\n        result = char + result\n    return result\n\n# Script approach\nword = 'python'\nresult = is_palindrome(word)\nprint(result)\n\n# Direct approach\nprint(is_palindrome('coding'))",
 
@@ -4108,7 +4108,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 357,
             "title": "Problem 357",
-            "description": "Write a Python program that defines a function `to_uppercase()` which contains a nested function `convert()` that converts a string to uppercase.\nExamples:\n  to_uppercase('hello') → HELLO\n  to_uppercase('world') → WORLD\n  to_uppercase('python') → PYTHON",
+            "description": "Write a Python program that defines a function `to_uppercase()` which contains a nested function `convert()` that converts a string to uppercase.\nExamples:\n  to_uppercase('hello world') → 'HELLO WORLD'\n  to_uppercase('abc') → 'ABC'",
             "initialCode": "def to_uppercase(string):\n    pass",
             "solution": "# Using function approach\ndef to_uppercase(string):\n    def convert(s):\n        return s.upper()\n    return convert(string)\nresult = to_uppercase('hello world')\nprint(result)\n\n# Using built-in approach\ndef to_uppercase(string):\n    return ''.join(chr(ord(c) - 32) if 'a' <= c <= 'z' else c for c in s)\n\n# Using manual approach\ndef to_uppercase(string):\n    return str(s).upper()\n\n# Script approach\nstring = 'hello'\nresult = to_uppercase(string)\nprint(result)\n\n# Direct approach\nprint(to_uppercase('world'))",
 
@@ -4156,7 +4156,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 361,
             "title": "Problem 361",
-            "description": "Write a Python program that defines a function `count_vowels()` which contains a nested function `is_vowel()` to count the number of vowels in a string.\nExamples:\n  count_vowels('hello') → None\n  count_vowels('world') → None\n  count_vowels('python') → None",
+            "description": "Write a Python program that defines a function `count_vowels()` which contains a nested function `is_vowel()` to count the number of vowels in a string.\nExamples:\n  count_vowels('Hello World') → 3\n  count_vowels('Python') → 1",
             "initialCode": "def count_vowels(string):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(string):\n    def is_vowel(char):\n        return char in 'aeiouAEIOU'\n    count = 0\n    for char in string:\n        if is_vowel(char):\n            count += 1\n    return count\nresult = count_vowels('Hello World')\nprint(result)\n\n# Using built-in approach\ndef count_vowels(string):\n    return sum(1 for char in string if is_vowel(char))\n\n# Using manual approach\ndef count_vowels(string):\n    return len([char for char in string if is_vowel(char)])\n\n# Script approach\nstring = 'hello'\nresult = count_vowels(string)\nprint(result)\n\n# Direct approach\nprint(count_vowels('world'))",
 
@@ -4180,7 +4180,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 363,
             "title": "Problem 363",
-            "description": "Write a Python program that defines a function `reverse_string()` which contains a nested function `reverse()` that reverses a given string.\nExamples:\n  reverse_string('Hello, World!') → !dlroW ,olleH",
+            "description": "Write a Python program that defines a function `reverse_string()` which contains a nested function `reverse()` that reverses a given string.\nExamples:\n  reverse_string('Hello, World!') → '!dlroW ,olleH'\n  reverse_string('abc') → 'cba'",
             "initialCode": "def reverse_string():\n    pass\n\ndef reverse_string(string):\n    pass",
             "solution": "# Using function approach\ndef reverse_string():\n    def reverse(s):\n        return s[::-1]\n    return reverse\nreverse_func = reverse_string()\nprint(reverse_func('Hello, World!'))  \ndef reverse_string(string):\n    def reverse(s):\n        reversed_str = ''\n        for char in s:\n            reversed_str = char + reversed_str\n        return reversed_str\n    return reverse(string)\nresult = reverse_string('Hello')\nprint(result)\n\n# Using built-in approach\ndef reverse_string():\n    return ''.join(reversed(s))\n\n# Using manual approach\ndef reverse_string():\n    result = ''\n    for char in s:\n        result = char + result\n    return result\n\n# Script approach\nstring = 'hello'\nresult = reverse_string(string)\nprint(result)\n\n# Direct approach\nprint(reverse_string('world'))",
 
@@ -4240,7 +4240,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 368,
             "title": "Problem 368",
-            "description": "Write a Python program that defines a main function `convert_temperature()` and a helper function `celsius_to_fahrenheit(c)` that converts a temperature from Celsius to Fahrenheit. The `convert_temperature()` function should use the helper function to return the converted temperature.\nExamples:\n  convert_temperature([1, 2, 3]) → ?\n  convert_temperature([5, 8, 2]) → ?\n  convert_temperature([3, 1, 4]) → ?",
+            "description": "Write a Python program that defines a main function `convert_temperature()` and a helper function `celsius_to_fahrenheit(c)` that converts a temperature from Celsius to Fahrenheit. The `convert_temperature()` function should use the helper function to return the converted temperature.\nExamples:\n  convert_temperature(25) → 77\n  convert_temperature(0) → 32\n  convert_temperature(100) → 212",
             "initialCode": "def convert_temperature(celsius):\n    pass",
             "solution": "# Using function approach\ndef convert_temperature(celsius):\n    def celsius_to_fahrenheit(c):\n        return (c * 9/5) + 32\n    return celsius_to_fahrenheit(celsius)\nresult = convert_temperature(25)\nprint(result)\n\n# Using built-in approach\ndef convert_temperature(celsius):\n    result = (c * 9/5) + 32\n    return result\n\n# Using manual approach\ndef convert_temperature(celsius):\n    return (c * 9/5) + 32\n\n# Script approach\ncelsius = 15\nresult = convert_temperature(celsius)\nprint(result)\n\n# Direct approach\nprint(convert_temperature(25))",
 
@@ -4300,7 +4300,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 374,
             "title": "Problem 374",
-            "description": "Write a Python program that defines a main function `capitalize_words()` and a helper function `capitalize(word)` that capitalizes the first letter of a word. The `capitalize_words()` function should use the helper function to capitalize each word in a sentence.\nExamples:\n  capitalize_words('hello') → None\n  capitalize_words('world') → None\n  capitalize_words('python') → None",
+            "description": "Write a Python program that defines a main function `capitalize_words()` and a helper function `capitalize(word)` that capitalizes the first letter of a word. The `capitalize_words()` function should use the helper function to capitalize each word in a sentence.\nExamples:\n  capitalize_words('hello world from python') → 'Hello World From Python'\n  capitalize_words('a b c') → 'A B C'",
             "initialCode": "def capitalize_words(sentence):\n    pass",
             "solution": "# Using function approach\ndef capitalize_words(sentence):\n    def capitalize(word):\n        return word[0].upper() + word[1:]\n    words = sentence.split()\n    capitalized_words = []\n    for word in words:\n        capitalized_words.append(capitalize(word))\n    return ' '.join(capitalized_words)\nresult = capitalize_words('hello world from python')\nprint(result)\n\n# Using built-in approach\ndef capitalize_words(sentence):\n    result = word[0].upper() + word[1:]\n    return result\n\n# Using manual approach\ndef capitalize_words(sentence):\n    return word[0].upper() + word[1:]\n\n# Script approach\nsentence = 'Hello, World!'\nresult = capitalize_words(sentence)\nprint(result)\n\n# Direct approach\nprint(capitalize_words('Python is fun'))",
 
@@ -4324,7 +4324,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 376,
             "title": "Problem 376",
-            "description": "Write a Python program that defines a main function `reverse_string()` and a helper function `reverse(s)` that reverses a given string. The `reverse_string()` function should use the helper function to return the reversed string.\nExamples:\n  reverse_string('hello') → olleh\n  reverse_string('world') → dlrow\n  reverse_string('python') → nohtyp",
+            "description": "Write a Python program that defines a main function `reverse_string()` and a helper function `reverse(s)` that reverses a given string. The `reverse_string()` function should use the helper function to return the reversed string.\nExamples:\n  reverse_string('hello') → 'olleh'\n  reverse_string('abc') → 'cba'",
             "initialCode": "def reverse_string(s):\n    pass",
             "solution": "# Using function approach\ndef reverse_string(s):\n    def reverse(s):\n        reversed_str = ''\n        for char in s:\n            reversed_str = char + reversed_str\n        return reversed_str\n    return reverse(s)\nresult = reverse_string('hello')\nprint(result)\n\n# Using built-in approach\ndef reverse_string(s):\n    result = reversed_str\n    return result\n\n# Using manual approach\ndef reverse_string(s):\n    return reversed_str\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = reverse_string(s)\nprint(result)\n\n# Direct approach\nprint(reverse_string([4, 1, 8, 6, 3]))",
 
@@ -4348,7 +4348,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 378,
             "title": "Problem 378",
-            "description": "Write a Python program that defines a main function `check_palindrome()` and a helper function `is_palindrome(s)` that checks if a string is a palindrome. The `check_palindrome()` function should use the helper function to return whether the string is a palindrome.\nExamples:\n  check_palindrome('hello') → None\n  check_palindrome('world') → None\n  check_palindrome('python') → None",
+            "description": "Write a Python program that defines a main function `check_palindrome()` and a helper function `is_palindrome(s)` that checks if a string is a palindrome. The `check_palindrome()` function should use the helper function to return whether the string is a palindrome.\nExamples:\n  check_palindrome('racecar') → True\n  check_palindrome('hello') → False\n  check_palindrome('radar') → True",
             "initialCode": "def check_palindrome(s):\n    pass",
             "solution": "# Using function approach\ndef check_palindrome(s):\n    def is_palindrome(s):\n        return s == s[::-1]\n    return is_palindrome(s)\nresult = check_palindrome('racecar')\nprint(result)\n\n# Using built-in approach\ndef check_palindrome(s):\n    result = s == s[::-1]\n    return result\n\n# Using manual approach\ndef check_palindrome(s):\n    return s == s[::-1]\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = check_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(check_palindrome([4, 1, 8, 6, 3]))",
 
@@ -4384,7 +4384,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 381,
             "title": "Problem 381",
-            "description": "Write a function where user types a list of numbers in string and returns a list of numbers in integer. Do not use a for loop.\nExamples:\n  convert_to_integers('hello') → ?\n  convert_to_integers('world') → ?\n  convert_to_integers('python') → ?",
+            "description": "Write a function where user types a list of numbers in string and returns a list of numbers in integer. Do not use a for loop.\nExamples:\n  convert_to_integers(['10', '20', '30', '40']) → [10, 20, 30, 40]\n  convert_to_integers(['1', '2']) → [1, 2]",
             "initialCode": "def convert_to_integers(strings):\n    pass",
             "solution": "# Using function approach\nuser = input('type numbers: ').split()\nprint(list(map(int, user)))\ndef convert_to_integers(strings):\n    return list(map(int, strings))\nnumbers_in_strings = ['10', '20', '30', '40']\nprint(convert_to_integers(numbers_in_strings))\n\n# Using built-in approach\ndef convert_to_integers(strings):\n    result = list(map(int, strings))\n    return result\n\n# Using manual approach\ndef convert_to_integers(strings):\n    return list(map(int, strings))\n\n# Script approach\nstrings = 'hello'\nresult = convert_to_integers(strings)\nprint(result)\n\n# Direct approach\nprint(convert_to_integers('world'))",
 
@@ -4396,7 +4396,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 382,
             "title": "Problem 382",
-            "description": "Write a Python program to sort a list of strings by their length using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_strings_by_length('hello') → ['h', 'e', 'l', 'l', 'o']\n  sort_strings_by_length('world') → ['w', 'o', 'r', 'l', 'd']\n  sort_strings_by_length('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to sort a list of strings by their length using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_strings_by_length(['apple', 'fig', 'banana', 'kiwi']) → ['fig', 'kiwi', 'apple', 'banana']\n  sort_strings_by_length(['a', 'abc', 'ab']) → ['a', 'ab', 'abc']",
             "initialCode": "def sort_strings_by_length(strings):\n    pass",
             "solution": "# Using function approach\ndef sort_strings_by_length(strings):\n    sorted_strings = sorted(strings, key=len)\n    return sorted_strings\nresult = sort_strings_by_length(['apple', 'fig', 'banana', 'kiwi'])\nprint(result)\n# Using for loop with sorted\n    # Manual sorting alternative\n\n# Using built-in approach\ndef sort_strings_by_length(strings):\n    result = sorted_strings\n    return result\n\n# Using manual approach\ndef sort_strings_by_length(strings):\n    return sorted_strings\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = sort_strings_by_length(strings)\nprint(result)\n\n# Direct approach\nprint(sort_strings_by_length([4, 1, 8, 6, 3]))",
 
@@ -4408,7 +4408,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 384,
             "title": "Problem 384",
-            "description": "Write a Python program to sort a list of tuples based on the second element using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_tuples_by_second([1, 2, 3]) → ?\n  sort_tuples_by_second([5, 8, 2]) → ?\n  sort_tuples_by_second([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of tuples based on the second element using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_tuples_by_second([[1, 3], [2, 1], [3, 2]]) → [[2, 1], [3, 2], [1, 3]]\n  sort_tuples_by_second([[1, 5], [2, 2]]) → [[2, 2], [1, 5]]",
             "initialCode": "def sort_tuples_by_second(tuples):\n    pass",
             "solution": "# Using function approach\ndef sort_tuples_by_second(tuples):\n    sorted_tuples = sorted(tuples, key=lambda x: x[1])\n    return sorted_tuples\nresult = sort_tuples_by_second([(1, 3), (2, 1), (3, 2)])\nprint(result)\n\n# Using built-in approach\ndef sort_tuples_by_second(tuples):\n    result = sorted_tuples\n    return result\n\n# Using manual approach\ndef sort_tuples_by_second(tuples):\n    return sorted_tuples\n\n# Script approach\ntuples = [3, 7, 2, 9, 1]\nresult = sort_tuples_by_second(tuples)\nprint(result)\n\n# Direct approach\nprint(sort_tuples_by_second([4, 1, 8, 6, 3]))",
 
@@ -4420,7 +4420,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 385,
             "title": "Problem 385",
-            "description": "Write a Python program to sort a list of dictionaries based on the value of a specific key using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_dicts_by_key([1, 2, 3], [1, 2, 3]) → ?\n  sort_dicts_by_key([5, 8, 2], [5, 8, 2]) → ?\n  sort_dicts_by_key([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of dictionaries based on the value of a specific key using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_dicts_by_key([{'name':'Alice','age':30}, {'name':'Bob','age':25}], 'age') → [[object Object], [object Object]]\n  sort_dicts_by_key([{'v':3}, {'v':1}], 'v') → [[object Object], [object Object]]",
             "initialCode": "def sort_dicts_by_key(dicts, key_name):\n    pass",
             "solution": "# Using function approach\ndef sort_dicts_by_key(dicts, key_name):\n    sorted_dicts = sorted(dicts, key=lambda x: x[key_name])\n    return sorted_dicts\nresult = sort_dicts_by_key([{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}], 'age')\nprint(result)\n\n# Using built-in approach\ndef sort_dicts_by_key(dicts, key_name):\n    result = sorted_dicts\n    return result\n\n# Using manual approach\ndef sort_dicts_by_key(dicts, key_name):\n    return sorted_dicts\n\n# Script approach\ndicts = [3, 7, 2, 9, 1]\nkey_name = [3, 7, 2, 9, 1]\nresult = sort_dicts_by_key(dicts, key_name)\nprint(result)\n\n# Direct approach\nprint(sort_dicts_by_key([4, 1, 8, 6, 3], [4, 1, 8, 6, 3]))",
 
@@ -4432,7 +4432,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 386,
             "title": "Problem 386",
-            "description": "Write a Python program to find the longest word in a list of words using the `key` parameter.\nExamples:\n  longest_word('hello') → h\n  longest_word('world') → w\n  longest_word('python') → p",
+            "description": "Write a Python program to find the longest word in a list of words using the `key` parameter.\nExamples:\n  longest_word(['apple', 'banana', 'cherry', 'date']) → 'banana'\n  longest_word(['a', 'ab', 'abc']) → 'abc'",
             "initialCode": "def longest_word(words):\n    pass",
             "solution": "# Using function approach\ndef longest_word(words):\n    longest = ''\n    for word in words:\n        if len(word) > len(longest):\n            longest = word\n    return longest\nresult = longest_word(['apple', 'banana', 'cherry', 'date'])\nprint(result)\n\n# Using built-in approach\ndef longest_word(words):\n    result = longest\n    return result\n\n# Using manual approach\ndef longest_word(words):\n    return longest\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = longest_word(words)\nprint(result)\n\n# Direct approach\nprint(longest_word([4, 1, 8, 6, 3]))",
 
@@ -4456,7 +4456,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 388,
             "title": "Problem 388",
-            "description": "Write a Python program to sort a list of strings by the last character of each string using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_strings_by_last_character('hello') → ['e', 'h', 'l', 'l', 'o']\n  sort_strings_by_last_character('world') → ['d', 'l', 'o', 'r', 'w']\n  sort_strings_by_last_character('python') → ['h', 'n', 'o', 'p', 't', 'y']",
+            "description": "Write a Python program to sort a list of strings by the last character of each string using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_strings_by_last_character(['banana', 'apple', 'grape', 'kiwi']) → ['banana', 'apple', 'grape', 'kiwi']\n  sort_strings_by_last_character(['treez', 'cliff', 'grassya']) → ['grassya', 'cliff', 'treez']",
             "initialCode": "def sort_strings_by_last_character(strings):\n    pass\n\ndef main(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_strings_by_last_character(strings):\n    sorted_strings = sorted(strings, key=lambda x: x[-1])\n    return sorted_strings\nresult = sort_strings_by_last_character(['banana', 'apple', 'grape', 'kiwi'])\nprint(result)\ndef main(lst):\n    def inner(word):\n        return word[-1]\n    return list(sorted(lst, key=inner))\nlst = ['treez', 'cliff', 'mountain', 'tree','tree', 'grassya']\nmain(lst)\n\n# Using built-in approach\ndef sort_strings_by_last_character(strings):\n    result = sorted_strings\n    return result\n\n# Using manual approach\ndef sort_strings_by_last_character(strings):\n    return sorted_strings\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = sort_strings_by_last_character(strings)\nprint(result)\n\n# Direct approach\nprint(sort_strings_by_last_character([4, 1, 8, 6, 3]))",
 
@@ -4468,7 +4468,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 389,
             "title": "Problem 389",
-            "description": "Write a Python program to find the earliest date in a list of date strings (in 'YYYY-MM-DD' format) using the `key` parameter in the `min()` function.\nExamples:\n  earliest_date('hello') → e\n  earliest_date('world') → d\n  earliest_date('python') → h",
+            "description": "Write a Python program to find the earliest date in a list of date strings (in 'YYYY-MM-DD' format) using the `key` parameter in the `min()` function.\nExamples:\n  earliest_date(['2023-10-01', '2024-01-15', '2022-12-31']) → '2022-12-31'\n  earliest_date(['2025-01-01', '2024-01-01']) → '2024-01-01'",
             "initialCode": "def earliest_date(dates):\n    pass",
             "solution": "# Using function approach\ndef earliest_date(dates):\n    earliest = min(dates)\n    return earliest\nresult = earliest_date(['2023-10-01', '2024-01-15', '2022-12-31'])\nprint(result)\n\n# Using built-in approach\ndef earliest_date(dates):\n    return sorted(dates)[0]\n\n# Using manual approach\ndef earliest_date(dates):\n    result = dates[0]\n    for item in dates:\n        if item < result:\n            result = item\n    return result\n\n# Script approach\ndates = [3, 7, 2, 9, 1]\nresult = earliest_date(dates)\nprint(result)\n\n# Direct approach\nprint(earliest_date([4, 1, 8, 6, 3]))",
 
@@ -4480,7 +4480,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 390,
             "title": "Problem 390",
-            "description": "Write a Python program to sort a list of names by surname using the `key` parameter in the `sorted()` function.\nExamples:\n  get_surname('hello') → hello\n  get_surname('world') → world\n  get_surname('python') → python",
+            "description": "Write a Python program to sort a list of names by surname using the `key` parameter in the `sorted()` function.\nExamples:\n  get_surname('John Doe') → 'Doe'\n  get_surname('Jane Smith') → 'Smith'",
             "initialCode": "def get_surname(name):\n    pass",
             "solution": "# Using function approach\ndef get_surname(name):\n    return name.split()[-1]\nnames = [\n    'John Doe',\n    'Jane Smith',\n    'Alice Johnson',\n    'Bob Brown',\n    'Charlie Davis'\n]\nsorted_names = sorted(names, key=get_surname)\nprint(sorted_names)\n\n# Using built-in approach\ndef get_surname(name):\n    result = name.split()[-1]\n    return result\n\n# Using manual approach\ndef get_surname(name):\n    return name.split()[-1]\n\n# Script approach\nname = 'Alice'\nresult = get_surname(name)\nprint(result)\n\n# Direct approach\nprint(get_surname('Bob'))",
 
@@ -4492,7 +4492,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 391,
             "title": "Problem 391",
-            "description": "Write a Python program to sort a list of strings alphabetically, ignoring case, using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_strings_alphabetically('hello') → ['e', 'h', 'l', 'l', 'o']\n  sort_strings_alphabetically('world') → ['d', 'l', 'o', 'r', 'w']\n  sort_strings_alphabetically('python') → ['h', 'n', 'o', 'p', 't', 'y']",
+            "description": "Write a Python program to sort a list of strings alphabetically, ignoring case, using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_strings_alphabetically(['banana', 'Apple', 'cherry', 'Date']) → ['Apple', 'banana', 'cherry', 'Date']\n  sort_strings_alphabetically(['b', 'A']) → ['A', 'b']",
             "initialCode": "def sort_strings_alphabetically(strings):\n    pass",
             "solution": "# Using function approach\ndef sort_strings_alphabetically(strings):\n    return sorted(strings, key=str.lower)\nstrings = ['banana', 'Apple', 'cherry', 'Date', 'fig', 'Grape']\nsorted_strings = sort_strings_alphabetically(strings)\nprint(sorted_strings)\n\n# Using built-in approach\ndef sort_strings_alphabetically(strings):\n    result = sorted(strings, key=str.lower)\n    return result\n\n# Using manual approach\ndef sort_strings_alphabetically(strings):\n    return sorted(strings, key=str.lower)\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = sort_strings_alphabetically(strings)\nprint(result)\n\n# Direct approach\nprint(sort_strings_alphabetically([4, 1, 8, 6, 3]))",
 
@@ -4504,7 +4504,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 392,
             "title": "Problem 392",
-            "description": "Write a Python program to find the word with the highest Scrabble score in a list of words using the `key` parameter.\nExamples:\n  scrabble_score('hello') → 8\n  scrabble_score('world') → 9\n  scrabble_score('python') → 14",
+            "description": "Write a Python program to find the word with the highest Scrabble score in a list of words using the `key` parameter.\nExamples:\n  scrabble_score(['hello', 'world', 'python', 'scrabble']) → 'python'\n  scrabble_score(['a', 'zzzz']) → 'zzzz'",
             "initialCode": "def scrabble_score(word):\n    pass\n\ndef find_highest_scrabble_word(words):\n    pass",
             "solution": "# Using function approach\ndef scrabble_score(word):\n    score_chart = {\n        'A': 1, 'E': 1, 'I': 1, 'O': 1, 'U': 1,\n        'L': 1, 'N': 1, 'S': 1, 'T': 1, 'R': 1,\n        'D': 2, 'G': 2,\n        'B': 3, 'C': 3, 'M': 3, 'P': 3,\n        'F': 4, 'H': 4, 'V': 4, 'W': 4, 'Y': 4,\n        'K': 5,\n        'J': 8, 'X': 8,\n        'Q': 10, 'Z': 10\n    }\n    total_score = 0\n    for letter in word.upper():\n        total_score += score_chart.get(letter, 0)\n    return total_score\ndef find_highest_scrabble_word(words):\n    highest_word = max(words, key=scrabble_score)\n    return highest_word\nresult = find_highest_scrabble_word(['hello', 'world', 'python', 'scrabble'])\nprint(result)\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef scrabble_score(word):\n    result = total_score\n    return result\n\n# Using manual approach\ndef scrabble_score(word):\n    return total_score\n\n# Script approach\nword = 'python'\nresult = scrabble_score(word)\nprint(result)\n\n# Direct approach\nprint(scrabble_score('coding'))",
 
@@ -4588,7 +4588,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 399,
             "title": "Problem 399",
-            "description": "Write a Python program to sort a list of words by the number of distinct letters in each word using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_words_by_distinct_letters('hello') → None\n  sort_words_by_distinct_letters('world') → None\n  sort_words_by_distinct_letters('python') → None",
+            "description": "Write a Python program to sort a list of words by the number of distinct letters in each word using the `key` parameter in the `sorted()` function.\nExamples:\n  sort_words_by_distinct_letters(['apple', 'banana', 'cherry', 'date']) → ['banana', 'apple', 'date', 'cherry']\n  sort_words_by_distinct_letters(['a', 'ab', 'abc']) → ['a', 'ab', 'abc']",
             "initialCode": "def sort_words_by_distinct_letters(words):\n    pass",
             "solution": "# Using function approach\ndef sort_words_by_distinct_letters(words):\n    def distinct_letter_count(word):\n        return len(set(word))\n    sorted_words = sorted(words, key=distinct_letter_count)\n    return sorted_words\nresult = sort_words_by_distinct_letters(['apple', 'banana', 'cherry', 'date'])\nprint(result)\n\n# Using built-in approach\ndef sort_words_by_distinct_letters(words):\n    result = len(set(word))\n    return result\n\n# Using manual approach\ndef sort_words_by_distinct_letters(words):\n    return len(set(word))\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = sort_words_by_distinct_letters(words)\nprint(result)\n\n# Direct approach\nprint(sort_words_by_distinct_letters([4, 1, 8, 6, 3]))",
 
@@ -4600,7 +4600,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 400,
             "title": "Problem 400",
-            "description": "Write a Python program to find the word with the highest sum of ASCII values of its characters in a list of words using the `key` parameter.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a Python program to find the word with the highest sum of ASCII values of its characters in a list of words using the `key` parameter.\nExamples:\n  main(['hello', 'world', 'python', 'scrabble']) → 'scrabble'\n  main(['aa', 'bb', 'cc', 'uu']) → 'uu'",
             "initialCode": "def main(lst):\n    pass\n\ndef ascii_value(word):\n    pass\n\ndef find_highest_ascii_word(words):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    def inner(word):\n        count = 0\n        for char in word:\n            count += ord(char)\n        return count\n    return max(lst, key=inner)\nlst = ['aa', 'bb', 'cc', 'dg','uu', 'ak']\nmain(lst)\ndef ascii_value(word):\n    total_value = 0\n    for char in word:\n        total_value += ord(char)\n    return total_value\ndef find_highest_ascii_word(words):\n    highest_word = max(words, key=ascii_value)\n    return highest_word\nresult = find_highest_ascii_word(['hello', 'world', 'python', 'scrabble'])\nprint(result)\n\n# Using built-in approach\ndef main(lst):\n    result = count\n    return result\n\n# Using manual approach\ndef main(lst):\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -4612,7 +4612,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 401,
             "title": "Problem 401",
-            "description": "Write a Python program to sort a list of strings by the number of vowels in each string using the `key` parameter in the `sorted()` function.\"\nExamples:\n  count_vowels('hello') → 2\n  count_vowels('world') → 1\n  count_vowels('python') → 1",
+            "description": "Write a Python program to sort a list of strings by the number of vowels in each string using the `key` parameter in the `sorted()` function.\"\nExamples:\n  count_vowels(['apple', 'banana', 'cherry', 'date', 'fig', 'grape']) → ['cherry', 'fig', 'apple', 'date', 'grape', 'banana']\n  count_vowels(['a', 'e', 'i']) → ['a', 'e', 'i']",
             "initialCode": "def count_vowels(s):\n    pass\n\ndef sort_by_vowel_count(strings):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(s):\n    vowels = 'aeiou'\n    count = 0\n    s = s.lower() \n    for char in s:\n        if char in vowels:\n            count += 1\n    return count\ndef sort_by_vowel_count(strings):\n    return sorted(strings, key=count_vowels)\nstrings = ['apple', 'banana', 'cherry', 'date', 'fig', 'grape']\nsorted_strings = sort_by_vowel_count(strings)\nprint(sorted_strings)\n\n# Using built-in approach\ndef count_vowels(s):\n    return sum(1 for char in s if char in vowels)\n\n# Using manual approach\ndef count_vowels(s):\n    return len([char for char in s if char in vowels])\n\n# Script approach\ns = 'hello'\nresult = count_vowels(s)\nprint(result)\n\n# Direct approach\nprint(count_vowels('world'))",
 
@@ -4624,7 +4624,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 402,
             "title": "Problem 402",
-            "description": "Write a function where user transforms a list of integers into a list of strings. Do not use a for loop.\nExamples:\n  convert_to_integers('hello') → ['h', 'e', 'l', 'l', 'o']\n  convert_to_integers('world') → ['w', 'o', 'r', 'l', 'd']\n  convert_to_integers('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a function where user transforms a list of integers into a list of strings. Do not use a for loop.\nExamples:\n  convert_to_integers([4, 24, 66, 25]) → ['4', '24', '66', '25']\n  convert_to_integers([1, 2]) → ['1', '2']",
             "initialCode": "def convert_to_integers(integers):\n    pass",
             "solution": "# Using function approach\ndef convert_to_integers(integers):\n    return list(map(str, integers))\nnumbers = [4, 24, 66, 25]\nprint(convert_to_integers(numbers))\n\n# Using built-in approach\ndef convert_to_integers(integers):\n    result = list(map(str, integers))\n    return result\n\n# Using manual approach\ndef convert_to_integers(integers):\n    return list(map(str, integers))\n\n# Script approach\nintegers = 15\nresult = convert_to_integers(integers)\nprint(result)\n\n# Direct approach\nprint(convert_to_integers(25))",
 
@@ -4696,7 +4696,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 408,
             "title": "Problem 408",
-            "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, with maintaining the original order of characters.\nExamples:\n  remove_duplicates([1, 2, 3]) → ?\n  remove_duplicates([5, 8, 2]) → ?\n  remove_duplicates([3, 1, 4]) → ?",
+            "description": "Write a Python function called remove_duplicates that takes a string as input and returns a new string with duplicate characters removed, with maintaining the original order of characters.\nExamples:\n  remove_duplicates('what is you is going is to do') → ['what', 'is', 'you', 'going', 'to', 'do']\n  remove_duplicates('a b a c') → ['a', 'b', 'c']",
             "initialCode": "def remove_duplicates(lst):\n    pass",
             "solution": "# Using function approach\ndef remove_duplicates(lst):\n    lst = lst.split()\n    unique = []\n    commom = []\n    for word in lst:\n        if word in unique:\n            commom.append(word)\n        else:\n            unique.append(word)\n    return unique\nlst = ' what is you is going is to do'\nprint(remove_duplicates(lst))\n\n# Using built-in approach\ndef remove_duplicates(lst):\n    return [word for word in lst]\n\n# Using manual approach\ndef remove_duplicates(lst):\n    return list(map(lambda word: word, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = remove_duplicates(lst)\nprint(result)\n\n# Direct approach\nprint(remove_duplicates([1, 3, 5, 7]))",
 
@@ -4708,7 +4708,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 409,
             "title": "Problem 409",
-            "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words without using len(). Use a dictionary.\nExamples:\n  len_words([1, 2, 3]) → ?\n  len_words([5, 8, 2]) → ?\n  len_words([3, 1, 4]) → ?",
+            "description": "Write a program that maps a list of words into a list of integers representing the lengths of the correponding words without using len(). Use a dictionary.\nExamples:\n  len_words(['Jonathan', 'Chris', 'Jeremy']) → [object Object]\n  len_words(['a', 'ab']) → [object Object]",
             "initialCode": "def len_words(lst):\n    pass",
             "solution": "# Using function approach\ndef len_words(lst):\n    result = {}\n    for word in lst:\n        count = 0\n        for char in word:\n            count += 1\n        result[word] = count\n    return result\nlst = ['Jonathan', 'Chris', 'Jeremy']\nprint(len_words(lst))\n\n# Using built-in approach\ndef len_words(lst):\n    result = result\n    return result\n\n# Using manual approach\ndef len_words(lst):\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = len_words(lst)\nprint(result)\n\n# Direct approach\nprint(len_words([1, 3, 5, 7]))",
 
@@ -4816,7 +4816,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 418,
             "title": "Problem 418",
-            "description": "Write a Python function called celsius_to_fahrenheit that takes a temperature in Celsius and converts it to Fahrenheit. Use a nested function to do the conversion.\nExamples:\n  celsius_to_fahrenheit([1, 2, 3]) → ?\n  celsius_to_fahrenheit([5, 8, 2]) → ?\n  celsius_to_fahrenheit([3, 1, 4]) → ?",
+            "description": "Write a Python function called celsius_to_fahrenheit that takes a temperature in Celsius and converts it to Fahrenheit. Use a nested function to do the conversion.\nExamples:\n  celsius_to_fahrenheit(20) → 68\n  celsius_to_fahrenheit(0) → 32\n  celsius_to_fahrenheit(100) → 212",
             "initialCode": "def celsius_to_fahrenheit(celsius):\n    pass",
             "solution": "# Using function approach\ndef celsius_to_fahrenheit(celsius):\n    def convert():\n        return (celsius * 9 / 5) + 32\n    return convert()\nresult = celsius_to_fahrenheit(20)\nprint(result)\n\n# Using built-in approach\ndef celsius_to_fahrenheit(celsius):\n    result = (celsius * 9 / 5) + 32\n    return result\n\n# Using manual approach\ndef celsius_to_fahrenheit(celsius):\n    return (celsius * 9 / 5) + 32\n\n# Script approach\ncelsius = 15\nresult = celsius_to_fahrenheit(celsius)\nprint(result)\n\n# Direct approach\nprint(celsius_to_fahrenheit(25))",
 
@@ -4888,7 +4888,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 424,
             "title": "Problem 424",
-            "description": "Write a Python function string_length that takes a string and returns its length. Use a nested function that calculates and returns the length.\nExamples:\n  string_length('hello') → 5\n  string_length('world') → 5\n  string_length('python') → 6",
+            "description": "Write a Python function string_length that takes a string and returns its length. Use a nested function that calculates and returns the length.\nExamples:\n  string_length('Hello, World!') → 13\n  string_length('abc') → 3",
             "initialCode": "def string_length(s):\n    pass",
             "solution": "# Using function approach\ndef string_length(s):\n    def calculate_length():\n        length = 0\n        for char in s:\n            length += 1\n        return length\n    return calculate_length()\nresult = string_length('Hello, World!')\nprint(result)\n\n# Using built-in approach\ndef string_length(s):\n    result = length\n    return result\n\n# Using manual approach\ndef string_length(s):\n    return length\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = string_length(s)\nprint(result)\n\n# Direct approach\nprint(string_length([4, 1, 8, 6, 3]))",
 
@@ -4900,7 +4900,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 425,
             "title": "Problem 425",
-            "description": "Write a Python function first_and_last that takes a string and returns its first and last characters using a nested function.\nExamples:\n  first_and_last('hello') → ('h', 'o')\n  first_and_last('world') → ('w', 'd')\n  first_and_last('python') → ('p', 'n')",
+            "description": "Write a Python function first_and_last that takes a string and returns its first and last characters using a nested function.\nExamples:\n  first_and_last('Hello') → ['H', 'o']\n  first_and_last('a') → ['a', 'a']",
             "initialCode": "def first_and_last(s):\n    pass",
             "solution": "# Using function approach\ndef first_and_last(s):\n    def get_first_last():\n        if len(s) > 0:\n            return s[0], s[-1]\n        else:\n            return None, None\n    return get_first_last()\nresult = first_and_last('Hello')\nprint(result)\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef first_and_last(s):\n    result = s[0], s[-1]\n    return result\n\n# Using manual approach\ndef first_and_last(s):\n    return s[0], s[-1]\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = first_and_last(s)\nprint(result)\n\n# Direct approach\nprint(first_and_last([4, 1, 8, 6, 3]))",
 
@@ -4912,7 +4912,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 426,
             "title": "Problem 426",
-            "description": "Write a Python function count_vowels that takes a string and counts the number of vowels using a nested function.\nExamples:\n  count_vowels('hello') → None\n  count_vowels('world') → None\n  count_vowels('python') → None",
+            "description": "Write a Python function count_vowels that takes a string and counts the number of vowels using a nested function.\nExamples:\n  count_vowels('Hello, World!') → 3\n  count_vowels('Python') → 1",
             "initialCode": "def count_vowels(s):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(s):\n    def is_vowel(char):\n        return char.lower() in 'aeiou'\n    count = 0\n    for char in s:\n        if is_vowel(char):\n            count += 1\n    return count\nresult = count_vowels('Hello, World!')\nprint(result)\n\n# Using built-in approach\ndef count_vowels(s):\n    return sum(1 for char in s if is_vowel(char))\n\n# Using manual approach\ndef count_vowels(s):\n    return len([char for char in s if is_vowel(char)])\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = count_vowels(s)\nprint(result)\n\n# Direct approach\nprint(count_vowels([4, 1, 8, 6, 3]))",
 
@@ -4924,7 +4924,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 427,
             "title": "Problem 427",
-            "description": "Write a Python function reverse_string that takes a string and returns its reverse using a nested function.\nExamples:\n  reverse_string('hello') → olleh\n  reverse_string('world') → dlrow\n  reverse_string('python') → nohtyp",
+            "description": "Write a Python function reverse_string that takes a string and returns its reverse using a nested function.\nExamples:\n  reverse_string('Hello') → 'olleH'\n  reverse_string('abc') → 'cba'",
             "initialCode": "def reverse_string(s):\n    pass",
             "solution": "# Using function approach\ndef reverse_string(s):\n    def reverse():\n        reversed_s = ''\n        for char in s:\n            reversed_s = char + reversed_s\n        return reversed_s\n    return reverse()\nresult = reverse_string('Hello')\nprint(result)\n\n# Using built-in approach\ndef reverse_string(s):\n    result = reversed_s\n    return result\n\n# Using manual approach\ndef reverse_string(s):\n    return reversed_s\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = reverse_string(s)\nprint(result)\n\n# Direct approach\nprint(reverse_string([4, 1, 8, 6, 3]))",
 
@@ -4936,7 +4936,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 428,
             "title": "Problem 428",
-            "description": "Write a Python function is_palindrome that takes a string and checks if it’s a palindrome using a nested function.\nExamples:\n  is_palindrome('hello') → False\n  is_palindrome('world') → False\n  is_palindrome('python') → False",
+            "description": "Write a Python function is_palindrome that takes a string and checks if it’s a palindrome using a nested function.\nExamples:\n  is_palindrome('racecar') → True\n  is_palindrome('hello') → False",
             "initialCode": "def is_palindrome(s):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(s):\n    def check():\n        return s == s[::-1]\n    return check()\nresult = is_palindrome('racecar')\nprint(result)\n\n# Using built-in approach\ndef is_palindrome(s):\n    result = s == s[::-1]\n    return result\n\n# Using manual approach\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome([4, 1, 8, 6, 3]))",
 
@@ -4972,7 +4972,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 431,
             "title": "Problem 431",
-            "description": "Write a Python function greet_person that takes a name and returns a greeting using a nested function.\nExamples:\n  greet_person('hello') → Hello, hello!\n  greet_person('world') → Hello, world!\n  greet_person('python') → Hello, python!",
+            "description": "Write a Python function greet_person that takes a name and returns a greeting using a nested function.\nExamples:\n  greet_person('Alice') → 'Hello, Alice!'\n  greet_person('Bob') → 'Hello, Bob!'",
             "initialCode": "def greet_person(name):\n    pass",
             "solution": "# Using function approach\ndef greet_person(name):\n    def greeting():\n        return f'Hello, {name}!'\n    return greeting()\nresult = greet_person('Alice')\nprint(result)\n\n# Using built-in approach\ndef greet_person(name):\n    return 'Hello, {}!'.format(name)\n\n# Using manual approach\ndef greet_person(name):\n    return 'Hello, %s!' % (name)\n\n# Script approach\nname = 'Alice'\nresult = greet_person(name)\nprint(result)\n\n# Direct approach\nprint(greet_person('Bob'))",
 
@@ -5104,7 +5104,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 442,
             "title": "Problem 442",
-            "description": "Write a Python function is_uppercase that checks if all characters in a string are uppercase using a nested function.\nExamples:\n  is_uppercase('hello') → False\n  is_uppercase('world') → False\n  is_uppercase('python') → False",
+            "description": "Write a Python function is_uppercase that checks if all characters in a string are uppercase using a nested function.\nExamples:\n  is_uppercase('HELLO') → True\n  is_uppercase('Hello') → False",
             "initialCode": "def is_uppercase(s):\n    pass",
             "solution": "# Using function approach\ndef is_uppercase(s):\n    def check():\n        for char in s:\n            if not char.isupper():\n                return False\n        return True\n    return check()\nresult = is_uppercase('HELLO')\nprint(result)\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef is_uppercase(s):\n    result = False\n    return result\n\n# Using manual approach\ndef is_uppercase(s):\n    return False\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_uppercase(s)\nprint(result)\n\n# Direct approach\nprint(is_uppercase([4, 1, 8, 6, 3]))",
 
@@ -5116,7 +5116,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 443,
             "title": "Problem 443",
-            "description": "Write a Python function is_lowercase that checks if all characters in a string are lowercase using a nested function.\nExamples:\n  is_lowercase('hello') → True\n  is_lowercase('world') → True\n  is_lowercase('python') → True",
+            "description": "Write a Python function is_lowercase that checks if all characters in a string are lowercase using a nested function.\nExamples:\n  is_lowercase('hello') → True\n  is_lowercase('Hello') → False",
             "initialCode": "def is_lowercase(s):\n    pass",
             "solution": "# Using function approach\ndef is_lowercase(s):\n    def check():\n        for char in s:\n            if not char.islower():\n                return False\n        return True\n    return check()\nresult = is_lowercase('hello')\nprint(result)\n\n# Using built-in approach\ndef is_lowercase(s):\n    result = False\n    return result\n\n# Using manual approach\ndef is_lowercase(s):\n    return False\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_lowercase(s)\nprint(result)\n\n# Direct approach\nprint(is_lowercase([4, 1, 8, 6, 3]))",
 
@@ -5128,7 +5128,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 444,
             "title": "Problem 444",
-            "description": "Write a Python function string_contains_digit that checks if a string contains a digit using a nested function.\nExamples:\n  string_contains_digit('hello') → False\n  string_contains_digit('world') → False\n  string_contains_digit('python') → False",
+            "description": "Write a Python function string_contains_digit that checks if a string contains a digit using a nested function.\nExamples:\n  string_contains_digit('jonathan5') → True\n  string_contains_digit('hello') → False",
             "initialCode": "def string_contains_digit(string):\n    pass",
             "solution": "# Using function approach\ndef string_contains_digit(string):\n    def contains_digit(x):\n        for char in x:\n            if char.isdigit():\n                return True\n        return False\n    return contains_digit(string)\nstring = 'jonathan5'\nprint(string_contains_digit(string))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef string_contains_digit(string):\n    result = True\n    return result\n\n# Using manual approach\ndef string_contains_digit(string):\n    return True\n\n# Script approach\nstring = 'hello'\nresult = string_contains_digit(string)\nprint(result)\n\n# Direct approach\nprint(string_contains_digit('world'))",
 
@@ -5140,7 +5140,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 445,
             "title": "Problem 445",
-            "description": "Write a Python function string_contains_letter that checks if a string contains a letter using a nested function.\nExamples:\n  string_contains_letter('hello') → True\n  string_contains_letter('world') → True\n  string_contains_letter('python') → True",
+            "description": "Write a Python function string_contains_letter that checks if a string contains a letter using a nested function.\nExamples:\n  string_contains_letter('123455g') → True\n  string_contains_letter('12345') → False",
             "initialCode": "def string_contains_letter(string):\n    pass",
             "solution": "# Using function approach\ndef string_contains_letter(string):\n    def contains_letter(x):\n        for char in x:\n            if char.isalpha():\n                return True\n        return False\n    return contains_letter(string)\nstring = '123455g'\nprint(string_contains_letter(string))\n\n# Using built-in approach\ndef string_contains_letter(string):\n    result = True\n    return result\n\n# Using manual approach\ndef string_contains_letter(string):\n    return True\n\n# Script approach\nstring = 'hello'\nresult = string_contains_letter(string)\nprint(result)\n\n# Direct approach\nprint(string_contains_letter('world'))",
 
@@ -5164,7 +5164,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 447,
             "title": "Problem 447",
-            "description": "Write a Python function check_multiple_of_n that takes two numbers and checks if the first is a multiple of the second using a nested function.\nExamples:\n  check_multiple_of_n([1, 2, 3], [1, 2, 3]) → ?\n  check_multiple_of_n([5, 8, 2], [5, 8, 2]) → ?\n  check_multiple_of_n([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function check_multiple_of_n that takes two numbers and checks if the first is a multiple of the second using a nested function.\nExamples:\n  check_multiple_of_n(10, 5) → True\n  check_multiple_of_n(10, 3) → False",
             "initialCode": "def check_multiple_of_n(num1, num2):\n    pass",
             "solution": "# Using function approach\ndef check_multiple_of_n(num1, num2):\n    def is_multiple(x, y):\n        return x % y == 0 \n    return is_multiple(num1, num2)\nprint(check_multiple_of_n(10, 2))\nprint(check_multiple_of_n(10, 3))\n\n# Using built-in approach\ndef check_multiple_of_n(num1, num2):\n    result = x % y == 0\n    return result\n\n# Using manual approach\ndef check_multiple_of_n(num1, num2):\n    return x % y == 0\n\n# Script approach\nnum1 = 10\nnum2 = 20\nresult = check_multiple_of_n(num1, num2)\nprint(result)\n\n# Direct approach\nprint(check_multiple_of_n(20, 30))",
 
@@ -5188,7 +5188,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 449,
             "title": "Problem 449",
-            "description": "Write a Python function shortest_string that takes a list of strings and returns the shortest one using a nested function.\nExamples:\n  shortest_string([1, 2, 3]) → ?\n  shortest_string([5, 8, 2]) → ?\n  shortest_string([3, 1, 4]) → ?",
+            "description": "Write a Python function shortest_string that takes a list of strings and returns the shortest one using a nested function.\nExamples:\n  shortest_string(['a', 'bb', 'ccc']) → 'a'\n  shortest_string(['hi', 'hello', 'hey']) → 'hi'",
             "initialCode": "def shortest_string(lst):\n    pass",
             "solution": "# Using function approach\ndef shortest_string(lst):\n    def shortest(x):\n        return min(x, key=len)\n    return shortest(lst)\nlst = ['chris', 'tit', 'mountain']\nprint(shortest_string(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef shortest_string(lst):\n    result = min(x, key=len)\n    return result\n\n# Using manual approach\ndef shortest_string(lst):\n    return min(x, key=len)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = shortest_string(lst)\nprint(result)\n\n# Direct approach\nprint(shortest_string([1, 3, 5, 7]))",
 
@@ -5260,7 +5260,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 456,
             "title": "Problem 456",
-            "description": "Write a Python function that sorts a list of strings by their length using the key parameter.\nExamples:\n  len_lst([1, 2, 3]) → ?\n  len_lst([5, 8, 2]) → ?\n  len_lst([3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of strings by their length using the key parameter.\nExamples:\n  len_lst(['apple', 'fig', 'banana', 'kiwi']) → ['fig', 'kiwi', 'apple', 'banana']\n  len_lst(['aa', 'b', 'cccc']) → ['b', 'aa', 'cccc']",
             "initialCode": "def len_lst(lst):\n    pass",
             "solution": "# Using function approach\ndef len_lst(lst):\n    sort = sorted(lst, key=len)\n    return sort\nlst = ['Jonathan', 'chris', 'Jeremy']\nprint(len_lst(lst))\n\n# Using built-in approach\ndef len_lst(lst):\n    result = sort\n    return result\n\n# Using manual approach\ndef len_lst(lst):\n    return sort\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = len_lst(lst)\nprint(result)\n\n# Direct approach\nprint(len_lst([1, 3, 5, 7]))",
 
@@ -5272,7 +5272,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 457,
             "title": "Problem 457",
-            "description": "Write a Python function to find the minimum string by its length using the min() function with the key parameter.\nExamples:\n  min_len([1, 2, 3]) → ?\n  min_len([5, 8, 2]) → ?\n  min_len([3, 1, 4]) → ?",
+            "description": "Write a Python function to find the minimum string by its length using the min() function with the key parameter.\nExamples:\n  min_len(['apple', 'fig', 'banana']) → 'fig'\n  min_len(['long', 'to', 'a']) → 'a'",
             "initialCode": "def min_len(lst):\n    pass",
             "solution": "# Using function approach\ndef min_len(lst):\n    min_string = min(lst, key=len)\n    return min_string\nlst = ['truck', 'is', 'Bethany']\nprint(min_len(lst))\n\n# Using built-in approach\ndef min_len(lst):\n    result = min_string\n    return result\n\n# Using manual approach\ndef min_len(lst):\n    return min_string\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = min_len(lst)\nprint(result)\n\n# Direct approach\nprint(min_len([1, 3, 5, 7]))",
 
@@ -5296,7 +5296,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 459,
             "title": "Problem 459",
-            "description": "Write a Python function to sort a list of dictionaries by the value associated with a specific key using the key parameter.\nExamples:\n  sort_dicts_by_key([1, 2, 3], [1, 2, 3]) → ?\n  sort_dicts_by_key([5, 8, 2], [5, 8, 2]) → ?\n  sort_dicts_by_key([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of dictionaries by the value associated with a specific key using the key parameter.\nExamples:\n  sort_dicts_by_key([{'name':'Alice','age':30}, {'name':'Bob','age':25}], 'age') → [[object Object], [object Object]]\n  sort_dicts_by_key([{'name':'Charlie','age':20}, {'name':'Alice','age':30}], 'name') → [[object Object], [object Object]]",
             "initialCode": "from operator import itemgetter\ndef sort_dicts_by_key(dict_list, sort_key):\n    pass",
             "solution": "from operator import itemgetter\n\n# Using function approach\ndef sort_dicts_by_key(dict_list, sort_key):\n    return sorted(dict_list, key=itemgetter(sort_key))\ndict_list = [\n    {'name': 'John', 'age': 30},\n    {'name': 'Jane', 'age': 25},\n    {'name': 'Doe', 'age': 35}\n]\nsorted_list = sort_dicts_by_key(dict_list, 'age')\nprint(sorted_list)\n\n# Using built-in approach\ndef sort_dicts_by_key(dict_list, sort_key):\n    result = sorted(dict_list, key=itemgetter(sort_key))\n    return result\n\n# Using manual approach\ndef sort_dicts_by_key(dict_list, sort_key):\n    return sorted(dict_list, key=itemgetter(sort_key))\n\n# Script approach\ndict_list = [3, 7, 2, 9, 1]\nsort_key = [3, 7, 2, 9, 1]\nresult = sort_dicts_by_key(dict_list, sort_key)\nprint(result)\n\n# Direct approach\nprint(sort_dicts_by_key([4, 1, 8, 6, 3], [4, 1, 8, 6, 3]))",
 
@@ -5320,7 +5320,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 461,
             "title": "Problem 461",
-            "description": "Write a Python function that sorts a list of words by the number of vowels they contain using the key parameter.\nExamples:\n  sort_words_by_vowel_count([1, 2, 3]) → ?\n  sort_words_by_vowel_count([5, 8, 2]) → ?\n  sort_words_by_vowel_count([3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of words by the number of vowels they contain using the key parameter.\nExamples:\n  sort_words_by_vowel_count(['apple', 'banana', 'cherry', 'date']) → ['cherry', 'apple', 'date', 'banana']\n  sort_words_by_vowel_count(['sky', 'tree', 'audio']) → ['sky', 'tree', 'audio']",
             "initialCode": "def sort_words_by_vowel_count(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_words_by_vowel_count(lst):\n    def count_vowels(word):\n        vowels = 'aeiou'\n        count = 0\n        for char in word:\n            if char in vowels:\n                count += 1\n        return count\n    return sorted(lst, key=count_vowels)\nlst = ['apple', 'banana', 'cherry', 'date']\nprint(sort_words_by_vowel_count(lst))\n\n# Using built-in approach\ndef sort_words_by_vowel_count(lst):\n    return sum(1 for char in word if char in vowels)\n\n# Using manual approach\ndef sort_words_by_vowel_count(lst):\n    return len([char for char in word if char in vowels])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_words_by_vowel_count(lst)\nprint(result)\n\n# Direct approach\nprint(sort_words_by_vowel_count([1, 3, 5, 7]))",
 
@@ -5332,7 +5332,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 462,
             "title": "Problem 462",
-            "description": "Write a Python function to find the longest word in a list using the max() function with the key parameter.\nExamples:\n  longest_word([1, 2, 3]) → ?\n  longest_word([5, 8, 2]) → ?\n  longest_word([3, 1, 4]) → ?",
+            "description": "Write a Python function to find the longest word in a list using the max() function with the key parameter.\nExamples:\n  longest_word(['apple', 'banana', 'cherry']) → 'banana'\n  longest_word(['a', 'alphabet', 'tool']) → 'alphabet'",
             "initialCode": "def longest_word(lst):\n    pass",
             "solution": "# Using function approach\ndef longest_word(lst):\n    longest_w = max(lst, key=len)\n    return longest_w\nlst = ['cheater', 'lepard', 'lion']\nprint(longest_word(lst))\n# Using for loop\n\n# Using built-in approach\ndef longest_word(lst):\n    result = longest_w\n    return result\n\n# Using manual approach\ndef longest_word(lst):\n    return longest_w\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = longest_word(lst)\nprint(result)\n\n# Direct approach\nprint(longest_word([1, 3, 5, 7]))",
 
@@ -5344,7 +5344,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 463,
             "title": "Problem 463",
-            "description": "Write a Python function to sort a list of tuples by the sum of the elements in each tuple using the key parameter.\nExamples:\n  sum_of_tuple([1, 2, 3]) → ?\n  sum_of_tuple([5, 8, 2]) → ?\n  sum_of_tuple([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of tuples by the sum of the elements in each tuple using the key parameter.\nExamples:\n  sum_of_tuple([[1, 2], [3, 4], [1, 1], [2, 2]]) → [[1, 1], [1, 2], [2, 2], [3, 4]]\n  sum_of_tuple([[5, 5], [1, 1], [3, 0]]) → [[1, 1], [3, 0], [5, 5]]",
             "initialCode": "def sum_of_tuple(lst):\n    pass",
             "solution": "# Using function approach\ndef sum_of_tuple(lst):\n    return sorted(lst, key=sum)\nlst = [(9, 9, 9), (5, 5, 5), (8, 8, 8)]\nprint(sum_of_tuple(lst))\n\n# Using built-in approach\ndef sum_of_tuple(lst):\n    result = sorted(lst, key=sum)\n    return result\n\n# Using manual approach\ndef sum_of_tuple(lst):\n    return sorted(lst, key=sum)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sum_of_tuple(lst)\nprint(result)\n\n# Direct approach\nprint(sum_of_tuple([1, 3, 5, 7]))",
 
@@ -5356,7 +5356,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 464,
             "title": "Problem 464",
-            "description": "Write a Python function to sort a list of strings by the last character of each string using the key parameter.\nExamples:\n  list_of_strings_lst([1, 2, 3]) → ?\n  list_of_strings_lst([5, 8, 2]) → ?\n  list_of_strings_lst([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of strings by the last character of each string using the key parameter.\nExamples:\n  list_of_strings_lst(['banana', 'apple', 'grape', 'kiwi']) → ['banana', 'apple', 'grape', 'kiwi']\n  list_of_strings_lst(['ab', 'aa', 'ac']) → ['aa', 'ab', 'ac']",
             "initialCode": "def list_of_strings_lst(lst):\n    pass",
             "solution": "# Using function approach\ndef list_of_strings_lst(lst):\n    def last_char(s):\n        return s[-1]\n    return sorted(lst, key=last_char)\nlst = ['car', 'side', 'beach']\nprint(list_of_strings_lst(lst))\n\n# Using built-in approach\ndef list_of_strings_lst(lst):\n    result = s[-1]\n    return result\n\n# Using manual approach\ndef list_of_strings_lst(lst):\n    return s[-1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = list_of_strings_lst(lst)\nprint(result)\n\n# Direct approach\nprint(list_of_strings_lst([1, 3, 5, 7]))",
 
@@ -5368,7 +5368,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 465,
             "title": "Problem 465",
-            "description": "Write a Python function to sort a list of strings by the number of uppercase letters in each string using the key parameter.\nExamples:\n  sort_number_uppercases([1, 2, 3]) → ?\n  sort_number_uppercases([5, 8, 2]) → ?\n  sort_number_uppercases([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of strings by the number of uppercase letters in each string using the key parameter.\nExamples:\n  sort_number_uppercases(['Hello', 'World', 'PYTHON', 'code']) → ['code', 'Hello', 'World', 'PYTHON']\n  sort_number_uppercases(['ABC', 'aB', 'plain']) → ['plain', 'aB', 'ABC']",
             "initialCode": "def sort_number_uppercases(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_number_uppercases(lst):\n    def uppercase_count(x):\n        count = 0\n        for char in x:\n            if char.isupper():\n                count += 1\n        return count\n    return sorted(lst,\n    key=uppercase_count)\nlst = ['SNSKEYHG', 'SlIppery', 'SNAKEGG']\nprint(sort_number_uppercases(lst))\n\n# Using built-in approach\ndef sort_number_uppercases(lst):\n    return sum(1 for char in x if char.isupper())\n\n# Using manual approach\ndef sort_number_uppercases(lst):\n    return len([char for char in x if char.isupper()])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_number_uppercases(lst)\nprint(result)\n\n# Direct approach\nprint(sort_number_uppercases([1, 3, 5, 7]))",
 
@@ -5380,7 +5380,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 466,
             "title": "Problem 466",
-            "description": "Write a Python function to find the tuple with the largest product of its elements using the key parameter.\nExamples:\n  tuple_largest_product([1, 2, 3]) → ?\n  tuple_largest_product([5, 8, 2]) → ?\n  tuple_largest_product([3, 1, 4]) → ?",
+            "description": "Write a Python function to find the tuple with the largest product of its elements using the key parameter.\nExamples:\n  tuple_largest_product([[1, 2], [3, 4], [5, 6]]) → [5, 6]\n  tuple_largest_product([[2, 2, 2], [3, 3], [1, 10]]) → [1, 10]",
             "initialCode": "def tuple_largest_product(lst):\n    pass",
             "solution": "# Using function approach\ndef tuple_largest_product(lst):\n    def product(x):\n        count = 1\n        for number in x:\n            count *= number\n        return count\n    return max(lst, key=product)\nlst = [(2, 2, 2), (4, 4, 4)]\nprint(tuple_largest_product(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef tuple_largest_product(lst):\n    result = count\n    return result\n\n# Using manual approach\ndef tuple_largest_product(lst):\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = tuple_largest_product(lst)\nprint(result)\n\n# Direct approach\nprint(tuple_largest_product([1, 3, 5, 7]))",
 
@@ -5404,7 +5404,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 468,
             "title": "Problem 468",
-            "description": "Write a Python function to sort a list of tuples based on the first element in descending order using the key parameter.\nExamples:\n  first_element_decending_order([1, 2, 3]) → ?\n  first_element_decending_order([5, 8, 2]) → ?\n  first_element_decending_order([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of tuples based on the first element in descending order using the key parameter.\nExamples:\n  first_element_decending_order([[3, 1], [1, 2], [2, 3]]) → [[3, 1], [2, 3], [1, 2]]\n  first_element_decending_order([[10, 'a'], [5, 'b'], [20, 'c']]) → [[20, 'c'], [10, 'a'], [5, 'b']]",
             "initialCode": "def first_element_decending_order(lst):\n    pass",
             "solution": "# Using function approach\ndef first_element_decending_order(lst):\n    def first_element(x):\n        return x[0] \n    return sorted(lst, key=first_element, reverse=True)\nlst = [('see', 'sea', 'saw'), ('zoat', 'zite', 'zank')]\nprint(first_element_decending_order(lst))\n\n# Using built-in approach\ndef first_element_decending_order(lst):\n    result = x[0]\n    return result\n\n# Using manual approach\ndef first_element_decending_order(lst):\n    return x[0]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = first_element_decending_order(lst)\nprint(result)\n\n# Direct approach\nprint(first_element_decending_order([1, 3, 5, 7]))",
 
@@ -5428,7 +5428,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 470,
             "title": "Problem 470",
-            "description": "Write a Python function to find the shortest string in a list using the min() function with the key parameter.\nExamples:\n  min_string([1, 2, 3]) → ?\n  min_string([5, 8, 2]) → ?\n  min_string([3, 1, 4]) → ?",
+            "description": "Write a Python function to find the shortest string in a list using the min() function with the key parameter.\nExamples:\n  min_string(['apple', 'fig', 'banana']) → 'fig'\n  min_string(['long', 'to', 'a']) → 'a'",
             "initialCode": "def min_string(lst):\n    pass",
             "solution": "# Using function approach\ndef min_string(lst):\n    return min(lst, key=len)\nlst = ['down', 'up']\nprint(min_string(lst))\n\n# Using built-in approach\ndef min_string(lst):\n    result = min(lst, key=len)\n    return result\n\n# Using manual approach\ndef min_string(lst):\n    return min(lst, key=len)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = min_string(lst)\nprint(result)\n\n# Direct approach\nprint(min_string([1, 3, 5, 7]))",
 
@@ -5440,7 +5440,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 471,
             "title": "Problem 471",
-            "description": "Write a Python function to sort a list of dictionaries by the length of the value associated with a specific key using the key parameter.\nExamples:\n  length_of_value([1, 2, 3], [1, 2, 3]) → ?\n  length_of_value([5, 8, 2], [5, 8, 2]) → ?\n  length_of_value([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of dictionaries by the length of the value associated with a specific key using the key parameter.\nExamples:\n  length_of_value([{'name':'Alice'}, {'name':'Bob'}, {'name':'Jonathan'}], 'name') → [[object Object], [object Object], [object Object]]\n  length_of_value([{'code':'zz'}, {'code':'a'}, {'code':'mmmm'}], 'code') → [[object Object], [object Object], [object Object]]",
             "initialCode": "def length_of_value(lst, key):\n    pass",
             "solution": "# Using function approach\ndef length_of_value(lst, key):\n    def length_function(x):\n        return len(x.get(key, ''))\n    return sorted(lst, key=length_function)\nlst = [{'a': 'tree', 'b': 'bushen'}, {'a': 'tin', 'b': 'bash'}, {'a': 'tumb', 'b': 'bat'}]\nsorted_lst = length_of_value(lst, 'b')\nprint(sorted_lst)\n\n# Using built-in approach\ndef length_of_value(lst, key):\n    result = len(x.get(key, ''))\n    return result\n\n# Using manual approach\ndef length_of_value(lst, key):\n    return len(x.get(key, ''))\n\n# Script approach\nlst = [2, 4, 6, 8]\nkey = 'key'\nresult = length_of_value(lst, key)\nprint(result)\n\n# Direct approach\nprint(length_of_value([1, 3, 5, 7], 'value'))",
 
@@ -5464,7 +5464,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 473,
             "title": "Problem 473",
-            "description": "Write a Python function that sorts a list of integers by their remainder when divided by a given number using the key parameter.\nExamples:\n  main([1, 2, 3], [1, 2, 3]) → ?\n  main([5, 8, 2], [5, 8, 2]) → ?\n  main([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of integers by their remainder when divided by a given number using the key parameter.\nExamples:\n  main([1, 2, 3, 4, 5], 2) → [2, 4, 1, 3, 5]\n  main([10, 11, 12, 13], 3) → [12, 10, 13, 11]",
             "initialCode": "def main(lst, divisor):\n    pass\n\ndef remainder_key(x, divisor):\n    pass\n\ndef sort_by_remainder(lst, divisor):\n    pass",
             "solution": "# Using function approach\ndef main(lst, divisor):\n    def inner(num):\n        return num % divisor\n    return sorted(lst, key=inner)\nlst = [677, 34, 9, 2, 67]\ndivisor = 5\nmain(lst, divisor)\ndef remainder_key(x, divisor):\n    return x % divisor\ndef sort_by_remainder(lst, divisor):\n    def key_func(x):\n        return remainder_key(x, divisor)\n    return sorted(lst, key=key_func)\nlst = [10, 23, 4, 7, 15]\ndivisor = 5\nprint(sort_by_remainder(lst, divisor))\n\n# Using built-in approach\ndef main(lst, divisor):\n    return num - (divisor * (num // divisor))\n\n# Using manual approach\ndef main(lst, divisor):\n    return divmod(num, divisor)[1]\n\n# Script approach\nlst = [2, 4, 6, 8]\ndivisor = 15\nresult = main(lst, divisor)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7], 25))",
 
@@ -5476,7 +5476,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 474,
             "title": "Problem 474",
-            "description": "Write a Python function to sort a list of dates by the year using the key parameter.\nExamples:\n  year_key([1, 2, 3]) → ?\n  year_key([5, 8, 2]) → ?\n  year_key([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of dates by the year using the key parameter.\nExamples:\n  year_key(['2023-10-01', '2020-01-15', '2025-12-31']) → ['2020-01-15', '2023-10-01', '2025-12-31']\n  year_key(['1999-12-31', '2024-01-01', '2001-06-15']) → ['1999-12-31', '2001-06-15', '2024-01-01']",
             "initialCode": "from datetime import datetime\ndef year_key(date):\n    pass\n\ndef sort_by_year(dates):\n    pass",
             "solution": "from datetime import datetime\n\n# Using function approach\ndef year_key(date):\n    return datetime.strptime(date, '%Y-%m-%d').year\ndef sort_by_year(dates):\n    return sorted(dates, key=year_key)\nprint(sort_by_year(['2023-10-01', '2020-01-15', '2025-12-31']))\n\n# Using built-in approach\ndef year_key(date):\n    result = datetime.strptime(date, '%Y-%m-%d').year\n    return result\n\n# Using manual approach\ndef year_key(date):\n    return datetime.strptime(date, '%Y-%m-%d').year\n\n# Script approach\ndate = 15\nresult = year_key(date)\nprint(result)\n\n# Direct approach\nprint(year_key(25))",
 
@@ -5488,7 +5488,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 475,
             "title": "Problem 475",
-            "description": "Write a Python function to sort a list of names by the number of times the letter ‘a’ appears in each name using the key parameter.\nExamples:\n  sort_by_a_count('hello') → ['h', 'e', 'l', 'l', 'o']\n  sort_by_a_count('world') → ['w', 'o', 'r', 'l', 'd']\n  sort_by_a_count('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python function to sort a list of names by the number of times the letter ‘a’ appears in each name using the key parameter.\nExamples:\n  sort_by_a_count(['apple', 'banana', 'cherry', 'date']) → ['cherry', 'apple', 'date', 'banana']\n  sort_by_a_count(['bbb', 'atlas', 'aardvark']) → ['bbb', 'atlas', 'aardvark']",
             "initialCode": "def sort_by_a_count(names):\n    pass",
             "solution": "# Using function approach\ndef sort_by_a_count(names):\n    def count_a(name):\n        return name.lower().count('a')\n    return sorted(names, key=count_a)\nnames = ['Anna', 'Alice', 'Bob', 'Amanda', 'Ava']\nsorted_names = sort_by_a_count(names)\nprint(sorted_names)\n\n# Using built-in approach\ndef sort_by_a_count(names):\n    result = name.lower().count('a')\n    return result\n\n# Using manual approach\ndef sort_by_a_count(names):\n    return name.lower().count('a')\n\n# Script approach\nnames = [3, 7, 2, 9, 1]\nresult = sort_by_a_count(names)\nprint(result)\n\n# Direct approach\nprint(sort_by_a_count([4, 1, 8, 6, 3]))",
 
@@ -5512,7 +5512,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 477,
             "title": "Problem 477",
-            "description": "Write a Python function to find the list element closest to a target value using the key parameter.\nExamples:\n  closest_to_target([1, 2, 3], 5) → ?\n  closest_to_target([5, 8, 2], 3) → ?\n  closest_to_target([3, 1, 4], 10) → ?",
+            "description": "Write a Python function to find the list element closest to a target value using the key parameter.\nExamples:\n  closest_to_target([10, 20, 30, 40], 25) → 20\n  closest_to_target([1, 5, 10], 6) → 5",
             "initialCode": "def closest_to_target(lst, target):\n    pass",
             "solution": "# Using function approach\ndef closest_to_target(lst, target):\n    def difference_from_target(x):\n        return abs(x - target)\n    return min(lst, key=difference_from_target)\nlst = [10, 22, 14, 3, 8]\ntarget = 7\nclosest_value = closest_to_target(lst, target)\nprint(closest_value)\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef closest_to_target(lst, target):\n    result = abs(x - target)\n    return result\n\n# Using manual approach\ndef closest_to_target(lst, target):\n    return abs(x - target)\n\n# Script approach\nlst = [2, 4, 6, 8]\ntarget = 'target'\nresult = closest_to_target(lst, target)\nprint(result)\n\n# Direct approach\nprint(closest_to_target([1, 3, 5, 7], 'goal'))",
 
@@ -5524,7 +5524,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 478,
             "title": "Problem 478",
-            "description": "Write a Python function that sorts a list of tuples based on the length of the first element in each tuple using the key parameter.\nExamples:\n  length_of_first_element([1, 2, 3]) → ?\n  length_of_first_element([5, 8, 2]) → ?\n  length_of_first_element([3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of tuples based on the length of the first element in each tuple using the key parameter.\nExamples:\n  length_of_first_element([['apple', 1], ['banana', 2], ['fig', 3]]) → [['fig', 3], ['apple', 1], ['banana', 2]]\n  length_of_first_element([['aa', 1], ['b', 2], ['cccc', 3]]) → [['b', 2], ['aa', 1], ['cccc', 3]]",
             "initialCode": "def length_of_first_element(lst):\n    pass",
             "solution": "# Using function approach\ndef length_of_first_element(lst):\n    def length_of_first(x):\n        return len(x[0])\n    return sorted(lst, key=length_of_first)\nlst = [('initiate', 'love', 'seat'), ('sweet', 'beat', 'hell')]\nsorted_list = length_of_first_element(lst)\nprint(sorted_list)\n\n# Using built-in approach\ndef length_of_first_element(lst):\n    result = len(x[0])\n    return result\n\n# Using manual approach\ndef length_of_first_element(lst):\n    return len(x[0])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = length_of_first_element(lst)\nprint(result)\n\n# Direct approach\nprint(length_of_first_element([1, 3, 5, 7]))",
 
@@ -5536,7 +5536,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 479,
             "title": "Problem 479",
-            "description": "Write a Python function to sort a list of strings by the number of spaces they contain using the key parameter.\nExamples:\n  number_of_spaces([1, 2, 3]) → ?\n  number_of_spaces([5, 8, 2]) → ?\n  number_of_spaces([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of strings by the number of spaces they contain using the key parameter.\nExamples:\n  number_of_spaces(['hello world', 'a b c', 'nospace']) → ['nospace', 'hello world', 'a b c']\n  number_of_spaces(['two spaces here', 'one space', 'zero']) → ['zero', 'one space', 'two spaces here']",
             "initialCode": "def number_of_spaces(lst):\n    pass",
             "solution": "# Using function approach\ndef number_of_spaces(lst):\n    def spaces_count(x):\n        return x.count(' ')\n    return sorted(lst, key=spaces_count)\nlst = ['what is happening', 'why all the hate in your brain', 'stop it']\nprint(number_of_spaces(lst))\n\n# Using built-in approach\ndef number_of_spaces(lst):\n    return sum(1 for c in x if c == ' ')\n\n# Using manual approach\ndef number_of_spaces(lst):\n    count = 0\n    for c in x:\n        if c == ' ':\n            count += 1\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = number_of_spaces(lst)\nprint(result)\n\n# Direct approach\nprint(number_of_spaces([1, 3, 5, 7]))",
 
@@ -5548,7 +5548,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 480,
             "title": "Problem 480",
-            "description": "Write a Python function that finds the word with the most vowels in a list using the max() function with the key parameter.\nExamples:\n  most_vowels([1, 2, 3]) → ?\n  most_vowels([5, 8, 2]) → ?\n  most_vowels([3, 1, 4]) → ?",
+            "description": "Write a Python function that finds the word with the most vowels in a list using the max() function with the key parameter.\nExamples:\n  most_vowels(['apple', 'banana', 'cherry', 'date']) → 'banana'\n  most_vowels(['sky', 'audio', 'tree']) → 'audio'",
             "initialCode": "def most_vowels(lst):\n    pass",
             "solution": "# Using function approach\ndef most_vowels(lst):\n    def count_vowels(word):\n        vowels = 'aeiou'\n        count = 0\n        for char in word:\n            if char in vowels:\n                count += 1\n        return count\n    return max(lst, key=count_vowels)\nlst = ['aamost', 'Aaron', 'bible', 'buttom', 'aeiouthian']\nprint(most_vowels(lst))\n# Using inner function\n    # Inline version available\n# Using for loop\n    # Alternative: implement manual max with key=count_vowels\n\n# Using built-in approach\ndef most_vowels(lst):\n    return sum(1 for char in word if char in vowels)\n\n# Using manual approach\ndef most_vowels(lst):\n    return len([char for char in word if char in vowels])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = most_vowels(lst)\nprint(result)\n\n# Direct approach\nprint(most_vowels([1, 3, 5, 7]))",
 
@@ -5572,7 +5572,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 482,
             "title": "Problem 482",
-            "description": "Write a Python function that sorts a list of tuples by the difference between their elements using the key parameter.\nExamples:\n  sort_tuples_by_difference([1, 2, 3]) → ?\n  sort_tuples_by_difference([5, 8, 2]) → ?\n  sort_tuples_by_difference([3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of tuples by the difference between their elements using the key parameter.\nExamples:\n  sort_tuples_by_difference([[1, 5], [3, 4], [10, 2]]) → [[3, 4], [1, 5], [10, 2]]\n  sort_tuples_by_difference([[5, 5], [2, 8], [9, 7]]) → [[5, 5], [9, 7], [2, 8]]",
             "initialCode": "def sort_tuples_by_difference(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_tuples_by_difference(lst):\n    def difference(tup):\n        return abs(tup[0] - tup[1]) \n    return sorted(lst, key=difference)\nlst = [(3, 8), (1, 7), (5, 5), (9, 2), (6, 10)]\nprint(sort_tuples_by_difference(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef sort_tuples_by_difference(lst):\n    result = abs(tup[0] - tup[1])\n    return result\n\n# Using manual approach\ndef sort_tuples_by_difference(lst):\n    return abs(tup[0] - tup[1])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_tuples_by_difference(lst)\nprint(result)\n\n# Direct approach\nprint(sort_tuples_by_difference([1, 3, 5, 7]))",
 
@@ -5584,7 +5584,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 483,
             "title": "Problem 483",
-            "description": "Write a Python function to sort a list of strings by the ASCII value of their first character using the key parameter.\nExamples:\n  sort_strings_by_ascii([1, 2, 3]) → ?\n  sort_strings_by_ascii([5, 8, 2]) → ?\n  sort_strings_by_ascii([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of strings by the ASCII value of their first character using the key parameter.\nExamples:\n  sort_strings_by_ascii(['banana', 'Apple', 'cherry']) → ['Apple', 'banana', 'cherry']\n  sort_strings_by_ascii(['zoo', 'ant', 'Dog']) → ['Dog', 'ant', 'zoo']",
             "initialCode": "def sort_strings_by_ascii(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_strings_by_ascii(lst):\n    def ascii_value(s):\n        return ord(s[0])\n    return sorted(lst, key=ascii_value)\nlst = ['banana', 'apple', 'cherry', 'date', 'elderberry']\nprint(sort_strings_by_ascii(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef sort_strings_by_ascii(lst):\n    result = ord(s[0])\n    return result\n\n# Using manual approach\ndef sort_strings_by_ascii(lst):\n    return ord(s[0])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_strings_by_ascii(lst)\nprint(result)\n\n# Direct approach\nprint(sort_strings_by_ascii([1, 3, 5, 7]))",
 
@@ -5596,7 +5596,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 484,
             "title": "Problem 484",
-            "description": "Write a Python function to sort a list of lists by the sum of the elements in each sublist using the key parameter.\nExamples:\n  sort_lists_by_sum([1, 2, 3]) → ?\n  sort_lists_by_sum([5, 8, 2]) → ?\n  sort_lists_by_sum([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of lists by the sum of the elements in each sublist using the key parameter.\nExamples:\n  sort_lists_by_sum([[1, 2], [3, 4], [1, 1]]) → [[1, 1], [1, 2], [3, 4]]\n  sort_lists_by_sum([[5], [1, 1, 1], [2, 2]]) → [[1, 1, 1], [2, 2], [5]]",
             "initialCode": "def sort_lists_by_sum(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_lists_by_sum(lst):\n    def sum_of_elements(sublist):\n        return sum(sublist)\n    return sorted(lst, key=sum_of_elements)\nlst = [[3, 4], [1, 2, 3], [10], [5, 1, 1]]\nprint(sort_lists_by_sum(lst))\n\n# Using built-in approach\ndef sort_lists_by_sum(lst):\n    total = 0\n    for item in sublist:\n        total += item\n    return total\n\n# Using manual approach\ndef sort_lists_by_sum(lst):\n    from functools import reduce\n    import operator\n    return reduce(operator.add, sublist, 0)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_lists_by_sum(lst)\nprint(result)\n\n# Direct approach\nprint(sort_lists_by_sum([1, 3, 5, 7]))",
 
@@ -5620,7 +5620,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 486,
             "title": "Problem 486",
-            "description": "Write a Python function that sorts a list of file names by their file extension using the key parameter.\nExamples:\n  sort_files_by_extension([1, 2, 3]) → ?\n  sort_files_by_extension([5, 8, 2]) → ?\n  sort_files_by_extension([3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of file names by their file extension using the key parameter.\nExamples:\n  sort_files_by_extension(['file.txt', 'image.jpg', 'doc.pdf', 'script.py']) → ['image.jpg', 'doc.pdf', 'script.py', 'file.txt']\n  sort_files_by_extension(['a.zip', 'b.csv', 'c.txt']) → ['b.csv', 'c.txt', 'a.zip']",
             "initialCode": "def sort_files_by_extension(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_files_by_extension(lst):\n    def file_extension(filename):\n        return filename.split('.')[-1]\n    return sorted(lst, key=file_extension)\nlst = ['document.txt', 'photo.jpeg', 'music.mp3', 'video.mp4', 'archive.zip']\nprint(sort_files_by_extension(lst))\n\n# Using built-in approach\ndef sort_files_by_extension(lst):\n    result = filename.split('.')[-1]\n    return result\n\n# Using manual approach\ndef sort_files_by_extension(lst):\n    return filename.split('.')[-1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_files_by_extension(lst)\nprint(result)\n\n# Direct approach\nprint(sort_files_by_extension([1, 3, 5, 7]))",
 
@@ -5644,7 +5644,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 488,
             "title": "Problem 488",
-            "description": "Write a Python function to sort a list of words by the number of distinct letters in each word using the key parameter.\nExamples:\n  sort_words_by_distinct_letters('hello') → ?\n  sort_words_by_distinct_letters('world') → ?\n  sort_words_by_distinct_letters('python') → ?",
+            "description": "Write a Python function to sort a list of words by the number of distinct letters in each word using the key parameter.\nExamples:\n  sort_words_by_distinct_letters(['apple', 'banana', 'cherry', 'date']) → ['banana', 'apple', 'date', 'cherry']\n  sort_words_by_distinct_letters(['aaa', 'ab', 'abc']) → ['aaa', 'ab', 'abc']",
             "initialCode": "def sort_words_by_distinct_letters(words):\n    pass",
             "solution": "# Using function approach\ndef sort_words_by_distinct_letters(words):\n    def distinct_letter_count(word):\n        return len(set(word))\n    return sorted(words, key=distinct_letter_count)\nwords = ['apple', 'banana', 'cherry', 'orange']\nprint(sort_words_by_distinct_letters(words))\n\n# Using built-in approach\ndef sort_words_by_distinct_letters(words):\n    result = len(set(word))\n    return result\n\n# Using manual approach\ndef sort_words_by_distinct_letters(words):\n    return len(set(word))\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = sort_words_by_distinct_letters(words)\nprint(result)\n\n# Direct approach\nprint(sort_words_by_distinct_letters([4, 1, 8, 6, 3]))",
 
@@ -5656,7 +5656,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 489,
             "title": "Problem 489",
-            "description": "Write a Python function that sorts a list of strings by the second letter in each string using the key parameter.\nExamples:\n  sort_second_letter([1, 2, 3]) → ?\n  sort_second_letter([5, 8, 2]) → ?\n  sort_second_letter([3, 1, 4]) → ?",
+            "description": "Write a Python function that sorts a list of strings by the second letter in each string using the key parameter.\nExamples:\n  sort_second_letter(['banana', 'apple', 'cherry', 'date']) → ['banana', 'date', 'cherry', 'apple']\n  sort_second_letter(['za', 'ab', 'cc']) → ['za', 'ab', 'cc']",
             "initialCode": "def sort_second_letter(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_second_letter(lst):\n    def second_letter(x):\n        return x[1]\n    return sorted(lst, key=second_letter)\nlst = ['mountain', 'law', 'lebany']\nprint(sort_second_letter(lst))\n\n# Using built-in approach\ndef sort_second_letter(lst):\n    result = x[1]\n    return result\n\n# Using manual approach\ndef sort_second_letter(lst):\n    return x[1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_second_letter(lst)\nprint(result)\n\n# Direct approach\nprint(sort_second_letter([1, 3, 5, 7]))",
 
@@ -5668,7 +5668,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 490,
             "title": "Problem 490",
-            "description": "Write a Python function to sort a list of people by their age stored in a dictionary using the key parameter.\nExamples:\n  people_age([1, 2, 3]) → ?\n  people_age([5, 8, 2]) → ?\n  people_age([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of people by their age stored in a dictionary using the key parameter.\nExamples:\n  people_age([{'name':'Alice','age':30}, {'name':'Bob','age':25}, {'name':'Charlie','age':35}]) → [[object Object], [object Object], [object Object]]\n  people_age([{'name':'Young','age':10}, {'name':'Old','age':80}]) → [[object Object], [object Object]]",
             "initialCode": "def people_age(dic):\n    pass",
             "solution": "# Using function approach\ndef people_age(dic):\n    def sort_age(person):\n        return person['age']\n    return sorted(dic, key=sort_age)\npeople = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]\nprint(people_age(people))\n\n# Using built-in approach\ndef people_age(dic):\n    result = person['age']\n    return result\n\n# Using manual approach\ndef people_age(dic):\n    return person['age']\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = people_age(dic)\nprint(result)\n\n# Direct approach\nprint(people_age([4, 1, 8, 6, 3]))",
 
@@ -5692,7 +5692,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 492,
             "title": "Problem 492",
-            "description": "Write a Python function to find the person with the shortest name in a list of dictionaries using the min() function with the key parameter.\nExamples:\n  sort_keys_by_value('hello') → ?\n  sort_keys_by_value('world') → ?\n  sort_keys_by_value('python') → ?",
+            "description": "Write a Python function to find the person with the shortest name in a list of dictionaries using the min() function with the key parameter.\nExamples:\n  sort_keys_by_value({'Sam':27,'Tommy':56,'Chantelle':18}) → ['Chantelle', 'Sam', 'Tommy']\n  sort_keys_by_value({'a':3,'b':1,'c':2}) → ['b', 'c', 'a']",
             "initialCode": "def sort_keys_by_value(dic):\n    pass",
             "solution": "# Using function approach\ndef sort_keys_by_value(dic):\n    def get_value(key):\n        return dic[key]\n    return sorted(dic.keys(), key=get_value)\ndic = {'Sam': 27, 'Tommy': 56, 'Chantelle': 18}\nprint(sort_keys_by_value(dic))\n\n# Using built-in approach\ndef sort_keys_by_value(dic):\n    result = dic[key]\n    return result\n\n# Using manual approach\ndef sort_keys_by_value(dic):\n    return dic[key]\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = sort_keys_by_value(dic)\nprint(result)\n\n# Direct approach\nprint(sort_keys_by_value([4, 1, 8, 6, 3]))",
 
@@ -5704,7 +5704,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 493,
             "title": "Problem 493",
-            "description": "Write a Python function to sort a list of fractions by their decimal value using the key parameter.\nExamples:\n  sort_fractions_by_decimal([1, 2, 3]) → ?\n  sort_fractions_by_decimal([5, 8, 2]) → ?\n  sort_fractions_by_decimal([3, 1, 4]) → ?",
+            "description": "Write a Python function to sort a list of fractions by their decimal value using the key parameter.\nExamples:\n  sort_fractions_by_decimal([3, 7, 1, 5]) → [1, 3, 5, 7]\n  sort_fractions_by_decimal([10, 2, 6]) → [2, 6, 10]",
             "initialCode": "from fractions import Fraction\ndef sort_fractions_by_decimal(fractions):\n    pass",
             "solution": "from fractions import Fraction\n\n# Using function approach\ndef sort_fractions_by_decimal(fractions):\n    def decimal_value(fraction):\n        return float(fraction)\n    return sorted(fractions, key=decimal_value)\nfractions = [Fraction(1, 3), Fraction(3, 4), Fraction(2, 5), Fraction(7, 10)]\nprint(sort_fractions_by_decimal(fractions))\n\n# Using built-in approach\ndef sort_fractions_by_decimal(fractions):\n    result = float(fraction)\n    return result\n\n# Using manual approach\ndef sort_fractions_by_decimal(fractions):\n    return float(fraction)\n\n# Script approach\nfractions = [3, 7, 2, 9, 1]\nresult = sort_fractions_by_decimal(fractions)\nprint(result)\n\n# Direct approach\nprint(sort_fractions_by_decimal([4, 1, 8, 6, 3]))",
 
@@ -5716,7 +5716,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 494,
             "title": "Problem 494",
-            "description": "Write a Python function to find the longest string that ends with a specific letter using the max() function with the key parameter.\nExamples:\n  longest_string_letter([1, 2, 3], 'hello') → ?\n  longest_string_letter([5, 8, 2], 'world') → ?\n  longest_string_letter([3, 1, 4], 'python') → ?",
+            "description": "Write a Python function to find the longest string that ends with a specific letter using the max() function with the key parameter.\nExamples:\n  longest_string_letter(['apple', 'grape', 'date', 'cherry'], 'e') → 'apple'\n  longest_string_letter(['sun', 'moon', 'star'], 'n') → 'moon'",
             "initialCode": "def longest_string_letter(lst, letter):\n    pass\n\ndef longest_string(string, letter):\n    pass",
             "solution": "# Using function approach\ndef longest_string_letter(lst, letter):\n    def longest_letter(s):\n        return len(s) if s.endswith(letter) else -1\n    return max(lst, key=longest_letter)\nlst = ['Jonathan', 'Nathan', 'Sarah', 'Martha']\nprint(longest_string_letter(lst, 'n'))\nprint(longest_string_letter(lst, 'a'))\ndef longest_string(string, letter):\n    words = string.split()\n    def letter_ends(word):\n        if word.endswith(letter):\n            return len(word)\n        else:\n            return 0\n    longest = None  \n    max_length = 0 \n    for word in words:\n        length = letter_ends(word)\n        if length > max_length:\n            max_length = length\n            longest = word\n    return longest\ninput_string = 'Jonathan nathan Natas'\nletter = 'a'\nprint(longest_string(input_string, letter))\n\n# Using built-in approach\ndef longest_string_letter(lst, letter):\n    result = len(s) if s.endswith(letter) else -1\n    return result\n\n# Using manual approach\ndef longest_string_letter(lst, letter):\n    return len(s) if s.endswith(letter) else -1\n\n# Script approach\nlst = [2, 4, 6, 8]\nletter = [3, 7, 2, 9, 1]\nresult = longest_string_letter(lst, letter)\nprint(result)\n\n# Direct approach\nprint(longest_string_letter([1, 3, 5, 7], [4, 1, 8, 6, 3]))",
 
@@ -6208,7 +6208,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 535,
             "title": "Problem 535",
-            "description": "Write a Python program to count the number of times the letter ‘a’ appears in a string. Use count().\nExamples:\n  count_letter('hello') → 0\n  count_letter('world') → 0\n  count_letter('python') → 0",
+            "description": "Write a Python program to count the number of times the letter ‘a’ appears in a string. Use count().\nExamples:\n  count_letter('banana') → 3\n  count_letter('apple') → 1",
             "initialCode": "def count_letter(s):\n    pass",
             "solution": "# Using function approach\ndef count_letter(s):\n    return s.count('a')\nstring = 'what going on today'\nprint(count_letter(string))\n\n# Using built-in approach\ndef count_letter(s):\n    return sum(1 for c in s if c == 'a')\n\n# Using manual approach\ndef count_letter(s):\n    count = 0\n    for c in s:\n        if c == 'a':\n            count += 1\n    return count\n\n# Script approach\ns = 5\nresult = count_letter(s)\nprint(result)\n\n# Direct approach\nprint(count_letter(10))",
 
@@ -6232,7 +6232,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 537,
             "title": "Problem 537",
-            "description": "Write a Python program to count how many times the word “hello” appears in a sentence. Use count().\nExamples:\n  count_hello('hello') → 1\n  count_hello('world') → 0\n  count_hello('python') → 0",
+            "description": "Write a Python program to count how many times the word “hello” appears in a sentence. Use count().\nExamples:\n  count_hello('hello world hello hello') → 3\n  count_hello('hello') → 1",
             "initialCode": "def count_hello(string):\n    pass",
             "solution": "# Using function approach\ndef count_hello(string):\n    return string.count('hello')\nstring = 'hello, my friend'\nprint(count_hello(string))\n\n# Using built-in approach\ndef count_hello(string):\n    return sum(1 for c in string if c == 'hello')\n\n# Using manual approach\ndef count_hello(string):\n    count = 0\n    for c in string:\n        if c == 'hello':\n            count += 1\n    return count\n\n# Script approach\nstring = 'hello'\nresult = count_hello(string)\nprint(result)\n\n# Direct approach\nprint(count_hello('world'))",
 
@@ -6244,7 +6244,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 538,
             "title": "Problem 538",
-            "description": "Write a function that counts how many times the character # appears in a string.  Use count().\nExamples:\n  count('hello') → 0\n  count('world') → 0\n  count('python') → 0",
+            "description": "Write a function that counts how many times the character # appears in a string.  Use count().\nExamples:\n  count('a#b#c#d') → 3\n  count('abc') → 0",
             "initialCode": "def count(string):\n    pass",
             "solution": "# Using function approach\ndef count(string):\n    return string.count('#')\nstring = 'hello, my friend ###'\nprint(count(string))\n\n# Using built-in approach\ndef count(string):\n    return sum(1 for c in string if c == '#')\n\n# Using manual approach\ndef count(string):\n    count = 0\n    for c in string:\n        if c == '#':\n            count += 1\n    return count\n\n# Script approach\nstring = 'hello'\nresult = count(string)\nprint(result)\n\n# Direct approach\nprint(count('world'))",
 
@@ -6280,7 +6280,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 541,
             "title": "Problem 541",
-            "description": "Write a program to count the number of spaces in a given string. Use count().\nExamples:\n  count_spaces('hello') → 0\n  count_spaces('world') → 0\n  count_spaces('python') → 0",
+            "description": "Write a program to count the number of spaces in a given string. Use count().\nExamples:\n  count_spaces('hello world python') → 2\n  count_spaces('nospaces') → 0",
             "initialCode": "def count_spaces(string):\n    pass",
             "solution": "# Using function approach\ndef count_spaces(string):\n    return string.count(' ')\nnum = 'i'm going for a walk today'\nprint(count_spaces(num))\n\n# Using built-in approach\ndef count_spaces(string):\n    return sum(1 for c in string if c == ' ')\n\n# Using manual approach\ndef count_spaces(string):\n    count = 0\n    for c in string:\n        if c == ' ':\n            count += 1\n    return count\n\n# Script approach\nstring = 'hello'\nresult = count_spaces(string)\nprint(result)\n\n# Direct approach\nprint(count_spaces('world'))",
 
@@ -6316,7 +6316,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 544,
             "title": "Problem 544",
-            "description": "Write a function to count how many times the letter ‘e’ appears in a list of strings. Use count().\nExamples:\n  count_letters([1, 2, 3]) → ?\n  count_letters([5, 8, 2]) → ?\n  count_letters([3, 1, 4]) → ?",
+            "description": "Write a function to count how many times the letter ‘e’ appears in a list of strings. Use count().\nExamples:\n  count_letters(['hello', 'world', 'python']) → 1\n  count_letters(['tree', 'bee']) → 4",
             "initialCode": "def count_letters(lst):\n    pass",
             "solution": "# Using function approach\ndef count_letters(lst):\n    total_count = 0\n    for word in lst:\n        total_count += word.count('e')\n    return total_count\nlst = ['Jonathen', 'Nathan', 'Netesha']\nprint(count_letters(lst))\n\n# Using built-in approach\ndef count_letters(lst):\n    result = total_count\n    return result\n\n# Using manual approach\ndef count_letters(lst):\n    return total_count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = count_letters(lst)\nprint(result)\n\n# Direct approach\nprint(count_letters([1, 3, 5, 7]))",
 
@@ -6340,7 +6340,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 546,
             "title": "Problem 546",
-            "description": "Write a function to count the occurrences of the string “test” in a string where multiple “test” substrings might exist. Use count().\nExamples:\n  count_test_occurrences('hello') → 0\n  count_test_occurrences('world') → 0\n  count_test_occurrences('python') → 0",
+            "description": "Write a function to count the occurrences of the string “test” in a string where multiple “test” substrings might exist. Use count().\nExamples:\n  count_test_occurrences('test test test testing') → 4\n  count_test_occurrences('contest test retest') → 3",
             "initialCode": "def count_test_occurrences(s):\n    pass",
             "solution": "# Using function approach\ndef count_test_occurrences(s):\n    return s.count('test')\ns = 'This is a test. Test the function with another test. Final test.'\nprint(count_test_occurrences(s))\n\n# Using built-in approach\ndef count_test_occurrences(s):\n    return sum(1 for c in s if c == 'test')\n\n# Using manual approach\ndef count_test_occurrences(s):\n    count = 0\n    for c in s:\n        if c == 'test':\n            count += 1\n    return count\n\n# Script approach\ns = 5\nresult = count_test_occurrences(s)\nprint(result)\n\n# Direct approach\nprint(count_test_occurrences(10))",
 
@@ -6376,7 +6376,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 549,
             "title": "Problem 549",
-            "description": "Write a Python program to count the number of uppercase letters in a string. Use count().\nExamples:\n  count_uppercase('hello') → 0\n  count_uppercase('world') → 0\n  count_uppercase('python') → 0",
+            "description": "Write a Python program to count the number of uppercase letters in a string. Use count().\nExamples:\n  count_uppercase('Hello World PYTHON') → 8\n  count_uppercase('abc XYZ') → 3",
             "initialCode": "def count_uppercase(string):\n    pass",
             "solution": "# Using function approach\ndef count_uppercase(string):\n    total_uppercase = 0\n    for char in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':\n        total_uppercase += string.count(char)\n    return total_uppercase\nstring = 'AFHHJJ ghgghh'\nprint(count_uppercase(string))\n\n# Using built-in approach\ndef count_uppercase(string):\n    result = total_uppercase\n    return result\n\n# Using manual approach\ndef count_uppercase(string):\n    return total_uppercase\n\n# Script approach\nstring = 'hello'\nresult = count_uppercase(string)\nprint(result)\n\n# Direct approach\nprint(count_uppercase('world'))",
 
@@ -6400,7 +6400,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 551,
             "title": "Problem 551",
-            "description": "Write a Python program to count how many times each letter appears in a given string. Use count().\nExamples:\n  count_letters('hello') → {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n  count_letters('world') → {'w': 1, 'o': 1, 'r': 1, 'l': 1, 'd': 1}\n  count_letters('python') → {'p': 1, 'y': 1, 't': 1, 'h': 1, 'o': 1, 'n': 1}",
+            "description": "Write a Python program to count how many times each letter appears in a given string. Use count().\nExamples:\n  count_letters('banana') → [object Object]\n  count_letters('AaB') → [object Object]",
             "initialCode": "def count_letters(string):\n    pass",
             "solution": "# Using function approach\ndef count_letters(string):\n    letter_count = {}\n    for letter in string.lower():\n        letter_count[letter] = string.lower().count(letter)\n    return letter_count\nstring = input('Enter a string: ')\nprint(count_letters(string))\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef count_letters(string):\n    result = letter_count\n    return result\n\n# Using manual approach\ndef count_letters(string):\n    return letter_count\n\n# Script approach\nstring = 'hello'\nresult = count_letters(string)\nprint(result)\n\n# Direct approach\nprint(count_letters('world'))",
 
@@ -6412,7 +6412,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 552,
             "title": "Problem 552",
-            "description": "Write a function to count the number of times the word “Python” appears in a paragraph of text. Use count().\nExamples:\n  count_text('hello') → 0\n  count_text('world') → 0\n  count_text('python') → 1",
+            "description": "Write a function to count the number of times the word “Python” appears in a paragraph of text. Use count().\nExamples:\n  count_text('Python is great. Python is fun.') → 2\n  count_text('python PYTHON PyThOn') → 3",
             "initialCode": "def count_text(string):\n    pass",
             "solution": "# Using function approach\ndef count_text(string):\n    string = string.lower()\n    return string.count('python')\nstring = 'python is python in disguise'\nprint(count_text(string))\n\n# Using built-in approach\ndef count_text(string):\n    return sum(1 for c in string if c == 'python')\n\n# Using manual approach\ndef count_text(string):\n    count = 0\n    for c in string:\n        if c == 'python':\n            count += 1\n    return count\n\n# Script approach\nstring = 'hello'\nresult = count_text(string)\nprint(result)\n\n# Direct approach\nprint(count_text('world'))",
 
@@ -6436,7 +6436,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 554,
             "title": "Problem 554",
-            "description": "Write a function to count how many times the letter ‘z’ appears in a list of strings. Use count().\nExamples:\n  count_letters([1, 2, 3]) → ?\n  count_letters([5, 8, 2]) → ?\n  count_letters([3, 1, 4]) → ?",
+            "description": "Write a function to count how many times the letter ‘z’ appears in a list of strings. Use count().\nExamples:\n  count_letters(['zebra', 'pizza', 'hello']) → 3\n  count_letters(['zzz', 'nope']) → 3",
             "initialCode": "def count_letters(lst):\n    pass",
             "solution": "# Using function approach\ndef count_letters(lst):\n    total_count = 0\n    for string in lst:\n        total_count += string.count('z')\n    return total_count\nlst = ['z', 'h', 'z', 'gloat']\nprint(count_letters(lst))\n\n# Using built-in approach\ndef count_letters(lst):\n    result = total_count\n    return result\n\n# Using manual approach\ndef count_letters(lst):\n    return total_count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = count_letters(lst)\nprint(result)\n\n# Direct approach\nprint(count_letters([1, 3, 5, 7]))",
 
@@ -6448,7 +6448,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 555,
             "title": "Problem 555",
-            "description": "Write a Python program to count the occurrences of the character ‘*’ in a given string. Use count().\nExamples:\n  count_asterisks('hello') → 0\n  count_asterisks('world') → 0\n  count_asterisks('python') → 0",
+            "description": "Write a Python program to count the occurrences of the character ‘*’ in a given string. Use count().\nExamples:\n  count_asterisks('a*b*c*d') → 3\n  count_asterisks('hello') → 0",
             "initialCode": "def count_asterisks(s):\n    pass",
             "solution": "# Using function approach\ndef count_asterisks(s):\n    return s.count('*')\ns = 'Hello *world* and *everyone*'\nprint(count_asterisks(s))\n\n# Using built-in approach\ndef count_asterisks(s):\n    return sum(1 for c in s if c == '*')\n\n# Using manual approach\ndef count_asterisks(s):\n    count = 0\n    for c in s:\n        if c == '*':\n            count += 1\n    return count\n\n# Script approach\ns = 5\nresult = count_asterisks(s)\nprint(result)\n\n# Direct approach\nprint(count_asterisks(10))",
 
@@ -6484,7 +6484,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 558,
             "title": "Problem 558",
-            "description": "Write a function to count the number of times a particular email domain appears in a list of email addresses. Use count().\nExamples:\n  count_email_domain([1, 2, 3], [1, 2, 3]) → ?\n  count_email_domain([5, 8, 2], [5, 8, 2]) → ?\n  count_email_domain([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a function to count the number of times a particular email domain appears in a list of email addresses. Use count().\nExamples:\n  count_email_domain(['a@gmail.com', 'b@yahoo.com', 'c@gmail.com'], 'gmail.com') → 2\n  count_email_domain(['a@test.com', 'b@test.com', 'c@mail.com'], 'test.com') → 2",
             "initialCode": "def count_email_domain(email_list, domain):\n    pass",
             "solution": "# Using function approach\ndef count_email_domain(email_list, domain):\n    count = 0\n    for email in email_list:\n        email_domain = email.split('@')[-1]\n        if email_domain == domain:\n            count += 1\n    return count\nemail_list = [\n    'user1@example.com',\n    'user2@example.com',\n    'user3@sample.com',\n    'user4@example.com'\n]\ndomain = 'example.com'\nprint(count_email_domain(email_list, domain))\n\n# Using built-in approach\ndef count_email_domain(email_list, domain):\n    return sum(1 for email in email_list if email_domain == domain)\n\n# Using manual approach\ndef count_email_domain(email_list, domain):\n    return len([email for email in email_list if email_domain == domain])\n\n# Script approach\nemail_list = [3, 7, 2, 9, 1]\ndomain = 15\nresult = count_email_domain(email_list, domain)\nprint(result)\n\n# Direct approach\nprint(count_email_domain([4, 1, 8, 6, 3], 25))",
 
@@ -6496,7 +6496,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 559,
             "title": "Problem 559",
-            "description": "Write a Python program to count the occurrences of the word “happy” in a given list of sentences. Use count().\nExamples:\n  count_word('hello') → 0\n  count_word('world') → 0\n  count_word('python') → 0",
+            "description": "Write a Python program to count the occurrences of the word “happy” in a given list of sentences. Use count().\nExamples:\n  count_word(['I am happy', 'happy birthday', 'sad day']) → 2\n  count_word(['happy happy', 'unhappy', 'sad']) → 3",
             "initialCode": "def count_word(sentences):\n    pass",
             "solution": "# Using function approach\ndef count_word(sentences):\n    count = 0\n    for sentence in sentences:\n        count += sentence.count('happy')\n    return count\nsentences = ['I am happy today', 'She looks very happy', 'Happy times are here', 'joy joy happy happy']\nprint(count_word(sentences))\n\n# Using built-in approach\ndef count_word(sentences):\n    result = count\n    return result\n\n# Using manual approach\ndef count_word(sentences):\n    return count\n\n# Script approach\nsentences = [3, 7, 2, 9, 1]\nresult = count_word(sentences)\nprint(result)\n\n# Direct approach\nprint(count_word([4, 1, 8, 6, 3]))",
 
@@ -6508,7 +6508,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 560,
             "title": "Problem 560",
-            "description": "Write a function to count the number of times the character ‘!’ appears in a list of strings. Use count().\nExamples:\n  count_exclamations([1, 2, 3]) → ?\n  count_exclamations([5, 8, 2]) → ?\n  count_exclamations([3, 1, 4]) → ?",
+            "description": "Write a function to count the number of times the character ‘!’ appears in a list of strings. Use count().\nExamples:\n  count_exclamations(['hello!', 'world!!', 'python']) → 3\n  count_exclamations(['!!', 'ok!', 'none']) → 3",
             "initialCode": "def count_exclamations(lst):\n    pass",
             "solution": "# Using function approach\ndef count_exclamations(lst):\n    count = 0\n    for string in lst:\n        count += string.count('!')\n    return count\nlst = ['Hello!', 'Wow! Amazing!', 'No exclamation here', 'Yes!']\nprint(count_exclamations(lst))\n\n# Using built-in approach\ndef count_exclamations(lst):\n    result = count\n    return result\n\n# Using manual approach\ndef count_exclamations(lst):\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = count_exclamations(lst)\nprint(result)\n\n# Direct approach\nprint(count_exclamations([1, 3, 5, 7]))",
 
@@ -6532,7 +6532,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 562,
             "title": "Problem 562",
-            "description": "Write a function to count the number of occurrences of a word in a list of words. Use count().\nExamples:\n  count_word_occurrences([1, 2, 3], 'hello') → 0\n  count_word_occurrences([5, 8, 2], 'world') → 0\n  count_word_occurrences([3, 1, 4], 'python') → 0",
+            "description": "Write a function to count the number of occurrences of a word in a list of words. Use count().\nExamples:\n  count_word_occurrences(['the', 'cat', 'the', 'dog'], 'the') → 2\n  count_word_occurrences(['a', 'b', 'a', 'a'], 'a') → 3",
             "initialCode": "def count_word_occurrences(lst, word):\n    pass",
             "solution": "# Using function approach\ndef count_word_occurrences(lst, word):\n    return lst.count(word)\nwords = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple']\nword_to_count = 'apple'\nprint(count_word_occurrences(words, word_to_count))\n\n# Using built-in approach\ndef count_word_occurrences(lst, word):\n    return sum(1 for c in lst if c == word)\n\n# Using manual approach\ndef count_word_occurrences(lst, word):\n    count = 0\n    for c in lst:\n        if c == word:\n            count += 1\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nword = 'python'\nresult = count_word_occurrences(lst, word)\nprint(result)\n\n# Direct approach\nprint(count_word_occurrences([1, 3, 5, 7], 'coding'))",
 
@@ -6544,7 +6544,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 563,
             "title": "Problem 563",
-            "description": "Write a Python program to count how many times the letter ‘x’ appears in a list of mixed data types. Use count().\nExamples:\n  count_x_in_mixed_list([1, 2, 3]) → ?\n  count_x_in_mixed_list([5, 8, 2]) → ?\n  count_x_in_mixed_list([3, 1, 4]) → ?",
+            "description": "Write a Python program to count how many times the letter ‘x’ appears in a list of mixed data types. Use count().\nExamples:\n  count_x_in_mixed_list([1, 'x', 2, 'x', 3]) → 2\n  count_x_in_mixed_list([1, 'x', 'no', 2]) → 1",
             "initialCode": "def count_x_in_mixed_list(lst):\n    pass",
             "solution": "# Using function approach\ndef count_x_in_mixed_list(lst):\n    count = 0\n    for item in lst:\n        if isinstance(item, str):\n            count += item.count('x')\n    return count\nmixed_list = [1, 'xylophone', 3.5, 'example', 'box', 7, 'text', ['x', 'x'], 'extra']\nprint(count_x_in_mixed_list(mixed_list))\n# Using sum() with generator\n\n# Using built-in approach\ndef count_x_in_mixed_list(lst):\n    result = count\n    return result\n\n# Using manual approach\ndef count_x_in_mixed_list(lst):\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = count_x_in_mixed_list(lst)\nprint(result)\n\n# Direct approach\nprint(count_x_in_mixed_list([1, 3, 5, 7]))",
 
@@ -6568,11 +6568,11 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 565,
             "title": "Problem 565",
-            "description": "Square List Elements: Write a function that takes a list of numbers and returns a list of their squares using map().\nExamples:\n  square_lst([1, 2, 3]) → ?\n  square_lst([5, 8, 2]) → ?\n  square_lst([3, 1, 4]) → ?",
+            "description": "Square List Elements: Write a function that takes a list of numbers and returns a list of their squares using map().\nExamples:\n  square_lst([1, 2, 3, 4, 5]) → [1, 4, 9, 16, 25]\n  square_lst([-2, 0, 3]) → [4, 0, 9]",
             "initialCode": "def square_lst(lst):\n    pass\n\ndef square(num):\n    pass",
             "solution": "# Using function approach\ndef square_lst(lst):\n    return list(map(square, lst))\ndef square(num):\n    return num ** 2\nlst = [2, 4, 6, 8]\nprint(square_lst(lst))\n\n# Using built-in approach\ndef square_lst(lst):\n    result = list(map(square, lst))\n    return result\n\n# Using manual approach\ndef square_lst(lst):\n    return list(map(square, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = square_lst(lst)\nprint(result)\n\n# Direct approach\nprint(square_lst([1, 3, 5, 7]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "hint": "With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
             "breakdown": "1. Define `square_lst(lst)` with parameters `lst`.\n2. Use `**` operator or `pow()` to perform exponentiation.\n3. Return the result.",
 
             "category": "Level 1"
@@ -6580,7 +6580,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 566,
             "title": "Problem 566",
-            "description": "Filter Odd Numbers: Write a function that takes a list of numbers and returns only the odd numbers using filter().\nExamples:\n  filter_odd_numbers([1, 2, 3]) → ?\n  filter_odd_numbers([5, 8, 2]) → ?\n  filter_odd_numbers([3, 1, 4]) → ?",
+            "description": "Filter Odd Numbers: Write a function that takes a list of numbers and returns only the odd numbers using filter().\nExamples:\n  filter_odd_numbers([1, 2, 3, 4, 5, 6]) → [1, 3, 5]\n  filter_odd_numbers([2, 4, 7, 9]) → [7, 9]",
             "initialCode": "def filter_odd_numbers(lst):\n    pass\n\ndef is_odd(x):\n    pass",
             "solution": "# Using function approach\ndef filter_odd_numbers(lst):\n    return list(filter(is_odd, lst))\ndef is_odd(x):\n    return x % 2 != 0\nlst = [1, 2, 3, 4, 5, 6, 7, 8, 9]\nprint(filter_odd_numbers(lst))\n\n# Using built-in approach\ndef filter_odd_numbers(lst):\n    result = list(filter(is_odd, lst))\n    return result\n\n# Using manual approach\ndef filter_odd_numbers(lst):\n    return list(filter(is_odd, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = filter_odd_numbers(lst)\nprint(result)\n\n# Direct approach\nprint(filter_odd_numbers([1, 3, 5, 7]))",
 
@@ -6604,7 +6604,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 568,
             "title": "Problem 568",
-            "description": "Convert to Uppercase: Write a function that takes a list of strings and returns the same list with each string converted to uppercase using map().\nExamples:\n  convert_to_uppercase([1, 2, 3]) → ?\n  convert_to_uppercase([5, 8, 2]) → ?\n  convert_to_uppercase([3, 1, 4]) → ?",
+            "description": "Convert to Uppercase: Write a function that takes a list of strings and returns the same list with each string converted to uppercase using map().\nExamples:\n  convert_to_uppercase(['hello', 'world']) → ['HELLO', 'WORLD']\n  convert_to_uppercase(['Py', 'Code']) → ['PY', 'CODE']",
             "initialCode": "def convert_to_uppercase(lst):\n    pass",
             "solution": "# Using function approach\ndef convert_to_uppercase(lst):\n    return list(map(str.upper, lst))\nlst = ['sleep', 'walk', 'eat']    \nprint(convert_to_uppercase(lst))\n\n# Using built-in approach\ndef convert_to_uppercase(lst):\n    result = list(map(str.upper, lst))\n    return result\n\n# Using manual approach\ndef convert_to_uppercase(lst):\n    return list(map(str.upper, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = convert_to_uppercase(lst)\nprint(result)\n\n# Direct approach\nprint(convert_to_uppercase([1, 3, 5, 7]))",
 
@@ -6616,7 +6616,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 569,
             "title": "Problem 569",
-            "description": "Remove Empty Strings: Write a function that filters out empty strings from a list using filter().\nExamples:\n  empty_strings([1, 2, 3]) → ?\n  empty_strings([5, 8, 2]) → ?\n  empty_strings([3, 1, 4]) → ?",
+            "description": "Remove Empty Strings: Write a function that filters out empty strings from a list using filter().\nExamples:\n  empty_strings(['a', '', 'b', '', 'c']) → ['a', 'b', 'c']\n  empty_strings(['dog', '  ', 'cat']) → ['dog', 'cat']",
             "initialCode": "def empty_strings(lst):\n    pass\n\ndef call_filter(string):\n    pass",
             "solution": "# Using function approach\ndef empty_strings(lst):\n    return list(filter(call_filter, lst))\ndef call_filter(string):\n    return string.strip() != ''\nlst = ['dog', '  ', 'cat']    \nprint(empty_strings(lst))\n\n# Using built-in approach\ndef empty_strings(lst):\n    result = list(filter(call_filter, lst))\n    return result\n\n# Using manual approach\ndef empty_strings(lst):\n    return list(filter(call_filter, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = empty_strings(lst)\nprint(result)\n\n# Direct approach\nprint(empty_strings([1, 3, 5, 7]))",
 
@@ -6640,7 +6640,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 571,
             "title": "Problem 571",
-            "description": "String Lengths: Write a function that takes a list of strings and returns their lengths using map().\nExamples:\n  lst_of_string([1, 2, 3]) → ?\n  lst_of_string([5, 8, 2]) → ?\n  lst_of_string([3, 1, 4]) → ?",
+            "description": "String Lengths: Write a function that takes a list of strings and returns their lengths using map().\nExamples:\n  lst_of_string(['hi', 'hello', 'hey']) → [2, 5, 3]\n  lst_of_string(['', 'abc']) → [0, 3]",
             "initialCode": "def lst_of_string(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_of_string(lst):\n    def len_string(word):\n        return len(word)\n    return list(map(len_string, lst))\nlst = ['hot', 'cold', 'giraffe']\nprint(lst_of_string(lst))\n\n# Using built-in approach\ndef lst_of_string(lst):\n    count = 0\n    for _ in word:\n        count += 1\n    return count\n\n# Using manual approach\ndef lst_of_string(lst):\n    return sum(1 for _ in word)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_of_string(lst)\nprint(result)\n\n# Direct approach\nprint(lst_of_string([1, 3, 5, 7]))",
 
@@ -6652,7 +6652,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 572,
             "title": "Problem 572",
-            "description": "Filter Palindromes: Write a function that filters out palindromes (words that read the same backward) from a list using filter().\nExamples:\n  palindromes(['radar', 'hello', 'level', 'world']) → ['radar', 'level']",
+            "description": "Filter Palindromes: Write a function that filters out palindromes (words that read the same backward) from a list using filter().\nExamples:\n  palindromes(['radar', 'hello', 'level', 'world']) → ['radar', 'level']\n  palindromes(['noon', 'python', 'madam']) → ['noon', 'madam']",
             "initialCode": "def palindromes(lst):\n    pass",
             "solution": "# Using function approach\ndef palindromes(lst):\n    def is_palindrome(word):\n        return word == word[::-1]\n    return list(filter(is_palindrome, lst))\nprint(palindromes(['radar', 'hello', 'level', 'world']))  # Output: ['radar', 'level']\n\n# Using built-in approach\ndef palindromes(lst):\n    result = word == word[::-1]\n    return result\n\n# Using manual approach\ndef palindromes(lst):\n    return word == word[::-1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = palindromes(lst)\nprint(result)\n\n# Direct approach\nprint(palindromes([1, 3, 5, 7]))",
 
@@ -6664,7 +6664,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 573,
             "title": "Problem 573",
-            "description": "Sum of List: Write a function that calculates the sum of a list of numbers using reduce().\nExamples:\n  sum_of_lst([1, 2, 3]) → ?\n  sum_of_lst([5, 8, 2]) → ?\n  sum_of_lst([3, 1, 4]) → ?",
+            "description": "Sum of List: Write a function that calculates the sum of a list of numbers using reduce().\nExamples:\n  sum_of_lst([1, 2, 3, 4, 5]) → 15\n  sum_of_lst([-2, 5, 7]) → 10",
             "initialCode": "from functools import reduce\ndef sum_of_lst(lst):\n    pass\n\ndef add(x, y):\n    pass\n\ndef sum_of_list(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef sum_of_lst(lst):\n    def add(x, y):\n        return x + y\n    return reduce(add, lst)\nlst = [1, 2, 3, 4, 5]\nprint(sum_of_list(lst))\ndef add(x, y):\n    return x + y\ndef sum_of_list(lst):\n    return reduce(add, lst)\nlst = [1, 2, 3, 4, 5]\nprint(sum_of_list(lst))\n\n# Using built-in approach\ndef sum_of_lst(lst):\n    return sum([x, y])\n\n# Using manual approach\ndef sum_of_lst(lst):\n    import operator\n    return operator.add(x, y)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sum_of_lst(lst)\nprint(result)\n\n# Direct approach\nprint(sum_of_lst([1, 3, 5, 7]))",
 
@@ -6688,7 +6688,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 575,
             "title": "Problem 575",
-            "description": "Capitalize Strings: Write a function that takes a list of strings and returns the list with each string capitalized using map().\nExamples:\n  capitalize_string([1, 2, 3]) → ?\n  capitalize_string([5, 8, 2]) → ?\n  capitalize_string([3, 1, 4]) → ?",
+            "description": "Capitalize Strings: Write a function that takes a list of strings and returns the list with each string capitalized using map().\nExamples:\n  capitalize_string(['hello', 'world']) → ['Hello', 'World']\n  capitalize_string(['python', 'CODE']) → ['Python', 'Code']",
             "initialCode": "def capitalize_string(lst):\n    pass\n\ndef lst_strings(lst):\n    pass",
             "solution": "# Using function approach\ndef capitalize_string(lst):\n    return list(map(str.capitalize, lst))\nlst = ['sam','ion', 'kon']\ncapitalize_string(lst)\ndef lst_strings(lst):\n    def capitalize_lst(word):\n        word = word.capitalize()\n        return word\n    return list(map(capitalize_lst, lst))\nlst = ['today', 'hello', 'sunshine']\nprint(lst_strings(lst))\n\n# Using built-in approach\ndef capitalize_string(lst):\n    result = list(map(str.capitalize, lst))\n    return result\n\n# Using manual approach\ndef capitalize_string(lst):\n    return list(map(str.capitalize, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = capitalize_string(lst)\nprint(result)\n\n# Direct approach\nprint(capitalize_string([1, 3, 5, 7]))",
 
@@ -6712,7 +6712,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 577,
             "title": "Problem 577",
-            "description": "Find Maximum: Write a function that finds the maximum number in a list using reduce(). (hint helper function)\nExamples:\n  find_max([1, 2, 3]) → ?\n  find_max([5, 8, 2]) → ?\n  find_max([3, 1, 4]) → ?",
+            "description": "Find Maximum: Write a function that finds the maximum number in a list using reduce(). (hint helper function)\nExamples:\n  find_max([3, 1, 4, 1, 5]) → 5\n  find_max([-3, -1, -5]) → -1",
             "initialCode": "from functools import reduce\ndef find_max(lst):\n    pass\n\ndef main(lst):\n    pass\n\ndef max_num(x, y):\n    pass\n\nfrom functools import reduce\ndef min_number(x, y):\n    pass\n\ndef number_lst(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef find_max(lst):\n    def inner(x, y):\n        if x > y:\n            return x\n        else:\n            return y\n    return reduce(inner, lst)\n# Test the function\nlst = [567, 4, 1, 57]\nprint(find_max(lst))  # Output: 567\ndef main(lst):\n    return reduce(max_num, lst)\ndef max_num(x, y):\n    if x > y:\n        return x\n    return y\nlst = [567, 4, 100000, 57]\nmain(lst)\nfrom functools import reduce\ndef min_number(x, y):\n    return x if x > y else y\ndef number_lst(lst):\n    return reduce(min_number, lst)\nlst = [34, 67, 1, 778]    \nprint(number_lst(lst))\n\n# Using built-in approach\ndef find_max(lst):\n    result = x\n    return result\n\n# Using manual approach\ndef find_max(lst):\n    return x\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = find_max(lst)\nprint(result)\n\n# Direct approach\nprint(find_max([1, 3, 5, 7]))",
 
@@ -6724,7 +6724,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 578,
             "title": "Problem 578",
-            "description": "Filter Short Words: Write a function that filters out words shorter than 4 characters from a list using filter().\nExamples:\n  list_words([1, 2, 3]) → ?\n  list_words([5, 8, 2]) → ?\n  list_words([3, 1, 4]) → ?",
+            "description": "Filter Short Words: Write a function that filters out words shorter than 4 characters from a list using filter().\nExamples:\n  list_words(['a', 'ab', 'abc', 'abcd', 'abcde']) → ['abcd', 'abcde']\n  list_words(['cat', 'boat', 'tree']) → ['boat', 'tree']",
             "initialCode": "def list_words(lst):\n    pass",
             "solution": "# Using function approach\ndef list_words(lst):\n    def filter_word(word):\n        if len(word) > 3:\n            return word\n    return list(filter(filter_word, lst))\nlst = ['bot', 'not', 'boat', 'chop']    \nprint(list_words(lst))\n\n# Using built-in approach\ndef list_words(lst):\n    result = word\n    return result\n\n# Using manual approach\ndef list_words(lst):\n    return word\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = list_words(lst)\nprint(result)\n\n# Direct approach\nprint(list_words([1, 3, 5, 7]))",
 
@@ -6736,7 +6736,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 579,
             "title": "Problem 579",
-            "description": "Concatenate Strings: Write a function that concatenates all strings in a list using reduce().\nExamples:\n  lst_strings([1, 2, 3]) → ?\n  lst_strings([5, 8, 2]) → ?\n  lst_strings([3, 1, 4]) → ?",
+            "description": "Concatenate Strings: Write a function that concatenates all strings in a list using reduce().\nExamples:\n  lst_strings(['hello', ' ', 'world']) → 'hello world'\n  lst_strings(['a', 'b', 'c']) → 'abc'",
             "initialCode": "from functools import reduce\ndef lst_strings(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef lst_strings(lst):\n    def concatenate_lst(x, y):\n        return x + y\n    return reduce(concatenate_lst, lst)\nlst = ['to', 'day', 'is', 'great']    \nprint(lst_strings(lst))\n\n# Using built-in approach\ndef lst_strings(lst):\n    return ''.join([x, y])\n\n# Using manual approach\ndef lst_strings(lst):\n    return '%s%s' % (x, y)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_strings(lst)\nprint(result)\n\n# Direct approach\nprint(lst_strings([1, 3, 5, 7]))",
 
@@ -6776,7 +6776,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "from functools import reduce\ndef lst_numbers(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef lst_numbers(lst):\n    def square_number(num):\n        return num ** 2\n    def add(x, y):\n        return x + y\n    squared_lst = map(square_number, lst)\n    return reduce(add, squared_lst)\nlst = [2, 4, 6, 8]    \nprint(lst_numbers(lst))\n\n# Using built-in approach\ndef lst_numbers(lst):\n    return pow(num, 2)\n\n# Using manual approach\ndef lst_numbers(lst):\n    import math\n    return math.pow(num, 2)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_numbers(lst)\nprint(result)\n\n# Direct approach\nprint(lst_numbers([1, 3, 5, 7]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "hint": "With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
             "breakdown": "1. Define `lst_numbers(lst)` with parameters `lst`.\n2. Use `sum()` on the input list to add all values together.\n3. Return the result.",
 
             "category": "Level 1"
@@ -6796,7 +6796,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 584,
             "title": "Problem 584",
-            "description": "Filter Non-Alphabetic Strings: Write a function that filters out strings that contain non-alphabetic characters using filter().\nExamples:\n  non_alphabetical_string('hello') → ['h', 'e', 'l', 'l', 'o']\n  non_alphabetical_string('world') → ['w', 'o', 'r', 'l', 'd']\n  non_alphabetical_string('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Filter Non-Alphabetic Strings: Write a function that filters out strings that contain non-alphabetic characters using filter().\nExamples:\n  non_alphabetical_string(['hello', 'world', 'abc123', 'python']) → ['hello', 'world', 'python']\n  non_alphabetical_string(['ok', 'no!', 'YES']) → ['ok', 'YES']",
             "initialCode": "def non_alphabetical_string(string):\n    pass",
             "solution": "# Using function approach\ndef non_alphabetical_string(string):\n    def is_alpha(word):\n        return word.isalpha()\n    return list(filter(is_alpha, string))\nprint(non_alphabetical_string(['hello', 'world', 'abc123', 'python']))\n\n# Using built-in approach\ndef non_alphabetical_string(string):\n    result = word.isalpha()\n    return result\n\n# Using manual approach\ndef non_alphabetical_string(string):\n    return word.isalpha()\n\n# Script approach\nstring = 'hello'\nresult = non_alphabetical_string(string)\nprint(result)\n\n# Direct approach\nprint(non_alphabetical_string('world'))",
 
@@ -6808,7 +6808,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 585,
             "title": "Problem 585",
-            "description": "Count Words: Write a function that counts how many times each word appears in a list using reduce(). (hint, result dictionary)\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Count Words: Write a function that counts how many times each word appears in a list using reduce(). (hint, result dictionary)\nExamples:\n  lst_words(['a', 'b', 'a', 'c', 'b', 'a']) → [object Object]\n  lst_words(['red', 'blue', 'red']) → [object Object]",
             "initialCode": "from functools import reduce\ndef lst_words(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef lst_words(lst):\n    def count_word(counts, word):\n        if word in counts:\n            counts[word] += 1\n        else:\n            counts[word] = 1\n        return counts\n    return reduce(count_word, lst, {})\nlst = ['Jon', 'Chris', 'Mike', 'Chris', 'Chris']    \nprint(lst_words(lst))\n\n# Using built-in approach\ndef lst_words(lst):\n    result = counts\n    return result\n\n# Using manual approach\ndef lst_words(lst):\n    return counts\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -6880,7 +6880,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 591,
             "title": "Problem 591",
-            "description": "Count Vowels in Strings: Write a function that counts how many vowels are present in each string of a list using map() and a helper function.\nExamples:\n  lst_string([1, 2, 3]) → ?\n  lst_string([5, 8, 2]) → ?\n  lst_string([3, 1, 4]) → ?",
+            "description": "Count Vowels in Strings: Write a function that counts how many vowels are present in each string of a list using map() and a helper function.\nExamples:\n  lst_string(['hello', 'world', 'python']) → [2, 1, 1]\n  lst_string(['aei', 'sky']) → [3, 0]",
             "initialCode": "def lst_string(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_string(lst):\n    def count_vowels(word):\n        vowels = 'aeiou'\n        count = 0\n        for char in word:\n            if char in vowels:\n                count += 1\n        return count\n    return list(map(count_vowels, lst))\nlst = ['Jonathan', 'mountain', 'lion']    \nprint(lst_string(lst))\n\n# Using built-in approach\ndef lst_string(lst):\n    return sum(1 for char in word if char in vowels)\n\n# Using manual approach\ndef lst_string(lst):\n    return len([char for char in word if char in vowels])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_string(lst)\nprint(result)\n\n# Direct approach\nprint(lst_string([1, 3, 5, 7]))",
 
@@ -6904,7 +6904,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 593,
             "title": "Problem 593",
-            "description": "Find Longest String: Write a function that finds the longest string in a list using reduce().\nExamples:\n  lst_string([1, 2, 3]) → ?\n  lst_string([5, 8, 2]) → ?\n  lst_string([3, 1, 4]) → ?",
+            "description": "Find Longest String: Write a function that finds the longest string in a list using reduce().\nExamples:\n  lst_string(['a', 'ab', 'abc']) → 'abc'\n  lst_string(['short', 'longest', 'mid']) → 'longest'",
             "initialCode": "from functools import reduce\ndef lst_string(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef lst_string(lst):\n    def longest_string(x, y):\n        if len(x) > len(y):\n            return x\n        else:\n            return y\n    return reduce(longest_string, lst)\nlst = ['shop', 'mountain', 'not']\nprint(lst_string(lst))\n\n# Using built-in approach\ndef lst_string(lst):\n    result = x\n    return result\n\n# Using manual approach\ndef lst_string(lst):\n    return x\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_string(lst)\nprint(result)\n\n# Direct approach\nprint(lst_string([1, 3, 5, 7]))",
 
@@ -6916,7 +6916,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 594,
             "title": "Problem 594",
-            "description": "Cumulative Sum: Write a function that returns a list of cumulative sums of a given list using reduce().\nExamples:\n  lst_num([1, 2, 3]) → ?\n  lst_num([5, 8, 2]) → ?\n  lst_num([3, 1, 4]) → ?",
+            "description": "Cumulative Sum: Write a function that returns a list of cumulative sums of a given list using reduce().\nExamples:\n  lst_num([1, 2, 3, 4]) → [1, 3, 6, 10]\n  lst_num([5, -2, 1]) → [5, 3, 4]",
             "initialCode": "from functools import reduce\ndef lst_num(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef lst_num(lst):\n    def cumulative(result, value):\n       result.append((result[-1] if result else 0) + value)\n       return result\n    return reduce(cumulative, lst, [])\nlst = [2, 2, 2, 2, 2]\nprint(lst_num(lst))\n\n# Using built-in approach\ndef lst_num(lst):\n    total = 0\n    result = []\n    for value in lst:\n        total += value\n        result.append(total)\n    return result\n\n# Using manual approach\ndef lst_num(lst):\n    total = 0\n    result = []\n    for value in lst:\n        total += value\n        result.append(total)\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_num(lst)\nprint(result)\n\n# Direct approach\nprint(lst_num([1, 3, 5, 7]))",
 
@@ -6928,7 +6928,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 595,
             "title": "Problem 595",
-            "description": "Flatten Nested Lists: Write a function that flattens a list of lists into a single list using reduce().\nExamples:\n  flatten([1, 2, 3]) → ?\n  flatten([5, 8, 2]) → ?\n  flatten([3, 1, 4]) → ?",
+            "description": "Flatten Nested Lists: Write a function that flattens a list of lists into a single list using reduce().\nExamples:\n  flatten([[1, 2], [3, 4], [5]]) → [1, 2, 3, 4, 5]\n  flatten([['a'], ['b', 'c']]) → ['a', 'b', 'c']",
             "initialCode": "from functools import reduce\ndef flatten(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef flatten(lst):\n    def concatenate(x, y):\n        return x + y\n    return reduce(concatenate, lst)\nnested_list = [[1, 2, 3], [4, 5], [6, 7, 8]]\nflattened_list = flatten(nested_list)\nprint(flattened_list)\n\n# Using built-in approach\ndef flatten(lst):\n    return sum([x, y])\n\n# Using manual approach\ndef flatten(lst):\n    import operator\n    return operator.add(x, y)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = flatten(lst)\nprint(result)\n\n# Direct approach\nprint(flatten([1, 3, 5, 7]))",
 
@@ -6940,7 +6940,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 596,
             "title": "Problem 596",
-            "description": "Word Frequency Count: Write a function that counts the frequency of each word in a list using reduce().\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Word Frequency Count: Write a function that counts the frequency of each word in a list using reduce().\nExamples:\n  lst_words(['a', 'b', 'a', 'c']) → [object Object]\n  lst_words(['red', 'red', 'blue']) → [object Object]",
             "initialCode": "from functools import reduce\ndef lst_words(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef lst_words(lst):\n    def count_frequency(result, word):\n        if word in result:\n            result[word] += 1\n        else:\n            result[word] = 1\n        return result\n    return reduce(count_frequency, lst, {})\nlst = ['word', 'sentence', 'paragraph', 'word', 'word']    \nprint(lst_words(lst))\n# Using lambda\n# Using manual checks\n    # Alternative: implement pattern check manually\n\n# Using built-in approach\ndef lst_words(lst):\n    result = result\n    return result\n\n# Using manual approach\ndef lst_words(lst):\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -6952,12 +6952,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 597,
             "title": "Problem 597",
-            "description": "Anagram Filter: Write a function that filters out words that are anagrams of a given word using filter().\nExamples:\n  lst_words([1, 2, 3], 'hello') → None\n  lst_words([5, 8, 2], 'world') → None\n  lst_words([3, 1, 4], 'python') → None",
+            "description": "Anagram Filter: Write a function that filters out words that are anagrams of a given word using filter().\nExamples:\n  lst_words(['listen', 'silent', 'hello', 'world'], 'listen') → ['hello', 'world']\n  lst_words(['rat', 'tar', 'art', 'cat'], 'rat') → ['cat']",
             "initialCode": "def lst_words(lst, target_word):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst, target_word):\n    def anagram_filter(word):\n        return sorted(word) != sorted(target_word)\n    return list(filter(anagram_filter, lst))\nlst = ['listen', 'sentence', 'stop', 'word', 'rat', 'trail']\ntarget_word = 'listen'\nfiltered_words = lst_words(lst, target_word)\nprint(filtered_words)\n\n# Using built-in approach\ndef lst_words(lst, target_word):\n    result = sorted(word) != sorted(target_word)\n    return result\n\n# Using manual approach\ndef lst_words(lst, target_word):\n    return sorted(word) != sorted(target_word)\n\n# Script approach\nlst = [2, 4, 6, 8]\ntarget_word = [3, 7, 2, 9, 1]\nresult = lst_words(lst, target_word)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7], [4, 1, 8, 6, 3]))",
 
             "hint": "`sorted(s1) == sorted(s2)` is the simplest anagram check.",
-            "breakdown": "1. Define `lst_words(lst, target_word)` with parameters `lst`, `target_word`.\n2. Perform the required operation on the input parameter(s) as described in the prompt.\n3. Return the result using `return`.",
+            "breakdown": "1. Define `lst_words(lst, target_word)` with parameters `lst`, `target_word`.\n2. Call `len()` on the input to get the number of elements.\n3. Return the result using `return`.",
 
             "category": "Level 1"
     },
@@ -6976,7 +6976,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 599,
             "title": "Problem 599",
-            "description": "Group By Length: Write a function that groups words by their lengths using reduce().\nExamples:\n  word_string('hello') → None\n  word_string('world') → None\n  word_string('python') → None",
+            "description": "Group By Length: Write a function that groups words by their lengths using reduce().\nExamples:\n  word_string(['a', 'bb', 'ccc', 'dd']) → [object Object]\n  word_string(['hi', 'to', 'sun']) → [object Object]",
             "initialCode": "from functools import reduce\ndef word_string(string):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef word_string(string):\n    words = string.split() if isinstance(string, str) else string\n    def group_by_length(result, word):\n        result.setdefault(len(word), []).append(word)\n        return result\n    return reduce(group_by_length, words, {})\nstring = \"let's group words by the length\"\nprint(word_string(string))\n\n# Using built-in approach\ndef word_string(string):\n    words = string.split() if isinstance(string, str) else string\n    result = {}\n    for word in words:\n        result.setdefault(len(word), []).append(word)\n    return result\n\n# Using manual approach\ndef word_string(string):\n    words = string.split() if isinstance(string, str) else string\n    result = {}\n    for word in words:\n        result.setdefault(len(word), []).append(word)\n    return result\n\n# Script approach\nstring = 'hello'\nresult = word_string(string)\nprint(result)\n\n# Direct approach\nprint(word_string('world'))",
 
@@ -7036,7 +7036,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 604,
             "title": "Problem 604",
-            "description": "Compose Multiple Functions: Write a function that takes a list of functions and an initial value, and applies the functions sequentially to the value using reduce().\nExamples:\n  compose_functions([1, 2, 3], [1, 2, 3]) → ?\n  compose_functions([5, 8, 2], [5, 8, 2]) → ?\n  compose_functions([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Compose Multiple Functions: Write a function that takes a list of functions and an initial value, and applies the functions sequentially to the value using reduce().\nExamples:\n  compose_functions(5) → 13\n  compose_functions(3) → 7",
             "initialCode": "from functools import reduce\ndef compose_functions(functions, initial_value):\n    pass\n\ndef add_one(x):\n    pass\n\ndef multiply_by_two(x):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef compose_functions(functions, initial_value):\n    def apply_functions(x, func):\n        return func(x)\n    return reduce(apply_functions, functions, initial_value)\n# Example usage\ndef add_one(x):\n    return x + 1\ndef multiply_by_two(x):\n    return x * 2\nfunctions = [add_one, multiply_by_two, add_one]\ninitial_value = 5\nresult = compose_functions(functions, initial_value)\nprint(result)\n\n# Using built-in approach\ndef compose_functions(functions, initial_value):\n    result = func(x)\n    return result\n\n# Using manual approach\ndef compose_functions(functions, initial_value):\n    return func(x)\n\n# Script approach\nfunctions = 15\ninitial_value = 15\nresult = compose_functions(functions, initial_value)\nprint(result)\n\n# Direct approach\nprint(compose_functions(25, 25))",
 
@@ -7048,7 +7048,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 605,
             "title": "Problem 605",
-            "description": "Write a program to create a dictionary and retrieve a list of its keys. Use key().\nExamples:\n  get_keys([1, 2, 3]) → ?\n  get_keys([5, 8, 2]) → ?\n  get_keys([3, 1, 4]) → ?",
+            "description": "Write a program to create a dictionary and retrieve a list of its keys. Use key().\nExamples:\n  get_keys({'a':1,'b':2,'c':3}) → ['a', 'b', 'c']\n  get_keys({'x':9,'y':8}) → ['x', 'y']",
             "initialCode": "def get_keys(dic):\n    pass\n\ndef get_dict_keys():\n    pass",
             "solution": "# Using function approach\ndef get_keys(dic):\n    return list(dic.keys())\ndic = {'Sam': 56, 'Chris': 34, 'Simon': 12}\nprint(get_keys(dic)) \ndef get_dict_keys():\n    my_dict = {\n        'apple': 3,\n        'banana': 5,\n        'cherry': 2,\n        'date': 7\n    }\n    return list(my_dict.keys())\nkeys_list = get_dict_keys()\nprint(keys_list)\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef get_keys(dic):\n    result = list(dic.keys())\n    return result\n\n# Using manual approach\ndef get_keys(dic):\n    return list(dic.keys())\n\n# Script approach\ndic = 15\nresult = get_keys(dic)\nprint(result)\n\n# Direct approach\nprint(get_keys(25))",
 
@@ -7060,7 +7060,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 606,
             "title": "Problem 606",
-            "description": "Write a function that sorts a list of strings by their length using the key parameter. Use key().\nExamples:\n  sort_string_len([1, 2, 3]) → ?\n  sort_string_len([5, 8, 2]) → ?\n  sort_string_len([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of strings by their length using the key parameter. Use key().\nExamples:\n  sort_string_len(['apple', 'fig', 'banana', 'kiwi']) → ['fig', 'kiwi', 'apple', 'banana']\n  sort_string_len(['aa', 'b', 'cccc']) → ['b', 'aa', 'cccc']",
             "initialCode": "def sort_string_len(lst):\n    pass",
             "solution": "# Using function approach\ndef sort_string_len(lst):\n    return sorted(lst, key=len)\nlst = ['length', 'lenny', 'len']    \nprint(sort_string_len(lst))\n# Using for loop with sorted\n    # Manual sorting alternative\n\n# Using built-in approach\ndef sort_string_len(lst):\n    result = sorted(lst, key=len)\n    return result\n\n# Using manual approach\ndef sort_string_len(lst):\n    return sorted(lst, key=len)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = sort_string_len(lst)\nprint(result)\n\n# Direct approach\nprint(sort_string_len([1, 3, 5, 7]))",
 
@@ -7072,7 +7072,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 607,
             "title": "Problem 607",
-            "description": "Write a Python program to sort a list of tuples based on the second element of each tuple using key().\nExamples:\n  lst_tuples_second([1, 2, 3]) → ?\n  lst_tuples_second([5, 8, 2]) → ?\n  lst_tuples_second([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of tuples based on the second element of each tuple using key().\nExamples:\n  lst_tuples_second([[1, 3], [2, 1], [3, 2]]) → [[2, 1], [3, 2], [1, 3]]\n  lst_tuples_second([['a', 2], ['b', 1]]) → [['b', 1], ['a', 2]]",
             "initialCode": "def lst_tuples_second(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_tuples_second(lst):\n    def sort_tuples(x):\n        return x[1]\n    return sorted(lst, key=sort_tuples)\nlst = [('ton', 54), ('tron', 4), ('zicn', 1)]    \nprint(lst_tuples_second(lst))\n\n# Using built-in approach\ndef lst_tuples_second(lst):\n    result = x[1]\n    return result\n\n# Using manual approach\ndef lst_tuples_second(lst):\n    return x[1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_tuples_second(lst)\nprint(result)\n\n# Direct approach\nprint(lst_tuples_second([1, 3, 5, 7]))",
 
@@ -7084,7 +7084,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 608,
             "title": "Problem 608",
-            "description": "Write a function to sort a list of dictionaries by a specific key in each dictionary using key().\nExamples:\n  sort_dicts_by_key([1, 2, 3], [1, 2, 3]) → ?\n  sort_dicts_by_key([5, 8, 2], [5, 8, 2]) → ?\n  sort_dicts_by_key([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a function to sort a list of dictionaries by a specific key in each dictionary using key().\nExamples:\n  sort_dicts_by_key([{'name':'Alice','age':30}, {'name':'Bob','age':25}], 'age') → [[object Object], [object Object]]\n  sort_dicts_by_key([{'name':'Charlie','age':20}, {'name':'Alice','age':30}], 'name') → [[object Object], [object Object]]",
             "initialCode": "def sort_dicts_by_key(lst, target_key):\n    pass",
             "solution": "# Using function approach\ndef sort_dicts_by_key(lst, target_key):\n    def get_key_value(d):\n        return d[target_key]\n    return sorted(lst, key=get_key_value)\ndicts = [\n    {'id': 5, 'name': 'zinc'},\n    {'id': 3, 'name': 'metal'},\n    {'id': 8, 'name': 'gold'},\n    {'id': 6, 'name': 'copper'},\n    {'id': 3, 'name': 'ruby'}\n]\ntarget_key = 'id'\nsorted_dicts = sort_dicts_by_key(dicts, target_key)\nprint(sorted_dicts)\n\n# Using built-in approach\ndef sort_dicts_by_key(lst, target_key):\n    result = d[target_key]\n    return result\n\n# Using manual approach\ndef sort_dicts_by_key(lst, target_key):\n    return d[target_key]\n\n# Script approach\nlst = [2, 4, 6, 8]\ntarget_key = 15\nresult = sort_dicts_by_key(lst, target_key)\nprint(result)\n\n# Direct approach\nprint(sort_dicts_by_key([1, 3, 5, 7], 25))",
 
@@ -7096,7 +7096,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 609,
             "title": "Problem 609",
-            "description": "Write a Python program to sort a list of names by their last name using the key().\nExamples:\n  sort_last_names('hello') → ['e', 'h', 'l', 'l', 'o']\n  sort_last_names('world') → ['d', 'l', 'o', 'r', 'w']\n  sort_last_names('python') → ['h', 'n', 'o', 'p', 't', 'y']",
+            "description": "Write a Python program to sort a list of names by their last name using the key().\nExamples:\n  sort_last_names(['John Doe', 'Jane Smith', 'Alice Johnson']) → ['John Doe', 'Alice Johnson', 'Jane Smith']\n  sort_last_names(['Ada Lovelace', 'Grace Hopper']) → ['Grace Hopper', 'Ada Lovelace']",
             "initialCode": "def sort_last_names(names):\n    pass",
             "solution": "# Using function approach\ndef sort_last_names(names):\n    def get_last_name(name):\n        return name.split()[-1]\n    return sorted(names, key=get_last_name)\nnames = ['Tom Simons', 'Lisa Johnson', 'Mark Twain', 'Sarah Connor', 'Peter Parker']\nprint(sort_last_names(names))\n\n# Using built-in approach\ndef sort_last_names(names):\n    result = name.split()[-1]\n    return result\n\n# Using manual approach\ndef sort_last_names(names):\n    return name.split()[-1]\n\n# Script approach\nnames = [3, 7, 2, 9, 1]\nresult = sort_last_names(names)\nprint(result)\n\n# Direct approach\nprint(sort_last_names([4, 1, 8, 6, 3]))",
 
@@ -7108,7 +7108,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 610,
             "title": "Problem 610",
-            "description": "Write a function that sorts a list of mixed case strings, ignoring case. use key parameter.\nExamples:\n  sort_ignore_case('hello') → ['e', 'h', 'l', 'l', 'o']\n  sort_ignore_case('world') → ['d', 'l', 'o', 'r', 'w']\n  sort_ignore_case('python') → ['h', 'n', 'o', 'p', 't', 'y']",
+            "description": "Write a function that sorts a list of mixed case strings, ignoring case. use key parameter.\nExamples:\n  sort_ignore_case(['banana', 'Apple', 'cherry', 'Date']) → ['Apple', 'banana', 'cherry', 'Date']\n  sort_ignore_case(['Zoo', 'ant', 'Bee']) → ['ant', 'Bee', 'Zoo']",
             "initialCode": "def sort_ignore_case(strings):\n    pass",
             "solution": "# Using function approach\ndef sort_ignore_case(strings):\n    def case_insensitive_key(s):\n        return s.lower()\n    return sorted(strings, key=case_insensitive_key)\nmixed_case_strings = ['banana', 'Apple', 'orange', 'mango', 'grape']\nsorted_strings = sort_ignore_case(mixed_case_strings)\nprint(sorted_strings)\n\n# Using built-in approach\ndef sort_ignore_case(strings):\n    return ''.join(chr(ord(c) + 32) if 'A' <= c <= 'Z' else c for c in s)\n\n# Using manual approach\ndef sort_ignore_case(strings):\n    return str(s).lower()\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = sort_ignore_case(strings)\nprint(result)\n\n# Direct approach\nprint(sort_ignore_case([4, 1, 8, 6, 3]))",
 
@@ -7132,7 +7132,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 612,
             "title": "Problem 612",
-            "description": "Write a function that sorts a list of words by the number of vowels they contain using the key parameter.\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of words by the number of vowels they contain using the key parameter.\nExamples:\n  lst_words(['apple', 'banana', 'cherry', 'date']) → ['cherry', 'apple', 'date', 'banana']\n  lst_words(['sky', 'tree', 'audio']) → ['sky', 'tree', 'audio']",
             "initialCode": "def lst_words(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst):\n    def sort(x):\n        vowels = 'aeiou'\n        count = 0\n        for char in x.lower():\n            if char in vowels:\n                count += 1\n        return count\n    return sorted(lst, key=sort)\nlst = ['jobaeiou', 'Jo', 'aei']    \nprint(lst_words(lst))\n\n# Using built-in approach\ndef lst_words(lst):\n    result = count\n    return result\n\n# Using manual approach\ndef lst_words(lst):\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -7144,7 +7144,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 613,
             "title": "Problem 613",
-            "description": "Write a Python program to sort a list of people by their age from a list of dictionaries.\nExamples:\n  sort_people_by_age([1, 2, 3]) → ?\n  sort_people_by_age([5, 8, 2]) → ?\n  sort_people_by_age([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of people by their age from a list of dictionaries.\nExamples:\n  sort_people_by_age([{'name':'Alice','age':30}, {'name':'Bob','age':25}]) → [[object Object], [object Object]]\n  sort_people_by_age([{'name':'Old','age':80}, {'name':'Young','age':10}]) → [[object Object], [object Object]]",
             "initialCode": "def sort_people_by_age(people):\n    pass",
             "solution": "# Using function approach\ndef sort_people_by_age(people):\n    def get_age(person):\n        return person['age']\n    return sorted(people, key=get_age)\npeople = [\n    {'name': 'Jon', 'age': 34},\n    {'name': 'Sam', 'age': 23},\n    {'name': 'Bob', 'age': 45}\n]\nsorted_people = sort_people_by_age(people)\nprint(sorted_people)\n\n# Using built-in approach\ndef sort_people_by_age(people):\n    result = person['age']\n    return result\n\n# Using manual approach\ndef sort_people_by_age(people):\n    return person['age']\n\n# Script approach\npeople = [3, 7, 2, 9, 1]\nresult = sort_people_by_age(people)\nprint(result)\n\n# Direct approach\nprint(sort_people_by_age([4, 1, 8, 6, 3]))",
 
@@ -7180,7 +7180,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 616,
             "title": "Problem 616",
-            "description": "Write a function that sorts a list of dates in string format (e.g., “YYYY-MM-DD”) using the key parameter.\nExamples:\n  sort_dates('hello') → None\n  sort_dates('world') → None\n  sort_dates('python') → None",
+            "description": "Write a function that sorts a list of dates in string format (e.g., “YYYY-MM-DD”) using the key parameter.\nExamples:\n  sort_dates(['2023-01-01', '2021-01-01', '2022-01-01']) → ['2021-01-01', '2022-01-01', '2023-01-01']\n  sort_dates(['2020-12-31', '2020-01-01']) → ['2020-01-01', '2020-12-31']",
             "initialCode": "def sort_dates(dates):\n    pass",
             "solution": "# Using function approach\ndef sort_dates(dates):\n    def date_key(date_str):\n        year, month, day = map(int, date_str.split('-'))\n        return (year, month, day) \n    return sorted(dates, key=date_key)\ndate_list = [\n    '2022-01-15',\n    '2021-12-25',\n    '2023-05-05',\n    '2020-11-30'\n]\nsorted_dates = sort_dates(date_list)\nprint(sorted_dates)\n\n# Using built-in approach\ndef sort_dates(dates):\n    result = (year, month, day)\n    return result\n\n# Using manual approach\ndef sort_dates(dates):\n    return (year, month, day)\n\n# Script approach\ndates = [3, 7, 2, 9, 1]\nresult = sort_dates(dates)\nprint(result)\n\n# Direct approach\nprint(sort_dates([4, 1, 8, 6, 3]))",
 
@@ -7192,7 +7192,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 617,
             "title": "Problem 617",
-            "description": "Write a Python program to sort a list of tuples by the first element, then by the second if the first elements are equal using key.\nExamples:\n  lst_tuples([1, 2, 3]) → ?\n  lst_tuples([5, 8, 2]) → ?\n  lst_tuples([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of tuples by the first element, then by the second if the first elements are equal using key.\nExamples:\n  lst_tuples([[1, 3], [1, 2], [2, 1]]) → [[1, 2], [1, 3], [2, 1]]\n  lst_tuples([[2, 2], [1, 9], [1, 1]]) → [[1, 1], [1, 9], [2, 2]]",
             "initialCode": "def lst_tuples(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_tuples(lst):\n    def sort(tup):\n        return (tup[0], tup[1]) \n    return sorted(lst, key=sort)\nlst = [('nice', 'good'), ('evil', 'bad'), ('nice', 'better'), ('evil', 'worse')]\nsorted_tuples = lst_tuples(lst)\nprint(sorted_tuples)\n\n# Using built-in approach\ndef lst_tuples(lst):\n    result = (tup[0], tup[1])\n    return result\n\n# Using manual approach\ndef lst_tuples(lst):\n    return (tup[0], tup[1])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_tuples(lst)\nprint(result)\n\n# Direct approach\nprint(lst_tuples([1, 3, 5, 7]))",
 
@@ -7204,7 +7204,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 618,
             "title": "Problem 618",
-            "description": "Write a function that sorts a list of names based on the number of characters in each name using the key parameter.\nExamples:\n  lst_names([1, 2, 3]) → ?\n  lst_names([5, 8, 2]) → ?\n  lst_names([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of names based on the number of characters in each name using the key parameter.\nExamples:\n  lst_names(['Alice', 'Bob', 'Jonathan']) → ['Bob', 'Alice', 'Jonathan']\n  lst_names(['Zoe', 'Al', 'Charlotte']) → ['Al', 'Zoe', 'Charlotte']",
             "initialCode": "def lst_names(lst):\n    pass\n\ndef lst_names(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_names(lst):\n    def sort_len_of_name(name):\n        return len(name)\n    return sorted(lst, key=sort_len_of_name)\nlst = ['Jonathan', 'Christopher', 'Chantelle', 'Bob', 'Mimi']\nprint(lst_names(lst))\ndef lst_names(lst):\n    def sort_len_of_name(name):\n        count = 0\n        for char in name:\n            count += 1\n        return count\n    return sorted(lst, key=sort_len_of_name)\nlst = ['Jonathan', 'Christopher', 'Chantelle', 'Bob', 'Mimi']\nprint(lst_names(lst))\n\n# Using built-in approach\ndef lst_names(lst):\n    count = 0\n    for _ in name:\n        count += 1\n    return count\n\n# Using manual approach\ndef lst_names(lst):\n    return sum(1 for _ in name)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_names(lst)\nprint(result)\n\n# Direct approach\nprint(lst_names([1, 3, 5, 7]))",
 
@@ -7228,7 +7228,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 620,
             "title": "Problem 620",
-            "description": "Write a function that sorts a list of sentences based on their length using the key parameter.\nExamples:\n  lst_of_sentences('hello') → None\n  lst_of_sentences('world') → None\n  lst_of_sentences('python') → None",
+            "description": "Write a function that sorts a list of sentences based on their length using the key parameter.\nExamples:\n  lst_of_sentences(['a b c', 'a b', 'a']) → ['a', 'a b', 'a b c']\n  lst_of_sentences(['long sentence', 'tiny']) → ['tiny', 'long sentence']",
             "initialCode": "def lst_of_sentences(sentences):\n    pass",
             "solution": "# Using function approach\ndef lst_of_sentences(sentences):\n    def sort(sentence):\n        return len(sentence) \n    return sorted(sentences, key=sort)\nsentences = ['hey what's happening today?', 'what is', 'what about me']\nprint(lst_of_sentences(sentences))\n\n# Using built-in approach\ndef lst_of_sentences(sentences):\n    count = 0\n    for _ in sentence:\n        count += 1\n    return count\n\n# Using manual approach\ndef lst_of_sentences(sentences):\n    return sum(1 for _ in sentence)\n\n# Script approach\nsentences = [3, 7, 2, 9, 1]\nresult = lst_of_sentences(sentences)\nprint(result)\n\n# Direct approach\nprint(lst_of_sentences([4, 1, 8, 6, 3]))",
 
@@ -7240,7 +7240,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 621,
             "title": "Problem 621",
-            "description": "Write a Python program to sort a list of words based on the frequency of their first letter using the key parameter.\nExamples:\n  frequency_first_letter('hello') → ['h', 'e', 'o', 'l', 'l']\n  frequency_first_letter('world') → ['w', 'o', 'r', 'l', 'd']\n  frequency_first_letter('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to sort a list of words based on the frequency of their first letter using the key parameter.\nExamples:\n  frequency_first_letter(['apple', 'banana', 'avocado', 'cherry']) → ['banana', 'cherry', 'apple', 'avocado']\n  frequency_first_letter(['ant', 'ape', 'bee']) → ['bee', 'ant', 'ape']",
             "initialCode": "def frequency_first_letter(words):\n    pass\n\nfrom collections import Counter\ndef frequency_first_letter(words):\n    pass",
             "solution": "# Using function approach\ndef frequency_first_letter(words):\n    letter_count = {}\n    for word in words:\n        first_letter = word[0]\n        if first_letter in letter_count:\n            letter_count[first_letter] += 1\n        else:\n            letter_count[first_letter] = 1\n    def sort(word):\n        return letter_count[word[0]] \n    return sorted(words, key=sort)\nwords = ['apple', 'apricot', 'banana', 'berry', 'blueberry', 'cherry', 'carrot']\nprint(frequency_first_letter(words))\nfrom collections import Counter\ndef frequency_first_letter(words):\n    letter_count = Counter()\n    for word in words:\n        first_letter = word[0] \n        letter_count[first_letter] += 1\n    def sort(word):\n        return letter_count[word[0]]\n    return sorted(words, key=sort)\nwords = ['apple', 'apricot', 'banana', 'berry', 'blueberry', 'cherry', 'carrot']\nprint(frequency_first_letter(words))\n\n# Using built-in approach\ndef frequency_first_letter(words):\n    result = letter_count[word[0]]\n    return result\n\n# Using manual approach\ndef frequency_first_letter(words):\n    return letter_count[word[0]]\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = frequency_first_letter(words)\nprint(result)\n\n# Direct approach\nprint(frequency_first_letter([4, 1, 8, 6, 3]))",
 
@@ -7252,7 +7252,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 622,
             "title": "Problem 622",
-            "description": "Write a function that sorts a list of tuples by the absolute value of the first element using the key parameter.\nExamples:\n  lst_of_tuples([1, 2, 3]) → ?\n  lst_of_tuples([5, 8, 2]) → ?\n  lst_of_tuples([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of tuples by the absolute value of the first element using the key parameter.\nExamples:\n  lst_of_tuples([[-3, 1], [1, 2], [-2, 3]]) → [[1, 2], [-2, 3], [-3, 1]]\n  lst_of_tuples([[5, 'a'], [-1, 'b']]) → [[-1, 'b'], [5, 'a']]",
             "initialCode": "def lst_of_tuples(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_of_tuples(lst):\n    def sort(x):\n        return abs((x)[0])\n    return sorted(lst, key=sort)\nlst = [(2.3, 4.2), (5.3, 7.3), (3.1, 2.4), (5.2, 6.2)]\nprint(lst_of_tuples(lst))\n\n# Using built-in approach\ndef lst_of_tuples(lst):\n    result = abs((x)[0])\n    return result\n\n# Using manual approach\ndef lst_of_tuples(lst):\n    return abs((x)[0])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_of_tuples(lst)\nprint(result)\n\n# Direct approach\nprint(lst_of_tuples([1, 3, 5, 7]))",
 
@@ -7300,7 +7300,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 626,
             "title": "Problem 626",
-            "description": "Write a function that sorts a list of email addresses by the domain part using the key parameter.\nExamples:\n  sort_emails([1, 2, 3]) → ?\n  sort_emails([5, 8, 2]) → ?\n  sort_emails([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of email addresses by the domain part using the key parameter.\nExamples:\n  sort_emails(['b@yahoo.com', 'a@gmail.com', 'c@outlook.com']) → ['a@gmail.com', 'c@outlook.com', 'b@yahoo.com']\n  sort_emails(['x@z.com', 'a@a.com']) → ['a@a.com', 'x@z.com']",
             "initialCode": "def sort_emails(emails):\n    pass",
             "solution": "# Using function approach\ndef sort_emails(emails):\n    def get_domain(email):\n        return email.split('@')[1] \n    return sorted(emails, key=get_domain)\nemails = ['alice@example.com', 'bob@test.com', 'charlie@example.com', 'dave@sample.com']\nsorted_emails = sort_emails(emails)\nprint(sorted_emails)\n\n# Using built-in approach\ndef sort_emails(emails):\n    result = email.split('@')[1]\n    return result\n\n# Using manual approach\ndef sort_emails(emails):\n    return email.split('@')[1]\n\n# Script approach\nemails = [3, 7, 2, 9, 1]\nresult = sort_emails(emails)\nprint(result)\n\n# Direct approach\nprint(sort_emails([4, 1, 8, 6, 3]))",
 
@@ -7312,7 +7312,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 627,
             "title": "Problem 627",
-            "description": "Write a Python program to sort a list of cities by their population using the key parameter.\nExamples:\n  sort_cities_by_population([1, 2, 3]) → ?\n  sort_cities_by_population([5, 8, 2]) → ?\n  sort_cities_by_population([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of cities by their population using the key parameter.\nExamples:\n  sort_cities_by_population([['A', 100], ['B', 50]]) → [['B', 50], ['A', 100]]\n  sort_cities_by_population([['X', 300], ['Y', 100], ['Z', 200]]) → [['Y', 100], ['Z', 200], ['X', 300]]",
             "initialCode": "def sort_cities_by_population(cities):\n    pass",
             "solution": "# Using function approach\ndef sort_cities_by_population(cities):\n    def get_population(city):\n        return city[1] \n    return sorted(cities, key=get_population)\n# List of cities with their population\ncities = [('New York', 8419600), ('Los Angeles', 3980400), ('Chicago', 2716000), ('Houston', 2328000), ('Phoenix', 1690000)]\nsorted_cities = sort_cities_by_population(cities)\nprint(sorted_cities)\n\n# Using built-in approach\ndef sort_cities_by_population(cities):\n    result = city[1]\n    return result\n\n# Using manual approach\ndef sort_cities_by_population(cities):\n    return city[1]\n\n# Script approach\ncities = [3, 7, 2, 9, 1]\nresult = sort_cities_by_population(cities)\nprint(result)\n\n# Direct approach\nprint(sort_cities_by_population([4, 1, 8, 6, 3]))",
 
@@ -7324,7 +7324,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 628,
             "title": "Problem 628",
-            "description": "Write a function that sorts a list of words by the last letter of each word using the key parameter.\nExamples:\n  last_letter([1, 2, 3]) → ?\n  last_letter([5, 8, 2]) → ?\n  last_letter([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of words by the last letter of each word using the key parameter.\nExamples:\n  last_letter(['banana', 'apple', 'grape', 'kiwi']) → ['banana', 'apple', 'grape', 'kiwi']\n  last_letter(['cab', 'aaa', 'dog']) → ['aaa', 'cab', 'dog']",
             "initialCode": "def last_letter(lst):\n    pass",
             "solution": "# Using function approach\ndef last_letter(lst):\n    def sort(word):\n        return word[-1]\n    return sorted(lst, key=sort)\nlst = ['house', 'garden', 'boat', 'building']\nprint(last_letter(lst))\n\n# Using built-in approach\ndef last_letter(lst):\n    result = word[-1]\n    return result\n\n# Using manual approach\ndef last_letter(lst):\n    return word[-1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = last_letter(lst)\nprint(result)\n\n# Direct approach\nprint(last_letter([1, 3, 5, 7]))",
 
@@ -7348,7 +7348,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 630,
             "title": "Problem 630",
-            "description": "Write a function that sorts a list of students by their grades using the key parameter.\nExamples:\n  sort_students_by_grades([1, 2, 3]) → ?\n  sort_students_by_grades([5, 8, 2]) → ?\n  sort_students_by_grades([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of students by their grades using the key parameter.\nExamples:\n  sort_students_by_grades([['A', 90], ['B', 80]]) → [['B', 80], ['A', 90]]\n  sort_students_by_grades([['C', 70], ['D', 95], ['E', 85]]) → [['C', 70], ['E', 85], ['D', 95]]",
             "initialCode": "def sort_students_by_grades(students):\n    pass",
             "solution": "# Using function approach\ndef sort_students_by_grades(students):\n    def get_grade(student):\n        return student[1] \n    return sorted(students, key=get_grade)\nstudents = [('Alice', 85), ('Bob', 70), ('Charlie', 95), ('David', 65)]\nprint(sort_students_by_grades(students))\n\n# Using built-in approach\ndef sort_students_by_grades(students):\n    result = student[1]\n    return result\n\n# Using manual approach\ndef sort_students_by_grades(students):\n    return student[1]\n\n# Script approach\nstudents = [3, 7, 2, 9, 1]\nresult = sort_students_by_grades(students)\nprint(result)\n\n# Direct approach\nprint(sort_students_by_grades([4, 1, 8, 6, 3]))",
 
@@ -7360,7 +7360,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 631,
             "title": "Problem 631",
-            "description": "Write a Python program to sort a list of book titles by the year they were published using the key parameter.\nExamples:\n  sort_books_by_year([1, 2, 3]) → ?\n  sort_books_by_year([5, 8, 2]) → ?\n  sort_books_by_year([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of book titles by the year they were published using the key parameter.\nExamples:\n  sort_books_by_year([['A', 2000], ['B', 1990]]) → [['B', 1990], ['A', 2000]]\n  sort_books_by_year([['New', 2020], ['Old', 1980]]) → [['Old', 1980], ['New', 2020]]",
             "initialCode": "def sort_books_by_year(books):\n    pass",
             "solution": "# Using function approach\ndef sort_books_by_year(books):\n    def get_year(book):\n        return book[1]\n    return sorted(books, key=get_year)\nbooks = [('Book A', 2005), ('Book B', 1999), ('Book C', 2010), ('Book D', 1985)]\nprint(sort_books_by_year(books))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef sort_books_by_year(books):\n    result = book[1]\n    return result\n\n# Using manual approach\ndef sort_books_by_year(books):\n    return book[1]\n\n# Script approach\nbooks = [3, 7, 2, 9, 1]\nresult = sort_books_by_year(books)\nprint(result)\n\n# Direct approach\nprint(sort_books_by_year([4, 1, 8, 6, 3]))",
 
@@ -7372,7 +7372,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 632,
             "title": "Problem 632",
-            "description": "Write a function that sorts a list of files based on their file extension using the key parameter.\nExamples:\n  sort_files_by_extension([1, 2, 3]) → ?\n  sort_files_by_extension([5, 8, 2]) → ?\n  sort_files_by_extension([3, 1, 4]) → ?",
+            "description": "Write a function that sorts a list of files based on their file extension using the key parameter.\nExamples:\n  sort_files_by_extension(['file.txt', 'image.jpg', 'doc.pdf']) → ['image.jpg', 'doc.pdf', 'file.txt']\n  sort_files_by_extension(['a.zip', 'b.csv', 'c.txt']) → ['b.csv', 'c.txt', 'a.zip']",
             "initialCode": "def sort_files_by_extension(files):\n    pass",
             "solution": "# Using function approach\ndef sort_files_by_extension(files):\n    def get_extension(file):\n        return file.split('.')[-1]\n    return sorted(files, key=get_extension)\nfiles = ['document.pdf', 'image.png', 'archive.zip', 'presentation.pptx', 'notes.txt']\nprint(sort_files_by_extension(files))\n\n# Using built-in approach\ndef sort_files_by_extension(files):\n    result = file.split('.')[-1]\n    return result\n\n# Using manual approach\ndef sort_files_by_extension(files):\n    return file.split('.')[-1]\n\n# Script approach\nfiles = [3, 7, 2, 9, 1]\nresult = sort_files_by_extension(files)\nprint(result)\n\n# Direct approach\nprint(sort_files_by_extension([4, 1, 8, 6, 3]))",
 
@@ -7384,7 +7384,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 633,
             "title": "Problem 633",
-            "description": "Write a Python program to sort a list of movies by their release date using the key parameter.\nExamples:\n  sort_movies_by_release_date([1, 2, 3]) → ?\n  sort_movies_by_release_date([5, 8, 2]) → ?\n  sort_movies_by_release_date([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of movies by their release date using the key parameter.\nExamples:\n  sort_movies_by_release_date([{'title':'A','release_date':'2001'}, {'title':'B','release_date':'1999'}, {'title':'C','release_date':'2005'}]) → [[object Object], [object Object], [object Object]]\n  sort_movies_by_release_date([{'title':'New','release_date':'2024'}, {'title':'Old','release_date':'1984'}]) → [[object Object], [object Object]]",
             "initialCode": "def sort_movies_by_release_date(movies):\n    pass",
             "solution": "# Using function approach\ndef sort_movies_by_release_date(movies):\n    def get_release_date(movie):\n        return movie['release_date'] \n    return sorted(movies, key=get_release_date)\nmovies = [\n    {'title': 'Inception', 'release_date': '2010-07-16'},\n    {'title': 'The Matrix', 'release_date': '1999-03-31'},\n    {'title': 'Interstellar', 'release_date': '2014-11-07'},\n    {'title': 'The Godfather', 'release_date': '1972-03-24'}\n]\nsorted_movies = sort_movies_by_release_date(movies)\nfor movie in sorted_movies:\n    print(f'{movie['title']} - {movie['release_date']}')\n\n# Using built-in approach\ndef sort_movies_by_release_date(movies):\n    result = movie['release_date']\n    return result\n\n# Using manual approach\ndef sort_movies_by_release_date(movies):\n    return movie['release_date']\n\n# Script approach\nmovies = [3, 7, 2, 9, 1]\nresult = sort_movies_by_release_date(movies)\nprint(result)\n\n# Direct approach\nprint(sort_movies_by_release_date([4, 1, 8, 6, 3]))",
 
@@ -7396,7 +7396,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 634,
             "title": "Problem 634",
-            "description": "Write a function that sorts a list of sentences based on the number of unique words in each sentence using the key parameter.\nExamples:\n  sort_sentences_by_unique_words('hello') → ?\n  sort_sentences_by_unique_words('world') → ?\n  sort_sentences_by_unique_words('python') → ?",
+            "description": "Write a function that sorts a list of sentences based on the number of unique words in each sentence using the key parameter.\nExamples:\n  sort_sentences_by_unique_words(['a a', 'a b c', 'a b']) → ['a a', 'a b', 'a b c']\n  sort_sentences_by_unique_words(['red red', 'red blue']) → ['red red', 'red blue']",
             "initialCode": "def sort_sentences_by_unique_words(sentences):\n    pass",
             "solution": "# Using function approach\ndef sort_sentences_by_unique_words(sentences):\n    def count_unique_words(sentence):\n        words = sentence.split() \n        unique_words = set(words)\n        return len(unique_words)\n    return sorted(sentences, key=count_unique_words)\nsentences = [\n    'This is a test sentence',\n    'Hello world',\n    'This is a simple sentence',\n    'Hello hello world',\n    'Unique words are counted here'\n]\nsorted_sentences = sort_sentences_by_unique_words(sentences)\nfor sentence in sorted_sentences:\n    print(sentence)\n\n# Using built-in approach\ndef sort_sentences_by_unique_words(sentences):\n    count = 0\n    for _ in unique_words:\n        count += 1\n    return count\n\n# Using manual approach\ndef sort_sentences_by_unique_words(sentences):\n    return sum(1 for _ in unique_words)\n\n# Script approach\nsentences = [3, 7, 2, 9, 1]\nresult = sort_sentences_by_unique_words(sentences)\nprint(result)\n\n# Direct approach\nprint(sort_sentences_by_unique_words([4, 1, 8, 6, 3]))",
 
@@ -7408,7 +7408,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 635,
             "title": "Problem 635",
-            "description": "Write a program to create a dictionary and retrieve a list of its keys.\nExamples:\n  get_keys_from_dictionary([1, 2, 3]) → ?\n  get_keys_from_dictionary([5, 8, 2]) → ?\n  get_keys_from_dictionary([3, 1, 4]) → ?",
+            "description": "Write a program to create a dictionary and retrieve a list of its keys.\nExamples:\n  get_keys_from_dictionary({'a':1,'b':2}) → ['a', 'b']\n  get_keys_from_dictionary({'x':1,'y':2,'z':3}) → ['x', 'y', 'z']",
             "initialCode": "def get_keys_from_dictionary(dic):\n    pass",
             "solution": "# Using function approach\ndef get_keys_from_dictionary(dic):\n    return list(dic.keys())\nexample_dict = {\n    'name': 'Alice',\n    'age': 30,\n    'city': 'New York'\n}\nkeys = get_keys_from_dictionary(example_dict)\nprint(keys)\n\n# Using built-in approach\ndef get_keys_from_dictionary(dic):\n    result = list(dic.keys())\n    return result\n\n# Using manual approach\ndef get_keys_from_dictionary(dic):\n    return list(dic.keys())\n\n# Script approach\ndic = 15\nresult = get_keys_from_dictionary(dic)\nprint(result)\n\n# Direct approach\nprint(get_keys_from_dictionary(25))",
 
@@ -7420,7 +7420,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 636,
             "title": "Problem 636",
-            "description": "Write a function that takes a dictionary and returns a list of keys that have values greater than 10.\nExamples:\n  dic_keys([1, 2, 3]) → ?\n  dic_keys([5, 8, 2]) → ?\n  dic_keys([3, 1, 4]) → ?",
+            "description": "Write a function that takes a dictionary and returns a list of keys that have values greater than 10.\nExamples:\n  dic_keys({'a':5,'b':15,'c':20,'d':3}) → ['b', 'c']\n  dic_keys({'low':1,'high':99}) → ['high']",
             "initialCode": "def dic_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef dic_keys(dic):\n    result = []\n    for key, value in dic.items():\n        if value > 10:\n            result.append(key)\n    return result\ndic = {'a': 5, 'b': 34, 'c': 67, 'd': 9}\nprint(dic_keys(dic))\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef dic_keys(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef dic_keys(dic):\n    return result\n\n# Script approach\ndic = 15\nresult = dic_keys(dic)\nprint(result)\n\n# Direct approach\nprint(dic_keys(25))",
 
@@ -7432,7 +7432,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 637,
             "title": "Problem 637",
-            "description": "Create a dictionary of fruits with their prices, and print all the keys.\nExamples:\n  print_fruit_keys([1, 2, 3]) → ?\n  print_fruit_keys([5, 8, 2]) → ?\n  print_fruit_keys([3, 1, 4]) → ?",
+            "description": "Create a dictionary of fruits with their prices, and print all the keys.\nExamples:\n  print_fruit_keys({'apple':1.2,'banana':0.5,'orange':0.75}) → ['apple', 'banana', 'orange']\n  print_fruit_keys({'pear':1,'plum':2}) → ['pear', 'plum']",
             "initialCode": "def print_fruit_keys(fruit_prices):\n    pass",
             "solution": "# Using function approach\ndef print_fruit_keys(fruit_prices):\n    return list(fruit_prices.keys())\nfruit_prices = {\n    'apple': 1.2,\n    'banana': 0.5,\n    'orange': 0.75,\n    'grape': 2.0\n}\nprint(print_fruit_keys(fruit_prices))\n\n# Using built-in approach\ndef print_fruit_keys(fruit_prices):\n    result = list(fruit_prices.keys())\n    return result\n\n# Using manual approach\ndef print_fruit_keys(fruit_prices):\n    return list(fruit_prices.keys())\n\n# Script approach\nfruit_prices = 15\nresult = print_fruit_keys(fruit_prices)\nprint(result)\n\n# Direct approach\nprint(print_fruit_keys(25))",
 
@@ -7456,7 +7456,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 639,
             "title": "Problem 639",
-            "description": "Create a dictionary of names and ages, and return the keys sorted by age.\nExamples:\n  name_age('hello') → ?\n  name_age('world') → ?\n  name_age('python') → ?",
+            "description": "Create a dictionary of names and ages, and return the keys sorted by age.\nExamples:\n  name_age({'Natty':78,'Bob':45}) → ['Bob', 'Natty']\n  name_age({'Young':10,'Old':80}) → ['Young', 'Old']",
             "initialCode": "def name_age(dic):\n    pass",
             "solution": "# Using function approach\ndef name_age(dic):\n    def sort_key(name):\n        return dic[name]\n    sorted_keys = sorted(dic.keys(), key=sort_key)\n    return sorted_keys\ndic = {'Natty': 78, 'Bob': 45}\nprint(name_age(dic))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef name_age(dic):\n    result = dic[name]\n    return result\n\n# Using manual approach\ndef name_age(dic):\n    return dic[name]\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = name_age(dic)\nprint(result)\n\n# Direct approach\nprint(name_age([4, 1, 8, 6, 3]))",
 
@@ -7468,7 +7468,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 640,
             "title": "Problem 640",
-            "description": "Write a function that accepts a dictionary and returns the keys as a single concatenated string.\nExamples:\n  concatenate_keys('hello') → ?\n  concatenate_keys('world') → ?\n  concatenate_keys('python') → ?",
+            "description": "Write a function that accepts a dictionary and returns the keys as a single concatenated string.\nExamples:\n  concatenate_keys({'1':456,'2':5566,'3':566}) → '123'\n  concatenate_keys({'a':1,'b':2}) → 'ab'",
             "initialCode": "def concatenate_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef concatenate_keys(dic):\n    result = ''\n    for key in dic.keys():\n        result += str(key)\n    return result\ndic = {1: 456, 2: 5566, 3: 566}    \nprint(concatenate_keys(dic))\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef concatenate_keys(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef concatenate_keys(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = concatenate_keys(dic)\nprint(result)\n\n# Direct approach\nprint(concatenate_keys([4, 1, 8, 6, 3]))",
 
@@ -7600,7 +7600,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 651,
             "title": "Problem 651",
-            "description": "Write a function that accepts a dictionary and returns a list of keys that are strings.\nExamples:\n  returns_strings('hello') → ?\n  returns_strings('world') → ?\n  returns_strings('python') → ?",
+            "description": "Write a function that accepts a dictionary and returns a list of keys that are strings.\nExamples:\n  returns_strings({'42':'answer','a':1,'c':3}) → ['42', 'a', 'c']\n  returns_strings({'x':1,'y':2}) → ['x', 'y']",
             "initialCode": "def returns_strings(dic):\n    pass",
             "solution": "# Using function approach\ndef returns_strings(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, str):\n            result.append(key)\n    return result\nexample_dict = {'Nat': 90, 56: 70, 'Zac': 60, 56: 56}\nprint(returns_strings(example_dict))\n\n# Using built-in approach\ndef returns_strings(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef returns_strings(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = returns_strings(dic)\nprint(result)\n\n# Direct approach\nprint(returns_strings([4, 1, 8, 6, 3]))",
 
@@ -7648,7 +7648,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 655,
             "title": "Problem 655",
-            "description": "Write a function that takes a dictionary and returns a list of keys that are palindromes.\nExamples:\n  palindromic_keys([1, 2, 3]) → ?\n  palindromic_keys([5, 8, 2]) → ?\n  palindromic_keys([3, 1, 4]) → ?",
+            "description": "Write a function that takes a dictionary and returns a list of keys that are palindromes.\nExamples:\n  palindromic_keys({'racecar':1,'hello':2,'level':3}) → ['racecar', 'level']\n  palindromic_keys({'madam':1,'test':2}) → ['madam']",
             "initialCode": "def palindromic_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef palindromic_keys(dic):\n    result = []\n    for key in dic.keys():\n        if key == key[::-1]: \n            result.append(key)\n    return result\nexample_dict = {\n    'madam': 1,\n    'racecar': 2,\n    'hello': 3,\n    'world': 4,\n    'level': 5\n}\nprint(palindromic_keys(example_dict))\n\n# Using built-in approach\ndef palindromic_keys(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef palindromic_keys(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = palindromic_keys(dic)\nprint(result)\n\n# Direct approach\nprint(palindromic_keys([4, 1, 8, 6, 3]))",
 
@@ -7732,7 +7732,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 662,
             "title": "Problem 662",
-            "description": "Create a dictionary of temperatures and their units, and return the keys as uppercase strings.\nExamples:\n  temperature('hello') → ?\n  temperature('world') → ?\n  temperature('python') → ?",
+            "description": "Create a dictionary of temperatures and their units, and return the keys as uppercase strings.\nExamples:\n  temperature({'Celsius':[0,20],'Fahrenheit':[32,68]}) → ['CELSIUS', 'FAHRENHEIT']\n  temperature({'low':[1],'high':[2]}) → ['LOW', 'HIGH']",
             "initialCode": "def temperature(dic):\n    pass",
             "solution": "# Using function approach\ndef temperature(dic):\n    upper_keys = []\n    for key in dic.keys():\n        upper_keys.append(key.upper())\n    return upper_keys\ndic = {\n    'Celsius': [0, 20, 37, 100],\n    'Fahrenheit': [32, 68, 98.6, 212],\n    'Kelvin': [273.15, 293.15, 310.15, 373.15]\n}\nprint(temperature(dic))\n\n# Using built-in approach\ndef temperature(dic):\n    result = upper_keys\n    return result\n\n# Using manual approach\ndef temperature(dic):\n    return upper_keys\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = temperature(dic)\nprint(result)\n\n# Direct approach\nprint(temperature([4, 1, 8, 6, 3]))",
 
@@ -7768,7 +7768,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 665,
             "title": "Problem 665",
-            "description": "Write a function that takes a dictionary and returns a list of keys that have values greater than 10.\nExamples:\n  keys_with_values_greater_than_10([1, 2, 3]) → ?\n  keys_with_values_greater_than_10([5, 8, 2]) → ?\n  keys_with_values_greater_than_10([3, 1, 4]) → ?",
+            "description": "Write a function that takes a dictionary and returns a list of keys that have values greater than 10.\nExamples:\n  keys_with_values_greater_than_10({'Sam':5,'Chris':34,'Simon':12,'Anna':9}) → ['Chris', 'Simon']\n  keys_with_values_greater_than_10({'low':10,'high':11}) → ['high']",
             "initialCode": "def keys_with_values_greater_than_10(dic):\n    pass\n\ndef get_dict_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef keys_with_values_greater_than_10(dic):\n    result = []\n    for key in dic.keys(): \n        if dic[key] > 10: \n            result.append(key)\n    return result\ndic = {'Sam': 5, 'Chris': 34, 'Simon': 12, 'Anna': 9}\nprint(keys_with_values_greater_than_10(dic)) \ndef get_dict_keys(dic):\n    result = []\n    for key, value in dic.items():\n        if value > 10:\n            result.append(key)\n    return result\nmy_dict = {'apple': 30, 'banana': 50, 'cherry': 2, 'date': 7}\nprint(get_dict_keys(my_dict))\n\n# Using built-in approach\ndef keys_with_values_greater_than_10(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef keys_with_values_greater_than_10(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = keys_with_values_greater_than_10(dic)\nprint(result)\n\n# Direct approach\nprint(keys_with_values_greater_than_10([4, 1, 8, 6, 3]))",
 
@@ -7780,7 +7780,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 666,
             "title": "Problem 666",
-            "description": "Create a dictionary of fruits with their prices, and print all the keys. Use key().\nExamples:\n  print_fruit_keys([1, 2, 3]) → ?\n  print_fruit_keys([5, 8, 2]) → ?\n  print_fruit_keys([3, 1, 4]) → ?",
+            "description": "Create a dictionary of fruits with their prices, and print all the keys. Use key().\nExamples:\n  print_fruit_keys({'Apple':3,'Banana':1,'Mango':2,'Orange':4}) → 'Apple\nBanana\nMango\nOrange'\n  print_fruit_keys({'Pear':1,'Plum':2}) → 'Pear\nPlum'",
             "initialCode": "def print_fruit_keys(fruits):\n    pass",
             "solution": "# Using function approach\ndef print_fruit_keys(fruits):\n    for key in fruits.keys():\n        print(key)\nfruits = {\n    'Apple': 3,\n    'Banana': 1,\n    'Mango': 2,\n    'Orange': 4\n}\nprint_fruit_keys(fruits)\n\n# Using built-in approach\ndef solve():\n    def print_fruit_keys(fruits):\n        for key in fruits.keys():\n            print(key)\n    fruits = {\n        'Apple': 3,\n        'Banana': 1,\n        'Mango': 2,\n        'Orange': 4\n    }\n    print_fruit_keys(fruits)\n\n# Using manual approach\ndef solve():\n    def print_fruit_keys(fruits):\n        for key in fruits.keys():\n            return key\n    fruits = {\n        'Apple': 3,\n        'Banana': 1,\n        'Mango': 2,\n        'Orange': 4\n    }\n    print_fruit_keys(fruits)\n\n# Script approach\nfruits = [3, 7, 2, 9, 1]\nresult = print_fruit_keys(fruits)\nprint(result)\n\n# Direct approach\nprint(print_fruit_keys([4, 1, 8, 6, 3]))",
 
@@ -7792,7 +7792,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 667,
             "title": "Problem 667",
-            "description": "Create a dictionary of names and ages, and return the keys sorted by age.\nExamples:\n  name_age('hello') → ?\n  name_age('world') → ?\n  name_age('python') → ?",
+            "description": "Create a dictionary of names and ages, and return the keys sorted by age.\nExamples:\n  name_age({'Tom':15,'Lucka':66,'Bob':8}) → ['Bob', 'Tom', 'Lucka']\n  name_age({'Old':90,'Young':5}) → ['Young', 'Old']",
             "initialCode": "def name_age(dic):\n    pass",
             "solution": "# Using function approach\ndef name_age(dic):\n    def sort_age(name):\n        return dic[name]\n    return sorted(dic, key=sort_age)\ndic = {'Tom': 15, 'Lucka': 66, 'Bob': 8}    \nprint(name_age(dic))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef name_age(dic):\n    return sorted(dic, key=dic.get)\n\n# Using manual approach\ndef name_age(dic):\n    return sorted(dic, key=lambda name: dic[name])\n\n# Script approach\ndic = {'Tom': 15, 'Lucka': 66, 'Bob': 8}\nresult = name_age(dic)\nprint(result)\n\n# Direct approach\nprint(name_age({'Old': 90, 'Young': 5}))",
 
@@ -7804,7 +7804,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 668,
             "title": "Problem 668",
-            "description": "Write a function that accepts a dictionary and returns the keys as a single concatenated string.\nExamples:\n  concatenate('hello') → ?\n  concatenate('world') → ?\n  concatenate('python') → ?",
+            "description": "Write a function that accepts a dictionary and returns the keys as a single concatenated string.\nExamples:\n  concatenate({'1':'one','2':'two','3':'three'}) → '123'\n  concatenate({'4':'four','5':'five'}) → '45'",
             "initialCode": "def concatenate(dic):\n    pass",
             "solution": "# Using function approach\ndef concatenate(dic):\n    result = ''\n    for key in dic.keys():\n        result += str(key)\n    return result\ndic = {1: 'one', 2: 'two', 3: 'three', 4: 'four'}    \nprint(concatenate(dic))\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef concatenate(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef concatenate(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = concatenate(dic)\nprint(result)\n\n# Direct approach\nprint(concatenate([4, 1, 8, 6, 3]))",
 
@@ -7936,7 +7936,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 679,
             "title": "Problem 679",
-            "description": "Write a function that accepts a dictionary and returns a list of keys that are strings.\nExamples:\n  string_keys('hello') → ?\n  string_keys('world') → ?\n  string_keys('python') → ?",
+            "description": "Write a function that accepts a dictionary and returns a list of keys that are strings.\nExamples:\n  string_keys({'42':'answer','a':1,'c':3}) → ['42', 'a', 'c']\n  string_keys({'x':1,'y':2}) → ['x', 'y']",
             "initialCode": "def string_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef string_keys(dic):\n    result = []\n    for key in dic.keys():\n        if isinstance(key, str): \n            result.append(key)\n    return result\nexample_dict = {\n    'name': 'Alice',\n    42: 'answer',\n    'city': 'Wonderland',\n    (1, 2): 'tuple_key',\n    'age': 30\n}\nstring_keys_list = string_keys(example_dict)\nprint('Keys that are strings:', string_keys_list)\n\n# Using built-in approach\ndef string_keys(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef string_keys(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = string_keys(dic)\nprint(result)\n\n# Direct approach\nprint(string_keys([4, 1, 8, 6, 3]))",
 
@@ -7984,7 +7984,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 683,
             "title": "Problem 683",
-            "description": "Write a function that takes a dictionary and returns a list of keys that are palindromes.\nExamples:\n  palindrome_keys([1, 2, 3]) → ?\n  palindrome_keys([5, 8, 2]) → ?\n  palindrome_keys([3, 1, 4]) → ?",
+            "description": "Write a function that takes a dictionary and returns a list of keys that are palindromes.\nExamples:\n  palindrome_keys({'racecar':1,'hello':2,'level':3,'world':4}) → ['racecar', 'level']\n  palindrome_keys({'madam':1,'test':2}) → ['madam']",
             "initialCode": "def palindrome_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef palindrome_keys(dic):\n    result = []\n    for key in dic.keys():\n        if str(key) == str(key)[::-1]:\n            result.append(key)\n    return result\nexample_dict = {\n    'racecar': 1,\n    'level': 2,\n    'hello': 3,\n    'madam': 4,\n    'world': 5\n}\nprint(palindrome_keys(example_dict))\n\n# Using built-in approach\ndef palindrome_keys(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef palindrome_keys(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = palindrome_keys(dic)\nprint(result)\n\n# Direct approach\nprint(palindrome_keys([4, 1, 8, 6, 3]))",
 
@@ -8020,7 +8020,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 686,
             "title": "Problem 686",
-            "description": "Create a dictionary of movies and their release years, and return the keys as a sorted list.\nExamples:\n  sorted_movie_titles([1, 2, 3]) → ?\n  sorted_movie_titles([5, 8, 2]) → ?\n  sorted_movie_titles([3, 1, 4]) → ?",
+            "description": "Create a dictionary of movies and their release years, and return the keys as a sorted list.\nExamples:\n  sorted_movie_titles({'Inception':2010,'The Matrix':1999}) → ['Inception', 'The Matrix']\n  sorted_movie_titles({'Zed':1,'Alpha':2}) → ['Alpha', 'Zed']",
             "initialCode": "def sorted_movie_titles(movies):\n    pass",
             "solution": "# Using function approach\ndef sorted_movie_titles(movies):\n    return sorted(movies.keys())\nmovies_dict = {\n    'The Shawshank Redemption': 1994,\n    'The Godfather': 1972,\n    'The Dark Knight': 2008,\n    'Pulp Fiction': 1994,\n    'Forrest Gump': 1994,\n}\nprint(sorted_movie_titles(movies_dict))\n\n# Using built-in approach\ndef sorted_movie_titles(movies):\n    result = sorted(movies.keys())\n    return result\n\n# Using manual approach\ndef sorted_movie_titles(movies):\n    return sorted(movies.keys())\n\n# Script approach\nmovies = [3, 7, 2, 9, 1]\nresult = sorted_movie_titles(movies)\nprint(result)\n\n# Direct approach\nprint(sorted_movie_titles([4, 1, 8, 6, 3]))",
 
@@ -8068,7 +8068,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 690,
             "title": "Problem 690",
-            "description": "Create a dictionary of temperatures and their units, and return the keys as uppercase strings. keys only (\"Celsius\": [0, 20, 37, 100]).\nExamples:\n  uppercase_keys('hello') → ?\n  uppercase_keys('world') → ?\n  uppercase_keys('python') → ?",
+            "description": "Create a dictionary of temperatures and their units, and return the keys as uppercase strings. keys only (\"Celsius\": [0, 20, 37, 100]).\nExamples:\n  uppercase_keys({'Celsius':[0,20],'Fahrenheit':[32,68]}) → ['CELSIUS', 'FAHRENHEIT']\n  uppercase_keys({'low':[1],'high':[2]}) → ['LOW', 'HIGH']",
             "initialCode": "def uppercase_keys(dic):\n    pass",
             "solution": "# Using function approach\ndef uppercase_keys(dic):\n    result = []\n    for key in dic.keys():\n        result.append(key.upper())\n    return result\ndic = {\n    'Celsius': [0, 20, 37, 100],\n    'Fahrenheit': [32, 68, 98.6, 212],\n    'Kelvin': [273.15, 293.15, 310.15, 373.15]\n}\nprint(uppercase_keys(dic))\n\n# Using built-in approach\ndef uppercase_keys(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef uppercase_keys(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = uppercase_keys(dic)\nprint(result)\n\n# Direct approach\nprint(uppercase_keys([4, 1, 8, 6, 3]))",
 
@@ -8096,7 +8096,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def square_numbers(lst):\n    pass",
             "solution": "# Using function approach\ndef square_numbers(lst):\n    def square(num):\n        return num ** 2\n    return list(map(square, lst))\nnumbers = [1, 2, 3, 4, 5]\nprint(square_numbers(numbers))\n\n# Using built-in approach\ndef square_numbers(lst):\n    return pow(num, 2)\n\n# Using manual approach\ndef square_numbers(lst):\n    import math\n    return math.pow(num, 2)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = square_numbers(lst)\nprint(result)\n\n# Direct approach\nprint(square_numbers([1, 3, 5, 7]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "hint": "With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
             "breakdown": "1. Define `square_numbers(lst)` with parameters `lst`.\n2. Use `**` operator or `pow()` to perform exponentiation.\n3. Return the result.",
 
             "category": "Level 1"
@@ -8104,7 +8104,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 693,
             "title": "Problem 693",
-            "description": "Create a program that takes a list of strings and returns a list of their lengths using map().\nExamples:\n  string_lengths([1, 2, 3]) → ?\n  string_lengths([5, 8, 2]) → ?\n  string_lengths([3, 1, 4]) → ?",
+            "description": "Create a program that takes a list of strings and returns a list of their lengths using map().\nExamples:\n  string_lengths(['hello', 'world', 'python']) → [5, 5, 6]\n  string_lengths(['', 'ab']) → [0, 2]",
             "initialCode": "def string_lengths(lst):\n    pass",
             "solution": "# Using function approach\ndef string_lengths(lst):\n    def length(string):\n        return len(string)\n    return list(map(length, lst))\nstrings = ['hello', 'world', 'python', 'programming']\nprint(string_lengths(strings))\n\n# Using built-in approach\ndef string_lengths(lst):\n    count = 0\n    for _ in string:\n        count += 1\n    return count\n\n# Using manual approach\ndef string_lengths(lst):\n    return sum(1 for _ in string)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = string_lengths(lst)\nprint(result)\n\n# Direct approach\nprint(string_lengths([1, 3, 5, 7]))",
 
@@ -8116,7 +8116,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 694,
             "title": "Problem 694",
-            "description": "Write a function that takes a list of strings and converts all of them to uppercase using `map()`.\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Write a function that takes a list of strings and converts all of them to uppercase using `map()`.\nExamples:\n  lst_words(['monkey', 'lizard', 'hippopotamus']) → ['MONKEY', 'LIZARD', 'HIPPOPOTAMUS']\n  lst_words(['cat', 'Dog']) → ['CAT', 'DOG']",
             "initialCode": "def lst_words(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst):\n    def word_len(word):\n        return word.upper()\n    return list(map(word_len, lst))\nlst = ['monkey', 'lizard', 'hippopotamus']\nprint(lst_words(lst))\n\n# Using built-in approach\ndef lst_words(lst):\n    return ''.join(chr(ord(c) - 32) if 'a' <= c <= 'z' else c for c in word)\n\n# Using manual approach\ndef lst_words(lst):\n    return str(word).upper()\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -8164,7 +8164,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 698,
             "title": "Problem 698",
-            "description": "Write a function that takes a list of words and returns the reversed version of each word using `map()`.\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Write a function that takes a list of words and returns the reversed version of each word using `map()`.\nExamples:\n  lst_words(['monkey', 'lizard']) → ['yeknom', 'drazil']\n  lst_words(['abc', 'Python']) → ['cba', 'nohtyP']",
             "initialCode": "def lst_words(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst):\n    def reverse_word(word):\n        return word[::-1]\n    return list(map(reverse_word, lst))\nlst = ['monkey', 'lizard', 'hippopotamus']\nprint(lst_words(lst))\n\n# Using built-in approach\ndef lst_words(lst):\n    return ''.join(reversed(word))\n\n# Using manual approach\ndef lst_words(lst):\n    result = ''\n    for char in word:\n        result = char + result\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -8188,7 +8188,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 701,
             "title": "Problem 701",
-            "description": "Write a program to take a list of strings and return a list of their first characters using `map()`.\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Write a program to take a list of strings and return a list of their first characters using `map()`.\nExamples:\n  lst_words(['monkey', 'lizard']) → ['m', 'l']\n  lst_words(['Python', 'app']) → ['P', 'a']",
             "initialCode": "def lst_words(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst):\n    def first_char(word):\n        return word[0]\n    return list(map(first_char, lst))\nlst = ['monkey', 'lizard', 'hippopotamus']\nprint(lst_words(lst))\n\n# Using built-in approach\ndef lst_words(lst):\n    result = word[0]\n    return result\n\n# Using manual approach\ndef lst_words(lst):\n    return word[0]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -8200,7 +8200,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 702,
             "title": "Problem 702",
-            "description": "Use `map()` to convert a list of binary strings to their decimal equivalents.\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Use `map()` to convert a list of binary strings to their decimal equivalents.\nExamples:\n  lst_words(['101', '110', '1001']) → [5, 6, 9]\n  lst_words(['0', '1111']) → [0, 15]",
             "initialCode": "def lst_words(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst):\n    def binary(word):\n        return int(word, 2)\n    return list(map(binary, lst))\nlst = ['101', '110', '1001']\nprint(lst_words(lst))\n\n# Using built-in approach\ndef lst_words(lst):\n    result = int(word, 2)\n    return result\n\n# Using manual approach\ndef lst_words(lst):\n    return int(word, 2)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -8212,7 +8212,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 703,
             "title": "Problem 703",
-            "description": "Write a program that takes a list of mixed-case strings and returns all strings in lowercase using `map()`.\nExamples:\n  lst_mixed_case([1, 2, 3]) → ?\n  lst_mixed_case([5, 8, 2]) → ?\n  lst_mixed_case([3, 1, 4]) → ?",
+            "description": "Write a program that takes a list of mixed-case strings and returns all strings in lowercase using `map()`.\nExamples:\n  lst_mixed_case(['LIZARD', 'hiPpopotamus', 'FroG']) → ['lizard', 'hippopotamus', 'frog']\n  lst_mixed_case(['ABC', 'PyThOn']) → ['abc', 'python']",
             "initialCode": "def lst_mixed_case(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_mixed_case(lst):\n    def lowercase(string):\n        return string.lower()\n    return list(map(lowercase, lst))\nlst = ['LIZARD', 'hiPpopotamus', 'FroG']\nprint(lst_mixed_case(lst))\n\n# Using built-in approach\ndef lst_mixed_case(lst):\n    return ''.join(chr(ord(c) + 32) if 'A' <= c <= 'Z' else c for c in string)\n\n# Using manual approach\ndef lst_mixed_case(lst):\n    return str(string).lower()\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_mixed_case(lst)\nprint(result)\n\n# Direct approach\nprint(lst_mixed_case([1, 3, 5, 7]))",
 
@@ -8228,7 +8228,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def lst_integers(lst1, lst2):\n    pass",
             "solution": "# Using function approach\ndef lst_integers(lst1, lst2):\n    def multiply(num1, num2):\n        return num1 * num2 \n    return list(map(multiply, lst1, lst2))\nlst1 = [6, 12, 23, 68]\nlst2 = [1, 2, 3, 4]\nprint(lst_integers(lst1, lst2))\n\n# Using built-in approach\ndef lst_integers(lst1, lst2):\n    result = 0\n    for _ in range(num2):\n        result += num1\n    return result\n\n# Using manual approach\ndef lst_integers(lst1, lst2):\n    return pow(num1, num2)\n\n# Script approach\nlst1 = [1, 3, 5]\nlst2 = [2, 4, 6]\nresult = lst_integers(lst1, lst2)\nprint(result)\n\n# Direct approach\nprint(lst_integers([2, 4, 6], [1, 3, 5]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
+            "hint": "Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.",
             "breakdown": "1. Define `lst_integers(lst1, lst2)` with parameters `lst1`, `lst2`.\n2. Use a list comprehension: `[x * 2 for x in input_list]` to double each element.\n3. Return the result using `return`.",
 
             "category": "Level 1"
@@ -8236,7 +8236,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 705,
             "title": "Problem 705",
-            "description": "Use `map()` to convert a list of tuples (representing x, y points) into a list of their Euclidean distances from the origin.\nExamples:\n  euclidean_distances([1, 2, 3]) → ?\n  euclidean_distances([5, 8, 2]) → ?\n  euclidean_distances([3, 1, 4]) → ?",
+            "description": "Use `map()` to convert a list of tuples (representing x, y points) into a list of their Euclidean distances from the origin.\nExamples:\n  euclidean_distances([[3, 4], [1, 1], [0, 0], [6, 8]]) → [5, 1.4142135623730951, 0, 10]\n  euclidean_distances([[5, 12], [8, 15]]) → [13, 17]",
             "initialCode": "import math\ndef euclidean_distances(points):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef euclidean_distances(points):\n    def distance(point):\n        return math.sqrt(point[0]**2 + point[1]**2)\n    return list(map(distance, points))\npoints = [(3, 4), (1, 1), (0, 0), (6, 8)]\nprint(euclidean_distances(points))\n\n# Using built-in approach\ndef euclidean_distances(points):\n    result = math.sqrt(point[0]**2 + point[1]**2)\n    return result\n\n# Using manual approach\ndef euclidean_distances(points):\n    return math.sqrt(point[0]**2 + point[1]**2)\n\n# Script approach\npoints = 15\nresult = euclidean_distances(points)\nprint(result)\n\n# Direct approach\nprint(euclidean_distances(25))",
 
@@ -8248,7 +8248,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 706,
             "title": "Problem 706",
-            "description": "Write a function that takes a list of email addresses and extracts the domain names using `map()`.\nExamples:\n  lst_emails([1, 2, 3]) → ?\n  lst_emails([5, 8, 2]) → ?\n  lst_emails([3, 1, 4]) → ?",
+            "description": "Write a function that takes a list of email addresses and extracts the domain names using `map()`.\nExamples:\n  lst_emails(['user@example.com', 'admin@domain.org']) → ['example.com', 'domain.org']\n  lst_emails(['a@test.io']) → ['test.io']",
             "initialCode": "def lst_emails(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_emails(lst):\n    def domain(string):\n        return string.split('@')[1]\n    return list(map(domain, lst))\nlst = ['user@example.com', 'admin@domain.org', 'info@website.net']\nprint(lst_emails(lst))\n\n# Using built-in approach\ndef lst_emails(lst):\n    result = string.split('@')[1]\n    return result\n\n# Using manual approach\ndef lst_emails(lst):\n    return string.split('@')[1]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_emails(lst)\nprint(result)\n\n# Direct approach\nprint(lst_emails([1, 3, 5, 7]))",
 
@@ -8264,7 +8264,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def lst_integers(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_integers(lst):\n    def even_odd(number):\n        if number % 2 == 0:\n            return 'Even'\n        else:\n            return 'Odd'\n    return list(map(even_odd, lst))\nlst = [65, 66, 67, 68, 69, 91, 120]\nprint(lst_integers(lst))\n\n# Using built-in approach\ndef lst_integers(lst):\n    result = 'Even'\n    return result\n\n# Using manual approach\ndef lst_integers(lst):\n    return 'Even'\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_integers(lst)\nprint(result)\n\n# Direct approach\nprint(lst_integers([1, 3, 5, 7]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "hint": "Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
             "breakdown": "1. Define `lst_integers(lst)` with parameters `lst`.\n2. Use a list comprehension: `[x for x in numbers if x % 2 == 0]` to filter even numbers.\n3. Return the result.",
 
             "category": "Level 1"
@@ -8276,8 +8276,8 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def negate_bool(value):\n    pass",
             "solution": "# Using function approach\ndef negate_bool(value):\n    return not value\nbool_list = [True, False, True, False]\nnegated_list = list(map(negate_bool, bool_list))\nprint(negated_list)  # Output: [False, True, False, True]\n\n# Using built-in approach\ndef negate_bool(value):\n    result = not value\n    return result\n\n# Using manual approach\ndef negate_bool(value):\n    return not value\n\n# Script approach\nvalue = 15\nresult = negate_bool(value)\nprint(result)\n\n# Direct approach\nprint(negate_bool(25))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
-            "breakdown": "1. Define `negate_bool(value)` with parameters `value`.\n2. Perform the required operation on the input parameter(s) as described in the prompt.\n3. Return the result using `return`.",
+            "hint": "Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.",
+            "breakdown": "1. Define `negate_bool(value)` with parameters `value`.\n2. Use `map(int, strings)` to convert each numeric string into an integer without writing a manual loop.\n3. Wrap the map object with `list(...)` so the function returns a real list of integers.\n4. Return the result using `return`.",
 
             "category": "Level 1"
     },
@@ -8308,7 +8308,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 711,
             "title": "Problem 711",
-            "description": "Given a list of sentences, use `map()` to return a list of the number of words in each sentence.\nExamples:\n  lst_sentence([1, 2, 3]) → ?\n  lst_sentence([5, 8, 2]) → ?\n  lst_sentence([3, 1, 4]) → ?",
+            "description": "Given a list of sentences, use `map()` to return a list of the number of words in each sentence.\nExamples:\n  lst_sentence(['hello world', 'python is fun', 'test']) → [2, 3, 1]\n  lst_sentence(['one', 'two words']) → [1, 2]",
             "initialCode": "def lst_sentence(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_sentence(lst):\n    def num_of_words(string):\n        words = string.split()\n        return len(words)\n    return list(map(num_of_words, lst))\nlst = ['how hot is it', 'what's up dog', 'today is the best day of my life']    \nprint(lst_sentence(lst))\n\n# Using built-in approach\ndef lst_sentence(lst):\n    count = 0\n    for _ in words:\n        count += 1\n    return count\n\n# Using manual approach\ndef lst_sentence(lst):\n    return sum(1 for _ in words)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_sentence(lst)\nprint(result)\n\n# Direct approach\nprint(lst_sentence([1, 3, 5, 7]))",
 
@@ -8320,7 +8320,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 712,
             "title": "Problem 712",
-            "description": "Use `map()` to take a list of strings and return a list of strings where each word has its first letter capitalized.\nExamples:\n  lst_sentence([1, 2, 3]) → ?\n  lst_sentence([5, 8, 2]) → ?\n  lst_sentence([3, 1, 4]) → ?",
+            "description": "Use `map()` to take a list of strings and return a list of strings where each word has its first letter capitalized.\nExamples:\n  lst_sentence(['hello', 'world', 'python']) → ['Hello', 'World', 'Python']\n  lst_sentence(['app', 'CODE']) → ['App', 'Code']",
             "initialCode": "def lst_sentence(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_sentence(lst):\n    def cap(word):\n        word = word.capitalize()\n        return word\n    return list(map(cap, lst))\nlst = ['mop', 'sop', 'dop']    \nprint(lst_sentence(lst))\n\n# Using built-in approach\ndef lst_sentence(lst):\n    return word.capitalize()\n\n# Using manual approach\ndef lst_sentence(lst):\n    return str(word).capitalize()\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_sentence(lst)\nprint(result)\n\n# Direct approach\nprint(lst_sentence([1, 3, 5, 7]))",
 
@@ -8332,7 +8332,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 713,
             "title": "Problem 713",
-            "description": "Write a program that takes a list of strings and removes all spaces from each string using `map()`.\nExamples:\n  lst_sentence([1, 2, 3]) → ?\n  lst_sentence([5, 8, 2]) → ?\n  lst_sentence([3, 1, 4]) → ?",
+            "description": "Write a program that takes a list of strings and removes all spaces from each string using `map()`.\nExamples:\n  lst_sentence(['hello world', 'foo bar']) → ['helloworld', 'foobar']\n  lst_sentence(['a b c', 'no_space']) → ['abc', 'no_space']",
             "initialCode": "def lst_sentence(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_sentence(lst):\n    def remove_spaces(word):\n        return word.replace(' ', '')\n    return list(map(remove_spaces, lst))\nlst = ['mop in tate', 'sop in tate', 'dop in tate']    \nprint(lst_sentence(lst))\n\n# Using built-in approach\ndef lst_sentence(lst):\n    result = word.replace(' ', '')\n    return result\n\n# Using manual approach\ndef lst_sentence(lst):\n    return word.replace(' ', '')\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_sentence(lst)\nprint(result)\n\n# Direct approach\nprint(lst_sentence([1, 3, 5, 7]))",
 
@@ -8344,7 +8344,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 714,
             "title": "Problem 714",
-            "description": "Create a program that takes a list of tuples representing (width, height) and returns a list of their areas using `map()`.\nExamples:\n  lst_of_tuples([1, 2, 3]) → ?\n  lst_of_tuples([5, 8, 2]) → ?\n  lst_of_tuples([3, 1, 4]) → ?",
+            "description": "Create a program that takes a list of tuples representing (width, height) and returns a list of their areas using `map()`.\nExamples:\n  lst_of_tuples([[3, 4], [5, 6]]) → [12, 30]\n  lst_of_tuples([[2, 7], [0, 9]]) → [14, 0]",
             "initialCode": "def lst_of_tuples(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_of_tuples(lst):\n    def area_lst(dimensions):\n        width, height = dimensions\n        area = width * height\n        return area\n    return list(map(area_lst, lst))\nlst = [(3, 5), (4, 9), (3, 9)]    \nprint(lst_of_tuples(lst))\n\n# Using built-in approach\ndef lst_of_tuples(lst):\n    result = 0\n    for _ in range(height):\n        result += width\n    return result\n\n# Using manual approach\ndef lst_of_tuples(lst):\n    return pow(width, height)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_of_tuples(lst)\nprint(result)\n\n# Direct approach\nprint(lst_of_tuples([1, 3, 5, 7]))",
 
@@ -8356,7 +8356,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 715,
             "title": "Problem 715",
-            "description": "Use `map()` to take a list of URLs and extract the domain name from each one.\nExamples:\n  extract_domain([1, 2, 3]) → ?\n  extract_domain([5, 8, 2]) → ?\n  extract_domain([3, 1, 4]) → ?",
+            "description": "Use `map()` to take a list of URLs and extract the domain name from each one.\nExamples:\n  extract_domain(['https://example.com/page', 'https://domain.org']) → ['example.com', 'domain.org']\n  extract_domain(['https://test.io/path']) → ['test.io']",
             "initialCode": "def extract_domain(lst):\n    pass",
             "solution": "# Using function approach\ndef extract_domain(lst):\n    def domain(url):\n        return url.split('//')[-1].split('/')[0]\n    return list(map(domain, lst))\nurls = [\n    'https://www.example.com/page',\n    'http://another-domain.org',\n    'https://sub.domain.com/path/to/resource'\n]\nprint(extract_domain(urls))\n\n# Using built-in approach\ndef extract_domain(lst):\n    result = url.split('//')[-1].split('/')[0]\n    return result\n\n# Using manual approach\ndef extract_domain(lst):\n    return url.split('//')[-1].split('/')[0]\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = extract_domain(lst)\nprint(result)\n\n# Direct approach\nprint(extract_domain([1, 3, 5, 7]))",
 
@@ -8368,7 +8368,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 716,
             "title": "Problem 716",
-            "description": "Write a function that takes two lists: one of numbers and one of strings, and returns a list of tuples pairing the elements using `map()`.\nExamples:\n  pair_elements([1, 2, 3], 'hello') → [(1, 'h'), (2, 'e'), (3, 'l')]\n  pair_elements([5, 8, 2], 'world') → [(5, 'w'), (8, 'o'), (2, 'r')]\n  pair_elements([3, 1, 4], 'python') → [(3, 'p'), (1, 'y'), (4, 't')]",
+            "description": "Write a function that takes two lists: one of numbers and one of strings, and returns a list of tuples pairing the elements using `map()`.\nExamples:\n  pair_elements([1, 2, 3], ['a', 'b', 'c']) → [[1, 'a'], [2, 'b'], [3, 'c']]\n  pair_elements([9, 8], ['x', 'y']) → [[9, 'x'], [8, 'y']]",
             "initialCode": "def pair_elements(numbers, strings):\n    pass",
             "solution": "# Using function approach\ndef pair_elements(numbers, strings):\n    def pair(num, string):\n        return (num, string)\n    return list(map(pair, numbers, strings))\nnumbers = [1, 2, 3]\nstrings = ['apple', 'banana', 'cherry']\nprint(pair_elements(numbers, strings))\n\n# Using built-in approach\ndef pair_elements(numbers, strings):\n    result = (num, string)\n    return result\n\n# Using manual approach\ndef pair_elements(numbers, strings):\n    return (num, string)\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nstrings = 'hello'\nresult = pair_elements(numbers, strings)\nprint(result)\n\n# Direct approach\nprint(pair_elements([4, 1, 8, 6, 3], 'world'))",
 
@@ -8380,7 +8380,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 717,
             "title": "Problem 717",
-            "description": "Create a program that converts a list of lowercase letters to uppercase using `map()`.\nExamples:\n  lowercase_to_uppercase([1, 2, 3]) → ?\n  lowercase_to_uppercase([5, 8, 2]) → ?\n  lowercase_to_uppercase([3, 1, 4]) → ?",
+            "description": "Create a program that converts a list of lowercase letters to uppercase using `map()`.\nExamples:\n  lowercase_to_uppercase(['a', 'b', 'c']) → ['A', 'B', 'C']\n  lowercase_to_uppercase(['x', 'word']) → ['X', 'WORD']",
             "initialCode": "def lowercase_to_uppercase(lst):\n    pass",
             "solution": "# Using function approach\ndef lowercase_to_uppercase(lst):\n    def to_uppercase(letter):\n        return letter.upper()\n    return list(map(to_uppercase, lst))\nlst = ['a', 'b', 'c', 'd']\nprint(lowercase_to_uppercase(lst))\n\n# Using built-in approach\ndef lowercase_to_uppercase(lst):\n    return ''.join(chr(ord(c) - 32) if 'a' <= c <= 'z' else c for c in letter)\n\n# Using manual approach\ndef lowercase_to_uppercase(lst):\n    return str(letter).upper()\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lowercase_to_uppercase(lst)\nprint(result)\n\n# Direct approach\nprint(lowercase_to_uppercase([1, 3, 5, 7]))",
 
@@ -8404,7 +8404,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 719,
             "title": "Problem 719",
-            "description": "Write a program that takes a list of sentences and returns a list of sentences in which each word is reversed using `map()`.\nExamples:\n  reverse_words_in_sentences([1, 2, 3]) → ?\n  reverse_words_in_sentences([5, 8, 2]) → ?\n  reverse_words_in_sentences([3, 1, 4]) → ?",
+            "description": "Write a program that takes a list of sentences and returns a list of sentences in which each word is reversed using `map()`.\nExamples:\n  reverse_words_in_sentences(['hello world', 'abc def']) → ['olleh dlrow', 'cba fed']\n  reverse_words_in_sentences(['one two']) → ['eno owt']",
             "initialCode": "def reverse_words_in_sentences(lst):\n    pass",
             "solution": "# Using function approach\ndef reverse_words_in_sentences(lst):\n    def reverse_sentence(sentence):\n        words = sentence.split()\n        reversed_words = []\n        for word in words:\n            reversed_words.append(word[::-1])\n        return ' '.join(reversed_words)\n    return list(map(reverse_sentence, lst))\nlst = ['The cat is fast', 'Hello world', 'Python is fun']\nprint(reverse_words_in_sentences(lst))\n\n# Using built-in approach\ndef reverse_words_in_sentences(lst):\n    return [word[::-1] for word in words]\n\n# Using manual approach\ndef reverse_words_in_sentences(lst):\n    return list(map(lambda word: word[::-1], words))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = reverse_words_in_sentences(lst)\nprint(result)\n\n# Direct approach\nprint(reverse_words_in_sentences([1, 3, 5, 7]))",
 
@@ -8416,7 +8416,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 720,
             "title": "Problem 720",
-            "description": "Use `map()` to check whether the elements of a list of strings contain only alphabetic characters.\nExamples:\n  lst_strings([1, 2, 3]) → ?\n  lst_strings([5, 8, 2]) → ?\n  lst_strings([3, 1, 4]) → ?",
+            "description": "Use `map()` to check whether the elements of a list of strings contain only alphabetic characters.\nExamples:\n  lst_strings(['hello', 'world123']) → [True, False]\n  lst_strings(['abc', '123']) → [True, False]",
             "initialCode": "def lst_strings(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_strings(lst):\n    def alpha_only(word):\n        if word.isalpha():\n            return True\n        else:\n            return False\n    return list(map(alpha_only, lst))\nlst = ['monkey', 'tomy&', 'magic']\nprint(lst_strings(lst))\n\n# Using built-in approach\ndef lst_strings(lst):\n    result = True\n    return result\n\n# Using manual approach\ndef lst_strings(lst):\n    return True\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_strings(lst)\nprint(result)\n\n# Direct approach\nprint(lst_strings([1, 3, 5, 7]))",
 
@@ -8432,7 +8432,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def square_floats(lst):\n    pass",
             "solution": "# Using function approach\ndef square_floats(lst):\n    def square(num):\n        return num * num\n    return list(map(square, lst))\nlst = [2.5, 3.1, 4.8, 6.7]\nprint(square_floats(lst))\n\n# Using built-in approach\ndef square_floats(lst):\n    result = 0\n    for _ in range(num):\n        result += num\n    return result\n\n# Using manual approach\ndef square_floats(lst):\n    return pow(num, num)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = square_floats(lst)\nprint(result)\n\n# Direct approach\nprint(square_floats([1, 3, 5, 7]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "hint": "With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
             "breakdown": "1. Define `square_floats(lst)` with parameters `lst`.\n2. Use `**` operator or `pow()` to perform exponentiation.\n3. Return the result.",
 
             "category": "Level 1"
@@ -8468,8 +8468,8 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def pair_lists(lst1, lst2):\n    pass",
             "solution": "# Using function approach\ndef pair_lists(lst1, lst2):\n    def pair_numbers(num1, num2):\n        return (num1, num2)\n    return list(map(pair_numbers, lst1, lst2))\nlst1 = [1, 2, 3]\nlst2 = [4, 5, 6]\nprint(pair_lists(lst1, lst2))\n\n# Using built-in approach\ndef pair_lists(lst1, lst2):\n    result = (num1, num2)\n    return result\n\n# Using manual approach\ndef pair_lists(lst1, lst2):\n    return (num1, num2)\n\n# Script approach\nlst1 = [1, 3, 5]\nlst2 = [2, 4, 6]\nresult = pair_lists(lst1, lst2)\nprint(result)\n\n# Direct approach\nprint(pair_lists([2, 4, 6], [1, 3, 5]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
-            "breakdown": "1. Define `pair_lists(lst1, lst2)` with parameters `lst1`, `lst2`.\n2. Perform the required operation on the input parameter(s) as described in the prompt.\n3. Return the result using `return`.",
+            "hint": "Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "breakdown": "1. Define `pair_lists(lst1, lst2)` with parameters `lst1`, `lst2`.\n2. Use `map(int, strings)` to convert each numeric string into an integer without writing a manual loop.\n3. Wrap the map object with `list(...)` so the function returns a real list of integers.\n4. Return the result using `return`.",
 
             "category": "Level 1"
     },
@@ -8504,7 +8504,7 @@ export const EXERCISES: Exercise[] = [
             "initialCode": "def lst_squares_and_cubes(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_squares_and_cubes(lst):\n    def square_and_cube(num):\n        return (num ** 2, num ** 3)\n    return list(map(square_and_cube, lst))\nlst = [1, 2, 3, 4, 5]\nprint(lst_squares_and_cubes(lst))\n\n# Using built-in approach\ndef lst_squares_and_cubes(lst):\n    result = (num ** 2, num ** 3)\n    return result\n\n# Using manual approach\ndef lst_squares_and_cubes(lst):\n    return (num ** 2, num ** 3)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_squares_and_cubes(lst)\nprint(result)\n\n# Direct approach\nprint(lst_squares_and_cubes([1, 3, 5, 7]))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
+            "hint": "Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.\nUse `return` to send the result back — `print()` alone will not satisfy a function problem.",
             "breakdown": "1. Define `lst_squares_and_cubes(lst)` with parameters `lst`.\n2. Use `**` operator or `pow()` to perform exponentiation.\n3. Return the result.",
 
             "category": "Level 1"
@@ -8512,7 +8512,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 728,
             "title": "Problem 728",
-            "description": "Write a program that uses `map()` to convert a list of RGB tuples into hexadecimal color codes.\nExamples:\n  rgb_to_hex([1, 2, 3]) → ?\n  rgb_to_hex([5, 8, 2]) → ?\n  rgb_to_hex([3, 1, 4]) → ?",
+            "description": "Write a program that uses `map()` to convert a list of RGB tuples into hexadecimal color codes.\nExamples:\n  rgb_to_hex([[255, 0, 0], [0, 255, 0]]) → ['#ff0000', '#00ff00']\n  rgb_to_hex([[0, 0, 255]]) → ['#0000ff']",
             "initialCode": "def rgb_to_hex(lst):\n    pass",
             "solution": "# Using function approach\ndef rgb_to_hex(lst):\n    def to_hex(rgb):\n        return '#{:02x}{:02x}{:02x}'.format(rgb[0], rgb[1], rgb[2])\n    return list(map(to_hex, lst))\nlst = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]\nprint(rgb_to_hex(lst))\n\n# Using built-in approach\ndef rgb_to_hex(lst):\n    result = '#{:02x}{:02x}{:02x}'.format(rgb[0], rgb[1], rgb[2])\n    return result\n\n# Using manual approach\ndef rgb_to_hex(lst):\n    return '#{:02x}{:02x}{:02x}'.format(rgb[0], rgb[1], rgb[2])\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = rgb_to_hex(lst)\nprint(result)\n\n# Direct approach\nprint(rgb_to_hex([1, 3, 5, 7]))",
 
@@ -8536,7 +8536,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 730,
             "title": "Problem 730",
-            "description": "Write a function that uses `map()` to convert a list of dates (in string format) into Python `datetime` objects.\nExamples:\n  convert_dates('hello') → ?\n  convert_dates('world') → ?\n  convert_dates('python') → ?",
+            "description": "Write a function that uses `map()` to convert a list of dates (in string format) into Python `datetime` objects.\nExamples:\n  convert_dates(['2024-01-01', '2023-12-25']) → ['2024-01-01T00:00:00', '2023-12-25T00:00:00']\n  convert_dates(['2020-02-03']) → ['2020-02-03T00:00:00']",
             "initialCode": "from datetime import datetime\ndef convert_dates(date_list):\n    pass",
             "solution": "from datetime import datetime\n\n# Using function approach\ndef convert_dates(date_list):\n    def parse_date(date_string):\n        return datetime.strptime(date_string, '%Y-%m-%d')\n    return list(map(parse_date, date_list))\ndate_list = ['2024-01-01', '2023-12-25', '2022-07-04']\nprint(convert_dates(date_list))\n\n# Using built-in approach\ndef convert_dates(date_list):\n    result = datetime.strptime(date_string, '%Y-%m-%d')\n    return result\n\n# Using manual approach\ndef convert_dates(date_list):\n    return datetime.strptime(date_string, '%Y-%m-%d')\n\n# Script approach\ndate_list = [3, 7, 2, 9, 1]\nresult = convert_dates(date_list)\nprint(result)\n\n# Direct approach\nprint(convert_dates([4, 1, 8, 6, 3]))",
 
@@ -8548,7 +8548,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 731,
             "title": "Problem 731",
-            "description": "Use `map()` to calculate the square roots of each number in a list.\nExamples:\n  calculate_square_roots([1, 2, 3]) → ?\n  calculate_square_roots([5, 8, 2]) → ?\n  calculate_square_roots([3, 1, 4]) → ?",
+            "description": "Use `map()` to calculate the square roots of each number in a list.\nExamples:\n  calculate_square_roots([1, 4, 9, 16]) → [1, 2, 3, 4]\n  calculate_square_roots([0, 25]) → [0, 5]",
             "initialCode": "import math\ndef calculate_square_roots(numbers):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef calculate_square_roots(numbers):\n    def square_root(x):\n        return math.sqrt(x)\n    return list(map(square_root, numbers))\nnumbers = [1, 4, 9, 16, 25]\nprint(calculate_square_roots(numbers))\n\n# Using built-in approach\ndef calculate_square_roots(numbers):\n    result = math.sqrt(x)\n    return result\n\n# Using manual approach\ndef calculate_square_roots(numbers):\n    return math.sqrt(x)\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = calculate_square_roots(numbers)\nprint(result)\n\n# Direct approach\nprint(calculate_square_roots([4, 1, 8, 6, 3]))",
 
@@ -8560,7 +8560,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 732,
             "title": "Problem 732",
-            "description": "Create a program that uses `map()` to calculate the percentage of each score in a list of scores based on the maximum score.\nExamples:\n  calculate_percentage([1, 2, 3], [1, 2, 3]) → ?\n  calculate_percentage([5, 8, 2], [5, 8, 2]) → ?\n  calculate_percentage([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Create a program that uses `map()` to calculate the percentage of each score in a list of scores based on the maximum score.\nExamples:\n  calculate_percentage([50, 75, 100], 100) → [50, 75, 100]\n  calculate_percentage([1, 2], 4) → [25, 50]",
             "initialCode": "def calculate_percentage(scores, max_score):\n    pass",
             "solution": "# Using function approach\ndef calculate_percentage(scores, max_score):\n    def percentage(score):\n        return (score / max_score) * 100\n    return list(map(percentage, scores))\nscores = [50, 75, 100, 80]\nmax_score = 100\nprint(calculate_percentage(scores, max_score))\n\n# Using built-in approach\ndef calculate_percentage(scores, max_score):\n    result = (score / max_score) * 100\n    return result\n\n# Using manual approach\ndef calculate_percentage(scores, max_score):\n    return (score / max_score) * 100\n\n# Script approach\nscores = 15\nmax_score = 15\nresult = calculate_percentage(scores, max_score)\nprint(result)\n\n# Direct approach\nprint(calculate_percentage(25, 25))",
 
@@ -8596,7 +8596,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 735,
             "title": "Problem 735",
-            "description": "Write a program that uses a helper function `capitalize_first_letter(word)` to capitalize the first letter of each word in a list of strings.\nExamples:\n  capitalize_first_letter('hello') → Hello\n  capitalize_first_letter('world') → World\n  capitalize_first_letter('python') → Python",
+            "description": "Write a program that uses a helper function `capitalize_first_letter(word)` to capitalize the first letter of each word in a list of strings.\nExamples:\n  capitalize_first_letter(['first', 'letter', 'word']) → ['First', 'Letter', 'Word']\n  capitalize_first_letter('hello') → 'Hello'",
             "initialCode": "def capitalize_first_letter(word):\n    pass\n\ndef word_list(lst):\n    pass\n\ndef word_list(lst):\n    pass\n\ndef capitalize_first_letter(word):\n    pass",
             "solution": "# Using function approach\ndef capitalize_first_letter(word):\n    return word.capitalize()\ndef word_list(lst):\n    return list(map(capitalize_first_letter, lst))\nlst = ['first', 'letter', 'word']\nprint(word_list(lst))\ndef word_list(lst):\n    return list(map(capitalize_first_letter, lst))\ndef capitalize_first_letter(word):\n    return word.capitalize()\nlst = ['first', 'letter', 'word']\nprint(word_list(lst))\n\n# Using built-in approach\ndef capitalize_first_letter(word):\n    return word.capitalize()\n\n# Using manual approach\ndef capitalize_first_letter(word):\n    return str(word).capitalize()\n\n# Script approach\nword = 'python'\nresult = capitalize_first_letter(word)\nprint(result)\n\n# Direct approach\nprint(capitalize_first_letter('coding'))",
 
@@ -8608,7 +8608,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 736,
             "title": "Problem 736",
-            "description": "Define a helper function `find_max(numbers)` that returns the maximum number from a list, and use it in a program to find the largest number.\nExamples:\n  lst_numbers([1, 2, 3]) → ?\n  lst_numbers([5, 8, 2]) → ?\n  lst_numbers([3, 1, 4]) → ?",
+            "description": "Define a helper function `find_max(numbers)` that returns the maximum number from a list, and use it in a program to find the largest number.\nExamples:\n  lst_numbers([2, 4, 6, 1]) → 6\n  lst_numbers([-5, -2, -9]) → -2",
             "initialCode": "def lst_numbers(lst):\n    pass\n\ndef find_max(numbers):\n    pass",
             "solution": "# Using function approach\ndef lst_numbers(lst):\n    return find_max(lst)\ndef find_max(numbers):\n    return max(numbers)\nlst = [2, 4, 6]\nprint(lst_numbers(lst))\n\n# Using built-in approach\ndef lst_numbers(lst):\n    result = find_max(lst)\n    return result\n\n# Using manual approach\ndef lst_numbers(lst):\n    return find_max(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_numbers(lst)\nprint(result)\n\n# Direct approach\nprint(lst_numbers([1, 3, 5, 7]))",
 
@@ -8620,7 +8620,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 737,
             "title": "Problem 737",
-            "description": "Create a helper function `convert_to_celsius(fahrenheit)` that converts a temperature from Fahrenheit to Celsius, and use it to convert a list of temperatures.\nExamples:\n  lst_tempertures([1, 2, 3]) → ?\n  lst_tempertures([5, 8, 2]) → ?\n  lst_tempertures([3, 1, 4]) → ?",
+            "description": "Create a helper function `convert_to_celsius(fahrenheit)` that converts a temperature from Fahrenheit to Celsius, and use it to convert a list of temperatures.\nExamples:\n  lst_tempertures([32, 50, 68]) → [0, 10, 20]\n  lst_tempertures(212) → 100",
             "initialCode": "def lst_tempertures(lst):\n    pass\n\ndef convert_to_celsius(fahrenheit):\n    pass",
             "solution": "# Using function approach\ndef lst_tempertures(lst):\n    return list(map(convert_to_celsius, lst))\ndef convert_to_celsius(fahrenheit):\n    return (fahrenheit - 32) / 1.8\nlst = [1, 16, 20, 27]    \nprint(lst_tempertures(lst))\n\n# Using built-in approach\ndef lst_tempertures(lst):\n    result = list(map(convert_to_celsius, lst))\n    return result\n\n# Using manual approach\ndef lst_tempertures(lst):\n    return list(map(convert_to_celsius, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_tempertures(lst)\nprint(result)\n\n# Direct approach\nprint(lst_tempertures([1, 3, 5, 7]))",
 
@@ -8632,7 +8632,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 738,
             "title": "Problem 738",
-            "description": "Write a program that defines a helper function `reverse_string(s)` that returns the reversed version of a string, and uses it to reverse all strings in a list.\nExamples:\n  string_lst([1, 2, 3]) → ?\n  string_lst([5, 8, 2]) → ?\n  string_lst([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `reverse_string(s)` that returns the reversed version of a string, and uses it to reverse all strings in a list.\nExamples:\n  string_lst(['hello', 'twice']) → ['olleh', 'eciwt']\n  string_lst('python') → 'nohtyp'",
             "initialCode": "def string_lst(lst):\n    pass\n\ndef reverse_string(word):\n    pass",
             "solution": "# Using function approach\ndef string_lst(lst):\n    return list(map(reverse_string, lst))\ndef reverse_string(word):\n    return word[::-1]\nlst = ['hello', 'twice']    \nprint(string_lst(lst))\n\n# Using built-in approach\ndef string_lst(lst):\n    result = list(map(reverse_string, lst))\n    return result\n\n# Using manual approach\ndef string_lst(lst):\n    return list(map(reverse_string, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = string_lst(lst)\nprint(result)\n\n# Direct approach\nprint(string_lst([1, 3, 5, 7]))",
 
@@ -8644,7 +8644,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 739,
             "title": "Problem 739",
-            "description": "Define a helper function `count_vowels(word)` that counts the number of vowels in a word, and use it to find the word with the most vowels in a list.\nExamples:\n  lst_words([1, 2, 3]) → ?\n  lst_words([5, 8, 2]) → ?\n  lst_words([3, 1, 4]) → ?",
+            "description": "Define a helper function `count_vowels(word)` that counts the number of vowels in a word, and use it to find the word with the most vowels in a list.\nExamples:\n  lst_words(['word', 'eerie', 'education']) → 'education'\n  lst_words('Queue') → 4",
             "initialCode": "def lst_words(lst):\n    pass\n\ndef count_vowels(word):\n    pass",
             "solution": "# Using function approach\ndef lst_words(lst):\n    return max(lst, key=count_vowels)\ndef count_vowels(word):\n    vowels = 'aeiou'\n    count = 0\n    for char in word:\n        if char.lower() in vowels:\n            count += 1\n    return count\nlst = ['word', 'eerie']    \nprint(lst_words(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef lst_words(lst):\n    result = max(lst, key=count_vowels)\n    return result\n\n# Using manual approach\ndef lst_words(lst):\n    return max(lst, key=count_vowels)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_words(lst)\nprint(result)\n\n# Direct approach\nprint(lst_words([1, 3, 5, 7]))",
 
@@ -8656,7 +8656,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 740,
             "title": "Problem 740",
-            "description": "Create a program with a helper function `is_palindrome(word)` that checks if a word is a palindrome and uses it to filter a list of words.\nExamples:\n  lst_of_word([1, 2, 3]) → ?\n  lst_of_word([5, 8, 2]) → ?\n  lst_of_word([3, 1, 4]) → ?",
+            "description": "Create a program with a helper function `is_palindrome(word)` that checks if a word is a palindrome and uses it to filter a list of words.\nExamples:\n  lst_of_word(['radar', 'words', 'level', 'deed']) → ['radar', 'level', 'deed']\n  lst_of_word('python') → False",
             "initialCode": "def lst_of_word(lst):\n    pass\n\ndef is_palindrome(word):\n    pass",
             "solution": "# Using function approach\ndef lst_of_word(lst):\n    return list(filter(is_palindrome, lst)) \ndef is_palindrome(word):\n    return word == word[::-1]\nlst = ['radar', 'words', 'level', 'deed']\nprint(lst_of_word(lst))\n\n# Using built-in approach\ndef lst_of_word(lst):\n    result = list(filter(is_palindrome, lst))\n    return result\n\n# Using manual approach\ndef lst_of_word(lst):\n    return list(filter(is_palindrome, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_of_word(lst)\nprint(result)\n\n# Direct approach\nprint(lst_of_word([1, 3, 5, 7]))",
 
@@ -8668,7 +8668,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 741,
             "title": "Problem 741",
-            "description": "Write a program that defines a helper function `calculate_area(radius)` to calculate the area of a circle given its radius, and uses it for a list of radii.\nExamples:\n  lst_of_radii([1, 2, 3]) → ?\n  lst_of_radii([5, 8, 2]) → ?\n  lst_of_radii([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `calculate_area(radius)` to calculate the area of a circle given its radius, and uses it for a list of radii.\nExamples:\n  lst_of_radii([1, 2, 3]) → [3.14159, 12.56636, 28.27431]\n  lst_of_radii(4) → 50.26544",
             "initialCode": "def lst_of_radii(lst):\n    pass\n\ndef calculate_area(radius):\n    pass",
             "solution": "# Using function approach\ndef lst_of_radii(lst):\n    return list(map(calculate_area, lst))\ndef calculate_area(radius):\n    return 3.14159 * radius ** 2\nlst = [1, 2, 3, 4, 5]\nprint(lst_of_radii(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef lst_of_radii(lst):\n    result = list(map(calculate_area, lst))\n    return result\n\n# Using manual approach\ndef lst_of_radii(lst):\n    return list(map(calculate_area, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_of_radii(lst)\nprint(result)\n\n# Direct approach\nprint(lst_of_radii([1, 3, 5, 7]))",
 
@@ -8680,7 +8680,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 742,
             "title": "Problem 742",
-            "description": "Define a helper function `square(n)` that returns the square of a number, and use it to square each element in a list.\nExamples:\n  lst_numbers([1, 2, 3]) → ?\n  lst_numbers([5, 8, 2]) → ?\n  lst_numbers([3, 1, 4]) → ?",
+            "description": "Define a helper function `square(n)` that returns the square of a number, and use it to square each element in a list.\nExamples:\n  lst_numbers([2, 5, 7]) → [4, 25, 49]\n  lst_numbers(9) → 81",
             "initialCode": "def lst_numbers(lst):\n    pass\n\ndef sqaure_number(num):\n    pass",
             "solution": "# Using function approach\ndef lst_numbers(lst):\n    return list(map(sqaure_number, lst))\ndef sqaure_number(num):\n    return num * num\nlst = [2, 5, 7]\nprint(lst_numbers(lst))\n\n# Using built-in approach\ndef lst_numbers(lst):\n    result = list(map(sqaure_number, lst))\n    return result\n\n# Using manual approach\ndef lst_numbers(lst):\n    return list(map(sqaure_number, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_numbers(lst)\nprint(result)\n\n# Direct approach\nprint(lst_numbers([1, 3, 5, 7]))",
 
@@ -8704,7 +8704,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 744,
             "title": "Problem 744",
-            "description": "Write a program that defines a helper function `merge_dicts(dict1, dict2)` that merges two dictionaries, and uses it to combine multiple dictionaries.\nExamples:\n  merge_dicts([1, 2, 3], [1, 2, 3]) → ?\n  merge_dicts([5, 8, 2], [5, 8, 2]) → ?\n  merge_dicts([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `merge_dicts(dict1, dict2)` that merges two dictionaries, and uses it to combine multiple dictionaries.\nExamples:\n  merge_dicts({'a':1}, {'b':2}) → [object Object]\n  merge_dicts([{'a':1}, {'b':2}, {'a':3}]) → [object Object]",
             "initialCode": "def merge_dicts(dict1, dict2):\n    pass\n\ndef combine_dicts(dicts):\n    pass",
             "solution": "# Using function approach\ndef merge_dicts(dict1, dict2):\n    return {**dict1, **dict2} \ndef combine_dicts(dicts):\n    result = {}\n    for d in dicts:\n        result = merge_dicts(result, d) \n    return result\ndicts = [\n    {'a': 1, 'b': 2},\n    {'b': 3, 'c': 4},\n    {'d': 5}\n]\nprint(combine_dicts(dicts))\n\n# Using built-in approach\ndef merge_dicts(dict1, dict2):\n    result = {**dict1, **dict2}\n    return result\n\n# Using manual approach\ndef merge_dicts(dict1, dict2):\n    return {**dict1, **dict2}\n\n# Script approach\ndict1 = {'a': 1, 'b': 2}\ndict2 = {'a': 1, 'b': 2}\nresult = merge_dicts(dict1, dict2)\nprint(result)\n\n# Direct approach\nprint(merge_dicts({'x': 10, 'y': 20}, {'x': 10, 'y': 20}))",
 
@@ -8728,7 +8728,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 746,
             "title": "Problem 746",
-            "description": "Create a program with a helper function `find_gcd(a, b)` that finds the greatest common divisor of two numbers, and use it to find the GCD of a list of pairs.\nExamples:\n  find_gcd([1, 2, 3], [1, 2, 3]) → ?\n  find_gcd([5, 8, 2], [5, 8, 2]) → ?\n  find_gcd([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Create a program with a helper function `find_gcd(a, b)` that finds the greatest common divisor of two numbers, and use it to find the GCD of a list of pairs.\nExamples:\n  find_gcd(48, 18) → 6\n  find_gcd([[48, 18], [56, 98], [100, 10]]) → [6, 14, 10]",
             "initialCode": "def find_gcd(a, b):\n    pass\n\ndef gcd_of_pairs(lst):\n    pass",
             "solution": "# Using function approach\ndef find_gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\ndef gcd_of_pairs(lst):\n    def gcd_pair(pair):\n        return find_gcd(pair[0], pair[1])\n    return list(map(gcd_pair, lst))\npairs = [(48, 18), (56, 98), (100, 10)]\ngcd_results = gcd_of_pairs(pairs)\nprint(gcd_results)\n\n# Using built-in approach\ndef find_gcd(a, b):\n    result = a\n    return result\n\n# Using manual approach\ndef find_gcd(a, b):\n    return a\n\n# Script approach\na = 10\nb = 20\nresult = find_gcd(a, b)\nprint(result)\n\n# Direct approach\nprint(find_gcd(20, 30))",
 
@@ -8740,7 +8740,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 747,
             "title": "Problem 747",
-            "description": "Write a program that defines a helper function `count_occurrences(lst, element)` that counts occurrences of an element in a list, and uses it for a given list.\nExamples:\n  lst_elements([1, 2, 3]) → ?\n  lst_elements([5, 8, 2]) → ?\n  lst_elements([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `count_occurrences(lst, element)` that counts occurrences of an element in a list, and uses it for a given list.\nExamples:\n  lst_elements(['tree', 'tree', 'tree', 'sand']) → 3\n  lst_elements(['a', 'b', 'a'], 'a') → 2",
             "initialCode": "def lst_elements(lst):\n    pass\n\ndef count_occurrences(lst, element):\n    pass",
             "solution": "# Using function approach\ndef lst_elements(lst):\n    element = 'tree' \n    return count_occurrences(lst, element)\ndef count_occurrences(lst, element):\n    count = 0\n    for item in lst:\n        if item == element:\n            count += 1\n    return count\nlst = ['tree', 'tree', 'tree', 'sand']\nprint(lst_elements(lst))\n\n# Using built-in approach\ndef lst_elements(lst):\n    result = count_occurrences(lst, element)\n    return result\n\n# Using manual approach\ndef lst_elements(lst):\n    return count_occurrences(lst, element)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_elements(lst)\nprint(result)\n\n# Direct approach\nprint(lst_elements([1, 3, 5, 7]))",
 
@@ -8764,7 +8764,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 749,
             "title": "Problem 749",
-            "description": "Create a program with a helper function `extract_domain(url)` that extracts the domain from a URL, and use it on a list of URLs.\nExamples:\n  domain_names([1, 2, 3]) → ?\n  domain_names([5, 8, 2]) → ?\n  domain_names([3, 1, 4]) → ?",
+            "description": "Create a program with a helper function `extract_domain(url)` that extracts the domain from a URL, and use it on a list of URLs.\nExamples:\n  domain_names(['http://google.com', 'http://github.com']) → ['google.com', 'github.com']\n  domain_names('http://stackoverflow.com') → 'stackoverflow.com'",
             "initialCode": "def domain_names(lst):\n    pass\n\ndef extract_URL(url):\n    pass",
             "solution": "# Using function approach\ndef domain_names(lst):\n    return list(map(extract_URL, lst))\ndef extract_URL(url):\n    site_name = url.split('//')[1]\n    return site_name\nlst = [\n    'http://google.com',\n    'http://facebook.com',\n    'http://twitter.com',\n    'http://linkedin.com',\n    'http://github.com',\n    'http://stackoverflow.com',\n    'http://youtube.com',\n    'http://amazon.com',\n    'http://microsoft.com',\n    'http://apple.com'\n]\nprint(domain_names(lst))\n\n# Using built-in approach\ndef domain_names(lst):\n    result = list(map(extract_URL, lst))\n    return result\n\n# Using manual approach\ndef domain_names(lst):\n    return list(map(extract_URL, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = domain_names(lst)\nprint(result)\n\n# Direct approach\nprint(domain_names([1, 3, 5, 7]))",
 
@@ -8776,7 +8776,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 750,
             "title": "Problem 750",
-            "description": "Write a program that defines a helper function `remove_duplicates(lst)` that removes duplicate elements from a list, and uses it on a sample list.\nExamples:\n  lst_sites([1, 2, 3]) → ?\n  lst_sites([5, 8, 2]) → ?\n  lst_sites([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `remove_duplicates(lst)` that removes duplicate elements from a list, and uses it on a sample list.\nExamples:\n  lst_sites(['google', 'twitter', 'google', 'apple']) → ['google', 'twitter', 'apple']\n  lst_sites([1, 2, 1, 3]) → [1, 2, 3]",
             "initialCode": "def lst_sites(lst):\n    pass\n\ndef remove_duplicates(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_sites(lst):\n    return remove_duplicates(lst)\ndef remove_duplicates(lst):\n    return list(set(lst))\nlst = [\n    'google',\n    'facebook',\n    'twitter',\n    'linkedin',\n    'github',\n    'stackoverflow',\n    'youtube',\n    'amazon',\n    'microsoft',\n    'apple',\n    'twitter',\n    'google'\n]\nprint(lst_sites(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef lst_sites(lst):\n    result = remove_duplicates(lst)\n    return result\n\n# Using manual approach\ndef lst_sites(lst):\n    return remove_duplicates(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_sites(lst)\nprint(result)\n\n# Direct approach\nprint(lst_sites([1, 3, 5, 7]))",
 
@@ -8788,7 +8788,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 751,
             "title": "Problem 751",
-            "description": "Define a helper function `flatten_list(nested_list)` that flattens a nested list, and use it to flatten a list of lists.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Define a helper function `flatten_list(nested_list)` that flattens a nested list, and use it to flatten a list of lists.\nExamples:\n  main([[1, 2], [3], [4, 5]]) → [1, 2, 3, 4, 5]\n  main([['a'], ['b', 'c']]) → ['a', 'b', 'c']",
             "initialCode": "def main(lst):\n    pass\n\ndef lst_of_lists(nested_list):\n    pass\n\ndef flatten_list(nested_list):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    result = []\n    for i in lst:\n        for j in i:\n            result.append(j)       \n    return result\nlst  = [['list1', 'list2'], ['list3', 'list4']]\nprint(main(lst))\ndef lst_of_lists(nested_list):\n    return flatten_list(nested_list)\ndef flatten_list(nested_list):\n    flat_list = []\n    for sublist in nested_list:\n        for item in sublist:\n            flat_list.append(item)\n    return flat_list\nnested_list = [\n    [1, 2, 3],\n    [4, 5],\n    [6, 7, 8, 9],\n    [10]\n]\nprint(lst_of_lists(nested_list))\n\n# Using built-in approach\ndef main(lst):\n    return [j for i in lst]\n\n# Using manual approach\ndef main(lst):\n    return list(map(lambda i: j, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -8800,7 +8800,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 752,
             "title": "Problem 752",
-            "description": "Create a program with a helper function `is_prime(n)` that checks if a number is prime, and uses it to filter a list of numbers.\nExamples:\n  filter_primes([1, 2, 3]) → ?\n  filter_primes([5, 8, 2]) → ?\n  filter_primes([3, 1, 4]) → ?",
+            "description": "Create a program with a helper function `is_prime(n)` that checks if a number is prime, and uses it to filter a list of numbers.\nExamples:\n  filter_primes([1, 2, 3, 4, 5, 9, 11]) → [2, 3, 5, 11]\n  filter_primes(9) → False",
             "initialCode": "def filter_primes(lst):\n    pass\n\ndef is_prime(n):\n    pass",
             "solution": "# Using function approach\ndef filter_primes(lst):\n    return list(filter(is_prime, lst))\ndef is_prime(n):\n    if n <= 1:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]\nprint(filter_primes(numbers))\n\n# Using built-in approach\ndef filter_primes(lst):\n    result = list(filter(is_prime, lst))\n    return result\n\n# Using manual approach\ndef filter_primes(lst):\n    return list(filter(is_prime, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = filter_primes(lst)\nprint(result)\n\n# Direct approach\nprint(filter_primes([1, 3, 5, 7]))",
 
@@ -8836,7 +8836,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 755,
             "title": "Problem 755",
-            "description": "Create a program with a helper function `get_unique_elements(lst)` that returns the unique elements of a list, and uses it on a sample list.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Create a program with a helper function `get_unique_elements(lst)` that returns the unique elements of a list, and uses it on a sample list.\nExamples:\n  main(['apple', 'banana', 'apple', 'kiwi']) → ['apple', 'banana', 'kiwi']\n  main([1, 2, 1, 3]) → [1, 2, 3]",
             "initialCode": "def main(lst):\n    pass\n\ndef get_unique_elements(word):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return get_unique_elements(lst)\ndef get_unique_elements(word):\n    return list(set(word))\nlst = [\n    'apple',\n    'banana',\n    'orange',\n    'apple',\n    'grape',\n    'banana',\n    'kiwi',\n    'mango',\n    'peach',\n    'kiwi',\n    'pear'\n]\nprint(main(lst))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef main(lst):\n    result = get_unique_elements(lst)\n    return result\n\n# Using manual approach\ndef main(lst):\n    return get_unique_elements(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -8884,7 +8884,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 759,
             "title": "Problem 759",
-            "description": "Write a program that defines a helper function `calculate_average(lst)` that calculates the average of a list, and uses it on multiple lists.\nExamples:\n  main([1, 2, 3], [1, 2, 3]) → ?\n  main([5, 8, 2], [5, 8, 2]) → ?\n  main([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `calculate_average(lst)` that calculates the average of a list, and uses it on multiple lists.\nExamples:\n  main([10, 20, 30]) → 20\n  main([10, 20], [2, 4, 6]) → [15, 4]",
             "initialCode": "def main(lst1, lst2):\n    pass\n\ndef calculate_average(lst):\n    pass",
             "solution": "# Using function approach\ndef main(lst1, lst2):\n    avg1 = calculate_average(lst1)\n    avg2 = calculate_average(lst2)\n    return avg1, avg2\ndef calculate_average(lst):\n    length_lst = len(lst)\n    total = sum(lst)\n    average = total / length_lst\n    return average\nlist1 = [3, 7, 2, 9, 12, 5]\nlist2 = [14, 6, 8, 11, 3, 10]\nprint(main(list1, list2))\n\n# Using built-in approach\ndef main(lst1, lst2):\n    result = avg1, avg2\n    return result\n\n# Using manual approach\ndef main(lst1, lst2):\n    return avg1, avg2\n\n# Script approach\nlst1 = [1, 3, 5]\nlst2 = [2, 4, 6]\nresult = main(lst1, lst2)\nprint(result)\n\n# Direct approach\nprint(main([2, 4, 6], [1, 3, 5]))",
 
@@ -8896,7 +8896,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 760,
             "title": "Problem 760",
-            "description": "Define a helper function `convert_to_kilometers(miles)` that converts miles to kilometers, and uses it to convert a list of distances.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Define a helper function `convert_to_kilometers(miles)` that converts miles to kilometers, and uses it to convert a list of distances.\nExamples:\n  main(10) → 16.0934\n  main([1, 2]) → [1.60934, 3.21868]",
             "initialCode": "def main(lst):\n    pass\n\ndef convert_to_kilometers(miles):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return list(map(convert_to_kilometers, lst))\ndef convert_to_kilometers(miles):\n    miles_to_km = 1.60934 \n    kilometers = miles * miles_to_km\n    return kilometers\nlst = [34, 67, 157]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = list(map(convert_to_kilometers, lst))\n    return result\n\n# Using manual approach\ndef main(lst):\n    return list(map(convert_to_kilometers, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -8920,7 +8920,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 762,
             "title": "Problem 762",
-            "description": "Write a program that defines a helper function `remove_whitespace(s)` that removes whitespace from a string, and uses it on a list of strings.\nExamples:\n  main('hello') → ?\n  main('world') → ?\n  main('python') → ?",
+            "description": "Write a program that defines a helper function `remove_whitespace(s)` that removes whitespace from a string, and uses it on a list of strings.\nExamples:\n  main('hello world') → 'helloworld'\n  main('a b c') → 'abc'",
             "initialCode": "def main(string):\n    pass\n\ndef remove_whitespace(s):\n    pass",
             "solution": "# Using function approach\ndef main(string):\n    return remove_whitespace(string)\ndef remove_whitespace(s):\n    return s.replace(' ', '')\nstring = 'today I'm going to the shopping centre'\nprint(main(string))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef main(string):\n    result = remove_whitespace(string)\n    return result\n\n# Using manual approach\ndef main(string):\n    return remove_whitespace(string)\n\n# Script approach\nstring = 'hello'\nresult = main(string)\nprint(result)\n\n# Direct approach\nprint(main('world'))",
 
@@ -8932,7 +8932,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 763,
             "title": "Problem 763",
-            "description": "Define a helper function `get_positive_numbers(lst)` that returns only the positive numbers from a list, and uses it on a sample list.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Define a helper function `get_positive_numbers(lst)` that returns only the positive numbers from a list, and uses it on a sample list.\nExamples:\n  main([1, -2, 2, -3, 3]) → [1, 2, 3]\n  main(-1) → False",
             "initialCode": "def main(lst):\n    pass\n\ndef get_positive_numbers(number):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return list(filter(get_positive_numbers, lst))\ndef get_positive_numbers(number):\n    return number > 0\nlst = [1, -2, 2, -3, 3, 4, -4]    \nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = list(filter(get_positive_numbers, lst))\n    return result\n\n# Using manual approach\ndef main(lst):\n    return list(filter(get_positive_numbers, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -8956,7 +8956,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 765,
             "title": "Problem 765",
-            "description": "Write a program that defines a helper function `check_even_odd(n)` that returns \"Even\" or \"Odd\" for a number, and uses it for a list of numbers.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `check_even_odd(n)` that returns \"Even\" or \"Odd\" for a number, and uses it for a list of numbers.\nExamples:\n  main([45, 7, 2, 3]) → ['Odd', 'Odd', 'Even', 'Odd']\n  main(8) → 'Even'",
             "initialCode": "def main(lst):\n    pass\n\ndef check_even_odd(n):\n    pass\n\ndef main(lst):\n    pass\n\ndef check_even_odd(n):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return list(map(check_even_odd, lst))\ndef check_even_odd(n):\n    if n % 2 == 0:\n        return 'Even'\n    else:\n        return 'Odd'\nlst = [45, 7, 2, 3, 68, 36]\nprint(main(lst))\ndef main(lst):\n    results = []\n    for number in lst:\n        results.append(check_even_odd(number))\n    return results\ndef check_even_odd(n):\n    if n % 2 == 0:\n        return 'Even'\n    else:\n        return 'Odd'\nlst = [45, 7, 2, 3, 68, 36]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = list(map(check_even_odd, lst))\n    return result\n\n# Using manual approach\ndef main(lst):\n    return list(map(check_even_odd, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -8968,7 +8968,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 766,
             "title": "Problem 766",
-            "description": "Define a helper function `convert_to_uppercase(word)` that converts a word to uppercase, and uses it on a list of words.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Define a helper function `convert_to_uppercase(word)` that converts a word to uppercase, and uses it on a list of words.\nExamples:\n  main(['hello', 'world']) → ['HELLO', 'WORLD']\n  main('python') → 'PYTHON'",
             "initialCode": "def main(lst):\n    pass\n\ndef convert_to_uppercase(word):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return list(map(convert_to_uppercase, lst))  \ndef convert_to_uppercase(word):\n    return word.upper()\nlst = ['eorl', 'sitting', 'kong']\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = list(map(convert_to_uppercase, lst))\n    return result\n\n# Using manual approach\ndef main(lst):\n    return list(map(convert_to_uppercase, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -8980,7 +8980,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 767,
             "title": "Problem 767",
-            "description": "Create a program with a helper function `count_characters(s)` that counts the characters in a string, and uses it on a list of strings.\nExamples:\n  main('hello') → ?\n  main('world') → ?\n  main('python') → ?",
+            "description": "Create a program with a helper function `count_characters(s)` that counts the characters in a string, and uses it on a list of strings.\nExamples:\n  main(['eorl', 'sitting', 'mountain']) → [4, 7, 8]\n  main('hello') → 5",
             "initialCode": "def main(lst_str):\n    pass\n\ndef count_characters(s):\n    pass\n\ndef main(lst_str):\n    pass\n\ndef count_characters(s):\n    pass",
             "solution": "# Using function approach\ndef main(lst_str):\n    return list(map(count_characters, lst_str))  \ndef count_characters(s):\n    return len(s)\nlst_str = ['eorl', 'sitting', 'mountain']\nprint(count_characters(lst_str))\ndef main(lst_str):\n    return list(map(count_characters, lst_str))  # Apply count_characters to each string in the list\ndef count_characters(s):\n    return len(s)\nlst_str = ['eorl', 'sitting', 'mountain']\nprint(main(lst_str))\n\n# Using built-in approach\ndef main(lst_str):\n    result = list(map(count_characters, lst_str))\n    return result\n\n# Using manual approach\ndef main(lst_str):\n    return list(map(count_characters, lst_str))\n\n# Script approach\nlst_str = 'hello'\nresult = main(lst_str)\nprint(result)\n\n# Direct approach\nprint(main('world'))",
 
@@ -8992,7 +8992,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 768,
             "title": "Problem 768",
-            "description": "Write a program that defines a helper function `remove_special_characters(s)` that removes special characters from a string, and uses it on a sample list of strings.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `remove_special_characters(s)` that removes special characters from a string, and uses it on a sample list of strings.\nExamples:\n  main(['eor?@l', 's@itting?', '@mountain?']) → ['eorl', 'sitting', 'mountain']\n  main('a?@b') → 'ab'",
             "initialCode": "def main(lst):\n    pass\n\ndef remove_special_characters(s):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return list(map(remove_special_characters, lst))  \ndef remove_special_characters(s):\n    s = s.replace('@', '').replace('?', '')\n    return s\nlst = ['eor?@l', 's@itting?', '@mountain?'] \nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = list(map(remove_special_characters, lst))\n    return result\n\n# Using manual approach\ndef main(lst):\n    return list(map(remove_special_characters, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -9004,7 +9004,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 769,
             "title": "Problem 769",
-            "description": "Define a helper function `is_substring(s1, s2)` that checks if `s1` is a substring of `s2`, and uses it on a list of string pairs.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Define a helper function `is_substring(s1, s2)` that checks if `s1` is a substring of `s2`, and uses it on a list of string pairs.\nExamples:\n  main([['apple', 'pineapple'], ['cat', 'dog']]) → [True, False]\n  main('dog', 'doghouse') → True",
             "initialCode": "def main(lst):\n    pass\n\ndef is_substring(s1, s2):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    results = []\n    for pair in lst:\n        results.append(is_substring(pair[0], pair[1]))\n    return results\ndef is_substring(s1, s2):\n    return s1 in s2\nlst = [('apple', 'pineapple'), ('dog', 'doghouse'), ('cat', 'concatenate')]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = results\n    return result\n\n# Using manual approach\ndef main(lst):\n    return results\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -9016,7 +9016,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 770,
             "title": "Problem 770",
-            "description": "Create a program with a helper function `sum_of_list(lst)` that returns the sum of all numbers in a list, and uses it on a sample list.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Create a program with a helper function `sum_of_list(lst)` that returns the sum of all numbers in a list, and uses it on a sample list.\nExamples:\n  main([2, 2, 2, 2, 2]) → 10\n  main([1, -1, 5]) → 5",
             "initialCode": "def main(lst):\n    pass\n\ndef sum_of_list(n):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return sum_of_list(lst)\ndef sum_of_list(n):\n    count = 0\n    for item in n:\n        count += item\n    return count\nlst = [2, 2, 2, 2, 2]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    return sum_of_list(lst)\ndef sum_of_list(n):\n    return sum(n)\n\n# Using manual approach\ndef main(lst):\n    return sum_of_list(lst)\ndef sum_of_list(n):\n    count = 0\n    for item in n:\n        count += item\n    return count\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -9028,7 +9028,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 771,
             "title": "Problem 771",
-            "description": "Write a program that defines a helper function `get_even_numbers(lst)` that filters and returns even numbers from a list, and uses it on a sample list.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a program that defines a helper function `get_even_numbers(lst)` that filters and returns even numbers from a list, and uses it on a sample list.\nExamples:\n  main([46, 22, 7, 4, 8, 13]) → [46, 22, 4, 8]\n  main(7) → False",
             "initialCode": "def main(lst):\n    pass\n\ndef get_even_numbers(n):\n    pass",
             "solution": "# Using function approach\ndef main(lst):\n    return list(filter(get_even_numbers, lst))\ndef get_even_numbers(n):\n    return n % 2 == 0  #\nlst = [46, 22, 7, 4, 8, 13]\nprint(main(lst))\n\n# Using built-in approach\ndef main(lst):\n    result = list(filter(get_even_numbers, lst))\n    return result\n\n# Using manual approach\ndef main(lst):\n    return list(filter(get_even_numbers, lst))\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = main(lst)\nprint(result)\n\n# Direct approach\nprint(main([1, 3, 5, 7]))",
 
@@ -9040,7 +9040,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 772,
             "title": "Problem 772",
-            "description": "Define a helper function `merge_sorted_lists(lst1, lst2)` that merges and sorts two lists, and uses it to combine multiple sorted lists.\nExamples:\n  main([1, 2, 3], [1, 2, 3]) → ?\n  main([5, 8, 2], [5, 8, 2]) → ?\n  main([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Define a helper function `merge_sorted_lists(lst1, lst2)` that merges and sorts two lists, and uses it to combine multiple sorted lists.\nExamples:\n  main([3, 1], [2, 4]) → [1, 2, 3, 4]\n  main([1, 33, 8], [9, 2, 7]) → [1, 2, 7, 8, 9, 33]",
             "initialCode": "def main(lst1, lst2):\n    pass\n\ndef merge_sorted_lists(x, y):\n    pass\n\ndef main(lst1, lst2):\n    pass",
             "solution": "# Using function approach\ndef main(lst1, lst2):\n    return merge_sorted_lists(lst1, lst2)\ndef merge_sorted_lists(x, y):\n    return sorted(x + y)\nlst1 = [1, 2, 3]\nlst2 = [4, 5, 6]   \nprint(main(lst1, lst2))\ndef main(lst1, lst2):\n    sort1 = sorted(lst1)\n    sort2 = sorted(lst2)\n    merge_lst = {*sort1, *sort2}\n    return merge_lst\nlst1 = [1, 33, 8]\nlst2 = [9, 2, 7]\nmain(lst1, lst2)\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef main(lst1, lst2):\n    result = merge_sorted_lists(lst1, lst2)\n    return result\n\n# Using manual approach\ndef main(lst1, lst2):\n    return merge_sorted_lists(lst1, lst2)\n\n# Script approach\nlst1 = [1, 3, 5]\nlst2 = [2, 4, 6]\nresult = main(lst1, lst2)\nprint(result)\n\n# Direct approach\nprint(main([2, 4, 6], [1, 3, 5]))",
 
@@ -9328,7 +9328,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 796,
             "title": "Problem 796",
-            "description": "Write a Python program to map a list of strings to their lengths using a dictionary.\nExamples:\n  map_lst_string_dic([1, 2, 3]) → ?\n  map_lst_string_dic([5, 8, 2]) → ?\n  map_lst_string_dic([3, 1, 4]) → ?",
+            "description": "Write a Python program to map a list of strings to their lengths using a dictionary.\nExamples:\n  map_lst_string_dic(['it', 'shop', 'jonny']) → [object Object]\n  map_lst_string_dic(['not', 'house']) → [object Object]",
             "initialCode": "def map_lst_string_dic(lst):\n    pass\n\ndef len_dic(lst):\n    pass",
             "solution": "# Using function approach\ndef map_lst_string_dic(lst):\n    result = {}\n    for word in lst:\n        result[word] = len(word)\n    return result\nlst = ['it', 'shop', 'jonny']\nprint(map_lst_string_dic(lst))\ndef len_dic(lst):\n    result = {}\n    for word in lst:\n        count = 0\n        for char in word:\n            count += 1\n        result[word] = count\n    return result\nlst = ['not', 'house', 'Jonathan']\nprint(len_dic(lst))\n\n# Using built-in approach\ndef map_lst_string_dic(lst):\n    result = result\n    return result\n\n# Using manual approach\ndef map_lst_string_dic(lst):\n    return result\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = map_lst_string_dic(lst)\nprint(result)\n\n# Direct approach\nprint(map_lst_string_dic([1, 3, 5, 7]))",
 
@@ -9388,7 +9388,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 801,
             "title": "Problem 801",
-            "description": "Write a Python program to convert a dictionary into a list of tuples, where each tuple contains a key-value pair.\nExamples:\n  dic_lst_tuples([1, 2, 3]) → ?\n  dic_lst_tuples([5, 8, 2]) → ?\n  dic_lst_tuples([3, 1, 4]) → ?",
+            "description": "Write a Python program to convert a dictionary into a list of tuples, where each tuple contains a key-value pair.\nExamples:\n  dic_lst_tuples({'a':1,'b':2}) → [['a', 1], ['b', 2]]\n  dic_lst_tuples({'x':9}) → [['x', 9]]",
             "initialCode": "def dic_lst_tuples(dic):\n    pass",
             "solution": "# Using function approach\ndef dic_lst_tuples(dic):\n    return list(dic.items())\ndic = {\n    'name': 'Alice',\n    'ages': 'stop',\n    'cities': 'New York',\n    'job': 'Engineer',\n    'nickname': 'Alice' \n}\nprint(dic_lst_tuples(dic))\n\n# Using built-in approach\ndef dic_lst_tuples(dic):\n    result = list(dic.items())\n    return result\n\n# Using manual approach\ndef dic_lst_tuples(dic):\n    return list(dic.items())\n\n# Script approach\ndic = 15\nresult = dic_lst_tuples(dic)\nprint(result)\n\n# Direct approach\nprint(dic_lst_tuples(25))",
 
@@ -9412,7 +9412,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 803,
             "title": "Problem 803",
-            "description": "Write a Python program to replace the value of a key in a dictionary with a list of values if the value is not already a list.\nExamples:\n  replace_value([1, 2, 3], [1, 2, 3]) → ?\n  replace_value([5, 8, 2], [5, 8, 2]) → ?\n  replace_value([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python program to replace the value of a key in a dictionary with a list of values if the value is not already a list.\nExamples:\n  replace_value({'a':1,'b':[2]}, [1, 2, 3]) → [object Object]\n  replace_value({'x':5,'y':[1]}, [9]) → [object Object]",
             "initialCode": "def replace_value(dic, list_values):\n    pass",
             "solution": "# Using function approach\ndef replace_value(dic, list_values):\n    for key in dic:\n        if not isinstance(dic[key], list):\n            dic[key] = list_values\n    return dic\ndic = {\n    'name': 'Alice',\n    'ages': 'Alice',\n    'cities': 'New York',\n    'job': 'Engineer',\n    'nickname': 'Alice' \n}\nlist_values = ['one', 'two', 'three', 'four', 'five']\nprint(replace_value(dic, list_values))\n\n# Using built-in approach\ndef replace_value(dic, list_values):\n    result = dic\n    return result\n\n# Using manual approach\ndef replace_value(dic, list_values):\n    return dic\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nlist_values = 15\nresult = replace_value(dic, list_values)\nprint(result)\n\n# Direct approach\nprint(replace_value([4, 1, 8, 6, 3], 25))",
 
@@ -9436,7 +9436,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 805,
             "title": "Problem 805",
-            "description": "Write a Python program to create a dictionary from a string where the keys are characters and the values are the number of occurrences of each character.\nExamples:\n  string_dic('hello') → {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n  string_dic('world') → {'w': 1, 'o': 1, 'r': 1, 'l': 1, 'd': 1}\n  string_dic('python') → {'p': 1, 'y': 1, 't': 1, 'h': 1, 'o': 1, 'n': 1}",
+            "description": "Write a Python program to create a dictionary from a string where the keys are characters and the values are the number of occurrences of each character.\nExamples:\n  string_dic('hello') → [object Object]\n  string_dic('banana') → [object Object]",
             "initialCode": "def string_dic(string):\n    pass\n\ndef string_dic(string):\n    pass\n\ndef string_dic(string):\n    pass",
             "solution": "# Using function approach\ndef string_dic(string):\n    result = {}\n    for char in string:\n        if char in result:\n            result[char] += 1\n        else:\n            result[char] = 1\n    return result\nstring = 'what's happening today?'\nprint(string_dic(string))\n#new line\ndef string_dic(string):\n    result = {}\n    for char in string:\n        if char in result:\n            result[char] += 1\n        else:\n            result[char] = 1\n    return result\nstring = 'what's happening today?'\nresult = string_dic(string)\nfor key, value in result.items():\n    print(f'{key}: {value}')\n#sort keys    \ndef string_dic(string):\n    result = {}\n    for char in string:\n        if char in result:\n            result[char] += 1\n        else:\n            result[char] = 1\n    return result\nstring = 'what's happening today?'\nresult = string_dic(string)\nfor key in sorted(result):\n    print(f'{key}: {result[key]}')\n# Using inner function\n    # Inline version available\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef string_dic(string):\n    result = result\n    return result\n\n# Using manual approach\ndef string_dic(string):\n    return result\n\n# Script approach\nstring = 'hello'\nresult = string_dic(string)\nprint(result)\n\n# Direct approach\nprint(string_dic('world'))",
 
@@ -9460,7 +9460,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 807,
             "title": "Problem 807",
-            "description": "Write a Python program to create a dictionary from a list of tuples.\nExamples:\n  lst_tuples([1, 2, 3]) → ?\n  lst_tuples([5, 8, 2]) → ?\n  lst_tuples([3, 1, 4]) → ?",
+            "description": "Write a Python program to create a dictionary from a list of tuples.\nExamples:\n  lst_tuples([['a', 1], ['b', 2], ['c', 3]]) → [object Object]\n  lst_tuples([['x', 9]]) → [object Object]",
             "initialCode": "def lst_tuples(lst):\n    pass",
             "solution": "# Using function approach\ndef lst_tuples(lst):\n    return dict(lst)\nlst = [('a', 1), ('b', 2), ('c', 3), ('d', 4)]\nprint(lst_tuples(lst))\n\n# Using built-in approach\ndef lst_tuples(lst):\n    result = dict(lst)\n    return result\n\n# Using manual approach\ndef lst_tuples(lst):\n    return dict(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = lst_tuples(lst)\nprint(result)\n\n# Direct approach\nprint(lst_tuples([1, 3, 5, 7]))",
 
@@ -9508,7 +9508,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 811,
             "title": "Problem 811",
-            "description": "Write a Python program to create a dictionary of words and their lengths from a given sentence.\nExamples:\n  word_len('hello') → {'hello': 5}\n  word_len('world') → {'world': 5}\n  word_len('python') → {'python': 6}",
+            "description": "Write a Python program to create a dictionary of words and their lengths from a given sentence.\nExamples:\n  word_len('today we code') → [object Object]\n  word_len('a bb') → [object Object]",
             "initialCode": "def word_len(string):\n    pass",
             "solution": "# Using function approach\ndef word_len(string):\n    words = string.split()\n    result = {}\n    for word in words:\n        result[word] = len(word)\n    return result\nstring = 'today we are going to the beach'\nprint(word_len(string))\n\n# Using built-in approach\ndef word_len(string):\n    result = result\n    return result\n\n# Using manual approach\ndef word_len(string):\n    return result\n\n# Script approach\nstring = 'hello'\nresult = word_len(string)\nprint(result)\n\n# Direct approach\nprint(word_len('world'))",
 
@@ -9520,7 +9520,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 812,
             "title": "Problem 812",
-            "description": "Write a Python program to create a dictionary of words and their lengths from a given sentence.\nExamples:\n  word_len('hello') → {'hello': 5}\n  word_len('world') → {'world': 5}\n  word_len('python') → {'python': 6}",
+            "description": "Write a Python program to create a dictionary of words and their lengths from a given sentence.\nExamples:\n  word_len('python is fun') → [object Object]\n  word_len('a bb') → [object Object]",
             "initialCode": "def word_len(string):\n    pass",
             "solution": "# Using function approach\ndef word_len(string):\n    words = string.split()\n    result = {}\n    for word in words:\n        result[word] = len(word)\n    return result\nstring = 'today we are going to the beach'\nprint(word_len(string))\n\n# Using built-in approach\ndef word_len(string):\n    result = result\n    return result\n\n# Using manual approach\ndef word_len(string):\n    return result\n\n# Script approach\nstring = 'hello'\nresult = word_len(string)\nprint(result)\n\n# Direct approach\nprint(word_len('world'))",
 
@@ -9532,7 +9532,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 813,
             "title": "Problem 813",
-            "description": "Write a Python program to group words in a dictionary based on their starting letter.\nExamples:\n  starting_letter('hello') → ?\n  starting_letter('world') → ?\n  starting_letter('python') → ?",
+            "description": "Write a Python program to group words in a dictionary based on their starting letter.\nExamples:\n  starting_letter({'Bob':50,'Alex':72,'Fred':87,'Ben':90}) → [object Object]\n  starting_letter({'name':777,'age':56}) → [object Object]",
             "initialCode": "def starting_letter(dic):\n    pass\n\ndef main(dic):\n    pass",
             "solution": "# Using function approach\ndef starting_letter(dic):\n    result = {}\n    for key in dic.keys():\n        first_letter = key[0]\n        if first_letter not in result:\n            result[first_letter] = []\n        result[first_letter].append(key)\n    return result\ndic = {\n    'Bob': 50,\n    'Alex': 72,\n    'Fred': 87,\n    'Mike': 60,\n    'Liz': 90 \n}\nprint(starting_letter(dic))\ndef main(dic):\n    result = {}\n    for key, value in dic.items():\n        first_letter = key[0]\n        result[first_letter] = key\n    return result\ndic = {\n    'name': 777,\n    'age': 56,\n    'city': 34,\n    'job': 1\n}\nprint(main(dic))\n\n# Using built-in approach\ndef starting_letter(dic):\n    result = result\n    return result\n\n# Using manual approach\ndef starting_letter(dic):\n    return result\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = starting_letter(dic)\nprint(result)\n\n# Direct approach\nprint(starting_letter([4, 1, 8, 6, 3]))",
 
@@ -9568,7 +9568,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 816,
             "title": "Problem 816",
-            "description": "Write a Python program to count how many times each vowel occurs in a given sentence using a dictionary.\nExamples:\n  count_vowels('hello') → {'a': 0, 'e': 1, 'i': 0, 'o': 1, 'u': 0}\n  count_vowels('world') → {'a': 0, 'e': 0, 'i': 0, 'o': 1, 'u': 0}\n  count_vowels('python') → {'a': 0, 'e': 0, 'i': 0, 'o': 1, 'u': 0}",
+            "description": "Write a Python program to count how many times each vowel occurs in a given sentence using a dictionary.\nExamples:\n  count_vowels('hello') → [object Object]\n  count_vowels('aei') → [object Object]",
             "initialCode": "def count_vowels(string):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(string):\n    vowels = 'aeiou'\n    result = {}\n    for vowel in vowels:\n        result[vowel] = 0\n    for char in string.lower():\n        if char in vowels:\n            result[char] += 1\n    return result\nstring = 'word how many times vowels? How many times many times many'\nprint(count_vowels(string))\n\n# Using built-in approach\ndef count_vowels(string):\n    result = result\n    return result\n\n# Using manual approach\ndef count_vowels(string):\n    return result\n\n# Script approach\nstring = 'hello'\nresult = count_vowels(string)\nprint(result)\n\n# Direct approach\nprint(count_vowels('world'))",
 
@@ -9616,7 +9616,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 820,
             "title": "Problem 820",
-            "description": "Write a Python program to merge multiple dictionaries into one.\nExamples:\n  merge_dicts([1, 2, 3], [1, 2, 3]) → ?\n  merge_dicts([5, 8, 2], [5, 8, 2]) → ?\n  merge_dicts([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python program to merge multiple dictionaries into one.\nExamples:\n  merge_dicts({'name':'Steven'}, {'named':'Alice'}) → [object Object]\n  merge_dicts({'a':1}, {'b':2}) → [object Object]",
             "initialCode": "def merge_dicts(dic1, dic2):\n    pass",
             "solution": "# Using function approach\ndef merge_dicts(dic1, dic2):\n    merged_dict = {**dic1, **dic2}\n    return merged_dict\ndic1 = {\n    'name': 'Steven',\n    'age': 56,\n    'city': 'New York',\n    'job': 'Engineer'\n}\ndic2 = {\n    'named': 'Alice',\n    'aged': 30,\n    'cities': 'New York',\n    'jobless': 'Engineer'\n}\nprint(merge_dicts(dic1, dic2))\n\n# Using built-in approach\ndef merge_dicts(dic1, dic2):\n    result = merged_dict\n    return result\n\n# Using manual approach\ndef merge_dicts(dic1, dic2):\n    return merged_dict\n\n# Script approach\ndic1 = 15\ndic2 = 15\nresult = merge_dicts(dic1, dic2)\nprint(result)\n\n# Direct approach\nprint(merge_dicts(25, 25))",
 
@@ -9688,7 +9688,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 826,
             "title": "Problem 826",
-            "description": "Write a Python program to add multiple new key-value pair to an existing dictionary.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a Python program to add multiple new key-value pair to an existing dictionary.\nExamples:\n  main({'a':1}) → [object Object]\n  main({'name':777}, {'status':'unemployed','country':'USA'}) → [object Object]",
             "initialCode": "def main(dic):\n    pass\n\ndef add_multiple_pairs(dic, new_pairs):\n    pass",
             "solution": "# Using function approach\ndef main(dic):\n    dic['first'] = 1\n    dic['second'] = 2\n    return dic\ndic = {\n    'name': 777,\n    'age': 56,\n    'city': 34,\n    'job': 1\n}\nprint(main(dic))\ndef add_multiple_pairs(dic, new_pairs):\n    dic.update(new_pairs)\n    return dic\ndic = {\n    'name': 777,\n    'age': 56,\n    'city': 34,\n    'job': 1\n}\nnew_pairs = {\n    'status': 'unemployed',\n    'country': 'USA',\n    'hobby': 'coding'\n}\nprint(add_multiple_pairs(dic, new_pairs))\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef main(dic):\n    result = dic\n    return result\n\n# Using manual approach\ndef main(dic):\n    return dic\n\n# Script approach\ndic = [3, 7, 2, 9, 1]\nresult = main(dic)\nprint(result)\n\n# Direct approach\nprint(main([4, 1, 8, 6, 3]))",
 
@@ -10180,7 +10180,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 867,
             "title": "Problem 867",
-            "description": "Write a Python program to create a dictionary from two lists, one containing keys and the other containing values. Do not use zip().\nExamples:\n  create_dictionary([1, 2, 3], [1, 2, 3]) → ?\n  create_dictionary([5, 8, 2], [5, 8, 2]) → ?\n  create_dictionary([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python program to create a dictionary from two lists, one containing keys and the other containing values. Do not use zip().\nExamples:\n  create_dictionary(['apple', 'banana', 'cherry'], [1, 2, 3]) → [object Object]\n  create_dictionary([1, 2], ['one', 'two']) → [object Object]",
             "initialCode": "def create_dictionary(keys, values):\n    pass",
             "solution": "# Using function approach\ndef create_dictionary(keys, values):\n    dictionary = {}\n    for i in range(len(keys)):\n        dictionary[keys[i]] = values[i]\n    return dictionary\nkeys = ['apple', 'banana', 'cherry']\nvalues = [1, 2, 3]\nresult = create_dictionary(keys, values)\nprint(result)\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef create_dictionary(keys, values):\n    result = dictionary\n    return result\n\n# Using manual approach\ndef create_dictionary(keys, values):\n    return dictionary\n\n# Script approach\nkeys = [3, 7, 2, 9, 1]\nvalues = [3, 7, 2, 9, 1]\nresult = create_dictionary(keys, values)\nprint(result)\n\n# Direct approach\nprint(create_dictionary([4, 1, 8, 6, 3], [4, 1, 8, 6, 3]))",
 
@@ -10192,7 +10192,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 868,
             "title": "Problem 868",
-            "description": "Write a Python program that defines a function `capitalize_words()` which contains a nested function `capitalize()` that capitalizes a word. The `capitalize_words()` function should return a list with each word capitalized.\nExamples:\n  capitalize_words([1, 2, 3]) → ?\n  capitalize_words([5, 8, 2]) → ?\n  capitalize_words([3, 1, 4]) → ?",
+            "description": "Write a Python program that defines a function `capitalize_words()` which contains a nested function `capitalize()` that capitalizes a word. The `capitalize_words()` function should return a list with each word capitalized.\nExamples:\n  capitalize_words(['jonathan', 'sam', 'mimi']) → ['Jonathan', 'Sam', 'Mimi']\n  capitalize_words(['python', 'code']) → ['Python', 'Code']",
             "initialCode": "def capitalize_words(lst):\n    pass",
             "solution": "# Using function approach\ndef capitalize_words(lst):\n    def capitalize(name):\n        return name.capitalize()\n    return list(map(capitalize, lst))\nlst = ['jonathan', 'sam', 'mimi']\ncapitalize_words(lst)\n\n# Using built-in approach\ndef capitalize_words(lst):\n    return name.capitalize()\n\n# Using manual approach\ndef capitalize_words(lst):\n    return str(name).capitalize()\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = capitalize_words(lst)\nprint(result)\n\n# Direct approach\nprint(capitalize_words([1, 3, 5, 7]))",
 
@@ -10324,7 +10324,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 879,
             "title": "Problem 879",
-            "description": "Write a Python program to assign function arguments using unpacking.\nExamples:\n  greet('hello', 5) → Hello, hello. You are 5 years old.\n  greet('world', 3) → None\n  greet('python', 10) → Hello, world. You are 3 years old.",
+            "description": "Write a Python program to assign function arguments using unpacking.\nExamples:\n  greet('Alice', 30) → 'Hello, Alice. You are 30 years old.'\n  greet('Bob', 41) → 'Hello, Bob. You are 41 years old.'",
             "initialCode": "def greet(name, age):\n    pass",
             "solution": "# Using function approach\ndef greet(name, age):\n    print(f'Hello, {name}. You are {age} years old.')\nperson = ('Alice', 30)\ngreet(*person)  # Expected output: Hello, Alice. You are 30 years old.\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef greet(name, age):\n    return f'Hello, {name}. You are {age} years old.'\n\n# Using manual approach\ndef greet(name, age):\n    result = f'Hello, {name}. You are {age} years old.'\n    return result\n\n# Script approach\nname = 'Alice'\nage = 15\nresult = greet(name, age)\nprint(result)\n\n# Direct approach\nprint(greet('Bob', 25))",
 
@@ -10600,7 +10600,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 902,
             "title": "Problem 902",
-            "description": "Write a Python program to unpack a list of dictionaries and extract all the values under a specific key.\nExamples:\n  main([1, 2, 3]) → ?\n  main([5, 8, 2]) → ?\n  main([3, 1, 4]) → ?",
+            "description": "Write a Python program to unpack a list of dictionaries and extract all the values under a specific key.\nExamples:\n  main([{'name':'jon','age':55}, {'name':'sam','age':8}]) → [55, 8]\n  main([{'name':'Alice','age':25}, {'name':'Bob','age':30}]) → [25, 30]",
             "initialCode": "def main(lst_dic):\n    pass",
             "solution": "# Using function approach\ndef main(lst_dic):\n    ages = [value['age'] for value in lst_dic]\n    return ages\nlst_dic = [{'name': 'jon', 'age': 55}, {'name': 'sam', 'age': 8}]\nmain(lst_dic)\npeople = [\n    {'name': 'Alice', 'age': 25},\n    {'name': 'Bob', 'age': 30},\n    {'name': 'Charlie', 'age': 35},\n]\nages = [person['age'] for person in people]\nprint(ages)  # Expected output: [25, 30, 35]\n\n# Using built-in approach\ndef main(lst_dic):\n    result = ages\n    return result\n\n# Using manual approach\ndef main(lst_dic):\n    return ages\n\n# Script approach\nlst_dic = [3, 7, 2, 9, 1]\nresult = main(lst_dic)\nprint(result)\n\n# Direct approach\nprint(main([4, 1, 8, 6, 3]))",
 
@@ -11152,7 +11152,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 948,
             "title": "Problem 948",
-            "description": "Write a Python program to catch a RecursionError when a function calls itself infinitely.\nExamples:\n  infinite_recursion() → ?",
+            "description": "Write a Python program to catch a RecursionError when a function calls itself infinitely.\nExamples:\n  infinite_recursion() → None",
             "initialCode": "def infinite_recursion():\n    pass",
             "solution": "# Using function approach\ndef infinite_recursion():\n    return infinite_recursion()\ntry:\n    infinite_recursion()\nexcept RecursionError:\n    print('Recursion limit exceeded')  # Expected output: Recursion limit exceeded\n\n# Using built-in approach\ndef infinite_recursion():\n    result = infinite_recursion()\n    return result\n\n# Using manual approach\ndef infinite_recursion():\n    return infinite_recursion()\n\n# Script approach\nresult = infinite_recursion()\nprint(result)\n\n# Direct approach\nresult = infinite_recursion()\nprint(result)",
 
@@ -11944,7 +11944,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1014,
             "title": "Problem 1014",
-            "description": "Write a Python program to check if a string is a palindrome using slicing.\nExamples:\n  is_palindrome('hello') → False\n  is_palindrome('world') → False\n  is_palindrome('python') → False",
+            "description": "Write a Python program to check if a string is a palindrome using slicing.\nExamples:\n  is_palindrome('madam') → True\n  is_palindrome('hello') → False\n  is_palindrome('level') → True",
             "initialCode": "def is_palindrome(s):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(s):\n    return s == s[::-1]\nprint(is_palindrome('madam'))  # Expected output: True\nprint(is_palindrome('hello'))  # Expected output: False\n\n# Using built-in approach\ndef is_palindrome(s):\n    result = s == s[::-1]\n    return result\n\n# Using manual approach\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome([4, 1, 8, 6, 3]))",
 
@@ -12268,7 +12268,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1041,
             "title": "Problem 1041",
-            "description": "Write a Python recursive function to reverse a string.\nExamples:\n  reverse_string('hello') → olleh\n  reverse_string('world') → dlrow\n  reverse_string('python') → nohtyp",
+            "description": "Write a Python recursive function to reverse a string.\nExamples:\n  reverse_string('hello') → 'olleh'\n  reverse_string('python') → 'nohtyp'",
             "initialCode": "def reverse_string(s):\n    pass",
             "solution": "# Using function approach\ndef reverse_string(s):\n    return s if len(s) == 0 else s[-1] + reverse_string(s[:-1])\nprint(reverse_string('hello'))  # Expected output: olleh\n\n# Using built-in approach\ndef reverse_string(s):\n    result = s if len(s) == 0 else s[-1] + reverse_string(s[:-1])\n    return result\n\n# Using manual approach\ndef reverse_string(s):\n    return s if len(s) == 0 else s[-1] + reverse_string(s[:-1])\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = reverse_string(s)\nprint(result)\n\n# Direct approach\nprint(reverse_string([4, 1, 8, 6, 3]))",
 
@@ -12352,7 +12352,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1048,
             "title": "Problem 1048",
-            "description": "Write a Python recursive function to print numbers from 1 to n.\nExamples:\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n  print_numbers(5) → '1\n2\n3\n4\n5'\n  print_numbers(3) → '1\n2\n3'",
+            "description": "Write a Python recursive function to print numbers from 1 to n.\nExamples:\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n2\n3\n4\n5'\n2\n3'\n  print_numbers(5) → '1\n2\n3\n4\n5'\n  print_numbers(3) → '1\n2\n3'",
             "initialCode": "def print_numbers(n):\n    pass",
             "solution": "# Using function approach\ndef print_numbers(n):\n    if n > 0:\n        print_numbers(n - 1)\n        print(n)\nprint_numbers(5)  \n# Expected output:\n# 1\n# 2\n# 3\n# 4\n# 5\n\n# Using built-in approach\ndef print_numbers(n):\n    if n > 0:\n        print_numbers(n - 1)\n    return n\n\n# Using manual approach\ndef print_numbers(n):\n    if n > 0:\n        print_numbers(n - 1)\n    result = n\n    return result\n\n# Script approach\nn = 6\nresult = print_numbers(n)\nprint(result)\n\n# Direct approach\nprint(print_numbers(15))",
 
@@ -12364,7 +12364,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1049,
             "title": "Problem 1049",
-            "description": "Write a Python recursive function to print numbers from n to 1.\nExamples:\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n  print_reverse(5) → '5\n4\n3\n2\n1'\n  print_reverse(3) → '3\n2\n1'",
+            "description": "Write a Python recursive function to print numbers from n to 1.\nExamples:\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n4\n3\n2\n1'\n2\n1'\n  print_reverse(5) → '5\n4\n3\n2\n1'\n  print_reverse(3) → '3\n2\n1'",
             "initialCode": "def print_reverse(n):\n    pass",
             "solution": "# Using function approach\ndef print_reverse(n):\n    if n > 0:\n        print(n)\n        print_reverse(n - 1)\nprint_reverse(5)  \n# Expected output:\n# 5\n# 4\n# 3\n# 2\n# 1\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef solve():\n    def print_reverse(n):\n        if n > 0:\n            print(n)\n            print_reverse(n - 1)\n    print_reverse(5)  \n\n# Using manual approach\ndef solve():\n    def print_reverse(n):\n        if n > 0:\n            return n\n            print_reverse(n - 1)\n    print_reverse(5)  \n\n# Script approach\nn = 6\nresult = print_reverse(n)\nprint(result)\n\n# Direct approach\nprint(print_reverse(15))",
 
@@ -12400,7 +12400,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1052,
             "title": "Problem 1052",
-            "description": "Write a Python recursive function to generate all binary strings of length n.\nExamples:\n  binary_strings(5, 'hello') → hello00000\n  binary_strings(3, 'world') → hello00001\n  binary_strings(10, 'python') → hello00010",
+            "description": "Write a Python recursive function to generate all binary strings of length n.\nExamples:\n01\n10\n11'\n1'\n  binary_strings(2) → '00\n01\n10\n11'\n  binary_strings(1) → '0\n1'",
             "initialCode": "def binary_strings(n, s=\"\"):\n    pass",
             "solution": "# Using function approach\ndef binary_strings(n, s=''):\n    if n == 0:\n        print(s)\n    else:\n        binary_strings(n - 1, s + '0')\n        binary_strings(n - 1, s + '1')\nbinary_strings(3)  \n# Expected output:\n# 000\n# 001\n# 010\n# 011\n# 100\n# 101\n# 110\n# 111\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef solve():\n    def binary_strings(n, s=''):\n        if n == 0:\n            print(s)\n        else:\n            binary_strings(n - 1, s + '0')\n            binary_strings(n - 1, s + '1')\n    binary_strings(3)  \n\n# Using manual approach\ndef solve():\n    def binary_strings(n, s=''):\n        if n == 0:\n            return s\n        else:\n            binary_strings(n - 1, s + '0')\n            binary_strings(n - 1, s + '1')\n    binary_strings(3)  \n\n# Script approach\nn = 6\ns = 15\nresult = binary_strings(n, s)\nprint(result)\n\n# Direct approach\nprint(binary_strings(15, 25))",
 
@@ -12460,7 +12460,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1057,
             "title": "Problem 1057",
-            "description": "Write a Python program to find the longest string in a list using the `max()` function with a lambda expression.\nExamples:\n  longest_string('hello') → h\n  longest_string('world') → w\n  longest_string('python') → p",
+            "description": "Write a Python program to find the longest string in a list using the `max()` function with a lambda expression.\nExamples:\n  longest_string(['a', 'abc', 'ab']) → 'abc'\n  longest_string(['xy', 'z']) → 'xy'",
             "initialCode": "def longest_string(words):\n    pass",
             "solution": "# Using function approach\ndef longest_string(words):\n    return max(words, key=lambda word: len(word))\nresult = longest_string(['apple', 'banana', 'cherry'])\nprint(result)\n# Using for loop\n\n# Using built-in approach\ndef longest_string(words):\n    result = max(words, key=lambda word: len(word))\n    return result\n\n# Using manual approach\ndef longest_string(words):\n    return max(words, key=lambda word: len(word))\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = longest_string(words)\nprint(result)\n\n# Direct approach\nprint(longest_string([4, 1, 8, 6, 3]))",
 
@@ -12484,7 +12484,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1059,
             "title": "Problem 1059",
-            "description": "Write a Python program to calculate the square root of all elements in a list using a lambda function.\nExamples:\n  square_roots([1, 2, 3]) → ?\n  square_roots([5, 8, 2]) → ?\n  square_roots([3, 1, 4]) → ?",
+            "description": "Write a Python program to calculate the square root of all elements in a list using a lambda function.\nExamples:\n  square_roots([1, 4, 9]) → [1, 2, 3]\n  square_roots([0, 16]) → [0, 4]",
             "initialCode": "import math\ndef square_roots(numbers):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef square_roots(numbers):\n    return list(map(lambda x: math.sqrt(x), numbers))\nresult = square_roots([4, 9, 16])\nprint(result)\n\n# Using built-in approach\ndef square_roots(numbers):\n    result = list(map(lambda x: math.sqrt(x), numbers))\n    return result\n\n# Using manual approach\ndef square_roots(numbers):\n    return list(map(lambda x: math.sqrt(x), numbers))\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = square_roots(numbers)\nprint(result)\n\n# Direct approach\nprint(square_roots([4, 1, 8, 6, 3]))",
 
@@ -12508,7 +12508,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1061,
             "title": "Problem 1061",
-            "description": "Write a Python program to sort a list of tuples based on the first element in descending order using a lambda expression.\nExamples:\n  sort_by_first_element_desc([1, 2, 3]) → ?\n  sort_by_first_element_desc([5, 8, 2]) → ?\n  sort_by_first_element_desc([3, 1, 4]) → ?",
+            "description": "Write a Python program to sort a list of tuples based on the first element in descending order using a lambda expression.\nExamples:\n  sort_by_first_element_desc([[3, 1], [1, 2], [2, 3]]) → [[3, 1], [2, 3], [1, 2]]\n  sort_by_first_element_desc([[0, 9], [5, 1]]) → [[5, 1], [0, 9]]",
             "initialCode": "def sort_by_first_element_desc(tuples):\n    pass",
             "solution": "# Using function approach\ndef sort_by_first_element_desc(tuples):\n    return sorted(tuples, key=lambda x: x[0], reverse=True)\nresult = sort_by_first_element_desc([(3, 'apple'), (1, 'banana'), (2, 'cherry')])\nprint(result)\n\n# Using built-in approach\ndef sort_by_first_element_desc(tuples):\n    result = sorted(tuples, key=lambda x: x[0], reverse=True)\n    return result\n\n# Using manual approach\ndef sort_by_first_element_desc(tuples):\n    return sorted(tuples, key=lambda x: x[0], reverse=True)\n\n# Script approach\ntuples = [3, 7, 2, 9, 1]\nresult = sort_by_first_element_desc(tuples)\nprint(result)\n\n# Direct approach\nprint(sort_by_first_element_desc([4, 1, 8, 6, 3]))",
 
@@ -12520,7 +12520,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1062,
             "title": "Problem 1062",
-            "description": "Write a Python program to filter out words that are shorter than a given length using the `filter()` function with a lambda expression.\nExamples:\n  filter_short_words('hello', 5) → []\n  filter_short_words('world', 3) → []\n  filter_short_words('python', 10) → []",
+            "description": "Write a Python program to filter out words that are shorter than a given length using the `filter()` function with a lambda expression.\nExamples:\n  filter_short_words(['a', 'abc', 'abcd', 'ab'], 3) → ['abc', 'abcd']\n  filter_short_words(['hi', 'hello'], 4) → ['hello']",
             "initialCode": "def filter_short_words(words, length):\n    pass",
             "solution": "# Using function approach\ndef filter_short_words(words, length):\n    return list(filter(lambda word: len(word) >= length, words))\nresult = filter_short_words(['apple', 'banana', 'cherry', 'date'], 6)\nprint(result)\n\n# Using built-in approach\ndef filter_short_words(words, length):\n    result = list(filter(lambda word: len(word) >= length, words))\n    return result\n\n# Using manual approach\ndef filter_short_words(words, length):\n    return list(filter(lambda word: len(word) >= length, words))\n\n# Script approach\nwords = 'hello'\nlength = 15\nresult = filter_short_words(words, length)\nprint(result)\n\n# Direct approach\nprint(filter_short_words('world', 25))",
 
@@ -12580,7 +12580,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1067,
             "title": "Problem 1067",
-            "description": "Write a Python program to sort a list of words by their lengths using the `sorted()` function with a lambda expression.\nExamples:\n  sort_by_length('hello') → ['h', 'e', 'l', 'l', 'o']\n  sort_by_length('world') → ['w', 'o', 'r', 'l', 'd']\n  sort_by_length('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python program to sort a list of words by their lengths using the `sorted()` function with a lambda expression.\nExamples:\n  sort_by_length(['abc', 'a', 'ab']) → ['a', 'ab', 'abc']\n  sort_by_length(['long', 'x']) → ['x', 'long']",
             "initialCode": "def sort_by_length(words):\n    pass",
             "solution": "# Using function approach\ndef sort_by_length(words):\n    return sorted(words, key=lambda word: len(word))\nresult = sort_by_length(['apple', 'banana', 'kiwi', 'cherry'])\nprint(result)\n\n# Using built-in approach\ndef sort_by_length(words):\n    result = sorted(words, key=lambda word: len(word))\n    return result\n\n# Using manual approach\ndef sort_by_length(words):\n    return sorted(words, key=lambda word: len(word))\n\n# Script approach\nwords = [3, 7, 2, 9, 1]\nresult = sort_by_length(words)\nprint(result)\n\n# Direct approach\nprint(sort_by_length([4, 1, 8, 6, 3]))",
 
@@ -12604,7 +12604,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1069,
             "title": "Problem 1069",
-            "description": "Write a Python program to find the sum of all elements in a list using the `reduce()` function with a lambda expression.\nExamples:\n  sum_of_elements([1, 2, 3]) → ?\n  sum_of_elements([5, 8, 2]) → ?\n  sum_of_elements([3, 1, 4]) → ?",
+            "description": "Write a Python program to find the sum of all elements in a list using the `reduce()` function with a lambda expression.\nExamples:\n  sum_of_elements([1, 2, 3, 4, 5]) → 15\n  sum_of_elements([10, -2]) → 8",
             "initialCode": "from functools import reduce\ndef sum_of_elements(numbers):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef sum_of_elements(numbers):\n    return reduce(lambda x, y: x + y, numbers)\nresult = sum_of_elements([1, 2, 3, 4])\nprint(result)\n\n# Using alternative approach\n# Using manual checks\n    # Alternative: implement pattern check manually\n\n# Using built-in approach\ndef sum_of_elements(numbers):\n    result = reduce(lambda x, y: x + y, numbers)\n    return result\n\n# Using manual approach\ndef sum_of_elements(numbers):\n    return reduce(lambda x, y: x + y, numbers)\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = sum_of_elements(numbers)\nprint(result)\n\n# Direct approach\nprint(sum_of_elements([4, 1, 8, 6, 3]))",
 
@@ -12724,7 +12724,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1079,
             "title": "Problem 1079",
-            "description": "Write a Python program to create a list of tuples (number, square root) for each number in a given list using a lambda function.\nExamples:\n  create_square_root_tuples([1, 2, 3]) → ?\n  create_square_root_tuples([5, 8, 2]) → ?\n  create_square_root_tuples([3, 1, 4]) → ?",
+            "description": "Write a Python program to create a list of tuples (number, square root) for each number in a given list using a lambda function.\nExamples:\n  create_square_root_tuples([1, 4, 9]) → [[1, 1], [4, 2], [9, 3]]\n  create_square_root_tuples([0, 16]) → [[0, 0], [16, 4]]",
             "initialCode": "import math\ndef create_square_root_tuples(numbers):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef create_square_root_tuples(numbers):\n    return list(map(lambda x: (x, math.sqrt(x)), numbers))\nresult = create_square_root_tuples([4, 9, 16])\nprint(result)\n\n# Using alternative approach\n# Using def\n    # Alternative: use a named function instead of lambda\n\n# Using built-in approach\ndef create_square_root_tuples(numbers):\n    result = list(map(lambda x: (x, math.sqrt(x)), numbers))\n    return result\n\n# Using manual approach\ndef create_square_root_tuples(numbers):\n    return list(map(lambda x: (x, math.sqrt(x)), numbers))\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nresult = create_square_root_tuples(numbers)\nprint(result)\n\n# Direct approach\nprint(create_square_root_tuples([4, 1, 8, 6, 3]))",
 
@@ -12808,7 +12808,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1086,
             "title": "Problem 1086",
-            "description": "Write a Python program to convert a list of strings to their lengths using a lambda function.\nExamples:\n  convert_to_lengths('hello') → [1, 1, 1, 1, 1]\n  convert_to_lengths('world') → [1, 1, 1, 1, 1]\n  convert_to_lengths('python') → [1, 1, 1, 1, 1, 1]",
+            "description": "Write a Python program to convert a list of strings to their lengths using a lambda function.\nExamples:\n  convert_to_lengths(['hi', 'hello', 'a']) → [2, 5, 1]\n  convert_to_lengths(['', 'abc']) → [0, 3]",
             "initialCode": "def convert_to_lengths(strings):\n    pass",
             "solution": "# Using function approach\ndef convert_to_lengths(strings):\n    return list(map(lambda x: len(x), strings))\nresult = convert_to_lengths(['apple', 'banana', 'cherry'])\nprint(result)\n\n# Using built-in approach\ndef convert_to_lengths(strings):\n    result = list(map(lambda x: len(x), strings))\n    return result\n\n# Using manual approach\ndef convert_to_lengths(strings):\n    return list(map(lambda x: len(x), strings))\n\n# Script approach\nstrings = 'hello'\nresult = convert_to_lengths(strings)\nprint(result)\n\n# Direct approach\nprint(convert_to_lengths('world'))",
 
@@ -12892,7 +12892,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1093,
             "title": "Problem 1093",
-            "description": "Write a Python program to create a generator that yields the characters of a string one by one.\nExamples:\n  char_generator('hello') → <generator object char_generator at 0x10741f780>\n  char_generator('world') → <generator object char_generator at 0x10741f780>\n  char_generator('python') → <generator object char_generator at 0x10741f780>",
+            "description": "Write a Python program to create a generator that yields the characters of a string one by one.\nExamples:\n  char_generator('hello') → ['h', 'e', 'l', 'l', 'o']\n  char_generator('ab') → ['a', 'b']",
             "initialCode": "def char_generator(s):\n    pass",
             "solution": "# Using function approach\ndef char_generator(s):\n    for char in s:\n        yield char\nresult = list(char_generator('hello'))\nprint(result)\n\n# Using built-in approach\ndef solve():\n    def char_generator(s):\n        for char in s:\n            yield char\n    result = list(char_generator('hello'))\n    print(result)\n\n# Using manual approach\ndef solve():\n    def char_generator(s):\n        for char in s:\n            yield char\n    result = list(char_generator('hello'))\n    return result\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = char_generator(s)\nprint(result)\n\n# Direct approach\nprint(char_generator([4, 1, 8, 6, 3]))",
 
@@ -13024,7 +13024,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1104,
             "title": "Problem 1104",
-            "description": "Write a Python program to create a generator that yields each word in a sentence.\nExamples:\n  word_generator('hello') → <generator object word_generator at 0x10741fb90>\n  word_generator('world') → <generator object word_generator at 0x10741fb90>\n  word_generator('python') → <generator object word_generator at 0x10741fb90>",
+            "description": "Write a Python program to create a generator that yields each word in a sentence.\nExamples:\n  word_generator('This is a test sentence') → ['This', 'is', 'a', 'test', 'sentence']\n  word_generator('hello world') → ['hello', 'world']",
             "initialCode": "def word_generator(sentence):\n    pass",
             "solution": "# Using function approach\ndef word_generator(sentence):\n    words = sentence.split()\n    for word in words:\n        yield word\nresult = list(word_generator('This is a test sentence'))\nprint(result)\n\n# Using built-in approach\ndef solve():\n    def word_generator(sentence):\n        words = sentence.split()\n        for word in words:\n            yield word\n    result = list(word_generator('This is a test sentence'))\n    print(result)\n\n# Using manual approach\ndef solve():\n    def word_generator(sentence):\n        words = sentence.split()\n        for word in words:\n            yield word\n    result = list(word_generator('This is a test sentence'))\n    return result\n\n# Script approach\nsentence = 'Hello, World!'\nresult = word_generator(sentence)\nprint(result)\n\n# Direct approach\nprint(word_generator('Python is fun'))",
 
@@ -13084,7 +13084,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1109,
             "title": "Problem 1109",
-            "description": "Write a Python program to create a generator that yields all the uppercase letters in a string.\nExamples:\n  uppercase_generator('hello') → <generator object uppercase_generator at 0x10741f780>\n  uppercase_generator('world') → <generator object uppercase_generator at 0x10741f780>\n  uppercase_generator('python') → <generator object uppercase_generator at 0x10741f780>",
+            "description": "Write a Python program to create a generator that yields all the uppercase letters in a string.\nExamples:\n  uppercase_generator('Hello World') → ['H', 'W']\n  uppercase_generator('ABCdef') → ['A', 'B', 'C']",
             "initialCode": "def uppercase_generator(s):\n    pass",
             "solution": "# Using function approach\ndef uppercase_generator(s):\n    for char in s:\n        if char.isupper():\n            yield char\nresult = list(uppercase_generator('Hello World'))\nprint(result)\n\n# Using built-in approach\ndef solve():\n    def uppercase_generator(s):\n        for char in s:\n            if char.isupper():\n                yield char\n    result = list(uppercase_generator('Hello World'))\n    print(result)\n\n# Using manual approach\ndef solve():\n    def uppercase_generator(s):\n        for char in s:\n            if char.isupper():\n                yield char\n    result = list(uppercase_generator('Hello World'))\n    return result\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = uppercase_generator(s)\nprint(result)\n\n# Direct approach\nprint(uppercase_generator([4, 1, 8, 6, 3]))",
 
@@ -13204,7 +13204,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1119,
             "title": "Problem 1119",
-            "description": "Write a Python program to create a generator that yields each word in a sentence, but only those with an even number of characters.\nExamples:\n  even_length_word_generator('hello') → <generator object even_length_word_generator at 0x10752f840>\n  even_length_word_generator('world') → <generator object even_length_word_generator at 0x10752f840>\n  even_length_word_generator('python') → <generator object even_length_word_generator at 0x10752f840>",
+            "description": "Write a Python program to create a generator that yields each word in a sentence, but only those with an even number of characters.\nExamples:\n  even_length_word_generator('This is a simple test sentence') → ['This', 'is', 'simple', 'test', 'sentence']\n  even_length_word_generator('odd even four') → ['even', 'four']",
             "initialCode": "def even_length_word_generator(sentence):\n    pass",
             "solution": "# Using function approach\ndef even_length_word_generator(sentence):\n    words = sentence.split()\n    for word in words:\n        if len(word) % 2 == 0:\n            yield word\nresult = list(even_length_word_generator('This is a simple test sentence'))\nprint(result)\n\n# Using built-in approach\ndef solve():\n    def even_length_word_generator(sentence):\n        words = sentence.split()\n        for word in words:\n            if len(word) % 2 == 0:\n                yield word\n    result = list(even_length_word_generator('This is a simple test sentence'))\n    print(result)\n\n# Using manual approach\ndef solve():\n    def even_length_word_generator(sentence):\n        words = sentence.split()\n        for word in words:\n            if len(word) % 2 == 0:\n                yield word\n    result = list(even_length_word_generator('This is a simple test sentence'))\n    return result\n\n# Script approach\nsentence = 'Hello, World!'\nresult = even_length_word_generator(sentence)\nprint(result)\n\n# Direct approach\nprint(even_length_word_generator('Python is fun'))",
 
@@ -13276,7 +13276,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1125,
             "title": "Problem 1125",
-            "description": "Write a Python program to print all numbers from 1 to n that are divisible by 7. Control flow.\nExamples:\n14'\n14'\n14'\n14'\n14'\n14'\n  divisible_by_7(14) → '7\n14'\n  divisible_by_7(10) → '7'",
+            "description": "Write a Python program to print all numbers from 1 to n that are divisible by 7. Control flow.\nExamples:\n14'\n14'\n14'\n14'\n14'\n14'\n14'\n14'\n  divisible_by_7(14) → '7\n14'\n  divisible_by_7(10) → '7'",
             "initialCode": "def divisible_by_7(n):\n    pass",
             "solution": "# Using function approach\ndef divisible_by_7(n):\n    for i in range(1, n+1):\n        if i % 7 == 0:\n            print(i)\ndivisible_by_7(50)\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef solve():\n    def divisible_by_7(n):\n        for i in range(1, n+1):\n            if i % 7 == 0:\n                print(i)\n    divisible_by_7(50)\n\n# Using manual approach\ndef solve():\n    def divisible_by_7(n):\n        for i in range(1, n+1):\n            if i % 7 == 0:\n                return i\n    divisible_by_7(50)\n\n# Script approach\nn = 6\nresult = divisible_by_7(n)\nprint(result)\n\n# Direct approach\nprint(divisible_by_7(15))",
 
@@ -13312,7 +13312,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1128,
             "title": "Problem 1128",
-            "description": "Write a Python program to check if a string is a palindrome. Control flow.\nExamples:\n  is_palindrome('hello') → False\n  is_palindrome('world') → False\n  is_palindrome('python') → False",
+            "description": "Write a Python program to check if a string is a palindrome. Control flow.\nExamples:\n  is_palindrome('radar') → True\n  is_palindrome('hello') → False",
             "initialCode": "def is_palindrome(s):\n    pass",
             "solution": "# Using function approach\ndef is_palindrome(s):\n    if s == s[::-1]:\n        return True\n    else:\n        return False\nresult = is_palindrome('madam')\nprint(result)\n\n# Using built-in approach\ndef is_palindrome(s):\n    result = True\n    return result\n\n# Using manual approach\ndef is_palindrome(s):\n    return True\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = is_palindrome(s)\nprint(result)\n\n# Direct approach\nprint(is_palindrome([4, 1, 8, 6, 3]))",
 
@@ -13324,7 +13324,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1129,
             "title": "Problem 1129",
-            "description": "Write a Python program to count the number of vowels in a given string. Control flow.\nExamples:\n  count_vowels('hello') → 2\n  count_vowels('world') → 1\n  count_vowels('python') → 1",
+            "description": "Write a Python program to count the number of vowels in a given string. Control flow.\nExamples:\n  count_vowels('hello') → 2\n  count_vowels('PYTHON') → 1\n  count_vowels('rhythms') → 0",
             "initialCode": "def count_vowels(s):\n    pass",
             "solution": "# Using function approach\ndef count_vowels(s):\n    vowels = 'aeiou'\n    count = 0\n    for char in s:\n        if char.lower() in vowels:\n            count += 1\n    return count\nresult = count_vowels('Hello World')\nprint(result)\n\n# Using built-in approach\ndef count_vowels(s):\n    return sum(1 for char in s if char.lower() in vowels)\n\n# Using manual approach\ndef count_vowels(s):\n    return len([char for char in s if char.lower() in vowels])\n\n# Script approach\ns = [3, 7, 2, 9, 1]\nresult = count_vowels(s)\nprint(result)\n\n# Direct approach\nprint(count_vowels([4, 1, 8, 6, 3]))",
 
@@ -13396,7 +13396,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1135,
             "title": "Problem 1135",
-            "description": "Write a Python program to print the multiplication table of a number up to 10. Control flow.\nExamples:\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n  multiplication_table(5) → '5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n  multiplication_table(2) → '2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'",
+            "description": "Write a Python program to print the multiplication table of a number up to 10. Control flow.\nExamples:\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'\n  multiplication_table(5) → '5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50'\n  multiplication_table(2) → '2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n2 x 10 = 20'",
             "initialCode": "def multiplication_table(n):\n    pass",
             "solution": "# Using function approach\ndef multiplication_table(n):\n    for i in range(1, 11):\n        print(f'{n} x {i} = {n*i}')\nmultiplication_table(7)\n# Using alternative loop\n    # Consider using while loop or list comprehension\n# Using return list\n    # Collect items in a list and return it\n\n# Using built-in approach\ndef solve():\n    def multiplication_table(n):\n        for i in range(1, 11):\n            print(f'{n} x {i} = {n*i}')\n    multiplication_table(7)\n\n# Using manual approach\ndef solve():\n    def multiplication_table(n):\n        for i in range(1, 11):\n            return f'{n} x {i} = {n*i}'\n    multiplication_table(7)\n\n# Script approach\nn = 6\nresult = multiplication_table(n)\nprint(result)\n\n# Direct approach\nprint(multiplication_table(15))",
 
@@ -13732,7 +13732,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1163,
             "title": "Problem 1163",
-            "description": "Write a Python program to demonstrate variable scope in different functions. Scope.\nExamples:\n  function_one() → ?",
+            "description": "Write a Python program to demonstrate variable scope in different functions. Scope.\nExamples:\n  function_one() → None",
             "initialCode": "def function_one():\n    pass\n\ndef function_two():\n    pass",
             "solution": "# Using function approach\nx = 50  # Global variable\ndef function_one():\n    print(f'Function One: {x}')\ndef function_two():\n    x = 40\n    print(f'Function Two: {x}')\nfunction_one()\nfunction_two()\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef function_one():\n    return f'Function One: {x}'\n\n# Using manual approach\ndef function_one():\n    result = f'Function One: {x}'\n    return result\n\n# Script approach\nprint(f'Function One: {x}')\n\n# Direct approach\nprint(f'Function One: {x}')",
 
@@ -13744,7 +13744,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1164,
             "title": "Problem 1164",
-            "description": "Write a Python program to demonstrate the use of `global` for modifying variables in different functions. Scope.\nExamples:\n  function_one() → ?",
+            "description": "Write a Python program to demonstrate the use of `global` for modifying variables in different functions. Scope.\nExamples:\n  function_one() → None",
             "initialCode": "def function_one():\n    pass\n\ndef function_two():\n    pass",
             "solution": "# Using function approach\nx = 10  # Global variable\ndef function_one():\n    global x\n    x += 5\ndef function_two():\n    global x\n    x -= 3\nfunction_one()\nfunction_two()\nprint(f'Global variable x: {x}')\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef solve():\n    x = 10  # Global variable\n    def function_one():\n        global x\n        x += 5\n    def function_two():\n        global x\n        x -= 3\n    function_one()\n    function_two()\n    print(f'Global variable x: {x}')\n\n# Using manual approach\ndef solve():\n    x = 10  # Global variable\n    def function_one():\n        global x\n        x += 5\n    def function_two():\n        global x\n        x -= 3\n    function_one()\n    function_two()\n    return f'Global variable x: {x}'\n\n# Script approach\nglobal x\nx += 5\n\n# Direct approach\nglobal x\nx += 5",
 
@@ -13792,7 +13792,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1168,
             "title": "Problem 1168",
-            "description": "Write a Python program to show the behavior of variables in global scope inside functions. Scope.\nExamples:\n  global_inside_function() → ?",
+            "description": "Write a Python program to show the behavior of variables in global scope inside functions. Scope.\nExamples:\n  global_inside_function() → None",
             "initialCode": "def global_inside_function():\n    pass",
             "solution": "# Using function approach\ndef global_inside_function():\n    print(f'Global variable x inside function: {x}')\nx = 10  # Global variable\nglobal_inside_function()\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef global_inside_function():\n    return f'Global variable x inside function: {x}'\n\n# Using manual approach\ndef global_inside_function():\n    result = f'Global variable x inside function: {x}'\n    return result\n\n# Script approach\nprint(f'Global variable x inside function: {x}')\n\n# Direct approach\nprint(f'Global variable x inside function: {x}')",
 
@@ -13912,7 +13912,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1178,
             "title": "Problem 1178",
-            "description": "Write a Python program to use the `random` module to generate a random number between 1 and 100. Module.\nExamples:\n  generate_random_number() → ?",
+            "description": "Write a Python program to use the `random` module to generate a random number between 1 and 100. Module.\nExamples:\n  generate_random_number() → [1, 100]",
             "initialCode": "import random\ndef generate_random_number():\n    pass",
             "solution": "import random\n\n# Using function approach\ndef generate_random_number():\n    return random.randint(1, 100)\nrandom_number = generate_random_number()\nprint(f'Random number between 1 and 100: {random_number}')\n\n# Using built-in approach\ndef generate_random_number():\n    result = random.randint(1, 100)\n    return result\n\n# Using manual approach\ndef generate_random_number():\n    return random.randint(1, 100)\n\n# Script approach\nresult = random.randint(1, 100)\nprint(result)\n\n# Direct approach\nresult = random.randint(1, 100)\nprint(result)",
 
@@ -13924,7 +13924,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1179,
             "title": "Problem 1179",
-            "description": "Write a Python program to use the `datetime` module to get the current date and time. Module.\nExamples:\n  current_datetime() → ?",
+            "description": "Write a Python program to use the `datetime` module to get the current date and time. Module.\nExamples:\n  current_datetime() → 'datetime'",
             "initialCode": "import datetime\ndef current_datetime():\n    pass",
             "solution": "import datetime\n\n# Using function approach\ndef current_datetime():\n    return datetime.datetime.now()\nnow = current_datetime()\nprint(f'Current date and time: {now}')\n\n# Using built-in approach\ndef current_datetime():\n    result = datetime.datetime.now()\n    return result\n\n# Using manual approach\ndef current_datetime():\n    return datetime.datetime.now()\n\n# Script approach\nresult = datetime.datetime.now()\nprint(result)\n\n# Direct approach\nresult = datetime.datetime.now()\nprint(result)",
 
@@ -13936,7 +13936,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1180,
             "title": "Problem 1180",
-            "description": "Write a Python program to use the `os` module to get the current working directory. Module.\nExamples:\n  current_working_directory() → ?",
+            "description": "Write a Python program to use the `os` module to get the current working directory. Module.\nExamples:\n  current_working_directory() → 'str'",
             "initialCode": "import os\ndef current_working_directory():\n    pass",
             "solution": "import os\n\n# Using function approach\ndef current_working_directory():\n    return os.getcwd()\ncwd = current_working_directory()\nprint(f'Current working directory: {cwd}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef current_working_directory():\n    result = os.getcwd()\n    return result\n\n# Using manual approach\ndef current_working_directory():\n    return os.getcwd()\n\n# Script approach\nresult = os.getcwd()\nprint(result)\n\n# Direct approach\nresult = os.getcwd()\nprint(result)",
 
@@ -13948,7 +13948,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1181,
             "title": "Problem 1181",
-            "description": "Write a Python program to use the `sys` module to get the Python version. Module.\nExamples:\n  python_version() → ?",
+            "description": "Write a Python program to use the `sys` module to get the Python version. Module.\nExamples:\n  python_version() → 'str'",
             "initialCode": "import sys\ndef python_version():\n    pass",
             "solution": "import sys\n\n# Using function approach\ndef python_version():\n    return sys.version\nversion = python_version()\nprint(f'Python version: {version}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef python_version():\n    result = sys.version\n    return result\n\n# Using manual approach\ndef python_version():\n    return sys.version\n\n# Script approach\nresult = sys.version\nprint(result)\n\n# Direct approach\nresult = sys.version\nprint(result)",
 
@@ -13960,7 +13960,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1182,
             "title": "Problem 1182",
-            "description": "Write a Python program to use the `json` module to convert a Python dictionary to a JSON string. Module.\nExamples:\n  dict_to_json() → ?",
+            "description": "Write a Python program to use the `json` module to convert a Python dictionary to a JSON string. Module.\nExamples:\n  dict_to_json() → '{\"name\": \"Alice\", \"age\": 30}'",
             "initialCode": "import json\ndef dict_to_json():\n    pass",
             "solution": "import json\n\n# Using function approach\ndef dict_to_json():\n    sample_dict = {'name': 'Alice', 'age': 30}\n    return json.dumps(sample_dict)\njson_str = dict_to_json()\nprint(f'JSON string: {json_str}')\n# Using eval()\n    # Warning: only for trusted data\n    return eval(json_str)\n\n# Using built-in approach\ndef dict_to_json():\n    result = json.dumps(sample_dict)\n    return result\n\n# Using manual approach\ndef dict_to_json():\n    return json.dumps(sample_dict)\n\n# Script approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = json.dumps(sample_dict)\nprint(result)\n\n# Direct approach\nsample_dict = {'name': 'Alice', 'age': 30}\nresult = json.dumps(sample_dict)\nprint(result)",
 
@@ -13972,7 +13972,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1183,
             "title": "Problem 1183",
-            "description": "Write a Python program to use the `re` module to check if a string contains a number. Module.\nExamples:\n  contains_number('hello') → ?\n  contains_number('world') → ?\n  contains_number('python') → ?",
+            "description": "Write a Python program to use the `re` module to check if a string contains a number. Module.\nExamples:\n  contains_number('abc123') → True\n  contains_number('abc') → False",
             "initialCode": "import re\ndef contains_number(string):\n    pass",
             "solution": "import re\n\n# Using function approach\ndef contains_number(string):\n    return bool(re.search(r'\\d', string))\nresult = contains_number('Hello123')\nprint(f'Does the string contain a number? {result}')\n\n# Using alternative approach\n# Using manual checks\n    # Alternative: implement the pattern check manually without re\n\n# Using built-in approach\ndef contains_number(string):\n    result = bool(re.search(r'\\d', string))\n    return result\n\n# Using manual approach\ndef contains_number(string):\n    return bool(re.search(r'\\d', string))\n\n# Script approach\nstring = 'hello'\nresult = contains_number(string)\nprint(result)\n\n# Direct approach\nprint(contains_number('world'))",
 
@@ -14008,7 +14008,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1186,
             "title": "Problem 1186",
-            "description": "Write a Python program to use the `time` module to measure the execution time of a block of code. Module.\nExamples:\n  measure_time() → ?",
+            "description": "Write a Python program to use the `time` module to measure the execution time of a block of code. Module.\nExamples:\n  measure_time() → [0, 5]",
             "initialCode": "import time\ndef measure_time():\n    pass",
             "solution": "import time\n\n# Using function approach\ndef measure_time():\n    start_time = time.time()\n    sum(range(1000000))\n    end_time = time.time()\n    return end_time - start_time\nexecution_time = measure_time()\nprint(f'Execution time: {execution_time} seconds')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef measure_time():\n    return end_time + (-start_time)\n\n# Using manual approach\ndef measure_time():\n    import operator\n    return operator.sub(end_time, start_time)\n\n# Script approach\nstart_time = time.time()\nsum(range(1000000))\nend_time = time.time()\nresult = end_time - start_time\nprint(result)\n\n# Direct approach\nstart_time = time.time()\nsum(range(1000000))\nend_time = time.time()\nresult = end_time - start_time\nprint(result)",
 
@@ -14032,7 +14032,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1188,
             "title": "Problem 1188",
-            "description": "Write a Python program to use the `math` module to find the value of pi. Module.\nExamples:\n  get_pi_value() → ?",
+            "description": "Write a Python program to use the `math` module to find the value of pi. Module.\nExamples:\n  get_pi_value() → 3.141592653589793",
             "initialCode": "import math\ndef get_pi_value():\n    pass",
             "solution": "import math\n\n# Using function approach\ndef get_pi_value():\n    return math.pi\npi_value = get_pi_value()\nprint(f'The value of pi is {pi_value}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef get_pi_value():\n    result = math.pi\n    return result\n\n# Using manual approach\ndef get_pi_value():\n    return math.pi\n\n# Script approach\nresult = math.pi\nprint(result)\n\n# Direct approach\nresult = math.pi\nprint(result)",
 
@@ -14044,7 +14044,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1189,
             "title": "Problem 1189",
-            "description": "Write a Python program to use the `random` module to shuffle a list of numbers. Module.\nExamples:\n  shuffle_list([1, 2, 3]) → ?\n  shuffle_list([5, 8, 2]) → ?\n  shuffle_list([3, 1, 4]) → ?",
+            "description": "Write a Python program to use the `random` module to shuffle a list of numbers. Module.\nExamples:\n  shuffle_list([1, 2, 3, 4, 5]) → [1, 2, 3, 4, 5]\n  shuffle_list(['red', 'blue', 'green']) → ['red', 'blue', 'green']",
             "initialCode": "import random\ndef shuffle_list(lst):\n    pass",
             "solution": "import random\n\n# Using function approach\ndef shuffle_list(lst):\n    random.shuffle(lst)\n    return lst\nnumbers = [1, 2, 3, 4, 5]\nshuffled_numbers = shuffle_list(numbers)\nprint(f'Shuffled list: {shuffled_numbers}')\n\n# Using built-in approach\ndef shuffle_list(lst):\n    result = lst\n    return result\n\n# Using manual approach\ndef shuffle_list(lst):\n    return lst\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = shuffle_list(lst)\nprint(result)\n\n# Direct approach\nprint(shuffle_list([1, 3, 5, 7]))",
 
@@ -14056,7 +14056,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1190,
             "title": "Problem 1190",
-            "description": "Write a Python program to use the `collections` module to count the occurrences of elements in a list. Module.\nExamples:\n  count_occurrences([1, 2, 3]) → ?\n  count_occurrences([5, 8, 2]) → ?\n  count_occurrences([3, 1, 4]) → ?",
+            "description": "Write a Python program to use the `collections` module to count the occurrences of elements in a list. Module.\nExamples:\n  count_occurrences([1, 2, 2, 3]) → [object Object]\n  count_occurrences(['a', 'b', 'a', 'c', 'b', 'a']) → [object Object]",
             "initialCode": "import collections\ndef count_occurrences(lst):\n    pass",
             "solution": "import collections\n\n# Using function approach\ndef count_occurrences(lst):\n    return collections.Counter(lst)\nnumbers = [1, 2, 2, 3, 3, 3]\noccurrences = count_occurrences(numbers)\nprint(f'Occurrences: {occurrences}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef count_occurrences(lst):\n    result = collections.Counter(lst)\n    return result\n\n# Using manual approach\ndef count_occurrences(lst):\n    return collections.Counter(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = count_occurrences(lst)\nprint(result)\n\n# Direct approach\nprint(count_occurrences([1, 3, 5, 7]))",
 
@@ -14092,7 +14092,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1193,
             "title": "Problem 1193",
-            "description": "Write a Python program to use the `datetime` module to format the current date. Module.\nExamples:\n  format_current_date() → ?",
+            "description": "Write a Python program to use the `datetime` module to format the current date. Module.\nExamples:\n  format_current_date() → 10",
             "initialCode": "import datetime\ndef format_current_date():\n    pass",
             "solution": "import datetime\n\n# Using function approach\ndef format_current_date():\n    return datetime.datetime.now().strftime('%Y-%m-%d')\nformatted_date = format_current_date()\nprint(f'Formatted current date: {formatted_date}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef format_current_date():\n    result = datetime.datetime.now().strftime('%Y-%m-%d')\n    return result\n\n# Using manual approach\ndef format_current_date():\n    return datetime.datetime.now().strftime('%Y-%m-%d')\n\n# Script approach\nresult = datetime.datetime.now().strftime('%Y-%m-%d')\nprint(result)\n\n# Direct approach\nresult = datetime.datetime.now().strftime('%Y-%m-%d')\nprint(result)",
 
@@ -14104,7 +14104,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1194,
             "title": "Problem 1194",
-            "description": "Write a Python program to use the `json` module to parse a JSON string into a Python dictionary. Module.\nExamples:\n  json_to_dict('hello') → ?\n  json_to_dict('world') → ?\n  json_to_dict('python') → ?",
+            "description": "Write a Python program to use the `json` module to parse a JSON string into a Python dictionary. Module.\nExamples:\n  json_to_dict('{\"name\": \"Bob\", \"age\": 25}') → [object Object]\n  json_to_dict('{\"ok\": true, \"count\": 3}') → [object Object]",
             "initialCode": "import json\ndef json_to_dict(json_str):\n    pass",
             "solution": "import json\n\n# Using function approach\ndef json_to_dict(json_str):\n    return json.loads(json_str)\njson_str = '{'name': 'Bob', 'age': 25}'\nparsed_dict = json_to_dict(json_str)\nprint(f'Parsed dictionary: {parsed_dict}')\n# Using eval()\n    # Warning: only for trusted data\n    return eval(json_str)\n\n# Using built-in approach\ndef json_to_dict(json_str):\n    result = json.loads(json_str)\n    return result\n\n# Using manual approach\ndef json_to_dict(json_str):\n    return json.loads(json_str)\n\n# Script approach\njson_str = 'hello'\nresult = json_to_dict(json_str)\nprint(result)\n\n# Direct approach\nprint(json_to_dict('world'))",
 
@@ -14116,7 +14116,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1195,
             "title": "Problem 1195",
-            "description": "Write a Python program to use the `random` module to select a random element from a list. Module.\nExamples:\n  select_random_element([1, 2, 3]) → ?\n  select_random_element([5, 8, 2]) → ?\n  select_random_element([3, 1, 4]) → ?",
+            "description": "Write a Python program to use the `random` module to select a random element from a list. Module.\nExamples:\n  select_random_element([7]) → 7\n  select_random_element(['only']) → 'only'",
             "initialCode": "import random\ndef select_random_element(lst):\n    pass",
             "solution": "import random\n\n# Using function approach\ndef select_random_element(lst):\n    return random.choice(lst)\nelements = [10, 20, 30, 40]\nrandom_element = select_random_element(elements)\nprint(f'Random element: {random_element}')\n\n# Using built-in approach\ndef select_random_element(lst):\n    result = random.choice(lst)\n    return result\n\n# Using manual approach\ndef select_random_element(lst):\n    return random.choice(lst)\n\n# Script approach\nlst = [2, 4, 6, 8]\nresult = select_random_element(lst)\nprint(result)\n\n# Direct approach\nprint(select_random_element([1, 3, 5, 7]))",
 
@@ -14380,7 +14380,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1217,
             "title": "Problem 1217",
-            "description": "Write a Python program to create a dictionary with default values using `defaultdict`. Dictionary operations.\nExamples:\n  create_defaultdict() → ?",
+            "description": "Write a Python program to create a dictionary with default values using `defaultdict`. Dictionary operations.\nExamples:\n  create_defaultdict() → [object Object]",
             "initialCode": "from collections import defaultdict\ndef create_defaultdict():\n    pass",
             "solution": "from collections import defaultdict\n\n# Using function approach\ndef create_defaultdict():\n    sample_dict = defaultdict(int)\n    sample_dict['a'] += 1\n    sample_dict['b'] += 2\n    return dict(sample_dict)\ndefault_dict = create_defaultdict()\nprint(f'Default dictionary: {default_dict}')\n\n# Using alternative approach\n    # Implement manually without import\n\n# Using built-in approach\ndef create_defaultdict():\n    result = dict(sample_dict)\n    return result\n\n# Using manual approach\ndef create_defaultdict():\n    return dict(sample_dict)\n\n# Script approach\nsample_dict = defaultdict(int)\nsample_dict['a'] += 1\nsample_dict['b'] += 2\nresult = dict(sample_dict)\nprint(result)\n\n# Direct approach\nsample_dict = defaultdict(int)\nsample_dict['a'] += 1\nsample_dict['b'] += 2\nresult = dict(sample_dict)\nprint(result)",
 
@@ -14428,7 +14428,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1221,
             "title": "Problem 1221",
-            "description": "Write a Python program to create a Path object using the `pathlib` module.\nExamples:\n  create_path() → ?",
+            "description": "Write a Python program to create a Path object using the `pathlib` module.\nExamples:\n  create_path() → 'example_directory'",
             "initialCode": "from pathlib import Path\ndef create_path():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef create_path():\n    p = Path('example_directory')\n    return p\npath = create_path()\nprint(f'Created path: {path}')\n\n# Using built-in approach\ndef create_path():\n    result = p\n    return result\n\n# Using manual approach\ndef create_path():\n    return p\n\n# Script approach\np = Path('example_directory')\nresult = p\nprint(result)\n\n# Direct approach\np = Path('example_directory')\nresult = p\nprint(result)",
 
@@ -14440,7 +14440,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1222,
             "title": "Problem 1222",
-            "description": "Write a Python program to check if a path exists using `pathlib`.\nExamples:\n  check_path_exists() → ?",
+            "description": "Write a Python program to check if a path exists using `pathlib`.\nExamples:\n  check_path_exists() → False\n  check_path_exists() → True",
             "initialCode": "from pathlib import Path\ndef check_path_exists():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_path_exists():\n    p = Path('example_directory')\n    return p.exists()\nexists = check_path_exists()\nprint(f'Path exists: {exists}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef check_path_exists():\n    result = p.exists()\n    return result\n\n# Using manual approach\ndef check_path_exists():\n    return p.exists()\n\n# Script approach\np = Path('example_directory')\nresult = p.exists()\nprint(result)\n\n# Direct approach\np = Path('example_directory')\nresult = p.exists()\nprint(result)",
 
@@ -14452,7 +14452,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1223,
             "title": "Problem 1223",
-            "description": "Write a Python program to check if a path is a file using `pathlib`.\nExamples:\n  check_if_file() → ?",
+            "description": "Write a Python program to check if a path is a file using `pathlib`.\nExamples:\n  check_if_file() → False\n  check_if_file() → True",
             "initialCode": "from pathlib import Path\ndef check_if_file():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_if_file():\n    p = Path('example_file.txt')\n    return p.is_file()\nis_file = check_if_file()\nprint(f'Is it a file? {is_file}')\n\n# Using built-in approach\ndef check_if_file():\n    result = p.is_file()\n    return result\n\n# Using manual approach\ndef check_if_file():\n    return p.is_file()\n\n# Script approach\np = Path('example_file.txt')\nresult = p.is_file()\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.is_file()\nprint(result)",
 
@@ -14464,7 +14464,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1224,
             "title": "Problem 1224",
-            "description": "Write a Python program to check if a path is a directory using `pathlib`.\nExamples:\n  check_if_directory() → ?",
+            "description": "Write a Python program to check if a path is a directory using `pathlib`.\nExamples:\n  check_if_directory() → False\n  check_if_directory() → True",
             "initialCode": "from pathlib import Path\ndef check_if_directory():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_if_directory():\n    p = Path('example_directory')\n    return p.is_dir()\nis_directory = check_if_directory()\nprint(f'Is it a directory? {is_directory}')\n\n# Using built-in approach\ndef check_if_directory():\n    result = p.is_dir()\n    return result\n\n# Using manual approach\ndef check_if_directory():\n    return p.is_dir()\n\n# Script approach\np = Path('example_directory')\nresult = p.is_dir()\nprint(result)\n\n# Direct approach\np = Path('example_directory')\nresult = p.is_dir()\nprint(result)",
 
@@ -14476,7 +14476,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1225,
             "title": "Problem 1225",
-            "description": "Write a Python program to get the file name from a path using `pathlib`.\nExamples:\n  get_file_name() → ?",
+            "description": "Write a Python program to get the file name from a path using `pathlib`.\nExamples:\n  get_file_name() → 'example_file.txt'",
             "initialCode": "from pathlib import Path\ndef get_file_name():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_file_name():\n    p = Path('example_directory/example_file.txt')\n    return p.name\nfile_name = get_file_name()\nprint(f'File name: {file_name}')\n\n# Using built-in approach\ndef get_file_name():\n    result = p.name\n    return result\n\n# Using manual approach\ndef get_file_name():\n    return p.name\n\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.name\nprint(result)\n\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.name\nprint(result)",
 
@@ -14488,7 +14488,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1226,
             "title": "Problem 1226",
-            "description": "Write a Python program to get the parent directory of a path using `pathlib`.\nExamples:\n  get_parent_directory() → ?",
+            "description": "Write a Python program to get the parent directory of a path using `pathlib`.\nExamples:\n  get_parent_directory() → 'example_directory'",
             "initialCode": "from pathlib import Path\ndef get_parent_directory():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_parent_directory():\n    p = Path('example_directory/example_file.txt')\n    return p.parent\nparent_directory = get_parent_directory()\nprint(f'Parent directory: {parent_directory}')\n\n# Using built-in approach\ndef get_parent_directory():\n    result = p.parent\n    return result\n\n# Using manual approach\ndef get_parent_directory():\n    return p.parent\n\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.parent\nprint(result)\n\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.parent\nprint(result)",
 
@@ -14500,11 +14500,11 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1227,
             "title": "Problem 1227",
-            "description": "Write a Python program to join two paths using `pathlib`.\nExamples:\n  join_paths() → ?",
+            "description": "Write a Python program to join two paths using `pathlib`.\nExamples:\n  join_paths() → 'example_directory/example_file.txt'",
             "initialCode": "from pathlib import Path\ndef join_paths():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef join_paths():\n    p1 = Path('example_directory')\n    p2 = 'example_file.txt'\n    return p1 / p2\njoined_path = join_paths()\nprint(f'Joined path: {joined_path}')\n\n# Using built-in approach\ndef join_paths():\n    return p1 * (1 / p2)\n\n# Using manual approach\ndef join_paths():\n    from fractions import Fraction\n    return float(Fraction(p1, p2))\n\n# Script approach\np1 = Path('example_directory')\np2 = 'example_file.txt'\nresult = p1 / p2\nprint(result)\n\n# Direct approach\np1 = Path('example_directory')\np2 = 'example_file.txt'\nresult = p1 / p2\nprint(result)",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
+            "hint": "Always use `with open(...) as f:` to ensure files are properly closed after reading/writing.",
             "breakdown": "1. Import the `Path` class from the `pathlib` module.\n2. Define a function named `join_paths` that takes two arguments, `path1` and `path2`.\n3. Inside the function, use the `Path.join()` method to concatenate `path1` and `path2`.",
 
             "category": "Level 1"
@@ -14512,7 +14512,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1228,
             "title": "Problem 1228",
-            "description": "Write a Python program to get the file extension of a path using `pathlib`.\nExamples:\n  get_file_extension() → ?",
+            "description": "Write a Python program to get the file extension of a path using `pathlib`.\nExamples:\n  get_file_extension() → '.txt'",
             "initialCode": "from pathlib import Path\ndef get_file_extension():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_file_extension():\n    p = Path('example_file.txt')\n    return p.suffix\nfile_extension = get_file_extension()\nprint(f'File extension: {file_extension}')\n\n# Using built-in approach\ndef get_file_extension():\n    result = p.suffix\n    return result\n\n# Using manual approach\ndef get_file_extension():\n    return p.suffix\n\n# Script approach\np = Path('example_file.txt')\nresult = p.suffix\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.suffix\nprint(result)",
 
@@ -14524,7 +14524,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1229,
             "title": "Problem 1229",
-            "description": "Write a Python program to get the size of a file using `pathlib`.\nExamples:\n  get_file_size() → ?",
+            "description": "Write a Python program to get the size of a file using `pathlib`.\nExamples:\n  get_file_size() → 5\n  get_file_size() → 11",
             "initialCode": "from pathlib import Path\ndef get_file_size():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_file_size():\n    p = Path('example_file.txt')\n    return p.stat().st_size\nfile_size = get_file_size()\nprint(f'File size: {file_size} bytes')\n\n# Using built-in approach\ndef get_file_size():\n    result = p.stat().st_size\n    return result\n\n# Using manual approach\ndef get_file_size():\n    return p.stat().st_size\n\n# Script approach\np = Path('example_file.txt')\nresult = p.stat().st_size\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.stat().st_size\nprint(result)",
 
@@ -14536,7 +14536,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1230,
             "title": "Problem 1230",
-            "description": "Write a Python program to rename a file using `pathlib`.\nExamples:\n  rename_file() → ?",
+            "description": "Write a Python program to rename a file using `pathlib`.\nExamples:\n  rename_file() → [object Object]\n  rename_file() → [object Object]",
             "initialCode": "from pathlib import Path\ndef rename_file():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef rename_file():\n    old_path = Path('old_file.txt')\n    new_path = Path('new_file.txt')\n    old_path.rename(new_path)\n    return new_path\nrenamed_file = rename_file()\nprint(f'Renamed file: {renamed_file}')\n\n# Using built-in approach\ndef rename_file():\n    result = new_path\n    return result\n\n# Using manual approach\ndef rename_file():\n    return new_path\n\n# Script approach\nold_path = Path('old_file.txt')\nnew_path = Path('new_file.txt')\nold_path.rename(new_path)\nresult = new_path\nprint(result)\n\n# Direct approach\nold_path = Path('old_file.txt')\nnew_path = Path('new_file.txt')\nold_path.rename(new_path)\nresult = new_path\nprint(result)",
 
@@ -14548,7 +14548,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1231,
             "title": "Problem 1231",
-            "description": "Write a Python program to create a new directory using `pathlib`.\nExamples:\n  create_directory() → ?",
+            "description": "Write a Python program to create a new directory using `pathlib`.\nExamples:\n  create_directory() → 'new_directory'",
             "initialCode": "from pathlib import Path\ndef create_directory():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef create_directory():\n    p = Path('new_directory')\n    p.mkdir(parents=True, exist_ok=True)\n    return p\ncreated_directory = create_directory()\nprint(f'Created directory: {created_directory}')\n\n# Using built-in approach\ndef create_directory():\n    result = p\n    return result\n\n# Using manual approach\ndef create_directory():\n    return p\n\n# Script approach\np = Path('new_directory')\np.mkdir(parents=True, exist_ok=True)\nresult = p\nprint(result)\n\n# Direct approach\np = Path('new_directory')\np.mkdir(parents=True, exist_ok=True)\nresult = p\nprint(result)",
 
@@ -14560,7 +14560,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1232,
             "title": "Problem 1232",
-            "description": "Write a Python program to remove a directory using `pathlib`.\nExamples:\n  remove_directory() → ?",
+            "description": "Write a Python program to remove a directory using `pathlib`.\nExamples:\n  remove_directory() → 'Directory new_directory removed'",
             "initialCode": "from pathlib import Path\ndef remove_directory():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef remove_directory():\n    p = Path('new_directory')\n    p.rmdir()\n    return f'Directory {p} removed'\nremoved_directory = remove_directory()\nprint(removed_directory)\n\n# Using built-in approach\ndef remove_directory():\n    return 'Directory {} removed'.format(p)\n\n# Using manual approach\ndef remove_directory():\n    return 'Directory %s removed' % (p)\n\n# Script approach\np = Path('new_directory')\np.rmdir()\nresult = f'Directory {p} removed'\nprint(result)\n\n# Direct approach\np = Path('new_directory')\np.rmdir()\nresult = f'Directory {p} removed'\nprint(result)",
 
@@ -14572,7 +14572,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1233,
             "title": "Problem 1233",
-            "description": "Write a Python program to remove a file using `pathlib`.\nExamples:\n  remove_file() → ?",
+            "description": "Write a Python program to remove a file using `pathlib`.\nExamples:\n  remove_file() → [object Object]\n  remove_file() → [object Object]",
             "initialCode": "from pathlib import Path\ndef remove_file():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef remove_file():\n    p = Path('example_file.txt')\n    p.unlink()\n    return f'File {p} removed'\nremoved_file = remove_file()\nprint(removed_file)\n\n# Using built-in approach\ndef remove_file():\n    return 'File {} removed'.format(p)\n\n# Using manual approach\ndef remove_file():\n    return 'File %s removed' % (p)\n\n# Script approach\np = Path('example_file.txt')\np.unlink()\nresult = f'File {p} removed'\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\np.unlink()\nresult = f'File {p} removed'\nprint(result)",
 
@@ -14584,7 +14584,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1234,
             "title": "Problem 1234",
-            "description": "Write a Python program to get the absolute path of a file using `pathlib`.\nExamples:\n  get_absolute_path() → ?",
+            "description": "Write a Python program to get the absolute path of a file using `pathlib`.\nExamples:\n  get_absolute_path() → 'example_file.txt'",
             "initialCode": "from pathlib import Path\ndef get_absolute_path():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_absolute_path():\n    p = Path('example_file.txt')\n    return p.resolve()\nabsolute_path = get_absolute_path()\nprint(f'Absolute path: {absolute_path}')\n\n# Using built-in approach\ndef get_absolute_path():\n    result = p.resolve()\n    return result\n\n# Using manual approach\ndef get_absolute_path():\n    return p.resolve()\n\n# Script approach\np = Path('example_file.txt')\nresult = p.resolve()\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.resolve()\nprint(result)",
 
@@ -14596,7 +14596,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1235,
             "title": "Problem 1235",
-            "description": "Write a Python program to check if a path is a symbolic link using `pathlib`.\nExamples:\n  check_if_symlink() → ?",
+            "description": "Write a Python program to check if a path is a symbolic link using `pathlib`.\nExamples:\n  check_if_symlink() → False\n  check_if_symlink() → True",
             "initialCode": "from pathlib import Path\ndef check_if_symlink():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_if_symlink():\n    p = Path('example_symlink')\n    return p.is_symlink()\nis_symlink = check_if_symlink()\nprint(f'Is it a symbolic link? {is_symlink}')\n\n# Using built-in approach\ndef check_if_symlink():\n    result = p.is_symlink()\n    return result\n\n# Using manual approach\ndef check_if_symlink():\n    return p.is_symlink()\n\n# Script approach\np = Path('example_symlink')\nresult = p.is_symlink()\nprint(result)\n\n# Direct approach\np = Path('example_symlink')\nresult = p.is_symlink()\nprint(result)",
 
@@ -14608,7 +14608,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1236,
             "title": "Problem 1236",
-            "description": "Write a Python program to create a symbolic link using `pathlib`.\nExamples:\n  create_symlink() → ?",
+            "description": "Write a Python program to create a symbolic link using `pathlib`.\nExamples:\n  create_symlink() → True",
             "initialCode": "from pathlib import Path\ndef create_symlink():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef create_symlink():\n    target = Path('example_file.txt')\n    symlink = Path('example_symlink')\n    symlink.symlink_to(target)\n    return symlink\nsymlink = create_symlink()\nprint(f'Created symlink: {symlink}')\n\n# Using built-in approach\ndef create_symlink():\n    result = symlink\n    return result\n\n# Using manual approach\ndef create_symlink():\n    return symlink\n\n# Script approach\ntarget = Path('example_file.txt')\nsymlink = Path('example_symlink')\nsymlink.symlink_to(target)\nresult = symlink\nprint(result)\n\n# Direct approach\ntarget = Path('example_file.txt')\nsymlink = Path('example_symlink')\nsymlink.symlink_to(target)\nresult = symlink\nprint(result)",
 
@@ -14620,7 +14620,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1237,
             "title": "Problem 1237",
-            "description": "Write a Python program to check if a path is a directory and if it contains files using `pathlib`.\nExamples:\n  check_directory_and_files() → ?",
+            "description": "Write a Python program to check if a path is a directory and if it contains files using `pathlib`.\nExamples:\n  check_directory_and_files() → []\n  check_directory_and_files() → ['a.txt', 'b.txt']",
             "initialCode": "from pathlib import Path\ndef check_directory_and_files():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_directory_and_files():\n    p = Path('example_directory')\n    if p.is_dir():\n        return [file.name for file in p.iterdir()]\n    return []\ndirectory_files = check_directory_and_files()\nprint(f'Files in directory: {directory_files}')\n\n# Using built-in approach\ndef check_directory_and_files():\n    result = [file.name for file in p.iterdir()]\n    return result\n\n# Using manual approach\ndef check_directory_and_files():\n    return [file.name for file in p.iterdir()]",
 
@@ -14632,7 +14632,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1238,
             "title": "Problem 1238",
-            "description": "Write a Python program to get the last modified time of a file using `pathlib`.\nExamples:\n  get_last_modified_time() → ?",
+            "description": "Write a Python program to get the last modified time of a file using `pathlib`.\nExamples:\n  get_last_modified_time() → 24",
             "initialCode": "from pathlib import Path\nimport time\ndef get_last_modified_time():\n    pass",
             "solution": "from pathlib import Path\nimport time\n\n# Using function approach\ndef get_last_modified_time():\n    p = Path('example_file.txt')\n    timestamp = p.stat().st_mtime\n    return time.ctime(timestamp)\nlast_modified_time = get_last_modified_time()\nprint(f'Last modified time: {last_modified_time}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef get_last_modified_time():\n    result = time.ctime(timestamp)\n    return result\n\n# Using manual approach\ndef get_last_modified_time():\n    return time.ctime(timestamp)\n\n# Script approach\np = Path('example_file.txt')\ntimestamp = p.stat().st_mtime\nresult = time.ctime(timestamp)\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\ntimestamp = p.stat().st_mtime\nresult = time.ctime(timestamp)\nprint(result)",
 
@@ -14643,7 +14643,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1239,
             "title": "Problem 1239",
-            "description": "Write a Python program to get the directory name from a path using `pathlib`.\nExamples:\n  get_directory_name() → ?",
+            "description": "Write a Python program to get the directory name from a path using `pathlib`.\nExamples:\n  get_directory_name() → 'example_directory'",
             "initialCode": "from pathlib import Path\ndef get_directory_name():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_directory_name():\n    p = Path('example_directory/example_file.txt')\n    return p.parent.name\ndirectory_name = get_directory_name()\nprint(f'Directory name: {directory_name}')\n\n# Using built-in approach\ndef get_directory_name():\n    result = p.parent.name\n    return result\n\n# Using manual approach\ndef get_directory_name():\n    return p.parent.name\n\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.name\nprint(result)\n\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.name\nprint(result)",
 
@@ -14655,7 +14655,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1240,
             "title": "Problem 1240",
-            "description": "Write a Python program to check if a path is empty (no files) using `pathlib`.\nExamples:\n  check_if_empty() → ?",
+            "description": "Write a Python program to check if a path is empty (no files) using `pathlib`.\nExamples:\n  check_if_empty() → True\n  check_if_empty() → False",
             "initialCode": "from pathlib import Path\ndef check_if_empty():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_if_empty():\n    p = Path('example_directory')\n    return len(list(p.iterdir())) == 0\nis_empty = check_if_empty()\nprint(f'Is directory empty? {is_empty}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef check_if_empty():\n    result = len(list(p.iterdir())) == 0\n    return result\n\n# Using manual approach\ndef check_if_empty():\n    return len(list(p.iterdir())) == 0\n\n# Script approach\np = Path('example_directory')\nresult = len(list(p.iterdir())) == 0\nprint(result)\n\n# Direct approach\np = Path('example_directory')\nresult = len(list(p.iterdir())) == 0\nprint(result)",
 
@@ -14667,7 +14667,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1241,
             "title": "Problem 1241",
-            "description": "Write a Python program to iterate over all files in a directory using `pathlib`.\nExamples:\n  iterate_files() → ?",
+            "description": "Write a Python program to iterate over all files in a directory using `pathlib`.\nExamples:\n  iterate_files() → ['a.txt', 'b.txt']\n  iterate_files() → ['one.py', 'two.py']",
             "initialCode": "from pathlib import Path\ndef iterate_files():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef iterate_files():\n    p = Path('example_directory')\n    return [file.name for file in p.iterdir() if file.is_file()]\nfiles_in_directory = iterate_files()\nprint(f'Files in directory: {files_in_directory}')\n\n# Using built-in approach\ndef iterate_files():\n    result = [file.name for file in p.iterdir() if file.is_file()]\n    return result\n\n# Using manual approach\ndef iterate_files():\n    return [file.name for file in p.iterdir() if file.is_file()]\n\n# Script approach\np = Path('example_directory')\nresult = [file.name for file in p.iterdir() if file.is_file()]\nprint(result)\n\n# Direct approach\np = Path('example_directory')\nresult = [file.name for file in p.iterdir() if file.is_file()]\nprint(result)",
 
@@ -14679,7 +14679,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1242,
             "title": "Problem 1242",
-            "description": "Write a Python program to find the path to the parent directory using `pathlib`.\nExamples:\n  get_parent_directory() → ?",
+            "description": "Write a Python program to find the path to the parent directory using `pathlib`.\nExamples:\n  get_parent_directory() → '.'",
             "initialCode": "from pathlib import Path\ndef get_parent_directory():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_parent_directory():\n    p = Path('example_directory/example_file.txt')\n    return p.parent.parent\nparent_directory = get_parent_directory()\nprint(f'Parent directory: {parent_directory}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef get_parent_directory():\n    result = p.parent.parent\n    return result\n\n# Using manual approach\ndef get_parent_directory():\n    return p.parent.parent\n\n# Script approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.parent\nprint(result)\n\n# Direct approach\np = Path('example_directory/example_file.txt')\nresult = p.parent.parent\nprint(result)",
 
@@ -14691,7 +14691,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1243,
             "title": "Problem 1243",
-            "description": "Write a Python program to check if a file has a certain extension using `pathlib`.\nExamples:\n  check_file_extension() → ?",
+            "description": "Write a Python program to check if a file has a certain extension using `pathlib`.\nExamples:\n  check_file_extension() → True",
             "initialCode": "from pathlib import Path\ndef check_file_extension():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_file_extension():\n    p = Path('example_file.txt')\n    return p.suffix == '.txt'\nhas_extension = check_file_extension()\nprint(f'Has .txt extension? {has_extension}')\n\n# Using built-in approach\ndef check_file_extension():\n    result = p.suffix == '.txt'\n    return result\n\n# Using manual approach\ndef check_file_extension():\n    return p.suffix == '.txt'\n\n# Script approach\np = Path('example_file.txt')\nresult = p.suffix == '.txt'\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.suffix == '.txt'\nprint(result)",
 
@@ -14703,7 +14703,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1244,
             "title": "Problem 1244",
-            "description": "Write a Python program to get the file size using `pathlib` in human-readable format.\nExamples:\n  get_human_readable_size() → ?",
+            "description": "Write a Python program to get the file size using `pathlib` in human-readable format.\nExamples:\n  get_human_readable_size() → '2.00 KB'\n  get_human_readable_size() → '0.50 KB'",
             "initialCode": "from pathlib import Path\ndef get_human_readable_size():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef get_human_readable_size():\n    p = Path('example_file.txt')\n    size_in_bytes = p.stat().st_size\n    return f'{size_in_bytes / 1024:.2f} KB'\nsize = get_human_readable_size()\nprint(f'File size: {size}')\n\n# Using built-in approach\ndef get_human_readable_size():\n    result = f'{size_in_bytes / 1024:.2f} KB'\n    return result\n\n# Using manual approach\ndef get_human_readable_size():\n    return f'{size_in_bytes / 1024:.2f} KB'\n\n# Script approach\np = Path('example_file.txt')\nsize_in_bytes = p.stat().st_size\nresult = f'{size_in_bytes / 1024:.2f} KB'\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nsize_in_bytes = p.stat().st_size\nresult = f'{size_in_bytes / 1024:.2f} KB'\nprint(result)",
 
@@ -14715,7 +14715,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1245,
             "title": "Problem 1245",
-            "description": "Write a Python program to change the current working directory using `pathlib`.\nExamples:\n  change_working_directory() → ?",
+            "description": "Write a Python program to change the current working directory using `pathlib`.\nExamples:\n  change_working_directory() → 'Changed working directory to: example_directory'",
             "initialCode": "from pathlib import Path\ndef change_working_directory():\n    pass",
             "solution": "from pathlib import Path\nimport os\n\n# Using function approach\ndef change_working_directory():\n    p = Path('example_directory')\n    os.chdir(p)\n    return f'Changed working directory to: {p}'\nchanged_directory = change_working_directory()\nprint(changed_directory)\n\n# Using built-in approach\ndef change_working_directory():\n    return 'Changed working directory to: {}'.format(p)\n\n# Using manual approach\ndef change_working_directory():\n    return 'Changed working directory to: %s' % (p)\n\n# Script approach\np = Path('example_directory')\nos.chdir(p)\nresult = f'Changed working directory to: {p}'\nprint(result)\n\n# Direct approach\np = Path('example_directory')\nos.chdir(p)\nresult = f'Changed working directory to: {p}'\nprint(result)",
 
@@ -14979,7 +14979,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1267,
             "title": "Problem 1267",
-            "description": "Write a Python program to check if a file exists and its size is greater than 100 KB using the `and` operator.\nExamples:\n  check_file_exists_and_size() → ?",
+            "description": "Write a Python program to check if a file exists and its size is greater than 100 KB using the `and` operator.\nExamples:\n  check_file_exists_and_size() → False\n  check_file_exists_and_size() → True",
             "initialCode": "from pathlib import Path\ndef check_file_exists_and_size():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_file_exists_and_size():\n    p = Path('example_file.txt')\n    return p.exists() and p.stat().st_size > 100 * 1024\nresult = check_file_exists_and_size()\nprint(f'File exists and its size is greater than 100 KB: {result}')\n\n# Using built-in approach\ndef check_file_exists_and_size():\n    result = p.exists() and p.stat().st_size > 100 * 1024\n    return result\n\n# Using manual approach\ndef check_file_exists_and_size():\n    return p.exists() and p.stat().st_size > 100 * 1024\n\n# Script approach\np = Path('example_file.txt')\nresult = p.exists() and p.stat().st_size > 100 * 1024\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.exists() and p.stat().st_size > 100 * 1024\nprint(result)",
 
@@ -15207,7 +15207,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1286,
             "title": "Problem 1286",
-            "description": "Write a Python program to check if a number is a perfect square or a perfect cube using the `or` operator.\nExamples:\n  check_perfect_square_or_cube() → ?",
+            "description": "Write a Python program to check if a number is a perfect square or a perfect cube using the `or` operator.\nExamples:\n  check_perfect_square_or_cube() → True",
             "initialCode": "import math\ndef check_perfect_square_or_cube():\n    pass",
             "solution": "import math\n\n# Using function approach\ndef check_perfect_square_or_cube():\n    num = 16\n    return math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\nresult = check_perfect_square_or_cube()\nprint(f'Number is a perfect square or cube: {result}')\n\n# Using built-in approach\ndef check_perfect_square_or_cube():\n    result = math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\n    return result\n\n# Using manual approach\ndef check_perfect_square_or_cube():\n    return math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\n\n# Script approach\nnum = 16\nresult = math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\nprint(result)\n\n# Direct approach\nnum = 16\nresult = math.isqrt(num) ** 2 == num or round(num ** (1 / 3)) ** 3 == num\nprint(result)",
 
@@ -15255,7 +15255,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1290,
             "title": "Problem 1290",
-            "description": "Write a Python program to check if a file exists or if it is writable using the `or` operator.\nExamples:\n  check_file_conditions() → ?",
+            "description": "Write a Python program to check if a file exists or if it is writable using the `or` operator.\nExamples:\n  check_file_conditions() → False\n  check_file_conditions() → True",
             "initialCode": "from pathlib import Path\ndef check_file_conditions():\n    pass",
             "solution": "from pathlib import Path\n\n# Using function approach\ndef check_file_conditions():\n    p = Path('example_file.txt')\n    return p.exists() or p.is_file()\nresult = check_file_conditions()\nprint(f'File exists or is a file: {result}')\n\n# Using built-in approach\ndef check_file_conditions():\n    result = p.exists() or p.is_file()\n    return result\n\n# Using manual approach\ndef check_file_conditions():\n    return p.exists() or p.is_file()\n\n# Script approach\np = Path('example_file.txt')\nresult = p.exists() or p.is_file()\nprint(result)\n\n# Direct approach\np = Path('example_file.txt')\nresult = p.exists() or p.is_file()\nprint(result)",
 
@@ -15891,7 +15891,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1343,
             "title": "Problem 1343",
-            "description": "Write a Python program to define a function that accepts only strings using isinstance().\nExamples:\n  greet('hello') → Hello, hello!\n  greet('world') → Hello, world!\n  greet('python') → Hello, python!",
+            "description": "Write a Python program to define a function that accepts only strings using isinstance().\nExamples:\n  greet('Alice') → 'Hello, Alice!'\n  greet(123) → 'Invalid input'",
             "initialCode": "def greet(name):\n    pass",
             "solution": "# Using function approach\ndef greet(name):\n    if not isinstance(name, str):\n        return 'Invalid input'\n    return f'Hello, {name}!'\nprint(greet('Alice'))  # Expected: Hello, Alice!\nprint(greet(123))      # Expected: Invalid input\n\n# Using built-in approach\ndef greet(name):\n    result = 'Invalid input'\n    return result\n\n# Using manual approach\ndef greet(name):\n    return 'Invalid input'\n\n# Script approach\nname = 'Alice'\nresult = greet(name)\nprint(result)\n\n# Direct approach\nprint(greet('Bob'))",
 
@@ -16347,7 +16347,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1381,
             "title": "Problem 1381",
-            "description": "Write a Python function that updates a dictionary with keyword arguments.\nExamples:\n  update_dict('hello') → ?\n  update_dict('world') → ?\n  update_dict('python') → ?",
+            "description": "Write a Python function that updates a dictionary with keyword arguments.\nExamples:\n  update_dict({'x':1}) → [object Object]\n  update_dict({'name':'A'}) → [object Object]",
             "initialCode": "def update_dict(base, **kwargs):\n    pass",
             "solution": "# Using function approach\ndef update_dict(base, **kwargs):\n    base.update(kwargs)\n    return base\nprint(update_dict({'x': 1}, y=2, z=3))  # Expected: {'x': 1, 'y': 2, 'z': 3}\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef update_dict(base, **kwargs):\n    result = base\n    return result\n\n# Using manual approach\ndef update_dict(base, **kwargs):\n    return base\n\n# Script approach\nbase.update(kwargs)\nresult = base\nprint(result)\n\n# Direct approach\nbase.update(kwargs)\nresult = base\nprint(result)",
 
@@ -16443,7 +16443,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1389,
             "title": "Problem 1389",
-            "description": "Write a Python function that returns the longest key in **kwargs.\nExamples:\n  longest_key() → ?",
+            "description": "Write a Python function that returns the longest key in **kwargs.\nExamples:\n  longest_key() → 'muchlonger'\n  longest_key() → 'bbbb'",
             "initialCode": "def longest_key(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef longest_key(**kwargs):\n    return max(kwargs, key=len)\nprint(longest_key(short=1, muchlonger=2))  # Expected: 'muchlonger'\n\n# Using built-in approach\ndef longest_key(**kwargs):\n    result = max(kwargs, key=len)\n    return result\n\n# Using manual approach\ndef longest_key(**kwargs):\n    return max(kwargs, key=len)\n\n# Script approach\nresult = max(kwargs, key=len)\nprint(result)\n\n# Direct approach\nresult = max(kwargs, key=len)\nprint(result)",
 
@@ -16455,7 +16455,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1390,
             "title": "Problem 1390",
-            "description": "Write a Python function that creates a string from **kwargs as key=value pairs joined by commas.\nExamples:\n  stringify_kwargs() → ?",
+            "description": "Write a Python function that creates a string from **kwargs as key=value pairs joined by commas.\nExamples:\n  stringify_kwargs() → 'x=10, y=20'\n  stringify_kwargs() → 'name=Noll, level=2'",
             "initialCode": "def stringify_kwargs(**kwargs):\n    pass",
             "solution": "# Using function approach\ndef stringify_kwargs(**kwargs):\n    return ', '.join(f'{k}={v}' for k, v in kwargs.items())\nprint(stringify_kwargs(x=10, y=20))  # Expected: 'x=10, y=20'\n\n# Using built-in approach\ndef stringify_kwargs(**kwargs):\n    result = ', '.join(f'{k}={v}' for k, v in kwargs.items())\n    return result\n\n# Using manual approach\ndef stringify_kwargs(**kwargs):\n    return ', '.join(f'{k}={v}' for k, v in kwargs.items())\n\n# Script approach\nresult = ', '.join(f'{k}={v}' for k, v in kwargs.items())\nprint(result)\n\n# Direct approach\nresult = ', '.join(f'{k}={v}' for k, v in kwargs.items())\nprint(result)",
 
@@ -17583,7 +17583,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1485,
             "title": "Problem 1485",
-            "description": "Use `is not` to verify a function argument is not None.\nExamples:\n  greet('hello') → Hello, hello!\n  greet('world') → None\n  greet('python') → Hello, world!",
+            "description": "Use `is not` to verify a function argument is not None.\nExamples:\n  greet('Alice') → 'Hello, Alice!'\n  greet(None) → None",
             "initialCode": "def greet(name):\n    pass",
             "solution": "# Using function approach\ndef greet(name):\n    if name is not None:\n        print(f'Hello, {name}!')\ngreet('Alice')  # Expected: Hello, Alice!\n# Using return instead of print\n   # Modify to return value instead of printing\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef solve():\n    def greet(name):\n        if name is not None:\n            print(f'Hello, {name}!')\n    greet('Alice')  # Expected: Hello, Alice!\n\n# Using manual approach\ndef solve():\n    def greet(name):\n        if name is not None:\n            return f'Hello, {name}!'\n    greet('Alice')  # Expected: Hello, Alice!\n\n# Script approach\nname = 'Alice'\nresult = greet(name)\nprint(result)\n\n# Direct approach\nprint(greet('Bob'))",
 
@@ -18531,7 +18531,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1564,
             "title": "Problem 1564",
-            "description": "Write a Python function with type hints using `typing.Optional` to indicate a parameter that can be None.\nExamples:\n  greet('hello') → Hello, hello!\n  greet('world') → Hello, world!\n  greet('python') → Hello, python!",
+            "description": "Write a Python function with type hints using `typing.Optional` to indicate a parameter that can be None.\nExamples:\n  greet('Alice') → 'Hello, Alice!'\n  greet() → 'Hello, Guest!'",
             "initialCode": "from typing import Optional\ndef greet(name: Optional[str] = None) -> str:\n    pass",
             "solution": "from typing import Optional\n\n# Using function approach\ndef greet(name: Optional[str] = None) -> str:\n    if name is None:\n        return 'Hello, Guest!'\n    return f'Hello, {name}!'\nprint(greet('Alice'), greet())  # Expected: Hello, Alice! Hello, Guest!\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef greet(name: Optional[str] = None):\n    result = 'Hello, Guest!'\n    return result\n\n# Using manual approach\ndef greet(name: Optional[str] = None):\n    return 'Hello, Guest!'\n\n# Script approach\nname = 'Alice'\nresult = greet(name)\nprint(result)\n\n# Direct approach\nprint(greet('Bob'))",
 
@@ -18543,7 +18543,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1565,
             "title": "Problem 1565",
-            "description": "Write a Python function with type hints using `typing.Union` to accept multiple types.\nExamples:\n  process_value(5, [1, 2, 3]) → ?\n  process_value(3, [5, 8, 2]) → ?\n  process_value(10, [3, 1, 4]) → ?",
+            "description": "Write a Python function with type hints using `typing.Union` to accept multiple types.\nExamples:\n  process_value(42) → '42'\n  process_value('hello') → 'hello'",
             "initialCode": "from typing import Union\ndef process_value(value: Union[int, str]) -> str:\n    pass",
             "solution": "from typing import Union\n\n# Using function approach\ndef process_value(value: Union[int, str]) -> str:\n    return str(value)\nprint(process_value(42), process_value('hello'))  # Expected: 42 hello\n\n# Using built-in approach\ndef process_value(value: Union[int, str]):\n    result = str(value)\n    return result\n\n# Using manual approach\ndef process_value(value: Union[int, str]):\n    return str(value)\n\n# Script approach\nvalue = 15\nresult = process_value(value)\nprint(result)\n\n# Direct approach\nprint(process_value(25))",
 
@@ -18579,7 +18579,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1568,
             "title": "Problem 1568",
-            "description": "Write a Python program using `match/case` statements to handle different string patterns.\nExamples:\n  handle_command('hello') → Unknown command\n  handle_command('world') → Unknown command\n  handle_command('python') → Unknown command",
+            "description": "Write a Python program using `match/case` statements to handle different string patterns.\nExamples:\n  handle_command('start') → 'Starting...'\n  handle_command('stop') → 'Stopping...'\n  handle_command(1) → 'Unknown command'",
             "initialCode": "def handle_command(cmd: str) -> str:\n    pass",
             "solution": "# Using function approach\ndef handle_command(cmd: str) -> str:\n    match cmd:\n        case 'start':\n            return 'Starting...'\n        case 'stop':\n            return 'Stopping...'\n        case 'pause':\n            return 'Paused'\n        case _:\n            return 'Unknown command'\nprint(handle_command('start'))  # Expected: Starting...\n\n# Using built-in approach\ndef handle_command(cmd: str):\n    result = 'Starting...'\n    return result\n\n# Using manual approach\ndef handle_command(cmd: str):\n    return 'Starting...'\n\n# Script approach\ncmd = 15\nresult = handle_command(cmd)\nprint(result)\n\n# Direct approach\nprint(handle_command(25))",
 
@@ -19607,7 +19607,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1654,
             "title": "Problem 1654",
-            "description": "Write a Python function called `calculate_circle_area` that takes the radius as a parameter and returns the area of a circle (use 3.14 for pi).\nExamples:\n  calculate_circle_area([1, 2, 3]) → ?\n  calculate_circle_area([5, 8, 2]) → ?\n  calculate_circle_area([3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_circle_area` that takes the radius as a parameter and returns the area of a circle (use 3.14 for pi).\nExamples:\n  calculate_circle_area(1) → 3.14\n  calculate_circle_area(3) → 28.259999999999998",
             "initialCode": "def calculate_circle_area(radius):\n    pass",
             "solution": "# Using function approach\ndef calculate_circle_area(radius):\n    return 3.14 * radius * radius\nresult = calculate_circle_area(5)\nprint(result)  # Expected: 78.5\n\n# Using built-in approach\ndef calculate_circle_area(radius):\n    result = 3.14 * radius * radius\n    return result\n\n# Using manual approach\ndef calculate_circle_area(radius):\n    return 3.14 * radius * radius\n\n# Script approach\nradius = 7\nresult = calculate_circle_area(radius)\nprint(result)\n\n# Direct approach\nprint(calculate_circle_area(14))",
 
@@ -19643,7 +19643,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1657,
             "title": "Problem 1657",
-            "description": "Write a Python function called `convert_celsius_to_fahrenheit` that takes a temperature in Celsius and returns it converted to Fahrenheit.\nExamples:\n  convert_celsius_to_fahrenheit([1, 2, 3]) → ?\n  convert_celsius_to_fahrenheit([5, 8, 2]) → ?\n  convert_celsius_to_fahrenheit([3, 1, 4]) → ?",
+            "description": "Write a Python function called `convert_celsius_to_fahrenheit` that takes a temperature in Celsius and returns it converted to Fahrenheit.\nExamples:\n  convert_celsius_to_fahrenheit(0) → 32\n  convert_celsius_to_fahrenheit(100) → 212",
             "initialCode": "def convert_celsius_to_fahrenheit(celsius):\n    pass",
             "solution": "# Using function approach\ndef convert_celsius_to_fahrenheit(celsius):\n    return (celsius * 9/5) + 32\nresult = convert_celsius_to_fahrenheit(25)\nprint(result)  # Expected: 77.0\n\n# Using built-in approach\ndef convert_celsius_to_fahrenheit(celsius):\n    result = (celsius * 9/5) + 32\n    return result\n\n# Using manual approach\ndef convert_celsius_to_fahrenheit(celsius):\n    return (celsius * 9/5) + 32\n\n# Script approach\ncelsius = 15\nresult = convert_celsius_to_fahrenheit(celsius)\nprint(result)\n\n# Direct approach\nprint(convert_celsius_to_fahrenheit(25))",
 
@@ -19691,7 +19691,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1661,
             "title": "Problem 1661",
-            "description": "Write a Python function called `get_first_char` that takes a string as input and returns the first character of the string.\nExamples:\n  get_first_char('hello') → h\n  get_first_char('world') → w\n  get_first_char('python') → p",
+            "description": "Write a Python function called `get_first_char` that takes a string as input and returns the first character of the string.\nExamples:\n  get_first_char('hello') → 'h'\n  get_first_char('Python') → 'P'",
             "initialCode": "def get_first_char(text):\n    pass",
             "solution": "# Using function approach\ndef get_first_char(text):\n    return text[0]\nresult = get_first_char('Hello')\nprint(result)  # Expected: H\n\n# Using built-in approach\ndef get_first_char(text):\n    result = text[0]\n    return result\n\n# Using manual approach\ndef get_first_char(text):\n    return text[0]\n\n# Script approach\ntext = 'hello'\nresult = get_first_char(text)\nprint(result)\n\n# Direct approach\nprint(get_first_char('world'))",
 
@@ -19703,7 +19703,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1662,
             "title": "Problem 1662",
-            "description": "Write a Python function called `get_last_char` that takes a string as input and returns the last character of the string.\nExamples:\n  get_last_char('hello') → o\n  get_last_char('world') → d\n  get_last_char('python') → n",
+            "description": "Write a Python function called `get_last_char` that takes a string as input and returns the last character of the string.\nExamples:\n  get_last_char('hello') → 'o'\n  get_last_char('Python') → 'n'",
             "initialCode": "def get_last_char(text):\n    pass",
             "solution": "# Using function approach\ndef get_last_char(text):\n    return text[-1]\nresult = get_last_char('Hello')\nprint(result)  # Expected: o\n\n# Using built-in approach\ndef get_last_char(text):\n    result = text[-1]\n    return result\n\n# Using manual approach\ndef get_last_char(text):\n    return text[-1]\n\n# Script approach\ntext = 'hello'\nresult = get_last_char(text)\nprint(result)\n\n# Direct approach\nprint(get_last_char('world'))",
 
@@ -19715,7 +19715,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1663,
             "title": "Problem 1663",
-            "description": "Write a Python function called `get_middle_char` that takes a string as input and returns the middle character. If the string has even length, return the character at index length//2.\nExamples:\n  get_middle_char('hello') → l\n  get_middle_char('world') → r\n  get_middle_char('python') → h",
+            "description": "Write a Python function called `get_middle_char` that takes a string as input and returns the middle character. If the string has even length, return the character at index length//2.\nExamples:\n  get_middle_char('hello') → 'l'\n  get_middle_char('abcd') → 'c'",
             "initialCode": "def get_middle_char(text):\n    pass",
             "solution": "# Using function approach\ndef get_middle_char(text):\n    return text[len(text) // 2]\nresult = get_middle_char('Hello')\nprint(result)  # Expected: l\n\n# Using built-in approach\ndef get_middle_char(text):\n    result = text[len(text) // 2]\n    return result\n\n# Using manual approach\ndef get_middle_char(text):\n    return text[len(text) // 2]\n\n# Script approach\ntext = 'hello'\nresult = get_middle_char(text)\nprint(result)\n\n# Direct approach\nprint(get_middle_char('world'))",
 
@@ -19727,7 +19727,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1664,
             "title": "Problem 1664",
-            "description": "Write a Python function called `repeat_string` that takes a string and a number n, and returns the string repeated n times.\nExamples:\n  repeat_string('hello', 5) → hellohellohellohellohello\n  repeat_string('world', 3) → worldworldworld\n  repeat_string('python', 10) → pythonpythonpythonpythonpythonpythonpythonpythonpythonpython",
+            "description": "Write a Python function called `repeat_string` that takes a string and a number n, and returns the string repeated n times.\nExamples:\n  repeat_string('ab', 3) → 'ababab'\n  repeat_string('x', 0) → ''",
             "initialCode": "def repeat_string(text, n):\n    pass",
             "solution": "# Using function approach\ndef repeat_string(text, n):\n    return text * n\nresult = repeat_string('Hi', 3)\nprint(result)  # Expected: HiHiHi\n\n# Using built-in approach\ndef repeat_string(text, n):\n    result = 0\n    for _ in range(n):\n        result += text\n    return result\n\n# Using manual approach\ndef repeat_string(text, n):\n    return pow(text, n)\n\n# Script approach\ntext = 'hello'\nn = 6\nresult = repeat_string(text, n)\nprint(result)\n\n# Direct approach\nprint(repeat_string('world', 15))",
 
@@ -19739,7 +19739,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1665,
             "title": "Problem 1665",
-            "description": "Write a Python function called `swap_first_last` that takes a string as input and returns a new string with the first and last characters swapped.\nExamples:\n  swap_first_last('hello') → oellh\n  swap_first_last('world') → dorlw\n  swap_first_last('python') → nythop",
+            "description": "Write a Python function called `swap_first_last` that takes a string as input and returns a new string with the first and last characters swapped.\nExamples:\n  swap_first_last('hello') → 'oellh'\n  swap_first_last('a') → 'a'\n  swap_first_last('ab') → 'ba'",
             "initialCode": "def swap_first_last(text):\n    pass",
             "solution": "# Using function approach\ndef swap_first_last(text):\n    if len(text) <= 1:\n        return text\n    return text[-1] + text[1:-1] + text[0]\nresult = swap_first_last('Hello')\nprint(result)  # Expected: oellH\n\n# Using built-in approach\ndef swap_first_last(text):\n    result = text\n    return result\n\n# Using manual approach\ndef swap_first_last(text):\n    return text\n\n# Script approach\ntext = 'hello'\nresult = swap_first_last(text)\nprint(result)\n\n# Direct approach\nprint(swap_first_last('world'))",
 
@@ -19751,7 +19751,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1666,
             "title": "Problem 1666",
-            "description": "Write a Python function called `remove_first_char` that takes a string as input and returns the string with the first character removed.\nExamples:\n  remove_first_char('hello') → ello\n  remove_first_char('world') → orld\n  remove_first_char('python') → ython",
+            "description": "Write a Python function called `remove_first_char` that takes a string as input and returns the string with the first character removed.\nExamples:\n  remove_first_char('hello') → 'ello'\n  remove_first_char('a') → ''",
             "initialCode": "def remove_first_char(text):\n    pass",
             "solution": "# Using function approach\ndef remove_first_char(text):\n    return text[1:]\nresult = remove_first_char('Hello')\nprint(result)  # Expected: ello\n\n# Using built-in approach\ndef remove_first_char(text):\n    result = text[1:]\n    return result\n\n# Using manual approach\ndef remove_first_char(text):\n    return text[1:]\n\n# Script approach\ntext = 'hello'\nresult = remove_first_char(text)\nprint(result)\n\n# Direct approach\nprint(remove_first_char('world'))",
 
@@ -19763,7 +19763,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1667,
             "title": "Problem 1667",
-            "description": "Write a Python function called `remove_last_char` that takes a string as input and returns the string with the last character removed.\nExamples:\n  remove_last_char('hello') → hell\n  remove_last_char('world') → worl\n  remove_last_char('python') → pytho",
+            "description": "Write a Python function called `remove_last_char` that takes a string as input and returns the string with the last character removed.\nExamples:\n  remove_last_char('hello') → 'hell'\n  remove_last_char('a') → ''",
             "initialCode": "def remove_last_char(text):\n    pass",
             "solution": "# Using function approach\ndef remove_last_char(text):\n    return text[:-1]\nresult = remove_last_char('Hello')\nprint(result)  # Expected: Hell\n\n# Using built-in approach\ndef remove_last_char(text):\n    result = text[:-1]\n    return result\n\n# Using manual approach\ndef remove_last_char(text):\n    return text[:-1]\n\n# Script approach\ntext = 'hello'\nresult = remove_last_char(text)\nprint(result)\n\n# Direct approach\nprint(remove_last_char('world'))",
 
@@ -19775,7 +19775,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1668,
             "title": "Problem 1668",
-            "description": "Write a Python function called `get_first_word` that takes a string of words separated by spaces and returns the first word.\nExamples:\n  get_first_word('hello') → hello\n  get_first_word('world') → world\n  get_first_word('python') → python",
+            "description": "Write a Python function called `get_first_word` that takes a string of words separated by spaces and returns the first word.\nExamples:\n  get_first_word('hello world') → 'hello'\n  get_first_word('one two three') → 'one'",
             "initialCode": "def get_first_word(text):\n    pass",
             "solution": "# Using function approach\ndef get_first_word(text):\n    return text.split()[0]\nresult = get_first_word('Hello World Python')\nprint(result)  # Expected: Hello\n\n# Using built-in approach\ndef get_first_word(text):\n    result = text.split()[0]\n    return result\n\n# Using manual approach\ndef get_first_word(text):\n    return text.split()[0]\n\n# Script approach\ntext = 'hello'\nresult = get_first_word(text)\nprint(result)\n\n# Direct approach\nprint(get_first_word('world'))",
 
@@ -19787,7 +19787,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1669,
             "title": "Problem 1669",
-            "description": "Write a Python function called `get_last_word` that takes a string of words separated by spaces and returns the last word.\nExamples:\n  get_last_word('hello') → hello\n  get_last_word('world') → world\n  get_last_word('python') → python",
+            "description": "Write a Python function called `get_last_word` that takes a string of words separated by spaces and returns the last word.\nExamples:\n  get_last_word('hello world') → 'world'\n  get_last_word('one two three') → 'three'",
             "initialCode": "def get_last_word(text):\n    pass",
             "solution": "# Using function approach\ndef get_last_word(text):\n    return text.split()[-1]\nresult = get_last_word('Hello World Python')\nprint(result)  # Expected: Python\n\n# Using built-in approach\ndef get_last_word(text):\n    result = text.split()[-1]\n    return result\n\n# Using manual approach\ndef get_last_word(text):\n    return text.split()[-1]\n\n# Script approach\ntext = 'hello'\nresult = get_last_word(text)\nprint(result)\n\n# Direct approach\nprint(get_last_word('world'))",
 
@@ -19799,7 +19799,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1670,
             "title": "Problem 1670",
-            "description": "Write a Python function called `count_characters` that takes a string as input and returns the number of characters in the string (excluding spaces).\nExamples:\n  count_characters('hello') → 5\n  count_characters('world') → 5\n  count_characters('python') → 6",
+            "description": "Write a Python function called `count_characters` that takes a string as input and returns the number of characters in the string (excluding spaces).\nExamples:\n  count_characters('hello') → 5\n  count_characters('hi there') → 7",
             "initialCode": "def count_characters(text):\n    pass",
             "solution": "# Using function approach\ndef count_characters(text):\n    return len(text.replace(' ', ''))\nresult = count_characters('Hello World')\nprint(result)  # Expected: 10\n\n# Using built-in approach\ndef count_characters(text):\n    result = len(text.replace(' ', ''))\n    return result\n\n# Using manual approach\ndef count_characters(text):\n    return len(text.replace(' ', ''))\n\n# Script approach\ntext = 'hello'\nresult = count_characters(text)\nprint(result)\n\n# Direct approach\nprint(count_characters('world'))",
 
@@ -20243,7 +20243,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1707,
             "title": "Problem 1707",
-            "description": "Write a Python function called `convert_to_integer` that takes a string containing a number and returns it as an integer.\nExamples:\n  convert_to_integer('hello') → ?\n  convert_to_integer('world') → ?\n  convert_to_integer('python') → ?",
+            "description": "Write a Python function called `convert_to_integer` that takes a string containing a number and returns it as an integer.\nExamples:\n  convert_to_integer('123') → 123\n  convert_to_integer('-7') → -7",
             "initialCode": "def convert_to_integer(text):\n    pass",
             "solution": "# Using function approach\ndef convert_to_integer(text):\n    return int(text)\nresult = convert_to_integer('123')\nprint(result, type(result))  # Expected: 123 <class 'int'>\n\n# Using built-in approach\ndef convert_to_integer(text):\n    result = int(text)\n    return result\n\n# Using manual approach\ndef convert_to_integer(text):\n    return int(text)\n\n# Script approach\ntext = 'hello'\nresult = convert_to_integer(text)\nprint(result)\n\n# Direct approach\nprint(convert_to_integer('world'))",
 
@@ -20255,7 +20255,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1708,
             "title": "Problem 1708",
-            "description": "Write a Python function called `convert_to_float` that takes a string containing a number and returns it as a float.\nExamples:\n  convert_to_float('hello') → ?\n  convert_to_float('world') → ?\n  convert_to_float('python') → ?",
+            "description": "Write a Python function called `convert_to_float` that takes a string containing a number and returns it as a float.\nExamples:\n  convert_to_float('3.14') → 3.14\n  convert_to_float('-2.5') → -2.5",
             "initialCode": "def convert_to_float(text):\n    pass",
             "solution": "# Using function approach\ndef convert_to_float(text):\n    return float(text)\nresult = convert_to_float('3.14')\nprint(result, type(result))  # Expected: 3.14 <class 'float'>\n\n# Using built-in approach\ndef convert_to_float(text):\n    result = float(text)\n    return result\n\n# Using manual approach\ndef convert_to_float(text):\n    return float(text)\n\n# Script approach\ntext = 'hello'\nresult = convert_to_float(text)\nprint(result)\n\n# Direct approach\nprint(convert_to_float('world'))",
 
@@ -20315,7 +20315,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1713,
             "title": "Problem 1713",
-            "description": "Write a Python function called `format_greeting` that takes a name and returns a greeting message using an f-string: 'Hello, {name}!'.\nExamples:\n  format_greeting('hello') → Hello, hello!\n  format_greeting('world') → Hello, world!\n  format_greeting('python') → Hello, python!",
+            "description": "Write a Python function called `format_greeting` that takes a name and returns a greeting message using an f-string: 'Hello, {name}!'.\nExamples:\n  format_greeting('Alice') → 'Hello, Alice!'\n  format_greeting('Noll') → 'Hello, Noll!'",
             "initialCode": "def format_greeting(name):\n    pass",
             "solution": "# Using function approach\ndef format_greeting(name):\n    return f'Hello, {name}!'\nresult = format_greeting('Alice')\nprint(result)  # Expected: Hello, Alice!\n\n# Using built-in approach\ndef format_greeting(name):\n    return 'Hello, {}!'.format(name)\n\n# Using manual approach\ndef format_greeting(name):\n    return 'Hello, %s!' % (name)\n\n# Script approach\nname = 'Alice'\nresult = format_greeting(name)\nprint(result)\n\n# Direct approach\nprint(format_greeting('Bob'))",
 
@@ -20375,7 +20375,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1718,
             "title": "Problem 1718",
-            "description": "Write a Python function called `calculate_circle_circumference` that takes the radius and returns the circumference of a circle (use 3.14 for pi).\nExamples:\n  calculate_circle_circumference([1, 2, 3]) → ?\n  calculate_circle_circumference([5, 8, 2]) → ?\n  calculate_circle_circumference([3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_circle_circumference` that takes the radius and returns the circumference of a circle (use 3.14 for pi).\nExamples:\n  calculate_circle_circumference(1) → 6.28\n  calculate_circle_circumference(2) → 12.56",
             "initialCode": "def calculate_circle_circumference(radius):\n    pass",
             "solution": "# Using function approach\ndef calculate_circle_circumference(radius):\n    return 2 * 3.14 * radius\nresult = calculate_circle_circumference(5)\nprint(result)  # Expected: 31.4\n\n# Using built-in approach\ndef calculate_circle_circumference(radius):\n    result = 2 * 3.14 * radius\n    return result\n\n# Using manual approach\ndef calculate_circle_circumference(radius):\n    return 2 * 3.14 * radius\n\n# Script approach\nradius = 7\nresult = calculate_circle_circumference(radius)\nprint(result)\n\n# Direct approach\nprint(calculate_circle_circumference(14))",
 
@@ -20399,7 +20399,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1720,
             "title": "Problem 1720",
-            "description": "Write a Python function called `convert_miles_to_km` that takes a distance in miles and returns it converted to kilometers.\nExamples:\n  convert_miles_to_km([1, 2, 3]) → ?\n  convert_miles_to_km([5, 8, 2]) → ?\n  convert_miles_to_km([3, 1, 4]) → ?",
+            "description": "Write a Python function called `convert_miles_to_km` that takes a distance in miles and returns it converted to kilometers.\nExamples:\n  convert_miles_to_km(1) → 1.6093444978925633\n  convert_miles_to_km(0) → 0",
             "initialCode": "def convert_miles_to_km(miles):\n    pass",
             "solution": "# Using function approach\ndef convert_miles_to_km(miles):\n    return miles / 0.621371\nresult = convert_miles_to_km(6.21371)\nprint(round(result, 2))  # Expected: 10.0\n\n# Using built-in approach\ndef convert_miles_to_km(miles):\n    result = miles / 0.621371\n    return result\n\n# Using manual approach\ndef convert_miles_to_km(miles):\n    return miles / 0.621371\n\n# Script approach\nmiles = 15\nresult = convert_miles_to_km(miles)\nprint(result)\n\n# Direct approach\nprint(convert_miles_to_km(25))",
 
@@ -20423,7 +20423,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1722,
             "title": "Problem 1722",
-            "description": "Write a Python function called `convert_pounds_to_kg` that takes a weight in pounds and returns it converted to kilograms.\nExamples:\n  convert_pounds_to_kg([1, 2, 3]) → ?\n  convert_pounds_to_kg([5, 8, 2]) → ?\n  convert_pounds_to_kg([3, 1, 4]) → ?",
+            "description": "Write a Python function called `convert_pounds_to_kg` that takes a weight in pounds and returns it converted to kilograms.\nExamples:\n  convert_pounds_to_kg(5) → 2.267964547178199\n  convert_pounds_to_kg(0) → 0",
             "initialCode": "def convert_pounds_to_kg(pounds):\n    pass",
             "solution": "# Using function approach\ndef convert_pounds_to_kg(pounds):\n    return pounds / 2.20462\nresult = convert_pounds_to_kg(22.0462)\nprint(round(result, 2))  # Expected: 10.0\n\n# Using built-in approach\ndef convert_pounds_to_kg(pounds):\n    result = pounds / 2.20462\n    return result\n\n# Using manual approach\ndef convert_pounds_to_kg(pounds):\n    return pounds / 2.20462\n\n# Script approach\npounds = 15\nresult = convert_pounds_to_kg(pounds)\nprint(result)\n\n# Direct approach\nprint(convert_pounds_to_kg(25))",
 
@@ -20435,7 +20435,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1723,
             "title": "Problem 1723",
-            "description": "Write a Python function called `check_vowel` that takes a character and returns True if it is a vowel (a, e, i, o, u), otherwise False.\nExamples:\n  check_vowel('hello') → False\n  check_vowel('world') → False\n  check_vowel('python') → False",
+            "description": "Write a Python function called `check_vowel` that takes a character and returns True if it is a vowel (a, e, i, o, u), otherwise False.\nExamples:\n  check_vowel('a') → True\n  check_vowel('b') → False",
             "initialCode": "def check_vowel(char):\n    pass",
             "solution": "# Using function approach\ndef check_vowel(char):\n    return char.lower() in 'aeiou'\nprint(check_vowel('a'), check_vowel('b'))  # Expected: True False\n\n# Using built-in approach\ndef check_vowel(char):\n    result = char.lower() in 'aeiou'\n    return result\n\n# Using manual approach\ndef check_vowel(char):\n    return char.lower() in 'aeiou'\n\n# Script approach\nchar = 'a'\nresult = check_vowel(char)\nprint(result)\n\n# Direct approach\nprint(check_vowel('z'))",
 
@@ -20447,7 +20447,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1724,
             "title": "Problem 1724",
-            "description": "Write a Python function called `check_consonant` that takes a character and returns True if it is a consonant, otherwise False.\nExamples:\n  check_consonant('hello') → True\n  check_consonant('world') → True\n  check_consonant('python') → True",
+            "description": "Write a Python function called `check_consonant` that takes a character and returns True if it is a consonant, otherwise False.\nExamples:\n  check_consonant('b') → True\n  check_consonant('a') → False",
             "initialCode": "def check_consonant(char):\n    pass",
             "solution": "# Using function approach\ndef check_consonant(char):\n    return char.isalpha() and char.lower() not in 'aeiou'\nprint(check_consonant('b'), check_consonant('a'))  # Expected: True False\n\n# Using built-in approach\ndef check_consonant(char):\n    result = char.isalpha() and char.lower() not in 'aeiou'\n    return result\n\n# Using manual approach\ndef check_consonant(char):\n    return char.isalpha() and char.lower() not in 'aeiou'\n\n# Script approach\nchar = 'a'\nresult = check_consonant(char)\nprint(result)\n\n# Direct approach\nprint(check_consonant('z'))",
 
@@ -20459,7 +20459,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1725,
             "title": "Problem 1725",
-            "description": "Write a Python function called `check_digit` that takes a character and returns True if it is a digit (0-9), otherwise False.\nExamples:\n  check_digit('hello') → False\n  check_digit('world') → False\n  check_digit('python') → False",
+            "description": "Write a Python function called `check_digit` that takes a character and returns True if it is a digit (0-9), otherwise False.\nExamples:\n  check_digit('5') → True\n  check_digit('a') → False",
             "initialCode": "def check_digit(char):\n    pass",
             "solution": "# Using function approach\ndef check_digit(char):\n    return char.isdigit()\nprint(check_digit('5'), check_digit('a'))  # Expected: True False\n\n# Using built-in approach\ndef check_digit(char):\n    result = char.isdigit()\n    return result\n\n# Using manual approach\ndef check_digit(char):\n    return char.isdigit()\n\n# Script approach\nchar = 'a'\nresult = check_digit(char)\nprint(result)\n\n# Direct approach\nprint(check_digit('z'))",
 
@@ -20471,7 +20471,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1726,
             "title": "Problem 1726",
-            "description": "Write a Python function called `check_letter` that takes a character and returns True if it is a letter (a-z or A-Z), otherwise False.\nExamples:\n  check_letter('hello') → True\n  check_letter('world') → True\n  check_letter('python') → True",
+            "description": "Write a Python function called `check_letter` that takes a character and returns True if it is a letter (a-z or A-Z), otherwise False.\nExamples:\n  check_letter('a') → True\n  check_letter('1') → False",
             "initialCode": "def check_letter(char):\n    pass",
             "solution": "# Using function approach\ndef check_letter(char):\n    return char.isalpha()\nprint(check_letter('a'), check_letter('5'))  # Expected: True False\n\n# Using built-in approach\ndef check_letter(char):\n    result = char.isalpha()\n    return result\n\n# Using manual approach\ndef check_letter(char):\n    return char.isalpha()\n\n# Script approach\nchar = 'a'\nresult = check_letter(char)\nprint(result)\n\n# Direct approach\nprint(check_letter('z'))",
 
@@ -20483,7 +20483,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1727,
             "title": "Problem 1727",
-            "description": "Write a Python function called `check_uppercase` that takes a character and returns True if it is uppercase, otherwise False.\nExamples:\n  check_uppercase('hello') → False\n  check_uppercase('world') → False\n  check_uppercase('python') → False",
+            "description": "Write a Python function called `check_uppercase` that takes a character and returns True if it is uppercase, otherwise False.\nExamples:\n  check_uppercase('A') → True\n  check_uppercase('a') → False",
             "initialCode": "def check_uppercase(char):\n    pass",
             "solution": "# Using function approach\ndef check_uppercase(char):\n    return char.isupper()\nprint(check_uppercase('A'), check_uppercase('a'))  # Expected: True False\n\n# Using built-in approach\ndef check_uppercase(char):\n    result = char.isupper()\n    return result\n\n# Using manual approach\ndef check_uppercase(char):\n    return char.isupper()\n\n# Script approach\nchar = 'a'\nresult = check_uppercase(char)\nprint(result)\n\n# Direct approach\nprint(check_uppercase('z'))",
 
@@ -20495,7 +20495,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1728,
             "title": "Problem 1728",
-            "description": "Write a Python function called `check_lowercase` that takes a character and returns True if it is lowercase, otherwise False.\nExamples:\n  check_lowercase('hello') → True\n  check_lowercase('world') → True\n  check_lowercase('python') → True",
+            "description": "Write a Python function called `check_lowercase` that takes a character and returns True if it is lowercase, otherwise False.\nExamples:\n  check_lowercase('a') → True\n  check_lowercase('A') → False",
             "initialCode": "def check_lowercase(char):\n    pass",
             "solution": "# Using function approach\ndef check_lowercase(char):\n    return char.islower()\nprint(check_lowercase('a'), check_lowercase('A'))  # Expected: True False\n\n# Using built-in approach\ndef check_lowercase(char):\n    result = char.islower()\n    return result\n\n# Using manual approach\ndef check_lowercase(char):\n    return char.islower()\n\n# Script approach\nchar = 'a'\nresult = check_lowercase(char)\nprint(result)\n\n# Direct approach\nprint(check_lowercase('z'))",
 
@@ -20699,7 +20699,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1745,
             "title": "Problem 1745",
-            "description": "Write a Python function called `get_numbers_greater_than` that takes a list of numbers and a threshold, and returns a new list containing only numbers greater than the threshold.\nExamples:\n  get_numbers_greater_than([1, 2, 3], [1, 2, 3]) → ?\n  get_numbers_greater_than([5, 8, 2], [5, 8, 2]) → ?\n  get_numbers_greater_than([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_numbers_greater_than` that takes a list of numbers and a threshold, and returns a new list containing only numbers greater than the threshold.\nExamples:\n  get_numbers_greater_than([1, 5, 3, 8], 3) → [5, 8]\n  get_numbers_greater_than([1, 2, 3], 5) → []",
             "initialCode": "def get_numbers_greater_than(numbers, threshold):\n    pass",
             "solution": "# Using function approach\ndef get_numbers_greater_than(numbers, threshold):\n    return [x for x in numbers if x > threshold]\nresult = get_numbers_greater_than([1, 5, 10, 15, 20], 10)\nprint(result)  # Expected: [15, 20]\n\n# Using built-in approach\ndef get_numbers_greater_than(numbers, threshold):\n    result = [x for x in numbers if x > threshold]\n    return result\n\n# Using manual approach\ndef get_numbers_greater_than(numbers, threshold):\n    return [x for x in numbers if x > threshold]\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nthreshold = 15\nresult = get_numbers_greater_than(numbers, threshold)\nprint(result)\n\n# Direct approach\nprint(get_numbers_greater_than([4, 1, 8, 6, 3], 25))",
 
@@ -20711,7 +20711,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1746,
             "title": "Problem 1746",
-            "description": "Write a Python function called `get_numbers_less_than` that takes a list of numbers and a threshold, and returns a new list containing only numbers less than the threshold.\nExamples:\n  get_numbers_less_than([1, 2, 3], [1, 2, 3]) → ?\n  get_numbers_less_than([5, 8, 2], [5, 8, 2]) → ?\n  get_numbers_less_than([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_numbers_less_than` that takes a list of numbers and a threshold, and returns a new list containing only numbers less than the threshold.\nExamples:\n  get_numbers_less_than([1, 5, 3, 8], 5) → [1, 3]\n  get_numbers_less_than([7, 8], 5) → []",
             "initialCode": "def get_numbers_less_than(numbers, threshold):\n    pass",
             "solution": "# Using function approach\ndef get_numbers_less_than(numbers, threshold):\n    return [x for x in numbers if x < threshold]\nresult = get_numbers_less_than([1, 5, 10, 15, 20], 10)\nprint(result)  # Expected: [1, 5]\n\n# Using built-in approach\ndef get_numbers_less_than(numbers, threshold):\n    result = [x for x in numbers if x < threshold]\n    return result\n\n# Using manual approach\ndef get_numbers_less_than(numbers, threshold):\n    return [x for x in numbers if x < threshold]\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nthreshold = 15\nresult = get_numbers_less_than(numbers, threshold)\nprint(result)\n\n# Direct approach\nprint(get_numbers_less_than([4, 1, 8, 6, 3], 25))",
 
@@ -20783,7 +20783,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1752,
             "title": "Problem 1752",
-            "description": "Write a Python function called `get_dictionary_keys` that takes a dictionary and returns a list of all keys.\nExamples:\n  get_dictionary_keys([1, 2, 3]) → ?\n  get_dictionary_keys([5, 8, 2]) → ?\n  get_dictionary_keys([3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_dictionary_keys` that takes a dictionary and returns a list of all keys.\nExamples:\n  get_dictionary_keys({'a':1,'b':2}) → ['a', 'b']\n  get_dictionary_keys({'x':9}) → ['x']",
             "initialCode": "def get_dictionary_keys(d):\n    pass",
             "solution": "# Using function approach\ndef get_dictionary_keys(d):\n    return list(d.keys())\nresult = get_dictionary_keys({'a': 1, 'b': 2, 'c': 3})\nprint(result)  # Expected: ['a', 'b', 'c']\n\n# Using built-in approach\ndef get_dictionary_keys(d):\n    result = list(d.keys())\n    return result\n\n# Using manual approach\ndef get_dictionary_keys(d):\n    return list(d.keys())\n\n# Script approach\nd = 5\nresult = get_dictionary_keys(d)\nprint(result)\n\n# Direct approach\nprint(get_dictionary_keys(10))",
 
@@ -20795,7 +20795,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1753,
             "title": "Problem 1753",
-            "description": "Write a Python function called `get_dictionary_values` that takes a dictionary and returns a list of all values.\nExamples:\n  get_dictionary_values([1, 2, 3]) → ?\n  get_dictionary_values([5, 8, 2]) → ?\n  get_dictionary_values([3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_dictionary_values` that takes a dictionary and returns a list of all values.\nExamples:\n  get_dictionary_values({'a':1,'b':2}) → [1, 2]\n  get_dictionary_values({'x':9}) → [9]",
             "initialCode": "def get_dictionary_values(d):\n    pass",
             "solution": "# Using function approach\ndef get_dictionary_values(d):\n    return list(d.values())\nresult = get_dictionary_values({'a': 1, 'b': 2, 'c': 3})\nprint(result)  # Expected: [1, 2, 3]\n\n# Using built-in approach\ndef get_dictionary_values(d):\n    result = list(d.values())\n    return result\n\n# Using manual approach\ndef get_dictionary_values(d):\n    return list(d.values())\n\n# Script approach\nd = 5\nresult = get_dictionary_values(d)\nprint(result)\n\n# Direct approach\nprint(get_dictionary_values(10))",
 
@@ -20927,7 +20927,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1764,
             "title": "Problem 1764",
-            "description": "Write a Python function called `read_file_content` that takes a filename and returns the content of the file as a string.\nExamples:\n  read_file_content('hello') → ?\n  read_file_content('world') → ?\n  read_file_content('python') → ?",
+            "description": "Write a Python function called `read_file_content` that takes a filename and returns the content of the file as a string.\nExamples:\n  read_file_content('example.txt') → 'Hello file'\n  read_file_content('notes.txt') → 'Second file'",
             "initialCode": "def read_file_content(filename):\n    pass",
             "solution": "# Using function approach\ndef read_file_content(filename):\n    with open(filename, 'r') as f:\n        return f.read()\n# Note: This requires a file to exist. Demonstration only.\n# content = read_file_content('example.txt')\nprint('Function defined: read_file_content(filename)')\n\n# Using built-in approach\ndef read_file_content(filename):\n    result = f.read()\n    return result\n\n# Using manual approach\ndef read_file_content(filename):\n    return f.read()\n\n# Script approach\nfilename = 15\nresult = read_file_content(filename)\nprint(result)\n\n# Direct approach\nprint(read_file_content(25))",
 
@@ -20975,7 +20975,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1768,
             "title": "Problem 1768",
-            "description": "Write a Python function called `safe_convert_to_int` that takes a string and tries to convert it to an integer. If conversion fails, return None.\nExamples:\n  safe_convert_to_int('hello') → None\n  safe_convert_to_int('world') → None\n  safe_convert_to_int('python') → None",
+            "description": "Write a Python function called `safe_convert_to_int` that takes a string and tries to convert it to an integer. If conversion fails, return None.\nExamples:\n  safe_convert_to_int('123') → 123\n  safe_convert_to_int('abc') → None",
             "initialCode": "def safe_convert_to_int(text):\n    pass",
             "solution": "# Using function approach\ndef safe_convert_to_int(text):\n    try:\n        return int(text)\n    except ValueError:\n        return None\nprint(safe_convert_to_int('123'), safe_convert_to_int('abc'))  # Expected: 123 None\n# Using if check\n    # Check condition instead of try/except\n\n# Using built-in approach\ndef safe_convert_to_int(text):\n    result = int(text)\n    return result\n\n# Using manual approach\ndef safe_convert_to_int(text):\n    return int(text)\n\n# Script approach\ntext = 'hello'\nresult = safe_convert_to_int(text)\nprint(result)\n\n# Direct approach\nprint(safe_convert_to_int('world'))",
 
@@ -21023,7 +21023,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1772,
             "title": "Problem 1772",
-            "description": "Write a Python function called `strip_whitespace` that takes a string and returns a new string with leading and trailing whitespace removed.\nExamples:\n  strip_whitespace('hello') → hello\n  strip_whitespace('world') → world\n  strip_whitespace('python') → python",
+            "description": "Write a Python function called `strip_whitespace` that takes a string and returns a new string with leading and trailing whitespace removed.\nExamples:\n  strip_whitespace('  hello  ') → 'hello'\n  strip_whitespace('\nNoll\t') → 'Noll'",
             "initialCode": "def strip_whitespace(text):\n    pass",
             "solution": "# Using function approach\ndef strip_whitespace(text):\n    return text.strip()\nresult = strip_whitespace('  Hello World  ')\nprint(result)  # Expected: Hello World\n\n# Using built-in approach\ndef strip_whitespace(text):\n    result = text.strip()\n    return result\n\n# Using manual approach\ndef strip_whitespace(text):\n    return text.strip()\n\n# Script approach\ntext = 'hello'\nresult = strip_whitespace(text)\nprint(result)\n\n# Direct approach\nprint(strip_whitespace('world'))",
 
@@ -21035,7 +21035,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1773,
             "title": "Problem 1773",
-            "description": "Write a Python function called `capitalize_first_letter` that takes a string and returns a new string with only the first letter capitalized.\nExamples:\n  capitalize_first_letter('hello') → Hello\n  capitalize_first_letter('world') → World\n  capitalize_first_letter('python') → Python",
+            "description": "Write a Python function called `capitalize_first_letter` that takes a string and returns a new string with only the first letter capitalized.\nExamples:\n  capitalize_first_letter('hello') → 'Hello'\n  capitalize_first_letter('hELLO') → 'Hello'",
             "initialCode": "def capitalize_first_letter(text):\n    pass",
             "solution": "# Using function approach\ndef capitalize_first_letter(text):\n    return text.capitalize()\nresult = capitalize_first_letter('hello world')\nprint(result)  # Expected: Hello world\n\n# Using built-in approach\ndef capitalize_first_letter(text):\n    return text.capitalize()\n\n# Using manual approach\ndef capitalize_first_letter(text):\n    return str(text).capitalize()\n\n# Script approach\ntext = 'hello'\nresult = capitalize_first_letter(text)\nprint(result)\n\n# Direct approach\nprint(capitalize_first_letter('world'))",
 
@@ -21047,7 +21047,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1774,
             "title": "Problem 1774",
-            "description": "Write a Python function called `swap_case` that takes a string and returns a new string with uppercase letters converted to lowercase and vice versa.\nExamples:\n  swap_case('hello') → HELLO\n  swap_case('world') → WORLD\n  swap_case('python') → PYTHON",
+            "description": "Write a Python function called `swap_case` that takes a string and returns a new string with uppercase letters converted to lowercase and vice versa.\nExamples:\n  swap_case('Hello') → 'hELLO'\n  swap_case('Py3') → 'pY3'",
             "initialCode": "def swap_case(text):\n    pass",
             "solution": "# Using function approach\ndef swap_case(text):\n    return text.swapcase()\nresult = swap_case('Hello World')\nprint(result)  # Expected: hELLO wORLD\n\n# Using built-in approach\ndef swap_case(text):\n    return text.swapcase()\n\n# Using manual approach\ndef swap_case(text):\n    return str(text).swapcase()\n\n# Script approach\ntext = 'hello'\nresult = swap_case(text)\nprint(result)\n\n# Direct approach\nprint(swap_case('world'))",
 
@@ -21059,7 +21059,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1775,
             "title": "Problem 1775",
-            "description": "Write a Python function called `check_all_digits` that takes a string and returns True if all characters in the string are digits, otherwise False.\nExamples:\n  check_all_digits('hello') → False\n  check_all_digits('world') → False\n  check_all_digits('python') → False",
+            "description": "Write a Python function called `check_all_digits` that takes a string and returns True if all characters in the string are digits, otherwise False.\nExamples:\n  check_all_digits('123') → True\n  check_all_digits('12a') → False",
             "initialCode": "def check_all_digits(text):\n    pass",
             "solution": "# Using function approach\ndef check_all_digits(text):\n    return text.isdigit()\nprint(check_all_digits('12345'), check_all_digits('12a45'))  # Expected: True False\n\n# Using built-in approach\ndef check_all_digits(text):\n    result = text.isdigit()\n    return result\n\n# Using manual approach\ndef check_all_digits(text):\n    return text.isdigit()\n\n# Script approach\ntext = 'hello'\nresult = check_all_digits(text)\nprint(result)\n\n# Direct approach\nprint(check_all_digits('world'))",
 
@@ -21071,7 +21071,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1776,
             "title": "Problem 1776",
-            "description": "Write a Python function called `check_all_letters` that takes a string and returns True if all characters in the string are letters, otherwise False.\nExamples:\n  check_all_letters('hello') → True\n  check_all_letters('world') → True\n  check_all_letters('python') → True",
+            "description": "Write a Python function called `check_all_letters` that takes a string and returns True if all characters in the string are letters, otherwise False.\nExamples:\n  check_all_letters('abc') → True\n  check_all_letters('ab1') → False",
             "initialCode": "def check_all_letters(text):\n    pass",
             "solution": "# Using function approach\ndef check_all_letters(text):\n    return text.isalpha()\nprint(check_all_letters('Hello'), check_all_letters('Hello123'))  # Expected: True False\n\n# Using built-in approach\ndef check_all_letters(text):\n    result = text.isalpha()\n    return result\n\n# Using manual approach\ndef check_all_letters(text):\n    return text.isalpha()\n\n# Script approach\ntext = 'hello'\nresult = check_all_letters(text)\nprint(result)\n\n# Direct approach\nprint(check_all_letters('world'))",
 
@@ -21083,7 +21083,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1777,
             "title": "Problem 1777",
-            "description": "Write a Python function called `check_all_alphanumeric` that takes a string and returns True if all characters are letters or digits, otherwise False.\nExamples:\n  check_all_alphanumeric('hello') → True\n  check_all_alphanumeric('world') → True\n  check_all_alphanumeric('python') → True",
+            "description": "Write a Python function called `check_all_alphanumeric` that takes a string and returns True if all characters are letters or digits, otherwise False.\nExamples:\n  check_all_alphanumeric('abc123') → True\n  check_all_alphanumeric('abc 123') → False",
             "initialCode": "def check_all_alphanumeric(text):\n    pass",
             "solution": "# Using function approach\ndef check_all_alphanumeric(text):\n    return text.isalnum()\nprint(check_all_alphanumeric('Hello123'), check_all_alphanumeric('Hello 123'))  # Expected: True False\n\n# Using built-in approach\ndef check_all_alphanumeric(text):\n    result = text.isalnum()\n    return result\n\n# Using manual approach\ndef check_all_alphanumeric(text):\n    return text.isalnum()\n\n# Script approach\ntext = 'hello'\nresult = check_all_alphanumeric(text)\nprint(result)\n\n# Direct approach\nprint(check_all_alphanumeric('world'))",
 
@@ -21131,7 +21131,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1781,
             "title": "Problem 1781",
-            "description": "Write a Python function called `get_uppercase_strings` that takes a list of strings and returns a new list with all strings converted to uppercase, using a list comprehension.\nExamples:\n  get_uppercase_strings('hello') → ['H', 'E', 'L', 'L', 'O']\n  get_uppercase_strings('world') → ['W', 'O', 'R', 'L', 'D']\n  get_uppercase_strings('python') → ['P', 'Y', 'T', 'H', 'O', 'N']",
+            "description": "Write a Python function called `get_uppercase_strings` that takes a list of strings and returns a new list with all strings converted to uppercase, using a list comprehension.\nExamples:\n  get_uppercase_strings(['a', 'b', 'c']) → ['A', 'B', 'C']\n  get_uppercase_strings(['Hi', 'noll']) → ['HI', 'NOLL']",
             "initialCode": "def get_uppercase_strings(strings):\n    pass",
             "solution": "# Using function approach\ndef get_uppercase_strings(strings):\n    return [s.upper() for s in strings]\nresult = get_uppercase_strings(['hello', 'world', 'python'])\nprint(result)  # Expected: ['HELLO', 'WORLD', 'PYTHON']\n\n# Using built-in approach\ndef get_uppercase_strings(strings):\n    result = [s.upper() for s in strings]\n    return result\n\n# Using manual approach\ndef get_uppercase_strings(strings):\n    return [s.upper() for s in strings]\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_uppercase_strings(strings)\nprint(result)\n\n# Direct approach\nprint(get_uppercase_strings([4, 1, 8, 6, 3]))",
 
@@ -21143,7 +21143,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1782,
             "title": "Problem 1782",
-            "description": "Write a Python function called `get_string_lengths` that takes a list of strings and returns a new list with the length of each string, using a list comprehension.\nExamples:\n  get_string_lengths('hello') → [1, 1, 1, 1, 1]\n  get_string_lengths('world') → [1, 1, 1, 1, 1]\n  get_string_lengths('python') → [1, 1, 1, 1, 1, 1]",
+            "description": "Write a Python function called `get_string_lengths` that takes a list of strings and returns a new list with the length of each string, using a list comprehension.\nExamples:\n  get_string_lengths(['hi', 'hello', 'a']) → [2, 5, 1]\n  get_string_lengths(['', 'abcd']) → [0, 4]",
             "initialCode": "def get_string_lengths(strings):\n    pass",
             "solution": "# Using function approach\ndef get_string_lengths(strings):\n    return [len(s) for s in strings]\nresult = get_string_lengths(['hello', 'world', 'python'])\nprint(result)  # Expected: [5, 5, 6]\n\n# Using built-in approach\ndef get_string_lengths(strings):\n    result = [len(s) for s in strings]\n    return result\n\n# Using manual approach\ndef get_string_lengths(strings):\n    return [len(s) for s in strings]\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_string_lengths(strings)\nprint(result)\n\n# Direct approach\nprint(get_string_lengths([4, 1, 8, 6, 3]))",
 
@@ -21155,7 +21155,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1783,
             "title": "Problem 1783",
-            "description": "Write a Python function called `print_number_pattern` that takes a number n and prints a pattern of numbers from 1 to n, where each line contains numbers from 1 to the line number.\nExamples:\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n  print_number_pattern(5) → '1 \n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n  print_number_pattern(3) → '1 \n1 2 \n1 2 3'",
+            "description": "Write a Python function called `print_number_pattern` that takes a number n and prints a pattern of numbers from 1 to n, where each line contains numbers from 1 to the line number.\nExamples:\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n1 2 \n1 2 3'\n  print_number_pattern(5) → '1 \n1 2 \n1 2 3 \n1 2 3 4 \n1 2 3 4 5'\n  print_number_pattern(3) → '1 \n1 2 \n1 2 3'",
             "initialCode": "def print_number_pattern(n):\n    pass",
             "solution": "# Using function approach\ndef print_number_pattern(n):\n    for i in range(1, n + 1):\n        for j in range(1, i + 1):\n            print(j, end=' ')\n        print()\nprint_number_pattern(5)  # Expected: 1, 1 2, 1 2 3, 1 2 3 4, 1 2 3 4 5\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef solve():\n    def print_number_pattern(n):\n        for i in range(1, n + 1):\n            for j in range(1, i + 1):\n                print(j, end=' ')\n            print()\n    print_number_pattern(5)  # Expected: 1, 1 2, 1 2 3, 1 2 3 4, 1 2 3 4 5\n\n# Using manual approach\ndef solve():\n    def print_number_pattern(n):\n        for i in range(1, n + 1):\n            for j in range(1, i + 1):\n                print(j, end=' ')\n            print()\n    print_number_pattern(5)  # Expected: 1, 1 2, 1 2 3, 1 2 3 4, 1 2 3 4 5\n\n# Script approach\nn = 6\nresult = print_number_pattern(n)\nprint(result)\n\n# Direct approach\nprint(print_number_pattern(15))",
 
@@ -21167,7 +21167,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1784,
             "title": "Problem 1784",
-            "description": "Write a Python function called `print_star_pattern` that takes a number n and prints n lines of stars, where the first line has 1 star, second has 2 stars, and so on.\nExamples:\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n  print_star_pattern(5) → '*\n**\n***\n****\n*****'\n  print_star_pattern(3) → '*\n**\n***'",
+            "description": "Write a Python function called `print_star_pattern` that takes a number n and prints n lines of stars, where the first line has 1 star, second has 2 stars, and so on.\nExamples:\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n**\n***\n****\n*****'\n**\n***'\n  print_star_pattern(5) → '*\n**\n***\n****\n*****'\n  print_star_pattern(3) → '*\n**\n***'",
             "initialCode": "def print_star_pattern(n):\n    pass",
             "solution": "# Using function approach\ndef print_star_pattern(n):\n    for i in range(1, n + 1):\n        print('*' * i)\nprint_star_pattern(5)  # Expected: *, **, ***, ****, *****\n# Using return instead of print\n   # Modify to return value instead of printing\n\n# Using built-in approach\ndef solve():\n    def print_star_pattern(n):\n        for i in range(1, n + 1):\n            print('*' * i)\n    print_star_pattern(5)  # Expected: *, **, ***, ****, *****\n\n# Using manual approach\ndef solve():\n    def print_star_pattern(n):\n        for i in range(1, n + 1):\n            return '*' * i\n    print_star_pattern(5)  # Expected: *, **, ***, ****, *****\n\n# Script approach\nn = 6\nresult = print_star_pattern(n)\nprint(result)\n\n# Direct approach\nprint(print_star_pattern(15))",
 
@@ -21179,7 +21179,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1785,
             "title": "Problem 1785",
-            "description": "Write a Python function called `print_reverse_star_pattern` that takes a number n and prints n lines of stars in reverse order, where the first line has n stars, second has n-1 stars, and so on.\nExamples:\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n  print_reverse_star_pattern(5) → '*****\n****\n***\n**\n*'\n  print_reverse_star_pattern(3) → '***\n**\n*'",
+            "description": "Write a Python function called `print_reverse_star_pattern` that takes a number n and prints n lines of stars in reverse order, where the first line has n stars, second has n-1 stars, and so on.\nExamples:\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n****\n***\n**\n*'\n**\n*'\n  print_reverse_star_pattern(5) → '*****\n****\n***\n**\n*'\n  print_reverse_star_pattern(3) → '***\n**\n*'",
             "initialCode": "def print_reverse_star_pattern(n):\n    pass",
             "solution": "# Using function approach\ndef print_reverse_star_pattern(n):\n    for i in range(n, 0, -1):\n        print('*' * i)\nprint_reverse_star_pattern(5)  # Expected: *****, ****, ***, **, *\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef solve():\n    def print_reverse_star_pattern(n):\n        for i in range(n, 0, -1):\n            print('*' * i)\n    print_reverse_star_pattern(5)  # Expected: *****, ****, ***, **, *\n\n# Using manual approach\ndef solve():\n    def print_reverse_star_pattern(n):\n        for i in range(n, 0, -1):\n            return '*' * i\n    print_reverse_star_pattern(5)  # Expected: *****, ****, ***, **, *\n\n# Script approach\nn = 6\nresult = print_reverse_star_pattern(n)\nprint(result)\n\n# Direct approach\nprint(print_reverse_star_pattern(15))",
 
@@ -21191,7 +21191,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1786,
             "title": "Problem 1786",
-            "description": "Write a Python function called `print_number_square` that takes a number n and prints an n by n square of numbers from 1 to n*n.\nExamples:\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n  print_number_square(5) → '1 2 3 4 5\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n  print_number_square(2) → '1 2\n3 4'",
+            "description": "Write a Python function called `print_number_square` that takes a number n and prints an n by n square of numbers from 1 to n*n.\nExamples:\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n3 4'\n  print_number_square(5) → '1 2 3 4 5\n6 7 8 9 10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25'\n  print_number_square(2) → '1 2\n3 4'",
             "initialCode": "def print_number_square(n):\n    pass",
             "solution": "# Using function approach\ndef print_number_square(n):\n    for i in range(1, n * n + 1, n):\n        row = [str(j) for j in range(i, i + n)]\n        print(' '.join(row))\nprint_number_square(3)  # Expected: 1 2 3, 4 5 6, 7 8 9\n\n# Using built-in approach\ndef print_number_square(n):\n    for i in range(1, n * n + 1, n):\n        row = [str(j) for j in range(i, i + n)]\n    return ' '.join(row)\n\n# Using manual approach\ndef print_number_square(n):\n    for i in range(1, n * n + 1, n):\n        row = [str(j) for j in range(i, i + n)]\n    result = ' '.join(row)\n    return result\n\n# Script approach\nn = 6\nresult = print_number_square(n)\nprint(result)\n\n# Direct approach\nprint(print_number_square(15))",
 
@@ -21479,7 +21479,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1810,
             "title": "Problem 1810",
-            "description": "Write a Python function called `flatten_nested_list` that takes a list of lists and returns a single list containing all elements.\nExamples:\n  flatten_nested_list([1, 2, 3]) → ?\n  flatten_nested_list([5, 8, 2]) → ?\n  flatten_nested_list([3, 1, 4]) → ?",
+            "description": "Write a Python function called `flatten_nested_list` that takes a list of lists and returns a single list containing all elements.\nExamples:\n  flatten_nested_list([[1, 2], [3, 4], [5]]) → [1, 2, 3, 4, 5]\n  flatten_nested_list([['a'], [], ['b', 'c']]) → ['a', 'b', 'c']",
             "initialCode": "def flatten_nested_list(nested_list):\n    pass",
             "solution": "# Using function approach\ndef flatten_nested_list(nested_list):\n    result = []\n    for sublist in nested_list:\n        result.extend(sublist)\n    return result\nresult = flatten_nested_list([[1, 2], [3, 4], [5, 6]])\nprint(result)  # Expected: [1, 2, 3, 4, 5, 6]\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef flatten_nested_list(nested_list):\n    result = result\n    return result\n\n# Using manual approach\ndef flatten_nested_list(nested_list):\n    return result\n\n# Script approach\nnested_list = [3, 7, 2, 9, 1]\nresult = flatten_nested_list(nested_list)\nprint(result)\n\n# Direct approach\nprint(flatten_nested_list([4, 1, 8, 6, 3]))",
 
@@ -21491,7 +21491,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1811,
             "title": "Problem 1811",
-            "description": "Write a Python function called `group_by_length` that takes a list of strings and returns a dictionary where keys are lengths and values are lists of strings with that length.\nExamples:\n  group_by_length('hello') → {1: ['h', 'e', 'l', 'l', 'o']}\n  group_by_length('world') → {1: ['w', 'o', 'r', 'l', 'd']}\n  group_by_length('python') → {1: ['p', 'y', 't', 'h', 'o', 'n']}",
+            "description": "Write a Python function called `group_by_length` that takes a list of strings and returns a dictionary where keys are lengths and values are lists of strings with that length.\nExamples:\n  group_by_length(['a', 'ab', 'abc', 'ab']) → [object Object]\n  group_by_length(['x', 'yy']) → [object Object]",
             "initialCode": "def group_by_length(strings):\n    pass",
             "solution": "# Using function approach\ndef group_by_length(strings):\n    groups = {}\n    for s in strings:\n        length = len(s)\n        if length not in groups:\n            groups[length] = []\n        groups[length].append(s)\n    return groups\nresult = group_by_length(['a', 'ab', 'abc', 'ab', 'abcd'])\nprint(result)  # Expected: {1: ['a'], 2: ['ab', 'ab'], 3: ['abc'], 4: ['abcd']}\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef group_by_length(strings):\n    result = groups\n    return result\n\n# Using manual approach\ndef group_by_length(strings):\n    return groups\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = group_by_length(strings)\nprint(result)\n\n# Direct approach\nprint(group_by_length([4, 1, 8, 6, 3]))",
 
@@ -21515,7 +21515,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1813,
             "title": "Problem 1813",
-            "description": "Write a Python function called `get_longest_string` that takes a list of strings and returns the longest string.\nExamples:\n  get_longest_string('hello') → h\n  get_longest_string('world') → w\n  get_longest_string('python') → p",
+            "description": "Write a Python function called `get_longest_string` that takes a list of strings and returns the longest string.\nExamples:\n  get_longest_string(['a', 'abc', 'ab']) → 'abc'\n  get_longest_string(['noll', 'ai']) → 'noll'",
             "initialCode": "def get_longest_string(strings):\n    pass",
             "solution": "# Using function approach\ndef get_longest_string(strings):\n    return max(strings, key=len)\nresult = get_longest_string(['a', 'ab', 'abc', 'abcd'])\nprint(result)  # Expected: abcd\n\n# Using built-in approach\ndef get_longest_string(strings):\n    result = max(strings, key=len)\n    return result\n\n# Using manual approach\ndef get_longest_string(strings):\n    return max(strings, key=len)\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_longest_string(strings)\nprint(result)\n\n# Direct approach\nprint(get_longest_string([4, 1, 8, 6, 3]))",
 
@@ -21527,7 +21527,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1814,
             "title": "Problem 1814",
-            "description": "Write a Python function called `get_shortest_string` that takes a list of strings and returns the shortest string.\nExamples:\n  get_shortest_string('hello') → h\n  get_shortest_string('world') → w\n  get_shortest_string('python') → p",
+            "description": "Write a Python function called `get_shortest_string` that takes a list of strings and returns the shortest string.\nExamples:\n  get_shortest_string(['a', 'abc', 'ab']) → 'a'\n  get_shortest_string(['noll', 'ai']) → 'ai'",
             "initialCode": "def get_shortest_string(strings):\n    pass",
             "solution": "# Using function approach\ndef get_shortest_string(strings):\n    return min(strings, key=len)\nresult = get_shortest_string(['a', 'ab', 'abc', 'abcd'])\nprint(result)  # Expected: a\n\n# Using built-in approach\ndef get_shortest_string(strings):\n    result = min(strings, key=len)\n    return result\n\n# Using manual approach\ndef get_shortest_string(strings):\n    return min(strings, key=len)\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_shortest_string(strings)\nprint(result)\n\n# Direct approach\nprint(get_shortest_string([4, 1, 8, 6, 3]))",
 
@@ -21539,7 +21539,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1815,
             "title": "Problem 1815",
-            "description": "Write a Python function called `capitalize_all_words` that takes a string of words separated by spaces and returns a new string with the first letter of each word capitalized.\nExamples:\n  capitalize_all_words('hello') → Hello\n  capitalize_all_words('world') → World\n  capitalize_all_words('python') → Python",
+            "description": "Write a Python function called `capitalize_all_words` that takes a string of words separated by spaces and returns a new string with the first letter of each word capitalized.\nExamples:\n  capitalize_all_words('hello world') → 'Hello World'\n  capitalize_all_words('noll app') → 'Noll App'",
             "initialCode": "def capitalize_all_words(text):\n    pass",
             "solution": "# Using function approach\ndef capitalize_all_words(text):\n    return ' '.join(word.capitalize() for word in text.split())\nresult = capitalize_all_words('hello world python')\nprint(result)  # Expected: Hello World Python\n\n# Using built-in approach\ndef capitalize_all_words(text):\n    result = ' '.join(word.capitalize() for word in text.split())\n    return result\n\n# Using manual approach\ndef capitalize_all_words(text):\n    return ' '.join(word.capitalize() for word in text.split())\n\n# Script approach\ntext = 'hello'\nresult = capitalize_all_words(text)\nprint(result)\n\n# Direct approach\nprint(capitalize_all_words('world'))",
 
@@ -21551,7 +21551,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1816,
             "title": "Problem 1816",
-            "description": "Write a Python function called `reverse_words` that takes a string of words separated by spaces and returns a new string with the order of words reversed.\nExamples:\n  reverse_words('hello world') → world hello\n  reverse_words('one two three') → three two one\n  reverse_words('python') → python",
+            "description": "Write a Python function called `reverse_words` that takes a string of words separated by spaces and returns a new string with the order of words reversed.\nExamples:\n  reverse_words('hello world') → 'world hello'\n  reverse_words('one two three') → 'three two one'",
             "initialCode": "def reverse_words(text):\n    pass",
             "solution": "# Using function approach\ndef reverse_words(text):\n    words = text.split()\n    return ' '.join(reversed(words))\nresult = reverse_words('hello world python')\nprint(result)  # Expected: python world hello\n\n# Using built-in approach\ndef reverse_words(text):\n    result = ' '.join(reversed(words))\n    return result\n\n# Using manual approach\ndef reverse_words(text):\n    return ' '.join(reversed(words))\n\n# Script approach\ntext = 'hello'\nresult = reverse_words(text)\nprint(result)\n\n# Direct approach\nprint(reverse_words('world'))",
 
@@ -21563,7 +21563,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1817,
             "title": "Problem 1817",
-            "description": "Write a Python function called `count_words` that takes a string and returns the number of words in the string (words are separated by spaces).\nExamples:\n  count_words('hello') → 1\n  count_words('world') → 1\n  count_words('python') → 1",
+            "description": "Write a Python function called `count_words` that takes a string and returns the number of words in the string (words are separated by spaces).\nExamples:\n  count_words('hello world') → 2\n  count_words('one two three') → 3",
             "initialCode": "def count_words(text):\n    pass",
             "solution": "# Using function approach\ndef count_words(text):\n    return len(text.split())\nresult = count_words('Hello World Python')\nprint(result)  # Expected: 3\n\n# Using built-in approach\ndef count_words(text):\n    result = len(text.split())\n    return result\n\n# Using manual approach\ndef count_words(text):\n    return len(text.split())\n\n# Script approach\ntext = 'hello'\nresult = count_words(text)\nprint(result)\n\n# Direct approach\nprint(count_words('world'))",
 
@@ -21575,7 +21575,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1818,
             "title": "Problem 1818",
-            "description": "Write a Python function called `get_longest_word` that takes a string of words separated by spaces and returns the longest word.\nExamples:\n  get_longest_word('hello') → hello\n  get_longest_word('world') → world\n  get_longest_word('python') → python",
+            "description": "Write a Python function called `get_longest_word` that takes a string of words separated by spaces and returns the longest word.\nExamples:\n  get_longest_word('hello world python') → 'python'\n  get_longest_word('small bigger') → 'bigger'",
             "initialCode": "def get_longest_word(text):\n    pass",
             "solution": "# Using function approach\ndef get_longest_word(text):\n    words = text.split()\n    return max(words, key=len)\nresult = get_longest_word('hello world python programming')\nprint(result)  # Expected: programming\n\n# Using built-in approach\ndef get_longest_word(text):\n    result = max(words, key=len)\n    return result\n\n# Using manual approach\ndef get_longest_word(text):\n    return max(words, key=len)\n\n# Script approach\ntext = 'hello'\nresult = get_longest_word(text)\nprint(result)\n\n# Direct approach\nprint(get_longest_word('world'))",
 
@@ -21587,7 +21587,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1819,
             "title": "Problem 1819",
-            "description": "Write a Python function called `get_shortest_word` that takes a string of words separated by spaces and returns the shortest word.\nExamples:\n  get_shortest_word('hello') → hello\n  get_shortest_word('world') → world\n  get_shortest_word('python') → python",
+            "description": "Write a Python function called `get_shortest_word` that takes a string of words separated by spaces and returns the shortest word.\nExamples:\n  get_shortest_word('hello world a') → 'a'\n  get_shortest_word('small bigger') → 'small'",
             "initialCode": "def get_shortest_word(text):\n    pass",
             "solution": "# Using function approach\ndef get_shortest_word(text):\n    words = text.split()\n    return min(words, key=len)\nresult = get_shortest_word('hello world python programming')\nprint(result)  # Expected: python\n\n# Using built-in approach\ndef get_shortest_word(text):\n    result = min(words, key=len)\n    return result\n\n# Using manual approach\ndef get_shortest_word(text):\n    return min(words, key=len)\n\n# Script approach\ntext = 'hello'\nresult = get_shortest_word(text)\nprint(result)\n\n# Direct approach\nprint(get_shortest_word('world'))",
 
@@ -21599,7 +21599,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1820,
             "title": "Problem 1820",
-            "description": "Write a Python function called `remove_vowels_from_string` that takes a string and returns a new string with all vowels (a, e, i, o, u) removed.\nExamples:\n  remove_vowels_from_string('hello') → hll\n  remove_vowels_from_string('world') → wrld\n  remove_vowels_from_string('python') → pythn",
+            "description": "Write a Python function called `remove_vowels_from_string` that takes a string and returns a new string with all vowels (a, e, i, o, u) removed.\nExamples:\n  remove_vowels_from_string('hello') → 'hll'\n  remove_vowels_from_string('AEIOUxyz') → 'xyz'",
             "initialCode": "def remove_vowels_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef remove_vowels_from_string(text):\n    vowels = 'aeiouAEIOU'\n    return ''.join(char for char in text if char not in vowels)\nresult = remove_vowels_from_string('Hello World')\nprint(result)  # Expected: Hll Wrld\n\n# Using built-in approach\ndef remove_vowels_from_string(text):\n    result = ''.join(char for char in text if char not in vowels)\n    return result\n\n# Using manual approach\ndef remove_vowels_from_string(text):\n    return ''.join(char for char in text if char not in vowels)\n\n# Script approach\ntext = 'hello'\nresult = remove_vowels_from_string(text)\nprint(result)\n\n# Direct approach\nprint(remove_vowels_from_string('world'))",
 
@@ -21611,7 +21611,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1821,
             "title": "Problem 1821",
-            "description": "Write a Python function called `remove_consonants_from_string` that takes a string and returns a new string with all consonants removed, keeping only vowels and other characters.\nExamples:\n  remove_consonants_from_string('hello') → eo\n  remove_consonants_from_string('world') → o\n  remove_consonants_from_string('python') → o",
+            "description": "Write a Python function called `remove_consonants_from_string` that takes a string and returns a new string with all consonants removed, keeping only vowels and other characters.\nExamples:\n  remove_consonants_from_string('hello') → 'eo'\n  remove_consonants_from_string('AEIOUxyz') → 'AEIOU'",
             "initialCode": "def remove_consonants_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef remove_consonants_from_string(text):\n    vowels = 'aeiouAEIOU'\n    return ''.join(char for char in text if char in vowels or not char.isalpha())\nresult = remove_consonants_from_string('Hello World')\nprint(result)  # Expected: eo o\n\n# Using built-in approach\ndef remove_consonants_from_string(text):\n    result = ''.join(char for char in text if char in vowels or not char.isalpha())\n    return result\n\n# Using manual approach\ndef remove_consonants_from_string(text):\n    return ''.join(char for char in text if char in vowels or not char.isalpha())\n\n# Script approach\ntext = 'hello'\nresult = remove_consonants_from_string(text)\nprint(result)\n\n# Direct approach\nprint(remove_consonants_from_string('world'))",
 
@@ -21623,7 +21623,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1822,
             "title": "Problem 1822",
-            "description": "Write a Python function called `count_vowels_in_string` that takes a string and returns the number of vowels (a, e, i, o, u) in the string.\nExamples:\n  count_vowels_in_string('hello') → 2\n  count_vowels_in_string('world') → 1\n  count_vowels_in_string('python') → 1",
+            "description": "Write a Python function called `count_vowels_in_string` that takes a string and returns the number of vowels (a, e, i, o, u) in the string.\nExamples:\n  count_vowels_in_string('hello') → 2\n  count_vowels_in_string('AEIOUxyz') → 5",
             "initialCode": "def count_vowels_in_string(text):\n    pass",
             "solution": "# Using function approach\ndef count_vowels_in_string(text):\n    vowels = 'aeiouAEIOU'\n    return sum(1 for char in text if char in vowels)\nresult = count_vowels_in_string('Hello World')\nprint(result)  # Expected: 3\n\n# Using built-in approach\ndef count_vowels_in_string(text):\n    result = sum(1 for char in text if char in vowels)\n    return result\n\n# Using manual approach\ndef count_vowels_in_string(text):\n    return sum(1 for char in text if char in vowels)\n\n# Script approach\ntext = 'hello'\nresult = count_vowels_in_string(text)\nprint(result)\n\n# Direct approach\nprint(count_vowels_in_string('world'))",
 
@@ -21635,7 +21635,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1823,
             "title": "Problem 1823",
-            "description": "Write a Python function called `count_consonants_in_string` that takes a string and returns the number of consonants in the string.\nExamples:\n  count_consonants_in_string('hello') → 3\n  count_consonants_in_string('world') → 4\n  count_consonants_in_string('python') → 5",
+            "description": "Write a Python function called `count_consonants_in_string` that takes a string and returns the number of consonants in the string.\nExamples:\n  count_consonants_in_string('hello') → 3\n  count_consonants_in_string('AEIOUxyz') → 3",
             "initialCode": "def count_consonants_in_string(text):\n    pass",
             "solution": "# Using function approach\ndef count_consonants_in_string(text):\n    vowels = 'aeiouAEIOU'\n    return sum(1 for char in text if char.isalpha() and char not in vowels)\nresult = count_consonants_in_string('Hello World')\nprint(result)  # Expected: 7\n# Using for loop\ntotal = 0\nfor char in text:\n    if char.isalpha(:\n    total += 1\nreturn total\n\n# Using built-in approach\ndef count_consonants_in_string(text):\n    result = sum(1 for char in text if char.isalpha() and char not in vowels)\n    return result\n\n# Using manual approach\ndef count_consonants_in_string(text):\n    return sum(1 for char in text if char.isalpha() and char not in vowels)\n\n# Script approach\ntext = 'hello'\nresult = count_consonants_in_string(text)\nprint(result)\n\n# Direct approach\nprint(count_consonants_in_string('world'))",
 
@@ -21647,7 +21647,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1824,
             "title": "Problem 1824",
-            "description": "Write a Python function called `swap_first_last_words` that takes a string of words separated by spaces and returns a new string with the first and last words swapped.\nExamples:\n  swap_first_last_words('hello') → hello\n  swap_first_last_words('world') → world\n  swap_first_last_words('python') → python",
+            "description": "Write a Python function called `swap_first_last_words` that takes a string of words separated by spaces and returns a new string with the first and last words swapped.\nExamples:\n  swap_first_last_words('hello world python') → 'python world hello'\n  swap_first_last_words('one two') → 'two one'",
             "initialCode": "def swap_first_last_words(text):\n    pass",
             "solution": "# Using function approach\ndef swap_first_last_words(text):\n    words = text.split()\n    if len(words) < 2:\n        return text\n    words[0], words[-1] = words[-1], words[0]\n    return ' '.join(words)\nresult = swap_first_last_words('Hello World Python')\nprint(result)  # Expected: Python World Hello\n\n# Using built-in approach\ndef swap_first_last_words(text):\n    result = text\n    return result\n\n# Using manual approach\ndef swap_first_last_words(text):\n    return text\n\n# Script approach\ntext = 'hello'\nresult = swap_first_last_words(text)\nprint(result)\n\n# Direct approach\nprint(swap_first_last_words('world'))",
 
@@ -21659,7 +21659,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1825,
             "title": "Problem 1825",
-            "description": "Write a Python function called `get_middle_word` that takes a string of words separated by spaces and returns the middle word. If there are even number of words, return the word at index length//2.\nExamples:\n  get_middle_word('hello') → hello\n  get_middle_word('world') → world\n  get_middle_word('python') → python",
+            "description": "Write a Python function called `get_middle_word` that takes a string of words separated by spaces and returns the middle word. If there are even number of words, return the word at index length//2.\nExamples:\n  get_middle_word('hello world python') → 'world'\n  get_middle_word('one two three four') → 'three'",
             "initialCode": "def get_middle_word(text):\n    pass",
             "solution": "# Using function approach\ndef get_middle_word(text):\n    words = text.split()\n    return words[len(words) // 2]\nresult = get_middle_word('Hello World Python Programming')\nprint(result)  # Expected: Python\n\n# Using built-in approach\ndef get_middle_word(text):\n    result = words[len(words) // 2]\n    return result\n\n# Using manual approach\ndef get_middle_word(text):\n    return words[len(words) // 2]\n\n# Script approach\ntext = 'hello'\nresult = get_middle_word(text)\nprint(result)\n\n# Direct approach\nprint(get_middle_word('world'))",
 
@@ -21851,7 +21851,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1841,
             "title": "Problem 1841",
-            "description": "Write a Python function called `unzip_list` that takes a list of tuples and returns two lists: one with all first elements and one with all second elements.\nExamples:\n  unzip_list([1, 2, 3]) → ?\n  unzip_list([5, 8, 2]) → ?\n  unzip_list([3, 1, 4]) → ?",
+            "description": "Write a Python function called `unzip_list` that takes a list of tuples and returns two lists: one with all first elements and one with all second elements.\nExamples:\n  unzip_list([[1, 'a'], [2, 'b']]) → [[1, 2], ['a', 'b']]\n  unzip_list([['x', 1], ['y', 2]]) → [['x', 'y'], [1, 2]]",
             "initialCode": "def unzip_list(tuples_list):\n    pass",
             "solution": "# Using function approach\ndef unzip_list(tuples_list):\n    if not tuples_list:\n        return [], []\n    first_elements = [t[0] for t in tuples_list]\n    second_elements = [t[1] for t in tuples_list]\n    return first_elements, second_elements\nresult = unzip_list([(1, 'a'), (2, 'b'), (3, 'c')])\nprint(result)  # Expected: ([1, 2, 3], ['a', 'b', 'c'])\n\n# Using built-in approach\ndef unzip_list(tuples_list):\n    result = [], []\n    return result\n\n# Using manual approach\ndef unzip_list(tuples_list):\n    return [], []\n\n# Script approach\ntuples_list = [3, 7, 2, 9, 1]\nresult = unzip_list(tuples_list)\nprint(result)\n\n# Direct approach\nprint(unzip_list([4, 1, 8, 6, 3]))",
 
@@ -21863,7 +21863,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1842,
             "title": "Problem 1842",
-            "description": "Write a Python function called `count_uppercase_letters` that takes a string and returns the number of uppercase letters in the string.\nExamples:\n  count_uppercase_letters('hello') → 0\n  count_uppercase_letters('world') → 0\n  count_uppercase_letters('python') → 0",
+            "description": "Write a Python function called `count_uppercase_letters` that takes a string and returns the number of uppercase letters in the string.\nExamples:\n  count_uppercase_letters('Hello WORLD') → 6\n  count_uppercase_letters('AbC123') → 2",
             "initialCode": "def count_uppercase_letters(text):\n    pass",
             "solution": "# Using function approach\ndef count_uppercase_letters(text):\n    return sum(1 for char in text if char.isupper())\nresult = count_uppercase_letters('Hello World')\nprint(result)  # Expected: 2\n\n# Using built-in approach\ndef count_uppercase_letters(text):\n    result = sum(1 for char in text if char.isupper())\n    return result\n\n# Using manual approach\ndef count_uppercase_letters(text):\n    return sum(1 for char in text if char.isupper())\n\n# Script approach\ntext = 'hello'\nresult = count_uppercase_letters(text)\nprint(result)\n\n# Direct approach\nprint(count_uppercase_letters('world'))",
 
@@ -21875,7 +21875,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1843,
             "title": "Problem 1843",
-            "description": "Write a Python function called `count_lowercase_letters` that takes a string and returns the number of lowercase letters in the string.\nExamples:\n  count_lowercase_letters('hello') → 5\n  count_lowercase_letters('world') → 5\n  count_lowercase_letters('python') → 6",
+            "description": "Write a Python function called `count_lowercase_letters` that takes a string and returns the number of lowercase letters in the string.\nExamples:\n  count_lowercase_letters('Hello WORLD') → 4\n  count_lowercase_letters('AbC123') → 1",
             "initialCode": "def count_lowercase_letters(text):\n    pass",
             "solution": "# Using function approach\ndef count_lowercase_letters(text):\n    return sum(1 for char in text if char.islower())\nresult = count_lowercase_letters('Hello World')\nprint(result)  # Expected: 8\n\n# Using built-in approach\ndef count_lowercase_letters(text):\n    result = sum(1 for char in text if char.islower())\n    return result\n\n# Using manual approach\ndef count_lowercase_letters(text):\n    return sum(1 for char in text if char.islower())\n\n# Script approach\ntext = 'hello'\nresult = count_lowercase_letters(text)\nprint(result)\n\n# Direct approach\nprint(count_lowercase_letters('world'))",
 
@@ -21887,7 +21887,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1844,
             "title": "Problem 1844",
-            "description": "Write a Python function called `swap_uppercase_lowercase` that takes a string and returns a new string where uppercase letters become lowercase and lowercase letters become uppercase.\nExamples:\n  swap_uppercase_lowercase('hello') → HELLO\n  swap_uppercase_lowercase('world') → WORLD\n  swap_uppercase_lowercase('python') → PYTHON",
+            "description": "Write a Python function called `swap_uppercase_lowercase` that takes a string and returns a new string where uppercase letters become lowercase and lowercase letters become uppercase.\nExamples:\n  swap_uppercase_lowercase('Hello') → 'hELLO'\n  swap_uppercase_lowercase('Py3') → 'pY3'",
             "initialCode": "def swap_uppercase_lowercase(text):\n    pass",
             "solution": "# Using function approach\ndef swap_uppercase_lowercase(text):\n    return text.swapcase()\nresult = swap_uppercase_lowercase('Hello World')\nprint(result)  # Expected: hELLO wORLD\n\n# Using built-in approach\ndef swap_uppercase_lowercase(text):\n    return text.swapcase()\n\n# Using manual approach\ndef swap_uppercase_lowercase(text):\n    return str(text).swapcase()\n\n# Script approach\ntext = 'hello'\nresult = swap_uppercase_lowercase(text)\nprint(result)\n\n# Direct approach\nprint(swap_uppercase_lowercase('world'))",
 
@@ -21899,7 +21899,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1845,
             "title": "Problem 1845",
-            "description": "Write a Python function called `remove_numbers_from_string` that takes a string and returns a new string with all digits removed.\nExamples:\n  remove_numbers_from_string('hello') → hello\n  remove_numbers_from_string('world') → world\n  remove_numbers_from_string('python') → python",
+            "description": "Write a Python function called `remove_numbers_from_string` that takes a string and returns a new string with all digits removed.\nExamples:\n  remove_numbers_from_string('ab12cd34') → 'abcd'\n  remove_numbers_from_string('1a2b!') → 'ab!'",
             "initialCode": "def remove_numbers_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef remove_numbers_from_string(text):\n    return ''.join(char for char in text if not char.isdigit())\nresult = remove_numbers_from_string('Hello123World456')\nprint(result)  # Expected: HelloWorld\n\n# Using built-in approach\ndef remove_numbers_from_string(text):\n    result = ''.join(char for char in text if not char.isdigit())\n    return result\n\n# Using manual approach\ndef remove_numbers_from_string(text):\n    return ''.join(char for char in text if not char.isdigit())\n\n# Script approach\ntext = 'hello'\nresult = remove_numbers_from_string(text)\nprint(result)\n\n# Direct approach\nprint(remove_numbers_from_string('world'))",
 
@@ -21911,7 +21911,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1846,
             "title": "Problem 1846",
-            "description": "Write a Python function called `remove_letters_from_string` that takes a string and returns a new string with all letters removed, keeping only digits and other characters.\nExamples:\n  remove_letters_from_string('hello') → ?\n  remove_letters_from_string('world') → ?\n  remove_letters_from_string('python') → ?",
+            "description": "Write a Python function called `remove_letters_from_string` that takes a string and returns a new string with all letters removed, keeping only digits and other characters.\nExamples:\n  remove_letters_from_string('ab12cd34') → '1234'\n  remove_letters_from_string('1a2b!') → '12!'",
             "initialCode": "def remove_letters_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef remove_letters_from_string(text):\n    return ''.join(char for char in text if not char.isalpha())\nresult = remove_letters_from_string('Hello123World456!')\nprint(result)  # Expected: 123456!\n\n# Using built-in approach\ndef remove_letters_from_string(text):\n    result = ''.join(char for char in text if not char.isalpha())\n    return result\n\n# Using manual approach\ndef remove_letters_from_string(text):\n    return ''.join(char for char in text if not char.isalpha())\n\n# Script approach\ntext = 'hello'\nresult = remove_letters_from_string(text)\nprint(result)\n\n# Direct approach\nprint(remove_letters_from_string('world'))",
 
@@ -21923,7 +21923,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1847,
             "title": "Problem 1847",
-            "description": "Write a Python function called `extract_numbers_from_string` that takes a string and returns a list of all numbers found in the string (as strings).\nExamples:\n  extract_numbers_from_string('hello') → []\n  extract_numbers_from_string('world') → []\n  extract_numbers_from_string('python') → []",
+            "description": "Write a Python function called `extract_numbers_from_string` that takes a string and returns a list of all numbers found in the string (as strings).\nExamples:\n  extract_numbers_from_string('ab12cd34') → ['1', '2', '3', '4']\n  extract_numbers_from_string('x9y8') → ['9', '8']",
             "initialCode": "def extract_numbers_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef extract_numbers_from_string(text):\n    return [char for char in text if char.isdigit()]\nresult = extract_numbers_from_string('Hello123World456')\nprint(result)  # Expected: ['1', '2', '3', '4', '5', '6']\n\n# Using built-in approach\ndef extract_numbers_from_string(text):\n    result = [char for char in text if char.isdigit()]\n    return result\n\n# Using manual approach\ndef extract_numbers_from_string(text):\n    return [char for char in text if char.isdigit()]\n\n# Script approach\ntext = 'hello'\nresult = extract_numbers_from_string(text)\nprint(result)\n\n# Direct approach\nprint(extract_numbers_from_string('world'))",
 
@@ -21935,7 +21935,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1848,
             "title": "Problem 1848",
-            "description": "Write a Python function called `extract_letters_from_string` that takes a string and returns a list of all letters found in the string.\nExamples:\n  extract_letters_from_string('hello') → ['h', 'e', 'l', 'l', 'o']\n  extract_letters_from_string('world') → ['w', 'o', 'r', 'l', 'd']\n  extract_letters_from_string('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python function called `extract_letters_from_string` that takes a string and returns a list of all letters found in the string.\nExamples:\n  extract_letters_from_string('ab12cd34') → ['a', 'b', 'c', 'd']\n  extract_letters_from_string('x9y8') → ['x', 'y']",
             "initialCode": "def extract_letters_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef extract_letters_from_string(text):\n    return [char for char in text if char.isalpha()]\nresult = extract_letters_from_string('Hello123World456')\nprint(result)  # Expected: ['H', 'e', 'l', 'l', 'o', 'W', 'o', 'r', 'l', 'd']\n\n# Using built-in approach\ndef extract_letters_from_string(text):\n    result = [char for char in text if char.isalpha()]\n    return result\n\n# Using manual approach\ndef extract_letters_from_string(text):\n    return [char for char in text if char.isalpha()]\n\n# Script approach\ntext = 'hello'\nresult = extract_letters_from_string(text)\nprint(result)\n\n# Direct approach\nprint(extract_letters_from_string('world'))",
 
@@ -21947,7 +21947,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1849,
             "title": "Problem 1849",
-            "description": "Write a Python function called `format_phone_number` that takes a string of 10 digits and returns it formatted as (XXX) XXX-XXXX.\nExamples:\n  format_phone_number('hello') → (hel) lo-\n  format_phone_number('world') → (wor) ld-\n  format_phone_number('python') → (pyt) hon-",
+            "description": "Write a Python function called `format_phone_number` that takes a string of 10 digits and returns it formatted as (XXX) XXX-XXXX.\nExamples:\n  format_phone_number('1234567890') → '(123) 456-7890'\n  format_phone_number('0987654321') → '(098) 765-4321'",
             "initialCode": "def format_phone_number(digits):\n    pass",
             "solution": "# Using function approach\ndef format_phone_number(digits):\n    return f'({digits[0:3]}) {digits[3:6]}-{digits[6:10]}'\nresult = format_phone_number('1234567890')\nprint(result)  # Expected: (123) 456-7890\n\n# Using built-in approach\ndef format_phone_number(digits):\n    result = f'({digits[0:3]}) {digits[3:6]}-{digits[6:10]}'\n    return result\n\n# Using manual approach\ndef format_phone_number(digits):\n    return f'({digits[0:3]}) {digits[3:6]}-{digits[6:10]}'\n\n# Script approach\ndigits = [3, 7, 2, 9, 1]\nresult = format_phone_number(digits)\nprint(result)\n\n# Direct approach\nprint(format_phone_number([4, 1, 8, 6, 3]))",
 
@@ -22067,7 +22067,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1859,
             "title": "Problem 1859",
-            "description": "Write a Python function called `count_vowels_and_consonants` that takes a string and returns a tuple containing the count of vowels and consonants.\nExamples:\n  count_vowels_and_consonants('hello') → (2, 3)\n  count_vowels_and_consonants('world') → (1, 4)\n  count_vowels_and_consonants('python') → (1, 5)",
+            "description": "Write a Python function called `count_vowels_and_consonants` that takes a string and returns a tuple containing the count of vowels and consonants.\nExamples:\n  count_vowels_and_consonants('hello') → [2, 3]\n  count_vowels_and_consonants('Python') → [1, 5]",
             "initialCode": "def count_vowels_and_consonants(text):\n    pass",
             "solution": "# Using function approach\ndef count_vowels_and_consonants(text):\n    vowels = 'aeiouAEIOU'\n    vowel_count = sum(1 for char in text if char in vowels)\n    consonant_count = sum(1 for char in text if char.isalpha() and char not in vowels)\n    return (vowel_count, consonant_count)\nresult = count_vowels_and_consonants('Hello World')\nprint(result)  # Expected: (3, 7)\n# Using for loop\ntotal = 0\nfor char in text:\n    if char in vowels:\n    total += 1\nreturn total\n\n# Using built-in approach\ndef count_vowels_and_consonants(text):\n    result = (vowel_count, consonant_count)\n    return result\n\n# Using manual approach\ndef count_vowels_and_consonants(text):\n    return (vowel_count, consonant_count)\n\n# Script approach\ntext = 'hello'\nresult = count_vowels_and_consonants(text)\nprint(result)\n\n# Direct approach\nprint(count_vowels_and_consonants('world'))",
 
@@ -22163,7 +22163,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1867,
             "title": "Problem 1867",
-            "description": "Write a Python function called `get_elements_at_indices` that takes a list and a list of indices, and returns a list of elements at those indices.\nExamples:\n  get_elements_at_indices([1, 2, 3], [1, 2, 3]) → ?\n  get_elements_at_indices([5, 8, 2], [5, 8, 2]) → ?\n  get_elements_at_indices([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_elements_at_indices` that takes a list and a list of indices, and returns a list of elements at those indices.\nExamples:\n  get_elements_at_indices([10, 20, 30, 40], [0, 2]) → [10, 30]\n  get_elements_at_indices(['a', 'b', 'c'], [1, 2]) → ['b', 'c']",
             "initialCode": "def get_elements_at_indices(my_list, indices):\n    pass",
             "solution": "# Using function approach\ndef get_elements_at_indices(my_list, indices):\n    return [my_list[i] for i in indices]\nresult = get_elements_at_indices([10, 20, 30, 40, 50], [0, 2, 4])\nprint(result)  # Expected: [10, 30, 50]\n\n# Using built-in approach\ndef get_elements_at_indices(my_list, indices):\n    result = [my_list[i] for i in indices]\n    return result\n\n# Using manual approach\ndef get_elements_at_indices(my_list, indices):\n    return [my_list[i] for i in indices]\n\n# Script approach\nmy_list = [3, 7, 2, 9, 1]\nindices = [3, 7, 2, 9, 1]\nresult = get_elements_at_indices(my_list, indices)\nprint(result)\n\n# Direct approach\nprint(get_elements_at_indices([4, 1, 8, 6, 3], [4, 1, 8, 6, 3]))",
 
@@ -22187,7 +22187,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1869,
             "title": "Problem 1869",
-            "description": "Write a Python function called `count_words_by_length` that takes a string and returns a dictionary where keys are word lengths and values are counts of words with that length.\nExamples:\n  count_words_by_length('hello') → {5: 1}\n  count_words_by_length('world') → {5: 1}\n  count_words_by_length('python') → {6: 1}",
+            "description": "Write a Python function called `count_words_by_length` that takes a string and returns a dictionary where keys are word lengths and values are counts of words with that length.\nExamples:\n  count_words_by_length('a ab abc ab') → [object Object]\n  count_words_by_length('hi to code') → [object Object]",
             "initialCode": "def count_words_by_length(text):\n    pass",
             "solution": "# Using function approach\ndef count_words_by_length(text):\n    words = text.split()\n    counts = {}\n    for word in words:\n        length = len(word)\n        counts[length] = counts.get(length, 0) + 1\n    return counts\nresult = count_words_by_length('hello world python programming')\nprint(result)  # Expected: {5: 2, 6: 2, 11: 1}\n\n# Using built-in approach\ndef count_words_by_length(text):\n    result = counts\n    return result\n\n# Using manual approach\ndef count_words_by_length(text):\n    return counts\n\n# Script approach\ntext = 'hello'\nresult = count_words_by_length(text)\nprint(result)\n\n# Direct approach\nprint(count_words_by_length('world'))",
 
@@ -22235,7 +22235,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1873,
             "title": "Problem 1873",
-            "description": "Write a Python function called `calculate_total_cost` that takes a list of prices and a tax rate percentage, and returns the total cost including tax.\nExamples:\n  calculate_total_cost([1, 2, 3], [1, 2, 3]) → ?\n  calculate_total_cost([5, 8, 2], [5, 8, 2]) → ?\n  calculate_total_cost([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_total_cost` that takes a list of prices and a tax rate percentage, and returns the total cost including tax.\nExamples:\n  calculate_total_cost([10, 20, 30], 10) → 66\n  calculate_total_cost([5, 15], 20) → 24",
             "initialCode": "def calculate_total_cost(prices, tax_rate):\n    pass",
             "solution": "# Using function approach\ndef calculate_total_cost(prices, tax_rate):\n    subtotal = sum(prices)\n    tax = subtotal * (tax_rate / 100)\n    return subtotal + tax\nresult = calculate_total_cost([10, 20, 30], 10)\nprint(result)  # Expected: 66.0\n\n# Using built-in approach\ndef calculate_total_cost(prices, tax_rate):\n    return sum([subtotal, tax])\n\n# Using manual approach\ndef calculate_total_cost(prices, tax_rate):\n    import operator\n    return operator.add(subtotal, tax)\n\n# Script approach\nprices = [3, 7, 2, 9, 1]\ntax_rate = 15\nresult = calculate_total_cost(prices, tax_rate)\nprint(result)\n\n# Direct approach\nprint(calculate_total_cost([4, 1, 8, 6, 3], 25))",
 
@@ -22259,7 +22259,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1875,
             "title": "Problem 1875",
-            "description": "Write a Python function called `split_into_chunks` that takes a list and a chunk size, and returns a list of lists where each inner list has at most chunk_size elements.\nExamples:\n  split_into_chunks([1, 2, 3], [1, 2, 3]) → ?\n  split_into_chunks([5, 8, 2], [5, 8, 2]) → ?\n  split_into_chunks([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `split_into_chunks` that takes a list and a chunk size, and returns a list of lists where each inner list has at most chunk_size elements.\nExamples:\n  split_into_chunks([1, 2, 3, 4, 5, 6], 2) → [[1, 2], [3, 4], [5, 6]]\n  split_into_chunks([1, 2, 3, 4, 5], 2) → [[1, 2], [3, 4], [5]]",
             "initialCode": "def split_into_chunks(my_list, chunk_size):\n    pass",
             "solution": "# Using function approach\ndef split_into_chunks(my_list, chunk_size):\n    return [my_list[i:i+chunk_size] for i in range(0, len(my_list), chunk_size)]\nresult = split_into_chunks([1, 2, 3, 4, 5, 6, 7], 3)\nprint(result)  # Expected: [[1, 2, 3], [4, 5, 6], [7]]\n\n# Using built-in approach\ndef split_into_chunks(my_list, chunk_size):\n    result = [my_list[i:i+chunk_size] for i in range(0, len(my_list), chunk_size)]\n    return result\n\n# Using manual approach\ndef split_into_chunks(my_list, chunk_size):\n    return [my_list[i:i+chunk_size] for i in range(0, len(my_list), chunk_size)]\n\n# Script approach\nmy_list = [3, 7, 2, 9, 1]\nchunk_size = 15\nresult = split_into_chunks(my_list, chunk_size)\nprint(result)\n\n# Direct approach\nprint(split_into_chunks([4, 1, 8, 6, 3], 25))",
 
@@ -22307,7 +22307,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1879,
             "title": "Problem 1879",
-            "description": "Write a Python function called `sort_by_multiple_criteria` that takes a list of tuples (name, age, score) and returns the list sorted first by age, then by score.\nExamples:\n  sort_by_multiple_criteria('hello') → ?\n  sort_by_multiple_criteria('world') → ?\n  sort_by_multiple_criteria('python') → ?",
+            "description": "Write a Python function called `sort_by_multiple_criteria` that takes a list of tuples (name, age, score) and returns the list sorted first by age, then by score.\nExamples:\n  sort_by_multiple_criteria([['Bob', 25, 90], ['Alice', 25, 85], ['Charlie', 30, 80]]) → [['Alice', 25, 85], ['Bob', 25, 90], ['Charlie', 30, 80]]\n  sort_by_multiple_criteria([['Zoe', 20, 70], ['Ann', 20, 90], ['Kim', 21, 80]]) → [['Zoe', 20, 70], ['Ann', 20, 90], ['Kim', 21, 80]]",
             "initialCode": "def sort_by_multiple_criteria(people):\n    pass",
             "solution": "# Using function approach\ndef sort_by_multiple_criteria(people):\n    return sorted(people, key=lambda x: (x[1], x[2]))\nresult = sort_by_multiple_criteria([('Alice', 25, 85), ('Bob', 25, 90), ('Charlie', 30, 80)])\nprint(result)  # Expected: [('Alice', 25, 85), ('Bob', 25, 90), ('Charlie', 30, 80)]\n\n# Using built-in approach\ndef sort_by_multiple_criteria(people):\n    result = sorted(people, key=lambda x: (x[1], x[2]))\n    return result\n\n# Using manual approach\ndef sort_by_multiple_criteria(people):\n    return sorted(people, key=lambda x: (x[1], x[2]))\n\n# Script approach\npeople = [3, 7, 2, 9, 1]\nresult = sort_by_multiple_criteria(people)\nprint(result)\n\n# Direct approach\nprint(sort_by_multiple_criteria([4, 1, 8, 6, 3]))",
 
@@ -22331,7 +22331,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1881,
             "title": "Problem 1881",
-            "description": "Write a Python function called `extract_numbers_from_string` that takes a string and returns a list of all numbers found in the string (as integers).\nExamples:\n  extract_numbers_from_string('hello') → []\n  extract_numbers_from_string('world') → []\n  extract_numbers_from_string('python') → []",
+            "description": "Write a Python function called `extract_numbers_from_string` that takes a string and returns a list of all numbers found in the string (as integers).\nExamples:\n  extract_numbers_from_string('ab12cd34') → [12, 34]\n  extract_numbers_from_string('x7y890z') → [7, 890]",
             "initialCode": "def extract_numbers_from_string(text):\n    pass",
             "solution": "# Using function approach\ndef extract_numbers_from_string(text):\n    import re\n    return [int(match) for match in re.findall(r'\\d+', text)]\nresult = extract_numbers_from_string('I have 3 cats and 2 dogs')\nprint(result)  # Expected: [3, 2]\n\n# Using built-in approach\ndef extract_numbers_from_string(text):\n    result = [int(match) for match in re.findall(r'\\d+', text)]\n    return result\n\n# Using manual approach\ndef extract_numbers_from_string(text):\n    return [int(match) for match in re.findall(r'\\d+', text)]\n\n# Script approach\ntext = 'hello'\nresult = extract_numbers_from_string(text)\nprint(result)\n\n# Direct approach\nprint(extract_numbers_from_string('world'))",
 
@@ -22355,7 +22355,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1883,
             "title": "Problem 1883",
-            "description": "Write a Python function called `check_password_strength` that takes a password string and returns True if it has at least 8 characters, contains both letters and digits, otherwise False.\nExamples:\n  check_password_strength('hello') → False\n  check_password_strength('world') → False\n  check_password_strength('python') → False",
+            "description": "Write a Python function called `check_password_strength` that takes a password string and returns True if it has at least 8 characters, contains both letters and digits, otherwise False.\nExamples:\n  check_password_strength('Abc123!@') → True\n  check_password_strength('weak') → False",
             "initialCode": "def check_password_strength(password):\n    pass",
             "solution": "# Using function approach\ndef check_password_strength(password):\n    return len(password) >= 8 and any(c.isalpha() for c in password) and any(c.isdigit() for c in password)\nprint(check_password_strength('Password123'), check_password_strength('weak'))  # Expected: True False\n\n# Using built-in approach\ndef check_password_strength(password):\n    result = len(password) >= 8 and any(c.isalpha() for c in password) and any(c.isdigit() for c in password)\n    return result\n\n# Using manual approach\ndef check_password_strength(password):\n    return len(password) >= 8 and any(c.isalpha() for c in password) and any(c.isdigit() for c in password)\n\n# Script approach\npassword = [3, 7, 2, 9, 1]\nresult = check_password_strength(password)\nprint(result)\n\n# Direct approach\nprint(check_password_strength([4, 1, 8, 6, 3]))",
 
@@ -22403,7 +22403,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1887,
             "title": "Problem 1887",
-            "description": "Write a Python function called `group_by_first_letter` that takes a list of strings and returns a dictionary where keys are first letters and values are lists of strings starting with that letter.\nExamples:\n  group_by_first_letter('hello') → {'h': ['h'], 'e': ['e'], 'l': ['l', 'l'], 'o': ['o']}\n  group_by_first_letter('world') → {'w': ['w'], 'o': ['o'], 'r': ['r'], 'l': ['l'], 'd': ['d']}\n  group_by_first_letter('python') → {'p': ['p'], 'y': ['y'], 't': ['t'], 'h': ['h'], 'o': ['o'], 'n': ['n']}",
+            "description": "Write a Python function called `group_by_first_letter` that takes a list of strings and returns a dictionary where keys are first letters and values are lists of strings starting with that letter.\nExamples:\n  group_by_first_letter(['apple', 'banana', 'apricot']) → [object Object]\n  group_by_first_letter(['cat', 'car', 'dog']) → [object Object]",
             "initialCode": "def group_by_first_letter(strings):\n    pass",
             "solution": "# Using function approach\ndef group_by_first_letter(strings):\n    groups = {}\n    for s in strings:\n        first_letter = s[0].lower()\n        if first_letter not in groups:\n            groups[first_letter] = []\n        groups[first_letter].append(s)\n    return groups\nresult = group_by_first_letter(['apple', 'banana', 'apricot', 'cherry'])\nprint(result)  # Expected: {'a': ['apple', 'apricot'], 'b': ['banana'], 'c': ['cherry']}\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef group_by_first_letter(strings):\n    result = groups\n    return result\n\n# Using manual approach\ndef group_by_first_letter(strings):\n    return groups\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = group_by_first_letter(strings)\nprint(result)\n\n# Direct approach\nprint(group_by_first_letter([4, 1, 8, 6, 3]))",
 
@@ -22523,7 +22523,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1897,
             "title": "Problem 1897",
-            "description": "Write a Python function called `count_uppercase_lowercase` that takes a string and returns a dictionary with 'uppercase' and 'lowercase' keys containing their counts.\nExamples:\n  count_uppercase_lowercase('hello') → {'uppercase': 0, 'lowercase': 5}\n  count_uppercase_lowercase('world') → {'uppercase': 0, 'lowercase': 5}\n  count_uppercase_lowercase('python') → {'uppercase': 0, 'lowercase': 6}",
+            "description": "Write a Python function called `count_uppercase_lowercase` that takes a string and returns a dictionary with 'uppercase' and 'lowercase' keys containing their counts.\nExamples:\n  count_uppercase_lowercase('Hello WORLD') → [object Object]\n  count_uppercase_lowercase('Py3') → [object Object]",
             "initialCode": "def count_uppercase_lowercase(text):\n    pass",
             "solution": "# Using function approach\ndef count_uppercase_lowercase(text):\n    return {\n        'uppercase': sum(1 for c in text if c.isupper()),\n        'lowercase': sum(1 for c in text if c.islower())\n    }\nresult = count_uppercase_lowercase('Hello World')\nprint(result)  # Expected: {'uppercase': 2, 'lowercase': 8}\n# Using for loop\ntotal = 0\nfor c in text:\n    if c.isupper(:\n    total += 1\nreturn total\n\n# Using built-in approach\ndef solve():\n    def count_uppercase_lowercase(text):\n        return {\n            'uppercase': sum(1 for c in text if c.isupper()),\n            'lowercase': sum(1 for c in text if c.islower())\n        }\n    result = count_uppercase_lowercase('Hello World')\n    print(result)  # Expected: {'uppercase': 2, 'lowercase': 8}\n\n# Using manual approach\ndef solve():\n    def count_uppercase_lowercase(text):\n        return {\n            'uppercase': sum(1 for c in text if c.isupper()),\n            'lowercase': sum(1 for c in text if c.islower())\n        }\n    result = count_uppercase_lowercase('Hello World')\n    return result\n\n# Script approach\ntext = 'hello'\nresult = count_uppercase_lowercase(text)\nprint(result)\n\n# Direct approach\nprint(count_uppercase_lowercase('world'))",
 
@@ -22595,7 +22595,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1903,
             "title": "Problem 1903",
-            "description": "Write a Python function called `check_palindrome_and_length` that takes a string and returns a tuple containing True/False for palindrome and the string length.\nExamples:\n  check_palindrome_and_length('hello') → (False, 5)\n  check_palindrome_and_length('world') → (False, 5)\n  check_palindrome_and_length('python') → (False, 6)",
+            "description": "Write a Python function called `check_palindrome_and_length` that takes a string and returns a tuple containing True/False for palindrome and the string length.\nExamples:\n  check_palindrome_and_length('radar') → [True, 5]\n  check_palindrome_and_length('hello') → [False, 5]",
             "initialCode": "def check_palindrome_and_length(text):\n    pass",
             "solution": "# Using function approach\ndef check_palindrome_and_length(text):\n    is_palindrome = text == text[::-1]\n    length = len(text)\n    return (is_palindrome, length)\nresult = check_palindrome_and_length('racecar')\nprint(result)  # Expected: (True, 7)\n\n# Using built-in approach\ndef check_palindrome_and_length(text):\n    result = (is_palindrome, length)\n    return result\n\n# Using manual approach\ndef check_palindrome_and_length(text):\n    return (is_palindrome, length)\n\n# Script approach\ntext = 'hello'\nresult = check_palindrome_and_length(text)\nprint(result)\n\n# Direct approach\nprint(check_palindrome_and_length('world'))",
 
@@ -22607,7 +22607,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1904,
             "title": "Problem 1904",
-            "description": "Write a Python function called `get_words_starting_with_vowel` that takes a string and returns a list of words that start with a vowel.\nExamples:\n  get_words_starting_with_vowel('hello') → []\n  get_words_starting_with_vowel('world') → []\n  get_words_starting_with_vowel('python') → []",
+            "description": "Write a Python function called `get_words_starting_with_vowel` that takes a string and returns a list of words that start with a vowel.\nExamples:\n  get_words_starting_with_vowel('apple banana orange') → ['apple', 'orange']\n  get_words_starting_with_vowel('Ice cream and cake') → ['Ice', 'and']",
             "initialCode": "def get_words_starting_with_vowel(text):\n    pass",
             "solution": "# Using function approach\ndef get_words_starting_with_vowel(text):\n    vowels = 'aeiouAEIOU'\n    words = text.split()\n    return [word for word in words if word[0] in vowels]\nresult = get_words_starting_with_vowel('apple orange banana cherry')\nprint(result)  # Expected: ['apple', 'orange']\n\n# Using built-in approach\ndef get_words_starting_with_vowel(text):\n    result = [word for word in words if word[0] in vowels]\n    return result\n\n# Using manual approach\ndef get_words_starting_with_vowel(text):\n    return [word for word in words if word[0] in vowels]\n\n# Script approach\ntext = 'hello'\nresult = get_words_starting_with_vowel(text)\nprint(result)\n\n# Direct approach\nprint(get_words_starting_with_vowel('world'))",
 
@@ -22619,7 +22619,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1905,
             "title": "Problem 1905",
-            "description": "Write a Python function called `get_words_ending_with_consonant` that takes a string and returns a list of words that end with a consonant.\nExamples:\n  get_words_ending_with_consonant('hello') → []\n  get_words_ending_with_consonant('world') → ['world']\n  get_words_ending_with_consonant('python') → ['python']",
+            "description": "Write a Python function called `get_words_ending_with_consonant` that takes a string and returns a list of words that end with a consonant.\nExamples:\n  get_words_ending_with_consonant('apple banana world') → ['world']\n  get_words_ending_with_consonant('sky tree run') → ['sky', 'run']",
             "initialCode": "def get_words_ending_with_consonant(text):\n    pass",
             "solution": "# Using function approach\ndef get_words_ending_with_consonant(text):\n    vowels = 'aeiouAEIOU'\n    words = text.split()\n    return [word for word in words if word[-1] not in vowels and word[-1].isalpha()]\nresult = get_words_ending_with_consonant('hello world python')\nprint(result)  # Expected: ['hello', 'world', 'python']\n\n# Using built-in approach\ndef get_words_ending_with_consonant(text):\n    result = [word for word in words if word[-1] not in vowels and word[-1].isalpha()]\n    return result\n\n# Using manual approach\ndef get_words_ending_with_consonant(text):\n    return [word for word in words if word[-1] not in vowels and word[-1].isalpha()]\n\n# Script approach\ntext = 'hello'\nresult = get_words_ending_with_consonant(text)\nprint(result)\n\n# Direct approach\nprint(get_words_ending_with_consonant('world'))",
 
@@ -22715,7 +22715,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1913,
             "title": "Problem 1913",
-            "description": "Write a Python function called `count_characters_by_type` that takes a string and returns a dictionary with 'letters', 'digits', and 'others' keys containing their counts.\nExamples:\n  count_characters_by_type('hello') → {'letters': 5, 'digits': 0, 'others': 0}\n  count_characters_by_type('world') → {'letters': 5, 'digits': 0, 'others': 0}\n  count_characters_by_type('python') → {'letters': 6, 'digits': 0, 'others': 0}",
+            "description": "Write a Python function called `count_characters_by_type` that takes a string and returns a dictionary with 'letters', 'digits', and 'others' keys containing their counts.\nExamples:\n  count_characters_by_type('hello') → [object Object]\n  count_characters_by_type('a1!') → [object Object]",
             "initialCode": "def count_characters_by_type(text):\n    pass",
             "solution": "# Using function approach\ndef count_characters_by_type(text):\n    return {\n        'letters': sum(1 for c in text if c.isalpha()),\n        'digits': sum(1 for c in text if c.isdigit()),\n        'others': sum(1 for c in text if not c.isalnum() and not c.isspace())\n    }\nresult = count_characters_by_type('Hello123!')\nprint(result)  # Expected: {'letters': 5, 'digits': 3, 'others': 1}\n\n# Using built-in approach\ndef solve():\n    def count_characters_by_type(text):\n        return {\n            'letters': sum(1 for c in text if c.isalpha()),\n            'digits': sum(1 for c in text if c.isdigit()),\n            'others': sum(1 for c in text if not c.isalnum() and not c.isspace())\n        }\n    result = count_characters_by_type('Hello123!')\n    print(result)  # Expected: {'letters': 5, 'digits': 3, 'others': 1}\n\n# Using manual approach\ndef solve():\n    def count_characters_by_type(text):\n        return {\n            'letters': sum(1 for c in text if c.isalpha()),\n            'digits': sum(1 for c in text if c.isdigit()),\n            'others': sum(1 for c in text if not c.isalnum() and not c.isspace())\n        }\n    result = count_characters_by_type('Hello123!')\n    return result\n\n# Script approach\ntext = 'hello'\nresult = count_characters_by_type(text)\nprint(result)\n\n# Direct approach\nprint(count_characters_by_type('world'))",
 
@@ -22727,7 +22727,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1914,
             "title": "Problem 1914",
-            "description": "Write a Python function called `get_range_between` that takes a list and two values, and returns a list of elements that fall between those two values (inclusive).\nExamples:\n  get_range_between([1, 2, 3], [1, 2, 3], [1, 2, 3]) → ?\n  get_range_between([5, 8, 2], [5, 8, 2], [5, 8, 2]) → ?\n  get_range_between([3, 1, 4], [3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_range_between` that takes a list and two values, and returns a list of elements that fall between those two values (inclusive).\nExamples:\n  get_range_between([1, 3, 5, 7, 9], 3, 7) → [3, 5, 7]\n  get_range_between([0, 2, 4, 6], 1, 5) → [2, 4]",
             "initialCode": "def get_range_between(my_list, min_val, max_val):\n    pass",
             "solution": "# Using function approach\ndef get_range_between(my_list, min_val, max_val):\n    return [x for x in my_list if min_val <= x <= max_val]\nresult = get_range_between([10, 20, 30, 40, 50], 20, 40)\nprint(result)  # Expected: [20, 30, 40]\n\n# Using built-in approach\ndef get_range_between(my_list, min_val, max_val):\n    result = [x for x in my_list if min_val <= x <= max_val]\n    return result\n\n# Using manual approach\ndef get_range_between(my_list, min_val, max_val):\n    return [x for x in my_list if min_val <= x <= max_val]\n\n# Script approach\nmy_list = [3, 7, 2, 9, 1]\nmin_val = 15\nmax_val = 15\nresult = get_range_between(my_list, min_val, max_val)\nprint(result)\n\n# Direct approach\nprint(get_range_between([4, 1, 8, 6, 3], 25, 25))",
 
@@ -22763,7 +22763,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1917,
             "title": "Problem 1917",
-            "description": "Write a Python function called `get_unique_characters` that takes a string and returns a list of unique characters in the order they first appear.\nExamples:\n  get_unique_characters('hello') → ['h', 'e', 'l', 'o']\n  get_unique_characters('world') → ['w', 'o', 'r', 'l', 'd']\n  get_unique_characters('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python function called `get_unique_characters` that takes a string and returns a list of unique characters in the order they first appear.\nExamples:\n  get_unique_characters('hello') → ['h', 'e', 'l', 'o']\n  get_unique_characters('banana') → ['b', 'a', 'n']",
             "initialCode": "def get_unique_characters(text):\n    pass",
             "solution": "# Using function approach\ndef get_unique_characters(text):\n    seen = set()\n    result = []\n    for char in text:\n        if char not in seen:\n            seen.add(char)\n            result.append(char)\n    return result\nresult = get_unique_characters('hello')\nprint(result)  # Expected: ['h', 'e', 'l', 'o']\n\n# Using built-in approach\ndef get_unique_characters(text):\n    return [char for char in text]\n\n# Using manual approach\ndef get_unique_characters(text):\n    return list(map(lambda char: char, text))\n\n# Script approach\ntext = 'hello'\nresult = get_unique_characters(text)\nprint(result)\n\n# Direct approach\nprint(get_unique_characters('world'))",
 
@@ -22787,7 +22787,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1919,
             "title": "Problem 1919",
-            "description": "Write a Python function called `get_numbers_in_range` that takes a list of numbers and a range (min, max), and returns a list of numbers within that range.\nExamples:\n  get_numbers_in_range([1, 2, 3], [1, 2, 3], [1, 2, 3]) → ?\n  get_numbers_in_range([5, 8, 2], [5, 8, 2], [5, 8, 2]) → ?\n  get_numbers_in_range([3, 1, 4], [3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_numbers_in_range` that takes a list of numbers and a range (min, max), and returns a list of numbers within that range.\nExamples:\n  get_numbers_in_range([1, 5, 10, 15], 5, 15) → [5, 10, 15]\n  get_numbers_in_range([0, 2, 4, 6], 1, 5) → [2, 4]",
             "initialCode": "def get_numbers_in_range(numbers, min_val, max_val):\n    pass",
             "solution": "# Using function approach\ndef get_numbers_in_range(numbers, min_val, max_val):\n    return [x for x in numbers if min_val <= x <= max_val]\nresult = get_numbers_in_range([10, 20, 30, 40, 50], 25, 45)\nprint(result)  # Expected: [30, 40]\n\n# Using built-in approach\ndef get_numbers_in_range(numbers, min_val, max_val):\n    result = [x for x in numbers if min_val <= x <= max_val]\n    return result\n\n# Using manual approach\ndef get_numbers_in_range(numbers, min_val, max_val):\n    return [x for x in numbers if min_val <= x <= max_val]\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nmin_val = 15\nmax_val = 15\nresult = get_numbers_in_range(numbers, min_val, max_val)\nprint(result)\n\n# Direct approach\nprint(get_numbers_in_range([4, 1, 8, 6, 3], 25, 25))",
 
@@ -22895,7 +22895,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1928,
             "title": "Problem 1928",
-            "description": "Write a Python function called `count_digits_letters` that takes a string and returns a tuple containing the count of digits and the count of letters.\nExamples:\n  count_digits_letters('hello') → (0, 5)\n  count_digits_letters('world') → (0, 5)\n  count_digits_letters('python') → (0, 6)",
+            "description": "Write a Python function called `count_digits_letters` that takes a string and returns a tuple containing the count of digits and the count of letters.\nExamples:\n  count_digits_letters('abc123') → [3, 3]\n  count_digits_letters('A1!b2') → [2, 2]",
             "initialCode": "def count_digits_letters(text):\n    pass",
             "solution": "# Using function approach\ndef count_digits_letters(text):\n    digits = sum(1 for c in text if c.isdigit())\n    letters = sum(1 for c in text if c.isalpha())\n    return (digits, letters)\nresult = count_digits_letters('Hello123World')\nprint(result)  # Expected: (3, 10)\n# Using for loop\ntotal = 0\nfor c in text:\n    if c.isdigit(:\n    total += 1\nreturn total\n\n# Using built-in approach\ndef count_digits_letters(text):\n    result = (digits, letters)\n    return result\n\n# Using manual approach\ndef count_digits_letters(text):\n    return (digits, letters)\n\n# Script approach\ntext = 'hello'\nresult = count_digits_letters(text)\nprint(result)\n\n# Direct approach\nprint(count_digits_letters('world'))",
 
@@ -22907,7 +22907,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1929,
             "title": "Problem 1929",
-            "description": "Write a Python function called `get_words_with_length` that takes a string and a length, and returns a list of words with exactly that length.\nExamples:\n  get_words_with_length('hello', 5) → ['hello']\n  get_words_with_length('world', 3) → []\n  get_words_with_length('python', 10) → []",
+            "description": "Write a Python function called `get_words_with_length` that takes a string and a length, and returns a list of words with exactly that length.\nExamples:\n  get_words_with_length('a ab abc abcd', 3) → ['abc']\n  get_words_with_length('hi to code', 2) → ['hi', 'to']",
             "initialCode": "def get_words_with_length(text, length):\n    pass",
             "solution": "# Using function approach\ndef get_words_with_length(text, length):\n    words = text.split()\n    return [word for word in words if len(word) == length]\nresult = get_words_with_length('hello world python programming', 5)\nprint(result)  # Expected: ['hello', 'world']\n\n# Using built-in approach\ndef get_words_with_length(text, length):\n    result = [word for word in words if len(word) == length]\n    return result\n\n# Using manual approach\ndef get_words_with_length(text, length):\n    return [word for word in words if len(word) == length]\n\n# Script approach\ntext = 'hello'\nlength = 15\nresult = get_words_with_length(text, length)\nprint(result)\n\n# Direct approach\nprint(get_words_with_length('world', 25))",
 
@@ -22931,7 +22931,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1931,
             "title": "Problem 1931",
-            "description": "Write a Python function called `calculate_total_with_discount` that takes a list of prices, a discount percentage, and a tax rate, and returns the final total.\nExamples:\n  calculate_total_with_discount([1, 2, 3], [1, 2, 3], [1, 2, 3]) → ?\n  calculate_total_with_discount([5, 8, 2], [5, 8, 2], [5, 8, 2]) → ?\n  calculate_total_with_discount([3, 1, 4], [3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_total_with_discount` that takes a list of prices, a discount percentage, and a tax rate, and returns the final total.\nExamples:\n  calculate_total_with_discount([100], 20, 0) → 80\n  calculate_total_with_discount([100, 50], 10, 8) → 145.8",
             "initialCode": "def calculate_total_with_discount(prices, discount_percent, tax_rate):\n    pass",
             "solution": "# Using function approach\ndef calculate_total_with_discount(prices, discount_percent, tax_rate):\n    subtotal = sum(prices)\n    discounted = subtotal * (1 - discount_percent / 100)\n    total = discounted * (1 + tax_rate / 100)\n    return total\nresult = calculate_total_with_discount([100, 50], 10, 8)\nprint(round(result, 2))  # Expected: 145.8\n\n# Using built-in approach\ndef calculate_total_with_discount(prices, discount_percent, tax_rate):\n    result = total\n    return result\n\n# Using manual approach\ndef calculate_total_with_discount(prices, discount_percent, tax_rate):\n    return total\n\n# Script approach\nprices = [3, 7, 2, 9, 1]\ndiscount_percent = 15\ntax_rate = 15\nresult = calculate_total_with_discount(prices, discount_percent, tax_rate)\nprint(result)\n\n# Direct approach\nprint(calculate_total_with_discount([4, 1, 8, 6, 3], 25, 25))",
 
@@ -22967,7 +22967,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1934,
             "title": "Problem 1934",
-            "description": "Write a Python function called `check_all_uppercase_words` that takes a string and returns True if all words start with uppercase letters, otherwise False.\nExamples:\n  check_all_uppercase_words('hello') → False\n  check_all_uppercase_words('world') → False\n  check_all_uppercase_words('python') → False",
+            "description": "Write a Python function called `check_all_uppercase_words` that takes a string and returns True if all words start with uppercase letters, otherwise False.\nExamples:\n  check_all_uppercase_words('HELLO WORLD') → True\n  check_all_uppercase_words('hello WORLD') → False",
             "initialCode": "def check_all_uppercase_words(text):\n    pass",
             "solution": "# Using function approach\ndef check_all_uppercase_words(text):\n    words = text.split()\n    return all(word[0].isupper() for word in words if word)\nresult = check_all_uppercase_words('Hello World Python')\nprint(result)  # Expected: True\n\n# Using built-in approach\ndef check_all_uppercase_words(text):\n    result = all(word[0].isupper() for word in words if word)\n    return result\n\n# Using manual approach\ndef check_all_uppercase_words(text):\n    return all(word[0].isupper() for word in words if word)\n\n# Script approach\ntext = 'hello'\nresult = check_all_uppercase_words(text)\nprint(result)\n\n# Direct approach\nprint(check_all_uppercase_words('world'))",
 
@@ -23015,7 +23015,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1938,
             "title": "Problem 1938",
-            "description": "Write a Python function called `format_multiline_string` that takes name, age, and email, and returns a formatted multiline string with each piece of information on a separate line.\nExamples:\n  format_multiline_string('hello', 2, 3) → 'Name: hello\nAge: 2\nEmail: 3'\n  format_multiline_string('Alice', 30, 'alice@example.com') → 'Name: Alice\nAge: 30\nEmail: alice@example.com'",
+            "description": "Write a Python function called `format_multiline_string` that takes name, age, and email, and returns a formatted multiline string with each piece of information on a separate line.\nExamples:\nAge: 2\nEmail: 3'\nAge: 30\nEmail: alice@example.com'\nAge: 2\nEmail: 3'\nAge: 30\nEmail: alice@example.com'\n  format_multiline_string('hello', 2, 3) → 'Name: hello\nAge: 2\nEmail: 3'\n  format_multiline_string('Alice', 30, 'alice@example.com') → 'Name: Alice\nAge: 30\nEmail: alice@example.com'",
             "initialCode": "def format_multiline_string(name, age, email):\n    pass",
             "solution": "# Using function approach\ndef format_multiline_string(name, age, email):\n    return f'Name: {name}\nAge: {age}\nEmail: {email}'\nresult = format_multiline_string('Alice', 30, 'alice@example.com')\nprint(result)  # Expected: Name: Alice\n# Age: 30\n# Email: alice@example.com\n\n# Script approach\nname = 'Alice'\nage = 15\nemail = 15\nresult = format_multiline_string(name, age, email)\nprint(result)\n\n# Direct approach\nprint(format_multiline_string('Bob', 25, 25))",
 
@@ -23039,7 +23039,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1940,
             "title": "Problem 1940",
-            "description": "Write a Python function called `count_vowels_per_word` that takes a string and returns a dictionary where keys are words and values are vowel counts.\nExamples:\n  count_vowels_per_word('hello') → {'hello': 2}\n  count_vowels_per_word('world') → {'world': 1}\n  count_vowels_per_word('python') → {'python': 1}",
+            "description": "Write a Python function called `count_vowels_per_word` that takes a string and returns a dictionary where keys are words and values are vowel counts.\nExamples:\n  count_vowels_per_word('hello world ai') → [object Object]\n  count_vowels_per_word('sky tree') → [object Object]",
             "initialCode": "def count_vowels_per_word(text):\n    pass",
             "solution": "# Using function approach\ndef count_vowels_per_word(text):\n    vowels = 'aeiouAEIOU'\n    words = text.split()\n    return {word: sum(1 for c in word if c in vowels) for word in words}\nresult = count_vowels_per_word('hello world python')\nprint(result)  # Expected: {'hello': 2, 'world': 1, 'python': 1}\n# Using for loop\ntotal = 0\nfor c in word:\n    if c in vowels:\n    total += 1\nreturn total\n\n# Using built-in approach\ndef count_vowels_per_word(text):\n    result = {word: sum(1 for c in word if c in vowels) for word in words}\n    return result\n\n# Using manual approach\ndef count_vowels_per_word(text):\n    return {word: sum(1 for c in word if c in vowels) for word in words}\n\n# Script approach\ntext = 'hello'\nresult = count_vowels_per_word(text)\nprint(result)\n\n# Direct approach\nprint(count_vowels_per_word('world'))",
 
@@ -23051,7 +23051,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1941,
             "title": "Problem 1941",
-            "description": "Write a Python function called `get_words_with_vowel_count` that takes a string and a number n, and returns words that have exactly n vowels.\nExamples:\n  get_words_with_vowel_count('hello', 5) → []\n  get_words_with_vowel_count('world', 3) → []\n  get_words_with_vowel_count('python', 10) → []",
+            "description": "Write a Python function called `get_words_with_vowel_count` that takes a string and a number n, and returns words that have exactly n vowels.\nExamples:\n  get_words_with_vowel_count('hello ai world', 2) → ['hello', 'ai']\n  get_words_with_vowel_count('sky tree apple', 0) → ['sky']",
             "initialCode": "def get_words_with_vowel_count(text, n):\n    pass",
             "solution": "# Using function approach\ndef get_words_with_vowel_count(text, n):\n    vowels = 'aeiouAEIOU'\n    words = text.split()\n    return [word for word in words if sum(1 for c in word if c in vowels) == n]\nresult = get_words_with_vowel_count('hello world python programming', 2)\nprint(result)  # Expected: ['hello']\n\n# Using built-in approach\ndef get_words_with_vowel_count(text, n):\n    result = [word for word in words if sum(1 for c in word if c in vowels) == n]\n    return result\n\n# Using manual approach\ndef get_words_with_vowel_count(text, n):\n    return [word for word in words if sum(1 for c in word if c in vowels) == n]\n\n# Script approach\ntext = 'hello'\nn = 6\nresult = get_words_with_vowel_count(text, n)\nprint(result)\n\n# Direct approach\nprint(get_words_with_vowel_count('world', 15))",
 
@@ -23099,7 +23099,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1945,
             "title": "Problem 1945",
-            "description": "Write a Python function called `get_strings_sorted_by_length` that takes a list of strings and returns the list sorted by length (shortest to longest).\nExamples:\n  get_strings_sorted_by_length('hello') → ['h', 'e', 'l', 'l', 'o']\n  get_strings_sorted_by_length('world') → ['w', 'o', 'r', 'l', 'd']\n  get_strings_sorted_by_length('python') → ['p', 'y', 't', 'h', 'o', 'n']",
+            "description": "Write a Python function called `get_strings_sorted_by_length` that takes a list of strings and returns the list sorted by length (shortest to longest).\nExamples:\n  get_strings_sorted_by_length(['abc', 'a', 'ab']) → ['a', 'ab', 'abc']\n  get_strings_sorted_by_length(['python', 'a', 'hello', 'world']) → ['a', 'hello', 'world', 'python']",
             "initialCode": "def get_strings_sorted_by_length(strings):\n    pass",
             "solution": "# Using function approach\ndef get_strings_sorted_by_length(strings):\n    return sorted(strings, key=len)\nresult = get_strings_sorted_by_length(['python', 'a', 'hello', 'world'])\nprint(result)  # Expected: ['a', 'hello', 'world', 'python']\n# Using for loop with sorted\n    # Manual sorting alternative\n\n# Using built-in approach\ndef get_strings_sorted_by_length(strings):\n    result = sorted(strings, key=len)\n    return result\n\n# Using manual approach\ndef get_strings_sorted_by_length(strings):\n    return sorted(strings, key=len)\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_strings_sorted_by_length(strings)\nprint(result)\n\n# Direct approach\nprint(get_strings_sorted_by_length([4, 1, 8, 6, 3]))",
 
@@ -23135,7 +23135,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1948,
             "title": "Problem 1948",
-            "description": "Write a Python function called `count_character_types` that takes a string and returns a dictionary with 'vowels', 'consonants', 'digits', and 'spaces' counts.\nExamples:\n  count_character_types('hello') → {'vowels': 2, 'consonants': 3, 'digits': 0, 'spaces': 0}\n  count_character_types('world') → {'vowels': 1, 'consonants': 4, 'digits': 0, 'spaces': 0}\n  count_character_types('python') → {'vowels': 1, 'consonants': 5, 'digits': 0, 'spaces': 0}",
+            "description": "Write a Python function called `count_character_types` that takes a string and returns a dictionary with 'vowels', 'consonants', 'digits', and 'spaces' counts.\nExamples:\n  count_character_types('hello') → [object Object]\n  count_character_types('Hi 123!') → [object Object]",
             "initialCode": "def count_character_types(text):\n    pass",
             "solution": "# Using function approach\ndef count_character_types(text):\n    vowels = 'aeiouAEIOU'\n    return {\n        'vowels': sum(1 for c in text if c in vowels),\n        'consonants': sum(1 for c in text if c.isalpha() and c not in vowels),\n        'digits': sum(1 for c in text if c.isdigit()),\n        'spaces': sum(1 for c in text if c.isspace())\n    }\nresult = count_character_types('Hello World 123')\nprint(result)  # Expected: {'vowels': 3, 'consonants': 7, 'digits': 3, 'spaces': 2}\n\n# Using built-in approach\ndef solve():\n    def count_character_types(text):\n        vowels = 'aeiouAEIOU'\n        return {\n            'vowels': sum(1 for c in text if c in vowels),\n            'consonants': sum(1 for c in text if c.isalpha() and c not in vowels),\n            'digits': sum(1 for c in text if c.isdigit()),\n            'spaces': sum(1 for c in text if c.isspace())\n        }\n    result = count_character_types('Hello World 123')\n    print(result)  # Expected: {'vowels': 3, 'consonants': 7, 'digits': 3, 'spaces': 2}\n\n# Using manual approach\ndef solve():\n    def count_character_types(text):\n        vowels = 'aeiouAEIOU'\n        return {\n            'vowels': sum(1 for c in text if c in vowels),\n            'consonants': sum(1 for c in text if c.isalpha() and c not in vowels),\n            'digits': sum(1 for c in text if c.isdigit()),\n            'spaces': sum(1 for c in text if c.isspace())\n        }\n    result = count_character_types('Hello World 123')\n    return result\n\n# Script approach\ntext = 'hello'\nresult = count_character_types(text)\nprint(result)\n\n# Direct approach\nprint(count_character_types('world'))",
 
@@ -23147,7 +23147,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1949,
             "title": "Problem 1949",
-            "description": "Write a Python function called `get_words_by_vowel_count` that takes a string and returns a dictionary where keys are vowel counts and values are lists of words with that count.\nExamples:\n  get_words_by_vowel_count('hello') → {2: ['hello']}\n  get_words_by_vowel_count('world') → {1: ['world']}\n  get_words_by_vowel_count('python') → {1: ['python']}",
+            "description": "Write a Python function called `get_words_by_vowel_count` that takes a string and returns a dictionary where keys are vowel counts and values are lists of words with that count.\nExamples:\n  get_words_by_vowel_count('hello ai world ae') → [object Object]\n  get_words_by_vowel_count('sky tree apple') → [object Object]",
             "initialCode": "def get_words_by_vowel_count(text):\n    pass",
             "solution": "# Using function approach\ndef get_words_by_vowel_count(text):\n    vowels = 'aeiouAEIOU'\n    words = text.split()\n    result = {}\n    for word in words:\n        count = sum(1 for c in word if c in vowels)\n        if count not in result:\n            result[count] = []\n        result[count].append(word)\n    return result\nresult = get_words_by_vowel_count('hello world python')\nprint(result)  # Expected: {2: ['hello'], 1: ['world', 'python']}\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef get_words_by_vowel_count(text):\n    result = result\n    return result\n\n# Using manual approach\ndef get_words_by_vowel_count(text):\n    return result\n\n# Script approach\ntext = 'hello'\nresult = get_words_by_vowel_count(text)\nprint(result)\n\n# Direct approach\nprint(get_words_by_vowel_count('world'))",
 
@@ -23171,7 +23171,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1951,
             "title": "Problem 1951",
-            "description": "Write a Python function called `calculate_area_circle_sector` that takes radius and angle in degrees, and returns the area of the sector.\nExamples:\n  calculate_area_circle_sector([1, 2, 3], [1, 2, 3]) → ?\n  calculate_area_circle_sector([5, 8, 2], [5, 8, 2]) → ?\n  calculate_area_circle_sector([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_area_circle_sector` that takes radius and angle in degrees, and returns the area of the sector.\nExamples:\n  calculate_area_circle_sector(1, 5) → 0.04363323129985824\n  calculate_area_circle_sector(2, 90) → 3.141592653589793",
             "initialCode": "import math\ndef calculate_area_circle_sector(radius, angle_degrees):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef calculate_area_circle_sector(radius, angle_degrees):\n    return (angle_degrees / 360) * math.pi * radius ** 2\nresult = calculate_area_circle_sector(5, 90)\nprint(round(result, 2))  # Expected: 19.63\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef calculate_area_circle_sector(radius, angle_degrees):\n    result = (angle_degrees / 360) * math.pi * radius ** 2\n    return result\n\n# Using manual approach\ndef calculate_area_circle_sector(radius, angle_degrees):\n    return (angle_degrees / 360) * math.pi * radius ** 2\n\n# Script approach\nradius = 7\nangle_degrees = 15\nresult = calculate_area_circle_sector(radius, angle_degrees)\nprint(result)\n\n# Direct approach\nprint(calculate_area_circle_sector(14, 25))",
 
@@ -23195,7 +23195,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1953,
             "title": "Problem 1953",
-            "description": "Write a Python function called `check_string_properties` that takes a string and returns a dictionary with boolean values for 'has_uppercase', 'has_lowercase', 'has_digit', 'has_special'.\nExamples:\n  check_string_properties('hello') → {'has_uppercase': False, 'has_lowercase': True, 'has_digit': False, 'has_special': False}\n  check_string_properties('world') → {'has_uppercase': False, 'has_lowercase': True, 'has_digit': False, 'has_special': False}\n  check_string_properties('python') → {'has_uppercase': False, 'has_lowercase': True, 'has_digit': False, 'has_special': False}",
+            "description": "Write a Python function called `check_string_properties` that takes a string and returns a dictionary with boolean values for 'has_uppercase', 'has_lowercase', 'has_digit', 'has_special'.\nExamples:\n  check_string_properties('hello') → [object Object]\n  check_string_properties('A1!') → [object Object]",
             "initialCode": "def check_string_properties(text):\n    pass",
             "solution": "# Using function approach\ndef check_string_properties(text):\n    return {\n        'has_uppercase': any(c.isupper() for c in text),\n        'has_lowercase': any(c.islower() for c in text),\n        'has_digit': any(c.isdigit() for c in text),\n        'has_special': any(not c.isalnum() and not c.isspace() for c in text)\n    }\nresult = check_string_properties('Hello123!')\nprint(result)  # Expected: {'has_uppercase': True, 'has_lowercase': True, 'has_digit': True, 'has_special': True}\n\n# Using built-in approach\ndef solve():\n    def check_string_properties(text):\n        return {\n            'has_uppercase': any(c.isupper() for c in text),\n            'has_lowercase': any(c.islower() for c in text),\n            'has_digit': any(c.isdigit() for c in text),\n            'has_special': any(not c.isalnum() and not c.isspace() for c in text)\n        }\n    result = check_string_properties('Hello123!')\n    print(result)  # Expected: {'has_uppercase': True, 'has_lowercase': True, 'has_digit': True, 'has_special': True}\n\n# Using manual approach\ndef solve():\n    def check_string_properties(text):\n        return {\n            'has_uppercase': any(c.isupper() for c in text),\n            'has_lowercase': any(c.islower() for c in text),\n            'has_digit': any(c.isdigit() for c in text),\n            'has_special': any(not c.isalnum() and not c.isspace() for c in text)\n        }\n    result = check_string_properties('Hello123!')\n    return result\n\n# Script approach\ntext = 'hello'\nresult = check_string_properties(text)\nprint(result)\n\n# Direct approach\nprint(check_string_properties('world'))",
 
@@ -23207,7 +23207,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1954,
             "title": "Problem 1954",
-            "description": "Write a Python function called `get_numbers_summing_to_range` that takes a list of numbers and a range (min_sum, max_sum), and returns pairs of numbers whose sum is in that range.\nExamples:\n  get_numbers_summing_to_range([1, 2, 3], [1, 2, 3], [1, 2, 3]) → ?\n  get_numbers_summing_to_range([5, 8, 2], [5, 8, 2], [5, 8, 2]) → ?\n  get_numbers_summing_to_range([3, 1, 4], [3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_numbers_summing_to_range` that takes a list of numbers and a range (min_sum, max_sum), and returns pairs of numbers whose sum is in that range.\nExamples:\n  get_numbers_summing_to_range([1, 2, 3, 4, 5], 5, 5) → [[1, 4], [2, 3]]\n  get_numbers_summing_to_range([1, 2, 3], 3, 4) → [[1, 2], [1, 3]]",
             "initialCode": "def get_numbers_summing_to_range(numbers, min_sum, max_sum):\n    pass",
             "solution": "# Using function approach\ndef get_numbers_summing_to_range(numbers, min_sum, max_sum):\n    pairs = []\n    for i in range(len(numbers)):\n        for j in range(i + 1, len(numbers)):\n            total = numbers[i] + numbers[j]\n            if min_sum <= total <= max_sum:\n                pairs.append((numbers[i], numbers[j]))\n    return pairs\nresult = get_numbers_summing_to_range([1, 2, 3, 4, 5], 5, 7)\nprint(result)  # Expected: [(1, 4), (1, 5), (2, 3), (2, 4), (2, 5), (3, 4)]\n\n# Using built-in approach\ndef get_numbers_summing_to_range(numbers, min_sum, max_sum):\n    result = pairs\n    return result\n\n# Using manual approach\ndef get_numbers_summing_to_range(numbers, min_sum, max_sum):\n    return pairs\n\n# Script approach\nnumbers = [3, 7, 2, 9, 1]\nmin_sum = 15\nmax_sum = 15\nresult = get_numbers_summing_to_range(numbers, min_sum, max_sum)\nprint(result)\n\n# Direct approach\nprint(get_numbers_summing_to_range([4, 1, 8, 6, 3], 25, 25))",
 
@@ -23255,7 +23255,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1958,
             "title": "Problem 1958",
-            "description": "Write a Python function called `calculate_lcm` that takes two numbers and returns their least common multiple.\nExamples:\n  calculate_lcm([1, 2, 3], [1, 2, 3]) → ?\n  calculate_lcm([5, 8, 2], [5, 8, 2]) → ?\n  calculate_lcm([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_lcm` that takes two numbers and returns their least common multiple.\nExamples:\n  calculate_lcm(12, 18) → 36\n  calculate_lcm(4, 6) → 12",
             "initialCode": "def calculate_lcm(a, b):\n    pass",
             "solution": "# Using function approach\ndef calculate_lcm(a, b):\n    def gcd(x, y):\n        while y:\n            x, y = y, x % y\n        return x\n    return abs(a * b) // gcd(a, b)\nresult = calculate_lcm(12, 18)\nprint(result)  # Expected: 36\n# Using inner function\n    # Inline version available\n\n# Using built-in approach\ndef calculate_lcm(a, b):\n    result = x\n    return result\n\n# Using manual approach\ndef calculate_lcm(a, b):\n    return x\n\n# Script approach\na = 10\nb = 20\nresult = calculate_lcm(a, b)\nprint(result)\n\n# Direct approach\nprint(calculate_lcm(20, 30))",
 
@@ -23291,7 +23291,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1961,
             "title": "Problem 1961",
-            "description": "Write a Python function called `get_words_with_same_length` that takes a list of strings and returns a dictionary where keys are lengths and values are lists of strings with that length.\nExamples:\n  get_words_with_same_length('hello') → {1: ['h', 'e', 'l', 'l', 'o']}\n  get_words_with_same_length('world') → {1: ['w', 'o', 'r', 'l', 'd']}\n  get_words_with_same_length('python') → {1: ['p', 'y', 't', 'h', 'o', 'n']}",
+            "description": "Write a Python function called `get_words_with_same_length` that takes a list of strings and returns a dictionary where keys are lengths and values are lists of strings with that length.\nExamples:\n  get_words_with_same_length(['a', 'ab', 'a', 'abc', 'ab']) → [object Object]\n  get_words_with_same_length(['hi', 'to', 'code']) → [object Object]",
             "initialCode": "def get_words_with_same_length(strings):\n    pass",
             "solution": "# Using function approach\ndef get_words_with_same_length(strings):\n    result = {}\n    for s in strings:\n        length = len(s)\n        if length not in result:\n            result[length] = []\n        result[length].append(s)\n    return result\nresult = get_words_with_same_length(['a', 'ab', 'abc', 'ab', 'abcd'])\nprint(result)  # Expected: {1: ['a'], 2: ['ab', 'ab'], 3: ['abc'], 4: ['abcd']}\n\n# Using built-in approach\ndef get_words_with_same_length(strings):\n    result = result\n    return result\n\n# Using manual approach\ndef get_words_with_same_length(strings):\n    return result\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_words_with_same_length(strings)\nprint(result)\n\n# Direct approach\nprint(get_words_with_same_length([4, 1, 8, 6, 3]))",
 
@@ -23435,7 +23435,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1973,
             "title": "Problem 1973",
-            "description": "Write a Python function called `calculate_total_area` that takes a list of shapes represented as tuples (shape_type, dimensions), and returns the total area. Shape types: 'rectangle' (length, width), 'circle' (radius).\nExamples:\n  calculate_total_area([1, 2, 3]) → ?\n  calculate_total_area([5, 8, 2]) → ?\n  calculate_total_area([3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_total_area` that takes a list of shapes represented as tuples (shape_type, dimensions), and returns the total area. Shape types: 'rectangle' (length, width), 'circle' (radius).\nExamples:\n  calculate_total_area([['rectangle', [5, 3]], ['circle', [2]]]) → 27.566370614359172\n  calculate_total_area([['rectangle', [2, 4]]]) → 8",
             "initialCode": "import math\ndef calculate_total_area(shapes):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef calculate_total_area(shapes):\n    total = 0\n    for shape_type, dimensions in shapes:\n        if shape_type == 'rectangle':\n            total += dimensions[0] * dimensions[1]\n        elif shape_type == 'circle':\n            total += math.pi * dimensions[0] ** 2\n    return total\nresult = calculate_total_area([('rectangle', (5, 3)), ('circle', (2,))])\nprint(round(result, 2))  # Expected: 27.57\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef calculate_total_area(shapes):\n    result = total\n    return result\n\n# Using manual approach\ndef calculate_total_area(shapes):\n    return total\n\n# Script approach\nshapes = 15\nresult = calculate_total_area(shapes)\nprint(result)\n\n# Direct approach\nprint(calculate_total_area(25))",
 
@@ -23447,7 +23447,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1974,
             "title": "Problem 1974",
-            "description": "Write a Python function called `get_words_with_repeated_chars` that takes a string and returns a list of words that contain at least one repeated character.\nExamples:\n  get_words_with_repeated_chars('hello') → ['hello']\n  get_words_with_repeated_chars('world') → []\n  get_words_with_repeated_chars('python') → []",
+            "description": "Write a Python function called `get_words_with_repeated_chars` that takes a string and returns a list of words that contain at least one repeated character.\nExamples:\n  get_words_with_repeated_chars('hello world aabb') → ['hello', 'aabb']\n  get_words_with_repeated_chars('cat moon sky') → ['moon']",
             "initialCode": "def get_words_with_repeated_chars(text):\n    pass",
             "solution": "# Using function approach\ndef get_words_with_repeated_chars(text):\n    words = text.split()\n    result = []\n    for word in words:\n        if len(word) != len(set(word)):\n            result.append(word)\n    return result\nresult = get_words_with_repeated_chars('hello world python programming')\nprint(result)  # Expected: ['hello', 'world', 'programming']\n\n# Using built-in approach\ndef get_words_with_repeated_chars(text):\n    return [word for word in words]\n\n# Using manual approach\ndef get_words_with_repeated_chars(text):\n    return list(map(lambda word: word, words))\n\n# Script approach\ntext = 'hello'\nresult = get_words_with_repeated_chars(text)\nprint(result)\n\n# Direct approach\nprint(get_words_with_repeated_chars('world'))",
 
@@ -23483,7 +23483,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1977,
             "title": "Problem 1977",
-            "description": "Write a Python function called `count_words_by_first_letter` that takes a string and returns a dictionary where keys are first letters and values are word counts.\nExamples:\n  count_words_by_first_letter('hello') → {'h': 1}\n  count_words_by_first_letter('world') → {'w': 1}\n  count_words_by_first_letter('python') → {'p': 1}",
+            "description": "Write a Python function called `count_words_by_first_letter` that takes a string and returns a dictionary where keys are first letters and values are word counts.\nExamples:\n  count_words_by_first_letter('apple banana apricot') → [object Object]\n  count_words_by_first_letter('apple apricot banana cherry') → [object Object]",
             "initialCode": "def count_words_by_first_letter(text):\n    pass",
             "solution": "# Using function approach\ndef count_words_by_first_letter(text):\n    words = text.split()\n    counts = {}\n    for word in words:\n        first_letter = word[0].lower()\n        counts[first_letter] = counts.get(first_letter, 0) + 1\n    return counts\nresult = count_words_by_first_letter('apple apricot banana cherry')\nprint(result)  # Expected: {'a': 2, 'b': 1, 'c': 1}\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef count_words_by_first_letter(text):\n    result = counts\n    return result\n\n# Using manual approach\ndef count_words_by_first_letter(text):\n    return counts\n\n# Script approach\ntext = 'hello'\nresult = count_words_by_first_letter(text)\nprint(result)\n\n# Direct approach\nprint(count_words_by_first_letter('world'))",
 
@@ -23507,7 +23507,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1979,
             "title": "Problem 1979",
-            "description": "Write a Python function called `get_elements_satisfying_all` that takes a list and multiple conditions (functions), and returns elements that satisfy all conditions.\nExamples:\n  get_elements_satisfying_all([1, 2, 3], [1, 2, 3]) → ?\n  get_elements_satisfying_all([5, 8, 2], [5, 8, 2]) → ?\n  get_elements_satisfying_all([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_elements_satisfying_all` that takes a list and multiple conditions (functions), and returns elements that satisfy all conditions.\nExamples:\n  get_elements_satisfying_all([1, 2, 3, 4, 5, 6]) → [3, 4, 5]\n  get_elements_satisfying_all([1, 2, 3, 4, 5, 6]) → [4, 6]",
             "initialCode": "def get_elements_satisfying_all(my_list, *conditions):\n    pass",
             "solution": "# Using function approach\ndef get_elements_satisfying_all(my_list, *conditions):\n    result = []\n    for item in my_list:\n        if all(cond(item) for cond in conditions):\n            result.append(item)\n    return result\nresult = get_elements_satisfying_all([1, 2, 3, 4, 5, 6], lambda x: x > 2, lambda x: x < 6)\nprint(result)  # Expected: [3, 4, 5]\n\n# Using built-in approach\ndef get_elements_satisfying_all(my_list, *conditions):\n    return [item for item in my_list]\n\n# Using manual approach\ndef get_elements_satisfying_all(my_list, *conditions):\n    return list(map(lambda item: item, my_list))\n\n# Script approach\nmy_list = [3, 7, 2, 9, 1]\n*conditions = 15\nresult = get_elements_satisfying_all(my_list, *conditions)\nprint(result)\n\n# Direct approach\nprint(get_elements_satisfying_all([4, 1, 8, 6, 3], 25))",
 
@@ -23531,7 +23531,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1981,
             "title": "Problem 1981",
-            "description": "Write a Python function called `get_strings_with_all_vowels` that takes a list of strings and returns strings that contain all five vowels (a, e, i, o, u).\nExamples:\n  get_strings_with_all_vowels('hello') → []\n  get_strings_with_all_vowels('world') → []\n  get_strings_with_all_vowels('python') → []",
+            "description": "Write a Python function called `get_strings_with_all_vowels` that takes a list of strings and returns strings that contain all five vowels (a, e, i, o, u).\nExamples:\n  get_strings_with_all_vowels(['education', 'hello', 'aerious']) → ['education', 'aerious']\n  get_strings_with_all_vowels(['education', 'hello', 'facetious']) → ['education', 'facetious']",
             "initialCode": "def get_strings_with_all_vowels(strings):\n    pass",
             "solution": "# Using function approach\ndef get_strings_with_all_vowels(strings):\n    vowels = set('aeiou')\n    result = []\n    for s in strings:\n        if vowels.issubset(set(s.lower())):\n            result.append(s)\n    return result\nresult = get_strings_with_all_vowels(['education', 'hello', 'facetious'])\nprint(result)  # Expected: ['education', 'facetious']\n# Using alternative loop\n    # Consider using while loop or list comprehension\n\n# Using built-in approach\ndef get_strings_with_all_vowels(strings):\n    return [s for s in strings]\n\n# Using manual approach\ndef get_strings_with_all_vowels(strings):\n    return list(map(lambda s: s, strings))\n\n# Script approach\nstrings = [3, 7, 2, 9, 1]\nresult = get_strings_with_all_vowels(strings)\nprint(result)\n\n# Direct approach\nprint(get_strings_with_all_vowels([4, 1, 8, 6, 3]))",
 
@@ -23579,7 +23579,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1985,
             "title": "Problem 1985",
-            "description": "Write a Python function called `get_words_sorted_by_vowels` that takes a string and returns a list of words sorted by the number of vowels they contain.\nExamples:\n  get_words_sorted_by_vowels('hello') → ['hello']\n  get_words_sorted_by_vowels('world') → ['world']\n  get_words_sorted_by_vowels('python') → ['python']",
+            "description": "Write a Python function called `get_words_sorted_by_vowels` that takes a string and returns a list of words sorted by the number of vowels they contain.\nExamples:\n  get_words_sorted_by_vowels('hello ai world') → ['world', 'hello', 'ai']\n  get_words_sorted_by_vowels('hello world python programming') → ['world', 'python', 'hello', 'programming']",
             "initialCode": "def get_words_sorted_by_vowels(text):\n    pass",
             "solution": "# Using function approach\ndef get_words_sorted_by_vowels(text):\n    vowels = 'aeiouAEIOU'\n    words = text.split()\n    return sorted(words, key=lambda w: sum(1 for c in w if c in vowels))\nresult = get_words_sorted_by_vowels('hello world python programming')\nprint(result)  # Expected: ['world', 'python', 'hello', 'programming']\n# Using for loop\n    result = []\n    for item in words:\n        result.append(item)\n    return sorted(result)\n\n# Direct approach\nprint(get_words_sorted_by_vowels())\n\n# Script approach\nvalues = []\nresult = get_words_sorted_by_vowels(values)\nprint(result)",
 
@@ -23627,7 +23627,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1989,
             "title": "Problem 1989",
-            "description": "Write a Python function called `format_list_items` that takes a list and returns a formatted string: 'Item 1: {item1}, Item 2: {item2}, ...'.\nExamples:\n  format_list_items('hello') → Item 1: h, Item 2: e, Item 3: l, Item 4: l, Item 5: o\n  format_list_items('world') → Item 1: w, Item 2: o, Item 3: r, Item 4: l, Item 5: d\n  format_list_items('python') → Item 1: p, Item 2: y, Item 3: t, Item 4: h, Item 5: o, Item 6: n",
+            "description": "Write a Python function called `format_list_items` that takes a list and returns a formatted string: 'Item 1: {item1}, Item 2: {item2}, ...'.\nExamples:\n  format_list_items([1, 2, 3, 4, 5]) → 'Item 1: 1, Item 2: 2, Item 3: 3, Item 4: 4, Item 5: 5'\n  format_list_items(['apple', 'banana', 'cherry']) → 'Item 1: apple, Item 2: banana, Item 3: cherry'",
             "initialCode": "def format_list_items(my_list):\n    pass",
             "solution": "# Using function approach\ndef format_list_items(my_list):\n    return ', '.join(f'Item {i+1}: {item}' for i, item in enumerate(my_list))\nresult = format_list_items(['apple', 'banana', 'cherry'])\nprint(result)  # Expected: Item 1: apple, Item 2: banana, Item 3: cherry\n# Using intermediate variable\n    _result = ', '.join(f'Item {i+1}: {item}' for i, item in enumerate(my_list))\n    return _result\n\n# Direct approach\nprint(format_list_items())\n\n# Script approach\nvalues = []\nresult = format_list_items(values)\nprint(result)",
 
@@ -23639,7 +23639,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1990,
             "title": "Problem 1990",
-            "description": "Write a Python function called `get_strings_with_pattern_count` that takes a list of strings and a pattern, and returns strings where the pattern appears exactly n times.\nExamples:\n  get_strings_with_pattern_count('hello', 'hello', 5) → []\n  get_strings_with_pattern_count('world', 'world', 3) → []\n  get_strings_with_pattern_count('python', 'python', 10) → []",
+            "description": "Write a Python function called `get_strings_with_pattern_count` that takes a list of strings and a pattern, and returns strings where the pattern appears exactly n times.\nExamples:\n  get_strings_with_pattern_count(['hello', 'lollipop', 'world'], 'l', 2) → ['hello']\n  get_strings_with_pattern_count(['aaa', 'aa', 'a'], 'a', 1) → ['a']",
             "initialCode": "def get_strings_with_pattern_count(strings, pattern, n):\n    pass",
             "solution": "# Using function approach\ndef get_strings_with_pattern_count(strings, pattern, n):\n    result = []\n    for s in strings:\n        if s.count(pattern) == n:\n            result.append(s)\n    return result\nresult = get_strings_with_pattern_count(['hello', 'lollipop', 'world'], 'l', 2)\nprint(result)  # Expected: ['hello']\n# Using inline return\n    return []\n\n# Direct approach\nprint(get_strings_with_pattern_count())\n\n# Script approach\nvalues = []\nresult = get_strings_with_pattern_count(values)\nprint(result)",
 
@@ -23675,7 +23675,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1993,
             "title": "Problem 1993",
-            "description": "Write a Python function called `format_table_data` that takes a list of tuples (name, value) and returns a formatted table string with aligned columns.\nExamples:\n  format_table_data('hello') → ?\n  format_table_data('world') → ?\n  format_table_data('python') → ?",
+            "description": "Write a Python function called `format_table_data` that takes a list of tuples (name, value) and returns a formatted table string with aligned columns.\nExamples:\n  format_table_data([['Alice', 85], ['Bob', 90], ['Charlie', 75]]) → 'Alice      | 85\nBob        | 90\nCharlie    | 75'\n  format_table_data([['Ann', 1], ['Bob', 22]]) → 'Ann        | 1\nBob        | 22'",
             "initialCode": "def format_table_data(data):\n    pass",
             "solution": "# Using function approach\ndef format_table_data(data):\n    lines = []\n    for name, value in data:\n        lines.append(f'{name:10s} | {value}')\n    return '\n'.join(lines)\nresult = format_table_data([('Alice', 85), ('Bob', 90), ('Charlie', 75)])\nprint(result)  # Expected: Alice      | 85\n# Bob        | 90\n# Charlie    | 75\n# Using return list\n    result = []\n    for item in ...:\n        result.append(item)\n    return result\n\n# Direct approach\nprint(format_table_data())\n\n# Script approach\nvalues = []\nresult = format_table_data(values)\nprint(result)",
 
@@ -23687,7 +23687,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1994,
             "title": "Problem 1994",
-            "description": "Write a Python function called `get_words_with_unique_chars` that takes a string and returns words where all characters are unique (no repeated characters).\nExamples:\n  get_words_with_unique_chars('hello') → []\n  get_words_with_unique_chars('world') → ['world']\n  get_words_with_unique_chars('python') → ['python']",
+            "description": "Write a Python function called `get_words_with_unique_chars` that takes a string and returns words where all characters are unique (no repeated characters).\nExamples:\n  get_words_with_unique_chars('hello world abc') → ['world', 'abc']\n  get_words_with_unique_chars('cat moon sky') → ['cat', 'sky']",
             "initialCode": "def get_words_with_unique_chars(text):\n    pass",
             "solution": "# Using function approach\ndef get_words_with_unique_chars(text):\n    words = text.split()\n    return [word for word in words if len(word) == len(set(word))]\nresult = get_words_with_unique_chars('hello world python')\nprint(result)  # Expected: ['world', 'python']\n# Using intermediate variable\n    _result = [word for word in words if len(word) == len(set(word))]\n    return _result\n\n# Direct approach\nprint(get_words_with_unique_chars())\n\n# Script approach\nvalues = []\nresult = get_words_with_unique_chars(values)\nprint(result)",
 
@@ -23699,7 +23699,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1995,
             "title": "Problem 1995",
-            "description": "Write a Python function called `calculate_total_with_multiple_discounts` that takes a price and a list of discount percentages, and returns the final price after applying all discounts sequentially.\nExamples:\n  calculate_total_with_multiple_discounts([1, 2, 3], [1, 2, 3]) → ?\n  calculate_total_with_multiple_discounts([5, 8, 2], [5, 8, 2]) → ?\n  calculate_total_with_multiple_discounts([3, 1, 4], [3, 1, 4]) → ?",
+            "description": "Write a Python function called `calculate_total_with_multiple_discounts` that takes a price and a list of discount percentages, and returns the final price after applying all discounts sequentially.\nExamples:\n  calculate_total_with_multiple_discounts(100, [10, 20]) → 72\n  calculate_total_with_multiple_discounts(200, [50, 10]) → 90",
             "initialCode": "def calculate_total_with_multiple_discounts(price, discounts):\n    pass",
             "solution": "# Using function approach\ndef calculate_total_with_multiple_discounts(price, discounts):\n    result = price\n    for discount in discounts:\n        result = result * (1 - discount / 100)\n    return result\nresult = calculate_total_with_multiple_discounts(100, [10, 20])\nprint(round(result, 2))  # Expected: 72.0\n# Using inline return\n    return result * (1 - discount / 100)\n\n# Direct approach\nprint(calculate_total_with_multiple_discounts())\n\n# Script approach\nvalues = []\nresult = calculate_total_with_multiple_discounts(values)\nprint(result)",
 
@@ -23711,7 +23711,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1996,
             "title": "Problem 1996",
-            "description": "Write a Python function called `format_multi_line_address` that takes name, street, city, state, zipcode, and returns a formatted multi-line address block.\nExamples:\n  format_multi_line_address('hello', 'hello', 3, '{1, 2, 3}', {'a':1,'b':2}) → 'hello\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}'\n  format_multi_line_address('Ada', '9 Elm', 'Austin', 'TX', '73301') → 'Ada\n9 Elm\nAustin, TX 73301'",
+            "description": "Write a Python function called `format_multi_line_address` that takes name, street, city, state, zipcode, and returns a formatted multi-line address block.\nExamples:\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}'\n9 Elm\nAustin, TX 73301'\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}'\n9 Elm\nAustin, TX 73301'\n  format_multi_line_address('hello', 'hello', 3, '{1, 2, 3}', {'a':1,'b':2}) → 'hello\nhello\n3, {1, 2, 3} {'a': 1, 'b': 2}'\n  format_multi_line_address('Ada', '9 Elm', 'Austin', 'TX', '73301') → 'Ada\n9 Elm\nAustin, TX 73301'",
             "initialCode": "def format_multi_line_address(name, street, city, state, zipcode):\n    pass",
             "solution": "# Using function approach\ndef format_multi_line_address(name, street, city, state, zipcode):\n    return f'{name}\n{street}\n{city}, {state} {zipcode}'\nresult = format_multi_line_address('John Doe', '123 Main St', 'New York', 'NY', '10001')\nprint(result)  # Expected: John Doe\n# 123 Main St\n# New York, NY 10001\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Direct approach\nprint(format_multi_line_address())\n\n# Script approach\nvalues = []\nresult = format_multi_line_address(values)\nprint(result)",
 
@@ -23747,7 +23747,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1999,
             "title": "Problem 1999",
-            "description": "Write a Python function called `format_contact_info` that takes name, phone, email, and address, and returns a formatted contact card as a multi-line string.\nExamples:\n  format_contact_info('hello', 5, 3, {'a':1,'b':2}) → 'Name: hello\nPhone: 5\nEmail: 3\nAddress: {'a': 1, 'b': 2}'\n  format_contact_info('Alice', '555-1234', 'alice@example.com', '123 Main St') → 'Name: Alice\nPhone: 555-1234\nEmail: alice@example.com\nAddress: 123 Main St'",
+            "description": "Write a Python function called `format_contact_info` that takes name, phone, email, and address, and returns a formatted contact card as a multi-line string.\nExamples:\nPhone: 5\nEmail: 3\nAddress: {'a': 1, 'b': 2}'\nPhone: 555-1234\nEmail: alice@example.com\nAddress: 123 Main St'\nPhone: 5\nEmail: 3\nAddress: {'a': 1, 'b': 2}'\nPhone: 555-1234\nEmail: alice@example.com\nAddress: 123 Main St'\n  format_contact_info('hello', 5, 3, {'a':1,'b':2}) → 'Name: hello\nPhone: 5\nEmail: 3\nAddress: {'a': 1, 'b': 2}'\n  format_contact_info('Alice', '555-1234', 'alice@example.com', '123 Main St') → 'Name: Alice\nPhone: 555-1234\nEmail: alice@example.com\nAddress: 123 Main St'",
             "initialCode": "def format_contact_info(name, phone, email, address):\n    pass",
             "solution": "# Using function approach\ndef format_contact_info(name, phone, email, address):\n    return f'Name: {name}\nPhone: {phone}\nEmail: {email}\nAddress: {address}'\nresult = format_contact_info('Alice', '555-1234', 'alice@example.com', '123 Main St')\nprint(result)  # Expected: Name: Alice\n# Phone: 555-1234\n# Email: alice@example.com\n# Address: 123 Main St\n# Using concatenation\n    return 'Name: ' + name + '\nPhone: ' + phone + '\nEmail: ' + email + '\nAddress: ' + address\n\n# Direct approach\nprint(format_contact_info())\n\n# Script approach\nvalues = []\nresult = format_contact_info(values)\nprint(result)",
 
@@ -23759,7 +23759,7 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 2000,
             "title": "Problem 2000",
-            "description": "Write a Python function called `get_comprehensive_statistics` that takes a list of numbers and returns a dictionary with sum, average, min, max, count, and standard deviation (using basic formula).\nExamples:\n  get_comprehensive_statistics([1, 2, 3]) → ?\n  get_comprehensive_statistics([5, 8, 2]) → ?\n  get_comprehensive_statistics([3, 1, 4]) → ?",
+            "description": "Write a Python function called `get_comprehensive_statistics` that takes a list of numbers and returns a dictionary with sum, average, min, max, count, and standard deviation (using basic formula).\nExamples:\n  get_comprehensive_statistics([1, 2, 3, 4, 5]) → [object Object]\n  get_comprehensive_statistics([10, 20, 30, 40, 50]) → [object Object]",
             "initialCode": "import math\ndef get_comprehensive_statistics(numbers):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef get_comprehensive_statistics(numbers):\n    n = len(numbers)\n    mean = sum(numbers) / n\n    variance = sum((x - mean) ** 2 for x in numbers) / n\n    std_dev = math.sqrt(variance)\n    return {\n        'sum': sum(numbers),\n        'average': mean,\n        'min': min(numbers),\n        'max': max(numbers),\n        'count': n,\n        'standard_deviation': std_dev\n    }\nresult = get_comprehensive_statistics([10, 20, 30, 40, 50])\nprint(result)  # Expected: {'sum': 150, 'average': 30.0, 'min': 10, 'max': 50, 'count': 5, 'standard_deviation': ~14.14}\n# Using for loop\n    # Alternative: compute statistics manually with for loops\n    n = len(numbers)\n    mean = sum(numbers) / n\n    variance = sum((x - mean) ** 2 for x in numbers) / n\n    std_dev = variance ** 0.5\n\n# Direct approach\nprint(get_comprehensive_statistics())\n\n# Script approach\nvalues = []\nresult = get_comprehensive_statistics(values)\nprint(result)",
 

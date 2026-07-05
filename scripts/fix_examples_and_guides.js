@@ -64,7 +64,12 @@ function examplesNeedFix(description) {
   const lines = description.split('\n');
   const exampleLines = lines.filter(l => /\u2192/.test(l) || /->/.test(l));
   if (exampleLines.length === 0) return true;
+  const lowerDescription = description.toLowerCase();
+  const expectsNumericData = /\b(integer|integers|number|numbers|numeric|float|floats)\b/.test(lowerDescription);
+  const expectsListData = /\blist\b/.test(lowerDescription);
+  const genericWordLiteral = /^['"]?(hello|world|python|test|example|sample)['"]?$/i;
   for (const line of exampleLines) {
+    if (/(?:\u2192|->)\s*\?/.test(line)) return true;
     const match = line.match(/\(([^)]+)\)/);
     if (!match) continue;
     const args = match[1].split(',').map(a => a.trim());
@@ -73,6 +78,9 @@ function examplesNeedFix(description) {
     if (uniqueArgs.size === 1 && args.length > 1) return true;
     // Single number where a list/collection is expected
     if (args.length === 1 && /^\d+$/.test(args[0])) return true;
+    if (args.some(arg => genericWordLiteral.test(arg))) return true;
+    if (expectsNumericData && args.some(arg => /^['"][A-Za-z_]+['"]$/.test(arg))) return true;
+    if (expectsListData && args.length === 1 && /^['"][^'"]*['"]$/.test(args[0])) return true;
     // Function name mismatch
     const fnMatch = line.match(/^  (\w+)\(/);
     if (fnMatch) {
@@ -131,6 +139,15 @@ function generateBreakdown(functionName, params, description) {
 
   if (/substring|slice.*(?:from|extract)/.test(desc)) {
     steps.push(`Use slicing: \`text[start:end]\` extracts characters from index \`start\` up to (not including) \`end\`.`);
+  } else if (/\bmap\(\)/.test(desc) && /string.*number|string.*integer|integers/.test(desc) && /list/.test(desc)) {
+    steps.push(`Use \`map(int, strings)\` to convert each numeric string into an integer without writing a manual loop.`);
+    steps.push(`Wrap the map object with \`list(...)\` so the function returns a real list of integers.`);
+  } else if (/\bmap\(\)/.test(desc) && /square/.test(desc) && /list/.test(desc)) {
+    steps.push(`Use \`map()\` with a helper or lambda that returns \`x ** 2\` for each number.`);
+    steps.push(`Wrap the map object with \`list(...)\` so the result is a list of squared numbers.`);
+  } else if (/\bmap\(\)/.test(desc) && /length/.test(desc) && /string/.test(desc)) {
+    steps.push(`Use \`map(len, strings)\` to apply \`len()\` to every string in the list.`);
+    steps.push(`Wrap the map object with \`list(...)\` so the result is a list of lengths.`);
   } else if (/replace.*char|substitute/.test(desc)) {
     steps.push(`Call \`text.replace(old\\_char, new\\_char)\` — returns a new string with all occurrences replaced.`);
   } else if (/remove.*char|delete.*char/.test(desc)) {
@@ -223,6 +240,12 @@ function generateHint(functionName, params, description) {
   if (/substring|slice/.test(desc) && /string|text/.test(desc)) {
     hints.push('Slicing with `text[start:end]` does NOT include the character at index `end`.');
     hints.push('Python slicing is forgiving: if `end` exceeds the string length, no error occurs.');
+  } else if (/\bmap\(\)/.test(desc) && /string.*number|string.*integer|integers/.test(desc) && /list/.test(desc)) {
+    hints.push('Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.');
+  } else if (/\bmap\(\)/.test(desc) && /square/.test(desc) && /list/.test(desc)) {
+    hints.push('With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.');
+  } else if (/\bmap\(\)/.test(desc) && /length/.test(desc) && /string/.test(desc)) {
+    hints.push('Use `list(map(len, strings))` to get one length for each string.');
   } else if (/replace.*char(?:acter)?/.test(desc)) {
     hints.push('`.replace()` returns a NEW string — it does NOT modify the original.');
     hints.push('Only exact character matches are replaced; case matters.');

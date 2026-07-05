@@ -9941,6 +9941,7 @@ const App: React.FC = () => {
     const offlineAiBusy = offlineAiState.status === 'downloading' || offlineAiState.status === 'removing';
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
+    const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
     const [logExpanded, setLogExpanded] = useState(false);
     const [showBreakdownFor, setShowBreakdownFor] = useState<number | null>(null);
@@ -10126,6 +10127,7 @@ const App: React.FC = () => {
     const stdinValuesRef = useRef<string[]>([]);
     const keyboardHapticsRef = useRef(keyboardHaptics);
     const keyboardSoundRef = useRef(keyboardSound);
+    const resultSoundRef = useRef(resultSound);
     const keyboardAudioRef = useRef<AudioContext | null>(null);
     const lastKeyboardFeedbackRef = useRef(0);
     const keyboardMainScrollRef = useRef<number | null>(null);
@@ -10188,6 +10190,11 @@ const App: React.FC = () => {
     }, [keyboardSound]);
 
     useEffect(() => {
+        resultSoundRef.current = resultSound;
+        localStorage.setItem('python_result_sound', String(resultSound));
+    }, [resultSound]);
+
+    useEffect(() => {
         localStorage.setItem('python_plain_mode', String(plainMode));
     }, [plainMode]);
 
@@ -10224,6 +10231,40 @@ const App: React.FC = () => {
             oscillator.stop(audio.currentTime + 0.04);
         } catch {
             // Audio feedback is optional and may be blocked by the browser.
+        }
+    }, []);
+
+    const playResultFeedback = useCallback((kind: 'win' | 'fail') => {
+        if (!resultSoundRef.current) return;
+        try {
+            const AudioCtor = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioCtor) return;
+            const audio = keyboardAudioRef.current ?? new AudioCtor();
+            keyboardAudioRef.current = audio;
+            if (audio.state === 'suspended') audio.resume();
+
+            const notes = kind === 'win'
+                ? [523.25, 659.25, 783.99, 1046.5]
+                : [392, 329.63, 261.63];
+            const spacing = kind === 'win' ? 0.055 : 0.075;
+            const duration = kind === 'win' ? 0.09 : 0.12;
+            const peak = kind === 'win' ? 0.055 : 0.04;
+            notes.forEach((frequency, index) => {
+                const start = audio.currentTime + index * spacing;
+                const oscillator = audio.createOscillator();
+                const gain = audio.createGain();
+                oscillator.type = kind === 'win' ? 'triangle' : 'sine';
+                oscillator.frequency.setValueAtTime(frequency, start);
+                gain.gain.setValueAtTime(0.0001, start);
+                gain.gain.exponentialRampToValueAtTime(peak, start + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+                oscillator.connect(gain);
+                gain.connect(audio.destination);
+                oscillator.start(start);
+                oscillator.stop(start + duration + 0.015);
+            });
+        } catch {
+            // Result audio is optional and may be blocked until the browser allows sound.
         }
     }, []);
 
@@ -10750,6 +10791,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 if (gradeResult.passed) {
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
+                    playResultFeedback('win');
                     setPendingNextProblem(true);
                     setOutput(`${displayOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
@@ -10760,10 +10802,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     if (aiFallback.autoWinReview) {
                         updateCurrentModeStats('success');
                         setOutputStatus('win');
+                        playResultFeedback('win');
                         setOutput(`${displayOutput}AI AUTO WIN\nDeterministic grader failed, but ${getAiReviewSourceLabel(aiFallback.autoWinReview.source)} judged this answer logically correct with ${Math.round(aiFallback.autoWinReview.confidence * 100)}% confidence.\n\nOriginal grader message:\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                     } else {
                         updateCurrentModeStats('failed');
                         setOutputStatus('fail');
+                        playResultFeedback('fail');
                         const review = aiFallback.review;
                         const reviewNote = review
                             ? review.source === 'diagnostic'
@@ -10795,6 +10839,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             setStdinValues([]);
             if (plainMode) {
                 setOutputStatus('fail');
+                playResultFeedback('fail');
                 setOutput(`${stdout || ''}\n${errorMessage}`);
             } else if (autoGrader) {
                 updateCurrentModeStats('failed');
@@ -10814,10 +10859,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setLatestAiReviewResult(diagnosticReview);
                 setAiHintText(formatAiReviewHintText(diagnosticReview));
                 setOutputStatus('fail');
+                playResultFeedback('fail');
                 setPendingNextProblem(true);
                 setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI REVIEW\n${diagnosticReview.explanation}${diagnosticReview.suggestedFix ? `\n\nSuggested fix:\n${diagnosticReview.suggestedFix}` : ''}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
             } else {
                 setOutputStatus('fail');
+                playResultFeedback('fail');
                 setOutput(`${userOutput}${errorMessage}`);
             }
         } finally {
@@ -10875,11 +10922,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     const handleMarkSuccess = () => {
         updateCurrentModeStats('success');
+        playResultFeedback('win');
         loadRandomExercise();
     };
 
     const handleMarkFailed = () => {
         updateCurrentModeStats('failed');
+        playResultFeedback('fail');
         loadRandomExercise();
     };
 
@@ -12361,6 +12410,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             </span>
                                             <span className="block text-xs font-bold">Sound</span>
                                             <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setResultSound(prev => !prev)}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={resultSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Zap size={15} style={{ color: resultSound ? countRowColors.wins : '#6b7280' }} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{resultSound ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Result</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Cute win/fail sounds after grading.</span>
                                         </button>
                                     </div>
                                 </div>

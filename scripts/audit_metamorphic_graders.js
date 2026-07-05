@@ -153,10 +153,12 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('get_odd_range') && [left, right].every(Number.isInteger)) return 'odd_range';
     if (names.has('add_lists') && Array.isArray(left) && Array.isArray(right)) return 'add_lists';
     if (names.has('filter_by_length') && Array.isArray(left) && Number.isInteger(right)) return 'filter_by_min_length';
+    if (names.has('filter_long_words') && Array.isArray(left) && Number.isInteger(right)) return 'filter_by_min_length';
     if (names.has('calculate_lcm') && [left, right].every(Number.isInteger)) return 'calculate_lcm';
     if (names.has('calculate_weighted_average') && Array.isArray(left) && Array.isArray(right)) return 'weighted_average';
     if (names.has('get_pairs_summing_to') && Array.isArray(left) && typeof right === 'number') return 'pairs_summing_to';
     if (names.has('get_words_with_vowel_count') && typeof left === 'string' && Number.isInteger(right)) return 'words_with_vowel_count';
+    if (names.has('merge_dicts') && [left, right].every(value => value && typeof value === 'object' && !Array.isArray(value))) return 'merge_dicts';
     if (names.has('main') && Array.isArray(left) && Number.isInteger(right)) return 'sort_by_remainder';
     return null;
   }
@@ -174,6 +176,7 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('get_sublist_sum') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(Number.isInteger)) return 'sublist_sum';
     if (names.has('get_numbers_summing_to_range') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(value => typeof value === 'number')) return 'pairs_sum_range';
     if (names.has('get_elements_by_frequency_range') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(Number.isInteger)) return 'elements_by_frequency_range';
+    if (names.has('get_elements_matching_multiple_patterns') && Array.isArray(firstArgs[0]) && firstArgs.slice(1).every(value => typeof value === 'string')) return 'strings_matching_multiple_patterns';
     return null;
   }
   if (firstArgs.length !== 1) return null;
@@ -212,6 +215,8 @@ function metamorphicRule(functionNames, tests) {
     if (names.has('reverse_strings')) return 'reverse_strings';
     if (names.has('strip_whitespace')) return 'strip_whitespace';
     if (names.has('number_and_square')) return 'number_and_square';
+    if (names.has('to_title_case')) return 'capitalize_words_list';
+    if (names.has('lst_emails')) return 'email_domains';
     if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && [...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_case_insensitive';
     if (['remove_duplicates', 'remove_duplicate'].some(name => names.has(name)) && ![...names].some(name => name.includes('case_insensitive'))) return 'remove_duplicates_list';
     if (names.has('has_duplicates')) return 'has_duplicates';
@@ -428,6 +433,9 @@ function metamorphicRule(functionNames, tests) {
   if (['people_age', 'sort_people_by_age'].some(name => names.has(name)) && Array.isArray(sample)) return 'sort_people_by_age';
   if (names.has('sort_by_binary_representation') && Array.isArray(sample)) return 'sort_by_binary_representation';
   if (names.has('sort_keys_by_value') && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_by_value';
+  if (names.has('get_keys') && sample && typeof sample === 'object' && !Array.isArray(sample)) return Array.isArray(firstExpected) && firstExpected.every(value => Object.prototype.hasOwnProperty.call(sample, value))
+    ? 'dict_keys'
+    : 'dict_values';
   if (['name_age', 'sports_by_popularity'].some(name => names.has(name)) && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_by_value';
   if (['sorted_students_grades', 'movies', 'sorted_movie_titles'].some(name => names.has(name)) && sample && typeof sample === 'object' && !Array.isArray(sample)) return 'sort_keys_alphabetically';
   if (names.has('students_grades') && sample && typeof sample === 'object' && !Array.isArray(sample) && typeof firstExpected === 'string') return 'print_keys_alphabetically';
@@ -559,6 +567,7 @@ function namedMetamorphicRule(functionNames, tests) {
   if (hasAll('main', 'get_even_numbers')) return 'helper_get_even_numbers';
   if (hasAll('main', 'sort_values', 'sort_key')) return 'helper_sort_values';
   if (hasAll('main', 'square_odd_number_generator')) return 'helper_square_odd_generator';
+  if (hasAll('main', 'does_key_exist')) return 'helper_key_exists';
   return null;
 }
 
@@ -618,7 +627,8 @@ function isGuardedObjectCommon(grader) {
   const tests = Array.isArray(grader.tests) ? grader.tests : [];
   return (
     (grader.requiredClassInheritance?.length || 0) > 0 ||
-    tests.some(testCase => Array.isArray(testCase?.getAttrs) && testCase.getAttrs.length > 0)
+    tests.some(testCase => Array.isArray(testCase?.getAttrs) && testCase.getAttrs.length > 0) ||
+    (grader.functionNames || []).some(name => /^[A-Z]/.test(name)) && tests.some(testCase => Boolean(testCase?.callMethod))
   );
 }
 
