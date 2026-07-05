@@ -330,6 +330,20 @@ const getUserRank = (statsByMode: StatsByMode): Rank => {
     return currentRank;
 };
 
+const getModeRank = (stats: Stats): Rank => {
+    const winRate = stats.shots > 0 ? (stats.success / stats.shots) * 100 : 0;
+    const score = stats.shots * (winRate / 100);
+    let currentRank = RANKS[0];
+    for (const rank of RANKS) {
+        if (score >= rank.minScore) {
+            currentRank = rank;
+        } else {
+            break;
+        }
+    }
+    return currentRank;
+};
+
 const getSavedDifficultyMode = (): DifficultyMode => {
     const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
     return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
@@ -9903,6 +9917,7 @@ const App: React.FC = () => {
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
     const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize'>('none');
+    const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
@@ -11266,8 +11281,31 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             >
                 <div className="flex items-center justify-center mb-3">
                     <div
-                        className="flex gap-3 sm:gap-5 items-center px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight"
+                        className="flex gap-3 sm:gap-5 items-center px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight select-none"
                         style={{ pointerEvents: 'auto', backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
+                        onPointerDown={() => {
+                            countRowLongPressRef.current = setTimeout(() => {
+                                setShowModal('settings');
+                            }, 500);
+                        }}
+                        onPointerUp={() => {
+                            if (countRowLongPressRef.current) {
+                                clearTimeout(countRowLongPressRef.current);
+                                countRowLongPressRef.current = null;
+                            }
+                        }}
+                        onPointerCancel={() => {
+                            if (countRowLongPressRef.current) {
+                                clearTimeout(countRowLongPressRef.current);
+                                countRowLongPressRef.current = null;
+                            }
+                        }}
+                        onPointerLeave={() => {
+                            if (countRowLongPressRef.current) {
+                                clearTimeout(countRowLongPressRef.current);
+                                countRowLongPressRef.current = null;
+                            }
+                        }}
                     >
                         <button onClick={() => setShowModal('api_key')} className="transition-all p-1.5 rounded-full border" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="API key settings"><Key size={14} /></button>
                         <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
@@ -12372,23 +12410,34 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
-                                    <div className="grid grid-cols-[1fr_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
+                                    <div className="grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
                                         <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Shots</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
                                         <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
                                         <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
                                         <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
                                         {DIFFICULTY_MODES.map(mode => {
                                             const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
                                             const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
+                                            const modeRank = getModeRank(modeStats);
                                             return [
                                                 <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.12em] text-gray-200 truncate">{mode.label}</span>,
                                                 <span key={`${mode.id}-shots`} className="font-mono text-right">{modeStats.shots}</span>,
                                                 <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{modeStats.success}</span>,
                                                 <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{modeStats.failed}</span>,
                                                 <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: modeStats.shots > 0 ? countRowColors.rate : 'inherit' }}>{modeRate}%</span>,
+                                                <span key={`${mode.id}-rank`} className="font-mono text-right" title={modeRank.name}>{modeRank.icon}</span>,
                                             ];
                                         })}
+                                    </div>
+                                    <div className="mt-3 border-t border-[#1d2d44] pt-2 grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
+                                        <div className="font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
+                                        <div className="font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
+                                        <div className="font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
+                                        <div className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
+                                        <div className="font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
+                                        <div className="font-mono text-right" title={userRank.name}>{userRank.icon}</div>
                                     </div>
                                 </div>
 
