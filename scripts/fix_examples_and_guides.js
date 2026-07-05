@@ -174,13 +174,45 @@ function generateBreakdown(functionName, params, description) {
     steps.push(`Call \`sorted()\` on the input to get a new sorted list.`);
   } else if (/set|union|intersection|difference/.test(desc)) {
     steps.push(`Convert lists to sets with \`set()\`, perform operations, convert back if needed.`);
+  } else if (/\b(?:count|number of)\s+vowel|vowel\s+count/.test(desc)) {
+    steps.push(`Iterate through each character and check if it is a vowel (\`aeiou\`) using \`in\` operator.`);
+    steps.push(`Use a counter variable or \`sum()\` with a generator expression.`);
+  } else if (/\b(?:count|number of)\s+word|word\s+count/.test(desc)) {
+    steps.push(`Use \`.split()\` to break the string into words, then call \`len()\` on the resulting list.`);
+  } else if (/\b(?:count|occurrence|frequency|appear)\b/.test(desc)) {
+    steps.push(`Use \`.count()\` on the sequence to count how many times each element appears.`);
+    steps.push(`Or use a \`collections.Counter\` object to count all elements at once.`);
+  } else if (/double|twice|each.*\b(?:2|two)\b/.test(desc)) {
+    steps.push(`Use a list comprehension: \`[x * 2 for x in input_list]\` to double each element.`);
+  } else if (/square\s+root|sqrt/.test(desc)) {
+    steps.push(`Use \`math.sqrt()\` to compute the square root of a number.`);
+  } else if (/random|randint|choice|shuffle/.test(desc)) {
+    steps.push(`Import \`random\` and use \`random.randint()\`, \`random.choice()\`, or \`random.shuffle()\` as needed.`);
+  } else if (/\barea\b|perimeter|circumference/.test(desc)) {
+    steps.push(`Apply the appropriate geometric formula using the input dimensions.`);
   } else if (/dictionary|dict/.test(desc)) {
     steps.push(`Iterate with \`.items()\` to access both keys and values when building the result.`);
+  } else if (/class\s/.test(desc) || /inherit/.test(desc)) {
+    steps.push(`Define a parent class with base behavior, then create child classes that extend or override methods.`);
+  } else if (/generator|yield/.test(desc)) {
+    steps.push(`Use \`yield\` instead of \`return\` to produce values lazily one at a time as the generator is iterated.`);
+  } else if (/kwargs|keyword.*arg/.test(desc)) {
+    steps.push(`Access the keyword arguments dictionary with \`.items()\` and iterate to process each key-value pair.`);
+  } else if (/args|positional.*arg|unpack/.test(desc)) {
+    steps.push(`Use \`*args\` to accept variable positional arguments as a tuple, then iterate over them.`);
+  } else if (/file.*(?:read|write|open|creat|exist)/.test(desc)) {
+    steps.push(`Use \`open()\` with the appropriate mode (\`'r'\` for read, \`'w'\` for write) inside a \`with\` statement for automatic closing.`);
+  } else if (/thread|parallel|concurrent/.test(desc)) {
+    steps.push(`Import the \`threading\` module, create \`Thread\` objects, start them, and join to wait for completion.`);
+  } else if (/except|error|raise|try/.test(desc)) {
+    steps.push(`Wrap the risky operation in a \`try\` block and catch specific exceptions with \`except\` handlers.`);
+  } else if (/regex|regular expression|re\./.test(desc)) {
+    steps.push(`Use \`re.match()\` or \`re.search()\` with a pattern to test or extract portions of the input.`);
   } else {
-    steps.push(`Apply the operation described in the prompt to the input parameter(s).`);
+    steps.push(`Perform the required operation on the input parameter(s) as described in the prompt.`);
   }
 
-  steps.push(`Return the result.`);
+  steps.push(`Return the result using \`return\`.`);
   return steps;
 }
 
@@ -226,6 +258,29 @@ function generateHint(functionName, params, description) {
     hints.push('`.upper()` converts all characters to uppercase.');
   } else if (/lower(?:case)?/.test(desc)) {
     hints.push('`.lower()` converts all characters to lowercase.');
+  } else if (/inherit|class\s/.test(desc)) {
+    hints.push('A child class inherits all methods from its parent — only override what needs different behavior.');
+    hints.push('Use `super().__init__()` in the child to call the parent constructor.');
+  } else if (/generator|yield/.test(desc)) {
+    hints.push('Generators use `yield` to produce values and `next()` or a `for` loop to consume them.');
+    hints.push('A generator function returns a generator object (lazy iterator), not the values themselves.');
+  } else if (/kwargs/.test(desc)) {
+    hints.push('`**kwargs` collects extra keyword arguments into a dictionary inside the function.');
+    hints.push('Use `kwargs.items()` to iterate over the collected key-value pairs.');
+  } else if (/args/.test(desc)) {
+    hints.push('`*args` collects extra positional arguments into a tuple.');
+  } else if (/random/.test(desc)) {
+    hints.push('`random.randint(a, b)` returns a random integer between a and b inclusive.');
+    hints.push('`random.choice(seq)` picks a random element from a sequence.');
+  } else if (/sqrt|square\s+root/.test(desc)) {
+    hints.push('`math.sqrt(x)` returns the square root as a float.');
+    hints.push('For integer square roots, use `int(math.sqrt(x))`.');
+  } else if (/vowel/.test(desc)) {
+    hints.push('Check if each character is in the set `"aeiouAEIOU"` using the `in` operator.');
+  } else if (/double/.test(desc) && !/double.*sort|double.*list/.test(desc)) {
+    hints.push('A list comprehension `[x * 2 for x in lst]` doubles each element cleanly.');
+  } else if (/file/.test(desc)) {
+    hints.push('Always use `with open(...) as f:` to ensure files are properly closed after reading/writing.');
   } else {
     hints.push('Carefully identify what the problem asks for: input type, output type, and the operation.');
   }
@@ -257,10 +312,12 @@ let hintFixCount = 0;
 
 for (const ex of EXERCISES) {
   const grader = AUTO_GRADERS[ex.id];
-  const signature = ex.initialCode ? ex.initialCode.split('\n')[0] : '';
-  const fnMatch = signature.match(/def\s+(\w+)\s*\(([^)]*)\)/);
-  const classMatch = !fnMatch ? signature.match(/class\s+(\w+)/) : null;
-  const isScriptMode = !fnMatch && !classMatch && (signature.startsWith('#') || !signature.trim());
+  const allCode = ex.initialCode || '';
+  // Search all lines for function/class definitions
+  const fnMatch = allCode.match(/def\s+(\w+)\s*\(([^)]*)\)/);
+  const classMatch = !fnMatch ? allCode.match(/class\s+(\w+)/) : null;
+  // Script mode: no func/class definition anywhere in initialCode
+  const isScriptMode = !fnMatch && !classMatch && allCode.trim().length > 0;
   
   if (!fnMatch && !classMatch && !isScriptMode) continue;
 
@@ -325,7 +382,10 @@ for (const ex of EXERCISES) {
   // ── Fix generic breakdown ──
   const hasGoodBreakdown = ex.breakdown && ex.breakdown.trim().length > 0
     && !ex.breakdown.includes('What is')
-    && !ex.breakdown.includes('A **');
+    && !ex.breakdown.includes('A **')
+    && !ex.breakdown.includes('Apply the operation')
+    && !ex.breakdown.includes('Perform the required operation');
+
   if (!hasGoodBreakdown) {
     const steps = generateBreakdown(functionName, params, description);
     if (steps.length) {
@@ -340,7 +400,7 @@ for (const ex of EXERCISES) {
   }
 
   // ── Fix generic hint ──
-  if (!ex.hint || /check the description for requirements/i.test(ex.hint.trim())) {
+  if (!ex.hint || /check the description for requirements/i.test(ex.hint.trim()) || /Carefully identify what the problem asks for/.test(ex.hint)) {
     const hints = generateHint(functionName, params, description);
     if (hints.length) {
       const hintStr = hints.join('\n');
