@@ -10975,18 +10975,36 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         }, 240);
     };
 
+    const panelAlpha = panelColors.alpha / 100;
+    const panelBackground = hexToRgba(panelColors.background, panelAlpha);
+    const panelBorder = hexToRgba(panelColors.border, 0.55);
+    const panelBorderSoft = hexToRgba(panelColors.border, 0.35);
+    const effectiveEditorColors = useMemo<EditorColorSettings>(() => ({
+        ...editorColors,
+        appBackground: panelColors.background,
+        problemBackground: panelColors.background,
+        problemBorder: panelColors.border,
+        panelBackground: panelColors.background,
+        panelBorder: panelColors.border,
+        tabBackground: panelColors.background,
+        activeTabBackground: editorColors.activeTabBackground,
+        outputBackground: panelColors.background,
+        background: panelColors.background,
+        gutterBackground: panelColors.background,
+    }), [editorColors, panelColors.background, panelColors.border]);
+
     const editorExtensions = useMemo(() => [
         python(),
         indentUnit.of("    "),
         holdBackspaceExtension,
         autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
         EditorView.lineWrapping,
-        ...createCustomPythonTheme(editorColors, hexToRgba(panelColors.background, panelColors.alpha / 100))
-    ], [pythonCompletionSource, editorColors, panelColors]);
+        ...createCustomPythonTheme(effectiveEditorColors)
+    ], [pythonCompletionSource, effectiveEditorColors]);
 
     if (bootStage !== 'launched') {
         return (
-            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500" style={{ backgroundColor: editorColors.appBackground }}>
+            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500" style={{ backgroundColor: panelColors.background }}>
                 <div className="relative mb-8 flex-shrink-0">
                     <div className="absolute inset-0 bg-[#3b82f6]/20 blur-3xl rounded-full animate-pulse"></div>
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" className={`w-20 h-20 relative z-10 ${bootStage === 'loading' ? 'animate-bounce' : 'scale-110'}`} alt="Python" />
@@ -11029,14 +11047,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     return (
         <div
             className="h-screen text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
-            style={{ backgroundColor: editorColors.appBackground }}
+            style={{ backgroundColor: panelColors.background }}
         >
             <div
                 ref={headerRef}
                 className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2"
                 style={{
                     top: 0,
-                    backgroundColor: hexToRgba(editorColors.appBackground, 0.18),
+                    backgroundColor: hexToRgba(panelColors.background, 0.18),
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                     paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
@@ -11203,10 +11221,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             height: '190px',
                             display: 'flex',
                             flexDirection: 'column',
-                            backgroundColor: hexToRgba(editorColors.problemBackground, panelColors.alpha / 100),
+                            backgroundColor: panelBackground,
                             backdropFilter: 'blur(8px)',
                             WebkitBackdropFilter: 'blur(8px)',
-                            border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.55)}`,
+                            border: `1px solid ${panelBorder}`,
                             borderRadius: '0.75rem',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                         }}
@@ -11214,15 +11232,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
                             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>Problem {exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.45)}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
+                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
                                 </button>
-                                <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Problem guide and hints" style={{ backgroundColor: showBreakdownFor === exercise.id ? hexToRgba(countRowColors.rate, 0.15) : 'transparent', border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.45)}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.rate, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Problem guide and hints" style={{ backgroundColor: showBreakdownFor === exercise.id ? hexToRgba(countRowColors.rate, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.rate, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
                                     <Lightbulb size={14} fill={showBreakdownFor === exercise.id ? 'currentColor' : 'none'} />
                                     <span>Guide</span>
                                 </button>
-                                <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: `1px solid ${hexToRgba(editorColors.problemBorder, 0.45)}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
+                                <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
                                     <span>Next</span>
                                 </button>
@@ -11289,10 +11307,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         className="flex items-center justify-between rounded-xl border p-2 shadow-2xl shadow-black/40"
                     style={{
                         pointerEvents: 'auto',
-                        backgroundColor: hexToRgba(editorColors.panelBackground, 0.78),
+                        backgroundColor: panelBackground,
                         backdropFilter: 'blur(8px)',
                         WebkitBackdropFilter: 'blur(8px)',
-                        borderColor: hexToRgba(editorColors.panelBorder, 0.65)
+                        borderColor: panelBorder
                     }}
                 >
                     <div className="flex items-center gap-2 overflow-hidden">
@@ -11339,7 +11357,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                     data-editor-panel
                     className="mb-28 rounded-xl flex flex-col shadow-2xl border overflow-hidden"
-                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: editorColors.panelBackground, borderColor: editorColors.panelBorder }}
+                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: panelColors.background, borderColor: panelColors.border }}
                 >
                     <div
                         className="hidden"
@@ -11362,7 +11380,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                     <div
                         className="flex border-b overflow-x-auto no-scrollbar"
-                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: editorColors.tabBackground, borderColor: editorColors.panelBorder }}
+                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: panelColors.background, borderColor: panelColors.border }}
                     >
                         {files.map((f, idx) => (
                             <button
@@ -11370,9 +11388,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 onClick={() => setActiveFileIndex(idx)}
                                 className="px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r whitespace-nowrap"
                                 style={{
-                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : editorColors.tabBackground,
-                                    borderColor: editorColors.panelBorder,
-                                    borderBottom: activeFileIndex === idx ? `2px solid ${countRowColors.count}` : `1px solid ${editorColors.panelBorder}`,
+                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : panelColors.background,
+                                    borderColor: panelColors.border,
+                                    borderBottom: activeFileIndex === idx ? `2px solid ${countRowColors.count}` : `1px solid ${panelColors.border}`,
                                     color: activeFileIndex === idx ? countRowColors.count : editorColors.gutterText,
                                 }}
                             >
@@ -11383,7 +11401,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         ref={editorShellRef}
                         className="flex-grow relative border-b"
-                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, backgroundColor: editorColors.background, borderColor: editorColors.panelBorder }}
+                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, backgroundColor: panelColors.background, borderColor: panelColors.border }}
                     >
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
@@ -11435,8 +11453,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </>
                         )}
                     </div>
-                    <div className="flex-shrink-0" style={{ backgroundColor: editorColors.panelBackground }}>
-                        <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: editorColors.panelBorder }}>
+                    <div className="flex-shrink-0" style={{ backgroundColor: panelColors.background }}>
+                        <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: panelColors.border }}>
                             <span className="text-xs font-bold uppercase tracking-wider" style={{ color: editorColors.gutterText }}>Output</span>
                             <button
                                 onClick={toggleOutputHeight}
@@ -11468,7 +11486,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         ? 'rgba(64, 15, 20, 0.45)'
                                         : outputStatus === 'running'
                                             ? 'rgba(30, 41, 59, 0.45)'
-                                            : hexToRgba(editorColors.outputBackground, 0.78),
+                                            : hexToRgba(panelColors.background, 0.78),
                                 boxShadow: outputStatus === 'win'
                                     ? '0 0 22px rgba(34, 197, 94, 0.18)'
                                     : outputStatus === 'fail'
@@ -11533,13 +11551,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </div>
                             )}
                         </div>
-                        <div className="h-2 flex-shrink-0 border-t" style={{ backgroundColor: editorColors.panelBorder, borderColor: editorColors.panelBorder }} />
+                        <div className="h-2 flex-shrink-0 border-t" style={{ backgroundColor: panelColors.border, borderColor: panelColors.border }} />
                     </div>
                 </div>
             </div>
 
             {/* Fixed footer - centered version button */}
-            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 bg-[#040b16] border-t border-[#1d2d44] py-2 px-4" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+            <div
+                className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 border-t py-2 px-4"
+                style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))', backgroundColor: panelColors.background, borderColor: panelBorderSoft }}
+            >
                 <div className="relative flex items-center justify-center">
                      <button onClick={() => window.location.reload()} className="flex items-center gap-2 text-gray-400 hover:brightness-125 transition-all px-3 py-2 rounded-full border border-[#1d2d44] bg-[#0a1628]" title="Reload app" style={{ color: countRowColors.icon }}
                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); e.currentTarget.style.color = countRowColors.count; }}
@@ -11556,7 +11577,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                     className="fixed inset-0 backdrop-blur-md flex items-center justify-center p-4 z-[120] animate-in fade-in duration-200"
                     style={{
-                        backgroundColor: hexToRgba(editorColors.appBackground, 0.82),
+                        backgroundColor: hexToRgba(panelColors.background, 0.82),
                         paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 1rem))',
                         paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 1rem))',
                         paddingLeft: 'max(1rem, calc(env(safe-area-inset-left) + 1rem))',
@@ -11566,8 +11587,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
                         style={{
-                            backgroundColor: hexToRgba(editorColors.panelBackground, showModal === 'settings' || showModal === 'customize' ? 0.82 : 0.96),
-                            borderColor: editorColors.panelBorder,
+                            backgroundColor: hexToRgba(panelColors.background, showModal === 'settings' || showModal === 'customize' ? 0.82 : 0.96),
+                            borderColor: panelColors.border,
                             backdropFilter: 'blur(18px)',
                             WebkitBackdropFilter: 'blur(18px)',
                             height: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
@@ -11843,47 +11864,38 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         <div className="space-y-4">
                                             <div
                                                 className="rounded-2xl border p-3"
-                                                style={{ backgroundColor: editorColors.problemBackground, borderColor: editorColors.problemBorder }}
+                                                style={{ backgroundColor: panelBackground, borderColor: panelBorder }}
                                             >
                                                 <div className="mb-2 flex items-center justify-between">
                                                     <div className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: editorColors.gutterText }}>Problem Panel Preview</div>
-                                                    <span className="rounded-lg border px-2 py-1 text-[10px] font-black" style={{ borderColor: hexToRgba(editorColors.problemBorder, 0.5), color: countRowColors.count }}>Next</span>
+                                                    <span className="rounded-lg border px-2 py-1 text-[10px] font-black" style={{ borderColor: panelBorder, color: countRowColors.count }}>Next</span>
                                                 </div>
                                                 <p className="m-0 text-sm leading-6" style={{ color: editorColors.problemText }}>Write a Python function, test different variable names, and solve the problem using the required logic.</p>
                                             </div>
                                             <div
                                                 className="rounded-2xl border p-3"
-                                                style={{ backgroundColor: editorColors.panelBackground, borderColor: editorColors.panelBorder }}
+                                                style={{ backgroundColor: panelBackground, borderColor: panelBorder }}
                                             >
                                                 <div className="mb-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: editorColors.gutterText }}>Live IDE Preview</div>
-                                                <div className="mb-2 flex overflow-hidden rounded-xl border text-[10px] font-bold" style={{ borderColor: editorColors.panelBorder, backgroundColor: editorColors.tabBackground }}>
-                                                    <span className="px-3 py-1.5" style={{ backgroundColor: editorColors.activeTabBackground, color: countRowColors.count, borderRight: `1px solid ${editorColors.panelBorder}` }}>main.py</span>
+                                                <div className="mb-2 flex overflow-hidden rounded-xl border text-[10px] font-bold" style={{ borderColor: panelBorder, backgroundColor: panelBackground }}>
+                                                    <span className="px-3 py-1.5" style={{ backgroundColor: editorColors.activeTabBackground, color: countRowColors.count, borderRight: `1px solid ${panelBorder}` }}>main.py</span>
                                                     <span className="px-3 py-1.5" style={{ color: editorColors.gutterText }}>helper.py</span>
                                                 </div>
                                                 <CodeMirror
                                                     value={"# comment\nnumber = 42\ntext = 'Python'\nprint(text)\nif number > 10:\n    return True"}
                                                     height="150px"
                                                     readOnly={true}
-                                                    extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                                                    extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(effectiveEditorColors)]}
                                                 />
-                                                <div className="mt-2 rounded-xl border px-3 py-2 font-mono text-[10px]" style={{ backgroundColor: editorColors.outputBackground, borderColor: editorColors.panelBorder, color: '#4ade80' }}>
+                                                <div className="mt-2 rounded-xl border px-3 py-2 font-mono text-[10px]" style={{ backgroundColor: panelBackground, borderColor: panelBorder, color: '#4ade80' }}>
                                                     Output preview: code results appear here
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                                 {([
-                                                    ['appBackground', 'App Background'],
-                                                    ['problemBackground', 'Problem Background'],
-                                                    ['problemBorder', 'Problem Border'],
                                                     ['problemText', 'Problem Text'],
-                                                    ['panelBackground', 'Editor Panel'],
-                                                    ['panelBorder', 'Editor Border'],
-                                                    ['tabBackground', 'File Tab Background'],
                                                     ['activeTabBackground', 'Active File Tab'],
-                                                    ['outputBackground', 'Output Background'],
-                                                    ['background', 'Code Background'],
                                                     ['text', 'Code Text'],
-                                                    ['gutterBackground', 'Line Number Background'],
                                                     ['gutterText', 'Line Number Text'],
                                                     ['comment', 'Comment'],
                                                     ['identifier', 'Identifier'],
@@ -11981,7 +11993,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
-                                                <ColorField label="Panel Background" value={panelColors.background} onChange={(value) => setPanelColors(prev => ({ ...prev, background: value }))} />
+                                                <ColorField label="App + Panel Background" value={panelColors.background} onChange={(value) => setPanelColors(prev => ({ ...prev, background: value }))} />
                                                 <ColorField label="Panel Border" value={panelColors.border} onChange={(value) => setPanelColors(prev => ({ ...prev, border: value }))} />
                                                 <label className="flex items-center justify-between gap-3 rounded-xl border border-[#1d2d44] bg-[#050c18]/80 px-3 py-3">
                                                     <span className="min-w-0">
@@ -11993,6 +12005,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                         min={0}
                                                         max={100}
                                                         value={panelColors.alpha}
+                                                        onInput={(event) => setPanelColors(prev => ({ ...prev, alpha: Number((event.currentTarget as HTMLInputElement).value) }))}
                                                         onChange={(event) => setPanelColors(prev => ({ ...prev, alpha: Number(event.target.value) }))}
                                                         className="h-2 w-24 cursor-pointer appearance-none rounded-full bg-[#1d2d44] accent-[#3b82f6]"
                                                         aria-label="Panel transparency"
@@ -12651,6 +12664,7 @@ const ColorField: React.FC<{ label: string; value: string; onChange: (value: str
         <input
             type="color"
             value={value}
+            onInput={(event) => onChange((event.currentTarget as HTMLInputElement).value)}
             onChange={(event) => onChange(event.target.value)}
             className="h-10 w-14 cursor-pointer rounded-xl border border-white/10 bg-transparent p-0"
             aria-label={`${label} color`}
