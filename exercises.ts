@@ -3088,12 +3088,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 265,
             "title": "Problem 265",
-            "description": "Write a Python program to calculate the Euclidean distance between two points in 2D space using `zip()`.\nExamples:\n  euclidean_distance(5, 5) → ?\n  euclidean_distance(3, 3) → ?\n  euclidean_distance(10, 10) → ?",
+            "description": "Write a Python program to calculate the Euclidean distance between two points in 2D space using `zip()`.\\nExamples:\\n  euclidean_distance([3, 4], [6, 8]) → 5\\n  euclidean_distance([0, 0], [3, 4]) → 5",
             "initialCode": "import math\ndef euclidean_distance(point1, point2):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef euclidean_distance(point1, point2):\n    distance_squared = 0\n    for x1, x2 in zip(point1, point2):\n        distance_squared += (x1 - x2) ** 2  # (x1-x2)\\u00b2, sum all dimensions\n    return math.sqrt(distance_squared)  # sqrt((3-6)\\u00b2 + (4-8)\\u00b2) = sqrt(9+16) = 5\npoint1 = (3, 4)\npoint2 = (6, 8)\nprint(euclidean_distance(point1, point2))  # Output: 5.0\n\n# Alternative using generator expression\nimport math\ndef euclidean_distance(point1, point2):\n    return math.sqrt(sum((x1 - x2) ** 2 for x1, x2 in zip(point1, point2)))\nprint(euclidean_distance((3, 4), (6, 8)))\n\n# Alternative using math.dist() (Python 3.8+)\nimport math\ndef euclidean_distance(point1, point2):\n    return math.dist(point1, point2)\nprint(euclidean_distance((3, 4), (6, 8)))\n\n# Alternative using **0.5 (no math import)\ndef euclidean_distance(point1, point2):\n    return sum((a - b) ** 2 for a, b in zip(point1, point2)) ** 0.5\nprint(euclidean_distance((3, 4), (6, 8)))\n\n# Using built-in approach\ndef euclidean_distance(point1, point2):\n    result = math.sqrt(distance_squared)\n    return result\n\n# Using manual approach\ndef euclidean_distance(point1, point2):\n    return math.sqrt(distance_squared)\n\n# Script approach\npoint1 = 15\npoint2 = 15\nresult = euclidean_distance(point1, point2)\nprint(result)\n\n# Direct approach\nprint(euclidean_distance(25, 25))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "**What is zip() function?**\nzip(*iterables)\n\n**zip()** aggregates elements from multiple iterables into tuples.\nSyntax: `zip(iterable1, iterable2, ...)`\n\nOrder of operations:\n1. Takes two or more iterables as arguments\n2. Pairs up the **first** items from each iterable, then the **second**, etc.\n3. Stops when the shortest iterable is exhausted\n4. Returns a `zip` **object** (iterator); use `list()` to materialize as a list of tuples\n\n1. Define the `euclidean_distance` function with two parameters, `point1` and `point2`, both of which are tuples representing the coordinates of the points in 2D space.\n2. Use `zip(point1, point2)` to pair corresponding elements from `point1` and `point2`. This will create a list of tuples where each tuple contains the x-coordinate of the first point and the y-coordinate of the second point.\n3. Calculate the Euclidean distance using the formula: `sqrt((x2 - x1)^2 + (y2 - y1)^2)`, where `(x1, y1)` and `(x2, y2)` are the coordinates of the two points.\n4. Return the calculated Euclidean distance as a float.",
+            "hint": "Remember that `zip()` pairs elements positionally: `zip([x1,y1], [x2,y2])` gives `[(x1,x2), (y1,y2)]`.\\nUse `math.sqrt()` on the sum of squared differences.\\nThe distance between (0,0) and (3,4) is 5.0.",
+            "breakdown": "1. Define `euclidean_distance(point1, point2)` with parameters `point1`, `point2`.\\n2. Use `zip(point1, point2)` to pair corresponding coordinates from each point.\\n3. For each pair, calculate the squared difference and sum them.\\n4. Apply `math.sqrt()` to the sum to get the Euclidean distance.\\n5. Return the result.",
 
             "category": "Level 1"
     },
@@ -6700,12 +6700,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 576,
             "title": "Problem 576",
-            "description": "Find Minimum: Write a function that finds the minimum number in a list using reduce().\nExamples:\n  min_number(5, 5) → 5\n  min_number(3, 3) → 3\n  min_number(10, 10) → 10",
+            "description": "Find Minimum: Write a function that finds the minimum number in a list using reduce().\\nExamples:\\n  min_number([3, 1, 4, 1, 5]) → 1\\n  min_number([9, -2, 4]) → -2",
             "initialCode": "from functools import reduce\ndef min_number(x, y):\n    pass\n\ndef number_lst(lst):\n    pass",
             "solution": "from functools import reduce\n\n# Using function approach\ndef min_number(x, y):\n    return x if x < y else y\ndef number_lst(lst):\n    return reduce(min_number, lst)\nlst = [34, 67, 1, 778]    \nprint(number_lst(lst))\n\n# Using built-in approach\ndef min_number(x, y):\n    result = x if x < y else y\n    return result\n\n# Using manual approach\ndef min_number(x, y):\n    return x if x < y else y\n\n# Script approach\nx = 7\ny = 3\nresult = min_number(x, y)\nprint(result)\n\n# Direct approach\nprint(min_number(3, 14))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "**What is reduce() function?**\nfunctools.reduce(function, iterable[, initial])\n\n**reduce()** cumulatively applies a function to pairs of items, reducing the iterable to a single value.\nSyntax: `functools.reduce(function, iterable, initial)`\n\nOrder of operations:\n1. Import: `from functools import reduce`\n2. The function takes **two arguments**: the accumulated value and the next item\n3. Starts with the first two items (or `initial` if provided)\n4. Processes left to right, building up a single result\n\n1. Import `reduce` from the `functools` module.\n2. Define the `min_number` function that takes two arguments, `x` and `y`.\n3. Use `reduce` to apply a lambda function that returns the minimum of two numbers to all elements in the list `lst`.",
+            "hint": "`from functools import reduce` is required.\\nThe lambda for `reduce()` should compare two values and return the smaller one.",
+            "breakdown": "1. Define the `min_number` function with one parameter: a list of numbers.\\n2. Use `functools.reduce()` with a lambda that returns the smaller of two values.\\n3. The lambda should compare `a` and `b` and return `a if a < b else b`.\\n4. Return the result of `reduce()`.",
 
             "category": "Level 1"
     },
@@ -9880,12 +9880,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 842,
             "title": "Problem 842",
-            "description": "Write a Python program to keep asking the user for positive numbers and print the sum when a negative number is entered using a while loop.\nExamples:\n  solve(5, 5) → ?\n  solve(3, 3) → ?\n  solve(10, 10) → ?",
+            "description": "Write a Python program to keep asking the user for positive numbers and print the sum when a negative number is entered using a while loop.\\nExamples:\\n  Input: 4, 6, 2, -1 → Output: 12\\n  Input: -5 → Output: 0",
             "initialCode": "# Write your solution here",
             "solution": "# Using function approach\ndef solve(start, end):\n    total = 0\n    while start <= end:\n        if start > 0:\n            total += start\n        start += 1\n    print(total)\n\nsolve(5, 5)\nsolve(3, 3)\nsolve(10, 10)\n\n# Using script approach\ntotal = 0\nnum = int(input('Enter a positive number: '))\nwhile num >= 0:\n    total += num\n    num = int(input('Enter another number: '))\nprint(total)\n\n# Using built-in approach\ndef solve(number, number1):\n    total = 0\n    num = number\n    while num >= 0:\n        total += num\n    num = number1\n    print(total)\n\n# Using manual approach\ndef solve(number, number1):\n    total = 0\n    num = number\n    while num >= 0:\n        total += num\n    num = number1\n    return total\n\n# Script approach\nnumber = 15\nnumber1 = 15\nresult = solve(number, number1)\nprint(result)\n\n# Direct approach\nprint(solve(25, 25))",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.\nUse `print()` to display the output as shown in the examples.",
-            "breakdown": "1. Define a function named `solve` that takes two parameters, `a` and `b`.\n2. Initialize a variable `sum` to store the sum of positive numbers.\n3. Use a while loop to keep asking for input until a negative number is entered.\n4. Inside the loop:\n5. - Prompt the user to enter a number using `input()`.\n6. - Convert the input to an integer using `int()` and store it in a variable named `num`.\n7. - Check if `num` is positive by comparing it to zero.\n8. - If `num` is positive, add it to `sum`.\n9. - If `num` is not positive (i.e., negative), break out of the loop.\n10. After the while loop ends, print the value of `sum`.",
+            "hint": "Use `int(input())` to get an integer from the user.\\nBreak the loop when a negative number is entered, then print the accumulated sum.\\nInitialize the sum variable to 0 before the loop starts.",
+            "breakdown": "1. Initialize a variable `total` to 0 before the loop.\\n2. Use a `while True` loop that keeps asking for input.\\n3. Convert each input to an integer.\\n4. If the number is negative, break out of the loop and print `total`.\\n5. Otherwise, add the number to `total`.",
 
             "category": "Level 1"
     },
@@ -14068,24 +14068,24 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1191,
             "title": "Problem 1191",
-            "description": "Write a Python program to use the `math` module to calculate the greatest common divisor (GCD) of two numbers. Module.\nExamples:\n  calculate_gcd(5, 5) → ?\n  calculate_gcd(3, 3) → ?\n  calculate_gcd(10, 10) → ?",
+            "description": "Write a Python program to use the `math` module to calculate the greatest common divisor (GCD) of two numbers.\\nExamples:\\n  calculate_gcd(12, 8) → 4\\n  calculate_gcd(48, 180) → 12",
             "initialCode": "import math\ndef calculate_gcd(a, b):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef calculate_gcd(a, b):\n    return math.gcd(a, b)\ngcd_result = calculate_gcd(48, 180)\nprint(f'The GCD of 48 and 180 is {gcd_result}')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef calculate_gcd(a, b):\n    result = math.gcd(a, b)\n    return result\n\n# Using manual approach\ndef calculate_gcd(a, b):\n    return math.gcd(a, b)\n\n# Script approach\na = 10\nb = 20\nresult = calculate_gcd(a, b)\nprint(result)\n\n# Direct approach\nprint(calculate_gcd(20, 30))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "1. Import the `math` module.\n2. Define a function named `calculate_gcd` that takes two parameters, `a` and `b`.\n3. Inside the function, use the `math.gcd(a, b)` method to calculate the greatest common divisor of `a` and `b`.",
+            "hint": "`math.gcd()` returns the greatest common divisor of two integers.\\nNo need to implement Euclid's algorithm manually — `math.gcd()` does it for you.",
+            "breakdown": "1. Import the `math` module.\\n2. Define a function `calculate_gcd` that takes two numbers as parameters.\\n3. Call `math.gcd(a, b)` inside the function.\\n4. Return the result.",
 
             "category": "Level 1"
     },
     {
             "id": 1192,
             "title": "Problem 1192",
-            "description": "Write a Python program to use the `os` module to rename a file. Module.\nExamples:\n  rename_file('hello', 'hello') → ?\n  rename_file('world', 'world') → ?\n  rename_file('python', 'python') → ?",
+            "description": "Write a Python program to use the `os` module to rename a file.\\nExamples:\\n  rename_file(\"old_file.txt\", \"new_file.txt\") → file renamed\\n  rename_file(\"source_note.txt\", \"target_note.txt\") → file renamed",
             "initialCode": "import os\ndef rename_file(old_name, new_name):\n    pass",
             "solution": "import os\n\n# Using function approach\ndef rename_file(old_name, new_name):\n    os.rename(old_name, new_name)\n# Uncomment the following lines to test the rename_file function:\nrename_file('old_file.txt', 'new_file.txt')\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef solve():\n    import os\n    def rename_file(old_name, new_name):\n        os.rename(old_name, new_name)\n    rename_file('old_file.txt', 'new_file.txt')\n\n# Using manual approach\ndef solve():\n    import os\n    def rename_file(old_name, new_name):\n        os.rename(old_name, new_name)\n    rename_file('old_file.txt', 'new_file.txt')\n\n# Script approach\nold_name = 'hello'\nnew_name = 'hello'\nresult = rename_file(old_name, new_name)\nprint(result)\n\n# Direct approach\nprint(rename_file('world', 'world'))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "1. Import the `os` module.\n2. Define a function named `rename_file` that takes two parameters: `old_name` and `new_name`.\n3. Inside the function, use `os.rename(old_name, new_name)` to rename the file from `old_name` to `new_name`.",
+            "hint": "`os.rename(src, dst)` renames a file from `src` to `dst`.\\nThe destination should not already exist (or it will be overwritten on some systems).",
+            "breakdown": "1. Import the `os` module.\\n2. Define a function `rename_file` that takes `old_name` and `new_name` as parameters.\\n3. Call `os.rename(old_name, new_name)` to rename the file.\\n4. The function does not need to return anything.",
 
             "category": "Level 1"
     },
@@ -19128,12 +19128,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1614,
             "title": "Problem 1614",
-            "description": "Write a Pythonic way to use `functools.cmp_to_key()` to convert an old-style comparison function to a key function.\nExamples:\n  compare(5, 5) → 0\n  compare(3, 3) → 0\n  compare(10, 10) → 0",
+            "description": "Write a Pythonic way to use `functools.cmp_to_key()` to convert an old-style comparison function to a key function.\\nExamples:\\n  compare(5, 3) → -2\\n  compare(2, 5) → 3\\n  compare(4, 4) → 0",
             "initialCode": "from functools import cmp_to_key\ndef compare(x, y):\n    pass",
             "solution": "from functools import cmp_to_key\n\n# Using function approach\ndef compare(x, y):\n    return y - x  # Reverse order\nnumbers = [3, 1, 4, 1, 5]\nsorted_nums = sorted(numbers, key=cmp_to_key(compare))\nprint(sorted_nums)  # Expected: [5, 4, 3, 1, 1]\n\n# Using built-in approach\ndef compare(x, y):\n    return y + (-x)\n\n# Using manual approach\ndef compare(x, y):\n    import operator\n    return operator.sub(y, x)\n\n# Script approach\nx = 7\ny = 3\nresult = compare(x, y)\nprint(result)\n\n# Direct approach\nprint(compare(3, 14))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "**What is sorted() function?**\nsorted(iterable, key=None, reverse=False)\n\n**sorted()** returns a new sorted list from any iterable.\nSyntax: `sorted(iterable, key=None, reverse=False)`\n\nOrder of operations:\n1. Takes an **iterable** (list, tuple, string, etc.)\n2. `key=` — optional callable that transforms each item before comparison (e.g., `key=len` sorts by length)\n3. `reverse=True` — sorts descending instead of ascending\n4. Returns a **new sorted list** (original is unchanged)\n\n1. Define the `compare` function that takes two arguments, `x` and `y`.\n2. Use `functools.cmp_to_key()` to convert the `compare` function into a key function.\n3. The `cmp_to_key()` function requires a comparison function as its argument. In this case, we use the `compare` function itself.\n4. Return the result of `functools.cmp_to_key(compare)` directly — it gives us a key function that can be used with sorting or other functions that require keys.",
+            "hint": "`cmp_to_key()` is imported from `functools`.\\nOld-style cmp returns a negative number if `a < b`, 0 if equal, positive if `a > b`.",
+            "breakdown": "1. Define a comparison function that takes two values and returns a negative, zero, or positive number (old-style cmp).\\n2. Use `cmp_to_key(compare_function)` to convert it to a key function.\\n3. Pass the result to `sorted()` as the `key` parameter.\\n4. Return the sorted result.",
 
             "category": "Level 1"
     },
@@ -19152,12 +19152,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1616,
             "title": "Problem 1616",
-            "description": "Write a Python program using `typing.Dict` to specify a function parameter that accepts a dictionary with string keys and integer values.\nExamples:\n  process_scores('hello', 'hello') → ?\n  process_scores('world', 'world') → ?\n  process_scores('python', 'python') → ?",
+            "description": "Write a Python program using `typing.Dict` to specify a function parameter that accepts a dictionary with string keys and integer values.\\nExamples:\\n  process_scores({\"Alice\": 85, \"Bob\": 90}) → 175\\n  process_scores({\"A\": 1, \"B\": 2, \"C\": 3}) → 6",
             "initialCode": "from typing import Dict\ndef process_scores(scores: Dict[str, int]) -> int:\n    pass",
             "solution": "from typing import Dict\n\n# Using function approach\ndef process_scores(scores: Dict[str, int]) -> int:\n    return sum(scores.values())\nresult = process_scores({'Alice': 85, 'Bob': 90})\nprint(result)  # Expected: 175\n\n# Using built-in approach\ndef process_scores(scores: Dict[str, int]):\n    result = sum(scores.values())\n    return result\n\n# Using manual approach\ndef process_scores(scores: Dict[str, int]):\n    return sum(scores.values())\n\n# Script approach\nscores = [3, 7, 2, 9, 1]\nresult = process_scores(scores)\nprint(result)\n\n# Direct approach\nprint(process_scores([4, 1, 8, 6, 3]))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "1. Define the `process_scores` function with a parameter named `scores` of type `Dict[str, int]`.\n2. Inside the function, use `sum(scores.values())` to calculate the total sum of all integer values in the dictionary.\n3. Return the result of `sum(scores.values())`.",
+            "hint": "Use `from typing import Dict` to import the type hint.\\nAdd the type hint to the parameter: `def process_scores(scores: Dict[str, int]):`\\n`sum(d.values())` adds all values in the dictionary.",
+            "breakdown": "1. Import `Dict` from `typing`.\\n2. Define a function with a parameter typed as `Dict[str, int]`.\\n3. Sum all the dictionary values using `sum(d.values())`.\\n4. Return the total sum.",
 
             "category": "Level 1"
     },
@@ -19176,12 +19176,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1618,
             "title": "Problem 1618",
-            "description": "Write a Python program using `typing.Callable` to specify a function parameter that accepts a callable.\nExamples:\n  apply_operation(5, 5, 5, 5, 5) → ?\n  apply_operation(3, 3, 3, 3, 3) → ?\n  apply_operation(10, 10, 10, 10, 10) → ?",
+            "description": "Write a Python program using `typing.Callable` to specify a function parameter that accepts a callable.\\nExamples:\\n  apply_operation(5, 3, lambda a, b: a * b) → 15\\n  apply_operation(5, 3, lambda a, b: a + b) → 8",
             "initialCode": "from typing import Callable\ndef apply_operation(x: int, y: int, op: Callable[[int, int], int]) -> int:\n    pass",
             "solution": "from typing import Callable\n\n# Using function approach\ndef apply_operation(x: int, y: int, op: Callable[[int, int], int]) -> int:\n    return op(x, y)\nresult = apply_operation(5, 3, lambda a, b: a * b)\nprint(result)  # Expected: 15\n\n# Using alternative approach\n# Using def\n    # Alternative: use a named function instead of lambda\n\n# Using built-in approach\ndef apply_operation(x: int, y: int, op: Callable[[int, int], int]):\n    result = op(x, y)\n    return result\n\n# Using manual approach\ndef apply_operation(x: int, y: int, op: Callable[[int, int], int]):\n    return op(x, y)\n\n# Script approach\nx = 7\ny = 3\nop = 15\nresult = apply_operation(x, y, op)\nprint(result)\n\n# Direct approach\nprint(apply_operation(3, 14, 25))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "**What is lambda function?**\nlambda parameters: expression\n\nA **lambda** is a small, anonymous function written as a single expression.\nSyntax: `lambda parameters: expression`\n\nOrder of operations:\n1. `lambda` keyword — tells Python you are creating an anonymous function\n2. `parameters` — comma-separated input variables (like a regular function)\n3. `:` colon — separates parameters from the return expression\n4. `expression` — a single Python expression that is **implicitly returned**\n\nUnlike `def`, a lambda does not have a `return` statement — the expression result is automatically returned.\n\n1. Define the `apply_operation` function with three parameters: `x`, `y`, and `op`.\n2. Use `typing.Callable[[int, int], int]` as the type hint for `op`. This specifies that `op` should be a callable that takes two integers and returns an integer.\n3. Inside the function, use the provided `op` to perform the operation on `x` and `y`.\n4. Return the result of the operation.\n5. 1",
+            "hint": "Use `from typing import Callable`.\\nThe type hint for a function that takes two ints and returns an int is `Callable[[int, int], int]`.",
+            "breakdown": "1. Import `Callable` from `typing`.\\n2. Define a function that takes two numbers and a callable parameter.\\n3. The callable parameter should be typed as `Callable[[int, int], int]`.\\n4. Call the callable with the two numbers and return the result.",
 
             "category": "Level 1"
     },
@@ -19223,12 +19223,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1622,
             "title": "Problem 1622",
-            "description": "Write a Python class implementing `__setitem__` magic method to enable item assignment.\nExamples:\n  __setitem__(5, 5) → ?\n  __setitem__(3, 3) → ?\n  __setitem__(10, 10) → ?",
+            "description": "Write a Python class implementing `__setitem__` magic method to enable item assignment.\\nExamples:\\n  obj = MyDict(); obj[\"key\"] = \"value\"; print(obj[\"key\"]) → value\\n  obj[\"count\"] = 3; print(obj[\"count\"]) → 3",
             "initialCode": "class MyDict:\n    pass",
             "solution": "# Using function approach\nclass MyDict:\n    def __init__(self):\n        self._data = {}\n    def __setitem__(self, key, value):\n        self._data[key] = value\n    def __getitem__(self, key):\n        return self._data[key]\nmy_dict = MyDict()\nmy_dict['key'] = 'value'\nprint(my_dict['key'])  # Expected: value\n\n# Using built-in approach\ndef solve():\n    class MyDict:\n        def __init__(self):\n            self._data = {}\n        def __setitem__(self, key, value):\n            self._data[key] = value\n        def __getitem__(self, key):\n            return self._data[key]\n    my_dict = MyDict()\n    my_dict['key'] = 'value'\n    print(my_dict['key'])  # Expected: value\n\n# Using manual approach\ndef solve():\n    class MyDict:\n        def __init__(self):\n            self._data = {}\n        def __setitem__(self, key, value):\n            self._data[key] = value\n        def __getitem__(self, key):\n            return self._data[key]\n    my_dict = MyDict()\n    my_dict['key'] = 'value'\n    return my_dict['key']\n\n# Script approach\nobj = MyDict()\nprint(obj)\n\n# Direct approach\nprint(MyDict())",
 
-            "hint": "Carefully identify what the problem asks for: input type, output type, and the operation.",
-            "breakdown": "1. Define `MyDict()` with parameters .\n2. Convert lists to sets with `set()`, perform operations, convert back if needed.\n3. Return the result.",
+            "hint": "`__setitem__` is called when you write `obj[key] = value`.\\n`__getitem__` is called when you read `obj[key]`.\\nUse a regular dictionary internally to store the key-value pairs.",
+            "breakdown": "1. Define a class `MyDict` with an `__init__` method that initializes an internal dictionary.\\n2. Implement `__setitem__(self, key, value)` to store items in the internal dict.\\n3. Implement `__getitem__(self, key)` to retrieve items from the internal dict.\\n4. Return the value from `__getitem__`.",
 
             "category": "Level 1"
     },
@@ -22415,12 +22415,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1888,
             "title": "Problem 1888",
-            "description": "Write a Python function called `calculate_distance` that takes two points (x1, y1) and (x2, y2) and returns the Euclidean distance between them.\nExamples:\n  calculate_distance(5, 5, 5, 5) → ?\n  calculate_distance(3, 3, 3, 3) → ?\n  calculate_distance(10, 10, 10, 10) → ?",
+            "description": "Write a Python function called `calculate_distance` that takes two points (x1, y1) and (x2, y2) and returns the Euclidean distance between them.\\nExamples:\\n  calculate_distance(0, 0, 3, 4) → 5.0\\n  calculate_distance(1, 1, 4, 5) → 5.0",
             "initialCode": "import math\ndef calculate_distance(x1, y1, x2, y2):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef calculate_distance(x1, y1, x2, y2):\n    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)\nresult = calculate_distance(0, 0, 3, 4)\nprint(result)  # Expected: 5.0\n\n# Using alternative approach\n# Using different variable names\n    # Alternative: rewrite with different variable names and structure\n\n# Using built-in approach\ndef calculate_distance(x1, y1, x2, y2):\n    result = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)\n    return result\n\n# Using manual approach\ndef calculate_distance(x1, y1, x2, y2):\n    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)\n\n# Script approach\nx1 = 15\ny1 = 15\nx2 = 15\ny2 = 15\nresult = calculate_distance(x1, y1, x2, y2)\nprint(result)\n\n# Direct approach\nprint(calculate_distance(25, 25, 25, 25))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "1. Define the `calculate_distance` function with four parameters: `x1`, `y1`, `x2`, and `y2`.\n2. Use the formula for Euclidean distance between two points in a 2D plane, which is \\(\\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}\\).\n3. Calculate the differences \\(x_2 - x_1\\) and \\(y_2 - y_1\\).\n4. Square these differences.\n5. Add the squared differences together.\n6. Take the square root of the sum to get the Euclidean distance.\n7. Return the calculated distance.",
+            "hint": "Use `math.sqrt()` to compute the square root.\\nThe distance between (0,0) and (3,4) is 5.0 from the formula sqrt((3-0)^2 + (4-0)^2).",
+            "breakdown": "1. Define a function `calculate_distance` with four parameters: `x1, y1, x2, y2`.\\n2. Calculate the squared differences: `(x2 - x1)**2 + (y2 - y1)**2`.\\n3. Use `math.sqrt()` to get the distance.\\n4. Return the result.",
 
             "category": "Level 1"
     },
@@ -23387,12 +23387,12 @@ export const EXERCISES: Exercise[] = [
     {
             "id": 1969,
             "title": "Problem 1969",
-            "description": "Write a Python function called `calculate_quadratic_roots` that takes coefficients a, b, c and returns the roots of ax^2 + bx + c = 0 as a tuple (or None if no real roots).\nExamples:\n  calculate_quadratic_roots(5, 5, 5) → None\n  calculate_quadratic_roots(3, 3, 3) → None\n  calculate_quadratic_roots(10, 10, 10) → None",
+            "description": "Write a Python function called `calculate_quadratic_roots` that takes coefficients a, b, c and returns the roots of ax^2 + bx + c = 0 as a tuple (or None if no real roots).\\nExamples:\\n  calculate_quadratic_roots(1, -5, 6) → (3.0, 2.0)\\n  calculate_quadratic_roots(1, 0, 1) → None",
             "initialCode": "import math\ndef calculate_quadratic_roots(a, b, c):\n    pass",
             "solution": "import math\n\n# Using function approach\ndef calculate_quadratic_roots(a, b, c):\n    discriminant = b**2 - 4*a*c\n    if discriminant < 0:\n        return None\n    root1 = (-b + math.sqrt(discriminant)) / (2*a)\n    root2 = (-b - math.sqrt(discriminant)) / (2*a)\n    return (root1, root2)\nresult = calculate_quadratic_roots(1, -5, 6)\nprint(result)  # Expected: (3.0, 2.0)\n\n# Using built-in approach\ndef calculate_quadratic_roots(a, b, c):\n    result = None\n    return result\n\n# Using manual approach\ndef calculate_quadratic_roots(a, b, c):\n    return None\n\n# Script approach\na = 10\nb = 20\nc = 5\nresult = calculate_quadratic_roots(a, b, c)\nprint(result)\n\n# Direct approach\nprint(calculate_quadratic_roots(20, 30, 10))",
 
-            "hint": "Check the description for requirements.",
-            "breakdown": "1. Define the `calculate_quadratic_roots` function with three parameters: `a`, `b`, and `c`.\n2. Calculate the discriminant using the formula `discriminant = b**2 - 4*a*c`. [math.sqrt() for square root]\n3. Check if the discriminant is less than zero, which means there are no real roots.\n4. If the discriminant is greater than or equal to zero, calculate the two roots using the quadratic formula: `root1 = (-b + math.sqrt(discriminant)) / (2*a)` and `root2 = (-b - math.sqrt(discriminant)) / (2*a)`. [math.sqrt() for square root]\n5. Return a tuple containing the two roots if they exist, or None if there are no real roots.\n6. Test the function with provided examples to ensure it works correctly.",
+            "hint": "Use `math.sqrt()` for the square root.\\nIf the discriminant is negative, there are no real roots — return `None`.\\nUse the quadratic formula: x = (-b ± sqrt(b^2 - 4ac)) / 2a",
+            "breakdown": "1. Define `calculate_quadratic_roots(a, b, c)` with three coefficients.\\n2. Calculate the discriminant: `d = b**2 - 4*a*c`.\\n3. If `d < 0`, return `None` (no real roots).\\n4. Otherwise, compute roots: `((-b + sqrt(d)) / (2*a), (-b - sqrt(d)) / (2*a))`.\\n5. Return the tuple of roots.",
 
             "category": "Level 1"
     },
