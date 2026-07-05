@@ -9916,7 +9916,7 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
@@ -11285,7 +11285,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         style={{ pointerEvents: 'auto', backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
                         onPointerDown={() => {
                             countRowLongPressRef.current = setTimeout(() => {
-                                setShowModal('settings');
+                                setShowModal('stats_by_mode');
                             }, 500);
                         }}
                         onPointerUp={() => {
@@ -11828,7 +11828,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
                         style={{
-                            backgroundColor: hexToRgba(panelColors.background, showModal === 'settings' || showModal === 'customize' ? 0.82 : 0.96),
+                            backgroundColor: hexToRgba(panelColors.background, showModal === 'settings' || showModal === 'customize' || showModal === 'stats_by_mode' ? 0.82 : 0.96),
                             borderColor: panelColors.border,
                             backdropFilter: 'blur(18px)',
                             WebkitBackdropFilter: 'blur(18px)',
@@ -12778,6 +12778,44 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </div>
 
                                 <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border py-3 rounded-xl transition-all hover:brightness-125" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), color: toolPanelColors.failed, backgroundColor: hexToRgba(toolPanelColors.failed, 0.15) }}>Reset Progress</button>
+                            </div>
+                        )}
+                        {showModal === 'stats_by_mode' && (
+                            <div className="flex flex-col h-full min-h-0 py-2">
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
+                                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
+                                    <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
+                                        <div className="grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
+                                            {DIFFICULTY_MODES.map(mode => {
+                                                const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
+                                                const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
+                                                const modeRank = getModeRank(modeStats);
+                                                return [
+                                                    <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.12em] text-gray-200 truncate">{mode.label}</span>,
+                                                    <span key={`${mode.id}-shots`} className="font-mono text-right">{modeStats.shots}</span>,
+                                                    <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{modeStats.success}</span>,
+                                                    <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{modeStats.failed}</span>,
+                                                    <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: modeStats.shots > 0 ? countRowColors.rate : 'inherit' }}>{modeRate}%</span>,
+                                                    <span key={`${mode.id}-rank`} className="font-mono text-right" title={modeRank.name}>{modeRank.icon}</span>,
+                                                ];
+                                            })}
+                                        </div>
+                                        <div className="mt-3 border-t border-[#1d2d44] pt-2 grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
+                                            <div className="font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
+                                            <div className="font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
+                                            <div className="font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
+                                            <div className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
+                                            <div className="font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
+                                            <div className="font-mono text-right" title={userRank.name}>{userRank.icon}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
                         {showModal === 'api_key' && (
