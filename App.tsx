@@ -197,7 +197,7 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
 };
 
 const DEFAULT_PANEL_COLORS: PanelColorSettings = {
-    background: '#081222',
+    background: '#0f1f3d',
     border: '#5876a0',
     alpha: 40,
 };
@@ -266,6 +266,13 @@ const loadPanelColorSettings = (): PanelColorSettings => {
         const raw = localStorage.getItem('python_panel_colors');
         if (!raw) return DEFAULT_PANEL_COLORS;
         const parsed = JSON.parse(raw);
+        const migrationKey = 'python_panel_colors_v2_migrated';
+        if (localStorage.getItem(migrationKey) !== 'true') {
+            localStorage.setItem(migrationKey, 'true');
+            if (sanitizeHexColor(parsed.background, '') === '#081222') {
+                parsed.background = DEFAULT_PANEL_COLORS.background;
+            }
+        }
         return {
             background: sanitizeHexColor(parsed.background, DEFAULT_PANEL_COLORS.background),
             border: sanitizeHexColor(parsed.border, DEFAULT_PANEL_COLORS.border),
@@ -10989,19 +10996,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const panelBackground = hexToRgba(panelColors.background, panelAlpha);
     const panelBorder = hexToRgba(panelColors.border, 0.55);
     const panelBorderSoft = hexToRgba(panelColors.border, 0.35);
+    const semitransparentBg = hexToRgba(panelColors.background, panelAlpha);
     const effectiveEditorColors = useMemo<EditorColorSettings>(() => ({
         ...editorColors,
-        appBackground: panelColors.background,
-        problemBackground: panelColors.background,
+        appBackground: semitransparentBg,
+        problemBackground: semitransparentBg,
         problemBorder: panelColors.border,
-        panelBackground: panelColors.background,
+        panelBackground: semitransparentBg,
         panelBorder: panelColors.border,
-        tabBackground: panelColors.background,
+        tabBackground: semitransparentBg,
         activeTabBackground: editorColors.activeTabBackground,
-        outputBackground: panelColors.background,
-        background: panelColors.background,
-        gutterBackground: panelColors.background,
-    }), [editorColors, panelColors.background, panelColors.border]);
+        outputBackground: semitransparentBg,
+        background: semitransparentBg,
+        gutterBackground: semitransparentBg,
+    }), [editorColors, panelColors.background, panelColors.border, panelAlpha]);
 
     const editorExtensions = useMemo(() => [
         python(),
@@ -11411,7 +11419,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         ref={editorShellRef}
                         className="flex-grow relative border-b"
-                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelColors.border }}
+                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, borderColor: panelColors.border }}
                     >
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
