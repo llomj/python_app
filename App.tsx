@@ -72,6 +72,13 @@ interface AutoGradeResult {
     output?: string;
 }
 
+interface ProblemAiMessage {
+    id: number;
+    role: 'user' | 'assistant';
+    text: string;
+    source?: 'built_in' | 'offline' | 'user';
+}
+
 const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
 const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini']);
 
@@ -9916,7 +9923,7 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
@@ -9926,6 +9933,10 @@ const App: React.FC = () => {
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
     const [aiReviewRunning, setAiReviewRunning] = useState(false);
+    const [problemAiMessages, setProblemAiMessages] = useState<ProblemAiMessage[]>([]);
+    const [problemAiDraft, setProblemAiDraft] = useState('');
+    const [problemAiRunning, setProblemAiRunning] = useState(false);
+    const [problemAiProblemId, setProblemAiProblemId] = useState<number | null>(null);
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -10934,6 +10945,139 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         loadRandomExercise();
     };
 
+    const buildProblemAiRequest = useCallback((question: string): AiReviewRequest => {
+        const reusableReviewRequest =
+            latestAiReviewRequest?.problemId === exercise.id &&
+            latestAiReviewRequest.userCode === files[activeFileIndex]?.content
+                ? latestAiReviewRequest
+                : null;
+        const currentGrader = AUTO_GRADERS[exercise.id] || null;
+        const activeCode = files[activeFileIndex]?.content || '';
+        const contextMessage = [
+            `USER QUESTION: ${question}`,
+            '',
+            'Answer as a patient Python tutor for this exact exercise.',
+            'Do not grade manually unless the user asks. Explain concepts, syntax, current output, and next steps.',
+            `Latest output/status: ${outputStatus}`,
+            `Latest output text: ${output}`,
+            reusableReviewRequest?.graderMessage ? `Latest grader message: ${reusableReviewRequest.graderMessage}` : 'Latest grader message: none yet',
+        ].join('\n');
+
+        return {
+            problemId: exercise.id,
+            title: exercise.title,
+            description: `${exercise.description}\n\n${contextMessage}`,
+            userCode: activeCode,
+            graderMessage: reusableReviewRequest?.graderMessage || contextMessage,
+            graderPassed: reusableReviewRequest?.graderPassed ?? outputStatus === 'win',
+            graderSpec: reusableReviewRequest?.graderSpec || currentGrader,
+            programOutput: reusableReviewRequest?.programOutput || output,
+            visibleSolution: displaySolution,
+        };
+    }, [activeFileIndex, displaySolution, exercise, files, latestAiReviewRequest, output, outputStatus]);
+
+    const buildBuiltInProblemAiAnswer = useCallback((question: string, request: AiReviewRequest): string => {
+        const q = question.toLowerCase();
+        const description = exercise.description;
+        const hint = exercise.hint?.trim();
+        const breakdown = exercise.breakdown?.trim();
+        const code = request.userCode || '';
+        const graderMessage = request.graderMessage || '';
+        const methodMatches = Array.from(new Set(description.match(/`[^`]+`|\.[A-Za-z_]\w*\(\)|\b[A-Za-z_]\w*\(\)/g) || []))
+            .slice(0, 8)
+            .join(', ');
+        const asksWhy = /why|wrong|failed|fail|error|output|red|incorrect/.test(q);
+        const asksMethod = /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in/.test(q);
+        const asksHint = /hint|help|start|how|what should|what do/.test(q);
+
+        const parts: string[] = [];
+        parts.push(`1. Problem focus\nThis exercise is asking about Problem ${exercise.id}: ${description.split('\n')[0]}`);
+
+        if (asksMethod || methodMatches) {
+            let methodText = methodMatches || 'No specific method name is written in the prompt.';
+            if (q.includes('isdigit') || description.toLowerCase().includes('digit')) {
+                methodText += `\n\nFor digit checks, \`isdigit()\` is a string method. Use it on a string/character, for example \`char.isdigit()\`. If you have an integer, convert it first with \`str(value).isdigit()\`, but if the task says character, the expected input is usually a string like \`'7'\`.`;
+            }
+            parts.push(`2. Relevant syntax or method\n${methodText}`);
+        }
+
+        if (asksWhy || outputStatus === 'fail') {
+            const outputText = output && output !== 'Run code to see output...' ? output : 'No run output is available yet.';
+            parts.push(`3. Current output check\nStatus: ${outputStatus.toUpperCase()}.\nOutput/grader context:\n${graderMessage || outputText}\n\nIf the output is wrong, compare what your code returns or prints against the operation requested by the problem, not just the example wording.`);
+        }
+
+        if (code.trim()) {
+            const lines = code.split('\n').filter(line => line.trim()).slice(0, 8).join('\n');
+            parts.push(`4. Your code context\nI can see your current code starts like this:\n\`\`\`python\n${lines}\n\`\`\``);
+        }
+
+        if (asksHint || hint || breakdown) {
+            parts.push(`5. Practical next step\n${hint || 'Break the problem into input, operation, and returned output.'}${breakdown ? `\n\nGuide:\n${breakdown}` : ''}`);
+        }
+
+        return parts.join('\n\n');
+    }, [exercise, output, outputStatus]);
+
+    const openProblemAi = useCallback(() => {
+        const request = buildProblemAiRequest('Explain this problem.');
+        const shouldReset = problemAiProblemId !== exercise.id || problemAiMessages.length === 0;
+        if (shouldReset) {
+            setProblemAiProblemId(exercise.id);
+            setProblemAiMessages([{
+                id: Date.now(),
+                role: 'assistant',
+                source: 'built_in',
+                text: buildBuiltInProblemAiAnswer(
+                    outputStatus === 'fail' ? 'Why did my output fail?' : 'Explain this problem.',
+                    request,
+                ),
+            }]);
+        }
+        setShowModal('problem_ai');
+    }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, exercise.id, outputStatus, problemAiMessages.length, problemAiProblemId]);
+
+    const sendProblemAiQuestion = useCallback(async (rawQuestion: string) => {
+        const question = rawQuestion.trim();
+        if (!question || problemAiRunning) return;
+        const request = buildProblemAiRequest(question);
+        const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
+        setProblemAiMessages(prev => [...prev, userMessage]);
+        setProblemAiDraft('');
+        setProblemAiRunning(true);
+
+        try {
+            if (offlineAiState.status === 'ready') {
+                const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
+                const answer = [
+                    review.explanation,
+                    review.suggestedFix ? `Suggested direction:\n${review.suggestedFix}` : '',
+                ].filter(Boolean).join('\n\n');
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: review.source === 'diagnostic' ? 'built_in' : 'offline',
+                    text: answer || buildBuiltInProblemAiAnswer(question, request),
+                }]);
+            } else {
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: buildBuiltInProblemAiAnswer(question, request),
+                }]);
+            }
+        } catch {
+            setProblemAiMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                role: 'assistant',
+                source: 'built_in',
+                text: `Offline AI could not answer this time, so built-in help answered instead.\n\n${buildBuiltInProblemAiAnswer(question, request)}`,
+            }]);
+        } finally {
+            setProblemAiRunning(false);
+        }
+    }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, offlineAiState, problemAiRunning]);
+
     const handleAiHint = async () => {
         const reusableReviewRequest =
             latestAiReviewRequest?.problemId === exercise.id &&
@@ -11524,6 +11668,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
                             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>Problem {exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <button onClick={openProblemAi} title="Ask AI about this problem" style={{ backgroundColor: showModal === 'problem_ai' ? hexToRgba(toolPanelColors.ai, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: toolPanelColors.ai, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                    <Bot size={14} />
+                                    <span>AI</span>
+                                </button>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
@@ -12102,6 +12250,89 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             )}
                                     </>
                                 </div>
+                            </div>
+                        )}
+                        {showModal === 'problem_ai' && (
+                            <div className="flex h-full min-h-0 flex-col gap-3">
+                                <div className="flex flex-shrink-0 items-start justify-between gap-3">
+                                    <div>
+                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
+                                        <p className="mt-1 text-xs text-gray-400">Ask about Problem {exercise.id}, your code, output, or why the grader failed.</p>
+                                    </div>
+                                    <span className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.08) }}>
+                                        {offlineAiState.status === 'ready' ? 'Offline AI' : 'Built-in help'}
+                                    </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                                    {['Explain task', 'Why failed?', 'What method?', 'Show hint'].map(prompt => (
+                                        <button
+                                            key={prompt}
+                                            onClick={() => sendProblemAiQuestion(prompt)}
+                                            disabled={problemAiRunning}
+                                            className="rounded-xl border px-3 py-2 text-left font-bold transition-all hover:brightness-125 disabled:opacity-50"
+                                            style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
+                                        >
+                                            {prompt}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                                    {problemAiMessages.map(message => (
+                                        <div
+                                            key={message.id}
+                                            className="rounded-2xl border p-3"
+                                            style={{
+                                                borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
+                                                backgroundColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.08) : 'rgba(8, 18, 34, 0.55)',
+                                            }}
+                                        >
+                                            <div className="mb-1.5 flex items-center justify-between gap-2">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: message.role === 'user' ? countRowColors.count : toolPanelColors.ai }}>
+                                                    {message.role === 'user' ? 'You' : 'Problem AI'}
+                                                </span>
+                                                {message.source && message.role === 'assistant' && (
+                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? 'Offline AI' : 'Built-in help'}</span>
+                                                )}
+                                            </div>
+                                            {message.role === 'assistant' ? (
+                                                <AiReviewText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} detectBareCode={true} numbered={true} />
+                                            ) : (
+                                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-100">{message.text}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {problemAiRunning && (
+                                        <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
+                                            Thinking about this problem...
+                                        </div>
+                                    )}
+                                </div>
+
+                                <form
+                                    className="flex flex-shrink-0 gap-2 border-t border-[#1d2d44] pt-3"
+                                    onSubmit={(event) => {
+                                        event.preventDefault();
+                                        sendProblemAiQuestion(problemAiDraft);
+                                    }}
+                                >
+                                    <input
+                                        value={problemAiDraft}
+                                        onChange={(event) => setProblemAiDraft(event.target.value)}
+                                        placeholder="Ask about this problem..."
+                                        className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!problemAiDraft.trim() || problemAiRunning}
+                                        className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
+                                    >
+                                        Ask
+                                    </button>
+                                </form>
                             </div>
                         )}
                         {showModal === 'customize' && (
