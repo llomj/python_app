@@ -11765,7 +11765,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         }, 240);
     };
 
-    const panelAlpha = panelColors.alpha / 100;
+    const panelAlpha = 1 - (panelColors.alpha / 100);
     const panelBackground = hexToRgba(panelColors.background, panelAlpha);
     const panelBorder = hexToRgba(panelColors.border, 0.3);
     const panelBorderSoft = hexToRgba(panelColors.border, 0.3);
@@ -12371,7 +12371,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {/* Fixed footer - centered version button */}
             <div
                 className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 border-t py-2 px-4"
-                style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))', backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelBorderSoft }}
+                style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))', backgroundColor: hexToRgba(panelColors.background, panelAlpha), borderColor: panelBorderSoft }}
             >
                 <div className="relative flex items-center justify-center">
                      <button onClick={() => window.location.reload()} className="flex items-center gap-2 hover:brightness-125 transition-all px-3 py-2 rounded-full border" title="Reload app" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: toolPanelColors.footerText }}
@@ -12721,7 +12721,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         <div className="space-y-4">
                                             <div
                                                 className="flex flex-wrap items-center justify-center gap-3 rounded-2xl px-4 py-3 text-xs font-black"
-                                                style={{ backgroundColor: hexToRgba(panelColors.background, 0.85), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
+                                                style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
                                             >
                                                 <span className="rounded-full border p-1" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Key size={14} /></span>
                                                 <span><span className="uppercase" style={{ color: countRowColors.count }}>Count:</span> <span style={{ color: countRowColors.value }}>12</span></span>
@@ -12822,11 +12822,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         <div className="space-y-4">
                                             <div
                                                 className="rounded-2xl border p-3"
-                                                style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.3) }}
+                                                style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), borderColor: hexToRgba(panelColors.border, 0.3) }}
                                             >
                                                 <div
                                                     className="mb-3 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em]"
-                                                    style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), color: toolPanelColors.toggleText }}
+                                                    style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), color: toolPanelColors.toggleText }}
                                                 >
                                                     <span>Hide Tools</span>
                                                     <ChevronDown size={14} />
@@ -12890,15 +12890,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </div>
                                                 {/* Transparent overlay panels */}
                                                 <div className="relative space-y-2 p-3">
-                                                    <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
+                                                    <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
                                                         <span className="uppercase" style={{ color: '#3b82f6' }}>Count:</span> 12
                                                         <span className="uppercase" style={{ color: '#22c55e' }}>Wins:</span> 8
                                                     </div>
-                                                    <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                                                    <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
                                                         <span className="font-bold text-white">Problem 1005</span>
                                                         <div className="mt-1 text-gray-400">Write a program to remove first and last characters from a string.</div>
                                                     </div>
-                                                    <div className="rounded-xl px-3 py-2 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                                                    <div className="rounded-xl px-3 py-2 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
                                                         <span className="font-bold text-gray-200">main.py</span>
                                                         <span className="ml-3 uppercase text-[#22c55e]">▶ Run</span>
                                                     </div>
