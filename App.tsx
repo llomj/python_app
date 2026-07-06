@@ -44,7 +44,7 @@ import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
-import { DEFAULT_OFFLINE_AI_STATE, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
+import { DEFAULT_OFFLINE_AI_STATE, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
@@ -70,6 +70,13 @@ interface AutoGradeResult {
     message: string;
     functionName?: string;
     output?: string;
+}
+
+interface ProblemAiMessage {
+    id: number;
+    role: 'user' | 'assistant';
+    text: string;
+    source?: 'built_in' | 'offline' | 'user';
 }
 
 const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
@@ -9242,7 +9249,15 @@ const parseAiTextParts = (text: string): AiTextPart[] => {
 
 const looksLikePythonCode = (text: string) => {
     const trimmed = text.trim();
-    return /\n/.test(trimmed) && /\b(def|class|return|if|for|while|import|from|print)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
+    const lines = trimmed.split('\n').map(line => line.trim()).filter(Boolean);
+    if (lines.length === 0) return false;
+    const codeLines = lines.filter(line => (
+        /^(def|class|return|if|elif|else:|for|while|try:|except|finally:|with|import|from|print\s*\(|raise\b|yield\b|pass\b|break\b|continue\b)\b/.test(line)
+        || /^[A-Za-z_]\w*\s*(?:=|\+=|-=|\*=|\/=|%=|\/\/=|\*\*=)/.test(line)
+        || /^[A-Za-z_]\w*\s*\(.*\)\s*$/.test(line)
+        || /^\s{2,}\S/.test(line)
+    ));
+    return codeLines.length >= Math.max(1, Math.ceil(lines.length * 0.35));
 };
 
 const isSolutionHeading = (line: string) => /^#\s*(Using|Script|Direct|Built|Manual|Alternative|Try|Another|Equivalent|Convert|Modify|Consider)\b/i.test(line.trim());
@@ -9865,6 +9880,77 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
     );
 }
 
+const renderProblemAiInlineText = (text: string) => {
+    const parts = text.split(/(`[^`]+`)/g);
+    return parts.map((part, index) => {
+        if (part.startsWith('`') && part.endsWith('`')) {
+            return (
+                <code key={`problem-ai-inline-${index}`} className="rounded-md border px-1.5 py-0.5 text-[0.85em]" style={{ borderColor: 'rgba(96, 165, 250, 0.24)', backgroundColor: 'rgba(15, 23, 42, 0.65)', color: '#bfdbfe' }}>
+                    {part.slice(1, -1)}
+                </code>
+            );
+        }
+        return <React.Fragment key={`problem-ai-inline-${index}`}>{part}</React.Fragment>;
+    });
+};
+
+function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: string; editorColors: EditorColorSettings; accentColor?: string }) {
+    const parts = parseAiTextParts(text);
+    const renderCode = (code: string, key: string) => (
+        <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
+            <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
+                Python
+            </div>
+            <CodeMirror
+                value={code}
+                height="auto"
+                readOnly={true}
+                extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                theme="none"
+                basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
+            />
+        </div>
+    );
+
+    return (
+        <div className="space-y-2.5 text-sm leading-relaxed text-gray-200">
+            {parts.map((part, index) => {
+                if (part.type === 'code' || looksLikePythonCode(part.value)) {
+                    return renderCode(part.value, `problem-ai-code-${index}`);
+                }
+
+                const sections = part.value
+                    .split(/\n\s*\n+/)
+                    .map(section => section.trim())
+                    .filter(Boolean);
+
+                return (
+                    <div key={`problem-ai-text-${index}`} className="space-y-2.5">
+                        {sections.map((section, sectionIndex) => {
+                            const cleaned = section.replace(/^\d+[.)]\s*/, '').trim();
+                            const lines = cleaned.split(/\n+/).map(line => line.trim()).filter(Boolean);
+                            return (
+                                <div key={`problem-ai-section-${index}-${sectionIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: hexToRgba(accentColor, 0.24), backgroundColor: 'rgba(8, 18, 34, 0.48)' }}>
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accentColor, 0.16), color: accentColor }}>
+                                        {sectionIndex + 1}
+                                    </div>
+                                    <div className="min-w-0 space-y-1.5 text-gray-200">
+                                        {lines.map((line, lineIndex) => (
+                                            <p key={`problem-ai-line-${index}-${sectionIndex}-${lineIndex}`} className="whitespace-pre-wrap">
+                                                {renderProblemAiInlineText(line)}
+                                            </p>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
@@ -9916,7 +10002,7 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
@@ -9926,6 +10012,10 @@ const App: React.FC = () => {
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
     const [aiReviewRunning, setAiReviewRunning] = useState(false);
+    const [problemAiMessages, setProblemAiMessages] = useState<ProblemAiMessage[]>([]);
+    const [problemAiDraft, setProblemAiDraft] = useState('');
+    const [problemAiRunning, setProblemAiRunning] = useState(false);
+    const [problemAiProblemId, setProblemAiProblemId] = useState<number | null>(null);
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -9941,6 +10031,7 @@ const App: React.FC = () => {
     const offlineAiBusy = offlineAiState.status === 'downloading' || offlineAiState.status === 'removing';
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
+    const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
     const [logExpanded, setLogExpanded] = useState(false);
     const [showBreakdownFor, setShowBreakdownFor] = useState<number | null>(null);
@@ -10028,8 +10119,9 @@ const App: React.FC = () => {
     const loadSavedProblem = (problem: SavedProblem) => {
         const ex = EXERCISES.find(e => e.id === problem.exerciseId);
         if (ex) {
+            setPlainMode(false);
             setExercise(ex);
-            setFiles([{ name: 'main.py', content: problem.initialCode }]);
+            setFiles([{ name: 'main.py', content: ex.initialCode }]);
             setActiveFileIndex(0);
             setOutput('Run code to see output...');
             setOutputStatus('idle');
@@ -10073,8 +10165,9 @@ const App: React.FC = () => {
     const loadIdLogProblem = (problem: SavedProblem) => {
         const ex = EXERCISES.find(e => e.id === problem.exerciseId);
         if (ex) {
+            setPlainMode(false);
             setExercise(ex);
-            setFiles([{ name: 'main.py', content: problem.initialCode }]);
+            setFiles([{ name: 'main.py', content: ex.initialCode }]);
             setActiveFileIndex(0);
             setOutput('Run code to see output...');
             setOutputStatus('idle');
@@ -10126,6 +10219,7 @@ const App: React.FC = () => {
     const stdinValuesRef = useRef<string[]>([]);
     const keyboardHapticsRef = useRef(keyboardHaptics);
     const keyboardSoundRef = useRef(keyboardSound);
+    const resultSoundRef = useRef(resultSound);
     const keyboardAudioRef = useRef<AudioContext | null>(null);
     const lastKeyboardFeedbackRef = useRef(0);
     const keyboardMainScrollRef = useRef<number | null>(null);
@@ -10188,6 +10282,11 @@ const App: React.FC = () => {
     }, [keyboardSound]);
 
     useEffect(() => {
+        resultSoundRef.current = resultSound;
+        localStorage.setItem('python_result_sound', String(resultSound));
+    }, [resultSound]);
+
+    useEffect(() => {
         localStorage.setItem('python_plain_mode', String(plainMode));
     }, [plainMode]);
 
@@ -10224,6 +10323,40 @@ const App: React.FC = () => {
             oscillator.stop(audio.currentTime + 0.04);
         } catch {
             // Audio feedback is optional and may be blocked by the browser.
+        }
+    }, []);
+
+    const playResultFeedback = useCallback((kind: 'win' | 'fail') => {
+        if (!resultSoundRef.current) return;
+        try {
+            const AudioCtor = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioCtor) return;
+            const audio = keyboardAudioRef.current ?? new AudioCtor();
+            keyboardAudioRef.current = audio;
+            if (audio.state === 'suspended') audio.resume();
+
+            const notes = kind === 'win'
+                ? [523.25, 659.25, 783.99, 1046.5]
+                : [392, 329.63, 261.63];
+            const spacing = kind === 'win' ? 0.055 : 0.075;
+            const duration = kind === 'win' ? 0.09 : 0.12;
+            const peak = kind === 'win' ? 0.055 : 0.04;
+            notes.forEach((frequency, index) => {
+                const start = audio.currentTime + index * spacing;
+                const oscillator = audio.createOscillator();
+                const gain = audio.createGain();
+                oscillator.type = kind === 'win' ? 'triangle' : 'sine';
+                oscillator.frequency.setValueAtTime(frequency, start);
+                gain.gain.setValueAtTime(0.0001, start);
+                gain.gain.exponentialRampToValueAtTime(peak, start + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+                oscillator.connect(gain);
+                gain.connect(audio.destination);
+                oscillator.start(start);
+                oscillator.stop(start + duration + 0.015);
+            });
+        } catch {
+            // Result audio is optional and may be blocked until the browser allows sound.
         }
     }, []);
 
@@ -10750,6 +10883,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 if (gradeResult.passed) {
                     updateCurrentModeStats('success');
                     setOutputStatus('win');
+                    playResultFeedback('win');
                     setPendingNextProblem(true);
                     setOutput(`${displayOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                 } else {
@@ -10760,10 +10894,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     if (aiFallback.autoWinReview) {
                         updateCurrentModeStats('success');
                         setOutputStatus('win');
+                        playResultFeedback('win');
                         setOutput(`${displayOutput}AI AUTO WIN\nDeterministic grader failed, but ${getAiReviewSourceLabel(aiFallback.autoWinReview.source)} judged this answer logically correct with ${Math.round(aiFallback.autoWinReview.confidence * 100)}% confidence.\n\nOriginal grader message:\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
                     } else {
                         updateCurrentModeStats('failed');
                         setOutputStatus('fail');
+                        playResultFeedback('fail');
                         const review = aiFallback.review;
                         const reviewNote = review
                             ? review.source === 'diagnostic'
@@ -10795,6 +10931,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             setStdinValues([]);
             if (plainMode) {
                 setOutputStatus('fail');
+                playResultFeedback('fail');
                 setOutput(`${stdout || ''}\n${errorMessage}`);
             } else if (autoGrader) {
                 updateCurrentModeStats('failed');
@@ -10814,10 +10951,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setLatestAiReviewResult(diagnosticReview);
                 setAiHintText(formatAiReviewHintText(diagnosticReview));
                 setOutputStatus('fail');
+                playResultFeedback('fail');
                 setPendingNextProblem(true);
                 setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI REVIEW\n${diagnosticReview.explanation}${diagnosticReview.suggestedFix ? `\n\nSuggested fix:\n${diagnosticReview.suggestedFix}` : ''}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
             } else {
                 setOutputStatus('fail');
+                playResultFeedback('fail');
                 setOutput(`${userOutput}${errorMessage}`);
             }
         } finally {
@@ -10875,13 +11014,447 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     const handleMarkSuccess = () => {
         updateCurrentModeStats('success');
+        playResultFeedback('win');
         loadRandomExercise();
     };
 
     const handleMarkFailed = () => {
         updateCurrentModeStats('failed');
+        playResultFeedback('fail');
         loadRandomExercise();
     };
+
+    const buildProblemAiRequest = useCallback((question: string): AiReviewRequest => {
+        const reusableReviewRequest =
+            latestAiReviewRequest?.problemId === exercise.id &&
+            latestAiReviewRequest.userCode === files[activeFileIndex]?.content
+                ? latestAiReviewRequest
+                : null;
+        const currentGrader = AUTO_GRADERS[exercise.id] || null;
+        const activeCode = files[activeFileIndex]?.content || '';
+        const contextMessage = [
+            `USER QUESTION: ${question}`,
+            '',
+            'Answer as a patient Python tutor for this exact exercise.',
+            'Do not grade manually unless the user asks. Explain concepts, syntax, current output, and next steps.',
+            `Latest output/status: ${outputStatus}`,
+            `Latest output text: ${output}`,
+            reusableReviewRequest?.graderMessage ? `Latest grader message: ${reusableReviewRequest.graderMessage}` : 'Latest grader message: none yet',
+        ].join('\n');
+
+        return {
+            problemId: exercise.id,
+            title: exercise.title,
+            description: `${exercise.description}\n\n${contextMessage}`,
+            userCode: activeCode,
+            graderMessage: reusableReviewRequest?.graderMessage || contextMessage,
+            graderPassed: reusableReviewRequest?.graderPassed ?? outputStatus === 'win',
+            graderSpec: reusableReviewRequest?.graderSpec || currentGrader,
+            programOutput: reusableReviewRequest?.programOutput || output,
+            visibleSolution: displaySolution,
+        };
+    }, [activeFileIndex, displaySolution, exercise, files, latestAiReviewRequest, output, outputStatus]);
+
+    const buildBuiltInProblemAiAnswer = useCallback((question: string, request: AiReviewRequest): string => {
+        const q = question.toLowerCase();
+        const description = exercise.description;
+        const hint = exercise.hint?.trim();
+        const breakdown = exercise.breakdown?.trim();
+        const code = request.userCode || '';
+        const graderMessage = request.graderMessage || '';
+        const promptMethods = Array.from(new Set(description.match(/`[^`]+`|\.[A-Za-z_]\w*\(\)|\b[A-Za-z_]\w*\(\)/g) || []))
+            .slice(0, 8);
+        const asksWhy = /why|wrong|failed|fail|error|output|red|incorrect/.test(q);
+        const asksMethod = /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in|append|split|join|strip|lower|upper|replace|sort|sorted/.test(q);
+        const asksHint = /hint|help|start|how|what should|what do/.test(q);
+        const asksDigitMethod = /\bis\s*(?:there\s*)?(?:is\s*)?digit\b/.test(q) || q.includes('isdigit') || (q.includes('digit') && q.includes('string') && q.includes('method'));
+        const asksIntegerArgument = /(?:integer|int|number).*(?:argument|input|parameter)|can i.*(?:integer|int|number)|write an? (?:integer|int|number)/.test(q);
+        const firstLine = description.split('\n')[0];
+        const functionName = description.match(/`([A-Za-z_]\w*)`/)?.[1] || exercise.initialCode.match(/def\s+([A-Za-z_]\w*)/)?.[1] || 'your_function';
+        const lowerDescription = description.toLowerCase();
+        const asksBoolean = /\b(bool|boolean|true|false)\b/.test(q);
+        const asksArgument = /\b(argument|parameter|input|pass|put|use)\b/.test(q);
+        const returnsBoolean = /\b(return|returns)\b[^.]*\b(true|false|boolean|bool)\b/.test(lowerDescription) || /\btrue\b.*\bif\b|\bfalse\b/.test(lowerDescription);
+        const wantsCharacter = /\b(character|char)\b/.test(lowerDescription);
+        const wantsString = wantsCharacter || /\b(string|str)\b/.test(lowerDescription);
+        const wantsNumber = /\b(integer|number|int|float)\b/.test(lowerDescription);
+        const promptMethodNames = promptMethods
+            .map(item => item.replace(/[`()]/g, '').trim())
+            .filter(Boolean);
+        const taskSummary = [
+            `The task is asking you to build \`${functionName}\`, not just copy the example output.`,
+            returnsBoolean ? 'The answer should be a Boolean result: `True` or `False`.' : '',
+            wantsCharacter ? 'The input is described as a character, so use a one-character string like `"5"` or `"a"`.' : '',
+            wantsString && !wantsCharacter ? 'The input is text, so string methods and string indexing may be useful.' : '',
+            wantsNumber && !wantsString ? 'The input is numeric, so arithmetic or numeric comparison is probably the main operation.' : '',
+            promptMethodNames.length ? `Useful prompt syntax: ${promptMethodNames.map(name => `\`${name}\``).join(', ')}.` : '',
+        ].filter(Boolean);
+        const directContextAnswer = (lead: string, extra: string[] = []) => [
+            `1. Direct answer`,
+            lead,
+            '',
+            `2. How it applies here`,
+            ...(taskSummary.length ? taskSummary : [firstLine]),
+            '',
+            ...extra,
+        ].join('\n');
+        const conceptAnswers: Array<{ pattern: RegExp; text: string }> = [
+            {
+                pattern: /\b(list|lists)\b/,
+                text: [
+                    '1. A list is an ordered collection of values.',
+                    'Use square brackets:',
+                    '```python',
+                    'numbers = [1, 2, 3]',
+                    "names = ['Ada', 'Bob']",
+                    '```',
+                    '2. Lists can change. You can add, remove, sort, index, and loop through them.',
+                    '```python',
+                    'numbers.append(4)',
+                    'print(numbers[0])  # 1',
+                    '```',
+                    '3. In a problem, if it says “takes a list”, the function parameter should receive something like `[1, 2, 3]`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(dict|dictionary|dictionaries)\b/,
+                text: [
+                    '1. A dictionary stores key-value pairs.',
+                    'Use curly braces with `key: value`:',
+                    '```python',
+                    "person = {'name': 'Ada', 'age': 30}",
+                    "print(person['name'])  # Ada",
+                    '```',
+                    '2. Use dictionaries when the problem asks you to map one thing to another, like word counts, names to scores, or keys to values.',
+                    '3. Common dictionary methods are `.keys()`, `.values()`, `.items()`, and `.get()`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(tuple|tuples)\b/,
+                text: [
+                    '1. A tuple is an ordered collection like a list, but it is immutable.',
+                    'Use parentheses:',
+                    '```python',
+                    'point = (3, 4)',
+                    'x, y = point',
+                    '```',
+                    '2. Use a tuple when the problem asks for a fixed group of values, like `(min_value, max_value)`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(set|sets)\b/,
+                text: [
+                    '1. A set stores unique values only.',
+                    'Use curly braces or `set()`:',
+                    '```python',
+                    'numbers = {1, 2, 2, 3}',
+                    'print(numbers)  # {1, 2, 3}',
+                    '```',
+                    '2. Sets are useful for removing duplicates and checking membership quickly with `in`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(string|strings|str)\b/,
+                text: [
+                    '1. A string is text in quotes.',
+                    '```python',
+                    "word = 'python'",
+                    '```',
+                    '2. Strings have methods like `.lower()`, `.upper()`, `.replace()`, `.split()`, `.strip()`, `.isdigit()`, and `.isalpha()`.',
+                    '3. Strings are sequences, so indexing and slicing work:',
+                    '```python',
+                    "word = 'python'",
+                    'print(word[0])   # p',
+                    'print(word[-1])  # n',
+                    '```',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(method|methods)\b/,
+                text: [
+                    '1. A method is a function that belongs to an object.',
+                    'You call it with dot notation:',
+                    '```python',
+                    "text = 'hello'",
+                    'print(text.upper())  # HELLO',
+                    '```',
+                    '2. In this app, if the problem mentions a string/list/dictionary method, it usually wants you to call it on that value.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(function|def)\b/,
+                text: [
+                    '1. A function is a reusable block of code.',
+                    '```python',
+                    'def add(a, b):',
+                    '    return a + b',
+                    '```',
+                    '2. `def` creates the function. `return` sends the answer back to the grader.',
+                    '3. For these problems, prefer `return` inside functions unless the prompt specifically asks you to print.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(oop|class|object)\b/,
+                text: [
+                    '1. OOP means object-oriented programming.',
+                    'A class is a blueprint. An object is an instance made from that blueprint.',
+                    '```python',
+                    'class Dog:',
+                    '    def __init__(self, name):',
+                    '        self.name = name',
+                    '```',
+                    '2. `self` means “this object”. Methods inside a class usually take `self` first.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(loop|for|while)\b/,
+                text: [
+                    '1. A loop repeats code.',
+                    'Use `for` when looping through a sequence:',
+                    '```python',
+                    'for number in [1, 2, 3]:',
+                    '    print(number)',
+                    '```',
+                    '2. Use `while` when repeating until a condition changes.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(return|print)\b/,
+                text: [
+                    '1. `return` sends a value back from a function.',
+                    '2. `print()` only displays text in the output.',
+                    '```python',
+                    'def square(n):',
+                    '    return n * n',
+                    '```',
+                    '3. For most function problems in this app, the grader expects `return`, not only `print()`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(index|indexes|indices|slice|slicing)\b/,
+                text: [
+                    '1. Indexing gets one item from a sequence.',
+                    '```python',
+                    "text = 'python'",
+                    'print(text[0])   # p',
+                    'print(text[-1])  # n',
+                    '```',
+                    '2. Slicing gets a range:',
+                    '```python',
+                    'print(text[1:4])  # yth',
+                    '```',
+                ].join('\n\n'),
+            },
+        ];
+
+        if (asksDigitMethod) {
+            return [
+                '1. Yes — `isdigit()` is a string method.',
+                'You call it on a string value, like this:',
+                '```python',
+                "char = '5'",
+                'print(char.isdigit())  # True',
+                '```',
+                '2. For this problem, `check_digit(char)` should take one character as a string and return `True` if it is a digit from `0` to `9`.',
+                '```python',
+                'def check_digit(char):',
+                '    return char.isdigit()',
+                '```',
+                '3. Do not pass an integer directly if the task says “character”. Use `"5"` not `5`. If you already have an integer, convert it first with `str(value).isdigit()`.',
+            ].join('\n\n');
+        }
+
+        if (asksIntegerArgument) {
+            const characterProblem = /character|char|string/.test(lowerDescription);
+            if (characterProblem) {
+                return [
+                    '1. For this problem, use a string character, not an integer.',
+                    'The prompt says the function takes a character. In Python, that usually means a one-character string like `"5"` or `"a"`.',
+                    '```python',
+                    "check_digit('5')  # correct",
+                    'check_digit(5)    # not ideal for this task',
+                    '```',
+                    '2. Why?',
+                    '`isdigit()` is a string method, so it works on strings:',
+                    '```python',
+                    "char = '5'",
+                    'print(char.isdigit())  # True',
+                    '```',
+                    '3. If you already have an integer, convert it first:',
+                    '```python',
+                    'value = 5',
+                    'print(str(value).isdigit())  # True',
+                    '```',
+                ].join('\n\n');
+            }
+            return [
+                '1. It depends on the problem input.',
+                'If the prompt says number or integer, passing an integer is fine.',
+                'If the prompt says string or character, use quotes, for example `"5"` instead of `5`.',
+                '2. Match the function parameter to the prompt, because the grader tests the type the problem asks for.',
+            ].join('\n\n');
+        }
+
+        if (asksBoolean) {
+            return directContextAnswer(
+                returnsBoolean
+                    ? 'Yes. For this problem, the function should return a Boolean value: `True` when the condition is satisfied, otherwise `False`.'
+                    : 'A Boolean is only needed if the prompt asks for `True`/`False`, a yes/no check, or a condition result.',
+                returnsBoolean ? [
+                    '3. Example shape',
+                    '```python',
+                    `def ${functionName}(value):`,
+                    '    return condition_here',
+                    '```',
+                    'The important part is that the expression after `return` evaluates to `True` or `False`.',
+                ] : [
+                    '3. What to return instead',
+                    'For this problem, return the type requested by the prompt, such as a number, string, list, dictionary, or other calculated result.',
+                ],
+            );
+        }
+
+        if (asksArgument) {
+            return directContextAnswer(
+                wantsString
+                    ? 'Use a string argument for this task. If the prompt says character, pass a quoted value like `"5"` or `"a"`.'
+                    : wantsNumber
+                        ? 'Use a numeric argument for this task unless the prompt specifically asks for text.'
+                        : 'Use the argument type described by the prompt. The variable name can be different, but the value type and logic must match the task.',
+                [
+                    '3. Variable names do not matter',
+                    `The grader cares that \`${functionName}\` performs the requested logic. The parameter can be named \`char\`, \`x\`, \`value\`, or another valid name.`,
+                ],
+            );
+        }
+
+        const conceptAnswer = conceptAnswers.find(item => item.pattern.test(q));
+        if (conceptAnswer && !asksWhy && !q.includes('explain task')) {
+            return conceptAnswer.text;
+        }
+
+        const parts: string[] = [];
+        parts.push(`1. Task breakdown\n${taskSummary.length ? taskSummary.join('\n') : firstLine}`);
+
+        const expectedShape = [
+            `Function: \`${functionName}\``,
+            promptMethods.length ? `Useful syntax from the prompt: ${promptMethods.join(', ')}` : '',
+        ].filter(Boolean).join('\n');
+        if (expectedShape) {
+            parts.push(`2. Important details\n${expectedShape}`);
+        }
+
+        if (asksMethod || promptMethods.length) {
+            let methodText = promptMethods.length ? promptMethods.join(', ') : 'No specific method name is written in the prompt.';
+            if (description.toLowerCase().includes('digit')) {
+                methodText += `\n\nFor digit checks, \`isdigit()\` is a string method. Use \`char.isdigit()\` on a string character like \`'7'\`.`;
+            }
+            parts.push(`3. Method or syntax\n${methodText}`);
+        }
+
+        if (asksWhy || outputStatus === 'fail') {
+            const outputText = output && output !== 'Run code to see output...' ? output : 'No run output is available yet.';
+            parts.push(`4. Current output check\nStatus: ${outputStatus.toUpperCase()}.\nOutput/grader context:\n${graderMessage || outputText}\n\nIf the output is wrong, compare what your code returns or prints against the operation requested by the problem.`);
+        }
+
+        if (code.trim() && asksWhy) {
+            const lines = code.split('\n').filter(line => line.trim()).slice(0, 8).join('\n');
+            parts.push(`5. Your code context\n\`\`\`python\n${lines}\n\`\`\``);
+        }
+
+        if (asksHint || hint || breakdown) {
+            parts.push(`6. Simple next step\n${hint || 'Break the problem into input, operation, and returned output.'}${breakdown ? `\n\nGuide:\n${breakdown}` : ''}`);
+        }
+
+        if (parts.length <= 2 && !asksHint && !asksWhy && !asksMethod) {
+            parts.push(`3. If your question is more specific\nAsk it directly, for example: “Should this return ` + '`True` or `False`?”, “Can the argument be an integer?”, or “What does this method do?”.');
+        }
+
+        return parts.join('\n\n');
+    }, [exercise, output, outputStatus]);
+
+    const openProblemAi = useCallback(() => {
+        const request = buildProblemAiRequest('Explain this problem.');
+        const shouldReset = problemAiProblemId !== exercise.id || problemAiMessages.length === 0;
+        if (shouldReset) {
+            setProblemAiProblemId(exercise.id);
+            setProblemAiMessages([{
+                id: Date.now(),
+                role: 'assistant',
+                source: 'built_in',
+                text: buildBuiltInProblemAiAnswer(
+                    outputStatus === 'fail' ? 'Why did my output fail?' : 'Explain this problem.',
+                    request,
+                ),
+            }]);
+        }
+        setShowModal('problem_ai');
+    }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, exercise.id, outputStatus, problemAiMessages.length, problemAiProblemId]);
+
+    const sendProblemAiQuestion = useCallback(async (rawQuestion: string) => {
+        const question = rawQuestion.trim();
+        if (!question || problemAiRunning) return;
+        const request = buildProblemAiRequest(question);
+        const lowerQuestion = question.toLowerCase();
+        const shouldUseReviewer =
+            /review my code|check my code|is my code correct|is this correct|why failed|why did.*fail|auto failed|grader|output wrong|error/.test(lowerQuestion);
+        const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
+        setProblemAiMessages(prev => [...prev, userMessage]);
+        setProblemAiDraft('');
+        setProblemAiRunning(true);
+
+        try {
+            if (!shouldUseReviewer) {
+                const modelAnswer = await answerProblemQuestionWithAvailableAi(question, request, offlineAiState);
+                if (modelAnswer) {
+                    setProblemAiMessages(prev => [...prev, {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        source: 'offline',
+                        text: modelAnswer,
+                    }]);
+                    return;
+                }
+
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: buildBuiltInProblemAiAnswer(question, request),
+                }]);
+                return;
+            }
+            if (offlineAiState.status !== 'ready') {
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: buildBuiltInProblemAiAnswer(question, request),
+                }]);
+                return;
+            }
+            const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
+            const answer = [
+                review.explanation,
+                review.suggestedFix ? `Suggested direction:\n${review.suggestedFix}` : '',
+            ].filter(Boolean).join('\n\n');
+            setProblemAiMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                role: 'assistant',
+                source: review.source === 'diagnostic' ? 'built_in' : 'offline',
+                text: answer || buildBuiltInProblemAiAnswer(question, request),
+            }]);
+        } catch {
+            setProblemAiMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                role: 'assistant',
+                source: 'built_in',
+                text: `Offline AI could not answer this time, so built-in help answered instead.\n\n${buildBuiltInProblemAiAnswer(question, request)}`,
+            }]);
+        } finally {
+            setProblemAiRunning(false);
+        }
+    }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, offlineAiState, problemAiRunning]);
 
     const handleAiHint = async () => {
         const reusableReviewRequest =
@@ -11194,8 +11767,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     const panelAlpha = panelColors.alpha / 100;
     const panelBackground = hexToRgba(panelColors.background, panelAlpha);
-    const panelBorder = hexToRgba(panelColors.border, 0.55);
-    const panelBorderSoft = hexToRgba(panelColors.border, 0.35);
+    const panelBorder = hexToRgba(panelColors.border, 0.3);
+    const panelBorderSoft = hexToRgba(panelColors.border, 0.3);
+    const sharedPanelSurface = {
+        backgroundColor: panelBackground,
+        border: `1px solid ${panelBorder}`,
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+    } as const;
     const semitransparentBg = hexToRgba(panelColors.background, panelAlpha);
     const effectiveEditorColors = useMemo<EditorColorSettings>(() => ({
         ...editorColors,
@@ -11282,7 +11861,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div className="flex items-center justify-center mb-3">
                     <div
                         className="flex gap-3 sm:gap-5 items-center px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight select-none"
-                        style={{ pointerEvents: 'auto', backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
+                        style={{ ...sharedPanelSurface, pointerEvents: 'auto' }}
                         onPointerDown={() => {
                             countRowLongPressRef.current = setTimeout(() => {
                                 setShowModal('stats_by_mode');
@@ -11323,10 +11902,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         style={{
                             minHeight: '64px',
                             maxHeight: '64px',
-                            backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100),
-                            backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
-                            borderColor: hexToRgba(panelColors.border, 0.25)
+                            ...sharedPanelSurface,
                         }}
                     >
                         <div className="flex items-center justify-between gap-3 px-4 py-3">
@@ -11340,10 +11916,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         className="bg-[#0a1628] rounded-xl border border-[#1d2d44] shadow-2xl overflow-hidden mt-2"
                         style={{
-                            backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100),
-                            backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
-                            borderColor: hexToRgba(panelColors.border, 0.25)
+                            ...sharedPanelSurface,
                         }}
                     >
                         <div className="flex items-center justify-between gap-3 px-4 py-3">
@@ -11462,17 +12035,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             height: '190px',
                             display: 'flex',
                             flexDirection: 'column',
-                            backgroundColor: panelBackground,
-                            backdropFilter: 'blur(8px)',
-                            WebkitBackdropFilter: 'blur(8px)',
-                            border: `1px solid ${panelBorder}`,
+                            ...sharedPanelSurface,
                             borderRadius: '0.75rem',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                         }}
                     >
                         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
-                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>Problem {exercise.id}</h2>
+                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>#{exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <button onClick={openProblemAi} title="Ask AI about this problem" style={{ backgroundColor: showModal === 'problem_ai' ? hexToRgba(toolPanelColors.ai, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: toolPanelColors.ai, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                    <Bot size={14} />
+                                    <span>AI</span>
+                                </button>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
@@ -11547,11 +12121,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                         className="flex items-center justify-between rounded-xl border p-2 shadow-2xl shadow-black/40"
                     style={{
+                        ...sharedPanelSurface,
                         pointerEvents: 'auto',
-                        backgroundColor: panelBackground,
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                        borderColor: panelBorder
                     }}
                 >
                     <div className="flex items-center gap-2 overflow-hidden">
@@ -11642,7 +12213,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     <div
                         ref={editorShellRef}
                         className="flex-grow relative border-b"
-                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, borderColor: panelColors.border }}
+                        style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, borderColor: panelBorder }}
                     >
                         <CodeMirror
                             value={files[activeFileIndex].content} height="320px" extensions={editorExtensions} onChange={updateActiveContent}
@@ -12053,6 +12624,89 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 </div>
                             </div>
                         )}
+                        {showModal === 'problem_ai' && (
+                            <div className="flex h-full min-h-0 flex-col gap-3">
+                                <div className="flex flex-shrink-0 items-start justify-between gap-3">
+                                    <div>
+                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
+                                        <p className="mt-1 text-xs text-gray-400">Ask about Problem {exercise.id}, your code, output, or why the grader failed.</p>
+                                    </div>
+                                    <span className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.08) }}>
+                                        {offlineAiState.status === 'ready' ? 'Offline AI' : 'Built-in help'}
+                                    </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                                    {['Explain task', 'Why failed?', 'What method?', 'Show hint'].map(prompt => (
+                                        <button
+                                            key={prompt}
+                                            onClick={() => sendProblemAiQuestion(prompt)}
+                                            disabled={problemAiRunning}
+                                            className="rounded-xl border px-3 py-2 text-left font-bold transition-all hover:brightness-125 disabled:opacity-50"
+                                            style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
+                                        >
+                                            {prompt}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                                    {problemAiMessages.map(message => (
+                                        <div
+                                            key={message.id}
+                                            className="rounded-2xl border p-3"
+                                            style={{
+                                                borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
+                                                backgroundColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.08) : 'rgba(8, 18, 34, 0.55)',
+                                            }}
+                                        >
+                                            <div className="mb-1.5 flex items-center justify-between gap-2">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: message.role === 'user' ? countRowColors.count : toolPanelColors.ai }}>
+                                                    {message.role === 'user' ? 'You' : 'Problem AI'}
+                                                </span>
+                                                {message.source && message.role === 'assistant' && (
+                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? 'Offline AI' : 'Built-in help'}</span>
+                                                )}
+                                            </div>
+                                            {message.role === 'assistant' ? (
+                                                <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
+                                            ) : (
+                                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-100">{message.text}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {problemAiRunning && (
+                                        <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
+                                            Thinking about this problem...
+                                        </div>
+                                    )}
+                                </div>
+
+                                <form
+                                    className="flex flex-shrink-0 gap-2 border-t border-[#1d2d44] pt-3"
+                                    onSubmit={(event) => {
+                                        event.preventDefault();
+                                        sendProblemAiQuestion(problemAiDraft);
+                                    }}
+                                >
+                                    <input
+                                        value={problemAiDraft}
+                                        onChange={(event) => setProblemAiDraft(event.target.value)}
+                                        placeholder="Ask about this problem..."
+                                        className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!problemAiDraft.trim() || problemAiRunning}
+                                        className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
+                                    >
+                                        Ask
+                                    </button>
+                                </form>
+                            </div>
+                        )}
                         {showModal === 'customize' && (
                             <div className="flex h-full min-h-0 flex-col py-2">
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Customize</h2>
@@ -12378,6 +13032,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             <span className="block text-xs font-bold">Sound</span>
                                             <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
                                         </button>
+                                        <button
+                                            onClick={() => setResultSound(prev => !prev)}
+                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                            style={resultSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                        >
+                                            <span className="mb-2 flex items-center justify-between gap-2">
+                                                <Zap size={15} style={{ color: resultSound ? countRowColors.wins : '#6b7280' }} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{resultSound ? 'On' : 'Off'}</span>
+                                            </span>
+                                            <span className="block text-xs font-bold">Result</span>
+                                            <span className="mt-1 block text-[10px] text-gray-400">Cute win/fail sounds after grading.</span>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -12470,13 +13136,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 return (
                                                     <div key={problem.exerciseId} className="rounded-lg border overflow-hidden" style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}>
                                                         <div
-                                                            onClick={() => {
-                                                                if (isExpanded) {
-                                                                    setExpandedSavedProblem(null);
-                                                                } else {
-                                                                    setExpandedSavedProblem(problem.exerciseId);
-                                                                }
-                                                            }}
+                                                            onClick={() => loadSavedProblem(problem)}
                                                             className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer transition-all hover:brightness-125"
                                                             onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.count, 0.5); }}
                                                             onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
@@ -12511,9 +13171,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>
-                                                                <span className="text-gray-500 ml-0.5" style={{ color: hexToRgba(countRowColors.count, 0.5) }}>
+                                                                <button
+                                                                    onClick={() => setExpandedSavedProblem(isExpanded ? null : problem.exerciseId)}
+                                                                    title={isExpanded ? 'Hide details' : 'Show details'}
+                                                                    className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                    style={{ color: hexToRgba(countRowColors.count, 0.7) }}
+                                                                >
                                                                     {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                                                                </span>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         {isExpanded && (
@@ -12525,7 +13190,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                         className="flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-125"
                                                                         style={{ backgroundColor: hexToRgba(countRowColors.count, 0.15), border: `1px solid ${hexToRgba(countRowColors.count, 0.3)}`, color: countRowColors.count }}
                                                                     >
-                                                                        Load
+                                                                        Practice in IDE
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -12573,13 +13238,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 return (
                                                     <div key={problem.exerciseId} className="rounded-lg border overflow-hidden" style={{ borderColor: '#1d2d44', backgroundColor: '#050c18' }}>
                                                         <div
-                                                            onClick={() => {
-                                                                if (isExpanded) {
-                                                                    setExpandedIdLogProblem(null);
-                                                                } else {
-                                                                    setExpandedIdLogProblem(problem.exerciseId);
-                                                                }
-                                                            }}
+                                                            onClick={() => loadIdLogProblem(problem)}
                                                             className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer transition-all hover:brightness-125"
                                                             onMouseEnter={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = hexToRgba(countRowColors.rate, 0.5); }}
                                                             onMouseLeave={(e) => { if (e.currentTarget) e.currentTarget.style.borderColor = '#1d2d44'; }}
@@ -12614,9 +13273,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                 >
                                                                     <Trash2 size={14} />
                                                                 </button>
-                                                                <span className="text-gray-500 ml-0.5" style={{ color: hexToRgba(countRowColors.rate, 0.5) }}>
+                                                                <button
+                                                                    onClick={() => setExpandedIdLogProblem(isExpanded ? null : problem.exerciseId)}
+                                                                    title={isExpanded ? 'Hide details' : 'Show details'}
+                                                                    className="p-1.5 rounded-md transition-all hover:brightness-125"
+                                                                    style={{ color: hexToRgba(countRowColors.rate, 0.7) }}
+                                                                >
                                                                     {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                                                                </span>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         {isExpanded && (
@@ -12628,7 +13292,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                                         className="flex-1 py-1.5 rounded-lg text-[11px] font-bold transition-all hover:brightness-125"
                                                                         style={{ backgroundColor: hexToRgba(countRowColors.rate, 0.15), border: `1px solid ${hexToRgba(countRowColors.rate, 0.3)}`, color: countRowColors.rate }}
                                                                     >
-                                                                        Load
+                                                                        Practice in IDE
                                                                     </button>
                                                                 </div>
                                                             </div>

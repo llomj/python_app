@@ -5,6 +5,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const writeMode = process.argv.includes('--write');
+const forceExamples = process.argv.includes('--force-examples');
 
 function loadTsExports(fileName) {
   const source = fs.readFileSync(path.join(root, fileName), 'utf8');
@@ -47,31 +48,23 @@ function formatExpected(val) {
   if (val === null) return 'None';
   if (val === true) return 'True';
   if (val === false) return 'False';
+  if (typeof val === 'object') return JSON.stringify(val).replace(/"/g, "'");
   return String(val);
 }
 
-function generateExamples(functionName, testCases, isClass) {
-  if (!Array.isArray(testCases) || testCases.length === 0) return [];
-  const withExpected = testCases.filter(tc => tc.expected !== undefined);
-  if (!withExpected.length) return [];
-
-  // Prefer tests matching the target function/class name
-  let cases = withExpected.filter(tc => !tc.functionName || tc.functionName === functionName).slice(0, 3);
-  // Fallback: use any available test if none match by name
-  if (!cases.length) {
-    cases = withExpected.slice(0, 3);
-  }
-
-  const hasCallMethod = cases.some(tc => tc.callMethod);
-
+function generateExamples(functionName, testCases) {
+  const cases = Array.isArray(testCases) ? testCases.slice(0, 3) : [];
+  if (!cases.length) return [];
   return cases.map(tc => {
-    const effectiveName = tc.functionName || functionName;
-    const args = Array.isArray(tc.args) ? tc.args.map(formatArg).join(', ') : '';
-    if (hasCallMethod && tc.callMethod) {
-      const methodArgs = Array.isArray(tc.callMethodArgs) ? tc.callMethodArgs.map(formatArg).join(', ') : '';
-      return `  ${effectiveName}(${args}).${tc.callMethod}(${methodArgs}) \u2192 ${formatExpected(tc.expected)}`;
+    if (Array.isArray(tc.inputValues) && tc.inputValues.length > 0) {
+      const inputs = tc.inputValues.map(formatExpected).join(', ');
+      const arrow = tc.expected !== undefined ? `\u2192 ${formatExpected(tc.expected)}` : '\u2192 shown output';
+      return `  input ${inputs} ${arrow}`;
     }
-    return `  ${effectiveName}(${args}) \u2192 ${formatExpected(tc.expected)}`;
+    const args = Array.isArray(tc.args) ? tc.args.map(formatArg).join(', ') : '';
+    const arrow = tc.expected !== undefined ? `\u2192 ${formatExpected(tc.expected)}` : '\u2192 ?';
+    const name = tc.functionName || functionName;
+    return `  ${name}(${args}) ${arrow}`;
   });
 }
 
@@ -79,7 +72,12 @@ function examplesNeedFix(description) {
   const lines = description.split('\n');
   const exampleLines = lines.filter(l => /\u2192/.test(l) || /->/.test(l));
   if (exampleLines.length === 0) return true;
+  const lowerDescription = description.toLowerCase();
+  const expectsNumericData = /\b(integer|integers|number|numbers|numeric|float|floats)\b/.test(lowerDescription);
+  const expectsListData = /\blist\b/.test(lowerDescription);
+  const genericWordLiteral = /^['"]?(hello|world|python|test|example|sample)['"]?$/i;
   for (const line of exampleLines) {
+    if (/(?:\u2192|->)\s*\?/.test(line)) return true;
     const match = line.match(/\(([^)]+)\)/);
     if (!match) continue;
     const args = match[1].split(',').map(a => a.trim());
@@ -88,6 +86,9 @@ function examplesNeedFix(description) {
     if (uniqueArgs.size === 1 && args.length > 1) return true;
     // Single number where a list/collection is expected
     if (args.length === 1 && /^\d+$/.test(args[0])) return true;
+    if (args.some(arg => genericWordLiteral.test(arg))) return true;
+    if (expectsNumericData && args.some(arg => /^['"][A-Za-z_]+['"]$/.test(arg))) return true;
+    if (expectsListData && args.length === 1 && /^['"][^'"]*['"]$/.test(args[0])) return true;
     // Function name mismatch
     const fnMatch = line.match(/^  (\w+)\(/);
     if (fnMatch) {
@@ -101,13 +102,6 @@ function examplesNeedFix(description) {
       const hasLiteralsMatch = args.every(a => a.startsWith("'") && a.endsWith("'"));
       if (hasLiteralsMatch && args.length >= 3) return true;
     }
-    // Single string or number passed where a list of items is expected
-    const isSingleLiteral = args.length === 1 && (
-      (args[0].startsWith("'") && args[0].endsWith("'")) ||
-      (args[0].startsWith('"') && args[0].endsWith('"')) ||
-      /^\d+$/.test(args[0])
-    );
-    if (isSingleLiteral && (/list|array|using `map/i.test(description) || description.includes('strings') || description.includes('numbers'))) return true;
   }
   return false;
 }
@@ -153,6 +147,15 @@ function generateBreakdown(functionName, params, description) {
 
   if (/substring|slice.*(?:from|extract)/.test(desc)) {
     steps.push(`Use slicing: \`text[start:end]\` extracts characters from index \`start\` up to (not including) \`end\`.`);
+  } else if (/\bmap\(\)/.test(desc) && /string.*number|string.*integer|integers/.test(desc) && /list/.test(desc)) {
+    steps.push(`Use \`map(int, strings)\` to convert each numeric string into an integer without writing a manual loop.`);
+    steps.push(`Wrap the map object with \`list(...)\` so the function returns a real list of integers.`);
+  } else if (/\bmap\(\)/.test(desc) && /square/.test(desc) && /list/.test(desc)) {
+    steps.push(`Use \`map()\` with a helper or lambda that returns \`x ** 2\` for each number.`);
+    steps.push(`Wrap the map object with \`list(...)\` so the result is a list of squared numbers.`);
+  } else if (/\bmap\(\)/.test(desc) && /length/.test(desc) && /string/.test(desc)) {
+    steps.push(`Use \`map(len, strings)\` to apply \`len()\` to every string in the list.`);
+    steps.push(`Wrap the map object with \`list(...)\` so the result is a list of lengths.`);
   } else if (/replace.*char|substitute/.test(desc)) {
     steps.push(`Call \`text.replace(old\\_char, new\\_char)\` — returns a new string with all occurrences replaced.`);
   } else if (/remove.*char|delete.*char/.test(desc)) {
@@ -245,6 +248,12 @@ function generateHint(functionName, params, description) {
   if (/substring|slice/.test(desc) && /string|text/.test(desc)) {
     hints.push('Slicing with `text[start:end]` does NOT include the character at index `end`.');
     hints.push('Python slicing is forgiving: if `end` exceeds the string length, no error occurs.');
+  } else if (/\bmap\(\)/.test(desc) && /string.*number|string.*integer|integers/.test(desc) && /list/.test(desc)) {
+    hints.push('Use `list(map(int, strings))` — `map()` applies `int` to each item, and `list()` materializes the result.');
+  } else if (/\bmap\(\)/.test(desc) && /square/.test(desc) && /list/.test(desc)) {
+    hints.push('With `map()`, pass a function such as `lambda x: x ** 2`, then convert the result with `list()`.');
+  } else if (/\bmap\(\)/.test(desc) && /length/.test(desc) && /string/.test(desc)) {
+    hints.push('Use `list(map(len, strings))` to get one length for each string.');
   } else if (/replace.*char(?:acter)?/.test(desc)) {
     hints.push('`.replace()` returns a NEW string — it does NOT modify the original.');
     hints.push('Only exact character matches are replaced; case matters.');
@@ -343,8 +352,9 @@ for (const ex of EXERCISES) {
   
   if (!fnMatch && !classMatch && !isScriptMode) continue;
 
-  const functionName = (grader && Array.isArray(grader.functionNames) && grader.functionNames[0]) || (fnMatch ? fnMatch[1] : (classMatch ? classMatch[1] : 'solve'));
-  const isClass = !!classMatch;
+  const graderFunctionNames = Array.isArray(grader?.functionNames) ? grader.functionNames : [];
+  const preferredGraderFunction = graderFunctionNames.find(name => name !== 'main') || graderFunctionNames[0];
+  const functionName = preferredGraderFunction || (fnMatch ? fnMatch[1] : (classMatch ? classMatch[1] : 'solve'));
   const params = fnMatch ? fnMatch[2].split(',').map(p => p.trim()).filter(Boolean) : [];
   const description = ex.description || '';
 
@@ -385,9 +395,9 @@ for (const ex of EXERCISES) {
   let newBlock = oldBlock;
   let blockChanged = false;
 
-  // ── Fix description examples from authoritative grader data ──
-  if (grader && Array.isArray(grader.tests) && (fnMatch || classMatch) && grader.tests.length > 0) {
-    const newExamples = generateExamples(functionName, grader.tests, isClass);
+  // ── Fix description examples ──
+  if ((forceExamples || examplesNeedFix(description)) && grader && Array.isArray(grader.tests) && fnMatch) {
+    const newExamples = generateExamples(functionName, grader.tests);
     if (newExamples.length) {
       const lines = description.split('\n');
       const nonExampleLines = lines.filter(l => !/\u2192/.test(l) && !/->/.test(l));
@@ -396,20 +406,6 @@ for (const ex of EXERCISES) {
       const descInfo = findFieldValue(newBlock, 0, 'description');
       if (descInfo) {
         newBlock = replaceFieldValue(newBlock, descInfo, newDesc);
-        blockChanged = true;
-        exampleFixCount++;
-      }
-    }
-  }
-
-  // ── Clean up leftover placeholder examples (e.g. script-mode problems) ──
-  if (/\u2192\s*\?/.test(newBlock)) {
-    const cleanedLines = description.split('\n').filter(l => !/\u2192\s*\?/.test(l) && !/->\s*\?/.test(l));
-    const cleanedDesc = cleanedLines.join('\n');
-    if (cleanedDesc !== description) {
-      const descInfo = findFieldValue(newBlock, 0, 'description');
-      if (descInfo) {
-        newBlock = replaceFieldValue(newBlock, descInfo, cleanedDesc);
         blockChanged = true;
         exampleFixCount++;
       }

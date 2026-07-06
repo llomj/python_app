@@ -4,147 +4,208 @@ const ts = require('typescript');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
-const source = fs.readFileSync(path.join(root, 'exercises.ts'), 'utf8');
-const graderSrc = fs.readFileSync(path.join(root, 'graders.ts'), 'utf8');
+const showAll = process.argv.includes('--show') || process.argv.includes('--all');
+const maxIssuesArg = process.argv.find(arg => arg.startsWith('--max-issues='));
+const maxIssues = maxIssuesArg ? Number(maxIssuesArg.slice('--max-issues='.length)) : null;
 
-const compiledTs = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true } }).outputText;
-const compiledGr = ts.transpileModule(graderSrc, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true } }).outputText;
-const sandbox = { exports: {}, module: { exports: {} }, require: () => ({}) };
-sandbox.exports = sandbox.module.exports;
-vm.runInNewContext(compiledGr, sandbox);
-vm.runInNewContext(compiledTs, sandbox);
+function loadTsExports(fileName) {
+  const source = fs.readFileSync(path.join(root, fileName), 'utf8');
+  const compiled = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true },
+    fileName,
+  }).outputText;
+  const sandbox = { exports: {}, module: { exports: {} }, require: () => ({}) };
+  sandbox.exports = sandbox.module.exports;
+  vm.runInNewContext(compiled, sandbox, { filename: fileName });
+  return sandbox.module.exports;
+}
 
-const { EXERCISES, AUTO_GRADERS } = sandbox.module.exports;
+function formatArg(arg) {
+  if (typeof arg === 'string') return `'${arg}'`;
+  if (Array.isArray(arg)) return `[${arg.map(formatArg).join(', ')}]`;
+  if (arg === null) return 'None';
+  if (arg === true) return 'True';
+  if (arg === false) return 'False';
+  if (typeof arg === 'object') return JSON.stringify(arg).replace(/"/g, "'");
+  return String(arg);
+}
 
-function splitArgs(argsStr) {
+function formatExpected(value) {
+  if (typeof value === 'string') return `'${value}'`;
+  if (Array.isArray(value)) return `[${value.map(formatExpected).join(', ')}]`;
+  if (value === null) return 'None';
+  if (value === true) return 'True';
+  if (value === false) return 'False';
+  if (value && typeof value === 'object') return JSON.stringify(value).replace(/"/g, "'");
+  return String(value);
+}
+
+function splitArgs(rawArgs) {
   const args = [];
   let current = '';
   let depth = 0;
-  let inStr = false;
-  let quoteCh = '';
-  for (let i = 0; i < argsStr.length; i++) {
-    const ch = argsStr[i];
-    if (inStr) {
+  let quote = null;
+  let escaped = false;
+  for (const ch of rawArgs) {
+    if (quote) {
       current += ch;
-      if (ch === quoteCh) inStr = false;
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === quote) quote = null;
       continue;
     }
     if (ch === '"' || ch === "'") {
+      quote = ch;
       current += ch;
-      inStr = true;
-      quoteCh = ch;
       continue;
     }
-    if (ch === '[' || ch === '(' || ch === '{') depth++;
-    if (ch === ']' || ch === ')' || ch === '}') depth--;
+    if ('([{'.includes(ch)) depth++;
+    if (')]}'.includes(ch)) depth--;
     if (ch === ',' && depth === 0) {
       args.push(current.trim());
       current = '';
-      continue;
+    } else {
+      current += ch;
     }
-    current += ch;
   }
   if (current.trim()) args.push(current.trim());
-  return args.filter(Boolean);
+  return args;
 }
+
+function normalizeText(value) {
+  return String(value).replace(/\s+/g, ' ').trim();
+}
+
+function normalizeLine(line) {
+  return normalizeText(line.replace(/->/g, '→'));
+}
+
+function exampleLines(description) {
+  return String(description || '')
+    .split('\n')
+    .filter(line => /(?:→|->)/.test(line));
+}
+
+function parseExampleLine(line) {
+  const match = line.match(/^\s*([A-Za-z_]\w*)\((.*)\)\s*(?:→|->)\s*(.+?)\s*$/);
+  if (!match) return null;
+  return {
+    functionName: match[1],
+    rawArgs: match[2].trim(),
+    args: splitArgs(match[2].trim()),
+    expected: match[3].trim(),
+  };
+}
+
+function graderExampleMap(grader) {
+  const map = new Map();
+  if (!grader || !Array.isArray(grader.tests)) return map;
+  for (const test of grader.tests) {
+    const names = test.functionName ? [test.functionName] : (grader.functionNames || []);
+    if (!Array.isArray(test.args) || test.expected === undefined) continue;
+    const args = test.args.map(formatArg).join(', ');
+    for (const name of names) {
+      map.set(`${name}(${normalizeText(args)})`, formatExpected(test.expected));
+    }
+  }
+  return map;
+}
+
+function descriptionMainFunction(description) {
+  const backticked = String(description || '').match(/`([A-Za-z_]\w*)`/);
+  if (backticked) return backticked[1];
+  const called = String(description || '').match(/(?:function|program)\s+(?:called|named)\s+([A-Za-z_]\w*)/i);
+  return called ? called[1] : null;
+}
+
+const { EXERCISES } = loadTsExports('exercises.ts');
+const { AUTO_GRADERS } = loadTsExports('graders.ts');
 
 const issues = [];
-let totalExamples = 0;
+let withExamples = 0;
+let duplicateCount = 0;
+let placeholderCount = 0;
+let contradictionCount = 0;
 
-for (const ex of EXERCISES) {
-  const desc = ex.description || '';
-  const code = ex.initialCode || '';
-  const grader = AUTO_GRADERS[ex.id];
-  const fnMatch = code.match(/def\s+(\w+)\s*\(([^)]*)\)/);
-  const fnName = fnMatch ? fnMatch[1] : null;
-  const params = fnMatch ? fnMatch[2].split(',').map(p => p.trim().split(':')[0].trim()).filter(Boolean) : [];
+for (const exercise of EXERCISES) {
+  const lines = exampleLines(exercise.description);
+  const grader = AUTO_GRADERS[exercise.id];
+  const graderMap = graderExampleMap(grader);
+  const allowedNames = new Set(grader?.functionNames || []);
+  const mainName = descriptionMainFunction(exercise.description);
+  if (mainName) allowedNames.add(mainName);
 
-  const lines = desc.split('\n');
-  const exampleLines = lines.filter(l => l.includes('\u2192') || l.includes('->'));
-  totalExamples += exampleLines.length;
-
-  for (const line of exampleLines) {
-    const callMatch = line.match(/(\w+)\s*\(([^)]*)\)/);
-    if (!callMatch) continue;
-    const callFn = callMatch[1];
-    const argsStr = callMatch[2];
-    const args = splitArgs(argsStr);
-
-    // Check 1: args count doesn't match params
-    if (fnName && callFn === fnName && params.length > 0 && args.length !== params.length) {
-      issues.push({ id: ex.id, type: 'arg_count', detail: `${params.length} params but ${args.length} args: (${argsStr})` });
-      continue;
-    }
-
-    // Check 2: expected output is "?" (unknown)
-    const expectedMatch = line.match(/\u2192\s*(.+)$/);
-    const expected = expectedMatch ? expectedMatch[1].trim() : '';
-    if (expected === '?') {
-      issues.push({ id: ex.id, type: 'unknown_result', detail: `example result is '?': (${argsStr})` });
-      continue;
-    }
-
-    // Check 3: description says list/array but example passes single literal (string or number)
-    const descLower = desc.toLowerCase();
-    const looksLikeList = /list|array/.test(descLower);
-    if (looksLikeList && args.length === 1 && fnName) {
-      const param = params[0] || '';
-      const paramLooksList = /lst|list|arr|array|items|numbers|strings|elems/.test(param);
-      const allStrings = args.every(a => (a.startsWith("'") && a.endsWith("'")) || (a.startsWith('"') && a.endsWith('"')));
-      const singleNumber = /^\d+$/.test(args[0]);
-      if (paramLooksList && (allStrings || singleNumber)) {
-        issues.push({ id: ex.id, type: 'single_arg_for_list', detail: `passes '${args[0]}' to list param '${param}'` });
-        continue;
-      }
-    }
-
-    // Check 4: grader has test data - does example match ANY test case?
-    if (grader && grader.tests && Array.isArray(grader.tests) && fnName) {
-      const graderTests = grader.tests;
-      const exampleNorm = args.join(',').replace(/'/g, '').replace(/"/g, '');
-      let matchesGrader = false;
-      for (const tc of graderTests) {
-        const tcArgs = Array.isArray(tc.args) ? tc.args : [tc.args];
-        const tcStr = tcArgs.map(a => String(a).replace(/'/g, '').replace(/"/g, '')).join(',');
-        if (exampleNorm === tcStr) {
-          matchesGrader = true;
-          break;
-        }
-      }
-      if (!matchesGrader && graderTests.length > 0) {
-        // Not in grader, but might be a simplified example
-        // Only flag if it's clearly wrong (like string for list)
-      }
-    }
+  if (lines.length) withExamples++;
+  if (!lines.length) {
+    issues.push({ id: exercise.id, type: 'missing_examples', detail: 'No example lines found.' });
+    continue;
   }
 
-  // Check 5: known wrong patterns
-  // Examples with "hello" → "your world" (nonsensical)
-  const fullDesc = desc.replace(/examples?:?\s*/i, '').split('\n').slice(0, 1).join('');
-  for (const line of exampleLines) {
-    const expectedStr = line.split('\u2192')[1]?.trim() || '';
-    // Check for clearly wrong expected values that are just placeholders
-    const weirdOutputs = ['?', '...', 'output', 'result', 'answer'];
-    if (weirdOutputs.includes(expectedStr.toLowerCase())) {
-      issues.push({ id: ex.id, type: 'placeholder_output', detail: `expected is '${expectedStr}': ${line.trim()}` });
+  const seenLines = new Set();
+  const seenCalls = new Set();
+  const lowerDescription = String(exercise.description || '').toLowerCase();
+  const expectsNumericData = /\b(integer|integers|number|numbers|numeric|float|floats)\b/.test(lowerDescription);
+  const expectsListData = /\blist\b/.test(lowerDescription);
+
+  for (const line of lines) {
+    const normalized = normalizeLine(line);
+    if (seenLines.has(normalized)) {
+      duplicateCount++;
+      issues.push({ id: exercise.id, type: 'duplicate_example_line', detail: normalized });
+    }
+    seenLines.add(normalized);
+
+    if (/(?:→|->)\s*\?/.test(line)) {
+      placeholderCount++;
+      issues.push({ id: exercise.id, type: 'placeholder_output', detail: normalized });
+    }
+
+    const parsed = parseExampleLine(line);
+    if (!parsed) {
+      issues.push({ id: exercise.id, type: 'unparseable_example', detail: normalized });
+      continue;
+    }
+
+    const callKey = `${parsed.functionName}(${normalizeText(parsed.rawArgs)})`;
+    if (seenCalls.has(callKey)) {
+      duplicateCount++;
+      issues.push({ id: exercise.id, type: 'duplicate_example_input', detail: callKey });
+    }
+    seenCalls.add(callKey);
+
+    if (allowedNames.size > 0 && !allowedNames.has(parsed.functionName)) {
+      issues.push({ id: exercise.id, type: 'function_name_mismatch', detail: `${parsed.functionName} is not one of ${[...allowedNames].join(', ')}` });
+    }
+
+    const genericArg = parsed.args.find(arg => /^['"]?(hello|world|python|test|example|sample)['"]?$/i.test(arg));
+    if (genericArg && (expectsNumericData || expectsListData)) {
+      issues.push({ id: exercise.id, type: 'generic_arg_mismatch', detail: `${genericArg} does not fit the problem type` });
+    }
+
+    const expectedFromGrader = graderMap.get(callKey);
+    if (expectedFromGrader !== undefined && normalizeText(expectedFromGrader) !== normalizeText(parsed.expected)) {
+      contradictionCount++;
+      issues.push({ id: exercise.id, type: 'grader_contradiction', detail: `${callKey} shows ${parsed.expected}, grader expects ${expectedFromGrader}` });
     }
   }
 }
 
-// Group by type
-const byType = {};
-for (const issue of issues) {
-  if (!byType[issue.type]) byType[issue.type] = [];
-  byType[issue.type].push({ id: issue.id, detail: issue.detail });
+console.log('Example audit');
+console.log(`Exercises: ${EXERCISES.length}`);
+console.log(`Exercises with examples: ${withExamples}`);
+console.log(`Issues: ${issues.length}`);
+console.log(`Duplicate issues: ${duplicateCount}`);
+console.log(`Placeholder outputs: ${placeholderCount}`);
+console.log(`Grader contradictions: ${contradictionCount}`);
+
+if (showAll || issues.length) {
+  for (const issue of issues.slice(0, showAll ? issues.length : 80)) {
+    console.log(`${issue.id}: ${issue.type}: ${issue.detail}`);
+  }
+  if (!showAll && issues.length > 80) console.log(`... ${issues.length - 80} more`);
 }
 
-console.log('Total example lines:', totalExamples);
-console.log('Total issues found:', issues.length);
-console.log('');
-
-for (const [type, items] of Object.entries(byType).sort((a, b) => b[1].length - a[1].length)) {
-  console.log(`${type}: ${items.length}`);
-  items.slice(0, 25).forEach(i => console.log(`  P${i.id}: ${i.detail}`));
-  if (items.length > 25) console.log(`  ... and ${items.length - 25} more`);
-  console.log('');
+if (maxIssues !== null && issues.length > maxIssues) {
+  console.error(`Example audit failed: issues ${issues.length} exceeds max ${maxIssues}`);
+  process.exit(1);
 }
