@@ -10989,6 +10989,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const asksWhy = /why|wrong|failed|fail|error|output|red|incorrect/.test(q);
         const asksMethod = /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in/.test(q);
         const asksHint = /hint|help|start|how|what should|what do/.test(q);
+        const asksDigitMethod = /\bis\s*(?:there\s*)?(?:is\s*)?digit\b/.test(q) || q.includes('isdigit') || (q.includes('digit') && q.includes('string') && q.includes('method'));
+
+        if (asksDigitMethod) {
+            return [
+                '1. Yes — `isdigit()` is a string method.',
+                'You call it on a string value, like this:',
+                '```python',
+                "char = '5'",
+                'print(char.isdigit())  # True',
+                '```',
+                '2. For this problem, `check_digit(char)` should take one character as a string and return `True` if it is a digit from `0` to `9`.',
+                '```python',
+                'def check_digit(char):',
+                '    return char.isdigit()',
+                '```',
+                '3. Do not pass an integer directly if the task says “character”. Use `"5"` not `5`. If you already have an integer, convert it first with `str(value).isdigit()`.',
+            ].join('\n\n');
+        }
 
         const parts: string[] = [];
         parts.push(`1. Problem focus\nThis exercise is asking about Problem ${exercise.id}: ${description.split('\n')[0]}`);
@@ -11040,12 +11058,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const question = rawQuestion.trim();
         if (!question || problemAiRunning) return;
         const request = buildProblemAiRequest(question);
+        const lowerQuestion = question.toLowerCase();
+        const shouldUseDirectTutor =
+            /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in|what does|what is|can i|should i/.test(lowerQuestion);
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setProblemAiMessages(prev => [...prev, userMessage]);
         setProblemAiDraft('');
         setProblemAiRunning(true);
 
         try {
+            if (shouldUseDirectTutor) {
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: buildBuiltInProblemAiAnswer(question, request),
+                }]);
+                return;
+            }
             if (offlineAiState.status === 'ready') {
                 const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
                 const answer = [
