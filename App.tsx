@@ -10983,13 +10983,162 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const breakdown = exercise.breakdown?.trim();
         const code = request.userCode || '';
         const graderMessage = request.graderMessage || '';
-        const methodMatches = Array.from(new Set(description.match(/`[^`]+`|\.[A-Za-z_]\w*\(\)|\b[A-Za-z_]\w*\(\)/g) || []))
-            .slice(0, 8)
-            .join(', ');
+        const promptMethods = Array.from(new Set(description.match(/`[^`]+`|\.[A-Za-z_]\w*\(\)|\b[A-Za-z_]\w*\(\)/g) || []))
+            .slice(0, 8);
         const asksWhy = /why|wrong|failed|fail|error|output|red|incorrect/.test(q);
-        const asksMethod = /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in/.test(q);
+        const asksMethod = /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in|append|split|join|strip|lower|upper|replace|sort|sorted/.test(q);
         const asksHint = /hint|help|start|how|what should|what do/.test(q);
         const asksDigitMethod = /\bis\s*(?:there\s*)?(?:is\s*)?digit\b/.test(q) || q.includes('isdigit') || (q.includes('digit') && q.includes('string') && q.includes('method'));
+        const firstLine = description.split('\n')[0];
+        const functionName = description.match(/`([A-Za-z_]\w*)`/)?.[1] || exercise.initialCode.match(/def\s+([A-Za-z_]\w*)/)?.[1] || 'your_function';
+        const conceptAnswers: Array<{ pattern: RegExp; text: string }> = [
+            {
+                pattern: /\b(list|lists)\b/,
+                text: [
+                    '1. A list is an ordered collection of values.',
+                    'Use square brackets:',
+                    '```python',
+                    'numbers = [1, 2, 3]',
+                    "names = ['Ada', 'Bob']",
+                    '```',
+                    '2. Lists can change. You can add, remove, sort, index, and loop through them.',
+                    '```python',
+                    'numbers.append(4)',
+                    'print(numbers[0])  # 1',
+                    '```',
+                    '3. In a problem, if it says “takes a list”, the function parameter should receive something like `[1, 2, 3]`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(dict|dictionary|dictionaries)\b/,
+                text: [
+                    '1. A dictionary stores key-value pairs.',
+                    'Use curly braces with `key: value`:',
+                    '```python',
+                    "person = {'name': 'Ada', 'age': 30}",
+                    "print(person['name'])  # Ada",
+                    '```',
+                    '2. Use dictionaries when the problem asks you to map one thing to another, like word counts, names to scores, or keys to values.',
+                    '3. Common dictionary methods are `.keys()`, `.values()`, `.items()`, and `.get()`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(tuple|tuples)\b/,
+                text: [
+                    '1. A tuple is an ordered collection like a list, but it is immutable.',
+                    'Use parentheses:',
+                    '```python',
+                    'point = (3, 4)',
+                    'x, y = point',
+                    '```',
+                    '2. Use a tuple when the problem asks for a fixed group of values, like `(min_value, max_value)`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(set|sets)\b/,
+                text: [
+                    '1. A set stores unique values only.',
+                    'Use curly braces or `set()`:',
+                    '```python',
+                    'numbers = {1, 2, 2, 3}',
+                    'print(numbers)  # {1, 2, 3}',
+                    '```',
+                    '2. Sets are useful for removing duplicates and checking membership quickly with `in`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(string|strings|str)\b/,
+                text: [
+                    '1. A string is text in quotes.',
+                    '```python',
+                    "word = 'python'",
+                    '```',
+                    '2. Strings have methods like `.lower()`, `.upper()`, `.replace()`, `.split()`, `.strip()`, `.isdigit()`, and `.isalpha()`.',
+                    '3. Strings are sequences, so indexing and slicing work:',
+                    '```python',
+                    "word = 'python'",
+                    'print(word[0])   # p',
+                    'print(word[-1])  # n',
+                    '```',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(method|methods)\b/,
+                text: [
+                    '1. A method is a function that belongs to an object.',
+                    'You call it with dot notation:',
+                    '```python',
+                    "text = 'hello'",
+                    'print(text.upper())  # HELLO',
+                    '```',
+                    '2. In this app, if the problem mentions a string/list/dictionary method, it usually wants you to call it on that value.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(function|def)\b/,
+                text: [
+                    '1. A function is a reusable block of code.',
+                    '```python',
+                    'def add(a, b):',
+                    '    return a + b',
+                    '```',
+                    '2. `def` creates the function. `return` sends the answer back to the grader.',
+                    '3. For these problems, prefer `return` inside functions unless the prompt specifically asks you to print.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(oop|class|object)\b/,
+                text: [
+                    '1. OOP means object-oriented programming.',
+                    'A class is a blueprint. An object is an instance made from that blueprint.',
+                    '```python',
+                    'class Dog:',
+                    '    def __init__(self, name):',
+                    '        self.name = name',
+                    '```',
+                    '2. `self` means “this object”. Methods inside a class usually take `self` first.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(loop|for|while)\b/,
+                text: [
+                    '1. A loop repeats code.',
+                    'Use `for` when looping through a sequence:',
+                    '```python',
+                    'for number in [1, 2, 3]:',
+                    '    print(number)',
+                    '```',
+                    '2. Use `while` when repeating until a condition changes.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(return|print)\b/,
+                text: [
+                    '1. `return` sends a value back from a function.',
+                    '2. `print()` only displays text in the output.',
+                    '```python',
+                    'def square(n):',
+                    '    return n * n',
+                    '```',
+                    '3. For most function problems in this app, the grader expects `return`, not only `print()`.',
+                ].join('\n\n'),
+            },
+            {
+                pattern: /\b(index|indexes|indices|slice|slicing)\b/,
+                text: [
+                    '1. Indexing gets one item from a sequence.',
+                    '```python',
+                    "text = 'python'",
+                    'print(text[0])   # p',
+                    'print(text[-1])  # n',
+                    '```',
+                    '2. Slicing gets a range:',
+                    '```python',
+                    'print(text[1:4])  # yth',
+                    '```',
+                ].join('\n\n'),
+            },
+        ];
 
         if (asksDigitMethod) {
             return [
@@ -11008,29 +11157,42 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             ].join('\n\n');
         }
 
-        const parts: string[] = [];
-        parts.push(`1. Problem focus\nThis exercise is asking about Problem ${exercise.id}: ${description.split('\n')[0]}`);
+        const conceptAnswer = conceptAnswers.find(item => item.pattern.test(q));
+        if (conceptAnswer && !asksWhy && !q.includes('explain task')) {
+            return conceptAnswer.text;
+        }
 
-        if (asksMethod || methodMatches) {
-            let methodText = methodMatches || 'No specific method name is written in the prompt.';
-            if (q.includes('isdigit') || description.toLowerCase().includes('digit')) {
-                methodText += `\n\nFor digit checks, \`isdigit()\` is a string method. Use it on a string/character, for example \`char.isdigit()\`. If you have an integer, convert it first with \`str(value).isdigit()\`, but if the task says character, the expected input is usually a string like \`'7'\`.`;
+        const parts: string[] = [];
+        parts.push(`1. What this problem wants\n${firstLine}`);
+
+        const expectedShape = [
+            `Function: \`${functionName}\``,
+            promptMethods.length ? `Useful syntax from the prompt: ${promptMethods.join(', ')}` : '',
+        ].filter(Boolean).join('\n');
+        if (expectedShape) {
+            parts.push(`2. Important details\n${expectedShape}`);
+        }
+
+        if (asksMethod || promptMethods.length) {
+            let methodText = promptMethods.length ? promptMethods.join(', ') : 'No specific method name is written in the prompt.';
+            if (description.toLowerCase().includes('digit')) {
+                methodText += `\n\nFor digit checks, \`isdigit()\` is a string method. Use \`char.isdigit()\` on a string character like \`'7'\`.`;
             }
-            parts.push(`2. Relevant syntax or method\n${methodText}`);
+            parts.push(`3. Method or syntax\n${methodText}`);
         }
 
         if (asksWhy || outputStatus === 'fail') {
             const outputText = output && output !== 'Run code to see output...' ? output : 'No run output is available yet.';
-            parts.push(`3. Current output check\nStatus: ${outputStatus.toUpperCase()}.\nOutput/grader context:\n${graderMessage || outputText}\n\nIf the output is wrong, compare what your code returns or prints against the operation requested by the problem, not just the example wording.`);
+            parts.push(`4. Current output check\nStatus: ${outputStatus.toUpperCase()}.\nOutput/grader context:\n${graderMessage || outputText}\n\nIf the output is wrong, compare what your code returns or prints against the operation requested by the problem.`);
         }
 
-        if (code.trim()) {
+        if (code.trim() && asksWhy) {
             const lines = code.split('\n').filter(line => line.trim()).slice(0, 8).join('\n');
-            parts.push(`4. Your code context\nI can see your current code starts like this:\n\`\`\`python\n${lines}\n\`\`\``);
+            parts.push(`5. Your code context\n\`\`\`python\n${lines}\n\`\`\``);
         }
 
         if (asksHint || hint || breakdown) {
-            parts.push(`5. Practical next step\n${hint || 'Break the problem into input, operation, and returned output.'}${breakdown ? `\n\nGuide:\n${breakdown}` : ''}`);
+            parts.push(`6. Simple next step\n${hint || 'Break the problem into input, operation, and returned output.'}${breakdown ? `\n\nGuide:\n${breakdown}` : ''}`);
         }
 
         return parts.join('\n\n');
@@ -11059,15 +11221,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         if (!question || problemAiRunning) return;
         const request = buildProblemAiRequest(question);
         const lowerQuestion = question.toLowerCase();
-        const shouldUseDirectTutor =
-            /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in|what does|what is|can i|should i/.test(lowerQuestion);
+        const shouldUseReviewer =
+            /review my code|check my code|is my code correct|is this correct|why failed|why did.*fail|auto failed|grader|output wrong|error/.test(lowerQuestion);
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setProblemAiMessages(prev => [...prev, userMessage]);
         setProblemAiDraft('');
         setProblemAiRunning(true);
 
         try {
-            if (shouldUseDirectTutor) {
+            if (!shouldUseReviewer || offlineAiState.status !== 'ready') {
                 setProblemAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
                     role: 'assistant',
@@ -11076,26 +11238,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }]);
                 return;
             }
-            if (offlineAiState.status === 'ready') {
-                const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
-                const answer = [
-                    review.explanation,
-                    review.suggestedFix ? `Suggested direction:\n${review.suggestedFix}` : '',
-                ].filter(Boolean).join('\n\n');
-                setProblemAiMessages(prev => [...prev, {
-                    id: Date.now() + 1,
-                    role: 'assistant',
-                    source: review.source === 'diagnostic' ? 'built_in' : 'offline',
-                    text: answer || buildBuiltInProblemAiAnswer(question, request),
-                }]);
-            } else {
-                setProblemAiMessages(prev => [...prev, {
-                    id: Date.now() + 1,
-                    role: 'assistant',
-                    source: 'built_in',
-                    text: buildBuiltInProblemAiAnswer(question, request),
-                }]);
-            }
+            const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
+            const answer = [
+                review.explanation,
+                review.suggestedFix ? `Suggested direction:\n${review.suggestedFix}` : '',
+            ].filter(Boolean).join('\n\n');
+            setProblemAiMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                role: 'assistant',
+                source: review.source === 'diagnostic' ? 'built_in' : 'offline',
+                text: answer || buildBuiltInProblemAiAnswer(question, request),
+            }]);
         } catch {
             setProblemAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
