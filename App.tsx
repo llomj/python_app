@@ -11114,68 +11114,55 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {
                 pattern: /\b(list|lists)\b/,
                 text: [
-                    '1. A list is an ordered collection of values.',
-                    'Use square brackets:',
+                    'A list is an ordered collection of values in square brackets.',
                     '```python',
                     'numbers = [1, 2, 3]',
                     "names = ['Ada', 'Bob']",
                     '```',
-                    '2. Lists can change. You can add, remove, sort, index, and loop through them.',
-                    '```python',
-                    'numbers.append(4)',
-                    'print(numbers[0])  # 1',
-                    '```',
-                    '3. In a problem, if it says “takes a list”, the function parameter should receive something like `[1, 2, 3]`.',
+                    'You can index, append, remove, sort, and loop through lists.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(dict|dictionary|dictionaries)\b/,
                 text: [
-                    '1. A dictionary stores key-value pairs.',
-                    'Use curly braces with `key: value`:',
+                    'A dictionary stores key-value pairs in curly braces.',
                     '```python',
                     "person = {'name': 'Ada', 'age': 30}",
                     "print(person['name'])  # Ada",
                     '```',
-                    '2. Use dictionaries when the problem asks you to map one thing to another, like word counts, names to scores, or keys to values.',
-                    '3. Common dictionary methods are `.keys()`, `.values()`, `.items()`, and `.get()`.',
+                    'Common methods: `.keys()`, `.values()`, `.items()`, `.get()`.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(tuple|tuples)\b/,
                 text: [
-                    '1. A tuple is an ordered collection like a list, but it is immutable.',
-                    'Use parentheses:',
+                    'A tuple is like a list but cannot change after creation.',
                     '```python',
                     'point = (3, 4)',
                     'x, y = point',
                     '```',
-                    '2. Use a tuple when the problem asks for a fixed group of values, like `(min_value, max_value)`.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(set|sets)\b/,
                 text: [
-                    '1. A set stores unique values only.',
-                    'Use curly braces or `set()`:',
+                    'A set stores unique values only.',
                     '```python',
                     'numbers = {1, 2, 2, 3}',
                     'print(numbers)  # {1, 2, 3}',
                     '```',
-                    '2. Sets are useful for removing duplicates and checking membership quickly with `in`.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(string|strings|str)\b/,
                 text: [
-                    '1. A string is text in quotes.',
+                    'A string is text in quotes.',
                     '```python',
                     "word = 'python'",
                     '```',
-                    '2. Strings have methods like `.lower()`, `.upper()`, `.replace()`, `.split()`, `.strip()`, `.isdigit()`, and `.isalpha()`.',
-                    '3. Strings are sequences, so indexing and slicing work:',
+                    'Common methods: `.lower()`, `.upper()`, `.replace()`, `.split()`, `.strip()`, `.isdigit()`, `.isalpha()`.',
+                    'Strings are sequences, so indexing and slicing work:',
                     '```python',
-                    "word = 'python'",
                     'print(word[0])   # p',
                     'print(word[-1])  # n',
                     '```',
@@ -11184,75 +11171,63 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {
                 pattern: /\b(method|methods)\b/,
                 text: [
-                    '1. A method is a function that belongs to an object.',
-                    'You call it with dot notation:',
+                    'A method is a function that belongs to an object. Call it with dot notation:',
                     '```python',
                     "text = 'hello'",
                     'print(text.upper())  # HELLO',
                     '```',
-                    '2. In this app, if the problem mentions a string/list/dictionary method, it usually wants you to call it on that value.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(function|def)\b/,
                 text: [
-                    '1. A function is a reusable block of code.',
+                    'A function is a reusable block of code.',
                     '```python',
                     'def add(a, b):',
                     '    return a + b',
                     '```',
-                    '2. `def` creates the function. `return` sends the answer back to the grader.',
-                    '3. For these problems, prefer `return` inside functions unless the prompt specifically asks you to print.',
+                    '`def` creates it. `return` sends the answer back.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(oop|class|object)\b/,
                 text: [
-                    '1. OOP means object-oriented programming.',
-                    'A class is a blueprint. An object is an instance made from that blueprint.',
+                    'A class is a blueprint. An object is an instance made from it.',
                     '```python',
                     'class Dog:',
                     '    def __init__(self, name):',
                     '        self.name = name',
                     '```',
-                    '2. `self` means “this object”. Methods inside a class usually take `self` first.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(loop|for|while)\b/,
                 text: [
-                    '1. A loop repeats code.',
-                    'Use `for` when looping through a sequence:',
+                    'A loop repeats code.',
                     '```python',
                     'for number in [1, 2, 3]:',
                     '    print(number)',
                     '```',
-                    '2. Use `while` when repeating until a condition changes.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(return|print)\b/,
                 text: [
-                    '1. `return` sends a value back from a function.',
-                    '2. `print()` only displays text in the output.',
+                    '`return` sends a value back from a function. `print()` only shows text in output.',
                     '```python',
                     'def square(n):',
                     '    return n * n',
                     '```',
-                    '3. For most function problems in this app, the grader expects `return`, not only `print()`.',
+                    'For these problems, use `return` unless the prompt asks you to print.',
                 ].join('\n\n'),
             },
             {
                 pattern: /\b(index|indexes|indices|slice|slicing)\b/,
                 text: [
-                    '1. Indexing gets one item from a sequence.',
+                    'Indexing gets one item. Slicing gets a range.',
                     '```python',
                     "text = 'python'",
-                    'print(text[0])   # p',
-                    'print(text[-1])  # n',
-                    '```',
-                    '2. Slicing gets a range:',
-                    '```python',
+                    'print(text[0])    # p',
                     'print(text[1:4])  # yth',
                     '```',
                 ].join('\n\n'),
@@ -11260,17 +11235,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             {
                 pattern: /\b(boolean|bool|true|false)\b/,
                 text: [
-                    '1. A Boolean is a value that is either `True` or `False`.',
-                    '2. Use comparison operators to get a Boolean:',
+                    'A Boolean is either `True` or `False`.',
                     '```python',
                     'print(5 > 3)   # True',
                     'print(2 == 4)  # False',
                     '```',
-                    '3. For function problems that ask for a yes/no or check result, return `True` or `False` directly:',
-                    '```python',
-                    'def is_even(n):',
-                    '    return n % 2 == 0',
-                    '```',
+                    'For yes/no checks, return `True` or `False`.',
                 ].join('\n\n'),
             },
         ];
@@ -11359,6 +11329,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const conceptAnswer = conceptAnswers.find(item => item.pattern.test(q));
         if (conceptAnswer && !asksWhy && !q.includes('explain task')) {
             return conceptAnswer.text;
+        }
+
+        const isProblemRelated = asksWhy || asksMethod || asksHint || asksBoolean || asksArgument ||
+            asksIntegerArgument || asksDigitMethod ||
+            /\b(this problem|this task|this exercise|my code|the function|the output|grader|fail|error)\b/.test(q);
+        if (!isProblemRelated && !q.includes('explain task')) {
+            return "I'm here to help with this problem. Ask about the task, your code, output errors, or a Python concept.";
         }
 
         const parts: string[] = [];
@@ -12598,46 +12575,41 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         )}
                         {showModal === 'problem_ai' && (
                             <div className="flex h-full min-h-0 flex-col gap-3">
-                                <div className="flex flex-shrink-0 items-start justify-between gap-3">
-                                    <div>
-                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
+                                <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
+                                            <button
+                                                onClick={() => setProblemAiEnabled(prev => !prev)}
+                                                className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                                style={{
+                                                    borderColor: hexToRgba(toolPanelColors.ai, 0.35),
+                                                    color: problemAiEnabled ? toolPanelColors.ai : '#9ca3af',
+                                                    backgroundColor: problemAiEnabled ? hexToRgba(toolPanelColors.ai, 0.12) : 'rgba(55, 65, 81, 0.5)',
+                                                }}
+                                                title={problemAiEnabled ? 'Problem AI is on' : 'Problem AI is off'}
+                                            >
+                                                {problemAiEnabled ? 'On' : 'Off'}
+                                            </button>
+                                        </div>
                                         <p className="mt-1 text-xs text-gray-400">Ask about Problem {exercise.id}, your code, output, or why the grader failed.</p>
                                     </div>
-                                    <button
-                                        onClick={() => setProblemAiEnabled(prev => !prev)}
-                                        className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
-                                        style={{
-                                            borderColor: hexToRgba(toolPanelColors.ai, 0.35),
-                                            color: problemAiEnabled ? toolPanelColors.ai : '#9ca3af',
-                                            backgroundColor: problemAiEnabled ? hexToRgba(toolPanelColors.ai, 0.12) : 'rgba(55, 65, 81, 0.5)',
-                                        }}
-                                        title={problemAiEnabled ? 'Problem AI is on' : 'Problem AI is off'}
-                                    >
-                                        {problemAiEnabled ? 'On' : 'Off'}
-                                    </button>
                                 </div>
 
-                                <div className="flex-shrink-0 overflow-y-auto pr-1" style={{ maxHeight: '112px' }}>
-                                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                                <div className="flex-shrink-0 overflow-x-auto pr-1 pb-1">
+                                    <div className="flex gap-2 text-[11px] whitespace-nowrap">
                                         {[
                                             'Explain task',
                                             'Why failed?',
                                             'What method?',
                                             'Show hint',
-                                            'What is a list?',
-                                            'What is a string?',
-                                            'What is a loop?',
-                                            'What is a Boolean?',
-                                            'What is a function?',
-                                            'What is a dictionary?',
-                                            'How do I return?',
                                             'What does this error mean?',
                                         ].map(prompt => (
                                             <button
                                                 key={prompt}
                                                 onClick={() => sendProblemAiQuestion(prompt)}
                                                 disabled={problemAiRunning || !problemAiEnabled}
-                                                className="rounded-xl border px-3 py-2 text-left font-bold transition-all hover:brightness-125 disabled:opacity-40"
+                                                className="rounded-xl border px-3 py-2 font-bold transition-all hover:brightness-125 disabled:opacity-40"
                                                 style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
                                             >
                                                 {prompt}
