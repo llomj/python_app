@@ -11598,7 +11598,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 <div
                     data-editor-panel
                     className="mb-28 rounded-xl flex flex-col shadow-2xl border overflow-hidden"
-                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelColors.border }}
+                    style={{ scrollMarginTop: `${editorContentTop + 12}px`, backgroundColor: panelColors.background, borderColor: panelColors.border }}
                 >
                     <div
                         className="hidden"
@@ -11621,7 +11621,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     </div>
                     <div
                         className="flex border-b overflow-x-auto no-scrollbar"
-                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: panelColors.border }}
+                        style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: panelColors.background, borderColor: panelColors.border }}
                     >
                         {files.map((f, idx) => (
                             <button
@@ -11629,7 +11629,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 onClick={() => setActiveFileIndex(idx)}
                                 className="px-4 py-1.5 text-[10px] font-bold tracking-wider transition-all border-r whitespace-nowrap"
                                 style={{
-                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : hexToRgba(panelColors.background, panelColors.alpha / 100),
+                                    backgroundColor: activeFileIndex === idx ? editorColors.activeTabBackground : panelColors.background,
                                     borderColor: panelColors.border,
                                     borderBottom: activeFileIndex === idx ? `2px solid ${countRowColors.count}` : `1px solid ${panelColors.border}`,
                                     color: activeFileIndex === idx ? toolPanelColors.fileText : editorColors.gutterText,
@@ -11694,7 +11694,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             </>
                         )}
                     </div>
-                    <div className="flex-shrink-0" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100) }}>
+                    <div className="flex-shrink-0" style={{ backgroundColor: panelColors.background }}>
                         <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: panelColors.border }}>
                             <span className="text-xs font-bold uppercase tracking-wider" style={{ color: toolPanelColors.panelLabelText }}>Output</span>
                             <button
@@ -11722,12 +11722,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         : `1px solid ${hexToRgba(panelColors.border, 0.25)}`,
                                 borderRadius: '0.75rem',
                                 backgroundColor: outputStatus === 'win'
-                                    ? 'rgba(12, 45, 28, 0.45)'
+                                    ? 'rgba(12, 45, 28, 0.85)'
                                     : outputStatus === 'fail'
-                                        ? 'rgba(64, 15, 20, 0.45)'
-                                        : outputStatus === 'running'
-                                            ? 'rgba(30, 41, 59, 0.45)'
-                                            : hexToRgba(panelColors.background, 0.78),
+                                        ? 'rgba(64, 15, 20, 0.85)'
+                                    : outputStatus === 'running'
+                                        ? 'rgba(30, 41, 59, 0.85)'
+                                        : hexToRgba(panelColors.background, 1),
                                 boxShadow: outputStatus === 'win'
                                     ? '0 0 22px rgba(34, 197, 94, 0.18)'
                                     : outputStatus === 'fail'
@@ -11770,12 +11770,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         )}
                         <div
                             className="border-t"
-                            style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), borderColor: hexToRgba(panelColors.border, 0.3) }}
+                            style={{ backgroundColor: panelColors.background, borderColor: hexToRgba(panelColors.border, 0.3) }}
                         >
                             <button
                                 onClick={() => setShowActionPanel(prev => !prev)}
                                 className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] transition-colors"
-                                style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), color: toolPanelColors.toggleText }}
+                                style={{ backgroundColor: panelColors.background, color: toolPanelColors.toggleText }}
                             >
                                 <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
                                 {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
@@ -12220,22 +12220,38 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     )}
                                     {customizeTab === 'panels' && (
                                         <div className="space-y-4">
-                                            <div className="space-y-2 rounded-2xl border bg-[#040b16] p-3">
-                                                <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, 0.85), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
-                                                    <span className="uppercase" style={{ color: '#3b82f6' }}>Count:</span> 12
-                                                    <span className="uppercase" style={{ color: '#22c55e' }}>Wins:</span> 8
+                                            <div className="relative overflow-hidden rounded-2xl border border-[#1d2d44]">
+                                                {/* Opaque output panel (IDE + output) behind the transparent panels */}
+                                                <div className="absolute inset-0 p-3" style={{ backgroundColor: panelColors.background }}>
+                                                    <div className="mb-2 rounded-lg border px-2 py-1.5 font-mono text-[9px]" style={{ backgroundColor: editorColors.background, borderColor: panelColors.border, color: editorColors.text }}>
+                                                        <span style={{ color: editorColors.keyword }}>def</span> <span style={{ color: editorColors.identifier }}>solve</span>(text):
+                                                        <br />    <span style={{ color: editorColors.keyword }}>return</span> text[1:-1]
+                                                        <br /><br />
+                                                        <span style={{ color: editorColors.builtin }}>print</span>(solve(<span style={{ color: editorColors.string }}>"Python"</span>))
+                                                    </div>
+                                                    <div className="rounded-lg border px-2 py-1.5" style={{ backgroundColor: editorColors.outputBackground, borderColor: panelColors.border }}>
+                                                        <div className="text-[9px] font-bold uppercase tracking-wider text-gray-400">Output</div>
+                                                        <div className="font-mono text-[10px] text-[#4ade80]">ytho</div>
+                                                    </div>
                                                 </div>
-                                                <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-                                                    <span className="font-bold text-white">Problem 1005</span>
-                                                    <div className="mt-1 text-gray-400">Write a program to remove first and last characters from a string.</div>
-                                                </div>
-                                                <div className="rounded-xl px-3 py-2 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-                                                    <span className="font-bold text-gray-200">main.py</span>
-                                                    <span className="ml-3 uppercase text-[#22c55e]">▶ Run</span>
-                                                </div>
-                                                <div className="rounded-xl px-3 py-3 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
-                                                    <span className="font-bold text-gray-200">Output</span>
-                                                    <div className="mt-1 font-mono text-[#4ade80]">ytho</div>
+                                                {/* Transparent overlay panels */}
+                                                <div className="relative space-y-2 p-3">
+                                                    <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
+                                                        <span className="uppercase" style={{ color: '#3b82f6' }}>Count:</span> 12
+                                                        <span className="uppercase" style={{ color: '#22c55e' }}>Wins:</span> 8
+                                                    </div>
+                                                    <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                                                        <span className="font-bold text-white">Problem 1005</span>
+                                                        <div className="mt-1 text-gray-400">Write a program to remove first and last characters from a string.</div>
+                                                    </div>
+                                                    <div className="rounded-xl px-3 py-2 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelColors.alpha / 100), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}`, backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                                                        <span className="font-bold text-gray-200">main.py</span>
+                                                        <span className="ml-3 uppercase text-[#22c55e]">▶ Run</span>
+                                                    </div>
+                                                    <div className="rounded-xl px-3 py-3 text-[10px] text-gray-400" style={{ backgroundColor: panelColors.background, border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
+                                                        <span className="font-bold text-gray-200">Output</span>
+                                                        <div className="mt-1 font-mono text-[#4ade80]">ytho</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
