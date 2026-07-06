@@ -50,13 +50,28 @@ function formatExpected(val) {
   return String(val);
 }
 
-function generateExamples(functionName, testCases) {
-  const cases = Array.isArray(testCases) ? testCases.slice(0, 3) : [];
-  if (!cases.length) return [];
+function generateExamples(functionName, testCases, isClass) {
+  if (!Array.isArray(testCases) || testCases.length === 0) return [];
+  const withExpected = testCases.filter(tc => tc.expected !== undefined);
+  if (!withExpected.length) return [];
+
+  // Prefer tests matching the target function/class name
+  let cases = withExpected.filter(tc => !tc.functionName || tc.functionName === functionName).slice(0, 3);
+  // Fallback: use any available test if none match by name
+  if (!cases.length) {
+    cases = withExpected.slice(0, 3);
+  }
+
+  const hasCallMethod = cases.some(tc => tc.callMethod);
+
   return cases.map(tc => {
+    const effectiveName = tc.functionName || functionName;
     const args = Array.isArray(tc.args) ? tc.args.map(formatArg).join(', ') : '';
-    const arrow = tc.expected !== undefined ? `\u2192 ${formatExpected(tc.expected)}` : '\u2192 ?';
-    return `  ${functionName}(${args}) ${arrow}`;
+    if (hasCallMethod && tc.callMethod) {
+      const methodArgs = Array.isArray(tc.callMethodArgs) ? tc.callMethodArgs.map(formatArg).join(', ') : '';
+      return `  ${effectiveName}(${args}).${tc.callMethod}(${methodArgs}) \u2192 ${formatExpected(tc.expected)}`;
+    }
+    return `  ${effectiveName}(${args}) \u2192 ${formatExpected(tc.expected)}`;
   });
 }
 
@@ -86,6 +101,13 @@ function examplesNeedFix(description) {
       const hasLiteralsMatch = args.every(a => a.startsWith("'") && a.endsWith("'"));
       if (hasLiteralsMatch && args.length >= 3) return true;
     }
+    // Single string or number passed where a list of items is expected
+    const isSingleLiteral = args.length === 1 && (
+      (args[0].startsWith("'") && args[0].endsWith("'")) ||
+      (args[0].startsWith('"') && args[0].endsWith('"')) ||
+      /^\d+$/.test(args[0])
+    );
+    if (isSingleLiteral && (/list|array|using `map/i.test(description) || description.includes('strings') || description.includes('numbers'))) return true;
   }
   return false;
 }
@@ -321,7 +343,8 @@ for (const ex of EXERCISES) {
   
   if (!fnMatch && !classMatch && !isScriptMode) continue;
 
-  const functionName = fnMatch ? fnMatch[1] : (classMatch ? classMatch[1] : 'solve');
+  const functionName = (grader && Array.isArray(grader.functionNames) && grader.functionNames[0]) || (fnMatch ? fnMatch[1] : (classMatch ? classMatch[1] : 'solve'));
+  const isClass = !!classMatch;
   const params = fnMatch ? fnMatch[2].split(',').map(p => p.trim()).filter(Boolean) : [];
   const description = ex.description || '';
 
@@ -362,9 +385,9 @@ for (const ex of EXERCISES) {
   let newBlock = oldBlock;
   let blockChanged = false;
 
-  // ── Fix description examples ──
-  if (examplesNeedFix(description) && grader && Array.isArray(grader.tests) && fnMatch) {
-    const newExamples = generateExamples(functionName, grader.tests);
+  // ── Fix description examples from authoritative grader data ──
+  if (grader && Array.isArray(grader.tests) && (fnMatch || classMatch) && grader.tests.length > 0) {
+    const newExamples = generateExamples(functionName, grader.tests, isClass);
     if (newExamples.length) {
       const lines = description.split('\n');
       const nonExampleLines = lines.filter(l => !/\u2192/.test(l) && !/->/.test(l));
@@ -373,6 +396,20 @@ for (const ex of EXERCISES) {
       const descInfo = findFieldValue(newBlock, 0, 'description');
       if (descInfo) {
         newBlock = replaceFieldValue(newBlock, descInfo, newDesc);
+        blockChanged = true;
+        exampleFixCount++;
+      }
+    }
+  }
+
+  // ── Clean up leftover placeholder examples (e.g. script-mode problems) ──
+  if (/\u2192\s*\?/.test(newBlock)) {
+    const cleanedLines = description.split('\n').filter(l => !/\u2192\s*\?/.test(l) && !/->\s*\?/.test(l));
+    const cleanedDesc = cleanedLines.join('\n');
+    if (cleanedDesc !== description) {
+      const descInfo = findFieldValue(newBlock, 0, 'description');
+      if (descInfo) {
+        newBlock = replaceFieldValue(newBlock, descInfo, cleanedDesc);
         blockChanged = true;
         exampleFixCount++;
       }
