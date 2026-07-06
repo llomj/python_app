@@ -9872,6 +9872,77 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
     );
 }
 
+const renderProblemAiInlineText = (text: string) => {
+    const parts = text.split(/(`[^`]+`)/g);
+    return parts.map((part, index) => {
+        if (part.startsWith('`') && part.endsWith('`')) {
+            return (
+                <code key={`problem-ai-inline-${index}`} className="rounded-md border px-1.5 py-0.5 text-[0.85em]" style={{ borderColor: 'rgba(96, 165, 250, 0.24)', backgroundColor: 'rgba(15, 23, 42, 0.65)', color: '#bfdbfe' }}>
+                    {part.slice(1, -1)}
+                </code>
+            );
+        }
+        return <React.Fragment key={`problem-ai-inline-${index}`}>{part}</React.Fragment>;
+    });
+};
+
+function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: string; editorColors: EditorColorSettings; accentColor?: string }) {
+    const parts = parseAiTextParts(text);
+    const renderCode = (code: string, key: string) => (
+        <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
+            <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
+                Python
+            </div>
+            <CodeMirror
+                value={code}
+                height="auto"
+                readOnly={true}
+                extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                theme="none"
+                basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
+            />
+        </div>
+    );
+
+    return (
+        <div className="space-y-2.5 text-sm leading-relaxed text-gray-200">
+            {parts.map((part, index) => {
+                if (part.type === 'code' || looksLikePythonCode(part.value)) {
+                    return renderCode(part.value, `problem-ai-code-${index}`);
+                }
+
+                const sections = part.value
+                    .split(/\n\s*\n+/)
+                    .map(section => section.trim())
+                    .filter(Boolean);
+
+                return (
+                    <div key={`problem-ai-text-${index}`} className="space-y-2.5">
+                        {sections.map((section, sectionIndex) => {
+                            const cleaned = section.replace(/^\d+[.)]\s*/, '').trim();
+                            const lines = cleaned.split(/\n+/).map(line => line.trim()).filter(Boolean);
+                            return (
+                                <div key={`problem-ai-section-${index}-${sectionIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: hexToRgba(accentColor, 0.24), backgroundColor: 'rgba(8, 18, 34, 0.48)' }}>
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accentColor, 0.16), color: accentColor }}>
+                                        {sectionIndex + 1}
+                                    </div>
+                                    <div className="min-w-0 space-y-1.5 text-gray-200">
+                                        {lines.map((line, lineIndex) => (
+                                            <p key={`problem-ai-line-${index}-${sectionIndex}-${lineIndex}`} className="whitespace-pre-wrap">
+                                                {renderProblemAiInlineText(line)}
+                                            </p>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
@@ -10989,6 +11060,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const asksMethod = /method|isdigit|isalpha|isalnum|string|integer|int|digit|syntax|built.?in|append|split|join|strip|lower|upper|replace|sort|sorted/.test(q);
         const asksHint = /hint|help|start|how|what should|what do/.test(q);
         const asksDigitMethod = /\bis\s*(?:there\s*)?(?:is\s*)?digit\b/.test(q) || q.includes('isdigit') || (q.includes('digit') && q.includes('string') && q.includes('method'));
+        const asksIntegerArgument = /(?:integer|int|number).*(?:argument|input|parameter)|can i.*(?:integer|int|number)|write an? (?:integer|int|number)/.test(q);
         const firstLine = description.split('\n')[0];
         const functionName = description.match(/`([A-Za-z_]\w*)`/)?.[1] || exercise.initialCode.match(/def\s+([A-Za-z_]\w*)/)?.[1] || 'your_function';
         const conceptAnswers: Array<{ pattern: RegExp; text: string }> = [
@@ -11154,6 +11226,37 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 '    return char.isdigit()',
                 '```',
                 '3. Do not pass an integer directly if the task says “character”. Use `"5"` not `5`. If you already have an integer, convert it first with `str(value).isdigit()`.',
+            ].join('\n\n');
+        }
+
+        if (asksIntegerArgument) {
+            const characterProblem = /character|char|string/.test(description.toLowerCase());
+            if (characterProblem) {
+                return [
+                    '1. For this problem, use a string character, not an integer.',
+                    'The prompt says the function takes a character. In Python, that usually means a one-character string like `"5"` or `"a"`.',
+                    '```python',
+                    "check_digit('5')  # correct",
+                    'check_digit(5)    # not ideal for this task',
+                    '```',
+                    '2. Why?',
+                    '`isdigit()` is a string method, so it works on strings:',
+                    '```python',
+                    "char = '5'",
+                    'print(char.isdigit())  # True',
+                    '```',
+                    '3. If you already have an integer, convert it first:',
+                    '```python',
+                    'value = 5',
+                    'print(str(value).isdigit())  # True',
+                    '```',
+                ].join('\n\n');
+            }
+            return [
+                '1. It depends on the problem input.',
+                'If the prompt says number or integer, passing an integer is fine.',
+                'If the prompt says string or character, use quotes, for example `"5"` instead of `5`.',
+                '2. Match the function parameter to the prompt, because the grader tests the type the problem asks for.',
             ].join('\n\n');
         }
 
@@ -12480,7 +12583,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 )}
                                             </div>
                                             {message.role === 'assistant' ? (
-                                                <AiReviewText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} detectBareCode={true} numbered={true} />
+                                                <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
                                             ) : (
                                                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-100">{message.text}</p>
                                             )}
