@@ -9314,7 +9314,29 @@ const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, 
         if (part.startsWith('`') && part.endsWith('`')) {
             return renderInlinePythonCode(part.slice(1, -1), editorColors, `${keyPrefix}-code-${index}`);
         }
-        return <React.Fragment key={`${keyPrefix}-text-${index}`}>{part}</React.Fragment>;
+        // Colorize bare Python tokens in normal prose: strings, True/False/None, numbers, .method()
+        const tokens = part.split(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b(True|False|None)\b|\.\w+(?:\(\))?|\b\d+(?:\.\d+)?\b)/g);
+        return (
+            <React.Fragment key={`${keyPrefix}-text-${index}`}>
+                {tokens.map((token, tokenIndex) => {
+                    if (!token) return null;
+                    const tokenKey = `${keyPrefix}-text-${index}-tok-${tokenIndex}`;
+                    if (/^"(?:[^"\\]|\\.)*"$/.test(token) || /^'(?:[^'\\]|\\.)*'$/.test(token)) {
+                        return <span key={tokenKey} style={{ color: editorColors.string }}>{token}</span>;
+                    }
+                    if (/^(True|False|None)$/.test(token)) {
+                        return <span key={tokenKey} style={{ color: editorColors.keyword }}>{token}</span>;
+                    }
+                    if (/^\d+(?:\.\d+)?$/.test(token)) {
+                        return <span key={tokenKey} style={{ color: editorColors.number }}>{token}</span>;
+                    }
+                    if (/^\.\w+(?:\(\))?$/.test(token)) {
+                        return <span key={tokenKey} style={{ color: editorColors.builtin }}>{token}</span>;
+                    }
+                    return <React.Fragment key={tokenKey}>{token}</React.Fragment>;
+                })}
+            </React.Fragment>
+        );
     });
 };
 
@@ -9880,20 +9902,6 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
     );
 }
 
-const renderProblemAiInlineText = (text: string) => {
-    const parts = text.split(/(`[^`]+`)/g);
-    return parts.map((part, index) => {
-        if (part.startsWith('`') && part.endsWith('`')) {
-            return (
-                <code key={`problem-ai-inline-${index}`} className="rounded-md border px-1.5 py-0.5 text-[0.85em]" style={{ borderColor: 'rgba(96, 165, 250, 0.24)', backgroundColor: 'rgba(15, 23, 42, 0.65)', color: '#bfdbfe' }}>
-                    {part.slice(1, -1)}
-                </code>
-            );
-        }
-        return <React.Fragment key={`problem-ai-inline-${index}`}>{part}</React.Fragment>;
-    });
-};
-
 function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: string; editorColors: EditorColorSettings; accentColor?: string }) {
     const parts = parseAiTextParts(text);
     const renderCode = (code: string, key: string) => (
@@ -9937,7 +9945,7 @@ function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: 
                                     <div className="min-w-0 space-y-1.5 text-gray-200">
                                         {lines.map((line, lineIndex) => (
                                             <p key={`problem-ai-line-${index}-${sectionIndex}-${lineIndex}`} className="whitespace-pre-wrap">
-                                                {renderProblemAiInlineText(line)}
+                                                {renderAiParagraphText(line, editorColors, `problem-ai-line-${index}-${sectionIndex}-${lineIndex}`)}
                                             </p>
                                         ))}
                                     </div>
@@ -10016,6 +10024,7 @@ const App: React.FC = () => {
     const [problemAiDraft, setProblemAiDraft] = useState('');
     const [problemAiRunning, setProblemAiRunning] = useState(false);
     const [problemAiProblemId, setProblemAiProblemId] = useState<number | null>(null);
+    const [problemAiEnabled, setProblemAiEnabled] = useState(() => localStorage.getItem('python_problem_ai_enabled') !== 'false');
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -10034,7 +10043,6 @@ const App: React.FC = () => {
     const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
     const [logExpanded, setLogExpanded] = useState(false);
-    const [showBreakdownFor, setShowBreakdownFor] = useState<number | null>(null);
     const [showSnippetSaveInput, setShowSnippetSaveInput] = useState(false);
     const [snippetNameInput, setSnippetNameInput] = useState('');
     const [savedSnippets, setSavedSnippets] = useState<Array<{ id: number; name: string; content: string; savedAt: string }>>(() => {
@@ -10293,6 +10301,10 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_saved_snippets', JSON.stringify(savedSnippets));
     }, [savedSnippets]);
+
+    useEffect(() => {
+        localStorage.setItem('python_problem_ai_enabled', String(problemAiEnabled));
+    }, [problemAiEnabled]);
 
     const playKeyboardFeedback = useCallback(() => {
         const now = performance.now();
@@ -11245,6 +11257,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     '```',
                 ].join('\n\n'),
             },
+            {
+                pattern: /\b(boolean|bool|true|false)\b/,
+                text: [
+                    '1. A Boolean is a value that is either `True` or `False`.',
+                    '2. Use comparison operators to get a Boolean:',
+                    '```python',
+                    'print(5 > 3)   # True',
+                    'print(2 == 4)  # False',
+                    '```',
+                    '3. For function problems that ask for a yes/no or check result, return `True` or `False` directly:',
+                    '```python',
+                    'def is_even(n):',
+                    '    return n % 2 == 0',
+                    '```',
+                ].join('\n\n'),
+            },
         ];
 
         if (asksDigitMethod) {
@@ -11392,6 +11420,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, exercise.id, outputStatus, problemAiMessages.length, problemAiProblemId]);
 
     const sendProblemAiQuestion = useCallback(async (rawQuestion: string) => {
+        if (!problemAiEnabled) return;
         const question = rawQuestion.trim();
         if (!question || problemAiRunning) return;
         const request = buildProblemAiRequest(question);
@@ -12036,10 +12065,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
                                 </button>
-                                <button onClick={() => setShowBreakdownFor(showBreakdownFor === exercise.id ? null : exercise.id)} title="Problem guide and hints" style={{ backgroundColor: showBreakdownFor === exercise.id ? hexToRgba(countRowColors.rate, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.rate, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
-                                    <Lightbulb size={14} fill={showBreakdownFor === exercise.id ? 'currentColor' : 'none'} />
-                                    <span>Guide</span>
-                                </button>
                                 <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
                                     <span>Next</span>
@@ -12048,44 +12073,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         </div>
                         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: editorColors.problemText, fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
                             {exercise.description}
-                            {showBreakdownFor === exercise.id && (
-                                <div style={{ marginTop: '0.75rem', borderTop: '1px solid rgba(255, 151, 0, 0.2)', paddingTop: '0.5rem' }}>
-                                    <h4 style={{ fontSize: '0.7rem', fontWeight: 700, color: '#FF9700', margin: '0 0 0.35rem', display: 'flex', alignItems: 'center', gap: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                                        <Lightbulb size={11} /> Guide
-                                    </h4>
-                                    <div style={{ display: 'grid', gap: '0.55rem', color: '#c8cdd5', fontSize: '0.8125rem', lineHeight: 1.65 }}>
-                                        {(() => {
-                                            const sections = buildExerciseGuideSections(exercise);
-                                            return sections.map((section, sectionIndex) => {
-                                                const sectionStyle = getGuideSectionStyle(section.tone);
-                                                return (
-                                                <div
-                                                    key={`guide-section-${section.title}`}
-                                                    style={{
-                                                        border: `1px solid ${sectionStyle.borderColor}`,
-                                                        backgroundColor: sectionStyle.backgroundColor,
-                                                        borderRadius: '0.7rem',
-                                                        padding: '0.55rem 0.65rem',
-                                                    }}
-                                                >
-                                                    <div style={{ color: sectionStyle.color, fontSize: '0.66rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
-                                                        {section.title}
-                                                    </div>
-                                                    <div style={{ display: 'grid', gap: '0.35rem' }}>
-                                                        {section.lines.map((line, lineIndex) => (
-                                                            <div key={`guide-line-${sectionIndex}-${lineIndex}`} style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                                                                <span style={{ color: sectionStyle.color, fontSize: '0.7rem', lineHeight: 1.7, flexShrink: 0 }}>{section.tone === 'steps' ? `${lineIndex + 1}.` : '•'}</span>
-                                                                <span>{renderAiParagraphText(line, editorColors, `guide-line-${sectionIndex}-${lineIndex}`)}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                                );
-                                            });
-                                        })()}
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -12616,23 +12603,47 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
                                         <p className="mt-1 text-xs text-gray-400">Ask about Problem {exercise.id}, your code, output, or why the grader failed.</p>
                                     </div>
-                                    <span className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.08) }}>
-                                        {offlineAiState.status === 'ready' ? 'Offline AI' : 'Built-in help'}
-                                    </span>
+                                    <button
+                                        onClick={() => setProblemAiEnabled(prev => !prev)}
+                                        className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                        style={{
+                                            borderColor: hexToRgba(toolPanelColors.ai, 0.35),
+                                            color: problemAiEnabled ? toolPanelColors.ai : '#9ca3af',
+                                            backgroundColor: problemAiEnabled ? hexToRgba(toolPanelColors.ai, 0.12) : 'rgba(55, 65, 81, 0.5)',
+                                        }}
+                                        title={problemAiEnabled ? 'Problem AI is on' : 'Problem AI is off'}
+                                    >
+                                        {problemAiEnabled ? 'On' : 'Off'}
+                                    </button>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-2 text-[11px]">
-                                    {['Explain task', 'Why failed?', 'What method?', 'Show hint'].map(prompt => (
-                                        <button
-                                            key={prompt}
-                                            onClick={() => sendProblemAiQuestion(prompt)}
-                                            disabled={problemAiRunning}
-                                            className="rounded-xl border px-3 py-2 text-left font-bold transition-all hover:brightness-125 disabled:opacity-50"
-                                            style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
-                                        >
-                                            {prompt}
-                                        </button>
-                                    ))}
+                                <div className="flex-shrink-0 overflow-y-auto pr-1" style={{ maxHeight: '112px' }}>
+                                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                                        {[
+                                            'Explain task',
+                                            'Why failed?',
+                                            'What method?',
+                                            'Show hint',
+                                            'What is a list?',
+                                            'What is a string?',
+                                            'What is a loop?',
+                                            'What is a Boolean?',
+                                            'What is a function?',
+                                            'What is a dictionary?',
+                                            'How do I return?',
+                                            'What does this error mean?',
+                                        ].map(prompt => (
+                                            <button
+                                                key={prompt}
+                                                onClick={() => sendProblemAiQuestion(prompt)}
+                                                disabled={problemAiRunning || !problemAiEnabled}
+                                                className="rounded-xl border px-3 py-2 text-left font-bold transition-all hover:brightness-125 disabled:opacity-40"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
+                                            >
+                                                {prompt}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
 
                                 <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
@@ -12677,13 +12688,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                     <input
                                         value={problemAiDraft}
                                         onChange={(event) => setProblemAiDraft(event.target.value)}
-                                        placeholder="Ask about this problem..."
-                                        className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
+                                        placeholder={problemAiEnabled ? "Ask about this problem..." : "Problem AI is off"}
+                                        disabled={!problemAiEnabled}
+                                        className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none disabled:opacity-40"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
                                     />
                                     <button
                                         type="submit"
-                                        disabled={!problemAiDraft.trim() || problemAiRunning}
+                                        disabled={!problemAiDraft.trim() || problemAiRunning || !problemAiEnabled}
                                         className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
                                     >
