@@ -87,6 +87,33 @@ ${clampText(request.userCode, 1800)
 ${request.visibleSolution ? `Expected solution:\n${clampText(request.visibleSolution, 600)}` : ''}
 `;
 
+const buildTutorPrompt = (question: string, request: AiReviewRequest) => `
+Answer the user's Python learning question for this exact exercise.
+
+Rules:
+- Answer the user's question directly first. Do not start by repeating "what this problem wants" unless the user asks for a task explanation.
+- Be specific to the current problem, code, output, and grader message.
+- If the user asks a general Python concept question, explain that concept in beginner language and connect it to the current problem when possible.
+- If the user asks whether a type, argument, method, return value, or syntax is correct, say yes/no/it depends first, then explain why.
+- Keep the format as numbered sections separated by blank lines.
+- Put Python code in fenced \`\`\`python blocks.
+- Wrap identifiers, method names, values, and keywords in backticks.
+- Do not give generic filler. Mention exact names from the prompt or user's code when possible.
+
+User question:
+${clampText(question, 500)}
+
+Problem ${request.problemId}
+Title: ${clampText(request.title, 300)}
+Description: ${clampText(request.description, 1200)}
+Latest grader passed: ${request.graderPassed ? 'yes' : 'no'}
+Latest grader message: ${clampText(request.graderMessage, 600)}
+Latest output: ${clampText(request.programOutput || '', 600)}
+User code:
+${clampText(request.userCode || '', 1600)}
+${request.visibleSolution ? `Reference solution:\n${clampText(request.visibleSolution, 700)}` : ''}
+`;
+
 const parseReviewJson = (text: string): AiReviewResult => {
     try {
         const cleaned = text.replace(/```json|```/g, '').trim();
@@ -155,6 +182,19 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
         max_tokens: 850,
     });
     return parseReviewJson(response?.choices?.[0]?.message?.content || '');
+};
+
+export const answerProblemQuestionWithWebLlm = async (question: string, request: AiReviewRequest, modelId: string): Promise<string> => {
+    const engine = await loadWebLlmReviewer(modelId);
+    const response = await engine.chat.completions.create({
+        messages: [
+            { role: 'system', content: 'You are a direct Python tutor for a beginner coding app. Answer the exact user question, with concrete examples. Do not return JSON.' },
+            { role: 'user', content: buildTutorPrompt(question, request) },
+        ],
+        temperature: 0.2,
+        max_tokens: 900,
+    });
+    return String(response?.choices?.[0]?.message?.content || '').trim();
 };
 
 export const testWebLlmReviewer = async (modelId: string) => {

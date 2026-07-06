@@ -44,7 +44,7 @@ import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
-import { DEFAULT_OFFLINE_AI_STATE, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
+import { DEFAULT_OFFLINE_AI_STATE, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
@@ -9249,7 +9249,15 @@ const parseAiTextParts = (text: string): AiTextPart[] => {
 
 const looksLikePythonCode = (text: string) => {
     const trimmed = text.trim();
-    return /\n/.test(trimmed) && /\b(def|class|return|if|for|while|import|from|print)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
+    const lines = trimmed.split('\n').map(line => line.trim()).filter(Boolean);
+    if (lines.length === 0) return false;
+    const codeLines = lines.filter(line => (
+        /^(def|class|return|if|elif|else:|for|while|try:|except|finally:|with|import|from|print\s*\(|raise\b|yield\b|pass\b|break\b|continue\b)\b/.test(line)
+        || /^[A-Za-z_]\w*\s*(?:=|\+=|-=|\*=|\/=|%=|\/\/=|\*\*=)/.test(line)
+        || /^[A-Za-z_]\w*\s*\(.*\)\s*$/.test(line)
+        || /^\s{2,}\S/.test(line)
+    ));
+    return codeLines.length >= Math.max(1, Math.ceil(lines.length * 0.35));
 };
 
 const isSolutionHeading = (line: string) => /^#\s*(Using|Script|Direct|Built|Manual|Alternative|Try|Another|Equivalent|Convert|Modify|Consider)\b/i.test(line.trim());
@@ -11063,6 +11071,33 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const asksIntegerArgument = /(?:integer|int|number).*(?:argument|input|parameter)|can i.*(?:integer|int|number)|write an? (?:integer|int|number)/.test(q);
         const firstLine = description.split('\n')[0];
         const functionName = description.match(/`([A-Za-z_]\w*)`/)?.[1] || exercise.initialCode.match(/def\s+([A-Za-z_]\w*)/)?.[1] || 'your_function';
+        const lowerDescription = description.toLowerCase();
+        const asksBoolean = /\b(bool|boolean|true|false)\b/.test(q);
+        const asksArgument = /\b(argument|parameter|input|pass|put|use)\b/.test(q);
+        const returnsBoolean = /\b(return|returns)\b[^.]*\b(true|false|boolean|bool)\b/.test(lowerDescription) || /\btrue\b.*\bif\b|\bfalse\b/.test(lowerDescription);
+        const wantsCharacter = /\b(character|char)\b/.test(lowerDescription);
+        const wantsString = wantsCharacter || /\b(string|str)\b/.test(lowerDescription);
+        const wantsNumber = /\b(integer|number|int|float)\b/.test(lowerDescription);
+        const promptMethodNames = promptMethods
+            .map(item => item.replace(/[`()]/g, '').trim())
+            .filter(Boolean);
+        const taskSummary = [
+            `The task is asking you to build \`${functionName}\`, not just copy the example output.`,
+            returnsBoolean ? 'The answer should be a Boolean result: `True` or `False`.' : '',
+            wantsCharacter ? 'The input is described as a character, so use a one-character string like `"5"` or `"a"`.' : '',
+            wantsString && !wantsCharacter ? 'The input is text, so string methods and string indexing may be useful.' : '',
+            wantsNumber && !wantsString ? 'The input is numeric, so arithmetic or numeric comparison is probably the main operation.' : '',
+            promptMethodNames.length ? `Useful prompt syntax: ${promptMethodNames.map(name => `\`${name}\``).join(', ')}.` : '',
+        ].filter(Boolean);
+        const directContextAnswer = (lead: string, extra: string[] = []) => [
+            `1. Direct answer`,
+            lead,
+            '',
+            `2. How it applies here`,
+            ...(taskSummary.length ? taskSummary : [firstLine]),
+            '',
+            ...extra,
+        ].join('\n');
         const conceptAnswers: Array<{ pattern: RegExp; text: string }> = [
             {
                 pattern: /\b(list|lists)\b/,
@@ -11230,7 +11265,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         }
 
         if (asksIntegerArgument) {
-            const characterProblem = /character|char|string/.test(description.toLowerCase());
+            const characterProblem = /character|char|string/.test(lowerDescription);
             if (characterProblem) {
                 return [
                     '1. For this problem, use a string character, not an integer.',
@@ -11260,13 +11295,46 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             ].join('\n\n');
         }
 
+        if (asksBoolean) {
+            return directContextAnswer(
+                returnsBoolean
+                    ? 'Yes. For this problem, the function should return a Boolean value: `True` when the condition is satisfied, otherwise `False`.'
+                    : 'A Boolean is only needed if the prompt asks for `True`/`False`, a yes/no check, or a condition result.',
+                returnsBoolean ? [
+                    '3. Example shape',
+                    '```python',
+                    `def ${functionName}(value):`,
+                    '    return condition_here',
+                    '```',
+                    'The important part is that the expression after `return` evaluates to `True` or `False`.',
+                ] : [
+                    '3. What to return instead',
+                    'For this problem, return the type requested by the prompt, such as a number, string, list, dictionary, or other calculated result.',
+                ],
+            );
+        }
+
+        if (asksArgument) {
+            return directContextAnswer(
+                wantsString
+                    ? 'Use a string argument for this task. If the prompt says character, pass a quoted value like `"5"` or `"a"`.'
+                    : wantsNumber
+                        ? 'Use a numeric argument for this task unless the prompt specifically asks for text.'
+                        : 'Use the argument type described by the prompt. The variable name can be different, but the value type and logic must match the task.',
+                [
+                    '3. Variable names do not matter',
+                    `The grader cares that \`${functionName}\` performs the requested logic. The parameter can be named \`char\`, \`x\`, \`value\`, or another valid name.`,
+                ],
+            );
+        }
+
         const conceptAnswer = conceptAnswers.find(item => item.pattern.test(q));
         if (conceptAnswer && !asksWhy && !q.includes('explain task')) {
             return conceptAnswer.text;
         }
 
         const parts: string[] = [];
-        parts.push(`1. What this problem wants\n${firstLine}`);
+        parts.push(`1. Task breakdown\n${taskSummary.length ? taskSummary.join('\n') : firstLine}`);
 
         const expectedShape = [
             `Function: \`${functionName}\``,
@@ -11296,6 +11364,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         if (asksHint || hint || breakdown) {
             parts.push(`6. Simple next step\n${hint || 'Break the problem into input, operation, and returned output.'}${breakdown ? `\n\nGuide:\n${breakdown}` : ''}`);
+        }
+
+        if (parts.length <= 2 && !asksHint && !asksWhy && !asksMethod) {
+            parts.push(`3. If your question is more specific\nAsk it directly, for example: “Should this return ` + '`True` or `False`?”, “Can the argument be an integer?”, or “What does this method do?”.');
         }
 
         return parts.join('\n\n');
@@ -11332,7 +11404,27 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setProblemAiRunning(true);
 
         try {
-            if (!shouldUseReviewer || offlineAiState.status !== 'ready') {
+            if (!shouldUseReviewer) {
+                const modelAnswer = await answerProblemQuestionWithAvailableAi(question, request, offlineAiState);
+                if (modelAnswer) {
+                    setProblemAiMessages(prev => [...prev, {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        source: 'offline',
+                        text: modelAnswer,
+                    }]);
+                    return;
+                }
+
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: buildBuiltInProblemAiAnswer(question, request),
+                }]);
+                return;
+            }
+            if (offlineAiState.status !== 'ready') {
                 setProblemAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
                     role: 'assistant',

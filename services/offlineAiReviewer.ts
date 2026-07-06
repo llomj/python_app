@@ -1,6 +1,6 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
+import { answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 
@@ -414,4 +414,36 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
     }
 
     return diagnostic;
+};
+
+const isSpecificTutorAnswer = (answer: string, request: AiReviewRequest, question: string) => {
+    const text = answer.toLowerCase();
+    if (answer.trim().length < 80) return false;
+    if (/generic answer|cannot determine|not enough information|unable to/i.test(answer)) return false;
+    const questionWords = (question.toLowerCase().match(/\b[a-z_][a-z0-9_]{3,}\b/g) || [])
+        .filter(word => !/^(what|this|that|with|from|does|need|problem|question|argument|python)$/i.test(word));
+    const problemSignals = extractReviewSignals(request);
+    const questionHits = questionWords.filter(word => text.includes(word)).length;
+    const problemHits = problemSignals.filter(signal => text.includes(signal)).length;
+    return questionHits >= Math.min(1, questionWords.length) || problemHits >= 1 || /yes|no|depends|true|false|return|method|argument|parameter/.test(text);
+};
+
+export const answerProblemQuestionWithAvailableAi = async (
+    question: string,
+    request: AiReviewRequest,
+    state: OfflineAiState,
+): Promise<string | null> => {
+    if (!state.enabled || state.status !== 'ready') return null;
+    if (!supportsWebLlm()) return null;
+
+    try {
+        const answer = await withTimeout(
+            answerProblemQuestionWithWebLlm(question, request, state.modelId),
+            OFFLINE_AI_REVIEW_TIMEOUT_MS,
+            'Offline AI tutor timed out.',
+        );
+        return isSpecificTutorAnswer(answer, request, question) ? answer : null;
+    } catch {
+        return null;
+    }
 };
