@@ -13738,9 +13738,8 @@ print(result)
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
                                     <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
-                                        <div className="overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44]" style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}>
-                                            <div className="overflow-x-auto overflow-y-hidden overscroll-contain" style={{ touchAction: 'pan-x', overscrollBehaviorX: 'contain', overscrollBehaviorY: 'none' }}>
-                                                <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
+                                        <div className="overflow-x-auto overscroll-contain rounded-xl border border-[#1d2d44]">
+                                            <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
@@ -13764,7 +13763,6 @@ print(result)
                                                 <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
                                                 <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
                                                 <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
