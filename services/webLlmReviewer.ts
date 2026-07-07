@@ -210,6 +210,37 @@ export const answerGeneralPythonWithWebLlm = async (question: string, modelId: s
     return String(response?.choices?.[0]?.message?.content || '').trim();
 };
 
+type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
+
+export const answerGeneralPythonWithWebLlmConversation = async (
+    question: string,
+    modelId: string,
+    history: ChatMessage[] = [],
+): Promise<string> => {
+    const engine = await loadWebLlmReviewer(modelId);
+    const messages: ChatMessage[] = [
+        {
+            role: 'system',
+            content: [
+                'You are an interactive Python tutor in a conversation.',
+                'Be clear, correct, and give code examples.',
+                'If the user says "expand", "more", "detail", "examples", or similar follow-ups, expand on your previous answer.',
+                'If the question is ambiguous, ASK a clarifying question instead of guessing.',
+                'If you do not know the answer, say "I cannot answer that."',
+                'Do not return JSON.',
+            ].join(' '),
+        },
+        ...history,
+        { role: 'user', content: question },
+    ];
+    const response = await engine.chat.completions.create({
+        messages,
+        temperature: 0.3,
+        max_tokens: 1500,
+    });
+    return String(response?.choices?.[0]?.message?.content || '').trim();
+};
+
 export const testWebLlmReviewer = async (modelId: string) => {
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({

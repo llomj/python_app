@@ -13280,9 +13280,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 role: 'assistant',
                 source: 'built_in',
                 text: [
-                    'Ask any Python question. I know methods, built-ins, keywords, concepts, syntax, and more.',
+                    'Ask any Python question. I can explain concepts, list methods and built-ins, compare ideas, or help you understand code.',
                     '',
-                    'You can ask me to list all methods, explain a specific function, compare concepts, or describe how something works.',
+                    'I can also follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer.',
                     '',
                     'Use **Save** to download the conversation or **Clear** to start a fresh one.',
                 ].join('\n'),
@@ -13294,6 +13294,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
+        const historyForAi = generalAiMessages.map(m => ({ role: m.role, content: m.text }));
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setGeneralAiMessages(prev => [...prev, userMessage]);
         setGeneralAiDraft('');
@@ -13310,7 +13311,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }]);
                 return;
             }
-            const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState);
+            const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, historyForAi);
             if (generalAnswer) {
                 setGeneralAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
@@ -14904,10 +14905,7 @@ print(result)
                             <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
                                 <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
-                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>General Python AI</h2>
-                                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.12) }}>
-                                            Built-in
-                                        </span>
+                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Python AI</h2>
                                         <button
                                             onClick={() => {
                                                 const text = generalAiMessages.map(m =>
@@ -14944,7 +14942,7 @@ print(result)
                                             Clear
                                         </button>
                                     </div>
-                                    <p className="mt-1 text-xs text-gray-400">Ask any Python concept question. This is separate from the problem-specific AI.</p>
+                                    <p className="mt-1 text-xs text-gray-400">Ask any Python question. I can explain concepts, list methods and built-ins, or help you understand code. Follow up to dive deeper.</p>
                                 </div>
                             </div>
 

@@ -1,6 +1,6 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { answerGeneralPythonWithWebLlm, answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
+import { answerGeneralPythonWithWebLlm, answerGeneralPythonWithWebLlmConversation, answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 
@@ -448,16 +448,21 @@ export const answerProblemQuestionWithAvailableAi = async (
     }
 };
 
+type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
+
 export const answerGeneralPythonWithAvailableAi = async (
     question: string,
     state: OfflineAiState,
+    history: ChatMessage[] = [],
 ): Promise<string | null> => {
     if (!state.enabled || state.status !== 'ready') return null;
     if (!supportsWebLlm()) return null;
 
     try {
         const answer = await withTimeout(
-            answerGeneralPythonWithWebLlm(question, state.modelId),
+            history.length > 0
+                ? answerGeneralPythonWithWebLlmConversation(question, state.modelId, history)
+                : answerGeneralPythonWithWebLlm(question, state.modelId),
             OFFLINE_AI_REVIEW_TIMEOUT_MS,
             'Offline AI general tutor timed out.',
         );
