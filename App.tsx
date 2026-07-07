@@ -10116,6 +10116,8 @@ const App: React.FC = () => {
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [showHowToUse, setShowHowToUse] = useState(false);
+    const [modeSectionOpen, setModeSectionOpen] = useState(true);
+    const [soundsSectionOpen, setSoundsSectionOpen] = useState(true);
     const [aiHintText, setAiHintText] = useState<string>('');
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
@@ -13208,87 +13210,103 @@ print(result)
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
-                                        <Terminal size={14} style={{ color: countRowColors.count }} /> Mode
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button
-                                            onClick={() => { setPlainMode(false); setExercise(getInitialExercise()); setFiles([{ name: 'main.py', content: getInitialExercise().initialCode }]); }}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={!plainMode ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <span className="text-xs font-black uppercase tracking-[0.14em]">Play</span>
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode ? countRowColors.wins : '#6b7280' }}>On</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Exercises</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">Practice with problems.</span>
-                                        </button>
-                                        <button
-                                            onClick={() => { setPlainMode(true); setFiles([{ name: 'main.py', content: '' }]); setOutput(''); setOutputStatus('idle'); }}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={plainMode ? { borderColor: hexToRgba(countRowColors.count, 0.6), backgroundColor: hexToRgba(countRowColors.count, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <span className="text-xs font-black uppercase tracking-[0.14em]">Plain</span>
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>On</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Free IDE</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">No problems, just code.</span>
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={() => setModeSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                            <Terminal size={14} style={{ color: countRowColors.count }} /> Mode
+                                        </h3>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: modeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {modeSectionOpen && (
+                                        <div className="mt-3 grid grid-cols-2 gap-2 animate-in fade-in duration-200">
+                                            <button
+                                                onClick={() => { setPlainMode(false); setExercise(getInitialExercise()); setFiles([{ name: 'main.py', content: getInitialExercise().initialCode }]); }}
+                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={!plainMode ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-2 flex items-center justify-between gap-2">
+                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">Play</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode ? countRowColors.wins : '#6b7280' }}>On</span>
+                                                </span>
+                                                <span className="block text-xs font-bold">Exercises</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">Practice with problems.</span>
+                                            </button>
+                                            <button
+                                                onClick={() => { setPlainMode(true); setFiles([{ name: 'main.py', content: '' }]); setOutput(''); setOutputStatus('idle'); }}
+                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={plainMode ? { borderColor: hexToRgba(countRowColors.count, 0.6), backgroundColor: hexToRgba(countRowColors.count, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-2 flex items-center justify-between gap-2">
+                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">Plain</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>On</span>
+                                                </span>
+                                                <span className="block text-xs font-bold">Free IDE</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">No problems, just code.</span>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <h3 className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
-                                        <SlidersHorizontal size={14} className="text-[#3b82f6]" />
-                                        Customize
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button
-                                            onClick={() => setKeyboardHaptics(prev => !prev)}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={keyboardHaptics ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Vibrate size={15} style={{ color: keyboardHaptics ? countRowColors.wins : '#6b7280' }} />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Haptic</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
-                                        </button>
-                                        <button
-                                            onClick={() => setKeyboardSound(prev => !prev)}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={keyboardSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Volume2 size={15} style={{ color: keyboardSound ? countRowColors.wins : '#6b7280' }} />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Sound</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
-                                        </button>
-                                        <button
-                                            onClick={() => setResultSound(prev => !prev)}
-                                            className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                            style={resultSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                        >
-                                            <span className="mb-2 flex items-center justify-between gap-2">
-                                                <Zap size={15} style={{ color: resultSound ? countRowColors.wins : '#6b7280' }} />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]">{resultSound ? 'On' : 'Off'}</span>
-                                            </span>
-                                            <span className="block text-xs font-bold">Result</span>
-                                            <span className="mt-1 block text-[10px] text-gray-400">Cute win/fail sounds after grading.</span>
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={() => setSoundsSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                            <SlidersHorizontal size={14} className="text-[#3b82f6]" />
+                                            Customize Sounds
+                                        </h3>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: soundsSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {soundsSectionOpen && (
+                                        <div className="mt-3 grid grid-cols-2 gap-2 animate-in fade-in duration-200">
+                                            <button
+                                                onClick={() => setKeyboardHaptics(prev => !prev)}
+                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={keyboardHaptics ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-2 flex items-center justify-between gap-2">
+                                                    <Vibrate size={15} style={{ color: keyboardHaptics ? countRowColors.wins : '#6b7280' }} />
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
+                                                </span>
+                                                <span className="block text-xs font-bold">Haptic</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
+                                            </button>
+                                            <button
+                                                onClick={() => setKeyboardSound(prev => !prev)}
+                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={keyboardSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-2 flex items-center justify-between gap-2">
+                                                    <Volume2 size={15} style={{ color: keyboardSound ? countRowColors.wins : '#6b7280' }} />
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
+                                                </span>
+                                                <span className="block text-xs font-bold">Sound</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
+                                            </button>
+                                            <button
+                                                onClick={() => setResultSound(prev => !prev)}
+                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={resultSound ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-2 flex items-center justify-between gap-2">
+                                                    <Zap size={15} style={{ color: resultSound ? countRowColors.wins : '#6b7280' }} />
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{resultSound ? 'On' : 'Off'}</span>
+                                                </span>
+                                                <span className="block text-xs font-bold">Result</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">Cute win/fail sounds after grading.</span>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-200">
                                         <span>Problem Mode</span>
-                                        <button onClick={() => setShowHowToUse(!showHowToUse)} className="inline-flex items-center ml-2 align-middle transition-all hover:brightness-125" title="How to use this app">
-                                            <Info size={14} style={{ color: countRowColors.count }} />
+                                        <button onClick={() => setShowHowToUse(!showHowToUse)} className="inline-flex items-center justify-center ml-2 align-middle rounded-full p-1 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use Problem Mode and Concepts" style={{ color: countRowColors.count }}>
+                                            <Info size={18} />
                                         </button>
                                     </label>
                                     <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
@@ -13348,12 +13366,12 @@ print(result)
                                     </div>
                                     {showHowToUse && (
                                         <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
-                                            <p className="font-bold text-white text-xs">How to use this app</p>
-                                            <p>Choose a difficulty mode, or choose a specific concept like For Loops, Dictionaries, OOP, Closures, or Regex. The app will randomize problems from the selected pool.</p>
+                                            <p className="font-bold text-white text-xs">Problem Mode</p>
+                                            <p><strong>Difficulty modes</strong> filter problems by how hard they are. <strong>Normal</strong> mixes everything together. <strong>Beginner</strong> is simple functions, strings, and lists. <strong>Intermediate</strong> adds loops, dictionaries, and patterns. <strong>Expert</strong> and <strong>Legend</strong> are harder challenges.</p>
+                                            <p className="font-bold text-white text-xs mt-3">Concepts</p>
+                                            <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic below. The app will only show problems that match that concept.</p>
                                             <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
                                             <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <CheckCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.win }} /> <strong>Win</strong> and <XCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.failed }} /> <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked — the more you get right, and the more problems you do, the higher your rank climbs.</p>
-                                            <p className="font-bold text-white text-xs mt-3">Settings</p>
-                                            <p>Customize colors, haptic feedback, keyboard sound, and tool panel appearance from the <SlidersHorizontal size={12} className="inline align-text-top" /> Customize section above. Your progress is saved automatically in this browser.</p>
                                             <p className="font-bold text-white text-xs mt-3">Ranking</p>
                                             <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
                                         </div>
