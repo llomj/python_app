@@ -15,7 +15,10 @@ const createForLoopPracticeExercise = (spec: ForLoopPracticeSpec): Exercise => (
     title: `Problem ${spec.id}`,
     description: `${spec.task} Use a for loop.\nExamples:\n  ${spec.examples.join('\n  ')}`,
     initialCode: `${spec.signature}:\n    pass`,
-    solution: `# Using function approach\n${spec.solutionCode}\n\n# Example calls\n${spec.examples.map(example => `# ${example}`).join('\n')}\n\n# Using step-by-step approach\n# 1. Start with the same function header from the starter code.\n# 2. Create a result variable before the loop.\n# 3. Use a for loop to visit each item.\n# 4. Update the result inside the loop.\n# 5. Return the result after the loop finishes.\n\n# Script approach\n# Change the sample values, call the function, and print the result.\n# result = ${spec.functionName}(...)\n# print(result)\n\n# Direct approach\n# print(${spec.functionName}(...))`,
+    solution: `# Using function approach\n${spec.solutionCode}\n${spec.examples.map(example => {
+        const [call, expected] = example.split(' -> ');
+        return `print(${call})  # Expected: ${expected}`;
+    }).join('\n')}\n\n# Script approach\nresult = ${spec.examples[0].split(' -> ')[0]}\nprint(result)\n\n# Direct approach\nprint(${spec.examples[1].split(' -> ')[0]})`,
     hint: "Use a `for` loop when you need to visit each item in a list, string, tuple, or range.\nPut the `return` statement after the loop unless the problem asks you to stop early.",
     breakdown: spec.breakdown,
     category: "Level 1"

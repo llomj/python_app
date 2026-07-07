@@ -11652,80 +11652,99 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     const createGeneratedForLoopDocs = (targetExercise: Exercise) => {
         const functionName = targetExercise.initialCode.match(/def\s+([a-zA-Z_]\w*)\s*\(/)?.[1] ?? 'the_function';
+        const prompt = targetExercise.description.split('\nExamples:')[0].trim();
+        const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
         const logic = `"""
 Problem: ${targetExercise.id}
+${prompt}
+"""
+#------------------------------------------------------------------------------
+# PROBLEM EXPLANATION:
+# ${prompt}
+#
+# This problem demonstrates how to use a for loop to process values one at a time.
+# The loop should update a result while it runs, then the function should return
+# the completed value after every item has been checked.
+#
+# CODE LOGIC:
+${(targetExercise.breakdown || '').split('\n').map(line => `# ${line}`).join('\n')}
+#------------------------------------------------------------------------------
 
-Code Logic
+${solutionCode}
 
-This problem is for practicing a real Python for loop. The function should loop through the input data one item at a time, update a result while the loop runs, and return the finished result after the loop.
+# TEST CASE:
+# This test case demonstrates the functionality with example inputs.
+# The output should match the expected result shown in the comments.`;
 
-Step-by-step logic:
-${targetExercise.breakdown || '1. Read the problem statement.\n2. Create the needed result variable.\n3. Use a for loop to process each item.\n4. Return the final result.'}
+        const requirements = `# ============================================================================
+# PROBLEM EXPLANATION:
+# ${prompt}
+#
+# This problem is for practicing a real Python for loop.
+#
+# Key Requirements:
+# - Define a function named ${functionName}.
+# - Use at least one for loop.
+# - Use the input values from the function parameters.
+# - Do not hard-code the example output.
+# - Build the result with loop logic.
+# - Return the final answer from the function.
+# - Keep the result type consistent with the examples.
+# ============================================================================
 
-Important workflow:
-1. Python stores the function when it sees the def line.
-2. The function body runs only when the function is called.
-3. The for loop repeats the indented block once for each item.
-4. Any if statement inside the loop decides whether the current item should change the result.
-5. The return statement should normally be after the loop so every item is processed.
-"""`;
-
-        const requirements = `"""
+"""
 Problem: ${targetExercise.id}
+${prompt}
+"""
 
-Requirements
+# SOLUTION EXPLANATION:
+# This solution defines a function that encapsulates the required loop logic.
+# The for loop repeats once for each item in the input data.
+# The function returns the completed value after the loop has finished.
 
-1. Define a function named ${functionName}.
-2. Use at least one for loop. This exercise is specifically for for-loop practice.
-3. Use the input values from the function parameters. Do not hard-code the example output.
-4. Build the answer with loop logic, such as a counter, total, string, list, dictionary, or nested loop.
-5. Return the final answer from the function.
-6. Keep the result type consistent with the prompt examples.
-7. Variable names can be different, but the logic must solve the exact task.
-"""`;
+${solutionCode}`;
 
         const syntax = `"""
-Problem: ${targetExercise.id}
-
-**SYNTAX**
-
-def ${functionName}(...):
+Problem ${targetExercise.id}:
+#
+# SYNTAX:
+# Syntax describes the Python building blocks used in this code —
+# the keywords, operators, and structures that make it work.
+#
+def ${functionName}(...):  # defines a function with parameters
     result = ...
     for item in iterable:
-        # repeated block
         ...
-    return result
-
-Key syntax used:
-- def creates a reusable function.
-- for item in iterable repeats the indented block for each item.
-- if can be placed inside the loop when only some items should be used.
-- append() adds values to a list.
-- += updates a running total, counter, or string.
-- return sends the final value back to the caller.
-
-**EVALUATION ORDER**
-
-1. Function call arguments are evaluated first.
-2. The function body starts running.
-3. The iterable after in is evaluated.
-4. The loop variable receives one item at a time.
-5. The indented loop body runs for each item.
-6. The return expression is evaluated last.
-
-**EXECUTION ORDER**
-
-def ${functionName}(...):  # stored first, not run yet
-result = ${functionName}(...)  # function runs here
-print(result)  # output is shown after the function returns
-
-**EXECUTION FLOW**
-
-Top-level code calls the function.
-The function enters the for loop.
-The loop body repeats for every item.
-Control leaves the loop when there are no more items.
-The function returns the completed result.
+    return result  # return sends the result back to the caller
+#
+# Operators: = += == != < > <= >= %
+# Built-in functions: len, range, print()
+#
+# EVALUATION ORDER:
+# Evaluation Order traces how Python reads and evaluates expressions.
+# Inner expressions are evaluated first, then the outer ones.
+#
+${functionName}(...)  # arguments evaluated first, then function body runs
+for item in iterable  # iterable evaluated first, then item receives each value
+condition  # evaluated as True or False if an if statement is used
+return result  # result is evaluated, then sent back to the caller
+#
+# EXECUTION ORDER:
+# Execution Order shows the sequence Python follows when running
+# the code. 'def' and 'class' blocks are just stored, not run yet.
+#
+def ${functionName}(...):  # stored in memory, not executed yet
+result = ${functionName}(...)  # calls the function
+print(result)
+#
+# EXECUTION FLOW:
+# Execution Flow tracks where Python jumps during runtime —
+# which blocks are skipped and which actually run.
+#
+# def blocks are skipped at runtime — ${functionName} is stored in memory
+# Execution starts when the function is called
+# Loop: takes one item from the iterable, runs body, repeats until done
+# Branch: if a condition exists, it picks which block runs
 """`;
 
         return { logic, requirements, syntax };
