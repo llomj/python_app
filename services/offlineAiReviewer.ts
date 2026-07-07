@@ -1,6 +1,6 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
+import { answerGeneralPythonWithWebLlm, answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 
@@ -443,6 +443,25 @@ export const answerProblemQuestionWithAvailableAi = async (
             'Offline AI tutor timed out.',
         );
         return isSpecificTutorAnswer(answer, request, question) ? answer : null;
+    } catch {
+        return null;
+    }
+};
+
+export const answerGeneralPythonWithAvailableAi = async (
+    question: string,
+    state: OfflineAiState,
+): Promise<string | null> => {
+    if (!state.enabled || state.status !== 'ready') return null;
+    if (!supportsWebLlm()) return null;
+
+    try {
+        const answer = await withTimeout(
+            answerGeneralPythonWithWebLlm(question, state.modelId),
+            OFFLINE_AI_REVIEW_TIMEOUT_MS,
+            'Offline AI general tutor timed out.',
+        );
+        return answer.trim().length >= 20 ? answer : null;
     } catch {
         return null;
     }

@@ -46,7 +46,7 @@ import { EditorSelection } from '@codemirror/state';
 import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
-import { DEFAULT_OFFLINE_AI_STATE, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
+import { DEFAULT_OFFLINE_AI_STATE, answerGeneralPythonWithAvailableAi, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { answerGeneralPythonQuestion } from './services/pythonReference';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
@@ -13914,6 +13914,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         if (!question || problemAiRunning) return;
         const request = buildProblemAiRequest(question);
         const lowerQuestion = question.toLowerCase();
+        const isGeneralPython = !/(?:this problem|this task|this exercise|my code|the function|the output|grader|why.*fail|error.*output|review|check.*code)/i.test(lowerQuestion);
         const shouldUseReviewer =
             /review my code|check my code|is my code correct|is this correct|why failed|why did.*fail|auto failed|grader|output wrong|error/.test(lowerQuestion);
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
@@ -13922,6 +13923,28 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setProblemAiRunning(true);
 
         try {
+            // General Python question → use clean WebLLM (no problem context), fallback to reference
+            if (isGeneralPython && !shouldUseReviewer) {
+                const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState);
+                if (generalAnswer) {
+                    setProblemAiMessages(prev => [...prev, {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        source: 'offline',
+                        text: generalAnswer,
+                    }]);
+                    return;
+                }
+                const builtInAnswer = buildBuiltInProblemAiAnswer(question, request);
+                setProblemAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: builtInAnswer,
+                }]);
+                return;
+            }
+
             if (!shouldUseReviewer) {
                 const modelAnswer = await answerProblemQuestionWithAvailableAi(question, request, offlineAiState);
                 if (modelAnswer) {
