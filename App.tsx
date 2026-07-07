@@ -11338,11 +11338,10 @@ const App: React.FC = () => {
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
     const averageRank = useMemo(() => {
-        const modes = Object.values(statsByMode);
+        const modes = Object.values(statsByMode).filter(s => s.shots > 0);
         if (modes.length === 0) return RANKS[0];
-        const totalScore = modes.reduce((sum, s) => sum + s.success, 0);
-        const avgScore = totalScore / modes.length;
-        return getModeRank({ shots: avgScore, success: avgScore });
+        const avgIndex = modes.reduce((sum, s) => sum + RANKS.indexOf(getModeRank(s)), 0) / modes.length;
+        return RANKS[Math.min(Math.round(avgIndex), RANKS.length - 1)];
     }, [statsByMode]);
     const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
     const modeExerciseCount = useMemo(() => {
@@ -15821,19 +15820,19 @@ print(result)
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4 text-center">
-                                    <div className="text-4xl mb-2">{userRank.icon}</div>
-                                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-white mb-1">{userRank.name}</h3>
+                                    <div className="text-4xl mb-2">{averageRank.icon}</div>
+                                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-white mb-1">Total Average</h3>
                                     <p className="text-[10px] text-gray-400">
                                         {(() => {
                                             const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
                                             const totalWins = Object.values(statsByMode).reduce((sum, s) => sum + s.success, 0);
                                             const rate = totalShots > 0 ? ((totalWins / totalShots) * 100).toFixed(0) : '0';
-                                            return `${totalShots} exercises | ${rate}% win rate`;
+                                            return `${totalShots} exercises | ${rate}% minimum rate | Average: ${averageRank.name}`;
                                         })()}
                                     </p>
                                     <div className="mt-2 flex items-center justify-center gap-1">
                                         {RANKS.map((rank, idx) => {
-                                            const isActive = rank.name === userRank.name;
+                                            const isActive = rank.name === averageRank.name;
                                             return (
                                                 <div
                                                     key={rank.name}
