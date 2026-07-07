@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const CACHE_VERSION = "v225";
+=======
+const CACHE_VERSION = "v220";
+>>>>>>> 47509cb (v221: fix general AI routing, add Clear button, improve WebLLM prompt)
 // Pre-cache stable runtime deps. The app shell and bundles are cached after a
 // successful network fetch so phones do not get stuck on old UI code.
 const CORE_ASSETS = [

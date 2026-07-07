@@ -188,11 +188,11 @@ export const answerProblemQuestionWithWebLlm = async (question: string, request:
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a direct Python tutor for a beginner coding app. Answer the exact user question, with concrete examples. Do not return JSON.' },
+            { role: 'system', content: 'You are a Python tutor. Answer the user question clearly with short examples. If asked for a list (all methods, all built-ins etc), give a numbered list. If asked what something does, explain it with a 1-3 line example. Be direct and concise. Do not return JSON.' },
             { role: 'user', content: buildTutorPrompt(question, request) },
         ],
         temperature: 0.2,
-        max_tokens: 900,
+        max_tokens: 1200,
     });
     return String(response?.choices?.[0]?.message?.content || '').trim();
 };
