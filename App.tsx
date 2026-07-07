@@ -153,7 +153,9 @@ const withAiReviewTimeout = async <T,>(promise: Promise<T>): Promise<T> => {
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
-type StatsByMode = Record<DifficultyMode, Stats>;
+type ConceptModeId = `concept:${string}`;
+type ProblemMode = DifficultyMode | ConceptModeId;
+type StatsByMode = Record<string, Stats>;
 type CustomizeModalTab = 'count' | 'ide' | 'tools' | 'panels';
 
 interface CountRowColorSettings {
@@ -298,7 +300,42 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
     { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
 ];
 
-const getDifficultyLabel = (mode: DifficultyMode) => DIFFICULTY_MODES.find(item => item.id === mode)?.label ?? 'Normal';
+interface ConceptMode {
+    id: ConceptModeId;
+    label: string;
+    description: string;
+    patterns: RegExp[];
+}
+
+const PYTHON_CONCEPT_MODES: ConceptMode[] = [
+    { id: 'concept:functions', label: 'Functions', description: 'def, parameters, return values', patterns: [/\bfunction|def |parameter|argument|return\b/] },
+    { id: 'concept:for_loops', label: 'For Loops', description: 'Iterate over strings, lists, ranges', patterns: [/\bfor loop|for each|iterate|iteration|loop through|for\s+\w+\s+in\b/] },
+    { id: 'concept:while_loops', label: 'While Loops', description: 'Repeat while a condition is true', patterns: [/\bwhile loop|while\s+|repeat until|condition changes\b/] },
+    { id: 'concept:conditionals', label: 'Conditionals', description: 'if, elif, else, comparisons', patterns: [/\bif |elif|else|condition|conditional|greater than|less than|compare|comparison\b/] },
+    { id: 'concept:strings', label: 'Strings', description: 'Text, slicing, string methods', patterns: [/\bstring|str\b|character|substring|vowel|word|sentence|palindrome|anagram|\.split|\.join|\.strip|\.lower|\.upper|\.replace|\.isdigit|\.isalpha|slice|slicing/] },
+    { id: 'concept:lists', label: 'Lists', description: 'Lists, indexing, filtering, sorting', patterns: [/\blist|array|element|index|append|filter|sort|sorted|sublist|\[[^\]]*\]/] },
+    { id: 'concept:dictionaries', label: 'Dictionaries', description: 'dicts, keys, values, items', patterns: [/\bdict|dictionary|key-value|keys\(\)|values\(\)|items\(\)|frequency|histogram|mapping/] },
+    { id: 'concept:tuples', label: 'Tuples', description: 'Tuples, packing, unpacking', patterns: [/\btuple|tuples|unpack|packing|pair\b/] },
+    { id: 'concept:sets', label: 'Sets', description: 'Unique values and set operations', patterns: [/\bset|sets|unique|intersection|union|difference|duplicate|duplicates\b/] },
+    { id: 'concept:oop', label: 'OOP / Classes', description: 'Classes, objects, inheritance', patterns: [/\bclass|object|instance|self|__init__|inheritance|polymorphism|encapsulation\b/] },
+    { id: 'concept:closures', label: 'Closures', description: 'Nested functions and captured state', patterns: [/\bclosure|nested function|inner function|nonlocal|enclosing scope|decorator\b/] },
+    { id: 'concept:recursion', label: 'Recursion', description: 'Functions calling themselves', patterns: [/\brecursion|recursive|base case|call itself|factorial|fibonacci\b/] },
+    { id: 'concept:comprehensions', label: 'Comprehensions', description: 'List, dict, set comprehensions', patterns: [/\bcomprehension|list comprehension|dict comprehension|set comprehension|\bfor\b[^\n\]]+\bif\b/] },
+    { id: 'concept:lambdas', label: 'Lambda / Map', description: 'lambda, map, filter, reduce', patterns: [/\blambda|map\(|filter\(|reduce\(|partial\b/] },
+    { id: 'concept:generators', label: 'Generators', description: 'yield and lazy iteration', patterns: [/\bgenerator|yield|iterator|iterable\b/] },
+    { id: 'concept:files', label: 'Files', description: 'open, read, write, CSV, JSON', patterns: [/\bfile|open\(|read\(|write\(|csv|json|pathlib|with open\b/] },
+    { id: 'concept:exceptions', label: 'Exceptions', description: 'try, except, raise', patterns: [/\btry|except|finally|raise|error handling|exception\b/] },
+    { id: 'concept:regex', label: 'Regex', description: 'Regular expressions and patterns', patterns: [/\bregex|regular expression|re\.|match|search|findall|pattern\b/] },
+    { id: 'concept:math', label: 'Math', description: 'Arithmetic, primes, gcd, lcm', patterns: [/\bmath|sum|average|square|cube|prime|factorial|gcd|lcm|modulo|remainder|percentage|bmi|number\b/] },
+    { id: 'concept:sorting', label: 'Sorting', description: 'sort, sorted, key functions', patterns: [/\bsort|sorted|ascending|descending|key parameter|order\b/] },
+    { id: 'concept:patterns', label: 'Patterns', description: 'Stars, pyramids, grids', patterns: [/\bpattern|pyramid|triangle|hollow|star|grid|checkerboard\b/] },
+    { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport|module|random|datetime|time|collections|itertools|statistics\b/] },
+];
+
+const MODE_OPTIONS = [...DIFFICULTY_MODES, ...PYTHON_CONCEPT_MODES] as Array<{ id: ProblemMode; label: string; description: string }>;
+const CONCEPT_MODE_IDS = new Set<ProblemMode>(PYTHON_CONCEPT_MODES.map(mode => mode.id));
+const isConceptMode = (mode: ProblemMode): mode is ConceptModeId => CONCEPT_MODE_IDS.has(mode);
+const getModeLabel = (mode: ProblemMode) => MODE_OPTIONS.find(item => item.id === mode)?.label ?? 'Normal';
 
 // Ranking system
 interface Rank {
@@ -351,9 +388,9 @@ const getModeRank = (stats: Stats): Rank => {
     return currentRank;
 };
 
-const getSavedDifficultyMode = (): DifficultyMode => {
-    const savedMode = localStorage.getItem('python_difficulty_mode') as DifficultyMode | null;
-    return savedMode && DIFFICULTY_MODES.some(mode => mode.id === savedMode) ? savedMode : 'normal';
+const getSavedDifficultyMode = (): ProblemMode => {
+    const savedMode = localStorage.getItem('python_difficulty_mode') as ProblemMode | null;
+    return savedMode && MODE_OPTIONS.some(mode => mode.id === savedMode) ? savedMode : 'normal';
 };
 
 const scoreExerciseDifficulty = (exercise: Exercise): number => {
@@ -473,7 +510,8 @@ const createEmptyStatsByMode = (): StatsByMode => ({
     beginner: { ...EMPTY_STATS },
     intermediate: { ...EMPTY_STATS },
     expert: { ...EMPTY_STATS },
-    legend: { ...EMPTY_STATS }
+    legend: { ...EMPTY_STATS },
+    ...Object.fromEntries(PYTHON_CONCEPT_MODES.map(mode => [mode.id, { ...EMPTY_STATS }]))
 });
 
 const isStats = (value: unknown): value is Stats => {
@@ -493,10 +531,13 @@ const loadStatsByMode = (): StatsByMode => {
         }
 
         const merged = { ...emptyStats };
-        for (const mode of DIFFICULTY_MODES) {
+        for (const mode of MODE_OPTIONS) {
             if (isStats(parsed?.[mode.id])) {
                 merged[mode.id] = parsed[mode.id];
             }
+        }
+        for (const [key, value] of Object.entries(parsed || {})) {
+            if (isStats(value)) merged[key] = value;
         }
         return merged;
     } catch {
@@ -513,18 +554,51 @@ const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode,
     return 'beginner';
 };
 
+const getExerciseConceptText = (exercise: Exercise, includeSolution = false) => (
+    `${exercise.title}\n${exercise.description}\n${exercise.initialCode}\n${exercise.hint}\n${exercise.breakdown || ''}\n${exercise.category}${includeSolution ? `\n${exercise.solution}` : ''}`.toLowerCase()
+);
+
+const getConceptForMode = (mode: ProblemMode) => (
+    isConceptMode(mode) ? PYTHON_CONCEPT_MODES.find(item => item.id === mode) ?? null : null
+);
+
+const exerciseMatchesConcept = (exercise: Exercise, concept: ConceptMode) => {
+    const primaryText = getExerciseConceptText(exercise);
+    if (concept.patterns.some(pattern => pattern.test(primaryText))) return true;
+
+    const solutionBackedConcepts = new Set<ConceptModeId>([
+        'concept:oop',
+        'concept:closures',
+        'concept:generators',
+        'concept:recursion',
+        'concept:files',
+        'concept:exceptions',
+        'concept:regex',
+        'concept:modules',
+    ]);
+    if (!solutionBackedConcepts.has(concept.id)) return false;
+
+    const fullText = getExerciseConceptText(exercise, true);
+    return concept.patterns.some(pattern => pattern.test(fullText));
+};
+
 const getExerciseById = (id: number | null): Exercise | null => {
     if (!id) return null;
     return EXERCISES.find(item => item.id === id) ?? null;
 };
 
-const getExercisePoolForMode = (mode: DifficultyMode): Exercise[] => {
+const getExercisePoolForMode = (mode: ProblemMode): Exercise[] => {
     if (mode === 'normal') return EXERCISES;
+    const concept = getConceptForMode(mode);
+    if (concept) {
+        const pool = EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
+        return pool.length > 0 ? pool : EXERCISES;
+    }
     const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
     return pool.length > 0 ? pool : EXERCISES;
 };
 
-const getRandomExerciseForMode = (mode: DifficultyMode, excludeId?: number): Exercise => {
+const getRandomExerciseForMode = (mode: ProblemMode, excludeId?: number): Exercise => {
     const pool = getExercisePoolForMode(mode);
     const candidates = pool.length > 1 && excludeId ? pool.filter(item => item.id !== excludeId) : pool;
     return candidates[Math.floor(Math.random() * candidates.length)] ?? EXERCISES[0];
@@ -535,7 +609,7 @@ const getInitialExercise = (): Exercise => {
     const savedId = Number(localStorage.getItem('python_current_problem_id'));
     const savedExercise = getExerciseById(Number.isFinite(savedId) ? savedId : null);
 
-    if (savedExercise && (savedMode === 'normal' || classifyExerciseDifficulty(savedExercise) === savedMode)) {
+    if (savedExercise && getExercisePoolForMode(savedMode).some(item => item.id === savedExercise.id)) {
         return savedExercise;
     }
 
@@ -10029,7 +10103,7 @@ const App: React.FC = () => {
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
-    const [difficultyMode, setDifficultyMode] = useState<DifficultyMode>(() => getSavedDifficultyMode());
+    const [difficultyMode, setDifficultyMode] = useState<ProblemMode>(() => getSavedDifficultyMode());
     const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
@@ -10245,13 +10319,21 @@ const App: React.FC = () => {
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
-    const selectedModeLabel = getDifficultyLabel(difficultyMode);
+    const selectedModeLabel = getModeLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
     const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
+    const statsRows = useMemo(() => MODE_OPTIONS.map(mode => {
+        const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
+        const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
+        const modeRank = getModeRank(modeStats);
+        const problemCount = getExercisePoolForMode(mode.id).length;
+        return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
+    }), [statsByMode]);
+    const selectedConceptMode = getConceptForMode(difficultyMode);
 
     useEffect(() => {
         localStorage.setItem('python_count_row_colors', JSON.stringify(countRowColors));
@@ -10742,12 +10824,12 @@ const App: React.FC = () => {
         setLatestAiReviewResult(null);
     };
 
-    const loadRandomExercise = useCallback((mode: DifficultyMode = difficultyMode) => {
+    const loadRandomExercise = useCallback((mode: ProblemMode = difficultyMode) => {
         const randomExercise = getRandomExerciseForMode(mode, exercise.id);
         setProblemById(randomExercise.id);
     }, [difficultyMode, exercise.id]);
 
-    const handleDifficultyModeSelect = (mode: DifficultyMode) => {
+    const handleDifficultyModeSelect = (mode: ProblemMode) => {
         setDifficultyMode(mode);
         localStorage.setItem('python_difficulty_mode', mode);
         const nextExercise = getRandomExerciseForMode(mode, exercise.id);
@@ -13044,10 +13126,46 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             );
                                         })}
                                     </div>
+                                    <div className="mt-3 rounded-2xl border border-[#1d2d44] bg-[#050c18]/55 p-3">
+                                        <div className="mb-2 flex items-center justify-between gap-2">
+                                            <div>
+                                                <h4 className="m-0 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Choose Concept</h4>
+                                                <p className="mt-1 text-[10px] text-gray-400">Pick one topic and the app will randomize only matching problems.</p>
+                                            </div>
+                                            {selectedConceptMode && (
+                                                <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(countRowColors.count, 0.35), color: countRowColors.count }}>
+                                                    {selectedConceptMode.label}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
+                                            {PYTHON_CONCEPT_MODES.map(concept => {
+                                                const isSelected = difficultyMode === concept.id;
+                                                const count = getExercisePoolForMode(concept.id).length;
+                                                return (
+                                                    <button
+                                                        key={concept.id}
+                                                        onClick={() => handleDifficultyModeSelect(concept.id)}
+                                                        className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
+                                                        style={isSelected ? { borderColor: countRowColors.count, backgroundColor: hexToRgba(countRowColors.count, 0.25), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#9ca3af' }}
+                                                    >
+                                                        <span className="flex items-center justify-between gap-3">
+                                                            <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
+                                                            <span className="flex items-center gap-2 text-[10px] text-gray-400">
+                                                                {count} problems
+                                                                {isSelected && <Check size={14} className="text-[#93c5fd]" />}
+                                                            </span>
+                                                        </span>
+                                                        <span className="mt-1 block text-[10px] text-gray-400">{concept.description}</span>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
                                     {showHowToUse && (
                                         <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
                                             <p className="font-bold text-white text-xs">How to use this app</p>
-                                            <p>Choose a mode above — Beginner, Intermediate, Expert, or Legend — to filter problems by difficulty, or use Normal to see everything mixed together.</p>
+                                            <p>Choose a difficulty mode, or choose a specific concept like For Loops, Dictionaries, OOP, Closures, or Regex. The app will randomize problems from the selected pool.</p>
                                             <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
                                             <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <CheckCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.win }} /> <strong>Win</strong> and <XCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.failed }} /> <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked — the more you get right, and the more problems you do, the higher your rank climbs.</p>
                                             <p className="font-bold text-white text-xs mt-3">Settings</p>
@@ -13057,40 +13175,38 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                         </div>
                                     )}
                                     <p className="mt-2 text-[10px] text-gray-300">
-                                        Current mode has {modeExerciseCount} matching problems. Normal mode uses all problems.
+                                        Current mode: <span className="font-bold text-gray-100">{selectedModeLabel}</span> · {modeExerciseCount} matching problems. Normal mode uses all problems.
                                     </p>
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
-                                    <div className="grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
-                                        {DIFFICULTY_MODES.map(mode => {
-                                            const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
-                                            const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
-                                            const modeRank = getModeRank(modeStats);
-                                            return [
-                                                <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.12em] text-gray-200 truncate">{mode.label}</span>,
-                                                <span key={`${mode.id}-shots`} className="font-mono text-right">{modeStats.shots}</span>,
-                                                <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{modeStats.success}</span>,
-                                                <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{modeStats.failed}</span>,
-                                                <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: modeStats.shots > 0 ? countRowColors.rate : 'inherit' }}>{modeRate}%</span>,
-                                                <span key={`${mode.id}-rank`} className="font-mono text-right" title={modeRank.name}>{modeRank.icon}</span>,
-                                            ];
-                                        })}
-                                    </div>
-                                    <div className="mt-3 border-t border-[#1d2d44] pt-2 grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
-                                        <div className="font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
-                                        <div className="font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
-                                        <div className="font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
-                                        <div className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
-                                        <div className="font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
-                                        <div className="font-mono text-right" title={userRank.name}>{userRank.icon}</div>
+                                    <div className="max-h-72 overflow-auto rounded-xl border border-[#1d2d44]">
+                                        <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
+                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Problems</div>
+                                            {statsRows.map(mode => [
+                                                <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.1em] text-gray-200">{mode.label}</span>,
+                                                <span key={`${mode.id}-shots`} className="font-mono text-right">{mode.stats.shots}</span>,
+                                                <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{mode.stats.success}</span>,
+                                                <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</span>,
+                                                <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</span>,
+                                                <span key={`${mode.id}-rank`} className="font-mono text-right" title={mode.rank.name}>{mode.rank.icon}</span>,
+                                                <span key={`${mode.id}-problems`} className="font-mono text-right text-gray-400">{mode.problemCount}</span>,
+                                            ])}
+                                            <div className="border-t border-[#1d2d44] pt-2 font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
+                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
+                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
+                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
+                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
+                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
+                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -13436,34 +13552,32 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
                                     <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
-                                        <div className="grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
-                                            {DIFFICULTY_MODES.map(mode => {
-                                                const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
-                                                const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
-                                                const modeRank = getModeRank(modeStats);
-                                                return [
-                                                    <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.12em] text-gray-200 truncate">{mode.label}</span>,
-                                                    <span key={`${mode.id}-shots`} className="font-mono text-right">{modeStats.shots}</span>,
-                                                    <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{modeStats.success}</span>,
-                                                    <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{modeStats.failed}</span>,
-                                                    <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: modeStats.shots > 0 ? countRowColors.rate : 'inherit' }}>{modeRate}%</span>,
-                                                    <span key={`${mode.id}-rank`} className="font-mono text-right" title={modeRank.name}>{modeRank.icon}</span>,
-                                                ];
-                                            })}
-                                        </div>
-                                        <div className="mt-3 border-t border-[#1d2d44] pt-2 grid grid-cols-[1fr_52px_52px_52px_52px_52px] gap-x-2 gap-y-1.5 text-[11px]">
-                                            <div className="font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
-                                            <div className="font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
-                                            <div className="font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
-                                            <div className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
-                                            <div className="font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
-                                            <div className="font-mono text-right" title={userRank.name}>{userRank.icon}</div>
+                                        <div className="overflow-auto rounded-xl border border-[#1d2d44]">
+                                            <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
+                                                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Problems</div>
+                                                {statsRows.map(mode => [
+                                                    <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.1em] text-gray-200">{mode.label}</span>,
+                                                    <span key={`${mode.id}-shots`} className="font-mono text-right">{mode.stats.shots}</span>,
+                                                    <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{mode.stats.success}</span>,
+                                                    <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</span>,
+                                                    <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</span>,
+                                                    <span key={`${mode.id}-rank`} className="font-mono text-right" title={mode.rank.name}>{mode.rank.icon}</span>,
+                                                    <span key={`${mode.id}-problems`} className="font-mono text-right text-gray-400">{mode.problemCount}</span>,
+                                                ])}
+                                                <div className="border-t border-[#1d2d44] pt-2 font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
+                                                <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
+                                                <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
+                                                <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
+                                                <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
+                                                <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
+                                                <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
