@@ -14495,6 +14495,28 @@ print(result)
                         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
                             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>#{exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <button
+                                    onClick={openProblemAi}
+                                    title="Ask AI about this problem"
+                                    aria-label="Ask AI about this problem"
+                                    style={{
+                                        backgroundColor: showModal === 'problem_ai' ? hexToRgba(toolPanelColors.ai, 0.15) : 'transparent',
+                                        border: `1px solid ${panelBorderSoft}`,
+                                        borderRadius: '0.5rem',
+                                        padding: '0.25rem 0.5rem',
+                                        color: toolPanelColors.ai,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: '0.75rem',
+                                        flexShrink: 0,
+                                        pointerEvents: 'auto',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                >
+                                    <Bot size={14} />
+                                </button>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
