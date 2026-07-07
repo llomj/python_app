@@ -12595,7 +12595,7 @@ print(result)
                          <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
                         <span className="text-base" title={`${selectedModeLabel} rank: ${currentModeRank.name}`}>{currentModeRank.icon}</span>
-                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}>{selectedModeLabel}</span>
+                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba('#4ade80', 0.35), backgroundColor: hexToRgba('#4ade80', 0.1), color: '#4ade80' }}>{selectedModeLabel}</span>
                     </button>
                 </div>
             </div>
@@ -13291,19 +13291,19 @@ print(result)
                                             <Info size={14} style={{ color: countRowColors.count }} />
                                         </button>
                                     </label>
-                                    <div className="grid grid-cols-1 gap-2">
+                                    <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
                                         {DIFFICULTY_MODES.map(mode => {
                                             const isSelected = difficultyMode === mode.id;
                                             return (
                                                 <button
                                                     key={mode.id}
                                                     onClick={() => handleDifficultyModeSelect(mode.id)}
-                                                    className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
-                                                    style={isSelected ? { borderColor: countRowColors.count, backgroundColor: hexToRgba(countRowColors.count, 0.25), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#9ca3af' }}
+                                                    className="w-full rounded-xl border px-3 py-2 text-left transition-colors hover:brightness-125"
+                                                    style={isSelected ? { borderColor: '#4ade80', backgroundColor: hexToRgba('#4ade80', 0.15), color: '#4ade80' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#9ca3af' }}
                                                 >
                                                     <span className="flex items-center justify-between gap-3">
                                                         <span className="text-xs font-black uppercase tracking-[0.16em]">{mode.label}</span>
-                                                        {isSelected && <Check size={14} className="text-[#93c5fd]" />}
+                                                        {isSelected && <Check size={14} style={{ color: '#4ade80' }} />}
                                                     </span>
                                                     <span className="mt-1 block text-[10px] text-gray-400">{mode.description}</span>
                                                 </button>
