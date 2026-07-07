@@ -113,8 +113,15 @@ _('union', 'set', 'set.union(*others)', 'Returns a new set with elements from th
 _('update', 'set', 'set.update(*others)', 'Adds all elements from others. Modifies in place.', `s = {1, 2}\ns.update({3, 4})\n# s is now {1, 2, 3, 4}`);
 
 // ── TUPLE METHODS ──────────────────────────────────────────────────────────
-_('count', 'tuple', 'tuple.count(x)', 'Returns the number of times x appears in the tuple.', `(1, 2, 2, 3).count(2)  # 2`);
-_('index', 'tuple', 'tuple.index(x[, start[, end]])', 'Returns the index of the first item equal to x. Raises ValueError.', `(10, 20, 30).index(20)  # 1`);
+_('count', 'tuple', 'tuple.count(x)', 'Returns the number of times x appears in the tuple. Returns 0 if not found.', `t = (1, 2, 2, 3, 2, 4)
+t.count(2)    # 3 (three occurrences of 2)
+t.count(5)    # 0 (not found)
+t.count(1)    # 1`);
+_('index', 'tuple', 'tuple.index(x[, start[, end]])', 'Returns the index of the first item equal to x. Can specify start and end to search a slice. Raises ValueError if not found.', `t = (10, 20, 30, 20, 40)
+t.index(20)       # 1 (first occurrence)
+t.index(20, 2)    # 3 (search from index 2 onward)
+t.index(20, 2, 4) # 3 (search between index 2-4)
+# t.index(99)     # ValueError: not in tuple`);
 
 // ── BUILT-IN FUNCTIONS ─────────────────────────────────────────────────────
 _('abs', 'builtin', 'abs(x)', 'Returns the absolute value of a number.', `abs(-5)    # 5\nabs(3+4j)  # 5.0`);
@@ -336,16 +343,66 @@ d.strftime("%Y-%m-%d")  # "2024-12-25"
 
 future = now + timedelta(days=7)    # 1 week from now
 delta = future - now                 # timedelta object`);
-_('regular expressions', 'concept', 're module', 'Regular expressions find patterns in strings. Use re.search() to find, re.match() to check start, re.findall() for all matches, re.sub() to replace.', `import re
+_('regular expressions', 'concept', 're module', 'The re module provides full regular expression support. Use re.search() to find anywhere, re.match() to check start, re.findall() for all matches, re.sub() for replace, re.split() for split.', `import re
 
-re.search(r"\\d+", "abc 123 xyz")   # match object (first digit group)
-re.findall(r"\\w+", "a b c")        # ["a", "b", "c"]
-re.sub(r"\\s+", "-", "a b c")       # "a-b-c"
-re.match(r"\\d+", "123abc")         # match (starts with digits)
-re.fullmatch(r"\\d+", "123")        # match (entire string is digits)
+text = "My email: alice@example.com, phone: 555-1234"
 
-# Common patterns: \\d digit, \\w word char, \\s whitespace,
-# . any char, + one or more, * zero or more, ? optional`);
+# Search — first match anywhere
+m = re.search(r"\\w+@\\w+\\.\\w+", text)
+m.group()  # "alice@example.com"
+
+# Find all — every match as list
+re.findall(r"\\d+", text)  # ["555", "1234"]
+
+# Match — must match at START (often use re.search instead)
+re.match(r"\\d+", text)    # None (text doesn't start with digit)
+
+# Full match — entire string must match
+re.fullmatch(r"\\d+", "123")  # match object
+
+# Substitution
+re.sub(r"\\d+", "XXX", text)  # "My email: alice@example.com, phone: XXX-XXXX"
+
+# Split
+re.split(r"[,: ]+", text)  # ["My", "email", "alice@example.com", "phone", "555-1234"]
+
+# Compile for reuse
+pat = re.compile(r"\\b\\w+@\\w+\\.\\w+\\b")
+pat.findall(text)
+
+# ── COMMON PATTERNS ──
+# \\d       digit (0-9)
+# \\w       word char (letter, digit, underscore)
+# \\s       whitespace (space, tab, newline)
+# .         any char except newline
+# +         one or more
+# *         zero or more
+# ?         optional (zero or one)
+# {3,5}     between 3 and 5
+# ^         start of string
+# $         end of string
+# \\b       word boundary
+# [abc]     any of a, b, c
+# [^abc]    NOT a, b, c
+# |         OR
+# (...)     capture group
+# (?:...)   non-capturing group
+# (?=...)   lookahead
+# (?!...)   negative lookahead
+
+# ── FLAGS ──
+# re.IGNORECASE / re.I     case insensitive
+# re.MULTILINE / re.M     ^$ match line boundaries
+# re.DOTALL / re.S         . matches newlines too
+# re.VERBOSE / re.X        allow spaces and comments in pattern
+
+# ── COMPLETE EXAMPLES ──
+# Email:     r"\\b\\w+@\\w+\\.\\w+\\b"
+# Phone:     r"\\b\\d{3}[-.]\\d{3}[-.]\\d{4}\\b"
+# URL:       r"https?://\\w+(\\.\\w+)+"
+# Date:      r"\\b\\d{4}-\\d{2}-\\d{2}\\b"
+# Words:     r"\\b\\w+\\b"
+# Hex color: r"#[0-9a-fA-F]{6}\\b"`);
 _('magic methods', 'concept', '__method__()', 'Magic (dunder) methods let you define behavior for built-in operations like len(), str(), +, [], and iteration.', `class MyClass:
     def __init__(self, x):     # constructor
         self.x = x
@@ -665,43 +722,39 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   const q = question.toLowerCase().trim();
 
   // ── Listing all methods ──────────────────────────────────────────────
-  if (/list all methods|all methods in python|list every method|show me all methods/i.test(q)) {
-    const all = allMethodsFlat();
+  if (/(?:list|show|get|give|all).*method|method.*list/i.test(q) && !/\blist\b.*\bdata\b|\bwhat\b.*\blist\b|\bhow\b.*\blist\b/i.test(q)) {
     return 'Here are all Python methods (grouped by type):\n\n' +
-      '**String methods:**\n' + allStringMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
-      '\n\n**List methods:**\n' + allListMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
-      '\n\n**Dict methods:**\n' + allDictMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
-      '\n\n**Set methods:**\n' + allSetMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
-      '\n\n**Tuple methods:**\n' + allTupleMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+      '**String methods (47):**\n' + allStringMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+      '\n\n**List methods (11):**\n' + allListMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+      '\n\n**Dict methods (11):**\n' + allDictMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+      '\n\n**Set methods (16):**\n' + allSetMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+      '\n\n**Tuple methods (2):**\n' + allTupleMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\nAsk me about any individual method for details!';
   }
 
   // ── Listing string methods ───────────────────────────────────────────
-  if (/list string methods|all string methods|string methods list|str methods/i.test(q)) {
-    const names = allStringMethods();
-    return '**String methods (alphabetical):**\n' +
-      names.map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+  if (/(?:list|show|all).*string.*method|string.*method.*(?:list|all)/i.test(q)) {
+    return '**String methods (47 total):**\n' +
+      allStringMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\nAsk about a specific method like `upper()`, `split()`, or `replace()` for details.';
   }
 
   // ── Listing list methods ─────────────────────────────────────────────
-  if (/list (methods|all).*list|list (methods|all)|all list methods/i.test(q)) {
-    const names = allListMethods();
-    return '**List methods (alphabetical):**\n' +
-      names.map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+  if (/(?:list|show|all).*\blist\b.*method|\blist\b.*method.*(?:list|all)/i.test(q) && /\bmethod\b/i.test(q)) {
+    return '**List methods (11 total):**\n' +
+      allListMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\nAsk about a specific method like `append()`, `pop()`, or `sort()` for details.';
   }
 
   // ── Listing dict methods ─────────────────────────────────────────────
-  if (/dict methods|dictionary methods|all dict/i.test(q)) {
-    const names = allDictMethods();
-    return '**Dictionary methods (alphabetical):**\n' +
-      names.map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+  if (/(?:list|show|all).*dict(?:ionary)?.*method|dict(?:ionary)?.*method/i.test(q)) {
+    return '**Dictionary methods (11 total):**\n' +
+      allDictMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\nAsk about a specific method like `get()`, `keys()`, or `items()` for details.';
   }
 
   // ── Listing built-in functions ───────────────────────────────────────
-  if (/list (all )?built.in|all built.in|how many built.in|built.in functions? list/i.test(q)) {
+  if (/(?:list|show|how many|all).*built.?in.*(?:func|method)|built.?in.*(?:list|all|func)/i.test(q)) {
     const names = allBuiltins();
     return `**Python built-in functions (${names.length} total):**\n` +
       names.map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
@@ -709,7 +762,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   }
 
   // ── Listing keywords ─────────────────────────────────────────────────
-  if (/list keywords|all keywords|python keywords|how many keywords/i.test(q)) {
+  if (/(?:list|show|how many|all).*keyword|keyword.*(?:list|all)/i.test(q)) {
     const keywords = allKeywords();
     return `**Python keywords (${keywords.length} total):**\n` +
       keywords.map((n, i) => `${i + 1}. \`${n}\``).join('\n') +
@@ -717,7 +770,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   }
 
   // ── Listing concepts ─────────────────────────────────────────────────
-  if (/what concepts|list concepts|all concepts/i.test(q)) {
+  if (/what concepts|list concepts|all concepts|concepts (?:you|can).*explain/i.test(q)) {
     return '**Python concepts I can explain:**\n' +
       allConcepts().map((n, i) => `${i + 1}. ${n}`).join('\n') +
       '\n\nAsk me to explain any of these!';

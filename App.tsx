@@ -15290,6 +15290,29 @@ print(result)
                                         <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
                                         <div className="flex items-center gap-1.5">
                                             <button
+                                                onClick={() => {
+                                                    const text = problemAiMessages.map(m =>
+                                                        `${m.role === 'user' ? 'You' : 'AI'}: ${m.text}`
+                                                    ).join('\n\n---\n\n');
+                                                    const blob = new Blob([text], { type: 'text/plain' });
+                                                    const url = URL.createObjectURL(blob);
+                                                    const a = document.createElement('a');
+                                                    a.href = url;
+                                                    a.download = `python-conversation-${Date.now()}.txt`;
+                                                    a.click();
+                                                    URL.revokeObjectURL(url);
+                                                }}
+                                                className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                                style={{
+                                                    borderColor: hexToRgba('#22c55e', 0.35),
+                                                    color: '#86efac',
+                                                    backgroundColor: hexToRgba('#22c55e', 0.1),
+                                                }}
+                                                title="Save conversation as text file"
+                                            >
+                                                Save
+                                            </button>
+                                            <button
                                                 onClick={() => setProblemAiMessages([])}
                                                 className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                                 style={{
@@ -15315,29 +15338,7 @@ print(result)
                                             </button>
                                         </div>
                                         </div>
-                                        <p className="mt-1 text-xs text-gray-400">Ask anything Python: methods, built-ins, slicing, closures, or about Problem {exercise.id}.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex-shrink-0 overflow-x-auto pr-1 pb-1">
-                                    <div className="flex gap-2 text-[11px] whitespace-nowrap">
-                                        {[
-                                            'Explain task',
-                                            'Why failed?',
-                                            'What method?',
-                                            'Show hint',
-                                            'What does this error mean?',
-                                        ].map(prompt => (
-                                            <button
-                                                key={prompt}
-                                                onClick={() => sendProblemAiQuestion(prompt)}
-                                                disabled={problemAiRunning || !problemAiEnabled}
-                                                className="rounded-xl border px-3 py-2 font-bold transition-all hover:brightness-125 disabled:opacity-40"
-                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
-                                            >
-                                                {prompt}
-                                            </button>
-                                        ))}
+                                        <p className="mt-1 text-xs text-gray-400">Python AI — ask about any method, built-in, keyword, concept, or Problem {exercise.id}.</p>
                                     </div>
                                 </div>
 
