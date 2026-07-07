@@ -341,7 +341,245 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport\b|\bmodule\b|\brandom\b|\bdatetime\b|\bcollections\b|\bitertools\b|\bstatistics\b/] },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
-const CONCEPT_DOCS: Record<ConceptModeId, string> = {};
+interface ConceptDocGuide {
+    simple: string;
+    intermediate: string;
+    inDepth: string;
+    examples: string[];
+    common: string[];
+}
+
+const buildConceptDoc = (title: string, description: string, guide: ConceptDocGuide) => `OVERVIEW:
+${title}
+${description}
+Use this tab as a concept reference while solving the current problem.
+
+SIMPLE EXPLANATION:
+${guide.simple}
+
+INTERMEDIATE EXPLANATION:
+${guide.intermediate}
+
+IN-DEPTH EXPLANATION:
+${guide.inDepth}
+
+EXAMPLES:
+${guide.examples.join('\n')}
+
+COMMON OPERATIONS:
+${guide.common.join('\n')}`;
+
+const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
+    'concept:builtins': {
+        simple: 'Built-ins are Python functions that are ready to use without importing anything.',
+        intermediate: 'Use built-ins when Python already provides the operation: count with len(), add with sum(), sort with sorted(), check types with isinstance(), and combine iteration with enumerate() or zip().',
+        inDepth: 'Built-ins are fast, readable tools for common work. Choose them when they express the task directly, but make sure the return type matches the problem. For example, sorted(items) returns a new list, while list.sort() changes the original list.',
+        examples: ['len([1, 2, 3])  # 3', 'sum([4, 5, 6])  # 15', 'sorted([3, 1, 2])  # [1, 2, 3]', 'list(enumerate(["a", "b"]))  # [(0, "a"), (1, "b")]'],
+        common: ['len(), sum(), min(), max()', 'sorted(), range(), enumerate(), zip()', 'any(), all(), round()', 'type(), isinstance(), int(), str(), list()']
+    },
+    'concept:closures': {
+        simple: 'A closure is an inner function that remembers variables from the outer function.',
+        intermediate: 'Closures are useful when you want to build a function with saved state or configuration. The outer function sets values, then returns the inner function that uses those values later.',
+        inDepth: 'Python stores referenced outer variables inside the returned function. Use nonlocal when the inner function needs to reassign an outer variable. Without nonlocal, assignment creates a new local variable inside the inner function.',
+        examples: ['def make_adder(n):\n    def add(x):\n        return x + n\n    return add', 'add_five = make_adder(5)\nprint(add_five(3))  # 8'],
+        common: ['Outer function defines data', 'Inner function uses that data', 'Return the inner function', 'Use nonlocal for changing captured values']
+    },
+    'concept:comprehensions': {
+        simple: 'A comprehension builds a list, dictionary, or set in one clear expression.',
+        intermediate: 'Use comprehensions to transform, filter, or collect values from an iterable. The basic order is expression first, then for, then optional if.',
+        inDepth: 'Comprehensions should stay readable. If the logic needs many branches or side effects, use a normal loop. List comprehensions return lists, set comprehensions remove duplicates, and dict comprehensions build key-value pairs.',
+        examples: ['squares = [n * n for n in numbers]', 'evens = [n for n in numbers if n % 2 == 0]', 'lengths = {word: len(word) for word in words}', 'unique = {x.lower() for x in words}'],
+        common: ['[expr for item in iterable]', '[expr for item in iterable if condition]', '{key: value for item in iterable}', '{expr for item in iterable}']
+    },
+    'concept:conditionals': {
+        simple: 'Conditionals let code choose different paths using if, elif, and else.',
+        intermediate: 'Use comparisons and boolean logic to decide what should happen. if handles the first true branch, elif checks another branch, and else handles the fallback.',
+        inDepth: 'Order matters. Put the most specific conditions before broad ones. Boolean operators and, or, and not combine tests. Comparisons return True or False and can be returned directly.',
+        examples: ['if score >= 50:\n    return "pass"\nelse:\n    return "fail"', 'return number % 2 == 0', 'if age >= 18 and has_id:\n    return True'],
+        common: ['if condition:', 'elif other_condition:', 'else:', 'and, or, not', '==, !=, <, >, <=, >=']
+    },
+    'concept:dictionaries': {
+        simple: 'A dictionary stores key-value pairs so you can look up a value by its key.',
+        intermediate: 'Use dictionaries for mappings, counters, grouping, and structured data. Keys must be hashable, such as strings, numbers, or tuples.',
+        inDepth: 'Dictionary access with dict[key] raises KeyError if the key is missing; dict.get(key, default) is safer for optional keys. Iterating over a dictionary gives keys by default; use .items() for key-value pairs.',
+        examples: ['person = {"name": "Ada", "age": 30}', 'person["age"]  # 30', 'counts[word] = counts.get(word, 0) + 1', 'for key, value in data.items():\n    print(key, value)'],
+        common: ['dict[key]', 'dict.get(key, default)', 'dict[key] = value', 'dict.keys(), dict.values(), dict.items()', 'key in dict']
+    },
+    'concept:exceptions': {
+        simple: 'Exceptions handle errors without crashing the whole program.',
+        intermediate: 'Use try for code that might fail, except for recovery, else for code that runs only if no error happened, and finally for cleanup.',
+        inDepth: 'Catch specific exceptions when possible. Broad except blocks can hide bugs. raise creates an exception intentionally when invalid input or state should stop normal execution.',
+        examples: ['try:\n    number = int(text)\nexcept ValueError:\n    number = 0', 'if age < 0:\n    raise ValueError("age cannot be negative")'],
+        common: ['try:', 'except ValueError:', 'else:', 'finally:', 'raise ValueError("message")']
+    },
+    'concept:files': {
+        simple: 'File code reads data from files or writes data into files.',
+        intermediate: 'Use with open(...) so Python closes the file automatically. Choose read mode for reading, write mode for replacing content, and append mode for adding content.',
+        inDepth: 'Text files return strings. Structured files like CSV and JSON need parsing. Always think about path, encoding, and whether your code should create, overwrite, or append.',
+        examples: ['with open("data.txt", "r") as file:\n    text = file.read()', 'with open("out.txt", "w") as file:\n    file.write("hello")', 'import json\ndata = json.loads(text)'],
+        common: ['open(path, "r")', 'open(path, "w")', 'file.read(), file.readlines()', 'file.write(text)', 'json.loads(), json.dumps()']
+    },
+    'concept:for_loops': {
+        simple: 'A for loop repeats code once for each item in a sequence.',
+        intermediate: 'Use a for loop when you know what collection or range you want to process. Each pass takes the next item, runs the loop body, and updates your result.',
+        inDepth: 'For loops work with any iterable: lists, strings, dictionaries, ranges, files, and generators. Use enumerate() when you need indexes and zip() when processing two iterables together.',
+        examples: ['total = 0\nfor number in numbers:\n    total += number', 'for index, value in enumerate(items):\n    print(index, value)', 'for char in text:\n    print(char)'],
+        common: ['for item in items:', 'for i in range(5):', 'for index, item in enumerate(items):', 'break, continue', 'append results inside the loop']
+    },
+    'concept:functions': {
+        simple: 'A function is a reusable block of code that can receive inputs and return an output.',
+        intermediate: 'Use parameters for inputs and return for the answer. Printing shows information, but return sends the value back to the caller.',
+        inDepth: 'Good functions have clear names, predictable parameters, and one main job. The grader usually calls the required function with hidden tests, so the function must return the correct value for many inputs.',
+        examples: ['def add(a, b):\n    return a + b', 'result = add(2, 3)\nprint(result)', 'def is_even(n):\n    return n % 2 == 0'],
+        common: ['def name(parameters):', 'return value', 'arguments are passed into parameters', 'local variables live inside the function']
+    },
+    'concept:generators': {
+        simple: 'A generator produces values one at a time using yield.',
+        intermediate: 'Use generators when you want lazy iteration instead of building a full list immediately. Each yield pauses the function and resumes on the next iteration.',
+        inDepth: 'Generators are memory-efficient for large sequences. A generator function returns an iterator object. Once consumed, it does not automatically restart unless you call the generator function again.',
+        examples: ['def count_up_to(n):\n    for i in range(1, n + 1):\n        yield i', 'for value in count_up_to(3):\n    print(value)', 'squares = (n * n for n in numbers)'],
+        common: ['yield value', 'next(generator)', 'for item in generator:', 'generator expression: (expr for item in items)']
+    },
+    'concept:input_output': {
+        simple: 'Input/output code reads from the user and displays results.',
+        intermediate: 'input() always returns a string. Convert it with int(), float(), split(), or other parsing before doing numeric or list operations.',
+        inDepth: 'For app grading, input problems need to read supplied test input, while function problems usually need return. Use print for display tasks and return for function-result tasks.',
+        examples: ['name = input("Name: ")\nprint("Hello", name)', 'number = int(input("Number: "))', 'values = input().split()'],
+        common: ['input(prompt)', 'print(value)', 'int(input())', 'input().split()', 'f"Result: {value}"']
+    },
+    'concept:lambdas': {
+        simple: 'A lambda is a small anonymous function.',
+        intermediate: 'Use lambda for short functions passed into tools like map(), filter(), sorted(), or reduce(). If the logic is more than one expression, use def instead.',
+        inDepth: 'map transforms items, filter keeps items that pass a test, and reduce combines items into one value. Lambdas should stay simple so the code remains readable.',
+        examples: ['square = lambda x: x * x', 'list(map(lambda x: x * 2, numbers))', 'list(filter(lambda x: x > 0, numbers))', 'sorted(words, key=lambda word: len(word))'],
+        common: ['lambda x: expression', 'map(function, iterable)', 'filter(function, iterable)', 'sorted(items, key=lambda item: ...)', 'functools.reduce(function, iterable)']
+    },
+    'concept:lists': {
+        simple: 'A list stores ordered values that can be changed.',
+        intermediate: 'Use indexing to access one item, slicing to take a range, append to add, and loops or comprehensions to transform items.',
+        inDepth: 'Lists preserve order and allow duplicates. Many list methods mutate the list in place. Be clear whether the problem asks for a new list or changes to the existing list.',
+        examples: ['items = [1, 2, 3]', 'items[0]  # first item', 'items[-1]  # last item', 'items.append(4)', 'doubled = [n * 2 for n in items]'],
+        common: ['list[index]', 'list[start:stop:step]', 'append(), pop(), remove()', 'sort() changes list, sorted() returns new list', 'len(list)']
+    },
+    'concept:math': {
+        simple: 'Math problems use numbers, arithmetic, and numeric rules.',
+        intermediate: 'Use operators for arithmetic and comparisons. Common tasks include sums, averages, squares, divisibility, primes, gcd, lcm, and percentages.',
+        inDepth: 'Be careful with integer vs float division. Use % for divisibility, ** for powers, // for floor division, and math module functions for roots and advanced operations.',
+        examples: ['square = n ** 2', 'is_even = n % 2 == 0', 'average = sum(numbers) / len(numbers)', 'import math\nroot = math.sqrt(25)'],
+        common: ['+, -, *, /', '//, %, **', 'sum(), min(), max()', 'math.sqrt(), math.floor()', 'round(value, digits)']
+    },
+    'concept:methods': {
+        simple: 'A method is a function attached to an object, called with dot syntax.',
+        intermediate: 'String methods, list methods, and dictionary methods let objects do common actions. Some return a new value, while others mutate the object.',
+        inDepth: 'Understand whether a method changes the object. text.upper() returns a new string because strings are immutable. list.append(x) changes the list and returns None.',
+        examples: ['text.lower()', 'text.strip().split()', 'items.append("x")', 'value = data.get("key", 0)', '"-".join(words)'],
+        common: ['string: lower(), upper(), strip(), split(), replace()', 'list: append(), pop(), remove(), sort()', 'dict: get(), keys(), values(), items()', 'Dot syntax: object.method(arguments)']
+    },
+    'concept:modules': {
+        simple: 'A module is a file or library you import to use extra tools.',
+        intermediate: 'Use import when the standard language does not already include the tool you need. Common modules include math, random, datetime, collections, itertools, json, and re.',
+        inDepth: 'Imports should usually be at the top of the file. import module keeps the module name, while from module import name brings one tool directly into your namespace.',
+        examples: ['import math\nmath.sqrt(16)', 'from collections import Counter\nCounter(words)', 'import random\nrandom.randint(1, 6)'],
+        common: ['import module', 'from module import name', 'math, random, datetime', 'collections.Counter', 'json, csv, re']
+    },
+    'concept:oop': {
+        simple: 'Object-oriented programming groups data and behavior inside classes and objects.',
+        intermediate: 'A class is a blueprint. An object is an instance of that blueprint. self refers to the current object inside methods.',
+        inDepth: '__init__ initializes object state. Methods use self to read or change attributes. Inheritance lets one class reuse or extend another class.',
+        examples: ['class Dog:\n    def __init__(self, name):\n        self.name = name', 'dog = Dog("Noll")\nprint(dog.name)', 'def speak(self):\n    return self.name'],
+        common: ['class Name:', '__init__(self, ...)', 'self.attribute', 'object = Class(args)', 'inheritance: class Child(Parent):']
+    },
+    'concept:operators': {
+        simple: 'Operators are symbols or words that perform operations on values.',
+        intermediate: 'Arithmetic operators calculate values, comparison operators produce booleans, and boolean operators combine conditions.',
+        inDepth: 'Operator precedence controls what runs first. Parentheses make intent clear. Some operators behave differently by type, such as + adding numbers or joining strings/lists.',
+        examples: ['total = a + b', 'remainder = n % 2', 'is_valid = age >= 18 and has_id', 'name = first + " " + last'],
+        common: ['Arithmetic: + - * / // % **', 'Comparison: == != < > <= >=', 'Boolean: and or not', 'Membership: in, not in', 'Identity: is, is not']
+    },
+    'concept:patterns': {
+        simple: 'Pattern problems print or build visual shapes using loops and strings.',
+        intermediate: 'Most pattern tasks combine loop counters, string multiplication, and spacing. Outer loops control rows; inner loops or formulas control characters.',
+        inDepth: 'Work out the first few rows manually. Then convert row number into counts for spaces, stars, numbers, or symbols. Printing and returning multi-line strings need careful newline handling.',
+        examples: ['for row in range(3):\n    print("*" * (row + 1))', 'line = " " * spaces + "*" * stars', 'result.append(line)\nreturn "\\n".join(result)'],
+        common: ['outer loop for rows', 'inner loop for columns', 'string * count', '"\\n".join(lines)', 'left/right spacing']
+    },
+    'concept:recursion': {
+        simple: 'Recursion is when a function solves a problem by calling itself.',
+        intermediate: 'Every recursive function needs a base case that stops the calls and a recursive case that moves closer to the base case.',
+        inDepth: 'Recursion uses the call stack. If the input does not get smaller, the function can recurse forever. Many recursive problems also have loop solutions.',
+        examples: ['def factorial(n):\n    if n == 0:\n        return 1\n    return n * factorial(n - 1)', 'def countdown(n):\n    if n <= 0:\n        return\n    countdown(n - 1)'],
+        common: ['base case', 'recursive case', 'return function(smaller_input)', 'call stack', 'avoid infinite recursion']
+    },
+    'concept:regex': {
+        simple: 'Regex means regular expressions: patterns for finding, replacing, splitting, or validating text.',
+        intermediate: 'Use Python re functions with a pattern and text. re.search checks if a match exists, re.findall returns all matches, re.sub replaces matches, and re.fullmatch validates the whole string.',
+        inDepth: 'Regex patterns are a compact language. Use raw strings like r"\\d+" so backslashes are not double-interpreted. Use groups when you need to capture parts of a match.',
+        examples: ['import re', 're.findall(r"\\d+", "A12 B3")  # ["12", "3"]', 're.search(r"cat", text) is not None', 're.sub(r"\\s+", " ", text)'],
+        common: ['\\d digit, \\w word char, \\s whitespace', '+ one or more, * zero or more, ? optional', '[] character set, () group', '^ start, $ end, \\b word boundary', 'search(), findall(), sub(), split(), fullmatch()']
+    },
+    'concept:sets': {
+        simple: 'A set stores unique values with no guaranteed order.',
+        intermediate: 'Use sets to remove duplicates and compare groups. Set operations can find intersection, union, difference, and membership quickly.',
+        inDepth: 'Sets are unordered, so do not rely on position. Set elements must be hashable. Convert back to a list if the problem expects a list result.',
+        examples: ['unique = set(items)', 'common = set(a) & set(b)', 'all_items = set(a) | set(b)', 'only_a = set(a) - set(b)'],
+        common: ['set(items)', 'add(), remove(), discard()', '& intersection', '| union', '- difference']
+    },
+    'concept:sorting': {
+        simple: 'Sorting puts values into a chosen order.',
+        intermediate: 'sorted(items) returns a new sorted list. items.sort() changes the original list. Use key= to sort by a derived value.',
+        inDepth: 'Sort keys decide what Python compares. Use reverse=True for descending order. Stable sorting preserves the original order of equal keys.',
+        examples: ['sorted([3, 1, 2])', 'words.sort()', 'sorted(words, key=len)', 'sorted(people, key=lambda p: p["age"])'],
+        common: ['sorted(items)', 'items.sort()', 'key=len', 'key=lambda item: ...', 'reverse=True']
+    },
+    'concept:strings': {
+        simple: 'A string is text: a sequence of characters.',
+        intermediate: 'Use indexing and slicing to access parts of a string. Use methods to change case, split words, strip spaces, replace text, or test characters.',
+        inDepth: 'Strings are immutable, so methods return new strings. Slicing uses start, stop, and step. Negative indexes count from the end.',
+        examples: ['text[0]  # first character', 'text[-1]  # last character', 'text[::-1]  # reverse', 'text.lower().strip()', 'words = text.split()'],
+        common: ['indexing: text[i]', 'slicing: text[start:stop:step]', 'lower(), upper(), strip()', 'split(), join(), replace()', 'isdigit(), isalpha(), startswith()']
+    },
+    'concept:tuples': {
+        simple: 'A tuple is an ordered collection that usually should not be changed.',
+        intermediate: 'Use tuples for fixed groups of values and unpacking. They are useful for returning multiple values from a function.',
+        inDepth: 'Tuples are immutable, but can contain mutable objects. Tuple unpacking assigns multiple variables at once, and starred unpacking captures extra values.',
+        examples: ['point = (3, 4)', 'x, y = point', 'return min_value, max_value', 'first, *middle, last = items'],
+        common: ['(a, b)', 'x, y = pair', 'return a, b', 'tuple(items)', 'star unpacking: first, *rest = values']
+    },
+    'concept:type_conversion': {
+        simple: 'Type conversion changes a value from one type to another.',
+        intermediate: 'Convert input strings before numeric work. Use list(), tuple(), set(), and dict() to reshape collections when needed.',
+        inDepth: 'Conversions can fail if the value is not valid for the target type. int("5") works, but int("hello") raises ValueError. Be explicit about the type the problem expects.',
+        examples: ['number = int("42")', 'price = float("3.50")', 'text = str(100)', 'items = list("abc")', 'unique = set(items)'],
+        common: ['int(), float(), str(), bool()', 'list(), tuple(), set(), dict()', 'split strings before converting many numbers', 'handle ValueError for invalid input']
+    },
+    'concept:variables': {
+        simple: 'A variable is a name that points to a value.',
+        intermediate: 'Use variables to store intermediate results so code is readable. Good names describe the data or purpose.',
+        inDepth: 'Assignment binds a name to an object. Scope controls where a name can be used: local inside a function, global at module level, and nonlocal in enclosing functions.',
+        examples: ['count = 0', 'total += number', 'name = "Ada"', 'result = calculate(value)'],
+        common: ['name = value', 'update with +=, -=, *=', 'local variables inside functions', 'global variables outside functions', 'clear descriptive names']
+    },
+    'concept:while_loops': {
+        simple: 'A while loop repeats while a condition stays True.',
+        intermediate: 'Use while loops when you do not know exactly how many repetitions are needed before starting. Update the condition inside the loop.',
+        inDepth: 'A while loop can run forever if the condition never becomes False. Use counters, sentinels, or break carefully to control the loop.',
+        examples: ['count = 0\nwhile count < 3:\n    print(count)\n    count += 1', 'while value != "quit":\n    value = input()'],
+        common: ['while condition:', 'update loop variable', 'break exits loop', 'continue skips to next pass', 'avoid infinite loops']
+    }
+};
+
+const CONCEPT_DOCS: Record<ConceptModeId, string> = Object.fromEntries(
+    PYTHON_CONCEPT_MODES.map(mode => [
+        mode.id,
+        buildConceptDoc(mode.label, mode.description, CONCEPT_GUIDES[mode.id] ?? {
+            simple: `${mode.label} is an important Python concept used in this group of practice problems.`,
+            intermediate: `Focus on how ${mode.label.toLowerCase()} changes the input into the required output.`,
+            inDepth: `Read the problem carefully, identify the required structure, then write code that works for different inputs instead of copying one example.`,
+            examples: ['# Write the concept in small steps', '# Test with more than one input'],
+            common: ['Read the prompt', 'Identify input and output', 'Use the required syntax', 'Return or print exactly what the problem asks for']
+        })
+    ])
+) as Record<ConceptModeId, string>;
 
 const MODE_OPTIONS = [...DIFFICULTY_MODES, ...PYTHON_CONCEPT_MODES] as Array<{ id: ProblemMode; label: string; description: string }>;
 const CONCEPT_MODE_IDS = new Set<ProblemMode>(PYTHON_CONCEPT_MODES.map(mode => mode.id));
@@ -12771,14 +13009,16 @@ print(result)
                         )}
                         {showModal === 'solution' && (
                             <div className="flex flex-col h-full overflow-hidden">
-                                <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
-                                    <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label="Solution" />
-                                    <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label="Logic" />
-                                    <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label="Requirements" />
-                                    <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label="Syntax" />
-                                    {isConceptMode(difficultyMode) && selectedConceptMode && (
-                                        <TabButton active={solutionTab === 'concept'} onClick={() => setSolutionTab('concept')} label={selectedConceptMode.label} />
-                                    )}
+                                <div className="mb-4 mx-1 mt-1 overflow-x-auto border-b border-[#1d2d44] [-webkit-overflow-scrolling:touch]">
+                                    <div className="flex w-max min-w-full gap-4 whitespace-nowrap pr-4">
+                                        <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label="Solution" />
+                                        <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label="Logic" />
+                                        <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label="Requirements" />
+                                        <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label="Syntax" />
+                                        {isConceptMode(difficultyMode) && selectedConceptMode && (
+                                            <TabButton active={solutionTab === 'concept'} onClick={() => setSolutionTab('concept')} label={selectedConceptMode.label} />
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="flex-grow overflow-y-auto">
                                     {solutionTab === 'code' && (
@@ -14271,7 +14511,7 @@ const ActionButton: React.FC<{ icon: React.ReactNode, iconColor: string, descrip
 );
 
 const TabButton: React.FC<{ active: boolean, onClick: () => void, label: string }> = ({ active: isActive, onClick, label }) => (
-    <button onClick={onClick} className={`pb-2 px-1 font-bold transition-all text-xs ${isActive ? 'text-white border-b-2 border-[#3b82f6]' : 'text-gray-500'}`}>{label}</button>
+    <button onClick={onClick} className={`shrink-0 whitespace-nowrap pb-2 px-1 font-bold transition-all text-xs ${isActive ? 'text-white border-b-2 border-[#3b82f6]' : 'text-gray-500'}`}>{label}</button>
 );
 
 const ColorField: React.FC<{ label: string; value: string; onChange: (value: string) => void }> = ({ label, value, onChange }) => (
