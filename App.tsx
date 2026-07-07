@@ -82,6 +82,8 @@ interface ProblemAiMessage {
     source?: 'built_in' | 'offline' | 'user';
 }
 
+type GeneralAiMode = 'simple' | 'normal' | 'deep' | 'examples';
+
 const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
 const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini']);
 
@@ -112,7 +114,7 @@ const normalizeGeneralPythonQuestion = (rawQuestion: string): string => {
 };
 
 const isGeneralPythonFollowUp = (question: string): boolean => (
-    /^(expand|more|more detail|details|explain more|break it down|go deeper|examples?|give examples|syntax|show syntax|how does it work|why|when use|when should)/i.test(question.trim())
+    /^(expand|more|more detail|details|explain more|break it down|go deeper|examples?|give examples|syntax|show syntax|how does it work|why|when use|when should|quiz|practice|test me|common mistakes?|mistakes?|compare|line by line|explain this code)/i.test(question.trim())
 );
 
 const GENERAL_PYTHON_GLOSSARY = [
@@ -136,6 +138,138 @@ const detectGeneralPythonTopic = (question: string): string => {
     if (/\bimport\b/.test(lowerQ)) return 'module';
     return 'this Python topic';
 };
+
+const GENERAL_AI_CONCEPT_MAP: Record<string, string[]> = {
+    list: ['indexing', 'slicing', 'append()', 'pop()', 'sort()', 'loops', 'mutability', 'list comprehension'],
+    dictionary: ['keys', 'values', 'items()', 'get()', 'membership with `in`', 'updating values', 'dictionary comprehension'],
+    string: ['indexing', 'slicing', 'immutability', 'split()', 'replace()', 'strip()', 'isdigit()', 'formatting'],
+    tuple: ['immutability', 'unpacking', 'indexing', 'fixed records', 'dictionary keys'],
+    set: ['uniqueness', 'membership tests', 'union', 'intersection', 'difference', 'duplicate removal'],
+    function: ['parameters', 'arguments', 'return', 'scope', 'docstrings', 'default arguments'],
+    method: ['object.method()', 'self', 'string methods', 'list methods', 'dictionary methods'],
+    lambda: ['anonymous function', 'single expression', 'callbacks', 'sort key', 'map()', 'filter()'],
+    class: ['object', 'instance', 'attribute', 'method', '__init__', 'self'],
+    object: ['class', 'instance', 'attribute', 'method', 'identity', 'type'],
+    module: ['import', 'from import', 'standard library', 'package', 'namespace'],
+    indentation: ['code blocks', '4 spaces', 'if/for/while/function/class blocks', 'IndentationError'],
+};
+
+const getConceptMapItems = (topic: string): string[] => {
+    const key = topic === 'dict' ? 'dictionary' : topic;
+    return GENERAL_AI_CONCEPT_MAP[key] || GENERAL_AI_CONCEPT_MAP[topic.split(' ')[0]] || [];
+};
+
+const looksLikeGeneralPythonCode = (question: string): boolean => (
+    /```|(^|\n)\s*(def |class |for |while |if |elif |else:|try:|except |with |import |from |print\(|return |[a-zA-Z_][\w]*\s*=)/.test(question)
+);
+
+const stripCodeFences = (text: string): string => text
+    .replace(/```(?:python)?/gi, '')
+    .replace(/```/g, '')
+    .trim();
+
+const buildGeneralAiCodeExplanation = (question: string): string | null => {
+    const lowerQ = question.toLowerCase();
+    if (!looksLikeGeneralPythonCode(question) || !/(explain|line by line|what does|code)/.test(lowerQ)) return null;
+    const code = stripCodeFences(question)
+        .split('\n')
+        .filter(line => !/^\s*(explain|what does|line by line|can you)/i.test(line.trim()))
+        .join('\n')
+        .trim();
+    if (!code) return null;
+    const explanations = code.split('\n').slice(0, 18).map((line, index) => {
+        const trimmed = line.trim();
+        if (!trimmed) return `${index + 1}. Blank line — separates code visually.`;
+        if (/^def\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` defines a reusable function.`;
+        if (/^class\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` defines a class blueprint for objects.`;
+        if (/^for\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` starts a loop over an iterable.`;
+        if (/^while\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` repeats while its condition is true.`;
+        if (/^if\s+|^elif\s+|^else:/.test(trimmed)) return `${index + 1}. \`${trimmed}\` controls which block runs.`;
+        if (/^return\b/.test(trimmed)) return `${index + 1}. \`${trimmed}\` sends a value back to the caller.`;
+        if (/^print\(/.test(trimmed)) return `${index + 1}. \`${trimmed}\` displays output in the console.`;
+        if (/^import\s+|^from\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` imports reusable code from a module.`;
+        if (/=/.test(trimmed) && !/[=!<>]=/.test(trimmed)) return `${index + 1}. \`${trimmed}\` assigns a value to a variable/name.`;
+        return `${index + 1}. \`${trimmed}\` runs this Python statement/expression.`;
+    });
+    return [
+        '1. Code explanation',
+        '```python',
+        code,
+        '```',
+        '',
+        '2. Line-by-line breakdown',
+        explanations.join('\n'),
+        '',
+        '3. What to check',
+        '- Does the code print when it should return?',
+        '- Are blocks indented with 4 spaces?',
+        '- Are variables defined before they are used?',
+    ].join('\n');
+};
+
+const buildGeneralAiTracebackAnswer = (question: string): string | null => {
+    if (!/Traceback \(most recent call last\)|File ".*", line \d+|SyntaxError|TypeError|NameError|ValueError|KeyError|IndexError|IndentationError/.test(question)) return null;
+    const errorMatch = question.match(/(SyntaxError|TypeError|NameError|ValueError|KeyError|IndexError|IndentationError|AttributeError):?\s*([^\n]*)/);
+    const errorName = errorMatch?.[1] || 'Python error';
+    const errorDetail = errorMatch?.[2]?.trim();
+    const specific = buildGeneralAiErrorAnswer(errorName) || '';
+    return [
+        '1. Traceback summary',
+        `Python is reporting **${errorName}**${errorDetail ? `: ${errorDetail}` : ''}.`,
+        '',
+        '2. How to read it',
+        'Look for the last `File "...", line N` entry. That is usually where Python finally failed.',
+        '',
+        specific || '3. Likely fix\nCheck the named line for the wrong type, misspelled name, missing key/index, missing colon, or bad indentation.',
+        '',
+        '4. Better next question',
+        'Paste the exact code around the failing line and ask: `explain this traceback line by line`.',
+    ].join('\n');
+};
+
+const buildGeneralAiExampleSet = (topic: string): string => [
+    '1. Basic example',
+    '```python',
+    topic === 'dictionary' ? 'data = {"name": "Noll"}\nprint(data["name"])' :
+    topic === 'lambda' ? 'double = lambda x: x * 2\nprint(double(5))' :
+    topic === 'function' ? 'def add(a, b):\n    return a + b\nprint(add(2, 3))' :
+    topic === 'list' ? 'items = [1, 2, 3]\nitems.append(4)\nprint(items)' :
+    'value = 10\nprint(value)',
+    '```',
+    '',
+    '2. Real use example',
+    '```python',
+    topic === 'dictionary' ? 'prices = {"apple": 2, "banana": 1}\nfor fruit, price in prices.items():\n    print(fruit, price)' :
+    topic === 'lambda' ? 'names = ["Ana", "Christopher", "Bo"]\nprint(sorted(names, key=lambda name: len(name)))' :
+    topic === 'function' ? 'def is_even(number):\n    return number % 2 == 0\nprint(is_even(8))' :
+    topic === 'list' ? 'scores = [80, 95, 70]\npassed = [score for score in scores if score >= 75]\nprint(passed)' :
+    'for number in range(3):\n    print(number)',
+    '```',
+    '',
+    '3. Common mistake and fix',
+    '```python',
+    '# Mistake: printing when a function should return\n# Fix: use return when another part of the code needs the value',
+    '```',
+].join('\n');
+
+const buildGeneralAiQuiz = (topic: string): string => [
+    `1. Mini quiz: ${topic}`,
+    'Question 1: What value does this produce?',
+    '```python',
+    topic === 'list' ? 'items = [10, 20, 30]\nprint(items[1])' :
+    topic === 'dictionary' ? 'data = {"a": 1, "b": 2}\nprint(data["b"])' :
+    topic === 'function' ? 'def square(x):\n    return x * x\nprint(square(4))' :
+    'print("python"[0])',
+    '```',
+    '',
+    '2. Practice task',
+    `Write one small example using **${topic}**. Then ask me: \`Check my answer for ${topic}\`.`,
+    '',
+    '3. Self-check',
+    '- Did you use the correct syntax?',
+    '- Did you print or return based on the goal?',
+    '- Did the output match what the code logically produces?',
+].join('\n');
 
 const buildGeneralAiComparisonAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
@@ -226,6 +360,56 @@ const buildGeneralAiComparisonAnswer = (question: string): string | null => {
             'print(unique)  # {1, 2}',
             '```',
         ].join('\n')],
+        [/return.*print|print.*return/, [
+            '1. Quick comparison',
+            '| Concept | `return` | `print()` |',
+            '|---|---|---|',
+            '| Purpose | Sends a value back to caller | Shows text/output to user |',
+            '| Usable later? | Yes | No, unless captured externally |',
+            '| Common in problems | Functions | Scripts/output demos |',
+            '',
+            '2. Example',
+            '```python',
+            'def add(a, b):',
+            '    return a + b',
+            '',
+            'result = add(2, 3)',
+            'print(result)',
+            '```',
+        ].join('\n')],
+        [/\bis\b.*==|==.*\bis\b|identity.*equality|equality.*identity/, [
+            '1. Quick comparison',
+            '| Concept | `is` | `==` |',
+            '|---|---|---|',
+            '| Checks | Same object in memory | Same value/content |',
+            '| Use for | `None`, identity checks | Normal value comparison |',
+            '',
+            '2. Example',
+            '```python',
+            'a = [1, 2]',
+            'b = [1, 2]',
+            'print(a == b)  # True',
+            'print(a is b)  # False',
+            '```',
+        ].join('\n')],
+        [/for.*while|while.*for/, [
+            '1. Quick comparison',
+            '| Concept | `for` loop | `while` loop |',
+            '|---|---|---|',
+            '| Best for | Known iterable/range | Repeat until condition changes |',
+            '| Risk | Usually safer | Can create infinite loops |',
+            '',
+            '2. Example',
+            '```python',
+            'for item in [1, 2, 3]:',
+            '    print(item)',
+            '',
+            'count = 0',
+            'while count < 3:',
+            '    print(count)',
+            '    count += 1',
+            '```',
+        ].join('\n')],
     ];
     return comparisons.find(([pattern]) => pattern.test(lowerQ))?.[1] || null;
 };
@@ -284,24 +468,31 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
     ].join('\n');
 };
 
-const enrichGeneralAiAnswer = (answer: string, question: string): string => {
+const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAiMode): string => {
     const lowerQ = question.toLowerCase();
     const topic = detectGeneralPythonTopic(question);
     const sections: string[] = [answer];
-    if (/simple|beginner|basic/.test(lowerQ)) {
+    const conceptMap = getConceptMapItems(topic);
+    if (conceptMap.length > 0 && !/list all|all methods|all built/i.test(lowerQ)) {
+        sections.push(`**Related concepts**\n${conceptMap.map((item, index) => `${index + 1}. ${item}`).join('\n')}`);
+    }
+    if (mode === 'simple' || /simple|beginner|basic/.test(lowerQ)) {
         sections.push(`**Simple version**\n${topic} is a Python idea you use to make code clearer, reusable, or easier to control. Focus first on what problem it solves, then look at syntax.`);
     }
-    if (/intermediate|workflow|order|flow/.test(lowerQ)) {
+    if (mode === 'normal' || /intermediate|workflow|order|flow/.test(lowerQ)) {
         sections.push(`**Workflow**\n1. Identify the data you start with.\n2. Apply the ${topic} syntax.\n3. Check what value is produced or changed.\n4. Print or return the result depending on the task.`);
     }
-    if (/deep|in.?depth|advanced|more detail|expand|go deeper/.test(lowerQ)) {
+    if (mode === 'deep' || /deep|in.?depth|advanced|more detail|expand|go deeper/.test(lowerQ)) {
         sections.push(`**In-depth notes**\n- Ask what object or value the code is working on.\n- Check whether the operation creates a new value or mutates the existing one.\n- Check whether the result should be printed, returned, assigned, or imported.\n- Read the syntax from left to right, but remember expressions inside parentheses or function calls are evaluated first.`);
     }
-    if (/example|examples|show me/.test(lowerQ)) {
-        sections.push(`**Practice examples to ask next**\n1. \`Give me beginner examples of ${topic}.\`\n2. \`Show common mistakes with ${topic}.\`\n3. \`Compare ${topic} with a similar Python concept.\``);
+    if (mode === 'examples' || /example|examples|show me/.test(lowerQ)) {
+        sections.push(`**Examples**\n${buildGeneralAiExampleSet(topic)}`);
     }
-    if (/mistake|wrong|common mistake|avoid/.test(lowerQ)) {
+    if (mode !== 'simple' || /mistake|wrong|common mistake|avoid/.test(lowerQ)) {
         sections.push(`**Common mistakes**\n- Memorizing syntax without knowing what value it produces.\n- Printing when the task asks you to return.\n- Using the right idea on the wrong data type.\n- Copying an example literally instead of matching the problem logic.`);
+    }
+    if (/quiz|practice|test me|check my understanding/.test(lowerQ)) {
+        sections.push(buildGeneralAiQuiz(topic));
     }
     return sections.join('\n\n');
 };
@@ -313,6 +504,7 @@ const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
         `Give examples of ${topic}`,
         `Common mistakes with ${topic}`,
         `Go deeper on ${topic}`,
+        `Quiz me on ${topic}`,
     ];
 };
 
@@ -10924,6 +11116,7 @@ const App: React.FC = () => {
     const [problemAiSearch, setProblemAiSearch] = useState('');
     const [generalAiMessages, setGeneralAiMessages] = useState<ProblemAiMessage[]>([]);
     const [generalAiDraft, setGeneralAiDraft] = useState('');
+    const [generalAiMode, setGeneralAiMode] = useState<GeneralAiMode>('normal');
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
     const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
@@ -13612,7 +13805,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setGeneralAiRunning(true);
 
         try {
+            const topic = detectGeneralPythonTopic(effectiveQuestion);
             const refAnswer =
+                buildGeneralAiTracebackAnswer(effectiveQuestion) ||
+                buildGeneralAiCodeExplanation(effectiveQuestion) ||
+                (/quiz|practice|test me|check my understanding/i.test(effectiveQuestion) ? buildGeneralAiQuiz(topic) : null) ||
+                (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic) : null) ||
                 buildGeneralAiComparisonAnswer(effectiveQuestion) ||
                 buildGeneralAiErrorAnswer(effectiveQuestion) ||
                 answerGeneralPythonQuestion(effectiveQuestion);
@@ -13621,7 +13819,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: enrichGeneralAiAnswer(refAnswer, effectiveQuestion),
+                    text: enrichGeneralAiAnswer(refAnswer, effectiveQuestion, generalAiMode),
                 }]);
                 return;
             }
@@ -13636,7 +13834,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [generalAiMessages, generalAiRunning]);
+    }, [generalAiMessages, generalAiMode, generalAiRunning]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -15243,6 +15441,23 @@ print(result)
                                         </button>
                                     </div>
                                     <p className="mt-1 text-xs text-gray-400">Ask any Python question. I can explain concepts, list methods and built-ins, or help you understand code. Follow up to dive deeper.</p>
+                                    <div className="mt-2 flex flex-wrap gap-1.5">
+                                        {(['simple', 'normal', 'deep', 'examples'] as GeneralAiMode[]).map(mode => (
+                                            <button
+                                                key={mode}
+                                                type="button"
+                                                onClick={() => setGeneralAiMode(mode)}
+                                                className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
+                                                style={{
+                                                    borderColor: generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.55) : hexToRgba(toolPanelColors.ai, 0.2),
+                                                    backgroundColor: generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.16) : 'rgba(0,0,0,0.14)',
+                                                    color: generalAiMode === mode ? toolPanelColors.ai : '#9ca3af',
+                                                }}
+                                            >
+                                                {mode}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
