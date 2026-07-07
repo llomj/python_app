@@ -10122,6 +10122,8 @@ const App: React.FC = () => {
     const [statsByModeSectionOpen, setStatsByModeSectionOpen] = useState(false);
     const [savedProblemsSectionOpen, setSavedProblemsSectionOpen] = useState(false);
     const [idLogSectionOpen, setIdLogSectionOpen] = useState(false);
+    const [offlineAiSectionOpen, setOfflineAiSectionOpen] = useState(false);
+    const [appCacheSectionOpen, setAppCacheSectionOpen] = useState(false);
     const [aiHintText, setAiHintText] = useState<string>('');
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
@@ -10355,11 +10357,25 @@ const App: React.FC = () => {
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
+    const averageRank = useMemo(() => {
+        const modes = Object.values(statsByMode);
+        if (modes.length === 0) return RANKS[0];
+        const totalScore = modes.reduce((sum, s) => sum + s.success, 0);
+        const avgScore = totalScore / modes.length;
+        return getModeRank({ shots: avgScore, success: avgScore });
+    }, [statsByMode]);
     const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
-    const statsRows = useMemo(() => DIFFICULTY_MODES.map(mode => {
+    const statsRows = useMemo(() => MODE_OPTIONS.map(mode => {
+        const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
+        const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
+        const modeRank = getModeRank(modeStats);
+        const problemCount = getExercisePoolForMode(mode.id).length;
+        return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
+    }), [statsByMode]);
+    const difficultyStatsRows = useMemo(() => DIFFICULTY_MODES.map(mode => {
         const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
         const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
         const modeRank = getModeRank(modeStats);
@@ -13307,18 +13323,18 @@ print(result)
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <button
-                                        onClick={() => setProblemModeSectionOpen(prev => !prev)}
-                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
-                                    >
-                                        <label className="flex items-center gap-2 text-sm font-bold text-gray-200 pointer-events-none">
-                                            <span>Problem Mode</span>
-                                            <span onClick={(e) => { e.stopPropagation(); setShowHowToUse(!showHowToUse); }} className="inline-flex items-center justify-center rounded-full p-1 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use Problem Mode and Concepts" style={{ color: countRowColors.count }}>
-                                                <Info size={18} />
-                                            </span>
-                                        </label>
-                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: problemModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-                                    </button>
+                                    <div className="flex items-center justify-between gap-2">
+                                        <button
+                                            onClick={() => setProblemModeSectionOpen(prev => !prev)}
+                                            className="flex flex-1 items-center justify-between gap-2 text-left"
+                                        >
+                                            <h3 className="text-sm font-bold text-gray-200">Problem Mode</h3>
+                                            <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: problemModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                        </button>
+                                        <button onClick={() => setShowHowToUse(!showHowToUse)} className="inline-flex flex-shrink-0 items-center justify-center rounded-full p-1.5 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use Problem Mode and Concepts" style={{ color: countRowColors.count }}>
+                                            <Info size={20} />
+                                        </button>
+                                    </div>
                                     {problemModeSectionOpen && (
                                         <div className="mt-3 animate-in fade-in duration-200">
                                             <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
@@ -13406,10 +13422,10 @@ print(result)
                                     {statsByModeSectionOpen && (
                                         <div className="mt-3 max-h-72 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44] animate-in fade-in duration-200" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
                                         <div className="space-y-2 select-none" style={{ WebkitUserSelect: 'none', userSelect: 'none' }}>
-                                            {statsRows.map(mode => {
+                                            {difficultyStatsRows.map(mode => {
                                                 const isSelected = difficultyMode === mode.id;
                                                 return (
-                                                    <div key={mode.id} className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5" style={isSelected ? { borderLeft: `3px solid ${countRowColors.wins}` } : undefined}>
+                                                    <div key={mode.id} className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5" style={isSelected ? { borderColor: countRowColors.wins } : undefined}>
                                                         <div className="flex items-center justify-between gap-2 mb-2">
                                                             <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : countRowColors.rate }}>{mode.label}</span>
                                                             <span className="font-mono text-sm" title={mode.rank.name}>{mode.rank.icon}</span>
@@ -13442,7 +13458,7 @@ print(result)
                                             <div className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5 mt-2">
                                                 <div className="flex items-center justify-between gap-2 mb-2">
                                                     <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>Total</span>
-                                                    <span className="font-mono text-sm" title={userRank.name}>{userRank.icon}</span>
+                                                    <span className="font-mono text-sm" title={averageRank.name}>{averageRank.icon}</span>
                                                 </div>
                                                 <div className="grid grid-cols-5 gap-1 text-[9px]">
                                                     <div className="text-center rounded bg-[#071225] px-1 py-1">
@@ -13674,36 +13690,44 @@ print(result)
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/80 p-4">
-                                    <div className="mb-3 flex items-center justify-between gap-3">
+                                    <button
+                                        onClick={() => setOfflineAiSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
                                         <div>
                                             <h3 className="text-sm font-black uppercase tracking-[0.14em] text-[#93c5fd]">Offline AI Reviewer</h3>
                                             <p className="mt-1 text-xs text-gray-400">{offlineAiState.message}</p>
                                         </div>
-                                        <button
-                                            onClick={() => {
-                                                if (offlineAiBusy) return;
-                                                setOfflineAiState(prev => {
-                                                    if (prev.status !== 'ready' && !prev.enabled) {
-                                                        return {
-                                                            ...prev,
-                                                            enabled: false,
-                                                            message: 'Download and test the offline model before turning model review on.',
-                                                        };
-                                                    }
-                                                    return {
-                                                        ...prev,
-                                                        enabled: !prev.enabled,
-                                                        message: !prev.enabled ? 'Offline model review is on.' : 'Offline model review is off. Built-in offline review remains active.',
-                                                    };
-                                                });
-                                            }}
-                                            disabled={offlineAiBusy}
-                                            className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled && offlineAiState.status === 'ready' ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
-                                        >
-                                            Model {offlineAiState.enabled && offlineAiState.status === 'ready' ? 'On' : 'Off'}
-                                        </button>
-                                    </div>
-                                    <div className="mb-3 grid grid-cols-2 gap-2 text-[11px] font-black uppercase tracking-[0.12em]">
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: offlineAiSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {offlineAiSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <div className="mb-3 flex items-center justify-between gap-3">
+                                                <button
+                                                    onClick={() => {
+                                                        if (offlineAiBusy) return;
+                                                        setOfflineAiState(prev => {
+                                                            if (prev.status !== 'ready' && !prev.enabled) {
+                                                                return {
+                                                                    ...prev,
+                                                                    enabled: false,
+                                                                    message: 'Download and test the offline model before turning model review on.',
+                                                                };
+                                                            }
+                                                            return {
+                                                                ...prev,
+                                                                enabled: !prev.enabled,
+                                                                message: !prev.enabled ? 'Offline model review is on.' : 'Offline model review is off. Built-in offline review remains active.',
+                                                            };
+                                                        });
+                                                    }}
+                                                    disabled={offlineAiBusy}
+                                                    className={`rounded-xl px-3 py-2 text-xs font-black uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-50 ${offlineAiState.enabled && offlineAiState.status === 'ready' ? 'bg-[#22c55e]/20 text-[#86efac]' : 'bg-[#334155] text-gray-300'}`}
+                                                >
+                                                    Model {offlineAiState.enabled && offlineAiState.status === 'ready' ? 'On' : 'Off'}
+                                                </button>
+                                            </div>
+                                            <div className="mb-3 grid grid-cols-2 gap-2 text-[11px] font-black uppercase tracking-[0.12em]">
                                         <div className="rounded-xl border border-[#1d2d44] bg-[#020817]/60 p-3 text-gray-300">
                                             <div className="text-gray-500">Installed</div>
                                             <div className={offlineAiState.status === 'ready' ? 'mt-1 text-[#86efac]' : 'mt-1 text-[#fca5a5]'}>
@@ -13806,22 +13830,34 @@ print(result)
                                         </button>
                                     </div>
                                 </div>
+                            )}
+                                </div>
 
                                 <div className="mb-6 rounded-2xl border p-4" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.3), backgroundColor: hexToRgba(toolPanelColors.failed, 0.08) }}>
-                                    <h3 className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.failed }}>
-                                        <Trash2 size={14} /> App Cache
-                                    </h3>
-                                    <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
-                                        If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.
-                                    </p>
                                     <button
-                                        onClick={clearAppCacheAndReload}
-                                        disabled={cacheClearBusy}
-                                        className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
-                                        style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
+                                        onClick={() => setAppCacheSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
                                     >
-                                        {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
+                                        <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.failed }}>
+                                            <Trash2 size={14} /> App Cache
+                                        </h3>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: appCacheSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
+                                    {appCacheSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
+                                                If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.
+                                            </p>
+                                            <button
+                                                onClick={clearAppCacheAndReload}
+                                                disabled={cacheClearBusy}
+                                                className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
+                                            >
+                                                {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
                                 </div>
@@ -13836,10 +13872,11 @@ print(result)
                                     <div className="space-y-3">
                                         {statsRows.map(mode => {
                                             const isSelected = difficultyMode === mode.id;
+                                            const isDifficulty = DIFFICULTY_MODES.some(m => m.id === mode.id);
                                             return (
-                                                <div key={mode.id} className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4" style={isSelected ? { borderLeft: `4px solid ${countRowColors.wins}` } : undefined}>
+                                                <div key={mode.id} className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4" style={isSelected ? { borderColor: countRowColors.wins } : undefined}>
                                                     <div className="flex items-center justify-between gap-2 mb-3">
-                                                        <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : countRowColors.rate }}>{mode.label}</span>
+                                                        <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : (isDifficulty ? countRowColors.rate : '#ffffff') }}>{mode.label}</span>
                                                         <span className="font-mono text-lg" title={mode.rank.name}>{mode.rank.icon}</span>
                                                     </div>
                                                     <div className="grid grid-cols-5 gap-2 text-[10px]">
@@ -13870,7 +13907,7 @@ print(result)
                                         <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
                                             <div className="flex items-center justify-between gap-2 mb-3">
                                                 <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>Total</span>
-                                                <span className="font-mono text-lg" title={userRank.name}>{userRank.icon}</span>
+                                                <span className="font-mono text-lg" title={averageRank.name}>{averageRank.icon}</span>
                                             </div>
                                             <div className="grid grid-cols-5 gap-2 text-[10px]">
                                                 <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
