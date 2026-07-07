@@ -343,6 +343,7 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
 
 interface ConceptDocGuide {
     shape?: string;
+    overview?: string;
     simple: string;
     intermediate: string;
     inDepth: string;
@@ -354,6 +355,7 @@ const buildConceptDoc = (title: string, description: string, guide: ConceptDocGu
 ${title}
 ${description}
 ${guide.shape ? `Quick shape: ${guide.shape}` : ''}
+${guide.overview ? guide.overview : ''}
 Use this tab as a concept reference while solving the current problem.
 
 SIMPLE EXPLANATION:
@@ -366,7 +368,7 @@ IN-DEPTH EXPLANATION:
 ${guide.inDepth}
 
 EXAMPLES:
-${guide.examples.join('\n')}
+${guide.examples.map((example, index) => `Example ${index + 1}:\n${example}`).join('\n')}
 
 COMMON OPERATIONS:
 ${guide.common.join('\n')}`;
@@ -402,11 +404,19 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
     },
     'concept:dictionaries': {
         shape: 'dictionary = {"key": value, "name": "Ada"}',
-        simple: 'A dictionary stores key-value pairs so you can look up a value by its key.',
-        intermediate: 'Use dictionaries for mappings, counters, grouping, and structured data. Keys must be hashable, such as strings, numbers, or tuples.',
-        inDepth: 'Dictionary access with dict[key] raises KeyError if the key is missing; dict.get(key, default) is safer for optional keys. Iterating over a dictionary gives keys by default; use .items() for key-value pairs.',
-        examples: ['person = {"name": "Ada", "age": 30}', 'person["age"]  # 30', 'counts[word] = counts.get(word, 0) + 1', 'for key, value in data.items():\n    print(key, value)'],
-        common: ['dict[key]', 'dict.get(key, default)', 'dict[key] = value', 'dict.keys(), dict.values(), dict.items()', 'key in dict']
+        overview: 'A dictionary is a mapping. It connects one key to one value, like a mini lookup table. It is not ordered like a list by index, and you should not use it when position 0, position 1, position 2 is the main idea. Use a list for ordered positions; use a dictionary when names, labels, IDs, or categories point to values.',
+        simple: 'A dictionary stores key-value pairs. The key is the label you search with, and the value is the data you get back. Example: in {"name": "Ada"}, the key is "name" and the value is "Ada".',
+        intermediate: 'Use dictionaries for mappings, counters, grouping, configuration, records, and structured data. Keys must be hashable, such as strings, numbers, booleans, or tuples. Values can be almost anything: strings, numbers, lists, other dictionaries, functions, or objects. Dictionary lookup is usually fast because Python uses the key to find the value directly.',
+        inDepth: 'Core rules: keys must be unique; assigning the same key again replaces the old value. dict[key] is direct access and raises KeyError when missing. dict.get(key, default) is safer when a key might not exist. Iterating over a dictionary gives keys by default. Use .items() when you need both key and value, .keys() for keys, and .values() for values. Use "key in dict" to check membership before accessing. For counters, the common pattern is counts[item] = counts.get(item, 0) + 1. For grouping, create a list for each key and append into it. Nested dictionaries are useful for records, but keep them readable.',
+        examples: [
+            'person = {"name": "Ada", "age": 30}\nprint(person["name"])  # Ada',
+            'person["city"] = "London"\nperson["age"] = 31\nprint(person)',
+            'score = person.get("score", 0)\nprint(score)  # 0 because score is missing',
+            'counts = {}\nfor word in words:\n    counts[word] = counts.get(word, 0) + 1',
+            'grades = {"Ana": 90, "Bo": 75}\nfor name, grade in grades.items():\n    print(name, grade)',
+            'students = {\n    "Ana": {"age": 12, "grade": 90},\n    "Bo": {"age": 13, "grade": 75},\n}\nprint(students["Ana"]["grade"])'
+        ],
+        common: ['Create: data = {"a": 1, "b": 2}', 'Read: data["a"] or data.get("a", 0)', 'Update/add: data["c"] = 3', 'Delete: del data["a"] or data.pop("a")', 'Loop keys: for key in data:', 'Loop pairs: for key, value in data.items():', 'Membership: "a" in data', 'Counter pattern: counts[x] = counts.get(x, 0) + 1']
     },
     'concept:exceptions': {
         simple: 'Exceptions handle errors without crashing the whole program.',
@@ -9589,6 +9599,65 @@ const renderDocCodeLine = (code: string, editorColors: EditorColorSettings, keyP
     ));
 };
 
+const isDocCodeLine = (line: string) => {
+    const trimmed = line.trim();
+    return (
+        /^\s{2,}\S/.test(line)
+        || /^(def|class|if|elif|else:|for|while|try:|except|finally:|with|return|print|import|from|raise|yield|pass|break|continue)\b/.test(trimmed)
+        || /^[A-Za-z_]\w*\s*(?:=|\+=|-=|\*=|\/=|%=|\/\/=|\*\*=)/.test(trimmed)
+        || /^[A-Za-z_][\w.]*\([^)]*\)\s*(?:#.*)?$/.test(trimmed)
+        || /^[}\])]\s*(?:#.*)?$/.test(trimmed)
+    );
+};
+
+type DocLineGroup =
+    | { type: 'code'; lines: string[] }
+    | { type: 'text'; line: string };
+
+const groupDocLines = (lines: string[]): DocLineGroup[] => {
+    const groups: DocLineGroup[] = [];
+    let codeLines: string[] = [];
+
+    const flushCode = () => {
+        if (codeLines.length > 0) {
+            groups.push({ type: 'code', lines: codeLines });
+            codeLines = [];
+        }
+    };
+
+    for (const line of lines) {
+        const raw = line.replace(/\s+$/g, '');
+        const trimmed = raw.trim();
+        if (!trimmed) {
+            flushCode();
+            continue;
+        }
+
+        if (isDocCodeLine(raw)) {
+            codeLines.push(raw);
+        } else {
+            flushCode();
+            groups.push({ type: 'text', line: trimmed });
+        }
+    }
+
+    flushCode();
+    return groups;
+};
+
+const formatDocSectionTitle = (title: string) => title
+    .replace('EVALUATION ORDER', 'Evaluation Order')
+    .replace('EXECUTION ORDER', 'Execution Order')
+    .replace('EXECUTION FLOW', 'Execution Flow')
+    .replace('SYNTAX', 'Syntax')
+    .replace('OVERVIEW', 'Overview')
+    .replace('SIMPLE EXPLANATION', 'Simple Explanation')
+    .replace('INTERMEDIATE EXPLANATION', 'Intermediate Explanation')
+    .replace('IN-DEPTH EXPLANATION', 'In-Depth Explanation')
+    .replace('EXAMPLES', 'Examples')
+    .replace('COMMON OPERATIONS', 'Common Operations')
+    .replace('COMMON METHODS', 'Common Methods');
+
 function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { content: string; editorColors: EditorColorSettings; panelColors: PanelColorSettings }) {
     const sections = useMemo(() => parseSyntaxDocumentation(content), [content]);
     const sectionAccents = [
@@ -9602,57 +9671,72 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
     const panelAlpha = Math.max(0.18, Math.min(0.78, panelColors.alpha / 100));
 
     return (
-        <div className="space-y-3 p-3 text-xs" style={{ color: editorColors.text }}>
+        <div className="space-y-3 p-2.5 text-xs" style={{ color: editorColors.text }}>
             {sections.map((section, sectionIndex) => {
                 const accent = sectionAccents[sectionIndex % sectionAccents.length] || editorColors.keyword;
+                const groups = groupDocLines(section.lines);
                 return (
                     <section
                         key={section.title}
-                        className="rounded-2xl border p-3 shadow-lg"
+                        className="grid grid-cols-[30px_1fr] gap-2 rounded-2xl border p-3 shadow-lg"
                         style={{
-                            borderColor: hexToRgba(accent, 0.34),
-                            backgroundColor: hexToRgba(panelColors.background, panelAlpha),
+                            borderColor: hexToRgba(accent, 0.28),
+                            backgroundColor: hexToRgba(panelColors.background, Math.max(0.42, panelAlpha)),
                             boxShadow: `0 14px 28px ${hexToRgba(editorColors.background, 0.32)}`,
                         }}
                     >
-                        <h3 className="mb-3 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em]" style={{ color: accent }}>
-                            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: accent }} />
-                            {section.title.replace('EVALUATION ORDER', 'Evaluation Order').replace('EXECUTION ORDER', 'Execution Order').replace('EXECUTION FLOW', 'Execution Flow').replace('SYNTAX', 'Syntax')}
-                        </h3>
-                        <div className="space-y-1.5">
-                            {section.lines.map((line, index) => {
-                                const raw = line.replace(/\s+$/g, '');
-                                const trimmed = raw.trim();
-                                const isCode = /^[A-Za-z_][\w.]*\(|^(def|class|if|for|while|return|print|import|from)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
-                                const isIndentedCode = /^\s{2,}\S/.test(raw);
-                                const isFlow = trimmed.startsWith('→') || trimmed.startsWith('def blocks') || trimmed.startsWith('Execution starts');
-                                return (
-                                    isCode || isIndentedCode ? (
-                                        <pre
-                                            key={`${section.title}-${index}`}
-                                            className="overflow-x-auto whitespace-pre rounded-lg border px-3 py-2 font-mono text-[11px] leading-relaxed"
-                                            style={{
-                                                borderColor: hexToRgba(editorColors.panelBorder, 0.35),
-                                                backgroundColor: hexToRgba(editorColors.background, 0.88),
-                                                color: editorColors.text,
-                                                WebkitOverflowScrolling: 'touch',
-                                            }}
-                                        >
-                                            {renderDocCodeLine(raw, editorColors, `${section.title}-${index}`)}
-                                        </pre>
-                                    ) : (
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accent, 0.16), color: accent }}>
+                            {sectionIndex + 1}
+                        </div>
+                        <div className="min-w-0 space-y-2">
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: accent }}>
+                                {formatDocSectionTitle(section.title)}
+                            </h3>
+                            <div className="max-h-[34vh] space-y-2 overflow-y-auto pr-1 [-webkit-overflow-scrolling:touch]">
+                                {groups.map((group, index) => {
+                                    if (group.type === 'code') {
+                                        return (
+                                            <div
+                                                key={`${section.title}-code-${index}`}
+                                                className="overflow-hidden rounded-xl border"
+                                                style={{ borderColor: hexToRgba(editorColors.panelBorder, 0.34), backgroundColor: hexToRgba(editorColors.background, 0.82) }}
+                                            >
+                                                <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba(editorColors.panelBorder, 0.2), color: accent }}>
+                                                    Python
+                                                </div>
+                                                <pre
+                                                    className="overflow-x-auto whitespace-pre px-3 py-2 font-mono text-[11px] leading-relaxed"
+                                                    style={{
+                                                        color: editorColors.text,
+                                                        WebkitOverflowScrolling: 'touch',
+                                                    }}
+                                                >
+                                                    {group.lines.map((codeLine, lineIndex) => (
+                                                        <React.Fragment key={`${section.title}-code-${index}-${lineIndex}`}>
+                                                            {renderDocCodeLine(codeLine, editorColors, `${section.title}-code-${index}-${lineIndex}`)}
+                                                            {lineIndex < group.lines.length - 1 ? '\n' : ''}
+                                                        </React.Fragment>
+                                                    ))}
+                                                </pre>
+                                            </div>
+                                        );
+                                    }
+
+                                    const isExampleLabel = /^Example\s+\d+:/i.test(group.line);
+                                    const isFlow = group.line.startsWith('→') || group.line.startsWith('def blocks') || group.line.startsWith('Execution starts');
+                                    return (
                                         <div
-                                        key={`${section.title}-${index}`}
-                                            className={isFlow ? 'rounded-lg px-3 py-2 font-mono text-[11px] leading-relaxed' : 'leading-relaxed'}
-                                            style={isFlow
-                                                ? { backgroundColor: hexToRgba(accent, 0.1), color: accent }
+                                            key={`${section.title}-text-${index}`}
+                                            className={isExampleLabel || isFlow ? 'rounded-xl border px-3 py-2 text-[11px] leading-relaxed' : 'text-sm leading-relaxed'}
+                                            style={isExampleLabel || isFlow
+                                                ? { borderColor: hexToRgba(accent, 0.18), backgroundColor: hexToRgba(accent, 0.08), color: isExampleLabel ? accent : editorColors.text }
                                                 : { color: editorColors.text }}
                                         >
-                                            {renderAiParagraphText(trimmed, editorColors, `${section.title}-${index}`)}
+                                            {renderAiParagraphText(group.line, editorColors, `${section.title}-text-${index}`)}
                                         </div>
-                                    )
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
                         </div>
                     </section>
                 );
@@ -13065,6 +13149,23 @@ print(result)
                         )}
                         {showModal === 'solution' && (
                             <div className="flex h-full min-h-0 flex-col overflow-hidden">
+                                <div
+                                    className="sticky top-0 z-20 mb-2 flex flex-shrink-0 items-center justify-between rounded-2xl border px-3 py-2"
+                                    style={{ borderColor: hexToRgba(panelColors.border, 0.8), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96) }}
+                                >
+                                    <div className="min-w-0">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: editorColors.comment }}>Hide Tools</p>
+                                        <p className="truncate text-sm font-black" style={{ color: editorColors.text }}>Solution Reference</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowModal('none')}
+                                        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border active:scale-95"
+                                        style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(panelColors.background, 0.72), color: editorColors.text }}
+                                        aria-label="Close solution panel"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
                                 <div
                                     className="sticky top-0 z-10 mb-4 mx-1 mt-1 flex-shrink-0 overflow-x-auto border-b [-webkit-overflow-scrolling:touch]"
                                     style={{ borderColor: panelColors.border, backgroundColor: hexToRgba(editorColors.panelBackground, 0.92), touchAction: 'pan-x' }}
