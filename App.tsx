@@ -10110,7 +10110,7 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai' | 'problem_mode_help'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
@@ -13331,7 +13331,7 @@ print(result)
                                             <h3 className="text-sm font-bold text-gray-200">Problem Mode</h3>
                                             <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: problemModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                         </button>
-                                        <button onClick={() => setShowHowToUse(!showHowToUse)} className="inline-flex flex-shrink-0 items-center justify-center rounded-full p-1.5 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use Problem Mode and Concepts" style={{ color: countRowColors.count }}>
+                                        <button onClick={() => setShowModal('problem_mode_help')} className="inline-flex flex-shrink-0 items-center justify-center rounded-full p-1.5 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use this app" style={{ color: countRowColors.count }}>
                                             <Info size={20} />
                                         </button>
                                     </div>
@@ -13932,6 +13932,49 @@ print(result)
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {showModal === 'problem_mode_help' && (
+                            <div className="flex h-full min-h-0 flex-col py-2">
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">How to use this app</h2>
+                                <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8 space-y-4 text-[11px] text-gray-300 leading-relaxed">
+                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
+                                        <p className="font-bold text-white text-xs">Problem Mode</p>
+                                        <p>Choose a <strong>difficulty mode</strong> to filter problems by how hard they are:</p>
+                                        <ul className="list-disc pl-4 space-y-1 text-gray-400">
+                                            <li><strong>Normal</strong> — mixes all problems together</li>
+                                            <li><strong>Beginner</strong> — simple functions, strings, and lists</li>
+                                            <li><strong>Intermediate</strong> — loops, dictionaries, and patterns</li>
+                                            <li><strong>Expert</strong> — harder challenges</li>
+                                            <li><strong>Legend</strong> — toughest problems</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
+                                        <p className="font-bold text-white text-xs">Concepts</p>
+                                        <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>For Loops</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic. The app will only show problems that match that concept.</p>
+                                    </div>
+
+                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
+                                        <p className="font-bold text-white text-xs">Stats By Mode</p>
+                                        <p><strong>Long-press the count row</strong> at the top of the screen to open Stats By Mode. It shows your shots, wins, fails, win rate, and rank for every difficulty mode and concept you have used.</p>
+                                    </div>
+
+                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
+                                        <p className="font-bold text-white text-xs">Win / Failed Tools</p>
+                                        <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <strong>Win</strong> and <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked.</p>
+                                    </div>
+
+                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
+                                        <p className="font-bold text-white text-xs">AI Reviewer</p>
+                                        <p>Tap the <strong>AI</strong> button to ask the built-in Problem AI about the current problem. You can also enable the offline AI model in Settings for deeper code review when it is downloaded.</p>
+                                    </div>
+
+                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
+                                        <p className="font-bold text-white text-xs">Ranking</p>
+                                        <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
                                     </div>
                                 </div>
                             </div>
