@@ -339,7 +339,7 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:sorting', label: 'Sorting', description: 'sort, sorted, key functions', patterns: [/\bsort\b|\bsorted\b|\bsorting\b|\bascending\b|\bdescending\b|\bkey\s+parameter\b|\border\b/] },
     { id: 'concept:patterns', label: 'Patterns', description: 'Stars, pyramids, grids', patterns: [/\bpattern\b|\bpyramid\b|\btriangle\b|\bhollow\b|\bstar\b|\bgrid\b|\bcheckerboard\b/] },
     { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport\b|\bmodule\b|\brandom\b|\bdatetime\b|\bcollections\b|\bitertools\b|\bstatistics\b/] },
-];
+].sort((a, b) => a.label.localeCompare(b.label));
 
 const MODE_OPTIONS = [...DIFFICULTY_MODES, ...PYTHON_CONCEPT_MODES] as Array<{ id: ProblemMode; label: string; description: string }>;
 const CONCEPT_MODE_IDS = new Set<ProblemMode>(PYTHON_CONCEPT_MODES.map(mode => mode.id));
@@ -13388,16 +13388,16 @@ print(result)
                                                                 key={concept.id}
                                                                 onClick={() => handleDifficultyModeSelect(concept.id)}
                                                                 className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
-                                                                style={isSelected ? { borderColor: 'rgba(156, 163, 175, 0.5)', backgroundColor: 'rgba(55, 65, 81, 0.35)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
+                                                                style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
                                                             >
                                                                 <span className="flex items-center justify-between gap-3">
                                                                     <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
-                                                                    <span className="flex items-center gap-2 text-[10px] text-gray-400">
+                                                                    <span className="flex items-center gap-2 text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>
                                                                         {count} problems
-                                                                        {isSelected && <Check size={14} className="text-white" />}
+                                                                        {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
                                                                     </span>
                                                                 </span>
-                                                                <span className="mt-1 block text-[10px] text-gray-400">{concept.description}</span>
+                                                                <span className="mt-1 block text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>{concept.description}</span>
                                                             </button>
                                                         );
                                                     })}
