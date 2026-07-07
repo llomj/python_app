@@ -13290,9 +13290,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 text: [
                     'Ask any Python question. I can explain concepts, list methods and built-ins, compare ideas, or help you understand code.',
                     '',
-                    'I can also follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer.',
+                    'I can follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer. If I don\'t understand, I\'ll ask you to clarify.',
                     '',
-                    'Use **Save** to download the conversation or **Clear** to start a fresh one.',
+                    'Click **Save** to store the conversation or **Clear** to start fresh. View saved chats with the **Saved (N)** button.',
                 ].join('\n'),
             }]);
         }
@@ -14032,8 +14032,7 @@ print(result)
                             }
                         }}
                     >
-                        <button onClick={openGeneralAi} className="transition-all p-1.5 rounded-full border" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: toolPanelColors.ai }} title="General Python AI"><Bot size={14} /></button>
-                        <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
+                                                <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
                         <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>Wins:</span><span style={{ color: countRowColors.value }}>{currentStats.success}</span></div>
                         <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
                         <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>Rate:</span><span style={{ color: countRowColors.value }}>{rate}%</span></div>
@@ -14192,6 +14191,10 @@ print(result)
                                 <button onClick={openProblemAi} title="Ask AI about this problem" style={{ backgroundColor: showModal === 'problem_ai' ? hexToRgba(toolPanelColors.ai, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: toolPanelColors.ai, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
                                     <Bot size={14} />
                                     <span>AI</span>
+                                </button>
+                                <button onClick={openGeneralAi} title="Interactive Python chatbot" style={{ backgroundColor: showModal === 'general_ai' ? hexToRgba('#22c55e', 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#86efac', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
+                                    <Bot size={14} />
+                                    <span>Chat</span>
                                 </button>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
