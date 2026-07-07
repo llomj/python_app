@@ -14006,37 +14006,51 @@ print(result)
             >
                 <div className="flex items-center justify-center mb-3">
                     <div
-                        className="flex gap-3 sm:gap-5 items-center px-3 py-2 rounded-full shadow-lg text-[10px] sm:text-xs font-black tracking-tight select-none"
+                        className="flex max-w-full items-center gap-2 rounded-full px-2 py-2 text-[10px] font-black tracking-tight shadow-lg sm:text-xs"
                         style={{ ...sharedPanelSurface, pointerEvents: 'auto' }}
-                        onPointerDown={() => {
-                            countRowLongPressRef.current = setTimeout(() => {
-                                setShowModal('stats_by_mode');
-                            }, 500);
-                        }}
-                        onPointerUp={() => {
-                            if (countRowLongPressRef.current) {
-                                clearTimeout(countRowLongPressRef.current);
-                                countRowLongPressRef.current = null;
-                            }
-                        }}
-                        onPointerCancel={() => {
-                            if (countRowLongPressRef.current) {
-                                clearTimeout(countRowLongPressRef.current);
-                                countRowLongPressRef.current = null;
-                            }
-                        }}
-                        onPointerLeave={() => {
-                            if (countRowLongPressRef.current) {
-                                clearTimeout(countRowLongPressRef.current);
-                                countRowLongPressRef.current = null;
-                            }
-                        }}
                     >
-                                                <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
-                        <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>Wins:</span><span style={{ color: countRowColors.value }}>{currentStats.success}</span></div>
-                        <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
-                        <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>Rate:</span><span style={{ color: countRowColors.value }}>{rate}%</span></div>
-                        <button onClick={() => setShowModal('settings')} className="transition-all p-1.5 rounded-full border" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="Settings"><Settings size={14} /></button>
+                        <button
+                            onClick={openGeneralAi}
+                            className="flex h-8 flex-shrink-0 items-center gap-1 rounded-full border px-2 transition-all active:scale-95"
+                            style={{ backgroundColor: hexToRgba(toolPanelColors.ai, 0.13), borderColor: hexToRgba(toolPanelColors.ai, 0.45), color: toolPanelColors.ai }}
+                            title="General Python AI"
+                            aria-label="Open General Python AI"
+                        >
+                            <Bot size={15} />
+                            <span className="text-[10px] font-black uppercase tracking-[0.12em]">AI</span>
+                        </button>
+                        <div
+                            className="flex min-w-0 flex-1 items-center gap-3 overflow-x-auto whitespace-nowrap px-1 [-webkit-overflow-scrolling:touch]"
+                            onPointerDown={() => {
+                                countRowLongPressRef.current = setTimeout(() => {
+                                    setShowModal('stats_by_mode');
+                                }, 500);
+                            }}
+                            onPointerUp={() => {
+                                if (countRowLongPressRef.current) {
+                                    clearTimeout(countRowLongPressRef.current);
+                                    countRowLongPressRef.current = null;
+                                }
+                            }}
+                            onPointerCancel={() => {
+                                if (countRowLongPressRef.current) {
+                                    clearTimeout(countRowLongPressRef.current);
+                                    countRowLongPressRef.current = null;
+                                }
+                            }}
+                            onPointerLeave={() => {
+                                if (countRowLongPressRef.current) {
+                                    clearTimeout(countRowLongPressRef.current);
+                                    countRowLongPressRef.current = null;
+                                }
+                            }}
+                        >
+                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
+                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>Wins:</span><span style={{ color: countRowColors.value }}>{currentStats.success}</span></div>
+                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
+                            <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>Rate:</span><span style={{ color: countRowColors.value }}>{rate}%</span></div>
+                        </div>
+                        <button onClick={() => setShowModal('settings')} className="h-8 w-8 flex-shrink-0 rounded-full border p-1.5 transition-all active:scale-95" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="Settings" aria-label="Settings"><Settings size={14} /></button>
                     </div>
                 </div>
 
