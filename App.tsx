@@ -115,8 +115,210 @@ const isGeneralPythonFollowUp = (question: string): boolean => (
     /^(expand|more|more detail|details|explain more|break it down|go deeper|examples?|give examples|syntax|show syntax|how does it work|why|when use|when should)/i.test(question.trim())
 );
 
+const GENERAL_PYTHON_GLOSSARY = [
+    'indentation', 'variable', 'identifier', 'function', 'method', 'argument', 'parameter',
+    'return', 'print', 'list', 'tuple', 'set', 'dictionary', 'string', 'boolean',
+    'integer', 'float', 'for loop', 'while loop', 'condition', 'if statement',
+    'lambda', 'module', 'library', 'package', 'class', 'object', 'attribute',
+    'oop', 'closure', 'decorator', 'generator', 'iterator', 'comprehension',
+    'regex', 'file I/O', 'exception', 'syntax error', 'type error', 'indentation error',
+    'scope', 'global', 'nonlocal', 'built-in function',
+];
+
+const detectGeneralPythonTopic = (question: string): string => {
+    const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    const topic = GENERAL_PYTHON_GLOSSARY.find(item => lowerQ.includes(item));
+    if (topic) return topic;
+    if (/\bdict\b/.test(lowerQ)) return 'dictionary';
+    if (/\bstr\b/.test(lowerQ)) return 'string';
+    if (/\bbool\b/.test(lowerQ)) return 'boolean';
+    if (/\bdef\b/.test(lowerQ)) return 'function';
+    if (/\bimport\b/.test(lowerQ)) return 'module';
+    return 'this Python topic';
+};
+
+const buildGeneralAiComparisonAnswer = (question: string): string | null => {
+    const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    const comparisons: Array<[RegExp, string]> = [
+        [/list.*tuple|tuple.*list/, [
+            '1. Quick comparison',
+            '| Concept | List | Tuple |',
+            '|---|---|---|',
+            '| Syntax | `[1, 2, 3]` | `(1, 2, 3)` |',
+            '| Can change? | Yes, mutable | No, immutable |',
+            '| Best for | Data you will edit | Fixed data/records |',
+            '',
+            '2. Example',
+            '```python',
+            'items = [1, 2, 3]',
+            'items.append(4)  # works',
+            '',
+            'point = (10, 20)',
+            '# point[0] = 99  # TypeError',
+            '```',
+            '',
+            '3. Common mistake',
+            'Use a tuple when the values should stay fixed. Use a list when you need to add, remove, sort, or update items.',
+        ].join('\n')],
+        [/list.*dict|dict.*list|dictionary.*list/, [
+            '1. Quick comparison',
+            '| Concept | List | Dictionary |',
+            '|---|---|---|',
+            '| Stores | Ordered values | Key-value pairs |',
+            '| Access by | Index: `items[0]` | Key: `data["name"]` |',
+            '| Best for | Sequences | Lookups by name/key |',
+            '',
+            '2. Example',
+            '```python',
+            'names = ["Ana", "Noll"]',
+            'print(names[0])',
+            '',
+            'user = {"name": "Noll", "age": 30}',
+            'print(user["name"])',
+            '```',
+        ].join('\n')],
+        [/function.*method|method.*function/, [
+            '1. Quick comparison',
+            '| Concept | Function | Method |',
+            '|---|---|---|',
+            '| Called as | `name(value)` | `object.name()` |',
+            '| Belongs to | Standalone code | An object/type |',
+            '| Example | `len("hi")` | `"hi".upper()` |',
+            '',
+            '2. Example',
+            '```python',
+            'print(len("hello"))      # function',
+            'print("hello".upper())  # method',
+            '```',
+            '',
+            '3. Rule',
+            'If it is called with a dot on an object, it is a method.',
+        ].join('\n')],
+        [/module.*library|library.*module|package.*module|module.*package/, [
+            '1. Quick comparison',
+            '| Concept | Meaning |',
+            '|---|---|',
+            '| Module | One importable Python file or module namespace |',
+            '| Package | A folder/group of modules |',
+            '| Library | A broader collection of reusable code |',
+            '',
+            '2. Example',
+            '```python',
+            'import math      # module',
+            'import pathlib   # standard-library module/package area',
+            '```',
+            '',
+            '3. Rule',
+            'A library can contain many packages and modules. A module is the smaller unit you usually import.',
+        ].join('\n')],
+        [/set.*tuple|tuple.*set|list.*set|set.*list/, [
+            '1. Collection comparison',
+            '| Concept | Ordered? | Mutable? | Allows duplicates? | Syntax |',
+            '|---|---:|---:|---:|---|',
+            '| List | Yes | Yes | Yes | `[1, 2]` |',
+            '| Tuple | Yes | No | Yes | `(1, 2)` |',
+            '| Set | No | Yes | No | `{1, 2}` |',
+            '',
+            '2. Example',
+            '```python',
+            'nums = [1, 1, 2]',
+            'unique = set(nums)',
+            'print(unique)  # {1, 2}',
+            '```',
+        ].join('\n')],
+    ];
+    return comparisons.find(([pattern]) => pattern.test(lowerQ))?.[1] || null;
+};
+
+const buildGeneralAiErrorAnswer = (question: string): string | null => {
+    const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    if (!/\berror\b|exception|syntaxerror|typeerror|nameerror|indentationerror|indexerror|keyerror|valueerror/.test(lowerQ)) return null;
+    if (/indentationerror|indentation error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`IndentationError` means Python expected code to line up a certain way, but the spaces/tabs are wrong.',
+            '',
+            '2. Correct example',
+            '```python',
+            'if True:',
+            '    print("inside block")',
+            '```',
+            '',
+            '3. Common mistakes',
+            'Do not mix tabs and spaces. Use 4 spaces for each block level.',
+        ].join('\n');
+    }
+    if (/syntaxerror|syntax error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`SyntaxError` means Python could not parse the code structure.',
+            '',
+            '2. Common causes',
+            'Missing colon, missing closing quote/bracket, invalid assignment, or wrong keyword placement.',
+            '',
+            '3. Example',
+            '```python',
+            'if x > 3:',
+            '    print(x)',
+            '```',
+        ].join('\n');
+    }
+    if (/typeerror|type error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`TypeError` means an operation/function received a value of the wrong type.',
+            '',
+            '2. Example',
+            '```python',
+            '# Wrong: "5" + 2',
+            'print(int("5") + 2)  # 7',
+            '```',
+        ].join('\n');
+    }
+    return [
+        '1. Error helper',
+        'Python errors usually tell you the error type, line number, and what went wrong.',
+        '',
+        '2. Best next question',
+        'Ask about the exact error name, for example `What is TypeError?`, `What is SyntaxError?`, or `What is IndentationError?`.',
+    ].join('\n');
+};
+
+const enrichGeneralAiAnswer = (answer: string, question: string): string => {
+    const lowerQ = question.toLowerCase();
+    const topic = detectGeneralPythonTopic(question);
+    const sections: string[] = [answer];
+    if (/simple|beginner|basic/.test(lowerQ)) {
+        sections.push(`**Simple version**\n${topic} is a Python idea you use to make code clearer, reusable, or easier to control. Focus first on what problem it solves, then look at syntax.`);
+    }
+    if (/intermediate|workflow|order|flow/.test(lowerQ)) {
+        sections.push(`**Workflow**\n1. Identify the data you start with.\n2. Apply the ${topic} syntax.\n3. Check what value is produced or changed.\n4. Print or return the result depending on the task.`);
+    }
+    if (/deep|in.?depth|advanced|more detail|expand|go deeper/.test(lowerQ)) {
+        sections.push(`**In-depth notes**\n- Ask what object or value the code is working on.\n- Check whether the operation creates a new value or mutates the existing one.\n- Check whether the result should be printed, returned, assigned, or imported.\n- Read the syntax from left to right, but remember expressions inside parentheses or function calls are evaluated first.`);
+    }
+    if (/example|examples|show me/.test(lowerQ)) {
+        sections.push(`**Practice examples to ask next**\n1. \`Give me beginner examples of ${topic}.\`\n2. \`Show common mistakes with ${topic}.\`\n3. \`Compare ${topic} with a similar Python concept.\``);
+    }
+    if (/mistake|wrong|common mistake|avoid/.test(lowerQ)) {
+        sections.push(`**Common mistakes**\n- Memorizing syntax without knowing what value it produces.\n- Printing when the task asks you to return.\n- Using the right idea on the wrong data type.\n- Copying an example literally instead of matching the problem logic.`);
+    }
+    return sections.join('\n\n');
+};
+
+const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
+    const topic = detectGeneralPythonTopic(question);
+    return [
+        `Explain ${topic} simply`,
+        `Give examples of ${topic}`,
+        `Common mistakes with ${topic}`,
+        `Go deeper on ${topic}`,
+    ];
+};
+
 const buildGeneralAiClarification = (question: string): string => {
     const lowerQ = question.toLowerCase();
+    const closeTopic = GENERAL_PYTHON_GLOSSARY.find(item => lowerQ.includes(item.split(' ')[0]));
     const suggestions = [
         '`What is indentation in Python?`',
         '`Explain lambda with examples.`',
@@ -182,8 +384,10 @@ const buildGeneralAiClarification = (question: string): string => {
         '2. Try one of these clearer questions',
         suggestions.map((item, index) => `${index + 1}. ${item}`).join('\n'),
         '',
-        '3. Tip',
-        'Name the concept, data type, method, built-in function, or error you want explained.',
+        '3. Python glossary fallback',
+        closeTopic
+            ? `I noticed something close to **${closeTopic}**. Try asking: \`Explain ${closeTopic} with examples.\``
+            : 'Name the concept, data type, method, built-in function, or error you want explained.',
     ].join('\n');
 };
 
@@ -13408,13 +13612,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setGeneralAiRunning(true);
 
         try {
-            const refAnswer = answerGeneralPythonQuestion(effectiveQuestion);
+            const refAnswer =
+                buildGeneralAiComparisonAnswer(effectiveQuestion) ||
+                buildGeneralAiErrorAnswer(effectiveQuestion) ||
+                answerGeneralPythonQuestion(effectiveQuestion);
             if (refAnswer) {
                 setGeneralAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: refAnswer,
+                    text: enrichGeneralAiAnswer(refAnswer, effectiveQuestion),
                 }]);
                 return;
             }
@@ -15057,31 +15264,6 @@ print(result)
                                         </button>
                                     </div>
                                     <p className="mt-1 text-xs text-gray-400">Ask any Python question. I can explain concepts, list methods and built-ins, or help you understand code. Follow up to dive deeper.</p>
-                                    <div
-                                        className="mt-3 rounded-2xl border p-3 text-xs leading-relaxed"
-                                        style={{
-                                            borderColor: hexToRgba(toolPanelColors.ai, 0.24),
-                                            backgroundColor: hexToRgba(toolPanelColors.ai, 0.08),
-                                        }}
-                                    >
-                                        <div className="mb-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
-                                            Interactive Python helper
-                                        </div>
-                                        <p className="text-gray-300">
-                                            Ask a clear Python question, then follow up with <span className="font-bold text-gray-100">expand</span>, <span className="font-bold text-gray-100">more detail</span>, or <span className="font-bold text-gray-100">give examples</span>. If the question is vague, I will ask what you mean instead of guessing.
-                                        </p>
-                                        <div className="mt-2 flex flex-wrap gap-1.5">
-                                            {['Explain indentation', 'Lambda order of operations', 'Function vs method'].map(example => (
-                                                <span
-                                                    key={example}
-                                                    className="rounded-full border px-2 py-1 text-[10px] font-bold text-gray-300"
-                                                    style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.22), backgroundColor: 'rgba(0,0,0,0.16)' }}
-                                                >
-                                                    {example}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -15153,6 +15335,26 @@ print(result)
                                         </div>
                                     )}
                                 </div>
+
+                                {generalAiMessages.some(message => message.role === 'user') && !generalAiRunning && (
+                                    <div className="flex flex-shrink-0 flex-wrap gap-1.5">
+                                        {getGeneralAiSuggestedFollowUps(generalAiMessages.filter(message => message.role === 'user').slice(-1)[0]?.text || '').map(suggestion => (
+                                            <button
+                                                key={suggestion}
+                                                type="button"
+                                                onClick={() => sendGeneralAiQuestion(suggestion)}
+                                                className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] transition-all active:scale-95"
+                                                style={{
+                                                    borderColor: hexToRgba(toolPanelColors.ai, 0.24),
+                                                    backgroundColor: hexToRgba(toolPanelColors.ai, 0.08),
+                                                    color: toolPanelColors.ai,
+                                                }}
+                                            >
+                                                {suggestion}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
 
                                 {showSavedConvs && (
                                     <div className="flex-shrink-0 max-h-48 overflow-y-auto rounded-2xl border p-2 space-y-1.5" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(8, 18, 34, 0.6)' }}>
