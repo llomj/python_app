@@ -33,7 +33,8 @@ import {
     ChevronDown,
     ChevronUp,
     Bookmark,
-    Terminal
+    Terminal,
+    BarChart3
 } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
@@ -13426,7 +13427,9 @@ print(result)
                                         onClick={() => setStatsByModeSectionOpen(prev => !prev)}
                                         className="mb-0 flex w-full items-center justify-between gap-2 text-left"
                                     >
-                                        <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
+                                        <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
+                                            <BarChart3 size={14} style={{ color: countRowColors.rate }} /> Stats By Mode
+                                        </h3>
                                         <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: statsByModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
                                     {statsByModeSectionOpen && (
@@ -13465,6 +13468,46 @@ print(result)
                                                     </div>
                                                 );
                                             })}
+                                            {conceptStatsRows.length > 0 && (
+                                                <div className="py-1">
+                                                    <div className="text-[10px] font-black uppercase tracking-[0.14em] text-gray-500 mb-2">Concepts</div>
+                                                    <div className="space-y-2">
+                                                        {conceptStatsRows.map(mode => {
+                                                            const isSelected = difficultyMode === mode.id;
+                                                            return (
+                                                                <div key={mode.id} className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5" style={isSelected ? { borderColor: countRowColors.wins } : undefined}>
+                                                                    <div className="flex items-center justify-between gap-2 mb-2">
+                                                                        <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : '#ffffff' }}>{mode.label}</span>
+                                                                        <span className="font-mono text-sm" title={mode.rank.name}>{mode.rank.icon}</span>
+                                                                    </div>
+                                                                    <div className="grid grid-cols-5 gap-1 text-[9px]">
+                                                                        <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                            <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Cnt</div>
+                                                                            <div className="font-mono text-gray-200">{mode.stats.shots}</div>
+                                                                        </div>
+                                                                        <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                            <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Win</div>
+                                                                            <div className="font-mono" style={{ color: countRowColors.wins }}>{mode.stats.success}</div>
+                                                                        </div>
+                                                                        <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                            <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Fail</div>
+                                                                            <div className="font-mono" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</div>
+                                                                        </div>
+                                                                        <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                            <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Rate</div>
+                                                                            <div className="font-mono" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</div>
+                                                                        </div>
+                                                                        <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                            <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Prb</div>
+                                                                            <div className="font-mono text-gray-400">{mode.problemCount}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            )}
                                             <div className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5 mt-2">
                                                 <div className="flex items-center justify-between gap-2 mb-2">
                                                     <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>Total</span>
