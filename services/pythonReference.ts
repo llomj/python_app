@@ -236,6 +236,12 @@ _('case', 'keyword', 'case pattern:', 'A pattern branch inside a match block.', 
 _('variable', 'concept', 'variable = value', 'A name that stores a reference to an object. Variables are created by assignment. No type declaration needed.', `x = 5\nname = "Alice"\nmy_list = [1, 2, 3]`);
 _('identifier', 'concept', '—', 'A name used to identify a variable, function, class, or module. Rules: letters, digits, underscores; cannot start with digit; case-sensitive.', `valid: my_var, _private, Var2\ninvalid: 2var, my-var, for (keyword)`);
 _('indentation', 'concept', '—', 'Python uses indentation (spaces or tabs) to define code blocks. Standard is 4 spaces. Mixing tabs and spaces is an error.', `def greet(name):\n    return f"Hello {name}"  # 4 spaces before return`);
+_('function', 'concept', 'def name(parameters):', 'A reusable block of code. A function can receive arguments, run statements, and return a result to the caller. Use functions when you want named, reusable logic instead of repeating code.', `def square(number):\n    return number ** 2\n\nanswer = square(5)\nprint(answer)  # 25`);
+_('module', 'concept', 'import module_name', 'A Python file or installed package you can import. Modules organize reusable code. For example, math is a module for mathematical tools, and your own file helper.py can also be imported as a module.', `import math\nprint(math.sqrt(16))  # 4.0\n\nfrom math import pi\nprint(pi)`);
+_('library', 'concept', 'collection of modules/packages', 'A library is a collection of reusable code, usually made of modules and packages. Python includes a standard library, and you can install third-party libraries such as requests, pandas, or numpy.', `import random\nprint(random.randint(1, 10))\n\n# random is from Python's standard library`);
+_('object-oriented programming', 'concept', 'class / object / attribute / method', 'Object-oriented programming groups data and behavior together. A class is a blueprint, an object is an instance of that blueprint, attributes store data, and methods are functions attached to the object.', `class Dog:\n    def __init__(self, name):\n        self.name = name  # attribute\n\n    def bark(self):      # method\n        return f"{self.name} says woof"\n\npet = Dog("Noll")\nprint(pet.bark())`);
+_('attribute', 'concept', 'object.attribute', 'An attribute is a value stored on an object. You access it with dot notation. Methods are also attributes, but they are callable functions attached to an object.', `class User:\n    def __init__(self, name):\n        self.name = name\n\nuser = User("Noll")\nprint(user.name)  # attribute access`);
+_('lambda expression', 'concept', 'lambda arguments: expression', 'A lambda is a small anonymous function written as one expression. Python evaluates the expression after the colon when the lambda is called. Use it for short callbacks, sorting keys, map/filter, or quick transformations.', `double = lambda x: x * 2\nprint(double(4))  # 8\n\nnums = [3, 1, 2]\nprint(sorted(nums, key=lambda x: -x))  # [3, 2, 1]`);
 _('slicing', 'concept', 'sequence[start:stop:step]', 'Extracts a portion of a sequence (string, list, tuple). Start INCLUSIVE, stop EXCLUSIVE. Negative indices count from the end.', `s = "python"\ns[0:3]    # "pyt"  (indices 0,1,2 — 3 is EXCLUDED)\ns[-3:]    # "hon"  (last 3)\ns[::-1]   # "nohtyp" (reverse)\ns[::2]    # "pto"  (every other)`);
 _('return vs print', 'concept', '—', 'return sends a value back to the caller (usable in code). print displays text to the console (not usable in code).', `def add(a, b):\n    return a + b    # caller can capture this\n\nx = add(2, 3)  # x = 5\n\nprint(5)  # shows "5" in console, but nothing captures it`);
 _('closure', 'concept', '—', 'A nested function that remembers variables from its enclosing scope even after the outer function finishes.', `def make_multiplier(n):\n    def multiplier(x):\n        return x * n  # "n" is remembered\n    return multiplier\n\ndouble = make_multiplier(2)\nprint(double(5))  # 10`);
@@ -813,11 +819,19 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   // ── Concept matching ─────────────────────────────────────────────────
   for (const e of Object.values(_ref)) {
     if (e.type !== 'concept') continue;
-    const patterns: RegExp[] = [
-      new RegExp(`\\b${e.name.replace(/[^a-z0-9 ]/g, '').toLowerCase().replace(/ /g, '\\s*')}\\b`, 'i'),
-    ];
+    const normalizedConceptName = e.name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+    const patterns: RegExp[] = normalizedConceptName
+      ? [new RegExp(`\\b${normalizedConceptName.replace(/ /g, '\\s*')}\\b`, 'i')]
+      : [];
     // Special case aliases
     if (e.name === 'return vs print') patterns.push(/return.*print|print.*return|difference between return and print|what.+(?:return|print).+do/i);
+    if (e.name === 'function') patterns.push(/what.*function|define.*function|def statement|function.*argument|function.*parameter|how.*function.*work/i);
+    if (e.name === 'module') patterns.push(/what.*module|import.*module|module.*import|python.*module|\.py file.*import/i);
+    if (e.name === 'library') patterns.push(/what.*library|standard library|third.?party library|library.*module|module.*library|package.*library/i);
+    if (e.name === 'object-oriented programming') patterns.push(/oop|object.oriented|object orientated|class.*object|what.*object|what.*class|class.*blueprint|instance.*object/i);
+    if (e.name === 'attribute') patterns.push(/what.*attribute|object attribute|dot notation|instance variable|self\.[a-z_]+/i);
+    if (e.name === 'lambda expression') patterns.push(/lambda.*order|lambda.*operation|lambda.*work|anonymous function|lambda expression|what.*lambda|explain.*lambda/i);
+    if (e.name === 'method vs function') patterns.push(/what.*method|method.*belong|method.*object|function.*method|method.*function/i);
     if (e.name === 'list vs dict') patterns.push(/list.*dict|dict.*list|difference between list and dict/i);
     if (e.name === 'for loop vs while loop') patterns.push(/for.*while|while.*for|difference between for and while/i);
     if (e.name === 'slicing') patterns.push(/inclusive.*exclusive|exclusive.*inclusive|start.*stop.*step|indexing.*slicing/i);
@@ -836,6 +850,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
     if (e.name === 'PEP 8 style') patterns.push(/pep.?8|style.*guide|coding.*style|python.*style/i);
     if (e.name === 'docstrings') patterns.push(/docstring|document.*string|__doc__|help.*function|triple.*quote/i);
     if (e.name === 'collections module') patterns.push(/defaultdict|Counter|deque|namedtuple|collections.*module/i);
+    if (e.name === 'closure') patterns.push(/nested.*function|inner.*function|function.*inside.*function|enclosing.*scope|remember.*variable/i);
     if (e.name === 'shallow vs deep copy') patterns.push(/shallow.*copy|deep.*copy|copy\.(copy|deepcopy)|copy.*module/i);
     if (e.name === 'property decorator') patterns.push(/@property|property.*decorator|getter|setter|computed.*attribute/i);
     if (e.name === 'instance vs class vs static methods') patterns.push(/classmethod|staticmethod|@classmethod|@staticmethod|instance.*method.*vs/i);

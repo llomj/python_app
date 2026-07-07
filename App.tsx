@@ -91,6 +91,102 @@ const isAiAutoWinReview = (review: AiReviewResult) => (
     review.confidence >= AI_AUTO_WIN_MIN_CONFIDENCE
 );
 
+const normalizeGeneralPythonQuestion = (rawQuestion: string): string => {
+    let normalized = rawQuestion.trim();
+    const replacements: Array<[RegExp, string]> = [
+        [/\blambada\b/gi, 'lambda'],
+        [/\bbullion\b/gi, 'boolean'],
+        [/\bbooleans?\b/gi, 'boolean'],
+        [/\bmodals?\b/gi, 'module'],
+        [/\bmoduls?\b/gi, 'module'],
+        [/\bobject orientated\b/gi, 'object-oriented'],
+        [/\bbuild in\b/gi, 'built-in'],
+        [/\bbuild-in\b/gi, 'built-in'],
+        [/\binner functions?\b/gi, 'nested functions closure'],
+        [/\bnested functions?\b/gi, 'nested functions closure'],
+    ];
+    for (const [pattern, value] of replacements) {
+        normalized = normalized.replace(pattern, value);
+    }
+    return normalized;
+};
+
+const isGeneralPythonFollowUp = (question: string): boolean => (
+    /^(expand|more|more detail|details|explain more|break it down|go deeper|examples?|give examples|syntax|show syntax|how does it work|why|when use|when should)/i.test(question.trim())
+);
+
+const buildGeneralAiClarification = (question: string): string => {
+    const lowerQ = question.toLowerCase();
+    const suggestions = [
+        '`What is indentation in Python?`',
+        '`Explain lambda with examples.`',
+        '`Difference between a function and a method.`',
+        '`List all Python built-in functions.`',
+        '`Difference between list, tuple, set, and dictionary.`',
+    ];
+
+    if (/\blambada\b/.test(lowerQ)) {
+        return [
+            '1. Clarification needed',
+            'Did you mean **`lambda`** in Python?',
+            '',
+            '2. Better question',
+            'Try: `What is lambda in Python and when should I use it?`',
+        ].join('\n');
+    }
+    if (/\b(modal|modul)\b/.test(lowerQ)) {
+        return [
+            '1. Clarification needed',
+            'Did you mean **module** in Python?',
+            '',
+            '2. Better question',
+            'Try: `What is a module in Python?` or `What is the difference between a module and a library?`',
+        ].join('\n');
+    }
+    if (/\b(method|methods)\b/.test(lowerQ) && !/\b(list|string|dict|dictionary|set|tuple)\b.*\bmethod|\bmethod.*\b(list|string|dict|dictionary|set|tuple)\b/.test(lowerQ)) {
+        return [
+            '1. Clarification needed',
+            'Methods belong to a specific object type, so I need the object you mean.',
+            '',
+            '2. Better questions',
+            '`List all string methods.`',
+            '`What does list.append() do?`',
+            '`Difference between a function and a method.`',
+        ].join('\n');
+    }
+    if (/\bbuilt.?in|\bfunction\b/.test(lowerQ) && !/\b(list|all|every|show|difference|specific)\b.*\bbuilt.?in|\bbuilt.?in.*\b(list|all|function)|\b[a-z_]+\(\)/.test(lowerQ)) {
+        return [
+            '1. Clarification needed',
+            'Are you asking for all **built-in functions**, a specific function, or the difference between functions and methods?',
+            '',
+            '2. Better questions',
+            '`List all Python built-in functions.`',
+            '`How does zip() work?`',
+            '`Difference between a function and a method.`',
+        ].join('\n');
+    }
+    if (/\b(error|exception|bug|fix|wrong|fail|my code|output)\b/.test(lowerQ)) {
+        return [
+            '1. I need code context',
+            'For code/output debugging, use the **Problem AI** button on the problem panel so I can read the current problem, your code, and the output together.',
+            '',
+            '2. Better question',
+            '`Why does this code fail for this problem?`',
+        ].join('\n');
+    }
+
+    return [
+        '1. I am not quite sure what you mean.',
+        'I do not want to guess and give the wrong Python explanation.',
+        '',
+        '2. Try one of these clearer questions',
+        suggestions.map((item, index) => `${index + 1}. ${item}`).join('\n'),
+        '',
+        '3. Tip',
+        'Name the concept, data type, method, built-in function, or error you want explained.',
+    ].join('\n');
+};
+
 const formatAiReviewHintText = (review: AiReviewResult) => (
     `${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`
 );
@@ -13015,7 +13111,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         'tuple': '# `tuple(iterable=())`\nCreates a tuple.\n```python\ntuple("abc")    # ("a", "b", "c")\ntuple([1, 2])   # (1, 2)\n```',
                         'set': '# `set(iterable=())`\nCreates a mutable set.\n```python\nset([1, 2, 2, 3])  # {1, 2, 3}\nset("hello")       # {"h", "e", "l", "o"}\n```',
                         'dict': '# `dict(**kwargs)`\nCreates a dictionary.\n```python\ndict(a=1, b=2)             # {"a": 1, "b": 2}\ndict([("a", 1), ("b", 2)]) # {"a": 1, "b": 2}\n```',
-                        'super': '# `super()`\nReturns a proxy object for calling parent methods.\n```python\nclass Child(Parent):\n    def __init__(self):\n        super().__init__()  # calls Parent.__init__\n```',
                     };
                     const doc = builtinDocs[func];
                     return doc || `# \`${func}()\`\nThis built-in function is used for standard Python operations. Try asking a more specific question about what you need it for, and I will show concrete examples.`;
@@ -13290,7 +13385,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 text: [
                     'Ask any Python question. I can explain concepts, list methods and built-ins, compare ideas, or help you understand code.',
                     '',
-                    'I can follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer. If I don\'t understand, I\'ll ask you to clarify.',
+                    'I can follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer. If your question is unclear, I will ask a clarification instead of guessing.',
                     '',
                     'Click **Save** to store the conversation or **Clear** to start fresh. View saved chats with the **Saved (N)** button.',
                 ].join('\n'),
@@ -13302,13 +13397,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
+        const previousUserQuestion = [...generalAiMessages].reverse().find(message => message.role === 'user')?.text || '';
+        const normalizedQuestion = normalizeGeneralPythonQuestion(question);
+        const effectiveQuestion = isGeneralPythonFollowUp(normalizedQuestion) && previousUserQuestion
+            ? normalizeGeneralPythonQuestion(`${previousUserQuestion}. ${normalizedQuestion}`)
+            : normalizedQuestion;
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setGeneralAiMessages(prev => [...prev, userMessage]);
         setGeneralAiDraft('');
         setGeneralAiRunning(true);
 
         try {
-            const refAnswer = answerGeneralPythonQuestion(question);
+            const refAnswer = answerGeneralPythonQuestion(effectiveQuestion);
             if (refAnswer) {
                 setGeneralAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
@@ -13320,29 +13420,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             }
             /* Offline model disabled — the 0.5B model hallucinates unreliable answers.
                Only the curated reference is used. If it doesn't match, we ask for clarification. */
-            const lowerQ = question.toLowerCase();
-            const clarification = [];
-            if (/\b(method|methods)\b/.test(lowerQ) && !/\b(list|string|dict|set|tuple)\b.*\bmethod|\bmethod.*\b(list|string|dict|set|tuple)\b/.test(lowerQ)) {
-                clarification.push('I see you\'re asking about methods. Do you mean: methods on a **list**, **string**, **dictionary**, **set**, or **tuple**? Try "list all string methods" or "list all dictionary methods."');
-            } else if (/\bbuilt.?in|\bfunction\b/.test(lowerQ) && !/\b(list|all|every|show)\b.*\bbuilt.?in|\bbuilt.?in.*\b(list|all)\b/.test(lowerQ)) {
-                clarification.push('Are you asking for a list of all **built-in functions**, or do you want to learn about a specific function? Try "list all built-in functions" or "how does zip() work?"');
-            } else if (/\b(print|return)\b/.test(lowerQ) && !/\b(differ|vs|versus|compare)\b/.test(lowerQ)) {
-                clarification.push('Are you asking about the difference between **print** and **return**? Try "what is the difference between print and return."');
-            } else if (/\b(error|exception|bug|fix|wrong|fail)\b/.test(lowerQ)) {
-                clarification.push('For error help, switch to the **Problem AI** tab and paste your code with the error output so I can review it.');
-            } else {
-                clarification.push('I didn\'t understand that. Try asking about a Python concept, method, built-in function, or difference between two things. For example: "list all string methods", "explain decorators", or "difference between list and tuple."');
-            }
             setGeneralAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: 'built_in',
-                text: clarification.join('\n'),
+                text: buildGeneralAiClarification(question),
             }]);
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [generalAiRunning]);
+    }, [generalAiMessages, generalAiRunning]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -14011,13 +14098,12 @@ print(result)
                     >
                         <button
                             onClick={openGeneralAi}
-                            className="flex h-8 flex-shrink-0 items-center gap-1 rounded-full border px-2 transition-all active:scale-95"
+                            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-all active:scale-95"
                             style={{ backgroundColor: hexToRgba(toolPanelColors.ai, 0.13), borderColor: hexToRgba(toolPanelColors.ai, 0.45), color: toolPanelColors.ai }}
                             title="General Python AI"
                             aria-label="Open General Python AI"
                         >
-                            <Bot size={15} />
-                            <span className="text-[10px] font-black uppercase tracking-[0.12em]">AI</span>
+                            <Bot size={16} />
                         </button>
                         <div
                             className="flex min-w-0 flex-1 items-center gap-3 overflow-x-auto whitespace-nowrap px-1 [-webkit-overflow-scrolling:touch]"
@@ -14971,6 +15057,31 @@ print(result)
                                         </button>
                                     </div>
                                     <p className="mt-1 text-xs text-gray-400">Ask any Python question. I can explain concepts, list methods and built-ins, or help you understand code. Follow up to dive deeper.</p>
+                                    <div
+                                        className="mt-3 rounded-2xl border p-3 text-xs leading-relaxed"
+                                        style={{
+                                            borderColor: hexToRgba(toolPanelColors.ai, 0.24),
+                                            backgroundColor: hexToRgba(toolPanelColors.ai, 0.08),
+                                        }}
+                                    >
+                                        <div className="mb-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
+                                            Interactive Python helper
+                                        </div>
+                                        <p className="text-gray-300">
+                                            Ask a clear Python question, then follow up with <span className="font-bold text-gray-100">expand</span>, <span className="font-bold text-gray-100">more detail</span>, or <span className="font-bold text-gray-100">give examples</span>. If the question is vague, I will ask what you mean instead of guessing.
+                                        </p>
+                                        <div className="mt-2 flex flex-wrap gap-1.5">
+                                            {['Explain indentation', 'Lambda order of operations', 'Function vs method'].map(example => (
+                                                <span
+                                                    key={example}
+                                                    className="rounded-full border px-2 py-1 text-[10px] font-bold text-gray-300"
+                                                    style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.22), backgroundColor: 'rgba(0,0,0,0.16)' }}
+                                                >
+                                                    {example}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
