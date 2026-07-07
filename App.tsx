@@ -305,31 +305,33 @@ interface ConceptMode {
     label: string;
     description: string;
     patterns: RegExp[];
+    excludePatterns?: RegExp[];
+    allowSolutionFallback?: boolean;
 }
 
 const PYTHON_CONCEPT_MODES: ConceptMode[] = [
-    { id: 'concept:functions', label: 'Functions', description: 'def, parameters, return values', patterns: [/\bfunction|def |parameter|argument|return\b/] },
-    { id: 'concept:for_loops', label: 'For Loops', description: 'Iterate over strings, lists, ranges', patterns: [/\bfor loop|for each|iterate|iteration|loop through|for\s+\w+\s+in\b/] },
-    { id: 'concept:while_loops', label: 'While Loops', description: 'Repeat while a condition is true', patterns: [/\bwhile loop|while\s+|repeat until|condition changes\b/] },
-    { id: 'concept:conditionals', label: 'Conditionals', description: 'if, elif, else, comparisons', patterns: [/\bif |elif|else|condition|conditional|greater than|less than|compare|comparison\b/] },
-    { id: 'concept:strings', label: 'Strings', description: 'Text, slicing, string methods', patterns: [/\bstring|str\b|character|substring|vowel|word|sentence|palindrome|anagram|\.split|\.join|\.strip|\.lower|\.upper|\.replace|\.isdigit|\.isalpha|slice|slicing/] },
-    { id: 'concept:lists', label: 'Lists', description: 'Lists, indexing, filtering, sorting', patterns: [/\blist|array|element|index|append|filter|sort|sorted|sublist|\[[^\]]*\]/] },
-    { id: 'concept:dictionaries', label: 'Dictionaries', description: 'dicts, keys, values, items', patterns: [/\bdict|dictionary|key-value|keys\(\)|values\(\)|items\(\)|frequency|histogram|mapping/] },
-    { id: 'concept:tuples', label: 'Tuples', description: 'Tuples, packing, unpacking', patterns: [/\btuple|tuples|unpack|packing|pair\b/] },
-    { id: 'concept:sets', label: 'Sets', description: 'Unique values and set operations', patterns: [/\bset|sets|unique|intersection|union|difference|duplicate|duplicates\b/] },
-    { id: 'concept:oop', label: 'OOP / Classes', description: 'Classes, objects, inheritance', patterns: [/\bclass|object|instance|self|__init__|inheritance|polymorphism|encapsulation\b/] },
-    { id: 'concept:closures', label: 'Closures', description: 'Nested functions and captured state', patterns: [/\bclosure|nested function|inner function|nonlocal|enclosing scope|decorator\b/] },
-    { id: 'concept:recursion', label: 'Recursion', description: 'Functions calling themselves', patterns: [/\brecursion|recursive|base case|call itself|factorial|fibonacci\b/] },
-    { id: 'concept:comprehensions', label: 'Comprehensions', description: 'List, dict, set comprehensions', patterns: [/\bcomprehension|list comprehension|dict comprehension|set comprehension|\bfor\b[^\n\]]+\bif\b/] },
-    { id: 'concept:lambdas', label: 'Lambda / Map', description: 'lambda, map, filter, reduce', patterns: [/\blambda|map\(|filter\(|reduce\(|partial\b/] },
-    { id: 'concept:generators', label: 'Generators', description: 'yield and lazy iteration', patterns: [/\bgenerator|yield|iterator|iterable\b/] },
-    { id: 'concept:files', label: 'Files', description: 'open, read, write, CSV, JSON', patterns: [/\bfile|open\(|read\(|write\(|csv|json|pathlib|with open\b/] },
-    { id: 'concept:exceptions', label: 'Exceptions', description: 'try, except, raise', patterns: [/\btry|except|finally|raise|error handling|exception\b/] },
-    { id: 'concept:regex', label: 'Regex', description: 'Regular expressions and patterns', patterns: [/\bregex|regular expression|re\.|match|search|findall|pattern\b/] },
-    { id: 'concept:math', label: 'Math', description: 'Arithmetic, primes, gcd, lcm', patterns: [/\bmath|sum|average|square|cube|prime|factorial|gcd|lcm|modulo|remainder|percentage|bmi|number\b/] },
-    { id: 'concept:sorting', label: 'Sorting', description: 'sort, sorted, key functions', patterns: [/\bsort|sorted|ascending|descending|key parameter|order\b/] },
-    { id: 'concept:patterns', label: 'Patterns', description: 'Stars, pyramids, grids', patterns: [/\bpattern|pyramid|triangle|hollow|star|grid|checkerboard\b/] },
-    { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport|module|random|datetime|time|collections|itertools|statistics\b/] },
+    { id: 'concept:functions', label: 'Functions', description: 'def, parameters, return values', patterns: [/\bwrite\s+a\s+python\s+function\b|\bdefine\s+(?:a\s+)?function\b|\bfunction\s+called\b/] },
+    { id: 'concept:for_loops', label: 'For Loops', description: 'Problems that explicitly require for loops', patterns: [/\busing\s+(?:a\s+)?for\s+loop\b|\buse\s+(?:a\s+)?for\s+loop\b|\bwith\s+(?:a\s+)?for\s+loop\b|\bfor\s+loop\b/], excludePatterns: [/\b(?:do not|don't|without|no)\s+use\s+(?:a\s+)?for\s+loop\b|\bwithout\s+for\s+loops?\b|\bno\s+for\s+loops?\b/] },
+    { id: 'concept:while_loops', label: 'While Loops', description: 'Problems that explicitly require while loops', patterns: [/\busing\s+(?:a\s+)?while\s+loop\b|\buse\s+(?:a\s+)?while\s+loop\b|\bwith\s+(?:a\s+)?while\s+loop\b|\bwhile\s+loop\b/], excludePatterns: [/\b(?:do not|don't|without|no)\s+use\s+(?:a\s+)?while\s+loop\b|\bwithout\s+while\s+loops?\b|\bno\s+while\s+loops?\b/] },
+    { id: 'concept:conditionals', label: 'Conditionals', description: 'if, elif, else, comparisons', patterns: [/\bif\b|\belif\b|\belse\b|\bconditional\b|\bcondition\b|\bgreater than\b|\bless than\b|\bcompare\b|\bcomparison\b|\btrue if\b|\bfalse otherwise\b/] },
+    { id: 'concept:strings', label: 'Strings', description: 'Text, slicing, string methods', patterns: [/\bstring\b|\bstrings\b|\bcharacter\b|\bsubstring\b|\bword\b|\bsentence\b|\bpalindrome\b|\banagram\b|\bisdigit\b|\bisalpha\b|\bsplit\(\)|join\(\)|strip\(\)|lower\(\)|upper\(\)|replace\(\)|\bslicing\b|\bslice\b/] },
+    { id: 'concept:lists', label: 'Lists', description: 'Lists, indexing, filtering, sorting', patterns: [/\blist\b|\blists\b|\barray\b|\belement\b|\bindex\b|\bappend\b|\bsublist\b/] },
+    { id: 'concept:dictionaries', label: 'Dictionaries', description: 'dicts, keys, values, items', patterns: [/\bdictionary\b|\bdictionaries\b|\bdict\b|\bkey-value\b|\bkeys\(\)|\bvalues\(\)|\bitems\(\)|\bfrequency\b|\bhistogram\b|\bmapping\b/] },
+    { id: 'concept:tuples', label: 'Tuples', description: 'Tuples, packing, unpacking', patterns: [/\btuple\b|\btuples\b|\bunpack\b|\bpacking\b/] },
+    { id: 'concept:sets', label: 'Sets', description: 'Unique values and set operations', patterns: [/\bset\b|\bsets\b|\bunique\b|\bintersection\b|\bunion\b|\bdifference\b|\bduplicates?\b/] },
+    { id: 'concept:oop', label: 'OOP / Classes', description: 'Classes, objects, inheritance', patterns: [/\bclass\b|\bobject\b|\binstance\b|\bself\b|\b__init__\b|\binheritance\b|\bpolymorphism\b|\bencapsulation\b/] },
+    { id: 'concept:closures', label: 'Closures', description: 'Nested functions and captured state', patterns: [/\bclosure\b|\bnested\s+function\b|\binner\s+function\b|\bnonlocal\b|\benclosing\s+scope\b/] },
+    { id: 'concept:recursion', label: 'Recursion', description: 'Functions calling themselves', patterns: [/\brecursion\b|\brecursive\b|\bbase\s+case\b|\bcall\s+itself\b/] },
+    { id: 'concept:comprehensions', label: 'Comprehensions', description: 'List, dict, set comprehensions', patterns: [/\bcomprehension\b|\blist\s+comprehension\b|\bdict\s+comprehension\b|\bset\s+comprehension\b/] },
+    { id: 'concept:lambdas', label: 'Lambda / Map', description: 'lambda, map, filter, reduce', patterns: [/\blambda\b|\bmap\(\)|\bfilter\(\)|\breduce\(\)|\busing\s+map\b|\busing\s+filter\b|\busing\s+reduce\b/] },
+    { id: 'concept:generators', label: 'Generators', description: 'yield and lazy iteration', patterns: [/\bgenerator\b|\byield\b|\biterator\b|\blazy\s+iteration\b/] },
+    { id: 'concept:files', label: 'Files', description: 'open, read, write, CSV, JSON', patterns: [/\bfile\b|\bfiles\b|\bopen\(\)|\bread\(\)|\bwrite\(\)|\bcsv\b|\bjson\b|\bpathlib\b|\bwith\s+open\b/] },
+    { id: 'concept:exceptions', label: 'Exceptions', description: 'try, except, raise', patterns: [/\btry\b|\bexcept\b|\bfinally\b|\braise\b|\berror\s+handling\b|\bexception\b/] },
+    { id: 'concept:regex', label: 'Regex', description: 'Regular expressions and patterns', patterns: [/\bregex\b|\bregular\s+expression\b|\bre\.(?:match|search|findall|sub|split)\b|\bpattern\s+matching\b/] },
+    { id: 'concept:math', label: 'Math', description: 'Arithmetic, primes, gcd, lcm', patterns: [/\barithmetic\b|\bsum\b|\baverage\b|\bsquare\b|\bcube\b|\bprime\b|\bfactorial\b|\bgcd\b|\blcm\b|\bmodulo\b|\bremainder\b|\bpercentage\b|\bbmi\b|\bnumber\b|\bnumbers\b/] },
+    { id: 'concept:sorting', label: 'Sorting', description: 'sort, sorted, key functions', patterns: [/\bsort\b|\bsorted\b|\bsorting\b|\bascending\b|\bdescending\b|\bkey\s+parameter\b|\border\b/] },
+    { id: 'concept:patterns', label: 'Patterns', description: 'Stars, pyramids, grids', patterns: [/\bpattern\b|\bpyramid\b|\btriangle\b|\bhollow\b|\bstar\b|\bgrid\b|\bcheckerboard\b/] },
+    { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport\b|\bmodule\b|\brandom\b|\bdatetime\b|\bcollections\b|\bitertools\b|\bstatistics\b/] },
 ];
 
 const MODE_OPTIONS = [...DIFFICULTY_MODES, ...PYTHON_CONCEPT_MODES] as Array<{ id: ProblemMode; label: string; description: string }>;
@@ -555,7 +557,7 @@ const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode,
 };
 
 const getExerciseConceptText = (exercise: Exercise, includeSolution = false) => (
-    `${exercise.title}\n${exercise.description}\n${exercise.initialCode}\n${exercise.hint}\n${exercise.breakdown || ''}\n${exercise.category}${includeSolution ? `\n${exercise.solution}` : ''}`.toLowerCase()
+    `${exercise.title}\n${exercise.description}\n${exercise.category}${includeSolution ? `\n${exercise.solution}` : ''}`.toLowerCase()
 );
 
 const getConceptForMode = (mode: ProblemMode) => (
@@ -564,21 +566,13 @@ const getConceptForMode = (mode: ProblemMode) => (
 
 const exerciseMatchesConcept = (exercise: Exercise, concept: ConceptMode) => {
     const primaryText = getExerciseConceptText(exercise);
+    if (concept.excludePatterns?.some(pattern => pattern.test(primaryText))) return false;
     if (concept.patterns.some(pattern => pattern.test(primaryText))) return true;
 
-    const solutionBackedConcepts = new Set<ConceptModeId>([
-        'concept:oop',
-        'concept:closures',
-        'concept:generators',
-        'concept:recursion',
-        'concept:files',
-        'concept:exceptions',
-        'concept:regex',
-        'concept:modules',
-    ]);
-    if (!solutionBackedConcepts.has(concept.id)) return false;
+    if (!concept.allowSolutionFallback) return false;
 
     const fullText = getExerciseConceptText(exercise, true);
+    if (concept.excludePatterns?.some(pattern => pattern.test(fullText))) return false;
     return concept.patterns.some(pattern => pattern.test(fullText));
 };
 
@@ -591,8 +585,7 @@ const getExercisePoolForMode = (mode: ProblemMode): Exercise[] => {
     if (mode === 'normal') return EXERCISES;
     const concept = getConceptForMode(mode);
     if (concept) {
-        const pool = EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
-        return pool.length > 0 ? pool : EXERCISES;
+        return EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
     }
     const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
     return pool.length > 0 ? pool : EXERCISES;
@@ -13138,7 +13131,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
+                                        <div className="max-h-64 space-y-2 overflow-y-auto overflow-x-hidden overscroll-contain pr-1" style={{ touchAction: 'pan-y' }}>
                                             {PYTHON_CONCEPT_MODES.map(concept => {
                                                 const isSelected = difficultyMode === concept.id;
                                                 const count = getExercisePoolForMode(concept.id).length;
@@ -13181,8 +13174,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
-                                    <div className="max-h-72 overflow-auto rounded-xl border border-[#1d2d44]">
-                                        <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
+                                    <div className="max-h-72 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44]" style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}>
+                                        <div className="overflow-x-auto overflow-y-hidden overscroll-contain" style={{ touchAction: 'pan-x', overscrollBehaviorX: 'contain', overscrollBehaviorY: 'none' }}>
+                                            <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
                                             <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
                                             <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
                                             <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
@@ -13206,6 +13200,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                             <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
                                             <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
                                             <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -13552,8 +13547,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
                                     <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
-                                        <div className="overflow-auto rounded-xl border border-[#1d2d44]">
-                                            <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
+                                        <div className="overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44]" style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}>
+                                            <div className="overflow-x-auto overflow-y-hidden overscroll-contain" style={{ touchAction: 'pan-x', overscrollBehaviorX: 'contain', overscrollBehaviorY: 'none' }}>
+                                                <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
                                                 <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
@@ -13577,6 +13573,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                                 <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
                                                 <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
                                                 <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
