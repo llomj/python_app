@@ -13317,7 +13317,7 @@ print(result)
                                                 <p className="mt-1 text-[10px] text-gray-400">Pick one topic and the app will randomize only matching problems.</p>
                                             </div>
                                             {selectedConceptMode && (
-                                                <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(countRowColors.count, 0.35), color: countRowColors.count }}>
+                                                <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: 'rgba(156, 163, 175, 0.4)', color: '#ffffff' }}>
                                                     {selectedConceptMode.label}
                                                 </span>
                                             )}
@@ -13331,13 +13331,13 @@ print(result)
                                                         key={concept.id}
                                                         onClick={() => handleDifficultyModeSelect(concept.id)}
                                                         className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
-                                                        style={isSelected ? { borderColor: '#4b5563', backgroundColor: 'rgba(55, 65, 81, 0.5)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#d1d5db' }}
+                                                        style={isSelected ? { borderColor: 'rgba(156, 163, 175, 0.5)', backgroundColor: 'rgba(55, 65, 81, 0.35)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
                                                     >
                                                         <span className="flex items-center justify-between gap-3">
                                                             <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
                                                             <span className="flex items-center gap-2 text-[10px] text-gray-400">
                                                                 {count} problems
-                                                                {isSelected && <Check size={14} className="text-gray-300" />}
+                                                                {isSelected && <Check size={14} className="text-white" />}
                                                             </span>
                                                         </span>
                                                         <span className="mt-1 block text-[10px] text-gray-400">{concept.description}</span>
