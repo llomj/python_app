@@ -10116,8 +10116,12 @@ const App: React.FC = () => {
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [showHowToUse, setShowHowToUse] = useState(false);
-    const [modeSectionOpen, setModeSectionOpen] = useState(true);
-    const [soundsSectionOpen, setSoundsSectionOpen] = useState(true);
+    const [modeSectionOpen, setModeSectionOpen] = useState(false);
+    const [soundsSectionOpen, setSoundsSectionOpen] = useState(false);
+    const [problemModeSectionOpen, setProblemModeSectionOpen] = useState(false);
+    const [statsByModeSectionOpen, setStatsByModeSectionOpen] = useState(false);
+    const [savedProblemsSectionOpen, setSavedProblemsSectionOpen] = useState(false);
+    const [idLogSectionOpen, setIdLogSectionOpen] = useState(false);
     const [aiHintText, setAiHintText] = useState<string>('');
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
@@ -13302,88 +13306,105 @@ print(result)
                                     )}
                                 </div>
 
-                                <div className="mb-6">
-                                    <label className="block text-sm font-bold mb-2 text-gray-200">
-                                        <span>Problem Mode</span>
-                                        <button onClick={() => setShowHowToUse(!showHowToUse)} className="inline-flex items-center justify-center ml-2 align-middle rounded-full p-1 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use Problem Mode and Concepts" style={{ color: countRowColors.count }}>
-                                            <Info size={18} />
-                                        </button>
-                                    </label>
-                                    <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
-                                        {DIFFICULTY_MODES.map(mode => {
-                                            const isSelected = difficultyMode === mode.id;
-                                            return (
-                                                <button
-                                                    key={mode.id}
-                                                    onClick={() => handleDifficultyModeSelect(mode.id)}
-                                                    className="w-full rounded-xl border px-3 py-2 text-left transition-colors hover:brightness-125"
-                                                    style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: hexToRgba(countRowColors.rate, 0.4), backgroundColor: 'rgba(7, 18, 37, 0.7)', color: countRowColors.rate }}
-                                                >
-                                                    <span className="flex items-center justify-between gap-3">
-                                                        <span className="text-xs font-black uppercase tracking-[0.16em]">{mode.label}</span>
-                                                        {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
-                                                    </span>
-                                                    <span className="mt-1 block text-[10px] text-gray-400">{mode.description}</span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                    <div className="mt-3 rounded-2xl border border-[#1d2d44] bg-[#050c18]/55 p-3">
-                                        <div className="mb-2 flex items-center justify-between gap-2">
-                                            <div>
-                                                <h4 className="m-0 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Choose Concept</h4>
-                                                <p className="mt-1 text-[10px] text-gray-400">Pick one topic and the app will randomize only matching problems.</p>
-                                            </div>
-                                            {selectedConceptMode && (
-                                                <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: 'rgba(156, 163, 175, 0.4)', color: '#ffffff' }}>
-                                                    {selectedConceptMode.label}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="max-h-64 space-y-2 overflow-y-auto overflow-x-hidden overscroll-contain pr-1" style={{ touchAction: 'pan-y' }}>
-                                            {PYTHON_CONCEPT_MODES.map(concept => {
-                                                const isSelected = difficultyMode === concept.id;
-                                                const count = getExercisePoolForMode(concept.id).length;
-                                                return (
-                                                    <button
-                                                        key={concept.id}
-                                                        onClick={() => handleDifficultyModeSelect(concept.id)}
-                                                        className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
-                                                        style={isSelected ? { borderColor: 'rgba(156, 163, 175, 0.5)', backgroundColor: 'rgba(55, 65, 81, 0.35)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
-                                                    >
-                                                        <span className="flex items-center justify-between gap-3">
-                                                            <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
-                                                            <span className="flex items-center gap-2 text-[10px] text-gray-400">
-                                                                {count} problems
-                                                                {isSelected && <Check size={14} className="text-white" />}
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <button
+                                        onClick={() => setProblemModeSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <label className="flex items-center gap-2 text-sm font-bold text-gray-200 pointer-events-none">
+                                            <span>Problem Mode</span>
+                                            <span onClick={(e) => { e.stopPropagation(); setShowHowToUse(!showHowToUse); }} className="inline-flex items-center justify-center rounded-full p-1 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use Problem Mode and Concepts" style={{ color: countRowColors.count }}>
+                                                <Info size={18} />
+                                            </span>
+                                        </label>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: problemModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {problemModeSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
+                                                {DIFFICULTY_MODES.map(mode => {
+                                                    const isSelected = difficultyMode === mode.id;
+                                                    return (
+                                                        <button
+                                                            key={mode.id}
+                                                            onClick={() => handleDifficultyModeSelect(mode.id)}
+                                                            className="w-full rounded-xl border px-3 py-2 text-left transition-colors hover:brightness-125"
+                                                            style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: hexToRgba(countRowColors.rate, 0.4), backgroundColor: 'rgba(7, 18, 37, 0.7)', color: countRowColors.rate }}
+                                                        >
+                                                            <span className="flex items-center justify-between gap-3">
+                                                                <span className="text-xs font-black uppercase tracking-[0.16em]">{mode.label}</span>
+                                                                {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
                                                             </span>
+                                                            <span className="mt-1 block text-[10px] text-gray-400">{mode.description}</span>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                            <div className="mt-3 rounded-2xl border border-[#1d2d44] bg-[#050c18]/55 p-3">
+                                                <div className="mb-2 flex items-center justify-between gap-2">
+                                                    <div>
+                                                        <h4 className="m-0 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Choose Concept</h4>
+                                                        <p className="mt-1 text-[10px] text-gray-400">Pick one topic and the app will randomize only matching problems.</p>
+                                                    </div>
+                                                    {selectedConceptMode && (
+                                                        <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: 'rgba(156, 163, 175, 0.4)', color: '#ffffff' }}>
+                                                            {selectedConceptMode.label}
                                                         </span>
-                                                        <span className="mt-1 block text-[10px] text-gray-400">{concept.description}</span>
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                    {showHowToUse && (
-                                        <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
-                                            <p className="font-bold text-white text-xs">Problem Mode</p>
-                                            <p><strong>Difficulty modes</strong> filter problems by how hard they are. <strong>Normal</strong> mixes everything together. <strong>Beginner</strong> is simple functions, strings, and lists. <strong>Intermediate</strong> adds loops, dictionaries, and patterns. <strong>Expert</strong> and <strong>Legend</strong> are harder challenges.</p>
-                                            <p className="font-bold text-white text-xs mt-3">Concepts</p>
-                                            <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic below. The app will only show problems that match that concept.</p>
-                                            <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
-                                            <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <CheckCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.win }} /> <strong>Win</strong> and <XCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.failed }} /> <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked — the more you get right, and the more problems you do, the higher your rank climbs.</p>
-                                            <p className="font-bold text-white text-xs mt-3">Ranking</p>
-                                            <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
+                                                    )}
+                                                </div>
+                                                <div className="max-h-64 space-y-2 overflow-y-auto overflow-x-hidden overscroll-contain pr-1" style={{ touchAction: 'pan-y' }}>
+                                                    {PYTHON_CONCEPT_MODES.map(concept => {
+                                                        const isSelected = difficultyMode === concept.id;
+                                                        const count = getExercisePoolForMode(concept.id).length;
+                                                        return (
+                                                            <button
+                                                                key={concept.id}
+                                                                onClick={() => handleDifficultyModeSelect(concept.id)}
+                                                                className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
+                                                                style={isSelected ? { borderColor: 'rgba(156, 163, 175, 0.5)', backgroundColor: 'rgba(55, 65, 81, 0.35)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
+                                                            >
+                                                                <span className="flex items-center justify-between gap-3">
+                                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
+                                                                    <span className="flex items-center gap-2 text-[10px] text-gray-400">
+                                                                        {count} problems
+                                                                        {isSelected && <Check size={14} className="text-white" />}
+                                                                    </span>
+                                                                </span>
+                                                                <span className="mt-1 block text-[10px] text-gray-400">{concept.description}</span>
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                            {showHowToUse && (
+                                                <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
+                                                    <p className="font-bold text-white text-xs">Problem Mode</p>
+                                                    <p><strong>Difficulty modes</strong> filter problems by how hard they are. <strong>Normal</strong> mixes everything together. <strong>Beginner</strong> is simple functions, strings, and lists. <strong>Intermediate</strong> adds loops, dictionaries, and patterns. <strong>Expert</strong> and <strong>Legend</strong> are harder challenges.</p>
+                                                    <p className="font-bold text-white text-xs mt-3">Concepts</p>
+                                                    <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic below. The app will only show problems that match that concept.</p>
+                                                    <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
+                                                    <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <CheckCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.win }} /> <strong>Win</strong> and <XCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.failed }} /> <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked — the more you get right, and the more problems you do, the higher your rank climbs.</p>
+                                                    <p className="font-bold text-white text-xs mt-3">Ranking</p>
+                                                    <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
+                                                </div>
+                                            )}
+                                            <p className="mt-2 text-[10px] text-gray-300">
+                                                Current mode: <span className="font-bold text-gray-100">{selectedModeLabel}</span> · {modeExerciseCount} matching problems. Normal mode uses all problems.
+                                            </p>
                                         </div>
                                     )}
-                                    <p className="mt-2 text-[10px] text-gray-300">
-                                        Current mode: <span className="font-bold text-gray-100">{selectedModeLabel}</span> · {modeExerciseCount} matching problems. Normal mode uses all problems.
-                                    </p>
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
-                                    <div className="max-h-72 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44]" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
+                                    <button
+                                        onClick={() => setStatsByModeSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: statsByModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {statsByModeSectionOpen && (
+                                        <div className="mt-3 max-h-72 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44] animate-in fade-in duration-200" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
                                         <div className="space-y-2 select-none" style={{ WebkitUserSelect: 'none', userSelect: 'none' }}>
                                             {statsRows.map(mode => {
                                                 const isSelected = difficultyMode === mode.id;
@@ -13448,12 +13469,21 @@ print(result)
                                             </div>
                                         </div>
                                     </div>
+                                )}
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
-                                        <Bookmark size={14} style={{ color: countRowColors.count }} /> Saved Problems
-                                    </h3>
+                                    <button
+                                        onClick={() => setSavedProblemsSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
+                                            <Bookmark size={14} style={{ color: countRowColors.count }} /> Saved Problems
+                                        </h3>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: savedProblemsSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {savedProblemsSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
                                     {savedProblems.length === 0 ? (
                                         <p className="text-[11px] text-gray-400 italic">No saved problems yet. Press Save on any problem to add it here.</p>
                                     ) : (
@@ -13528,12 +13558,22 @@ print(result)
                                         </div>
                                     )}
                                 </div>
+                            )}
+                                </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
-                                        <FileText size={14} style={{ color: countRowColors.rate }} /> ID Log
-                                    </h3>
-                                    <div className="mb-3 flex gap-2">
+                                    <button
+                                        onClick={() => setIdLogSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
+                                            <FileText size={14} style={{ color: countRowColors.rate }} /> ID Log
+                                        </h3>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: idLogSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {idLogSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <div className="mb-3 flex gap-2">
                                         <input
                                             type="number"
                                             min="1"
@@ -13629,6 +13669,8 @@ print(result)
                                             })}
                                         </div>
                                     )}
+                                </div>
+                            )}
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/80 p-4">
