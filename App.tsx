@@ -9658,6 +9658,57 @@ const formatDocSectionTitle = (title: string) => title
     .replace('COMMON OPERATIONS', 'Common Operations')
     .replace('COMMON METHODS', 'Common Methods');
 
+const isDocCodeHeavySection = (title: string) => ['EXAMPLES', 'COMMON OPERATIONS', 'COMMON METHODS'].includes(title);
+
+const buildDocCodePanelValue = (groups: DocLineGroup[], sectionTitle: string) => {
+    const lines: string[] = [];
+
+    for (const group of groups) {
+        if (group.type === 'code') {
+            lines.push(...group.lines, '');
+            continue;
+        }
+
+        const line = group.line.trim();
+        if (!line) continue;
+
+        if (/^Example\s+\d+:/i.test(line)) {
+            lines.push(`# ${line}`, '');
+            continue;
+        }
+
+        if (sectionTitle === 'COMMON OPERATIONS' || sectionTitle === 'COMMON METHODS') {
+            const operation = line.match(/^([^:]+):\s*(.+)$/);
+            if (operation) {
+                lines.push(`# ${operation[1].trim()}`, operation[2].trim(), '');
+            } else {
+                lines.push(`# ${line}`);
+            }
+        }
+    }
+
+    return lines.join('\n').trim();
+};
+
+function DocumentationCodePanel({ code, editorColors, accent }: { code: string; editorColors: EditorColorSettings; accent: string }) {
+    if (!code.trim()) return null;
+    return (
+        <div className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: hexToRgba(editorColors.panelBorder, 0.34), backgroundColor: hexToRgba(editorColors.background, 0.82) }}>
+            <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba(editorColors.panelBorder, 0.2), color: accent }}>
+                Python
+            </div>
+            <CodeMirror
+                value={code}
+                height="auto"
+                readOnly={true}
+                extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                theme="none"
+                basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
+            />
+        </div>
+    );
+}
+
 function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { content: string; editorColors: EditorColorSettings; panelColors: PanelColorSettings }) {
     const sections = useMemo(() => parseSyntaxDocumentation(content), [content]);
     const sectionAccents = [
@@ -9675,6 +9726,8 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
             {sections.map((section, sectionIndex) => {
                 const accent = sectionAccents[sectionIndex % sectionAccents.length] || editorColors.keyword;
                 const groups = groupDocLines(section.lines);
+                const codeHeavy = isDocCodeHeavySection(section.title);
+                const combinedCode = codeHeavy ? buildDocCodePanelValue(groups, section.title) : '';
                 return (
                     <section
                         key={section.title}
@@ -9694,31 +9747,15 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
                             </h3>
                             <div className="max-h-[34vh] space-y-2 overflow-y-auto pr-1 [-webkit-overflow-scrolling:touch]">
                                 {groups.map((group, index) => {
+                                    if (codeHeavy) {
+                                        if (index === 0) {
+                                            return <DocumentationCodePanel key={`${section.title}-combined-code`} code={combinedCode} editorColors={editorColors} accent={accent} />;
+                                        }
+                                        return null;
+                                    }
                                     if (group.type === 'code') {
                                         return (
-                                            <div
-                                                key={`${section.title}-code-${index}`}
-                                                className="overflow-hidden rounded-xl border"
-                                                style={{ borderColor: hexToRgba(editorColors.panelBorder, 0.34), backgroundColor: hexToRgba(editorColors.background, 0.82) }}
-                                            >
-                                                <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba(editorColors.panelBorder, 0.2), color: accent }}>
-                                                    Python
-                                                </div>
-                                                <pre
-                                                    className="overflow-x-auto whitespace-pre px-3 py-2 font-mono text-[11px] leading-relaxed"
-                                                    style={{
-                                                        color: editorColors.text,
-                                                        WebkitOverflowScrolling: 'touch',
-                                                    }}
-                                                >
-                                                    {group.lines.map((codeLine, lineIndex) => (
-                                                        <React.Fragment key={`${section.title}-code-${index}-${lineIndex}`}>
-                                                            {renderDocCodeLine(codeLine, editorColors, `${section.title}-code-${index}-${lineIndex}`)}
-                                                            {lineIndex < group.lines.length - 1 ? '\n' : ''}
-                                                        </React.Fragment>
-                                                    ))}
-                                                </pre>
-                                            </div>
+                                            <DocumentationCodePanel key={`${section.title}-code-${index}`} code={group.lines.join('\n')} editorColors={editorColors} accent={accent} />
                                         );
                                     }
 
@@ -13064,6 +13101,11 @@ print(result)
             {showModal !== 'none' && (
                 <div
                     className="fixed inset-0 backdrop-blur-md flex items-center justify-center p-4 z-[120] animate-in fade-in duration-200"
+                    onClick={(event) => {
+                        if (event.target === event.currentTarget) {
+                            setShowModal('none');
+                        }
+                    }}
                     style={{
                         backgroundColor: hexToRgba(panelColors.background, 0.82),
                         paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 1rem))',
@@ -13074,6 +13116,7 @@ print(result)
                 >
                     <div
                         className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
+                        onClick={(event) => event.stopPropagation()}
                         style={{
                             backgroundColor: hexToRgba(panelColors.background, showModal === 'settings' || showModal === 'customize' || showModal === 'stats_by_mode' ? 0.82 : 0.96),
                             borderColor: panelColors.border,
@@ -13083,7 +13126,7 @@ print(result)
                             maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
                     >
-                        <button onClick={() => setShowModal('none')} className="absolute top-4 right-4 text-gray-400 z-10" aria-label="Close modal"><X size={24} /></button>
+                        <button onClick={() => setShowModal('none')} className="absolute top-3 right-3 z-50 flex h-11 w-11 items-center justify-center rounded-full border text-gray-200 shadow-lg active:scale-95" style={{ backgroundColor: hexToRgba(panelColors.background, 0.92), borderColor: hexToRgba(panelColors.border, 0.9) }} aria-label="Close modal"><X size={24} /></button>
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full overflow-hidden">
                                 <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
@@ -13256,6 +13299,15 @@ print(result)
                                         </div>
                                     )}
                                 </div>
+                                <button
+                                    onClick={() => setShowModal('none')}
+                                    className="mt-3 flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
+                                    style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
+                                    aria-label="Back to main app"
+                                >
+                                    <X size={16} />
+                                    Back to App
+                                </button>
                             </div>
                         )}
                         {showModal === 'hint' && (
