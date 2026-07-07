@@ -48,6 +48,7 @@ import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
+import { answerGeneralPythonQuestion } from './services/pythonReference';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -10620,6 +10621,7 @@ const App: React.FC = () => {
     const [problemAiRunning, setProblemAiRunning] = useState(false);
     const [problemAiProblemId, setProblemAiProblemId] = useState<number | null>(null);
     const [problemAiEnabled, setProblemAiEnabled] = useState(() => localStorage.getItem('python_problem_ai_enabled') !== 'false');
+    const [problemAiSearch, setProblemAiSearch] = useState('');
     const [generalAiMessages, setGeneralAiMessages] = useState<ProblemAiMessage[]>([]);
     const [generalAiDraft, setGeneralAiDraft] = useState('');
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
@@ -10917,6 +10919,20 @@ const App: React.FC = () => {
         const intervalId = window.setInterval(() => setOfflineAiNow(Date.now()), 1000);
         return () => window.clearInterval(intervalId);
     }, [offlineAiState.status]);
+
+    // Auto-download offline AI model on first launch
+    useEffect(() => {
+        if (offlineAiState.status === 'idle' || offlineAiState.status === 'failed') {
+            const opId = ++offlineAiOperationRef.current;
+            downloadOfflineAiModel(offlineAiState, next => {
+                if (opId === offlineAiOperationRef.current) {
+                    setOfflineAiState(next);
+                }
+            }).catch(() => {
+                // Silent fail — user can retry via button
+            });
+        }
+    }, []);
 
     useEffect(() => {
         keyboardHapticsRef.current = keyboardHaptics;
@@ -13100,6 +13116,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             },
         ];
 
+        // ── Python Reference lookup (for general Python questions) ──────
+        const refAnswer = answerGeneralPythonQuestion(q);
+        if (refAnswer) {
+            // Also include existing concept answers as supplementary info
+            const conceptAnswer = conceptAnswers.find(item => item.pattern.test(q));
+            if (conceptAnswer) {
+                return refAnswer + '\n\n' + conceptAnswer.text;
+            }
+            return refAnswer;
+        }
+
         if (asksDigitMethod) {
             return [
                 '1. Yes — `isdigit()` is a string method.',
@@ -13193,7 +13220,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         if (!referencesProblem) {
             if (!conceptAnswer) {
-                return "I'm ready to answer that. Ask the AI below — it can answer any Python question including methods, built-ins, closures, slicing, order of operations, and more.";
+                return "I don't have information about that in my built-in reference. Try asking the offline AI (load the model above) — it can answer any Python question including methods, built-ins, closures, slicing, order of operations, and more.\n\nIf you're asking about something unrelated to Python, I can only answer Python questions.";
             }
         }
 
@@ -15314,8 +15341,21 @@ print(result)
                                     </div>
                                 </div>
 
+                                <div className="relative flex-shrink-0">
+                                    <input
+                                        value={problemAiSearch}
+                                        onChange={e => setProblemAiSearch(e.target.value)}
+                                        placeholder="Search conversation..."
+                                        className="w-full rounded-xl border bg-[#050c18] px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2) }}
+                                    />
+                                </div>
                                 <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
-                                    {problemAiMessages.map(message => (
+                                    {problemAiMessages.filter(m => {
+                                        if (!problemAiSearch.trim()) return true;
+                                        const s = problemAiSearch.toLowerCase();
+                                        return m.text.toLowerCase().includes(s);
+                                    }).map(message => (
                                         <div
                                             key={message.id}
                                             className="rounded-2xl border p-3"
