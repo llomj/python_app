@@ -342,6 +342,7 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 interface ConceptDocGuide {
+    shape?: string;
     simple: string;
     intermediate: string;
     inDepth: string;
@@ -352,6 +353,7 @@ interface ConceptDocGuide {
 const buildConceptDoc = (title: string, description: string, guide: ConceptDocGuide) => `OVERVIEW:
 ${title}
 ${description}
+${guide.shape ? `Quick shape: ${guide.shape}` : ''}
 Use this tab as a concept reference while solving the current problem.
 
 SIMPLE EXPLANATION:
@@ -399,6 +401,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['if condition:', 'elif other_condition:', 'else:', 'and, or, not', '==, !=, <, >, <=, >=']
     },
     'concept:dictionaries': {
+        shape: 'dictionary = {"key": value, "name": "Ada"}',
         simple: 'A dictionary stores key-value pairs so you can look up a value by its key.',
         intermediate: 'Use dictionaries for mappings, counters, grouping, and structured data. Keys must be hashable, such as strings, numbers, or tuples.',
         inDepth: 'Dictionary access with dict[key] raises KeyError if the key is missing; dict.get(key, default) is safer for optional keys. Iterating over a dictionary gives keys by default; use .items() for key-value pairs.',
@@ -420,6 +423,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['open(path, "r")', 'open(path, "w")', 'file.read(), file.readlines()', 'file.write(text)', 'json.loads(), json.dumps()']
     },
     'concept:for_loops': {
+        shape: 'for item in iterable:',
         simple: 'A for loop repeats code once for each item in a sequence.',
         intermediate: 'Use a for loop when you know what collection or range you want to process. Each pass takes the next item, runs the loop body, and updates your result.',
         inDepth: 'For loops work with any iterable: lists, strings, dictionaries, ranges, files, and generators. Use enumerate() when you need indexes and zip() when processing two iterables together.',
@@ -427,6 +431,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['for item in items:', 'for i in range(5):', 'for index, item in enumerate(items):', 'break, continue', 'append results inside the loop']
     },
     'concept:functions': {
+        shape: 'def function_name(parameters):\n    return result',
         simple: 'A function is a reusable block of code that can receive inputs and return an output.',
         intermediate: 'Use parameters for inputs and return for the answer. Printing shows information, but return sends the value back to the caller.',
         inDepth: 'Good functions have clear names, predictable parameters, and one main job. The grader usually calls the required function with hidden tests, so the function must return the correct value for many inputs.',
@@ -455,6 +460,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['lambda x: expression', 'map(function, iterable)', 'filter(function, iterable)', 'sorted(items, key=lambda item: ...)', 'functools.reduce(function, iterable)']
     },
     'concept:lists': {
+        shape: 'items = [1, 2, 3]',
         simple: 'A list stores ordered values that can be changed.',
         intermediate: 'Use indexing to access one item, slicing to take a range, append to add, and loops or comprehensions to transform items.',
         inDepth: 'Lists preserve order and allow duplicates. Many list methods mutate the list in place. Be clear whether the problem asks for a new list or changes to the existing list.',
@@ -518,6 +524,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['\\d digit, \\w word char, \\s whitespace', '+ one or more, * zero or more, ? optional', '[] character set, () group', '^ start, $ end, \\b word boundary', 'search(), findall(), sub(), split(), fullmatch()']
     },
     'concept:sets': {
+        shape: 'unique_items = {1, 2, 3}',
         simple: 'A set stores unique values with no guaranteed order.',
         intermediate: 'Use sets to remove duplicates and compare groups. Set operations can find intersection, union, difference, and membership quickly.',
         inDepth: 'Sets are unordered, so do not rely on position. Set elements must be hashable. Convert back to a list if the problem expects a list result.',
@@ -539,6 +546,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['indexing: text[i]', 'slicing: text[start:stop:step]', 'lower(), upper(), strip()', 'split(), join(), replace()', 'isdigit(), isalpha(), startswith()']
     },
     'concept:tuples': {
+        shape: 'point = (3, 4)',
         simple: 'A tuple is an ordered collection that usually should not be changed.',
         intermediate: 'Use tuples for fixed groups of values and unpacking. They are useful for returning multiple values from a function.',
         inDepth: 'Tuples are immutable, but can contain mutable objects. Tuple unpacking assigns multiple variables at once, and starred unpacking captures extra values.',
@@ -560,6 +568,7 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         common: ['name = value', 'update with +=, -=, *=', 'local variables inside functions', 'global variables outside functions', 'clear descriptive names']
     },
     'concept:while_loops': {
+        shape: 'while condition:',
         simple: 'A while loop repeats while a condition stays True.',
         intermediate: 'Use while loops when you do not know exactly how many repetitions are needed before starting. Update the condition inside the loop.',
         inDepth: 'A while loop can run forever if the condition never becomes False. Use counters, sentinels, or break carefully to control the loop.',
@@ -9561,40 +9570,87 @@ const parseSyntaxDocumentation = (content: string): SyntaxDocSection[] => {
     return sections.filter(section => section.lines.some(line => line.trim()));
 };
 
-function SyntaxDocumentationPanel({ content }: { content: string }) {
+const getDocTokenColor = (token: string, editorColors: EditorColorSettings) => {
+    if (/^#/.test(token)) return editorColors.comment;
+    if (/^(['"]).*\1$/.test(token)) return editorColors.string;
+    if (/^\d+(?:\.\d+)?$/.test(token)) return editorColors.number;
+    if (PYTHON_KEYWORDS.includes(token)) return editorColors.keyword;
+    if (PYTHON_BUILTINS.includes(token)) return editorColors.builtin;
+    if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(token)) return editorColors.identifier;
+    return editorColors.text;
+};
+
+const renderDocCodeLine = (code: string, editorColors: EditorColorSettings, keyPrefix: string) => {
+    const tokens = code.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b|\s+|./g) || [code];
+    return tokens.map((token, index) => (
+        <span key={`${keyPrefix}-${index}`} style={{ color: /^\s+$/.test(token) ? undefined : getDocTokenColor(token, editorColors) }}>
+            {token}
+        </span>
+    ));
+};
+
+function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { content: string; editorColors: EditorColorSettings; panelColors: PanelColorSettings }) {
     const sections = useMemo(() => parseSyntaxDocumentation(content), [content]);
+    const sectionAccents = [
+        editorColors.keyword,
+        editorColors.string,
+        editorColors.builtin,
+        editorColors.number,
+        editorColors.identifier,
+        editorColors.comment,
+    ];
+    const panelAlpha = Math.max(0.18, Math.min(0.78, panelColors.alpha / 100));
 
     return (
-        <div className="space-y-3 p-3 text-xs text-gray-200">
-            {sections.map(section => {
-                const style = SYNTAX_SECTION_STYLES[section.title] ?? {
-                    border: 'border-[#1d2d44]',
-                    bg: 'bg-[#071225]',
-                    title: 'text-gray-200',
-                    dot: 'bg-gray-400'
-                };
+        <div className="space-y-3 p-3 text-xs" style={{ color: editorColors.text }}>
+            {sections.map((section, sectionIndex) => {
+                const accent = sectionAccents[sectionIndex % sectionAccents.length] || editorColors.keyword;
                 return (
-                    <section key={section.title} className={`rounded-2xl border ${style.border} ${style.bg} p-3 shadow-lg`}>
-                        <h3 className={`mb-3 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em] ${style.title}`}>
-                            <span className={`h-2 w-2 rounded-full ${style.dot}`} />
+                    <section
+                        key={section.title}
+                        className="rounded-2xl border p-3 shadow-lg"
+                        style={{
+                            borderColor: hexToRgba(accent, 0.34),
+                            backgroundColor: hexToRgba(panelColors.background, panelAlpha),
+                            boxShadow: `0 14px 28px ${hexToRgba(editorColors.background, 0.32)}`,
+                        }}
+                    >
+                        <h3 className="mb-3 flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.16em]" style={{ color: accent }}>
+                            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: accent }} />
                             {section.title.replace('EVALUATION ORDER', 'Evaluation Order').replace('EXECUTION ORDER', 'Execution Order').replace('EXECUTION FLOW', 'Execution Flow').replace('SYNTAX', 'Syntax')}
                         </h3>
                         <div className="space-y-1.5">
                             {section.lines.map((line, index) => {
-                                const trimmed = line.trim();
+                                const raw = line.replace(/\s+$/g, '');
+                                const trimmed = raw.trim();
                                 const isCode = /^[A-Za-z_][\w.]*\(|^(def|class|if|for|while|return|print|import|from)\b|^[A-Za-z_]\w*\s*=/.test(trimmed);
+                                const isIndentedCode = /^\s{2,}\S/.test(raw);
                                 const isFlow = trimmed.startsWith('→') || trimmed.startsWith('def blocks') || trimmed.startsWith('Execution starts');
                                 return (
-                                    <div
+                                    isCode || isIndentedCode ? (
+                                        <pre
+                                            key={`${section.title}-${index}`}
+                                            className="overflow-x-auto whitespace-pre rounded-lg border px-3 py-2 font-mono text-[11px] leading-relaxed"
+                                            style={{
+                                                borderColor: hexToRgba(editorColors.panelBorder, 0.35),
+                                                backgroundColor: hexToRgba(editorColors.background, 0.88),
+                                                color: editorColors.text,
+                                                WebkitOverflowScrolling: 'touch',
+                                            }}
+                                        >
+                                            {renderDocCodeLine(raw, editorColors, `${section.title}-${index}`)}
+                                        </pre>
+                                    ) : (
+                                        <div
                                         key={`${section.title}-${index}`}
-                                        className={isCode
-                                            ? 'rounded-lg border border-[#1d2d44] bg-[#050c18]/85 px-3 py-2 font-mono text-[11px] leading-relaxed text-[#e5e7eb]'
-                                            : isFlow
-                                                ? 'rounded-lg bg-black/20 px-3 py-2 font-mono text-[11px] leading-relaxed text-[#d8b4fe]'
-                                                : 'leading-relaxed text-gray-300'}
-                                    >
-                                        {trimmed}
-                                    </div>
+                                            className={isFlow ? 'rounded-lg px-3 py-2 font-mono text-[11px] leading-relaxed' : 'leading-relaxed'}
+                                            style={isFlow
+                                                ? { backgroundColor: hexToRgba(accent, 0.1), color: accent }
+                                                : { color: editorColors.text }}
+                                        >
+                                            {renderAiParagraphText(trimmed, editorColors, `${section.title}-${index}`)}
+                                        </div>
+                                    )
                                 );
                             })}
                         </div>
@@ -13008,8 +13064,11 @@ print(result)
                             </div>
                         )}
                         {showModal === 'solution' && (
-                            <div className="flex flex-col h-full overflow-hidden">
-                                <div className="mb-4 mx-1 mt-1 overflow-x-auto border-b border-[#1d2d44] [-webkit-overflow-scrolling:touch]">
+                            <div className="flex h-full min-h-0 flex-col overflow-hidden">
+                                <div
+                                    className="sticky top-0 z-10 mb-4 mx-1 mt-1 flex-shrink-0 overflow-x-auto border-b [-webkit-overflow-scrolling:touch]"
+                                    style={{ borderColor: panelColors.border, backgroundColor: hexToRgba(editorColors.panelBackground, 0.92), touchAction: 'pan-x' }}
+                                >
                                     <div className="flex w-max min-w-full gap-4 whitespace-nowrap pr-4">
                                         <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label="Solution" />
                                         <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label="Logic" />
@@ -13020,7 +13079,7 @@ print(result)
                                         )}
                                     </div>
                                 </div>
-                                <div className="flex-grow overflow-y-auto">
+                                <div className="min-h-0 flex-grow overflow-y-auto">
                                     {solutionTab === 'code' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
@@ -13070,7 +13129,7 @@ print(result)
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {syntaxContent ? (
-                                                    <SyntaxDocumentationPanel content={syntaxContent} />
+                                                    <SyntaxDocumentationPanel content={syntaxContent} editorColors={editorColors} panelColors={panelColors} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         Searching syntax documentation...
@@ -13086,7 +13145,7 @@ print(result)
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {conceptDocContent ? (
-                                                    <SyntaxDocumentationPanel content={conceptDocContent} />
+                                                    <SyntaxDocumentationPanel content={conceptDocContent} editorColors={editorColors} panelColors={panelColors} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         No concept documentation available.
