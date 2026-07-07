@@ -13870,16 +13870,49 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setGeneralAiRunning(true);
 
         try {
+            const refAnswer = answerGeneralPythonQuestion(question);
+            if (refAnswer) {
+                setGeneralAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: refAnswer,
+                }]);
+                return;
+            }
+            const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState);
+            if (generalAnswer) {
+                setGeneralAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'offline',
+                    text: generalAnswer,
+                }]);
+                return;
+            }
+            const lowerQ = question.toLowerCase();
+            const clarification = [];
+            if (/\b(method|methods)\b/.test(lowerQ) && !/\b(list|string|dict|set|tuple)\b.*\bmethod|\bmethod.*\b(list|string|dict|set|tuple)\b/.test(lowerQ)) {
+                clarification.push('I see you\'re asking about methods. Do you mean: methods on a **list**, **string**, **dictionary**, **set**, or **tuple**? Try "list all string methods" or "list all dictionary methods."');
+            } else if (/\bbuilt.?in|\bfunction\b/.test(lowerQ) && !/\b(list|all|every|show)\b.*\bbuilt.?in|\bbuilt.?in.*\b(list|all)\b/.test(lowerQ)) {
+                clarification.push('Are you asking for a list of all **built-in functions**, or do you want to learn about a specific function? Try "list all built-in functions" or "how does zip() work?"');
+            } else if (/\b(print|return)\b/.test(lowerQ) && !/\b(differ|vs|versus|compare)\b/.test(lowerQ)) {
+                clarification.push('Are you asking about the difference between **print** and **return**? Try "what is the difference between print and return."');
+            } else if (/\b(error|exception|bug|fix|wrong|fail)\b/.test(lowerQ)) {
+                clarification.push('For error help, switch to the **Problem AI** tab and paste your code with the error output so I can review it.');
+            } else {
+                clarification.push('I didn\'t understand that. Try asking about a Python concept, method, built-in function, or difference between two things. For example: "list all string methods", "explain decorators", or "difference between list and tuple."');
+            }
             setGeneralAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: 'built_in',
-                text: buildBuiltInGeneralAiAnswer(question),
+                text: clarification.join('\n'),
             }]);
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [buildBuiltInGeneralAiAnswer, generalAiRunning]);
+    }, [answerGeneralPythonWithAvailableAi, generalAiRunning, offlineAiState]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -15438,17 +15471,52 @@ print(result)
                         )}
                         {showModal === 'general_ai' && (
                             <div className="flex h-full min-h-0 flex-col gap-3">
-                                <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
-                                    <div className="min-w-0 flex-1">
-                                        <div className="flex items-center gap-2">
-                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>General Python AI</h2>
-                                            <span className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.12) }}>
-                                                Built-in
-                                            </span>
-                                        </div>
-                                        <p className="mt-1 text-xs text-gray-400">Ask any Python concept question. This is separate from the problem-specific AI.</p>
+                            <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
+                                <div className="min-w-0 flex-1">
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>General Python AI</h2>
+                                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.12) }}>
+                                            Built-in
+                                        </span>
+                                        <button
+                                            onClick={() => {
+                                                const text = generalAiMessages.map(m =>
+                                                    `${m.role === 'user' ? 'You' : 'AI'}: ${m.text}`
+                                                ).join('\n\n---\n\n');
+                                                const blob = new Blob([text], { type: 'text/plain' });
+                                                const url = URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = `python-conversation-${Date.now()}.txt`;
+                                                a.click();
+                                                URL.revokeObjectURL(url);
+                                            }}
+                                            className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                            style={{
+                                                borderColor: hexToRgba('#22c55e', 0.35),
+                                                color: '#86efac',
+                                                backgroundColor: hexToRgba('#22c55e', 0.1),
+                                            }}
+                                            title="Save conversation as text file"
+                                        >
+                                            Save
+                                        </button>
+                                        <button
+                                            onClick={() => setGeneralAiMessages([])}
+                                            className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                            style={{
+                                                borderColor: hexToRgba('#ef4444', 0.35),
+                                                color: '#fca5a5',
+                                                backgroundColor: hexToRgba('#ef4444', 0.1),
+                                            }}
+                                            title="Clear conversation"
+                                        >
+                                            Clear
+                                        </button>
                                     </div>
+                                    <p className="mt-1 text-xs text-gray-400">Ask any Python concept question. This is separate from the problem-specific AI.</p>
                                 </div>
+                            </div>
 
 
 
