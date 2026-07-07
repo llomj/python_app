@@ -34,7 +34,8 @@ import {
     ChevronUp,
     Bookmark,
     Terminal,
-    BarChart3
+    BarChart3,
+    Sparkles
 } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
@@ -10596,7 +10597,7 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai' | 'problem_mode_help'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai' | 'general_ai' | 'problem_mode_help'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax' | 'concept'>('code');
@@ -10619,6 +10620,10 @@ const App: React.FC = () => {
     const [problemAiRunning, setProblemAiRunning] = useState(false);
     const [problemAiProblemId, setProblemAiProblemId] = useState<number | null>(null);
     const [problemAiEnabled, setProblemAiEnabled] = useState(() => localStorage.getItem('python_problem_ai_enabled') !== 'false');
+    const [generalAiMessages, setGeneralAiMessages] = useState<ProblemAiMessage[]>([]);
+    const [generalAiDraft, setGeneralAiDraft] = useState('');
+    const [generalAiRunning, setGeneralAiRunning] = useState(false);
+    const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -12011,6 +12016,399 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         return parts.join('\n\n');
     }, [exercise, output, outputStatus]);
 
+    const buildBuiltInGeneralAiAnswer = useCallback((question: string): string => {
+        const q = question.toLowerCase().trim();
+        const includes = (...words: string[]) => words.some(word => q.includes(word));
+        const topic = (() => {
+            if (includes('list', 'array')) return 'list';
+            if (includes('dict', 'dictionary', 'mapping', 'key value', 'key-value')) return 'dictionary';
+            if (includes('closure', 'closures')) return 'closure';
+            if (includes('tuple')) return 'tuple';
+            if (includes('set')) return 'set';
+            if (includes('string', 'str')) return 'string';
+            if (includes('function', ' def ', 'parameter', 'argument')) return 'function';
+            if (includes('class', 'object', 'oop', 'inheritance')) return 'oop';
+            if (includes('for loop', 'for loops')) return 'for loop';
+            if (includes('while loop', 'while loops')) return 'while loop';
+            if (includes('loop')) return 'loop';
+            if (includes('lambda')) return 'lambda';
+            if (includes('comprehension')) return 'comprehension';
+            if (includes('decorator')) return 'decorator';
+            if (includes('generator', 'yield')) return 'generator';
+            if (includes('exception', 'try', 'except', 'error handling')) return 'exception';
+            if (includes('regex', 'regular expression')) return 'regex';
+            if (includes('method')) return 'method';
+            if (includes('boolean', 'bool', 'true', 'false')) return 'boolean';
+            if (includes('return', 'print')) return 'return vs print';
+            if (includes('slice', 'slicing', 'index')) return 'indexing';
+            return 'python';
+        })();
+
+        const answers: Record<string, string> = {
+            list: [
+                '1. What a list is',
+                'A `list` is an ordered, changeable collection. Use it when position matters or when you need to store many values together.',
+                '',
+                '2. Basic syntax',
+                '```python',
+                'numbers = [10, 20, 30]',
+                "names = ['Ada', 'Bo', 'Cy']",
+                'print(numbers[0])   # 10',
+                '```',
+                '',
+                '3. Important rules',
+                'Lists use square brackets `[]`. Indexing starts at `0`. Lists are mutable, so methods like `.append()`, `.pop()`, and `.sort()` can change the list.',
+                '',
+                '4. Common operations',
+                '```python',
+                'items = [3, 1, 2]',
+                'items.append(4)',
+                'items.remove(1)',
+                'print(len(items))',
+                'print(sorted(items))',
+                '```',
+            ].join('\n'),
+            dictionary: [
+                '1. What a dictionary is',
+                'A `dict` stores key-value pairs. Use it when you want to look up data by a name, label, ID, or category instead of by position.',
+                '',
+                '2. Basic syntax',
+                '```python',
+                "person = {'name': 'Ada', 'age': 30}",
+                "print(person['name'])  # Ada",
+                '```',
+                '',
+                '3. Important rules',
+                'Keys must be unique and hashable, such as strings, numbers, booleans, or tuples. Values can be almost anything. `data[key]` raises `KeyError` if the key is missing; `data.get(key, default)` is safer.',
+                '',
+                '4. Common patterns',
+                '```python',
+                'counts = {}',
+                'for word in words:',
+                '    counts[word] = counts.get(word, 0) + 1',
+                '',
+                'for key, value in counts.items():',
+                '    print(key, value)',
+                '```',
+            ].join('\n'),
+            closure: [
+                '1. What a closure is',
+                'A closure is an inner function that remembers variables from the outer function even after the outer function has finished running.',
+                '',
+                '2. Basic syntax',
+                '```python',
+                'def make_adder(amount):',
+                '    def add(number):',
+                '        return number + amount',
+                '    return add',
+                '',
+                'add_five = make_adder(5)',
+                'print(add_five(10))  # 15',
+                '```',
+                '',
+                '3. Why it is useful',
+                'Closures let you create customized functions. The outer function stores configuration, and the inner function uses it later.',
+                '',
+                '4. Rule to remember',
+                'Use `nonlocal` only when the inner function needs to reassign a variable from the outer function.',
+            ].join('\n'),
+            tuple: [
+                '1. What a tuple is',
+                'A `tuple` is an ordered collection like a list, but it cannot be changed after creation.',
+                '',
+                '2. Example',
+                '```python',
+                'point = (3, 4)',
+                'x, y = point',
+                'print(x, y)',
+                '```',
+                '',
+                '3. When to use it',
+                'Use tuples for fixed data, coordinates, multiple return values, or dictionary keys when the values inside are hashable.',
+            ].join('\n'),
+            set: [
+                '1. What a set is',
+                'A `set` stores unique values only. It is useful for removing duplicates and fast membership checks.',
+                '',
+                '2. Example',
+                '```python',
+                'numbers = {1, 2, 2, 3}',
+                'print(numbers)  # {1, 2, 3}',
+                'print(2 in numbers)  # True',
+                '```',
+            ].join('\n'),
+            string: [
+                '1. What a string is',
+                'A `str` is text. Strings are written in quotes and behave like sequences of characters.',
+                '',
+                '2. Example',
+                '```python',
+                "word = 'Python'",
+                'print(word[0])     # P',
+                'print(word[-1])    # n',
+                'print(word.lower())',
+                '```',
+                '',
+                '3. Common methods',
+                'Use `.lower()`, `.upper()`, `.strip()`, `.split()`, `.replace()`, `.isdigit()`, and `.isalpha()`.',
+            ].join('\n'),
+            function: [
+                '1. What a function is',
+                'A function is a reusable block of code. It can receive inputs called parameters and send back an answer with `return`.',
+                '',
+                '2. Example',
+                '```python',
+                'def square(number):',
+                '    return number ** 2',
+                '',
+                'print(square(5))  # 25',
+                '```',
+                '',
+                '3. Key idea',
+                '`print()` displays something. `return` gives the result back to the caller.',
+            ].join('\n'),
+            oop: [
+                '1. What OOP means',
+                'Object-oriented programming groups data and behavior together. A `class` is the blueprint; an object is an instance created from that blueprint.',
+                '',
+                '2. Example',
+                '```python',
+                'class Dog:',
+                '    def __init__(self, name):',
+                '        self.name = name',
+                '',
+                '    def speak(self):',
+                "        return f'{self.name} barks'",
+                '',
+                "dog = Dog('Noll')",
+                'print(dog.speak())',
+                '```',
+            ].join('\n'),
+            'for loop': [
+                '1. What a for loop does',
+                'A `for` loop repeats once for each item in an iterable such as a list, string, dictionary, or range.',
+                '',
+                '2. Example',
+                '```python',
+                'for number in [1, 2, 3]:',
+                '    print(number)',
+                '```',
+                '',
+                '3. Useful tools',
+                'Use `range()` for counting, `enumerate()` when you need an index, and `.items()` when looping through dictionaries.',
+            ].join('\n'),
+            'while loop': [
+                '1. What a while loop does',
+                'A `while` loop repeats as long as a condition stays `True`.',
+                '',
+                '2. Example',
+                '```python',
+                'count = 0',
+                'while count < 3:',
+                '    print(count)',
+                '    count += 1',
+                '```',
+                '',
+                '3. Warning',
+                'Make sure something changes inside the loop, otherwise it can run forever.',
+            ].join('\n'),
+            lambda: [
+                '1. What lambda is',
+                '`lambda` creates a small anonymous function for simple one-line logic.',
+                '',
+                '2. Example',
+                '```python',
+                'square = lambda x: x * x',
+                'print(square(4))',
+                '',
+                'words = ["bbb", "a", "cc"]',
+                'print(sorted(words, key=lambda word: len(word)))',
+                '```',
+            ].join('\n'),
+            comprehension: [
+                '1. What a comprehension is',
+                'A comprehension builds a list, set, or dictionary in one expression.',
+                '',
+                '2. Examples',
+                '```python',
+                'squares = [n * n for n in range(5)]',
+                'evens = [n for n in range(10) if n % 2 == 0]',
+                'lengths = {word: len(word) for word in words}',
+                '```',
+            ].join('\n'),
+            decorator: [
+                '1. What a decorator is',
+                'A decorator is a function that wraps another function to add behavior before or after it runs.',
+                '',
+                '2. Simple shape',
+                '```python',
+                'def decorator(func):',
+                '    def wrapper():',
+                '        print("before")',
+                '        func()',
+                '        print("after")',
+                '    return wrapper',
+                '```',
+            ].join('\n'),
+            generator: [
+                '1. What a generator is',
+                'A generator produces values one at a time using `yield`, instead of building a full list immediately.',
+                '',
+                '2. Example',
+                '```python',
+                'def count_up_to(limit):',
+                '    number = 1',
+                '    while number <= limit:',
+                '        yield number',
+                '        number += 1',
+                '```',
+            ].join('\n'),
+            exception: [
+                '1. What exceptions are',
+                'Exceptions are runtime errors. `try` and `except` let you handle errors without crashing the program.',
+                '',
+                '2. Example',
+                '```python',
+                'try:',
+                '    number = int(text)',
+                'except ValueError:',
+                '    number = 0',
+                '```',
+            ].join('\n'),
+            regex: [
+                '1. What regex is',
+                'A regular expression is a pattern for searching, matching, extracting, or replacing text.',
+                '',
+                '2. Example',
+                '```python',
+                'import re',
+                '',
+                "text = 'Order 123'",
+                "match = re.search(r'\\d+', text)",
+                'print(match.group())  # 123',
+                '```',
+            ].join('\n'),
+            method: [
+                '1. What a method is',
+                'A method is a function that belongs to an object. You call it with dot syntax.',
+                '',
+                '2. Example',
+                '```python',
+                "text = 'hello'",
+                'print(text.upper())',
+                '',
+                'items = [1, 2]',
+                'items.append(3)',
+                '```',
+            ].join('\n'),
+            boolean: [
+                '1. What a Boolean is',
+                'A Boolean is a value that is either `True` or `False`.',
+                '',
+                '2. Example',
+                '```python',
+                'is_even = 10 % 2 == 0',
+                'print(is_even)  # True',
+                '```',
+            ].join('\n'),
+            'return vs print': [
+                '1. Difference',
+                '`return` sends a value back from a function. `print()` only displays text in the output panel.',
+                '',
+                '2. Example',
+                '```python',
+                'def add(a, b):',
+                '    return a + b',
+                '',
+                'result = add(2, 3)',
+                'print(result)',
+                '```',
+            ].join('\n'),
+            indexing: [
+                '1. Indexing and slicing',
+                'Indexing gets one item. Slicing gets a range.',
+                '',
+                '2. Example',
+                '```python',
+                "text = 'Python'",
+                'print(text[0])    # P',
+                'print(text[-1])   # n',
+                'print(text[1:4])  # yth',
+                '```',
+            ].join('\n'),
+        };
+
+        if (answers[topic]) return answers[topic];
+
+        if (!/\bpython|code|program|syntax|variable|loop|function|class|list|dict|string|tuple|set|method|return|print|error|exception|regex|lambda|closure|decorator|generator|boolean|oop\b/.test(q)) {
+            return [
+                '1. Python questions only',
+                'This AI is for Python learning. Ask about syntax, data types, functions, loops, OOP, errors, methods, or examples.',
+                '',
+                '2. Example questions',
+                '`What is a list?`',
+                '`Explain dictionaries with examples.`',
+                '`What is a closure?`',
+                '`What is the difference between return and print?`',
+            ].join('\n');
+        }
+
+        return [
+            '1. Short answer',
+            'This is a Python concept question. The safest way to learn it is to identify the syntax, what value it creates or changes, and when you should use it.',
+            '',
+            '2. General Python pattern',
+            '```python',
+            '# name the value clearly',
+            'result = None',
+            '',
+            '# apply one clear operation',
+            'print(result)',
+            '```',
+            '',
+            '3. Ask more specifically',
+            'Try asking: `What is a list?`, `Explain dictionary keys`, `Show a closure example`, or `What does .append() do?`',
+        ].join('\n');
+    }, []);
+
+    const openGeneralAi = useCallback(() => {
+        if (generalAiMessages.length === 0) {
+            setGeneralAiMessages([{
+                id: Date.now(),
+                role: 'assistant',
+                source: 'built_in',
+                text: [
+                    '1. General Python AI',
+                    'Ask any Python question, for example: `What is a list?`, `What is a dictionary?`, `Explain closures`, or `What is return vs print?`',
+                    '',
+                    '2. What I can explain',
+                    'I can explain syntax, concepts, examples, common mistakes, and when to use each Python feature.',
+                ].join('\n'),
+            }]);
+        }
+        setShowModal('general_ai');
+    }, [generalAiMessages.length]);
+
+    const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
+        const question = rawQuestion.trim();
+        if (!question || generalAiRunning) return;
+        const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
+        setGeneralAiMessages(prev => [...prev, userMessage]);
+        setGeneralAiDraft('');
+        setGeneralAiRunning(true);
+
+        try {
+            setGeneralAiMessages(prev => [...prev, {
+                id: Date.now() + 1,
+                role: 'assistant',
+                source: 'built_in',
+                text: buildBuiltInGeneralAiAnswer(question),
+            }]);
+        } finally {
+            setGeneralAiRunning(false);
+        }
+    }, [buildBuiltInGeneralAiAnswer, generalAiRunning]);
+
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
         const shouldReset = problemAiProblemId !== exercise.id || problemAiMessages.length === 0;
@@ -12667,7 +13065,7 @@ print(result)
                             }
                         }}
                     >
-                        <button onClick={() => setShowModal('api_key')} className="transition-all p-1.5 rounded-full border" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="API key settings"><Key size={14} /></button>
+                        <button onClick={openGeneralAi} className="transition-all p-1.5 rounded-full border" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: toolPanelColors.ai }} title="General Python AI"><Bot size={14} /></button>
                         <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
                         <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>Wins:</span><span style={{ color: countRowColors.value }}>{currentStats.success}</span></div>
                         <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
@@ -13498,6 +13896,134 @@ print(result)
                                     <button
                                         type="submit"
                                         disabled={!problemAiDraft.trim() || problemAiRunning || !problemAiEnabled}
+                                        className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
+                                    >
+                                        Ask
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+                        {showModal === 'general_ai' && (
+                            <div className="flex h-full min-h-0 flex-col gap-3">
+                                <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>General Python AI</h2>
+                                            <span className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), color: toolPanelColors.ai, backgroundColor: hexToRgba(toolPanelColors.ai, 0.12) }}>
+                                                Built-in
+                                            </span>
+                                        </div>
+                                        <p className="mt-1 text-xs text-gray-400">Ask any Python concept question. This is separate from the problem-specific AI.</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-shrink-0 overflow-x-auto pr-1 pb-1">
+                                    <div className="flex gap-2 text-[11px] whitespace-nowrap">
+                                        {[
+                                            'What is a list?',
+                                            'What is a dictionary?',
+                                            'Explain closures',
+                                            'Return vs print',
+                                            'What is OOP?',
+                                        ].map(prompt => (
+                                            <button
+                                                key={prompt}
+                                                onClick={() => sendGeneralAiQuestion(prompt)}
+                                                disabled={generalAiRunning}
+                                                className="rounded-xl border px-3 py-2 font-bold transition-all hover:brightness-125 disabled:opacity-40"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
+                                            >
+                                                {prompt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="rounded-2xl border p-3" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.22), backgroundColor: 'rgba(8, 18, 34, 0.42)' }}>
+                                    <button
+                                        onClick={() => setGeneralAiKeyOpen(prev => !prev)}
+                                        className="flex w-full items-center justify-between gap-2 text-left"
+                                    >
+                                        <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
+                                            <Sparkles size={13} />
+                                            Optional online AI key
+                                        </span>
+                                        <ChevronDown size={14} className="text-gray-400 transition-transform" style={{ transform: generalAiKeyOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {generalAiKeyOpen && (
+                                        <div className="mt-3 space-y-2">
+                                            <p className="text-[11px] leading-relaxed text-gray-400">
+                                                The built-in Python AI works without a key. Keep Gemini optional for future online AI answers when a user wants stronger model-backed help.
+                                            </p>
+                                            <input
+                                                type="text"
+                                                value={apiKey}
+                                                onChange={(e) => setApiKey(e.target.value)}
+                                                placeholder="Optional Gemini API key..."
+                                                className="w-full rounded-xl border bg-[#050c18] px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.28) }}
+                                            />
+                                            <button
+                                                onClick={() => localStorage.setItem('gemini_api_key', apiKey)}
+                                                className="rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.12), color: toolPanelColors.ai }}
+                                            >
+                                                Save Optional Key
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                                    {generalAiMessages.map(message => (
+                                        <div
+                                            key={message.id}
+                                            className="rounded-2xl border p-3"
+                                            style={{
+                                                borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
+                                                backgroundColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.08) : 'rgba(8, 18, 34, 0.55)',
+                                            }}
+                                        >
+                                            <div className="mb-1.5 flex items-center justify-between gap-2">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: message.role === 'user' ? countRowColors.count : toolPanelColors.ai }}>
+                                                    {message.role === 'user' ? 'You' : 'General AI'}
+                                                </span>
+                                                {message.source && message.role === 'assistant' && (
+                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? 'Offline AI' : 'Built-in Python'}</span>
+                                                )}
+                                            </div>
+                                            {message.role === 'assistant' ? (
+                                                <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
+                                            ) : (
+                                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-100">{message.text}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {generalAiRunning && (
+                                        <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
+                                            Thinking...
+                                        </div>
+                                    )}
+                                </div>
+
+                                <form
+                                    className="flex flex-shrink-0 gap-2 border-t border-[#1d2d44] pt-3"
+                                    onSubmit={(event) => {
+                                        event.preventDefault();
+                                        sendGeneralAiQuestion(generalAiDraft);
+                                    }}
+                                >
+                                    <input
+                                        value={generalAiDraft}
+                                        onChange={(event) => setGeneralAiDraft(event.target.value)}
+                                        placeholder="Ask any Python question..."
+                                        className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!generalAiDraft.trim() || generalAiRunning}
                                         className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
                                     >
