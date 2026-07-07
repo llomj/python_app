@@ -14306,7 +14306,7 @@ print(result)
                         <button
                             onClick={openGeneralAi}
                             className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-all active:scale-95"
-                            style={{ backgroundColor: hexToRgba(toolPanelColors.ai, 0.13), borderColor: hexToRgba(toolPanelColors.ai, 0.45), color: toolPanelColors.ai }}
+                            style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }}
                             title="General Python AI"
                             aria-label="Open General Python AI"
                         >
@@ -14343,7 +14343,7 @@ print(result)
                             <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
                             <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>Rate:</span><span style={{ color: countRowColors.value }}>{rate}%</span></div>
                         </div>
-                        <button onClick={() => setShowModal('settings')} className="h-8 w-8 flex-shrink-0 rounded-full border p-1.5 transition-all active:scale-95" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="Settings" aria-label="Settings"><Settings size={14} /></button>
+                        <button onClick={() => setShowModal('settings')} className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-all active:scale-95" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="Settings" aria-label="Settings"><Settings size={16} /></button>
                     </div>
                 </div>
 
@@ -15099,41 +15099,6 @@ print(result)
                                         <div className="flex items-center gap-2">
                                         <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
                                         <div className="flex items-center gap-1.5">
-                                            <button
-                                                onClick={() => {
-                                                    const text = problemAiMessages.map(m =>
-                                                        `${m.role === 'user' ? 'You' : 'AI'}: ${m.text}`
-                                                    ).join('\n\n---\n\n');
-                                                    const blob = new Blob([text], { type: 'text/plain' });
-                                                    const url = URL.createObjectURL(blob);
-                                                    const a = document.createElement('a');
-                                                    a.href = url;
-                                                    a.download = `python-conversation-${Date.now()}.txt`;
-                                                    a.click();
-                                                    URL.revokeObjectURL(url);
-                                                }}
-                                                className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
-                                                style={{
-                                                    borderColor: hexToRgba('#22c55e', 0.35),
-                                                    color: '#86efac',
-                                                    backgroundColor: hexToRgba('#22c55e', 0.1),
-                                                }}
-                                                title="Save conversation as text file"
-                                            >
-                                                Save
-                                            </button>
-                                            <button
-                                                onClick={() => setProblemAiMessages([])}
-                                                className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
-                                                style={{
-                                                    borderColor: hexToRgba('#ef4444', 0.35),
-                                                    color: '#fca5a5',
-                                                    backgroundColor: hexToRgba('#ef4444', 0.1),
-                                                }}
-                                                title="Clear conversation"
-                                            >
-                                                Clear
-                                            </button>
                                             <button
                                                 onClick={() => setProblemAiEnabled(prev => !prev)}
                                                 className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
