@@ -9690,6 +9690,28 @@ const buildDocCodePanelValue = (groups: DocLineGroup[], sectionTitle: string) =>
     return lines.join('\n').trim();
 };
 
+const splitDocTextParagraphs = (text: string) => {
+    const normalized = text.trim();
+    if (!normalized) return [];
+    if (normalized.length < 150) return [normalized];
+
+    const sentences = normalized.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g)?.map(part => part.trim()).filter(Boolean) || [normalized];
+    const paragraphs: string[] = [];
+    let current = '';
+
+    for (const sentence of sentences) {
+        if (current && `${current} ${sentence}`.length > 180) {
+            paragraphs.push(current);
+            current = sentence;
+        } else {
+            current = current ? `${current} ${sentence}` : sentence;
+        }
+    }
+
+    if (current) paragraphs.push(current);
+    return paragraphs;
+};
+
 function DocumentationCodePanel({ code, editorColors, accent }: { code: string; editorColors: EditorColorSettings; accent: string }) {
     if (!code.trim()) return null;
     return (
@@ -9764,12 +9786,16 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
                                     return (
                                         <div
                                             key={`${section.title}-text-${index}`}
-                                            className={isExampleLabel || isFlow ? 'rounded-xl border px-3 py-2 text-[11px] leading-relaxed' : 'text-sm leading-relaxed'}
+                                            className={isExampleLabel || isFlow ? 'rounded-xl border px-3 py-2 text-[11px] leading-relaxed' : 'space-y-2 rounded-xl px-1 py-1 text-sm leading-relaxed'}
                                             style={isExampleLabel || isFlow
                                                 ? { borderColor: hexToRgba(accent, 0.18), backgroundColor: hexToRgba(accent, 0.08), color: isExampleLabel ? accent : editorColors.text }
                                                 : { color: editorColors.text }}
                                         >
-                                            {renderAiParagraphText(group.line, editorColors, `${section.title}-text-${index}`)}
+                                            {splitDocTextParagraphs(group.line).map((paragraph, paragraphIndex) => (
+                                                <p key={`${section.title}-text-${index}-${paragraphIndex}`} className="whitespace-pre-wrap">
+                                                    {renderAiParagraphText(paragraph, editorColors, `${section.title}-text-${index}-${paragraphIndex}`)}
+                                                </p>
+                                            ))}
                                         </div>
                                     );
                                 })}
@@ -13126,7 +13152,9 @@ print(result)
                             maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
                     >
-                        <button onClick={() => setShowModal('none')} className="absolute top-3 right-3 z-50 flex h-11 w-11 items-center justify-center rounded-full border text-gray-200 shadow-lg active:scale-95" style={{ backgroundColor: hexToRgba(panelColors.background, 0.92), borderColor: hexToRgba(panelColors.border, 0.9) }} aria-label="Close modal"><X size={24} /></button>
+                        {showModal !== 'solution' && (
+                            <button onClick={() => setShowModal('none')} className="absolute top-3 right-3 z-50 flex h-11 w-11 items-center justify-center rounded-full border text-gray-200 shadow-lg active:scale-95" style={{ backgroundColor: hexToRgba(panelColors.background, 0.92), borderColor: hexToRgba(panelColors.border, 0.9) }} aria-label="Close modal"><X size={24} /></button>
+                        )}
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full overflow-hidden">
                                 <div className="flex gap-4 mb-4 border-b border-[#1d2d44] mx-1 mt-1">
@@ -13193,24 +13221,7 @@ print(result)
                         {showModal === 'solution' && (
                             <div className="flex h-full min-h-0 flex-col overflow-hidden">
                                 <div
-                                    className="sticky top-0 z-20 mb-2 flex flex-shrink-0 items-center justify-between rounded-2xl border px-3 py-2"
-                                    style={{ borderColor: hexToRgba(panelColors.border, 0.8), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96) }}
-                                >
-                                    <div className="min-w-0">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: editorColors.comment }}>Hide Tools</p>
-                                        <p className="truncate text-sm font-black" style={{ color: editorColors.text }}>Solution Reference</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowModal('none')}
-                                        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border active:scale-95"
-                                        style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(panelColors.background, 0.72), color: editorColors.text }}
-                                        aria-label="Close solution panel"
-                                    >
-                                        <X size={18} />
-                                    </button>
-                                </div>
-                                <div
-                                    className="sticky top-0 z-10 mb-4 mx-1 mt-1 flex-shrink-0 overflow-x-auto border-b [-webkit-overflow-scrolling:touch]"
+                                    className="sticky top-0 z-10 mb-4 mx-1 mt-1 flex-shrink-0 overflow-x-auto border-b pr-2 [-webkit-overflow-scrolling:touch]"
                                     style={{ borderColor: panelColors.border, backgroundColor: hexToRgba(editorColors.panelBackground, 0.92), touchAction: 'pan-x' }}
                                 >
                                     <div className="flex w-max min-w-full gap-4 whitespace-nowrap pr-4">
@@ -13301,11 +13312,10 @@ print(result)
                                 </div>
                                 <button
                                     onClick={() => setShowModal('none')}
-                                    className="mt-3 flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
+                                    className="mt-3 flex w-full flex-shrink-0 items-center justify-center rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
                                     style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
                                     aria-label="Back to main app"
                                 >
-                                    <X size={16} />
                                     Back to App
                                 </button>
                             </div>
