@@ -786,6 +786,7 @@ def __auto_grader_call_name(node):
 
 def __auto_grader_check_source_requirements():
     call_patterns = __auto_grader_spec.get("requiredCallPatterns", [])
+    any_call_patterns = __auto_grader_spec.get("requiredAnyCallPatterns", [])
     node_patterns = __auto_grader_spec.get("requiredNodePatterns", [])
     inheritance_patterns = __auto_grader_spec.get("requiredClassInheritance", [])
     bool_ops = __auto_grader_spec.get("requiredBoolOps", [])
@@ -812,7 +813,7 @@ def __auto_grader_check_source_requirements():
     )
     if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
         return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
-    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
+    if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
         return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -835,6 +836,32 @@ def __auto_grader_check_source_requirements():
             if min_args is not None:
                 detail += f" with at least {min_args} positional arguments"
             return "Missing required source pattern: " + detail
+    if any_call_patterns:
+        matched_any = False
+        expected_details = []
+        for pattern in any_call_patterns:
+            function_name = pattern.get("functionName")
+            keyword = pattern.get("keyword")
+            min_args = pattern.get("minArgs")
+            detail = function_name + "()"
+            if keyword:
+                detail += f" with {keyword}="
+            if min_args is not None:
+                detail += f" with at least {min_args} positional arguments"
+            expected_details.append(detail)
+            for call in calls:
+                if __auto_grader_call_name(call.func) != function_name:
+                    continue
+                if keyword and not any(item.arg == keyword for item in call.keywords):
+                    continue
+                if min_args is not None and len(call.args) < int(min_args):
+                    continue
+                matched_any = True
+                break
+            if matched_any:
+                break
+        if not matched_any:
+            return "Missing required source pattern: one of " + ", ".join(expected_details)
     for pattern in node_patterns:
         node_type = pattern.get("nodeType")
         min_count = int(pattern.get("minCount", 1))

@@ -38,6 +38,7 @@ export interface AutoGrader {
     mode?: 'function' | 'script';
     compare?: CompareMode;
     requiredCallPatterns?: Array<{ functionName: string; keyword?: string; minArgs?: number }>;
+    requiredAnyCallPatterns?: Array<{ functionName: string; keyword?: string; minArgs?: number }>;
     requiredNodePatterns?: Array<{ nodeType: string; minCount?: number }>;
     requiredClassInheritance?: Array<{ className: string; baseName: string }>;
     requiredBoolOps?: Array<'And' | 'Or'>;
@@ -56,13 +57,16 @@ const forLoopPracticeGrader = (functionName: string, tests: AutoTestCase[], comp
 
 const regexPracticeGrader = (
     functionName: string,
-    reFunctionName: string,
+    _reFunctionName: string,
     tests: AutoTestCase[],
     compare?: CompareMode
 ): AutoGrader => ({
     functionNames: [functionName],
     compare,
-    requiredCallPatterns: [{ functionName: reFunctionName, minArgs: 1 }],
+    requiredAnyCallPatterns: ['search', 'findall', 'sub', 'split', 'match', 'fullmatch', 'finditer'].map(reFunctionName => ({
+        functionName: reFunctionName,
+        minArgs: 1
+    })),
     tests
 });
 

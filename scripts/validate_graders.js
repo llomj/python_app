@@ -513,6 +513,7 @@ def call_name(node):
 
 def source_requirements_ok(source, grader):
     call_patterns = grader.get("requiredCallPatterns", [])
+    any_call_patterns = grader.get("requiredAnyCallPatterns", [])
     node_patterns = grader.get("requiredNodePatterns", [])
     inheritance_patterns = grader.get("requiredClassInheritance", [])
     bool_ops = grader.get("requiredBoolOps", [])
@@ -539,7 +540,7 @@ def source_requirements_ok(source, grader):
     )
     if needs_random and not any(call_name(call.func) in random_call_names for call in calls):
         return False
-    if not call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
+    if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
         return True
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -556,6 +557,25 @@ def source_requirements_ok(source, grader):
             matched = True
             break
         if not matched:
+            return False
+    if any_call_patterns:
+        matched_any = False
+        for pattern in any_call_patterns:
+            function_name = pattern.get("functionName")
+            keyword = pattern.get("keyword")
+            min_args = pattern.get("minArgs")
+            for call in calls:
+                if call_name(call.func) != function_name:
+                    continue
+                if keyword and not any(item.arg == keyword for item in call.keywords):
+                    continue
+                if min_args is not None and len(call.args) < int(min_args):
+                    continue
+                matched_any = True
+                break
+            if matched_any:
+                break
+        if not matched_any:
             return False
     for pattern in node_patterns:
         node_type = pattern.get("nodeType")

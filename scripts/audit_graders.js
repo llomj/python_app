@@ -128,6 +128,24 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
     }
   }
 
+  if (grader.requiredAnyCallPatterns !== undefined) {
+    if (!Array.isArray(grader.requiredAnyCallPatterns)) {
+      invalidGraders.push(`${id}: requiredAnyCallPatterns must be an array`);
+    } else {
+      grader.requiredAnyCallPatterns.forEach((pattern, index) => {
+        if (!pattern || typeof pattern.functionName !== 'string' || !pattern.functionName.trim()) {
+          invalidGraders.push(`${id}: requiredAnyCallPatterns ${index + 1} must declare functionName`);
+        }
+        if (pattern.keyword !== undefined && typeof pattern.keyword !== 'string') {
+          invalidGraders.push(`${id}: requiredAnyCallPatterns ${index + 1} keyword must be a string`);
+        }
+        if (pattern.minArgs !== undefined && (!Number.isInteger(pattern.minArgs) || pattern.minArgs < 0)) {
+          invalidGraders.push(`${id}: requiredAnyCallPatterns ${index + 1} minArgs must be a non-negative integer`);
+        }
+      });
+    }
+  }
+
   if (grader.requiredNodePatterns !== undefined) {
     if (!Array.isArray(grader.requiredNodePatterns)) {
       invalidGraders.push(`${id}: requiredNodePatterns must be an array`);
@@ -232,7 +250,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (grader.mode === 'script') {
     if (testCount === 1) {
       singleCaseScriptGraders.push(id);
-      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0 || (grader.requiredUnpackPatterns?.length || 0) > 0;
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredAnyCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0 || (grader.requiredUnpackPatterns?.length || 0) > 0;
       if (!hasSourceRequirements) unguardedSingleCaseScriptGraders.push(id);
       if (!hasDynamicScriptSignal(grader, tests)) {
         hardcodeRiskScriptGraders.push(id);
@@ -244,7 +262,7 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   if (testCount < MIN_FUNCTION_TESTS) {
     const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
     if (firstArgs.length === 0) {
-      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0 || (grader.requiredUnpackPatterns?.length || 0) > 0;
+      const hasSourceRequirements = (grader.requiredCallPatterns?.length || 0) > 0 || (grader.requiredAnyCallPatterns?.length || 0) > 0 || (grader.requiredNodePatterns?.length || 0) > 0 || (grader.requiredClassInheritance?.length || 0) > 0 || (grader.requiredBoolOps?.length || 0) > 0 || (grader.requiredAstOperators?.length || 0) > 0 || (grader.requiredUnpackPatterns?.length || 0) > 0;
       if (!hasSourceRequirements) {
         unguardedSingleCaseNoArgFunctionGraders.push(id);
       }
@@ -321,7 +339,10 @@ if (singleCaseScriptGraders.length && showAll) {
     const exercise = exerciseById.get(id);
     const grader = AUTO_GRADERS[id];
     const expected = grader.tests?.[0]?.expected;
-    const requiredCalls = (grader.requiredCallPatterns || []).map(pattern => pattern.functionName).join(', ');
+    const requiredCalls = [
+      ...(grader.requiredCallPatterns || []).map(pattern => pattern.functionName),
+      ...(grader.requiredAnyCallPatterns || []).map(pattern => `any:${pattern.functionName}`),
+    ].join(', ');
     const requiredNodes = (grader.requiredNodePatterns || []).map(pattern => `${pattern.nodeType}:${pattern.minCount || 1}`).join(', ');
     console.log(`${id}: ${exercise?.title || `Problem ${id}`} expected=${JSON.stringify(expected)} calls=[${requiredCalls}] nodes=[${requiredNodes}]`);
   }
