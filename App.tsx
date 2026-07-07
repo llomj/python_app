@@ -10624,6 +10624,7 @@ const App: React.FC = () => {
     const [generalAiDraft, setGeneralAiDraft] = useState('');
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
+    const generalAiLastTopicRef = useRef('python');
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -12019,32 +12020,182 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const buildBuiltInGeneralAiAnswer = useCallback((question: string): string => {
         const q = question.toLowerCase().trim();
         const includes = (...words: string[]) => words.some(word => q.includes(word));
+        const asksMoreDetail = /\b(expand|more detail|details|break.*down|explain.*more|go deeper|in depth|fully|how does|how do|rules|order of operations|workflow|step by step|examples?)\b/.test(q);
+        const asksDifference = /\b(difference|different|compare|versus| vs |between)\b/.test(q);
+        const asksBuiltinList = /\b(all|every|alphabetical|alphabetic|ordered|order).*\b(built.?in|builtin|built in|function)/.test(q) || /\bbuilt.?in functions?\b.*\balphabet/i.test(question);
+        const followUpOnly = /^(expand|expand on it|more|more detail|details|break it down|explain more|go deeper|in depth|give examples|examples|how does it work|how do they work)\??$/.test(q);
+        const effectiveQuestion = followUpOnly ? `${generalAiLastTopicRef.current} ${q}` : q;
+        const has = (...words: string[]) => words.some(word => effectiveQuestion.includes(word));
+        const builtInFunctions = [
+            'abs', 'aiter', 'all', 'anext', 'any', 'ascii', 'bin', 'bool', 'breakpoint', 'bytearray', 'bytes', 'callable', 'chr', 'classmethod', 'compile', 'complex', 'delattr', 'dict', 'dir', 'divmod', 'enumerate', 'eval', 'exec', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'help', 'hex', 'id', 'input', 'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'locals', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord', 'pow', 'print', 'property', 'range', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', '__import__'
+        ];
         const topic = (() => {
-            if (includes('list', 'array')) return 'list';
-            if (includes('dict', 'dictionary', 'mapping', 'key value', 'key-value')) return 'dictionary';
-            if (includes('closure', 'closures')) return 'closure';
-            if (includes('tuple')) return 'tuple';
-            if (includes('set')) return 'set';
-            if (includes('string', 'str')) return 'string';
-            if (includes('function', ' def ', 'parameter', 'argument')) return 'function';
-            if (includes('class', 'object', 'oop', 'inheritance')) return 'oop';
-            if (includes('for loop', 'for loops')) return 'for loop';
-            if (includes('while loop', 'while loops')) return 'while loop';
-            if (includes('loop')) return 'loop';
-            if (includes('lambda')) return 'lambda';
-            if (includes('comprehension')) return 'comprehension';
-            if (includes('decorator')) return 'decorator';
-            if (includes('generator', 'yield')) return 'generator';
-            if (includes('exception', 'try', 'except', 'error handling')) return 'exception';
-            if (includes('regex', 'regular expression')) return 'regex';
-            if (includes('method')) return 'method';
-            if (includes('boolean', 'bool', 'true', 'false')) return 'boolean';
-            if (includes('return', 'print')) return 'return vs print';
-            if (includes('slice', 'slicing', 'index')) return 'indexing';
+            if (has('indentation', 'indent', 'whitespace block')) return 'indentation';
+            if (has('module', 'modul', 'library', 'libraries', 'import')) return 'module';
+            if (has('attribute', 'attributes', 'self.')) return 'attribute';
+            if (has('object') && !has('object oriented', 'object-orientated', 'object-oriented')) return 'object';
+            if (has('list', 'array')) return 'list';
+            if (has('dict', 'dictionary', 'mapping', 'key value', 'key-value')) return 'dictionary';
+            if (has('closure', 'closures')) return 'closure';
+            if (has('tuple')) return 'tuple';
+            if (has('set')) return 'set';
+            if (has('string', 'str')) return 'string';
+            if (has('function', ' def ', 'parameter', 'argument')) return 'function';
+            if (has('class', 'oop', 'inheritance', 'object oriented', 'object-orientated', 'object-oriented')) return 'oop';
+            if (has('for loop', 'for loops')) return 'for loop';
+            if (has('while loop', 'while loops')) return 'while loop';
+            if (has('loop')) return 'loop';
+            if (has('lambda')) return 'lambda';
+            if (has('comprehension')) return 'comprehension';
+            if (has('decorator')) return 'decorator';
+            if (has('generator', 'yield')) return 'generator';
+            if (has('exception', 'try', 'except', 'error handling')) return 'exception';
+            if (has('regex', 'regular expression')) return 'regex';
+            if (has('method')) return 'method';
+            if (has('boolean', 'bool', 'bullion', 'true', 'false')) return 'boolean';
+            if (has('return', 'print')) return 'return vs print';
+            if (has('slice', 'slicing', 'index')) return 'indexing';
             return 'python';
         })();
 
+        generalAiLastTopicRef.current = topic;
+
+        if (asksBuiltinList) {
+            return [
+                '1. Python built-in functions in alphabetical order',
+                'These are functions available without `import`. They are different from methods because you call them directly, like `len(items)`, instead of on an object, like `items.append(value)`.',
+                '',
+                '```python',
+                builtInFunctions.join(', '),
+                '```',
+                '',
+                '2. Common beginner built-ins',
+                '`len()`, `print()`, `input()`, `int()`, `float()`, `str()`, `list()`, `dict()`, `set()`, `tuple()`, `sum()`, `min()`, `max()`, `sorted()`, `range()`, `enumerate()`, `zip()`, `type()`, and `isinstance()`.',
+                '',
+                '3. Built-in function vs method',
+                '```python',
+                'len(items)        # built-in function',
+                'items.append(4)   # method on a list object',
+                '```',
+            ].join('\n');
+        }
+
+        if (asksDifference && has('built') && has('method')) {
+            return [
+                '1. Built-in function vs method',
+                'A built-in function is available globally. A method belongs to an object and is called with dot syntax.',
+                '',
+                '2. Syntax difference',
+                '```python',
+                'items = [1, 2, 3]',
+                '',
+                'print(len(items))   # built-in function: function(object)',
+                'items.append(4)     # method: object.method(argument)',
+                '```',
+                '',
+                '3. How to decide',
+                'Use a built-in when Python provides a general operation, like `len()`, `sum()`, or `sorted()`. Use a method when the operation belongs to that object type, like `.append()` for lists, `.upper()` for strings, or `.items()` for dictionaries.',
+            ].join('\n');
+        }
+
+        if (asksDifference && (has('list') || has('dictionary') || has('dict') || has('set') || has('tuple'))) {
+            return [
+                '1. List vs dictionary vs set vs tuple',
+                'These are Python collection data types, but they solve different problems.',
+                '',
+                '2. Quick comparison',
+                '```python',
+                'items = [10, 20, 30]              # list: ordered, changeable, index-based',
+                "person = {'name': 'Ada'}          # dict: key-value lookup",
+                'unique = {1, 2, 3}                # set: unique values, no duplicates',
+                'point = (3, 4)                    # tuple: ordered, fixed/immutable',
+                '```',
+                '',
+                '3. When to use each',
+                'Use a `list` when order and position matter. Use a `dict` when labels/keys point to values. Use a `set` when uniqueness or membership is the main goal. Use a `tuple` when the data should stay fixed, like coordinates or multiple return values.',
+            ].join('\n');
+        }
+
         const answers: Record<string, string> = {
+            indentation: [
+                '1. What indentation means',
+                'Indentation is the spaces at the start of a line. In Python, indentation is not decoration; it defines which lines belong inside a block.',
+                '',
+                '2. Where indentation is required',
+                'After a line ending with `:`, the next related lines must be indented. This applies to `if`, `for`, `while`, `def`, `class`, `try`, `with`, and similar blocks.',
+                '',
+                '3. Example',
+                '```python',
+                'def greet(name):',
+                '    if name:',
+                "        return 'Hello ' + name",
+                "    return 'Hello'",
+                '```',
+                '',
+                '4. Rules',
+                'Use consistent indentation. Four spaces is the Python standard. Do not mix tabs and spaces. A line indented too far or not far enough can cause `IndentationError` or change the meaning of your code.',
+            ].join('\n'),
+            module: [
+                '1. Module vs library',
+                'A module is usually one Python file or importable unit. A library/package is a collection of modules that solve a larger problem.',
+                '',
+                '2. Import syntax',
+                '```python',
+                'import math',
+                'print(math.sqrt(16))',
+                '',
+                'from random import randint',
+                'print(randint(1, 10))',
+                '```',
+                '',
+                '3. How modules work',
+                'When you import a module, Python loads its code and gives you access to its functions, classes, and variables. Use `module.name` when you import the whole module. Use the name directly when you import it with `from module import name`.',
+                '',
+                '4. Common standard-library modules',
+                '`math`, `random`, `datetime`, `os`, `sys`, `json`, `csv`, `re`, `collections`, `itertools`, `statistics`, and `pathlib`.',
+            ].join('\n'),
+            attribute: [
+                '1. What an attribute is',
+                'An attribute is data stored on an object. In a class, attributes usually describe the object.',
+                '',
+                '2. Example',
+                '```python',
+                'class Dog:',
+                '    def __init__(self, name, age):',
+                '        self.name = name',
+                '        self.age = age',
+                '',
+                "dog = Dog('Noll', 3)",
+                'print(dog.name)',
+                '```',
+                '',
+                '3. Attribute vs method',
+                'An attribute stores data: `dog.name`. A method performs behavior: `dog.speak()`.',
+            ].join('\n'),
+            object: [
+                '1. What an object is',
+                'An object is a value with a type, data, and behavior. In Python, almost everything is an object: strings, lists, dictionaries, functions, and instances of your own classes.',
+                '',
+                '2. Example',
+                '```python',
+                "text = 'hello'",
+                'print(type(text))     # <class str>',
+                'print(text.upper())   # method behavior',
+                '```',
+                '',
+                '3. Custom objects',
+                '```python',
+                'class Person:',
+                '    def __init__(self, name):',
+                '        self.name = name',
+                '',
+                "person = Person('Ada')",
+                'print(person.name)',
+                '```',
+                '',
+                '4. Mental model',
+                'A class is the blueprint. An object is the actual thing created from that blueprint. Attributes are its data. Methods are its actions.',
+            ].join('\n'),
             list: [
                 '1. What a list is',
                 'A `list` is an ordered, changeable collection. Use it when position matters or when you need to store many values together.',
@@ -12166,6 +12317,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 '',
                 '3. Key idea',
                 '`print()` displays something. `return` gives the result back to the caller.',
+                '',
+                '4. Parameters vs arguments',
+                'A parameter is the variable name in the function definition. An argument is the real value passed when calling the function.',
+                '```python',
+                'def greet(name):       # name is a parameter',
+                "    return 'Hi ' + name",
+                '',
+                "greet('Ada')           # 'Ada' is an argument",
+                '```',
             ].join('\n'),
             oop: [
                 '1. What OOP means',
@@ -12183,6 +12343,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 "dog = Dog('Noll')",
                 'print(dog.speak())',
                 '```',
+                '',
+                '3. The main pieces',
+                '`class` defines the blueprint. `__init__` initializes the object. `self` means this specific object. Attributes store data, like `self.name`. Methods are functions inside the class, like `speak()`.',
+                '',
+                '4. Why use OOP',
+                'Use OOP when your program has things with data and behavior, such as users, students, accounts, games, pets, products, or files.',
             ].join('\n'),
             'for loop': [
                 '1. What a for loop does',
@@ -12196,6 +12362,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 '',
                 '3. Useful tools',
                 'Use `range()` for counting, `enumerate()` when you need an index, and `.items()` when looping through dictionaries.',
+            ].join('\n'),
+            loop: [
+                '1. What a loop is',
+                'A loop repeats code. Use a loop when the same action must happen multiple times.',
+                '',
+                '2. Two main loop types',
+                '```python',
+                '# for loop: use when you have a sequence or known range',
+                'for item in items:',
+                '    print(item)',
+                '',
+                '# while loop: use while a condition stays True',
+                'while condition:',
+                '    do_work()',
+                '```',
+                '',
+                '3. How to choose',
+                'Use `for` for lists, strings, dictionaries, files, and `range()`. Use `while` when the stopping condition is based on something changing over time.',
             ].join('\n'),
             'while loop': [
                 '1. What a while loop does',
@@ -12224,6 +12408,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 'words = ["bbb", "a", "cc"]',
                 'print(sorted(words, key=lambda word: len(word)))',
                 '```',
+                '',
+                '3. Order of operation',
+                'Python creates the lambda function first, then passes it where a function is expected. When another function calls it, the lambda receives an argument and returns the expression result.',
+                '',
+                '4. Lambda vs normal function',
+                '```python',
+                'square = lambda x: x * x',
+                '',
+                'def square_def(x):',
+                '    return x * x',
+                '```',
+                'Use `lambda` for short one-expression functions. Use `def` when the logic needs multiple lines or a clear name.',
             ].join('\n'),
             comprehension: [
                 '1. What a comprehension is',
@@ -12300,6 +12496,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 'items = [1, 2]',
                 'items.append(3)',
                 '```',
+                '',
+                '3. How methods work',
+                'The object before the dot is the thing being operated on. In `text.upper()`, Python uses the string stored in `text` and returns an uppercase version. In `items.append(3)`, Python changes the list by adding `3`.',
+                '',
+                '4. Method examples by type',
+                '`str` methods: `.upper()`, `.lower()`, `.strip()`, `.split()`, `.replace()`.',
+                '`list` methods: `.append()`, `.pop()`, `.remove()`, `.sort()`, `.reverse()`.',
+                '`dict` methods: `.get()`, `.keys()`, `.values()`, `.items()`, `.update()`.',
             ].join('\n'),
             boolean: [
                 '1. What a Boolean is',
@@ -12338,7 +12542,27 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             ].join('\n'),
         };
 
-        if (answers[topic]) return answers[topic];
+        const addDeepFollowUp = (base: string) => {
+            if (!asksMoreDetail) return base;
+            return [
+                base,
+                '',
+                '5. Deeper mental model',
+                `When learning \`${topic}\`, always ask three questions: what syntax creates it, what value it produces or changes, and what mistake would make it fail.`,
+                '',
+                '6. Common mistakes',
+                'Using the wrong type, mixing up `return` and `print()`, forgetting indentation after `:`, mutating a value when you meant to create a new one, or using a method that belongs to a different object type.',
+                '',
+                '7. Practice pattern',
+                '```python',
+                '# 1. create the value',
+                '# 2. apply the operation',
+                '# 3. return or print the result depending on the task',
+                '```',
+            ].join('\n');
+        };
+
+        if (answers[topic]) return addDeepFollowUp(answers[topic]);
 
         if (!/\bpython|code|program|syntax|variable|loop|function|class|list|dict|string|tuple|set|method|return|print|error|exception|regex|lambda|closure|decorator|generator|boolean|oop\b/.test(q)) {
             return [
