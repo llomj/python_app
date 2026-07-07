@@ -13825,12 +13825,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             return [
                 '1. Python questions only',
                 'This AI is for Python learning. Ask about syntax, data types, functions, loops, OOP, errors, methods, or examples.',
-                '',
-                '2. Example questions',
-                '`What is a list?`',
-                '`Explain dictionaries with examples.`',
-                '`What is a closure?`',
-                '`What is the difference between return and print?`',
             ].join('\n');
         }
 
@@ -13846,9 +13840,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             '# apply one clear operation',
             'print(result)',
             '```',
-            '',
-            '3. Ask more specifically',
-            'Try asking: `What is a list?`, `Explain dictionary keys`, `Show a closure example`, or `What does .append() do?`',
         ].join('\n');
     }, []);
 
@@ -13859,11 +13850,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 role: 'assistant',
                 source: 'built_in',
                 text: [
-                    '1. General Python AI',
-                    'Ask any Python question, for example: `What is a list?`, `What is a dictionary?`, `Explain closures`, or `What is return vs print?`',
+                    'Ask any Python question. I know methods, built-ins, keywords, concepts, syntax, and more.',
                     '',
-                    '2. What I can explain',
-                    'I can explain syntax, concepts, examples, common mistakes, and when to use each Python feature.',
+                    'You can ask me to list all methods, explain a specific function, compare concepts, or describe how something works.',
+                    '',
+                    'Use **Save** to download the conversation or **Clear** to start a fresh one.',
                 ].join('\n'),
             }]);
         }
@@ -13923,8 +13914,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setProblemAiRunning(true);
 
         try {
-            // General Python question → use clean WebLLM (no problem context), fallback to reference
+            // General Python question → curated reference FIRST, WebLLM fallback
             if (isGeneralPython && !shouldUseReviewer) {
+                const refAnswer = answerGeneralPythonQuestion(question);
+                if (refAnswer) {
+                    setProblemAiMessages(prev => [...prev, {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        source: 'built_in',
+                        text: refAnswer,
+                    }]);
+                    return;
+                }
                 const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState);
                 if (generalAnswer) {
                     setProblemAiMessages(prev => [...prev, {
@@ -13935,12 +13936,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     }]);
                     return;
                 }
-                const builtInAnswer = buildBuiltInProblemAiAnswer(question, request);
                 setProblemAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: builtInAnswer,
+                    text: "I don't have information about that in my reference. Try rephrasing your question.",
                 }]);
                 return;
             }
@@ -15450,27 +15450,7 @@ print(result)
                                     </div>
                                 </div>
 
-                                <div className="flex-shrink-0 overflow-x-auto pr-1 pb-1">
-                                    <div className="flex gap-2 text-[11px] whitespace-nowrap">
-                                        {[
-                                            'What is a list?',
-                                            'What is a dictionary?',
-                                            'Explain closures',
-                                            'Return vs print',
-                                            'What is OOP?',
-                                        ].map(prompt => (
-                                            <button
-                                                key={prompt}
-                                                onClick={() => sendGeneralAiQuestion(prompt)}
-                                                disabled={generalAiRunning}
-                                                className="rounded-xl border px-3 py-2 font-bold transition-all hover:brightness-125 disabled:opacity-40"
-                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.25), backgroundColor: hexToRgba(toolPanelColors.ai, 0.07), color: '#dbeafe' }}
-                                            >
-                                                {prompt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
+
 
                                 <div className="rounded-2xl border p-3" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.22), backgroundColor: 'rgba(8, 18, 34, 0.42)' }}>
                                     <button
