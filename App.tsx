@@ -311,6 +311,12 @@ interface ConceptMode {
 
 const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:functions', label: 'Functions', description: 'def, parameters, return values', patterns: [/\bwrite\s+a\s+python\s+function\b|\bdefine\s+(?:a\s+)?function\b|\bfunction\s+called\b/] },
+    { id: 'concept:methods', label: 'Methods', description: 'String, list, dict, and object methods', patterns: [/\bmethod\b|\bmethods\b|\b\.\w+\(\)|\bappend\(\)|\bextend\(\)|\bpop\(\)|\bremove\(\)|\bsplit\(\)|join\(\)|strip\(\)|lower\(\)|upper\(\)|replace\(\)|\bstartswith\(\)|\bendswith\(\)|\bget\(\)|\bitems\(\)|\bkeys\(\)|\bvalues\(\)/] },
+    { id: 'concept:builtins', label: 'Built-ins', description: 'Built-in functions like len, sum, range, zip', patterns: [/\bbuilt[- ]?in\b|\blen\(\)|\bsum\(\)|\bmax\(\)|\bmin\(\)|\brange\(\)|\bzip\(\)|\benumerate\(\)|\bany\(\)|\ball\(\)|\bsorted\(\)|\bround\(\)|\btype\(\)|\bisinstance\(\)/] },
+    { id: 'concept:variables', label: 'Variables', description: 'Assignment, naming, scope, and values', patterns: [/\bvariable\b|\bvariables\b|\bassign\b|\bassignment\b|\bscope\b|\blocal\b|\bglobal\b|\bvalue\b/] },
+    { id: 'concept:operators', label: 'Operators', description: 'Arithmetic, comparison, boolean operators', patterns: [/\boperator\b|\boperators\b|\barithmetic\b|\bcomparison\b|\bboolean\b|\bmodulo\b|\bremainder\b|\bgreater than\b|\bless than\b|\bequal\b|\bnot equal\b/] },
+    { id: 'concept:type_conversion', label: 'Type Conversion', description: 'int, str, float, bool conversions', patterns: [/\btype conversion\b|\bconvert\b|\bconversion\b|\bcast\b|\bint\(\)|\bstr\(\)|\bfloat\(\)|\bbool\(\)|\blist\(\)|\btuple\(\)|\bset\(\)|\bdict\(\)/] },
+    { id: 'concept:input_output', label: 'Input / Output', description: 'input, print, formatting output', patterns: [/\binput\(\)|\bprint\(\)|\bprompt\b|\buser input\b|\boutput\b|\bformatted output\b|\bf-string\b|\bformat string\b/] },
     { id: 'concept:for_loops', label: 'For Loops', description: 'Problems that explicitly require for loops', patterns: [/\busing\s+(?:a\s+)?for\s+loop\b|\buse\s+(?:a\s+)?for\s+loop\b|\bwith\s+(?:a\s+)?for\s+loop\b|\bfor\s+loop\b/], excludePatterns: [/\b(?:do not|don't|without|no)\s+use\s+(?:a\s+)?for\s+loop\b|\bwithout\s+for\s+loops?\b|\bno\s+for\s+loops?\b/] },
     { id: 'concept:while_loops', label: 'While Loops', description: 'Problems that explicitly require while loops', patterns: [/\busing\s+(?:a\s+)?while\s+loop\b|\buse\s+(?:a\s+)?while\s+loop\b|\bwith\s+(?:a\s+)?while\s+loop\b|\bwhile\s+loop\b/], excludePatterns: [/\b(?:do not|don't|without|no)\s+use\s+(?:a\s+)?while\s+loop\b|\bwithout\s+while\s+loops?\b|\bno\s+while\s+loops?\b/] },
     { id: 'concept:conditionals', label: 'Conditionals', description: 'if, elif, else, comparisons', patterns: [/\bif\b|\belif\b|\belse\b|\bconditional\b|\bcondition\b|\bgreater than\b|\bless than\b|\bcompare\b|\bcomparison\b|\btrue if\b|\bfalse otherwise\b/] },
@@ -11650,10 +11656,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         return remainingContent.substring(0, endIndex).trim();
     };
 
-    const createGeneratedForLoopDocs = (targetExercise: Exercise) => {
+    const createGeneratedPracticeDocs = (targetExercise: Exercise) => {
         const functionName = targetExercise.initialCode.match(/def\s+([a-zA-Z_]\w*)\s*\(/)?.[1] ?? 'the_function';
         const prompt = targetExercise.description.split('\nExamples:')[0].trim();
         const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
+        const isRegexPractice = /regular expression|regex/i.test(targetExercise.description) || /\bimport\s+re\b/.test(targetExercise.solution);
+        const conceptName = isRegexPractice ? 'regular expressions' : 'for loops';
+        const operationLine = isRegexPractice
+            ? '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().'
+            : '# Use a for loop to process values one at a time.';
         const logic = `"""
 Problem: ${targetExercise.id}
 ${prompt}
@@ -11662,9 +11673,8 @@ ${prompt}
 # PROBLEM EXPLANATION:
 # ${prompt}
 #
-# This problem demonstrates how to use a for loop to process values one at a time.
-# The loop should update a result while it runs, then the function should return
-# the completed value after every item has been checked.
+# This problem demonstrates how to use Python ${conceptName}.
+${isRegexPractice ? '# A regex pattern describes what text to find, replace, split, or validate.' : '# The loop should update a result while it runs, then return the completed value.'}
 #
 # CODE LOGIC:
 ${(targetExercise.breakdown || '').split('\n').map(line => `# ${line}`).join('\n')}
@@ -11680,14 +11690,14 @@ ${solutionCode}
 # PROBLEM EXPLANATION:
 # ${prompt}
 #
-# This problem is for practicing a real Python for loop.
+# This problem is for practicing Python ${conceptName}.
 #
 # Key Requirements:
 # - Define a function named ${functionName}.
-# - Use at least one for loop.
+# - ${isRegexPractice ? "Import and use Python's re module." : 'Use at least one for loop.'}
+# - ${isRegexPractice ? 'Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.' : 'Build the result with loop logic.'}
 # - Use the input values from the function parameters.
 # - Do not hard-code the example output.
-# - Build the result with loop logic.
 # - Return the final answer from the function.
 # - Keep the result type consistent with the examples.
 # ============================================================================
@@ -11698,13 +11708,57 @@ ${prompt}
 """
 
 # SOLUTION EXPLANATION:
-# This solution defines a function that encapsulates the required loop logic.
-# The for loop repeats once for each item in the input data.
-# The function returns the completed value after the loop has finished.
+# This solution defines a function that encapsulates the required logic.
+${isRegexPractice ? '# The regex pattern decides which text is matched, captured, replaced, or validated.' : '# The for loop repeats once for each item in the input data.'}
+# The function returns the completed value after the operation has finished.
 
 ${solutionCode}`;
 
-        const syntax = `"""
+        const syntax = isRegexPractice ? `"""
+Problem ${targetExercise.id}:
+#
+# SYNTAX:
+# Syntax describes the Python building blocks used in this code.
+#
+import re  # imports Python's regular expression module
+
+def ${functionName}(...):  # defines a function with parameters
+    pattern = r"..."
+    ${operationLine}
+    return result
+#
+# Common regex functions:
+# re.search(pattern, text)      -> finds the first match or returns None
+# re.findall(pattern, text)     -> returns all matches as a list
+# re.sub(pattern, repl, text)   -> replaces matching text
+# re.split(pattern, text)       -> splits text using a regex separator
+# re.fullmatch(pattern, text)   -> validates the whole string
+#
+# Common regex syntax:
+# \\d  digit, \\D non-digit, \\w word character, \\s whitespace
+# + one or more, * zero or more, ? optional
+# [] character set, () capture group, ^ start, $ end, \\b word boundary
+#
+# EVALUATION ORDER:
+# Python builds the pattern first, evaluates the input text, then calls the re function.
+#
+${functionName}(...)  # arguments evaluated first, then function body runs
+re.findall(pattern, text)  # pattern and text evaluated first, then matching runs
+return result  # result is evaluated, then sent back to the caller
+#
+# EXECUTION ORDER:
+# The import runs first, the def block is stored, and the function runs only when called.
+#
+import re
+def ${functionName}(...):  # stored in memory
+result = ${functionName}(...)  # calls the function
+print(result)
+#
+# EXECUTION FLOW:
+# The function receives input, applies the regex operation, and returns the result.
+#
+# Regex flow: pattern -> match/replace/split/validate -> result
+"""` : `"""
 Problem ${targetExercise.id}:
 #
 # SYNTAX:
@@ -11753,7 +11807,7 @@ print(result)
     const loadSolutionFiles = useCallback(async (exerciseId: number) => {
         const targetExercise = getExerciseById(exerciseId);
         if (targetExercise && exerciseId > 2000) {
-            const docs = createGeneratedForLoopDocs(targetExercise);
+            const docs = createGeneratedPracticeDocs(targetExercise);
             setLogicContent(docs.logic);
             setRequirementsContent(docs.requirements);
             setSyntaxContent(docs.syntax);

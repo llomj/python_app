@@ -54,6 +54,18 @@ const forLoopPracticeGrader = (functionName: string, tests: AutoTestCase[], comp
     tests
 });
 
+const regexPracticeGrader = (
+    functionName: string,
+    reFunctionName: string,
+    tests: AutoTestCase[],
+    compare?: CompareMode
+): AutoGrader => ({
+    functionNames: [functionName],
+    compare,
+    requiredCallPatterns: [{ functionName: reFunctionName, minArgs: 1 }],
+    tests
+});
+
 export const AUTO_GRADERS: Record<number, AutoGrader> = {
     1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
@@ -16273,6 +16285,206 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
     { args: [[1, 2, 3, 4], 1], expected: [2, 3, 4, 1] },
     { args: [["a", "b", "c"], 2], expected: ["c", "a", "b"] },
     { args: [[9, 8], 4], expected: [9, 8] }
+  ]),
+  2041: regexPracticeGrader("extract_numbers_regex", "findall", [
+    { args: ["Order 42 has 100 items"], expected: ["42", "100"] },
+    { args: ["No 7 then 89"], expected: ["7", "89"] },
+    { args: ["abc"], expected: [] }
+  ]),
+  2042: regexPracticeGrader("has_digit_regex", "search", [
+    { args: ["abc3"], expected: true },
+    { args: ["hello"], expected: false },
+    { args: ["2026"], expected: true }
+  ]),
+  2043: regexPracticeGrader("normalize_spaces_regex", "sub", [
+    { args: ["hi   there"], expected: "hi there" },
+    { args: ["  a\t b  "], expected: "a b" },
+    { args: ["x\n\ny\tz"], expected: "x y z" }
+  ]),
+  2044: regexPracticeGrader("extract_emails_regex", "findall", [
+    { args: ["a@x.com and bob@test.org"], expected: ["a@x.com", "bob@test.org"] },
+    { args: ["none here"], expected: [] },
+    { args: ["mail me@site.net"], expected: ["me@site.net"] }
+  ]),
+  2045: regexPracticeGrader("mask_digits_regex", "sub", [
+    { args: ["Phone 123"], expected: "Phone ***" },
+    { args: ["A9B8"], expected: "A*B*" },
+    { args: ["no digits"], expected: "no digits" }
+  ]),
+  2046: regexPracticeGrader("split_commas_semicolons_regex", "split", [
+    { args: ["red,blue; green"], expected: ["red", "blue", "green"] },
+    { args: ["a;b,c"], expected: ["a", "b", "c"] },
+    { args: ["one; two, three"], expected: ["one", "two", "three"] }
+  ]),
+  2047: regexPracticeGrader("starts_with_capital_regex", "match", [
+    { args: ["Python"], expected: true },
+    { args: ["python"], expected: false },
+    { args: ["Ada code"], expected: true }
+  ]),
+  2048: regexPracticeGrader("is_hex_color_regex", "fullmatch", [
+    { args: ["#A1B2C3"], expected: true },
+    { args: ["A1B2C3"], expected: false },
+    { args: ["#123ABZ"], expected: false }
+  ]),
+  2049: regexPracticeGrader("extract_hashtags_regex", "findall", [
+    { args: ["Learn #python and #regex"], expected: ["#python", "#regex"] },
+    { args: ["no tags"], expected: [] },
+    { args: ["#one #two"], expected: ["#one", "#two"] }
+  ]),
+  2050: regexPracticeGrader("remove_punctuation_regex", "sub", [
+    { args: ["Hi, Bob!"], expected: "Hi Bob" },
+    { args: ["A-1?"], expected: "A1" },
+    { args: ["Keep spaces."], expected: "Keep spaces" }
+  ]),
+  2051: regexPracticeGrader("words_starting_with_regex", "findall", [
+    { args: ["Cat car dog", "c"], expected: ["Cat", "car"] },
+    { args: ["Apple ant bat", "a"], expected: ["Apple", "ant"] },
+    { args: ["red blue", "z"], expected: [] }
+  ]),
+  2052: regexPracticeGrader("count_vowel_groups_regex", "findall", [
+    { args: ["beautiful day"], expected: 4 },
+    { args: ["sky"], expected: 0 },
+    { args: ["queue tree"], expected: 2 }
+  ]),
+  2053: regexPracticeGrader("digits_only_regex", "sub", [
+    { args: ["(555) 123-4567"], expected: "5551234567" },
+    { args: ["A1B2"], expected: "12" },
+    { args: ["none"], expected: "" }
+  ]),
+  2054: regexPracticeGrader("date_to_iso_regex", "sub", [
+    { args: ["07/12/2026"], expected: "2026-12-07" },
+    { args: ["01/02/2003"], expected: "2003-02-01" },
+    { args: ["31/01/1999"], expected: "1999-01-31" }
+  ]),
+  2055: regexPracticeGrader("capitalized_words_regex", "findall", [
+    { args: ["Ada wrote Python code"], expected: ["Ada", "Python"] },
+    { args: ["hello Bob"], expected: ["Bob"] },
+    { args: ["no capitals"], expected: [] }
+  ]),
+  2056: regexPracticeGrader("contains_whole_word_regex", "search", [
+    { args: ["cat scatter cat", "cat"], expected: true },
+    { args: ["scatter", "cat"], expected: false },
+    { args: ["hello world", "world"], expected: true }
+  ]),
+  2057: regexPracticeGrader("extract_decimals_regex", "findall", [
+    { args: ["x=3.14 y=2"], expected: ["3.14"] },
+    { args: ["1.5 and 20.75"], expected: ["1.5", "20.75"] },
+    { args: ["no decimal 5"], expected: [] }
+  ]),
+  2058: regexPracticeGrader("redact_emails_regex", "sub", [
+    { args: ["Mail a@x.com now"], expected: "Mail [EMAIL] now" },
+    { args: ["bob@test.org ok"], expected: "[EMAIL] ok" },
+    { args: ["none"], expected: "none" }
+  ]),
+  2059: regexPracticeGrader("split_sentences_regex", "split", [
+    { args: ["Hi! How are you? Good."], expected: ["Hi", "How are you", "Good"] },
+    { args: ["One. Two"], expected: ["One", "Two"] },
+    { args: ["Wait... Go!"], expected: ["Wait", "Go"] }
+  ]),
+  2060: regexPracticeGrader("valid_username_regex", "fullmatch", [
+    { args: ["user_123"], expected: true },
+    { args: ["1bad"], expected: false },
+    { args: ["ab"], expected: false }
+  ]),
+  2061: regexPracticeGrader("extract_mentions_regex", "findall", [
+    { args: ["Hi @ada and @bob"], expected: ["@ada", "@bob"] },
+    { args: ["none"], expected: [] },
+    { args: ["@x ok"], expected: ["@x"] }
+  ]),
+  2062: regexPracticeGrader("collapse_repeated_chars_regex", "sub", [
+    { args: ["boook"], expected: "bok" },
+    { args: ["mississippi"], expected: "misisipi" },
+    { args: ["abc"], expected: "abc" }
+  ]),
+  2063: regexPracticeGrader("three_letter_words_regex", "findall", [
+    { args: ["cat dog python"], expected: ["cat", "dog"] },
+    { args: ["a bee car"], expected: ["bee", "car"] },
+    { args: ["four six"], expected: ["six"] }
+  ]),
+  2064: regexPracticeGrader("remove_html_tags_regex", "sub", [
+    { args: ["<p>Hello</p>"], expected: "Hello" },
+    { args: ["A <b>bold</b> word"], expected: "A bold word" },
+    { args: ["plain"], expected: "plain" }
+  ]),
+  2065: regexPracticeGrader("extract_extensions_regex", "search", [
+    { args: [["a.py", "b.txt"]], expected: ["py", "txt"] },
+    { args: [["no_ext", "x.js"]], expected: ["js"] },
+    { args: [["data.csv", "README"]], expected: ["csv"] }
+  ]),
+  2066: regexPracticeGrader("has_24h_time_regex", "search", [
+    { args: ["Meet at 09:30"], expected: true },
+    { args: ["Time 29:99"], expected: false },
+    { args: ["ends 23:59"], expected: true }
+  ]),
+  2067: regexPracticeGrader("extract_quoted_text_regex", "findall", [
+    { args: ["He said \"hi\" and \"bye\""], expected: ["hi", "bye"] },
+    { args: ["no quotes"], expected: [] },
+    { args: ["\"one\""], expected: ["one"] }
+  ]),
+  2068: regexPracticeGrader("spaces_to_dash_regex", "sub", [
+    { args: ["hello   world"], expected: "hello-world" },
+    { args: [" a\t b "], expected: "a-b" },
+    { args: ["one two\nthree"], expected: "one-two-three" }
+  ]),
+  2069: regexPracticeGrader("count_words_regex", "findall", [
+    { args: ["hello world"], expected: 2 },
+    { args: ["one, two! three"], expected: 3 },
+    { args: [""], expected: 0 }
+  ]),
+  2070: regexPracticeGrader("extract_ipv4_regex", "findall", [
+    { args: ["ping 192.168.1.1 now"], expected: ["192.168.1.1"] },
+    { args: ["none 10.0.0.5"], expected: ["10.0.0.5"] },
+    { args: ["no ip"], expected: [] }
+  ]),
+  2071: regexPracticeGrader("letters_only_regex", "sub", [
+    { args: ["A1 b!"], expected: "Ab" },
+    { args: ["Hi-5"], expected: "Hi" },
+    { args: ["abc"], expected: "abc" }
+  ]),
+  2072: regexPracticeGrader("repeated_words_regex", "findall", [
+    { args: ["go go now"], expected: ["go"] },
+    { args: ["Yes yes no"], expected: ["Yes"] },
+    { args: ["no repeat"], expected: [] }
+  ]),
+  2073: regexPracticeGrader("extract_domains_regex", "findall", [
+    { args: ["Go https://example.com/a"], expected: ["example.com"] },
+    { args: ["http://test.org"], expected: ["test.org"] },
+    { args: ["none"], expected: [] }
+  ]),
+  2074: regexPracticeGrader("tabs_to_space_regex", "sub", [
+    { args: ["a\t\tb"], expected: "a b" },
+    { args: ["x\ty"], expected: "x y" },
+    { args: ["no tabs"], expected: "no tabs" }
+  ]),
+  2075: regexPracticeGrader("words_ending_with_regex", "findall", [
+    { args: ["running jumping run", "ing"], expected: ["running", "jumping"] },
+    { args: ["cat hat dog", "at"], expected: ["cat", "hat"] },
+    { args: ["alpha beta", "zz"], expected: [] }
+  ]),
+  2076: regexPracticeGrader("simple_postcode_regex", "fullmatch", [
+    { args: ["AB1234"], expected: true },
+    { args: ["A12345"], expected: false },
+    { args: ["XY0000"], expected: true }
+  ]),
+  2077: regexPracticeGrader("inside_parentheses_regex", "findall", [
+    { args: ["a (one) b (two)"], expected: ["one", "two"] },
+    { args: ["none"], expected: [] },
+    { args: ["(x)"], expected: ["x"] }
+  ]),
+  2078: regexPracticeGrader("remove_line_comments_regex", "sub", [
+    { args: ["x = 1 # set x"], expected: "x = 1 " },
+    { args: ["a#b\nc"], expected: "a\nc" },
+    { args: ["no comment"], expected: "no comment" }
+  ]),
+  2079: regexPracticeGrader("extract_initials_regex", "findall", [
+    { args: ["J. R. Smith"], expected: ["J.", "R."] },
+    { args: ["Ada L."], expected: ["L."] },
+    { args: ["no initials"], expected: [] }
+  ]),
+  2080: regexPracticeGrader("extract_currency_regex", "findall", [
+    { args: ["Pay $12 and $4.50"], expected: ["$12", "$4.50"] },
+    { args: ["none $100"], expected: ["$100"] },
+    { args: ["free"], expected: [] }
   ])
 
 };

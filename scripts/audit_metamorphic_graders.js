@@ -123,6 +123,7 @@ function metamorphicRule(functionNames, tests) {
   const firstArgs = Array.isArray(tests[0]?.args) ? tests[0].args : [];
   const names = new Set(functionNames || []);
   const firstExpected = tests[0]?.expected;
+  if ([...names].some(name => name.endsWith('_regex'))) return 'regex_practice';
   if (firstArgs.length === 2) {
     const [left, right] = firstArgs;
     if (names.has('count_long_words_with_for_loop') && Array.isArray(left) && Number.isInteger(right)) return 'count_long_words_for_loop';
