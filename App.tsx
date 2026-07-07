@@ -10353,7 +10353,7 @@ const App: React.FC = () => {
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
-    const statsRows = useMemo(() => MODE_OPTIONS.map(mode => {
+    const statsRows = useMemo(() => DIFFICULTY_MODES.map(mode => {
         const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
         const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
         const modeRank = getModeRank(modeStats);
