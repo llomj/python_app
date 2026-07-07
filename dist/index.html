@@ -136,12 +136,25 @@
     </style>
 
     <script>
+        // ── GLOBAL ERROR CATCHER ──
+        window.addEventListener('error', function (e) {
+            var bootError = document.getElementById('bootError');
+            var fallback = document.getElementById('bootFallback');
+            if (bootError) {
+                bootError.textContent = '⚠️ Error: ' + (e.message || 'App failed to load');
+            }
+            if (fallback) {
+                fallback.style.display = 'block';
+            }
+        });
+    </script>
+    <script>
         // ── FORCE CACHE CLEAR ──────────────────────────────────────────
         // Runs before ANY module loads. If version changed, wipe everything
         // and reload. This ensures fresh content on every deploy.
         // ───────────────────────────────────────────────────────────────
         (function () {
-            var APP_VERSION = 'v218';
+            var APP_VERSION = 'v219';
             var prevVersion = localStorage.getItem('app_version');
             var alreadyCleared = sessionStorage.getItem('cache_cleared');
 
@@ -202,7 +215,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="./assets/index-DmcjMR51.js"></script>
+  <script type="module" crossorigin src="./assets/index-C6DY2uD1.js"></script>
 </head>
 
 <body>
@@ -212,8 +225,37 @@
         <p style="margin-top: 20px; font-weight: 900; font-size: 12px; letter-spacing: 2px; color: #3b82f6;">CONNECTING
             TO EDITOR...</p>
         <p style="margin-top: 8px; font-size: 10px; color: #4b5563;">Please wait for Python engine</p>
-        <button id="rescueBtn" class="rescue-link">Force Clear Cache & Reload</button>
+        <div id="bootFallback" style="display:none; margin-top: 30px; text-align: center;">
+            <p style="color: #f59e0b; font-size: 12px; font-weight: 900; letter-spacing: 1px;">
+                ⚡ Taking longer than expected?
+            </p>
+            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px; align-items: center;">
+                <button id="rescueBtn" class="rescue-link" style="position:static; display:inline-block; background:#1d2d44; color:white; padding:14px 28px; border-radius:16px; font-weight:900; font-size:10px; text-transform:uppercase; letter-spacing:2px; text-decoration:none;">
+                    Force Clear Cache &amp; Reload
+                </button>
+                <button id="bypassModuleBtn" style="background:#7c3aed; color:white; padding:12px 24px; border-radius:16px; font-weight:900; font-size:10px; text-transform:uppercase; letter-spacing:2px; cursor:pointer; border:none;">
+                    Try Lite Mode (No AI)
+                </button>
+            </div>
+            <p id="bootError" style="margin-top: 16px; color: #ef4444; font-size: 11px;"></p>
+        </div>
         <script>
+            // ── BOOT TIMEOUT: show fallback options if app doesn't mount within 15s ──
+            var bootCheckInterval = setInterval(function () {
+                var root = document.getElementById('root');
+                if (root && root.children.length > 0) {
+                    clearInterval(bootCheckInterval);
+                    return;
+                }
+            }, 500);
+            setTimeout(function () {
+                clearInterval(bootCheckInterval);
+                var fallback = document.getElementById('bootFallback');
+                if (fallback && document.getElementById('root') && document.getElementById('root').children.length === 0) {
+                    fallback.style.display = 'block';
+                }
+            }, 15000);
+
             document.getElementById('rescueBtn').addEventListener('click', function (e) {
                 this.textContent = 'Clearing cache...';
                 var clearCaches = window.caches
@@ -235,8 +277,80 @@
                     location.reload();
                 });
             });
+
+            document.getElementById('bypassModuleBtn').addEventListener('click', function () {
+                sessionStorage.setItem('lite_mode', '1');
+                // Try a direct reload with lite mode flag
+                var nextUrl = new URL(location.href);
+                nextUrl.searchParams.set('lite', '1');
+                nextUrl.searchParams.set('cache', Date.now().toString());
+                location.replace(nextUrl.toString());
+            });
         </script>
     </div>
+    <script>
+        // Service worker registration (browsers that support ES modules)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                try {
+                    navigator.serviceWorker.register('./sw.js?v=v219', {
+                        updateViaCache: 'none',
+                        scope: './'
+                    });
+                } catch (err) {
+                    console.error('Service worker registration failed:', err);
+                }
+            });
+        }
+    </script>
+    <script>
+        var makeEditorCompact = function () {
+            const editors = Array.from(document.querySelectorAll('.cm-editor'));
+            for (const editor of editors) {
+                const wrapper = editor.parentElement;
+                if (!(editor instanceof HTMLElement) || !(wrapper instanceof HTMLElement)) continue;
+                if (editor.dataset.compactEditor === 'true') continue;
+
+                editor.dataset.compactEditor = 'true';
+                wrapper.style.minHeight = '320px';
+                editor.style.height = '320px';
+            }
+        };
+
+        const makeOutputScrollable = () => {
+            const labels = Array.from(document.querySelectorAll('span')).filter(
+                (node) => node.textContent && node.textContent.trim() === 'Output'
+            );
+
+            for (const label of labels) {
+                const header = label.closest('div');
+                const output = header?.nextElementSibling;
+
+                if (!(output instanceof HTMLElement) || output.dataset.outputScrollable === 'true') continue;
+
+                output.dataset.outputScrollable = 'true';
+                output.style.height = '85px';
+                output.style.minHeight = '85px';
+                output.style.maxHeight = '50vh';
+                output.style.overflowY = 'auto';
+                output.style.webkitOverflowScrolling = 'touch';
+                output.style.touchAction = 'pan-y';
+                output.style.resize = 'vertical';
+            }
+        };
+
+        window.addEventListener('load', () => {
+            let attempts = 0;
+            const intervalId = window.setInterval(() => {
+                makeEditorCompact();
+                makeOutputScrollable();
+                attempts += 1;
+                if ((document.querySelector('[data-output-scrollable="true"]') && document.querySelector('[data-compact-editor="true"]')) || attempts > 20) {
+                    window.clearInterval(intervalId);
+                }
+            }, 500);
+        });
+    </script>
 </body>
 
 </html>
