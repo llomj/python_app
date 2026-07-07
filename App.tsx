@@ -10382,6 +10382,13 @@ const App: React.FC = () => {
         const problemCount = getExercisePoolForMode(mode.id).length;
         return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
     }), [statsByMode]);
+    const conceptStatsRows = useMemo(() => PYTHON_CONCEPT_MODES.map(mode => {
+        const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
+        const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
+        const modeRank = getModeRank(modeStats);
+        const problemCount = getExercisePoolForMode(mode.id).length;
+        return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
+    }), [statsByMode]);
     const selectedConceptMode = getConceptForMode(difficultyMode);
 
     useEffect(() => {
@@ -13873,13 +13880,12 @@ print(result)
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 pb-8 select-none" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', WebkitUserSelect: 'none', userSelect: 'none' }}>
                                     <div className="space-y-3">
-                                        {statsRows.map(mode => {
+                                        {difficultyStatsRows.map(mode => {
                                             const isSelected = difficultyMode === mode.id;
-                                            const isDifficulty = DIFFICULTY_MODES.some(m => m.id === mode.id);
                                             return (
                                                 <div key={mode.id} className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4" style={isSelected ? { borderColor: countRowColors.wins } : undefined}>
                                                     <div className="flex items-center justify-between gap-2 mb-3">
-                                                        <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : (isDifficulty ? countRowColors.rate : '#ffffff') }}>{mode.label}</span>
+                                                        <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : countRowColors.rate }}>{mode.label}</span>
                                                         <span className="font-mono text-lg" title={mode.rank.name}>{mode.rank.icon}</span>
                                                     </div>
                                                     <div className="grid grid-cols-5 gap-2 text-[10px]">
@@ -13907,6 +13913,46 @@ print(result)
                                                 </div>
                                             );
                                         })}
+                                        {conceptStatsRows.length > 0 && (
+                                            <div className="py-1">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-gray-500 mb-2">Concepts</div>
+                                                <div className="space-y-3">
+                                                    {conceptStatsRows.map(mode => {
+                                                        const isSelected = difficultyMode === mode.id;
+                                                        return (
+                                                            <div key={mode.id} className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4" style={isSelected ? { borderColor: countRowColors.wins } : undefined}>
+                                                                <div className="flex items-center justify-between gap-2 mb-3">
+                                                                    <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : '#ffffff' }}>{mode.label}</span>
+                                                                    <span className="font-mono text-lg" title={mode.rank.name}>{mode.rank.icon}</span>
+                                                                </div>
+                                                                <div className="grid grid-cols-5 gap-2 text-[10px]">
+                                                                    <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Cnt</div>
+                                                                        <div className="font-mono text-gray-200">{mode.stats.shots}</div>
+                                                                    </div>
+                                                                    <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Win</div>
+                                                                        <div className="font-mono" style={{ color: countRowColors.wins }}>{mode.stats.success}</div>
+                                                                    </div>
+                                                                    <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fail</div>
+                                                                        <div className="font-mono" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</div>
+                                                                    </div>
+                                                                    <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Rate</div>
+                                                                        <div className="font-mono" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</div>
+                                                                    </div>
+                                                                    <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Prb</div>
+                                                                        <div className="font-mono text-gray-400">{mode.problemCount}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
                                             <div className="flex items-center justify-between gap-2 mb-3">
                                                 <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>Total</span>
