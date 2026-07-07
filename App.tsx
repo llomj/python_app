@@ -10626,6 +10626,14 @@ const App: React.FC = () => {
     const [generalAiDraft, setGeneralAiDraft] = useState('');
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
+    const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
+        try {
+            const raw = localStorage.getItem('saved_ai_conversations');
+            return raw ? JSON.parse(raw) : [];
+        } catch { return []; }
+    });
+    const [showSavedConvs, setShowSavedConvs] = useState(false);
+    const [generalAiSaveFeedback, setGeneralAiSaveFeedback] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState(false);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
@@ -13294,7 +13302,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
-        const historyForAi = generalAiMessages.map(m => ({ role: m.role, content: m.text }));
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setGeneralAiMessages(prev => [...prev, userMessage]);
         setGeneralAiDraft('');
@@ -13311,16 +13318,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }]);
                 return;
             }
-            const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, historyForAi);
-            if (generalAnswer) {
-                setGeneralAiMessages(prev => [...prev, {
-                    id: Date.now() + 1,
-                    role: 'assistant',
-                    source: 'offline',
-                    text: generalAnswer,
-                }]);
-                return;
-            }
+            /* Offline model disabled — the 0.5B model hallucinates unreliable answers.
+               Only the curated reference is used. If it doesn't match, we ask for clarification. */
             const lowerQ = question.toLowerCase();
             const clarification = [];
             if (/\b(method|methods)\b/.test(lowerQ) && !/\b(list|string|dict|set|tuple)\b.*\bmethod|\bmethod.*\b(list|string|dict|set|tuple)\b/.test(lowerQ)) {
@@ -13343,7 +13342,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [answerGeneralPythonWithAvailableAi, generalAiRunning, offlineAiState]);
+    }, [generalAiRunning]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -14908,16 +14907,16 @@ print(result)
                                             <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Python AI</h2>
                                         <button
                                             onClick={() => {
+                                                const label = generalAiMessages.filter(m => m.role === 'user').slice(-1)[0]?.text.slice(0, 50) || 'Python AI chat';
                                                 const text = generalAiMessages.map(m =>
                                                     `${m.role === 'user' ? 'You' : 'AI'}: ${m.text}`
                                                 ).join('\n\n---\n\n');
-                                                const blob = new Blob([text], { type: 'text/plain' });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement('a');
-                                                a.href = url;
-                                                a.download = `python-conversation-${Date.now()}.txt`;
-                                                a.click();
-                                                URL.revokeObjectURL(url);
+                                                const entry = { time: new Date().toLocaleString(), label, text };
+                                                const next = [...savedConversations, entry];
+                                                setSavedConversations(next);
+                                                localStorage.setItem('saved_ai_conversations', JSON.stringify(next));
+                                                setGeneralAiSaveFeedback(true);
+                                                setTimeout(() => setGeneralAiSaveFeedback(false), 1500);
                                             }}
                                             className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                             style={{
@@ -14925,9 +14924,21 @@ print(result)
                                                 color: '#86efac',
                                                 backgroundColor: hexToRgba('#22c55e', 0.1),
                                             }}
-                                            title="Save conversation as text file"
+                                            title="Save conversation to history"
                                         >
-                                            Save
+                                            {generalAiSaveFeedback ? 'Saved ✓' : 'Save'}
+                                        </button>
+                                        <button
+                                            onClick={() => setShowSavedConvs(prev => !prev)}
+                                            className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                            style={{
+                                                borderColor: hexToRgba(toolPanelColors.ai, 0.35),
+                                                color: toolPanelColors.ai,
+                                                backgroundColor: hexToRgba(toolPanelColors.ai, 0.1),
+                                            }}
+                                            title="Show saved conversations"
+                                        >
+                                            Saved ({savedConversations.length})
                                         </button>
                                         <button
                                             onClick={() => setGeneralAiMessages([])}
@@ -15014,6 +15025,31 @@ print(result)
                                         </div>
                                     )}
                                 </div>
+
+                                {showSavedConvs && (
+                                    <div className="flex-shrink-0 max-h-48 overflow-y-auto rounded-2xl border p-2 space-y-1.5" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(8, 18, 34, 0.6)' }}>
+                                        <div className="flex items-center justify-between px-1 pb-1">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.12em] text-gray-400">Saved conversations</span>
+                                            <button
+                                                onClick={() => { setSavedConversations([]); localStorage.removeItem('saved_ai_conversations'); }}
+                                                className="text-[9px] text-red-400 hover:text-red-300"
+                                            >
+                                                Clear all
+                                            </button>
+                                        </div>
+                                        {savedConversations.length === 0 && (
+                                            <p className="px-1 text-[11px] text-gray-500">No saved conversations yet. Click Save to store one.</p>
+                                        )}
+                                        {[...savedConversations].reverse().map((conv, i) => (
+                                            <div key={i} className="rounded-xl border p-2 text-xs" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.15), backgroundColor: 'rgba(0,0,0,0.2)' }}>
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <span className="truncate font-bold text-gray-200">{conv.label}</span>
+                                                    <span className="shrink-0 text-[10px] text-gray-500">{conv.time}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 <form
                                     className="flex flex-shrink-0 gap-2 border-t border-[#1d2d44] pt-3"
