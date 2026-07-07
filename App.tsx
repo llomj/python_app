@@ -10159,11 +10159,6 @@ const App: React.FC = () => {
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax' | 'concept'>('code');
-    useEffect(() => {
-        if (solutionTab === 'concept' && !isConceptMode(difficultyMode)) {
-            setSolutionTab('code');
-        }
-    }, [solutionTab, difficultyMode]);
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [showHowToUse, setShowHowToUse] = useState(false);
     const [modeSectionOpen, setModeSectionOpen] = useState(false);
@@ -10188,6 +10183,11 @@ const App: React.FC = () => {
         return localStorage.getItem('gemini_api_key') || '';
     });
     const [difficultyMode, setDifficultyMode] = useState<ProblemMode>(() => getSavedDifficultyMode());
+    useEffect(() => {
+        if (solutionTab === 'concept' && !isConceptMode(difficultyMode)) {
+            setSolutionTab('code');
+        }
+    }, [solutionTab, difficultyMode]);
     const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
