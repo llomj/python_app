@@ -10375,15 +10375,10 @@ const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSetti
     return '#e5e7eb';
 };
 
-const renderInlinePythonCode = (code: string, editorColors: EditorColorSettings, keyPrefix: string) => {
-    const tokens = code.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b|\s+|./g) || [code];
+const renderInlinePythonCode = (code: string) => {
     return (
-        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em]">
-            {tokens.map((token, index) => (
-                <span key={`${keyPrefix}-${index}`} style={{ color: /^\s+$/.test(token) ? undefined : getInlinePythonTokenColor(token, editorColors) }}>
-                    {token}
-                </span>
-            ))}
+        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100">
+            {code}
         </code>
     );
 };
@@ -10392,29 +10387,15 @@ const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, 
     const parts = text.split(/(`[^`]+`)/g).filter(Boolean);
     return parts.map((part, index) => {
         if (part.startsWith('`') && part.endsWith('`')) {
-            return renderInlinePythonCode(part.slice(1, -1), editorColors, `${keyPrefix}-code-${index}`);
+            return (
+                <React.Fragment key={`${keyPrefix}-code-${index}`}>
+                    {renderInlinePythonCode(part.slice(1, -1))}
+                </React.Fragment>
+            );
         }
-        // Colorize bare Python tokens in normal prose: strings, True/False/None, numbers, .method()
-        const tokens = part.split(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b(True|False|None)\b|\.\w+(?:\(\))?|\b\d+(?:\.\d+)?\b)/g);
         return (
             <React.Fragment key={`${keyPrefix}-text-${index}`}>
-                {tokens.map((token, tokenIndex) => {
-                    if (!token) return null;
-                    const tokenKey = `${keyPrefix}-text-${index}-tok-${tokenIndex}`;
-                    if (/^"(?:[^"\\]|\\.)*"$/.test(token) || /^'(?:[^'\\]|\\.)*'$/.test(token)) {
-                        return <span key={tokenKey} style={{ color: editorColors.string }}>{token}</span>;
-                    }
-                    if (/^(True|False|None)$/.test(token)) {
-                        return <span key={tokenKey} style={{ color: editorColors.keyword }}>{token}</span>;
-                    }
-                    if (/^\d+(?:\.\d+)?$/.test(token)) {
-                        return <span key={tokenKey} style={{ color: editorColors.number }}>{token}</span>;
-                    }
-                    if (/^\.\w+(?:\(\))?$/.test(token)) {
-                        return <span key={tokenKey} style={{ color: editorColors.builtin }}>{token}</span>;
-                    }
-                    return <React.Fragment key={tokenKey}>{token}</React.Fragment>;
-                })}
+                {part}
             </React.Fragment>
         );
     });
