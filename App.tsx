@@ -13324,19 +13324,19 @@ print(result)
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <div className="flex items-center justify-between gap-2">
-                                        <h3 className="text-sm font-bold text-gray-200">Problem Mode</h3>
-                                        <div className="flex items-center gap-1">
-                                            <button
-                                                onClick={() => setProblemModeSectionOpen(prev => !prev)}
-                                                className="inline-flex items-center justify-center rounded-full p-1.5 transition-all hover:bg-[#1d2d44]"
-                                                title={problemModeSectionOpen ? 'Collapse' : 'Expand'}
-                                            >
-                                                <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: problemModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                        <div className="flex items-center gap-2">
+                                            <button onClick={() => setShowModal('problem_mode_help')} className="inline-flex items-center justify-center rounded-full p-1 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use this app" style={{ color: countRowColors.count }}>
+                                                <Info size={16} />
                                             </button>
-                                            <button onClick={() => setShowModal('problem_mode_help')} className="inline-flex items-center justify-center rounded-full p-1.5 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use this app" style={{ color: countRowColors.count }}>
-                                                <Info size={20} />
-                                            </button>
+                                            <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">Problem Mode</h3>
                                         </div>
+                                        <button
+                                            onClick={() => setProblemModeSectionOpen(prev => !prev)}
+                                            className="inline-flex items-center justify-center rounded-full p-1.5 transition-all hover:bg-[#1d2d44]"
+                                            title={problemModeSectionOpen ? 'Collapse' : 'Expand'}
+                                        >
+                                            <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: problemModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                        </button>
                                     </div>
                                     {problemModeSectionOpen && (
                                         <div className="mt-3 animate-in fade-in duration-200">
