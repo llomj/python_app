@@ -13299,11 +13299,11 @@ print(result)
                                                     key={mode.id}
                                                     onClick={() => handleDifficultyModeSelect(mode.id)}
                                                     className="w-full rounded-xl border px-3 py-2 text-left transition-colors hover:brightness-125"
-                                                    style={isSelected ? { borderColor: '#4ade80', backgroundColor: hexToRgba('#4ade80', 0.15), color: '#4ade80' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#9ca3af' }}
+                                                    style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: hexToRgba(countRowColors.rate, 0.4), backgroundColor: 'rgba(7, 18, 37, 0.7)', color: countRowColors.rate }}
                                                 >
                                                     <span className="flex items-center justify-between gap-3">
                                                         <span className="text-xs font-black uppercase tracking-[0.16em]">{mode.label}</span>
-                                                        {isSelected && <Check size={14} style={{ color: '#4ade80' }} />}
+                                                        {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
                                                     </span>
                                                     <span className="mt-1 block text-[10px] text-gray-400">{mode.description}</span>
                                                 </button>
@@ -13331,13 +13331,13 @@ print(result)
                                                         key={concept.id}
                                                         onClick={() => handleDifficultyModeSelect(concept.id)}
                                                         className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
-                                                        style={isSelected ? { borderColor: countRowColors.count, backgroundColor: hexToRgba(countRowColors.count, 0.25), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#9ca3af' }}
+                                                        style={isSelected ? { borderColor: '#4b5563', backgroundColor: 'rgba(55, 65, 81, 0.5)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#d1d5db' }}
                                                     >
                                                         <span className="flex items-center justify-between gap-3">
                                                             <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
                                                             <span className="flex items-center gap-2 text-[10px] text-gray-400">
                                                                 {count} problems
-                                                                {isSelected && <Check size={14} className="text-[#93c5fd]" />}
+                                                                {isSelected && <Check size={14} className="text-gray-300" />}
                                                             </span>
                                                         </span>
                                                         <span className="mt-1 block text-[10px] text-gray-400">{concept.description}</span>
@@ -13367,60 +13367,63 @@ print(result)
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
                                     <div className="max-h-72 overflow-y-auto overflow-x-hidden overscroll-contain rounded-xl border border-[#1d2d44]" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
                                         <div className="space-y-2 select-none" style={{ WebkitUserSelect: 'none', userSelect: 'none' }}>
-                                            {statsRows.map(mode => (
-                                                <div key={mode.id} className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5">
-                                                    <div className="flex items-center justify-between gap-2 mb-2">
-                                                        <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>{mode.label}</span>
-                                                        <span className="font-mono text-sm" title={mode.rank.name}>{mode.rank.icon}</span>
+                                            {statsRows.map(mode => {
+                                                const isSelected = difficultyMode === mode.id;
+                                                return (
+                                                    <div key={mode.id} className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5" style={isSelected ? { borderLeft: `3px solid ${countRowColors.wins}` } : undefined}>
+                                                        <div className="flex items-center justify-between gap-2 mb-2">
+                                                            <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : countRowColors.rate }}>{mode.label}</span>
+                                                            <span className="font-mono text-sm" title={mode.rank.name}>{mode.rank.icon}</span>
+                                                        </div>
+                                                        <div className="grid grid-cols-5 gap-1 text-[9px]">
+                                                            <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Cnt</div>
+                                                                <div className="font-mono text-gray-200">{mode.stats.shots}</div>
+                                                            </div>
+                                                            <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Win</div>
+                                                                <div className="font-mono" style={{ color: countRowColors.wins }}>{mode.stats.success}</div>
+                                                            </div>
+                                                            <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Fail</div>
+                                                                <div className="font-mono" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</div>
+                                                            </div>
+                                                            <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Rate</div>
+                                                                <div className="font-mono" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</div>
+                                                            </div>
+                                                            <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                                <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Prb</div>
+                                                                <div className="font-mono text-gray-400">{mode.problemCount}</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="grid grid-cols-3 gap-2 text-[10px]">
-                                                        <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Count</div>
-                                                            <div className="font-mono text-gray-200">{mode.stats.shots}</div>
-                                                        </div>
-                                                        <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Wins</div>
-                                                            <div className="font-mono" style={{ color: countRowColors.wins }}>{mode.stats.success}</div>
-                                                        </div>
-                                                        <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fails</div>
-                                                            <div className="font-mono" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</div>
-                                                        </div>
-                                                        <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Rate</div>
-                                                            <div className="font-mono" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</div>
-                                                        </div>
-                                                        <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Problems</div>
-                                                            <div className="font-mono text-gray-400">{mode.problemCount}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
+                                                );
+                                            })}
                                             <div className="rounded-lg border border-[#1d2d44] bg-[#050c18] p-2.5 mt-2">
                                                 <div className="flex items-center justify-between gap-2 mb-2">
                                                     <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>Total</span>
                                                     <span className="font-mono text-sm" title={userRank.name}>{userRank.icon}</span>
                                                 </div>
-                                                <div className="grid grid-cols-3 gap-2 text-[10px]">
-                                                    <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Count</div>
+                                                <div className="grid grid-cols-5 gap-1 text-[9px]">
+                                                    <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                        <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Cnt</div>
                                                         <div className="font-mono text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
                                                     </div>
-                                                    <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Wins</div>
+                                                    <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                        <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Win</div>
                                                         <div className="font-mono" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
                                                     </div>
-                                                    <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fails</div>
+                                                    <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                        <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Fail</div>
                                                         <div className="font-mono" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
                                                     </div>
-                                                    <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Rate</div>
+                                                    <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                        <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Rate</div>
                                                         <div className="font-mono" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
                                                     </div>
-                                                    <div className="text-center rounded-md bg-[#071225] px-2 py-1.5">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Problems</div>
+                                                    <div className="text-center rounded bg-[#071225] px-1 py-1">
+                                                        <div className="text-gray-500 uppercase tracking-wider text-[8px] font-bold">Prb</div>
                                                         <div className="font-mono text-gray-400">{EXERCISES.length}</div>
                                                     </div>
                                                 </div>
@@ -13771,60 +13774,63 @@ print(result)
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 pb-8 select-none" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', WebkitUserSelect: 'none', userSelect: 'none' }}>
                                     <div className="space-y-3">
-                                        {statsRows.map(mode => (
-                                            <div key={mode.id} className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
-                                                <div className="flex items-center justify-between gap-2 mb-3">
-                                                    <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>{mode.label}</span>
-                                                    <span className="font-mono text-lg" title={mode.rank.name}>{mode.rank.icon}</span>
+                                        {statsRows.map(mode => {
+                                            const isSelected = difficultyMode === mode.id;
+                                            return (
+                                                <div key={mode.id} className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4" style={isSelected ? { borderLeft: `4px solid ${countRowColors.wins}` } : undefined}>
+                                                    <div className="flex items-center justify-between gap-2 mb-3">
+                                                        <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: isSelected ? countRowColors.wins : countRowColors.rate }}>{mode.label}</span>
+                                                        <span className="font-mono text-lg" title={mode.rank.name}>{mode.rank.icon}</span>
+                                                    </div>
+                                                    <div className="grid grid-cols-5 gap-2 text-[10px]">
+                                                        <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Cnt</div>
+                                                            <div className="font-mono text-gray-200">{mode.stats.shots}</div>
+                                                        </div>
+                                                        <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Win</div>
+                                                            <div className="font-mono" style={{ color: countRowColors.wins }}>{mode.stats.success}</div>
+                                                        </div>
+                                                        <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fail</div>
+                                                            <div className="font-mono" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</div>
+                                                        </div>
+                                                        <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Rate</div>
+                                                            <div className="font-mono" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</div>
+                                                        </div>
+                                                        <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                            <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Prb</div>
+                                                            <div className="font-mono text-gray-400">{mode.problemCount}</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="grid grid-cols-3 gap-3 text-[11px]">
-                                                    <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Count</div>
-                                                        <div className="font-mono text-gray-200">{mode.stats.shots}</div>
-                                                    </div>
-                                                    <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Wins</div>
-                                                        <div className="font-mono" style={{ color: countRowColors.wins }}>{mode.stats.success}</div>
-                                                    </div>
-                                                    <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fails</div>
-                                                        <div className="font-mono" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</div>
-                                                    </div>
-                                                    <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Rate</div>
-                                                        <div className="font-mono" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</div>
-                                                    </div>
-                                                    <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                        <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Problems</div>
-                                                        <div className="font-mono text-gray-400">{mode.problemCount}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                         <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
                                             <div className="flex items-center justify-between gap-2 mb-3">
                                                 <span className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: countRowColors.rate }}>Total</span>
                                                 <span className="font-mono text-lg" title={userRank.name}>{userRank.icon}</span>
                                             </div>
-                                            <div className="grid grid-cols-3 gap-3 text-[11px]">
-                                                <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Count</div>
+                                            <div className="grid grid-cols-5 gap-2 text-[10px]">
+                                                <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Cnt</div>
                                                     <div className="font-mono text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
                                                 </div>
-                                                <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Wins</div>
+                                                <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Win</div>
                                                     <div className="font-mono" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
                                                 </div>
-                                                <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fails</div>
+                                                <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Fail</div>
                                                     <div className="font-mono" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
                                                 </div>
-                                                <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
+                                                <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
                                                     <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Rate</div>
                                                     <div className="font-mono" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
                                                 </div>
-                                                <div className="text-center rounded-xl border border-[#1d2d44] bg-[#050c18] px-2 py-2">
-                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Problems</div>
+                                                <div className="text-center rounded-lg border border-[#1d2d44] bg-[#050c18] px-1 py-2">
+                                                    <div className="text-gray-500 uppercase tracking-wider text-[9px] font-bold">Prb</div>
                                                     <div className="font-mono text-gray-400">{EXERCISES.length}</div>
                                                 </div>
                                             </div>
