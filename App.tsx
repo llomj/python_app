@@ -370,7 +370,7 @@ const buildGeneralAiClarification = (question: string): string => {
     if (/\b(error|exception|bug|fix|wrong|fail|my code|output)\b/.test(lowerQ)) {
         return [
             '1. I need code context',
-            'For code/output debugging, use the **Problem AI** button on the problem panel so I can read the current problem, your code, and the output together.',
+            'For code/output debugging, use the top-left **Python AI** and include the current problem, your code, and the output in your question.',
             '',
             '2. Better question',
             '`Why does this code fail for this problem?`',
@@ -14495,14 +14495,6 @@ print(result)
                         <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.75rem 1rem 0.25rem 1rem', borderTopLeftRadius: '0.75rem', borderTopRightRadius: '0.75rem' }}>
                             <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: editorColors.text, margin: 0 }}>#{exercise.id}</h2>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <button onClick={openProblemAi} title="Ask AI about this problem" style={{ backgroundColor: showModal === 'problem_ai' ? hexToRgba(toolPanelColors.ai, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: toolPanelColors.ai, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
-                                    <Bot size={14} />
-                                    <span>AI</span>
-                                </button>
-                                <button onClick={openGeneralAi} title="Interactive Python chatbot" style={{ backgroundColor: showModal === 'general_ai' ? hexToRgba('#22c55e', 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: '#86efac', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', transition: 'all 0.2s ease' }}>
-                                    <Bot size={14} />
-                                    <span>Chat</span>
-                                </button>
                                 <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
                                     <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
@@ -16495,7 +16487,7 @@ print(result)
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
                                         <p className="font-bold text-white text-xs">AI Reviewer</p>
-                                        <p>Tap the <strong>AI</strong> button to ask the built-in Problem AI about the current problem. You can also enable the offline AI model in Settings for deeper code review when it is downloaded.</p>
+                                        <p>Tap the top-left <strong>Python AI</strong> icon to ask general Python questions. For code review, include the problem, your code, and the output in the same question.</p>
                                     </div>
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
