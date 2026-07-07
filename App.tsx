@@ -10314,6 +10314,7 @@ const App: React.FC = () => {
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
     const selectedModeLabel = getModeLabel(difficultyMode);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
+    const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
     const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
     const modeExerciseCount = useMemo(() => {
@@ -11649,7 +11650,97 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         return remainingContent.substring(0, endIndex).trim();
     };
 
+    const createGeneratedForLoopDocs = (targetExercise: Exercise) => {
+        const functionName = targetExercise.initialCode.match(/def\s+([a-zA-Z_]\w*)\s*\(/)?.[1] ?? 'the_function';
+        const logic = `"""
+Problem: ${targetExercise.id}
+
+Code Logic
+
+This problem is for practicing a real Python for loop. The function should loop through the input data one item at a time, update a result while the loop runs, and return the finished result after the loop.
+
+Step-by-step logic:
+${targetExercise.breakdown || '1. Read the problem statement.\n2. Create the needed result variable.\n3. Use a for loop to process each item.\n4. Return the final result.'}
+
+Important workflow:
+1. Python stores the function when it sees the def line.
+2. The function body runs only when the function is called.
+3. The for loop repeats the indented block once for each item.
+4. Any if statement inside the loop decides whether the current item should change the result.
+5. The return statement should normally be after the loop so every item is processed.
+"""`;
+
+        const requirements = `"""
+Problem: ${targetExercise.id}
+
+Requirements
+
+1. Define a function named ${functionName}.
+2. Use at least one for loop. This exercise is specifically for for-loop practice.
+3. Use the input values from the function parameters. Do not hard-code the example output.
+4. Build the answer with loop logic, such as a counter, total, string, list, dictionary, or nested loop.
+5. Return the final answer from the function.
+6. Keep the result type consistent with the prompt examples.
+7. Variable names can be different, but the logic must solve the exact task.
+"""`;
+
+        const syntax = `"""
+Problem: ${targetExercise.id}
+
+**SYNTAX**
+
+def ${functionName}(...):
+    result = ...
+    for item in iterable:
+        # repeated block
+        ...
+    return result
+
+Key syntax used:
+- def creates a reusable function.
+- for item in iterable repeats the indented block for each item.
+- if can be placed inside the loop when only some items should be used.
+- append() adds values to a list.
+- += updates a running total, counter, or string.
+- return sends the final value back to the caller.
+
+**EVALUATION ORDER**
+
+1. Function call arguments are evaluated first.
+2. The function body starts running.
+3. The iterable after in is evaluated.
+4. The loop variable receives one item at a time.
+5. The indented loop body runs for each item.
+6. The return expression is evaluated last.
+
+**EXECUTION ORDER**
+
+def ${functionName}(...):  # stored first, not run yet
+result = ${functionName}(...)  # function runs here
+print(result)  # output is shown after the function returns
+
+**EXECUTION FLOW**
+
+Top-level code calls the function.
+The function enters the for loop.
+The loop body repeats for every item.
+Control leaves the loop when there are no more items.
+The function returns the completed result.
+"""`;
+
+        return { logic, requirements, syntax };
+    };
+
     const loadSolutionFiles = useCallback(async (exerciseId: number) => {
+        const targetExercise = getExerciseById(exerciseId);
+        if (targetExercise && exerciseId > 2000) {
+            const docs = createGeneratedForLoopDocs(targetExercise);
+            setLogicContent(docs.logic);
+            setRequirementsContent(docs.requirements);
+            setSyntaxContent(docs.syntax);
+            return;
+        }
+
         // Determine which file set contains this problem
         let filePrefix: number;
         if (exerciseId <= 500) {
@@ -12403,7 +12494,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = panelColors.border; e.currentTarget.style.color = toolPanelColors.footerText; }}>
                          <RefreshCw size={18} />
                         <span className="text-xs font-bold tracking-tight">{typeof window !== 'undefined' && (window as any).APP_VERSION || 'PythonV2'}</span>
-                        <span className="text-base" title={`Rank: ${userRank.name}`}>{userRank.icon}</span>
+                        <span className="text-base" title={`${selectedModeLabel} rank: ${currentModeRank.name}`}>{currentModeRank.icon}</span>
                         <span className="rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}>{selectedModeLabel}</span>
                     </button>
                 </div>
