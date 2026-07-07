@@ -13365,32 +13365,42 @@ print(result)
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <h3 className="mb-3 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Stats By Mode</h3>
-                                    <div className="max-h-72 overflow-auto overscroll-contain rounded-xl border border-[#1d2d44] relative" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'auto' }}>
-                                        <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 p-3 text-[11px]">
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Problems</div>
-                                            {statsRows.map(mode => [
-                                                <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.1em] text-gray-200">{mode.label}</span>,
-                                                <span key={`${mode.id}-shots`} className="font-mono text-right">{mode.stats.shots}</span>,
-                                                <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{mode.stats.success}</span>,
-                                                <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</span>,
-                                                <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</span>,
-                                                <span key={`${mode.id}-rank`} className="font-mono text-right" title={mode.rank.name}>{mode.rank.icon}</span>,
-                                                <span key={`${mode.id}-problems`} className="font-mono text-right text-gray-400">{mode.problemCount}</span>,
-                                            ])}
-                                            <div className="border-t border-[#1d2d44] pt-2 font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
-                                        </div>
+                                    <div className="max-h-72 overflow-auto overscroll-contain rounded-xl border border-[#1d2d44]" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
+                                        <table className="w-full text-[11px] border-collapse" style={{ minWidth: '720px', tableLayout: 'fixed' }}>
+                                            <thead>
+                                                <tr>
+                                                    <th className="text-left text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '180px' }}>Mode</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Count</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Wins</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Fails</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Rate</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Rank</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '90px' }}>Problems</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {statsRows.map(mode => (
+                                                    <tr key={mode.id}>
+                                                        <td className="font-bold uppercase tracking-[0.1em] text-gray-200 py-1.5 px-2 truncate">{mode.label}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2">{mode.stats.shots}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" style={{ color: countRowColors.wins }}>{mode.stats.success}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" title={mode.rank.name}>{mode.rank.icon}</td>
+                                                        <td className="font-mono text-right text-gray-400 py-1.5 px-2">{mode.problemCount}</td>
+                                                    </tr>
+                                                ))}
+                                                <tr>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-bold uppercase tracking-[0.12em] text-gray-200">Total</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" title={userRank.name}>{userRank.icon}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right text-gray-400">{EXERCISES.length}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 
@@ -13734,33 +13744,43 @@ print(result)
                         {showModal === 'stats_by_mode' && (
                             <div className="flex flex-col h-full min-h-0 py-2">
                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
-                                <div className="min-h-0 flex-1 overflow-auto overscroll-contain pr-1 pb-8 relative" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'auto' }}>
-                                    <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4 min-w-min">
-                                        <div className="grid min-w-[720px] grid-cols-[180px_72px_72px_72px_72px_72px_90px] gap-x-2 gap-y-1.5 text-[11px]">
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500">Mode</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Count</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Wins</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Fails</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rate</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Rank</div>
-                                            <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 text-right">Problems</div>
-                                            {statsRows.map(mode => [
-                                                <span key={`${mode.id}-label`} className="font-bold uppercase tracking-[0.1em] text-gray-200">{mode.label}</span>,
-                                                <span key={`${mode.id}-shots`} className="font-mono text-right">{mode.stats.shots}</span>,
-                                                <span key={`${mode.id}-wins`} className="font-mono text-right" style={{ color: countRowColors.wins }}>{mode.stats.success}</span>,
-                                                <span key={`${mode.id}-fails`} className="font-mono text-right" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</span>,
-                                                <span key={`${mode.id}-rate`} className="font-mono text-right" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</span>,
-                                                <span key={`${mode.id}-rank`} className="font-mono text-right" title={mode.rank.name}>{mode.rank.icon}</span>,
-                                                <span key={`${mode.id}-problems`} className="font-mono text-right text-gray-400">{mode.problemCount}</span>,
-                                            ])}
-                                            <div className="border-t border-[#1d2d44] pt-2 font-bold uppercase tracking-[0.12em] text-gray-200">Total</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right" title={userRank.name}>{userRank.icon}</div>
-                                            <div className="border-t border-[#1d2d44] pt-2 font-mono text-right text-gray-400">{EXERCISES.length}</div>
-                                        </div>
+                                <div className="min-h-0 flex-1 overflow-auto overscroll-contain pr-1 pb-8" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}>
+                                    <div className="rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4">
+                                        <table className="w-full text-[11px] border-collapse" style={{ minWidth: '720px', tableLayout: 'fixed' }}>
+                                            <thead>
+                                                <tr>
+                                                    <th className="text-left text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '180px' }}>Mode</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Count</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Wins</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Fails</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Rate</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '72px' }}>Rank</th>
+                                                    <th className="text-right text-[9px] font-bold uppercase tracking-[0.12em] text-gray-500 py-2 px-2" style={{ width: '90px' }}>Problems</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {statsRows.map(mode => (
+                                                    <tr key={mode.id}>
+                                                        <td className="font-bold uppercase tracking-[0.1em] text-gray-200 py-1.5 px-2 truncate">{mode.label}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2">{mode.stats.shots}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" style={{ color: countRowColors.wins }}>{mode.stats.success}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" style={{ color: toolPanelColors.failed }}>{mode.stats.failed}</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" style={{ color: mode.stats.shots > 0 ? countRowColors.rate : 'inherit' }}>{mode.rate}%</td>
+                                                        <td className="font-mono text-right py-1.5 px-2" title={mode.rank.name}>{mode.rank.icon}</td>
+                                                        <td className="font-mono text-right text-gray-400 py-1.5 px-2">{mode.problemCount}</td>
+                                                    </tr>
+                                                ))}
+                                                <tr>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-bold uppercase tracking-[0.12em] text-gray-200">Total</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right text-gray-200">{Object.values(statsByMode).reduce((s, m) => s + m.shots, 0)}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" style={{ color: countRowColors.wins }}>{Object.values(statsByMode).reduce((s, m) => s + m.success, 0)}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" style={{ color: toolPanelColors.failed }}>{Object.values(statsByMode).reduce((s, m) => s + m.failed, 0)}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" style={{ color: countRowColors.rate }}>{(() => { const t = Object.values(statsByMode).reduce((s, m) => s + m.shots, 0); const w = Object.values(statsByMode).reduce((s, m) => s + m.success, 0); return t > 0 ? ((w / t) * 100).toFixed(0) + '%' : '0%'; })()}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right" title={userRank.name}>{userRank.icon}</td>
+                                                    <td className="border-t border-[#1d2d44] pt-2 pb-2 px-2 font-mono text-right text-gray-400">{EXERCISES.length}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
