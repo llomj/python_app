@@ -125,6 +125,8 @@ function metamorphicRule(functionNames, tests) {
   const firstExpected = tests[0]?.expected;
   if (firstArgs.length === 2) {
     const [left, right] = firstArgs;
+    if (names.has('count_long_words_with_for_loop') && Array.isArray(left) && Number.isInteger(right)) return 'count_long_words_for_loop';
+    if (names.has('mask_short_words_for_loop') && Array.isArray(left) && Number.isInteger(right)) return 'mask_short_words_for_loop';
     if (['add_numbers', 'add_number', 'add_num'].some(name => names.has(name)) && [left, right].every(value => typeof value === 'number')) return 'add_numbers';
     if (names.has('merge_lists') && Array.isArray(left) && Array.isArray(right)) return 'merge_lists';
     if (names.has('sum_of_2_lst') && Array.isArray(left) && Array.isArray(right)) return 'sum_two_lists';
@@ -188,6 +190,7 @@ function metamorphicRule(functionNames, tests) {
   if (names.has('reverse') && typeof sample === 'string') return 'reverse';
   if (['reverse_words', 'reverse_word'].some(name => names.has(name)) && typeof sample === 'string') return 'reverse_words';
   if (names.has('remove_vowels') && typeof sample === 'string') return 'remove_vowels';
+  if (names.has('remove_vowels_with_for_loop') && typeof sample === 'string') return 'remove_vowels';
   if (names.has('find_vowels') && typeof sample === 'string') return 'find_vowels';
   if (names.has('count_vowels') && typeof sample === 'string') {
     return firstExpected && typeof firstExpected === 'object' && !Array.isArray(firstExpected)
@@ -195,6 +198,15 @@ function metamorphicRule(functionNames, tests) {
       : 'count_vowels_number';
   }
   if (Array.isArray(sample)) {
+    if (names.has('sum_even_with_for_loop')) return 'sum_even_numbers_for_loop';
+    if (names.has('reverse_list_with_for_loop')) return 'reverse_list';
+    if (names.has('build_squares_with_for_loop')) return 'square_list';
+    if (names.has('count_vowels_each_word_for_loop')) return 'vowels_per_word_for_loop';
+    if (names.has('separate_even_odd_for_loop')) return 'even_odd_partition_for_loop';
+    if (names.has('capitalize_first_letters_for_loop')) return 'capitalize_words_list';
+    if (names.has('sum_matrix_for_loop')) return 'sum_nested_list';
+    if (names.has('nested_even_numbers_for_loop')) return 'keep_even_numbers_nested_for_loop';
+    if (names.has('remove_duplicates_for_loop')) return 'remove_duplicates_list';
     if (names.has('find_max')) return 'find_max';
     if (['find_min', 'find_minimum'].some(name => names.has(name))) return 'find_min';
     if (['calculate_sum', 'cal_sum', 'sum_of_list'].some(name => names.has(name))) return 'sum_list';

@@ -47,6 +47,13 @@ export interface AutoGrader {
     tests: AutoTestCase[];
 }
 
+const forLoopPracticeGrader = (functionName: string, tests: AutoTestCase[], compare?: CompareMode): AutoGrader => ({
+    functionNames: [functionName],
+    compare,
+    requiredNodePatterns: [{ nodeType: 'For', minCount: 1 }],
+    tests
+});
+
 export const AUTO_GRADERS: Record<number, AutoGrader> = {
     1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
@@ -16066,6 +16073,206 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
       args: [[10, 20, 30, 40, 50]],
       expected: {"sum": 150, "average": 30, "min": 10, "max": 50, "count": 5, "standard_deviation": 14.142135623730951}
     }]
-  }
+  },
+  2001: forLoopPracticeGrader("sum_even_with_for_loop", [
+    { args: [[1, 2, 3, 4, 5, 6]], expected: 12 },
+    { args: [[7, 9, 10]], expected: 10 },
+    { args: [[-4, -3, 2]], expected: -2 }
+  ]),
+  2002: forLoopPracticeGrader("count_long_words_with_for_loop", [
+    { args: [["cat", "python", "code"], 4], expected: 2 },
+    { args: [["a", "bee", "tree"], 3], expected: 2 },
+    { args: [["one", "three", "seven"], 5], expected: 2 }
+  ]),
+  2003: forLoopPracticeGrader("collect_positive_numbers_with_for_loop", [
+    { args: [[-2, 0, 3, 5]], expected: [3, 5] },
+    { args: [[-1, -5, 8]], expected: [8] },
+    { args: [[1, -1, 2, -2]], expected: [1, 2] }
+  ]),
+  2004: forLoopPracticeGrader("multiply_all_with_for_loop", [
+    { args: [[2, 3, 4]], expected: 24 },
+    { args: [[5, -2, 3]], expected: -30 },
+    { args: [[7]], expected: 7 }
+  ]),
+  2005: forLoopPracticeGrader("reverse_list_with_for_loop", [
+    { args: [[1, 2, 3]], expected: [3, 2, 1] },
+    { args: [["a", "b"]], expected: ["b", "a"] },
+    { args: [[true, false, true]], expected: [true, false, true] }
+  ]),
+  2006: forLoopPracticeGrader("count_character_with_for_loop", [
+    { args: ["banana", "a"], expected: 3 },
+    { args: ["mississippi", "s"], expected: 4 },
+    { args: ["hello", "z"], expected: 0 }
+  ]),
+  2007: forLoopPracticeGrader("build_squares_with_for_loop", [
+    { args: [[1, 2, 3]], expected: [1, 4, 9] },
+    { args: [[-2, 0, 5]], expected: [4, 0, 25] },
+    { args: [[10]], expected: [100] }
+  ]),
+  2008: forLoopPracticeGrader("find_longest_word_with_for_loop", [
+    { args: [["red", "yellow", "blue"]], expected: "yellow" },
+    { args: [["go", "python"]], expected: "python" },
+    { args: [["same", "size"]], expected: "same" }
+  ]),
+  2009: forLoopPracticeGrader("remove_vowels_with_for_loop", [
+    { args: ["hello world"], expected: "hll wrld" },
+    { args: ["AEIOUxyz"], expected: "xyz" },
+    { args: ["Python"], expected: "Pythn" }
+  ]),
+  2010: forLoopPracticeGrader("pair_items_with_index_for_loop", [
+    { args: [["a", "b"]], expected: [[0, "a"], [1, "b"]] },
+    { args: [[10, 20, 30]], expected: [[0, 10], [1, 20], [2, 30]] },
+    { args: [[]], expected: [] }
+  ]),
+  2011: forLoopPracticeGrader("flatten_one_level_with_for_loop", [
+    { args: [[[1, 2], [3], [4, 5]]], expected: [1, 2, 3, 4, 5] },
+    { args: [[["a"], ["b", "c"]]], expected: ["a", "b", "c"] },
+    { args: [[[], [1]]], expected: [1] }
+  ]),
+  2012: forLoopPracticeGrader("get_every_second_item_for_loop", [
+    { args: [["a", "b", "c", "d"]], expected: ["a", "c"] },
+    { args: [[10, 20, 30, 40, 50]], expected: [10, 30, 50] },
+    { args: [[1]], expected: [1] }
+  ]),
+  2013: forLoopPracticeGrader("total_prices_with_for_loop", [
+    { args: [[2.5, 3.0, 4.5]], expected: 10.0 },
+    { args: [[10, 20]], expected: 30 },
+    { args: [[-1, 4]], expected: 3 }
+  ], 'float'),
+  2014: forLoopPracticeGrader("uppercase_words_for_loop", [
+    { args: [["hi", "python"]], expected: ["HI", "PYTHON"] },
+    { args: [["Cat", "dog"]], expected: ["CAT", "DOG"] },
+    { args: [["x"]], expected: ["X"] }
+  ]),
+  2015: forLoopPracticeGrader("count_occurrences_for_loop", [
+    { args: [[1, 2, 2, 3], 2], expected: 2 },
+    { args: [["a", "b", "a"], "a"], expected: 2 },
+    { args: [[9, 8], 7], expected: 0 }
+  ]),
+  2016: forLoopPracticeGrader("filter_divisible_by_for_loop", [
+    { args: [[3, 4, 6, 9], 3], expected: [3, 6, 9] },
+    { args: [[10, 12, 15], 5], expected: [10, 15] },
+    { args: [[1, 2, 3], 4], expected: [] }
+  ]),
+  2017: forLoopPracticeGrader("running_totals_for_loop", [
+    { args: [[1, 2, 3]], expected: [1, 3, 6] },
+    { args: [[5, -2, 4]], expected: [5, 3, 7] },
+    { args: [[10]], expected: [10] }
+  ]),
+  2018: forLoopPracticeGrader("words_starting_with_for_loop", [
+    { args: [["cat", "car", "dog"], "c"], expected: ["cat", "car"] },
+    { args: [["Apple", "ant", "bat"], "a"], expected: ["Apple", "ant"] },
+    { args: [["red", "blue"], "z"], expected: [] }
+  ]),
+  2019: forLoopPracticeGrader("replace_negatives_with_zero_for_loop", [
+    { args: [[3, -1, 5]], expected: [3, 0, 5] },
+    { args: [[-4, -2, 7]], expected: [0, 0, 7] },
+    { args: [[0, 1]], expected: [0, 1] }
+  ]),
+  2020: forLoopPracticeGrader("join_words_with_dash_for_loop", [
+    { args: [["red", "blue", "green"]], expected: "red-blue-green" },
+    { args: [["a", "b"]], expected: "a-b" },
+    { args: [["solo"]], expected: "solo" }
+  ]),
+  2021: forLoopPracticeGrader("dict_from_pairs_for_loop", [
+    { args: [[["a", 1], ["b", 2]]], expected: { a: 1, b: 2 } },
+    { args: [[["x", 9]]], expected: { x: 9 } },
+    { args: [[["name", "Ada"], ["age", 30]]], expected: { name: "Ada", age: 30 } }
+  ]),
+  2022: forLoopPracticeGrader("count_vowels_each_word_for_loop", [
+    { args: [["hello", "sky"]], expected: { hello: 2, sky: 0 } },
+    { args: [["apple", "bee"]], expected: { apple: 2, bee: 2 } },
+    { args: [["AI", "code"]], expected: { AI: 2, code: 2 } }
+  ]),
+  2023: forLoopPracticeGrader("find_indexes_for_loop", [
+    { args: [["a", "b", "a"], "a"], expected: [0, 2] },
+    { args: [[5, 6, 5, 5], 5], expected: [0, 2, 3] },
+    { args: [[1, 2, 3], 9], expected: [] }
+  ]),
+  2024: forLoopPracticeGrader("separate_even_odd_for_loop", [
+    { args: [[1, 2, 3, 4]], expected: { even: [2, 4], odd: [1, 3] } },
+    { args: [[6, 7]], expected: { even: [6], odd: [7] } },
+    { args: [[0, -1, -2]], expected: { even: [0, -2], odd: [-1] } }
+  ]),
+  2025: forLoopPracticeGrader("total_nested_lengths_for_loop", [
+    { args: [["hi", "python"]], expected: 8 },
+    { args: [["a", "bc", "def"]], expected: 6 },
+    { args: [[""]], expected: 0 }
+  ]),
+  2026: forLoopPracticeGrader("list_to_number_for_loop", [
+    { args: [[1, 2, 3]], expected: 123 },
+    { args: [[4, 0, 5]], expected: 405 },
+    { args: [[0, 7]], expected: 7 }
+  ]),
+  2027: forLoopPracticeGrader("grade_pass_fail_for_loop", [
+    { args: [[80, 40, 60], 50], expected: ["pass", "fail", "pass"] },
+    { args: [[3, 7], 5], expected: ["fail", "pass"] },
+    { args: [[10, 10], 10], expected: ["pass", "pass"] }
+  ]),
+  2028: forLoopPracticeGrader("repeat_items_for_loop", [
+    { args: [["a", "b"], 2], expected: ["a", "a", "b", "b"] },
+    { args: [[1, 2], 3], expected: [1, 1, 1, 2, 2, 2] },
+    { args: [["x"], 1], expected: ["x"] }
+  ]),
+  2029: forLoopPracticeGrader("common_items_for_loop", [
+    { args: [[1, 2, 2, 3], [2, 4]], expected: [2] },
+    { args: [["a", "b", "c"], ["c", "a"]], expected: ["a", "c"] },
+    { args: [[5, 6], [7]], expected: [] }
+  ]),
+  2030: forLoopPracticeGrader("capitalize_first_letters_for_loop", [
+    { args: [["hello", "world"]], expected: ["Hello", "World"] },
+    { args: [["python", "code"]], expected: ["Python", "Code"] },
+    { args: [["a", "Bee"]], expected: ["A", "Bee"] }
+  ]),
+  2031: forLoopPracticeGrader("sum_matrix_for_loop", [
+    { args: [[[1, 2], [3, 4]]], expected: 10 },
+    { args: [[[5], [6, 7]]], expected: 18 },
+    { args: [[[], [1]]], expected: 1 }
+  ]),
+  2032: forLoopPracticeGrader("split_pairs_for_loop", [
+    { args: [[ [1, "a"], [2, "b"] ]], expected: [[1, 2], ["a", "b"]] },
+    { args: [[ ["x", 9] ]], expected: [["x"], [9]] },
+    { args: [[ [true, "yes"], [false, "no"] ]], expected: [[true, false], ["yes", "no"]] }
+  ]),
+  2033: forLoopPracticeGrader("product_table_for_loop", [
+    { args: [3, 3], expected: ["3 x 1 = 3", "3 x 2 = 6", "3 x 3 = 9"] },
+    { args: [5, 2], expected: ["5 x 1 = 5", "5 x 2 = 10"] },
+    { args: [1, 1], expected: ["1 x 1 = 1"] }
+  ]),
+  2034: forLoopPracticeGrader("count_digits_for_loop", [
+    { args: ["a1b22"], expected: 3 },
+    { args: ["no digits"], expected: 0 },
+    { args: ["2026-07-07"], expected: 8 }
+  ]),
+  2035: forLoopPracticeGrader("mask_short_words_for_loop", [
+    { args: [["a", "tree", "go"], 3], expected: ["*", "tree", "*"] },
+    { args: [["cat", "python"], 4], expected: ["*", "python"] },
+    { args: [["long"], 4], expected: ["long"] }
+  ]),
+  2036: forLoopPracticeGrader("merge_alternating_for_loop", [
+    { args: [[1, 2], ["a", "b"]], expected: [1, "a", 2, "b"] },
+    { args: [["x"], ["y"]], expected: ["x", "y"] },
+    { args: [[true, false], [1, 0]], expected: [true, 1, false, 0] }
+  ]),
+  2037: forLoopPracticeGrader("calculate_discounts_for_loop", [
+    { args: [[100, 50], 10], expected: [90.0, 45.0] },
+    { args: [[20], 25], expected: [15.0] },
+    { args: [[80, 40], 50], expected: [40.0, 20.0] }
+  ]),
+  2038: forLoopPracticeGrader("nested_even_numbers_for_loop", [
+    { args: [[[1, 2], [3, 4, 6]]], expected: [2, 4, 6] },
+    { args: [[[7], [8, 9]]], expected: [8] },
+    { args: [[[1], [3]]], expected: [] }
+  ]),
+  2039: forLoopPracticeGrader("remove_duplicates_for_loop", [
+    { args: [[1, 2, 1, 3, 2]], expected: [1, 2, 3] },
+    { args: [["a", "b", "a"]], expected: ["a", "b"] },
+    { args: [[true, true, false]], expected: [true, false] }
+  ]),
+  2040: forLoopPracticeGrader("rotate_left_for_loop", [
+    { args: [[1, 2, 3, 4], 1], expected: [2, 3, 4, 1] },
+    { args: [["a", "b", "c"], 2], expected: ["c", "a", "b"] },
+    { args: [[9, 8], 4], expected: [9, 8] }
+  ])
 
 };

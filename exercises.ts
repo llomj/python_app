@@ -1,5 +1,389 @@
 import { Exercise } from './types';
 
+interface ForLoopPracticeSpec {
+    id: number;
+    functionName: string;
+    signature: string;
+    task: string;
+    examples: string[];
+    solutionCode: string;
+    breakdown: string;
+}
+
+const createForLoopPracticeExercise = (spec: ForLoopPracticeSpec): Exercise => ({
+    id: spec.id,
+    title: `Problem ${spec.id}`,
+    description: `${spec.task} Use a for loop.\nExamples:\n  ${spec.examples.join('\n  ')}`,
+    initialCode: `${spec.signature}:\n    pass`,
+    solution: `# Requirements\n# - Define ${spec.functionName} exactly as shown in the starter code.\n# - Use at least one for loop to process the input step by step.\n# - Return the final result from the function.\n\n# Solution Logic\n# 1. Create an empty result or running total when needed.\n# 2. Use a for loop to visit each value in the input.\n# 3. Update the result inside the loop.\n# 4. Return the completed value after the loop finishes.\n\n# Syntax\n# for item in sequence:\n#     # repeat this block once for each item\n\n# Using function approach\n${spec.solutionCode}\n\n# Script practice approach\n# Change the sample values below, call the function, and print the result.\n# result = ${spec.functionName}(...)\n# print(result)`,
+    hint: "Use a `for` loop when you need to visit each item in a list, string, tuple, or range.\nPut the `return` statement after the loop unless the problem asks you to stop early.",
+    breakdown: spec.breakdown,
+    category: "Level 1"
+});
+
+const FOR_LOOP_PRACTICE_EXERCISES: Exercise[] = [
+    createForLoopPracticeExercise({
+        id: 2001,
+        functionName: "sum_even_with_for_loop",
+        signature: "def sum_even_with_for_loop(numbers)",
+        task: "Write a Python function called `sum_even_with_for_loop` that takes a list of numbers and returns the sum of only the even numbers.",
+        examples: ["sum_even_with_for_loop([1, 2, 3, 4, 5, 6]) -> 12", "sum_even_with_for_loop([7, 9, 10]) -> 10"],
+        solutionCode: "def sum_even_with_for_loop(numbers):\n    total = 0\n    for number in numbers:\n        if number % 2 == 0:\n            total += number\n    return total",
+        breakdown: "1. Start `total` at 0.\n2. Loop through each number in `numbers`.\n3. Check whether the number is even with `% 2 == 0`.\n4. Add only even numbers to `total`.\n5. Return `total` after the loop."
+    }),
+    createForLoopPracticeExercise({
+        id: 2002,
+        functionName: "count_long_words_with_for_loop",
+        signature: "def count_long_words_with_for_loop(words, min_length)",
+        task: "Write a Python function called `count_long_words_with_for_loop` that counts how many words have at least `min_length` characters.",
+        examples: ["count_long_words_with_for_loop(['cat', 'python', 'code'], 4) -> 2", "count_long_words_with_for_loop(['a', 'bee', 'tree'], 3) -> 2"],
+        solutionCode: "def count_long_words_with_for_loop(words, min_length):\n    count = 0\n    for word in words:\n        if len(word) >= min_length:\n            count += 1\n    return count",
+        breakdown: "1. Start a counter at 0.\n2. Loop through each word.\n3. Use `len(word)` to measure the word.\n4. Increase the counter when the word is long enough.\n5. Return the counter."
+    }),
+    createForLoopPracticeExercise({
+        id: 2003,
+        functionName: "collect_positive_numbers_with_for_loop",
+        signature: "def collect_positive_numbers_with_for_loop(numbers)",
+        task: "Write a Python function called `collect_positive_numbers_with_for_loop` that returns a new list containing only positive numbers.",
+        examples: ["collect_positive_numbers_with_for_loop([-2, 0, 3, 5]) -> [3, 5]", "collect_positive_numbers_with_for_loop([-1, -5, 8]) -> [8]"],
+        solutionCode: "def collect_positive_numbers_with_for_loop(numbers):\n    positives = []\n    for number in numbers:\n        if number > 0:\n            positives.append(number)\n    return positives",
+        breakdown: "1. Create an empty list named `positives`.\n2. Loop through each number.\n3. Check whether it is greater than 0.\n4. Append positive numbers to the result list.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2004,
+        functionName: "multiply_all_with_for_loop",
+        signature: "def multiply_all_with_for_loop(numbers)",
+        task: "Write a Python function called `multiply_all_with_for_loop` that multiplies all numbers in a list and returns the product.",
+        examples: ["multiply_all_with_for_loop([2, 3, 4]) -> 24", "multiply_all_with_for_loop([5, -2, 3]) -> -30"],
+        solutionCode: "def multiply_all_with_for_loop(numbers):\n    product = 1\n    for number in numbers:\n        product *= number\n    return product",
+        breakdown: "1. Start `product` at 1 because 1 does not change multiplication.\n2. Loop through the numbers.\n3. Multiply `product` by each number.\n4. Return `product` after all numbers are processed."
+    }),
+    createForLoopPracticeExercise({
+        id: 2005,
+        functionName: "reverse_list_with_for_loop",
+        signature: "def reverse_list_with_for_loop(items)",
+        task: "Write a Python function called `reverse_list_with_for_loop` that returns a new list with the items in reverse order.",
+        examples: ["reverse_list_with_for_loop([1, 2, 3]) -> [3, 2, 1]", "reverse_list_with_for_loop(['a', 'b']) -> ['b', 'a']"],
+        solutionCode: "def reverse_list_with_for_loop(items):\n    reversed_items = []\n    for item in items:\n        reversed_items.insert(0, item)\n    return reversed_items",
+        breakdown: "1. Create an empty list.\n2. Loop through each item from left to right.\n3. Insert each item at the front of the new list.\n4. Return the new reversed list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2006,
+        functionName: "count_character_with_for_loop",
+        signature: "def count_character_with_for_loop(text, target)",
+        task: "Write a Python function called `count_character_with_for_loop` that counts how many times `target` appears in `text`.",
+        examples: ["count_character_with_for_loop('banana', 'a') -> 3", "count_character_with_for_loop('mississippi', 's') -> 4"],
+        solutionCode: "def count_character_with_for_loop(text, target):\n    count = 0\n    for char in text:\n        if char == target:\n            count += 1\n    return count",
+        breakdown: "1. Start a counter at 0.\n2. Loop through each character in the text.\n3. Compare each character with `target`.\n4. Add 1 to the counter for each match.\n5. Return the counter."
+    }),
+    createForLoopPracticeExercise({
+        id: 2007,
+        functionName: "build_squares_with_for_loop",
+        signature: "def build_squares_with_for_loop(numbers)",
+        task: "Write a Python function called `build_squares_with_for_loop` that returns a list containing the square of each number.",
+        examples: ["build_squares_with_for_loop([1, 2, 3]) -> [1, 4, 9]", "build_squares_with_for_loop([-2, 0, 5]) -> [4, 0, 25]"],
+        solutionCode: "def build_squares_with_for_loop(numbers):\n    squares = []\n    for number in numbers:\n        squares.append(number ** 2)\n    return squares",
+        breakdown: "1. Create an empty list named `squares`.\n2. Loop through each number.\n3. Square the number with `number ** 2`.\n4. Append the square to the list.\n5. Return the list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2008,
+        functionName: "find_longest_word_with_for_loop",
+        signature: "def find_longest_word_with_for_loop(words)",
+        task: "Write a Python function called `find_longest_word_with_for_loop` that returns the longest word in a list.",
+        examples: ["find_longest_word_with_for_loop(['red', 'yellow', 'blue']) -> 'yellow'", "find_longest_word_with_for_loop(['go', 'python']) -> 'python'"],
+        solutionCode: "def find_longest_word_with_for_loop(words):\n    longest = words[0]\n    for word in words:\n        if len(word) > len(longest):\n            longest = word\n    return longest",
+        breakdown: "1. Store the first word as the current longest word.\n2. Loop through every word.\n3. Compare each word length with the current longest length.\n4. Update `longest` when a longer word is found.\n5. Return `longest`."
+    }),
+    createForLoopPracticeExercise({
+        id: 2009,
+        functionName: "remove_vowels_with_for_loop",
+        signature: "def remove_vowels_with_for_loop(text)",
+        task: "Write a Python function called `remove_vowels_with_for_loop` that returns the text with all vowels removed.",
+        examples: ["remove_vowels_with_for_loop('hello world') -> 'hll wrld'", "remove_vowels_with_for_loop('AEIOUxyz') -> 'xyz'"],
+        solutionCode: "def remove_vowels_with_for_loop(text):\n    result = ''\n    for char in text:\n        if char.lower() not in 'aeiou':\n            result += char\n    return result",
+        breakdown: "1. Create an empty string for the result.\n2. Loop through each character.\n3. Convert the character to lowercase for checking.\n4. Keep only characters that are not vowels.\n5. Return the final string."
+    }),
+    createForLoopPracticeExercise({
+        id: 2010,
+        functionName: "pair_items_with_index_for_loop",
+        signature: "def pair_items_with_index_for_loop(items)",
+        task: "Write a Python function called `pair_items_with_index_for_loop` that returns a list of `[index, item]` pairs.",
+        examples: ["pair_items_with_index_for_loop(['a', 'b']) -> [[0, 'a'], [1, 'b']]", "pair_items_with_index_for_loop([10, 20, 30]) -> [[0, 10], [1, 20], [2, 30]]"],
+        solutionCode: "def pair_items_with_index_for_loop(items):\n    pairs = []\n    index = 0\n    for item in items:\n        pairs.append([index, item])\n        index += 1\n    return pairs",
+        breakdown: "1. Create an empty list for pairs.\n2. Start an index counter at 0.\n3. Loop through each item.\n4. Append `[index, item]` to the result.\n5. Increase the index after each item."
+    }),
+    createForLoopPracticeExercise({
+        id: 2011,
+        functionName: "flatten_one_level_with_for_loop",
+        signature: "def flatten_one_level_with_for_loop(nested)",
+        task: "Write a Python function called `flatten_one_level_with_for_loop` that takes a list of lists and returns one flat list.",
+        examples: ["flatten_one_level_with_for_loop([[1, 2], [3], [4, 5]]) -> [1, 2, 3, 4, 5]", "flatten_one_level_with_for_loop([['a'], ['b', 'c']]) -> ['a', 'b', 'c']"],
+        solutionCode: "def flatten_one_level_with_for_loop(nested):\n    flat = []\n    for group in nested:\n        for item in group:\n            flat.append(item)\n    return flat",
+        breakdown: "1. Create an empty list named `flat`.\n2. Loop through each inner list.\n3. Loop through each item inside that inner list.\n4. Append each item to `flat`.\n5. Return `flat`."
+    }),
+    createForLoopPracticeExercise({
+        id: 2012,
+        functionName: "get_every_second_item_for_loop",
+        signature: "def get_every_second_item_for_loop(items)",
+        task: "Write a Python function called `get_every_second_item_for_loop` that returns items at indexes 0, 2, 4, and so on.",
+        examples: ["get_every_second_item_for_loop(['a', 'b', 'c', 'd']) -> ['a', 'c']", "get_every_second_item_for_loop([10, 20, 30, 40, 50]) -> [10, 30, 50]"],
+        solutionCode: "def get_every_second_item_for_loop(items):\n    result = []\n    for index in range(len(items)):\n        if index % 2 == 0:\n            result.append(items[index])\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through the indexes with `range(len(items))`.\n3. Use `% 2 == 0` to find even indexes.\n4. Append the item at each even index.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2013,
+        functionName: "total_prices_with_for_loop",
+        signature: "def total_prices_with_for_loop(prices)",
+        task: "Write a Python function called `total_prices_with_for_loop` that returns the total of all prices.",
+        examples: ["total_prices_with_for_loop([2.5, 3.0, 4.5]) -> 10.0", "total_prices_with_for_loop([10, 20]) -> 30"],
+        solutionCode: "def total_prices_with_for_loop(prices):\n    total = 0\n    for price in prices:\n        total += price\n    return total",
+        breakdown: "1. Start `total` at 0.\n2. Loop through each price.\n3. Add each price to `total`.\n4. Return the final total."
+    }),
+    createForLoopPracticeExercise({
+        id: 2014,
+        functionName: "uppercase_words_for_loop",
+        signature: "def uppercase_words_for_loop(words)",
+        task: "Write a Python function called `uppercase_words_for_loop` that returns a new list with every word converted to uppercase.",
+        examples: ["uppercase_words_for_loop(['hi', 'python']) -> ['HI', 'PYTHON']", "uppercase_words_for_loop(['Cat', 'dog']) -> ['CAT', 'DOG']"],
+        solutionCode: "def uppercase_words_for_loop(words):\n    result = []\n    for word in words:\n        result.append(word.upper())\n    return result",
+        breakdown: "1. Create an empty list.\n2. Loop through each word.\n3. Use `.upper()` to convert the word.\n4. Append the uppercase word.\n5. Return the list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2015,
+        functionName: "count_occurrences_for_loop",
+        signature: "def count_occurrences_for_loop(items, target)",
+        task: "Write a Python function called `count_occurrences_for_loop` that counts how many times `target` appears in a list.",
+        examples: ["count_occurrences_for_loop([1, 2, 2, 3], 2) -> 2", "count_occurrences_for_loop(['a', 'b', 'a'], 'a') -> 2"],
+        solutionCode: "def count_occurrences_for_loop(items, target):\n    count = 0\n    for item in items:\n        if item == target:\n            count += 1\n    return count",
+        breakdown: "1. Start `count` at 0.\n2. Loop through each item.\n3. Compare each item with `target`.\n4. Increase `count` for matches.\n5. Return `count`."
+    }),
+    createForLoopPracticeExercise({
+        id: 2016,
+        functionName: "filter_divisible_by_for_loop",
+        signature: "def filter_divisible_by_for_loop(numbers, divisor)",
+        task: "Write a Python function called `filter_divisible_by_for_loop` that returns numbers divisible by `divisor`.",
+        examples: ["filter_divisible_by_for_loop([3, 4, 6, 9], 3) -> [3, 6, 9]", "filter_divisible_by_for_loop([10, 12, 15], 5) -> [10, 15]"],
+        solutionCode: "def filter_divisible_by_for_loop(numbers, divisor):\n    result = []\n    for number in numbers:\n        if number % divisor == 0:\n            result.append(number)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each number.\n3. Use `% divisor == 0` to test divisibility.\n4. Append matching numbers.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2017,
+        functionName: "running_totals_for_loop",
+        signature: "def running_totals_for_loop(numbers)",
+        task: "Write a Python function called `running_totals_for_loop` that returns a list of cumulative totals.",
+        examples: ["running_totals_for_loop([1, 2, 3]) -> [1, 3, 6]", "running_totals_for_loop([5, -2, 4]) -> [5, 3, 7]"],
+        solutionCode: "def running_totals_for_loop(numbers):\n    totals = []\n    current = 0\n    for number in numbers:\n        current += number\n        totals.append(current)\n    return totals",
+        breakdown: "1. Create an empty list for totals.\n2. Start `current` at 0.\n3. Loop through each number.\n4. Add each number to `current` and append it.\n5. Return the totals list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2018,
+        functionName: "words_starting_with_for_loop",
+        signature: "def words_starting_with_for_loop(words, letter)",
+        task: "Write a Python function called `words_starting_with_for_loop` that returns words starting with `letter`.",
+        examples: ["words_starting_with_for_loop(['cat', 'car', 'dog'], 'c') -> ['cat', 'car']", "words_starting_with_for_loop(['Apple', 'ant', 'bat'], 'a') -> ['Apple', 'ant']"],
+        solutionCode: "def words_starting_with_for_loop(words, letter):\n    result = []\n    for word in words:\n        if word.lower().startswith(letter.lower()):\n            result.append(word)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each word.\n3. Compare the first letter in a case-insensitive way.\n4. Append words that match.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2019,
+        functionName: "replace_negatives_with_zero_for_loop",
+        signature: "def replace_negatives_with_zero_for_loop(numbers)",
+        task: "Write a Python function called `replace_negatives_with_zero_for_loop` that returns a new list where negative numbers become 0.",
+        examples: ["replace_negatives_with_zero_for_loop([3, -1, 5]) -> [3, 0, 5]", "replace_negatives_with_zero_for_loop([-4, -2, 7]) -> [0, 0, 7]"],
+        solutionCode: "def replace_negatives_with_zero_for_loop(numbers):\n    result = []\n    for number in numbers:\n        if number < 0:\n            result.append(0)\n        else:\n            result.append(number)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each number.\n3. Append 0 if the number is negative.\n4. Otherwise append the original number.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2020,
+        functionName: "join_words_with_dash_for_loop",
+        signature: "def join_words_with_dash_for_loop(words)",
+        task: "Write a Python function called `join_words_with_dash_for_loop` that joins words with a dash between them.",
+        examples: ["join_words_with_dash_for_loop(['red', 'blue', 'green']) -> 'red-blue-green'", "join_words_with_dash_for_loop(['a', 'b']) -> 'a-b'"],
+        solutionCode: "def join_words_with_dash_for_loop(words):\n    result = ''\n    for index in range(len(words)):\n        if index > 0:\n            result += '-'\n        result += words[index]\n    return result",
+        breakdown: "1. Start with an empty string.\n2. Loop through the indexes of the words.\n3. Add a dash before every word except the first.\n4. Add the current word.\n5. Return the final string."
+    }),
+    createForLoopPracticeExercise({
+        id: 2021,
+        functionName: "dict_from_pairs_for_loop",
+        signature: "def dict_from_pairs_for_loop(pairs)",
+        task: "Write a Python function called `dict_from_pairs_for_loop` that turns a list of `[key, value]` pairs into a dictionary.",
+        examples: ["dict_from_pairs_for_loop([['a', 1], ['b', 2]]) -> {'a': 1, 'b': 2}", "dict_from_pairs_for_loop([['x', 9]]) -> {'x': 9}"],
+        solutionCode: "def dict_from_pairs_for_loop(pairs):\n    result = {}\n    for key, value in pairs:\n        result[key] = value\n    return result",
+        breakdown: "1. Create an empty dictionary.\n2. Loop through each pair.\n3. Unpack the pair into `key` and `value`.\n4. Store the value under that key.\n5. Return the dictionary."
+    }),
+    createForLoopPracticeExercise({
+        id: 2022,
+        functionName: "count_vowels_each_word_for_loop",
+        signature: "def count_vowels_each_word_for_loop(words)",
+        task: "Write a Python function called `count_vowels_each_word_for_loop` that returns a dictionary mapping each word to its vowel count.",
+        examples: ["count_vowels_each_word_for_loop(['hello', 'sky']) -> {'hello': 2, 'sky': 0}", "count_vowels_each_word_for_loop(['apple', 'bee']) -> {'apple': 2, 'bee': 2}"],
+        solutionCode: "def count_vowels_each_word_for_loop(words):\n    result = {}\n    for word in words:\n        count = 0\n        for char in word.lower():\n            if char in 'aeiou':\n                count += 1\n        result[word] = count\n    return result",
+        breakdown: "1. Create an empty dictionary.\n2. Loop through each word.\n3. Count vowels inside that word with another loop.\n4. Store the count using the word as the key.\n5. Return the dictionary."
+    }),
+    createForLoopPracticeExercise({
+        id: 2023,
+        functionName: "find_indexes_for_loop",
+        signature: "def find_indexes_for_loop(items, target)",
+        task: "Write a Python function called `find_indexes_for_loop` that returns all indexes where `target` appears.",
+        examples: ["find_indexes_for_loop(['a', 'b', 'a'], 'a') -> [0, 2]", "find_indexes_for_loop([5, 6, 5, 5], 5) -> [0, 2, 3]"],
+        solutionCode: "def find_indexes_for_loop(items, target):\n    indexes = []\n    for index in range(len(items)):\n        if items[index] == target:\n            indexes.append(index)\n    return indexes",
+        breakdown: "1. Create an empty list for indexes.\n2. Loop through positions with `range(len(items))`.\n3. Check whether the item at each index equals `target`.\n4. Append matching indexes.\n5. Return the index list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2024,
+        functionName: "separate_even_odd_for_loop",
+        signature: "def separate_even_odd_for_loop(numbers)",
+        task: "Write a Python function called `separate_even_odd_for_loop` that returns a dictionary with even and odd numbers separated.",
+        examples: ["separate_even_odd_for_loop([1, 2, 3, 4]) -> {'even': [2, 4], 'odd': [1, 3]}", "separate_even_odd_for_loop([6, 7]) -> {'even': [6], 'odd': [7]}"],
+        solutionCode: "def separate_even_odd_for_loop(numbers):\n    result = {'even': [], 'odd': []}\n    for number in numbers:\n        if number % 2 == 0:\n            result['even'].append(number)\n        else:\n            result['odd'].append(number)\n    return result",
+        breakdown: "1. Create a dictionary with empty `even` and `odd` lists.\n2. Loop through each number.\n3. Use `% 2` to decide if it is even or odd.\n4. Append the number to the correct list.\n5. Return the dictionary."
+    }),
+    createForLoopPracticeExercise({
+        id: 2025,
+        functionName: "total_nested_lengths_for_loop",
+        signature: "def total_nested_lengths_for_loop(strings)",
+        task: "Write a Python function called `total_nested_lengths_for_loop` that returns the total number of characters across all strings.",
+        examples: ["total_nested_lengths_for_loop(['hi', 'python']) -> 8", "total_nested_lengths_for_loop(['a', 'bc', 'def']) -> 6"],
+        solutionCode: "def total_nested_lengths_for_loop(strings):\n    total = 0\n    for text in strings:\n        total += len(text)\n    return total",
+        breakdown: "1. Start `total` at 0.\n2. Loop through each string.\n3. Add the string length with `len(text)`.\n4. Return the final total."
+    }),
+    createForLoopPracticeExercise({
+        id: 2026,
+        functionName: "list_to_number_for_loop",
+        signature: "def list_to_number_for_loop(digits)",
+        task: "Write a Python function called `list_to_number_for_loop` that turns a list of digits into one integer.",
+        examples: ["list_to_number_for_loop([1, 2, 3]) -> 123", "list_to_number_for_loop([4, 0, 5]) -> 405"],
+        solutionCode: "def list_to_number_for_loop(digits):\n    result = 0\n    for digit in digits:\n        result = result * 10 + digit\n    return result",
+        breakdown: "1. Start `result` at 0.\n2. Loop through each digit.\n3. Shift the current result left by multiplying by 10.\n4. Add the new digit.\n5. Return the final number."
+    }),
+    createForLoopPracticeExercise({
+        id: 2027,
+        functionName: "grade_pass_fail_for_loop",
+        signature: "def grade_pass_fail_for_loop(scores, passing)",
+        task: "Write a Python function called `grade_pass_fail_for_loop` that returns a list of 'pass' or 'fail' for each score.",
+        examples: ["grade_pass_fail_for_loop([80, 40, 60], 50) -> ['pass', 'fail', 'pass']", "grade_pass_fail_for_loop([3, 7], 5) -> ['fail', 'pass']"],
+        solutionCode: "def grade_pass_fail_for_loop(scores, passing):\n    result = []\n    for score in scores:\n        if score >= passing:\n            result.append('pass')\n        else:\n            result.append('fail')\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each score.\n3. Compare the score to the passing mark.\n4. Append `'pass'` or `'fail'`.\n5. Return the list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2028,
+        functionName: "repeat_items_for_loop",
+        signature: "def repeat_items_for_loop(items, times)",
+        task: "Write a Python function called `repeat_items_for_loop` that returns a new list where each item is repeated `times` times.",
+        examples: ["repeat_items_for_loop(['a', 'b'], 2) -> ['a', 'a', 'b', 'b']", "repeat_items_for_loop([1, 2], 3) -> [1, 1, 1, 2, 2, 2]"],
+        solutionCode: "def repeat_items_for_loop(items, times):\n    result = []\n    for item in items:\n        for _ in range(times):\n            result.append(item)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each item.\n3. Use an inner loop to repeat it `times` times.\n4. Append each repeated item.\n5. Return the list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2029,
+        functionName: "common_items_for_loop",
+        signature: "def common_items_for_loop(first, second)",
+        task: "Write a Python function called `common_items_for_loop` that returns unique items from `first` that also appear in `second`.",
+        examples: ["common_items_for_loop([1, 2, 2, 3], [2, 4]) -> [2]", "common_items_for_loop(['a', 'b', 'c'], ['c', 'a']) -> ['a', 'c']"],
+        solutionCode: "def common_items_for_loop(first, second):\n    result = []\n    for item in first:\n        if item in second and item not in result:\n            result.append(item)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each item in the first list.\n3. Check that it appears in the second list.\n4. Check that it is not already in the result.\n5. Return the unique common items."
+    }),
+    createForLoopPracticeExercise({
+        id: 2030,
+        functionName: "capitalize_first_letters_for_loop",
+        signature: "def capitalize_first_letters_for_loop(words)",
+        task: "Write a Python function called `capitalize_first_letters_for_loop` that capitalizes the first letter of each word.",
+        examples: ["capitalize_first_letters_for_loop(['hello', 'world']) -> ['Hello', 'World']", "capitalize_first_letters_for_loop(['python', 'code']) -> ['Python', 'Code']"],
+        solutionCode: "def capitalize_first_letters_for_loop(words):\n    result = []\n    for word in words:\n        result.append(word[:1].upper() + word[1:])\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each word.\n3. Uppercase the first character with `word[:1].upper()`.\n4. Add the rest of the word with `word[1:]`.\n5. Return the list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2031,
+        functionName: "sum_matrix_for_loop",
+        signature: "def sum_matrix_for_loop(matrix)",
+        task: "Write a Python function called `sum_matrix_for_loop` that returns the sum of all numbers in a list of lists.",
+        examples: ["sum_matrix_for_loop([[1, 2], [3, 4]]) -> 10", "sum_matrix_for_loop([[5], [6, 7]]) -> 18"],
+        solutionCode: "def sum_matrix_for_loop(matrix):\n    total = 0\n    for row in matrix:\n        for number in row:\n            total += number\n    return total",
+        breakdown: "1. Start `total` at 0.\n2. Loop through each row.\n3. Loop through each number in the row.\n4. Add each number to `total`.\n5. Return the total."
+    }),
+    createForLoopPracticeExercise({
+        id: 2032,
+        functionName: "split_pairs_for_loop",
+        signature: "def split_pairs_for_loop(pairs)",
+        task: "Write a Python function called `split_pairs_for_loop` that takes pairs and returns `[first_items, second_items]`.",
+        examples: ["split_pairs_for_loop([[1, 'a'], [2, 'b']]) -> [[1, 2], ['a', 'b']]", "split_pairs_for_loop([['x', 9]]) -> [['x'], [9]]"],
+        solutionCode: "def split_pairs_for_loop(pairs):\n    first_items = []\n    second_items = []\n    for first, second in pairs:\n        first_items.append(first)\n        second_items.append(second)\n    return [first_items, second_items]",
+        breakdown: "1. Create two empty lists.\n2. Loop through each pair.\n3. Unpack each pair into two values.\n4. Append each value to the matching list.\n5. Return both lists inside one list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2033,
+        functionName: "product_table_for_loop",
+        signature: "def product_table_for_loop(number, upto)",
+        task: "Write a Python function called `product_table_for_loop` that returns multiplication table lines from 1 to `upto`.",
+        examples: ["product_table_for_loop(3, 3) -> ['3 x 1 = 3', '3 x 2 = 6', '3 x 3 = 9']", "product_table_for_loop(5, 2) -> ['5 x 1 = 5', '5 x 2 = 10']"],
+        solutionCode: "def product_table_for_loop(number, upto):\n    lines = []\n    for multiplier in range(1, upto + 1):\n        lines.append(f'{number} x {multiplier} = {number * multiplier}')\n    return lines",
+        breakdown: "1. Create an empty list for lines.\n2. Loop from 1 through `upto`.\n3. Multiply `number` by the current multiplier.\n4. Format the table line.\n5. Return the list of lines."
+    }),
+    createForLoopPracticeExercise({
+        id: 2034,
+        functionName: "count_digits_for_loop",
+        signature: "def count_digits_for_loop(text)",
+        task: "Write a Python function called `count_digits_for_loop` that counts digit characters in a string.",
+        examples: ["count_digits_for_loop('a1b22') -> 3", "count_digits_for_loop('no digits') -> 0"],
+        solutionCode: "def count_digits_for_loop(text):\n    count = 0\n    for char in text:\n        if char.isdigit():\n            count += 1\n    return count",
+        breakdown: "1. Start a counter at 0.\n2. Loop through each character.\n3. Use `.isdigit()` to check for digits.\n4. Increase the counter for digit characters.\n5. Return the counter."
+    }),
+    createForLoopPracticeExercise({
+        id: 2035,
+        functionName: "mask_short_words_for_loop",
+        signature: "def mask_short_words_for_loop(words, min_length)",
+        task: "Write a Python function called `mask_short_words_for_loop` that replaces words shorter than `min_length` with '*'.",
+        examples: ["mask_short_words_for_loop(['a', 'tree', 'go'], 3) -> ['*', 'tree', '*']", "mask_short_words_for_loop(['cat', 'python'], 4) -> ['*', 'python']"],
+        solutionCode: "def mask_short_words_for_loop(words, min_length):\n    result = []\n    for word in words:\n        if len(word) < min_length:\n            result.append('*')\n        else:\n            result.append(word)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each word.\n3. Compare its length to `min_length`.\n4. Append `'*'` for short words, otherwise append the word.\n5. Return the list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2036,
+        functionName: "merge_alternating_for_loop",
+        signature: "def merge_alternating_for_loop(first, second)",
+        task: "Write a Python function called `merge_alternating_for_loop` that alternates items from two equal-length lists.",
+        examples: ["merge_alternating_for_loop([1, 2], ['a', 'b']) -> [1, 'a', 2, 'b']", "merge_alternating_for_loop(['x'], ['y']) -> ['x', 'y']"],
+        solutionCode: "def merge_alternating_for_loop(first, second):\n    result = []\n    for index in range(len(first)):\n        result.append(first[index])\n        result.append(second[index])\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through the indexes of the first list.\n3. Append the item from the first list.\n4. Append the item from the second list at the same index.\n5. Return the merged list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2037,
+        functionName: "calculate_discounts_for_loop",
+        signature: "def calculate_discounts_for_loop(prices, percent)",
+        task: "Write a Python function called `calculate_discounts_for_loop` that returns each price after applying the same discount percent.",
+        examples: ["calculate_discounts_for_loop([100, 50], 10) -> [90.0, 45.0]", "calculate_discounts_for_loop([20], 25) -> [15.0]"],
+        solutionCode: "def calculate_discounts_for_loop(prices, percent):\n    result = []\n    for price in prices:\n        result.append(price * (1 - percent / 100))\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each price.\n3. Convert the percent into a discount multiplier.\n4. Append the discounted price.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2038,
+        functionName: "nested_even_numbers_for_loop",
+        signature: "def nested_even_numbers_for_loop(groups)",
+        task: "Write a Python function called `nested_even_numbers_for_loop` that returns all even numbers from nested lists.",
+        examples: ["nested_even_numbers_for_loop([[1, 2], [3, 4, 6]]) -> [2, 4, 6]", "nested_even_numbers_for_loop([[7], [8, 9]]) -> [8]"],
+        solutionCode: "def nested_even_numbers_for_loop(groups):\n    result = []\n    for group in groups:\n        for number in group:\n            if number % 2 == 0:\n                result.append(number)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each inner list.\n3. Loop through each number in the inner list.\n4. Append numbers that are even.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2039,
+        functionName: "remove_duplicates_for_loop",
+        signature: "def remove_duplicates_for_loop(items)",
+        task: "Write a Python function called `remove_duplicates_for_loop` that removes duplicates while keeping the original order.",
+        examples: ["remove_duplicates_for_loop([1, 2, 1, 3, 2]) -> [1, 2, 3]", "remove_duplicates_for_loop(['a', 'b', 'a']) -> ['a', 'b']"],
+        solutionCode: "def remove_duplicates_for_loop(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return result",
+        breakdown: "1. Create an empty result list.\n2. Loop through each item.\n3. Check whether the item is already in the result.\n4. Append only new items.\n5. Return the result list."
+    }),
+    createForLoopPracticeExercise({
+        id: 2040,
+        functionName: "rotate_left_for_loop",
+        signature: "def rotate_left_for_loop(items, steps)",
+        task: "Write a Python function called `rotate_left_for_loop` that rotates a list left by `steps` positions.",
+        examples: ["rotate_left_for_loop([1, 2, 3, 4], 1) -> [2, 3, 4, 1]", "rotate_left_for_loop(['a', 'b', 'c'], 2) -> ['c', 'a', 'b']"],
+        solutionCode: "def rotate_left_for_loop(items, steps):\n    if not items:\n        return []\n    result = items[:]\n    for _ in range(steps % len(items)):\n        first = result.pop(0)\n        result.append(first)\n    return result",
+        breakdown: "1. Return an empty list if the input is empty.\n2. Copy the original list.\n3. Loop for the number of rotations needed.\n4. Move the first item to the end each time.\n5. Return the rotated list."
+    })
+];
+
 export const EXERCISES: Exercise[] = [
     {
             "id": 1,
@@ -23767,5 +24151,6 @@ export const EXERCISES: Exercise[] = [
             "breakdown": "1. Define the `get_comprehensive_statistics` function with a parameter named `numbers`.\n2. Initialize variables to store sum, average, min, max, count, and standard deviation.\n3. Calculate the sum of all numbers using a loop or built-in function.\n4. Calculate the average by dividing the sum by the count of numbers.\n5. Find the minimum number in the list using the `min()` function.\n6. Find the maximum number in the list using the `max()` function.\n7. Count the number of elements in the list using the `len()` function.\n8. Calculate the standard deviation using the formula: sqrt((sum((x - mean) ** 2 for x in numbers)) / count).\n9. Return a dictionary containing all calculated statistics.",
 
             "category": "Level 1"
-    }
+    },
+    ...FOR_LOOP_PRACTICE_EXERCISES
 ];
