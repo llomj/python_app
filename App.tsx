@@ -10375,10 +10375,19 @@ const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSetti
     return '#e5e7eb';
 };
 
-const renderInlinePythonCode = (code: string) => {
+ const renderInlinePythonCode = (code: string) => {
+    const tokens = code.split(/(\b(?:def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with|raise|pass|break|continue|and|or|not|in|is|lambda|True|False|None)\b|(?:[0-9]+(?:\.[0-9]+)?)|(['\"].*?['\"])|(#.*))/g).filter(Boolean);
+    const dc = DEFAULT_EDITOR_COLORS;
     return (
-        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100">
-            {code}
+        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em]">
+            {tokens.map((t, i) => {
+                if (/^(True|False|None)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
+                if (/^(def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with|raise|pass|break|continue|and|or|not|in|is|lambda)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
+                if (/^[0-9]+(?:\.[0-9]+)?$/.test(t)) return <span key={i} style={{ color: dc.number }}>{t}</span>;
+                if (/^(['"]).*\1$/.test(t)) return <span key={i} style={{ color: dc.string }}>{t}</span>;
+                if (/^#/.test(t)) return <span key={i} style={{ color: dc.comment }}>{t}</span>;
+                return <span key={i} style={{ color: dc.text }}>{t}</span>;
+            })}
         </code>
     );
 };
@@ -10974,7 +10983,7 @@ function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: 
                 value={code}
                 height="auto"
                 readOnly={true}
-                extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]}
+                extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(DEFAULT_EDITOR_COLORS)]}
                 theme="none"
                 basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
             />
