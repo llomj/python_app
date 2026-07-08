@@ -201,7 +201,7 @@ export const answerGeneralPythonWithWebLlm = async (question: string, modelId: s
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a Python expert answering a general Python question. Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If you do not know the answer, say "I cannot answer that" — do not guess or make things up. Do not return JSON.' },
+            { role: 'system', content: 'You are a Python expert answering a general Python question. Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If you are not 100% confident about the answer, respond with exactly "I cannot answer that" — never guess, never make up syntax, never invent functions. Do not return JSON.' },
             { role: 'user', content: question },
         ],
         temperature: 0.2,
@@ -226,7 +226,7 @@ export const answerGeneralPythonWithWebLlmConversation = async (
                 'Be clear, correct, and give code examples.',
                 'If the user says "expand", "more", "detail", "examples", or similar follow-ups, expand on your previous answer.',
                 'If the question is ambiguous, ASK a clarifying question instead of guessing.',
-                'If you do not know the answer, say "I cannot answer that."',
+                'If you are not 100% confident, respond with exactly "I cannot answer that" — never guess or invent.',
                 'Do not return JSON.',
             ].join(' '),
         },

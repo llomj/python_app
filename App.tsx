@@ -13820,8 +13820,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }]);
                 return;
             }
-            /* Offline model disabled — the 0.5B model hallucinates unreliable answers.
-               Only the curated reference is used. If it doesn't match, we ask for clarification. */
+            try {
+                const aiHistory = generalAiMessages.slice(-6).map(m => ({
+                    role: m.role === 'user' ? 'user' as const : 'assistant' as const,
+                    content: m.text,
+                }));
+                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory);
+                if (aiAnswer) {
+                    setGeneralAiMessages(prev => [...prev, {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        source: 'offline',
+                        text: aiAnswer,
+                    }]);
+                    return;
+                }
+            } catch {
+                /* Offline model failed — fall through to clarification */
+            }
             setGeneralAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
@@ -13831,7 +13847,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [generalAiMessages, generalAiMode, generalAiRunning]);
+    }, [generalAiMessages, generalAiMode, generalAiRunning, offlineAiState]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
