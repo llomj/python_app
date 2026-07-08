@@ -1,4 +1,5 @@
 import { Exercise } from './types';
+import { ATOMIC_BEGINNER_EXERCISES } from './atomicBeginnerExercises';
 
 interface ForLoopPracticeSpec {
     id: number;
@@ -24222,6 +24223,7 @@ export const EXERCISES: Exercise[] = [
 
             "category": "Level 1"
     },
+    ...ATOMIC_BEGINNER_EXERCISES,
     ...FOR_LOOP_PRACTICE_EXERCISES,
     ...REGEX_PRACTICE_EXERCISES
 ];

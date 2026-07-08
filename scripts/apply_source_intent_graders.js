@@ -17,7 +17,15 @@ function loadTsExports(fileName) {
     },
     fileName,
   }).outputText;
-  const sandbox = { exports: {}, module: { exports: {} }, require: () => ({}) };
+  const sandbox = {
+    exports: {},
+    module: { exports: {} },
+    require: (specifier) => {
+      if (specifier === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
+      if (specifier === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
+      return {};
+    },
+  };
   sandbox.exports = sandbox.module.exports;
   vm.runInNewContext(compiled, sandbox, { filename: fileName });
   return sandbox.module.exports;

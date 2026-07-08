@@ -23,6 +23,8 @@ function loadTsExports(fileName) {
     require: request => {
       if (request === './graders') return loadTsExports('graders.ts');
       if (request === './exercises') return loadTsExports('exercises.ts');
+      if (request === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
+      if (request === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
       if (request === './types') return {};
       if (request === 'react') {
         return {

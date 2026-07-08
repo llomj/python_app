@@ -1062,7 +1062,7 @@ const withAiReviewTimeout = async <T,>(promise: Promise<T>): Promise<T> => {
 };
 
 type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
-type DifficultyMode = 'normal' | 'beginner' | 'intermediate' | 'expert' | 'legend';
+type DifficultyMode = 'normal' | 'atomic_beginner' | 'beginner' | 'intermediate' | 'expert' | 'legend';
 type ConceptModeId = `concept:${string}`;
 type ProblemMode = DifficultyMode | ConceptModeId;
 type StatsByMode = Record<string, Stats>;
@@ -1204,7 +1204,8 @@ const loadPanelColorSettings = (): PanelColorSettings => {
 
 const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
     { id: 'normal', label: 'Normal', description: 'All problems mixed' },
-    { id: 'beginner', label: 'Beginner', description: 'Simple functions, strings, lists' },
+    { id: 'atomic_beginner', label: 'Beginner', description: 'First steps: print, variables, tiny values' },
+    { id: 'beginner', label: 'Easy', description: 'Simple functions, strings, lists' },
     { id: 'intermediate', label: 'Intermediate', description: 'Loops, dictionaries, patterns' },
     { id: 'expert', label: 'Expert', description: 'Nested data, constraints, algorithms' },
     { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
@@ -1514,12 +1515,9 @@ const CONCEPT_MODE_IDS = new Set<ProblemMode>(PYTHON_CONCEPT_MODES.map(mode => m
 const isConceptMode = (mode: ProblemMode): mode is ConceptModeId => CONCEPT_MODE_IDS.has(mode);
 const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
     const fallback = MODE_OPTIONS.find(item => item.id === mode)?.label ?? 'Normal';
-    if (lang === 'fr') {
-        const key = mode.startsWith('concept:') ? mode.replace(':', '.') : 'mode.' + mode;
-        const translated = t(key, lang);
-        return translated !== key ? translated : fallback;
-    }
-    return fallback;
+    const key = isConceptMode(mode) ? mode.replace(':', '.') : `mode.${mode}`;
+    const translated = t(key, lang);
+    return translated !== key ? translated : fallback;
 };
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
@@ -1537,16 +1535,17 @@ interface Rank {
 }
 
 const RANKS: Rank[] = [
-    { name: 'Plankton', icon: '🦠', minScore: 0 },
-    { name: 'Shrimp', icon: '🦐', minScore: 5 },
-    { name: 'Crab', icon: '🦀', minScore: 15 },
-    { name: 'Small Fish', icon: '🐟', minScore: 35 },
-    { name: 'Octopus', icon: '🐙', minScore: 70 },
-    { name: 'Seal', icon: '🦭', minScore: 120 },
-    { name: 'Dolphin', icon: '🐬', minScore: 200 },
-    { name: 'Shark', icon: '🦈', minScore: 350 },
-    { name: 'Whale', icon: '🐋', minScore: 500 },
-    { name: 'God Whale', icon: '👑🐋', minScore: 750 },
+    { name: 'Atom', icon: '⚛️', minScore: 0 },
+    { name: 'Plankton', icon: '🦠', minScore: 5 },
+    { name: 'Shrimp', icon: '🦐', minScore: 15 },
+    { name: 'Crab', icon: '🦀', minScore: 35 },
+    { name: 'Small Fish', icon: '🐟', minScore: 70 },
+    { name: 'Octopus', icon: '🐙', minScore: 120 },
+    { name: 'Seal', icon: '🦭', minScore: 200 },
+    { name: 'Dolphin', icon: '🐬', minScore: 350 },
+    { name: 'Shark', icon: '🦈', minScore: 500 },
+    { name: 'Whale', icon: '🐋', minScore: 750 },
+    { name: 'God Whale', icon: '👑🐋', minScore: 1000 },
 ];
 
 const getUserRank = (statsByMode: StatsByMode): Rank => {
@@ -1699,6 +1698,7 @@ const EMPTY_STATS: Stats = { shots: 0, success: 0, failed: 0 };
 
 const createEmptyStatsByMode = (): StatsByMode => ({
     normal: { ...EMPTY_STATS },
+    atomic_beginner: { ...EMPTY_STATS },
     beginner: { ...EMPTY_STATS },
     intermediate: { ...EMPTY_STATS },
     expert: { ...EMPTY_STATS },
@@ -1738,6 +1738,7 @@ const loadStatsByMode = (): StatsByMode => {
 };
 
 const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
+    if (exercise.category === 'Atomic Beginner' || (exercise.id >= 2081 && exercise.id <= 2380)) return 'atomic_beginner';
     const score = scoreExerciseDifficulty(exercise);
 
     if (score > 24) return 'legend';
@@ -1773,6 +1774,7 @@ const getExerciseById = (id: number | null): Exercise | null => {
 
 const getExercisePoolForMode = (mode: ProblemMode): Exercise[] => {
     if (mode === 'normal') return EXERCISES;
+    if (mode === 'atomic_beginner') return EXERCISES.filter(item => classifyExerciseDifficulty(item) === 'atomic_beginner');
     const concept = getConceptForMode(mode);
     if (concept) {
         return EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
@@ -10918,6 +10920,7 @@ const getGuideConceptHints = (exercise: Exercise) => {
     const add = (condition: boolean, hint: string) => {
         if (condition && !hints.includes(hint)) hints.push(hint);
     };
+    add(exercise.category === 'Atomic Beginner', 'This is an atomic beginner problem: do one tiny action first, usually create a value, use one operator or built-in, then `print()` the result.');
     add(text.includes('input(') || text.includes('prompt the user'), 'If the problem asks for user input, read it with `input()` and convert it with `int()`, `float()`, or `.split()` before using it.');
     add(text.includes('return'), 'If the problem says “returns”, use `return`, not only `print()`. Printing can look correct but fail function tests.');
     add(text.includes('print'), 'If the problem says “print”, make sure the visible output format matches the example line by line.');
@@ -16471,7 +16474,7 @@ print(result)
                                                                 <span className="text-xs font-black uppercase tracking-[0.16em]">{t('mode.' + mode.id, appLang)}</span>
                                                                 {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
                                                             </span>
-                                                            <span className="mt-1 block text-[10px] text-gray-400">{mode.description}</span>
+                                                            <span className="mt-1 block text-[10px] text-gray-400">{t('mode.' + mode.id + 'Desc', appLang)}</span>
                                                         </button>
                                                     );
                                                 })}
@@ -16515,7 +16518,7 @@ print(result)
                                             {showHowToUse && (
                                                 <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
                                                     <p className="font-bold text-white text-xs">Problem Mode</p>
-                                                    <p><strong>Difficulty modes</strong> filter problems by how hard they are. <strong>Normal</strong> mixes everything together. <strong>Beginner</strong> is simple functions, strings, and lists. <strong>Intermediate</strong> adds loops, dictionaries, and patterns. <strong>Expert</strong> and <strong>Legend</strong> are harder challenges.</p>
+                                                    <p><strong>Difficulty modes</strong> filter problems by how hard they are. <strong>Normal</strong> mixes everything together. <strong>Beginner</strong> is the new atomic first-step level. <strong>Easy</strong> is the old beginner level with simple functions, strings, and lists. <strong>Intermediate</strong> adds loops, dictionaries, and patterns. <strong>Expert</strong> and <strong>Legend</strong> are harder challenges.</p>
                                                     <p className="font-bold text-white text-xs mt-3">Concepts</p>
                                                     <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic below. The app will only show problems that match that concept.</p>
                                                     <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
@@ -17146,7 +17149,8 @@ print(result)
                                         <p>Choose a <strong>difficulty mode</strong> to filter problems by how hard they are:</p>
                                         <ul className="list-disc pl-4 space-y-1 text-gray-400">
                                             <li><strong>Normal</strong> — mixes all problems together</li>
-                                            <li><strong>Beginner</strong> — simple functions, strings, and lists</li>
+                                            <li><strong>Beginner</strong> — atomic first steps: print, variables, values</li>
+                                            <li><strong>Easy</strong> — simple functions, strings, and lists</li>
                                             <li><strong>Intermediate</strong> — loops, dictionaries, and patterns</li>
                                             <li><strong>Expert</strong> — harder challenges</li>
                                             <li><strong>Legend</strong> — toughest problems</li>
