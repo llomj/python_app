@@ -10382,10 +10382,11 @@ const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSetti
         <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em]">
             {tokens.map((t, i) => {
                 if (/^(True|False|None)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
-                if (/^(def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with|raise|pass|break|continue|and|or|not|in|is|lambda)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
-                if (/^[0-9]+(?:\.[0-9]+)?$/.test(t)) return <span key={i} style={{ color: dc.number }}>{t}</span>;
+                if (/^(def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with|raise|pass|break|continue|and|or|not|in|is|lambda|assert|global|nonlocal|del|yield|async|await)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
+                if (/^\d+(?:\.\d+)?$/.test(t)) return <span key={i} style={{ color: dc.number }}>{t}</span>;
                 if (/^(['"]).*\1$/.test(t)) return <span key={i} style={{ color: dc.string }}>{t}</span>;
                 if (/^#/.test(t)) return <span key={i} style={{ color: dc.comment }}>{t}</span>;
+                if (/^[\w.]+\(\)?$/.test(t)) return <span key={i} style={{ color: dc.builtin }}>{t}</span>;
                 return <span key={i} style={{ color: dc.text }}>{t}</span>;
             })}
         </code>
