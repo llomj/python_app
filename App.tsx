@@ -11116,6 +11116,7 @@ const App: React.FC = () => {
     const [generalAiDraft, setGeneralAiDraft] = useState('');
     const [generalAiMode, setGeneralAiMode] = useState<GeneralAiMode>('normal');
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
+    const [generalAiProgress, setGeneralAiProgress] = useState(0);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
     const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
         try {
@@ -11126,6 +11127,21 @@ const App: React.FC = () => {
     const [showSavedConvs, setShowSavedConvs] = useState(false);
     const [generalAiSaveFeedback, setGeneralAiSaveFeedback] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState(false);
+    useEffect(() => {
+        if (!generalAiRunning) { setGeneralAiProgress(0); return; }
+        setGeneralAiProgress(5);
+        const startTime = Date.now();
+        const interval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            let p: number;
+            if (elapsed < 2000) p = 5 + (elapsed / 2000) * 20;
+            else if (elapsed < 8000) p = 25 + ((elapsed - 2000) / 6000) * 45;
+            else if (elapsed < 20000) p = 70 + ((elapsed - 8000) / 12000) * 18;
+            else p = 88 + Math.min(10, (elapsed - 20000) / 60000 * 10);
+            setGeneralAiProgress(Math.min(99, Math.round(p)));
+        }, 200);
+        return () => clearInterval(interval);
+    }, [generalAiRunning]);
     const [apiKey, setApiKey] = useState<string>(() => {
         return localStorage.getItem('gemini_api_key') || '';
     });
@@ -13812,6 +13828,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 buildGeneralAiErrorAnswer(effectiveQuestion) ||
                 answerGeneralPythonQuestion(effectiveQuestion);
             if (refAnswer) {
+                setGeneralAiProgress(100);
                 setGeneralAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
                     role: 'assistant',
@@ -13827,6 +13844,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }));
                 const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory);
                 if (aiAnswer) {
+                    setGeneralAiProgress(100);
                     setGeneralAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
                         role: 'assistant',
@@ -13838,6 +13856,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             } catch {
                 /* Offline model failed — fall through to clarification */
             }
+            setGeneralAiProgress(100);
             setGeneralAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
@@ -15537,8 +15556,13 @@ print(result)
                                         </div>
                                     ))}
                                     {generalAiRunning && (
-                                        <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
-                                            Thinking...
+                                        <div className="flex items-center gap-2 rounded-2xl border px-3 py-2" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08) }}>
+                                            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
+                                                <div className="h-full rounded-full transition-all duration-300 ease-out" style={{ width: `${Math.max(3, generalAiProgress)}%`, background: 'linear-gradient(90deg, #38bdf8, #22c55e)' }} />
+                                            </div>
+                                            <span className="text-xs font-black uppercase tracking-[0.12em]" style={{ color: toolPanelColors.ai }}>
+                                                {generalAiProgress > 0 ? `${generalAiProgress}%` : '...'}
+                                            </span>
                                         </div>
                                     )}
                                 </div>
