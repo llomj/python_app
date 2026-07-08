@@ -49,6 +49,7 @@ import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, answerGeneralPythonWithAvailableAi, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/translations';
+import { EXERCISES_FR } from './services/exercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { answerGeneralPythonQuestion } from './services/pythonReference';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
@@ -1191,7 +1192,22 @@ const CONCEPT_DOCS: Record<ConceptModeId, string> = Object.fromEntries(
 const MODE_OPTIONS = [...DIFFICULTY_MODES, ...PYTHON_CONCEPT_MODES] as Array<{ id: ProblemMode; label: string; description: string }>;
 const CONCEPT_MODE_IDS = new Set<ProblemMode>(PYTHON_CONCEPT_MODES.map(mode => mode.id));
 const isConceptMode = (mode: ProblemMode): mode is ConceptModeId => CONCEPT_MODE_IDS.has(mode);
-const getModeLabel = (mode: ProblemMode) => MODE_OPTIONS.find(item => item.id === mode)?.label ?? 'Normal';
+const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
+    const fallback = MODE_OPTIONS.find(item => item.id === mode)?.label ?? 'Normal';
+    if (lang === 'fr') {
+        const key = mode.startsWith('concept:') ? mode.replace(':', '.') : 'mode.' + mode;
+        const translated = t(key, lang);
+        return translated !== key ? translated : fallback;
+    }
+    return fallback;
+};
+
+const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
+    if (lang === 'fr' && EXERCISES_FR[exercise.id]) {
+        return EXERCISES_FR[exercise.id];
+    }
+    return exercise.description;
+};
 
 // Ranking system
 interface Rank {
@@ -11470,7 +11486,7 @@ const App: React.FC = () => {
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
-    const selectedModeLabel = getModeLabel(difficultyMode);
+    const selectedModeLabel = getModeLabel(difficultyMode, appLang);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
@@ -14863,7 +14879,7 @@ print(result)
                             </div>
                         </div>
                         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: editorColors.problemText, fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
-                            {exercise.description}
+                            {getExerciseDescription(exercise, appLang)}
                         </div>
                     </div>
                 </div>
@@ -15030,13 +15046,13 @@ print(result)
                     </div>
                     <div className="flex-shrink-0" style={{ backgroundColor: editorColors.background }}>
                         <div className="flex items-center justify-between px-2 py-1 border-b" style={{ borderColor: panelColors.border }}>
-                            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: toolPanelColors.panelLabelText }}>Output</span>
+                            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: toolPanelColors.panelLabelText }}>{t('output.title', appLang)}</span>
                             <button
                                 onClick={toggleOutputHeight}
                                 className="text-gray-400 hover:text-[#3b82f6] transition-all px-2 py-1 flex items-center gap-1 text-[11px] font-bold"
-                                title={isOutputExpanded ? "Collapse" : "Expand"}
+                                title={isOutputExpanded ? t('output.collapse', appLang) : t('output.expand', appLang)}
                             >
-                                <span>{isOutputExpanded ? 'Smaller' : 'Larger'}</span>
+                                <span>{isOutputExpanded ? t('output.smaller', appLang) : t('output.larger', appLang)}</span>
                                 {isOutputExpanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
                             </button>
                         </div>
@@ -15358,7 +15374,7 @@ print(result)
                                             {exercise && (
                                                 <div className="rounded-2xl border p-3" style={{ borderColor: 'rgba(88, 118, 160, 0.25)', backgroundColor: 'rgba(8, 18, 34, 0.4)' }}>
                                                     <div className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: countRowColors.rate }}>Problem {exercise.id}</div>
-                                                    <p className="text-[13px] leading-relaxed text-gray-200">{exercise.description}</p>
+                                                    <p className="text-[13px] leading-relaxed text-gray-200">{getExerciseDescription(exercise, appLang)}</p>
                                                 </div>
                                             )}
 
@@ -15724,12 +15740,12 @@ print(result)
                         )}
                         {showModal === 'customize' && (
                             <div className="flex h-full min-h-0 flex-col py-2">
-                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Customize</h2>
-                                <div className="mb-4 flex flex-shrink-0 gap-3 border-b border-[#1d2d44]">
-                                    <TabButton active={customizeTab === 'count'} onClick={() => setCustomizeTab('count')} label="Count Row" />
-                                    <TabButton active={customizeTab === 'ide'} onClick={() => setCustomizeTab('ide')} label="IDE" />
-                                    <TabButton active={customizeTab === 'tools'} onClick={() => setCustomizeTab('tools')} label="Tools" />
-                                    <TabButton active={customizeTab === 'panels'} onClick={() => setCustomizeTab('panels')} label="Panels" />
+                                 <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">{t('customize.title', appLang)}</h2>
+                                 <div className="mb-4 flex flex-shrink-0 gap-3 border-b border-[#1d2d44]">
+                                     <TabButton active={customizeTab === 'count'} onClick={() => setCustomizeTab('count')} label={t('customize.countRow', appLang)} />
+                                     <TabButton active={customizeTab === 'ide'} onClick={() => setCustomizeTab('ide')} label={t('customize.ide', appLang)} />
+                                     <TabButton active={customizeTab === 'tools'} onClick={() => setCustomizeTab('tools')} label={t('customize.tools', appLang)} />
+                                     <TabButton active={customizeTab === 'panels'} onClick={() => setCustomizeTab('panels')} label={t('customize.panels', appLang)} />
                                 </div>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
                                     {customizeTab === 'count' && (
@@ -15901,7 +15917,7 @@ print(result)
                                                         <span style={{ color: editorColors.builtin }}>print</span>(solve(<span style={{ color: editorColors.string }}>"Python"</span>))
                                                     </div>
                                                     <div className="rounded-lg border px-2 py-1.5" style={{ backgroundColor: editorColors.outputBackground, borderColor: panelColors.border }}>
-                                                        <div className="text-[9px] font-bold uppercase tracking-wider text-gray-400">Output</div>
+                                                        <div className="text-[9px] font-bold uppercase tracking-wider text-gray-400">{t('output.title', appLang)}</div>
                                                         <div className="font-mono text-[10px] text-[#4ade80]">ytho</div>
                                                     </div>
                                                 </div>
@@ -15912,15 +15928,15 @@ print(result)
                                                         <span className="uppercase" style={{ color: '#22c55e' }}>{t('countRow.wins', appLang)}</span> 8
                                                     </div>
                                                     <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
-                                                        <span className="font-bold text-white">Problem 1005</span>
-                                                        <div className="mt-1 text-gray-400">Write a program to remove first and last characters from a string.</div>
+                                                        <span className="font-bold text-white">{t('preview.problem', appLang, '1005')}</span>
+                                                        <div className="mt-1 text-gray-400">{t('preview.problemDescription', appLang)}</div>
                                                     </div>
                                                     <div className="rounded-xl px-3 py-2 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
-                                                        <span className="font-bold text-gray-200">main.py</span>
-                                                        <span className="ml-3 uppercase text-[#22c55e]">▶ Run</span>
+                                                        <span className="font-bold text-gray-200">{t('preview.mainFile', appLang)}</span>
+                                                        <span className="ml-3 uppercase text-[#22c55e]">▶ {t('output.run', appLang)}</span>
                                                     </div>
                                                     <div className="rounded-xl px-3 py-3 text-[10px] text-gray-400" style={{ backgroundColor: editorColors.outputBackground, border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
-                                                        <span className="font-bold text-gray-200">Output</span>
+                                                        <span className="font-bold text-gray-200">{t('output.title', appLang)}</span>
                                                         <div className="mt-1 font-mono text-[#4ade80]">ytho</div>
                                                     </div>
                                                 </div>
@@ -15990,7 +16006,7 @@ print(result)
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <div className="flex items-center justify-between gap-2">
                                         <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
-                                            <Languages size={14} className="text-[#f59e0b]" />
+                                            <Languages size={14} className="text-[#22c55e]" />
                                             {t('settings.language', appLang)}
                                         </h3>
                                     </div>
@@ -16001,7 +16017,7 @@ print(result)
                                                 key={l}
                                                 onClick={() => changeLang(l)}
                                                 className="flex-1 rounded-xl border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
-                                                style={appLang === l ? { borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                                style={appLang === l ? { borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
                                             >
                                                 {l === 'en' ? 'English' : 'Français'}
                                             </button>
@@ -16188,7 +16204,7 @@ print(result)
                                                 </div>
                                             )}
                                             <p className="mt-2 text-[10px] text-gray-300">
-                                                Current mode: <span className="font-bold text-gray-100">{selectedModeLabel}</span> · {modeExerciseCount} matching problems. Normal mode uses all problems.
+                                                {t('misc.currentMode', appLang, selectedModeLabel, String(modeExerciseCount))}
                                             </p>
                                         </div>
                                     )}
@@ -16942,7 +16958,7 @@ print(result)
                                         userSelect: 'text',
                                         WebkitUserSelect: 'text'
                                     }}>
-                                        {exercise.description}
+                                        {getExerciseDescription(exercise, appLang)}
                                     </pre>
                                 </div>
                             </div>

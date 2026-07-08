@@ -349,6 +349,9 @@ const EN: Dict = {
   'misc.currentMode': 'Current mode: {0} · {1} matching problems. Normal mode uses all problems.',
   'misc.noSnippets': 'No saved snippets yet. Press Save to save your current code.',
   'misc.problemFull': 'Problem {0} - Full Description',
+  'preview.problemDescription': 'Write a program to remove first and last characters from a string.',
+  'preview.problem': 'Problem {0}',
+  'preview.mainFile': 'main.py',
 };
 
 const FR: Dict = {
@@ -474,10 +477,10 @@ const FR: Dict = {
   'customize.helperPy': 'helper.py',
 
   /* ── Count Row ────────────────────────────────────────────── */
-  'countRow.count': 'Compte :',
-  'countRow.wins': 'Gagnés :',
-  'countRow.fail': 'Perdus :',
-  'countRow.rate': 'Taux :',
+  'countRow.count': 'Tir :',
+  'countRow.wins': 'Réu :',
+  'countRow.fail': 'Éch :',
+  'countRow.rate': 'Tx :',
   'countRow.settings': 'Paramètres',
 
   /* ── Difficulty Modes ─────────────────────────────────────── */
@@ -699,6 +702,9 @@ const FR: Dict = {
   'misc.currentMode': 'Mode actuel : {0} · {1} problèmes correspondants. Le mode Normal utilise tous les problèmes.',
   'misc.noSnippets': 'Aucun extrait sauvegardé. Appuyez sur Sauvegarder pour enregistrer votre code actuel.',
   'misc.problemFull': 'Problème {0} - Description Complète',
+  'preview.problemDescription': 'Écrivez un programme pour supprimer les premiers et derniers caractères d\'une chaîne.',
+  'preview.problem': 'Problème {0}',
+  'preview.mainFile': 'main.py',
 };
 
 export const DICTIONARIES: Record<Lang, Dict> = { en: EN, fr: FR };
