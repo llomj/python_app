@@ -50,6 +50,7 @@ import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewType
 import { DEFAULT_OFFLINE_AI_STATE, answerGeneralPythonWithAvailableAi, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/translations';
 import { EXERCISES_FR } from './services/exercisesFr';
+import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { answerGeneralPythonQuestion } from './services/pythonReference';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
@@ -1521,6 +1522,9 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 };
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
+    if (lang === 'fr' && ATOMIC_BEGINNER_EXERCISES_FR[exercise.id]) {
+        return ATOMIC_BEGINNER_EXERCISES_FR[exercise.id];
+    }
     if (lang === 'fr' && EXERCISES_FR[exercise.id]) {
         return EXERCISES_FR[exercise.id];
     }

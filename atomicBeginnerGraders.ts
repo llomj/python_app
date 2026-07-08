@@ -1,4 +1,4 @@
-import { AutoGrader } from './graders';
+import type { AutoGrader } from './graders';
 
 export const ATOMIC_BEGINNER_GRADERS: Record<number, AutoGrader> = {
   "2081": {

@@ -17,6 +17,80 @@ const repr = (value) => {
 
 const tupleRepr = (items) => `(${items.map(repr).join(', ')}${items.length === 1 ? ',' : ''})`;
 
+const cleanScript = (script) => script
+  .replace(/^#\s*Script approach\s*\n/i, '')
+  .trim();
+
+const indent = (code, spaces = 4) => code
+  .split('\n')
+  .map((line) => (line ? `${' '.repeat(spaces)}${line}` : line))
+  .join('\n');
+
+const compactScript = (script) => {
+  const body = cleanScript(script);
+  const resultMatch = body.match(/^([\s\S]*?)\nresult\s*=\s*([^\n]+)\nprint\(result\)$/);
+  if (resultMatch) {
+    const setup = resultMatch[1].trim();
+    const expression = resultMatch[2].trim();
+    return `${setup ? `${setup}\n` : ''}print(${expression})`;
+  }
+
+  const assignmentPrintMatch = body.match(/^([A-Za-z_]\w*)\s*=\s*([^\n]+)\nprint\(\1\)$/);
+  if (assignmentPrintMatch) {
+    const [, name, value] = assignmentPrintMatch;
+    return `${name} = ${value}\nprint(${name})`;
+  }
+
+  return body;
+};
+
+const commentedScript = (script) => cleanScript(script)
+  .split('\n')
+  .flatMap((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) return [line];
+    if (/^print\(/.test(trimmed)) return [`# Step ${index + 1}: display the final answer.`, line];
+    if (/^if\b/.test(trimmed)) return [`# Step ${index + 1}: check the condition before printing.`, line];
+    if (/=/.test(trimmed) && !/[=!<>]=/.test(trimmed)) return [`# Step ${index + 1}: store a value in a name.`, line];
+    return [`# Step ${index + 1}: run this Python statement.`, line];
+  })
+  .join('\n');
+
+const functionScript = (script) => {
+  const body = cleanScript(script);
+  const lines = body.split('\n');
+  const printIndexes = lines
+    .map((line, index) => (/^\s*print\(([\s\S]*)\)\s*$/.test(line) ? index : -1))
+    .filter((index) => index >= 0);
+
+  if (printIndexes.length === 1 && printIndexes[0] === lines.length - 1) {
+    const expression = lines[lines.length - 1].trim().match(/^print\(([\s\S]*)\)$/)?.[1] ?? '';
+    const setup = lines.slice(0, -1).join('\n').trim();
+    const functionBody = `${setup ? `${setup}\n` : ''}return ${expression}`;
+    return `def solve():\n${indent(functionBody)}\n\nprint(solve())`;
+  }
+
+  return `def solve():\n${indent(body)}\n\nsolve()`;
+};
+
+const manualScript = (script) => {
+  const body = cleanScript(script);
+  const singlePrint = body.match(/^print\(([\s\S]+)\)$/);
+  if (singlePrint) {
+    return `# Step 1: store the answer in a clear name.\nanswer = ${singlePrint[1]}\n# Step 2: display the answer.\nprint(answer)`;
+  }
+  return commentedScript(script);
+};
+
+const buildTeachingSolution = (script) => {
+  const body = cleanScript(script);
+  const functionBlock = `# Using function approach\n${functionScript(script)}`;
+  const scriptBlock = `# Using script approach\n${body}`;
+  const directBlock = `# Direct approach\n${compactScript(script)}`;
+  const manualBlock = `# Manual step-by-step approach\n${manualScript(script)}`;
+  return [functionBlock, scriptBlock, directBlock, manualBlock].join('\n\n');
+};
+
 const add = ({ title, description, initialCode, solution, hint, breakdown, expected, requiredNodePatterns = [], requiredCallPatterns = [] }) => {
   const id = startId + exercises.length;
   exercises.push({
@@ -24,7 +98,7 @@ const add = ({ title, description, initialCode, solution, hint, breakdown, expec
     title: `Problem ${id}`,
     description,
     initialCode: initialCode ?? '# Write your code here\n',
-    solution,
+    solution: buildTeachingSolution(solution),
     hint,
     breakdown,
     category: 'Atomic Beginner',
@@ -358,10 +432,102 @@ if (exercises.length !== 300) {
   throw new Error(`Expected 300 atomic beginner exercises, generated ${exercises.length}`);
 }
 
+const translateAtomicDescription = (description) => {
+  let match = description.match(/^Write a Python program that prints the text "(.+)"\.$/);
+  if (match) return `Écrivez un programme Python qui affiche le texte "${match[1]}".`;
+
+  match = description.match(/^Write a Python program that prints the number (.+)\.$/);
+  if (match) return `Écrivez un programme Python qui affiche le nombre ${match[1]}.`;
+
+  match = description.match(/^Create a variable called `([^`]+)` and store the string "(.+)" in it\. Then print the variable\.$/);
+  if (match) return `Créez une variable appelée \`${match[1]}\` et stockez-y la chaîne "${match[2]}". Ensuite, affichez la variable.`;
+
+  match = description.match(/^Create a variable called `([^`]+)` and store the number (.+) in it\. Then print the variable\.$/);
+  if (match) return `Créez une variable appelée \`${match[1]}\` et stockez-y le nombre ${match[2]}. Ensuite, affichez la variable.`;
+
+  match = description.match(/^Write a Python program that (adds|subtracts|multiplies|divides) (.+) and (.+), then prints the result\.$/);
+  if (match) {
+    const verbs = { adds: 'additionne', subtracts: 'soustrait', multiplies: 'multiplie', divides: 'divise' };
+    return `Écrivez un programme Python qui ${verbs[match[1]]} ${match[2]} et ${match[3]}, puis affiche le résultat.`;
+  }
+
+  match = description.match(/^Write a Python program that prints the length for the string "(.+)", then prints the result\.$/);
+  if (match) return `Écrivez un programme Python qui affiche la longueur de la chaîne "${match[1]}", puis affiche le résultat.`;
+
+  match = description.match(/^Write a Python program that changes it to uppercase for the string "(.+)", then prints the result\.$/);
+  if (match) return `Écrivez un programme Python qui transforme la chaîne "${match[1]}" en majuscules, puis affiche le résultat.`;
+
+  match = description.match(/^Write a Python program that changes it to lowercase for the string "(.+)", then prints the result\.$/);
+  if (match) return `Écrivez un programme Python qui transforme la chaîne "${match[1]}" en minuscules, puis affiche le résultat.`;
+
+  match = description.match(/^Write a Python program that capitalizes it for the string "(.+)", then prints the result\.$/);
+  if (match) return `Écrivez un programme Python qui met la première lettre de la chaîne "${match[1]}" en majuscule, puis affiche le résultat.`;
+
+  match = description.match(/^Write a Python program that removes spaces from both ends for the string "([\s\S]+)", then prints the result\.$/);
+  if (match) return `Écrivez un programme Python qui supprime les espaces au début et à la fin de la chaîne "${match[1]}", puis affiche le résultat.`;
+
+  match = description.match(/^Write a Python program that title-cases it for the string "(.+)", then prints the result\.$/);
+  if (match) return `Écrivez un programme Python qui met chaque mot de la chaîne "${match[1]}" en forme titre, puis affiche le résultat.`;
+
+  match = description.match(/^Store the string "(.+)"\. Replace every "l" with "L", then print the result\.$/);
+  if (match) return `Stockez la chaîne "${match[1]}". Remplacez chaque "l" par "L", puis affichez le résultat.`;
+
+  match = description.match(/^Store the string "(.+)"\. Count how many times "s" appears, then print the count\.$/);
+  if (match) return `Stockez la chaîne "${match[1]}". Comptez combien de fois "s" apparaît, puis affichez le nombre.`;
+
+  match = description.match(/^Create a list containing (.+)\. Then print the list\.$/);
+  if (match) return `Créez une liste contenant ${match[1]}. Ensuite, affichez la liste.`;
+
+  match = description.match(/^Create the list (.+)\. Then print the (first|second|third|last) item\.$/);
+  if (match) {
+    const labels = { first: 'premier', second: 'deuxième', third: 'troisième', last: 'dernier' };
+    return `Créez la liste ${match[1]}. Ensuite, affichez le ${labels[match[2]]} élément.`;
+  }
+
+  match = description.match(/^Create the list (.+)\. Then print how many items are in the list\.$/);
+  if (match) return `Créez la liste ${match[1]}. Ensuite, affichez combien d’éléments elle contient.`;
+
+  match = description.match(/^Create a comparison that checks whether (.+) (>|<|==|!=|>=|<=) (.+)\. Print the Boolean result\.$/);
+  if (match) return `Créez une comparaison qui vérifie si ${match[1]} ${match[2]} ${match[3]}. Affichez le résultat booléen.`;
+
+  match = description.match(/^Create a variable called `([^`]+)` with the value (.+)\. If `([^`]+)` (>|<|==|!=|>=|<=) (.+), print "(.+)"\.$/);
+  if (match) return `Créez une variable appelée \`${match[1]}\` avec la valeur ${match[2]}. Si \`${match[3]}\` ${match[4]} ${match[5]}, affichez "${match[6]}".`;
+
+  match = description.match(/^Convert (.+) using `([^`]+)\(\)`, then print the result\.$/);
+  if (match) return `Convertissez ${match[1]} avec \`${match[2]}()\`, puis affichez le résultat.`;
+
+  match = description.match(/^Create `name = "(.+)"` and `age = (.+)`\. Print the sentence "(.+)" using an f-string\.$/);
+  if (match) return `Créez \`name = "${match[1]}"\` et \`age = ${match[2]}\`. Affichez la phrase "${match[3]}" avec une f-string.`;
+
+  match = description.match(/^Create the dictionary (.+)\. Then print the value for the key "(.+)"\.$/);
+  if (match) return `Créez le dictionnaire ${match[1]}. Ensuite, affichez la valeur de la clé "${match[2]}".`;
+
+  match = description.match(/^Create the tuple (.+)\. Then print the (first|second|third|last) item\.$/);
+  if (match) {
+    const labels = { first: 'premier', second: 'deuxième', third: 'troisième', last: 'dernier' };
+    return `Créez le tuple ${match[1]}. Ensuite, affichez le ${labels[match[2]]} élément.`;
+  }
+
+  match = description.match(/^Write a Python program that prints the remainder of (.+) divided by (.+)\.$/);
+  if (match) return `Écrivez un programme Python qui affiche le reste de ${match[1]} divisé par ${match[2]}.`;
+
+  match = description.match(/^Check whether (.+) is inside (.+)\. Print the Boolean result\.$/);
+  if (match) return `Vérifiez si ${match[1]} se trouve dans ${match[2]}. Affichez le résultat booléen.`;
+
+  return description;
+};
+
+const frenchDescriptions = Object.fromEntries(
+  exercises.map((exercise) => [exercise.id, translateAtomicDescription(exercise.description)])
+);
+
 const exerciseFile = `import type { Exercise } from './types';\n\nexport const ATOMIC_BEGINNER_EXERCISES: Exercise[] = ${JSON.stringify(exercises, null, 2)};\n`;
 
-const graderFile = `import { AutoGrader } from './graders';\n\nexport const ATOMIC_BEGINNER_GRADERS: Record<number, AutoGrader> = ${JSON.stringify(graders, null, 2)};\n`;
+const graderFile = `import type { AutoGrader } from './graders';\n\nexport const ATOMIC_BEGINNER_GRADERS: Record<number, AutoGrader> = ${JSON.stringify(graders, null, 2)};\n`;
+
+const frenchFile = `// Auto-generated French descriptions for atomic beginner exercises.\n// Do not edit manually; run scripts/generate_atomic_beginner.mjs.\n\nexport const ATOMIC_BEGINNER_EXERCISES_FR: Record<number, string> = ${JSON.stringify(frenchDescriptions, null, 2)};\n`;
 
 fs.writeFileSync('atomicBeginnerExercises.ts', exerciseFile);
 fs.writeFileSync('atomicBeginnerGraders.ts', graderFile);
+fs.writeFileSync('atomicBeginnerExercisesFr.ts', frenchFile);
 console.log(`Generated ${exercises.length} atomic beginner exercises (${startId}-${startId + exercises.length - 1}).`);
