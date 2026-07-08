@@ -169,7 +169,7 @@ const getConceptMapItems = (topic: string): string[] => {
 };
 
 const looksLikeGeneralPythonCode = (question: string): boolean => (
-    /```|(^|\n)\s*(def |class |for |while |if |elif |else:|try:|except |with |import |from |print\(|return |[a-zA-Z_][\w]*\s*=)/.test(question)
+    /```|(^|\n|\b)(def |class |for |while |if |elif |else:|try:|except |with |import |from |print\(|return |[a-zA-Z_][\w]*\s*=)/.test(question)
 );
 
 const stripCodeFences = (text: string): string => text
@@ -182,7 +182,8 @@ const buildGeneralAiCodeExplanation = (question: string): string | null => {
     if (!looksLikeGeneralPythonCode(question) || !/(explain|line by line|what does|code)/.test(lowerQ)) return null;
     const code = stripCodeFences(question)
         .split('\n')
-        .filter(line => !/^\s*(explain|what does|line by line|can you)/i.test(line.trim()))
+        .map(line => line.replace(/^\s*(explain|what does|line by line|can you)\s+(this\s+)?(python\s+)?code[:\s-]*/i, ''))
+        .filter(line => !/^\s*(explain|what does|line by line|can you)\b/i.test(line.trim()))
         .join('\n')
         .trim();
     if (!code) return null;
@@ -279,6 +280,79 @@ const buildGeneralAiQuiz = (topic: string): string => [
     '- Did you print or return based on the goal?',
     '- Did the output match what the code logically produces?',
 ].join('\n');
+
+const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
+    const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    const topic = detectGeneralPythonTopic(question);
+    if (!/\bwhat\s+(is|are)\b|\bexplain\b|\btell me about\b/.test(lowerQ)) return null;
+    const answers: Record<string, string> = {
+        list: [
+            '**list data type**',
+            '',
+            'A list is an ordered, mutable collection. Ordered means items keep their position. Mutable means you can change, add, or remove items.',
+            '',
+            '```python',
+            'items = [10, 20, 30]',
+            'items.append(40)',
+            'print(items[0])  # 10',
+            '```',
+        ].join('\n'),
+        dictionary: [
+            '**dictionary data type**',
+            '',
+            'A dictionary stores key-value pairs. You use a key to look up a value. Keys are unique, and values can be any Python object.',
+            '',
+            '```python',
+            'user = {"name": "Noll", "age": 30}',
+            'print(user["name"])',
+            'user["city"] = "Paris"',
+            '```',
+        ].join('\n'),
+        string: [
+            '**string data type**',
+            '',
+            'A string is an immutable sequence of text characters. Immutable means methods return new strings instead of changing the original string.',
+            '',
+            '```python',
+            'text = "hello"',
+            'print(text.upper())',
+            'print(text[0])',
+            '```',
+        ].join('\n'),
+        tuple: [
+            '**tuple data type**',
+            '',
+            'A tuple is an ordered, immutable sequence. Use it for fixed groups of values that should not change.',
+            '',
+            '```python',
+            'point = (10, 20)',
+            'x, y = point',
+            '```',
+        ].join('\n'),
+        set: [
+            '**set data type**',
+            '',
+            'A set is an unordered collection of unique values. It removes duplicates and supports math-style operations like union and intersection.',
+            '',
+            '```python',
+            'nums = {1, 1, 2, 3}',
+            'print(nums)  # {1, 2, 3}',
+            '```',
+        ].join('\n'),
+        boolean: [
+            '**boolean data type**',
+            '',
+            'A boolean is either `True` or `False`. Booleans usually come from comparisons or conditions.',
+            '',
+            '```python',
+            'age = 20',
+            'is_adult = age >= 18',
+            'print(is_adult)  # True',
+            '```',
+        ].join('\n'),
+    };
+    return answers[topic] || null;
+};
 
 const buildGeneralAiComparisonAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
@@ -503,6 +577,9 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (/quiz|practice|test me|check my understanding/.test(lowerQ)) {
         sections.push(buildGeneralAiQuiz(topic));
     }
+    if (!/quiz|practice|test me|check my understanding/.test(lowerQ)) {
+        sections.push(buildGeneralAiSuggestedFollowUpText(question));
+    }
     return sections.join('\n\n');
 };
 
@@ -515,6 +592,14 @@ const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
         `Go deeper on ${topic}`,
         `Quiz me on ${topic}`,
     ];
+};
+
+const buildGeneralAiSuggestedFollowUpText = (question: string): string => {
+    const suggestions = getGeneralAiSuggestedFollowUps(question);
+    return [
+        '**You can ask next**',
+        ...suggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`),
+    ].join('\n');
 };
 
 const buildGeneralAiClarification = (question: string): string => {
@@ -10384,20 +10469,32 @@ const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSetti
     return '#e5e7eb';
 };
 
- const renderInlinePythonCode = (code: string) => {
-    const tokens = code.split(/(\b(?:def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with|raise|pass|break|continue|and|or|not|in|is|lambda|True|False|None)\b|(?:[0-9]+(?:\.[0-9]+)?)|(['\"].*?['\"])|(#.*))/g).filter(Boolean);
-    const dc = DEFAULT_EDITOR_COLORS;
+const isInlinePythonCodeLike = (code: string) => {
+    const trimmed = code.trim();
+    if (!trimmed || /[?]/.test(trimmed)) return false;
+    if (/\s/.test(trimmed) && !/[()[\]{}=:+\-*/%]|->|==|!=|<=|>=/.test(trimmed)) return false;
     return (
-        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em]">
-            {tokens.map((t, i) => {
-                if (/^(True|False|None)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
-                if (/^(def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with|raise|pass|break|continue|and|or|not|in|is|lambda|assert|global|nonlocal|del|yield|async|await)$/.test(t)) return <span key={i} style={{ color: dc.keyword }}>{t}</span>;
-                if (/^\d+(?:\.\d+)?$/.test(t)) return <span key={i} style={{ color: dc.number }}>{t}</span>;
-                if (/^(['"]).*\1$/.test(t)) return <span key={i} style={{ color: dc.string }}>{t}</span>;
-                if (/^#/.test(t)) return <span key={i} style={{ color: dc.comment }}>{t}</span>;
-                if (/^[\w.]+\(\)?$/.test(t)) return <span key={i} style={{ color: dc.builtin }}>{t}</span>;
-                return <span key={i} style={{ color: dc.text }}>{t}</span>;
-            })}
+        /[()[\]{}=:+\-*/%]|->|==|!=|<=|>=|\.\w+/.test(trimmed) ||
+        /^(True|False|None|def|return|for|while|if|elif|else|class|import|from|lambda|print|len|range|list|dict|set|tuple|str|int|float|bool)\b/.test(trimmed)
+    );
+};
+
+const renderInlinePythonCode = (code: string, editorColors: EditorColorSettings, keyPrefix: string) => {
+    if (!isInlinePythonCodeLike(code)) {
+        return (
+            <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100">
+                {code}
+            </code>
+        );
+    }
+    const tokens = code.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b|\s+|./g) || [code];
+    return (
+        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100">
+            {tokens.map((token, index) => (
+                <span key={`${keyPrefix}-${index}`} style={{ color: /^\s+$/.test(token) ? undefined : getInlinePythonTokenColor(token, editorColors) }}>
+                    {token}
+                </span>
+            ))}
         </code>
     );
 };
@@ -10408,7 +10505,7 @@ const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, 
         if (part.startsWith('`') && part.endsWith('`')) {
             return (
                 <React.Fragment key={`${keyPrefix}-code-${index}`}>
-                    {renderInlinePythonCode(part.slice(1, -1))}
+                    {renderInlinePythonCode(part.slice(1, -1), editorColors, `${keyPrefix}-code-${index}`)}
                 </React.Fragment>
             );
         }
@@ -13833,6 +13930,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic) : null) ||
                 buildGeneralAiComparisonAnswer(effectiveQuestion) ||
                 buildGeneralAiErrorAnswer(effectiveQuestion) ||
+                buildGeneralAiCoreTopicAnswer(effectiveQuestion) ||
                 answerGeneralPythonQuestion(effectiveQuestion);
             if (refAnswer) {
                 setGeneralAiProgress(100);
@@ -15573,26 +15671,6 @@ print(result)
                                         </div>
                                     )}
                                 </div>
-
-                                {generalAiMessages.some(message => message.role === 'user') && !generalAiRunning && (
-                                    <div className="flex flex-shrink-0 flex-wrap gap-1.5">
-                                        {getGeneralAiSuggestedFollowUps(generalAiMessages.filter(message => message.role === 'user').slice(-1)[0]?.text || '').map(suggestion => (
-                                            <button
-                                                key={suggestion}
-                                                type="button"
-                                                onClick={() => sendGeneralAiQuestion(suggestion)}
-                                                className="rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] transition-all active:scale-95"
-                                                style={{
-                                                    borderColor: hexToRgba(toolPanelColors.ai, 0.24),
-                                                    backgroundColor: hexToRgba(toolPanelColors.ai, 0.08),
-                                                    color: toolPanelColors.ai,
-                                                }}
-                                            >
-                                                {suggestion}
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
 
                                 {showSavedConvs && (
                                     <div className="flex-shrink-0 max-h-48 overflow-y-auto rounded-2xl border p-2 space-y-1.5" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(8, 18, 34, 0.6)' }}>
