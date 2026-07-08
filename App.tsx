@@ -136,8 +136,56 @@ const GENERAL_PYTHON_GLOSSARY = [
     'scope', 'global', 'nonlocal', 'built-in function',
 ];
 
+const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const GENERAL_AI_TOPIC_ALIASES: Record<string, string[]> = {
+    list: ['list', 'array'],
+    dictionary: ['dictionary', 'dict', 'mapping', 'hash map', 'key value', 'key-value'],
+    set: ['set', 'sets'],
+    tuple: ['tuple', 'tuples'],
+    string: ['string', 'str', 'text'],
+    boolean: ['boolean', 'bool', 'true false', 'true/false', 'bullion'],
+    integer: ['integer', 'int', 'whole number'],
+    float: ['float', 'decimal', 'floating point'],
+    function: ['function', 'functions', 'def'],
+    method: ['method', 'methods'],
+    module: ['module', 'modules'],
+    file: ['file', 'python file', '.py file'],
+    package: ['package', 'packages'],
+    library: ['library', 'libraries'],
+    class: ['class', 'classes'],
+    object: ['object', 'objects', 'instance', 'instances'],
+    attribute: ['attribute', 'attributes', 'property', 'properties'],
+    oop: ['oop', 'object oriented programming', 'object-orientated programming', 'object-oriented programming'],
+    argument: ['argument', 'arguments', 'arg', 'args'],
+    parameter: ['parameter', 'parameters'],
+    'keyword argument': ['keyword argument', 'keyword arguments', 'kwarg', 'kwargs', 'keyboard argument', 'keyboard arguments'],
+    identifier: ['identifier', 'identifiers', 'identify'],
+    variable: ['variable', 'variables'],
+    syntax: ['syntax'],
+    indentation: ['indentation', 'indent', 'indents'],
+    comment: ['comment', 'comments', 'commerce'],
+    comma: ['comma', 'commas'],
+    return: ['return'],
+    print: ['print', 'print()'],
+    'for loop': ['for loop', 'for loops'],
+    'while loop': ['while loop', 'while loops'],
+    condition: ['condition', 'conditions', 'conditional', 'conditionals', 'if statement'],
+    lambda: ['lambda', 'lambada'],
+    closure: ['closure', 'closures'],
+    decorator: ['decorator', 'decorators'],
+    generator: ['generator', 'generators'],
+    iterator: ['iterator', 'iterators'],
+    comprehension: ['comprehension', 'comprehensions', 'list comprehension', 'dict comprehension', 'set comprehension'],
+    slicing: ['slicing', 'slice', 'slices'],
+    'built-in function': ['built-in function', 'built in function', 'builtin function', 'built-ins', 'builtins'],
+};
+
 const detectGeneralPythonTopic = (question: string): string => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    for (const [topic, aliases] of Object.entries(GENERAL_AI_TOPIC_ALIASES)) {
+        if (aliases.some(alias => new RegExp(`\\b${escapeRegex(alias).replace(/\\s+/g, '\\s+')}\\b`, 'i').test(lowerQ))) return topic;
+    }
     const topic = GENERAL_PYTHON_GLOSSARY.find(item => lowerQ.includes(item));
     if (topic) return topic;
     if (/\bdict\b/.test(lowerQ)) return 'dictionary';
@@ -284,7 +332,74 @@ const buildGeneralAiQuiz = (topic: string): string => [
 const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
     const topic = detectGeneralPythonTopic(question);
-    if (!/\bwhat\s+(is|are)\b|\bexplain\b|\btell me about\b/.test(lowerQ)) return null;
+    if (!/\bwhat\s+(is|are|do|does)\b|\bexplain\b|\btell me about\b|\brepresent\b|\bmean\b/.test(lowerQ)) return null;
+    if (/\bsyntax\b/.test(lowerQ) && /\bcolou?rs?\b|\bhighlight/.test(lowerQ)) {
+        return [
+            '**Syntax highlighting colors**',
+            '',
+            'Syntax colors are visual hints. They do not change how Python runs. They help you quickly see what each part of code represents.',
+            '',
+            '1. Common meanings',
+            '- Keywords: words built into Python grammar, such as `if`, `for`, `def`, `return`, and `class`.',
+            '- Strings: text inside quotes, such as `"hello"`.',
+            '- Numbers: numeric values, such as `42` or `3.14`.',
+            '- Comments: notes after `#`; Python ignores them.',
+            '- Built-ins: ready-made names such as `print`, `len`, `range`, `dict`, and `list`.',
+            '- Identifiers: names you create, such as variables, functions, classes, and parameters.',
+            '',
+            '2. Example',
+            '```python',
+            '# comment',
+            'def square(number):',
+            '    return number ** 2',
+            '```',
+        ].join('\n');
+    }
+    if (/\boop\b|object[- ]orien/.test(lowerQ) && /\bbasic|begin|start|where|how\b/.test(lowerQ)) {
+        return [
+            '**OOP basics**',
+            '',
+            'Object-oriented programming groups data and behavior together.',
+            '',
+            '1. The four core words',
+            '- Class: the blueprint.',
+            '- Object: one real instance made from the class.',
+            '- Attribute: data stored on the object.',
+            '- Method: a function attached to the object.',
+            '',
+            '2. Minimal example',
+            '```python',
+            'class Dog:',
+            '    def __init__(self, name):',
+            '        self.name = name',
+            '',
+            '    def bark(self):',
+            '        return f"{self.name} says woof"',
+            '',
+            'pet = Dog("Noll")',
+            'print(pet.bark())',
+            '```',
+            '',
+            '3. Where to begin',
+            'Start by writing one class with one attribute and one method. Then create an object and call the method.',
+        ].join('\n');
+    }
+    const conceptSpec = GENERAL_AI_CONCEPT_SPECS[topic];
+    if (conceptSpec) {
+        return [
+            `**${conceptSpec.label}**`,
+            '',
+            conceptSpec.summary,
+            '',
+            `1. Syntax: ${conceptSpec.syntax}`,
+            `2. Best use: ${conceptSpec.bestFor}`,
+            '',
+            '3. Example',
+            '```python',
+            conceptSpec.example,
+            '```',
+        ].join('\n');
+    }
     const answers: Record<string, string> = {
         list: [
             '**list data type**',
@@ -354,96 +469,270 @@ const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
     return answers[topic] || null;
 };
 
+type GeneralAiConceptSpec = {
+    label: string;
+    summary: string;
+    syntax: string;
+    bestFor: string;
+    example: string;
+    mistakes?: string;
+};
+
+const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
+    list: {
+        label: 'List',
+        summary: 'An ordered, mutable collection. It keeps item order and allows duplicates.',
+        syntax: '`[1, 2, 3]`',
+        bestFor: 'Sequences you need to edit, append to, sort, slice, or loop through.',
+        example: 'items = ["a", "b"]\nitems.append("c")\nprint(items[0])',
+    },
+    tuple: {
+        label: 'Tuple',
+        summary: 'An ordered, immutable collection. It keeps item order and allows duplicates, but you cannot change it in place.',
+        syntax: '`(1, 2, 3)`',
+        bestFor: 'Fixed records, coordinates, unpacking, and values that should not change.',
+        example: 'point = (10, 20)\nx, y = point\nprint(x)',
+    },
+    set: {
+        label: 'Set',
+        summary: 'An unordered, mutable collection of unique values. Duplicates are removed.',
+        syntax: '`{1, 2, 3}` or `set()` for empty set',
+        bestFor: 'Removing duplicates, fast membership checks, union, intersection, and difference.',
+        example: 'values = {1, 1, 2, 3}\nprint(values)      # {1, 2, 3}\nprint(2 in values) # True',
+    },
+    dictionary: {
+        label: 'Dictionary',
+        summary: 'A mutable mapping of unique keys to values. It stores key-value pairs.',
+        syntax: '`{"name": "Noll", "age": 30}`',
+        bestFor: 'Looking up values by meaningful keys such as names, IDs, or labels.',
+        example: 'user = {"name": "Noll", "age": 30}\nprint(user["name"])\nuser["city"] = "Paris"',
+    },
+    string: {
+        label: 'String',
+        summary: 'An immutable sequence of text characters.',
+        syntax: '`"hello"` or `\'hello\'`',
+        bestFor: 'Text, characters, formatting, splitting, searching, and validation methods like `isdigit()`.',
+        example: 'text = "hello"\nprint(text[0])\nprint(text.upper())',
+    },
+    boolean: {
+        label: 'Boolean',
+        summary: 'A truth value: either `True` or `False`.',
+        syntax: '`True` / `False`',
+        bestFor: 'Conditions, comparisons, flags, and yes/no logic.',
+        example: 'age = 20\nis_adult = age >= 18\nprint(is_adult)',
+    },
+    integer: {
+        label: 'Integer',
+        summary: 'A whole number with no decimal part.',
+        syntax: '`42`, `-3`, `0`',
+        bestFor: 'Counting, indexing, loop ranges, and exact whole-number arithmetic.',
+        example: 'count = 3\nprint(count + 2)',
+    },
+    float: {
+        label: 'Float',
+        summary: 'A decimal number stored with floating-point precision.',
+        syntax: '`3.14`, `0.5`, `-2.0`',
+        bestFor: 'Measurements, averages, division results, and decimal calculations.',
+        example: 'price = 19.99\nprint(price * 1.1)',
+    },
+    function: {
+        label: 'Function',
+        summary: 'A reusable block of code called by name.',
+        syntax: '`def name(parameters):`',
+        bestFor: 'Reusable logic that receives inputs and returns or prints a result.',
+        example: 'def add(a, b):\n    return a + b\nprint(add(2, 3))',
+    },
+    method: {
+        label: 'Method',
+        summary: 'A function attached to an object or type, called with dot notation.',
+        syntax: '`object.method()`',
+        bestFor: 'Operations that belong to a specific object, such as string/list/dict methods.',
+        example: 'text = "hello"\nprint(text.upper())',
+    },
+    module: {
+        label: 'Module',
+        summary: 'An importable Python file or module namespace.',
+        syntax: '`import math`',
+        bestFor: 'Organizing reusable code and using standard-library tools.',
+        example: 'import math\nprint(math.sqrt(16))',
+    },
+    file: {
+        label: 'Python file',
+        summary: 'A `.py` file that stores Python source code. A file can become a module when imported.',
+        syntax: '`helper.py`',
+        bestFor: 'Saving scripts, functions, classes, and reusable code on disk.',
+        example: '# helper.py\ndef greet(name):\n    return f"Hi {name}"',
+    },
+    package: {
+        label: 'Package',
+        summary: 'A folder/group of importable modules.',
+        syntax: '`package_name.module_name`',
+        bestFor: 'Organizing many related modules under one namespace.',
+        example: 'from pathlib import Path\nprint(Path("."))',
+    },
+    library: {
+        label: 'Library',
+        summary: 'A broader collection of reusable code, usually containing modules and packages.',
+        syntax: '`import random` / installed libraries like `requests`',
+        bestFor: 'Using prebuilt tools instead of writing everything yourself.',
+        example: 'import random\nprint(random.randint(1, 10))',
+    },
+    class: {
+        label: 'Class',
+        summary: 'A blueprint for creating objects.',
+        syntax: '`class Name:`',
+        bestFor: 'Grouping related data and behavior together.',
+        example: 'class Dog:\n    def __init__(self, name):\n        self.name = name',
+    },
+    object: {
+        label: 'Object',
+        summary: 'A concrete instance/value created from a class. In Python, almost everything is an object.',
+        syntax: '`pet = Dog("Noll")`',
+        bestFor: 'Working with values that have attributes and methods.',
+        example: 'text = "hello"\nprint(type(text))\nprint(text.upper())',
+    },
+    attribute: {
+        label: 'Attribute',
+        summary: 'A value stored on an object and accessed with dot notation.',
+        syntax: '`object.attribute`',
+        bestFor: 'Storing object data such as `user.name` or `pet.age`.',
+        example: 'class User:\n    def __init__(self, name):\n        self.name = name\n\nuser = User("Noll")\nprint(user.name)',
+    },
+    argument: {
+        label: 'Argument',
+        summary: 'The actual value passed into a function call.',
+        syntax: '`greet("Noll")`',
+        bestFor: 'Supplying input values when calling functions.',
+        example: 'def greet(name):\n    return f"Hi {name}"\n\nprint(greet("Noll"))',
+    },
+    parameter: {
+        label: 'Parameter',
+        summary: 'The variable name written in a function definition to receive an argument.',
+        syntax: '`def greet(name):`',
+        bestFor: 'Naming the inputs a function expects.',
+        example: 'def greet(name):\n    return f"Hi {name}"',
+    },
+    'keyword argument': {
+        label: 'Keyword argument',
+        summary: 'An argument passed by parameter name.',
+        syntax: '`name=value`',
+        bestFor: 'Making function calls clearer and passing optional/default values.',
+        example: 'def greet(name, loud=False):\n    return name.upper() if loud else name\n\nprint(greet(name="Noll", loud=True))',
+    },
+    identifier: {
+        label: 'Identifier',
+        summary: 'A valid Python name for a variable, function, class, module, or attribute.',
+        syntax: '`my_var`, `_private`, `User2`',
+        bestFor: 'Naming things in code.',
+        example: 'total_score = 95\nprint(total_score)',
+    },
+    syntax: {
+        label: 'Syntax',
+        summary: 'The grammar/rules for writing valid Python code.',
+        syntax: '`if condition:` then an indented block',
+        bestFor: 'Making code understandable to the Python interpreter.',
+        example: 'if True:\n    print("valid syntax")',
+    },
+    indentation: {
+        label: 'Indentation',
+        summary: 'Leading spaces that define code blocks in Python.',
+        syntax: '4 spaces per block level',
+        bestFor: 'Showing which code belongs inside `if`, `for`, `while`, `def`, and `class` blocks.',
+        example: 'if True:\n    print("inside block")',
+    },
+    comment: {
+        label: 'Comment',
+        summary: 'Text ignored by Python, used to explain code to humans.',
+        syntax: '`# this is a comment`',
+        bestFor: 'Notes, reminders, and explaining non-obvious logic.',
+        example: '# Calculate the total price\ntotal = price * quantity',
+    },
+    comma: {
+        label: 'Comma',
+        summary: 'A separator used between items, arguments, parameters, and dictionary pairs.',
+        syntax: '`,`',
+        bestFor: 'Separating values in lists, tuples, function calls, and function definitions.',
+        example: 'items = [1, 2, 3]\nprint("a", "b", "c")',
+    },
+    return: {
+        label: 'return',
+        summary: 'Sends a value out of a function to the caller.',
+        syntax: '`return value`',
+        bestFor: 'Function answers that need to be reused, tested, or stored.',
+        example: 'def square(x):\n    return x * x\n\nresult = square(4)',
+    },
+    print: {
+        label: 'print()',
+        summary: 'Displays output to the console/user.',
+        syntax: '`print(value)`',
+        bestFor: 'Showing results, debugging, and script output.',
+        example: 'print("Hello")',
+    },
+    'for loop': {
+        label: 'for loop',
+        summary: 'Loops over each item in an iterable.',
+        syntax: '`for item in iterable:`',
+        bestFor: 'Known sequences such as lists, strings, dictionaries, ranges, and files.',
+        example: 'for item in ["a", "b"]:\n    print(item)',
+    },
+    'while loop': {
+        label: 'while loop',
+        summary: 'Repeats while a condition remains true.',
+        syntax: '`while condition:`',
+        bestFor: 'Repeating until user input, a counter, or a state condition changes.',
+        example: 'count = 0\nwhile count < 3:\n    print(count)\n    count += 1',
+    },
+    condition: {
+        label: 'Condition',
+        summary: 'An expression used to decide whether code should run.',
+        syntax: '`if value > 0:`',
+        bestFor: 'Branching logic and yes/no decisions.',
+        example: 'if score >= 50:\n    print("pass")\nelse:\n    print("fail")',
+    },
+};
+
+const normalizeGeneralAiConceptName = (value: string): string | null => {
+    const normalized = normalizeGeneralPythonQuestion(value).toLowerCase().replace(/[?.!,;:()[\]{}]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!normalized) return null;
+    const entries = Object.entries(GENERAL_AI_TOPIC_ALIASES)
+        .sort((a, b) => Math.max(...b[1].map(alias => alias.length)) - Math.max(...a[1].map(alias => alias.length)));
+    for (const [topic, aliases] of entries) {
+        if (aliases.some(alias => new RegExp(`(^|\\s)${escapeRegex(alias).replace(/\\s+/g, '\\s+')}(\\s|$)`, 'i').test(normalized))) {
+            return GENERAL_AI_CONCEPT_SPECS[topic] ? topic : null;
+        }
+    }
+    return GENERAL_AI_CONCEPT_SPECS[normalized] ? normalized : null;
+};
+
+const extractGeneralAiComparisonPair = (question: string): [string, string] | null => {
+    const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    const pairPatterns = [
+        /(?:what(?:'s| is)?|can you explain|explain|tell me)?\s*(?:the\s+)?difference\s+between\s+(.+?)\s+(?:and|vs\.?|versus)\s+(.+?)(?:\?|$)/i,
+        /(?:compare|contrast)\s+(.+?)\s+(?:and|with|vs\.?|versus)\s+(.+?)(?:\?|$)/i,
+        /(.+?)\s+(?:vs\.?|versus)\s+(.+?)(?:\?|$)/i,
+        /(?:how\s+is|how\s+are)\s+(.+?)\s+different\s+from\s+(.+?)(?:\?|$)/i,
+    ];
+    for (const pattern of pairPatterns) {
+        const match = lowerQ.match(pattern);
+        const first = match?.[1] ? normalizeGeneralAiConceptName(match[1]) : null;
+        const second = match?.[2] ? normalizeGeneralAiConceptName(match[2]) : null;
+        if (first && second && first !== second) return [first, second];
+    }
+    const detected = Object.keys(GENERAL_AI_CONCEPT_SPECS).filter(topic => {
+        const aliases = GENERAL_AI_TOPIC_ALIASES[topic] || [topic];
+        return aliases.some(alias => new RegExp(`\\b${escapeRegex(alias).replace(/\\s+/g, '\\s+')}\\b`, 'i').test(lowerQ));
+    });
+    const unique = [...new Set(detected)];
+    if (/\bdifference|different|compare|contrast|vs\.?|versus\b/.test(lowerQ) && unique.length >= 2) {
+        return [unique[0], unique[1]];
+    }
+    return null;
+};
+
 const buildGeneralAiComparisonAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
-    const comparisons: Array<[RegExp, string]> = [
-        [/list.*tuple|tuple.*list/, [
-            '1. Quick comparison',
-            '| Concept | List | Tuple |',
-            '|---|---|---|',
-            '| Syntax | `[1, 2, 3]` | `(1, 2, 3)` |',
-            '| Can change? | Yes, mutable | No, immutable |',
-            '| Best for | Data you will edit | Fixed data/records |',
-            '',
-            '2. Example',
-            '```python',
-            'items = [1, 2, 3]',
-            'items.append(4)  # works',
-            '',
-            'point = (10, 20)',
-            '# point[0] = 99  # TypeError',
-            '```',
-            '',
-            '3. Common mistake',
-            'Use a tuple when the values should stay fixed. Use a list when you need to add, remove, sort, or update items.',
-        ].join('\n')],
-        [/list.*dict|dict.*list|dictionary.*list/, [
-            '1. Quick comparison',
-            '| Concept | List | Dictionary |',
-            '|---|---|---|',
-            '| Stores | Ordered values | Key-value pairs |',
-            '| Access by | Index: `items[0]` | Key: `data["name"]` |',
-            '| Best for | Sequences | Lookups by name/key |',
-            '',
-            '2. Example',
-            '```python',
-            'names = ["Ana", "Noll"]',
-            'print(names[0])',
-            '',
-            'user = {"name": "Noll", "age": 30}',
-            'print(user["name"])',
-            '```',
-        ].join('\n')],
-        [/function.*method|method.*function/, [
-            '1. Quick comparison',
-            '| Concept | Function | Method |',
-            '|---|---|---|',
-            '| Called as | `name(value)` | `object.name()` |',
-            '| Belongs to | Standalone code | An object/type |',
-            '| Example | `len("hi")` | `"hi".upper()` |',
-            '',
-            '2. Example',
-            '```python',
-            'print(len("hello"))      # function',
-            'print("hello".upper())  # method',
-            '```',
-            '',
-            '3. Rule',
-            'If it is called with a dot on an object, it is a method.',
-        ].join('\n')],
-        [/module.*library|library.*module|package.*module|module.*package/, [
-            '1. Quick comparison',
-            '| Concept | Meaning |',
-            '|---|---|',
-            '| Module | One importable Python file or module namespace |',
-            '| Package | A folder/group of modules |',
-            '| Library | A broader collection of reusable code |',
-            '',
-            '2. Example',
-            '```python',
-            'import math      # module',
-            'import pathlib   # standard-library module/package area',
-            '```',
-            '',
-            '3. Rule',
-            'A library can contain many packages and modules. A module is the smaller unit you usually import.',
-        ].join('\n')],
-        [/set.*tuple|tuple.*set|list.*set|set.*list/, [
-            '1. Collection comparison',
-            '| Concept | Ordered? | Mutable? | Allows duplicates? | Syntax |',
-            '|---|---:|---:|---:|---|',
-            '| List | Yes | Yes | Yes | `[1, 2]` |',
-            '| Tuple | Yes | No | Yes | `(1, 2)` |',
-            '| Set | No | Yes | No | `{1, 2}` |',
-            '',
-            '2. Example',
-            '```python',
-            'nums = [1, 1, 2]',
-            'unique = set(nums)',
-            'print(unique)  # {1, 2}',
-            '```',
-        ].join('\n')],
-        [/return.*print|print.*return/, [
+    if (/\bprint\b/.test(lowerQ) && /\breturn\b/.test(lowerQ) && /\bwhy|when|use|not|instead|should\b/.test(lowerQ)) {
+        return [
             '1. Quick comparison',
             '| Concept | `return` | `print()` |',
             '|---|---|---|',
@@ -459,8 +748,13 @@ const buildGeneralAiComparisonAnswer = (question: string): string | null => {
             'result = add(2, 3)',
             'print(result)',
             '```',
-        ].join('\n')],
-        [/\bis\b.*==|==.*\bis\b|identity.*equality|equality.*identity/, [
+            '',
+            '3. Rule',
+            'Use `return` when the function must give a value back. Use `print()` when the task asks you to display output.',
+        ].join('\n');
+    }
+    if (/\bis\b.*==|==.*\bis\b|identity.*equality|equality.*identity/.test(lowerQ)) {
+        return [
             '1. Quick comparison',
             '| Concept | `is` | `==` |',
             '|---|---|---|',
@@ -474,27 +768,41 @@ const buildGeneralAiComparisonAnswer = (question: string): string | null => {
             'print(a == b)  # True',
             'print(a is b)  # False',
             '```',
-        ].join('\n')],
-        [/for.*while|while.*for/, [
-            '1. Quick comparison',
-            '| Concept | `for` loop | `while` loop |',
-            '|---|---|---|',
-            '| Best for | Known iterable/range | Repeat until condition changes |',
-            '| Risk | Usually safer | Can create infinite loops |',
             '',
-            '2. Example',
-            '```python',
-            'for item in [1, 2, 3]:',
-            '    print(item)',
-            '',
-            'count = 0',
-            'while count < 3:',
-            '    print(count)',
-            '    count += 1',
-            '```',
-        ].join('\n')],
-    ];
-    return comparisons.find(([pattern]) => pattern.test(lowerQ))?.[1] || null;
+            '3. Rule',
+            'Use `==` for normal answers. Use `is` mainly for identity checks such as `value is None`.',
+        ].join('\n');
+    }
+
+    const pair = extractGeneralAiComparisonPair(question);
+    if (!pair) return null;
+    const [firstKey, secondKey] = pair;
+    const first = GENERAL_AI_CONCEPT_SPECS[firstKey];
+    const second = GENERAL_AI_CONCEPT_SPECS[secondKey];
+    if (!first || !second) return null;
+
+    return [
+        `1. Difference between ${first.label} and ${second.label}`,
+        `| Point | ${first.label} | ${second.label} |`,
+        '|---|---|---|',
+        `| Meaning | ${first.summary} | ${second.summary} |`,
+        `| Syntax | ${first.syntax} | ${second.syntax} |`,
+        `| Best for | ${first.bestFor} | ${second.bestFor} |`,
+        '',
+        `2. ${first.label} example`,
+        '```python',
+        first.example,
+        '```',
+        '',
+        `3. ${second.label} example`,
+        '```python',
+        second.example,
+        '```',
+        '',
+        '4. Simple rule',
+        `Use **${first.label}** when you need: ${first.bestFor.toLowerCase()}`,
+        `Use **${second.label}** when you need: ${second.bestFor.toLowerCase()}`,
+    ].join('\n');
 };
 
 const buildGeneralAiErrorAnswer = (question: string): string | null => {
@@ -584,6 +892,18 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
 };
 
 const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
+    const pair = extractGeneralAiComparisonPair(question);
+    if (pair) {
+        const first = GENERAL_AI_CONCEPT_SPECS[pair[0]]?.label || pair[0];
+        const second = GENERAL_AI_CONCEPT_SPECS[pair[1]]?.label || pair[1];
+        return [
+            `Give beginner examples of ${first} vs ${second}`,
+            `Show common mistakes with ${first} and ${second}`,
+            `Quiz me on ${first} and ${second}`,
+            `When should I use ${first} instead of ${second}?`,
+            `Go deeper on ${first} and ${second}`,
+        ];
+    }
     const topic = detectGeneralPythonTopic(question);
     return [
         `Explain ${topic} simply`,
@@ -13926,9 +14246,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const refAnswer =
                 buildGeneralAiTracebackAnswer(effectiveQuestion) ||
                 buildGeneralAiCodeExplanation(effectiveQuestion) ||
+                buildGeneralAiComparisonAnswer(effectiveQuestion) ||
                 (/quiz|practice|test me|check my understanding/i.test(effectiveQuestion) ? buildGeneralAiQuiz(topic) : null) ||
                 (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic) : null) ||
-                buildGeneralAiComparisonAnswer(effectiveQuestion) ||
                 buildGeneralAiErrorAnswer(effectiveQuestion) ||
                 buildGeneralAiCoreTopicAnswer(effectiveQuestion) ||
                 answerGeneralPythonQuestion(effectiveQuestion);
@@ -15568,9 +15888,9 @@ print(result)
                                             onClick={() => setGeneralAiMessages([])}
                                             className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                             style={{
-                                                borderColor: hexToRgba('#ef4444', 0.35),
-                                                color: '#fca5a5',
-                                                backgroundColor: hexToRgba('#ef4444', 0.1),
+                                                borderColor: hexToRgba(toolPanelColors.failed, 0.35),
+                                                color: toolPanelColors.failed,
+                                                backgroundColor: hexToRgba(toolPanelColors.failed, 0.1),
                                             }}
                                             title="Clear conversation"
                                         >
@@ -15678,7 +15998,8 @@ print(result)
                                             <span className="text-[10px] font-black uppercase tracking-[0.12em] text-gray-400">Saved conversations</span>
                                             <button
                                                 onClick={() => { setSavedConversations([]); localStorage.removeItem('saved_ai_conversations'); }}
-                                                className="text-[9px] text-red-400 hover:text-red-300"
+                                                className="text-[9px] hover:brightness-125"
+                                                style={{ color: toolPanelColors.failed }}
                                             >
                                                 Clear all
                                             </button>
