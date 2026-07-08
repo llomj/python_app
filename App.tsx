@@ -106,6 +106,13 @@ const normalizeGeneralPythonQuestion = (rawQuestion: string): string => {
         [/\bbuild-in\b/gi, 'built-in'],
         [/\binner functions?\b/gi, 'nested functions closure'],
         [/\bnested functions?\b/gi, 'nested functions closure'],
+        [/\bwhat'?s\b/gi, 'what is'],
+        [/\bhow'?s\b/gi, 'how is'],
+        [/\bdon'?t\b/gi, 'do not'],
+        [/\bdoesn'?t\b/gi, 'does not'],
+        [/\bisn'?t\b/gi, 'is not'],
+        [/\bcan'?t\b/gi, 'cannot'],
+        [/\bwon'?t\b/gi, 'will not'],
     ];
     for (const [pattern, value] of replacements) {
         normalized = normalized.replace(pattern, value);

@@ -292,6 +292,12 @@ seq[0]  # "a"
 # Dict: name matters
 mapping = {"name": "Alice", "age": 30}
 mapping["name"]  # "Alice"`);
+_('condition (if/else)', 'concept', 'if / elif / else', 'Conditional statements let code take different paths based on whether an expression is True or False. if runs its block when the condition is True. elif checks another condition if the previous if was False. else runs when no previous condition matched.', `score = 85\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("B")  # runs: 85 >= 80\nelse:\n    print("C")`);
+
+_('for loop', 'concept', 'for var in iterable:', 'A for loop iterates over every item in a sequence (list, tuple, string, range, dict, set). The loop variable takes each value one at a time, and the indented block runs once per item. Use for loops when you know the collection of items to process.', `fruits = ["apple", "banana", "cherry"]\nfor fruit in fruits:\n    print(fruit)\n\n# Range: repeat N times\nfor i in range(3):\n    print(i)  # 0 1 2\n\n# String: iterate characters\nfor char in "hi":\n    print(char)  # "h" "i"`);
+
+_('while loop', 'concept', 'while condition:', 'A while loop repeats its indented block as long as the condition remains True. The condition is checked before every iteration. Use while loops when you do not know in advance how many times to repeat — the loop runs until something changes the condition.', `count = 0\nwhile count < 3:\n    print(count)\n    count += 1  # must update or loop forever\n\n# Infinite loop (danger!)\n# while True:\n#     print("runs forever")`);
+
 _('for loop vs while loop', 'concept', '—', 'A for loop iterates over a known sequence (list, range, string). A while loop repeats until a condition becomes False. Use for when the number of iterations is known; use while when it depends on a condition that changes inside the loop.', `# For: fixed number of times
 for i in range(5):
     print(i)
@@ -783,7 +789,8 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   }
 
   // ── What does X do / explain X ──────────────────────────────────────
-  const nameMatch = q.match(/(?:what|how|explain|tell me about|describe)\s+(?:is|does|about|a|the)?\s*(?:a |an |the |a |an )?(\w+(?:\(\))?)\s*(?:method|function|keyword|built.in)?\s*(?:do|work|mean)?/i);
+  const normalizedNameQ = q.replace(/what'?s\b/gi, 'what is').replace(/how'?s\b/gi, 'how is').replace(/where'?s\b/gi, 'where is').replace(/'?re\b/gi, ' are').replace(/'?ve\b/gi, ' have').replace(/n'?t\b/gi, ' not');
+  const nameMatch = normalizedNameQ.match(/(?:what|how|explain|tell me about|describe)\s+(?:is|does|about|a|the)?\s*(?:a |an |the |a |an )?(\w+(?:\(\))?)\s*(?:method|function|keyword|built.in)?\s*(?:do|work|mean)?/i);
   if (nameMatch) {
     const rawName = nameMatch[1].replace(/[()]/g, '').toLowerCase();
     const entry = lookup(rawName);
@@ -795,7 +802,8 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   }
 
   // ── Direct "what is X" lookup ───────────────────────────────────────
-  const simpleMatch = q.match(/what (is|are)\s*(a |an |the )?(\w[\w ]{0,30}?\w|\w)/i);
+  const simpleQ = q.replace(/what'?s\b/gi, 'what is');
+  const simpleMatch = simpleQ.match(/what (is|are)\s*(a |an |the )?(\w[\w ]{0,30}?\w|\w)/i);
   if (simpleMatch) {
     let rawName = simpleMatch[3].toLowerCase().trim().replace(/\s+/g, ' ');
     // Try concept match first (data types, etc.)
@@ -833,6 +841,9 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
     if (e.name === 'lambda expression') patterns.push(/lambda.*order|lambda.*operation|lambda.*work|anonymous function|lambda expression|what.*lambda|explain.*lambda/i);
     if (e.name === 'method vs function') patterns.push(/what.*method|method.*belong|method.*object|function.*method|method.*function/i);
     if (e.name === 'list vs dict') patterns.push(/list.*dict|dict.*list|difference between list and dict/i);
+    if (e.name === 'condition (if/else)') patterns.push(/what.*(?:if|else|condition|conditional)|explain.*(?:if|else|condition|conditional)|how.*(?:if|else|condition|conditional).*work|if.*statement|elif|else.*statement/i);
+    if (e.name === 'for loop') patterns.push(/what.*for loop|how.*for loop|explain.*for loop|tell me.*for loop|for.*loop.*work|for.*loop.*example|what.*loop/i);
+    if (e.name === 'while loop') patterns.push(/what.*while loop|how.*while loop|explain.*while loop|tell me.*while loop|while.*loop.*work|while.*loop.*example|infinite.*loop/i);
     if (e.name === 'for loop vs while loop') patterns.push(/for.*while|while.*for|difference between for and while/i);
     if (e.name === 'slicing') patterns.push(/inclusive.*exclusive|exclusive.*inclusive|start.*stop.*step|indexing.*slicing/i);
     if (e.name === 'comprehension') patterns.push(/list comp|dict comp|set comp|generator expression|list comprehension/i);
