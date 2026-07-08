@@ -16,6 +16,7 @@ import {
     FileText,
     AlertTriangle,
     Key,
+    Languages,
     ExternalLink,
     Loader2,
     Trash2,
@@ -47,6 +48,7 @@ import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, answerGeneralPythonWithAvailableAi, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
+import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/translations';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { answerGeneralPythonQuestion } from './services/pythonReference';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
@@ -11127,6 +11129,11 @@ const App: React.FC = () => {
     const [showSavedConvs, setShowSavedConvs] = useState(false);
     const [generalAiSaveFeedback, setGeneralAiSaveFeedback] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState(false);
+    const [appLang, setAppLang] = useState<'en' | 'fr'>(() => getLanguage());
+    const changeLang = useCallback((newLang: 'en' | 'fr') => {
+        setLanguage(newLang);
+        setAppLang(newLang);
+    }, []);
     useEffect(() => {
         if (!generalAiRunning) { setGeneralAiProgress(0); return; }
         setGeneralAiProgress(5);
@@ -14568,10 +14575,10 @@ print(result)
                                 }
                             }}
                         >
-                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>Count:</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
-                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>Wins:</span><span style={{ color: countRowColors.value }}>{currentStats.success}</span></div>
-                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>Fail:</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
-                            <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>Rate:</span><span style={{ color: countRowColors.value }}>{rate}%</span></div>
+                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.count }}>{t('countRow.count', appLang)}</span><span style={{ color: countRowColors.value }}>{currentStats.shots}</span></div>
+                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.wins }}>{t('countRow.wins', appLang)}</span><span style={{ color: countRowColors.value }}>{currentStats.success}</span></div>
+                            <div className="flex items-center"><span className="mr-1 uppercase" style={{ color: countRowColors.fail }}>{t('countRow.fail', appLang)}</span><span style={{ color: countRowColors.value }}>{currentStats.failed}</span></div>
+                            <div className="flex items-center pl-3 ml-1" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="mr-1 uppercase" style={{ color: countRowColors.rate }}>{t('countRow.rate', appLang)}</span><span style={{ color: countRowColors.value }}>{rate}%</span></div>
                         </div>
                         <button onClick={() => setShowModal('settings')} className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-all active:scale-95" style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }} title="Settings" aria-label="Settings"><Settings size={16} /></button>
                     </div>
@@ -15654,10 +15661,10 @@ print(result)
                                                 style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
                                             >
                                                 <span className="rounded-full border p-1" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Key size={14} /></span>
-                                                <span><span className="uppercase" style={{ color: countRowColors.count }}>Count:</span> <span style={{ color: countRowColors.value }}>12</span></span>
-                                                <span><span className="uppercase" style={{ color: countRowColors.wins }}>Wins:</span> <span style={{ color: countRowColors.value }}>8</span></span>
-                                                <span><span className="uppercase" style={{ color: countRowColors.fail }}>Fail:</span> <span style={{ color: countRowColors.value }}>4</span></span>
-                                                <span className="pl-3" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="uppercase" style={{ color: countRowColors.rate }}>Rate:</span> <span style={{ color: countRowColors.value }}>67%</span></span>
+                                                <span><span className="uppercase" style={{ color: countRowColors.count }}>{t('countRow.count', appLang)}</span> <span style={{ color: countRowColors.value }}>12</span></span>
+                                                <span><span className="uppercase" style={{ color: countRowColors.wins }}>{t('countRow.wins', appLang)}</span> <span style={{ color: countRowColors.value }}>8</span></span>
+                                                <span><span className="uppercase" style={{ color: countRowColors.fail }}>{t('countRow.fail', appLang)}</span> <span style={{ color: countRowColors.value }}>4</span></span>
+                                                <span className="pl-3" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="uppercase" style={{ color: countRowColors.rate }}>{t('countRow.rate', appLang)}</span> <span style={{ color: countRowColors.value }}>67%</span></span>
                                                 <span className="rounded-full border p-1" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Settings size={14} /></span>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -15823,8 +15830,8 @@ print(result)
                                                 {/* Transparent overlay panels */}
                                                 <div className="relative space-y-2 p-3">
                                                     <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
-                                                        <span className="uppercase" style={{ color: '#3b82f6' }}>Count:</span> 12
-                                                        <span className="uppercase" style={{ color: '#22c55e' }}>Wins:</span> 8
+                                                        <span className="uppercase" style={{ color: '#3b82f6' }}>{t('countRow.count', appLang)}</span> 12
+                                                        <span className="uppercase" style={{ color: '#22c55e' }}>{t('countRow.wins', appLang)}</span> 8
                                                     </div>
                                                     <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
                                                         <span className="font-bold text-white">Problem 1005</span>
@@ -15873,18 +15880,18 @@ print(result)
                         )}
                         {showModal === 'settings' && (
                             <div className="flex h-full min-h-0 flex-col py-2">
-                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Settings</h2>
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">{t('settings.title', appLang)}</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-4 text-center">
                                     <div className="text-4xl mb-2">{averageRank.icon}</div>
-                                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-white mb-1">Total Average</h3>
+                                    <h3 className="text-sm font-black uppercase tracking-[0.18em] text-white mb-1">{t('settings.totalAverage', appLang)}</h3>
                                     <p className="text-[10px] text-gray-400">
                                         {(() => {
                                             const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
                                             const totalWins = Object.values(statsByMode).reduce((sum, s) => sum + s.success, 0);
                                             const rate = totalShots > 0 ? ((totalWins / totalShots) * 100).toFixed(0) : '0';
-                                            return `${totalShots} exercises | ${rate}% minimum rate | Average: ${averageRank.name}`;
+                                            return `${totalShots} ${t('misc.exercises', appLang)} | ${rate}% ${t('misc.minimumRate', appLang)} | ${t('misc.average', appLang)}: ${averageRank.name}`;
                                         })()}
                                     </p>
                                     <div className="mt-2 flex items-center justify-center gap-1">
@@ -15903,12 +15910,34 @@ print(result)
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
+                                            <Languages size={14} className="text-[#f59e0b]" />
+                                            {t('settings.language', appLang)}
+                                        </h3>
+                                    </div>
+                                    <p className="mt-1 mb-2 text-[10px] text-gray-400">{t('settings.languageDesc', appLang)}</p>
+                                    <div className="flex gap-2">
+                                        {SUPPORTED_LANGUAGES.map(l => (
+                                            <button
+                                                key={l}
+                                                onClick={() => changeLang(l)}
+                                                className="flex-1 rounded-xl border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                                style={appLang === l ? { borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                {l === 'en' ? 'English' : 'Français'}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
                                     <button
                                         onClick={() => setModeSectionOpen(prev => !prev)}
                                         className="mb-0 flex w-full items-center justify-between gap-2 text-left"
                                     >
                                         <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
-                                            <Terminal size={14} style={{ color: countRowColors.count }} /> Mode
+                                            <Terminal size={14} style={{ color: countRowColors.count }} /> {t('settings.mode', appLang)}
                                         </h3>
                                         <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: modeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
@@ -15920,11 +15949,11 @@ print(result)
                                                 style={!plainMode ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
                                             >
                                                 <span className="mb-2 flex items-center justify-between gap-2">
-                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">Play</span>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode ? countRowColors.wins : '#6b7280' }}>On</span>
+                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">{t('settings.play', appLang)}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode ? countRowColors.wins : '#6b7280' }}>{t('settings.on', appLang)}</span>
                                                 </span>
-                                                <span className="block text-xs font-bold">Exercises</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">Practice with problems.</span>
+                                                <span className="block text-xs font-bold">{t('settings.exercises', appLang)}</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.playDesc', appLang)}</span>
                                             </button>
                                             <button
                                                 onClick={() => { setPlainMode(true); setFiles([{ name: 'main.py', content: '' }]); setOutput(''); setOutputStatus('idle'); }}
@@ -15932,11 +15961,11 @@ print(result)
                                                 style={plainMode ? { borderColor: hexToRgba(countRowColors.count, 0.6), backgroundColor: hexToRgba(countRowColors.count, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
                                             >
                                                 <span className="mb-2 flex items-center justify-between gap-2">
-                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">Plain</span>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>On</span>
+                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">{t('settings.plain', appLang)}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>{t('settings.on', appLang)}</span>
                                                 </span>
-                                                <span className="block text-xs font-bold">Free IDE</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">No problems, just code.</span>
+                                                <span className="block text-xs font-bold">{t('settings.freeIde', appLang)}</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.plainDesc', appLang)}</span>
                                             </button>
                                         </div>
                                     )}
@@ -15949,7 +15978,7 @@ print(result)
                                     >
                                         <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
                                             <SlidersHorizontal size={14} className="text-[#3b82f6]" />
-                                            Customize Sounds
+                                            {t('settings.customizeSounds', appLang)}
                                         </h3>
                                         <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: soundsSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
@@ -15962,10 +15991,10 @@ print(result)
                                             >
                                                 <span className="mb-2 flex items-center justify-between gap-2">
                                                     <Vibrate size={15} style={{ color: keyboardHaptics ? countRowColors.wins : '#6b7280' }} />
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? 'On' : 'Off'}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardHaptics ? t('settings.on', appLang) : t('settings.off', appLang)}</span>
                                                 </span>
-                                                <span className="block text-xs font-bold">Haptic</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">Tiny vibration while typing.</span>
+                                                <span className="block text-xs font-bold">{t('settings.haptic', appLang)}</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.hapticDesc', appLang)}</span>
                                             </button>
                                             <button
                                                 onClick={() => setKeyboardSound(prev => !prev)}
@@ -15974,10 +16003,10 @@ print(result)
                                             >
                                                 <span className="mb-2 flex items-center justify-between gap-2">
                                                     <Volume2 size={15} style={{ color: keyboardSound ? countRowColors.wins : '#6b7280' }} />
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? 'On' : 'Off'}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{keyboardSound ? t('settings.on', appLang) : t('settings.off', appLang)}</span>
                                                 </span>
-                                                <span className="block text-xs font-bold">Sound</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">Soft key click in editor.</span>
+                                                <span className="block text-xs font-bold">{t('settings.sound', appLang)}</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.soundDesc', appLang)}</span>
                                             </button>
                                             <button
                                                 onClick={() => setResultSound(prev => !prev)}
@@ -15986,10 +16015,10 @@ print(result)
                                             >
                                                 <span className="mb-2 flex items-center justify-between gap-2">
                                                     <Zap size={15} style={{ color: resultSound ? countRowColors.wins : '#6b7280' }} />
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{resultSound ? 'On' : 'Off'}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{resultSound ? t('settings.on', appLang) : t('settings.off', appLang)}</span>
                                                 </span>
-                                                <span className="block text-xs font-bold">Result</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">Cute win/fail sounds after grading.</span>
+                                                <span className="block text-xs font-bold">{t('settings.result', appLang)}</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.resultDesc', appLang)}</span>
                                             </button>
                                         </div>
                                     )}
@@ -16001,7 +16030,7 @@ print(result)
                                             <button onClick={() => setShowModal('problem_mode_help')} className="inline-flex items-center justify-center rounded-full p-1 transition-all hover:brightness-125 hover:bg-[#1d2d44]" title="How to use this app" style={{ color: countRowColors.count }}>
                                                 <Info size={16} />
                                             </button>
-                                            <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">Problem Mode</h3>
+                                            <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">{t('settings.problemMode', appLang)}</h3>
                                         </div>
                                         <button
                                             onClick={() => setProblemModeSectionOpen(prev => !prev)}
@@ -16035,8 +16064,8 @@ print(result)
                                             <div className="mt-3 rounded-2xl border border-[#1d2d44] bg-[#050c18]/55 p-3">
                                                 <div className="mb-2 flex items-center justify-between gap-2">
                                                     <div>
-                                                        <h4 className="m-0 text-xs font-black uppercase tracking-[0.16em] text-gray-200">Choose Concept</h4>
-                                                        <p className="mt-1 text-[10px] text-gray-400">Pick one topic and the app will randomize only matching problems.</p>
+                                                        <h4 className="m-0 text-xs font-black uppercase tracking-[0.16em] text-gray-200">{t('settings.chooseConcept', appLang)}</h4>
+                                                        <p className="mt-1 text-[10px] text-gray-400">{t('settings.chooseConceptDesc', appLang)}</p>
                                                     </div>
                                                     {selectedConceptMode && (
                                                         <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: 'rgba(156, 163, 175, 0.4)', color: '#ffffff' }}>
@@ -16093,7 +16122,7 @@ print(result)
                                         className="mb-0 flex w-full items-center justify-between gap-2 text-left"
                                     >
                                         <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200 flex items-center gap-2">
-                                            <BarChart3 size={14} style={{ color: countRowColors.rate }} /> Stats By Mode
+                                            <BarChart3 size={14} style={{ color: countRowColors.rate }} /> {t('settings.statsByMode', appLang)}
                                         </h3>
                                         <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: statsByModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
@@ -16585,7 +16614,7 @@ print(result)
                         )}
                         {showModal === 'stats_by_mode' && (
                             <div className="flex flex-col h-full min-h-0 py-2">
-                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">Stats By Mode</h2>
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">{t('settings.statsByMode', appLang)}</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 pb-8 select-none" style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', WebkitUserSelect: 'none', userSelect: 'none' }}>
                                     <div className="space-y-3">
                                         {difficultyStatsRows.map(mode => {
@@ -16715,8 +16744,8 @@ print(result)
                                     </div>
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
-                                        <p className="font-bold text-white text-xs">Stats By Mode</p>
-                                        <p><strong>Long-press the count row</strong> at the top of the screen to open Stats By Mode. It shows your shots, wins, fails, win rate, and rank for every difficulty mode and concept you have used.</p>
+                                        <p className="font-bold text-white text-xs">{t('settings.statsByMode', appLang)}</p>
+                                        <p>{t('howto.statsByModeDesc', appLang)}</p>
                                     </div>
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
