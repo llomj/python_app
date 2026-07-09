@@ -11827,8 +11827,11 @@ const App: React.FC = () => {
     const frenchCodeDisplay = useMemo(() => {
         if (appLang !== 'fr') return displaySolution;
         const frDesc = EXERCISES_FR[exercise.id];
-        if (!frDesc) return displaySolution;
-        return '"""\n' + frDesc.split('\nExamples:')[0].trim() + '\n"""\n\n' + exercise.solution.split('# Script approach')[0].trim();
+        let code = exercise.solution.split('# Script approach')[0].trim();
+        code = code.replace(/# Using function approach/g, '# Approche fonction');
+        code = code.replace(/# Expected:/g, '# Attendu :');
+        if (!frDesc) return code;
+        return '"""\n' + frDesc.split('\nExamples:')[0].trim() + '\n"""\n\n' + code;
     }, [appLang, exercise.id, exercise.solution, displaySolution]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
