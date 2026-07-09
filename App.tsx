@@ -11824,6 +11824,12 @@ const App: React.FC = () => {
         return RANKS[Math.min(Math.round(avgIndex), RANKS.length - 1)];
     }, [statsByMode]);
     const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
+    const frenchCodeDisplay = useMemo(() => {
+        if (appLang !== 'fr') return displaySolution;
+        const frDesc = EXERCISES_FR[exercise.id];
+        if (!frDesc) return displaySolution;
+        return '"""\n' + frDesc.split('\nExamples:')[0].trim() + '\n"""\n\n' + exercise.solution.split('# Script approach')[0].trim();
+    }, [appLang, exercise.id, exercise.solution, displaySolution]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
@@ -15682,10 +15688,10 @@ ${solutionCode}`;
                                     {solutionTab === 'code' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={displaySolution} />
+                                                <CopyButton text={appLang === 'fr' ? frenchCodeDisplay : displaySolution} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
+                                                <CodeMirror value={appLang === 'fr' ? frenchCodeDisplay : displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
