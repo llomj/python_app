@@ -14563,6 +14563,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const prompt = isFrench ? frDesc : enDesc;
         const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
         const exerciseDesc = isFrench ? frDesc : enDesc;
+        const functionName = targetExercise.initialCode.match(/def\s+(\w+)/)?.[1] || 'your_function';
         const isRegexPractice = /regular expression|regex/i.test(exerciseDesc) || /\bimport\s+re\b/.test(targetExercise.solution);
         const conceptName = isRegexPractice
             ? (isFrench ? "les expressions régulières" : "regular expressions")
