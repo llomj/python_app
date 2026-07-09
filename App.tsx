@@ -14545,149 +14545,222 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     };
 
     const createGeneratedPracticeDocs = (targetExercise: Exercise) => {
-        const functionName = targetExercise.initialCode.match(/def\s+([a-zA-Z_]\w*)\s*\(/)?.[1] ?? 'the_function';
-        const prompt = targetExercise.description.split('\nExamples:')[0].trim();
+        const isFrench = appLang === 'fr';
+        const enDesc = targetExercise.description.split('\nExamples:')[0].trim();
+        const frDesc = isFrench && EXERCISES_FR[targetExercise.id]
+            ? EXERCISES_FR[targetExercise.id].split('\nExamples:')[0].trim()
+            : enDesc;
+        const prompt = isFrench ? frDesc : enDesc;
         const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
-        const isRegexPractice = /regular expression|regex/i.test(targetExercise.description) || /\bimport\s+re\b/.test(targetExercise.solution);
-        const conceptName = isRegexPractice ? 'regular expressions' : 'for loops';
+        const exerciseDesc = isFrench ? frDesc : enDesc;
+        const isRegexPractice = /regular expression|regex/i.test(exerciseDesc) || /\bimport\s+re\b/.test(targetExercise.solution);
+        const conceptName = isRegexPractice
+            ? (isFrench ? "les expressions régulières" : "regular expressions")
+            : (isFrench ? "les boucles for" : "for loops");
         const operationLine = isRegexPractice
             ? '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().'
             : '# Use a for loop to process values one at a time.';
+
+        const pHead = isFrench ? 'Problème' : 'Problem';
+        const pExpl = isFrench ? 'EXPLICATION DU PROBLÈME' : 'PROBLEM EXPLANATION';
+        const demoLine = isFrench
+            ? `# Ce problème montre comment utiliser Python ${conceptName}.`
+            : `# This problem demonstrates how to use Python ${conceptName}.`;
+        const regexLine1 = isFrench
+            ? '# Un motif regex décrit quel texte chercher, remplacer, diviser ou valider.'
+            : '# A regex pattern describes what text to find, replace, split, or validate.';
+        const regexLine2 = isFrench
+            ? '# La boucle doit mettre à jour un résultat pendant son exécution, puis retourner la valeur finale.'
+            : '# The loop should update a result while it runs, then return the completed value.';
+        const codeLogic = isFrench ? 'LOGIQUE DU CODE' : 'CODE LOGIC';
+        const testCase = isFrench ? 'CAS DE TEST' : 'TEST CASE';
+        const testLine1 = isFrench
+            ? '# Ce cas de test illustre la fonctionnalité avec des exemples d\'entrée.'
+            : '# This test case demonstrates the functionality with example inputs.';
+        const testLine2 = isFrench
+            ? '# La sortie doit correspondre au résultat attendu indiqué dans les commentaires.'
+            : '# The output should match the expected result shown in the comments.';
+        const practicing = isFrench
+            ? `# Ce problème permet de s\'entraîner avec Python ${conceptName}.`
+            : `# This problem is for practicing Python ${conceptName}.`;
+        const reqHead = isFrench ? 'EXIGENCES CLÉS' : 'Key Requirements';
+        const defineFn = isFrench
+            ? `# - Définissez une fonction nommée ${functionName}.`
+            : `# - Define a function named ${functionName}.`;
+        const reqRegex1 = isFrench
+            ? "# - Importez et utilisez le module re de Python."
+            : "# - Import and use Python's re module.";
+        const reqFor1 = isFrench
+            ? '# - Utilisez au moins une boucle for.'
+            : '# - Use at least one for loop.';
+        const reqRegex2 = isFrench
+            ? '# - Choisissez la fonction regex adaptée : search, findall, sub, split, match ou fullmatch.'
+            : '# - Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.';
+        const reqFor2 = isFrench
+            ? '# - Construisez le résultat avec la logique de la boucle.'
+            : '# - Build the result with loop logic.';
+        const reqInputs = isFrench
+            ? '# - Utilisez les valeurs d\'entrée depuis les paramètres de la fonction.'
+            : '# - Use the input values from the function parameters.';
+        const reqNoHard = isFrench
+            ? '# - Ne codez pas en dur le résultat de l\'exemple.'
+            : '# - Do not hard-code the example output.';
+        const reqReturn = isFrench
+            ? '# - Retournez la réponse finale depuis la fonction.'
+            : '# - Return the final answer from the function.';
+        const reqType = isFrench
+            ? '# - Gardez le type du résultat cohérent avec les exemples.'
+            : '# - Keep the result type consistent with the examples.';
+        const solExpl = isFrench ? 'EXPLICATION DE LA SOLUTION' : 'SOLUTION EXPLANATION';
+        const solLine1 = isFrench
+            ? '# Cette solution définit une fonction qui encapsule la logique demandée.'
+            : '# This solution defines a function that encapsulates the required logic.';
+        const solRegex = isFrench
+            ? '# Le motif regex détermine quel texte est cherché, capturé, remplacé ou validé.'
+            : '# The regex pattern decides which text is matched, captured, replaced, or validated.';
+        const solFor = isFrench
+            ? '# La boucle for se répète une fois pour chaque élément des données d\'entrée.'
+            : '# The for loop repeats once for each item in the input data.';
+        const solLine2 = isFrench
+            ? '# La fonction retourne la valeur finale une fois l\'opération terminée.'
+            : '# The function returns the completed value after the operation has finished.';
+
+        const syntax = isRegexPractice ? `"""
+${pHead} ${targetExercise.id} :
+#
+# SYNTAX / SYNTAXE :
+${isFrench ? '# La syntaxe décrit les briques Python utilisées dans ce code.' : '# Syntax describes the Python building blocks used in this code.'}
+#
+import re  ${isFrench ? '# importe le module des expressions régulières de Python' : "# imports Python's regular expression module"}
+
+def ${functionName}(...):  ${isFrench ? '# définit une fonction avec des paramètres' : '# defines a function with parameters'}
+    pattern = r"..."
+    ${operationLine}
+    return result
+#
+${isFrench ? '# Fonctions regex courantes :' : '# Common regex functions:'}
+# re.search(pattern, text)      -> ${isFrench ? 'trouve la première correspondance ou retourne None' : 'finds the first match or returns None'}
+# re.findall(pattern, text)     -> ${isFrench ? 'retourne toutes les correspondances dans une liste' : 'returns all matches as a list'}
+# re.sub(pattern, repl, text)   -> ${isFrench ? 'remplace le texte correspondant' : 'replaces matching text'}
+# re.split(pattern, text)       -> ${isFrench ? 'divise le texte avec un séparateur regex' : 'splits text using a regex separator'}
+# re.fullmatch(pattern, text)   -> ${isFrench ? 'valide toute la chaîne' : 'validates the whole string'}
+#
+${isFrench ? '# Syntaxe regex courante :' : '# Common regex syntax:'}
+# \\d  ${isFrench ? 'chiffre' : 'digit'}, \\D ${isFrench ? 'non-chiffre' : 'non-digit'}, \\w ${isFrench ? 'caractère de mot' : 'word character'}, \\s ${isFrench ? 'espace' : 'whitespace'}
+# + ${isFrench ? 'un ou plusieurs' : 'one or more'}, * ${isFrench ? 'zéro ou plusieurs' : 'zero or more'}, ? ${isFrench ? 'optionnel' : 'optional'}
+# [] ${isFrench ? 'ensemble de caractères' : 'character set'}, () ${isFrench ? 'groupe de capture' : 'capture group'}, ^ ${isFrench ? 'début' : 'start'}, $ ${isFrench ? 'fin' : 'end'}, \\b ${isFrench ? 'limite de mot' : 'word boundary'}
+#
+# EVALUATION ORDER / ORDRE D'ÉVALUATION :
+${isFrench ? '# Python construit d\'abord le motif, évalue le texte d\'entrée, puis appelle la fonction re.' : '# Python builds the pattern first, evaluates the input text, then calls the re function.'}
+#
+${functionName}(...)  ${isFrench ? '# les arguments sont évalués en premier, puis le corps de la fonction s\'exécute' : '# arguments evaluated first, then function body runs'}
+re.findall(pattern, text)  ${isFrench ? '# le motif et le texte sont évalués en premier, puis la recherche s\'exécute' : '# pattern and text evaluated first, then matching runs'}
+return result  ${isFrench ? '# le résultat est évalué, puis renvoyé à l\'appelant' : '# result is evaluated, then sent back to the caller'}
+#
+# EXECUTION ORDER / ORDRE D'EXÉCUTION :
+${isFrench ? "# L'import s'exécute en premier, le bloc def est stocké, et la fonction ne s'exécute que lorsqu'elle est appelée." : '# The import runs first, the def block is stored, and the function runs only when called.'}
+#
+import re
+def ${functionName}(...):  ${isFrench ? '# stocké en mémoire' : '# stored in memory'}
+result = ${functionName}(...)  ${isFrench ? '# appelle la fonction' : '# calls the function'}
+print(result)
+#
+# EXECUTION FLOW / FLUX D'EXÉCUTION :
+${isFrench ? '# La fonction reçoit l\'entrée, applique l\'opération regex et retourne le résultat.' : '# The function receives input, applies the regex operation, and returns the result.'}
+#
+# ${isFrench ? 'Flux regex : motif -> correspondance/remplacement/division/validation -> résultat' : 'Regex flow: pattern -> match/replace/split/validate -> result'}
+"""` : `"""
+${pHead} ${targetExercise.id} :
+#
+# SYNTAX / SYNTAXE :
+${isFrench ? '# La syntaxe décrit les briques Python utilisées dans ce code —' : '# Syntax describes the Python building blocks used in this code —'}
+${isFrench ? '# les mots-clés, opérateurs et structures qui le font fonctionner.' : '# the keywords, operators, and structures that make it work.'}
+#
+def ${functionName}(...):  ${isFrench ? '# définit une fonction avec des paramètres' : '# defines a function with parameters'}
+    result = ...
+    for item in iterable:
+        ...
+    return result  ${isFrench ? '# return renvoie le résultat à l\'appelant' : '# return sends the result back to the caller'}
+#
+# Operators / Opérateurs : = += == != < > <= >= %
+# Built-in functions / Fonctions intégrées : len, range, print()
+#
+# EVALUATION ORDER / ORDRE D'ÉVALUATION :
+${isFrench ? "# L'ordre d'évaluation montre comment Python lit et évalue les expressions." : '# Evaluation Order traces how Python reads and evaluates expressions.'}
+${isFrench ? '# Les expressions internes sont évaluées en premier, puis les expressions externes.' : '# Inner expressions are evaluated first, then the outer ones.'}
+#
+${functionName}(...)  ${isFrench ? '# les arguments sont évalués en premier, puis le corps de la fonction s\'exécute' : '# arguments evaluated first, then function body runs'}
+for item in iterable  ${isFrench ? '# l\'itérable est évalué en premier, puis item reçoit chaque valeur' : '# iterable evaluated first, then item receives each value'}
+condition  ${isFrench ? '# évaluée à True ou False si une instruction if est utilisée' : '# evaluated as True or False if an if statement is used'}
+return result  ${isFrench ? '# le résultat est évalué, puis renvoyé à l\'appelant' : '# result is evaluated, then sent back to the caller'}
+#
+# EXECUTION ORDER / ORDRE D'EXÉCUTION :
+${isFrench ? "# L'ordre d'exécution montre la séquence que Python suit pendant" : '# Execution Order shows the sequence Python follows when running'}
+${isFrench ? "# l'exécution du code. Les blocs 'def' et 'class' sont simplement stockés, pas encore exécutés." : "# the code. 'def' and 'class' blocks are just stored, not run yet."}
+#
+def ${functionName}(...):  ${isFrench ? '# stocké en mémoire, pas encore exécuté' : '# stored in memory, not executed yet'}
+result = ${functionName}(...)  ${isFrench ? '# appelle la fonction' : '# calls the function'}
+print(result)
+#
+# EXECUTION FLOW / FLUX D'EXÉCUTION :
+${isFrench ? "# Le flux d'exécution suit les sauts que Python effectue pendant" : '# Execution Flow tracks where Python jumps during runtime —'}
+${isFrench ? "# l'exécution — quels blocs sont ignorés et lesquels s'exécutent réellement." : '# which blocks are skipped and which actually run.'}
+#
+${isFrench ? '# Les blocs def sont ignorés au moment de l\'exécution —' : '# def blocks are skipped at runtime —'}
+${isFrench ? `# ${functionName} est stocké en mémoire` : `# ${functionName} is stored in memory`}
+${isFrench ? "# L'exécution commence quand la fonction est appelée" : '# Execution starts when the function is called'}
+${isFrench ? '# Boucle : prend un élément de l\'itérable, exécute le corps, répète jusqu\'à épuisement' : '# Loop: takes one item from the iterable, runs body, repeats until done'}
+${isFrench ? '# Branche : si une condition existe, elle choisit quel bloc s\'exécute' : '# Branch: if a condition exists, it picks which block runs'}
+"""`;
+
         const logic = `"""
-Problem: ${targetExercise.id}
+${pHead} : ${targetExercise.id}
 ${prompt}
 """
 #------------------------------------------------------------------------------
-# PROBLEM EXPLANATION:
+# ${pExpl} :
 # ${prompt}
 #
-# This problem demonstrates how to use Python ${conceptName}.
-${isRegexPractice ? '# A regex pattern describes what text to find, replace, split, or validate.' : '# The loop should update a result while it runs, then return the completed value.'}
+${demoLine}
+${isRegexPractice ? regexLine1 : regexLine2}
 #
-# CODE LOGIC:
+# ${codeLogic} :
 ${(targetExercise.breakdown || '').split('\n').map(line => `# ${line}`).join('\n')}
 #------------------------------------------------------------------------------
 
 ${solutionCode}
 
-# TEST CASE:
-# This test case demonstrates the functionality with example inputs.
-# The output should match the expected result shown in the comments.`;
+# ${testCase} :
+${testLine1}
+${testLine2}`;
 
         const requirements = `# ============================================================================
-# PROBLEM EXPLANATION:
+# ${pExpl} :
 # ${prompt}
 #
-# This problem is for practicing Python ${conceptName}.
+${practicing}
 #
-# Key Requirements:
-# - Define a function named ${functionName}.
-# - ${isRegexPractice ? "Import and use Python's re module." : 'Use at least one for loop.'}
-# - ${isRegexPractice ? 'Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.' : 'Build the result with loop logic.'}
-# - Use the input values from the function parameters.
-# - Do not hard-code the example output.
-# - Return the final answer from the function.
-# - Keep the result type consistent with the examples.
+# ${reqHead} :
+${defineFn}
+# ${isRegexPractice ? reqRegex1 : reqFor1}
+# ${isRegexPractice ? reqRegex2 : reqFor2}
+${reqInputs}
+${reqNoHard}
+${reqReturn}
+${reqType}
 # ============================================================================
 
 """
-Problem: ${targetExercise.id}
+${pHead} : ${targetExercise.id}
 ${prompt}
 """
 
-# SOLUTION EXPLANATION:
-# This solution defines a function that encapsulates the required logic.
-${isRegexPractice ? '# The regex pattern decides which text is matched, captured, replaced, or validated.' : '# The for loop repeats once for each item in the input data.'}
-# The function returns the completed value after the operation has finished.
+# ${solExpl} :
+${solLine1}
+# ${isRegexPractice ? solRegex : solFor}
+${solLine2}
 
 ${solutionCode}`;
-
-        const syntax = isRegexPractice ? `"""
-Problem ${targetExercise.id}:
-#
-# SYNTAX:
-# Syntax describes the Python building blocks used in this code.
-#
-import re  # imports Python's regular expression module
-
-def ${functionName}(...):  # defines a function with parameters
-    pattern = r"..."
-    ${operationLine}
-    return result
-#
-# Common regex functions:
-# re.search(pattern, text)      -> finds the first match or returns None
-# re.findall(pattern, text)     -> returns all matches as a list
-# re.sub(pattern, repl, text)   -> replaces matching text
-# re.split(pattern, text)       -> splits text using a regex separator
-# re.fullmatch(pattern, text)   -> validates the whole string
-#
-# Common regex syntax:
-# \\d  digit, \\D non-digit, \\w word character, \\s whitespace
-# + one or more, * zero or more, ? optional
-# [] character set, () capture group, ^ start, $ end, \\b word boundary
-#
-# EVALUATION ORDER:
-# Python builds the pattern first, evaluates the input text, then calls the re function.
-#
-${functionName}(...)  # arguments evaluated first, then function body runs
-re.findall(pattern, text)  # pattern and text evaluated first, then matching runs
-return result  # result is evaluated, then sent back to the caller
-#
-# EXECUTION ORDER:
-# The import runs first, the def block is stored, and the function runs only when called.
-#
-import re
-def ${functionName}(...):  # stored in memory
-result = ${functionName}(...)  # calls the function
-print(result)
-#
-# EXECUTION FLOW:
-# The function receives input, applies the regex operation, and returns the result.
-#
-# Regex flow: pattern -> match/replace/split/validate -> result
-"""` : `"""
-Problem ${targetExercise.id}:
-#
-# SYNTAX:
-# Syntax describes the Python building blocks used in this code —
-# the keywords, operators, and structures that make it work.
-#
-def ${functionName}(...):  # defines a function with parameters
-    result = ...
-    for item in iterable:
-        ...
-    return result  # return sends the result back to the caller
-#
-# Operators: = += == != < > <= >= %
-# Built-in functions: len, range, print()
-#
-# EVALUATION ORDER:
-# Evaluation Order traces how Python reads and evaluates expressions.
-# Inner expressions are evaluated first, then the outer ones.
-#
-${functionName}(...)  # arguments evaluated first, then function body runs
-for item in iterable  # iterable evaluated first, then item receives each value
-condition  # evaluated as True or False if an if statement is used
-return result  # result is evaluated, then sent back to the caller
-#
-# EXECUTION ORDER:
-# Execution Order shows the sequence Python follows when running
-# the code. 'def' and 'class' blocks are just stored, not run yet.
-#
-def ${functionName}(...):  # stored in memory, not executed yet
-result = ${functionName}(...)  # calls the function
-print(result)
-#
-# EXECUTION FLOW:
-# Execution Flow tracks where Python jumps during runtime —
-# which blocks are skipped and which actually run.
-#
-# def blocks are skipped at runtime — ${functionName} is stored in memory
-# Execution starts when the function is called
-# Loop: takes one item from the iterable, runs body, repeats until done
-# Branch: if a condition exists, it picks which block runs
-"""`;
 
         return { logic, requirements, syntax };
     };
@@ -14720,10 +14793,13 @@ print(result)
         }
 
         try {
-            const logicFile = `level1_${filePrefix}_codelogic.py`;
-            const reqFile1 = `level1_${filePrefix}_requirements.py`;
-            const reqFile2 = `level1_${filePrefix}_requirements..py`;
-            const syntaxFile = `level1_${filePrefix}_syntax.py`;
+            const isFrench = appLang === 'fr';
+            const langSuffix = isFrench ? '_fr' : '';
+            const logicFile = `level1_${filePrefix}_codelogic${langSuffix}.py`;
+            const reqFile1 = `level1_${filePrefix}_requirements${langSuffix}.py`;
+            const reqFile2 = `level1_${filePrefix}_requirements${langSuffix}.py`;
+            const syntaxFile = `level1_${filePrefix}_syntax${langSuffix}.py`;
+            const reqFileOld = `level1_${filePrefix}_requirements..py`;
 
             // Handle GitHub Pages subdirectory
             const isGitHubPages = window.location.hostname === 'llomj.github.io';
@@ -14746,11 +14822,11 @@ print(result)
                 console.warn(`Error loading logic file: ${err.message}`);
             }
 
-            // Fetch and parse requirements file (try both variations)
+            // Fetch and parse requirements file
             try {
                 let reqResponse = await fetch(`${basePath}/${reqFile1}${cacheBuster}`);
-                if (!reqResponse.ok) {
-                    reqResponse = await fetch(`${basePath}/${reqFile2}${cacheBuster}`);
+                if (!reqResponse.ok && !isFrench) {
+                    reqResponse = await fetch(`${basePath}/${reqFileOld}${cacheBuster}`);
                 }
                 if (reqResponse.ok) {
                     const reqText = await reqResponse.text();
@@ -14758,7 +14834,7 @@ print(result)
                     setRequirementsContent(problemReq || '');
                 } else {
                     setRequirementsContent('');
-                    console.warn(`Requirements file not found: ${reqFile1} or ${reqFile2}`);
+                    console.warn(`Requirements file not found: ${reqFile1}`);
                 }
             } catch (err) {
                 setRequirementsContent('');
@@ -15454,18 +15530,18 @@ print(result)
                                 className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] transition-colors"
                                 style={{ backgroundColor: editorColors.background, color: toolPanelColors.toggleText }}
                             >
-                                <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
+                                <span>{showActionPanel ? t('output.hideTools', appLang) : t('output.showTools', appLang)}</span>
                                 {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
                             </button>
                             {showActionPanel && (
                                 <div className="flex justify-center gap-2 sm:gap-3 px-2 pb-3 animate-in fade-in slide-in-from-top-1 duration-200">
-                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => setShowModal('solution')} />
-                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={handleAiHint} />
-                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => setShowModal('customize')} />
-                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={handleMarkSuccess} />
-                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={handleMarkFailed} />
-                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
+                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description={t('tool.info', appLang)} onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description={t('tool.sol', appLang)} onClick={() => setShowModal('solution')} />
+                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description={t('tool.ai', appLang)} onClick={handleAiHint} />
+                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description={t('tool.custom', appLang)} onClick={() => setShowModal('customize')} />
+                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description={t('tool.win', appLang)} onClick={handleMarkSuccess} />
+                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description={t('tool.failed', appLang)} onClick={handleMarkFailed} />
+                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description={t('tool.reset', appLang)} onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
                                 </div>
                             )}
                         </div>
@@ -15592,10 +15668,10 @@ print(result)
                                     style={{ borderColor: panelColors.border, backgroundColor: hexToRgba(editorColors.panelBackground, 0.92), touchAction: 'pan-x' }}
                                 >
                                     <div className="flex w-max min-w-full gap-4 whitespace-nowrap pr-4">
-                                        <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label="Solution" />
-                                        <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label="Logic" />
-                                        <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label="Requirements" />
-                                        <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label="Syntax" />
+                                        <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label={t('solution.code', appLang)} />
+                                        <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label={t('solution.logic', appLang)} />
+                                        <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label={t('solution.requirements', appLang)} />
+                                        <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label={t('solution.syntax', appLang)} />
                                         {isConceptMode(difficultyMode) && selectedConceptMode && (
                                             <TabButton active={solutionTab === 'concept'} onClick={() => setSolutionTab('concept')} label={selectedConceptMode.label} />
                                         )}
@@ -15622,7 +15698,7 @@ print(result)
                                                     <CodeMirror value={logicContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        Searching logic documentation...
+                                                        {t('solution.searchingLogic', appLang)}
                                                     </div>
                                                 )}
                                             </div>
@@ -15638,7 +15714,7 @@ print(result)
                                                     <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        Searching requirements...
+                                                        {t('solution.searchingRequirements', appLang)}
                                                     </div>
                                                 )}
                                             </div>
@@ -15654,7 +15730,7 @@ print(result)
                                                     <SyntaxDocumentationPanel content={syntaxContent} editorColors={editorColors} panelColors={panelColors} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        Searching syntax documentation...
+                                                        {t('solution.searchingSyntax', appLang)}
                                                     </div>
                                                 )}
                                             </div>
@@ -15670,37 +15746,37 @@ print(result)
                                                     <SyntaxDocumentationPanel content={conceptDocContent} editorColors={editorColors} panelColors={panelColors} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        No concept documentation available.
+                                                        {t('solution.noDoc', appLang)}
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
                                     )}
                                 </div>
-                                <button
-                                    onClick={() => setShowModal('none')}
-                                    className="mt-3 flex w-full flex-shrink-0 items-center justify-center rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
-                                    style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
-                                    aria-label="Back to main app"
-                                >
-                                    Back to App
-                                </button>
+                                    <button
+                                        onClick={() => setShowModal('none')}
+                                        className="mt-3 flex w-full flex-shrink-0 items-center justify-center rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
+                                        style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
+                                        aria-label={t('solution.backToApp', appLang)}
+                                    >
+                                        {t('solution.backToApp', appLang)}
+                                    </button>
                             </div>
                         )}
                         {showModal === 'hint' && (
                             <div className="flex h-full min-h-0 flex-col gap-3">
-                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>AI Review</h2>
+                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('aiReview.title', appLang)}</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto -mx-1 px-1 space-y-3">
                                     <>
                                             {aiReviewRunning && (
                                                 <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
-                                                    Local model is checking this exact problem, code, output, and grader result...
+                                                    {t('aiReview.running', appLang)}
                                                 </div>
                                             )}
                                             {/* Problem section */}
                                             {exercise && (
                                                 <div className="rounded-2xl border p-3" style={{ borderColor: 'rgba(88, 118, 160, 0.25)', backgroundColor: 'rgba(8, 18, 34, 0.4)' }}>
-                                                    <div className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: countRowColors.rate }}>Problem {exercise.id}</div>
+                                                    <div className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: countRowColors.rate }}>{t('preview.problem', appLang, exercise.id)}</div>
                                                     <p className="text-[13px] leading-relaxed text-gray-200">{getExerciseDescription(exercise, appLang)}</p>
                                                 </div>
                                             )}
@@ -16189,17 +16265,17 @@ print(result)
                                                     className="mb-3 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em]"
                                                     style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), color: toolPanelColors.toggleText }}
                                                 >
-                                                    <span>Hide Tools</span>
+                                                    <span>{t('output.hideTools', appLang)}</span>
                                                     <ChevronDown size={14} />
                                                 </div>
                                                 <div className="flex flex-wrap justify-center gap-2">
-                                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => undefined} />
-                                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => undefined} />
-                                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={() => undefined} />
-                                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => undefined} />
-                                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={() => undefined} />
-                                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={() => undefined} />
-                                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => undefined} />
+                                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description={t('tool.info', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description={t('tool.sol', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description={t('tool.ai', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description={t('tool.custom', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description={t('tool.win', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description={t('tool.failed', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description={t('tool.reset', appLang)} onClick={() => undefined} />
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -17177,7 +17253,7 @@ print(result)
                                     </div>
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
-                                        <p className="font-bold text-white text-xs">AI Reviewer</p>
+                                        <p className="font-bold text-white text-xs">{t('aiReview.title', appLang)}</p>
                                         <p>Tap the top-left <strong>Python AI</strong> icon to ask general Python questions. For code review, include the problem, your code, and the output in the same question.</p>
                                     </div>
 

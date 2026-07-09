@@ -4,7 +4,7 @@
     "description": "Python Mastery Pro App",
     "scripts": {
         "dev": "vite",
-        "build": "vite build && cp level1_*_codelogic.py level1_*_requirements*.py level1_*_syntax.py dist/",
+        "build": "vite build && cp level1_*_codelogic.py level1_*_requirements*.py level1_*_syntax.py level1_*_fr.py dist/ 2>/dev/null; true",
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",
         "audit:graders": "node scripts/audit_graders.js",

@@ -231,6 +231,7 @@ const EN: Dict = {
   'problem.copied': 'Problem copied to clipboard',
 
   /* ── Solution Modal ───────────────────────────────────────── */
+  'solution.code': 'Code',
   'solution.solution': 'Solution',
   'solution.logic': 'Logic',
   'solution.requirements': 'Requirements',
@@ -586,6 +587,7 @@ const FR: Dict = {
   'problem.copied': 'Problème copié dans le presse-papiers',
 
   /* ── Solution Modal ───────────────────────────────────────── */
+  'solution.code': 'Code',
   'solution.solution': 'Solution',
   'solution.logic': 'Logique',
   'solution.requirements': 'Prérequis',
