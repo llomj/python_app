@@ -14508,7 +14508,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     // Helper function to extract a specific problem's content from file text
     const extractProblemContent = (fileContent: string, problemId: number): string => {
         // Pattern to match both formats: """ \nProblem: X (requirements) and """ \nProblem X: (codelogic)
-        const problemMarker = new RegExp(`"""\\s*Problem\\s*:?\\s*${problemId}\\b`, 'm');
+        // Also matches French "Problème" marker used in _fr.py files
+        const problemMarker = new RegExp(`"""\\s*(?:Problem|Problème)\\s*:?\\s*${problemId}\\b`, 'mu');
         const match = fileContent.match(problemMarker);
 
         if (!match) {
@@ -14519,7 +14520,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         // Find the end - look for the next problem marker
         const remainingContent = fileContent.substring(startIndex);
-        const nextProblemPattern = new RegExp(`"""\\s*Problem\\s*:?\\s*\\d+\\b`, 'm');
+        const nextProblemPattern = new RegExp(`"""\\s*(?:Problem|Problème)\\s*:?\\s*\\d+\\b`, 'mu');
 
         // Find all potential next problems, but skip the current one
         let endIndex = remainingContent.length;
@@ -14862,7 +14863,7 @@ ${solutionCode}`;
             setRequirementsContent('');
             setSyntaxContent('');
         }
-    }, []);
+    }, [appLang]);
 
     useEffect(() => {
         if (showModal === 'solution') {
