@@ -11828,8 +11828,7 @@ const App: React.FC = () => {
         if (appLang !== 'fr') return displaySolution;
         const frDesc = EXERCISES_FR[exercise.id];
         let code = exercise.solution.split('# Script approach')[0].trim();
-        code = code.replace(/# Using function approach/g, '# Approche fonction');
-        code = code.replace(/# Expected:/g, '# Attendu :');
+        code = code.replace(/#[^\n]*/g, '').replace(/\n{3,}/g, '\n\n').trim();
         if (!frDesc) return code;
         return '"""\n' + frDesc.split('\nExamples:')[0].trim() + '\n"""\n\n' + code;
     }, [appLang, exercise.id, exercise.solution, displaySolution]);
@@ -14561,7 +14560,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             ? EXERCISES_FR[targetExercise.id].split('\nExamples:')[0].trim()
             : enDesc;
         const prompt = isFrench ? frDesc : enDesc;
-        const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
+        const solutionCode = (isFrench
+            ? targetExercise.solution.split('# Script approach')[0].trim().replace(/#[^\n]*/g, '').replace(/\n{3,}/g, '\n\n').trim()
+            : targetExercise.solution.split('# Script approach')[0].trim());
         const exerciseDesc = isFrench ? frDesc : enDesc;
         const functionName = targetExercise.initialCode.match(/def\s+(\w+)/)?.[1] || 'your_function';
         const isRegexPractice = /regular expression|regex/i.test(exerciseDesc) || /\bimport\s+re\b/.test(targetExercise.solution);
@@ -14569,8 +14570,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             ? (isFrench ? "les expressions régulières" : "regular expressions")
             : (isFrench ? "les boucles for" : "for loops");
         const operationLine = isRegexPractice
-            ? '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().'
-            : '# Use a for loop to process values one at a time.';
+            ? (isFrench
+                ? '# Utilisez les fonctions regex Python comme re.search(), re.findall(), re.sub(), re.split(), ou re.fullmatch().'
+                : '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().')
+            : (isFrench
+                ? '# Utilisez une boucle for pour traiter les valeurs une par une.'
+                : '# Use a for loop to process values one at a time.');
 
         const pHead = isFrench ? 'Problème' : 'Problem';
         const pExpl = isFrench ? 'EXPLICATION DU PROBLÈME' : 'PROBLEM EXPLANATION';
@@ -14776,6 +14781,10 @@ ${solutionCode}`;
         return { logic, requirements, syntax };
     };
 
+    const stripComments = (text: string): string => {
+        return text.replace(/#[^\n]*/g, '').replace(/\n{3,}/g, '\n\n').trim();
+    };
+
     const loadSolutionFiles = useCallback(async (exerciseId: number) => {
         const targetExercise = getExerciseById(exerciseId);
         if (targetExercise && exerciseId > 2000) {
@@ -14822,7 +14831,8 @@ ${solutionCode}`;
                 const logicResponse = await fetch(`${basePath}/${logicFile}${cacheBuster}`);
                 if (logicResponse.ok) {
                     const logicText = await logicResponse.text();
-                    const problemLogic = extractProblemContent(logicText, exerciseId);
+                    let problemLogic = extractProblemContent(logicText, exerciseId);
+                    if (isFrench && problemLogic) problemLogic = stripComments(problemLogic);
                     setLogicContent(problemLogic || '');
                 } else {
                     setLogicContent('');
@@ -14841,7 +14851,8 @@ ${solutionCode}`;
                 }
                 if (reqResponse.ok) {
                     const reqText = await reqResponse.text();
-                    const problemReq = extractProblemContent(reqText, exerciseId);
+                    let problemReq = extractProblemContent(reqText, exerciseId);
+                    if (isFrench && problemReq) problemReq = stripComments(problemReq);
                     setRequirementsContent(problemReq || '');
                 } else {
                     setRequirementsContent('');
@@ -14857,7 +14868,8 @@ ${solutionCode}`;
                 const syntaxResponse = await fetch(`${basePath}/${syntaxFile}${cacheBuster}`);
                 if (syntaxResponse.ok) {
                     const syntaxText = await syntaxResponse.text();
-                    const problemSyntax = extractProblemContent(syntaxText, exerciseId);
+                    let problemSyntax = extractProblemContent(syntaxText, exerciseId);
+                    if (isFrench && problemSyntax) problemSyntax = stripComments(problemSyntax);
                     setSyntaxContent(problemSyntax || '');
                 } else {
                     setSyntaxContent('');
