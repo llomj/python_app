@@ -46,6 +46,7 @@ export interface EditorColorSettings {
   comment: string;
   identifier: string;
   builtin: string;
+  method: string;
   keyword: string;
   number: string;
   string: string;
@@ -68,6 +69,7 @@ export const DEFAULT_EDITOR_COLORS: EditorColorSettings = {
   comment: "#858585",
   identifier: "#FF1900",
   builtin: "#FFD700",
+  method: "#FFD700",
   keyword: "#389EDB",
   number: "#FF00FF",
   string: "#00AD89",
@@ -76,7 +78,7 @@ export const DEFAULT_EDITOR_COLORS: EditorColorSettings = {
 const createVarHighlightField = (colors: EditorColorSettings) => {
   const builtinMark = Decoration.mark({ attributes: { style: `color:${colors.builtin}` } });
   const identifierMark = Decoration.mark({ attributes: { style: `color:${colors.identifier}` } });
-  const methodMark = Decoration.mark({ attributes: { style: 'color:#FFD700' } });
+  const methodMark = Decoration.mark({ attributes: { style: `color:${colors.method}` } });
 
   return StateField.define<DecorationSet>({
     create(state) {

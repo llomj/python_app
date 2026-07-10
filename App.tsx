@@ -16638,6 +16638,7 @@ print(result)
                                                     ['comment', 'Comment'],
                                                     ['identifier', 'Identifier'],
                                                     ['builtin', 'Built-in'],
+                                                    ['method', 'Method'],
                                                     ['keyword', 'Keyword'],
                                                     ['number', 'Number'],
                                                     ['string', 'String'],
@@ -16717,40 +16718,50 @@ print(result)
                                     )}
                                     {customizeTab === 'panels' && (
                                         <div className="space-y-4">
-                                            <div className="relative overflow-hidden rounded-2xl border border-[#1d2d44]">
-                                                {/* Opaque output panel (IDE + output) behind the transparent panels */}
-                                                <div className="absolute inset-0 p-3" style={{ backgroundColor: editorColors.background }}>
-                                                    <div className="mb-2 rounded-lg border px-2 py-1.5 font-mono text-[9px]" style={{ backgroundColor: editorColors.background, borderColor: panelColors.border, color: editorColors.text }}>
-                                                        <span style={{ color: editorColors.keyword }}>def</span> <span style={{ color: editorColors.identifier }}>solve</span>(text):
-                                                        <br />    <span style={{ color: editorColors.keyword }}>return</span> text[1:-1]
-                                                        <br /><br />
-                                                        <span style={{ color: editorColors.builtin }}>print</span>(solve(<span style={{ color: editorColors.string }}>"Python"</span>))
-                                                    </div>
-                                                    <div className="rounded-lg border px-2 py-1.5" style={{ backgroundColor: editorColors.outputBackground, borderColor: panelColors.border }}>
-                                                        <div className="text-[9px] font-bold uppercase tracking-wider text-gray-400">{t('output.title', appLang)}</div>
-                                                        <div className="font-mono text-[10px] text-[#4ade80]">ytho</div>
-                                                    </div>
-                                                </div>
-                                                {/* Transparent overlay panels */}
-                                                <div className="relative space-y-2 p-3">
-                                                    <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
-                                                        <span className="uppercase" style={{ color: '#3b82f6' }}>{t('countRow.count', appLang)}</span> 12
-                                                        <span className="uppercase" style={{ color: '#22c55e' }}>{t('countRow.wins', appLang)}</span> 8
-                                                    </div>
-                                                    <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed text-gray-300" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}>
-                                                        <span className="font-bold text-white">{t('preview.problem', appLang, '1005')}</span>
-                                                        <div className="mt-1 text-gray-400">{t('preview.problemDescription', appLang)}</div>
-                                                    </div>
-                                                    <div className="rounded-xl px-3 py-2 text-[10px] text-gray-400" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
-                                                        <span className="font-bold text-gray-200">{t('preview.mainFile', appLang)}</span>
-                                                        <span className="ml-3 uppercase text-[#22c55e]">▶ {t('output.run', appLang)}</span>
-                                                    </div>
-                                                    <div className="rounded-xl px-3 py-3 text-[10px] text-gray-400" style={{ backgroundColor: editorColors.outputBackground, border: `1px solid ${hexToRgba(panelColors.border, 0.35)}` }}>
-                                                        <span className="font-bold text-gray-200">{t('output.title', appLang)}</span>
-                                                        <div className="mt-1 font-mono text-[#4ade80]">ytho</div>
-                                                    </div>
-                                                </div>
+                                            <div className="space-y-2 rounded-2xl border border-[#1d2d44] p-3" style={{ backgroundColor: hexToRgba(editorColors.background, 0.95) }}>
+                                            {/* File tabs bar */}
+                                            <div className="flex overflow-hidden rounded-lg border text-[9px] font-bold" style={{ borderColor: panelColors.border, backgroundColor: editorColors.background }}>
+                                                <span className="flex items-center gap-1 px-2 py-1" style={{ backgroundColor: editorColors.activeTabBackground, color: toolPanelColors.fileText, borderRight: `1px solid ${panelColors.border}` }}>
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-[#22c55e]" />main.py
+                                                </span>
+                                                <span className="px-2 py-1" style={{ color: editorColors.gutterText }}>helper.py</span>
                                             </div>
+                                            {/* Code panel */}
+                                            <div className="rounded-lg border px-2 py-1.5 font-mono text-[9px]" style={{ backgroundColor: editorColors.background, borderColor: panelColors.border, color: editorColors.text }}>
+                                                <span style={{ color: editorColors.keyword }}>def</span> <span style={{ color: editorColors.identifier }}>solve</span>(text):
+                                                <br />    <span style={{ color: editorColors.keyword }}>return</span> text[1:-1]
+                                                <br /><br />
+                                                <span style={{ color: editorColors.builtin }}>print</span>(solve(<span style={{ color: editorColors.string }}>"Python"</span>))
+                                            </div>
+                                            {/* Output panel */}
+                                            <div className="rounded-lg border px-2 py-1.5" style={{ backgroundColor: editorColors.outputBackground, borderColor: panelColors.border }}>
+                                                <div className="text-[9px] font-bold uppercase tracking-wider" style={{ color: editorColors.gutterText }}>{t('output.title', appLang)}</div>
+                                                <div className="font-mono text-[10px] text-[#4ade80]">ytho</div>
+                                            </div>
+                                            {/* Divider */}
+                                            <div className="flex items-center gap-2 py-1">
+                                                <div className="h-px flex-1" style={{ backgroundColor: hexToRgba(panelColors.border, 0.2) }} />
+                                                <span className="text-[8px] font-black uppercase tracking-widest" style={{ color: hexToRgba(panelColors.border, 0.5) }}>Panels</span>
+                                                <div className="h-px flex-1" style={{ backgroundColor: hexToRgba(panelColors.border, 0.2) }} />
+                                            </div>
+                                            {/* Transparent overlay panel cards */}
+                                            <div className="flex flex-wrap items-center justify-center gap-2 rounded-full px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`, backdropFilter: 'blur(4px)' }}>
+                                                <span className="uppercase" style={{ color: '#3b82f6' }}>{t('countRow.count', appLang)}</span> 12
+                                                <span className="uppercase" style={{ color: '#22c55e' }}>{t('countRow.wins', appLang)}</span> 8
+                                            </div>
+                                            <div className="rounded-xl px-3 py-3 text-[10px] leading-relaxed" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}`, backdropFilter: 'blur(4px)', color: editorColors.text }}>
+                                                <span className="font-bold">{t('preview.problem', appLang, '1005')}</span>
+                                                <div className="mt-1 opacity-70">{t('preview.problemDescription', appLang)}</div>
+                                            </div>
+                                            <div className="flex items-center justify-between rounded-xl px-3 py-2 text-[10px]" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.35)}`, backdropFilter: 'blur(4px)', color: editorColors.text }}>
+                                                <span className="font-bold opacity-80">{t('preview.mainFile', appLang)}</span>
+                                                <span className="uppercase text-[#22c55e]">▶ {t('output.run', appLang)}</span>
+                                            </div>
+                                            <div className="rounded-xl px-3 py-3 text-[10px]" style={{ backgroundColor: editorColors.outputBackground, border: `1px solid ${hexToRgba(panelColors.border, 0.35)}`, color: editorColors.text }}>
+                                                <span className="font-bold opacity-80">{t('output.title', appLang)}</span>
+                                                <div className="mt-1 font-mono text-[#4ade80]">ytho</div>
+                                            </div>
+                                        </div>
                                             <div className="space-y-3">
                                                 <ColorField label="Panel Background" value={panelColors.background} onChange={(value) => setPanelColors(prev => ({ ...prev, background: value }))} />
                                                 <ColorField label="Panel Border" value={panelColors.border} onChange={(value) => setPanelColors(prev => ({ ...prev, border: value }))} />
