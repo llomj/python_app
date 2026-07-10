@@ -5,7 +5,7 @@
 
 import { lookupConcept, type ConceptResult } from './pythonConceptLibrary';
 
-interface RefEntry {
+export interface RefEntry {
   name: string
   type: string        // 'str', 'list', 'dict', 'set', 'tuple', 'builtin', 'keyword', 'concept'
   signature: string
@@ -14,13 +14,13 @@ interface RefEntry {
 }
 
 // ── FLAT LOOKUP: methodName -> entry ───────────────────────────────────────
-const _ref: Record<string, RefEntry[]> = {};
+const _ref: Record<string, RefEntry[]> = Object.create(null);
 
 const _ = (name: string, type: string, signature: string, desc: string, example: string): void => {
   (_ref[name] ||= []).push({ name, type, signature, desc, example });
 };
 
-const allReferenceEntries = (): RefEntry[] => Object.values(_ref).flat();
+export const allReferenceEntries = (): RefEntry[] => Object.values(_ref).flat();
 
 // ── STRING METHODS ─────────────────────────────────────────────────────────
 _('capitalize', 'str', 'str.capitalize()', 'Returns a copy with the first character upper-cased and the rest lower-cased.', `"hello world".capitalize()  # "Hello world"`);
@@ -713,6 +713,14 @@ export const lookup = (name: string, preferredType?: string): RefEntry | undefin
   const clean = withoutPrefix.replace(/[^a-z0-9_]/g, '');
   const entries = _ref[clean] || [];
   return (preferredType ? entries.find(entry => entry.type === preferredType) : undefined) || entries[0];
+};
+
+/** Return every exact API/reference match so callers can detect ambiguity. */
+export const lookupAll = (name: string): RefEntry[] => {
+  const normalized = name.toLowerCase().trim().replace(/\(\)$/, '');
+  const withoutPrefix = normalized.replace(/^(str|list|dict|set|tuple|int|float|bool)\./, '');
+  const clean = withoutPrefix.replace(/[^a-z0-9_]/g, '');
+  return [...(_ref[clean] || [])];
 };
 
 /** Format a single entry as human-readable text */

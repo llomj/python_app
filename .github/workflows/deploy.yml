@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Audit Python concept definitions
-        run: npm run audit:concepts
+        run: npm run audit:concepts && npm run eval:general-ai
 
       - name: Build
         run: npm run build

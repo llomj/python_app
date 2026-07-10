@@ -54,6 +54,7 @@ import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { allBuiltins, allDictMethods, allListMethods, allSetMethods, allStringMethods, allTupleMethods, answerGeneralPythonQuestion } from './services/pythonReference';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
+import { answerPythonCodeQuestion, answerPythonKnowledgeComparison, answerPythonKnowledgeQuestion, answerPythonVersionQuestion, buildPythonKnowledgeDeepSupplement, buildPythonKnowledgeExampleSupplement, extractKnowledgeTerm, resolveKnowledgeFollowUp, selectKnowledgeContextQuestion } from './services/pythonKnowledge';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
@@ -125,10 +126,6 @@ const normalizeGeneralPythonQuestion = (rawQuestion: string): string => {
     }
     return normalized;
 };
-
-const isGeneralPythonFollowUp = (question: string): boolean => (
-    /^(expand|more|more detail|details|explain more|break it down|go deeper|examples?|give examples|syntax|show syntax|how does it work|why|when use|when should|quiz|practice|test me|common mistakes?|mistakes?|compare|line by line|explain this code)/i.test(question.trim())
-);
 
 const GENERAL_PYTHON_GLOSSARY = [
     'indentation', 'variable', 'identifier', 'function', 'method', 'argument', 'parameter',
@@ -345,7 +342,7 @@ const buildGeneralAiQuiz = (topic: string): string => [
 
 const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
-    const topic = detectGeneralPythonTopic(question);
+    const topic = extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
     if (!/\bwhat\s+(is|are|do|does)\b|\bexplain\b|\btell me about\b|\brepresent\b|\bmean\b/.test(lowerQ)) return null;
     if (/\bsyntax\b/.test(lowerQ) && /\bcolou?rs?\b|\bhighlight/.test(lowerQ)) {
         return [
@@ -1033,7 +1030,35 @@ const buildGeneralAiCreationAnswer = (question: string, language: 'en' | 'fr'): 
 };
 
 const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAiMode, language: 'en' | 'fr'): string => {
-    const topic = detectGeneralPythonTopic(question);
+    const topic = extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
+    const isClarification = /\*\*(?:Clarification needed|Pr[eé]cision n[eé]cessaire)/i.test(answer);
+    if (isClarification) return answer;
+    const isStructuredAnswer = /\*\*(?:Source and confidence|Source et confiance)\*\*/i.test(answer);
+    const isCodeAnswer = /\*\*(?:Line-by-line code analysis|Analyse du code ligne par ligne)/i.test(answer);
+    if (isCodeAnswer) return answer;
+    const isVersionAnswer = /\*\*.+version information\*\*/i.test(answer);
+    if (isVersionAnswer) return answer;
+    const isCompleteSpecialAnswer = isStructuredAnswer
+        || /\|\s*(?:Criterion|Crit[eè]re)\s*\|/i.test(answer);
+    if (isCompleteSpecialAnswer) {
+        if (isStructuredAnswer && mode === 'simple') {
+            return composeGeneralAiAnswer({ answer, topic, mode, language });
+        }
+        if (isStructuredAnswer && mode === 'examples') {
+            return composeGeneralAiAnswer({
+                answer,
+                topic,
+                mode,
+                language,
+                examples: buildPythonKnowledgeExampleSupplement(question, language),
+                followUps: buildGeneralAiSuggestedFollowUpText(question, language),
+            });
+        }
+        if (isStructuredAnswer && mode === 'deep') {
+            return [answer, buildPythonKnowledgeDeepSupplement(question, language), buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
+        }
+        return [answer, buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
+    }
     if (/\bhow many\b|\bnumber of\b|\bcount (?:of )?\b/i.test(question)) {
         return [answer, mode === 'simple' ? '' : buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
     }
@@ -1087,7 +1112,7 @@ const getGeneralAiSuggestedFollowUps = (question: string, language: 'en' | 'fr' 
             `Go deeper on ${first} and ${second}`,
         ];
     }
-    const topic = detectGeneralPythonTopic(question);
+    const topic = extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
     if (language === 'fr') {
         const topicFr = getFrenchGeneralAiTopicLabel(topic);
         const topicWithDe = topicFr.startsWith('les ') ? `des ${topicFr.slice(4)}`
@@ -14709,16 +14734,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
-        const previousUserQuestion = [...generalAiMessages].reverse().find(message => message.role === 'user')?.text || '';
+        const previousUserQuestions = [...generalAiMessages].reverse()
+            .filter(message => message.role === 'user')
+            .map(message => normalizeGeneralPythonQuestion(normalizeAiQuestionForLookup(message.text, appLang)));
+        const previousUserQuestion = selectKnowledgeContextQuestion(previousUserQuestions);
         const localizedLookupQuestion = normalizeAiQuestionForLookup(question, appLang);
         const normalizedQuestion = normalizeGeneralPythonQuestion(localizedLookupQuestion);
-        const effectiveQuestion = isGeneralPythonFollowUp(normalizedQuestion) && previousUserQuestion
-            ? normalizeGeneralPythonQuestion(`${previousUserQuestion}. ${normalizedQuestion}`)
-            : normalizedQuestion;
+        const followUp = resolveKnowledgeFollowUp(normalizedQuestion, previousUserQuestion, generalAiMode);
+        const effectiveQuestion = followUp.question;
+        const effectiveMode = followUp.mode;
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setGeneralAiMessages(prev => [...prev, userMessage]);
         setGeneralAiDraft('');
         setGeneralAiRunning(true);
+        if (followUp.usedContext && effectiveMode !== generalAiMode) setGeneralAiMode(effectiveMode);
 
         try {
             const topic = detectGeneralPythonTopic(effectiveQuestion);
@@ -14728,16 +14757,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 countAnswer ||
                 creationAnswer ||
                 buildGeneralAiTracebackAnswer(effectiveQuestion) ||
+                answerPythonCodeQuestion(effectiveQuestion, appLang) ||
                 buildGeneralAiCodeExplanation(effectiveQuestion) ||
+                answerPythonKnowledgeComparison(effectiveQuestion, appLang) ||
                 buildGeneralAiComparisonAnswer(effectiveQuestion) ||
+                answerPythonVersionQuestion(effectiveQuestion, appLang) ||
                 (/quiz|practice|test me|check my understanding/i.test(effectiveQuestion) ? buildGeneralAiQuiz(topic) : null) ||
                 (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic, appLang) : null) ||
                 buildGeneralAiErrorAnswer(effectiveQuestion) ||
+                answerPythonKnowledgeQuestion(effectiveQuestion, appLang) ||
                 answerGeneralPythonQuestion(effectiveQuestion) ||
                 buildGeneralAiCoreTopicAnswer(effectiveQuestion);
             if (refAnswer) {
                 setGeneralAiProgress(100);
-                const enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, generalAiMode, appLang);
+                const enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang);
                 const answerText = appLang === 'fr' && (countAnswer || creationAnswer)
                     ? enrichedAnswer
                     : localizeAiText(enrichedAnswer, appLang);
@@ -14754,7 +14787,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     role: m.role === 'user' ? 'user' as const : 'assistant' as const,
                     content: m.text,
                 }));
-                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory, appLang, generalAiMode);
+                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory, appLang, effectiveMode);
                 if (aiAnswer) {
                     setGeneralAiProgress(100);
                     setGeneralAiMessages(prev => [...prev, {
@@ -14816,7 +14849,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         try {
             // General Python question → curated reference FIRST, WebLLM fallback
             if (isGeneralPython && !shouldUseReviewer) {
-                const refAnswer = answerGeneralPythonQuestion(lookupQuestion);
+                const refAnswer = answerPythonKnowledgeComparison(lookupQuestion, appLang)
+                    || answerPythonCodeQuestion(lookupQuestion, appLang)
+                    || answerPythonVersionQuestion(lookupQuestion, appLang)
+                    || answerPythonKnowledgeQuestion(lookupQuestion, appLang)
+                    || answerGeneralPythonQuestion(lookupQuestion);
                 if (refAnswer) {
                     setProblemAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
@@ -16540,11 +16577,18 @@ print(result)
                                         sendGeneralAiQuestion(generalAiDraft);
                                     }}
                                 >
-                                    <input
+                                    <textarea
                                         value={generalAiDraft}
                                         onChange={(event) => setGeneralAiDraft(event.target.value)}
+                                        onKeyDown={(event) => {
+                                            if (event.key === 'Enter' && !event.shiftKey) {
+                                                event.preventDefault();
+                                                sendGeneralAiQuestion(generalAiDraft);
+                                            }
+                                        }}
+                                        rows={2}
                                         placeholder={t('generalAi.placeholder', appLang)}
-                                        className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
+                                        className="max-h-28 min-w-0 flex-1 resize-none rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
                                     />
                                     <button
