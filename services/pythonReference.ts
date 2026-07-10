@@ -729,9 +729,93 @@ export const formatAllOfType = (type: string): string => {
   return entries.map((e, i) => `${i + 1}. \`${e.name}\` — ${e.desc}`).join('\n');
 };
 
+const mutationRuleAnswer = (): string => [
+  '**Methods vs built-in functions: mutating rule**',
+  '',
+  '1. Core rule',
+  'Methods that modify an existing mutable object usually return `None`.',
+  '',
+  'Examples: `list.append()`, `list.extend()`, `list.sort()`, `list.reverse()`, `dict.update()`, `set.add()`.',
+  '',
+  'They change the original object instead of creating and returning a new one. Python does this to make mutation obvious.',
+  '',
+  '```python',
+  'numbers = [1, 2, 3]',
+  'result = numbers.reverse()',
+  '',
+  'print(numbers)  # [3, 2, 1]',
+  'print(result)   # None',
+  '```',
+  '',
+  '2. `reverse()` vs `reversed()`',
+  '| Tool | Kind | Original changed? | Return value |',
+  '|---|---|---:|---|',
+  '| `list.reverse()` | list method | Yes | `None` |',
+  '| `reversed(iterable)` | built-in function | No | reverse iterator |',
+  '',
+  '```python',
+  'numbers = [1, 2, 3]',
+  'numbers.reverse()',
+  'print(numbers)  # [3, 2, 1]',
+  '',
+  'numbers = [1, 2, 3]',
+  'it = reversed(numbers)',
+  'print(numbers)       # [1, 2, 3]',
+  'print(list(it))      # [3, 2, 1]',
+  '```',
+  '',
+  '3. `sort()` vs `sorted()`',
+  '| Tool | Kind | Original changed? | Return value |',
+  '|---|---|---:|---|',
+  '| `list.sort()` | list method | Yes | `None` |',
+  '| `sorted(iterable)` | built-in function | No | new sorted list |',
+  '',
+  '```python',
+  'numbers = [3, 1, 2]',
+  'new_list = sorted(numbers)',
+  'print(new_list)  # [1, 2, 3]',
+  'print(numbers)   # [3, 1, 2]',
+  '',
+  'numbers.sort()',
+  'print(numbers)   # [1, 2, 3]',
+  '```',
+  '',
+  '4. What is an iterator?',
+  'An iterator produces one value at a time. `reversed(numbers)` does not immediately make a full list; use `list(reversed(numbers))` if you want the full reversed list.',
+  '',
+  '```python',
+  'it = reversed([10, 20, 30])',
+  'print(next(it))  # 30',
+  'print(next(it))  # 20',
+  'print(next(it))  # 10',
+  '```',
+  '',
+  '5. Practical rule',
+  'Use the method when you want to change the original object. Use the built-in function when you want a new result and want to keep the original unchanged.',
+].join('\n');
+
+const buildMutationComparisonAnswer = (question: string): string | null => {
+  const q = question.toLowerCase();
+  const asksMutatingReturnNone = /\b(return|returns|why|none)\b/.test(q) &&
+    /\b(append|extend|insert|remove|clear|sort|reverse|update|add|discard|difference_update|intersection_update|symmetric_difference_update)\s*\(/.test(q);
+  const asksSortSorted = /\bsort\s*\(\)|\bsorted\s*\(/.test(q) && /\b(difference|different|vs|versus|compare|return|none|original|change|method|built.?in)\b/.test(q);
+  const asksReverseReversed = /\breverse\s*\(\)|\breversed\s*\(/.test(q) && /\b(difference|different|vs|versus|compare|return|none|iterator|original|change|method|built.?in)\b/.test(q);
+  const asksMethodBuiltinMutation = /\bmethod\b.*\bbuilt.?in\b|\bbuilt.?in\b.*\bmethod\b|\bmodify|mutat|in.?place\b/.test(q) &&
+    /\b(return none|none|sort|sorted|reverse|reversed|append|update|add)\b/.test(q);
+
+  if (asksMutatingReturnNone || asksSortSorted || asksReverseReversed || asksMethodBuiltinMutation) {
+    return mutationRuleAnswer();
+  }
+
+  return null;
+};
+
 /** Build a full reference answer for a general Python question */
 export const answerGeneralPythonQuestion = (question: string): string | null => {
   const q = question.toLowerCase().trim();
+
+  const mutationAnswer = buildMutationComparisonAnswer(question);
+  if (mutationAnswer) return mutationAnswer;
 
   // ── Listing all methods ──────────────────────────────────────────────
   if (/(?:list|show|get|give|all).*method|method.*list/i.test(q) && !/\blist\b.*\bdata\b|\bwhat\b.*\blist\b|\bhow\b.*\blist\b/i.test(q)) {

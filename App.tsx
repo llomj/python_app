@@ -10801,6 +10801,83 @@ const normalizeSolutionHeadings = (solution: string) => {
     return normalized.join('\n');
 };
 
+const localizeSolutionCodeDisplay = (solution: string, lang: 'en' | 'fr') => {
+    if (lang !== 'fr') return solution;
+    return solution
+        .replace(/^# Using function approach/gm, '# Approche avec fonction')
+        .replace(/^# Using script approach/gm, '# Approche script')
+        .replace(/^# Direct approach/gm, '# Approche directe')
+        .replace(/^# Manual step-by-step approach/gm, '# Approche manuelle étape par étape')
+        .replace(/^# Script approach/gm, '# Approche script')
+        .replace(/^# Step (\d+): store the answer in a clear name\./gm, '# Étape $1 : stocker la réponse dans un nom clair.')
+        .replace(/^# Step (\d+): display the answer\./gm, '# Étape $1 : afficher la réponse.')
+        .replace(/^# Step (\d+): display the final answer\./gm, '# Étape $1 : afficher la réponse finale.')
+        .replace(/^# Step (\d+): store a value in a name\./gm, '# Étape $1 : stocker une valeur dans un nom.')
+        .replace(/^# Step (\d+): check the condition before printing\./gm, '# Étape $1 : vérifier la condition avant d’afficher.')
+        .replace(/^# Step (\d+): run this Python statement\./gm, '# Étape $1 : exécuter cette instruction Python.');
+};
+
+const localizeSolutionDocText = (content: string, lang: 'en' | 'fr') => {
+    if (lang !== 'fr' || !content) return content;
+    return content
+        .replace(/\bProblem\b/g, 'Problème')
+        .replace(/PROBLEM EXPLANATION/g, 'EXPLICATION DU PROBLÈME')
+        .replace(/CODE LOGIC/g, 'LOGIQUE DU CODE')
+        .replace(/SOLUTION EXPLANATION/g, 'EXPLICATION DE LA SOLUTION')
+        .replace(/TEST CASE/g, 'CAS DE TEST')
+        .replace(/Key Requirements/g, 'Prérequis essentiels')
+        .replace(/\bSYNTAX\b/g, 'SYNTAXE')
+        .replace(/EVALUATION ORDER/g, 'ORDRE D’ÉVALUATION')
+        .replace(/EXECUTION ORDER/g, 'ORDRE D’EXÉCUTION')
+        .replace(/EXECUTION FLOW/g, 'FLUX D’EXÉCUTION')
+        .replace(/This problem demonstrates how to use Python/g, 'Ce problème montre comment utiliser')
+        .replace(/This problem is for practicing Python/g, 'Ce problème sert à pratiquer')
+        .replace(/A regex pattern describes what text to find, replace, split, or validate\./g, 'Un motif regex décrit quel texte trouver, remplacer, découper ou valider.')
+        .replace(/The loop should update a result while it runs, then return the completed value\./g, 'La boucle doit mettre à jour un résultat pendant son exécution, puis retourner la valeur finale.')
+        .replace(/Use Python regex functions such as/g, 'Utilisez les fonctions regex de Python comme')
+        .replace(/Use a for loop to process values one at a time\./g, 'Utilisez une boucle for pour traiter les valeurs une par une.')
+        .replace(/Define a function named/g, 'Définir une fonction appelée')
+        .replace(/Import and use Python's re module\./g, 'Importer et utiliser le module re de Python.')
+        .replace(/Use at least one for loop\./g, 'Utiliser au moins une boucle for.')
+        .replace(/Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch\./g, 'Choisir la fonction regex adaptée à la tâche : search, findall, sub, split, match ou fullmatch.')
+        .replace(/Build the result with loop logic\./g, 'Construire le résultat avec la logique de boucle.')
+        .replace(/Use the input values from the function parameters\./g, 'Utiliser les valeurs d’entrée des paramètres de la fonction.')
+        .replace(/Do not hard-code the example output\./g, 'Ne pas coder en dur la sortie de l’exemple.')
+        .replace(/Return the final answer from the function\./g, 'Retourner la réponse finale depuis la fonction.')
+        .replace(/Keep the result type consistent with the examples\./g, 'Garder le type du résultat cohérent avec les exemples.')
+        .replace(/This solution defines a function that encapsulates the required logic\./g, 'Cette solution définit une fonction qui contient la logique demandée.')
+        .replace(/The regex pattern decides which text is matched, captured, replaced, or validated\./g, 'Le motif regex décide quel texte est trouvé, capturé, remplacé ou validé.')
+        .replace(/The for loop repeats once for each item in the input data\./g, 'La boucle for se répète une fois pour chaque élément des données d’entrée.')
+        .replace(/The function returns the completed value after the operation has finished\./g, 'La fonction retourne la valeur finale une fois l’opération terminée.')
+        .replace(/Syntax describes the Python building blocks used in this code/g, 'La syntaxe décrit les éléments Python utilisés dans ce code')
+        .replace(/defines a function with parameters/g, 'définit une fonction avec des paramètres')
+        .replace(/imports Python's regular expression module/g, 'importe le module d’expressions régulières de Python')
+        .replace(/return sends the result back to the caller/g, 'return renvoie le résultat à l’appelant')
+        .replace(/Operators/g, 'Opérateurs')
+        .replace(/Built-in functions/g, 'Fonctions intégrées')
+        .replace(/Common regex functions/g, 'Fonctions regex courantes')
+        .replace(/Common regex syntax/g, 'Syntaxe regex courante')
+        .replace(/Python builds the pattern first, evaluates the input text, then calls the re function\./g, 'Python construit d’abord le motif, évalue le texte d’entrée, puis appelle la fonction re.')
+        .replace(/Evaluation Order traces how Python reads and evaluates expressions\./g, 'L’ordre d’évaluation montre comment Python lit et évalue les expressions.')
+        .replace(/Inner expressions are evaluated first, then the outer ones\./g, 'Les expressions internes sont évaluées avant les expressions externes.')
+        .replace(/arguments evaluated first, then function body runs/g, 'les arguments sont évalués d’abord, puis le corps de la fonction s’exécute')
+        .replace(/iterable evaluated first, then item receives each value/g, 'l’itérable est évalué d’abord, puis item reçoit chaque valeur')
+        .replace(/evaluated as True or False if an if statement is used/g, 'évaluée comme True ou False si une instruction if est utilisée')
+        .replace(/result is evaluated, then sent back to the caller/g, 'le résultat est évalué, puis renvoyé à l’appelant')
+        .replace(/Execution Order shows the sequence Python follows when running/g, 'L’ordre d’exécution montre la séquence suivie par Python pendant l’exécution')
+        .replace(/the code\. 'def' and 'class' blocks are just stored, not run yet\./g, 'du code. Les blocs def et class sont seulement stockés, pas encore exécutés.')
+        .replace(/stored in memory, not executed yet/g, 'stockée en mémoire, pas encore exécutée')
+        .replace(/calls the function/g, 'appelle la fonction')
+        .replace(/Execution Flow tracks where Python jumps during runtime/g, 'Le flux d’exécution suit où Python se déplace pendant l’exécution')
+        .replace(/which blocks are skipped and which actually run\./g, 'quels blocs sont ignorés et lesquels s’exécutent réellement.')
+        .replace(/def blocks are skipped at runtime/g, 'les blocs def sont ignorés au démarrage')
+        .replace(/is stored in memory/g, 'est stockée en mémoire')
+        .replace(/Execution starts when the function is called/g, 'L’exécution commence quand la fonction est appelée')
+        .replace(/Loop: takes one item from the iterable, runs body, repeats until done/g, 'Boucle : prend un élément de l’itérable, exécute le corps, répète jusqu’à la fin')
+        .replace(/Branch: if a condition exists, it picks which block runs/g, 'Branchement : si une condition existe, elle choisit quel bloc s’exécute')
+        .replace(/Regex flow: pattern -> match\/replace\/split\/validate -> result/g, 'Flux regex : motif -> trouver/remplacer/découper/valider -> résultat');
+};
+
 const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSettings) => {
     if (/^#/.test(token)) return editorColors.comment;
     if (/^(['"]).*\1$/.test(token)) return editorColors.string;
@@ -11823,31 +11900,10 @@ const App: React.FC = () => {
         const avgIndex = modes.reduce((sum, s) => sum + RANKS.indexOf(getModeRank(s)), 0) / modes.length;
         return RANKS[Math.min(Math.round(avgIndex), RANKS.length - 1)];
     }, [statsByMode]);
-    const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
-    const frenchCodeDisplay = useMemo(() => {
-        if (appLang !== 'fr') return displaySolution;
-        const frDesc = EXERCISES_FR[exercise.id] || ATOMIC_BEGINNER_EXERCISES_FR[exercise.id];
-        let code = exercise.solution.split('# Script approach')[0].trim();
-        // Translate common English comment patterns to French
-        code = code
-            .replace(/(^|\n)# Using function approach/g, '$1# Approche fonctionnelle')
-            .replace(/(^|\n)# Using built-in approach/g, '$1# Approche native')
-            .replace(/(^|\n)# Using manual approach/g, '$1# Approche manuelle')
-            .replace(/(^|\n)# Alternative using /g, '$1# Alternative avec ')
-            .replace(/(^|\n)# Expected:/g, '$1# Attendu :')
-            .replace(/(^|\n)# Output:/g, '$1# Sortie :')
-            .replace(/(^|\n)# Goal:/g, '$1# Objectif :')
-            .replace(/# Initialize list/g, '# Initialisation de la liste')
-            .replace(/# Initialize string variable/g, '# Initialisation de la variable chaîne')
-            .replace(/# Print the result/g, '# Affichage du résultat')
-            .replace(/# Return the result/g, '# Retour du résultat')
-            .replace(/# Example usage/g, "# Exemple d'utilisation")
-            .replace(/# Base class /g, '# Classe de base ')
-            .replace(/# Derived class /g, '# Classe dérivée ')
-            .replace(/\n{3,}/g, '\n\n').trim();
-        if (!frDesc) return code;
-        return '"""\n' + frDesc + '\n"""\n\n' + code;
-    }, [appLang, exercise.id, exercise.solution, displaySolution]);
+    const displaySolution = useMemo(
+        () => localizeSolutionCodeDisplay(normalizeSolutionHeadings(exercise.solution), appLang),
+        [exercise.solution, appLang],
+    );
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
@@ -14532,8 +14588,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     // Helper function to extract a specific problem's content from file text
     const extractProblemContent = (fileContent: string, problemId: number): string => {
         // Pattern to match both formats: """ \nProblem: X (requirements) and """ \nProblem X: (codelogic)
-        // Also matches French "Problème" marker used in _fr.py files
-        const problemMarker = new RegExp(`"""\\s*(?:Problem|Problème)\\s*:?\\s*${problemId}\\b`, 'mu');
+        const problemMarker = new RegExp(`"""\\s*Problem\\s*:?\\s*${problemId}\\b`, 'm');
         const match = fileContent.match(problemMarker);
 
         if (!match) {
@@ -14544,7 +14599,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         // Find the end - look for the next problem marker
         const remainingContent = fileContent.substring(startIndex);
-        const nextProblemPattern = new RegExp(`"""\\s*(?:Problem|Problème)\\s*:?\\s*\\d+\\b`, 'mu');
+        const nextProblemPattern = new RegExp(`"""\\s*Problem\\s*:?\\s*\\d+\\b`, 'm');
 
         // Find all potential next problems, but skip the current one
         let endIndex = remainingContent.length;
@@ -14569,238 +14624,162 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         return remainingContent.substring(0, endIndex).trim();
     };
 
-    const createGeneratedPracticeDocs = (targetExercise: Exercise) => {
-        const isFrench = appLang === 'fr';
-        const enDesc = targetExercise.description.split('\nExamples:')[0].trim();
-        const frDesc = isFrench
-            ? (EXERCISES_FR[targetExercise.id] || ATOMIC_BEGINNER_EXERCISES_FR[targetExercise.id] || enDesc)
-            : enDesc;
-        const prompt = isFrench ? frDesc : enDesc;
-        const solutionCode = (isFrench
-            ? targetExercise.solution.split('# Script approach')[0].trim().replace(/(^|\n)# Expected:/g, '$1# Attendu :').replace(/(^|\n)# Using function approach/g, '$1# Approche fonctionnelle').replace(/\n{3,}/g, '\n\n').trim()
-            : targetExercise.solution.split('# Script approach')[0].trim());
-        const exerciseDesc = isFrench ? frDesc : enDesc;
-        const functionName = targetExercise.initialCode.match(/def\s+(\w+)/)?.[1] || 'your_function';
-        const isRegexPractice = /regular expression|regex/i.test(exerciseDesc) || /\bimport\s+re\b/.test(targetExercise.solution);
-        const conceptName = isRegexPractice
-            ? (isFrench ? "les expressions régulières" : "regular expressions")
-            : (isFrench ? "les boucles for" : "for loops");
+    const createGeneratedPracticeDocs = (targetExercise: Exercise, lang: 'en' | 'fr') => {
+        const functionName = targetExercise.initialCode.match(/def\s+([a-zA-Z_]\w*)\s*\(/)?.[1] ?? 'the_function';
+        const prompt = getExerciseDescription(targetExercise, lang).split('\nExamples:')[0].trim();
+        const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
+        const isRegexPractice = /regular expression|regex/i.test(targetExercise.description) || /\bimport\s+re\b/.test(targetExercise.solution);
+        const conceptName = isRegexPractice ? 'regular expressions' : 'for loops';
         const operationLine = isRegexPractice
-            ? (isFrench
-                ? '# Utilisez les fonctions regex Python comme re.search(), re.findall(), re.sub(), re.split(), ou re.fullmatch().'
-                : '# Utilisez les fonctions regex Python comme re.search(), re.findall(), re.sub(), re.split(), ou re.fullmatch().')
-            : (isFrench
-                ? '# Utilisez une boucle for pour traiter les valeurs une par une.'
-                : '# Utilisez une boucle for pour traiter les valeurs une par une.');
-
-        const pHead = isFrench ? 'Problème' : 'Problem';
-        const pExpl = isFrench ? 'EXPLICATION DU PROBLÈME' : 'PROBLEM EXPLANATION';
-        const demoLine = isFrench
-            ? `# Ce problème montre comment utiliser Python ${conceptName}.`
-            : `# This problem demonstrates how to use Python ${conceptName}.`;
-        const regexLine1 = isFrench
-            ? '# Un motif regex décrit quel texte chercher, remplacer, diviser ou valider.'
-            : '# A regex pattern describes what text to find, replace, split, or validate.';
-        const regexLine2 = isFrench
-            ? '# La boucle doit mettre à jour un résultat pendant son exécution, puis retourner la valeur finale.'
-            : '# The loop should update a result while it runs, then return the completed value.';
-        const codeLogic = isFrench ? 'LOGIQUE DU CODE' : 'CODE LOGIC';
-        const testCase = isFrench ? 'CAS DE TEST' : 'TEST CASE';
-        const testLine1 = isFrench
-            ? '# Ce cas de test illustre la fonctionnalité avec des exemples d\'entrée.'
-            : '# This test case demonstrates the functionality with example inputs.';
-        const testLine2 = isFrench
-            ? '# La sortie doit correspondre au résultat attendu indiqué dans les commentaires.'
-            : '# The output should match the expected result shown in the comments.';
-        const practicing = isFrench
-            ? `# Ce problème permet de s\'entraîner avec Python ${conceptName}.`
-            : `# This problem is for practicing Python ${conceptName}.`;
-        const reqHead = isFrench ? 'EXIGENCES CLÉS' : 'Key Requirements';
-        const defineFn = isFrench
-            ? `# - Définissez une fonction nommée ${functionName}.`
-            : `# - Define a function named ${functionName}.`;
-        const reqRegex1 = isFrench
-            ? "# - Importez et utilisez le module re de Python."
-            : "# - Import and use Python's re module.";
-        const reqFor1 = isFrench
-            ? '# - Utilisez au moins une boucle for.'
-            : '# - Use at least one for loop.';
-        const reqRegex2 = isFrench
-            ? '# - Choisissez la fonction regex adaptée : search, findall, sub, split, match ou fullmatch.'
-            : '# - Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.';
-        const reqFor2 = isFrench
-            ? '# - Construisez le résultat avec la logique de la boucle.'
-            : '# - Build the result with loop logic.';
-        const reqInputs = isFrench
-            ? '# - Utilisez les valeurs d\'entrée depuis les paramètres de la fonction.'
-            : '# - Use the input values from the function parameters.';
-        const reqNoHard = isFrench
-            ? '# - Ne codez pas en dur le résultat de l\'exemple.'
-            : '# - Do not hard-code the example output.';
-        const reqReturn = isFrench
-            ? '# - Retournez la réponse finale depuis la fonction.'
-            : '# - Return the final answer from the function.';
-        const reqType = isFrench
-            ? '# - Gardez le type du résultat cohérent avec les exemples.'
-            : '# - Keep the result type consistent with the examples.';
-        const solExpl = isFrench ? 'EXPLICATION DE LA SOLUTION' : 'SOLUTION EXPLANATION';
-        const solLine1 = isFrench
-            ? '# Cette solution définit une fonction qui encapsule la logique demandée.'
-            : '# This solution defines a function that encapsulates the required logic.';
-        const solRegex = isFrench
-            ? '# Le motif regex détermine quel texte est cherché, capturé, remplacé ou validé.'
-            : '# The regex pattern decides which text is matched, captured, replaced, or validated.';
-        const solFor = isFrench
-            ? '# La boucle for se répète une fois pour chaque élément des données d\'entrée.'
-            : '# The for loop repeats once for each item in the input data.';
-        const solLine2 = isFrench
-            ? '# La fonction retourne la valeur finale une fois l\'opération terminée.'
-            : '# The function returns the completed value after the operation has finished.';
-
-        const syntax = isRegexPractice ? `"""
-${pHead} ${targetExercise.id} :
-#
-# SYNTAX / SYNTAXE :
-${isFrench ? '# La syntaxe décrit les briques Python utilisées dans ce code.' : '# Syntax describes the Python building blocks used in this code.'}
-#
-import re  ${isFrench ? '# importe le module des expressions régulières de Python' : "# imports Python's regular expression module"}
-
-def ${functionName}(...):  ${isFrench ? '# définit une fonction avec des paramètres' : '# defines a function with parameters'}
-    pattern = r"..."
-    ${operationLine}
-    return result
-#
-${isFrench ? '# Fonctions regex courantes :' : '# Common regex functions:'}
-# re.search(pattern, text)      -> ${isFrench ? 'trouve la première correspondance ou retourne None' : 'finds the first match or returns None'}
-# re.findall(pattern, text)     -> ${isFrench ? 'retourne toutes les correspondances dans une liste' : 'returns all matches as a list'}
-# re.sub(pattern, repl, text)   -> ${isFrench ? 'remplace le texte correspondant' : 'replaces matching text'}
-# re.split(pattern, text)       -> ${isFrench ? 'divise le texte avec un séparateur regex' : 'splits text using a regex separator'}
-# re.fullmatch(pattern, text)   -> ${isFrench ? 'valide toute la chaîne' : 'validates the whole string'}
-#
-${isFrench ? '# Syntaxe regex courante :' : '# Common regex syntax:'}
-# \\d  ${isFrench ? 'chiffre' : 'digit'}, \\D ${isFrench ? 'non-chiffre' : 'non-digit'}, \\w ${isFrench ? 'caractère de mot' : 'word character'}, \\s ${isFrench ? 'espace' : 'whitespace'}
-# + ${isFrench ? 'un ou plusieurs' : 'one or more'}, * ${isFrench ? 'zéro ou plusieurs' : 'zero or more'}, ? ${isFrench ? 'optionnel' : 'optional'}
-# [] ${isFrench ? 'ensemble de caractères' : 'character set'}, () ${isFrench ? 'groupe de capture' : 'capture group'}, ^ ${isFrench ? 'début' : 'start'}, $ ${isFrench ? 'fin' : 'end'}, \\b ${isFrench ? 'limite de mot' : 'word boundary'}
-#
-# EVALUATION ORDER / ORDRE D'ÉVALUATION :
-${isFrench ? '# Python construit d\'abord le motif, évalue le texte d\'entrée, puis appelle la fonction re.' : '# Python builds the pattern first, evaluates the input text, then calls the re function.'}
-#
-${functionName}(...)  ${isFrench ? '# les arguments sont évalués en premier, puis le corps de la fonction s\'exécute' : '# arguments evaluated first, then function body runs'}
-re.findall(pattern, text)  ${isFrench ? '# le motif et le texte sont évalués en premier, puis la recherche s\'exécute' : '# pattern and text evaluated first, then matching runs'}
-return result  ${isFrench ? '# le résultat est évalué, puis renvoyé à l\'appelant' : '# result is evaluated, then sent back to the caller'}
-#
-# EXECUTION ORDER / ORDRE D'EXÉCUTION :
-${isFrench ? "# L'import s'exécute en premier, le bloc def est stocké, et la fonction ne s'exécute que lorsqu'elle est appelée." : '# The import runs first, the def block is stored, and the function runs only when called.'}
-#
-import re
-def ${functionName}(...):  ${isFrench ? '# stocké en mémoire' : '# stored in memory'}
-result = ${functionName}(...)  ${isFrench ? '# appelle la fonction' : '# calls the function'}
-print(result)
-#
-# EXECUTION FLOW / FLUX D'EXÉCUTION :
-${isFrench ? '# La fonction reçoit l\'entrée, applique l\'opération regex et retourne le résultat.' : '# The function receives input, applies the regex operation, and returns the result.'}
-#
-# ${isFrench ? 'Flux regex : motif -> correspondance/remplacement/division/validation -> résultat' : 'Regex flow: pattern -> match/replace/split/validate -> result'}
-"""` : `"""
-${pHead} ${targetExercise.id} :
-#
-# SYNTAX / SYNTAXE :
-${isFrench ? '# La syntaxe décrit les briques Python utilisées dans ce code —' : '# Syntax describes the Python building blocks used in this code —'}
-${isFrench ? '# les mots-clés, opérateurs et structures qui le font fonctionner.' : '# the keywords, operators, and structures that make it work.'}
-#
-def ${functionName}(...):  ${isFrench ? '# définit une fonction avec des paramètres' : '# defines a function with parameters'}
-    result = ...
-    for item in iterable:
-        ...
-    return result  ${isFrench ? '# return renvoie le résultat à l\'appelant' : '# return sends the result back to the caller'}
-#
-# Operators / Opérateurs : = += == != < > <= >= %
-# Built-in functions / Fonctions intégrées : len, range, print()
-#
-# EVALUATION ORDER / ORDRE D'ÉVALUATION :
-${isFrench ? "# L'ordre d'évaluation montre comment Python lit et évalue les expressions." : '# Evaluation Order traces how Python reads and evaluates expressions.'}
-${isFrench ? '# Les expressions internes sont évaluées en premier, puis les expressions externes.' : '# Inner expressions are evaluated first, then the outer ones.'}
-#
-${functionName}(...)  ${isFrench ? '# les arguments sont évalués en premier, puis le corps de la fonction s\'exécute' : '# arguments evaluated first, then function body runs'}
-for item in iterable  ${isFrench ? '# l\'itérable est évalué en premier, puis item reçoit chaque valeur' : '# iterable evaluated first, then item receives each value'}
-condition  ${isFrench ? '# évaluée à True ou False si une instruction if est utilisée' : '# evaluated as True or False if an if statement is used'}
-return result  ${isFrench ? '# le résultat est évalué, puis renvoyé à l\'appelant' : '# result is evaluated, then sent back to the caller'}
-#
-# EXECUTION ORDER / ORDRE D'EXÉCUTION :
-${isFrench ? "# L'ordre d'exécution montre la séquence que Python suit pendant" : '# Execution Order shows the sequence Python follows when running'}
-${isFrench ? "# l'exécution du code. Les blocs 'def' et 'class' sont simplement stockés, pas encore exécutés." : "# the code. 'def' and 'class' blocks are just stored, not run yet."}
-#
-def ${functionName}(...):  ${isFrench ? '# stocké en mémoire, pas encore exécuté' : '# stored in memory, not executed yet'}
-result = ${functionName}(...)  ${isFrench ? '# appelle la fonction' : '# calls the function'}
-print(result)
-#
-# EXECUTION FLOW / FLUX D'EXÉCUTION :
-${isFrench ? "# Le flux d'exécution suit les sauts que Python effectue pendant" : '# Execution Flow tracks where Python jumps during runtime —'}
-${isFrench ? "# l'exécution — quels blocs sont ignorés et lesquels s'exécutent réellement." : '# which blocks are skipped and which actually run.'}
-#
-${isFrench ? '# Les blocs def sont ignorés au moment de l\'exécution —' : '# def blocks are skipped at runtime —'}
-${isFrench ? `# ${functionName} est stocké en mémoire` : `# ${functionName} is stored in memory`}
-${isFrench ? "# L'exécution commence quand la fonction est appelée" : '# Execution starts when the function is called'}
-${isFrench ? '# Boucle : prend un élément de l\'itérable, exécute le corps, répète jusqu\'à épuisement' : '# Loop: takes one item from the iterable, runs body, repeats until done'}
-${isFrench ? '# Branche : si une condition existe, elle choisit quel bloc s\'exécute' : '# Branch: if a condition exists, it picks which block runs'}
-"""`;
-
+            ? '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().'
+            : '# Use a for loop to process values one at a time.';
         const logic = `"""
-${pHead} : ${targetExercise.id}
+Problem: ${targetExercise.id}
 ${prompt}
 """
 #------------------------------------------------------------------------------
-# ${pExpl} :
+# PROBLEM EXPLANATION:
 # ${prompt}
 #
-${demoLine}
-${isRegexPractice ? regexLine1 : regexLine2}
+# This problem demonstrates how to use Python ${conceptName}.
+${isRegexPractice ? '# A regex pattern describes what text to find, replace, split, or validate.' : '# The loop should update a result while it runs, then return the completed value.'}
 #
-# ${codeLogic} :
+# CODE LOGIC:
 ${(targetExercise.breakdown || '').split('\n').map(line => `# ${line}`).join('\n')}
 #------------------------------------------------------------------------------
 
 ${solutionCode}
 
-# ${testCase} :
-${testLine1}
-${testLine2}`;
+# TEST CASE:
+# This test case demonstrates the functionality with example inputs.
+# The output should match the expected result shown in the comments.`;
 
         const requirements = `# ============================================================================
-# ${pExpl} :
+# PROBLEM EXPLANATION:
 # ${prompt}
 #
-${practicing}
+# This problem is for practicing Python ${conceptName}.
 #
-# ${reqHead} :
-${defineFn}
-# ${isRegexPractice ? reqRegex1 : reqFor1}
-# ${isRegexPractice ? reqRegex2 : reqFor2}
-${reqInputs}
-${reqNoHard}
-${reqReturn}
-${reqType}
+# Key Requirements:
+# - Define a function named ${functionName}.
+# - ${isRegexPractice ? "Import and use Python's re module." : 'Use at least one for loop.'}
+# - ${isRegexPractice ? 'Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.' : 'Build the result with loop logic.'}
+# - Use the input values from the function parameters.
+# - Do not hard-code the example output.
+# - Return the final answer from the function.
+# - Keep the result type consistent with the examples.
 # ============================================================================
 
 """
-${pHead} : ${targetExercise.id}
+Problem: ${targetExercise.id}
 ${prompt}
 """
 
-# ${solExpl} :
-${solLine1}
-# ${isRegexPractice ? solRegex : solFor}
-${solLine2}
+# SOLUTION EXPLANATION:
+# This solution defines a function that encapsulates the required logic.
+${isRegexPractice ? '# The regex pattern decides which text is matched, captured, replaced, or validated.' : '# The for loop repeats once for each item in the input data.'}
+# The function returns the completed value after the operation has finished.
 
 ${solutionCode}`;
 
-        return { logic, requirements, syntax };
+        const syntax = isRegexPractice ? `"""
+Problem ${targetExercise.id}:
+#
+# SYNTAX:
+# Syntax describes the Python building blocks used in this code.
+#
+import re  # imports Python's regular expression module
+
+def ${functionName}(...):  # defines a function with parameters
+    pattern = r"..."
+    ${operationLine}
+    return result
+#
+# Common regex functions:
+# re.search(pattern, text)      -> finds the first match or returns None
+# re.findall(pattern, text)     -> returns all matches as a list
+# re.sub(pattern, repl, text)   -> replaces matching text
+# re.split(pattern, text)       -> splits text using a regex separator
+# re.fullmatch(pattern, text)   -> validates the whole string
+#
+# Common regex syntax:
+# \\d  digit, \\D non-digit, \\w word character, \\s whitespace
+# + one or more, * zero or more, ? optional
+# [] character set, () capture group, ^ start, $ end, \\b word boundary
+#
+# EVALUATION ORDER:
+# Python builds the pattern first, evaluates the input text, then calls the re function.
+#
+${functionName}(...)  # arguments evaluated first, then function body runs
+re.findall(pattern, text)  # pattern and text evaluated first, then matching runs
+return result  # result is evaluated, then sent back to the caller
+#
+# EXECUTION ORDER:
+# The import runs first, the def block is stored, and the function runs only when called.
+#
+import re
+def ${functionName}(...):  # stored in memory
+result = ${functionName}(...)  # calls the function
+print(result)
+#
+# EXECUTION FLOW:
+# The function receives input, applies the regex operation, and returns the result.
+#
+# Regex flow: pattern -> match/replace/split/validate -> result
+"""` : `"""
+Problem ${targetExercise.id}:
+#
+# SYNTAX:
+# Syntax describes the Python building blocks used in this code —
+# the keywords, operators, and structures that make it work.
+#
+def ${functionName}(...):  # defines a function with parameters
+    result = ...
+    for item in iterable:
+        ...
+    return result  # return sends the result back to the caller
+#
+# Operators: = += == != < > <= >= %
+# Built-in functions: len, range, print()
+#
+# EVALUATION ORDER:
+# Evaluation Order traces how Python reads and evaluates expressions.
+# Inner expressions are evaluated first, then the outer ones.
+#
+${functionName}(...)  # arguments evaluated first, then function body runs
+for item in iterable  # iterable evaluated first, then item receives each value
+condition  # evaluated as True or False if an if statement is used
+return result  # result is evaluated, then sent back to the caller
+#
+# EXECUTION ORDER:
+# Execution Order shows the sequence Python follows when running
+# the code. 'def' and 'class' blocks are just stored, not run yet.
+#
+def ${functionName}(...):  # stored in memory, not executed yet
+result = ${functionName}(...)  # calls the function
+print(result)
+#
+# EXECUTION FLOW:
+# Execution Flow tracks where Python jumps during runtime —
+# which blocks are skipped and which actually run.
+#
+# def blocks are skipped at runtime — ${functionName} is stored in memory
+# Execution starts when the function is called
+# Loop: takes one item from the iterable, runs body, repeats until done
+# Branch: if a condition exists, it picks which block runs
+"""`;
+
+        return {
+            logic: localizeSolutionDocText(logic, lang),
+            requirements: localizeSolutionDocText(requirements, lang),
+            syntax: localizeSolutionDocText(syntax, lang),
+        };
     };
 
     const loadSolutionFiles = useCallback(async (exerciseId: number) => {
         const targetExercise = getExerciseById(exerciseId);
         if (targetExercise && exerciseId > 2000) {
-            const docs = createGeneratedPracticeDocs(targetExercise);
+            const docs = createGeneratedPracticeDocs(targetExercise, appLang);
             setLogicContent(docs.logic);
             setRequirementsContent(docs.requirements);
             setSyntaxContent(docs.syntax);
@@ -14825,44 +14804,23 @@ ${solutionCode}`;
         }
 
         try {
-            const isFrench = appLang === 'fr';
-            const langSuffix = isFrench ? '_fr' : '';
-            const logicFile = `level1_${filePrefix}_codelogic${langSuffix}.py`;
-            const reqFile1 = `level1_${filePrefix}_requirements${langSuffix}.py`;
-            const reqFile2 = `level1_${filePrefix}_requirements${langSuffix}.py`;
-            const syntaxFile = `level1_${filePrefix}_syntax${langSuffix}.py`;
-            const reqFileOld = `level1_${filePrefix}_requirements..py`;
+            const logicFile = `level1_${filePrefix}_codelogic.py`;
+            const reqFile1 = `level1_${filePrefix}_requirements.py`;
+            const reqFile2 = `level1_${filePrefix}_requirements..py`;
+            const syntaxFile = `level1_${filePrefix}_syntax.py`;
 
             // Handle GitHub Pages subdirectory
             const isGitHubPages = window.location.hostname === 'llomj.github.io';
             const basePath = isGitHubPages ? '/python_app' : '';
             const cacheBuster = `?cb=${Date.now()}`;
 
-            const pHead = isFrench ? 'Problème' : 'Problem';
-            const replaceEnglishDesc = (content: string): string => {
-                if (!isFrench) return content;
-                const frDesc = EXERCISES_FR[exerciseId];
-                if (!frDesc) return content;
-                // Find the first separator (# --- or # ...EXPLICATION...) and replace the header
-                const firstSep = content.search(/\n#-{3,}|\n# [A-Z]+ EXPLICATION|\n# [A-Z]+ PROBL[ÈE]ME|\n# PROBLEM EXPLANATION/);
-                if (firstSep === -1) return `"""\n${pHead} : ${exerciseId}\n${frDesc}\n"""\n\n${content}`;
-                const header = content.substring(0, firstSep).trim();
-                const rest = content.substring(firstSep);
-                const stripped = header.replace(/""".*?"""/s, '').trim();
-                if (stripped.length < 10) {
-                    return `"""\n${pHead} : ${exerciseId}\n${frDesc}\n"""\n\n#${rest.substring(1)}`;
-                }
-                return `"""\n${pHead} : ${exerciseId}\n${frDesc}\n"""\n\n${rest}`;
-            };
-
             // Fetch and parse logic file
             try {
                 const logicResponse = await fetch(`${basePath}/${logicFile}${cacheBuster}`);
                 if (logicResponse.ok) {
                     const logicText = await logicResponse.text();
-                    let problemLogic = extractProblemContent(logicText, exerciseId);
-                    if (isFrench) problemLogic = replaceEnglishDesc(problemLogic);
-                    setLogicContent(problemLogic || '');
+                    const problemLogic = extractProblemContent(logicText, exerciseId);
+                    setLogicContent(localizeSolutionDocText(problemLogic || '', appLang));
                 } else {
                     setLogicContent('');
                     console.warn(`Logic file not found: ${logicFile}`);
@@ -14872,20 +14830,19 @@ ${solutionCode}`;
                 console.warn(`Error loading logic file: ${err.message}`);
             }
 
-            // Fetch and parse requirements file
+            // Fetch and parse requirements file (try both variations)
             try {
                 let reqResponse = await fetch(`${basePath}/${reqFile1}${cacheBuster}`);
-                if (!reqResponse.ok && !isFrench) {
-                    reqResponse = await fetch(`${basePath}/${reqFileOld}${cacheBuster}`);
+                if (!reqResponse.ok) {
+                    reqResponse = await fetch(`${basePath}/${reqFile2}${cacheBuster}`);
                 }
                 if (reqResponse.ok) {
                     const reqText = await reqResponse.text();
-                    let problemReq = extractProblemContent(reqText, exerciseId);
-                    if (isFrench) problemReq = replaceEnglishDesc(problemReq);
-                    setRequirementsContent(problemReq || '');
+                    const problemReq = extractProblemContent(reqText, exerciseId);
+                    setRequirementsContent(localizeSolutionDocText(problemReq || '', appLang));
                 } else {
                     setRequirementsContent('');
-                    console.warn(`Requirements file not found: ${reqFile1}`);
+                    console.warn(`Requirements file not found: ${reqFile1} or ${reqFile2}`);
                 }
             } catch (err) {
                 setRequirementsContent('');
@@ -14897,9 +14854,8 @@ ${solutionCode}`;
                 const syntaxResponse = await fetch(`${basePath}/${syntaxFile}${cacheBuster}`);
                 if (syntaxResponse.ok) {
                     const syntaxText = await syntaxResponse.text();
-                    let problemSyntax = extractProblemContent(syntaxText, exerciseId);
-                    if (isFrench) problemSyntax = replaceEnglishDesc(problemSyntax);
-                    setSyntaxContent(problemSyntax || '');
+                    const problemSyntax = extractProblemContent(syntaxText, exerciseId);
+                    setSyntaxContent(localizeSolutionDocText(problemSyntax || '', appLang));
                 } else {
                     setSyntaxContent('');
                     console.warn(`Syntax file not found: ${syntaxFile}`);
@@ -14920,7 +14876,7 @@ ${solutionCode}`;
         if (showModal === 'solution') {
             loadSolutionFiles(exercise.id);
         }
-    }, [showModal, exercise.id, loadSolutionFiles]);
+    }, [showModal, exercise.id, appLang, loadSolutionFiles]);
 
     const rate = currentStats.shots > 0 ? ((currentStats.success / currentStats.shots) * 100).toFixed(2) : '0.00';
 
@@ -15582,18 +15538,18 @@ ${solutionCode}`;
                                 className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] transition-colors"
                                 style={{ backgroundColor: editorColors.background, color: toolPanelColors.toggleText }}
                             >
-                                <span>{showActionPanel ? t('output.hideTools', appLang) : t('output.showTools', appLang)}</span>
+                                <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
                                 {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
                             </button>
                             {showActionPanel && (
                                 <div className="flex justify-center gap-2 sm:gap-3 px-2 pb-3 animate-in fade-in slide-in-from-top-1 duration-200">
-                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description={t('tool.info', appLang)} onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description={t('tool.sol', appLang)} onClick={() => setShowModal('solution')} />
-                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description={t('tool.ai', appLang)} onClick={handleAiHint} />
-                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description={t('tool.custom', appLang)} onClick={() => setShowModal('customize')} />
-                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description={t('tool.win', appLang)} onClick={handleMarkSuccess} />
-                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description={t('tool.failed', appLang)} onClick={handleMarkFailed} />
-                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description={t('tool.reset', appLang)} onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
+                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => setShowModal('solution')} />
+                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={handleAiHint} />
+                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => setShowModal('customize')} />
+                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={handleMarkSuccess} />
+                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={handleMarkFailed} />
+                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
                                 </div>
                             )}
                         </div>
@@ -15720,7 +15676,7 @@ ${solutionCode}`;
                                     style={{ borderColor: panelColors.border, backgroundColor: hexToRgba(editorColors.panelBackground, 0.92), touchAction: 'pan-x' }}
                                 >
                                     <div className="flex w-max min-w-full gap-4 whitespace-nowrap pr-4">
-                                        <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label={t('solution.code', appLang)} />
+                                        <TabButton active={solutionTab === 'code'} onClick={() => setSolutionTab('code')} label={t('solution.solution', appLang)} />
                                         <TabButton active={solutionTab === 'logic'} onClick={() => setSolutionTab('logic')} label={t('solution.logic', appLang)} />
                                         <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label={t('solution.requirements', appLang)} />
                                         <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label={t('solution.syntax', appLang)} />
@@ -15733,10 +15689,10 @@ ${solutionCode}`;
                                     {solutionTab === 'code' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={appLang === 'fr' ? frenchCodeDisplay : displaySolution} />
+                                                <CopyButton text={displaySolution} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
-                                                <CodeMirror value={appLang === 'fr' ? frenchCodeDisplay : displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
+                                                <CodeMirror value={displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                             </div>
                                         </div>
                                     )}
@@ -15766,7 +15722,7 @@ ${solutionCode}`;
                                                     <CodeMirror value={requirementsContent} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        {t('solution.searchingRequirements', appLang)}
+                                                        {t('solution.searchingReqs', appLang)}
                                                     </div>
                                                 )}
                                             </div>
@@ -15798,37 +15754,37 @@ ${solutionCode}`;
                                                     <SyntaxDocumentationPanel content={conceptDocContent} editorColors={editorColors} panelColors={panelColors} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        {t('solution.noDoc', appLang)}
+                                                        No concept documentation available.
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
                                     )}
                                 </div>
-                                    <button
-                                        onClick={() => setShowModal('none')}
-                                        className="mt-3 flex w-full flex-shrink-0 items-center justify-center rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
-                                        style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
-                                        aria-label={t('solution.backToApp', appLang)}
-                                    >
-                                        {t('solution.backToApp', appLang)}
-                                    </button>
+                                <button
+                                    onClick={() => setShowModal('none')}
+                                    className="mt-3 flex w-full flex-shrink-0 items-center justify-center rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
+                                    style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
+                                    aria-label="Back to main app"
+                                >
+                                    Back to App
+                                </button>
                             </div>
                         )}
                         {showModal === 'hint' && (
                             <div className="flex h-full min-h-0 flex-col gap-3">
-                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('aiReview.title', appLang)}</h2>
+                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>AI Review</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto -mx-1 px-1 space-y-3">
                                     <>
                                             {aiReviewRunning && (
                                                 <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
-                                                    {t('aiReview.running', appLang)}
+                                                    Local model is checking this exact problem, code, output, and grader result...
                                                 </div>
                                             )}
                                             {/* Problem section */}
                                             {exercise && (
                                                 <div className="rounded-2xl border p-3" style={{ borderColor: 'rgba(88, 118, 160, 0.25)', backgroundColor: 'rgba(8, 18, 34, 0.4)' }}>
-                                                    <div className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: countRowColors.rate }}>{t('preview.problem', appLang, exercise.id)}</div>
+                                                    <div className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: countRowColors.rate }}>Problem {exercise.id}</div>
                                                     <p className="text-[13px] leading-relaxed text-gray-200">{getExerciseDescription(exercise, appLang)}</p>
                                                 </div>
                                             )}
@@ -16317,17 +16273,17 @@ ${solutionCode}`;
                                                     className="mb-3 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em]"
                                                     style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), color: toolPanelColors.toggleText }}
                                                 >
-                                                    <span>{t('output.hideTools', appLang)}</span>
+                                                    <span>Hide Tools</span>
                                                     <ChevronDown size={14} />
                                                 </div>
                                                 <div className="flex flex-wrap justify-center gap-2">
-                                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description={t('tool.info', appLang)} onClick={() => undefined} />
-                                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description={t('tool.sol', appLang)} onClick={() => undefined} />
-                                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description={t('tool.ai', appLang)} onClick={() => undefined} />
-                                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description={t('tool.custom', appLang)} onClick={() => undefined} />
-                                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description={t('tool.win', appLang)} onClick={() => undefined} />
-                                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description={t('tool.failed', appLang)} onClick={() => undefined} />
-                                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description={t('tool.reset', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => undefined} />
+                                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => undefined} />
+                                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={() => undefined} />
+                                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => undefined} />
+                                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={() => undefined} />
+                                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={() => undefined} />
+                                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => undefined} />
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -17305,7 +17261,7 @@ ${solutionCode}`;
                                     </div>
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
-                                        <p className="font-bold text-white text-xs">{t('aiReview.title', appLang)}</p>
+                                        <p className="font-bold text-white text-xs">AI Reviewer</p>
                                         <p>Tap the top-left <strong>Python AI</strong> icon to ask general Python questions. For code review, include the problem, your code, and the output in the same question.</p>
                                     </div>
 

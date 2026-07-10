@@ -188,7 +188,7 @@ export const answerProblemQuestionWithWebLlm = async (question: string, request:
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a Python tutor. Answer the user question clearly with short examples. If asked for a list (all methods, all built-ins etc), give a numbered list. If asked what something does, explain it with a 1-3 line example. Be direct and concise. Do not return JSON.' },
+            { role: 'system', content: 'You are a Python tutor. Answer the user question clearly with short examples. If asked for a list (all methods, all built-ins etc), give a numbered list. If asked what something does, explain it with a 1-3 line example. For method-vs-built-in comparisons such as list.sort() vs sorted(), list.reverse() vs reversed(), append(), update(), add(), or methods returning None, explicitly explain: method or built-in, whether it mutates the original object, what it returns, and a short code example. Be direct and concise. Do not return JSON.' },
             { role: 'user', content: buildTutorPrompt(question, request) },
         ],
         temperature: 0.2,
@@ -201,7 +201,7 @@ export const answerGeneralPythonWithWebLlm = async (question: string, modelId: s
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a Python expert answering a general Python question. Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If you are not 100% confident about the answer, respond with exactly "I cannot answer that" — never guess, never make up syntax, never invent functions. Do not return JSON.' },
+            { role: 'system', content: 'You are a Python expert answering a general Python question. Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If the user asks the difference between any method and any built-in function, compare them side by side: method/function, mutates original or not, return value, common mistake, and code example. Important rule: mutating methods such as list.append(), list.extend(), list.sort(), list.reverse(), dict.update(), and set.add() usually modify the object and return None; built-ins such as sorted() and reversed() leave the original unchanged and return a new result or iterator. If you are not 100% confident about the answer, respond with exactly "I cannot answer that" — never guess, never make up syntax, never invent functions. Do not return JSON.' },
             { role: 'user', content: question },
         ],
         temperature: 0.2,
@@ -225,6 +225,7 @@ export const answerGeneralPythonWithWebLlmConversation = async (
                 'You are an interactive Python tutor in a conversation.',
                 'Be clear, correct, and give code examples.',
                 'If the user says "expand", "more", "detail", "examples", or similar follow-ups, expand on your previous answer.',
+                'For method-vs-built-in comparisons, always state whether each option mutates the original object and what each option returns. Explain why mutating methods commonly return None.',
                 'If the question is ambiguous, ASK a clarifying question instead of guessing.',
                 'If you are not 100% confident, respond with exactly "I cannot answer that" — never guess or invent.',
                 'Do not return JSON.',
