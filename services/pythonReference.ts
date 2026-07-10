@@ -829,15 +829,10 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   const mutationAnswer = buildMutationComparisonAnswer(question);
   if (mutationAnswer) return mutationAnswer;
 
-  // ── Bare word / short phrase lookup ───────────────────────────────────
+  // ── Bare word / short phrase lookup (concept library first) ──────────
   const wordCount = q.split(/\s+/).length;
   if (wordCount <= 4) {
-    const bareEntry = lookup(q, preferredMethodType);
-    if (bareEntry) {
-      let label = bareEntry.type.charAt(0).toUpperCase() + bareEntry.type.slice(1);
-      if (bareEntry.type === 'builtin') label = 'Built-in function';
-      return `**${label}: \`${bareEntry.name}()\`**\n\n${bareEntry.desc}\n\n\`\`\`python\n${bareEntry.example}\n\`\`\``;
-    }
+    // Concept library takes priority for bare-word definitions
     const bareConcept = lookupConcept(q);
     if (bareConcept.source === 'entry' && bareConcept.entry) {
       const e = bareConcept.entry;
@@ -845,6 +840,13 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
     }
     if (bareConcept.source === 'category') {
       return `**${q}**\n\n${bareConcept.categoryFallback.intermediate}\n\n**Deep Dive:**\n${bareConcept.categoryFallback.advanced}`;
+    }
+    // Fall back to method/builtin reference
+    const bareEntry = lookup(q, preferredMethodType);
+    if (bareEntry) {
+      let label = bareEntry.type.charAt(0).toUpperCase() + bareEntry.type.slice(1);
+      if (bareEntry.type === 'builtin') label = 'Built-in function';
+      return `**${label}: \`${bareEntry.name}()\`**\n\n${bareEntry.desc}\n\n\`\`\`python\n${bareEntry.example}\n\`\`\``;
     }
   }
 
@@ -925,13 +927,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
     if (dataTypeConcept && /\b(?:data type|list|dict(?:ionary)?|tuple|set|string)\b/i.test(normalizedNameQ)) {
       return `**${dataTypeConcept.name}**\n\n${dataTypeConcept.desc}\n\n\`\`\`python\n${dataTypeConcept.example}\n\`\`\``;
     }
-    const entry = lookup(rawName, preferredMethodType);
-    if (entry) {
-      let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
-      if (entry.type === 'builtin') label = 'Built-in function';
-      return `**${label}: \`${entry.name}()\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
-    }
-    // Concept library fallback
+    // Concept library takes priority for definitions
     const cl2 = lookupConcept(rawName);
     if (cl2.source === 'entry' && cl2.entry) {
       const e = cl2.entry;
@@ -940,6 +936,13 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
     if (cl2.source === 'category') {
       return `**${rawName}**\n\n${cl2.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl2.categoryFallback.advanced}`;
     }
+    // Fall back to method/builtin reference
+    const entry = lookup(rawName, preferredMethodType);
+    if (entry) {
+      let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
+      if (entry.type === 'builtin') label = 'Built-in function';
+      return `**${label}: \`${entry.name}()\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
+    }
   }
 
   // ── Direct "what is X" lookup ───────────────────────────────────────
@@ -947,7 +950,16 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   const simpleMatch = simpleQ.match(/what (is|are)\s*(a |an |the )?(\w[\w ]{0,30}?\w|\w)/i);
   if (simpleMatch) {
     let rawName = simpleMatch[3].toLowerCase().trim().replace(/\s+/g, ' ').replace(/^(a |an |the )/i, '');
-    // Try concept match first (data types, etc.)
+    // Concept library takes priority
+    const cl = lookupConcept(rawName);
+    if (cl.source === 'entry' && cl.entry) {
+      const e = cl.entry;
+      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}`;
+    }
+    if (cl.source === 'category') {
+      return `**${rawName}**\n\n${cl.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl.categoryFallback.advanced}`;
+    }
+    // Then try reference entries
     const conceptEntry = allReferenceEntries().find(e => {
       if (e.type !== 'concept') return false;
       const normalized = e.name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ');
@@ -962,15 +974,6 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
       let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
       if (entry.type === 'builtin') label = 'Built-in function';
       return `**${label}: \`${entry.name}\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
-    }
-    // Concept library fallback
-    const cl = lookupConcept(rawName);
-    if (cl.source === 'entry' && cl.entry) {
-      const e = cl.entry;
-      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}`;
-    }
-    if (cl.source === 'category') {
-      return `**${rawName}**\n\n${cl.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl.categoryFallback.advanced}`;
     }
   }
 
