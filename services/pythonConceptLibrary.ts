@@ -2779,7 +2779,21 @@ function summarizeCatalogTerm(term: string, definition: CategoryDefinition): str
 // ── PART 3: MASTER ENTRIES MAP ─────────────────────────────────────────────────
 const ENTRIES = new Map<string, ConceptEntry>();
 
-function entry(e: ConceptEntry): void { ENTRIES.set(e.name.toLowerCase(), e); for (const a of e.aliases) ENTRIES.set(a.toLowerCase(), e); }
+const normalizeCatalogAlias = (value: string): string => {
+  const trimmed = value.trim();
+  const quote = trimmed[0];
+  if ((quote === '"' || quote === "'") && trimmed.endsWith(quote)) {
+    return trimmed.slice(1, -1).trim();
+  }
+  return trimmed;
+};
+
+function entry(e: ConceptEntry): void {
+  const aliases = e.aliases.map(normalizeCatalogAlias).filter(Boolean);
+  const normalizedEntry = { ...e, aliases };
+  ENTRIES.set(e.name.toLowerCase(), normalizedEntry);
+  for (const alias of aliases) ENTRIES.set(alias.toLowerCase(), normalizedEntry);
+}
 
 // ── Core Fundamentals ──────────────────────────────────────────────────────────
 

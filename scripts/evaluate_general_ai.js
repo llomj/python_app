@@ -76,12 +76,25 @@ try {
     ['sort vs sorted', ['Sorts the list in place', 'Returns a new sorted list', 'Mutates object']],
     ['difference between list and tuple', ['list', 'tuple', 'Criterion']],
     ['compare reverse with reversed', ['Reverses the list in place', 'reverse iterator', 'Sources']],
-    ['difference between dictionary and set', ['dict', 'set', 'Purpose']],
+    ['difference between dictionary and set', ['stores pairs of keys and values', 'unordered collection of unique items', 'Purpose']],
   ];
   for (const [question, fragments] of comparisonCases) {
     const answer = knowledge.answerPythonKnowledgeComparison(question, 'en') || '';
     for (const fragment of fragments) {
       if (!answer.toLowerCase().includes(fragment.toLowerCase())) failures.push(`Comparison ${JSON.stringify(question)} missing ${JSON.stringify(fragment)}`);
+    }
+  }
+
+  const everydayAliases = [
+    ['dictionary', 'dict'],
+    ['array', 'list'],
+    ['immutable list', 'tuple'],
+    ['text', 'string'],
+  ];
+  for (const [alias, expectedCanonicalName] of everydayAliases) {
+    const resolution = knowledge.resolvePythonKnowledge(alias);
+    if (!resolution.record || resolution.record.canonicalName !== expectedCanonicalName || resolution.record.confidence === 'categorized') {
+      failures.push(`Everyday alias ${JSON.stringify(alias)} did not resolve to curated ${JSON.stringify(expectedCanonicalName)}`);
     }
   }
 
