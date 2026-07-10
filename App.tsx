@@ -1568,6 +1568,16 @@ const RANKS: Rank[] = [
     { name: 'God Whale', icon: '👑🐋', minScore: 1000 },
 ];
 
+interface StarData {
+    x: number;
+    y: number;
+    speed: number;
+    size: number;
+    opacity: number;
+}
+
+const STAR_COUNTS = [8, 13, 20, 28, 36, 45, 55, 65, 80, 100, 130];
+
 const getUserRank = (statsByMode: StatsByMode): Rank => {
     const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
     const totalWins = Object.values(statsByMode).reduce((sum, s) => sum + s.success, 0);
@@ -11638,6 +11648,7 @@ const App: React.FC = () => {
     const [idLogSectionOpen, setIdLogSectionOpen] = useState(false);
     const [offlineAiSectionOpen, setOfflineAiSectionOpen] = useState(false);
     const [appCacheSectionOpen, setAppCacheSectionOpen] = useState(false);
+    const [languageSectionOpen, setLanguageSectionOpen] = useState(false);
     const [aiHintText, setAiHintText] = useState<string>('');
     const [latestAiReviewRequest, setLatestAiReviewRequest] = useState<AiReviewRequest | null>(null);
     const [latestAiReviewResult, setLatestAiReviewResult] = useState<AiReviewResult | null>(null);
@@ -11898,6 +11909,9 @@ const App: React.FC = () => {
     const keyboardSoundRef = useRef(keyboardSound);
     const resultSoundRef = useRef(resultSound);
     const keyboardAudioRef = useRef<AudioContext | null>(null);
+    const starCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const starsRef = useRef<StarData[]>([]);
+    const starAnimFrameRef = useRef(0);
     const lastKeyboardFeedbackRef = useRef(0);
     const keyboardMainScrollRef = useRef<number | null>(null);
     const keyboardRestoreTimersRef = useRef<number[]>([]);
@@ -11917,6 +11931,7 @@ const App: React.FC = () => {
     const selectedModeLabel = getModeLabel(difficultyMode, appLang);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
+    const rankIndex = useMemo(() => RANKS.indexOf(currentModeRank), [currentModeRank]);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
     const averageRank = useMemo(() => {
         const modes = Object.values(statsByMode).filter(s => s.shots > 0);
@@ -12090,6 +12105,91 @@ const App: React.FC = () => {
             // Result audio is optional and may be blocked until the browser allows sound.
         }
     }, []);
+
+    const playStarChime = useCallback(() => {
+        try {
+            const AudioCtor = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioCtor) return;
+            const audio = keyboardAudioRef.current ?? new AudioCtor();
+            keyboardAudioRef.current = audio;
+            if (audio.state === 'suspended') audio.resume();
+            const now = audio.currentTime;
+            const freq = 1300 + Math.random() * 900;
+            const osc = audio.createOscillator();
+            const gain = audio.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.035, now + 0.006);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+            osc.connect(gain);
+            gain.connect(audio.destination);
+            osc.start(now);
+            osc.stop(now + 0.12);
+        } catch {}
+    }, []);
+
+    useEffect(() => {
+        const canvas = starCanvasRef.current;
+        if (!canvas) return;
+        const parent = canvas.parentElement;
+        if (!parent) return;
+        const resize = () => {
+            canvas.width = parent.clientWidth;
+            canvas.height = parent.clientHeight;
+        };
+        resize();
+        const starCount = STAR_COUNTS[Math.min(rankIndex, STAR_COUNTS.length - 1)];
+        starsRef.current = [];
+        for (let i = 0; i < starCount; i++) {
+            starsRef.current.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                speed: 25 + Math.random() * 45,
+                size: 1.2 + Math.random() * 2.2,
+                opacity: 0.3 + Math.random() * 0.7,
+            });
+        }
+        const chimeThreshold = Math.max(1, 8 - Math.floor(rankIndex / 2));
+        let chimeCounter = 0;
+        let lastTime = performance.now();
+        const animate = (time: number) => {
+            const dt = Math.min((time - lastTime) / 1000, 0.1);
+            lastTime = time;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const star of starsRef.current) {
+                star.y += star.speed * dt;
+                if (star.y > canvas.height + 10) {
+                    star.y = -10 - Math.random() * 40;
+                    star.x = Math.random() * canvas.width;
+                    star.opacity = 0.3 + Math.random() * 0.7;
+                    chimeCounter++;
+                    if (chimeCounter >= chimeThreshold && resultSoundRef.current) {
+                        chimeCounter = 0;
+                        playStarChime();
+                    }
+                }
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.shadowColor = 'rgba(255, 255, 200, 0.5)';
+                ctx.shadowBlur = star.size * 5;
+                ctx.fillStyle = star.size > 2.5
+                    ? `rgba(255, 240, 200, ${star.opacity})`
+                    : `rgba(200, 220, 255, ${star.opacity * 0.8})`;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+            starAnimFrameRef.current = requestAnimationFrame(animate);
+        };
+        starAnimFrameRef.current = requestAnimationFrame(animate);
+        window.addEventListener('resize', resize);
+        return () => {
+            cancelAnimationFrame(starAnimFrameRef.current);
+            window.removeEventListener('resize', resize);
+        };
+    }, [rankIndex, playStarChime]);
 
     const preserveEditorKeyboardPosition = useCallback(() => {
         const mainScroller = mainScrollRef.current;
@@ -15100,6 +15200,12 @@ print(result)
             className="h-screen text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
             style={{ backgroundColor: '#050c18' }}
         >
+            <canvas
+                ref={starCanvasRef}
+                className="absolute inset-0 w-full h-full pointer-events-none select-none"
+                style={{ opacity: 0.65, zIndex: 0 }}
+                aria-hidden="true"
+            />
             <div
                 ref={headerRef}
                 className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2"
@@ -16470,25 +16576,33 @@ print(result)
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
-                                    <div className="flex items-center justify-between gap-2">
+                                    <button
+                                        onClick={() => setLanguageSectionOpen(prev => !prev)}
+                                        className="mb-0 flex w-full items-center justify-between gap-2 text-left"
+                                    >
                                         <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-gray-200">
                                             <Languages size={14} className="text-[#22c55e]" />
                                             {t('settings.language', appLang)}
                                         </h3>
-                                    </div>
-                                    <p className="mt-1 mb-2 text-[10px] text-gray-400">{t('settings.languageDesc', appLang)}</p>
-                                    <div className="flex gap-2">
-                                        {SUPPORTED_LANGUAGES.map(l => (
-                                            <button
-                                                key={l}
-                                                onClick={() => changeLang(l)}
-                                                className="flex-1 rounded-xl border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
-                                                style={appLang === l ? { borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                            >
-                                                {l === 'en' ? 'English' : 'Français'}
-                                            </button>
-                                        ))}
-                                    </div>
+                                        <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: languageSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {languageSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <p className="mb-2 text-[10px] text-gray-400">{t('settings.languageDesc', appLang)}</p>
+                                            <div className="flex gap-2">
+                                                {SUPPORTED_LANGUAGES.map(l => (
+                                                    <button
+                                                        key={l}
+                                                        onClick={() => changeLang(l)}
+                                                        className="flex-1 rounded-xl border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                                        style={appLang === l ? { borderColor: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.15)', color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                                    >
+                                                        {l === 'en' ? 'English' : 'Français'}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
