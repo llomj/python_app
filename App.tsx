@@ -10674,7 +10674,7 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
     const panelAlpha = Math.max(0.18, Math.min(0.78, panelColors.alpha / 100));
 
     return (
-        <div className="space-y-3 p-2.5 text-xs" style={{ color: editorColors.text }}>
+        <div className="flex h-full flex-col space-y-3 overflow-y-auto p-2.5 text-xs" style={{ color: editorColors.text }}>
             {sections.map((section, sectionIndex) => {
                 const accent = sectionAccents[sectionIndex % sectionAccents.length] || editorColors.keyword;
                 const groups = groupDocLines(section.lines);
@@ -10697,7 +10697,7 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
                             <h3 className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: accent }}>
                                 {formatDocSectionTitle(section.title)}
                             </h3>
-                            <div className="max-h-[34vh] space-y-2 overflow-y-auto pr-1 [-webkit-overflow-scrolling:touch]">
+                            <div className="max-h-[68vh] space-y-2 overflow-y-auto pr-1 [-webkit-overflow-scrolling:touch]">
                                 {groups.map((group, index) => {
                                     if (codeHeavy) {
                                         if (index === 0) {
