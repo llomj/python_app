@@ -11913,6 +11913,7 @@ const App: React.FC = () => {
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
+    const [rankUpCelebration, setRankUpCelebration] = useState(() => localStorage.getItem('python_rank_up_celebration') !== 'false');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
     const [logExpanded, setLogExpanded] = useState(false);
     const [showSnippetSaveInput, setShowSnippetSaveInput] = useState(false);
@@ -12100,10 +12101,8 @@ const App: React.FC = () => {
     const keyboardHapticsRef = useRef(keyboardHaptics);
     const keyboardSoundRef = useRef(keyboardSound);
     const resultSoundRef = useRef(resultSound);
+    const rankUpCelebrationRef = useRef(rankUpCelebration);
     const keyboardAudioRef = useRef<AudioContext | null>(null);
-    const starCanvasRef = useRef<HTMLCanvasElement | null>(null);
-    const starsRef = useRef<StarData[]>([]);
-    const starAnimFrameRef = useRef(0);
     const lastKeyboardFeedbackRef = useRef(0);
     const keyboardMainScrollRef = useRef<number | null>(null);
     const keyboardRestoreTimersRef = useRef<number[]>([]);
@@ -12123,7 +12122,11 @@ const App: React.FC = () => {
     const selectedModeLabel = getModeLabel(difficultyMode, appLang);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
-    const rankIndex = useMemo(() => RANKS.indexOf(currentModeRank), [currentModeRank]);
+    const prevRankRef = useRef<Rank>(currentModeRank);
+    const celebrationCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const celebrationAnimRef = useRef(0);
+    const celebrationStarsRef = useRef<StarData[]>([]);
+    const [celebration, setCelebration] = useState<{ rankIndex: number; rankName: string; rankIcon: string; modeLabel: string } | null>(null);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
     const averageRank = useMemo(() => {
         const modes = Object.values(statsByMode).filter(s => s.shots > 0);
@@ -12221,6 +12224,11 @@ const App: React.FC = () => {
     }, [resultSound]);
 
     useEffect(() => {
+        rankUpCelebrationRef.current = rankUpCelebration;
+        localStorage.setItem('python_rank_up_celebration', String(rankUpCelebration));
+    }, [rankUpCelebration]);
+
+    useEffect(() => {
         localStorage.setItem('python_plain_mode', String(plainMode));
     }, [plainMode]);
 
@@ -12298,7 +12306,7 @@ const App: React.FC = () => {
         }
     }, []);
 
-    const playStarChime = useCallback(() => {
+    const playCelebrationMelody = useCallback((rankIdx: number) => {
         try {
             const AudioCtor = window.AudioContext || (window as any).webkitAudioContext;
             if (!AudioCtor) return;
@@ -12306,44 +12314,63 @@ const App: React.FC = () => {
             keyboardAudioRef.current = audio;
             if (audio.state === 'suspended') audio.resume();
             const now = audio.currentTime;
-            const freq = 1300 + Math.random() * 900;
-            const osc = audio.createOscillator();
-            const gain = audio.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.exponentialRampToValueAtTime(0.035, now + 0.006);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
-            osc.connect(gain);
-            gain.connect(audio.destination);
-            osc.start(now);
-            osc.stop(now + 0.12);
+            const baseNotes = [523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77, 1046.5];
+            const noteCount = Math.min(rankIdx + 3, baseNotes.length);
+            for (let i = 0; i < noteCount; i++) {
+                const start = now + i * 0.12;
+                const osc = audio.createOscillator();
+                const gain = audio.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(baseNotes[i], start);
+                gain.gain.setValueAtTime(0.0001, start);
+                gain.gain.exponentialRampToValueAtTime(0.055, start + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.18);
+                osc.connect(gain);
+                gain.connect(audio.destination);
+                osc.start(start);
+                osc.stop(start + 0.22);
+            }
         } catch {}
     }, []);
 
     useEffect(() => {
-        const canvas = starCanvasRef.current;
+        const currIdx = RANKS.indexOf(currentModeRank);
+        const prevIdx = RANKS.indexOf(prevRankRef.current);
+        prevRankRef.current = currentModeRank;
+        if (currIdx > prevIdx && rankUpCelebration) {
+            const modeLabel = getModeLabel(difficultyMode, appLang);
+            setCelebration({ rankIndex: currIdx, rankName: currentModeRank.name, rankIcon: currentModeRank.icon, modeLabel });
+        }
+    }, [currentModeRank, difficultyMode, appLang, rankUpCelebration]);
+
+    useEffect(() => {
+        if (!celebration) return;
+        const timer = setTimeout(() => setCelebration(null), 5000);
+        return () => clearTimeout(timer);
+    }, [celebration]);
+
+    useEffect(() => {
+        if (!celebration) { celebrationAnimRef.current = 0; return; }
+        const canvas = celebrationCanvasRef.current;
         if (!canvas) return;
         const parent = canvas.parentElement;
         if (!parent) return;
-        const resize = () => {
-            canvas.width = parent.clientWidth;
-            canvas.height = parent.clientHeight;
-        };
+        const resize = () => { canvas.width = parent.clientWidth; canvas.height = parent.clientHeight; };
         resize();
-        const starCount = STAR_COUNTS[Math.min(rankIndex, STAR_COUNTS.length - 1)];
-        starsRef.current = [];
+        const starCount = STAR_COUNTS[Math.min(celebration.rankIndex, STAR_COUNTS.length - 1)];
+        celebrationStarsRef.current = [];
         for (let i = 0; i < starCount; i++) {
-            starsRef.current.push({
+            celebrationStarsRef.current.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                speed: 25 + Math.random() * 45,
-                size: 1.2 + Math.random() * 2.2,
-                opacity: 0.3 + Math.random() * 0.7,
+                speed: 30 + Math.random() * 50,
+                size: 2.5 + Math.random() * 3.5,
+                opacity: 0.5 + Math.random() * 0.5,
             });
         }
-        const chimeThreshold = Math.max(1, 8 - Math.floor(rankIndex / 2));
-        let chimeCounter = 0;
+        if (celebration.rankIndex >= 7 && resultSoundRef.current) {
+            setTimeout(() => playCelebrationMelody(celebration.rankIndex), 300);
+        }
         let lastTime = performance.now();
         const animate = (time: number) => {
             const dt = Math.min((time - lastTime) / 1000, 0.1);
@@ -12351,37 +12378,42 @@ const App: React.FC = () => {
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (const star of starsRef.current) {
+            for (const star of celebrationStarsRef.current) {
                 star.y += star.speed * dt;
                 if (star.y > canvas.height + 10) {
                     star.y = -10 - Math.random() * 40;
                     star.x = Math.random() * canvas.width;
-                    star.opacity = 0.3 + Math.random() * 0.7;
-                    chimeCounter++;
-                    if (chimeCounter >= chimeThreshold && resultSoundRef.current) {
-                        chimeCounter = 0;
-                        playStarChime();
-                    }
+                    star.opacity = 0.5 + Math.random() * 0.5;
                 }
+                const spikes = 5;
+                const outerR = star.size;
+                const innerR = star.size * 0.4;
                 ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.shadowColor = 'rgba(255, 255, 200, 0.5)';
-                ctx.shadowBlur = star.size * 5;
-                ctx.fillStyle = star.size > 2.5
+                for (let i = 0; i < spikes * 2; i++) {
+                    const r = i % 2 === 0 ? outerR : innerR;
+                    const angle = (Math.PI * i) / spikes - Math.PI / 2;
+                    const px = star.x + Math.cos(angle) * r;
+                    const py = star.y + Math.sin(angle) * r;
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.shadowColor = 'rgba(255, 255, 200, 0.7)';
+                ctx.shadowBlur = star.size * 4;
+                ctx.fillStyle = star.size > 3.5
                     ? `rgba(255, 240, 200, ${star.opacity})`
                     : `rgba(200, 220, 255, ${star.opacity * 0.8})`;
                 ctx.fill();
                 ctx.shadowBlur = 0;
             }
-            starAnimFrameRef.current = requestAnimationFrame(animate);
+            celebrationAnimRef.current = requestAnimationFrame(animate);
         };
-        starAnimFrameRef.current = requestAnimationFrame(animate);
+        celebrationAnimRef.current = requestAnimationFrame(animate);
         window.addEventListener('resize', resize);
         return () => {
-            cancelAnimationFrame(starAnimFrameRef.current);
+            cancelAnimationFrame(celebrationAnimRef.current);
             window.removeEventListener('resize', resize);
         };
-    }, [rankIndex, playStarChime]);
+    }, [celebration, playCelebrationMelody]);
 
     const preserveEditorKeyboardPosition = useCallback(() => {
         const mainScroller = mainScrollRef.current;
@@ -15406,12 +15438,6 @@ print(result)
             className="h-screen text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
             style={{ backgroundColor: '#050c18' }}
         >
-            <canvas
-                ref={starCanvasRef}
-                className="absolute inset-0 w-full h-full pointer-events-none select-none"
-                style={{ opacity: 0.65, zIndex: 0 }}
-                aria-hidden="true"
-            />
             <div
                 ref={headerRef}
                 className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2"
@@ -16906,6 +16932,18 @@ print(result)
                                                 <span className="block text-xs font-bold">{t('settings.result', appLang)}</span>
                                                 <span className="mt-1 block text-[10px] text-gray-400">{t('settings.resultDesc', appLang)}</span>
                                             </button>
+                                            <button
+                                                onClick={() => setRankUpCelebration(prev => !prev)}
+                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={rankUpCelebration ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-2 flex items-center justify-between gap-2">
+                                                    <Sparkles size={15} style={{ color: rankUpCelebration ? countRowColors.wins : '#6b7280' }} />
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]">{rankUpCelebration ? t('settings.on', appLang) : t('settings.off', appLang)}</span>
+                                                </span>
+                                                <span className="block text-xs font-bold">Celebration</span>
+                                                <span className="mt-1 block text-[10px] text-gray-400">Rank-up animation</span>
+                                            </button>
                                         </div>
                                     )}
                                 </div>
@@ -17751,16 +17789,27 @@ print(result)
                                         userSelect: 'text',
                                         WebkitUserSelect: 'text'
                                     }}>
-                                        {getExerciseDescription(exercise, appLang)}
-                                    </pre>
+                        {getExerciseDescription(exercise, appLang)}
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+                            )}
+                            {celebration && (
+                                <div className="fixed inset-0 z-[130] flex flex-col items-center justify-center pointer-events-none animate-in fade-in duration-500" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
+                                    <canvas ref={celebrationCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none select-none" aria-hidden="true" />
+                                    <div className="relative z-10 text-center px-4">
+                                        <div className="text-6xl mb-4 animate-bounce">{celebration.rankIcon}</div>
+                                        <h2 className="text-3xl font-black text-white mb-2">🎉 Congratulations!</h2>
+                                        <p className="text-xl text-white/90">You reached <span className="font-bold" style={{ color: '#22c55e' }}>{celebration.rankName}</span>!</p>
+                                        <p className="text-lg text-white/70 mt-2">You have mastered <span className="font-bold" style={{ color: '#FFD700' }}>{celebration.modeLabel}</span></p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
 };
 
 const ActionButton: React.FC<{ icon: React.ReactNode, iconColor: string, description: string, onClick: () => void }> = ({ icon, iconColor, description, onClick }) => (
