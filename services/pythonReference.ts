@@ -3,6 +3,8 @@
 // Used by the built-in Problem AI when WebLLM is not available
 // ────────────────────────────────────────────────────────────────────────────
 
+import { lookupConcept } from './pythonConceptLibrary';
+
 interface RefEntry {
   name: string
   type: string        // 'str', 'list', 'dict', 'set', 'tuple', 'builtin', 'keyword', 'concept'
@@ -827,6 +829,25 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   const mutationAnswer = buildMutationComparisonAnswer(question);
   if (mutationAnswer) return mutationAnswer;
 
+  // ── Bare word / short phrase lookup ───────────────────────────────────
+  const wordCount = q.split(/\s+/).length;
+  if (wordCount <= 4) {
+    const bareEntry = lookup(q, preferredMethodType);
+    if (bareEntry) {
+      let label = bareEntry.type.charAt(0).toUpperCase() + bareEntry.type.slice(1);
+      if (bareEntry.type === 'builtin') label = 'Built-in function';
+      return `**${label}: \`${bareEntry.name}()\`**\n\n${bareEntry.desc}\n\n\`\`\`python\n${bareEntry.example}\n\`\`\``;
+    }
+    const bareConcept = lookupConcept(q);
+    if (bareConcept.source === 'entry' && bareConcept.entry) {
+      const e = bareConcept.entry;
+      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}${e.related.length ? `\n\n**Related:** ${e.related.map(r => `\`${r}\``).join(', ')}` : ''}`;
+    }
+    if (bareConcept.source === 'category') {
+      return `**${q}**\n\n${bareConcept.categoryFallback.intermediate}\n\n**Deep Dive:**\n${bareConcept.categoryFallback.advanced}`;
+    }
+  }
+
   // ── Listing all methods ──────────────────────────────────────────────
   if (/(?:^|\b)(?:list|show|get|give)\s+(?:me\s+)?(?:all\s+)?(?:python\s+)?methods?\b|\ball\s+(?:python\s+)?methods?\b|methods?.*\blist\b/i.test(q) && !/\blist\b.*\bdata\b|\bwhat\b.*\blist\b|\bhow\b.*\blist\b/i.test(q)) {
     return 'Here are all Python methods (grouped by type):\n\n' +
@@ -910,13 +931,22 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
       if (entry.type === 'builtin') label = 'Built-in function';
       return `**${label}: \`${entry.name}()\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
     }
+    // Concept library fallback
+    const cl2 = lookupConcept(rawName);
+    if (cl2.source === 'entry' && cl2.entry) {
+      const e = cl2.entry;
+      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}`;
+    }
+    if (cl2.source === 'category') {
+      return `**${rawName}**\n\n${cl2.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl2.categoryFallback.advanced}`;
+    }
   }
 
   // ── Direct "what is X" lookup ───────────────────────────────────────
   const simpleQ = q.replace(/what'?s\b/gi, 'what is');
   const simpleMatch = simpleQ.match(/what (is|are)\s*(a |an |the )?(\w[\w ]{0,30}?\w|\w)/i);
   if (simpleMatch) {
-    let rawName = simpleMatch[3].toLowerCase().trim().replace(/\s+/g, ' ');
+    let rawName = simpleMatch[3].toLowerCase().trim().replace(/\s+/g, ' ').replace(/^(a |an |the )/i, '');
     // Try concept match first (data types, etc.)
     const conceptEntry = allReferenceEntries().find(e => {
       if (e.type !== 'concept') return false;
@@ -932,6 +962,15 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
       let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
       if (entry.type === 'builtin') label = 'Built-in function';
       return `**${label}: \`${entry.name}\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
+    }
+    // Concept library fallback
+    const cl = lookupConcept(rawName);
+    if (cl.source === 'entry' && cl.entry) {
+      const e = cl.entry;
+      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}`;
+    }
+    if (cl.source === 'category') {
+      return `**${rawName}**\n\n${cl.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl.categoryFallback.advanced}`;
     }
   }
 
@@ -984,6 +1023,28 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
     if (e.name === 'type hints deep') patterns.push(/type.*hint|type.*annot|typing.*module|optional.*type|union.*type|generic.*type/i);
     if (patterns.some(p => p.test(q))) {
       return `**${e.name}**\n\n${e.desc}\n\n\`\`\`python\n${e.example}\n\`\`\``;
+    }
+  }
+
+  // ── Concept library catch-all ──────────────────────────────────────────
+  // Strip common question prefixes and try each remaining word/phrase
+  const cleaned = q
+    .replace(/^(what|how|explain|tell me about|describe|define|what is|what are|what does|how does|how do|i don'?t understand|can you explain|give me|show me|what'?s|what does a|what is a|what is an|what is the)\s*/i, '')
+    .replace(/^(a |an |the )/, '')
+    .replace(/[?.!]+$/, '')
+    .trim();
+  const terms = [q, cleaned, ...cleaned.split(/\s+/)].filter(Boolean);
+  for (const term of [...new Set(terms)]) {
+    const cr = lookupConcept(term);
+    if (cr.source !== 'none') {
+      const name = cr.entry?.name ?? term;
+      if (cr.entry) {
+        const e = cr.entry;
+        return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}${e.related.length ? `\n\n**Related:** ${e.related.map(r => `\`${r}\``).join(', ')}` : ''}`;
+      }
+      if (cr.categoryFallback.found) {
+        return `**${name}**\n\n${cr.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cr.categoryFallback.advanced}`;
+      }
     }
   }
 
