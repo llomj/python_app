@@ -16533,15 +16533,15 @@ print(result)
                                     {customizeTab === 'count' && (
                                         <div className="space-y-4">
                                             <div
-                                                className="flex flex-wrap items-center justify-center gap-3 rounded-2xl px-4 py-3 text-xs font-black"
+                                                className="flex flex-nowrap items-center justify-center gap-2 overflow-x-auto rounded-2xl px-2 py-2 text-[9px] font-black"
                                                 style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), border: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}
                                             >
-                                                <span className="rounded-full border p-1" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Key size={14} /></span>
-                                                <span><span className="uppercase" style={{ color: countRowColors.count }}>{t('countRow.count', appLang)}</span> <span style={{ color: countRowColors.value }}>12</span></span>
-                                                <span><span className="uppercase" style={{ color: countRowColors.wins }}>{t('countRow.wins', appLang)}</span> <span style={{ color: countRowColors.value }}>8</span></span>
-                                                <span><span className="uppercase" style={{ color: countRowColors.fail }}>{t('countRow.fail', appLang)}</span> <span style={{ color: countRowColors.value }}>4</span></span>
-                                                <span className="pl-3" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="uppercase" style={{ color: countRowColors.rate }}>{t('countRow.rate', appLang)}</span> <span style={{ color: countRowColors.value }}>67%</span></span>
-                                                <span className="rounded-full border p-1" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Settings size={14} /></span>
+                                                <span className="rounded-full border p-0.5" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Bot size={11} /></span>
+                                                <span className="whitespace-nowrap"><span className="uppercase" style={{ color: countRowColors.count }}>{t('countRow.count', appLang)}</span> <span style={{ color: countRowColors.value }}>12</span></span>
+                                                <span className="whitespace-nowrap"><span className="uppercase" style={{ color: countRowColors.wins }}>{t('countRow.wins', appLang)}</span> <span style={{ color: countRowColors.value }}>8</span></span>
+                                                <span className="whitespace-nowrap"><span className="uppercase" style={{ color: countRowColors.fail }}>{t('countRow.fail', appLang)}</span> <span style={{ color: countRowColors.value }}>4</span></span>
+                                                <span className="whitespace-nowrap pl-2" style={{ borderLeft: `1px solid ${hexToRgba(panelColors.border, 0.3)}` }}><span className="uppercase" style={{ color: countRowColors.rate }}>{t('countRow.rate', appLang)}</span> <span style={{ color: countRowColors.value }}>67%</span></span>
+                                                <span className="rounded-full border p-0.5" style={{ color: countRowColors.icon, backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}><Settings size={11} /></span>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                                 {([
@@ -16646,14 +16646,14 @@ print(result)
                                                     <span>Hide Tools</span>
                                                     <ChevronDown size={14} />
                                                 </div>
-                                                <div className="flex flex-wrap justify-center gap-2">
-                                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => undefined} />
-                                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => undefined} />
-                                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={() => undefined} />
-                                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => undefined} />
-                                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={() => undefined} />
-                                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={() => undefined} />
-                                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => undefined} />
+                                                <div className="flex flex-nowrap justify-center gap-1 overflow-x-auto">
+                                                    <ActionButton icon={<Book size={13} />} iconColor={toolPanelColors.info} description="Info" onClick={() => undefined} />
+                                                    <ActionButton icon={<Lightbulb size={13} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => undefined} />
+                                                    <ActionButton icon={<Bot size={13} />} iconColor={toolPanelColors.ai} description="AI" onClick={() => undefined} />
+                                                    <ActionButton icon={<SlidersHorizontal size={13} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => undefined} />
+                                                    <ActionButton icon={<CheckCircle size={13} />} iconColor={toolPanelColors.win} description="Win" onClick={() => undefined} />
+                                                    <ActionButton icon={<XCircle size={13} />} iconColor={toolPanelColors.failed} description="Failed" onClick={() => undefined} />
+                                                    <ActionButton icon={<RotateCcw size={13} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => undefined} />
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
