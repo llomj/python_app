@@ -11826,11 +11826,27 @@ const App: React.FC = () => {
     const displaySolution = useMemo(() => normalizeSolutionHeadings(exercise.solution), [exercise.solution]);
     const frenchCodeDisplay = useMemo(() => {
         if (appLang !== 'fr') return displaySolution;
-        const frDesc = EXERCISES_FR[exercise.id];
+        const frDesc = EXERCISES_FR[exercise.id] || ATOMIC_BEGINNER_EXERCISES_FR[exercise.id];
         let code = exercise.solution.split('# Script approach')[0].trim();
-        code = code.replace(/#[^\n]*/g, '').replace(/\n{3,}/g, '\n\n').trim();
+        // Translate common English comment patterns to French
+        code = code
+            .replace(/(^|\n)# Using function approach/g, '$1# Approche fonctionnelle')
+            .replace(/(^|\n)# Using built-in approach/g, '$1# Approche native')
+            .replace(/(^|\n)# Using manual approach/g, '$1# Approche manuelle')
+            .replace(/(^|\n)# Alternative using /g, '$1# Alternative avec ')
+            .replace(/(^|\n)# Expected:/g, '$1# Attendu :')
+            .replace(/(^|\n)# Output:/g, '$1# Sortie :')
+            .replace(/(^|\n)# Goal:/g, '$1# Objectif :')
+            .replace(/# Initialize list/g, '# Initialisation de la liste')
+            .replace(/# Initialize string variable/g, '# Initialisation de la variable chaîne')
+            .replace(/# Print the result/g, '# Affichage du résultat')
+            .replace(/# Return the result/g, '# Retour du résultat')
+            .replace(/# Example usage/g, "# Exemple d'utilisation")
+            .replace(/# Base class /g, '# Classe de base ')
+            .replace(/# Derived class /g, '# Classe dérivée ')
+            .replace(/\n{3,}/g, '\n\n').trim();
         if (!frDesc) return code;
-        return '"""\n' + frDesc.split('\nExamples:')[0].trim() + '\n"""\n\n' + code;
+        return '"""\n' + frDesc + '\n"""\n\n' + code;
     }, [appLang, exercise.id, exercise.solution, displaySolution]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
@@ -14556,12 +14572,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const createGeneratedPracticeDocs = (targetExercise: Exercise) => {
         const isFrench = appLang === 'fr';
         const enDesc = targetExercise.description.split('\nExamples:')[0].trim();
-        const frDesc = isFrench && EXERCISES_FR[targetExercise.id]
-            ? EXERCISES_FR[targetExercise.id].split('\nExamples:')[0].trim()
+        const frDesc = isFrench
+            ? (EXERCISES_FR[targetExercise.id] || ATOMIC_BEGINNER_EXERCISES_FR[targetExercise.id] || enDesc)
             : enDesc;
         const prompt = isFrench ? frDesc : enDesc;
         const solutionCode = (isFrench
-            ? targetExercise.solution.split('# Script approach')[0].trim().replace(/#[^\n]*/g, '').replace(/\n{3,}/g, '\n\n').trim()
+            ? targetExercise.solution.split('# Script approach')[0].trim().replace(/(^|\n)# Expected:/g, '$1# Attendu :').replace(/(^|\n)# Using function approach/g, '$1# Approche fonctionnelle').replace(/\n{3,}/g, '\n\n').trim()
             : targetExercise.solution.split('# Script approach')[0].trim());
         const exerciseDesc = isFrench ? frDesc : enDesc;
         const functionName = targetExercise.initialCode.match(/def\s+(\w+)/)?.[1] || 'your_function';
@@ -14572,10 +14588,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const operationLine = isRegexPractice
             ? (isFrench
                 ? '# Utilisez les fonctions regex Python comme re.search(), re.findall(), re.sub(), re.split(), ou re.fullmatch().'
-                : '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().')
+                : '# Utilisez les fonctions regex Python comme re.search(), re.findall(), re.sub(), re.split(), ou re.fullmatch().')
             : (isFrench
                 ? '# Utilisez une boucle for pour traiter les valeurs une par une.'
-                : '# Use a for loop to process values one at a time.');
+                : '# Utilisez une boucle for pour traiter les valeurs une par une.');
 
         const pHead = isFrench ? 'Problème' : 'Problem';
         const pExpl = isFrench ? 'EXPLICATION DU PROBLÈME' : 'PROBLEM EXPLANATION';
@@ -14781,10 +14797,6 @@ ${solutionCode}`;
         return { logic, requirements, syntax };
     };
 
-    const stripComments = (text: string): string => {
-        return text.replace(/#[^\n]*/g, '').replace(/\n{3,}/g, '\n\n').trim();
-    };
-
     const loadSolutionFiles = useCallback(async (exerciseId: number) => {
         const targetExercise = getExerciseById(exerciseId);
         if (targetExercise && exerciseId > 2000) {
@@ -14826,13 +14838,30 @@ ${solutionCode}`;
             const basePath = isGitHubPages ? '/python_app' : '';
             const cacheBuster = `?cb=${Date.now()}`;
 
+            const pHead = isFrench ? 'Problème' : 'Problem';
+            const replaceEnglishDesc = (content: string): string => {
+                if (!isFrench) return content;
+                const frDesc = EXERCISES_FR[exerciseId];
+                if (!frDesc) return content;
+                // Find the first separator (# --- or # ...EXPLICATION...) and replace the header
+                const firstSep = content.search(/\n#-{3,}|\n# [A-Z]+ EXPLICATION|\n# [A-Z]+ PROBL[ÈE]ME|\n# PROBLEM EXPLANATION/);
+                if (firstSep === -1) return `"""\n${pHead} : ${exerciseId}\n${frDesc}\n"""\n\n${content}`;
+                const header = content.substring(0, firstSep).trim();
+                const rest = content.substring(firstSep);
+                const stripped = header.replace(/""".*?"""/s, '').trim();
+                if (stripped.length < 10) {
+                    return `"""\n${pHead} : ${exerciseId}\n${frDesc}\n"""\n\n#${rest.substring(1)}`;
+                }
+                return `"""\n${pHead} : ${exerciseId}\n${frDesc}\n"""\n\n${rest}`;
+            };
+
             // Fetch and parse logic file
             try {
                 const logicResponse = await fetch(`${basePath}/${logicFile}${cacheBuster}`);
                 if (logicResponse.ok) {
                     const logicText = await logicResponse.text();
                     let problemLogic = extractProblemContent(logicText, exerciseId);
-                    if (isFrench && problemLogic) problemLogic = stripComments(problemLogic);
+                    if (isFrench) problemLogic = replaceEnglishDesc(problemLogic);
                     setLogicContent(problemLogic || '');
                 } else {
                     setLogicContent('');
@@ -14852,7 +14881,7 @@ ${solutionCode}`;
                 if (reqResponse.ok) {
                     const reqText = await reqResponse.text();
                     let problemReq = extractProblemContent(reqText, exerciseId);
-                    if (isFrench && problemReq) problemReq = stripComments(problemReq);
+                    if (isFrench) problemReq = replaceEnglishDesc(problemReq);
                     setRequirementsContent(problemReq || '');
                 } else {
                     setRequirementsContent('');
@@ -14869,7 +14898,7 @@ ${solutionCode}`;
                 if (syntaxResponse.ok) {
                     const syntaxText = await syntaxResponse.text();
                     let problemSyntax = extractProblemContent(syntaxText, exerciseId);
-                    if (isFrench && problemSyntax) problemSyntax = stripComments(problemSyntax);
+                    if (isFrench) problemSyntax = replaceEnglishDesc(problemSyntax);
                     setSyntaxContent(problemSyntax || '');
                 } else {
                     setSyntaxContent('');
