@@ -1316,7 +1316,7 @@ const DEFAULT_COUNT_ROW_COLORS: CountRowColorSettings = {
 
 const DEFAULT_PANEL_COLORS: PanelColorSettings = {
     background: '#0f1f3d',
-    border: '#5876a0',
+    border: '#22c55e',
     alpha: 40,
 };
 
@@ -1390,6 +1390,9 @@ const loadPanelColorSettings = (): PanelColorSettings => {
             if (sanitizeHexColor(parsed.background, '') === '#081222') {
                 parsed.background = DEFAULT_PANEL_COLORS.background;
             }
+        }
+        if (sanitizeHexColor(parsed.border, '') === '#5876a0') {
+            parsed.border = '#22c55e';
         }
         return {
             background: sanitizeHexColor(parsed.background, DEFAULT_PANEL_COLORS.background),
@@ -16674,14 +16677,16 @@ print(result)
                                                         onChange={(value) => setToolPanelColors(prev => ({ ...prev, [key]: value }))}
                                                     />
                                                 ))}
+                                                <div className="flex items-end justify-end">
+                                                    <button
+                                                        onClick={() => setToolPanelColors(DEFAULT_TOOL_PANEL_COLORS)}
+                                                        className="rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition-all hover:brightness-125"
+                                                        style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}
+                                                     >
+                                                         Reset Defaults
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <button
-                                                onClick={() => setToolPanelColors(DEFAULT_TOOL_PANEL_COLORS)}
-                                                className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all hover:brightness-125"
-                                                style={{ borderColor: hexToRgba(countRowColors.count, 0.35), backgroundColor: hexToRgba(countRowColors.count, 0.1), color: countRowColors.count }}
-                                             >
-                                                 Reset Tools Defaults
-                                            </button>
                                         </div>
                                     )}
                                     {customizeTab === 'panels' && (

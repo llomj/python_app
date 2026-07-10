@@ -61,26 +61,29 @@ export const DEFAULT_EDITOR_COLORS: EditorColorSettings = {
 const createVarHighlightField = (colors: EditorColorSettings) => {
   const builtinMark = Decoration.mark({ attributes: { style: `color:${colors.builtin}` } });
   const identifierMark = Decoration.mark({ attributes: { style: `color:${colors.identifier}` } });
+  const functionMark = Decoration.mark({ attributes: { style: 'color:#FFD700' } });
 
   return StateField.define<DecorationSet>({
     create(state) {
-      return computeVarDecorations(state, builtinMark, identifierMark);
+      return computeVarDecorations(state, builtinMark, identifierMark, functionMark);
     },
     update(deco, tr) {
       if (!tr.docChanged) return deco;
-      return computeVarDecorations(tr.state, builtinMark, identifierMark);
+      return computeVarDecorations(tr.state, builtinMark, identifierMark, functionMark);
     },
     provide: f => EditorView.decorations.from(f),
   });
 };
 
-function computeVarDecorations(state, builtinMark, identifierMark) {
+function computeVarDecorations(state, builtinMark, identifierMark, functionMark) {
   const decos = [];
   syntaxTree(state).iterate({
     enter(node) {
       if (node.name === 'VariableName') {
         const parent = node.node.parent;
-        if (parent && parent.name === 'CallExpression') {
+        if (parent && parent.name === 'FunctionDefinition') {
+          decos.push(functionMark.range(node.from, node.to));
+        } else if (parent && parent.name === 'CallExpression') {
           const name = state.sliceDoc(node.from, node.to);
           if (PYTHON_BUILTINS.has(name)) {
             decos.push(builtinMark.range(node.from, node.to));
