@@ -16618,7 +16618,7 @@ print(result)
                                                     <span className="px-3 py-1.5" style={{ color: editorColors.gutterText }}>helper.py</span>
                                                 </div>
                                                 <CodeMirror
-                                                    value={"# comment\nnumber = 42\ntext = 'Python'\nprint(text)\nif number > 10:\n    return True"}
+                                                    value={"# comment\nnumber = 42\ntext = 'Python'\nprint(text.upper())\nif number > 10:\n    return True"}
                                                     height="150px"
                                                     readOnly={true}
                                                     extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(effectiveEditorColors)]}
@@ -16731,7 +16731,7 @@ print(result)
                                                 <span style={{ color: editorColors.keyword }}>def</span> <span style={{ color: editorColors.identifier }}>solve</span>(text):
                                                 <br />    <span style={{ color: editorColors.keyword }}>return</span> text[1:-1]
                                                 <br /><br />
-                                                <span style={{ color: editorColors.builtin }}>print</span>(solve(<span style={{ color: editorColors.string }}>"Python"</span>))
+                                                <span style={{ color: editorColors.builtin }}>print</span>(result.<span style={{ color: editorColors.method }}>upper</span>())
                                             </div>
                                             {/* Output panel */}
                                             <div className="rounded-lg border px-2 py-1.5" style={{ backgroundColor: editorColors.outputBackground, borderColor: panelColors.border }}>
