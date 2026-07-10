@@ -197,6 +197,14 @@ const detectGeneralPythonTopic = (question: string): string => {
     if (/\bbool\b/.test(lowerQ)) return 'boolean';
     if (/\bdef\b/.test(lowerQ)) return 'function';
     if (/\bimport\b/.test(lowerQ)) return 'module';
+    const explicitSubject = lowerQ
+        .replace(/[?!]+$/g, '')
+        .replace(/^(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell\s+me\s+about|can\s+you\s+(?:define|describe|explain))\s+/i, '')
+        .replace(/^(?:a|an|the)\s+/i, '')
+        .replace(/\s+(?:do|does|mean|work)$/i, '')
+        .trim();
+    if (explicitSubject && explicitSubject !== lowerQ && explicitSubject.split(/\s+/).length <= 6) return explicitSubject;
+    if (/^[a-z_@][a-z0-9_@.() +\-/]{0,60}$/i.test(lowerQ)) return lowerQ;
     return 'this Python topic';
 };
 
@@ -1029,12 +1037,16 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (/\bhow many\b|\bnumber of\b|\bcount (?:of )?\b/i.test(question)) {
         return [answer, mode === 'simple' ? '' : buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
     }
+    const supportsGeneratedExamples = ['dictionary', 'lambda', 'function', 'list'].includes(topic);
+    const generatedExamples = (mode === 'examples' || mode === 'deep') && !/```python\b/.test(answer) && supportsGeneratedExamples
+        ? buildGeneralAiExampleSet(topic, language)
+        : '';
     return composeGeneralAiAnswer({
         answer,
         topic,
         mode,
         language,
-        examples: mode === 'examples' || mode === 'deep' ? buildGeneralAiExampleSet(topic, language) : '',
+        examples: generatedExamples,
         relatedConcepts: language === 'fr' ? [] : getConceptMapItems(topic),
         followUps: buildGeneralAiSuggestedFollowUpText(question, language),
     });

@@ -18,7 +18,6 @@ export interface ConceptEntry {
 
 
 const CATEGORY_TREE: Record<string, string> = {
-  "": "built_in_data_types",
   "!a": "strings",
   "!r": "strings",
   "!s": "strings",
@@ -2672,17 +2671,110 @@ const CATEGORY_TREE: Record<string, string> = {
 };
 
 
-const CATEGORY_DEFS: Record<string, { intermediate: string; advanced: string }> = {};
-CATEGORY_DEFS["python_fundamentals"] = { intermediate: "Python is a high-level, interpreted, general-purpose programming language. It emphasizes code readability through significant whitespace and a clean syntax, and is dynamically typed with automatic memory management (garbage collection). Its standard library is extensive, often described as \"batteries included.\"", advanced: "Python's reference implementation is CPython, which compiles source code to bytecode executed by a stack-based virtual machine. It uses reference counting for primary memory management with a generational garbage collector for cycle collection. The Global Interpreter Lock (GIL) serializes bytecode execution within a single process, but I/O-bound concurrency is handled through asyncio or threading. C extensions via the Python/C API can bypass the GIL for CPU-bound work." };
-CATEGORY_DEFS["variables_and_names"] = { intermediate: "Variables in Python are names that refer to objects in memory - they are not containers or boxes. Assignment creates a name-to-object binding. Python uses dynamic typing: names can refer to any type of object, and the type is determined at runtime. The LEGB rule (Local, Enclosing, Global, Builtins) determines name resolution order in scopes.", advanced: "Python's variable model is strictly \"object references.\" Assignment never copies the object; it binds the name to the object. The `is` operator tests identity (same object), while `==` tests value equality. Mutable vs immutable behavior flows from this: mutating a shared mutable object affects all references. The walrus operator (`:=`) allows assignment within expressions, introducing a new name in the current scope." };
-CATEGORY_DEFS["objects_and_object_model"] = { intermediate: "Everything in Python is an object - every value has a type, identity (returned by `id()`), and methods. Even functions, classes, and modules are objects. Objects have attributes and methods, and their behavior is defined by their type (class). Python's data model is uniform: ints, strings, lists, functions, and classes are all first-class objects.", advanced: "Every Python object has a pointer to its type (a `PyTypeObject` in CPython), a reference count, and optionally a `__dict__` for instance attributes. The type of an object determines its layout and available operations through the `__slots__` mechanism and `tp_*` slots in the C-level type structure. Python uses structural subtyping through protocols (duck typing) alongside nominal subtyping (inheritance)." };
-CATEGORY_DEFS["built_in_data_types"] = { intermediate: "Python's built-in types include numerics (`int`, `float`, `complex`), sequences (`list`, `tuple`, `range`, `str`, `bytes`), mappings (`dict`), sets (`set`, `frozenset`), booleans (`bool`), and `NoneType`. Each type supports specific operations and methods. `int` has arbitrary precision. `list` is a dynamic array. `tuple` is an immutable sequence. `dict` is a hash table.", advanced: "`int` objects are variable-length in CPython, using an array of 30-bit digits for arbitrary precision. `dict` uses a compact hash table with randomized hash seed for security (PYTHONHASHSEED). `str` is stored as either one-byte, two-byte, or four-byte internal encoding (flexible string representation, PEP 393). `list` uses `PyObject*` array with an overallocation strategy (0, 4, 8, 16, 25, 35, 46, ...) for amortized O(1) appends." };
-CATEGORY_DEFS["strings"] = { intermediate: "Strings are immutable sequences of Unicode code points. They support indexing, slicing, concatenation, and many methods like `.split()`, `.join()`, `.upper()`, `.replace()`, and `.strip()`. F-strings (f\"...\") embed expressions directly using curly braces. Raw strings (r\"...\") preserve backslashes literally without escape processing.", advanced: "Internally, Python uses three storage representations per PEP 393: 1-byte (Latin-1), 2-byte (UCS-2), or 4-byte (UCS-4/UTF-32), chosen based on the largest code point in the string. Strings are interned automatically for short identifiers and literal strings (at CPython's discretion), enabling fast identity checks (`is`) and memory savings." };
-CATEGORY_DEFS["control_flow"] = { intermediate: "Python uses `if`, `elif`, `else` for conditional branching, `for` and `while` for iteration, and `match` (Python 3.10+) for structural pattern matching. `break` exits the innermost loop, `continue` skips to the next iteration, and `pass` is a no-op placeholder. Conditional expressions (`x if cond else y`) provide inline ternary logic.", advanced: "Python 3.10+ `match` implements structural pattern matching inspired by functional languages. Patterns can be literal, capture, wildcard (`_`), sequence, mapping, class (`case Point(x, y)`), guard (`if cond`), or OR (`|`). The compiler may optimize the match using a jump table for literal patterns. `for` loops iterate over any iterable by calling `iter()` on the target, then `__next__()` repeatedly until `StopIteration`." };
-CATEGORY_DEFS["functions"] = { intermediate: "Functions are defined with `def` and return a value (or `None` implicitly). Parameters can be positional, keyword, positional-only (`/`), keyword-only (`*`), and variadic (`*args`, `**kwargs`). Functions are first-class objects: they can be assigned, passed, returned, and stored. Lambda expressions provide anonymous inline functions limited to single-expression bodies.", advanced: "Functions in Python are objects with a `__code__` object (bytecode, constants, names), `__closure__` (free variable bindings for closures), `__defaults__` (default argument values), and `__kwdefaults__`. The `def` statement compiles the function body into a code object and creates a function object from it. Default arguments are evaluated once at definition time, not each call - a common pitfall with mutable defaults." };
-CATEGORY_DEFS["closures"] = { intermediate: "A closure is a function that remembers and can access variables from the enclosing scope even after that scope has exited. In Python, a nested function that references variables from its containing function creates a closure when the outer function returns the inner function. The captured variables are called free variables.", advanced: "The closure's free variables are stored in `func.__closure__`, a tuple of `cell` objects. Each cell holds a reference to the variable's value. Python accesses these via the `LOAD_DEREF` bytecode instruction. Mutating captured variables requires `nonlocal` to signal the compiler to use the cell rather than a local slot (without it, assignment creates a new local instead)." };
-CATEGORY_DEFS["decorators"] = { intermediate: "A decorator is a callable that takes a function (or class) and returns a modified version, applied with the `@` syntax. Decorators are commonly used for logging, timing, access control, memoization, and registering functions. Multiple decorators stack from bottom to top (closest to the definition applies first).", advanced: "The `@decorator` syntax is syntactic sugar for `func = decorator(func)`. Parametric decorators (e.g., `@deco(args)`) require an extra wrapping layer: the outer function accepts arguments and returns the actual decorator. `functools.wraps` copies metadata (`__name__`, `__doc__`, etc.) from the original function because decorators replace the original with a wrapper. Decorators can target classes, methods, or arbitrary callables." };
-CATEGORY_DEFS["classes_and_oop"] = { intermediate: "Classes are defined with `class ClassName:` and serve as blueprints for objects. `__init__` initializes instance state. Methods receive `self` as the first parameter. Inheritance lets a child class reuse parent behavior. Method Resolution Order (MRO) via C3 linearization determines method lookup order in complex hierarchies. Duck typing means \"if it walks like a duck,\" the type system treats it like one.", advanced: "Python implements a \"everything is an object\" model where classes themselves are objects (instances of their metaclass, default `type`). Attribute lookup follows: instance `__dict__` -> class `__dict__` -> parent MRO chain -> `__getattr__`. The descriptor protocol resolves attribute access on class objects. `super()` uses the MRO to determine the next class in the chain, not the parent." };
+interface CategoryDefinition {
+  label: string;
+  intermediate: string;
+  advanced: string;
+}
+
+const CATEGORY_DEFS: Record<string, CategoryDefinition> = {};
+CATEGORY_DEFS["python_fundamentals"] = { label: "Python fundamentals", intermediate: "Python is a high-level, interpreted, general-purpose programming language. It emphasizes code readability through significant whitespace and a clean syntax, and is dynamically typed with automatic memory management (garbage collection). Its standard library is extensive, often described as \"batteries included.\"", advanced: "Python's reference implementation is CPython, which compiles source code to bytecode executed by a stack-based virtual machine. It uses reference counting for primary memory management with a generational garbage collector for cycle collection. The Global Interpreter Lock (GIL) serializes bytecode execution within a single process, but I/O-bound concurrency is handled through asyncio or threading. C extensions via the Python/C API can bypass the GIL for CPU-bound work." };
+CATEGORY_DEFS["variables_and_names"] = { label: "variables and names", intermediate: "Variables in Python are names that refer to objects in memory - they are not containers or boxes. Assignment creates a name-to-object binding. Python uses dynamic typing: names can refer to any type of object, and the type is determined at runtime. The LEGB rule (Local, Enclosing, Global, Builtins) determines name resolution order in scopes.", advanced: "Python's variable model is strictly \"object references.\" Assignment never copies the object; it binds the name to the object. The `is` operator tests identity (same object), while `==` tests value equality. Mutable vs immutable behavior flows from this: mutating a shared mutable object affects all references. The walrus operator (`:=`) allows assignment within expressions, introducing a new name in the current scope." };
+CATEGORY_DEFS["objects_and_object_model"] = { label: "objects and Python's object model", intermediate: "Everything in Python is an object - every value has a type, identity (returned by `id()`), and methods. Even functions, classes, and modules are objects. Objects have attributes and methods, and their behavior is defined by their type (class). Python's data model is uniform: ints, strings, lists, functions, and classes are all first-class objects.", advanced: "Every Python object has a pointer to its type (a `PyTypeObject` in CPython), a reference count, and optionally a `__dict__` for instance attributes. The type of an object determines its layout and available operations through the `__slots__` mechanism and `tp_*` slots in the C-level type structure. Python uses structural subtyping through protocols (duck typing) alongside nominal subtyping (inheritance)." };
+CATEGORY_DEFS["built_in_data_types"] = { label: "built-in data types", intermediate: "Python's built-in types include numerics (`int`, `float`, `complex`), sequences (`list`, `tuple`, `range`, `str`, `bytes`), mappings (`dict`), sets (`set`, `frozenset`), booleans (`bool`), and `NoneType`. Each type supports specific operations and methods. `int` has arbitrary precision. `list` is a dynamic array. `tuple` is an immutable sequence. `dict` is a hash table.", advanced: "`int` objects are variable-length in CPython, using an array of 30-bit digits for arbitrary precision. `dict` uses a compact hash table with randomized hash seed for security (PYTHONHASHSEED). `str` is stored as either one-byte, two-byte, or four-byte internal encoding (flexible string representation, PEP 393). `list` uses `PyObject*` array with an overallocation strategy for amortized O(1) appends." };
+CATEGORY_DEFS["strings"] = { label: "strings and text processing", intermediate: "Strings are immutable sequences of Unicode code points. They support indexing, slicing, concatenation, and many methods like `.split()`, `.join()`, `.upper()`, `.replace()`, and `.strip()`. F-strings embed expressions directly using curly braces. Raw strings preserve backslashes literally without escape processing.", advanced: "Internally, Python uses three storage representations per PEP 393: 1-byte, 2-byte, or 4-byte, chosen based on the largest code point in the string. Strings are interned automatically for some identifiers and literals, enabling memory savings and fast internal comparisons." };
+CATEGORY_DEFS["control_flow"] = { label: "control flow", intermediate: "Python uses `if`, `elif`, `else` for conditional branching, `for` and `while` for iteration, and `match` for structural pattern matching. `break` exits the innermost loop, `continue` skips to the next iteration, and `pass` is a no-op placeholder.", advanced: "Python 3.10+ `match` supports literal, capture, wildcard, sequence, mapping, class, guard, and OR patterns. `for` loops iterate by calling `iter()` and then `__next__()` until `StopIteration`." };
+CATEGORY_DEFS["functions"] = { label: "functions and callables", intermediate: "Functions are defined with `def` and return a value (or `None` implicitly). Parameters can be positional, keyword, positional-only (`/`), keyword-only (`*`), and variadic (`*args`, `**kwargs`). Functions are first-class objects: they can be assigned, passed, returned, and stored.", advanced: "Functions are objects with `__code__`, `__closure__`, `__defaults__`, and `__kwdefaults__`. Default arguments are evaluated once at definition time, not on each call, which is important when defaults are mutable." };
+CATEGORY_DEFS["closures"] = { label: "closures", intermediate: "A closure is a function that remembers variables from an enclosing scope after that scope has returned. A nested function creates a closure when it references these free variables.", advanced: "Free variables are stored in `func.__closure__` cell objects and loaded with closure-specific bytecode. Rebinding a captured name requires `nonlocal`; otherwise assignment creates a new local name." };
+CATEGORY_DEFS["decorators"] = { label: "decorators", intermediate: "A decorator is a callable that receives a function or class and returns a replacement, applied with `@name`. Decorators support logging, timing, access control, caching, and registration. Stacked decorators apply from the bottom upward.", advanced: "`@decorator` is equivalent to `func = decorator(func)`. Decorators with arguments add an outer factory layer. `functools.wraps` preserves metadata such as `__name__` and `__doc__`." };
+CATEGORY_DEFS["classes_and_oop"] = { label: "classes and object-oriented programming", intermediate: "Classes are blueprints for objects. `__init__` initializes instance state, methods receive `self`, and inheritance reuses behavior. The method resolution order determines where Python finds inherited attributes.", advanced: "Classes are themselves objects created by metaclasses. Attribute lookup combines descriptors, the instance dictionary, the class dictionary, and the MRO. `super()` advances through the MRO rather than simply naming a parent class." };
+
+Object.assign(CATEGORY_DEFS, {
+  numbers: { label: "numbers and numeric operations", intermediate: "Python numeric programming covers integers, floating-point values, complex numbers, arithmetic operators, rounding, and numeric conversion.", advanced: "Numeric types follow Python's data model and operator protocols. Integer arithmetic has arbitrary precision, while floating-point values use binary IEEE 754 semantics and therefore cannot exactly represent every decimal fraction." },
+  operators: { label: "operators", intermediate: "Operators combine or compare values, including arithmetic, comparison, Boolean, identity, membership, assignment, and bitwise operations.", advanced: "Most operators dispatch to special methods such as `__add__`, `__eq__`, and `__contains__`. Precedence controls grouping, while short-circuit Boolean operators may skip evaluation of the right operand." },
+  iteration: { label: "iteration", intermediate: "Iteration processes values from an iterable one at a time using loops, comprehensions, or iterator functions.", advanced: "`iter()` obtains an iterator and `next()` advances it until `StopIteration`. Lazy iterators avoid materializing every result and can represent unbounded streams." },
+  comprehensions: { label: "comprehensions", intermediate: "Comprehensions build lists, sets, dictionaries, or generator expressions from an iterable with an optional condition.", advanced: "A comprehension has its own scope in Python 3. Generator expressions are lazy, while list, set, and dictionary comprehensions eagerly construct their result containers." },
+  generators: { label: "generators", intermediate: "Generators are lazy iterators produced by functions containing `yield` or by generator expressions.", advanced: "A generator preserves its suspended frame between values. `send`, `throw`, and `close` interact with that frame, while `yield from` delegates iteration and return-value handling." },
+  exceptions: { label: "exceptions and error handling", intermediate: "Exceptions report errors or unusual conditions. Code handles them with `try` and `except`, performs cleanup with `finally`, and creates them with `raise`.", advanced: "Exception matching follows the class hierarchy. Tracebacks retain stack frames, exception chaining preserves causes, and custom exceptions should normally derive from `Exception`." },
+  context_managers: { label: "context managers", intermediate: "Context managers control setup and cleanup around a `with` block, commonly for files, locks, and database transactions.", advanced: "The protocol calls `__enter__` before the block and `__exit__` afterward, including when an exception occurs. Generator-based context managers use `contextlib.contextmanager`." },
+  modules_and_imports: { label: "modules and imports", intermediate: "Modules organize Python code into importable files and packages. `import` loads a module and binds a name to its module object.", advanced: "Import resolution uses `sys.meta_path`, finders, loaders, module specifications, `sys.path`, and the `sys.modules` cache. Packages define namespaces that may span one or more directories." },
+  packages_and_project_structure: { label: "packages and project structure", intermediate: "Packages group modules into a reusable namespace, while project metadata describes dependencies, builds, tests, and distribution.", advanced: "Modern projects commonly use `pyproject.toml`, isolated virtual environments, build backends, wheels, and explicit package layouts to make imports and deployment reproducible." },
+  file_handling: { label: "file handling", intermediate: "File handling opens, reads, writes, and closes filesystem resources using text or binary modes.", advanced: "File objects are buffered streams. Text wrappers decode bytes using an encoding and normalize newlines; context managers guarantee cleanup even when an operation raises an exception." },
+  pathlib: { label: "pathlib and filesystem paths", intermediate: "`pathlib` represents filesystem paths as objects and provides methods for joining, inspecting, reading, writing, and searching paths.", advanced: "`PurePath` performs lexical operations without filesystem access, while `Path` adds operating-system I/O. Path-like objects implement the `os.PathLike` protocol." },
+  collections_module: { label: "specialized collections", intermediate: "The `collections` module provides containers such as `Counter`, `defaultdict`, `deque`, `namedtuple`, and `ChainMap` for common data-structure tasks.", advanced: "These types optimize specific access patterns and expose behavior beyond the built-in list, tuple, and dictionary types while still following standard collection protocols." },
+  itertools: { label: "itertools", intermediate: "`itertools` supplies fast, memory-efficient iterator building blocks for chaining, grouping, filtering, combining, and repeating data.", advanced: "Most itertools objects are lazy and composable. Their C implementations reduce Python-loop overhead, but infinite iterators must be bounded by the caller." },
+  functools: { label: "functools", intermediate: "`functools` contains tools for higher-order functions, caching, partial application, ordering, generic functions, and preserving wrapper metadata.", advanced: "Its utilities manipulate callable behavior while retaining Python's descriptor and dispatch semantics. Cache decorators also introduce state, memory, and invalidation considerations." },
+  dataclasses: { label: "dataclasses", intermediate: "Dataclasses generate common methods for classes that primarily store data, based on annotated fields.", advanced: "Decorator options control equality, ordering, hashing, frozen instances, slots, keyword-only fields, and pattern-matching metadata. Field factories prevent shared mutable defaults." },
+  type_hints: { label: "type hints", intermediate: "Type hints describe expected values for variables, parameters, and return values so tools can catch mistakes and improve editor assistance.", advanced: "Annotations do not normally enforce types at runtime. Static type systems model unions, protocols, generics, variance, overloads, narrowing, and gradual typing." },
+  protocols_and_abstract_base_classes: { label: "protocols and abstract base classes", intermediate: "Protocols and abstract base classes describe interfaces that objects are expected to support.", advanced: "Abstract base classes use nominal registration and abstract methods, while protocols enable structural subtyping: compatibility depends on available members rather than inheritance alone." },
+  descriptors: { label: "descriptors", intermediate: "Descriptors are objects that customize attribute access through `__get__`, `__set__`, or `__delete__`.", advanced: "Data descriptors take precedence over an instance dictionary, while non-data descriptors can be shadowed. Functions, properties, class methods, static methods, and slots rely on this protocol." },
+  metaclasses: { label: "metaclasses", intermediate: "A metaclass is the class of a class and controls how class objects are created.", advanced: "Class creation resolves the metaclass, prepares the namespace, executes the body, calls the metaclass, and then invokes class-initialization hooks such as `__set_name__` and `__init_subclass__`." },
+  special_methods: { label: "special methods", intermediate: "Special, or dunder, methods let user-defined objects participate in Python syntax and built-in protocols.", advanced: "Python usually looks up special methods on the type rather than the instance. Numeric, container, iteration, context-manager, comparison, and representation protocols each dispatch to particular dunder methods." },
+  introspection_and_reflection: { label: "introspection and reflection", intermediate: "Introspection examines objects at runtime using tools such as `type`, `isinstance`, `dir`, `vars`, `getattr`, and `inspect`.", advanced: "Reflection can dynamically retrieve or modify attributes and inspect signatures, frames, code objects, annotations, and class hierarchies. It should be used carefully because it couples code to runtime structure." },
+  memory_management: { label: "memory management", intermediate: "Python automatically allocates objects and reclaims unreachable memory, so programs rarely free memory manually.", advanced: "CPython primarily uses reference counting plus a cyclic garbage collector. Object arenas, pools, free lists, weak references, and finalizers affect lifetime and memory behavior." },
+  performance: { label: "performance", intermediate: "Python performance work measures execution and memory use, then improves algorithms, data structures, I/O, and hot paths.", advanced: "Reliable optimization starts with profiling. Complexity, interpreter overhead, allocation, cache behavior, vectorization, native extensions, concurrency, and workload shape all affect results." },
+  threading: { label: "threading", intermediate: "Threads run multiple flows of control within one process and are useful mainly for overlapping I/O in standard CPython.", advanced: "Threads share memory and require synchronization. The GIL limits parallel Python bytecode execution in traditional CPython builds, but blocking I/O and many native operations release it." },
+  multiprocessing: { label: "multiprocessing", intermediate: "Multiprocessing uses separate Python processes to run work in parallel across CPU cores.", advanced: "Processes have isolated memory and exchange serialized data through queues, pipes, shared memory, or managers. Startup method, pickling, task size, and inter-process communication determine overhead." },
+  asynchronous_programming: { label: "asynchronous programming", intermediate: "Asynchronous Python uses `async def`, `await`, tasks, and an event loop to interleave operations that spend time waiting.", advanced: "Coroutines cooperate by suspending at await points. The event loop schedules ready tasks and monitors I/O; blocking calls must be avoided or moved to an executor." },
+  date_and_time: { label: "dates and times", intermediate: "Python date-time tools represent dates, clock times, durations, time zones, parsing, and formatting.", advanced: "Correct date-time code distinguishes naive and aware values, handles daylight-saving transitions, uses `timedelta` for durations, and uses `zoneinfo` for IANA time-zone rules." },
+  regular_expressions: { label: "regular expressions", intermediate: "Regular expressions describe text patterns for matching, searching, extracting, splitting, and replacing strings.", advanced: "Regex engines combine literals, character classes, quantifiers, groups, assertions, and backtracking. Escaping, greediness, Unicode rules, and pathological backtracking are common sources of bugs." },
+  serialization: { label: "serialization", intermediate: "Serialization converts in-memory values into a format that can be stored or transmitted, then reconstructed later.", advanced: "Formats differ in supported types, portability, schema, performance, and security. Never deserialize untrusted pickle data because it can execute arbitrary code." },
+  logging: { label: "logging", intermediate: "Logging records structured diagnostic events with severity levels, timestamps, sources, and configurable destinations.", advanced: "Logger hierarchies send records through filters, handlers, and formatters. Production systems must control volume, rotation, structured fields, exception context, and sensitive data." },
+  debugging: { label: "debugging", intermediate: "Debugging finds and explains incorrect program behavior using tracebacks, breakpoints, inspection, logging, and minimized reproductions.", advanced: "Systematic debugging distinguishes symptoms from causes, controls inputs and state, examines stack frames, and validates a hypothesis with a focused regression test." },
+  testing: { label: "testing", intermediate: "Testing executes code under controlled conditions and checks that actual behavior matches expected behavior.", advanced: "Strong suites combine unit, integration, property, regression, and end-to-end tests. Fixtures, parametrization, isolation, deterministic inputs, and coverage of failure paths improve reliability." },
+  security: { label: "security", intermediate: "Python security practices protect code, data, credentials, dependencies, and users from accidental or malicious misuse.", advanced: "Secure design validates untrusted input, avoids unsafe deserialization and shell construction, uses established cryptography, limits privileges, manages secrets, and updates dependencies." },
+  data_science: { label: "data science", intermediate: "Python data science uses arrays, tables, statistics, visualization, and machine-learning tools to analyze data and build models.", advanced: "Reliable analysis requires clean data, explicit assumptions, reproducible pipelines, appropriate validation, leakage prevention, uncertainty measurement, and careful interpretation." },
+  abstract_syntax_trees: { label: "abstract syntax trees", intermediate: "An abstract syntax tree represents Python source code as nested nodes describing its grammatical structure.", advanced: "Python's `ast` module parses source, supports tree traversal and transformation, and can compile valid modified trees. Source positions and context nodes must remain consistent." },
+  docstrings: { label: "docstrings", intermediate: "A docstring is the first string literal in a module, class, function, or method and documents its purpose and use.", advanced: "Docstrings populate `__doc__` and are consumed by `help`, documentation generators, IDEs, and introspection tools. Conventions define summaries, parameters, returns, raises, and examples." },
+});
+
+const PRECISE_TERM_SUMMARIES: Record<string, string> = {
+  asyncio: "`asyncio` is Python's standard-library framework for event-loop based asynchronous I/O, coroutines, tasks, queues, synchronization, and subprocesses.",
+  csv: "`csv` is Python's standard-library module for reading and writing delimiter-separated tabular text such as comma-separated value files.",
+  django: "Django is a third-party, full-stack Python web framework with routing, templates, forms, authentication, and an object-relational mapper.",
+  fastapi: "FastAPI is a third-party Python framework for building typed HTTP APIs using ASGI, type annotations, validation, and automatic OpenAPI documentation.",
+  flask: "Flask is a lightweight third-party Python web framework that provides routing, request handling, templates, and an extension system.",
+  json: "`json` is Python's standard-library module for encoding supported Python values as JSON text and decoding JSON text back into Python values.",
+  matplotlib: "Matplotlib is a Python plotting library for creating static, animated, and interactive charts and figures.",
+  multiprocessing: "`multiprocessing` is Python's standard-library package for running work in separate processes and communicating through queues, pipes, pools, or shared memory.",
+  numpy: "NumPy is a third-party numerical-computing library centered on fast, multidimensional arrays and vectorized operations.",
+  pandas: "pandas is a third-party data-analysis library centered on labeled `Series` and tabular `DataFrame` objects.",
+  pathlib: "`pathlib` is Python's standard-library module for object-oriented filesystem path construction, inspection, traversal, reading, and writing.",
+  requests: "Requests is a third-party Python HTTP client library for sending requests and working with responses, sessions, headers, cookies, and authentication.",
+  scipy: "SciPy is a scientific-computing library built on NumPy that provides algorithms for optimization, integration, interpolation, signal processing, statistics, and more.",
+  seaborn: "Seaborn is a statistical-data-visualization library built on Matplotlib with high-level plotting functions and attractive defaults.",
+  sqlite3: "`sqlite3` is Python's standard-library interface to SQLite, an embedded relational database stored in a local file or memory.",
+  threading: "`threading` is Python's standard-library module for creating and coordinating threads that share memory within one process.",
+  unittest: "`unittest` is Python's standard-library unit-testing framework with test cases, assertions, fixtures, suites, discovery, and mocking support.",
+  xgboost: "XGBoost is a third-party machine-learning library that implements optimized gradient-boosted decision trees for classification, regression, and ranking.",
+  xml: "XML is a text format for structured data; Python's standard library includes parsers and tree APIs under the `xml` package.",
+  yaml: "YAML is a human-readable data-serialization format commonly used for configuration; Python support normally comes from third-party libraries such as PyYAML.",
+};
+
+function summarizeCatalogTerm(term: string, definition: CategoryDefinition): string {
+  const normalized = term.toLowerCase();
+  const precise = PRECISE_TERM_SUMMARIES[normalized];
+  if (precise) return precise;
+  if (/^__.+__$/.test(term)) {
+    return `\`${term}\` is a Python special-method name. Python invokes special methods through syntax or a built-in protocol rather than requiring application code to call them directly.`;
+  }
+  if (/^@/.test(term)) {
+    return `\`${term}\` is decorator syntax associated with ${definition.label}. A decorator changes or registers a function, method, or class when its definition executes.`;
+  }
+  if (/(?:error|exception)$/i.test(term)) {
+    return `\`${term}\` is an exception name associated with ${definition.label}. It identifies a particular failure condition that code may raise, catch, inspect, or allow to propagate.`;
+  }
+  if (/warning$/i.test(term)) {
+    return `\`${term}\` is a warning name associated with ${definition.label}. Warnings report noteworthy conditions without necessarily stopping the program.`;
+  }
+  if (definition.label === 'regular expressions') {
+    return `\`${term}\` is a regular-expression term or pattern token used when describing how text should be matched.`;
+  }
+  if (definition.label === 'operators') {
+    return `\`${term}\` is a Python operator or operator-related term used to combine, compare, assign, or transform values.`;
+  }
+  return `\`${term}\` is a Python concept, API name, syntax form, tool, or library in the area of ${definition.label}.`;
+}
 
 // ── PART 3: MASTER ENTRIES MAP ─────────────────────────────────────────────────
 const ENTRIES = new Map<string, ConceptEntry>();
@@ -2853,17 +2945,27 @@ entry({"name": "descriptor", "aliases": ["descriptor protocol", "__get__", "__se
 
 // ── Export Functions ────────────────────────────────────────────────────────────
 
-function getCategoryFallback(term: string): { found: boolean; intermediate: string; advanced: string } {
-  const cat = CATEGORY_TREE[term.toLowerCase()];
-  if (cat && CATEGORY_DEFS[cat]) {
-    return { found: true, ...CATEGORY_DEFS[cat] };
+export interface CategoryFallback {
+  found: boolean;
+  category: string;
+  label: string;
+  summary: string;
+  intermediate: string;
+  advanced: string;
+}
+
+function getCategoryFallback(term: string): CategoryFallback {
+  const category = CATEGORY_TREE[term.toLowerCase()];
+  const definition = category ? CATEGORY_DEFS[category] : undefined;
+  if (category && definition) {
+    return { found: true, category, summary: summarizeCatalogTerm(term, definition), ...definition };
   }
-  return { found: false, intermediate: '', advanced: '' };
+  return { found: false, category: '', label: '', summary: '', intermediate: '', advanced: '' };
 }
 
 export interface ConceptResult {
   entry: ConceptEntry | null;
-  categoryFallback: { found: boolean; intermediate: string; advanced: string };
+  categoryFallback: CategoryFallback;
   source: 'entry' | 'category' | 'none';
 }
 
@@ -2878,28 +2980,46 @@ export function lookupConcept(term: string): ConceptResult {
   // 1. Check direct entry
   const entry = ENTRIES.get(normalized) ?? null;
   if (entry) {
-    return { entry, categoryFallback: { found: false, intermediate: '', advanced: '' }, source: 'entry' };
+    return { entry, categoryFallback: getCategoryFallback(''), source: 'entry' };
   }
   // 2. Check category tree for fallback
   const cat = CATEGORY_TREE[normalized];
   if (cat && CATEGORY_DEFS[cat]) {
     return {
       entry: null,
-      categoryFallback: { found: true, ...CATEGORY_DEFS[cat] },
+      categoryFallback: getCategoryFallback(normalized),
       source: 'category'
     };
   }
   // 3. Check aliases: iterate entries for alias match
   for (const [, val] of ENTRIES) {
     if (val.aliases.some(a => a.toLowerCase() === normalized)) {
-      return { entry: val, categoryFallback: { found: false, intermediate: '', advanced: '' }, source: 'entry' };
+      return { entry: val, categoryFallback: getCategoryFallback(''), source: 'entry' };
     }
   }
-  return { entry: null, categoryFallback: { found: false, intermediate: '', advanced: '' }, source: 'none' };
+  return { entry: null, categoryFallback: getCategoryFallback(''), source: 'none' };
 }
 
 export function getAllCategoryNames(): string[] {
   return Object.keys(CATEGORY_DEFS).sort();
+}
+
+export function getAllConceptTerms(): string[] {
+  return Object.keys(CATEGORY_TREE).filter(Boolean).sort((a, b) => a.localeCompare(b));
+}
+
+export function getConceptCoverage(): { total: number; entries: number; categoryFallbacks: number; missing: string[] } {
+  const terms = getAllConceptTerms();
+  let entries = 0;
+  let categoryFallbacks = 0;
+  const missing: string[] = [];
+  for (const term of terms) {
+    const result = lookupConcept(term);
+    if (result.source === 'entry') entries += 1;
+    else if (result.source === 'category') categoryFallbacks += 1;
+    else missing.push(term);
+  }
+  return { total: terms.length, entries, categoryFallbacks, missing };
 }
 
 export function hasConcept(term: string): boolean {

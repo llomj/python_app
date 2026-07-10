@@ -3,7 +3,7 @@
 // Used by the built-in Problem AI when WebLLM is not available
 // ────────────────────────────────────────────────────────────────────────────
 
-import { lookupConcept } from './pythonConceptLibrary';
+import { lookupConcept, type ConceptResult } from './pythonConceptLibrary';
 
 interface RefEntry {
   name: string
@@ -708,10 +708,10 @@ export const allConcepts = (): string[] =>
 
 /** Look up a single term (method name, built-in name, or concept). */
 export const lookup = (name: string, preferredType?: string): RefEntry | undefined => {
-  const clean = name.toLowerCase().replace(/[^a-z0-9_]/g, '');
-  // Remove leading type prefix like "str." or "list." before lookup
-  const withoutPrefix = clean.replace(/^(str|list|dict|set|tuple|int|float|bool)\./, '');
-  const entries = _ref[clean] || _ref[withoutPrefix] || [];
+  const normalized = name.toLowerCase().trim().replace(/\(\)$/, '');
+  const withoutPrefix = normalized.replace(/^(str|list|dict|set|tuple|int|float|bool)\./, '');
+  const clean = withoutPrefix.replace(/[^a-z0-9_]/g, '');
+  const entries = _ref[clean] || [];
   return (preferredType ? entries.find(entry => entry.type === preferredType) : undefined) || entries[0];
 };
 
@@ -816,6 +816,69 @@ const buildMutationComparisonAnswer = (question: string): string | null => {
   return null;
 };
 
+const formatReferenceAnswer = (entry: RefEntry): string => {
+  let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
+  if (entry.type === 'builtin') label = 'Built-in function';
+  return `**${label}: \`${entry.signature}\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
+};
+
+const formatConceptAnswer = (term: string, result: ConceptResult): string | null => {
+  if (result.entry) {
+    const entry = result.entry;
+    return `**${entry.name}**\n\n**Easy:** ${entry.easy}\n\n**Intermediate:** ${entry.intermediate}\n\n**Advanced:** ${entry.advanced}${entry.examples.length ? `\n\n**Examples:**\n${entry.examples.map(example => `\`\`\`python\n${example.code}\n\`\`\``).join('\n')}` : ''}${entry.commonMistakes.length ? `\n\n**Common mistakes:**\n${entry.commonMistakes.map(mistake => `- ${mistake}`).join('\n')}` : ''}${entry.related.length ? `\n\n**Related:** ${entry.related.map(related => `\`${related}\``).join(', ')}` : ''}`;
+  }
+
+  if (!result.categoryFallback.found) return null;
+  const fallback = result.categoryFallback;
+  return [
+    `**${term}**`,
+    '',
+    fallback.summary,
+    '',
+    `**Category context:** ${fallback.intermediate}`,
+    '',
+    `**Deeper context:** ${fallback.advanced}`,
+    '',
+    `Ask "show an example of ${term}" or include the code where you saw it for a more specific explanation.`,
+  ].join('\n');
+};
+
+const resolveDefinitionTerm = (term: string, preferredType?: string): string | null => {
+  const normalized = term
+    .trim()
+    .replace(/[?.!]+$/, '')
+    .replace(/^(?:a|an|the)\s+/i, '')
+    .replace(/\s+(?:in python)$/i, '')
+    .trim();
+  if (!normalized) return null;
+
+  const concept = lookupConcept(normalized);
+  if (concept.source === 'entry') return formatConceptAnswer(normalized, concept);
+
+  // Exact API references are more useful than a broad category fallback.
+  const reference = lookup(normalized, preferredType);
+  if (reference) return formatReferenceAnswer(reference);
+
+  return concept.source === 'category' ? formatConceptAnswer(normalized, concept) : null;
+};
+
+const extractDefinitionTerm = (question: string): string | null => {
+  const cleaned = question.trim().replace(/[?.!]+$/, '').trim();
+  if (!cleaned) return null;
+
+  const definitionMatch = cleaned.match(
+    /^(?:(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell\s+me\s+about)|can\s+you\s+(?:define|describe|explain))\s+(.+)$/i,
+  );
+  if (!definitionMatch) {
+    return cleaned.split(/\s+/).length <= 4 ? cleaned : null;
+  }
+
+  return definitionMatch[1]
+    .replace(/^(?:a|an|the)\s+/i, '')
+    .replace(/\s+(?:do|does|mean|work)$/i, '')
+    .trim();
+};
+
 /** Build a full reference answer for a general Python question */
 export const answerGeneralPythonQuestion = (question: string): string | null => {
   const q = question.toLowerCase().trim();
@@ -829,25 +892,10 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   const mutationAnswer = buildMutationComparisonAnswer(question);
   if (mutationAnswer) return mutationAnswer;
 
-  // ── Bare word / short phrase lookup (concept library first) ──────────
-  const wordCount = q.split(/\s+/).length;
-  if (wordCount <= 4) {
-    // Concept library takes priority for bare-word definitions
-    const bareConcept = lookupConcept(q);
-    if (bareConcept.source === 'entry' && bareConcept.entry) {
-      const e = bareConcept.entry;
-      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}${e.related.length ? `\n\n**Related:** ${e.related.map(r => `\`${r}\``).join(', ')}` : ''}`;
-    }
-    if (bareConcept.source === 'category') {
-      return `**${q}**\n\n${bareConcept.categoryFallback.intermediate}\n\n**Deep Dive:**\n${bareConcept.categoryFallback.advanced}`;
-    }
-    // Fall back to method/builtin reference
-    const bareEntry = lookup(q, preferredMethodType);
-    if (bareEntry) {
-      let label = bareEntry.type.charAt(0).toUpperCase() + bareEntry.type.slice(1);
-      if (bareEntry.type === 'builtin') label = 'Built-in function';
-      return `**${label}: \`${bareEntry.name}()\`**\n\n${bareEntry.desc}\n\n\`\`\`python\n${bareEntry.example}\n\`\`\``;
-    }
+  const definitionTerm = extractDefinitionTerm(q);
+  if (definitionTerm) {
+    const definitionAnswer = resolveDefinitionTerm(definitionTerm, preferredMethodType);
+    if (definitionAnswer) return definitionAnswer;
   }
 
   // ── Listing all methods ──────────────────────────────────────────────
@@ -918,65 +966,6 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
       return `**${type} method: \`${entry.signature}\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
     }
   }
-  const nameMatch = normalizedNameQ.match(/(?:what|how|explain|tell me about|describe)\s+(?:is|does|about|a|the)?\s*(?:a |an |the |a |an )?(\w+(?:\(\))?)\s*(?:method|function|keyword|built.in)?\s*(?:do|work|mean)?/i);
-  if (nameMatch) {
-    const rawName = nameMatch[1].replace(/[()]/g, '').toLowerCase();
-    const dataTypeConcept = allReferenceEntries().find(e =>
-      e.type === 'concept' && e.name.toLowerCase() === `${rawName} data type`
-    );
-    if (dataTypeConcept && /\b(?:data type|list|dict(?:ionary)?|tuple|set|string)\b/i.test(normalizedNameQ)) {
-      return `**${dataTypeConcept.name}**\n\n${dataTypeConcept.desc}\n\n\`\`\`python\n${dataTypeConcept.example}\n\`\`\``;
-    }
-    // Concept library takes priority for definitions
-    const cl2 = lookupConcept(rawName);
-    if (cl2.source === 'entry' && cl2.entry) {
-      const e = cl2.entry;
-      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}`;
-    }
-    if (cl2.source === 'category') {
-      return `**${rawName}**\n\n${cl2.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl2.categoryFallback.advanced}`;
-    }
-    // Fall back to method/builtin reference
-    const entry = lookup(rawName, preferredMethodType);
-    if (entry) {
-      let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
-      if (entry.type === 'builtin') label = 'Built-in function';
-      return `**${label}: \`${entry.name}()\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
-    }
-  }
-
-  // ── Direct "what is X" lookup ───────────────────────────────────────
-  const simpleQ = q.replace(/what'?s\b/gi, 'what is');
-  const simpleMatch = simpleQ.match(/what (is|are)\s*(a |an |the )?(\w[\w ]{0,30}?\w|\w)/i);
-  if (simpleMatch) {
-    let rawName = simpleMatch[3].toLowerCase().trim().replace(/\s+/g, ' ').replace(/^(a |an |the )/i, '');
-    // Concept library takes priority
-    const cl = lookupConcept(rawName);
-    if (cl.source === 'entry' && cl.entry) {
-      const e = cl.entry;
-      return `**${e.name}**\n\n🔹 **Easy:** ${e.easy}\n\n🔹 **Intermediate:** ${e.intermediate}\n\n🔹 **Advanced:** ${e.advanced}${e.examples.length ? `\n\n**Examples:**\n${e.examples.map(ex => `\`\`\`python\n${ex.code}\n\`\`\``).join('\n')}` : ''}${e.commonMistakes.length ? `\n\n**Common Mistakes:**\n${e.commonMistakes.map(m => `• ${m}`).join('\n')}` : ''}`;
-    }
-    if (cl.source === 'category') {
-      return `**${rawName}**\n\n${cl.categoryFallback.intermediate}\n\n**Deep Dive:**\n${cl.categoryFallback.advanced}`;
-    }
-    // Then try reference entries
-    const conceptEntry = allReferenceEntries().find(e => {
-      if (e.type !== 'concept') return false;
-      const normalized = e.name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ');
-      return normalized === rawName || normalized === rawName + ' data type';
-    });
-    if (conceptEntry) {
-      return `**${conceptEntry.name}**\n\n${conceptEntry.desc}\n\n\`\`\`python\n${conceptEntry.example}\n\`\`\``;
-    }
-    // Then try method/builtin lookup
-    const entry = lookup(rawName, preferredMethodType);
-    if (entry) {
-      let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
-      if (entry.type === 'builtin') label = 'Built-in function';
-      return `**${label}: \`${entry.name}\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
-    }
-  }
-
   // ── Concept matching ─────────────────────────────────────────────────
   for (const e of allReferenceEntries()) {
     if (e.type !== 'concept') continue;

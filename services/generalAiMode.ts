@@ -39,7 +39,12 @@ export const composeGeneralAiAnswer = ({
     followUps = '',
 }: ComposeGeneralAiAnswerOptions): string => {
     if (mode === 'simple') {
-        return [answer, language === 'fr'
+        const blocks = answer.split(/\n{2,}/).map(block => block.trim()).filter(Boolean);
+        const firstCodeBlock = answer.match(/```python\n[\s\S]*?```/)?.[0] || '';
+        const conciseAnswer = [blocks[0], blocks[1], firstCodeBlock]
+            .filter((block, index, all) => block && all.indexOf(block) === index)
+            .join('\n\n');
+        return [conciseAnswer, language === 'fr'
             ? `**À retenir**\nConcentrez-vous d’abord sur le rôle de ${topic}, puis sur sa syntaxe.`
             : `**Key point**\nFocus first on what ${topic} does, then on its syntax.`]
             .filter(Boolean)
@@ -49,8 +54,8 @@ export const composeGeneralAiAnswer = ({
     if (mode === 'examples') {
         return [
             answer,
-            language === 'fr' ? '**Exemples progressifs**' : '**Progressive examples**',
-            examples,
+            examples ? (language === 'fr' ? '**Exemples progressifs**' : '**Progressive examples**') : '',
+            examples || '',
             language === 'fr'
                 ? '**Comment les lire**\n1. Repérez la valeur de départ.\n2. Suivez l’opération.\n3. Vérifiez la valeur affichée ou renvoyée.'
                 : '**How to read them**\n1. Find the starting value.\n2. Follow the operation.\n3. Check the printed or returned value.',
