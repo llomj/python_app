@@ -1,4 +1,5 @@
 import { AiReviewRequest, AiReviewResult } from '../aiReviewTypes';
+import { AiLanguage, aiLanguageInstruction } from './aiLocalization';
 
 type EngineModule = typeof import('@mlc-ai/web-llm');
 
@@ -47,6 +48,7 @@ const clampText = (text: string, maxLength: number) => (
 
 const buildPrompt = (request: AiReviewRequest) => `
 Review this beginner Python answer against the exact problem, grader result, and program output.
+${aiLanguageInstruction(request.language || 'en')}
 Return JSON only:
 {"verdict":"likely_correct|likely_incorrect|unclear","confidence":0.0,"explanation":"specific review","suggestedFix":"specific fix or empty"}
 
@@ -89,6 +91,7 @@ ${request.visibleSolution ? `Expected solution:\n${clampText(request.visibleSolu
 
 const buildTutorPrompt = (question: string, request: AiReviewRequest) => `
 Answer the user's Python learning question for this exact exercise.
+${aiLanguageInstruction(request.language || 'en')}
 
 Rules:
 - Answer the user's question directly first. Do not start by repeating "what this problem wants" unless the user asks for a task explanation.
@@ -175,7 +178,7 @@ export const reviewWithWebLlm = async (request: AiReviewRequest, modelId: string
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a precise Python tutor and code reviewer. Return valid JSON only. Every explanation must cite the exact problem and specific code lines or identifiers.' },
+            { role: 'system', content: `You are a precise Python tutor and code reviewer. ${aiLanguageInstruction(request.language || 'en')} Return valid JSON only. Every explanation must cite the exact problem and specific code lines or identifiers.` },
             { role: 'user', content: buildPrompt(request) },
         ],
         temperature: 0.1,
@@ -188,7 +191,7 @@ export const answerProblemQuestionWithWebLlm = async (question: string, request:
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a Python tutor. Answer the user question clearly with short examples. If asked for a list (all methods, all built-ins etc), give a numbered list. If asked what something does, explain it with a 1-3 line example. For method-vs-built-in comparisons such as list.sort() vs sorted(), list.reverse() vs reversed(), append(), update(), add(), or methods returning None, explicitly explain: method or built-in, whether it mutates the original object, what it returns, and a short code example. Be direct and concise. Do not return JSON.' },
+            { role: 'system', content: `You are a Python tutor. ${aiLanguageInstruction(request.language || 'en')} Answer the user question clearly with short examples. If asked for a list (all methods, all built-ins etc), give a numbered list. If asked what something does, explain it with a 1-3 line example. For method-vs-built-in comparisons such as list.sort() vs sorted(), list.reverse() vs reversed(), append(), update(), add(), or methods returning None, explicitly explain: method or built-in, whether it mutates the original object, what it returns, and a short code example. Be direct and concise. Do not return JSON.` },
             { role: 'user', content: buildTutorPrompt(question, request) },
         ],
         temperature: 0.2,
@@ -197,11 +200,11 @@ export const answerProblemQuestionWithWebLlm = async (question: string, request:
     return String(response?.choices?.[0]?.message?.content || '').trim();
 };
 
-export const answerGeneralPythonWithWebLlm = async (question: string, modelId: string): Promise<string> => {
+export const answerGeneralPythonWithWebLlm = async (question: string, modelId: string, language: AiLanguage = 'en'): Promise<string> => {
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: 'You are a Python expert answering a general Python question. Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If the user asks the difference between any method and any built-in function, compare them side by side: method/function, mutates original or not, return value, common mistake, and code example. Important rule: mutating methods such as list.append(), list.extend(), list.sort(), list.reverse(), dict.update(), and set.add() usually modify the object and return None; built-ins such as sorted() and reversed() leave the original unchanged and return a new result or iterator. If you are not 100% confident about the answer, respond with exactly "I cannot answer that" — never guess, never make up syntax, never invent functions. Do not return JSON.' },
+            { role: 'system', content: `You are a Python expert answering a general Python question. ${aiLanguageInstruction(language)} Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If the user asks the difference between any method and any built-in function, compare them side by side: method/function, mutates original or not, return value, common mistake, and code example. Important rule: mutating methods such as list.append(), list.extend(), list.sort(), list.reverse(), dict.update(), and set.add() usually modify the object and return None; built-ins such as sorted() and reversed() leave the original unchanged and return a new result or iterator. If you are not 100% confident about the answer, do not guess or invent syntax. Do not return JSON.` },
             { role: 'user', content: question },
         ],
         temperature: 0.2,
@@ -216,6 +219,7 @@ export const answerGeneralPythonWithWebLlmConversation = async (
     question: string,
     modelId: string,
     history: ChatMessage[] = [],
+    language: AiLanguage = 'en',
 ): Promise<string> => {
     const engine = await loadWebLlmReviewer(modelId);
     const messages: ChatMessage[] = [
@@ -223,6 +227,7 @@ export const answerGeneralPythonWithWebLlmConversation = async (
             role: 'system',
             content: [
                 'You are an interactive Python tutor in a conversation.',
+                aiLanguageInstruction(language),
                 'Be clear, correct, and give code examples.',
                 'If the user says "expand", "more", "detail", "examples", or similar follow-ups, expand on your previous answer.',
                 'For method-vs-built-in comparisons, always state whether each option mutates the original object and what each option returns. Explain why mutating methods commonly return None.',

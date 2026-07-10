@@ -1,4 +1,5 @@
 import { AiReviewRequest, AiReviewResult } from '../aiReviewTypes';
+import { localizeAiText } from './aiLocalization';
 
 const hasFunctionDefinition = (code: string) => /\bdef\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/.test(code);
 const hasReturn = (code: string) => /\breturn\b/.test(code);
@@ -534,6 +535,89 @@ const visibleSolutionFix = (request: AiReviewRequest) => {
     return concise ? `Use this structure for this exact problem:\n\`\`\`python\n${concise}\n\`\`\`` : '';
 };
 
+const describeCodeLineFr = (line: string) => {
+    if (/^\s*(?:from|import)\s+/.test(line)) return 'importe un module';
+    if (/^\s*def\s+/.test(line)) return 'définit la fonction que le correcteur peut appeler';
+    if (/^\s*pass\s*$/.test(line)) return 'est seulement un emplacement vide et ne réalise aucun calcul';
+    if (/^\s*return\b/.test(line)) return 'renvoie une valeur au correcteur';
+    if (/^\s*print\s*\(/.test(line)) return 'affiche une valeur dans la sortie';
+    if (/\binput\s*\(/.test(line)) return 'demande une entrée interactive';
+    if (/^\s*(?:if|elif|else)\b/.test(line)) return 'choisit une branche selon une condition';
+    if (/^\s*(?:for|while)\b/.test(line)) return 'répète un bloc de code';
+    if (/=/.test(line) && !/[=!<>]=/.test(line)) return 'affecte ou calcule une valeur';
+    return 'exécute cette instruction';
+};
+
+const buildFrenchDiagnosticReview = (
+    request: AiReviewRequest,
+    verdict: AiReviewResult['verdict'],
+    confidence: number,
+    expectedGot: ReturnType<typeof extractExpectedGot>,
+    raisedError: ReturnType<typeof extractRaisedError>,
+    requiredFunctionName: string,
+): AiReviewResult => {
+    const code = request.userCode || '';
+    const importantLines = code.split('\n')
+        .map((line, index) => ({ text: line.trim(), number: index + 1 }))
+        .filter(item => item.text && !item.text.startsWith('#'))
+        .slice(0, 10);
+    const codeCheck = importantLines.length
+        ? importantLines.map(item => `Ligne ${item.number} : \`${item.text}\` ${describeCodeLineFr(item.text)}.`).join('\n')
+        : 'L’éditeur est vide : aucune ligne ne peut encore être vérifiée.';
+
+    let outputAnalysis: string;
+    if (request.graderPassed) {
+        outputAnalysis = `Correcte. Le correcteur a accepté la réponse${request.programOutput?.trim() ? ` et la sortie visible est \`${request.programOutput.trim().slice(0, 180)}\`` : ''}.`;
+    } else if (expectedGot) {
+        outputAnalysis = `${expectedGot.args ? `Pour ${expectedGot.args}, ` : ''}le correcteur attendait \`${expectedGot.expected}\`, mais le code a produit \`${expectedGot.actual}\`.`;
+    } else if (raisedError) {
+        outputAnalysis = `Le code s’est arrêté avec \`${raisedError.errorType}\`${raisedError.detail ? ` : \`${raisedError.detail}\`` : ''}. Cette erreur doit être corrigée avant de vérifier le résultat final.`;
+    } else {
+        outputAnalysis = `Le correcteur n’a pas accepté cette réponse. ${localizeAiText(request.graderMessage || 'Aucun détail supplémentaire.', 'fr')}`;
+    }
+
+    const concepts = [
+        /\bdef\s+/.test(code) ? '`def` crée une fonction ; son bloc indenté ne s’exécute que lorsque la fonction est appelée.' : '',
+        /\breturn\b/.test(code) ? '`return` renvoie une valeur à l’appelant et au correcteur.' : '',
+        /\bprint\s*\(/.test(code) ? '`print()` affiche une valeur, mais ne la renvoie pas à une fonction appelante.' : '',
+        /\b(?:for|while)\b/.test(code) ? 'Une boucle répète son bloc indenté ; une boucle `for` parcourt des valeurs et une boucle `while` dépend d’une condition.' : '',
+        /\b(?:if|elif|else)\b/.test(code) ? '`if`, `elif` et `else` choisissent quelle branche exécuter.' : '',
+        /\[[^\]]*:[^\]]*\]/.test(code) ? 'Une tranche `[début:fin:pas]` sélectionne une partie d’une séquence ; la position `fin` est exclue.' : '',
+        /\[[^\]]*\]/.test(code) ? 'Les crochets peuvent créer une liste ou accéder à un élément par son index.' : '',
+        /\{[^}]*:[^}]*\}/.test(code) ? 'Les accolades contenant des paires `clé: valeur` créent un dictionnaire.' : '',
+    ].filter(Boolean);
+
+    const solutionLines = extractPrimarySolutionLines(request.visibleSolution || '')
+        .map(line => line.trim())
+        .filter(Boolean)
+        .slice(0, 7);
+    const workflow = solutionLines.length
+        ? solutionLines.map((line, index) => `Étape ${index + 1} : \`${line}\` ${describeCodeLineFr(line)}.`).join('\n')
+        : 'Identifiez les entrées demandées, appliquez l’opération décrite, puis renvoyez ou affichez exactement le type de résultat demandé.';
+
+    let suggestedFix = 'Comparez le nom de la fonction, ses paramètres, la valeur renvoyée et les cas limites avec l’énoncé, puis relancez le code.';
+    if (!code.trim()) suggestedFix = 'Écrivez d’abord une solution dans l’éditeur, puis relancez la révision.';
+    else if (/\bpass\b/.test(code)) suggestedFix = 'Remplacez `pass` par la logique demandée et ajoutez la valeur finale avec `return` ou `print()` selon l’énoncé.';
+    else if (expectedGot?.actual === 'None' && hasFunctionDefinition(code) && !hasReturn(code)) suggestedFix = 'La fonction renvoie `None`. Remplacez le `print()` final par `return`, ou ajoutez un `return` dans chaque branche.';
+    else if (raisedError) suggestedFix = `Corrigez d’abord l’erreur \`${raisedError.errorType}\`, puis exécutez à nouveau le code.`;
+    else if (requiredFunctionName && !new RegExp(`\\bdef\\s+${requiredFunctionName}\\s*\\(`).test(code)) suggestedFix = `Définissez la fonction demandée avec le nom exact \`${requiredFunctionName}\`.`;
+
+    return {
+        verdict,
+        confidence,
+        explanation: [
+            `1. Exigence du problème\n${request.description || request.title}`,
+            `2. Vérification ligne par ligne\n${codeCheck}`,
+            `3. Analyse de la sortie\n${outputAnalysis}`,
+            `4. Explication du code\n${concepts.length ? concepts.join('\n') : 'Le code utilise des instructions Python simples exécutées de haut en bas.'}`,
+            `5. Déroulement de la solution\n${workflow}`,
+            `6. Point à corriger\n${suggestedFix}`,
+        ].join('\n\n'),
+        suggestedFix,
+        source: 'diagnostic',
+    };
+};
+
 const buildCodeComparisonReview = (userCode: string, solution: string, description: string): { notes: string[]; fixes: string[] } => {
     const notes: string[] = [];
     const fixes: string[] = [];
@@ -817,13 +901,20 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
         fixes.push('Compare the submitted code against the exact function name, inputs, return value, and edge cases in the prompt.');
     }
 
+    if (request.language === 'fr') {
+        return buildFrenchDiagnosticReview(request, verdict, confidence, expectedGot, raisedError, requiredFunctionName);
+    }
+
+    const explanation = notes.join(' ');
+    const suggestedFix = fixes.length
+        ? [...new Set(fixes)].join(' ')
+        : 'Compare the required function name, return value, and edge cases against the problem statement.';
+
     return {
         verdict,
         confidence,
-        explanation: notes.join(' '),
-        suggestedFix: fixes.length
-            ? [...new Set(fixes)].join(' ')
-            : 'Compare the required function name, return value, and edge cases against the problem statement.',
+        explanation: localizeAiText(explanation, request.language || 'en'),
+        suggestedFix: localizeAiText(suggestedFix, request.language || 'en'),
         source: 'diagnostic',
     };
 };

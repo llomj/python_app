@@ -3,6 +3,7 @@ import { buildDiagnosticReview } from './aiReviewDiagnostics';
 import { answerGeneralPythonWithWebLlm, answerGeneralPythonWithWebLlmConversation, answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
+import { AiLanguage } from './aiLocalization';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC';
@@ -454,6 +455,7 @@ export const answerGeneralPythonWithAvailableAi = async (
     question: string,
     state: OfflineAiState,
     history: ChatMessage[] = [],
+    language: AiLanguage = 'en',
 ): Promise<string | null> => {
     if (!state.enabled || state.status !== 'ready') return null;
     if (!supportsWebLlm()) return null;
@@ -461,8 +463,8 @@ export const answerGeneralPythonWithAvailableAi = async (
     try {
         const answer = await withTimeout(
             history.length > 0
-                ? answerGeneralPythonWithWebLlmConversation(question, state.modelId, history)
-                : answerGeneralPythonWithWebLlm(question, state.modelId),
+                ? answerGeneralPythonWithWebLlmConversation(question, state.modelId, history, language)
+                : answerGeneralPythonWithWebLlm(question, state.modelId, language),
             OFFLINE_AI_REVIEW_TIMEOUT_MS,
             'Offline AI general tutor timed out.',
         );

@@ -877,6 +877,12 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   const nameMatch = normalizedNameQ.match(/(?:what|how|explain|tell me about|describe)\s+(?:is|does|about|a|the)?\s*(?:a |an |the |a |an )?(\w+(?:\(\))?)\s*(?:method|function|keyword|built.in)?\s*(?:do|work|mean)?/i);
   if (nameMatch) {
     const rawName = nameMatch[1].replace(/[()]/g, '').toLowerCase();
+    const dataTypeConcept = Object.values(_ref).find(e =>
+      e.type === 'concept' && e.name.toLowerCase() === `${rawName} data type`
+    );
+    if (dataTypeConcept && /\b(?:data type|list|dict(?:ionary)?|tuple|set|string)\b/i.test(normalizedNameQ)) {
+      return `**${dataTypeConcept.name}**\n\n${dataTypeConcept.desc}\n\n\`\`\`python\n${dataTypeConcept.example}\n\`\`\``;
+    }
     const entry = lookup(rawName);
     if (entry) {
       let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);

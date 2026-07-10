@@ -53,6 +53,7 @@ import { EXERCISES_FR } from './services/exercisesFr';
 import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { answerGeneralPythonQuestion } from './services/pythonReference';
+import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -999,11 +1000,26 @@ const buildGeneralAiClarification = (question: string): string => {
     ].join('\n');
 };
 
-const formatAiReviewHintText = (review: AiReviewResult) => (
-    `${review.verdict.replace('_', ' ').toUpperCase()}\n\n${review.explanation}${review.suggestedFix ? `\n\nSuggested fix: ${review.suggestedFix}` : ''}`
-);
+const formatAiReviewHintText = (review: AiReviewResult, language: 'en' | 'fr' = 'en') => {
+    const verdict = language === 'fr'
+        ? ({ likely_correct: 'PROBABLEMENT CORRECT', likely_incorrect: 'PROBABLEMENT INCORRECT', unclear: 'INCERTAIN' } as const)[review.verdict]
+        : review.verdict.replace('_', ' ').toUpperCase();
+    const suggestedFixLabel = language === 'fr' ? 'Correction suggérée' : 'Suggested fix';
+    return `${verdict}\n\n${localizeAiText(review.explanation, language)}${review.suggestedFix ? `\n\n${suggestedFixLabel}: ${localizeAiText(review.suggestedFix, language)}` : ''}`;
+};
 
-const getOfflineAiStatusLabel = (status: OfflineAiStatus) => {
+const getOfflineAiStatusLabel = (status: OfflineAiStatus, language: 'en' | 'fr' = 'en') => {
+    if (language === 'fr') {
+        switch (status) {
+            case 'failed': return 'modèle indisponible';
+            case 'unsupported': return 'non pris en charge ici';
+            case 'not_installed': return 'non installé';
+            case 'ready': return 'prêt';
+            case 'disabled': return 'désactivé';
+            case 'downloading': return 'téléchargement';
+            case 'removing': return 'suppression';
+        }
+    }
     switch (status) {
         case 'failed':
             return 'model unavailable';
@@ -1016,16 +1032,16 @@ const getOfflineAiStatusLabel = (status: OfflineAiStatus) => {
     }
 };
 
-const getAiReviewSourceLabel = (source: AiReviewResult['source']) => {
+const getAiReviewSourceLabel = (source: AiReviewResult['source'], language: 'en' | 'fr' = 'en') => {
     switch (source) {
         case 'offline_model':
-            return 'offline model';
+            return language === 'fr' ? 'modèle hors ligne' : 'offline model';
         case 'gemini':
             return 'Gemini AI';
         case 'ollama':
-            return 'local AI (Ollama)';
+            return language === 'fr' ? 'IA locale (Ollama)' : 'local AI (Ollama)';
         case 'diagnostic':
-            return 'built-in offline';
+            return language === 'fr' ? 'diagnostic hors ligne intégré' : 'built-in offline';
         default:
             return source;
     }
@@ -11346,23 +11362,24 @@ const getGuideSectionStyle = (tone: GuideSection['tone']) => {
     }
 };
 
-const getAiStepTitle = (step: string, index: number) => {
+const getAiStepTitle = (step: string, index: number, language: 'en' | 'fr' = 'en') => {
     const normalized = step.toLowerCase();
-    if (normalized.includes('problem requirement')) return 'Problem Requirement';
-    if (normalized.includes('line-by-line') || normalized.includes('code inspection')) return 'Code Check';
-    if (normalized.includes('output analysis')) return 'Output Analysis';
-    if (normalized.includes('code explanation') || normalized.includes('syntax explanation') || normalized.includes('concept explanation')) return 'Code Explanation';
-    if (normalized.includes('expected solution workflow') || normalized.includes('function workflow')) return 'Solution Workflow';
-    if (normalized.includes('execution order') || normalized.includes('order of operation')) return 'Execution Order';
-    if (normalized.includes('grader') || normalized.includes('mismatch') || normalized.includes('failed') || normalized.includes('rejected')) return 'Result / Error';
-    if (normalized.includes('built-in review') || normalized.includes('local model')) return 'Review Status';
-    if (normalized.includes('suggested fix') || normalized.includes('what to change')) return 'What To Change';
-    return `Review Point ${index + 1}`;
+    const fr = language === 'fr';
+    if (normalized.includes('problem requirement') || normalized.includes('exigence du problème')) return fr ? 'Exigence Du Problème' : 'Problem Requirement';
+    if (normalized.includes('line-by-line') || normalized.includes('code inspection') || normalized.includes('ligne par ligne') || normalized.includes('vérification du code')) return fr ? 'Vérification Du Code' : 'Code Check';
+    if (normalized.includes('output analysis') || normalized.includes('analyse de la sortie')) return fr ? 'Analyse De La Sortie' : 'Output Analysis';
+    if (normalized.includes('code explanation') || normalized.includes('syntax explanation') || normalized.includes('concept explanation') || normalized.includes('explication du code')) return fr ? 'Explication Du Code' : 'Code Explanation';
+    if (normalized.includes('expected solution workflow') || normalized.includes('function workflow') || normalized.includes('déroulement') || normalized.includes('flux de la solution')) return fr ? 'Déroulement De La Solution' : 'Solution Workflow';
+    if (normalized.includes('execution order') || normalized.includes('order of operation') || normalized.includes("ordre d'exécution") || normalized.includes('ordre des opérations')) return fr ? "Ordre D'Exécution" : 'Execution Order';
+    if (normalized.includes('grader') || normalized.includes('correcteur') || normalized.includes('mismatch') || normalized.includes('failed') || normalized.includes('rejected') || normalized.includes('échec')) return fr ? 'Résultat / Erreur' : 'Result / Error';
+    if (normalized.includes('built-in review') || normalized.includes('local model') || normalized.includes('révision intégrée') || normalized.includes('modèle local')) return fr ? 'État De La Révision' : 'Review Status';
+    if (normalized.includes('suggested fix') || normalized.includes('what to change') || normalized.includes('correction suggérée') || normalized.includes("ce qu'il faut modifier")) return fr ? 'À Modifier' : 'What To Change';
+    return fr ? `Point De Révision ${index + 1}` : `Review Point ${index + 1}`;
 };
 
 const getAiStepTone = (step: string, accentColor: string) => {
     const normalized = step.toLowerCase();
-    if (normalized.includes('output analysis')) {
+    if (normalized.includes('output analysis') || normalized.includes('analyse de la sortie')) {
         if (normalized.includes('incorrect')) {
             return {
                 color: '#FF1900',
@@ -11429,7 +11446,7 @@ const splitAiReviewSteps = (text: string) => {
     return sentenceSections.length > 1 ? sentenceSections : [normalized];
 };
 
-function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false, numbered = false }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean; numbered?: boolean }) {
+function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false, numbered = false, language = 'en' }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean; numbered?: boolean; language?: 'en' | 'fr' }) {
     const parts = parseAiTextParts(text);
     const renderCode = (code: string, key: string) => (
         <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
@@ -11470,7 +11487,7 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                                     </div>
                                     <div className="min-w-0 space-y-2">
                                         <div className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: tone.color }}>
-                                            {getAiStepTitle(step, stepIndex)}
+                                            {getAiStepTitle(step, stepIndex, language)}
                                         </div>
                                         <div className="space-y-1.5">
                                             {splitAiStepParagraphs(step).map((paragraph, paragraphIndex, paragraphs) => (
@@ -11592,7 +11609,7 @@ const App: React.FC = () => {
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [newName, setNewName] = useState('');
 
-    const [output, setOutput] = useState('Run code to see output...');
+    const [output, setOutput] = useState(() => t('output.runPrompt', getLanguage()));
     const [outputStatus, setOutputStatus] = useState<OutputStatus>('idle');
     const [pendingNextProblem, setPendingNextProblem] = useState(false);
     const [stdinValues, setStdinValues] = useState<string[]>([]);
@@ -11650,6 +11667,13 @@ const App: React.FC = () => {
     const changeLang = useCallback((newLang: 'en' | 'fr') => {
         setLanguage(newLang);
         setAppLang(newLang);
+        setProblemAiMessages([]);
+        setGeneralAiMessages([]);
+        setLatestAiReviewRequest(null);
+        setLatestAiReviewResult(null);
+        setAiHintText('');
+        setOutput(t('output.runPrompt', newLang));
+        setOutputStatus('idle');
     }, []);
     useEffect(() => {
         if (!generalAiRunning) { setGeneralAiProgress(0); return; }
@@ -11776,7 +11800,7 @@ const App: React.FC = () => {
             setExercise(ex);
             setFiles([{ name: 'main.py', content: ex.initialCode }]);
             setActiveFileIndex(0);
-            setOutput('Run code to see output...');
+            setOutput(t('output.runPrompt', appLang));
             setOutputStatus('idle');
             setPendingNextProblem(false);
             setAiHintText('');
@@ -11822,7 +11846,7 @@ const App: React.FC = () => {
             setExercise(ex);
             setFiles([{ name: 'main.py', content: ex.initialCode }]);
             setActiveFileIndex(0);
-            setOutput('Run code to see output...');
+            setOutput(t('output.runPrompt', appLang));
             setOutputStatus('idle');
             setPendingNextProblem(false);
             setAiHintText('');
@@ -12187,14 +12211,14 @@ const App: React.FC = () => {
 
     // Auto-scroll output to bottom when new output is added
     useEffect(() => {
-        if (outputRef.current && output !== 'Run code to see output...') {
+        if (outputRef.current && outputStatus !== 'idle') {
             outputRef.current.scrollTop = outputRef.current.scrollHeight;
         }
     }, [output]);
 
     // After run completes, keep the editor below the fixed file toolbar.
     useEffect(() => {
-        if (!isRunning && mainScrollRef.current && output !== 'Run code to see output...') {
+        if (!isRunning && mainScrollRef.current && outputStatus !== 'idle') {
             const scrollContainer = mainScrollRef.current;
             const editorPanel = editorShellRef.current?.closest('[data-editor-panel]');
             if (!(editorPanel instanceof HTMLElement)) return;
@@ -12205,7 +12229,7 @@ const App: React.FC = () => {
                 scrollContainer.scrollTop -= toolbarBottom + 8 - panelTop;
             }
         }
-    }, [isRunning, output, editorToolbarTop]);
+    }, [isRunning, output, outputStatus, editorToolbarTop]);
 
     useEffect(() => {
         return () => {
@@ -12424,7 +12448,7 @@ const App: React.FC = () => {
         localStorage.setItem('python_current_problem_id', String(ex.id));
         setFiles([{ name: 'main.py', content: ex.initialCode }]);
         setActiveFileIndex(0);
-        setOutput('Run code to see output...');
+        setOutput(t('output.runPrompt', appLang));
         setOutputStatus('idle');
         setPendingNextProblem(false);
         setStdinValues([]);
@@ -12468,7 +12492,7 @@ const App: React.FC = () => {
         try {
             const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
             setLatestAiReviewResult(review);
-            setAiHintText(formatAiReviewHintText(review));
+            setAiHintText(formatAiReviewHintText(review, appLang));
             return {
                 review,
                 autoWinReview: isAiAutoWinReview(review) ? review : null,
@@ -12480,7 +12504,7 @@ const App: React.FC = () => {
                 graderPassed: false,
             });
             setLatestAiReviewResult(fallback);
-            setAiHintText(formatAiReviewHintText(fallback));
+            setAiHintText(formatAiReviewHintText(fallback, appLang));
             return { review: fallback, autoWinReview: null };
         }
     };
@@ -12498,7 +12522,7 @@ const App: React.FC = () => {
         const autoGrader = !plainMode ? AUTO_GRADERS[exercise.id] : null;
         setIsRunning(true);
         setOutputStatus('running');
-        setOutput('Executing...');
+        setOutput(t('output.executing', appLang));
         setWaitingForInput(false);
         setInputPrompt('');
         setPendingNextProblem(false);
@@ -12559,7 +12583,7 @@ builtins.input = __app_input
             setStdinValues([]);
 
             if (plainMode) {
-                setOutput(stdout?.trim() || 'Success (No output).');
+                setOutput(stdout?.trim() || t('output.successNoOutput', appLang));
                 setOutputStatus('info');
             } else if (autoGrader) {
                 pyodide.runPython(`
@@ -12569,9 +12593,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 pyodide.runPython(buildAutoGradeScript(autoGrader, activeFile.content, activeFile.name));
                 const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
                 const graderOutput = gradeResult.output?.trim()
-                    ? `Program output:\n${gradeResult.output.trim()}\n\n`
+                    ? `${t('output.programOutput', appLang)}\n${gradeResult.output.trim()}\n\n`
                     : '';
-                const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+                const userOutput = stdout?.trim() ? `${t('output.programOutput', appLang)}\n${stdout.trim()}\n\n` : '';
                 const displayOutput = userOutput || graderOutput;
                 const reviewRequest: AiReviewRequest = {
                     problemId: exercise.id,
@@ -12583,6 +12607,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     graderSpec: autoGrader,
                     programOutput: stdout || gradeResult.output || '',
                     visibleSolution: displaySolution,
+                    language: appLang,
                 };
                 setLatestAiReviewRequest(reviewRequest);
                 setLatestAiReviewResult(null);
@@ -12592,17 +12617,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     setOutputStatus('win');
                     playResultFeedback('win');
                     setPendingNextProblem(true);
-                    setOutput(`${displayOutput}AUTO WIN\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
+                    setOutput(`${displayOutput}${t('output.autoWin', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.useNext', appLang)}`);
                 } else {
                     setOutputStatus('info');
                     setPendingNextProblem(true);
-                    setOutput(`${displayOutput}AUTO CHECK\n${gradeResult.message}\n\nDeterministic grader failed. AI reviewer is checking whether this is logically correct...`);
+                    setOutput(`${displayOutput}${t('output.autoCheck', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.checkingLogic', appLang)}`);
                     const aiFallback = await tryAiAutoWinFallback(reviewRequest);
                     if (aiFallback.autoWinReview) {
                         updateCurrentModeStats('success');
                         setOutputStatus('win');
                         playResultFeedback('win');
-                        setOutput(`${displayOutput}AI AUTO WIN\nDeterministic grader failed, but ${getAiReviewSourceLabel(aiFallback.autoWinReview.source)} judged this answer logically correct with ${Math.round(aiFallback.autoWinReview.confidence * 100)}% confidence.\n\nOriginal grader message:\n${gradeResult.message}\n\nUse the Next button in the problem panel for another problem.`);
+                        const aiWinDetail = appLang === 'fr'
+                            ? `Le correcteur déterministe a échoué, mais ${getAiReviewSourceLabel(aiFallback.autoWinReview.source, appLang)} a jugé cette réponse logiquement correcte avec une confiance de ${Math.round(aiFallback.autoWinReview.confidence * 100)} %.`
+                            : `Deterministic grader failed, but ${getAiReviewSourceLabel(aiFallback.autoWinReview.source, appLang)} judged this answer logically correct with ${Math.round(aiFallback.autoWinReview.confidence * 100)}% confidence.`;
+                        setOutput(`${displayOutput}${t('output.aiAutoWin', appLang)}\n${aiWinDetail}\n\n${t('output.originalGrader', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.useNext', appLang)}`);
                     } else {
                         updateCurrentModeStats('failed');
                         setOutputStatus('fail');
@@ -12610,36 +12638,38 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         const review = aiFallback.review;
                         const reviewNote = review
                             ? review.source === 'diagnostic'
-                                ? '\n\nAI reviewer used built-in diagnostics only. No model-backed review confirmed this as correct.'
-                                : `\n\nAI reviewer returned ${review.verdict.replace('_', ' ')} with ${Math.round(review.confidence * 100)}% confidence from ${getAiReviewSourceLabel(review.source)}.`
-                            : '\n\nAI reviewer could not complete.';
-                        setOutput(`${displayOutput}AUTO FAILED\n${gradeResult.message}${reviewNote}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                                ? `\n\n${t('output.diagnosticOnly', appLang)}`
+                                : appLang === 'fr'
+                                    ? `\n\nLa révision IA a conclu « ${review.verdict === 'likely_correct' ? 'probablement correct' : review.verdict === 'likely_incorrect' ? 'probablement incorrect' : 'incertain'} » avec une confiance de ${Math.round(review.confidence * 100)} %, via ${getAiReviewSourceLabel(review.source, appLang)}.`
+                                    : `\n\nAI reviewer returned ${review.verdict.replace('_', ' ')} with ${Math.round(review.confidence * 100)}% confidence from ${getAiReviewSourceLabel(review.source, appLang)}.`
+                            : `\n\n${t('output.aiUnavailable', appLang)}`;
+                        setOutput(`${displayOutput}${t('output.autoFailed', appLang)}\n${localizeAiText(gradeResult.message, appLang)}${reviewNote}\n\n${t('output.fixAndRun', appLang)}`);
                     }
                 }
             } else {
                 setOutputStatus('info');
-                setOutput(`${stdout || 'Success (No output).'}\n\nNo auto-grader yet for Problem ${exercise.id}. Use Win/Failed manually from Tools.`);
+                setOutput(`${stdout || t('output.successNoOutput', appLang)}\n\n${t('output.noGrader', appLang, String(exercise.id))}`);
             }
         } catch (err: any) {
             const errorMessage = String(err?.message || err || '');
             const inputMarker = '__PY_INPUT_REQUIRED__';
             if (errorMessage.includes(inputMarker)) {
-                const prompt = errorMessage.split(inputMarker).pop()?.trim() || 'Input required';
+                const prompt = errorMessage.split(inputMarker).pop()?.trim() || t('output.inputRequired', appLang);
                 const stdout = pyodide.runPython("sys.stdout.getvalue()");
                 setOutputStatus('info');
                 setWaitingForInput(true);
                 setInputPrompt(prompt);
-                setOutput(`${stdout || ''}\nWaiting for input${prompt ? `: ${prompt}` : ''}`);
+                setOutput(`${stdout || ''}\n${t('output.waitingInput', appLang)}${prompt ? ` : ${prompt}` : ''}`);
                 return;
             }
             const stdout = pyodide.runPython("sys.stdout.getvalue()");
-            const userOutput = stdout?.trim() ? `Program output:\n${stdout.trim()}\n\n` : '';
+            const userOutput = stdout?.trim() ? `${t('output.programOutput', appLang)}\n${stdout.trim()}\n\n` : '';
             stdinValuesRef.current = [];
             setStdinValues([]);
             if (plainMode) {
                 setOutputStatus('fail');
                 playResultFeedback('fail');
-                setOutput(`${stdout || ''}\n${errorMessage}`);
+                setOutput(`${stdout || ''}\n${localizeAiText(errorMessage, appLang)}`);
             } else if (autoGrader) {
                 updateCurrentModeStats('failed');
                 const reviewRequest: AiReviewRequest = {
@@ -12652,19 +12682,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     graderSpec: autoGrader,
                     programOutput: stdout || '',
                     visibleSolution: displaySolution,
+                    language: appLang,
                 };
                 setLatestAiReviewRequest(reviewRequest);
                 const diagnosticReview = buildDiagnosticReview(reviewRequest);
                 setLatestAiReviewResult(diagnosticReview);
-                setAiHintText(formatAiReviewHintText(diagnosticReview));
+                setAiHintText(formatAiReviewHintText(diagnosticReview, appLang));
                 setOutputStatus('fail');
                 playResultFeedback('fail');
                 setPendingNextProblem(true);
-                setOutput(`${userOutput}AUTO FAILED\n${errorMessage}\n\nAI REVIEW\n${diagnosticReview.explanation}${diagnosticReview.suggestedFix ? `\n\nSuggested fix:\n${diagnosticReview.suggestedFix}` : ''}\n\nFix your code and press RUN again, or use the Next button in the problem panel.`);
+                setOutput(`${userOutput}${t('output.autoFailed', appLang)}\n${localizeAiText(errorMessage, appLang)}\n\n${t('output.aiReview', appLang)}\n${localizeAiText(diagnosticReview.explanation, appLang)}${diagnosticReview.suggestedFix ? `\n\n${t('output.suggestedFix', appLang)}\n${localizeAiText(diagnosticReview.suggestedFix, appLang)}` : ''}\n\n${t('output.fixAndRun', appLang)}`);
             } else {
                 setOutputStatus('fail');
                 playResultFeedback('fail');
-                setOutput(`${userOutput}${errorMessage}`);
+                setOutput(`${userOutput}${localizeAiText(errorMessage, appLang)}`);
             }
         } finally {
             setIsRunning(false);
@@ -12752,19 +12783,21 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         return {
             problemId: exercise.id,
             title: exercise.title,
-            description: `${exercise.description}\n\n${contextMessage}`,
+            description: `${getExerciseDescription(exercise, appLang)}\n\n${contextMessage}`,
             userCode: activeCode,
             graderMessage: reusableReviewRequest?.graderMessage || contextMessage,
             graderPassed: reusableReviewRequest?.graderPassed ?? outputStatus === 'win',
             graderSpec: reusableReviewRequest?.graderSpec || currentGrader,
             programOutput: reusableReviewRequest?.programOutput || output,
             visibleSolution: displaySolution,
+            language: appLang,
         };
-    }, [activeFileIndex, displaySolution, exercise, files, latestAiReviewRequest, output, outputStatus]);
+    }, [activeFileIndex, appLang, displaySolution, exercise, files, latestAiReviewRequest, output, outputStatus]);
 
     const buildBuiltInProblemAiAnswer = useCallback((question: string, request: AiReviewRequest): string => {
-        const q = question.toLowerCase();
-        const description = exercise.description;
+        const lookupQuestion = normalizeAiQuestionForLookup(question, appLang);
+        const q = lookupQuestion.toLowerCase();
+        const description = getExerciseDescription(exercise, appLang);
         const hint = exercise.hint?.trim();
         const breakdown = exercise.breakdown?.trim();
         const code = request.userCode || '';
@@ -14163,7 +14196,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             if (conceptAnswer) {
                 return refAnswer + '\n\n' + conceptAnswer.text;
             }
-            return refAnswer;
+            return localizeAiText(refAnswer, appLang);
         }
 
         if (asksDigitMethod) {
@@ -14289,7 +14322,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         }
 
         if (asksWhy || outputStatus === 'fail') {
-            const outputText = output && output !== 'Run code to see output...' ? output : 'No run output is available yet.';
+            const outputText = outputStatus !== 'idle' && output ? output : (appLang === 'fr' ? 'Aucune sortie d\'exécution disponible.' : 'No run output is available yet.');
             if (referencesProblem) {
                 parts.push(`4. Current output check\nStatus: ${outputStatus.toUpperCase()}.\nOutput/grader context:\n${graderMessage || outputText}\n\nIf the output is wrong, compare what your code returns or prints against the operation requested by the problem.`);
             } else {
@@ -14310,8 +14343,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             parts.push(`3. If your question is more specific\nAsk it directly, for example: “Should this return ` + '`True` or `False`?”, “Can the argument be an integer?”, or “What does this method do?”.');
         }
 
-        return parts.join('\n\n');
-    }, [exercise, output, outputStatus]);
+        return localizeAiText(parts.join('\n\n'), appLang);
+    }, [appLang, exercise, output, outputStatus]);
 
     const openGeneralAi = useCallback(() => {
         if (generalAiMessages.length === 0) {
@@ -14319,23 +14352,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now(),
                 role: 'assistant',
                 source: 'built_in',
-                text: [
+                text: localizeAiText([
                     'Ask any Python question. I can explain concepts, list methods and built-ins, compare ideas, or help you understand code.',
                     '',
                     'I can follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer. If your question is unclear, I will ask a clarification instead of guessing.',
                     '',
                     'Click **Save** to store the conversation or **Clear** to start fresh. View saved chats with the **Saved (N)** button.',
-                ].join('\n'),
+                ].join('\n'), appLang),
             }]);
         }
         setShowModal('general_ai');
-    }, [generalAiMessages.length]);
+    }, [appLang, generalAiMessages.length]);
 
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
         const previousUserQuestion = [...generalAiMessages].reverse().find(message => message.role === 'user')?.text || '';
-        const normalizedQuestion = normalizeGeneralPythonQuestion(question);
+        const localizedLookupQuestion = normalizeAiQuestionForLookup(question, appLang);
+        const normalizedQuestion = normalizeGeneralPythonQuestion(localizedLookupQuestion);
         const effectiveQuestion = isGeneralPythonFollowUp(normalizedQuestion) && previousUserQuestion
             ? normalizeGeneralPythonQuestion(`${previousUserQuestion}. ${normalizedQuestion}`)
             : normalizedQuestion;
@@ -14361,7 +14395,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: enrichGeneralAiAnswer(refAnswer, effectiveQuestion, generalAiMode),
+                    text: localizeAiText(enrichGeneralAiAnswer(refAnswer, effectiveQuestion, generalAiMode), appLang),
                 }]);
                 return;
             }
@@ -14370,14 +14404,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     role: m.role === 'user' ? 'user' as const : 'assistant' as const,
                     content: m.text,
                 }));
-                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory);
+                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory, appLang);
                 if (aiAnswer) {
                     setGeneralAiProgress(100);
                     setGeneralAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
                         role: 'assistant',
                         source: 'offline',
-                        text: aiAnswer,
+                        text: localizeAiText(aiAnswer, appLang),
                     }]);
                     return;
                 }
@@ -14389,12 +14423,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: 'built_in',
-                text: buildGeneralAiClarification(question),
+                text: localizeAiText(buildGeneralAiClarification(question), appLang),
             }]);
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [generalAiMessages, generalAiMode, generalAiRunning, offlineAiState]);
+    }, [appLang, generalAiMessages, generalAiMode, generalAiRunning, offlineAiState]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -14405,21 +14439,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now(),
                 role: 'assistant',
                 source: 'built_in',
-                text: buildBuiltInProblemAiAnswer(
+                text: localizeAiText(buildBuiltInProblemAiAnswer(
                     outputStatus === 'fail' ? 'Why did my output fail?' : 'Explain this problem.',
                     request,
-                ),
+                ), appLang),
             }]);
         }
         setShowModal('problem_ai');
-    }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, exercise.id, outputStatus, problemAiMessages.length, problemAiProblemId]);
+    }, [appLang, buildBuiltInProblemAiAnswer, buildProblemAiRequest, exercise.id, outputStatus, problemAiMessages.length, problemAiProblemId]);
 
     const sendProblemAiQuestion = useCallback(async (rawQuestion: string) => {
         if (!problemAiEnabled) return;
         const question = rawQuestion.trim();
         if (!question || problemAiRunning) return;
         const request = buildProblemAiRequest(question);
-        const lowerQuestion = question.toLowerCase();
+        const lookupQuestion = normalizeAiQuestionForLookup(question, appLang);
+        const lowerQuestion = lookupQuestion.toLowerCase();
         const isGeneralPython = !/(?:this problem|this task|this exercise|my code|the function|the output|grader|why.*fail|error.*output|review|check.*code)/i.test(lowerQuestion);
         const shouldUseReviewer =
             /review my code|check my code|is my code correct|is this correct|why failed|why did.*fail|auto failed|grader|output wrong|error/.test(lowerQuestion);
@@ -14431,23 +14466,23 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         try {
             // General Python question → curated reference FIRST, WebLLM fallback
             if (isGeneralPython && !shouldUseReviewer) {
-                const refAnswer = answerGeneralPythonQuestion(question);
+                const refAnswer = answerGeneralPythonQuestion(lookupQuestion);
                 if (refAnswer) {
                     setProblemAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
                         role: 'assistant',
                         source: 'built_in',
-                        text: refAnswer,
+                        text: localizeAiText(refAnswer, appLang),
                     }]);
                     return;
                 }
-                const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState);
+                const generalAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, [], appLang);
                 if (generalAnswer) {
                     setProblemAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
                         role: 'assistant',
                         source: 'offline',
-                        text: generalAnswer,
+                        text: localizeAiText(generalAnswer, appLang),
                     }]);
                     return;
                 }
@@ -14455,7 +14490,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: "I don't have information about that in my reference. Try rephrasing your question.",
+                    text: appLang === 'fr'
+                        ? "Je n'ai pas cette information dans ma référence. Essayez de reformuler votre question."
+                        : "I don't have information about that in my reference. Try rephrasing your question.",
                 }]);
                 return;
             }
@@ -14467,7 +14504,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         id: Date.now() + 1,
                         role: 'assistant',
                         source: 'offline',
-                        text: modelAnswer,
+                        text: localizeAiText(modelAnswer, appLang),
                     }]);
                     return;
                 }
@@ -14476,7 +14513,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: buildBuiltInProblemAiAnswer(question, request),
+                    text: localizeAiText(buildBuiltInProblemAiAnswer(question, request), appLang),
                 }]);
                 return;
             }
@@ -14485,7 +14522,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: buildBuiltInProblemAiAnswer(question, request),
+                    text: localizeAiText(buildBuiltInProblemAiAnswer(question, request), appLang),
                 }]);
                 return;
             }
@@ -14498,19 +14535,19 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: review.source === 'diagnostic' ? 'built_in' : 'offline',
-                text: answer || buildBuiltInProblemAiAnswer(question, request),
+                text: localizeAiText(answer || buildBuiltInProblemAiAnswer(question, request), appLang),
             }]);
         } catch {
             setProblemAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: 'built_in',
-                text: `Offline AI could not answer this time, so built-in help answered instead.\n\n${buildBuiltInProblemAiAnswer(question, request)}`,
+                text: localizeAiText(`Offline AI could not answer this time, so built-in help answered instead.\n\n${buildBuiltInProblemAiAnswer(question, request)}`, appLang),
             }]);
         } finally {
             setProblemAiRunning(false);
         }
-    }, [buildBuiltInProblemAiAnswer, buildProblemAiRequest, offlineAiState, problemAiRunning]);
+    }, [appLang, buildBuiltInProblemAiAnswer, buildProblemAiRequest, offlineAiState, problemAiRunning]);
 
     const handleAiHint = async () => {
         const reusableReviewRequest =
@@ -14519,16 +14556,21 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ? latestAiReviewRequest
                 : null;
         const currentGrader = AUTO_GRADERS[exercise.id] || null;
-        const request: AiReviewRequest = reusableReviewRequest || {
+        const request: AiReviewRequest = reusableReviewRequest ? {
+            ...reusableReviewRequest,
+            description: getExerciseDescription(exercise, appLang),
+            language: appLang,
+        } : {
             problemId: exercise.id,
             title: exercise.title,
-            description: exercise.description,
+            description: getExerciseDescription(exercise, appLang),
             userCode: files[activeFileIndex].content,
             graderMessage: 'Run has not been pressed for this code yet.',
             graderPassed: false,
             graderSpec: currentGrader,
             programOutput: output,
             visibleSolution: displaySolution,
+            language: appLang,
         };
 
         setShowModal('hint');
@@ -14541,45 +14583,55 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 return {
                     verdict: 'unclear' as const,
                     confidence: 0.25,
-                    explanation: `Built-in review could not inspect this code automatically: ${String(error?.message || error || 'Unknown error')}`,
-                    suggestedFix: 'Run the code first, then press AI Review again so the reviewer can compare the code, output, and grader result.',
+                    explanation: localizeAiText(`Built-in review could not inspect this code automatically: ${String(error?.message || error || 'Unknown error')}`, appLang),
+                    suggestedFix: localizeAiText('Run the code first, then press AI Review again so the reviewer can compare the code, output, and grader result.', appLang),
                     source: 'diagnostic' as const,
                 };
             }
         })();
         const setupNote = offlineAiState.status !== 'ready'
-            ? `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status)}. Built-in offline review is active.\n\n`
-            : 'Built-in review is shown immediately while the local model checks the code.\n\n';
+            ? appLang === 'fr'
+                ? `État du modèle hors ligne : ${getOfflineAiStatusLabel(offlineAiState.status, appLang)}. La révision hors ligne intégrée est active.\n\n`
+                : `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status, appLang)}. Built-in offline review is active.\n\n`
+            : appLang === 'fr'
+                ? 'La révision intégrée apparaît immédiatement pendant que le modèle local vérifie le code.\n\n'
+                : 'Built-in review is shown immediately while the local model checks the code.\n\n';
         const immediateResult = {
             ...diagnosticResult,
             explanation: `${setupNote}${diagnosticResult.explanation}`,
         };
         setLatestAiReviewResult(immediateResult);
-        setAiHintText(formatAiReviewHintText(immediateResult));
+        setAiHintText(formatAiReviewHintText(immediateResult, appLang));
 
         setAiReviewRunning(true);
         try {
             const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
             const setupNote = offlineAiState.status !== 'ready'
-                ? `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status)}. Built-in offline review is active.\n\n`
+                ? appLang === 'fr'
+                    ? `État du modèle hors ligne : ${getOfflineAiStatusLabel(offlineAiState.status, appLang)}. La révision hors ligne intégrée est active.\n\n`
+                    : `Offline model status: ${getOfflineAiStatusLabel(offlineAiState.status, appLang)}. Built-in offline review is active.\n\n`
                 : '';
             const result = review.source === 'diagnostic' && setupNote
                 ? { ...review, explanation: `${setupNote}${review.explanation}` }
                 : review;
             setLatestAiReviewResult(result);
-            setAiHintText(formatAiReviewHintText(result));
+            setAiHintText(formatAiReviewHintText(result, appLang));
         } catch (error: any) {
             const fallback = buildDiagnosticReview({
                 ...request,
-                graderMessage: `AI review failed: ${String(error?.message || error || 'Unknown error')}`,
+                graderMessage: appLang === 'fr'
+                    ? `La révision IA a échoué : ${String(error?.message || error || 'erreur inconnue')}`
+                    : `AI review failed: ${String(error?.message || error || 'Unknown error')}`,
                 graderPassed: false,
             });
             const result = {
                 ...fallback,
-                explanation: `AI review could not complete, so built-in offline review checked this code instead. ${fallback.explanation}`,
+                explanation: appLang === 'fr'
+                    ? `La révision IA n'a pas pu se terminer ; la révision hors ligne intégrée a donc vérifié ce code. ${fallback.explanation}`
+                    : `AI review could not complete, so built-in offline review checked this code instead. ${fallback.explanation}`,
             };
             setLatestAiReviewResult(result);
-            setAiHintText(formatAiReviewHintText(result));
+            setAiHintText(formatAiReviewHintText(result, appLang));
         } finally {
             setAiReviewRunning(false);
         }
@@ -15754,7 +15806,7 @@ print(result)
                                                     <SyntaxDocumentationPanel content={conceptDocContent} editorColors={editorColors} panelColors={panelColors} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
-                                                        No concept documentation available.
+                                                        {t('solution.noDoc', appLang)}
                                                     </div>
                                                 )}
                                             </div>
@@ -15765,20 +15817,20 @@ print(result)
                                     onClick={() => setShowModal('none')}
                                     className="mt-3 flex w-full flex-shrink-0 items-center justify-center rounded-2xl border py-3 text-[11px] font-black uppercase tracking-[0.18em] active:scale-[0.99]"
                                     style={{ borderColor: hexToRgba(panelColors.border, 0.9), backgroundColor: hexToRgba(editorColors.panelBackground, 0.96), color: editorColors.text }}
-                                    aria-label="Back to main app"
+                                    aria-label={t('solution.backToApp', appLang)}
                                 >
-                                    Back to App
+                                    {t('solution.backToApp', appLang)}
                                 </button>
                             </div>
                         )}
                         {showModal === 'hint' && (
                             <div className="flex h-full min-h-0 flex-col gap-3">
-                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>AI Review</h2>
+                                <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('aiReview.title', appLang)}</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto -mx-1 px-1 space-y-3">
                                     <>
                                             {aiReviewRunning && (
                                                 <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
-                                                    Local model is checking this exact problem, code, output, and grader result...
+                                                    {t('aiReview.running', appLang)}
                                                 </div>
                                             )}
                                             {/* Problem section */}
@@ -15793,8 +15845,8 @@ print(result)
                                             {latestAiReviewRequest?.userCode && (
                                                 <div className="rounded-2xl border overflow-hidden" style={{ borderColor: 'rgba(88, 118, 160, 0.25)' }}>
                                                     <div className="flex items-center justify-between px-3 py-1.5" style={{ backgroundColor: 'rgba(8, 18, 34, 0.6)', borderBottom: '1px solid rgba(88, 118, 160, 0.15)' }}>
-                                                        <span className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Your Code</span>
-                                                        <span className="text-[10px] text-gray-500">{latestAiReviewRequest.userCode.split('\n').length} lines</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">{t('aiReview.yourCode', appLang)}</span>
+                                                        <span className="text-[10px] text-gray-500">{latestAiReviewRequest.userCode.split('\n').length} {t('aiReview.lines', appLang)}</span>
                                                     </div>
                                                     <div className="max-h-[240px] overflow-y-auto" style={{ backgroundColor: 'rgba(5, 12, 24, 0.5)' }}>
                                                         <CodeMirror
@@ -15820,34 +15872,36 @@ print(result)
                                                                 color: latestAiReviewResult.verdict === 'likely_correct' ? '#86efac' : latestAiReviewResult.verdict === 'likely_incorrect' ? '#fca5a5' : '#fde68a',
                                                             }}
                                                         >
-                                                            {latestAiReviewResult.verdict.replace('_', ' ')}
+                                                            {appLang === 'fr'
+                                                                ? latestAiReviewResult.verdict === 'likely_correct' ? 'probablement correct' : latestAiReviewResult.verdict === 'likely_incorrect' ? 'probablement incorrect' : 'incertain'
+                                                                : latestAiReviewResult.verdict.replace('_', ' ')}
                                                         </span>
                                                         <span className="text-xs text-gray-400">
-                                                            Confidence {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source)}
+                                                            {appLang === 'fr' ? 'Confiance' : 'Confidence'} {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source, appLang)}
                                                         </span>
                                                     </div>
-                                                    <AiReviewText text={latestAiReviewResult.explanation} editorColors={editorColors} accentColor={toolPanelColors.ai} numbered={true} />
+                                                    <AiReviewText text={localizeAiText(latestAiReviewResult.explanation, appLang)} editorColors={editorColors} accentColor={toolPanelColors.ai} numbered={true} language={appLang} />
                                                     {latestAiReviewResult.suggestedFix && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
-                                                            <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>Suggested Fix</div>
-                                                            <AiReviewText text={latestAiReviewResult.suggestedFix} editorColors={editorColors} accentColor="#fbbf24" detectBareCode={true} />
+                                                            <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>{t('aiReview.suggestedFix', appLang)}</div>
+                                                            <AiReviewText text={localizeAiText(latestAiReviewResult.suggestedFix, appLang)} editorColors={editorColors} accentColor="#fbbf24" detectBareCode={true} language={appLang} />
                                                         </div>
                                                     )}
                                                     {latestAiReviewResult.verdict === 'likely_correct' && latestAiReviewRequest?.graderPassed === false && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(34, 197, 94, 0.35)', backgroundColor: 'rgba(34, 197, 94, 0.1)' }}>
-                                                            <p className="text-sm" style={{ color: '#86efac' }}>AI Suggested Win: review this answer and use the manual Win button if you agree.</p>
+                                                            <p className="text-sm" style={{ color: '#86efac' }}>{t('aiReview.aiSuggestedWin', appLang)}</p>
                                                         </div>
                                                     )}
                                                 </div>
                                             ) : (
-                                                <p className="whitespace-pre-wrap text-sm text-gray-400">{aiHintText || 'Press Run first for the strongest review, or press AI again to analyze the current code.'}</p>
+                                                <p className="whitespace-pre-wrap text-sm text-gray-400">{aiHintText || t('aiReview.initialMsg', appLang)}</p>
                                             )}
 
                                             {/* Grader message section */}
                                             {latestAiReviewRequest?.graderMessage && (
                                                 <div className="rounded-2xl border max-h-36 overflow-y-auto p-3" style={{ borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'rgba(239, 68, 68, 0.08)' }}>
-                                                    <div className="mb-1 text-[10px] font-black uppercase tracking-[0.12em]" style={{ color: '#fecaca' }}>Grader Message</div>
-                                                    <div className="whitespace-pre-wrap text-xs" style={{ color: '#fecaca' }}>{latestAiReviewRequest.graderMessage}</div>
+                                                    <div className="mb-1 text-[10px] font-black uppercase tracking-[0.12em]" style={{ color: '#fecaca' }}>{t('aiReview.graderMsg', appLang)}</div>
+                                                    <div className="whitespace-pre-wrap text-xs" style={{ color: '#fecaca' }}>{localizeAiText(latestAiReviewRequest.graderMessage, appLang)}</div>
                                                 </div>
                                             )}
                                     </>
@@ -15859,7 +15913,7 @@ print(result)
                                 <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
                                     <div className="min-w-0 flex-1">
                                         <div className="flex items-center gap-2">
-                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Problem AI</h2>
+                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('problemAi.title', appLang)}</h2>
                                         <div className="flex items-center gap-1.5">
                                             <button
                                                 onClick={() => setProblemAiEnabled(prev => !prev)}
@@ -15869,13 +15923,13 @@ print(result)
                                                     color: problemAiEnabled ? toolPanelColors.ai : '#9ca3af',
                                                     backgroundColor: problemAiEnabled ? hexToRgba(toolPanelColors.ai, 0.12) : 'rgba(55, 65, 81, 0.5)',
                                                 }}
-                                                title={problemAiEnabled ? 'Problem AI is on' : 'Problem AI is off'}
+                                                title={problemAiEnabled ? t('settings.on', appLang) : t('problemAi.off', appLang)}
                                             >
-                                                {problemAiEnabled ? 'On' : 'Off'}
+                                                {problemAiEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}
                                             </button>
                                         </div>
                                         </div>
-                                        <p className="mt-1 text-xs text-gray-400">Python AI — ask about any method, built-in, keyword, concept, or Problem {exercise.id}.</p>
+                                        <p className="mt-1 text-xs text-gray-400">{t('problemAi.desc', appLang, String(exercise.id))}</p>
                                     </div>
                                 </div>
 
@@ -15883,7 +15937,7 @@ print(result)
                                     <input
                                         value={problemAiSearch}
                                         onChange={e => setProblemAiSearch(e.target.value)}
-                                        placeholder="Search conversation..."
+                                        placeholder={t('problemAi.search', appLang)}
                                         className="w-full rounded-xl border bg-[#050c18] px-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2) }}
                                     />
@@ -15904,10 +15958,10 @@ print(result)
                                         >
                                             <div className="mb-1.5 flex items-center justify-between gap-2">
                                                 <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: message.role === 'user' ? countRowColors.count : toolPanelColors.ai }}>
-                                                    {message.role === 'user' ? 'You' : 'Problem AI'}
+                                                    {message.role === 'user' ? t('problemAi.you', appLang) : t('problemAi.ai', appLang)}
                                                 </span>
                                                 {message.source && message.role === 'assistant' && (
-                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? 'Offline AI' : 'Built-in help'}</span>
+                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? t('problemAi.offlineAi', appLang) : t('problemAi.builtin', appLang)}</span>
                                                 )}
                                             </div>
                                             {message.role === 'assistant' ? (
@@ -15919,7 +15973,7 @@ print(result)
                                     ))}
                                     {problemAiRunning && (
                                         <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
-                                            Thinking about this problem...
+                                            {t('problemAi.thinking', appLang)}
                                         </div>
                                     )}
                                 </div>
@@ -15934,7 +15988,7 @@ print(result)
                                     <input
                                         value={problemAiDraft}
                                         onChange={(event) => setProblemAiDraft(event.target.value)}
-                                        placeholder={problemAiEnabled ? "Ask about this problem..." : "Problem AI is off"}
+                                        placeholder={problemAiEnabled ? t('problemAi.placeholder', appLang) : t('problemAi.off', appLang)}
                                         disabled={!problemAiEnabled}
                                         className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none disabled:opacity-40"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
@@ -15945,7 +15999,7 @@ print(result)
                                         className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
                                     >
-                                        Ask
+                                        {t('problemAi.ask', appLang)}
                                     </button>
                                 </form>
                             </div>
@@ -15955,7 +16009,7 @@ print(result)
                             <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
                                 <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
-                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>Python AI</h2>
+                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('generalAi.title', appLang)}</h2>
                                         <button
                                             onClick={() => {
                                                 const label = generalAiMessages.filter(m => m.role === 'user').slice(-1)[0]?.text.slice(0, 50) || 'Python AI chat';
@@ -15977,7 +16031,7 @@ print(result)
                                             }}
                                             title="Save conversation to history"
                                         >
-                                            {generalAiSaveFeedback ? 'Saved ✓' : 'Save'}
+                                            {generalAiSaveFeedback ? t('generalAi.saved', appLang) : t('generalAi.save', appLang)}
                                         </button>
                                         <button
                                             onClick={() => setShowSavedConvs(prev => !prev)}
@@ -15989,7 +16043,7 @@ print(result)
                                             }}
                                             title="Show saved conversations"
                                         >
-                                            Saved ({savedConversations.length})
+                                            {t('generalAi.savedCount', appLang, String(savedConversations.length))}
                                         </button>
                                         <button
                                             onClick={() => setGeneralAiMessages([])}
@@ -16001,10 +16055,10 @@ print(result)
                                             }}
                                             title="Clear conversation"
                                         >
-                                            Clear
+                                            {t('generalAi.clear', appLang)}
                                         </button>
                                     </div>
-                                    <p className="mt-1 text-xs text-gray-400">Ask any Python question. I can explain concepts, list methods and built-ins, or help you understand code. Follow up to dive deeper.</p>
+                                    <p className="mt-1 text-xs text-gray-400">{t('generalAi.desc', appLang)}</p>
                                     <div className="mt-2 flex flex-wrap gap-1.5">
                                         {(['simple', 'normal', 'deep', 'examples'] as GeneralAiMode[]).map(mode => (
                                             <button
@@ -16018,7 +16072,7 @@ print(result)
                                                     color: generalAiMode === mode ? toolPanelColors.ai : '#9ca3af',
                                                 }}
                                             >
-                                                {mode}
+                                                {appLang === 'fr' ? ({ simple: 'simple', normal: 'normal', deep: 'approfondi', examples: 'exemples' } as const)[mode] : mode}
                                             </button>
                                         ))}
                                     </div>
@@ -16034,20 +16088,20 @@ print(result)
                                     >
                                         <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
                                             <Sparkles size={13} />
-                                            Optional online AI key
+                                            {t('generalAi.onlineKey', appLang)}
                                         </span>
                                         <ChevronDown size={14} className="text-gray-400 transition-transform" style={{ transform: generalAiKeyOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
                                     {generalAiKeyOpen && (
                                         <div className="mt-3 space-y-2">
                                             <p className="text-[11px] leading-relaxed text-gray-400">
-                                                The built-in Python AI works without a key. Keep Gemini optional for future online AI answers when a user wants stronger model-backed help.
+                                                {t('generalAi.onlineKeyDesc', appLang)}
                                             </p>
                                             <input
                                                 type="text"
                                                 value={apiKey}
                                                 onChange={(e) => setApiKey(e.target.value)}
-                                                placeholder="Optional Gemini API key..."
+                                                placeholder={t('generalAi.geminiPlaceholder', appLang)}
                                                 className="w-full rounded-xl border bg-[#050c18] px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
                                                 style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.28) }}
                                             />
@@ -16056,7 +16110,7 @@ print(result)
                                                 className="rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                                 style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.12), color: toolPanelColors.ai }}
                                             >
-                                                Save Optional Key
+                                                {t('generalAi.saveKey', appLang)}
                                             </button>
                                         </div>
                                     )}
@@ -16074,10 +16128,10 @@ print(result)
                                         >
                                             <div className="mb-1.5 flex items-center justify-between gap-2">
                                                 <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: message.role === 'user' ? countRowColors.count : toolPanelColors.ai }}>
-                                                    {message.role === 'user' ? 'You' : 'General AI'}
+                                                    {message.role === 'user' ? t('generalAi.you', appLang) : t('generalAi.ai', appLang)}
                                                 </span>
                                                 {message.source && message.role === 'assistant' && (
-                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? 'Offline AI' : 'Built-in Python'}</span>
+                                                    <span className="text-[10px] text-gray-500">{message.source === 'offline' ? t('generalAi.offlineAi', appLang) : t('generalAi.builtin', appLang)}</span>
                                                 )}
                                             </div>
                                             {message.role === 'assistant' ? (
@@ -16102,17 +16156,17 @@ print(result)
                                 {showSavedConvs && (
                                     <div className="flex-shrink-0 max-h-48 overflow-y-auto rounded-2xl border p-2 space-y-1.5" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(8, 18, 34, 0.6)' }}>
                                         <div className="flex items-center justify-between px-1 pb-1">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.12em] text-gray-400">Saved conversations</span>
+                                            <span className="text-[10px] font-black uppercase tracking-[0.12em] text-gray-400">{t('generalAi.savedConvs', appLang)}</span>
                                             <button
                                                 onClick={() => { setSavedConversations([]); localStorage.removeItem('saved_ai_conversations'); }}
                                                 className="text-[9px] hover:brightness-125"
                                                 style={{ color: toolPanelColors.failed }}
                                             >
-                                                Clear all
+                                                {t('generalAi.clearAll', appLang)}
                                             </button>
                                         </div>
                                         {savedConversations.length === 0 && (
-                                            <p className="px-1 text-[11px] text-gray-500">No saved conversations yet. Click Save to store one.</p>
+                                            <p className="px-1 text-[11px] text-gray-500">{t('generalAi.noSavedConvs', appLang)}</p>
                                         )}
                                         {[...savedConversations].reverse().map((conv, i) => (
                                             <div key={i} className="rounded-xl border p-2 text-xs" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.15), backgroundColor: 'rgba(0,0,0,0.2)' }}>
@@ -16135,7 +16189,7 @@ print(result)
                                     <input
                                         value={generalAiDraft}
                                         onChange={(event) => setGeneralAiDraft(event.target.value)}
-                                        placeholder="Ask any Python question..."
+                                        placeholder={t('generalAi.placeholder', appLang)}
                                         className="min-w-0 flex-1 rounded-xl border bg-[#050c18] px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3) }}
                                     />
@@ -16145,7 +16199,7 @@ print(result)
                                         className="rounded-xl border px-4 py-2 text-xs font-black uppercase tracking-[0.12em] transition-all hover:brightness-125 disabled:opacity-40"
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.4), backgroundColor: hexToRgba(toolPanelColors.ai, 0.15), color: toolPanelColors.ai }}
                                     >
-                                        Ask
+                                        {t('generalAi.ask', appLang)}
                                     </button>
                                 </form>
                             </div>
@@ -17015,7 +17069,7 @@ print(result)
                                             />
                                         </div>
                                         <div className="mt-2 text-[11px] leading-relaxed text-gray-400">
-                                            Status: {getOfflineAiStatusLabel(offlineAiState.status)} · Model: {offlineAiState.modelId}
+                                            {appLang === 'fr' ? 'État' : 'Status'}: {getOfflineAiStatusLabel(offlineAiState.status, appLang)} · {appLang === 'fr' ? 'Modèle' : 'Model'}: {offlineAiState.modelId}
                                             {offlineAiState.status === 'downloading' ? ' · Built-in review stays active during setup.' : ''}
                                         </div>
                                     </div>

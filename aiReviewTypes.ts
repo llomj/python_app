@@ -19,6 +19,7 @@ export interface AiReviewRequest {
     graderSpec?: unknown;
     programOutput?: string;
     visibleSolution?: string;
+    language?: 'en' | 'fr';
 }
 
 export interface AiReviewResult {
