@@ -1,6 +1,10 @@
 export type AiLanguage = 'en' | 'fr';
 
 const FRENCH_QUERY_REPLACEMENTS: Array<[RegExp, string]> = [
+    [/combien (?:y a[- ]t[- ]il|existe[- ]t[- ]il|existe|de)\s+(?:de |des )?m[eé]thodes?/gi, 'how many methods are there'],
+    [/combien (?:y a[- ]t[- ]il|existe[- ]t[- ]il|existe|de)\s+(?:de |des )?fonctions? int[eé]gr[eé]es?/gi, 'how many built-in functions are there'],
+    [/comment (?:est[- ]ce qu['’]on |puis[- ]je |peut[- ]on |faire pour )?(?:cr[eé]er|d[eé]finir|[eé]crire)\s+(?:une |la )?m[eé]thode/gi, 'how do you create a method'],
+    [/comment (?:est[- ]ce qu['’]on |puis[- ]je |peut[- ]on |faire pour )?(?:cr[eé]er|commencer|faire|utiliser)\s+(?:la |un programme en )?(?:poo|programmation orient[eé]e objet)/gi, 'how do you create oop'],
     [/qu['’]est[- ]ce qu['’](?:une|un|les|des|le|la)?\s+liste\b/gi, 'what is a list data type'],
     [/qu['’]est[- ]ce qu['’](?:une|un|les|des|le|la)?\s+dictionnaire\b/gi, 'what is a dictionary data type'],
     [/qu['’]est[- ]ce qu['’](?:une|un|les|des|le|la)?\s+cha[iî]ne(?: de caract[eè]res)?\b/gi, 'what is a string data type'],
@@ -269,7 +273,6 @@ const PHRASE_REPLACEMENTS: Array<[RegExp, string]> = [
     [/the tuple/gi, 'le tuple'],
     [/the value/gi, 'la valeur'],
     [/\bvalue\b/gi, 'valeur'],
-    [/\bbut\b/gi, 'mais'],
     [/\bresult was\b/gi, 'le résultat était'],
     [/the result/gi, 'le résultat'],
     [/the output/gi, 'la sortie'],

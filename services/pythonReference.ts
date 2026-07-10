@@ -12,11 +12,13 @@ interface RefEntry {
 }
 
 // ── FLAT LOOKUP: methodName -> entry ───────────────────────────────────────
-const _ref: Record<string, RefEntry> = {};
+const _ref: Record<string, RefEntry[]> = {};
 
 const _ = (name: string, type: string, signature: string, desc: string, example: string): void => {
-  _ref[name] = { name, type, signature, desc, example };
+  (_ref[name] ||= []).push({ name, type, signature, desc, example });
 };
+
+const allReferenceEntries = (): RefEntry[] => Object.values(_ref).flat();
 
 // ── STRING METHODS ─────────────────────────────────────────────────────────
 _('capitalize', 'str', 'str.capitalize()', 'Returns a copy with the first character upper-cased and the rest lower-cased.', `"hello world".capitalize()  # "Hello world"`);
@@ -125,7 +127,9 @@ t.index(20, 2, 4) # 3 (search between index 2-4)
 
 // ── BUILT-IN FUNCTIONS ─────────────────────────────────────────────────────
 _('abs', 'builtin', 'abs(x)', 'Returns the absolute value of a number.', `abs(-5)    # 5\nabs(3+4j)  # 5.0`);
+_('aiter', 'builtin', 'aiter(async_iterable)', 'Returns an asynchronous iterator for an asynchronous iterable.', `iterator = aiter(async_items)`);
 _('all', 'builtin', 'all(iterable)', 'Returns True if every element of the iterable is truthy.', `all([True, 1, "a"])   # True\nall([True, 0, "a"])   # False`);
+_('anext', 'builtin', 'await anext(async_iterator[, default])', 'Returns the next item from an asynchronous iterator.', `item = await anext(async_iterator, None)`);
 _('any', 'builtin', 'any(iterable)', 'Returns True if any element of the iterable is truthy.', `any([False, 0, "a"])  # True\nany([False, 0, ""])   # False`);
 _('ascii', 'builtin', 'ascii(object)', 'Returns a printable string with non-ASCII chars escaped (like repr but always escapes).', `ascii("héllo")  # "'h\\xe9llo'"`);
 _('bin', 'builtin', 'bin(x)', 'Converts an integer to a binary string prefixed with "0b".', `bin(5)   # "0b101"\nbin(255) # "0b11111111"`);
@@ -192,6 +196,7 @@ _('tuple', 'builtin', 'tuple([iterable])', 'Creates a tuple from an iterable, or
 _('type', 'builtin', 'type(object) / type(name, bases, dict)', 'Returns the type of an object, or creates a new class.', `type(5)       # <class 'int'>\ntype("hello")  # <class 'str'>`);
 _('vars', 'builtin', 'vars([object])', 'Returns __dict__ of a module, class, instance, or local scope.', `vars()  # local namespace dict`);
 _('zip', 'builtin', 'zip(*iterables, strict=False)', 'Returns an iterator of tuples, pairing up elements from each iterable.', `list(zip([1,2], ["a","b"]))  # [(1, "a"), (2, "b")]\ndict(zip(["k1","k2"], [1,2])) # {"k1": 1, "k2": 2}`);
+_('__import__', 'builtin', '__import__(name, globals=None, locals=None, fromlist=(), level=0)', 'Low-level function used by the import statement. Most code should use import instead.', `math = __import__("math")\nmath.sqrt(16)  # 4.0`);
 
 // ── KEYWORD / BUILT-IN CONSTANTS ──────────────────────────────────────────
 _('True', 'keyword', 'True', 'Boolean true value. The integer 1.', `True == 1  # True`);
@@ -658,32 +663,32 @@ def first[T](items: list[T]) -> T:  # Python 3.12+
 
 /** All string method names, alphabetical */
 export const allStringMethods = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'str').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'str').map(e => e.name).sort();
 
 /** All list method names, alphabetical */
 export const allListMethods = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'list').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'list').map(e => e.name).sort();
 
 /** All dict method names, alphabetical */
 export const allDictMethods = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'dict').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'dict').map(e => e.name).sort();
 
 /** All set method names, alphabetical */
 export const allSetMethods = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'set').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'set').map(e => e.name).sort();
 
 /** All tuple method names, alphabetical */
 export const allTupleMethods = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'tuple').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'tuple').map(e => e.name).sort();
 
 /** All built-in function names, alphabetical */
 export const allBuiltins = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'builtin').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'builtin').map(e => e.name).sort();
 
 /** All method names across ALL types, alphabetical (deduplicated) */
 export const allMethodsFlat = (): string[] => {
   const names = new Set<string>();
-  for (const e of Object.values(_ref)) {
+  for (const e of allReferenceEntries()) {
     if (e.type !== 'builtin' && e.type !== 'keyword' && e.type !== 'concept') {
       names.add(e.name);
     }
@@ -693,20 +698,19 @@ export const allMethodsFlat = (): string[] => {
 
 /** All keyword names, alphabetical */
 export const allKeywords = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'keyword').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'keyword').map(e => e.name).sort();
 
 /** All concept names, alphabetical */
 export const allConcepts = (): string[] =>
-  Object.values(_ref).filter(e => e.type === 'concept').map(e => e.name).sort();
+  allReferenceEntries().filter(e => e.type === 'concept').map(e => e.name).sort();
 
 /** Look up a single term (method name, built-in name, or concept). */
-export const lookup = (name: string): RefEntry | undefined => {
+export const lookup = (name: string, preferredType?: string): RefEntry | undefined => {
   const clean = name.toLowerCase().replace(/[^a-z0-9_]/g, '');
-  // Direct match
-  if (_ref[clean]) return _ref[clean];
   // Remove leading type prefix like "str." or "list." before lookup
   const withoutPrefix = clean.replace(/^(str|list|dict|set|tuple|int|float|bool)\./, '');
-  return _ref[withoutPrefix];
+  const entries = _ref[clean] || _ref[withoutPrefix] || [];
+  return (preferredType ? entries.find(entry => entry.type === preferredType) : undefined) || entries[0];
 };
 
 /** Format a single entry as human-readable text */
@@ -725,7 +729,7 @@ export const formatEntry = (entry: RefEntry): string => {
 
 /** Format all entries of a given type as a numbered list */
 export const formatAllOfType = (type: string): string => {
-  const entries = Object.values(_ref).filter(e => e.type === type).sort((a, b) => a.name.localeCompare(b.name));
+  const entries = allReferenceEntries().filter(e => e.type === type).sort((a, b) => a.name.localeCompare(b.name));
   return entries.map((e, i) => `${i + 1}. \`${e.name}\` — ${e.desc}`).join('\n');
 };
 
@@ -813,17 +817,23 @@ const buildMutationComparisonAnswer = (question: string): string | null => {
 /** Build a full reference answer for a general Python question */
 export const answerGeneralPythonQuestion = (question: string): string | null => {
   const q = question.toLowerCase().trim();
+  const preferredMethodType = /\b(?:string|str)\b/.test(q) ? 'str'
+    : /\blist\b/.test(q) ? 'list'
+      : /\b(?:dict|dictionary)\b/.test(q) ? 'dict'
+        : /\bset\b/.test(q) ? 'set'
+          : /\btuple\b/.test(q) ? 'tuple'
+            : undefined;
 
   const mutationAnswer = buildMutationComparisonAnswer(question);
   if (mutationAnswer) return mutationAnswer;
 
   // ── Listing all methods ──────────────────────────────────────────────
-  if (/(?:list|show|get|give|all).*method|method.*list/i.test(q) && !/\blist\b.*\bdata\b|\bwhat\b.*\blist\b|\bhow\b.*\blist\b/i.test(q)) {
+  if (/(?:^|\b)(?:list|show|get|give)\s+(?:me\s+)?(?:all\s+)?(?:python\s+)?methods?\b|\ball\s+(?:python\s+)?methods?\b|methods?.*\blist\b/i.test(q) && !/\blist\b.*\bdata\b|\bwhat\b.*\blist\b|\bhow\b.*\blist\b/i.test(q)) {
     return 'Here are all Python methods (grouped by type):\n\n' +
       '**String methods (47):**\n' + allStringMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\n**List methods (11):**\n' + allListMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\n**Dict methods (11):**\n' + allDictMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
-      '\n\n**Set methods (16):**\n' + allSetMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
+      '\n\n**Set methods (17):**\n' + allSetMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\n**Tuple methods (2):**\n' + allTupleMethods().map((n, i) => `${i + 1}. \`${n}()\``).join('\n') +
       '\n\nAsk me about any individual method for details!';
   }
@@ -873,17 +883,28 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   }
 
   // ── What does X do / explain X ──────────────────────────────────────
-  const normalizedNameQ = q.replace(/what'?s\b/gi, 'what is').replace(/how'?s\b/gi, 'how is').replace(/where'?s\b/gi, 'where is').replace(/'?re\b/gi, ' are').replace(/'?ve\b/gi, ' have').replace(/n'?t\b/gi, ' not');
+  const normalizedNameQ = q
+    .replace(/\bwhat'?s\b/gi, 'what is')
+    .replace(/\bhow'?s\b/gi, 'how is')
+    .replace(/\bwhere'?s\b/gi, 'where is');
+  const typedMethodMatch = normalizedNameQ.match(/\b(string|str|list|dict|dictionary|set|tuple)\s+([a-z_][a-z0-9_]*)\s*(?:\(\))?\s+method\b/i);
+  if (typedMethodMatch) {
+    const type = typedMethodMatch[1].toLowerCase().replace('string', 'str').replace('dictionary', 'dict');
+    const entry = lookup(typedMethodMatch[2], type);
+    if (entry) {
+      return `**${type} method: \`${entry.signature}\`**\n\n${entry.desc}\n\n\`\`\`python\n${entry.example}\n\`\`\``;
+    }
+  }
   const nameMatch = normalizedNameQ.match(/(?:what|how|explain|tell me about|describe)\s+(?:is|does|about|a|the)?\s*(?:a |an |the |a |an )?(\w+(?:\(\))?)\s*(?:method|function|keyword|built.in)?\s*(?:do|work|mean)?/i);
   if (nameMatch) {
     const rawName = nameMatch[1].replace(/[()]/g, '').toLowerCase();
-    const dataTypeConcept = Object.values(_ref).find(e =>
+    const dataTypeConcept = allReferenceEntries().find(e =>
       e.type === 'concept' && e.name.toLowerCase() === `${rawName} data type`
     );
     if (dataTypeConcept && /\b(?:data type|list|dict(?:ionary)?|tuple|set|string)\b/i.test(normalizedNameQ)) {
       return `**${dataTypeConcept.name}**\n\n${dataTypeConcept.desc}\n\n\`\`\`python\n${dataTypeConcept.example}\n\`\`\``;
     }
-    const entry = lookup(rawName);
+    const entry = lookup(rawName, preferredMethodType);
     if (entry) {
       let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
       if (entry.type === 'builtin') label = 'Built-in function';
@@ -897,7 +918,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   if (simpleMatch) {
     let rawName = simpleMatch[3].toLowerCase().trim().replace(/\s+/g, ' ');
     // Try concept match first (data types, etc.)
-    const conceptEntry = Object.values(_ref).find(e => {
+    const conceptEntry = allReferenceEntries().find(e => {
       if (e.type !== 'concept') return false;
       const normalized = e.name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ');
       return normalized === rawName || normalized === rawName + ' data type';
@@ -906,7 +927,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
       return `**${conceptEntry.name}**\n\n${conceptEntry.desc}\n\n\`\`\`python\n${conceptEntry.example}\n\`\`\``;
     }
     // Then try method/builtin lookup
-    const entry = lookup(rawName);
+    const entry = lookup(rawName, preferredMethodType);
     if (entry) {
       let label = entry.type.charAt(0).toUpperCase() + entry.type.slice(1);
       if (entry.type === 'builtin') label = 'Built-in function';
@@ -915,7 +936,7 @@ export const answerGeneralPythonQuestion = (question: string): string | null => 
   }
 
   // ── Concept matching ─────────────────────────────────────────────────
-  for (const e of Object.values(_ref)) {
+  for (const e of allReferenceEntries()) {
     if (e.type !== 'concept') continue;
     const normalizedConceptName = e.name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
     const patterns: RegExp[] = normalizedConceptName

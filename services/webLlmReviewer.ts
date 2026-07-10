@@ -1,5 +1,6 @@
 import { AiReviewRequest, AiReviewResult } from '../aiReviewTypes';
 import { AiLanguage, aiLanguageInstruction } from './aiLocalization';
+import { GeneralAiResponseMode, getGeneralAiModeInstruction } from './generalAiMode';
 
 type EngineModule = typeof import('@mlc-ai/web-llm');
 
@@ -200,11 +201,11 @@ export const answerProblemQuestionWithWebLlm = async (question: string, request:
     return String(response?.choices?.[0]?.message?.content || '').trim();
 };
 
-export const answerGeneralPythonWithWebLlm = async (question: string, modelId: string, language: AiLanguage = 'en'): Promise<string> => {
+export const answerGeneralPythonWithWebLlm = async (question: string, modelId: string, language: AiLanguage = 'en', mode: GeneralAiResponseMode = 'normal'): Promise<string> => {
     const engine = await loadWebLlmReviewer(modelId);
     const response = await engine.chat.completions.create({
         messages: [
-            { role: 'system', content: `You are a Python expert answering a general Python question. ${aiLanguageInstruction(language)} Give a clear, accurate answer with code examples. If the user asks for a list (all methods, all built-ins etc), provide them in numbered format. If the user asks the difference between any method and any built-in function, compare them side by side: method/function, mutates original or not, return value, common mistake, and code example. Important rule: mutating methods such as list.append(), list.extend(), list.sort(), list.reverse(), dict.update(), and set.add() usually modify the object and return None; built-ins such as sorted() and reversed() leave the original unchanged and return a new result or iterator. If you are not 100% confident about the answer, do not guess or invent syntax. Do not return JSON.` },
+            { role: 'system', content: `You are a Python expert answering a general Python question. ${aiLanguageInstruction(language)} ${getGeneralAiModeInstruction(mode, language)} Give a clear, accurate answer with code examples. If the user asks for a count, distinguish a fixed standard-library count from an open-ended count across third-party and user-defined classes. If the user asks for a list (all methods, all built-ins etc), provide it in numbered format. If the user asks the difference between any method and any built-in function, compare them side by side: method/function, mutates original or not, return value, common mistake, and code example. Important rule: mutating methods such as list.append(), list.extend(), list.sort(), list.reverse(), dict.update(), and set.add() usually modify the object and return None; built-ins such as sorted() and reversed() leave the original unchanged and return a new result or iterator. If you are not 100% confident about the answer, do not guess or invent syntax. Do not return JSON.` },
             { role: 'user', content: question },
         ],
         temperature: 0.2,
@@ -220,6 +221,7 @@ export const answerGeneralPythonWithWebLlmConversation = async (
     modelId: string,
     history: ChatMessage[] = [],
     language: AiLanguage = 'en',
+    mode: GeneralAiResponseMode = 'normal',
 ): Promise<string> => {
     const engine = await loadWebLlmReviewer(modelId);
     const messages: ChatMessage[] = [
@@ -228,6 +230,7 @@ export const answerGeneralPythonWithWebLlmConversation = async (
             content: [
                 'You are an interactive Python tutor in a conversation.',
                 aiLanguageInstruction(language),
+                getGeneralAiModeInstruction(mode, language),
                 'Be clear, correct, and give code examples.',
                 'If the user says "expand", "more", "detail", "examples", or similar follow-ups, expand on your previous answer.',
                 'For method-vs-built-in comparisons, always state whether each option mutates the original object and what each option returns. Explain why mutating methods commonly return None.',

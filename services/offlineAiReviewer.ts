@@ -4,6 +4,7 @@ import { answerGeneralPythonWithWebLlm, answerGeneralPythonWithWebLlmConversatio
 import { hasGeminiKey, reviewWithGemini } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 import { AiLanguage } from './aiLocalization';
+import { GeneralAiResponseMode } from './generalAiMode';
 
 const STORAGE_KEY = 'python_offline_ai_state';
 const DEFAULT_MODEL_ID = 'Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC';
@@ -456,6 +457,7 @@ export const answerGeneralPythonWithAvailableAi = async (
     state: OfflineAiState,
     history: ChatMessage[] = [],
     language: AiLanguage = 'en',
+    mode: GeneralAiResponseMode = 'normal',
 ): Promise<string | null> => {
     if (!state.enabled || state.status !== 'ready') return null;
     if (!supportsWebLlm()) return null;
@@ -463,8 +465,8 @@ export const answerGeneralPythonWithAvailableAi = async (
     try {
         const answer = await withTimeout(
             history.length > 0
-                ? answerGeneralPythonWithWebLlmConversation(question, state.modelId, history, language)
-                : answerGeneralPythonWithWebLlm(question, state.modelId, language),
+                ? answerGeneralPythonWithWebLlmConversation(question, state.modelId, history, language, mode)
+                : answerGeneralPythonWithWebLlm(question, state.modelId, language, mode),
             OFFLINE_AI_REVIEW_TIMEOUT_MS,
             'Offline AI general tutor timed out.',
         );

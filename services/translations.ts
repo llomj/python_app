@@ -62,6 +62,7 @@ const EN: Dict = {
   'settings.cancelSetup': 'Cancel Setup',
   'settings.removeOfflineAi': 'Remove Offline AI',
   'settings.appCache': 'App Cache',
+  'settings.offlineAiReviewer': 'Offline AI Reviewer',
   'settings.appCacheDesc': 'If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.',
   'settings.clearCache': 'Clear App Cache & Reload',
   'settings.clearingCache': 'Clearing Cache...',
@@ -437,6 +438,7 @@ const FR: Dict = {
   'settings.cancelSetup': 'Annuler l\'Installation',
   'settings.removeOfflineAi': 'Supprimer l\'IA Hors Ligne',
   'settings.appCache': 'Cache de l\'Appli',
+  'settings.offlineAiReviewer': 'Réviseur IA hors ligne',
   'settings.appCacheDesc': 'Si l\'appli mobile reste bloquée sur une ancienne version GitHub Pages, videz uniquement le cache et le service worker. La progression, les stats, les problèmes sauvegardés et les réglages restent en place.',
   'settings.clearCache': 'Vider le Cache & Recharger',
   'settings.clearingCache': 'Vidage du Cache...',
@@ -767,7 +769,8 @@ export const setLanguage = (lang: Lang): void => {
 };
 
 export const t = (key: string, ...args: (string | number)[]): string => {
-  const lang = getLanguage();
+  const explicitLanguage = args[0] === 'en' || args[0] === 'fr' ? args.shift() as Lang : null;
+  const lang = explicitLanguage || getLanguage();
   const val = DICTIONARIES[lang]?.[key];
   if (val === undefined) {
     const enVal = DICTIONARIES['en'][key];

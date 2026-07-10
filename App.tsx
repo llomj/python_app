@@ -52,8 +52,9 @@ import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/tra
 import { EXERCISES_FR } from './services/exercisesFr';
 import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
-import { answerGeneralPythonQuestion } from './services/pythonReference';
+import { allBuiltins, allDictMethods, allListMethods, allSetMethods, allStringMethods, allTupleMethods, answerGeneralPythonQuestion } from './services/pythonReference';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
+import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -288,8 +289,8 @@ const buildGeneralAiTracebackAnswer = (question: string): string | null => {
     ].join('\n');
 };
 
-const buildGeneralAiExampleSet = (topic: string): string => [
-    '1. Basic example',
+const buildGeneralAiExampleSet = (topic: string, language: 'en' | 'fr' = 'en'): string => [
+    language === 'fr' ? '1. Exemple simple' : '1. Basic example',
     '```python',
     topic === 'dictionary' ? 'data = {"name": "Noll"}\nprint(data["name"])' :
     topic === 'lambda' ? 'double = lambda x: x * 2\nprint(double(5))' :
@@ -298,7 +299,7 @@ const buildGeneralAiExampleSet = (topic: string): string => [
     'value = 10\nprint(value)',
     '```',
     '',
-    '2. Real use example',
+    language === 'fr' ? '2. Exemple pratique' : '2. Real use example',
     '```python',
     topic === 'dictionary' ? 'prices = {"apple": 2, "banana": 1}\nfor fruit, price in prices.items():\n    print(fruit, price)' :
     topic === 'lambda' ? 'names = ["Ana", "Christopher", "Bo"]\nprint(sorted(names, key=lambda name: len(name)))' :
@@ -307,9 +308,11 @@ const buildGeneralAiExampleSet = (topic: string): string => [
     'for number in range(3):\n    print(number)',
     '```',
     '',
-    '3. Common mistake and fix',
+    language === 'fr' ? '3. Erreur fréquente et correction' : '3. Common mistake and fix',
     '```python',
-    '# Mistake: printing when a function should return\n# Fix: use return when another part of the code needs the value',
+    language === 'fr'
+        ? '# Erreur : afficher alors que la fonction doit renvoyer une valeur\n# Correction : utilisez return si une autre partie du code a besoin de la valeur'
+        : '# Mistake: printing when a function should return\n# Fix: use return when another part of the code needs the value',
     '```',
 ].join('\n');
 
@@ -862,43 +865,208 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
     ].join('\n');
 };
 
-const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAiMode): string => {
-    const lowerQ = question.toLowerCase();
-    const topic = detectGeneralPythonTopic(question);
-    const sections: string[] = [answer];
-    const conceptMap = getConceptMapItems(topic);
-    if (conceptMap.length > 0 && !/list all|all methods|all built/i.test(lowerQ)) {
-        sections.push(`**Related concepts**\n${conceptMap.map((item, index) => `${index + 1}. ${item}`).join('\n')}`);
+const buildGeneralAiCountAnswer = (question: string, language: 'en' | 'fr'): string | null => {
+    const q = question.toLowerCase();
+    const asksCount = /\bhow many\b|\bnumber of\b|\bcount (?:of )?\b/.test(q);
+    if (!asksCount) return null;
+
+    if (/\bmethods?\b/.test(q)) {
+        const groups = [
+            ['str', allStringMethods().length],
+            ['list', allListMethods().length],
+            ['dict', allDictMethods().length],
+            ['set', allSetMethods().length],
+            ['tuple', allTupleMethods().length],
+        ] as const;
+        const total = groups.reduce((sum, [, count]) => sum + count, 0);
+        if (language === 'fr') {
+            return [
+                '**Combien existe-t-il de méthodes Python ?**',
+                '',
+                'Il n’existe pas de total unique pour toutes les méthodes Python : chaque classe, bibliothèque et type personnalisé peut définir ses propres méthodes.',
+                '',
+                `Cette application référence **${total} méthodes principales** pour cinq types intégrés :`,
+                ...groups.map(([name, count]) => `- \`${name}\` : ${count}`),
+                '',
+                'Ce total compte les entrées par type. Certains noms, comme `count()` ou `index()`, existent sur plusieurs types.',
+            ].join('\n');
+        }
+        return [
+            '**How many Python methods are there?**',
+            '',
+            'There is no single total for every Python method: every class, library, and user-defined type can define more methods.',
+            '',
+            `This app catalogs **${total} core method entries** across five built-in types:`,
+            ...groups.map(([name, count]) => `- \`${name}\`: ${count}`),
+            '',
+            'The total counts entries by type. Names such as `count()` and `index()` can appear on more than one type.',
+        ].join('\n');
     }
-    if (mode === 'simple' || /simple|beginner|basic/.test(lowerQ)) {
-        sections.push(`**Simple version**\n${topic} is a Python idea you use to make code clearer, reusable, or easier to control. Focus first on what problem it solves, then look at syntax.`);
+
+    if (/\bbuilt.?in(?: function)?s?\b/.test(q)) {
+        const count = allBuiltins().length;
+        return language === 'fr'
+            ? `**Fonctions intégrées**\n\nCette application référence **${count} fonctions intégrées Python** utilisables sans installer de bibliothèque, par exemple \`len()\`, \`print()\`, \`range()\`, \`sorted()\` et \`zip()\`. Le nombre exact peut dépendre de la version de Python.`
+            : `**Built-in functions**\n\nThis app catalogs **${count} Python built-in functions** available without installing a library, including \`len()\`, \`print()\`, \`range()\`, \`sorted()\`, and \`zip()\`. The exact count can depend on the Python version.`;
     }
-    if (mode === 'normal' || /intermediate|workflow|order|flow/.test(lowerQ)) {
-        sections.push(`**Workflow**\n1. Identify the data you start with.\n2. Apply the ${topic} syntax.\n3. Check what value is produced or changed.\n4. Print or return the result depending on the task.`);
-    }
-    if (mode === 'deep' || /deep|in.?depth|advanced|more detail|expand|go deeper/.test(lowerQ)) {
-        sections.push(`**In-depth notes**\n- Ask what object or value the code is working on.\n- Check whether the operation creates a new value or mutates the existing one.\n- Check whether the result should be printed, returned, assigned, or imported.\n- Read the syntax from left to right, but remember expressions inside parentheses or function calls are evaluated first.`);
-    }
-    if (mode === 'examples' || /example|examples|show me/.test(lowerQ)) {
-        sections.push(`**Examples**\n${buildGeneralAiExampleSet(topic)}`);
-    }
-    if (mode !== 'simple' || /mistake|wrong|common mistake|avoid/.test(lowerQ)) {
-        sections.push(`**Common mistakes**\n- Memorizing syntax without knowing what value it produces.\n- Printing when the task asks you to return.\n- Using the right idea on the wrong data type.\n- Copying an example literally instead of matching the problem logic.`);
-    }
-    if (/quiz|practice|test me|check my understanding/.test(lowerQ)) {
-        sections.push(buildGeneralAiQuiz(topic));
-    }
-    if (!/quiz|practice|test me|check my understanding/.test(lowerQ)) {
-        sections.push(buildGeneralAiSuggestedFollowUpText(question));
-    }
-    return sections.join('\n\n');
+
+    return null;
 };
 
-const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
+const buildGeneralAiCreationAnswer = (question: string, language: 'en' | 'fr'): string | null => {
+    const q = question.toLowerCase();
+    if (!/\b(?:how (?:do|can|would) (?:i|you)|how to)\b/.test(q) || !/\b(?:create|make|write|build|define|start|use)\b/.test(q)) return null;
+
+    if (/\bmethod\b/.test(q)) {
+        return language === 'fr' ? [
+            '**Créer une méthode**',
+            '',
+            'Une méthode est une fonction définie dans une classe. Une méthode d’instance reçoit `self` comme premier paramètre.',
+            '',
+            '1. Créez une classe avec `class`.',
+            '2. Définissez la méthode avec `def` et `self`.',
+            '3. Créez un objet à partir de la classe.',
+            '4. Appelez la méthode avec la notation pointée.',
+            '',
+            '```python',
+            'class Calculator:',
+            '    def double(self, number):',
+            '        return number * 2',
+            '',
+            'calculator = Calculator()',
+            'print(calculator.double(5))  # 10',
+            '```',
+            '',
+            '`self` représente l’objet qui appelle la méthode. Python le transmet automatiquement lors de `calculator.double(5)`.',
+        ].join('\n') : [
+            '**Creating a method**',
+            '',
+            'A method is a function defined inside a class. An instance method receives `self` as its first parameter.',
+            '',
+            '1. Create a class with `class`.',
+            '2. Define the method with `def` and `self`.',
+            '3. Create an object from the class.',
+            '4. Call the method with dot notation.',
+            '',
+            '```python',
+            'class Calculator:',
+            '    def double(self, number):',
+            '        return number * 2',
+            '',
+            'calculator = Calculator()',
+            'print(calculator.double(5))  # 10',
+            '```',
+            '',
+            '`self` is the object calling the method. Python supplies it automatically for `calculator.double(5)`.',
+        ].join('\n');
+    }
+
+    if (/\boop\b|object[- ]oriented/.test(q)) {
+        return language === 'fr' ? [
+            '**Créer un programme orienté objet**',
+            '',
+            'La programmation orientée objet regroupe les données et les comportements dans des classes et des objets.',
+            '',
+            '1. Identifiez l’objet réel à représenter.',
+            '2. Créez une classe avec `class`.',
+            '3. Initialisez ses attributs dans `__init__()`.',
+            '4. Stockez les données avec `self.attribut`.',
+            '5. Ajoutez des méthodes qui utilisent ou modifient ces données.',
+            '6. Créez une instance de la classe.',
+            '7. Appelez ses méthodes avec la notation pointée.',
+            '',
+            '```python',
+            'class BankAccount:',
+            '    def __init__(self, owner, balance=0):',
+            '        self.owner = owner',
+            '        self.balance = balance',
+            '',
+            '    def deposit(self, amount):',
+            '        self.balance += amount',
+            '        return self.balance',
+            '',
+            'account = BankAccount("Noll", 100)',
+            'print(account.deposit(25))  # 125',
+            '```',
+            '',
+            'Commencez avec une seule classe, deux attributs et une méthode. Ajoutez ensuite l’héritage ou la composition uniquement lorsque le problème le justifie.',
+        ].join('\n') : [
+            '**Creating an object-oriented program**',
+            '',
+            'Object-oriented programming groups data and behavior into classes and objects.',
+            '',
+            '1. Identify the real thing you want to represent.',
+            '2. Create a class with `class`.',
+            '3. Initialize attributes in `__init__()`.',
+            '4. Store data with `self.attribute`.',
+            '5. Add methods that use or modify that data.',
+            '6. Create an instance of the class.',
+            '7. Call its methods with dot notation.',
+            '',
+            '```python',
+            'class BankAccount:',
+            '    def __init__(self, owner, balance=0):',
+            '        self.owner = owner',
+            '        self.balance = balance',
+            '',
+            '    def deposit(self, amount):',
+            '        self.balance += amount',
+            '        return self.balance',
+            '',
+            'account = BankAccount("Noll", 100)',
+            'print(account.deposit(25))  # 125',
+            '```',
+            '',
+            'Start with one class, two attributes, and one method. Add inheritance or composition only when the problem needs it.',
+        ].join('\n');
+    }
+
+    return null;
+};
+
+const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAiMode, language: 'en' | 'fr'): string => {
+    const topic = detectGeneralPythonTopic(question);
+    if (/\bhow many\b|\bnumber of\b|\bcount (?:of )?\b/i.test(question)) {
+        return [answer, mode === 'simple' ? '' : buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
+    }
+    return composeGeneralAiAnswer({
+        answer,
+        topic,
+        mode,
+        language,
+        examples: mode === 'examples' || mode === 'deep' ? buildGeneralAiExampleSet(topic, language) : '',
+        relatedConcepts: language === 'fr' ? [] : getConceptMapItems(topic),
+        followUps: buildGeneralAiSuggestedFollowUpText(question, language),
+    });
+};
+
+const getFrenchGeneralAiTopicLabel = (topic: string) => ({
+    list: 'les listes', dictionary: 'les dictionnaires', set: 'les ensembles', tuple: 'les tuples', string: 'les chaînes',
+    boolean: 'les booléens', integer: 'les entiers', float: 'les nombres décimaux', function: 'les fonctions', method: 'les méthodes',
+    module: 'les modules', file: 'les fichiers Python', package: 'les paquets', library: 'les bibliothèques', class: 'les classes',
+    object: 'les objets', attribute: 'les attributs', oop: 'la programmation orientée objet', argument: 'les arguments',
+    parameter: 'les paramètres', identifier: 'les identifiants', variable: 'les variables', syntax: 'la syntaxe', indentation: 'l’indentation',
+    return: '`return`', print: '`print()`', 'for loop': 'les boucles `for`', 'while loop': 'les boucles `while`',
+    condition: 'les conditions', lambda: 'les fonctions lambda', closure: 'les fermetures', decorator: 'les décorateurs',
+    generator: 'les générateurs', iterator: 'les itérateurs', comprehension: 'les compréhensions', regex: 'les expressions régulières',
+} as Record<string, string>)[topic] || topic;
+
+const getGeneralAiSuggestedFollowUps = (question: string, language: 'en' | 'fr' = 'en'): string[] => {
     const pair = extractGeneralAiComparisonPair(question);
     if (pair) {
         const first = GENERAL_AI_CONCEPT_SPECS[pair[0]]?.label || pair[0];
         const second = GENERAL_AI_CONCEPT_SPECS[pair[1]]?.label || pair[1];
+        if (language === 'fr') {
+            const firstFr = getFrenchGeneralAiTopicLabel(pair[0]);
+            const secondFr = getFrenchGeneralAiTopicLabel(pair[1]);
+            return [
+                `Donne des exemples simples comparant ${firstFr} et ${secondFr}`,
+                `Montre les erreurs fréquentes avec ${firstFr} et ${secondFr}`,
+                `Fais-moi un quiz sur ${firstFr} et ${secondFr}`,
+                `Quand faut-il utiliser ${firstFr} plutôt que ${secondFr} ?`,
+                `Approfondis la comparaison entre ${firstFr} et ${secondFr}`,
+            ];
+        }
         return [
             `Give beginner examples of ${first} vs ${second}`,
             `Show common mistakes with ${first} and ${second}`,
@@ -908,6 +1076,20 @@ const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
         ];
     }
     const topic = detectGeneralPythonTopic(question);
+    if (language === 'fr') {
+        const topicFr = getFrenchGeneralAiTopicLabel(topic);
+        const topicWithDe = topicFr.startsWith('les ') ? `des ${topicFr.slice(4)}`
+            : topicFr.startsWith('la ') ? `de la ${topicFr.slice(3)}`
+                : topicFr.startsWith('l’') ? `de ${topicFr}`
+                    : `de ${topicFr}`;
+        return [
+            `Explique ${topicFr} simplement`,
+            `Donne des exemples ${topicWithDe}`,
+            `Montre les erreurs fréquentes avec ${topicFr}`,
+            `Approfondis ${topicFr}`,
+            `Fais-moi un quiz sur ${topicFr}`,
+        ];
+    }
     return [
         `Explain ${topic} simply`,
         `Give examples of ${topic}`,
@@ -917,10 +1099,10 @@ const getGeneralAiSuggestedFollowUps = (question: string): string[] => {
     ];
 };
 
-const buildGeneralAiSuggestedFollowUpText = (question: string): string => {
-    const suggestions = getGeneralAiSuggestedFollowUps(question);
+const buildGeneralAiSuggestedFollowUpText = (question: string, language: 'en' | 'fr' = 'en'): string => {
+    const suggestions = getGeneralAiSuggestedFollowUps(question, language);
     return [
-        '**You can ask next**',
+        language === 'fr' ? '**Vous pouvez ensuite demander**' : '**You can ask next**',
         ...suggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`),
     ].join('\n');
 };
@@ -10945,13 +11127,20 @@ const renderInlinePythonCode = (code: string, editorColors: EditorColorSettings,
 };
 
 const renderAiParagraphText = (text: string, editorColors: EditorColorSettings, keyPrefix: string) => {
-    const parts = text.split(/(`[^`]+`)/g).filter(Boolean);
+    const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g).filter(Boolean);
     return parts.map((part, index) => {
         if (part.startsWith('`') && part.endsWith('`')) {
             return (
                 <React.Fragment key={`${keyPrefix}-code-${index}`}>
                     {renderInlinePythonCode(part.slice(1, -1), editorColors, `${keyPrefix}-code-${index}`)}
                 </React.Fragment>
+            );
+        }
+        if (part.startsWith('**') && part.endsWith('**')) {
+            return (
+                <strong key={`${keyPrefix}-strong-${index}`} className="font-black text-white">
+                    {part.slice(2, -2)}
+                </strong>
             );
         }
         return (
@@ -14452,13 +14641,19 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now(),
                 role: 'assistant',
                 source: 'built_in',
-                text: localizeAiText([
-                    'Ask any Python question. I can explain concepts, list methods and built-ins, compare ideas, or help you understand code.',
+                text: appLang === 'fr' ? [
+                    'Posez n’importe quelle question sur Python. Je peux expliquer des concepts, compter ou lister des méthodes et des fonctions intégrées, comparer des notions ou vous aider à comprendre du code.',
                     '',
-                    'I can follow up — try saying **"expand"**, **"more detail"**, or **"give examples"** after an answer. If your question is unclear, I will ask a clarification instead of guessing.',
+                    'Vous pouvez poser une question de suivi, par exemple **« approfondis »**, **« explique plus simplement »** ou **« donne des exemples »**. Si la question n’est pas claire, je demanderai une précision au lieu de deviner.',
                     '',
-                    'Click **Save** to store the conversation or **Clear** to start fresh. View saved chats with the **Saved (N)** button.',
-                ].join('\n'), appLang),
+                    'Utilisez **Sauvegarder** pour conserver la conversation ou **Effacer** pour recommencer. Le bouton **Sauvegardés (N)** affiche les conversations conservées.',
+                ].join('\n') : [
+                    'Ask any Python question. I can explain concepts, count or list methods and built-ins, compare ideas, or help you understand code.',
+                    '',
+                    'You can ask a follow-up, such as **“go deeper”**, **“explain more simply”**, or **“give examples”**. If the question is unclear, I will ask for clarification instead of guessing.',
+                    '',
+                    'Use **Save** to keep the conversation or **Clear** to start fresh. **Saved (N)** opens stored conversations.',
+                ].join('\n'),
             }]);
         }
         setShowModal('general_ai');
@@ -14480,22 +14675,30 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         try {
             const topic = detectGeneralPythonTopic(effectiveQuestion);
+            const countAnswer = buildGeneralAiCountAnswer(effectiveQuestion, appLang);
+            const creationAnswer = buildGeneralAiCreationAnswer(effectiveQuestion, appLang);
             const refAnswer =
+                countAnswer ||
+                creationAnswer ||
                 buildGeneralAiTracebackAnswer(effectiveQuestion) ||
                 buildGeneralAiCodeExplanation(effectiveQuestion) ||
                 buildGeneralAiComparisonAnswer(effectiveQuestion) ||
                 (/quiz|practice|test me|check my understanding/i.test(effectiveQuestion) ? buildGeneralAiQuiz(topic) : null) ||
-                (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic) : null) ||
+                (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic, appLang) : null) ||
                 buildGeneralAiErrorAnswer(effectiveQuestion) ||
-                buildGeneralAiCoreTopicAnswer(effectiveQuestion) ||
-                answerGeneralPythonQuestion(effectiveQuestion);
+                answerGeneralPythonQuestion(effectiveQuestion) ||
+                buildGeneralAiCoreTopicAnswer(effectiveQuestion);
             if (refAnswer) {
                 setGeneralAiProgress(100);
+                const enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, generalAiMode, appLang);
+                const answerText = appLang === 'fr' && (countAnswer || creationAnswer)
+                    ? enrichedAnswer
+                    : localizeAiText(enrichedAnswer, appLang);
                 setGeneralAiMessages(prev => [...prev, {
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: localizeAiText(enrichGeneralAiAnswer(refAnswer, effectiveQuestion, generalAiMode), appLang),
+                    text: answerText,
                 }]);
                 return;
             }
@@ -14504,7 +14707,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     role: m.role === 'user' ? 'user' as const : 'assistant' as const,
                     content: m.text,
                 }));
-                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory, appLang);
+                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory, appLang, generalAiMode);
                 if (aiAnswer) {
                     setGeneralAiProgress(100);
                     setGeneralAiMessages(prev => [...prev, {
@@ -15227,8 +15430,8 @@ print(result)
                             onClick={openGeneralAi}
                             className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-all active:scale-95"
                             style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border, color: countRowColors.icon }}
-                            title="General Python AI"
-                            aria-label="Open General Python AI"
+                            title={t('generalAi.title', appLang)}
+                            aria-label={t('misc.openGeneralAi', appLang)}
                         >
                             <Bot size={16} />
                         </button>
@@ -15417,8 +15620,8 @@ print(result)
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <button
                                     onClick={openProblemAi}
-                                    title="Ask AI about this problem"
-                                    aria-label="Ask AI about this problem"
+                                    title={t('problem.askAi', appLang)}
+                                    aria-label={t('problem.askAi', appLang)}
                                     style={{
                                         backgroundColor: showModal === 'problem_ai' ? hexToRgba(toolPanelColors.ai, 0.15) : 'transparent',
                                         border: `1px solid ${panelBorderSoft}`,
@@ -15437,13 +15640,13 @@ print(result)
                                 >
                                     <Bot size={14} />
                                 </button>
-                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? 'Saved' : 'Save problem'} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
+                                <button onClick={saveCurrentProblem} title={isProblemSaved(exercise.id) ? t('problem.saved', appLang) : t('problem.save', appLang)} style={{ backgroundColor: isProblemSaved(exercise.id) ? hexToRgba(countRowColors.count, 0.15) : 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto', opacity: isProblemSaved(exercise.id) ? 1 : 0.7, transition: 'all 0.2s ease' }}>
                                     <Bookmark size={14} fill={isProblemSaved(exercise.id) ? 'currentColor' : 'none'} />
-                                    <span>{isProblemSaved(exercise.id) ? 'Saved' : 'Save'}</span>
+                                    <span>{isProblemSaved(exercise.id) ? t('problem.saved', appLang) : t('problem.save', appLang)}</span>
                                 </button>
                                 <button onClick={() => { setPendingNextProblem(false); loadRandomExercise(); }} style={{ backgroundColor: 'transparent', border: `1px solid ${panelBorderSoft}`, borderRadius: '0.5rem', padding: '0.25rem 0.5rem', color: countRowColors.count, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', flexShrink: 0, pointerEvents: 'auto' }} title="Load next problem">
                                     <SkipForward size={14} />
-                                    <span>Next</span>
+                                    <span>{t('problem.next', appLang)}</span>
                                 </button>
                             </div>
                         </div>
@@ -15696,7 +15899,7 @@ print(result)
                                 className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] transition-colors"
                                 style={{ backgroundColor: editorColors.background, color: toolPanelColors.toggleText }}
                             >
-                                <span>{showActionPanel ? 'Hide Tools' : 'Show Tools'}</span>
+                                <span>{showActionPanel ? t('output.hideTools', appLang) : t('output.showTools', appLang)}</span>
                                 {showActionPanel ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
                             </button>
                             {showActionPanel && (
@@ -15762,7 +15965,7 @@ print(result)
                         }}
                     >
                         {showModal !== 'solution' && (
-                            <button onClick={() => setShowModal('none')} className="absolute top-3 right-3 z-50 flex h-11 w-11 items-center justify-center rounded-full border text-gray-200 shadow-lg active:scale-95" style={{ backgroundColor: hexToRgba(panelColors.background, 0.92), borderColor: hexToRgba(panelColors.border, 0.9) }} aria-label="Close modal"><X size={24} /></button>
+                            <button onClick={() => setShowModal('none')} className="absolute top-3 right-3 z-50 flex h-11 w-11 items-center justify-center rounded-full border text-gray-200 shadow-lg active:scale-95" style={{ backgroundColor: hexToRgba(panelColors.background, 0.92), borderColor: hexToRgba(panelColors.border, 0.9) }} aria-label={appLang === 'fr' ? 'Fermer la fenêtre' : 'Close modal'}><X size={24} /></button>
                         )}
                         {showModal === 'instructions' && (
                             <div className="flex flex-col h-full overflow-hidden">
@@ -16056,6 +16259,7 @@ print(result)
                                     }).map(message => (
                                         <div
                                             key={message.id}
+                                            data-problem-ai-message={message.role}
                                             className="rounded-2xl border p-3"
                                             style={{
                                                 borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
@@ -16115,7 +16319,10 @@ print(result)
                             <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
                                 <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
-                                            <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('generalAi.title', appLang)}</h2>
+                                        <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('generalAi.title', appLang)}</h2>
+                                    </div>
+                                    <p className="mt-1 text-xs text-gray-400">{t('generalAi.desc', appLang)}</p>
+                                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
                                         <button
                                             onClick={() => {
                                                 const label = generalAiMessages.filter(m => m.role === 'user').slice(-1)[0]?.text.slice(0, 50) || 'Python AI chat';
@@ -16135,7 +16342,7 @@ print(result)
                                                 color: '#86efac',
                                                 backgroundColor: hexToRgba('#22c55e', 0.1),
                                             }}
-                                            title="Save conversation to history"
+                                            title={t('generalAi.save', appLang)}
                                         >
                                             {generalAiSaveFeedback ? t('generalAi.saved', appLang) : t('generalAi.save', appLang)}
                                         </button>
@@ -16147,7 +16354,7 @@ print(result)
                                                 color: toolPanelColors.ai,
                                                 backgroundColor: hexToRgba(toolPanelColors.ai, 0.1),
                                             }}
-                                            title="Show saved conversations"
+                                            title={t('generalAi.savedConvs', appLang)}
                                         >
                                             {t('generalAi.savedCount', appLang, String(savedConversations.length))}
                                         </button>
@@ -16159,12 +16366,11 @@ print(result)
                                                 color: toolPanelColors.failed,
                                                 backgroundColor: hexToRgba(toolPanelColors.failed, 0.1),
                                             }}
-                                            title="Clear conversation"
+                                            title={t('generalAi.clear', appLang)}
                                         >
                                             {t('generalAi.clear', appLang)}
                                         </button>
                                     </div>
-                                    <p className="mt-1 text-xs text-gray-400">{t('generalAi.desc', appLang)}</p>
                                     <div className="mt-2 flex flex-wrap gap-1.5">
                                         {(['simple', 'normal', 'deep', 'examples'] as GeneralAiMode[]).map(mode => (
                                             <button
@@ -16226,6 +16432,7 @@ print(result)
                                     {generalAiMessages.map(message => (
                                         <div
                                             key={message.id}
+                                            data-general-ai-message={message.role}
                                             className="rounded-2xl border p-3"
                                             style={{
                                                 borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
@@ -17398,7 +17605,7 @@ print(result)
                         )}
                         {showModal === 'problem_mode_help' && (
                             <div className="flex h-full min-h-0 flex-col py-2">
-                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">How to use this app</h2>
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">{t('howto.title', appLang)}</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8 space-y-4 text-[11px] text-gray-300 leading-relaxed">
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
                                         <p className="font-bold text-white text-xs">Problem Mode</p>
