@@ -14,6 +14,21 @@ const PYTHON_BUILTINS = new Set([
   'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', '__import__',
 ]);
 
+const PYTHON_METHODS = new Set([
+  'upper', 'lower', 'strip', 'split', 'join', 'replace', 'find', 'index',
+  'startswith', 'endswith', 'format', 'capitalize', 'count', 'encode',
+  'isalnum', 'isalpha', 'isascii', 'isdecimal', 'isdigit', 'isidentifier',
+  'islower', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'isupper',
+  'ljust', 'lstrip', 'rjust', 'rstrip', 'swapcase', 'title', 'zfill',
+  'casefold', 'center', 'expandtabs', 'partition', 'rpartition',
+  'removeprefix', 'removesuffix', 'splitlines', 'translate', 'maketrans',
+  'append', 'extend', 'insert', 'remove', 'pop', 'clear', 'sort', 'reverse', 'copy',
+  'keys', 'values', 'items', 'get', 'update', 'setdefault', 'fromkeys',
+  'add', 'discard', 'union', 'intersection', 'difference', 'symmetric_difference',
+  'issubset', 'issuperset', 'isdisjoint',
+  'encode', 'decode',
+]);
+
 export interface EditorColorSettings {
   appBackground: string;
   problemBackground: string;
@@ -61,20 +76,21 @@ export const DEFAULT_EDITOR_COLORS: EditorColorSettings = {
 const createVarHighlightField = (colors: EditorColorSettings) => {
   const builtinMark = Decoration.mark({ attributes: { style: `color:${colors.builtin}` } });
   const identifierMark = Decoration.mark({ attributes: { style: `color:${colors.identifier}` } });
+  const methodMark = Decoration.mark({ attributes: { style: 'color:#FFD700' } });
 
   return StateField.define<DecorationSet>({
     create(state) {
-      return computeVarDecorations(state, builtinMark, identifierMark);
+      return computeVarDecorations(state, builtinMark, identifierMark, methodMark);
     },
     update(deco, tr) {
       if (!tr.docChanged) return deco;
-      return computeVarDecorations(tr.state, builtinMark, identifierMark);
+      return computeVarDecorations(tr.state, builtinMark, identifierMark, methodMark);
     },
     provide: f => EditorView.decorations.from(f),
   });
 };
 
-function computeVarDecorations(state, builtinMark, identifierMark) {
+function computeVarDecorations(state, builtinMark, identifierMark, methodMark) {
   const decos = [];
   syntaxTree(state).iterate({
     enter(node) {
@@ -89,6 +105,11 @@ function computeVarDecorations(state, builtinMark, identifierMark) {
           }
         } else {
           decos.push(identifierMark.range(node.from, node.to));
+        }
+      } else if (node.name === 'PropertyName') {
+        const name = state.sliceDoc(node.from, node.to);
+        if (PYTHON_METHODS.has(name)) {
+          decos.push(methodMark.range(node.from, node.to));
         }
       }
     },
