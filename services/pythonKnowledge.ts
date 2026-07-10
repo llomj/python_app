@@ -4,7 +4,7 @@ import {
   type CategoryFallback,
   type ConceptEntry,
 } from './pythonConceptLibrary';
-import { lookupAll, type RefEntry } from './pythonReference';
+import { allBuiltins, allDictMethods, allListMethods, allSetMethods, allStringMethods, allTupleMethods, answerGeneralPythonQuestion, lookupAll, type RefEntry } from './pythonReference';
 import type { GeneralAiResponseMode } from './generalAiMode';
 import { localizeAiText } from './aiLocalization';
 
@@ -42,11 +42,22 @@ export interface KnowledgeFollowUpResolution {
   usedContext: boolean;
 }
 
+export const getPythonReferenceCounts = () => ({
+  builtin: allBuiltins().length,
+  dict: allDictMethods().length,
+  list: allListMethods().length,
+  set: allSetMethods().length,
+  str: allStringMethods().length,
+  tuple: allTupleMethods().length,
+});
+
+export const answerPythonReferenceQuestion = (question: string): string | null => answerGeneralPythonQuestion(question);
+
 export const isKnowledgeFollowUpQuestion = (question: string): boolean => {
   const trimmed = question.trim();
   if (/```|(^|\n)\s*(?:def |class |for |while |if |import |from |return |yield |[A-Za-z_]\w*\s*=)/m.test(trimmed)) return false;
   return /^(?:go deeper|more detail|explain more|break it down|approfondis|plus de details?|examples?|give (?:another )?examples?|show (?:another )?examples?|simplify|explain simply|explique simplement)\b/i.test(trimmed)
-    || /\b(?:it|this|that|cela|ca|il|elle)\b/i.test(trimmed);
+    || /\b(?:it|this|that|them|those|cela|ca|ceci|il|elle|eux)\b/i.test(trimmed);
 };
 
 export const selectKnowledgeContextQuestion = (newestFirstQuestions: string[]): string => (
@@ -204,6 +215,21 @@ const FRENCH_CATEGORY: Record<string, string> = {
 };
 
 const FRENCH_PRECISE_SUMMARY: Record<string, string> = {
+  boolean: 'Un booléen représente une valeur logique : `True` ou `False`. Il est utilisé dans les conditions, les comparaisons et les décisions du programme.',
+  class: 'Une classe est un modèle qui définit les données et les comportements partagés par les objets créés à partir de cette classe.',
+  closure: 'Une fermeture est une fonction interne qui conserve l’accès aux variables de sa portée englobante, même après la fin de la fonction externe.',
+  comprehension: 'Une compréhension construit une collection avec une expression, une ou plusieurs boucles et éventuellement une condition de filtrage.',
+  dict: 'Un dictionnaire stocke des paires clé-valeur. Chaque clé unique permet de retrouver sa valeur sans utiliser une position numérique.',
+  dictionary: 'Un dictionnaire stocke des paires clé-valeur. Chaque clé unique permet de retrouver sa valeur sans utiliser une position numérique.',
+  function: 'Une fonction est un bloc de code réutilisable défini avec `def`. Elle peut recevoir des arguments et renvoyer une valeur avec `return`.',
+  lambda: 'Une expression `lambda` crée une petite fonction anonyme limitée à une seule expression.',
+  list: 'Une liste est une collection ordonnée et modifiable. Elle utilise des crochets, par exemple `[1, 2, 3]`, et peut contenir différents types de valeurs.',
+  method: 'Une méthode est une fonction attachée à une classe ou à un objet et appelée avec la notation pointée, par exemple `objet.methode()`.',
+  object: 'Un objet est une instance concrète d’une classe. Il possède une identité, un type, des attributs et éventuellement des méthodes.',
+  set: 'Un ensemble est une collection non ordonnée de valeurs uniques. Il élimine les doublons et prend en charge l’union, l’intersection et la différence.',
+  str: 'Une chaîne représente du texte sous forme d’une séquence Unicode immuable, écrite entre guillemets simples ou doubles.',
+  string: 'Une chaîne représente du texte sous forme d’une séquence Unicode immuable, écrite entre guillemets simples ou doubles.',
+  tuple: 'Un tuple est une collection ordonnée et immuable. Il utilise généralement des parenthèses, par exemple `(1, 2, 3)`.',
   asyncio: '`asyncio` est le cadre de la bibliothèque standard pour les entrées-sorties asynchrones, les coroutines, les tâches et les boucles d\'événements.',
   csv: '`csv` est le module de la bibliothèque standard qui lit et écrit des données tabulaires séparées par des délimiteurs, notamment les fichiers CSV.',
   django: 'Django est un framework web Python complet avec routage, modèles, formulaires, authentification et ORM.',
@@ -216,6 +242,17 @@ const FRENCH_PRECISE_SUMMARY: Record<string, string> = {
   requests: 'Requests est une bibliothèque cliente HTTP pour envoyer des requêtes et traiter les réponses, sessions, en-têtes et cookies.',
   threading: '`threading` est le module de la bibliothèque standard pour créer et coordonner des threads qui partagent la mémoire d\'un processus.',
   xgboost: 'XGBoost est une bibliothèque d\'apprentissage automatique qui implémente des arbres de décision optimisés par gradient boosting.',
+};
+
+const localizedKnowledgeSummary = (record: PythonKnowledgeRecord, language: KnowledgeLanguage): string => {
+  if (language !== 'fr') return record.summary;
+  const precise = FRENCH_PRECISE_SUMMARY[record.term.toLowerCase()]
+    || FRENCH_PRECISE_SUMMARY[record.canonicalName.toLowerCase()];
+  if (precise) return precise;
+  const translated = localizeAiText(record.summary, 'fr');
+  const category = FRENCH_CATEGORY[record.category] || record.category.replace(/_/g, ' ');
+  if (translated !== record.summary && !/\b(?:is|the|returns|creates|used|with|from|and|this|that|library)\b/i.test(translated)) return translated;
+  return `\`${record.canonicalName}\` est un terme Python du domaine ${category}. Sa définition exacte et sa syntaxe sont vérifiées dans la source indiquée.`;
 };
 
 const normalizeTerm = (value: string): string => {
@@ -371,29 +408,36 @@ const ambiguityAnswer = (resolution: KnowledgeResolution, language: KnowledgeLan
 
 export const formatPythonKnowledgeRecord = (record: PythonKnowledgeRecord, language: KnowledgeLanguage): string => {
   const isFrench = language === 'fr';
-  const localized = (value: string): string => isFrench ? localizeAiText(value, 'fr') : value;
+  const localizedOr = (value: string, fallback: string): string => {
+    if (!isFrench) return value;
+    const translated = localizeAiText(value, 'fr');
+    return translated === value ? fallback : translated;
+  };
   const frenchCategory = FRENCH_CATEGORY[record.category] || record.category.replace(/_/g, ' ');
   const summary = isFrench && record.confidence === 'categorized'
     ? (FRENCH_PRECISE_SUMMARY[record.term.toLowerCase()] || `\`${record.canonicalName}\` est un terme Python associé au domaine ${frenchCategory}.`)
-    : localized(record.summary);
+    : localizedKnowledgeSummary(record, language);
   const details = isFrench && record.confidence === 'categorized'
     ? `Ce terme appartient au domaine ${frenchCategory}. Son comportement exact dépend de l\'API, de la syntaxe ou de la bibliothèque indiquée par le code. La source liée ci-dessous permet de vérifier sa signature et sa version.`
-    : localized(record.details);
+    : localizedOr(record.details, `Ce concept relève du domaine ${frenchCategory}. Son fonctionnement dépend de la syntaxe et des valeurs utilisées ; l’exemple et la source ci-dessous montrent son usage vérifié.`);
   const returns = isFrench && record.confidence === 'categorized'
     ? 'Cela dépend de l\'API ou de l\'opération précise.'
-    : localized(record.returns);
+    : localizedOr(record.returns, 'La valeur renvoyée dépend de l’opération précise présentée par la signature et l’exemple.');
   const raises = isFrench && record.confidence === 'categorized'
     ? 'Les exceptions dépendent de l\'opération, des arguments et des valeurs utilisés.'
-    : localized(record.raises);
+    : localizedOr(record.raises, 'Les erreurs possibles dépendent des types, des arguments et des valeurs fournis.');
   const version = isFrench && record.confidence === 'categorized'
     ? 'Vérifiez la disponibilité exacte dans la documentation liée pour la version utilisée.'
-    : localized(record.version);
+    : localizedOr(record.version, 'Consultez la source liée pour vérifier la disponibilité et le comportement de la version Python utilisée.');
   const kind = isFrench ? (FRENCH_KIND[record.kind] || record.kind) : record.kind;
   const mutation = isFrench
     ? ({ yes: 'Oui', no: 'Non', depends: 'Cela dépend', 'not-applicable': 'Sans objet' } as const)[record.mutates]
     : ({ yes: 'Yes', no: 'No', depends: 'Depends', 'not-applicable': 'Not applicable' } as const)[record.mutates];
   const exampleText = record.examples.length
-    ? record.examples.slice(0, 3).map((example, index) => `${index + 1}. ${localized(example.title)}\n\`\`\`python\n${example.code}\n\`\`\``).join('\n\n')
+    ? record.examples.slice(0, 3).map((example, index) => {
+      const title = isFrench ? localizedOr(example.title, `Exemple ${index + 1}`) : example.title;
+      return `${index + 1}. ${title}\n\`\`\`python\n${example.code}\n\`\`\``;
+    }).join('\n\n')
     : (isFrench ? 'Aucun exemple générique n\'est inventé. Demandez un exemple avec le contexte ou le module exact.' : 'No generic example is invented. Ask with the exact module or code context for a precise example.');
   const confidence = isFrench
     ? ({ authoritative: 'source officielle', curated: 'définition vérifiée', categorized: 'définition catégorisée' } as const)[record.confidence]
@@ -553,7 +597,7 @@ export const answerPythonKnowledgeComparison = (question: string, language: Know
     `| ${isFrench ? 'Critère' : 'Criterion'} | ${a.canonicalName} | ${b.canonicalName} |`,
     '|---|---|---|',
     `| ${isFrench ? 'Type' : 'Kind'} | ${a.kind} | ${b.kind} |`,
-    `| ${isFrench ? 'But' : 'Purpose'} | ${a.summary} | ${b.summary} |`,
+    `| ${isFrench ? 'But' : 'Purpose'} | ${localizedKnowledgeSummary(a, language)} | ${localizedKnowledgeSummary(b, language)} |`,
     `| ${isFrench ? 'Syntaxe' : 'Syntax'} | \`${a.signature}\` | \`${b.signature}\` |`,
     `| ${isFrench ? 'Modifie l\'objet' : 'Mutates object'} | ${a.mutates} | ${b.mutates} |`,
     `| ${isFrench ? 'Retour' : 'Returns'} | ${a.returns} | ${b.returns} |`,
@@ -611,10 +655,16 @@ export const resolveKnowledgeFollowUp = (
   }
   const directExamples = trimmed.match(/^(?:show|give)\s+(?:me\s+)?(?:another\s+)?examples?\s+(?:of|for)\s+(.+)$/i);
   if (directExamples) return { question: `what is ${normalizeTerm(directExamples[1])}`, mode: 'examples', usedContext: true };
+  const directFrenchExamples = trimmed.match(/^(?:donne|montre)(?:-moi)?\s+(?:un autre |des )?exemples?\s+(?:de|des|pour)\s+(.+)$/i);
+  if (directFrenchExamples) return { question: `what is ${normalizeTerm(directFrenchExamples[1])}`, mode: 'examples', usedContext: true };
   const directDeep = trimmed.match(/^(?:go deeper on|explain in depth|deep explanation of)\s+(.+)$/i);
   if (directDeep) return { question: `what is ${normalizeTerm(directDeep[1])}`, mode: 'deep', usedContext: true };
+  const directFrenchDeep = trimmed.match(/^(?:approfondis|explique en d[eé]tail)\s+(.+)$/i);
+  if (directFrenchDeep) return { question: `what is ${normalizeTerm(directFrenchDeep[1])}`, mode: 'deep', usedContext: true };
   const directSimple = trimmed.match(/^(?:explain simply|simple explanation of)\s+(.+)$/i);
   if (directSimple) return { question: `what is ${normalizeTerm(directSimple[1])}`, mode: 'simple', usedContext: true };
+  const directFrenchSimple = trimmed.match(/^(?:explique simplement|explication simple de)\s+(.+)$/i);
+  if (directFrenchSimple) return { question: `what is ${normalizeTerm(directFrenchSimple[1])}`, mode: 'simple', usedContext: true };
   if (!previousQuestion) return { question: trimmed, mode: currentMode, usedContext: false };
   const subject = subjectFromQuestion(previousQuestion);
   if (/^(?:go deeper|more detail|explain more|break it down|approfondis|plus de details?)\b/i.test(trimmed)) {
@@ -626,9 +676,11 @@ export const resolveKnowledgeFollowUp = (
   if (/^(?:simplify|explain simply|explain more simply|simple|explique simplement)\b/i.test(trimmed)) {
     return { question: previousQuestion, mode: 'simple', usedContext: true };
   }
-  if (/\b(?:it|this|that|cela|ca|il|elle)\b/i.test(trimmed)) {
+  const newSubject = trimmed.match(/^(?:what about|how about|et|et pour)\s+(.+?)[?.!]*$/i);
+  if (newSubject) return { question: `what is ${normalizeTerm(newSubject[1])}`, mode: currentMode, usedContext: true };
+  if (/\b(?:it|this|that|them|those|cela|ca|ceci|il|elle|eux)\b/i.test(trimmed)) {
     return {
-      question: trimmed.replace(/\b(?:it|this|that|cela|ca|il|elle)\b/i, subject),
+      question: trimmed.replace(/\b(?:it|this|that|them|those|cela|ca|ceci|il|elle|eux)\b/i, subject),
       mode: currentMode,
       usedContext: true,
     };
@@ -674,7 +726,7 @@ export const answerPythonCodeQuestion = (question: string, language: KnowledgeLa
   const callDetails = uniqueCalls.map(name => {
     const resolution = resolvePythonKnowledge(name);
     if (resolution.alternatives.length) return `- \`${name}()\`: ${language === 'fr' ? 'nom ambigu; precisez le type de l\'objet' : 'ambiguous name; include the object type'}`;
-    return resolution.record ? `- \`${name}()\`: ${resolution.record.summary}` : `- \`${name}()\`: ${language === 'fr' ? 'fonction definie par le programme ou une bibliotheque externe' : 'defined by the program or an external library'}`;
+    return resolution.record ? `- \`${name}()\`: ${localizedKnowledgeSummary(resolution.record, language)}` : `- \`${name}()\`: ${language === 'fr' ? 'fonction definie par le programme ou une bibliotheque externe' : 'defined by the program or an external library'}`;
   });
   const syntaxFindings: string[] = [];
   if (/\[[^\]]*:[^\]]*\]/.test(code)) syntaxFindings.push(language === 'fr' ? '- `start:stop:step` est un decoupage; `stop` est exclu.' : '- `start:stop:step` is slicing; the `stop` position is excluded.');
@@ -701,6 +753,134 @@ export const answerPythonCodeQuestion = (question: string, language: KnowledgeLa
     language === 'fr' ? '**Syntaxe detectee**' : '**Detected syntax**',
     syntaxFindings.join('\n') || (language === 'fr' ? 'Aucune syntaxe speciale detectee.' : 'No special syntax detected.'),
   ].join('\n');
+};
+
+export interface PythonKnowledgeSearchResult {
+  matchedTerm: string;
+  score: number;
+  record: PythonKnowledgeRecord;
+}
+
+const SEARCH_STOP_WORDS = new Set([
+  'a', 'about', 'an', 'and', 'are', 'de', 'des', 'documentation', 'docs', 'du', 'for',
+  'in', 'is', 'la', 'le', 'les', 'of', 'official', 'python', 'reference', 'sur', 'the',
+  'what', 'with', 'une', 'un',
+]);
+
+const SEARCH_SYNONYMS: Record<string, string[]> = {
+  anonymous: ['lambda'],
+  array: ['list'],
+  mapping: ['dict', 'dictionary'],
+  pairs: ['dict', 'dictionary', 'key', 'value'],
+  unique: ['set'],
+  unordered: ['set'],
+  immutable: ['tuple', 'frozenset', 'string'],
+  text: ['string', 'str'],
+  loop: ['iteration', 'for', 'while'],
+  errors: ['exceptions', 'traceback'],
+  fichier: ['file'],
+  dictionnaire: ['dict', 'dictionary'],
+  liste: ['list'],
+  ensemble: ['set'],
+  chaine: ['string', 'str'],
+  boucle: ['loop', 'iteration'],
+};
+
+interface SearchIndexItem {
+  term: string;
+  text: string;
+}
+
+let knowledgeSearchIndex: SearchIndexItem[] | null = null;
+
+const tokenizeSearchText = (value: string): string[] => {
+  const base = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9_+.]+/g, ' ')
+    .split(/\s+/)
+    .filter(token => token.length > 1 && !SEARCH_STOP_WORDS.has(token));
+  return [...new Set(base.flatMap(token => [token, ...(SEARCH_SYNONYMS[token] || [])]))];
+};
+
+const getKnowledgeSearchIndex = (): SearchIndexItem[] => {
+  if (knowledgeSearchIndex) return knowledgeSearchIndex;
+  knowledgeSearchIndex = getAllConceptTerms().map(term => {
+    const concept = lookupConcept(term);
+    const text = [
+      term,
+      concept.entry?.name,
+      ...(concept.entry?.aliases || []),
+      concept.entry?.easy,
+      concept.entry?.intermediate,
+      concept.categoryFallback.summary,
+      concept.categoryFallback.label,
+    ].filter(Boolean).join(' ').toLowerCase();
+    return { term, text };
+  });
+  return knowledgeSearchIndex;
+};
+
+export const searchPythonKnowledge = (query: string, limit = 5): PythonKnowledgeSearchResult[] => {
+  const normalizedQuery = normalizeTerm(query).toLowerCase();
+  const tokens = tokenizeSearchText(normalizedQuery);
+  if (!tokens.length) return [];
+  const scored = getKnowledgeSearchIndex().map(item => {
+    let score = item.term.toLowerCase() === normalizedQuery ? 100 : 0;
+    if (item.term.toLowerCase().startsWith(normalizedQuery)) score += 35;
+    for (const token of tokens) {
+      if (item.term.toLowerCase() === token) score += 30;
+      else if (item.term.toLowerCase().includes(token)) score += 12;
+      if (item.text.includes(` ${token} `) || item.text.startsWith(`${token} `)) score += 5;
+      else if (item.text.includes(token)) score += 2;
+    }
+    return { term: item.term, score };
+  }).filter(item => item.score > 0).sort((a, b) => b.score - a.score || a.term.localeCompare(b.term));
+
+  const results: PythonKnowledgeSearchResult[] = [];
+  const seen = new Set<string>();
+  for (const item of scored) {
+    const resolution = resolvePythonKnowledge(item.term);
+    if (!resolution.record) continue;
+    const key = `${resolution.record.kind}:${resolution.record.canonicalName}`.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    results.push({ matchedTerm: item.term, score: item.score, record: resolution.record });
+    if (results.length >= limit) break;
+  }
+  return results;
+};
+
+export const answerPythonDocumentationQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  if (!/\b(?:documentation|official docs?|reference|docs? for|documentation officielle|r[eé]f[eé]rence)\b/i.test(question)) return null;
+  const subject = question
+    .replace(/\b(?:find|show|give|open|cherche|montre|donne)\b/gi, ' ')
+    .replace(/\b(?:me|moi|the|la|les|official|officielle|python|documentation|docs?|reference|r[eé]f[eé]rence|for|pour|about|sur)\b/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const results = searchPythonKnowledge(subject || question, 3).filter(result => result.score >= 7);
+  if (!results.length) return null;
+  const fr = language === 'fr';
+  return [
+    fr ? '**Documentation Python correspondante**' : '**Matching Python documentation**',
+    ...results.flatMap((result, index) => [
+      '',
+      `${index + 1}. **${result.record.canonicalName}** — ${localizedKnowledgeSummary(result.record, language)}`,
+      `${fr ? 'Syntaxe' : 'Syntax'}: \`${result.record.signature}\``,
+      `${fr ? 'Source vérifiée' : 'Verified source'}: ${result.record.sourceUrl}`,
+    ]),
+  ].join('\n');
+};
+
+export const answerPythonSemanticSuggestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const results = searchPythonKnowledge(question, 3).filter(result => result.score >= 12);
+  if (!results.length) return null;
+  const fr = language === 'fr';
+  return [
+    fr ? '**Précision nécessaire**' : '**Clarification needed**',
+    fr
+      ? 'Je ne peux pas relier cette formulation à un seul concept avec suffisamment de certitude. Vouliez-vous parler de :'
+      : 'I cannot connect that wording to one concept with enough confidence. Did you mean:',
+    ...results.map((result, index) => `${index + 1}. \`${result.record.canonicalName}\` — ${localizedKnowledgeSummary(result.record, language)}`),
+  ].join('\n\n');
 };
 
 export const getKnowledgeCatalogSize = (): number => getAllConceptTerms().length;

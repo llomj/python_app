@@ -10,6 +10,10 @@ const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'general-ai-eval-'));
 const knowledgeBundle = path.join(tempDir, 'knowledge.cjs');
 const conceptBundle = path.join(tempDir, 'concepts.cjs');
 const localizationBundle = path.join(tempDir, 'localization.cjs');
+const intentBundle = path.join(tempDir, 'intent.cjs');
+const tracebackBundle = path.join(tempDir, 'traceback.cjs');
+const runtimeBundle = path.join(tempDir, 'runtime.cjs');
+const verificationBundle = path.join(tempDir, 'verification.cjs');
 
 const bundle = (entry, outfile) => buildSync({
   entryPoints: [path.join(root, entry)],
@@ -24,10 +28,18 @@ try {
   bundle('services/pythonKnowledge.ts', knowledgeBundle);
   bundle('services/pythonConceptLibrary.ts', conceptBundle);
   bundle('services/aiLocalization.ts', localizationBundle);
+  bundle('services/generalAiIntent.ts', intentBundle);
+  bundle('services/generalAiTraceback.ts', tracebackBundle);
+  bundle('services/generalAiRuntime.ts', runtimeBundle);
+  bundle('services/generalAiVerification.ts', verificationBundle);
 
   const knowledge = require(knowledgeBundle);
   const concepts = require(conceptBundle);
   const localization = require(localizationBundle);
+  const intent = require(intentBundle);
+  const traceback = require(tracebackBundle);
+  const runtime = require(runtimeBundle);
+  const verification = require(verificationBundle);
   const failures = [];
   const terms = concepts.getAllConceptTerms();
   let structuredRecords = 0;
@@ -133,13 +145,101 @@ try {
     if (!frenchAnswer.toLowerCase().includes(fragment.toLowerCase())) failures.push(`French structured answer missing ${JSON.stringify(fragment)}`);
   }
 
+  const intentCases = [
+    ['What is a list?', 'definition'],
+    ['Define a closure', 'definition'],
+    ['Qu’est-ce qu’un dictionnaire ?', 'definition'],
+    ['difference between dictionary and set', 'comparison'],
+    ['compare print with return', 'comparison'],
+    ['Quelle est la différence entre liste et tuple ?', 'comparison'],
+    ['How many built-in functions are there?', 'count'],
+    ['Combien de méthodes existe-t-il ?', 'count'],
+    ['How do I create a method?', 'creation'],
+    ['Comment créer une classe ?', 'creation'],
+    ['When was match added?', 'version'],
+    ['Quelle version a ajouté les f-strings ?', 'version'],
+    ['Quiz me on dictionaries', 'quiz'],
+    ['Teste-moi sur les listes', 'quiz'],
+    ['Give examples of lambda', 'examples'],
+    ['Montre-moi des exemples de tuple', 'examples'],
+    ['Show official docs for mapping keys and values', 'documentation'],
+    ['Documentation officielle sur les ensembles uniques', 'documentation'],
+    ['What is TypeError?', 'error_help'],
+    ['Pourquoi cette erreur ValueError ?', 'error_help'],
+    ['Explain this code:\n```python\nprint(1 + 2)\n```', 'code_explanation'],
+    ['Analyse ce code :\nvalue = [1, 2][-1]', 'code_explanation'],
+    ['Traceback (most recent call last):\n  File "main.py", line 2, in <module>\nNameError: name x is not defined', 'traceback'],
+  ];
+  for (const [question, expected] of intentCases) {
+    const actual = intent.classifyGeneralAiIntent(question);
+    if (actual.intent !== expected || actual.confidence < 0.7) {
+      failures.push(`Intent ${JSON.stringify(question)} expected ${expected}, found ${actual.intent} (${actual.confidence})`);
+    }
+  }
+  if (!intent.shouldClarifyGeneralAiQuestion('it?') || intent.shouldClarifyGeneralAiQuestion('What is a list?')) {
+    failures.push('Clarification confidence gate failed');
+  }
+
+  const semanticStarted = Date.now();
+  const semanticResults = knowledge.searchPythonKnowledge('unique unordered collection mathematical union', 3);
+  const semanticElapsed = Date.now() - semanticStarted;
+  if (semanticResults[0]?.record.canonicalName !== 'set') failures.push('Semantic retrieval did not rank set first');
+  if (semanticElapsed > 1500) failures.push(`Lazy semantic index took too long to initialize: ${semanticElapsed}ms`);
+  const docsAnswer = knowledge.answerPythonDocumentationQuestion('Show official docs for mapping keys and values', 'en') || '';
+  if (!docsAnswer.includes('dict') || !docsAnswer.includes('docs.python.org')) failures.push('Semantic documentation answer did not retrieve dict documentation');
+  const frenchDocs = knowledge.answerPythonDocumentationQuestion('Documentation officielle sur un ensemble unique', 'fr') || '';
+  if (!frenchDocs.includes('Documentation Python correspondante') || !frenchDocs.includes('collection non ordonnée de valeurs uniques') || !frenchDocs.includes('docs.python.org') || frenchDocs.includes('is a Python concept')) failures.push('French documentation retrieval failed');
+  const frenchComparison = knowledge.answerPythonKnowledgeComparison('difference between dict and set', 'fr') || '';
+  if (!frenchComparison.includes('paires clé-valeur') || !frenchComparison.includes('valeurs uniques')) failures.push('French comparison summaries were not native');
+
+  const tracebackText = [
+    'Traceback (most recent call last):',
+    '  File "main.py", line 8, in <module>',
+    '    calculate()',
+    '  File "helpers.py", line 3, in calculate',
+    '    return values[5]',
+    'IndexError: list index out of range',
+  ].join('\n');
+  const parsedTraceback = traceback.parsePythonTraceback(tracebackText);
+  if (!parsedTraceback || parsedTraceback.frames.length !== 2 || parsedTraceback.failingFrame?.file !== 'helpers.py' || parsedTraceback.errorType !== 'IndexError') {
+    failures.push('Frame-aware traceback parser failed');
+  }
+  const tracebackAnswer = traceback.answerPythonTraceback(tracebackText, 'en') || '';
+  const frenchTracebackAnswer = traceback.answerPythonTraceback(tracebackText, 'fr') || '';
+  for (const fragment of ['helpers.py:3', 'IndexError', 'Call stack', 'valid range']) {
+    if (!tracebackAnswer.includes(fragment)) failures.push(`Traceback answer missing ${JSON.stringify(fragment)}`);
+  }
+  if (!frenchTracebackAnswer.includes('Pile d’appels') || !frenchTracebackAnswer.includes('hors des limites')) failures.push('Native French traceback explanation failed');
+
+  const safeRuntime = runtime.assessGeneralAiRuntimeSafety('Explain this code:\n```python\nitems = [1, 2]\nitems.append(3)\nprint(items)\n```');
+  const unsafeImport = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nimport os\nprint(os.listdir())\n```');
+  const unsafeLoop = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nwhile True:\n    pass\n```');
+  if (!safeRuntime.safe || unsafeImport.safe || unsafeLoop.safe) failures.push('Guarded runtime safety policy failed');
+  const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '' }, 'en');
+  const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type' }, 'fr');
+  if (!runtimeEvidence.includes('Actual output') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('déclenche')) failures.push('Runtime evidence formatting failed');
+
+  const verifiedAnswer = verification.verifyGeneralAiAnswer('What is len?', '**Source and confidence**\nhttps://docs.python.org/3/library/functions.html#len');
+  const badFence = verification.verifyGeneralAiAnswer('Explain code', '```python\nprint(1)');
+  const badSource = verification.verifyGeneralAiAnswer('What is list?', 'See https://made-up-python-docs.example/list for details.');
+  if (!verifiedAnswer.valid || badFence.valid || badSource.valid) failures.push('Answer verification gates failed');
+
+  const frenchDirectExample = knowledge.resolveKnowledgeFollowUp('donne des exemples de dictionnaire', 'what is list', 'normal');
+  const frenchDeepFollowUp = knowledge.resolveKnowledgeFollowUp('approfondis les tuples', 'what is list', 'normal');
+  const switchedSubject = knowledge.resolveKnowledgeFollowUp('what about tuple?', 'what is list', 'normal');
+  if (frenchDirectExample.mode !== 'examples' || !frenchDirectExample.question.includes('dictionnaire')) failures.push('French direct-example context failed');
+  if (frenchDeepFollowUp.mode !== 'deep' || !frenchDeepFollowUp.question.includes('tuples')) failures.push('French deep context failed');
+  if (switchedSubject.question !== 'what is tuple') failures.push('Conversation subject switching failed');
+
   console.log('General Python AI quality evaluation');
   console.log(`Catalog terms evaluated: ${terms.length}`);
   console.log(`Structured records: ${structuredRecords}`);
   console.log(`Ambiguity records: ${ambiguityResponses}`);
   console.log(`Definition query variants: ${definitionVariants}`);
   console.log(`Comparison cases: ${comparisonCases.length}`);
-  console.log('Follow-up, code, version, source, and French checks: completed');
+  console.log(`Intent variants: ${intentCases.length}`);
+  console.log(`Semantic index cold start: ${semanticElapsed}ms`);
+  console.log('All 10 feature gates: intent, docs, comparison, context, code, traceback, French, verification, version, and performance completed');
 
   if (failures.length) {
     console.error('\nFailures:');

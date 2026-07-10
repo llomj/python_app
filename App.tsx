@@ -52,10 +52,12 @@ import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/tra
 import { EXERCISES_FR } from './services/exercisesFr';
 import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
-import { allBuiltins, allDictMethods, allListMethods, allSetMethods, allStringMethods, allTupleMethods, answerGeneralPythonQuestion } from './services/pythonReference';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
-import { answerPythonCodeQuestion, answerPythonKnowledgeComparison, answerPythonKnowledgeQuestion, answerPythonVersionQuestion, buildPythonKnowledgeDeepSupplement, buildPythonKnowledgeExampleSupplement, extractKnowledgeTerm, resolveKnowledgeFollowUp, selectKnowledgeContextQuestion } from './services/pythonKnowledge';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
+import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
+import { answerPythonTraceback } from './services/generalAiTraceback';
+import { assessGeneralAiRuntimeSafety, buildGeneralAiRuntimeScript, formatGeneralAiRuntimeEvidence, type GeneralAiRuntimeResult } from './services/generalAiRuntime';
+import { verifyGeneralAiAnswer } from './services/generalAiVerification';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -90,6 +92,7 @@ interface ProblemAiMessage {
 }
 
 type GeneralAiMode = 'simple' | 'normal' | 'deep' | 'examples';
+type GeneralAiKnowledgeModule = typeof import('./services/pythonKnowledge');
 
 const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
 const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini']);
@@ -321,9 +324,9 @@ const buildGeneralAiExampleSet = (topic: string, language: 'en' | 'fr' = 'en'): 
     '```',
 ].join('\n');
 
-const buildGeneralAiQuiz = (topic: string): string => [
-    `1. Mini quiz: ${topic}`,
-    'Question 1: What value does this produce?',
+const buildGeneralAiQuiz = (topic: string, language: 'en' | 'fr' = 'en'): string => [
+    `1. ${language === 'fr' ? 'Mini-quiz' : 'Mini quiz'}: ${topic}`,
+    language === 'fr' ? 'Question 1 : quelle valeur ce code produit-il ?' : 'Question 1: What value does this produce?',
     '```python',
     topic === 'list' ? 'items = [10, 20, 30]\nprint(items[1])' :
     topic === 'dictionary' ? 'data = {"a": 1, "b": 2}\nprint(data["b"])' :
@@ -331,18 +334,20 @@ const buildGeneralAiQuiz = (topic: string): string => [
     'print("python"[0])',
     '```',
     '',
-    '2. Practice task',
-    `Write one small example using **${topic}**. Then ask me: \`Check my answer for ${topic}\`.`,
+    language === 'fr' ? '2. Exercice pratique' : '2. Practice task',
+    language === 'fr'
+        ? `Écrivez un petit exemple utilisant **${topic}**. Demandez-moi ensuite : \`Vérifie ma réponse sur ${topic}\`.`
+        : `Write one small example using **${topic}**. Then ask me: \`Check my answer for ${topic}\`.`,
     '',
-    '3. Self-check',
-    '- Did you use the correct syntax?',
-    '- Did you print or return based on the goal?',
-    '- Did the output match what the code logically produces?',
+    language === 'fr' ? '3. Auto-vérification' : '3. Self-check',
+    language === 'fr' ? '- Avez-vous utilisé la syntaxe correcte ?' : '- Did you use the correct syntax?',
+    language === 'fr' ? '- Avez-vous utilisé `print` ou `return` selon l’objectif ?' : '- Did you print or return based on the goal?',
+    language === 'fr' ? '- La sortie correspond-elle à la logique du code ?' : '- Did the output match what the code logically produces?',
 ].join('\n');
 
 const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
-    const topic = extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
+    const topic = detectGeneralPythonTopic(question);
     if (!/\bwhat\s+(is|are|do|does)\b|\bexplain\b|\btell me about\b|\brepresent\b|\bmean\b/.test(lowerQ)) return null;
     if (/\bsyntax\b/.test(lowerQ) && /\bcolou?rs?\b|\bhighlight/.test(lowerQ)) {
         return [
@@ -870,18 +875,19 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
     ].join('\n');
 };
 
-const buildGeneralAiCountAnswer = (question: string, language: 'en' | 'fr'): string | null => {
+const buildGeneralAiCountAnswer = (question: string, language: 'en' | 'fr', knowledge: GeneralAiKnowledgeModule): string | null => {
     const q = question.toLowerCase();
     const asksCount = /\bhow many\b|\bnumber of\b|\bcount (?:of )?\b/.test(q);
     if (!asksCount) return null;
 
     if (/\bmethods?\b/.test(q)) {
+        const counts = knowledge.getPythonReferenceCounts();
         const groups = [
-            ['str', allStringMethods().length],
-            ['list', allListMethods().length],
-            ['dict', allDictMethods().length],
-            ['set', allSetMethods().length],
-            ['tuple', allTupleMethods().length],
+            ['str', counts.str],
+            ['list', counts.list],
+            ['dict', counts.dict],
+            ['set', counts.set],
+            ['tuple', counts.tuple],
         ] as const;
         const total = groups.reduce((sum, [, count]) => sum + count, 0);
         if (language === 'fr') {
@@ -909,7 +915,7 @@ const buildGeneralAiCountAnswer = (question: string, language: 'en' | 'fr'): str
     }
 
     if (/\bbuilt.?in(?: function)?s?\b/.test(q)) {
-        const count = allBuiltins().length;
+        const count = knowledge.getPythonReferenceCounts().builtin;
         return language === 'fr'
             ? `**Fonctions intégrées**\n\nCette application référence **${count} fonctions intégrées Python** utilisables sans installer de bibliothèque, par exemple \`len()\`, \`print()\`, \`range()\`, \`sorted()\` et \`zip()\`. Le nombre exact peut dépendre de la version de Python.`
             : `**Built-in functions**\n\nThis app catalogs **${count} Python built-in functions** available without installing a library, including \`len()\`, \`print()\`, \`range()\`, \`sorted()\`, and \`zip()\`. The exact count can depend on the Python version.`;
@@ -1029,13 +1035,17 @@ const buildGeneralAiCreationAnswer = (question: string, language: 'en' | 'fr'): 
     return null;
 };
 
-const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAiMode, language: 'en' | 'fr'): string => {
-    const topic = extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
+const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAiMode, language: 'en' | 'fr', knowledge: GeneralAiKnowledgeModule): string => {
+    const topic = knowledge.extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
     const isClarification = /\*\*(?:Clarification needed|Pr[eé]cision n[eé]cessaire)/i.test(answer);
     if (isClarification) return answer;
     const isStructuredAnswer = /\*\*(?:Source and confidence|Source et confiance)\*\*/i.test(answer);
     const isCodeAnswer = /\*\*(?:Line-by-line code analysis|Analyse du code ligne par ligne)/i.test(answer);
     if (isCodeAnswer) return answer;
+    const isTracebackAnswer = /\*\*1\. (?:Exact error|Erreur exacte)\*\*/i.test(answer);
+    if (isTracebackAnswer) return answer;
+    const isDocumentationAnswer = /\*\*(?:Matching Python documentation|Documentation Python correspondante)\*\*/i.test(answer);
+    if (isDocumentationAnswer) return answer;
     const isVersionAnswer = /\*\*.+version information\*\*/i.test(answer);
     if (isVersionAnswer) return answer;
     const isCompleteSpecialAnswer = isStructuredAnswer
@@ -1050,12 +1060,12 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
                 topic,
                 mode,
                 language,
-                examples: buildPythonKnowledgeExampleSupplement(question, language),
+                examples: knowledge.buildPythonKnowledgeExampleSupplement(question, language),
                 followUps: buildGeneralAiSuggestedFollowUpText(question, language),
             });
         }
         if (isStructuredAnswer && mode === 'deep') {
-            return [answer, buildPythonKnowledgeDeepSupplement(question, language), buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
+            return [answer, knowledge.buildPythonKnowledgeDeepSupplement(question, language), buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
         }
         return [answer, buildGeneralAiSuggestedFollowUpText(question, language)].filter(Boolean).join('\n\n');
     }
@@ -1112,7 +1122,7 @@ const getGeneralAiSuggestedFollowUps = (question: string, language: 'en' | 'fr' 
             `Go deeper on ${first} and ${second}`,
         ];
     }
-    const topic = extractKnowledgeTerm(question) || detectGeneralPythonTopic(question);
+    const topic = detectGeneralPythonTopic(question);
     if (language === 'fr') {
         const topicFr = getFrenchGeneralAiTopicLabel(topic);
         const topicWithDe = topicFr.startsWith('les ') ? `des ${topicFr.slice(4)}`
@@ -14549,17 +14559,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             },
         ];
 
-        // ── Python Reference lookup (for general Python questions) ──────
-        const refAnswer = answerGeneralPythonQuestion(q);
-        if (refAnswer) {
-            // Also include existing concept answers as supplementary info
-            const conceptAnswer = conceptAnswers.find(item => item.pattern.test(q));
-            if (conceptAnswer) {
-                return refAnswer + '\n\n' + conceptAnswer.text;
-            }
-            return localizeAiText(refAnswer, appLang);
-        }
-
         if (asksDigitMethod) {
             return [
                 '1. Yes — `isdigit()` is a string method.',
@@ -14708,6 +14707,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     }, [appLang, exercise, output, outputStatus]);
 
     const openGeneralAi = useCallback(() => {
+        void import('./services/pythonKnowledge');
         if (generalAiMessages.length === 0) {
             setGeneralAiMessages([{
                 id: Date.now(),
@@ -14734,13 +14734,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
+        const knowledge = await import('./services/pythonKnowledge');
         const previousUserQuestions = [...generalAiMessages].reverse()
             .filter(message => message.role === 'user')
             .map(message => normalizeGeneralPythonQuestion(normalizeAiQuestionForLookup(message.text, appLang)));
-        const previousUserQuestion = selectKnowledgeContextQuestion(previousUserQuestions);
+        const previousUserQuestion = knowledge.selectKnowledgeContextQuestion(previousUserQuestions);
         const localizedLookupQuestion = normalizeAiQuestionForLookup(question, appLang);
         const normalizedQuestion = normalizeGeneralPythonQuestion(localizedLookupQuestion);
-        const followUp = resolveKnowledgeFollowUp(normalizedQuestion, previousUserQuestion, generalAiMode);
+        const followUp = knowledge.resolveKnowledgeFollowUp(normalizedQuestion, previousUserQuestion, generalAiMode);
         const effectiveQuestion = followUp.question;
         const effectiveMode = followUp.mode;
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
@@ -14751,26 +14752,70 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         try {
             const topic = detectGeneralPythonTopic(effectiveQuestion);
-            const countAnswer = buildGeneralAiCountAnswer(effectiveQuestion, appLang);
-            const creationAnswer = buildGeneralAiCreationAnswer(effectiveQuestion, appLang);
-            const refAnswer =
-                countAnswer ||
-                creationAnswer ||
-                buildGeneralAiTracebackAnswer(effectiveQuestion) ||
-                answerPythonCodeQuestion(effectiveQuestion, appLang) ||
-                buildGeneralAiCodeExplanation(effectiveQuestion) ||
-                answerPythonKnowledgeComparison(effectiveQuestion, appLang) ||
-                buildGeneralAiComparisonAnswer(effectiveQuestion) ||
-                answerPythonVersionQuestion(effectiveQuestion, appLang) ||
-                (/quiz|practice|test me|check my understanding/i.test(effectiveQuestion) ? buildGeneralAiQuiz(topic) : null) ||
-                (/example|examples|show me/i.test(effectiveQuestion) ? buildGeneralAiExampleSet(topic, appLang) : null) ||
-                buildGeneralAiErrorAnswer(effectiveQuestion) ||
-                answerPythonKnowledgeQuestion(effectiveQuestion, appLang) ||
-                answerGeneralPythonQuestion(effectiveQuestion) ||
-                buildGeneralAiCoreTopicAnswer(effectiveQuestion);
+            const intent = classifyGeneralAiIntent(effectiveQuestion);
+            let countAnswer: string | null = null;
+            let creationAnswer: string | null = null;
+            let refAnswer: string | null = null;
+            switch (intent.intent) {
+                case 'traceback':
+                    refAnswer = answerPythonTraceback(effectiveQuestion, appLang) || buildGeneralAiTracebackAnswer(effectiveQuestion);
+                    break;
+                case 'code_explanation':
+                    refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion);
+                    break;
+                case 'comparison':
+                    refAnswer = knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang) || buildGeneralAiComparisonAnswer(effectiveQuestion);
+                    break;
+                case 'count':
+                    countAnswer = buildGeneralAiCountAnswer(effectiveQuestion, appLang, knowledge);
+                    refAnswer = countAnswer;
+                    break;
+                case 'creation':
+                    creationAnswer = buildGeneralAiCreationAnswer(effectiveQuestion, appLang);
+                    refAnswer = creationAnswer;
+                    break;
+                case 'version':
+                    refAnswer = knowledge.answerPythonVersionQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'quiz':
+                    refAnswer = buildGeneralAiQuiz(topic, appLang);
+                    break;
+                case 'examples':
+                    refAnswer = knowledge.buildPythonKnowledgeExampleSupplement(effectiveQuestion, appLang) || buildGeneralAiExampleSet(topic, appLang);
+                    break;
+                case 'documentation':
+                    refAnswer = knowledge.answerPythonDocumentationQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'error_help':
+                    refAnswer = buildGeneralAiErrorAnswer(effectiveQuestion) || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'definition':
+                    refAnswer = knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
+                        || knowledge.answerPythonReferenceQuestion(effectiveQuestion)
+                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
+                    break;
+                default:
+                    break;
+            }
+            if (refAnswer) {
+                const verification = verifyGeneralAiAnswer(effectiveQuestion, refAnswer);
+                if (!verification.valid) refAnswer = null;
+            }
             if (refAnswer) {
                 setGeneralAiProgress(100);
-                const enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang);
+                let enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang, knowledge);
+                if (intent.intent === 'code_explanation' && pyodide) {
+                    const safety = assessGeneralAiRuntimeSafety(effectiveQuestion);
+                    if (safety.safe) {
+                        try {
+                            const runtimeJson = await pyodide.runPythonAsync(buildGeneralAiRuntimeScript(safety.code));
+                            const runtimeResult = JSON.parse(String(runtimeJson)) as GeneralAiRuntimeResult;
+                            enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiRuntimeEvidence(runtimeResult, appLang)}`;
+                        } catch {
+                            /* Static analysis remains available if isolated runtime evidence fails. */
+                        }
+                    }
+                }
                 const answerText = appLang === 'fr' && (countAnswer || creationAnswer)
                     ? enrichedAnswer
                     : localizeAiText(enrichedAnswer, appLang);
@@ -14782,13 +14827,25 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 }]);
                 return;
             }
+            if (shouldClarifyGeneralAiQuestion(effectiveQuestion)) {
+                const suggestion = knowledge.answerPythonSemanticSuggestion(effectiveQuestion, appLang);
+                setGeneralAiProgress(100);
+                setGeneralAiMessages(prev => [...prev, {
+                    id: Date.now() + 1,
+                    role: 'assistant',
+                    source: 'built_in',
+                    text: suggestion || localizeAiText(buildGeneralAiClarification(question), appLang),
+                }]);
+                return;
+            }
             try {
-                const aiHistory = generalAiMessages.slice(-6).map(m => ({
+                const aiHistory = generalAiMessages.slice(-12).map(m => ({
                     role: m.role === 'user' ? 'user' as const : 'assistant' as const,
                     content: m.text,
                 }));
-                const aiAnswer = await answerGeneralPythonWithAvailableAi(question, offlineAiState, aiHistory, appLang, effectiveMode);
-                if (aiAnswer) {
+                const aiAnswer = await answerGeneralPythonWithAvailableAi(effectiveQuestion, offlineAiState, aiHistory, appLang, effectiveMode);
+                const verification = aiAnswer ? verifyGeneralAiAnswer(effectiveQuestion, aiAnswer) : null;
+                if (aiAnswer && verification?.valid) {
                     setGeneralAiProgress(100);
                     setGeneralAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
@@ -14801,17 +14858,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             } catch {
                 /* Offline model failed — fall through to clarification */
             }
+            const semanticSuggestion = knowledge.answerPythonSemanticSuggestion(effectiveQuestion, appLang);
             setGeneralAiProgress(100);
             setGeneralAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: 'built_in',
-                text: localizeAiText(buildGeneralAiClarification(question), appLang),
+                text: semanticSuggestion || localizeAiText(buildGeneralAiClarification(question), appLang),
             }]);
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [appLang, generalAiMessages, generalAiMode, generalAiRunning, offlineAiState]);
+    }, [appLang, generalAiMessages, generalAiMode, generalAiRunning, offlineAiState, pyodide]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -14849,11 +14907,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         try {
             // General Python question → curated reference FIRST, WebLLM fallback
             if (isGeneralPython && !shouldUseReviewer) {
-                const refAnswer = answerPythonKnowledgeComparison(lookupQuestion, appLang)
-                    || answerPythonCodeQuestion(lookupQuestion, appLang)
-                    || answerPythonVersionQuestion(lookupQuestion, appLang)
-                    || answerPythonKnowledgeQuestion(lookupQuestion, appLang)
-                    || answerGeneralPythonQuestion(lookupQuestion);
+                const knowledge = await import('./services/pythonKnowledge');
+                const refAnswer = knowledge.answerPythonKnowledgeComparison(lookupQuestion, appLang)
+                    || knowledge.answerPythonCodeQuestion(lookupQuestion, appLang)
+                    || knowledge.answerPythonVersionQuestion(lookupQuestion, appLang)
+                    || knowledge.answerPythonKnowledgeQuestion(lookupQuestion, appLang)
+                    || knowledge.answerPythonReferenceQuestion(lookupQuestion);
                 if (refAnswer) {
                     setProblemAiMessages(prev => [...prev, {
                         id: Date.now() + 1,
