@@ -14,6 +14,7 @@ const intentBundle = path.join(tempDir, 'intent.cjs');
 const tracebackBundle = path.join(tempDir, 'traceback.cjs');
 const runtimeBundle = path.join(tempDir, 'runtime.cjs');
 const verificationBundle = path.join(tempDir, 'verification.cjs');
+const tutorBundle = path.join(tempDir, 'tutor.cjs');
 
 const bundle = (entry, outfile) => buildSync({
   entryPoints: [path.join(root, entry)],
@@ -32,6 +33,7 @@ try {
   bundle('services/generalAiTraceback.ts', tracebackBundle);
   bundle('services/generalAiRuntime.ts', runtimeBundle);
   bundle('services/generalAiVerification.ts', verificationBundle);
+  bundle('services/generalAiTutor.ts', tutorBundle);
 
   const knowledge = require(knowledgeBundle);
   const concepts = require(conceptBundle);
@@ -40,6 +42,7 @@ try {
   const traceback = require(tracebackBundle);
   const runtime = require(runtimeBundle);
   const verification = require(verificationBundle);
+  const tutor = require(tutorBundle);
   const failures = [];
   const terms = concepts.getAllConceptTerms();
   let structuredRecords = 0;
@@ -135,6 +138,8 @@ try {
   for (const fragment of ['Line-by-line code analysis', 'selects the last item', 'print()', 'Execution flow']) {
     if (!codeAnswer.includes(fragment)) failures.push(`Code analysis missing ${JSON.stringify(fragment)}`);
   }
+  const typedMethodCode = knowledge.answerPythonCodeQuestion('Explain this code:\n```python\nnums = [1, 2]\nnums.pop()\n```', 'en') || '';
+  if (!typedMethodCode.includes('nums.pop()') || typedMethodCode.includes('ambiguous name')) failures.push('Code analyzer did not infer method owner type');
 
   const versionAnswer = knowledge.answerPythonVersionQuestion('when was match statement added', 'en') || '';
   if (!versionAnswer.includes('Python 3.10') || !versionAnswer.includes('docs.python.org')) failures.push('Version-aware match answer failed');
@@ -164,6 +169,10 @@ try {
     ['Montre-moi des exemples de tuple', 'examples'],
     ['Show official docs for mapping keys and values', 'documentation'],
     ['Documentation officielle sur les ensembles uniques', 'documentation'],
+    ['What should I use to remove duplicate values?', 'purpose'],
+    ['Comment faire pour trier sans modifier la liste ?', 'purpose'],
+    ['What concepts are related to generators?', 'relationships'],
+    ['Que dois-je apprendre ensuite après les listes ?', 'relationships'],
     ['What is TypeError?', 'error_help'],
     ['Pourquoi cette erreur ValueError ?', 'error_help'],
     ['Explain this code:\n```python\nprint(1 + 2)\n```', 'code_explanation'],
@@ -180,6 +189,65 @@ try {
     failures.push('Clarification confidence gate failed');
   }
 
+  const bareTerms = ['sys', 'len', 'list.append', 'TypeError', 'tuple', 'zip'];
+  for (const term of bareTerms) {
+    const answer = knowledge.answerPythonBareOrFuzzyQuestion(term, 'en') || '';
+    if (answer.length < 80 || !answer.toLowerCase().includes(term.split('.')[0].toLowerCase())) failures.push(`Bare-term lookup failed for ${term}`);
+  }
+  const fuzzyLen = knowledge.answerPythonBareOrFuzzyQuestion('leng', 'en') || '';
+  if (!fuzzyLen.includes('Likely correction') || !fuzzyLen.includes('len')) failures.push('Fuzzy bare-term correction failed');
+
+  const beginnerList = knowledge.answerPythonAtLevel('list', 'en', 'beginner') || '';
+  const intermediateList = knowledge.answerPythonAtLevel('list', 'en', 'intermediate') || '';
+  const expertList = knowledge.answerPythonAtLevel('list', 'en', 'expert') || '';
+  const progressiveList = knowledge.answerPythonProgressiveExamples('examples of list', 'en') || '';
+  const progressiveSys = knowledge.answerPythonProgressiveExamples('examples of sys', 'en') || '';
+  const contextualSys = knowledge.answerPythonAtLevel('Explain sys again', 'en', 'intermediate') || '';
+  if (!beginnerList.includes('beginner level') || !beginnerList.includes('Tiny example')) failures.push('Beginner explanation contract failed');
+  if (!intermediateList.includes('intermediate level') || !intermediateList.includes('Return and mutation')) failures.push('Intermediate explanation contract failed');
+  if (!expertList.includes('expert level') || !expertList.includes('Version and source') || !expertList.includes('Deep mechanics')) failures.push('Expert explanation contract failed');
+  if (!progressiveList.includes('Progressive examples: list') || !progressiveList.includes('Suggested progression')) failures.push('Progressive list examples failed');
+  if (!progressiveSys.includes('Progressive examples: sys') || !progressiveSys.includes('import sys')) failures.push('Progressive sys examples failed');
+  if (!contextualSys.includes('**sys — intermediate level**') || !contextualSys.includes('sys.argv') || contextualSys.includes('capsys')) failures.push('Contextual sys retrieval failed');
+
+  let mastery = tutor.parseTutorMasteryProfile(null);
+  const adaptiveFirst = tutor.inferTutorLevel('What is a closure?', mastery, 'normal', true);
+  mastery = tutor.updateTutorMastery(mastery, 'closure', adaptiveFirst);
+  const adaptiveSecond = tutor.inferTutorLevel('Explain closure again', mastery, 'normal', true);
+  mastery = tutor.updateTutorMastery(mastery, 'closure', adaptiveSecond);
+  mastery = tutor.updateTutorMastery(mastery, 'closure', 'normal');
+  mastery = tutor.updateTutorMastery(mastery, 'closure', 'normal');
+  const adaptiveExperienced = tutor.inferTutorLevel('Explain closure again', mastery, 'normal', true);
+  const adaptiveExplicit = tutor.inferTutorLevel('Explain closure internals and bytecode', mastery, 'normal', true);
+  if (adaptiveFirst !== 'simple' || adaptiveSecond !== 'normal' || adaptiveExperienced !== 'deep' || adaptiveExplicit !== 'deep') failures.push('Adaptive mastery levels failed');
+  if (mastery.closure.views !== 4 || mastery.closure.beginner !== 1 || mastery.closure.intermediate !== 3) failures.push('Mastery persistence counters failed');
+
+  const tutorModes = [
+    ['socratic', 'list', 'Socratic mode'],
+    ['quiz', 'list', 'Adaptive quiz'],
+    ['practice', 'list', 'Targeted practice'],
+    ['debug', 'Why is it broken?', 'Debug mode'],
+    ['compare', 'Compare these', 'Compare mode'],
+  ];
+  for (const [mode, question, fragment] of tutorModes) {
+    const answer = tutor.answerTutorMode(question, mode, 'normal', 'en') || '';
+    if (!answer.includes(fragment)) failures.push(`${mode} tutor mode failed`);
+  }
+
+  const previousCodeAnswer = '**Example**\n```python\nitems = [1, 2]\nitems.append(3)\nprint(items)\n```';
+  const runCommand = tutor.resolveTutorCodeCommand('run this', previousCodeAnswer, 'en');
+  const lineCommand = tutor.resolveTutorCodeCommand('explain line 2', previousCodeAnswer, 'en');
+  const changeCommand = tutor.resolveTutorCodeCommand('change the input to [8, 9]', previousCodeAnswer, 'en');
+  if (!runCommand.effectiveQuestion?.includes('items.append(3)')) failures.push('Interactive run-this command failed');
+  if (!lineCommand.directAnswer?.includes('items.append(3)')) failures.push('Interactive explain-line command failed');
+  if (!changeCommand.effectiveQuestion?.includes('items = [8, 9]')) failures.push('Interactive change-input command failed');
+
+  const purposeAnswer = knowledge.answerPythonPurposeQuestion('What should I use to remove duplicate values from a collection?', 'en') || '';
+  const relationshipAnswer = knowledge.answerPythonRelationships('What concepts are related to list?', 'en') || '';
+  if (!purposeAnswer.includes('Python tools matching the goal') || !purposeAnswer.includes('set')) failures.push('Purpose-based retrieval failed');
+  if (tutor.getTutorSubject('What should I use to remove duplicate values from a collection?') !== 'set') failures.push('Purpose mastery subject did not match retrieval');
+  if (!relationshipAnswer.includes('Concept map') || !relationshipAnswer.includes('Learn next')) failures.push('Concept relationship graph failed');
+
   const semanticStarted = Date.now();
   const semanticResults = knowledge.searchPythonKnowledge('unique unordered collection mathematical union', 3);
   const semanticElapsed = Date.now() - semanticStarted;
@@ -191,6 +259,13 @@ try {
   if (!frenchDocs.includes('Documentation Python correspondante') || !frenchDocs.includes('collection non ordonnée de valeurs uniques') || !frenchDocs.includes('docs.python.org') || frenchDocs.includes('is a Python concept')) failures.push('French documentation retrieval failed');
   const frenchComparison = knowledge.answerPythonKnowledgeComparison('difference between dict and set', 'fr') || '';
   if (!frenchComparison.includes('paires clé-valeur') || !frenchComparison.includes('valeurs uniques')) failures.push('French comparison summaries were not native');
+  const frenchBeginner = knowledge.answerPythonAtLevel('list', 'fr', 'beginner') || '';
+  const frenchIntermediate = knowledge.answerPythonAtLevel('list', 'fr', 'intermediate') || '';
+  const frenchExpert = knowledge.answerPythonAtLevel('list', 'fr', 'expert') || '';
+  const frenchSocratic = tutor.answerTutorMode('list', 'socratic', 'normal', 'fr') || '';
+  const frenchPractice = tutor.answerTutorMode('list', 'practice', 'normal', 'fr') || '';
+  if (!frenchBeginner.includes('niveau débutant') || !frenchIntermediate.includes('niveau intermédiaire') || !frenchExpert.includes('niveau expert')) failures.push('French explanation levels failed');
+  if (!frenchSocratic.includes('Mode socratique') || !frenchPractice.includes('Exercice ciblé')) failures.push('French tutor modes failed');
 
   const tracebackText = [
     'Traceback (most recent call last):',
@@ -238,8 +313,10 @@ try {
   console.log(`Definition query variants: ${definitionVariants}`);
   console.log(`Comparison cases: ${comparisonCases.length}`);
   console.log(`Intent variants: ${intentCases.length}`);
+  console.log(`Bare-term checks: ${bareTerms.length}`);
+  console.log(`Tutor modes: ${tutorModes.length}`);
   console.log(`Semantic index cold start: ${semanticElapsed}ms`);
-  console.log('All 10 feature gates: intent, docs, comparison, context, code, traceback, French, verification, version, and performance completed');
+  console.log('All 12 tutor gates: bare/fuzzy terms, levels, context, adaptation, relationships, ambiguity, purpose, progressive interaction, tutor modes, mastery, retrieval, and conversations completed');
 
   if (failures.length) {
     console.error('\nFailures:');

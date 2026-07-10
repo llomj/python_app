@@ -58,6 +58,7 @@ import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './servi
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiRuntimeSafety, buildGeneralAiRuntimeScript, formatGeneralAiRuntimeEvidence, type GeneralAiRuntimeResult } from './services/generalAiRuntime';
 import { verifyGeneralAiAnswer } from './services/generalAiVerification';
+import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 
@@ -1042,6 +1043,10 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     const isStructuredAnswer = /\*\*(?:Source and confidence|Source et confiance)\*\*/i.test(answer);
     const isCodeAnswer = /\*\*(?:Line-by-line code analysis|Analyse du code ligne par ligne)/i.test(answer);
     if (isCodeAnswer) return answer;
+    const isTutorLevelAnswer = /—\s*(?:beginner|intermediate|expert|niveau débutant|niveau intermédiaire|niveau expert)\s*(?:level)?\*\*/i.test(answer);
+    if (isTutorLevelAnswer) return answer;
+    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
+    if (isInteractiveTutorAnswer) return answer;
     const isTracebackAnswer = /\*\*1\. (?:Exact error|Erreur exacte)\*\*/i.test(answer);
     if (isTracebackAnswer) return answer;
     const isDocumentationAnswer = /\*\*(?:Matching Python documentation|Documentation Python correspondante)\*\*/i.test(answer);
@@ -11901,6 +11906,16 @@ const App: React.FC = () => {
     const [generalAiMessages, setGeneralAiMessages] = useState<ProblemAiMessage[]>([]);
     const [generalAiDraft, setGeneralAiDraft] = useState('');
     const [generalAiMode, setGeneralAiMode] = useState<GeneralAiMode>('normal');
+    const [generalAiAdaptiveLevel, setGeneralAiAdaptiveLevel] = useState(true);
+    const [generalAiTutorMode, setGeneralAiTutorMode] = useState<GeneralAiTutorMode>('explain');
+    const [generalAiMastery, setGeneralAiMastery] = useState<TutorMasteryProfile>(() => {
+        try {
+            const raw = localStorage.getItem('python_general_ai_mastery');
+            return raw ? JSON.parse(raw) : {};
+        } catch {
+            return {};
+        }
+    });
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
     const [generalAiProgress, setGeneralAiProgress] = useState(0);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
@@ -11913,6 +11928,8 @@ const App: React.FC = () => {
     const [showSavedConvs, setShowSavedConvs] = useState(false);
     const [generalAiSaveFeedback, setGeneralAiSaveFeedback] = useState(false);
     const [copyFeedback, setCopyFeedback] = useState(false);
+    const latestGeneralAiMastery = useMemo(() => Object.entries(generalAiMastery)
+        .sort(([, left], [, right]) => right.lastSeen - left.lastSeen)[0] || null, [generalAiMastery]);
     const [appLang, setAppLang] = useState<'en' | 'fr'>(() => getLanguage());
     const changeLang = useCallback((newLang: 'en' | 'fr') => {
         setLanguage(newLang);
@@ -14708,6 +14725,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     const openGeneralAi = useCallback(() => {
         void import('./services/pythonKnowledge');
+        void import('./services/generalAiTutor');
         if (generalAiMessages.length === 0) {
             setGeneralAiMessages([{
                 id: Date.now(),
@@ -14734,7 +14752,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
-        const knowledge = await import('./services/pythonKnowledge');
+        const [knowledge, tutor] = await Promise.all([
+            import('./services/pythonKnowledge'),
+            import('./services/generalAiTutor'),
+        ]);
+        const previousAssistantAnswer = [...generalAiMessages].reverse().find(message => message.role === 'assistant')?.text || '';
+        const codeCommand = tutor.resolveTutorCodeCommand(question, previousAssistantAnswer, appLang);
         const previousUserQuestions = [...generalAiMessages].reverse()
             .filter(message => message.role === 'user')
             .map(message => normalizeGeneralPythonQuestion(normalizeAiQuestionForLookup(message.text, appLang)));
@@ -14742,8 +14765,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const localizedLookupQuestion = normalizeAiQuestionForLookup(question, appLang);
         const normalizedQuestion = normalizeGeneralPythonQuestion(localizedLookupQuestion);
         const followUp = knowledge.resolveKnowledgeFollowUp(normalizedQuestion, previousUserQuestion, generalAiMode);
-        const effectiveQuestion = followUp.question;
-        const effectiveMode = followUp.mode;
+        const effectiveQuestion = codeCommand.effectiveQuestion || followUp.question;
+        const adaptiveMode = tutor.inferTutorLevel(effectiveQuestion, generalAiMastery, generalAiMode, generalAiAdaptiveLevel);
+        const effectiveMode = followUp.usedContext && followUp.mode !== generalAiMode ? followUp.mode : adaptiveMode;
+        const previousMasterySubject = Object.entries(generalAiMastery)
+            .sort(([, left], [, right]) => right.lastSeen - left.lastSeen)[0]?.[0];
+        const tutorSubject = codeCommand.handled && previousMasterySubject
+            ? previousMasterySubject
+            : tutor.getTutorSubject(effectiveQuestion);
+        const nextMastery = tutor.updateTutorMastery(generalAiMastery, tutorSubject, effectiveMode);
+        setGeneralAiMastery(nextMastery);
+        localStorage.setItem('python_general_ai_mastery', JSON.stringify(nextMastery));
         const userMessage: ProblemAiMessage = { id: Date.now(), role: 'user', source: 'user', text: question };
         setGeneralAiMessages(prev => [...prev, userMessage]);
         setGeneralAiDraft('');
@@ -14755,8 +14787,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const intent = classifyGeneralAiIntent(effectiveQuestion);
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
-            let refAnswer: string | null = null;
-            switch (intent.intent) {
+            let refAnswer: string | null = codeCommand.directAnswer
+                || tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang);
+            if (!refAnswer && effectiveMode === 'examples') {
+                refAnswer = knowledge.answerPythonProgressiveExamples(effectiveQuestion, appLang);
+            }
+            if (!refAnswer) switch (intent.intent) {
                 case 'traceback':
                     refAnswer = answerPythonTraceback(effectiveQuestion, appLang) || buildGeneralAiTracebackAnswer(effectiveQuestion);
                     break;
@@ -14781,20 +14817,31 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     refAnswer = buildGeneralAiQuiz(topic, appLang);
                     break;
                 case 'examples':
-                    refAnswer = knowledge.buildPythonKnowledgeExampleSupplement(effectiveQuestion, appLang) || buildGeneralAiExampleSet(topic, appLang);
+                    refAnswer = knowledge.answerPythonProgressiveExamples(effectiveQuestion, appLang) || buildGeneralAiExampleSet(topic, appLang);
                     break;
                 case 'documentation':
                     refAnswer = knowledge.answerPythonDocumentationQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'purpose':
+                    refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'relationships':
+                    refAnswer = knowledge.answerPythonRelationships(effectiveQuestion, appLang);
                     break;
                 case 'error_help':
                     refAnswer = buildGeneralAiErrorAnswer(effectiveQuestion) || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'definition':
-                    refAnswer = knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
+                    refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
+                        || knowledge.answerPythonAtLevel(effectiveQuestion, appLang, effectiveMode === 'simple' ? 'beginner' : effectiveMode === 'deep' ? 'expert' : 'intermediate')
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonReferenceQuestion(effectiveQuestion)
                         || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;
                 default:
+                    refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
+                        || knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
+                        || knowledge.answerPythonRelationships(effectiveQuestion, appLang);
                     break;
             }
             if (refAnswer) {
@@ -14869,7 +14916,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [appLang, generalAiMessages, generalAiMode, generalAiRunning, offlineAiState, pyodide]);
+    }, [appLang, generalAiAdaptiveLevel, generalAiMastery, generalAiMessages, generalAiMode, generalAiRunning, generalAiTutorMode, offlineAiState, pyodide]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -16509,22 +16556,60 @@ print(result)
                                         </button>
                                     </div>
                                     <div className="mt-2 flex flex-wrap gap-1.5">
+                                        <button
+                                            type="button"
+                                            onClick={() => setGeneralAiAdaptiveLevel(true)}
+                                            className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
+                                            style={{
+                                                borderColor: generalAiAdaptiveLevel ? hexToRgba(toolPanelColors.ai, 0.55) : hexToRgba(toolPanelColors.ai, 0.2),
+                                                backgroundColor: generalAiAdaptiveLevel ? hexToRgba(toolPanelColors.ai, 0.16) : 'rgba(0,0,0,0.14)',
+                                                color: generalAiAdaptiveLevel ? toolPanelColors.ai : '#9ca3af',
+                                            }}
+                                        >
+                                            {appLang === 'fr' ? 'auto' : 'auto'}
+                                        </button>
                                         {(['simple', 'normal', 'deep', 'examples'] as GeneralAiMode[]).map(mode => (
                                             <button
                                                 key={mode}
                                                 type="button"
-                                                onClick={() => setGeneralAiMode(mode)}
+                                                onClick={() => { setGeneralAiMode(mode); setGeneralAiAdaptiveLevel(false); }}
                                                 className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
                                                 style={{
-                                                    borderColor: generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.55) : hexToRgba(toolPanelColors.ai, 0.2),
-                                                    backgroundColor: generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.16) : 'rgba(0,0,0,0.14)',
-                                                    color: generalAiMode === mode ? toolPanelColors.ai : '#9ca3af',
+                                                    borderColor: !generalAiAdaptiveLevel && generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.55) : hexToRgba(toolPanelColors.ai, 0.2),
+                                                    backgroundColor: !generalAiAdaptiveLevel && generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.16) : 'rgba(0,0,0,0.14)',
+                                                    color: !generalAiAdaptiveLevel && generalAiMode === mode ? toolPanelColors.ai : '#9ca3af',
                                                 }}
                                             >
-                                                {appLang === 'fr' ? ({ simple: 'simple', normal: 'normal', deep: 'approfondi', examples: 'exemples' } as const)[mode] : mode}
+                                                {appLang === 'fr'
+                                                    ? ({ simple: 'débutant', normal: 'intermédiaire', deep: 'expert', examples: 'exemples' } as const)[mode]
+                                                    : ({ simple: 'beginner', normal: 'intermediate', deep: 'expert', examples: 'examples' } as const)[mode]}
                                             </button>
                                         ))}
                                     </div>
+                                    <div className="mt-2 flex max-w-full gap-1.5 overflow-x-auto pb-1">
+                                        {(['explain', 'socratic', 'debug', 'compare', 'quiz', 'practice'] as GeneralAiTutorMode[]).map(mode => (
+                                            <button
+                                                key={mode}
+                                                type="button"
+                                                onClick={() => setGeneralAiTutorMode(mode)}
+                                                className="shrink-0 rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
+                                                style={{
+                                                    borderColor: generalAiTutorMode === mode ? hexToRgba('#22c55e', 0.5) : hexToRgba(toolPanelColors.ai, 0.18),
+                                                    backgroundColor: generalAiTutorMode === mode ? hexToRgba('#22c55e', 0.12) : 'rgba(0,0,0,0.14)',
+                                                    color: generalAiTutorMode === mode ? '#86efac' : '#9ca3af',
+                                                }}
+                                            >
+                                                {appLang === 'fr'
+                                                    ? ({ explain: 'expliquer', socratic: 'socratique', debug: 'déboguer', compare: 'comparer', quiz: 'quiz', practice: 'pratique' } as const)[mode]
+                                                    : mode}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {latestGeneralAiMastery && (
+                                        <p className="mt-1 text-[10px] text-gray-500">
+                                            {appLang === 'fr' ? 'Suivi' : 'Mastery'}: <span className="font-bold text-gray-300">{latestGeneralAiMastery[0]}</span> · {latestGeneralAiMastery[1].views} {appLang === 'fr' ? 'interactions' : 'interactions'}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 

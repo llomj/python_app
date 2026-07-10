@@ -9,6 +9,8 @@ export type GeneralAiIntent =
   | 'examples'
   | 'error_help'
   | 'documentation'
+  | 'purpose'
+  | 'relationships'
   | 'definition'
   | 'unknown';
 
@@ -35,6 +37,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   if (/\b(?:difference between|compare|versus|vs\.?|diff[eé]rence entre|compar(?:e|er))\b/i.test(lower)) {
     return { intent: 'comparison', confidence: 0.98, reason: 'Comparison phrasing detected' };
   }
+  if (/\b(?:how can i|what should i use|which (?:method|function|type|tool)|best way to|comment (?:puis-je|faire)(?:\s+pour)?|que dois-je utiliser)\b/i.test(lower)) {
+    return { intent: 'purpose', confidence: 0.95, reason: 'Purpose-based tool request detected' };
+  }
   if (/\b(?:how many|number of|count of|combien|nombre de)\b/i.test(lower)) {
     return { intent: 'count', confidence: 0.96, reason: 'Count request detected' };
   }
@@ -53,6 +58,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:documentation|official docs?|reference|docs? for|documentation officielle|r[eé]f[eé]rence)\b/i.test(lower)) {
     return { intent: 'documentation', confidence: 0.94, reason: 'Documentation request detected' };
+  }
+  if (/\b(?:related concepts?|concepts? (?:are )?related|what next|learn next|connected to|goes with|concepts? li[eé]s?|apprendre ensuite)\b/i.test(lower)) {
+    return { intent: 'relationships', confidence: 0.92, reason: 'Concept relationship request detected' };
   }
   if (/\b(?:syntaxerror|typeerror|nameerror|valueerror|keyerror|indexerror|indentationerror|attributeerror|exception|error|erreur)\b/i.test(lower)) {
     return { intent: 'error_help', confidence: 0.91, reason: 'Python error name or error request detected' };

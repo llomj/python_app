@@ -2797,6 +2797,26 @@ function entry(e: ConceptEntry): void {
 
 // ── Core Fundamentals ──────────────────────────────────────────────────────────
 
+entry({
+  name: "sys",
+  aliases: ["sys module", "system module"],
+  category: "modules_and_imports",
+  easy: "The `sys` module connects Python code to the running interpreter. It exposes information such as the Python version, command-line arguments, import paths, loaded modules, and standard input/output streams.",
+  intermediate: "Import `sys` before using it. `sys.argv` contains command-line arguments, `sys.path` controls where imports are searched, `sys.modules` caches loaded modules, `sys.stdin`/`stdout`/`stderr` are standard streams, and `sys.exit()` raises `SystemExit` to request program termination. Changing interpreter state such as `sys.path` affects later operations in the same process.",
+  advanced: "`sys` exposes CPython and runtime-specific state including recursion limits, tracing/profiling hooks, frame access, byte order, implementation metadata, object sizes, audit hooks, and exception state. Many attributes are implementation- or platform-dependent, so portable code should check the official documentation and avoid mutating global interpreter state unnecessarily.",
+  examples: [
+    { title: "Interpreter information", code: "import sys\nprint(sys.version)\nprint(sys.implementation.name)\nprint(sys.platform)" },
+    { title: "Arguments and import paths", code: "import sys\nprint(sys.argv)\nfor folder in sys.path:\n    print(folder)" },
+  ],
+  commonMistakes: [
+    "Forgetting `import sys` before using its attributes",
+    "Assuming `sys.argv` excludes the script name",
+    "Permanently modifying `sys.path` instead of fixing project packaging",
+    "Catching `Exception` and expecting it to catch `SystemExit`",
+  ],
+  related: ["module", "import", "sys.path", "sys.argv", "sys.modules", "SystemExit", "interpreter"],
+});
+
 entry({ name: "Python", aliases: ['"python language"', '"python programming language"'], category: "python_fundamentals", easy: "Python is a programming language that is easy to read and write. It is used for websites, data analysis, artificial intelligence, and automation. Code is organized by indentation instead of curly braces.", intermediate: "Python is a high-level, dynamically-typed, interpreted programming language created by Guido van Rossum in 1991. It emphasizes readability through significant whitespace and uses a \"batteries included\" philosophy with a comprehensive standard library. Python is garbage-collected and supports multiple paradigms: procedural, object-oriented, and functional.", advanced: "Python's reference implementation, CPython, compiles source to platform-independent bytecode executed on a stack-based virtual machine. Memory management combines reference counting with a generational garbage collector for cycle detection (the gc module). Python's data model is uniform - everything is an object with a type, value, and identity. C extensions via the Python/C API integrate with native code.", examples: [{ title: "Hello World", code: "print(\"Hello, World!\")" }, { title: "Fibonacci", code: "def fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        print(a, end=\" \")\n        a, b = b, a + b" }], commonMistakes: ['"Confusing indentation - mixing tabs and spaces causes errors"', '"Forgetting that Python 2 and Python 3 have significant differences"', '"Assuming Python is \\"just a scripting language\\" (it powers production systems)"'], related: ['"variable"', '"function"', '"class"', '"cpython"', '"pep 8"'] });
 
 entry({ name: "variable", aliases: ['"name"', '"binding"'], category: "variables_and_names", easy: "A variable is a name that holds a value in your program. You create one with `name = value`. For example, `age = 25` creates a variable called `age` that holds the number 25.", intermediate: "In Python, variables are names (or references) that point to objects in memory. Assignment creates a binding between a name and an object. Unlike some languages, variables don't have types - objects do. Reassigning a variable points it to a different object. Python's dynamic typing allows any name to refer to any type of object at any time.", advanced: "Python's variable semantics follow the \"object references\" model. Every variable holds a pointer to a PyObject in CPython. Assignment `x = obj` stores the pointer, not a copy. The `is` operator checks pointer equality (same object), while `==` uses `__eq__`. Variables are scoped by function (not block), and the LEGB rule (Local, Enclosing, Global, Builtins) governs name resolution.", examples: [{ title: "Basic Assignment", code: "x = 42\nname = \"Alice\"\npi = 3.14159" }, { title: "Multiple Assignment", code: "a, b, c = 1, 2, 3\nx = y = z = 0" }], commonMistakes: ['"Expecting block-level scope (Python only has function scope)"', '"Mutating a default argument and having changes persist across calls"', '"Using `is` for value comparison instead of `==`"'], related: ['"object"', '"assignment"', '"scope"', '"legb rule"'] });

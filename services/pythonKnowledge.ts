@@ -4,7 +4,7 @@ import {
   type CategoryFallback,
   type ConceptEntry,
 } from './pythonConceptLibrary';
-import { allBuiltins, allDictMethods, allListMethods, allSetMethods, allStringMethods, allTupleMethods, answerGeneralPythonQuestion, lookupAll, type RefEntry } from './pythonReference';
+import { allBuiltins, allDictMethods, allListMethods, allReferenceEntries, allSetMethods, allStringMethods, allTupleMethods, answerGeneralPythonQuestion, lookupAll, type RefEntry } from './pythonReference';
 import type { GeneralAiResponseMode } from './generalAiMode';
 import { localizeAiText } from './aiLocalization';
 
@@ -126,6 +126,7 @@ const THIRD_PARTY_SOURCES: Record<string, [string, string]> = {
   requests: ['Requests documentation', 'https://requests.readthedocs.io/'],
   scipy: ['SciPy documentation', 'https://docs.scipy.org/doc/scipy/'],
   seaborn: ['seaborn documentation', 'https://seaborn.pydata.org/'],
+  sys: ['Official Python sys module documentation', `${PYTHON_DOCS}/library/sys.html`],
   xgboost: ['XGBoost documentation', 'https://xgboost.readthedocs.io/'],
   yaml: ['PyYAML documentation', 'https://pyyaml.org/wiki/PyYAMLDocumentation'],
 };
@@ -152,7 +153,7 @@ const VERSION_NOTES: Record<string, string> = {
 const CONCEPT_FIRST_TERMS = new Set([
   'bool', 'boolean', 'bytearray', 'bytes', 'class', 'complex', 'dict', 'dictionary',
   'float', 'function', 'int', 'integer', 'list', 'none', 'object', 'set', 'str',
-  'string', 'tuple', 'type',
+  'string', 'sys', 'tuple', 'type',
 ]);
 
 const FRENCH_KIND: Record<string, string> = {
@@ -229,6 +230,7 @@ const FRENCH_PRECISE_SUMMARY: Record<string, string> = {
   set: 'Un ensemble est une collection non ordonnée de valeurs uniques. Il élimine les doublons et prend en charge l’union, l’intersection et la différence.',
   str: 'Une chaîne représente du texte sous forme d’une séquence Unicode immuable, écrite entre guillemets simples ou doubles.',
   string: 'Une chaîne représente du texte sous forme d’une séquence Unicode immuable, écrite entre guillemets simples ou doubles.',
+  sys: 'Le module `sys` donne accès à l’interpréteur Python en cours d’exécution, aux arguments de ligne de commande, aux chemins d’importation, aux modules chargés et aux flux standard.',
   tuple: 'Un tuple est une collection ordonnée et immuable. Il utilise généralement des parenthèses, par exemple `(1, 2, 3)`.',
   asyncio: '`asyncio` est le cadre de la bibliothèque standard pour les entrées-sorties asynchrones, les coroutines, les tâches et les boucles d\'événements.',
   csv: '`csv` est le module de la bibliothèque standard qui lit et écrit des données tabulaires séparées par des délimiteurs, notamment les fichiers CSV.',
@@ -478,6 +480,114 @@ export const answerPythonKnowledgeQuestion = (question: string, language: Knowle
   return resolution.record ? formatPythonKnowledgeRecord(resolution.record, language) : null;
 };
 
+export type PythonExplanationLevel = 'beginner' | 'intermediate' | 'expert';
+
+const editDistance = (left: string, right: string): number => {
+  if (left === right) return 0;
+  if (!left.length) return right.length;
+  if (!right.length) return left.length;
+  const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let row = 1; row <= left.length; row += 1) {
+    let diagonal = previous[0];
+    previous[0] = row;
+    for (let column = 1; column <= right.length; column += 1) {
+      const above = previous[column];
+      previous[column] = Math.min(
+        previous[column] + 1,
+        previous[column - 1] + 1,
+        diagonal + (left[row - 1] === right[column - 1] ? 0 : 1),
+      );
+      diagonal = above;
+    }
+  }
+  return previous[right.length];
+};
+
+export const resolveFuzzyPythonTerm = (rawTerm: string): { term: string; distance: number } | null => {
+  const normalized = normalizeTerm(rawTerm).toLowerCase();
+  if (!/^[a-z_][a-z0-9_.-]{1,39}$/.test(normalized)) return null;
+  const exact = resolvePythonKnowledge(normalized);
+  if (exact.record || exact.alternatives.length) return { term: normalized, distance: 0 };
+  const candidates = getAllConceptTerms()
+    .filter(term => /^[a-z_][a-z0-9_.-]+$/i.test(term) && Math.abs(term.length - normalized.length) <= 2)
+    .map(term => ({ term, distance: editDistance(normalized, term.toLowerCase()) }))
+    .filter(candidate => candidate.distance <= (normalized.length <= 4 ? 1 : 2))
+    .sort((a, b) => a.distance - b.distance || a.term.length - b.term.length || a.term.localeCompare(b.term));
+  if (!candidates.length) return null;
+  if (candidates[1] && candidates[1].distance === candidates[0].distance && candidates[1].term.length === candidates[0].term.length) return null;
+  return candidates[0];
+};
+
+export const answerPythonBareOrFuzzyQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const value = question.trim().replace(/[?!]+$/g, '');
+  if (!/^[A-Za-z_][A-Za-z0-9_.-]*(?:\(\))?$/.test(value)) return null;
+  const normalized = normalizeTerm(value);
+  const exact = resolvePythonKnowledge(normalized, typeFromPrefix(normalized));
+  if (exact.alternatives.length) return ambiguityAnswer(exact, language);
+  if (exact.record) return formatPythonKnowledgeRecord(exact.record, language);
+  const fuzzy = resolveFuzzyPythonTerm(normalized);
+  if (!fuzzy || fuzzy.distance === 0) return null;
+  const resolution = resolvePythonKnowledge(fuzzy.term, typeFromPrefix(fuzzy.term));
+  if (!resolution.record) return null;
+  const prefix = language === 'fr'
+    ? `**Correction probable**\nJ’ai interprété \`${value}\` comme \`${fuzzy.term}\`.`
+    : `**Likely correction**\nI interpreted \`${value}\` as \`${fuzzy.term}\`.`;
+  return `${prefix}\n\n${formatPythonKnowledgeRecord(resolution.record, language)}`;
+};
+
+export const answerPythonAtLevel = (question: string, language: KnowledgeLanguage, level: PythonExplanationLevel): string | null => {
+  const term = extractKnowledgeTerm(question) || normalizeTerm(question);
+  const fuzzy = resolveFuzzyPythonTerm(term);
+  let resolution = resolvePythonKnowledge(fuzzy?.term || term, typeFromPrefix(fuzzy?.term || term));
+  if (!resolution.record && !resolution.alternatives.length) {
+    const semantic = searchPythonKnowledge(term, 1)[0];
+    if (semantic && semantic.score >= 8) resolution = { term: semantic.matchedTerm, record: semantic.record, alternatives: [] };
+  }
+  if (resolution.alternatives.length) return ambiguityAnswer(resolution, language);
+  if (!resolution.record) return null;
+  const record = resolution.record;
+  const fr = language === 'fr';
+  const summary = localizedKnowledgeSummary(record, language);
+  const example = record.examples[0]?.code || '';
+  const frenchOr = (value: string, fallback: string): string => {
+    if (!fr) return value;
+    const translated = localizeAiText(value, 'fr');
+    return translated !== value && !/\b(?:is|the|returns|creates|used|with|from|and|this|that|library)\b/i.test(translated) ? translated : fallback;
+  };
+  const mutation = fr
+    ? ({ yes: 'oui', no: 'non', depends: 'cela dépend', 'not-applicable': 'sans objet' } as const)[record.mutates]
+    : record.mutates;
+  if (level === 'beginner') {
+    return [
+      `**${record.canonicalName} — ${fr ? 'niveau débutant' : 'beginner level'}**`,
+      summary,
+      `${fr ? 'Syntaxe de départ' : 'Starting syntax'}: \`${record.signature}\``,
+      example ? `**${fr ? 'Petit exemple' : 'Tiny example'}**\n\`\`\`python\n${example}\n\`\`\`` : '',
+      fr ? '**À retenir**\nComprenez d’abord son rôle et essayez le petit exemple avant d’ajouter des cas complexes.' : '**Key point**\nUnderstand its purpose first and run the tiny example before adding complex cases.',
+    ].filter(Boolean).join('\n\n');
+  }
+  if (level === 'intermediate') {
+    return [
+      `**${record.canonicalName} — ${fr ? 'niveau intermédiaire' : 'intermediate level'}**`,
+      summary,
+      `**${fr ? 'Fonctionnement' : 'How it works'}**\n${language === 'fr' ? localizedKnowledgeSummary({ ...record, term: record.canonicalName }, language) : record.details}`,
+      `**${fr ? 'Retour et modification' : 'Return and mutation'}**\n${fr ? 'Modification' : 'Mutation'}: ${mutation}. ${fr ? 'Retour' : 'Return'}: ${frenchOr(record.returns, 'La valeur renvoyée dépend de l’opération et des arguments indiqués par la signature.')}`,
+      `**${fr ? 'Erreurs à surveiller' : 'Mistakes to watch'}**\n${frenchOr(record.raises, 'Vérifiez les types, le nombre d’arguments, les valeurs limites et les éléments absents.')}`,
+      example ? `\`\`\`python\n${example}\n\`\`\`` : '',
+    ].filter(Boolean).join('\n\n');
+  }
+  return [
+    `**${record.canonicalName} — ${fr ? 'niveau expert' : 'expert level'}**`,
+    summary,
+    `**${fr ? 'Mécanisme et contrat' : 'Mechanics and contract'}**\n${fr ? `Analysez la signature \`${record.signature}\`, la mutabilité (${record.mutates}) et le contrat de retour. Consultez la source pour les détails d’implémentation propres à la version.` : record.details}`,
+    `**${fr ? 'Cas limites et erreurs' : 'Edge cases and errors'}**\n${fr ? 'Vérifiez les entrées vides, les types incompatibles, la mutabilité, la portée, les itérateurs épuisés et les coûts de matérialisation.' : record.raises}`,
+    `**${fr ? 'Version et source' : 'Version and source'}**\n${frenchOr(record.version, 'Consultez la source officielle pour vérifier les différences entre versions.')}\n${record.sourceUrl}`,
+    record.related.length ? `**${fr ? 'Concepts liés' : 'Related concepts'}**\n${record.related.map((item, index) => `${index + 1}. ${item}`).join('\n')}` : '',
+    buildPythonKnowledgeDeepSupplement(`what is ${record.term}`, language),
+    example ? `\`\`\`python\n${example}\n\`\`\`` : '',
+  ].filter(Boolean).join('\n\n');
+};
+
 const complexityForRecord = (record: PythonKnowledgeRecord): string => {
   const key = `${record.kind}.${record.canonicalName}`.toLowerCase();
   if (key === 'builtin.len') return 'Built-in containers normally store their size, so `len()` is O(1); a custom `__len__()` controls its own cost.';
@@ -564,6 +674,37 @@ export const buildPythonKnowledgeExampleSupplement = (question: string, language
   const examples = EXTRA_EXAMPLES[key] || [];
   if (!examples.length) return '';
   return examples.map((code, index) => `${index + 1}. ${language === 'fr' ? 'Exemple ciblé' : 'Targeted example'}\n\`\`\`python\n${code}\n\`\`\``).join('\n\n');
+};
+
+export const answerPythonProgressiveExamples = (question: string, language: KnowledgeLanguage): string | null => {
+  const cleaned = question.replace(/\b(?:give|show|another|examples?|of|for|donne|montre|des|exemples?|de|pour)\b/gi, ' ').replace(/\s+/g, ' ').trim();
+  const term = /\b(?:examples?|exemples?)\b/i.test(question) ? cleaned : (extractKnowledgeTerm(question) || cleaned);
+  const fuzzy = resolveFuzzyPythonTerm(term);
+  const resolution = resolvePythonKnowledge(fuzzy?.term || term, typeFromPrefix(fuzzy?.term || term));
+  if (resolution.alternatives.length) return ambiguityAnswer(resolution, language);
+  if (!resolution.record) return null;
+  const record = resolution.record;
+  const key = `${record.kind}.${record.canonicalName}`.toLowerCase();
+  const examples = [...record.examples.map(example => example.code), ...(EXTRA_EXAMPLES[key] || [])]
+    .filter((code, index, all) => code.trim() && all.indexOf(code) === index)
+    .slice(0, 4);
+  const fr = language === 'fr';
+  const blocks = examples.map((code, index) => {
+    const level = index === 0 ? (fr ? 'Débutant' : 'Beginner')
+      : index === 1 ? (fr ? 'Intermédiaire' : 'Intermediate')
+        : (fr ? 'Expert' : 'Expert');
+    return `${index + 1}. **${level}**\n\`\`\`python\n${code}\n\`\`\``;
+  });
+  return [
+    `**${fr ? 'Exemples progressifs' : 'Progressive examples'}: ${record.canonicalName}**`,
+    localizedKnowledgeSummary(record, language),
+    ...blocks,
+    blocks.length === 0 ? `**${fr ? 'Syntaxe vérifiée' : 'Verified syntax'}**\n\`\`\`python\n${record.signature}\n\`\`\`` : '',
+    `**${fr ? 'Progression conseillée' : 'Suggested progression'}**`,
+    fr
+      ? '1. Exécutez l’exemple avec les valeurs fournies.\n2. Remplacez une entrée et prédisez le résultat.\n3. Testez un cas vide ou limite.\n4. Expliquez le type renvoyé, la mutabilité et les erreurs possibles.'
+      : '1. Run the example with its original values.\n2. Replace one input and predict the result.\n3. Test an empty or boundary case.\n4. Explain the return type, mutation behavior, and possible errors.',
+  ].filter(Boolean).join('\n\n');
 };
 
 const parseComparisonPair = (question: string): [string, string] | null => {
@@ -719,14 +860,28 @@ export const answerPythonCodeQuestion = (question: string, language: KnowledgeLa
   if (!code) return null;
   const lines = code.split('\n').slice(0, 80);
   const explanations = lines.map((line, index) => `${index + 1}. \`${line || ' '}\`\n   ${explainCodeLine(line, language)}`);
-  const calls = [...code.matchAll(/(?:\.\s*)?([A-Za-z_]\w*)\s*\(/g)]
-    .map(match => match[1])
-    .filter(name => !['def', 'class', 'if', 'for', 'while'].includes(name));
-  const uniqueCalls = [...new Set(calls)].slice(0, 15);
-  const callDetails = uniqueCalls.map(name => {
-    const resolution = resolvePythonKnowledge(name);
-    if (resolution.alternatives.length) return `- \`${name}()\`: ${language === 'fr' ? 'nom ambigu; precisez le type de l\'objet' : 'ambiguous name; include the object type'}`;
-    return resolution.record ? `- \`${name}()\`: ${localizedKnowledgeSummary(resolution.record, language)}` : `- \`${name}()\`: ${language === 'fr' ? 'fonction definie par le programme ou une bibliotheque externe' : 'defined by the program or an external library'}`;
+  const variableTypes = new Map<string, string>();
+  for (const match of code.matchAll(/^\s*([A-Za-z_]\w*)\s*=\s*(.+)$/gm)) {
+    const value = match[2].trim();
+    const type = value.startsWith('[') ? 'list'
+      : value.startsWith('{') && value.includes(':') ? 'dict'
+        : value.startsWith('{') ? 'set'
+          : value.startsWith('(') ? 'tuple'
+            : /^['"]/.test(value) ? 'str'
+              : '';
+    if (type) variableTypes.set(match[1], type);
+  }
+  const calls = [...code.matchAll(/\b(?:(\w+)\.)?([A-Za-z_]\w*)\s*\(/g)]
+    .map(match => ({ owner: match[1] || '', name: match[2] }))
+    .filter(call => !['def', 'class', 'if', 'for', 'while'].includes(call.name));
+  const uniqueCalls = calls.filter((call, index, all) => all.findIndex(other => other.owner === call.owner && other.name === call.name) === index).slice(0, 15);
+  const callDetails = uniqueCalls.map(call => {
+    const ownerType = variableTypes.get(call.owner);
+    const term = ownerType ? `${ownerType}.${call.name}` : call.name;
+    const resolution = resolvePythonKnowledge(term, ownerType);
+    const label = call.owner ? `${call.owner}.${call.name}()` : `${call.name}()`;
+    if (resolution.alternatives.length) return `- \`${label}\`: ${language === 'fr' ? 'nom ambigu; precisez le type de l\'objet' : 'ambiguous name; include the object type'}`;
+    return resolution.record ? `- \`${label}\`: ${localizedKnowledgeSummary(resolution.record, language)}` : `- \`${label}\`: ${language === 'fr' ? 'fonction definie par le programme ou une bibliotheque externe' : 'defined by the program or an external library'}`;
   });
   const syntaxFindings: string[] = [];
   if (/\[[^\]]*:[^\]]*\]/.test(code)) syntaxFindings.push(language === 'fr' ? '- `start:stop:step` est un decoupage; `stop` est exclu.' : '- `start:stop:step` is slicing; the `stop` position is excluded.');
@@ -772,6 +927,9 @@ const SEARCH_SYNONYMS: Record<string, string[]> = {
   array: ['list'],
   mapping: ['dict', 'dictionary'],
   pairs: ['dict', 'dictionary', 'key', 'value'],
+  duplicate: ['set', 'unique'],
+  duplicates: ['set', 'unique'],
+  deduplicate: ['set', 'unique'],
   unique: ['set'],
   unordered: ['set'],
   immutable: ['tuple', 'frozenset', 'string'],
@@ -803,7 +961,8 @@ const tokenizeSearchText = (value: string): string[] => {
 
 const getKnowledgeSearchIndex = (): SearchIndexItem[] => {
   if (knowledgeSearchIndex) return knowledgeSearchIndex;
-  knowledgeSearchIndex = getAllConceptTerms().map(term => {
+  const terms = [...new Set([...getAllConceptTerms(), ...allReferenceEntries().map(entry => entry.name)])];
+  knowledgeSearchIndex = terms.map(term => {
     const concept = lookupConcept(term);
     const text = [
       term,
@@ -880,6 +1039,55 @@ export const answerPythonSemanticSuggestion = (question: string, language: Knowl
       ? 'Je ne peux pas relier cette formulation à un seul concept avec suffisamment de certitude. Vouliez-vous parler de :'
       : 'I cannot connect that wording to one concept with enough confidence. Did you mean:',
     ...results.map((result, index) => `${index + 1}. \`${result.record.canonicalName}\` — ${localizedKnowledgeSummary(result.record, language)}`),
+  ].join('\n\n');
+};
+
+export const answerPythonPurposeQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  if (!/\b(?:how can i|what should i use|which (?:method|function|type|tool)|best way to|comment (?:puis-je|faire)|que dois-je utiliser)\b/i.test(question)) return null;
+  const recipes: Array<[RegExp, string[]]> = [
+    [/\b(?:remove|avoid|without|supprimer|[eé]viter).*(?:duplicate|duplicates|doublons?)|\b(?:deduplicate|unique values?|valeurs uniques)\b/i, ['set', 'dict.fromkeys', 'list comprehension']],
+    [/\b(?:sort|order|trier|ordonner).*(?:without|copy|new|sans modifier|nouvelle)\b/i, ['sorted', 'list.sort']],
+    [/\b(?:read|open|load|lire|ouvrir|charger).*(?:file|fichier)\b/i, ['open', 'pathlib']],
+    [/\b(?:length|size|number of items|longueur|taille|nombre d.ele?ments)\b/i, ['len']],
+    [/\b(?:reverse|reversed|inverser|renverser).*(?:without|copy|new|sans modifier|nouvelle)\b/i, ['reversed', 'list.reverse', 'slicing']],
+  ];
+  const recipe = recipes.find(([pattern]) => pattern.test(question));
+  const recipeResults = recipe?.[1].flatMap(term => {
+    const resolution = resolvePythonKnowledge(term, typeFromPrefix(term));
+    return resolution.record ? [{ matchedTerm: term, score: 100, record: resolution.record }] : [];
+  }) || [];
+  const results = recipeResults.length ? recipeResults : searchPythonKnowledge(question, 4).filter(result => result.score >= 8);
+  if (!results.length) return null;
+  const fr = language === 'fr';
+  return [
+    fr ? '**Outils Python correspondant au besoin**' : '**Python tools matching the goal**',
+    fr ? 'Voici les options les plus proches, classées par pertinence :' : 'These are the closest verified options, ranked by relevance:',
+    ...results.map((result, index) => [
+      `${index + 1}. **${result.record.canonicalName}** — ${localizedKnowledgeSummary(result.record, language)}`,
+      `${fr ? 'Syntaxe' : 'Syntax'}: \`${result.record.signature}\``,
+      `${fr ? 'Modification' : 'Mutation'}: ${result.record.mutates}`,
+    ].join('\n')),
+    fr ? 'Si plusieurs options conviennent, précisez le type de données, la sortie attendue et si l’objet d’origine doit être modifié.' : 'If several options fit, specify the input type, expected output, and whether the original object may be modified.',
+  ].join('\n\n');
+};
+
+export const answerPythonRelationships = (question: string, language: KnowledgeLanguage): string | null => {
+  if (!/\b(?:related concepts?|concepts? (?:are )?related|what next|learn next|connected to|goes with|concepts? li[eé]s?|apprendre ensuite)\b/i.test(question)) return null;
+  const stripped = question.replace(/\b(?:what|which|are|is|the|related|concepts?|to|learn|next|connected|goes|with|quels?|sont|les|li[eé]s?|apprendre|ensuite|à|de)\b/gi, ' ').replace(/\s+/g, ' ').trim();
+  const direct = resolvePythonKnowledge(stripped);
+  const record = direct.record || searchPythonKnowledge(stripped || question, 1)[0]?.record;
+  if (!record) return null;
+  const related = record.related.length ? record.related : searchPythonKnowledge(`${record.category} ${record.canonicalName}`, 6)
+    .map(result => result.record.canonicalName)
+    .filter(name => name.toLowerCase() !== record.canonicalName.toLowerCase())
+    .slice(0, 5);
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Carte de concepts' : 'Concept map'}: ${record.canonicalName}**`,
+    localizedKnowledgeSummary(record, language),
+    `**${fr ? 'À apprendre ensuite' : 'Learn next'}**`,
+    ...(related.length ? related.map((item, index) => `${index + 1}. \`${item}\``) : [fr ? 'Aucun lien précis n’est enregistré.' : 'No precise relationships are recorded.']),
+    `**${fr ? 'Parcours conseillé' : 'Suggested path'}**\n${fr ? 'Commencez par la syntaxe, puis le comportement, les erreurs fréquentes et enfin les mécanismes internes.' : 'Start with syntax, then behavior, common mistakes, and finally internal mechanics.'}`,
   ].join('\n\n');
 };
 
