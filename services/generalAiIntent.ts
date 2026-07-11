@@ -2,6 +2,8 @@ export type GeneralAiIntent =
   | 'traceback'
   | 'code_explanation'
   | 'output_prediction'
+  | 'interactive_debug'
+  | 'test_generation'
   | 'code_quality'
   | 'learning_path'
   | 'contract_search'
@@ -37,6 +39,12 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (containsCode(value) && /\b(?:what (?:does|will) (?:this )?(?:print|output|return)|predict (?:the )?output|trace (?:this|the code)|que va (?:afficher|renvoyer)|pr[eé]dis la sortie)\b/i.test(value)) {
     return { intent: 'output_prediction', confidence: 0.99, reason: 'Python code and output-prediction request detected' };
+  }
+  if (containsCode(value) && /\b(?:step through|debug step|trace execution|show variable changes|loop iterations|pas à pas|trace l['’]exécution|changements? de variables?|itérations? de boucle)\b/i.test(value)) {
+    return { intent: 'interactive_debug', confidence: 0.99, reason: 'Interactive execution-trace request detected' };
+  }
+  if (containsCode(value) && /\b(?:generate|create|write|suggest|show|make|g[eé]n[eè]re|cr[eé]e|[eé]cris|propose|montre).{0,25}\b(?:tests?|test cases?|edge cases?|cas de test|cas limites?)\b/i.test(value)) {
+    return { intent: 'test_generation', confidence: 0.99, reason: 'Test-case generation request detected' };
   }
   if (containsCode(value) && /\b(?:review|quality|readability|pythonic|pep\s*8|performance|security|improve|refactor|qualit[eé]|lisibilit[eé]|am[eé]liore|refactorise)\b/i.test(value)) {
     return { intent: 'code_quality', confidence: 0.98, reason: 'Python code and quality-review request detected' };

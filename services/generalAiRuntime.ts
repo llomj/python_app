@@ -15,7 +15,14 @@ export interface GeneralAiRuntimeResult {
   errorMessage: string;
   errorLine?: number;
   variables?: Record<string, string>;
-  executionTrace?: Array<{ line: number; variables: Record<string, string> }>;
+  executionTrace?: Array<{
+    line: number;
+    event?: 'call' | 'line' | 'return';
+    function?: string;
+    variables: Record<string, string>;
+    changedVariables?: Record<string, string>;
+    returnValue?: string;
+  }>;
 }
 
 export const extractGeneralAiPythonCode = (question: string): string => {
@@ -69,6 +76,7 @@ __general_ai_stdout = io.StringIO()
 __general_ai_result = None
 __general_ai_payload = {}
 __general_ai_trace = []
+__general_ai_previous = {}
 def __general_ai_repr(value):
     try:
         text = repr(value)
@@ -82,8 +90,24 @@ def __general_ai_variables(namespace):
         if not name.startswith("__") and not isinstance(value, (types.FunctionType, type, types.ModuleType))
     }
 def __general_ai_tracer(frame, event, arg):
-    if frame.f_code.co_filename == "<general-ai>" and event == "line" and len(__general_ai_trace) < 80:
-        __general_ai_trace.append({"line": frame.f_lineno, "variables": __general_ai_variables(frame.f_locals)})
+    if frame.f_code.co_filename == "<general-ai>" and event in ("call", "line", "return") and len(__general_ai_trace) < 120:
+        variables = __general_ai_variables(frame.f_locals)
+        frame_key = id(frame)
+        previous = __general_ai_previous.get(frame_key, {})
+        changed = {name: value for name, value in variables.items() if previous.get(name) != value}
+        item = {
+            "line": frame.f_lineno,
+            "event": event,
+            "function": frame.f_code.co_name,
+            "variables": variables,
+            "changedVariables": changed,
+        }
+        if event == "return":
+            item["returnValue"] = __general_ai_repr(arg)
+            __general_ai_previous.pop(frame_key, None)
+        else:
+            __general_ai_previous[frame_key] = variables
+        __general_ai_trace.append(item)
     return __general_ai_tracer
 try:
     __general_ai_tree = ast.parse(__general_ai_source, mode="exec")
@@ -132,11 +156,28 @@ json.dumps(__general_ai_payload)
 
 export const formatGeneralAiRuntimeEvidence = (result: GeneralAiRuntimeResult, language: GeneralAiRuntimeLanguage): string => {
   const fr = language === 'fr';
+  const lineVisits = new Map<number, number>();
+  const traceLines = result.executionTrace?.filter(step => !(step.function === '<module>' && step.event && step.event !== 'line')).slice(-24).map((step, index) => {
+    const visits = (lineVisits.get(step.line) || 0) + 1;
+    lineVisits.set(step.line, visits);
+    const eventLabel = step.event === 'call' ? (fr ? 'appel' : 'call') : step.event === 'return' ? (fr ? 'retour' : 'return') : (fr ? 'ligne' : 'line');
+    const functionLabel = step.function && step.function !== '<module>' ? ` \`${step.function}()\`` : '';
+    const loopLabel = visits > 1 && step.event !== 'call' ? ` (${fr ? 'passage' : 'visit'} ${visits})` : '';
+    const changes = step.changedVariables && Object.keys(step.changedVariables).length
+      ? Object.entries(step.changedVariables).map(([name, value]) => `\`${name}=${value}\``).join(', ')
+      : '';
+    const returned = step.event === 'return' && step.returnValue !== undefined ? ` ${fr ? 'valeur' : 'value'}=\`${step.returnValue}\`` : '';
+    const location = step.event === 'line'
+      ? `${fr ? 'ligne' : 'line'} ${step.line}${functionLabel ? ` ${fr ? 'dans' : 'in'} ${functionLabel}` : ''}`
+      : `${eventLabel}${functionLabel} — ${fr ? 'ligne' : 'line'} ${step.line}`;
+    return `${index + 1}. ${location}${loopLabel}${changes ? ` — ${fr ? 'modifié' : 'changed'}: ${changes}` : ''}${returned}`;
+  }) || [];
   if (!result.ok) {
     return [
       fr ? '**Preuve d’exécution locale**' : '**Local runtime evidence**',
       `${fr ? 'Le code déclenche' : 'The code raises'} \`${result.errorType}\`${result.errorMessage ? `: ${result.errorMessage}` : ''}${result.errorLine ? ` ${fr ? 'à la ligne' : 'on line'} ${result.errorLine}` : ''}.`,
       result.variables && Object.keys(result.variables).length ? `**${fr ? 'Variables au moment de l’erreur' : 'Variables at failure'}**\n${Object.entries(result.variables).map(([name, value]) => `- \`${name}\` = \`${value}\``).join('\n')}` : '',
+      traceLines.length ? `**${fr ? 'Trace avant l’erreur' : 'Trace before failure'}**\n${traceLines.join('\n')}` : '',
       result.stdout ? `${fr ? 'Sortie avant l’erreur' : 'Output before the error'}:\n\`\`\`text\n${result.stdout.trim()}\n\`\`\`` : '',
     ].filter(Boolean).join('\n\n');
   }
@@ -145,6 +186,6 @@ export const formatGeneralAiRuntimeEvidence = (result: GeneralAiRuntimeResult, l
     result.stdout ? `${fr ? 'Sortie réelle' : 'Actual output'}:\n\`\`\`text\n${result.stdout.trim()}\n\`\`\`` : (fr ? 'Le code ne produit aucune sortie avec `print()`.' : 'The code produces no `print()` output.'),
     result.resultRepr ? `${fr ? 'Valeur de la dernière expression' : 'Final expression value'}: \`${result.resultRepr}\` (\`${result.resultType}\`)` : '',
     result.variables && Object.keys(result.variables).length ? `**${fr ? 'État final des variables' : 'Final variable state'}**\n${Object.entries(result.variables).map(([name, value]) => `- \`${name}\` = \`${value}\``).join('\n')}` : '',
-    result.executionTrace?.length ? `**${fr ? 'Ordre d’exécution vérifié' : 'Verified execution order'}**\n${result.executionTrace.slice(-12).map((step, index) => `${index + 1}. ${fr ? 'ligne' : 'line'} ${step.line}${Object.keys(step.variables).length ? ` — ${Object.entries(step.variables).map(([name, value]) => `\`${name}=${value}\``).join(', ')}` : ''}`).join('\n')}` : '',
+    traceLines.length ? `**${fr ? 'Débogage pas à pas vérifié' : 'Verified step-by-step debugging'}**\n${traceLines.join('\n')}` : '',
   ].filter(Boolean).join('\n\n');
 };

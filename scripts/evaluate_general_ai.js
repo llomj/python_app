@@ -211,6 +211,8 @@ try {
     ['Explain this code:\n```python\nprint(1 + 2)\n```', 'code_explanation'],
     ['Analyse ce code :\nvalue = [1, 2][-1]', 'code_explanation'],
     ['What does this print?\n```python\nprint(1 + 2)\n```', 'output_prediction'],
+    ['Step through this code and show variable changes:\n```python\nfor n in range(2):\n    print(n)\n```', 'interactive_debug'],
+    ['Generate test cases for this function:\n```python\ndef square(number):\n    return number ** 2\n```', 'test_generation'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -329,20 +331,27 @@ try {
   const safeFunctionLoop = runtime.assessGeneralAiRuntimeSafety('What does this print?\n```python\ndef total(values):\n    result = 0\n    for value in values:\n        result += value\n    return result\nprint(total([1, 2, 3]))\n```');
   const unsafeLargeRange = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nfor item in range(9000):\n    print(item)\n```');
   if (!safeRuntime.safe || !safeFunctionLoop.safe || unsafeImport.safe || unsafeLoop.safe || unsafeLargeRange.safe) failures.push('Guarded runtime safety policy failed');
-  const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '', variables: { total: '3' }, executionTrace: [{ line: 1, variables: {} }, { line: 2, variables: { total: '3' } }] }, 'en');
-  const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type', errorLine: 4, variables: { value: "'x'" } }, 'fr');
-  if (!runtimeEvidence.includes('Actual output') || !runtimeEvidence.includes('Final variable state') || !runtimeEvidence.includes('Verified execution order') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('ligne 4')) failures.push('Runtime evidence formatting failed');
+  const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '', variables: { total: '3' }, executionTrace: [{ line: 1, event: 'call', function: 'total', variables: {}, changedVariables: {} }, { line: 2, event: 'line', function: 'total', variables: { total: '3' }, changedVariables: { total: '3' } }, { line: 2, event: 'return', function: 'total', variables: { total: '3' }, changedVariables: {}, returnValue: '3' }] }, 'en');
+  const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type', errorLine: 4, variables: { value: "'x'" }, executionTrace: [{ line: 4, event: 'line', function: 'change', variables: { value: "'x'" }, changedVariables: { value: "'x'" } }] }, 'fr');
+  if (!runtimeEvidence.includes('Actual output') || !runtimeEvidence.includes('Final variable state') || !runtimeEvidence.includes('Verified step-by-step debugging') || !runtimeEvidence.includes('return `total()`') || !runtimeEvidence.includes('value=`3`') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('Trace avant l’erreur')) failures.push('Runtime evidence formatting failed');
 
   const learningPath = advanced.answerPythonLearningPath('Build me a learning path for dictionaries', {}, 'en') || '';
   const frenchLearningPath = advanced.answerPythonLearningPath('Construis un parcours pour les dictionnaires', {}, 'fr') || '';
   const qualityReview = advanced.answerPythonCodeQuality('Review this code:\n```python\ndef add(item, values=[]):\n    try:\n        values.append(item)\n    except:\n        pass\n```', 'en') || '';
   const quiz = advanced.createAdaptiveQuiz('list', 'normal', 'en');
+  const secondQuiz = advanced.createAdaptiveQuiz('list', 'normal', 'en', 1, 'negative indexing');
   const quizCorrect = advanced.evaluateAdaptiveQuiz('It prints 3 3 because append adds one item.', quiz, 'en');
   const quizWrong = advanced.evaluateAdaptiveQuiz('It prints 2.', quiz, 'en');
+  const mistakeProfile = advanced.updateGeneralAiMistakes({}, quiz);
+  const generatedTests = advanced.answerPythonTestCaseRequest('Generate test cases:\n```python\ndef total(values):\n    return sum(values)\n```', 'en') || '';
+  const frenchGeneratedTests = advanced.answerPythonTestCaseRequest('Génère des cas de test :\n```python\ndef total(values):\n    return sum(values)\n```', 'fr') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
-  if (!quiz.prompt.includes('Adaptive quiz') || !quizCorrect.correct || quizWrong.correct) failures.push('Stateful adaptive quiz evaluation failed');
+  if (!quiz.prompt.includes('Adaptive quiz') || secondQuiz.id === quiz.id || !secondQuiz.prompt.includes('negative indexing') || !quizCorrect.correct || quizWrong.correct || !quizWrong.text.includes('Misconception detected')) failures.push('Stateful adaptive quiz evaluation failed');
+  if (Object.values(mistakeProfile)[0]?.count !== 1 || !Object.values(mistakeProfile)[0]?.lastMistake) failures.push('Mistake profile tracking failed');
+  if (!generatedTests.includes('Generated test cases') || !generatedTests.includes('total([])') || !generatedTests.includes('Executable harness')) failures.push('Test-case generation failed');
+  if (!frenchGeneratedTests.includes('Cas de test générés') || !frenchGeneratedTests.includes('Harnais exécutable')) failures.push('French test-case generation failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';
