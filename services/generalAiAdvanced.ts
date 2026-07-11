@@ -536,3 +536,48 @@ export const answerGeneralAiProgressRequest = (
     `**${fr ? 'Interprétation correcte' : 'Correct interpretation'}**\n${fr ? 'Les interactions mesurent l’exposition, pas une maîtrise prouvée. Les erreurs proviennent uniquement des quiz évalués dans cette application.' : 'Interactions measure exposure, not proven mastery. Mistakes come only from quizzes evaluated in this app.'}`,
   ].join('\n\n');
 };
+
+interface PythonVersionFeature {
+  id: string;
+  version: [number, number];
+  label: [string, string];
+  detect: RegExp;
+  alternative: [string, string];
+  source: string;
+}
+
+const PYTHON_VERSION_FEATURES: PythonVersionFeature[] = [
+  { id: 'f-string', version: [3, 6], label: ['f-string syntax', 'syntaxe des f-strings'], detect: /(?:^|[^A-Za-z0-9_])f["'][^\n]*[{}]/m, alternative: ['Use `str.format()` on older Python.', 'Utilisez `str.format()` sur une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.6.html#pep-498-formatted-string-literals' },
+  { id: 'dataclasses', version: [3, 7], label: ['the `dataclasses` standard-library module', 'le module standard `dataclasses`'], detect: /\b(?:from\s+dataclasses\s+import|import\s+dataclasses)\b/, alternative: ['Install the `dataclasses` backport for supported older releases.', 'Installez le rétroportage `dataclasses` pour les anciennes versions compatibles.'], source: 'https://docs.python.org/3/whatsnew/3.7.html#dataclasses' },
+  { id: 'walrus', version: [3, 8], label: ['assignment expressions (`:=`)', 'les expressions d’affectation (`:=`)'], detect: /:=/, alternative: ['Assign the value on a separate line before the condition.', 'Affectez la valeur sur une ligne séparée avant la condition.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions' },
+  { id: 'zoneinfo', version: [3, 9], label: ['the `zoneinfo` standard-library module', 'le module standard `zoneinfo`'], detect: /\b(?:from\s+zoneinfo\s+import|import\s+zoneinfo)\b/, alternative: ['Use a maintained timezone dependency on older Python.', 'Utilisez une dépendance de fuseaux horaires maintenue sur une ancienne version.'], source: 'https://docs.python.org/3/whatsnew/3.9.html#zoneinfo' },
+  { id: 'builtin-generics', version: [3, 9], label: ['built-in collection generics such as `list[str]`', 'les génériques intégrés comme `list[str]`'], detect: /\b(?:list|dict|set|tuple|type)\s*\[[^\]]+\]/, alternative: ['Use `typing.List`, `typing.Dict`, and related aliases.', 'Utilisez `typing.List`, `typing.Dict` et les alias associés.'], source: 'https://docs.python.org/3/whatsnew/3.9.html#type-hinting-generics-in-standard-collections' },
+  { id: 'match', version: [3, 10], label: ['structural pattern matching (`match`/`case`)', 'le filtrage structurel (`match`/`case`)'], detect: /^\s*match\s+.+:|^\s*case\s+.+:/m, alternative: ['Rewrite simple cases with `if`/`elif`; complex patterns need explicit unpacking and guards.', 'Réécrivez les cas simples avec `if`/`elif` ; les motifs complexes exigent un déballage et des gardes explicites.'], source: 'https://docs.python.org/3/whatsnew/3.10.html#pep-634-structural-pattern-matching' },
+  { id: 'union-operator', version: [3, 10], label: ['the `X | Y` union type syntax', 'la syntaxe de type union `X | Y`'], detect: /(?:^|[(:,]\s*)[A-Za-z_]\w*(?:\[[^\]]+\])?\s*\|\s*[A-Za-z_]\w*(?:\[[^\]]+\])?/m, alternative: ['Use `typing.Union[X, Y]`.', 'Utilisez `typing.Union[X, Y]`.'], source: 'https://docs.python.org/3/whatsnew/3.10.html#pep-604-new-type-union-operator' },
+  { id: 'tomllib', version: [3, 11], label: ['the `tomllib` standard-library module', 'le module standard `tomllib`'], detect: /\b(?:from\s+tomllib\s+import|import\s+tomllib)\b/, alternative: ['Use the compatible `tomli` package on older Python.', 'Utilisez le paquet compatible `tomli` sur une ancienne version.'], source: 'https://docs.python.org/3/whatsnew/3.11.html#tomllib' },
+  { id: 'taskgroup', version: [3, 11], label: ['`asyncio.TaskGroup`', '`asyncio.TaskGroup`'], detect: /\b(?:asyncio\.)?TaskGroup\s*\(/, alternative: ['Use carefully managed tasks with `asyncio.gather()` on older Python.', 'Gérez explicitement les tâches avec `asyncio.gather()` sur une ancienne version.'], source: 'https://docs.python.org/3/whatsnew/3.11.html#asyncio' },
+  { id: 'exception-groups', version: [3, 11], label: ['exception groups and `except*`', 'les groupes d’exceptions et `except*`'], detect: /\bexcept\s*\*|\bExceptionGroup\s*\(/, alternative: ['Handle exceptions individually; there is no exact syntax-equivalent before 3.11.', 'Traitez les exceptions individuellement ; il n’existe pas d’équivalent syntaxique exact avant 3.11.'], source: 'https://docs.python.org/3/whatsnew/3.11.html#pep-654-exception-groups-and-except' },
+  { id: 'type-statement', version: [3, 12], label: ['the `type` alias statement', 'l’instruction d’alias `type`'], detect: /^\s*type\s+[A-Za-z_]\w*(?:\[[^\]]+\])?\s*=/m, alternative: ['Use an assignment with `typing.TypeAlias`.', 'Utilisez une affectation avec `typing.TypeAlias`.'], source: 'https://docs.python.org/3/whatsnew/3.12.html#pep-695-type-parameter-syntax' },
+];
+
+const comparePythonVersions = (left: [number, number], right: [number, number]): number => left[0] - right[0] || left[1] - right[1];
+
+export const answerPythonVersionCompatibilityRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:minimum python version|python version compatibility|will this (?:work|run)|compatible with python|requires? python|support python|version minimale de python|compatibilit[eé].*python|compatible (?:avec|sous) python|fonctionne(?:ra)? (?:avec|sous) python|n[eé]cessite python|prend en charge python)\b/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  if (!code || !/\n|import |def |class |match |type /.test(code)) return null;
+  const fr = language === 'fr';
+  const targetMatch = question.match(/python\s*(\d+)\.(\d+)/i);
+  const target: [number, number] | null = targetMatch ? [Number(targetMatch[1]), Number(targetMatch[2])] : null;
+  const detected = PYTHON_VERSION_FEATURES.filter(feature => feature.detect.test(code));
+  const minimum = detected.reduce<[number, number]>((current, feature) => comparePythonVersions(feature.version, current) > 0 ? feature.version : current, [3, 0]);
+  const compatible = target ? comparePythonVersions(target, minimum) >= 0 : null;
+  return [
+    `**${fr ? 'Vérification de compatibilité Python' : 'Python version compatibility check'}**`,
+    `1. **${fr ? 'Version minimale détectée' : 'Detected minimum version'}: Python ${minimum[0]}.${minimum[1]}**`,
+    target ? `2. **${fr ? 'Cible demandée' : 'Requested target'}: Python ${target[0]}.${target[1]} — ${compatible ? (fr ? 'compatible avec les fonctionnalités détectées' : 'compatible with the detected features') : (fr ? 'non compatible sans modification' : 'not compatible without changes')}**` : `2. **${fr ? 'Cible demandée' : 'Requested target'}**\n${fr ? 'Aucune version cible précise n’a été fournie.' : 'No exact target version was supplied.'}`,
+    `3. **${fr ? 'Fonctionnalités déterminantes' : 'Version-determining features'}**\n${detected.length ? detected.map((feature, index) => `${index + 1}. Python ${feature.version[0]}.${feature.version[1]} — ${feature.label[fr ? 1 : 0]}\n${feature.alternative[fr ? 1 : 0]}`).join('\n\n') : (fr ? 'Aucune syntaxe postérieure à Python 3.0 n’a été reconnue dans cet extrait.' : 'No post-Python-3.0 syntax was recognized in this snippet.')}`,
+    `4. **${fr ? 'Sources officielles' : 'Official sources'}**\n${detected.length ? [...new Set(detected.map(feature => feature.source))].map(url => `- ${url}`).join('\n') : '- https://docs.python.org/3/whatsnew/'}`,
+    `**${fr ? 'Limite' : 'Limit'}**\n${fr ? 'Cette vérification couvre les fonctionnalités explicitement reconnues. Les versions des dépendances externes, les API supprimées et les branches non collées doivent être vérifiées séparément.' : 'This check covers explicitly recognized features. External dependency versions, removed APIs, and code paths not pasted here require separate verification.'}`,
+  ].join('\n\n');
+};

@@ -10,6 +10,7 @@ export type GeneralAiIntent =
   | 'module_project'
   | 'misconception'
   | 'learning_progress'
+  | 'version_compatibility'
   | 'learning_path'
   | 'contract_search'
   | 'comparison'
@@ -59,6 +60,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:my progress|learning progress|progress report|weak areas?|strengths?|what should i revise|mastery report|mes progr[eè]s|rapport de progression|points? faibles?|points? forts?|que dois-je r[eé]viser|bilan d['’]apprentissage)\b/i.test(value)) {
     return { intent: 'learning_progress', confidence: 0.99, reason: 'Personal learning-progress request detected' };
+  }
+  if (containsCode(value) && /\b(?:minimum python version|python version compatibility|will this (?:work|run)|compatible with python|requires? python|support python|version minimale de python|compatibilit[eé].*python|compatible (?:avec|sous) python|fonctionne(?:ra)? (?:avec|sous) python|n[eé]cessite python|prend en charge python)\b/i.test(value)) {
+    return { intent: 'version_compatibility', confidence: 0.99, reason: 'Code-level Python version compatibility request detected' };
   }
   if (/\b(?:misconception|what am i misunderstanding|common mistake|conceptual error|malentendu|qu['’]est-ce que je comprends mal|erreur de compr[eé]hension)\b/i.test(value)
     || (containsCode(value) && /\b(?:returns? none|unexpected behavior|comportement inattendu)\b/i.test(value))) {

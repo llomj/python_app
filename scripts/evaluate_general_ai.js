@@ -219,6 +219,7 @@ try {
     ['Audit these files:\n```python\n# file: main.py\nfrom helpers import greet\nprint(greet("Noll"))\n```\n```python\n# file: helpers.py\ndef greet(name):\n    return f"Hi {name}"\n```', 'module_project'],
     ['Show my learning progress and weak areas', 'learning_progress'],
     ['What am I misunderstanding? This returns None:\n```python\nitems = [1, 2]\nresult = items.append(3)\n```', 'misconception'],
+    ['Will this run on Python 3.9?\n```python\nmatch command:\n    case "go":\n        print("go")\n```', 'version_compatibility'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -370,6 +371,12 @@ try {
     'list:slicing': { count: 2, lastSeen: 4, lastMistake: 'slice stop is excluded' },
   }, 'en') || '';
   const frenchProgress = advanced.answerGeneralAiProgressRequest('Montre mes progrès et mes points faibles', {}, {}, 'fr') || '';
+  const matchCompatibility = advanced.answerPythonVersionCompatibilityRequest('Will this run on Python 3.9?\n```python\nmatch command:\n    case "go":\n        print("go")\n```', 'en') || '';
+  const tomllibCompatibility = advanced.answerPythonVersionCompatibilityRequest('Is this compatible with Python 3.11?\n```python\nimport tomllib\n```', 'en') || '';
+  const typeCompatibility = advanced.answerPythonVersionCompatibilityRequest('Minimum Python version?\n```python\ntype Point = tuple[float, float]\n```', 'en') || '';
+  const frenchWalrusCompatibility = advanced.answerPythonVersionCompatibilityRequest('Fonctionnera sous Python 3.7 ?\n```python\nif (size := len(items)) > 2:\n    print(size)\n```', 'fr') || '';
+  const frenchAdjectiveCompatibility = advanced.answerPythonVersionCompatibilityRequest('Est-ce compatible avec Python 3.9 ?\n```python\nmatch command:\n    case "go":\n        print("go")\n```', 'fr') || '';
+  const unionCompatibility = advanced.answerPythonVersionCompatibilityRequest('What minimum Python version is required?\n```python\ndef parse(value: int | str) -> str:\n    return str(value)\n```', 'en') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
@@ -391,6 +398,12 @@ try {
   if (!printMisconception.includes('Display without a function result') || !printMisconception.includes('return value * 2')) failures.push('Print-versus-return misconception diagnosis failed');
   if (!progressReport.includes('Python learning progress report') || !progressReport.includes('7 interactions') || !progressReport.includes('slice stop is excluded') || !progressReport.includes('exposure, not proven mastery')) failures.push('Learning-progress report failed');
   if (!frenchProgress.includes('Bilan d’apprentissage Python') || !frenchProgress.includes('Aucune activité enregistrée') || !frenchProgress.includes('pas une maîtrise prouvée')) failures.push('Empty French progress report failed');
+  if (!matchCompatibility.includes('Python 3.10') || !matchCompatibility.includes('not compatible without changes') || !matchCompatibility.includes('docs.python.org/3/whatsnew/3.10')) failures.push('Pattern-matching compatibility failed');
+  if (!tomllibCompatibility.includes('Python 3.11') || !tomllibCompatibility.includes('compatible with the detected features') || !tomllibCompatibility.includes('tomli')) failures.push('tomllib compatibility failed');
+  if (!typeCompatibility.includes('Python 3.12') || !typeCompatibility.includes('typing.TypeAlias')) failures.push('Type-statement compatibility failed');
+  if (!frenchWalrusCompatibility.includes('Python 3.8') || !frenchWalrusCompatibility.includes('non compatible sans modification') || !frenchWalrusCompatibility.includes('ligne séparée')) failures.push('French walrus compatibility failed');
+  if (!frenchAdjectiveCompatibility.includes('Python 3.10') || !frenchAdjectiveCompatibility.includes('non compatible sans modification')) failures.push('French adjective compatibility phrasing failed');
+  if (!unionCompatibility.includes('Python 3.10') || !unionCompatibility.includes('typing.Union')) failures.push('Union-type compatibility failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';

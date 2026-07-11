@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiRuntimeSafety, buildGeneralAiRuntimeScript, formatGeneralAiRuntimeEvidence, type GeneralAiRuntimeResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonVersionCompatibilityRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { verifyGeneralAiAnswer } from './services/generalAiVerification';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
@@ -1047,7 +1047,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isCodeAnswer) return answer;
     const isTutorLevelAnswer = /—\s*(?:beginner|intermediate|expert|niveau débutant|niveau intermédiaire|niveau expert)\s*(?:level)?\*\*/i.test(answer);
     if (isTutorLevelAnswer) return answer;
-    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Python learning progress report|Bilan d’apprentissage Python|Python misconception diagnosis|Diagnostic du malentendu Python|Code-quality review|Revue de qualité du code|Complexity analysis|Analyse de complexité|Two-solution code comparison|Comparaison de deux solutions|Python modules and files guide|Guide des modules et fichiers Python|Multi-file Python project audit|Audit du projet Python multi-fichiers|Generated test cases|Cas de test générés|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
+    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Python learning progress report|Bilan d’apprentissage Python|Python misconception diagnosis|Diagnostic du malentendu Python|Python version compatibility check|Vérification de compatibilité Python|Code-quality review|Revue de qualité du code|Complexity analysis|Analyse de complexité|Two-solution code comparison|Comparaison de deux solutions|Python modules and files guide|Guide des modules et fichiers Python|Multi-file Python project audit|Audit du projet Python multi-fichiers|Generated test cases|Cas de test générés|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
     if (isInteractiveTutorAnswer) return answer;
     const isTracebackAnswer = /\*\*1\. (?:Exact error|Erreur exacte)\*\*/i.test(answer);
     if (isTracebackAnswer) return answer;
@@ -14859,6 +14859,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonModuleProjectRequest(effectiveQuestion, appLang)
                 || answerGeneralAiProgressRequest(effectiveQuestion, nextMastery, generalAiMistakes, appLang)
                 || answerPythonMisconceptionRequest(effectiveQuestion, appLang)
+                || answerPythonVersionCompatibilityRequest(effectiveQuestion, appLang)
                 || answerPythonCodeQuality(effectiveQuestion, appLang)
                 || answerPythonTestCaseRequest(effectiveQuestion, appLang)
                 || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
@@ -14905,6 +14906,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'misconception':
                     refAnswer = answerPythonMisconceptionRequest(effectiveQuestion, appLang);
+                    break;
+                case 'version_compatibility':
+                    refAnswer = answerPythonVersionCompatibilityRequest(effectiveQuestion, appLang);
                     break;
                 case 'code_quality':
                     refAnswer = answerPythonCodeQuality(effectiveQuestion, appLang);
