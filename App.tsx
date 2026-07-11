@@ -57,6 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiRuntimeSafety, buildGeneralAiRuntimeScript, formatGeneralAiRuntimeEvidence, type GeneralAiRuntimeResult } from './services/generalAiRuntime';
+import { answerPythonCodeQuality, answerPythonLearningPath, createAdaptiveQuiz, evaluateAdaptiveQuiz, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { verifyGeneralAiAnswer } from './services/generalAiVerification';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
@@ -1046,7 +1047,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isCodeAnswer) return answer;
     const isTutorLevelAnswer = /—\s*(?:beginner|intermediate|expert|niveau débutant|niveau intermédiaire|niveau expert)\s*(?:level)?\*\*/i.test(answer);
     if (isTutorLevelAnswer) return answer;
-    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
+    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Code-quality review|Revue de qualité du code|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
     if (isInteractiveTutorAnswer) return answer;
     const isTracebackAnswer = /\*\*1\. (?:Exact error|Erreur exacte)\*\*/i.test(answer);
     if (isTracebackAnswer) return answer;
@@ -11903,11 +11904,25 @@ const App: React.FC = () => {
     const [problemAiProblemId, setProblemAiProblemId] = useState<number | null>(null);
     const [problemAiEnabled, setProblemAiEnabled] = useState(() => localStorage.getItem('python_problem_ai_enabled') !== 'false');
     const [problemAiSearch, setProblemAiSearch] = useState('');
-    const [generalAiMessages, setGeneralAiMessages] = useState<ProblemAiMessage[]>([]);
+    const [generalAiMessages, setGeneralAiMessages] = useState<ProblemAiMessage[]>(() => {
+        try {
+            const saved = JSON.parse(localStorage.getItem('python_general_ai_active_conversation') || '[]');
+            return Array.isArray(saved) ? saved.slice(-40) : [];
+        } catch {
+            return [];
+        }
+    });
     const [generalAiDraft, setGeneralAiDraft] = useState('');
     const [generalAiMode, setGeneralAiMode] = useState<GeneralAiMode>('normal');
     const [generalAiAdaptiveLevel, setGeneralAiAdaptiveLevel] = useState(true);
     const [generalAiTutorMode, setGeneralAiTutorMode] = useState<GeneralAiTutorMode>('explain');
+    const [generalAiActiveQuiz, setGeneralAiActiveQuiz] = useState<GeneralAiQuizState | null>(() => {
+        try {
+            return JSON.parse(localStorage.getItem('python_general_ai_active_quiz') || 'null');
+        } catch {
+            return null;
+        }
+    });
     const [generalAiMastery, setGeneralAiMastery] = useState<TutorMasteryProfile>(() => {
         try {
             const raw = localStorage.getItem('python_general_ai_mastery');
@@ -11938,6 +11953,7 @@ const App: React.FC = () => {
         setAppLang(newLang);
         setProblemAiMessages([]);
         setGeneralAiMessages([]);
+        setGeneralAiActiveQuiz(null);
         setLatestAiReviewRequest(null);
         setLatestAiReviewResult(null);
         setAiHintText('');
@@ -11959,6 +11975,17 @@ const App: React.FC = () => {
         }, 500);
         return () => clearInterval(interval);
     }, [generalAiRunning]);
+    useEffect(() => {
+        try {
+            localStorage.setItem('python_general_ai_active_conversation', JSON.stringify(generalAiMessages.slice(-40)));
+        } catch {
+            localStorage.removeItem('python_general_ai_active_conversation');
+        }
+    }, [generalAiMessages]);
+    useEffect(() => {
+        if (generalAiActiveQuiz) localStorage.setItem('python_general_ai_active_quiz', JSON.stringify(generalAiActiveQuiz));
+        else localStorage.removeItem('python_general_ai_active_quiz');
+    }, [generalAiActiveQuiz]);
     const [apiKey, setApiKey] = useState<string>(() => {
         return loadOnlineAiConfig().apiKey;
     });
@@ -14755,6 +14782,19 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
+        const startsNewQuiz = /\b(?:another|new|next|start|quiz|autre|nouveau|suivant|commence)\b/i.test(question);
+        const asksNewQuestion = /\b(?:what|why|how|explain|define|compare|review|help|qu['’]est|pourquoi|comment|explique|définis|compare|aide)\b/i.test(question);
+        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion) {
+            const result = evaluateAdaptiveQuiz(question, generalAiActiveQuiz, appLang);
+            setGeneralAiMessages(prev => [
+                ...prev,
+                { id: Date.now(), role: 'user', source: 'user', text: question },
+                { id: Date.now() + 1, role: 'assistant', source: 'built_in', text: result.text },
+            ]);
+            setGeneralAiDraft('');
+            if (result.correct) setGeneralAiActiveQuiz(null);
+            return;
+        }
         const [knowledge, tutor] = await Promise.all([
             import('./services/pythonKnowledge'),
             import('./services/generalAiTutor'),
@@ -14790,11 +14830,20 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const intent = classifyGeneralAiIntent(effectiveQuestion);
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
+            const shouldCreateQuiz = generalAiTutorMode === 'quiz' || intent.intent === 'quiz';
             let refAnswer: string | null = codeCommand.directAnswer
                 || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang)
-                || tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang);
+                || knowledge.answerPythonContractSearch(effectiveQuestion, appLang)
+                || answerPythonLearningPath(effectiveQuestion, nextMastery, appLang)
+                || answerPythonCodeQuality(effectiveQuestion, appLang)
+                || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
+            if (!refAnswer && shouldCreateQuiz) {
+                const quiz = createAdaptiveQuiz(effectiveQuestion, effectiveMode, appLang);
+                setGeneralAiActiveQuiz(quiz);
+                refAnswer = quiz.prompt;
+            }
             if (!refAnswer && effectiveMode === 'examples') {
                 refAnswer = knowledge.answerPythonProgressiveExamples(effectiveQuestion, appLang);
             }
@@ -14804,6 +14853,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'code_explanation':
                     refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion);
+                    break;
+                case 'output_prediction':
+                    refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion);
+                    break;
+                case 'code_quality':
+                    refAnswer = answerPythonCodeQuality(effectiveQuestion, appLang);
+                    break;
+                case 'learning_path':
+                    refAnswer = answerPythonLearningPath(effectiveQuestion, nextMastery, appLang);
+                    break;
+                case 'contract_search':
+                    refAnswer = knowledge.answerPythonContractSearch(effectiveQuestion, appLang);
                     break;
                 case 'comparison':
                     refAnswer = knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang) || buildGeneralAiComparisonAnswer(effectiveQuestion);
@@ -14857,7 +14918,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             if (refAnswer) {
                 setGeneralAiProgress(100);
                 let enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang, knowledge);
-                if (intent.intent === 'code_explanation' && pyodide) {
+                if (['code_explanation', 'output_prediction', 'code_quality'].includes(intent.intent) && pyodide) {
                     const safety = assessGeneralAiRuntimeSafety(effectiveQuestion);
                     if (safety.safe) {
                         try {
@@ -14923,7 +14984,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         } finally {
             setGeneralAiRunning(false);
         }
-    }, [appLang, generalAiAdaptiveLevel, generalAiMastery, generalAiMessages, generalAiMode, generalAiRunning, generalAiTutorMode, offlineAiState, pyodide]);
+    }, [appLang, generalAiActiveQuiz, generalAiAdaptiveLevel, generalAiMastery, generalAiMessages, generalAiMode, generalAiRunning, generalAiTutorMode, offlineAiState, pyodide]);
 
     const openProblemAi = useCallback(() => {
         const request = buildProblemAiRequest('Explain this problem.');
@@ -16563,6 +16624,7 @@ print(result)
                                         <button
                                             onClick={() => {
                                                 setGeneralAiMessages([]);
+                                                setGeneralAiActiveQuiz(null);
                                                 setGeneralAiClearFeedback(true);
                                                 setTimeout(() => setGeneralAiClearFeedback(false), 1000);
                                             }}

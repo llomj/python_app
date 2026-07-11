@@ -1,6 +1,10 @@
 export type GeneralAiIntent =
   | 'traceback'
   | 'code_explanation'
+  | 'output_prediction'
+  | 'code_quality'
+  | 'learning_path'
+  | 'contract_search'
   | 'comparison'
   | 'count'
   | 'creation'
@@ -30,6 +34,20 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   const lower = value.toLowerCase();
   if (/traceback \(most recent call last\)|(^|\n)\s*file ".+", line \d+/i.test(value)) {
     return { intent: 'traceback', confidence: 1, reason: 'Python traceback frames detected' };
+  }
+  if (containsCode(value) && /\b(?:what (?:does|will) (?:this )?(?:print|output|return)|predict (?:the )?output|trace (?:this|the code)|que va (?:afficher|renvoyer)|pr[eé]dis la sortie)\b/i.test(value)) {
+    return { intent: 'output_prediction', confidence: 0.99, reason: 'Python code and output-prediction request detected' };
+  }
+  if (containsCode(value) && /\b(?:review|quality|readability|pythonic|pep\s*8|performance|security|improve|refactor|qualit[eé]|lisibilit[eé]|am[eé]liore|refactorise)\b/i.test(value)) {
+    return { intent: 'code_quality', confidence: 0.98, reason: 'Python code and quality-review request detected' };
+  }
+  if (/\b(?:learning path|roadmap|study plan|what should i learn|parcours|feuille de route|plan d['’][eé]tude)\b/i.test(lower)) {
+    return { intent: 'learning_path', confidence: 0.97, reason: 'Structured learning-path request detected' };
+  }
+  if (/\b(?:find|which|show|list|search|trouve|quels?|montre|liste|cherche)\b/i.test(lower)
+    && /\b(?:methods?|functions?|m[eé]thodes?|fonctions?)\b/i.test(lower)
+    && /\b(?:return|accept|iterable|mutat|modify|in place|remove|delete|sort|copy|none|renvoie|accepte|modifie|supprime|trie|copie)\b/i.test(lower)) {
+    return { intent: 'contract_search', confidence: 0.96, reason: 'API contract search detected' };
   }
   if (containsCode(value) && /explain|analyse|analyze|debug|why|output|code|ligne|erreur/i.test(value)) {
     return { intent: 'code_explanation', confidence: 0.98, reason: 'Python code and an analysis request detected' };

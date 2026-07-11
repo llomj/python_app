@@ -153,6 +153,38 @@ export const answerPythonCatalogQuestion = (question: string, language: Knowledg
   return null;
 };
 
+export const answerPythonContractSearch = (question: string, language: KnowledgeLanguage): string | null => {
+  if (!/\b(?:find|which|show|list|search|what|trouve|quels?|montre|liste|cherche)\b/i.test(question)) return null;
+  const q = question.toLowerCase();
+  const wantsMethods = /\bmethods?\b|\bm[eé]thodes?\b/.test(q);
+  const wantsFunctions = /\bfunctions?\b|\bfonctions?\b/.test(q);
+  const hasContractFilter = /\b(?:return(?:s|ing)?|accept(?:s|ing)?|argument|iterable|mutat|modify|in place|remove|delete|sort|copy|none|renvoie|accepte|it[eé]rable|modifie|supprime|trie|copie|aucun)\b/i.test(q);
+  if ((!wantsMethods && !wantsFunctions) || !hasContractFilter) return null;
+  const records = allReferenceEntries().filter(entry => wantsMethods ? !['builtin', 'keyword', 'concept'].includes(entry.type) : entry.type === 'builtin');
+  const matches = records.filter(entry => {
+    const text = `${entry.name} ${entry.signature} ${entry.desc}`.toLowerCase();
+    if (/\b(?:iterable|it[eé]rable)\b/.test(q) && !/iterable|sequence|collection/.test(text)) return false;
+    if (/\b(?:remove|delete|supprime|efface)\b/.test(q) && !/remove|delete|discard|pop|clear/.test(text)) return false;
+    if (/\b(?:sort|trie|tri)\b/.test(q) && !/sort|order/.test(text)) return false;
+    if (/\b(?:copy|copie)\b/.test(q) && !/copy|new/.test(text)) return false;
+    if (/\b(?:return(?:s|ing)? none|renvoie (?:none|aucun)|in place|mutat|modify|modifie)\b/.test(q) && !/in place|modif|adds item|removes|updates|none/.test(text)) return false;
+    return true;
+  });
+  if (!matches.length) return null;
+  const fr = language === 'fr';
+  const limited = matches.slice(0, 40);
+  const mutationSummary = /\b(?:return(?:s|ing)? none|renvoie (?:none|aucun)|in place|mutat|modify|modifie)\b/.test(q)
+    ? (fr ? 'Contrat recherché : ces opérations modifient généralement l’objet sur place et renvoient `None`.' : 'Requested contract: these operations generally mutate the object in place and return `None`.')
+    : '';
+  return [
+    `**${fr ? 'Recherche dans les contrats Python' : 'Python contract search'} (${matches.length})**`,
+    fr ? 'Résultats classés à partir des signatures et descriptions vérifiées :' : 'Matches from verified signatures and API descriptions:',
+    mutationSummary,
+    formatCatalogEntries(limited, language),
+    matches.length > limited.length ? (fr ? `${matches.length - limited.length} autres résultats existent ; précisez le type ou le comportement.` : `${matches.length - limited.length} more results exist; narrow the owner type or behavior.`) : '',
+  ].filter(Boolean).join('\n\n');
+};
+
 const splitSignatureParameters = (signature: string): { parameters: string[]; required: number; variadic: boolean } | null => {
   const open = signature.indexOf('(');
   const close = signature.lastIndexOf(')');

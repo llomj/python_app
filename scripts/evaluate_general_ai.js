@@ -15,6 +15,7 @@ const tracebackBundle = path.join(tempDir, 'traceback.cjs');
 const runtimeBundle = path.join(tempDir, 'runtime.cjs');
 const verificationBundle = path.join(tempDir, 'verification.cjs');
 const tutorBundle = path.join(tempDir, 'tutor.cjs');
+const advancedBundle = path.join(tempDir, 'advanced.cjs');
 
 const bundle = (entry, outfile) => buildSync({
   entryPoints: [path.join(root, entry)],
@@ -34,6 +35,7 @@ try {
   bundle('services/generalAiRuntime.ts', runtimeBundle);
   bundle('services/generalAiVerification.ts', verificationBundle);
   bundle('services/generalAiTutor.ts', tutorBundle);
+  bundle('services/generalAiAdvanced.ts', advancedBundle);
 
   const knowledge = require(knowledgeBundle);
   const concepts = require(conceptBundle);
@@ -43,6 +45,7 @@ try {
   const runtime = require(runtimeBundle);
   const verification = require(verificationBundle);
   const tutor = require(tutorBundle);
+  const advanced = require(advancedBundle);
   const failures = [];
   const terms = concepts.getAllConceptTerms();
   let structuredRecords = 0;
@@ -207,6 +210,10 @@ try {
     ['Pourquoi cette erreur ValueError ?', 'error_help'],
     ['Explain this code:\n```python\nprint(1 + 2)\n```', 'code_explanation'],
     ['Analyse ce code :\nvalue = [1, 2][-1]', 'code_explanation'],
+    ['What does this print?\n```python\nprint(1 + 2)\n```', 'output_prediction'],
+    ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
+    ['Build me a learning path for OOP', 'learning_path'],
+    ['Which list methods return None and mutate in place?', 'contract_search'],
     ['Traceback (most recent call last):\n  File "main.py", line 2, in <module>\nNameError: name x is not defined', 'traceback'],
   ];
   for (const [question, expected] of intentCases) {
@@ -319,15 +326,37 @@ try {
   const safeRuntime = runtime.assessGeneralAiRuntimeSafety('Explain this code:\n```python\nitems = [1, 2]\nitems.append(3)\nprint(items)\n```');
   const unsafeImport = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nimport os\nprint(os.listdir())\n```');
   const unsafeLoop = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nwhile True:\n    pass\n```');
-  if (!safeRuntime.safe || unsafeImport.safe || unsafeLoop.safe) failures.push('Guarded runtime safety policy failed');
-  const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '' }, 'en');
-  const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type' }, 'fr');
-  if (!runtimeEvidence.includes('Actual output') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('déclenche')) failures.push('Runtime evidence formatting failed');
+  const safeFunctionLoop = runtime.assessGeneralAiRuntimeSafety('What does this print?\n```python\ndef total(values):\n    result = 0\n    for value in values:\n        result += value\n    return result\nprint(total([1, 2, 3]))\n```');
+  const unsafeLargeRange = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nfor item in range(9000):\n    print(item)\n```');
+  if (!safeRuntime.safe || !safeFunctionLoop.safe || unsafeImport.safe || unsafeLoop.safe || unsafeLargeRange.safe) failures.push('Guarded runtime safety policy failed');
+  const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '', variables: { total: '3' }, executionTrace: [{ line: 1, variables: {} }, { line: 2, variables: { total: '3' } }] }, 'en');
+  const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type', errorLine: 4, variables: { value: "'x'" } }, 'fr');
+  if (!runtimeEvidence.includes('Actual output') || !runtimeEvidence.includes('Final variable state') || !runtimeEvidence.includes('Verified execution order') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('ligne 4')) failures.push('Runtime evidence formatting failed');
+
+  const learningPath = advanced.answerPythonLearningPath('Build me a learning path for dictionaries', {}, 'en') || '';
+  const frenchLearningPath = advanced.answerPythonLearningPath('Construis un parcours pour les dictionnaires', {}, 'fr') || '';
+  const qualityReview = advanced.answerPythonCodeQuality('Review this code:\n```python\ndef add(item, values=[]):\n    try:\n        values.append(item)\n    except:\n        pass\n```', 'en') || '';
+  const quiz = advanced.createAdaptiveQuiz('list', 'normal', 'en');
+  const quizCorrect = advanced.evaluateAdaptiveQuiz('It prints 3 3 because append adds one item.', quiz, 'en');
+  const quizWrong = advanced.evaluateAdaptiveQuiz('It prints 2.', quiz, 'en');
+  if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
+  if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
+  if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
+  if (!quiz.prompt.includes('Adaptive quiz') || !quizCorrect.correct || quizWrong.correct) failures.push('Stateful adaptive quiz evaluation failed');
+
+  const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
+  const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';
+  const iterableContracts = knowledge.answerPythonContractSearch('Which functions accept an iterable?', 'en') || '';
+  if (!removeContracts.includes('Python contract search') || !removeContracts.includes('pop')) failures.push('Removal contract search failed');
+  if (!noneContracts.includes('return `None`') || !noneContracts.includes('list.append')) failures.push('In-place contract search failed');
+  if (!iterableContracts.includes('iterable') || !iterableContracts.includes('any(iterable)')) failures.push('Iterable contract search failed');
 
   const verifiedAnswer = verification.verifyGeneralAiAnswer('What is len?', '**Source and confidence**\nhttps://docs.python.org/3/library/functions.html#len');
   const badFence = verification.verifyGeneralAiAnswer('Explain code', '```python\nprint(1)');
   const badSource = verification.verifyGeneralAiAnswer('What is list?', 'See https://made-up-python-docs.example/list for details.');
-  if (!verifiedAnswer.valid || badFence.valid || badSource.valid) failures.push('Answer verification gates failed');
+  const offTopicAnswer = verification.verifyGeneralAiAnswer('What is a dictionary?', 'A tuple is an immutable ordered sequence of values.');
+  const groundedAnswer = verification.verifyGeneralAiAnswer('What is a dictionary?', 'A dictionary stores key-value pairs and supports lookup by key.');
+  if (!verifiedAnswer.valid || badFence.valid || badSource.valid || offTopicAnswer.valid || !groundedAnswer.valid) failures.push('Answer verification gates failed');
 
   const frenchDirectExample = knowledge.resolveKnowledgeFollowUp('donne des exemples de dictionnaire', 'what is list', 'normal');
   const frenchDeepFollowUp = knowledge.resolveKnowledgeFollowUp('approfondis les tuples', 'what is list', 'normal');
@@ -346,7 +375,7 @@ try {
   console.log(`Bare-term checks: ${bareTerms.length}`);
   console.log(`Tutor modes: ${tutorModes.length}`);
   console.log(`Semantic index cold start: ${semanticElapsed}ms`);
-  console.log('All 12 tutor gates: bare/fuzzy terms, levels, context, adaptation, relationships, ambiguity, purpose, progressive interaction, tutor modes, mastery, retrieval, and conversations completed');
+  console.log('Tutor gates include runtime traces, learning paths, code quality, stateful quizzes, contract search, bilingual retrieval, and durable conversation behavior');
 
   if (failures.length) {
     console.error('\nFailures:');
