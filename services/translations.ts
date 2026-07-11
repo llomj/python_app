@@ -301,9 +301,9 @@ const EN: Dict = {
   'generalAi.noSavedConvs': 'No saved conversations yet. Click Save to store one.',
   'generalAi.placeholder': 'Ask any Python question...',
   'generalAi.ask': 'Ask',
-  'generalAi.onlineKey': 'Optional online AI key',
-  'generalAi.onlineKeyDesc': 'The built-in Python AI works without a key. Keep Gemini optional for future online AI answers when a user wants stronger model-backed help.',
-  'generalAi.geminiPlaceholder': 'Optional Gemini API key...',
+  'generalAi.onlineKey': 'Optional AI API',
+  'generalAi.onlineKeyDesc': 'The built-in Python AI works without a key. Optionally connect Gemini or an OpenAI-compatible model for model-backed answers and grader review.',
+  'generalAi.geminiPlaceholder': 'Optional AI API key...',
   'generalAi.saveKey': 'Save Optional Key',
 
   /* ── Instructions Modal ───────────────────────────────────── */
@@ -677,9 +677,9 @@ const FR: Dict = {
   'generalAi.noSavedConvs': 'Aucune conversation sauvegardée. Cliquez sur Sauvegarder pour en enregistrer une.',
   'generalAi.placeholder': 'Posez une question Python...',
   'generalAi.ask': 'Demander',
-  'generalAi.onlineKey': 'Clé IA en ligne (optionnelle)',
-  'generalAi.onlineKeyDesc': 'L\'IA Python intégrée fonctionne sans clé. Gardez Gemini optionnel pour de futures réponses IA en ligne.',
-  'generalAi.geminiPlaceholder': 'Clé API Gemini optionnelle...',
+  'generalAi.onlineKey': 'API IA optionnelle',
+  'generalAi.onlineKeyDesc': 'L\'IA Python intégrée fonctionne sans clé. Vous pouvez connecter Gemini ou un modèle compatible OpenAI pour des réponses et une correction renforcées.',
+  'generalAi.geminiPlaceholder': 'Clé API IA optionnelle...',
   'generalAi.saveKey': 'Sauvegarder la Clé',
 
   /* ── Instructions Modal ───────────────────────────────────── */

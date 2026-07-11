@@ -1,7 +1,7 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
 import { answerGeneralPythonWithWebLlm, answerGeneralPythonWithWebLlmConversation, answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
-import { hasGeminiKey, reviewWithGemini } from './geminiService';
+import { hasOnlineAiKey, reviewWithOnlineAi } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 import { AiLanguage } from './aiLocalization';
 import { GeneralAiResponseMode } from './generalAiMode';
@@ -401,13 +401,13 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
         }
     }
 
-    if (hasGeminiKey()) {
+    if (hasOnlineAiKey()) {
         try {
-            const geminiResult = await reviewWithGemini(request);
-            if (geminiResult.verdict !== 'unclear' || geminiResult.explanation.length > 20) {
+            const onlineResult = await reviewWithOnlineAi(request);
+            if (onlineResult.verdict !== 'unclear' || onlineResult.explanation.length > 20) {
                 return {
-                    ...geminiResult,
-                    confidence: Math.max(geminiResult.confidence, diagnostic.confidence),
+                    ...onlineResult,
+                    confidence: Math.max(onlineResult.confidence, diagnostic.confidence),
                 };
             }
         } catch {

@@ -1480,7 +1480,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
     184: {
-        functionNames: ['int'],
+        functionNames: ['get_second_digit', 'extract_digit', 'get_digit'],
         compare: 'printedOrReturn',
         tests: [
             { args: [123], expected: '2' },
@@ -1488,7 +1488,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
     185: {
-        functionNames: ['int'],
+        functionNames: ['get_indexed_digits', 'extract_digits', 'get_digits'],
         tests: [
             { args: [12345678], expected: ['2', '4', '8'] },
             { args: [98765432], expected: ['8', '6', '2'] }

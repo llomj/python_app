@@ -58,6 +58,7 @@ import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './servi
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiRuntimeSafety, buildGeneralAiRuntimeScript, formatGeneralAiRuntimeEvidence, type GeneralAiRuntimeResult } from './services/generalAiRuntime';
 import { verifyGeneralAiAnswer } from './services/generalAiVerification';
+import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
@@ -96,7 +97,7 @@ type GeneralAiMode = 'simple' | 'normal' | 'deep' | 'examples';
 type GeneralAiKnowledgeModule = typeof import('./services/pythonKnowledge');
 
 const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
-const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini']);
+const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini', 'online_api']);
 
 const isAiAutoWinReview = (review: AiReviewResult) => (
     AI_AUTO_WIN_MODEL_SOURCES.has(review.source) &&
@@ -1051,6 +1052,8 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isTracebackAnswer) return answer;
     const isDocumentationAnswer = /\*\*(?:Matching Python documentation|Documentation Python correspondante)\*\*/i.test(answer);
     if (isDocumentationAnswer) return answer;
+    const isCallableContractAnswer = /\*\*(?:Signature and argument count|Signature et nombre d[’']arguments|Lambda evaluation order|Ordre d[’']évaluation d[’']une lambda|Comprehension evaluation order|Ordre d[’']une compréhension|Variable resolution: the LEGB rule|Résolution des variables : règle LEGB)/i.test(answer);
+    if (isCallableContractAnswer) return answer;
     const isVersionAnswer = /\*\*.+version information\*\*/i.test(answer);
     if (isVersionAnswer) return answer;
     const isCompleteSpecialAnswer = isStructuredAnswer
@@ -1272,6 +1275,8 @@ const getAiReviewSourceLabel = (source: AiReviewResult['source'], language: 'en'
             return language === 'fr' ? 'modèle hors ligne' : 'offline model';
         case 'gemini':
             return 'Gemini AI';
+        case 'online_api':
+            return language === 'fr' ? 'API IA configurée' : 'configured AI API';
         case 'ollama':
             return language === 'fr' ? 'IA locale (Ollama)' : 'local AI (Ollama)';
         case 'diagnostic':
@@ -3851,36 +3856,9 @@ def __auto_grader_run_metamorphic_tests(target, target_name, function_names, tes
         if not returned_ok and not printed_ok:
             actual = printed if printed else returned
             return f"extra generated test {index} failed for args={args}. Expected {expected!r}, got {__auto_grader_jsonable(actual)!r}."
-    if tests and len(tests) < 3:
-        first_args = tests[0].get("args", [])
-        if first_args and len(first_args) >= 1:
-            probe_inputs = __auto_grader_generate_probe_inputs(first_args)
-            if probe_inputs:
-                outputs = []
-                for probe_args in probe_inputs:
-                    if not __auto_grader_accepts_args(target, probe_args):
-                        continue
-                    old_stdout = sys.stdout
-                    sys.stdout = io.StringIO()
-                    try:
-                        result = target(*probe_args)
-                        output = sys.stdout.getvalue().strip()
-                    except Exception:
-                        result = None
-                        output = ""
-                    finally:
-                        sys.stdout = old_stdout
-                    outputs.append((result, output))
-                if len(outputs) >= 2:
-                    all_same = all(
-                        __auto_grader_deep_normalize(str(r)) == __auto_grader_deep_normalize(str(outputs[0][0]))
-                        and __auto_grader_deep_normalize(o) == __auto_grader_deep_normalize(outputs[0][1])
-                        for r, o in outputs[1:]
-                    )
-                    if all_same and outputs[0][0] is not None:
-                        first_expected = tests[0].get("expected")
-                        if not isinstance(first_expected, bool) and first_expected is not None:
-                            return f"Hardcoded answer suspected: your function returned the same value {outputs[0][0]!r} for {len(outputs)} different inputs. Make sure your function computes the answer dynamically."
+    # Do not infer hard-coding merely because arbitrary probes produce the
+    # same value. Counts, predicates, searches, and filters commonly do that.
+    # Exact generated cases above are the safe anti-hardcoding mechanism.
     return None
 
 def __auto_grader_generate_probe_inputs(first_args):
@@ -4292,6 +4270,25 @@ def __auto_grader_run():
             active_tests = optional_tests
             use_optional_tests = True
 
+    # A guarded no-argument exercise embeds its own sample data. Its literal
+    # values are illustrative rather than mandatory, so validate the requested
+    # AST/API operations and result shape for equivalent user-selected data.
+    has_source_contract = any([
+        __auto_grader_spec.get("requiredCallPatterns"),
+        __auto_grader_spec.get("requiredAnyCallPatterns"),
+        __auto_grader_spec.get("requiredNodePatterns"),
+        __auto_grader_spec.get("requiredClassInheritance"),
+        __auto_grader_spec.get("requiredBoolOps"),
+        __auto_grader_spec.get("requiredAstOperators"),
+        __auto_grader_spec.get("requiredUnpackPatterns"),
+    ])
+    fixed_data_alternative = bool(
+        not use_optional_tests and
+        tests and
+        all(case.get("args", []) == [] and not case.get("inputValues") and __auto_grader_is_simple_case(case) for case in tests) and
+        has_source_contract
+    )
+
     if not use_optional_tests:
         source_requirement_error = __auto_grader_check_source_requirements()
         if source_requirement_error:
@@ -4564,8 +4561,9 @@ def __auto_grader_run():
                 "message": f"{label} expected {expected_exception} to be raised."
             }
 
-        returned_ok = __auto_grader_same(returned, expected, compare)
-        printed_ok = bool(printed) and __auto_grader_same(printed, expected, compare)
+        case_compare = "sourceIntent" if fixed_data_alternative else compare
+        returned_ok = __auto_grader_same(returned, expected, case_compare)
+        printed_ok = bool(printed) and __auto_grader_same(printed, expected, case_compare)
         if not printed_ok and (compare == "printedOrReturn" or returned is None):
             printed_ok = __auto_grader_same(printed, expected, "printedOrReturn")
         if not returned_ok and not printed_ok and compare not in ("dictAddedPair",):
@@ -11919,6 +11917,8 @@ const App: React.FC = () => {
     const [generalAiRunning, setGeneralAiRunning] = useState(false);
     const [generalAiProgress, setGeneralAiProgress] = useState(0);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
+    const [generalAiControlsOpen, setGeneralAiControlsOpen] = useState(false);
+    const [generalAiClearFeedback, setGeneralAiClearFeedback] = useState(false);
     const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
         try {
             const raw = localStorage.getItem('saved_ai_conversations');
@@ -11954,12 +11954,15 @@ const App: React.FC = () => {
             else if (elapsed < 20000) p = 70 + ((elapsed - 8000) / 12000) * 18;
             else p = 88 + Math.min(10, (elapsed - 20000) / 60000 * 10);
             setGeneralAiProgress(Math.min(99, Math.round(p)));
-        }, 200);
+        }, 500);
         return () => clearInterval(interval);
     }, [generalAiRunning]);
     const [apiKey, setApiKey] = useState<string>(() => {
-        return localStorage.getItem('gemini_api_key') || '';
+        return loadOnlineAiConfig().apiKey;
     });
+    const [apiProvider, setApiProvider] = useState<OnlineAiProvider>(() => loadOnlineAiConfig().provider);
+    const [apiEndpoint, setApiEndpoint] = useState(() => loadOnlineAiConfig().endpoint);
+    const [apiModel, setApiModel] = useState(() => loadOnlineAiConfig().model);
     const [difficultyMode, setDifficultyMode] = useState<ProblemMode>(() => getSavedDifficultyMode());
     useEffect(() => {
         if (solutionTab === 'concept' && !isConceptMode(difficultyMode)) {
@@ -14724,8 +14727,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     }, [appLang, exercise, output, outputStatus]);
 
     const openGeneralAi = useCallback(() => {
-        void import('./services/pythonKnowledge');
-        void import('./services/generalAiTutor');
         if (generalAiMessages.length === 0) {
             setGeneralAiMessages([{
                 id: Date.now(),
@@ -14788,6 +14789,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
             let refAnswer: string | null = codeCommand.directAnswer
+                || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
+                || knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang)
                 || tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang);
             if (!refAnswer && effectiveMode === 'examples') {
                 refAnswer = knowledge.answerPythonProgressiveExamples(effectiveQuestion, appLang);
@@ -14890,7 +14893,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     role: m.role === 'user' ? 'user' as const : 'assistant' as const,
                     content: m.text,
                 }));
-                const aiAnswer = await answerGeneralPythonWithAvailableAi(effectiveQuestion, offlineAiState, aiHistory, appLang, effectiveMode);
+                const onlineAnswer = await answerGeneralPythonWithOnlineAi(effectiveQuestion, aiHistory, appLang, effectiveMode).catch(() => null);
+                const aiAnswer = onlineAnswer || await answerGeneralPythonWithAvailableAi(effectiveQuestion, offlineAiState, aiHistory, appLang, effectiveMode);
                 const verification = aiAnswer ? verifyGeneralAiAnswer(effectiveQuestion, aiAnswer) : null;
                 if (aiAnswer && verification?.valid) {
                     setGeneralAiProgress(100);
@@ -16317,7 +16321,7 @@ print(result)
                             </div>
                         )}
                         {showModal === 'hint' && (
-                            <div className="flex h-full min-h-0 flex-col gap-3">
+                            <div className="flex h-full min-h-0 min-w-0 flex-col gap-3 overflow-x-hidden" style={{ touchAction: 'pan-y' }}>
                                 <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('aiReview.title', appLang)}</h2>
                                 <div className="min-h-0 flex-1 overflow-y-auto -mx-1 px-1 space-y-3">
                                     <>
@@ -16506,6 +16510,17 @@ print(result)
                                         <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('generalAi.title', appLang)}</h2>
                                     </div>
                                     <p className="mt-1 text-xs text-gray-400">{t('generalAi.desc', appLang)}</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setGeneralAiControlsOpen(open => !open)}
+                                        className="mt-2 flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left text-[10px] font-black uppercase tracking-[0.12em]"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}
+                                    >
+                                        <span>{appLang === 'fr' ? 'Commandes du tuteur' : 'Tutor controls'}</span>
+                                        <ChevronDown size={14} style={{ transform: generalAiControlsOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {generalAiControlsOpen && (
+                                    <div className="mt-2 rounded-xl border p-2" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(0,0,0,0.12)' }}>
                                     <div className="mt-2 flex flex-wrap items-center gap-1.5">
                                         <button
                                             onClick={() => {
@@ -16522,9 +16537,9 @@ print(result)
                                             }}
                                             className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                             style={{
-                                                borderColor: hexToRgba('#22c55e', 0.35),
-                                                color: '#86efac',
-                                                backgroundColor: hexToRgba('#22c55e', 0.1),
+                                                borderColor: hexToRgba(generalAiSaveFeedback ? '#22c55e' : toolPanelColors.ai, 0.4),
+                                                color: generalAiSaveFeedback ? '#86efac' : toolPanelColors.ai,
+                                                backgroundColor: hexToRgba(generalAiSaveFeedback ? '#22c55e' : toolPanelColors.ai, 0.12),
                                             }}
                                             title={t('generalAi.save', appLang)}
                                         >
@@ -16543,12 +16558,16 @@ print(result)
                                             {t('generalAi.savedCount', appLang, String(savedConversations.length))}
                                         </button>
                                         <button
-                                            onClick={() => setGeneralAiMessages([])}
+                                            onClick={() => {
+                                                setGeneralAiMessages([]);
+                                                setGeneralAiClearFeedback(true);
+                                                setTimeout(() => setGeneralAiClearFeedback(false), 1000);
+                                            }}
                                             className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                             style={{
-                                                borderColor: hexToRgba(toolPanelColors.failed, 0.35),
-                                                color: toolPanelColors.failed,
-                                                backgroundColor: hexToRgba(toolPanelColors.failed, 0.1),
+                                                borderColor: hexToRgba(generalAiClearFeedback ? toolPanelColors.failed : toolPanelColors.ai, 0.4),
+                                                color: generalAiClearFeedback ? toolPanelColors.failed : toolPanelColors.ai,
+                                                backgroundColor: hexToRgba(generalAiClearFeedback ? toolPanelColors.failed : toolPanelColors.ai, 0.12),
                                             }}
                                             title={t('generalAi.clear', appLang)}
                                         >
@@ -16561,9 +16580,9 @@ print(result)
                                             onClick={() => setGeneralAiAdaptiveLevel(true)}
                                             className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
                                             style={{
-                                                borderColor: generalAiAdaptiveLevel ? hexToRgba(toolPanelColors.ai, 0.55) : hexToRgba(toolPanelColors.ai, 0.2),
-                                                backgroundColor: generalAiAdaptiveLevel ? hexToRgba(toolPanelColors.ai, 0.16) : 'rgba(0,0,0,0.14)',
-                                                color: generalAiAdaptiveLevel ? toolPanelColors.ai : '#9ca3af',
+                                                borderColor: hexToRgba(generalAiAdaptiveLevel ? '#22c55e' : toolPanelColors.ai, 0.5),
+                                                backgroundColor: hexToRgba(generalAiAdaptiveLevel ? '#22c55e' : toolPanelColors.ai, 0.12),
+                                                color: generalAiAdaptiveLevel ? '#86efac' : toolPanelColors.ai,
                                             }}
                                         >
                                             {appLang === 'fr' ? 'auto' : 'auto'}
@@ -16575,9 +16594,9 @@ print(result)
                                                 onClick={() => { setGeneralAiMode(mode); setGeneralAiAdaptiveLevel(false); }}
                                                 className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
                                                 style={{
-                                                    borderColor: !generalAiAdaptiveLevel && generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.55) : hexToRgba(toolPanelColors.ai, 0.2),
-                                                    backgroundColor: !generalAiAdaptiveLevel && generalAiMode === mode ? hexToRgba(toolPanelColors.ai, 0.16) : 'rgba(0,0,0,0.14)',
-                                                    color: !generalAiAdaptiveLevel && generalAiMode === mode ? toolPanelColors.ai : '#9ca3af',
+                                                    borderColor: hexToRgba(!generalAiAdaptiveLevel && generalAiMode === mode ? '#22c55e' : toolPanelColors.ai, 0.5),
+                                                    backgroundColor: hexToRgba(!generalAiAdaptiveLevel && generalAiMode === mode ? '#22c55e' : toolPanelColors.ai, 0.12),
+                                                    color: !generalAiAdaptiveLevel && generalAiMode === mode ? '#86efac' : toolPanelColors.ai,
                                                 }}
                                             >
                                                 {appLang === 'fr'
@@ -16586,7 +16605,7 @@ print(result)
                                             </button>
                                         ))}
                                     </div>
-                                    <div className="mt-2 flex max-w-full gap-1.5 overflow-x-auto pb-1">
+                                    <div className="mt-2 flex flex-wrap gap-1.5 pb-1">
                                         {(['explain', 'socratic', 'debug', 'compare', 'quiz', 'practice'] as GeneralAiTutorMode[]).map(mode => (
                                             <button
                                                 key={mode}
@@ -16596,7 +16615,7 @@ print(result)
                                                 style={{
                                                     borderColor: generalAiTutorMode === mode ? hexToRgba('#22c55e', 0.5) : hexToRgba(toolPanelColors.ai, 0.18),
                                                     backgroundColor: generalAiTutorMode === mode ? hexToRgba('#22c55e', 0.12) : 'rgba(0,0,0,0.14)',
-                                                    color: generalAiTutorMode === mode ? '#86efac' : '#9ca3af',
+                                                    color: generalAiTutorMode === mode ? '#86efac' : toolPanelColors.ai,
                                                 }}
                                             >
                                                 {appLang === 'fr'
@@ -16605,6 +16624,8 @@ print(result)
                                             </button>
                                         ))}
                                     </div>
+                                    </div>
+                                    )}
                                     {latestGeneralAiMastery && (
                                         <p className="mt-1 text-[10px] text-gray-500">
                                             {appLang === 'fr' ? 'Suivi' : 'Mastery'}: <span className="font-bold text-gray-300">{latestGeneralAiMastery[0]}</span> · {latestGeneralAiMastery[1].views} {appLang === 'fr' ? 'interactions' : 'interactions'}
@@ -16631,16 +16652,47 @@ print(result)
                                             <p className="text-[11px] leading-relaxed text-gray-400">
                                                 {t('generalAi.onlineKeyDesc', appLang)}
                                             </p>
+                                            <select
+                                                value={apiProvider}
+                                                onChange={(event) => {
+                                                    const provider = event.target.value as OnlineAiProvider;
+                                                    setApiProvider(provider);
+                                                    setApiModel(provider === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini');
+                                                }}
+                                                className="w-full rounded-xl border bg-[#050c18] px-3 py-2 text-xs text-white focus:outline-none"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.28) }}
+                                            >
+                                                <option value="gemini">Gemini</option>
+                                                <option value="openai_compatible">OpenAI-compatible API</option>
+                                            </select>
                                             <input
-                                                type="text"
+                                                type="password"
                                                 value={apiKey}
                                                 onChange={(e) => setApiKey(e.target.value)}
                                                 placeholder={t('generalAi.geminiPlaceholder', appLang)}
                                                 className="w-full rounded-xl border bg-[#050c18] px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
                                                 style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.28) }}
                                             />
+                                            {apiProvider === 'openai_compatible' && (
+                                                <input
+                                                    type="url"
+                                                    value={apiEndpoint}
+                                                    onChange={(event) => setApiEndpoint(event.target.value)}
+                                                    placeholder="https://api.openai.com/v1"
+                                                    className="w-full rounded-xl border bg-[#050c18] px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
+                                                    style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.28) }}
+                                                />
+                                            )}
+                                            <input
+                                                type="text"
+                                                value={apiModel}
+                                                onChange={(event) => setApiModel(event.target.value)}
+                                                placeholder={apiProvider === 'gemini' ? 'gemini-2.0-flash' : 'Model name'}
+                                                className="w-full rounded-xl border bg-[#050c18] px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
+                                                style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.28) }}
+                                            />
                                             <button
-                                                onClick={() => localStorage.setItem('gemini_api_key', apiKey)}
+                                                onClick={() => saveOnlineAiConfig({ provider: apiProvider, apiKey, endpoint: apiEndpoint, model: apiModel })}
                                                 className="rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
                                                 style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.12), color: toolPanelColors.ai }}
                                             >
@@ -16650,12 +16702,12 @@ print(result)
                                     )}
                                 </div>
 
-                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
-                                    {generalAiMessages.map(message => (
+                                <div className="min-h-0 min-w-0 flex-1 space-y-3 overflow-y-auto overflow-x-hidden pr-1" style={{ touchAction: 'pan-y' }}>
+                                    {generalAiMessages.slice(-80).map(message => (
                                         <div
                                             key={message.id}
                                             data-general-ai-message={message.role}
-                                            className="rounded-2xl border p-3"
+                                            className="min-w-0 overflow-hidden rounded-2xl border p-3 break-words"
                                             style={{
                                                 borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
                                                 backgroundColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.08) : 'rgba(8, 18, 34, 0.55)',
@@ -17903,13 +17955,25 @@ print(result)
                         )}
                         {showModal === 'api_key' && (
                             <div className="py-2">
-                                <h2 className="text-lg font-bold mb-4 text-center">API Key</h2>
+                                <h2 className="text-lg font-bold mb-4 text-center">AI API</h2>
                                 <div className="mb-6">
                                     <label className="block text-sm font-bold mb-2 text-gray-300">
-                                        <Key size={14} className="inline mr-1" /> Gemini API Key
+                                        <Key size={14} className="inline mr-1" /> AI API configuration
                                     </label>
+                                    <select
+                                        value={apiProvider}
+                                        onChange={(event) => {
+                                            const provider = event.target.value as OnlineAiProvider;
+                                            setApiProvider(provider);
+                                            setApiModel(provider === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini');
+                                        }}
+                                        className="mb-2 w-full rounded-xl border border-[#1d2d44] bg-[#0d1b2a] px-4 py-3 text-sm text-white"
+                                    >
+                                        <option value="gemini">Gemini</option>
+                                        <option value="openai_compatible">OpenAI-compatible API</option>
+                                    </select>
                                     <input
-                                        type="text"
+                                        type="password"
                                         value={apiKey}
                                         onChange={(e) => setApiKey(e.target.value)}
                                         placeholder="Paste your API key here..."
@@ -17918,22 +17982,19 @@ print(result)
                                         onFocus={(e) => e.target.style.borderColor = countRowColors.count}
                                         onBlur={(e) => e.target.style.borderColor = '#1d2d44'}
                                     />
-                                    <p className="text-[10px] text-gray-400 mt-2 leading-relaxed">
-                                        Get your API key from{' '}
-                                        <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="underline inline-flex items-center gap-0.5" style={{ color: countRowColors.count }}>
-                                            Google AI Studio <ExternalLink size={10} />
-                                        </a>
-                                    </p>
+                                    {apiProvider === 'openai_compatible' && <input type="url" value={apiEndpoint} onChange={event => setApiEndpoint(event.target.value)} placeholder="API base URL, for example https://api.openai.com/v1" className="mt-2 w-full rounded-xl border border-[#1d2d44] bg-[#0d1b2a] px-4 py-3 text-sm text-white" />}
+                                    <input type="text" value={apiModel} onChange={event => setApiModel(event.target.value)} placeholder="Model name" className="mt-2 w-full rounded-xl border border-[#1d2d44] bg-[#0d1b2a] px-4 py-3 text-sm text-white" />
+                                    <p className="mt-2 text-[10px] leading-relaxed text-gray-400">Keys stay in this browser. OpenAI-compatible providers must support the <code>/chat/completions</code> format.</p>
                                 </div>
                                 <button
                                     onClick={() => {
-                                        localStorage.setItem('gemini_api_key', apiKey);
+                                        saveOnlineAiConfig({ provider: apiProvider, apiKey, endpoint: apiEndpoint, model: apiModel });
                                         setShowModal('none');
                                     }}
                                     className="w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:brightness-125"
                                     style={{ backgroundColor: countRowColors.count }}
                                 >
-                                    <Check size={18} /> Save API Key
+                                    <Check size={18} /> Save AI API
                                 </button>
                             </div>
                         )}

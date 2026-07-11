@@ -53,6 +53,102 @@ export const getPythonReferenceCounts = () => ({
 
 export const answerPythonReferenceQuestion = (question: string): string | null => answerGeneralPythonQuestion(question);
 
+const splitSignatureParameters = (signature: string): { parameters: string[]; required: number; variadic: boolean } | null => {
+  const open = signature.indexOf('(');
+  const close = signature.lastIndexOf(')');
+  if (open < 0 || close < open) return null;
+  const raw = signature.slice(open + 1, close).trim();
+  if (!raw) return { parameters: [], required: 0, variadic: false };
+  const optionalStart = raw.indexOf('[');
+  const flattened = raw.replace(/[\[\]]/g, '');
+  const parameters = flattened.split(',').map(value => value.trim()).filter(Boolean);
+  const required = parameters.filter(parameter => {
+    const position = raw.indexOf(parameter);
+    return parameter !== '...' && !parameter.startsWith('*') && !parameter.includes('=') && (optionalStart < 0 || position < optionalStart);
+  }).length;
+  return { parameters, required, variadic: parameters.some(parameter => parameter === '...' || parameter.startsWith('*')) };
+};
+
+export const answerPythonCallableSignatureQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  if (!/\b(?:how many|number of|which|what|order|first|arguments?|parameters?|takes?|accepts?|combien|nombre|ordre|arguments?|param[eè]tres?)\b/i.test(question)) return null;
+  const explicitCalls = [...question.matchAll(/\b([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)\s*\(\s*\)/g)].map(match => match[1]);
+  const dottedNames = [...question.matchAll(/\b([A-Za-z_]\w*\.[A-Za-z_]\w*)\b/g)].map(match => match[1]);
+  const stopWords = new Set(['how', 'many', 'number', 'of', 'arguments', 'argument', 'parameters', 'parameter', 'does', 'do', 'take', 'takes', 'accept', 'accepts', 'what', 'is', 'the', 'order', 'in', 'for', 'first', 'combien', 'nombre', 'de', 'des', 'ordre', 'prend', 'accepte']);
+  const plainNames = [...question.matchAll(/\b([A-Za-z_]\w*)\b/g)].map(match => match[1]).filter(value => !stopWords.has(value.toLowerCase()));
+  const candidates = [...new Set([...explicitCalls, ...dottedNames, ...plainNames])];
+  const subject = candidates.find(candidate => {
+    const candidateResolution = resolvePythonKnowledge(candidate, typeFromPrefix(candidate));
+    return Boolean(candidateResolution.record || candidateResolution.alternatives.length);
+  });
+  if (!subject) return null;
+  const resolution = resolvePythonKnowledge(subject, typeFromPrefix(subject));
+  if (!resolution.record) {
+    if (!resolution.alternatives.length) return null;
+    const fr = language === 'fr';
+    return [
+      fr ? `**Précisez le type pour \`${subject}\`**` : `**Specify the owner type for \`${subject}\`**`,
+      fr ? 'Plusieurs API portent ce nom :' : 'Several Python APIs use this name:',
+      ...resolution.alternatives.slice(0, 8).map((record, index) => `${index + 1}. \`${record.signature}\``),
+    ].join('\n\n');
+  }
+  const record = resolution.record;
+  const parsed = splitSignatureParameters(record.signature);
+  if (!parsed) return null;
+  const fr = language === 'fr';
+  const optional = Math.max(0, parsed.parameters.filter(parameter => parameter !== '...' && !parameter.startsWith('*')).length - parsed.required);
+  const countText = parsed.variadic
+    ? (fr ? `au moins ${parsed.required}, puis des arguments supplémentaires` : `at least ${parsed.required}, with additional arguments allowed`)
+    : optional > 0
+      ? (fr ? `${parsed.required} obligatoire(s) et ${optional} facultatif(s)` : `${parsed.required} required and ${optional} optional`)
+      : (fr ? `exactement ${parsed.required}` : `exactly ${parsed.required}`);
+  return [
+    `**${fr ? 'Signature et nombre d’arguments' : 'Signature and argument count'}: ${record.canonicalName}**`,
+    `\`${record.signature}\``,
+    `${fr ? 'Nombre accepté' : 'Accepted count'}: **${countText}**.`,
+    `**${fr ? 'Ordre des arguments' : 'Argument order'}**`,
+    ...(parsed.parameters.length
+      ? parsed.parameters.map((parameter, index) => `${index + 1}. \`${parameter}\`${parameter === '...' ? (fr ? ' — autres itérables/arguments positionnels' : ' — additional iterables/positional arguments') : ''}`)
+      : [fr ? 'Aucun argument.' : 'No arguments.']),
+    `**${fr ? 'Règle pratique' : 'Practical rule'}**\n${record.canonicalName === 'map'
+      ? (fr ? 'Passez d’abord la fonction, puis un ou plusieurs itérables. La fonction reçoit un élément de chaque itérable à chaque étape.' : 'Pass the function first, then one or more iterables. The function receives one item from each iterable per step.')
+      : localizedKnowledgeSummary(record, language)}`,
+  ].join('\n\n');
+};
+
+export const answerPythonEvaluationAndScopeQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const fr = language === 'fr';
+  if (/\b(?:scope|global|local|nonlocal|legb|variable resolution|which variable|port[eé]e|globale?|locale?|r[eé]solution des noms)\b/i.test(question)) {
+    return [
+      fr ? '**Résolution des variables : règle LEGB**' : '**Variable resolution: the LEGB rule**',
+      fr ? 'Python cherche un nom dans cet ordre :' : 'Python looks up a name in this order:',
+      `1. **Local** — ${fr ? 'paramètres et affectations de la fonction courante' : 'parameters and assignments in the current function'}.`,
+      `2. **Enclosing** — ${fr ? 'fonctions englobantes, important pour les fermetures' : 'enclosing functions, important for closures'}.`,
+      `3. **Global** — ${fr ? 'espace de noms du module' : 'the module namespace'}.`,
+      `4. **Built-ins** — \`len\`, \`sum\`, \`print\`, ${fr ? 'etc.' : 'and so on'}.`,
+      fr ? '`global name` permet d’affecter le nom du module ; `nonlocal name` permet d’affecter le nom d’une fonction englobante. Sans ces mots-clés, une affectation crée normalement un nom local.' : '`global name` allows assignment to the module name; `nonlocal name` allows assignment to an enclosing-function name. Without them, assignment normally creates a local name.',
+    ].join('\n\n');
+  }
+  if (!/\b(?:order of (?:operations|evaluation|execution)|evaluation order|lambda|list comprehension|dict comprehension|set comprehension|ordre d['’](?:ex[eé]cution|[eé]valuation)|compr[eé]hension)\b/i.test(question)) return null;
+  if (/\blambda\b/i.test(question)) {
+    return [
+      fr ? '**Ordre d’évaluation d’une lambda**' : '**Lambda evaluation order**',
+      `1. ${fr ? 'Python crée la fonction sans exécuter son expression.' : 'Python creates the function without running its expression.'}`,
+      `2. ${fr ? 'Lors de l’appel, les expressions des arguments sont évaluées de gauche à droite.' : 'At call time, argument expressions are evaluated left to right.'}`,
+      `3. ${fr ? 'Les paramètres reçoivent les valeurs, puis l’unique expression après `:` est évaluée.' : 'Parameters receive the values, then the single expression after `:` is evaluated.'}`,
+      `4. ${fr ? 'Le résultat de cette expression est renvoyé automatiquement.' : 'That expression result is returned automatically.'}`,
+      '```python\ndouble = lambda number: number * 2\nresult = double(5)  # 10\n```',
+    ].join('\n\n');
+  }
+  return [
+    fr ? '**Ordre d’une compréhension**' : '**Comprehension evaluation order**',
+    `1. ${fr ? 'Évaluez l’itérable du premier `for`.' : 'Evaluate the first `for` iterable.'}`,
+    `2. ${fr ? 'Liez la variable de boucle à chaque élément.' : 'Bind the loop variable to each item.'}`,
+    `3. ${fr ? 'Évaluez les clauses `for` suivantes puis les filtres `if`, de gauche à droite.' : 'Evaluate later `for` clauses and then `if` filters, left to right.'}`,
+    `4. ${fr ? 'Si les filtres réussissent, évaluez l’expression de sortie (ou la paire clé/valeur).' : 'When filters pass, evaluate the output expression (or key/value pair).'}`,
+    '```python\nsquares = [number ** 2 for number in range(6) if number % 2 == 0]\n# [0, 4, 16]\n```',
+  ].join('\n\n');
+};
+
 export const isKnowledgeFollowUpQuestion = (question: string): boolean => {
   const trimmed = question.trim();
   if (/```|(^|\n)\s*(?:def |class |for |while |if |import |from |return |yield |[A-Za-z_]\w*\s*=)/m.test(trimmed)) return false;

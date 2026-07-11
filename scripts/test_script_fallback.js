@@ -124,6 +124,8 @@ const mixedExceptionGrader = AUTO_GRADERS[944];
 const attrExceptionGrader = AUTO_GRADERS[1571];
 const pureExceptionGrader = AUTO_GRADERS[948];
 const addKeyValuePairGrader = AUTO_GRADERS[797];
+const countDigitGrader = AUTO_GRADERS[550];
+const sumValuesGrader = AUTO_GRADERS[1211];
 
 const scriptAnswer = `
 result = number ** 2
@@ -356,6 +358,40 @@ def add_key_value_pair(dic):
 const addKeyValuePairInvalidResult = runAutoGrade(buildAutoGradeScript(addKeyValuePairGrader, addKeyValuePairInvalid));
 if (addKeyValuePairInvalidResult.passed) {
   throw new Error(`Expected invalid assignment-in-return answer to fail, got: ${JSON.stringify(addKeyValuePairInvalidResult)}`);
+}
+
+const countDigitAlternative = `
+def count_digit(num, digit):
+    return str(num).count(str(digit))
+
+num = 15443674
+print(count_digit(num, 4))
+`;
+const countDigitAlternativeResult = runAutoGrade(buildAutoGradeScript(countDigitGrader, countDigitAlternative));
+if (!countDigitAlternativeResult.passed) {
+  throw new Error(`Expected the two-argument count_digit solution to pass, got: ${JSON.stringify(countDigitAlternativeResult)}`);
+}
+
+const sumValuesAlternative = `
+def sum_values():
+    dic = {"a": 1, "b": 3}
+    return sum(dic.values())
+
+print(sum_values())
+`;
+const sumValuesAlternativeResult = runAutoGrade(buildAutoGradeScript(sumValuesGrader, sumValuesAlternative));
+if (!sumValuesAlternativeResult.passed) {
+  throw new Error(`Expected guarded fixed-data alternatives to pass, got: ${JSON.stringify(sumValuesAlternativeResult)}`);
+}
+
+const sumValuesWrongOperation = `
+def sum_values():
+    dic = {"a": 1, "b": 3}
+    return len(dic)
+`;
+const sumValuesWrongOperationResult = runAutoGrade(buildAutoGradeScript(sumValuesGrader, sumValuesWrongOperation));
+if (sumValuesWrongOperationResult.passed) {
+  throw new Error(`Expected a fixed-data answer missing sum()/values() to fail, got: ${JSON.stringify(sumValuesWrongOperationResult)}`);
 }
 
 console.log('Script fallback smoke test passed.');

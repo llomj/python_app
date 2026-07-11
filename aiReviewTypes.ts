@@ -27,7 +27,7 @@ export interface AiReviewResult {
     confidence: number;
     explanation: string;
     suggestedFix?: string;
-    source: 'diagnostic' | 'offline_model' | 'gemini' | 'ollama';
+    source: 'diagnostic' | 'offline_model' | 'gemini' | 'online_api' | 'ollama';
 }
 
 export interface OfflineAiState {

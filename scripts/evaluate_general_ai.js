@@ -87,6 +87,19 @@ try {
     failures.push('count ambiguity did not produce a useful clarification');
   }
 
+  const anySignature = knowledge.answerPythonCallableSignatureQuestion('how many arguments does any() take?', 'en') || '';
+  const mapSignature = knowledge.answerPythonCallableSignatureQuestion('what is the order of arguments in map()?', 'en') || '';
+  const countSignature = knowledge.answerPythonCallableSignatureQuestion('how many arguments does str.count take?', 'en') || '';
+  const lambdaOrder = knowledge.answerPythonEvaluationAndScopeQuestion('what is the order of evaluation for lambda?', 'en') || '';
+  const comprehensionOrder = knowledge.answerPythonEvaluationAndScopeQuestion('explain list comprehension order of operations', 'en') || '';
+  const scopeOrder = knowledge.answerPythonEvaluationAndScopeQuestion('which local or global variable does Python use first?', 'en') || '';
+  if (!anySignature.includes('exactly 1') || !anySignature.includes('any(iterable)')) failures.push('any() argument-count answer failed');
+  if (!mapSignature.includes('at least 2') || !mapSignature.includes('function first')) failures.push('map() argument-order answer failed');
+  if (!countSignature.includes('str.count(sub[, start[, end]])') || !countSignature.includes('1 required and 2 optional')) failures.push('str.count() optional-argument answer failed');
+  if (!lambdaOrder.includes('single expression after `:`') || !lambdaOrder.includes('returned automatically')) failures.push('Lambda evaluation-order answer failed');
+  if (!comprehensionOrder.includes('first `for` iterable') || !comprehensionOrder.includes('`if` filters')) failures.push('Comprehension evaluation-order answer failed');
+  if (!scopeOrder.includes('LEGB') || !scopeOrder.includes('Enclosing') || !scopeOrder.includes('Built-ins')) failures.push('Variable-scope answer failed');
+
   const comparisonCases = [
     ['sort vs sorted', ['Sorts the list in place', 'Returns a new sorted list', 'Mutates object']],
     ['difference between list and tuple', ['list', 'tuple', 'Criterion']],
