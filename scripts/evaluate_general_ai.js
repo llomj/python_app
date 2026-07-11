@@ -217,6 +217,8 @@ try {
     ['Compare these solutions:\n```python\nfor a in values:\n    for b in values:\n        print(a, b)\n```\n```python\nfor value in values:\n    print(value)\n```', 'code_comparison'],
     ['How should I organize imports across multiple Python modules?', 'module_project'],
     ['Audit these files:\n```python\n# file: main.py\nfrom helpers import greet\nprint(greet("Noll"))\n```\n```python\n# file: helpers.py\ndef greet(name):\n    return f"Hi {name}"\n```', 'module_project'],
+    ['Show my learning progress and weak areas', 'learning_progress'],
+    ['What am I misunderstanding? This returns None:\n```python\nitems = [1, 2]\nresult = items.append(3)\n```', 'misconception'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -358,6 +360,16 @@ try {
   const projectAudit = advanced.answerPythonModuleProjectRequest('Audit these modules:\n```python\n# file: main.py\nfrom helpers import greet\nprint(greet("Noll"))\n```\n```python\n# file: helpers.py\ndef greet(name):\n    return f"Hi {name}"\n```', 'en') || '';
   const missingImportAudit = advanced.answerPythonModuleProjectRequest('Check imports:\n```python\n# file: main.py\nfrom helpers import missing_name\n```\n```python\n# file: helpers.py\ndef available():\n    return True\n```', 'en') || '';
   const circularAudit = advanced.answerPythonModuleProjectRequest('Analyse ces fichiers multiples :\n```python\n# file: first.py\nimport second\n```\n```python\n# file: second.py\nimport first\n```', 'fr') || '';
+  const mutationMisconception = advanced.answerPythonMisconceptionRequest('Why does this return None?\n```python\nitems = [1, 2]\nresult = items.append(3)\n```', 'en') || '';
+  const identityMisconception = advanced.answerPythonMisconceptionRequest('Quelle est mon erreur de compréhension ?\n```python\nvalue = 1000\nprint(value is 1000)\n```', 'fr') || '';
+  const printMisconception = advanced.answerPythonMisconceptionRequest('What am I misunderstanding?\n```python\ndef double(value):\n    print(value * 2)\n```', 'en') || '';
+  const progressReport = advanced.answerGeneralAiProgressRequest('Show my learning progress', {
+    list: { views: 5, beginner: 1, intermediate: 2, expert: 2, lastSeen: 3 },
+    dictionary: { views: 2, beginner: 1, intermediate: 1, expert: 0, lastSeen: 2 },
+  }, {
+    'list:slicing': { count: 2, lastSeen: 4, lastMistake: 'slice stop is excluded' },
+  }, 'en') || '';
+  const frenchProgress = advanced.answerGeneralAiProgressRequest('Montre mes progrès et mes points faibles', {}, {}, 'fr') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
@@ -374,6 +386,11 @@ try {
   if (!projectAudit.includes('Multi-file Python project audit') || !projectAudit.includes('`main` → `helpers`') || !projectAudit.includes('add a `main()` function')) failures.push('Multi-file project audit failed');
   if (!missingImportAudit.includes('missing_name') || !missingImportAudit.includes('no module-level definition')) failures.push('Missing imported symbol audit failed');
   if (!circularAudit.includes('Audit du projet Python multi-fichiers') || !circularAudit.includes('Dépendance circulaire détectée')) failures.push('French circular-import audit failed');
+  if (!mutationMisconception.includes('In-place mutation versus return value') || !mutationMisconception.includes('items.append(3)') || !mutationMisconception.includes('result = items')) failures.push('Mutation misconception diagnosis failed');
+  if (!identityMisconception.includes('Identité contre égalité') || !identityMisconception.includes('value == 1000')) failures.push('French identity misconception diagnosis failed');
+  if (!printMisconception.includes('Display without a function result') || !printMisconception.includes('return value * 2')) failures.push('Print-versus-return misconception diagnosis failed');
+  if (!progressReport.includes('Python learning progress report') || !progressReport.includes('7 interactions') || !progressReport.includes('slice stop is excluded') || !progressReport.includes('exposure, not proven mastery')) failures.push('Learning-progress report failed');
+  if (!frenchProgress.includes('Bilan d’apprentissage Python') || !frenchProgress.includes('Aucune activité enregistrée') || !frenchProgress.includes('pas une maîtrise prouvée')) failures.push('Empty French progress report failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';

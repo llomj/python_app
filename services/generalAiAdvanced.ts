@@ -444,3 +444,95 @@ export const answerPythonModuleProjectRequest = (question: string, language: Adv
     `**${fr ? 'Limite de l’audit' : 'Audit limit'}**\n${fr ? 'Seuls les fichiers collés sont analysés. Les bibliothèques installées, les imports dynamiques et les chemins configurés à l’exécution ne sont pas vérifiés.' : 'Only pasted files are analyzed. Installed libraries, dynamic imports, and runtime path configuration are not verified.'}`,
   ].join('\n\n');
 };
+
+export const answerPythonMisconceptionRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:misconception|what am i misunderstanding|common mistake|why (?:is|does|do|am|are).*(?:none|wrong|change)|returns? none|unexpected behavior|conceptual error|malentendu|qu['’]est-ce que je comprends mal|erreur de compr[eé]hension|pourquoi.*(?:none|faux|change)|comportement inattendu)\b/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  const fr = language === 'fr';
+  const findings: Array<{ title: string; explanation: string; correction: string }> = [];
+  const inPlaceAssignment = code.match(/\b([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\.(append|extend|insert|sort|reverse|remove|clear|update|add)\s*\(([^\n)]*)\)/);
+  if (inPlaceAssignment) {
+    findings.push({
+      title: fr ? 'Modification sur place contre valeur de retour' : 'In-place mutation versus return value',
+      explanation: fr ? 'La méthode modifie l’objet existant et renvoie `None`. Affecter son résultat remplace donc votre variable par `None`.' : 'The method changes the existing object and returns `None`. Assigning its result therefore stores `None` in your variable.',
+      correction: `${inPlaceAssignment[2]}.${inPlaceAssignment[3]}(${inPlaceAssignment[4]})\n${inPlaceAssignment[1]} = ${inPlaceAssignment[2]}`,
+    });
+  }
+  if (/\breturn\s+print\s*\(/.test(code)) {
+    findings.push({
+      title: fr ? '`print()` contre `return`' : '`print()` versus `return`',
+      explanation: fr ? '`print()` affiche une valeur mais renvoie `None`. Une fonction doit utiliser `return valeur` si l’appelant a besoin du résultat.' : '`print()` displays a value but returns `None`. A function must use `return value` when its caller needs the result.',
+      correction: 'def calculate(value):\n    return value * 2\n\nprint(calculate(4))',
+    });
+  } else if (/\bdef\s+\w+\([^)]*\):[\s\S]*?\bprint\s*\(/.test(code) && !/\breturn\b/.test(code)) {
+    findings.push({
+      title: fr ? 'Affichage sans résultat de fonction' : 'Display without a function result',
+      explanation: fr ? 'La fonction affiche quelque chose, mais un appel comme `result = fonction()` reçoit `None` car aucun `return` n’est exécuté.' : 'The function displays something, but a call such as `result = function()` receives `None` because no `return` executes.',
+      correction: 'def calculate(value):\n    return value * 2',
+    });
+  }
+  const identityComparison = code.match(/\b([A-Za-z_]\w*)\s+is\s+((?:["'][^"']*["'])|[-+]?\d+(?:\.\d+)?)/);
+  if (identityComparison) {
+    findings.push({
+      title: fr ? 'Identité contre égalité' : 'Identity versus equality',
+      explanation: fr ? '`is` vérifie si deux références désignent le même objet. Utilisez `==` pour comparer des chaînes, nombres, listes ou autres valeurs.' : '`is` checks whether two references point to the same object. Use `==` to compare strings, numbers, lists, and other values.',
+      correction: `if ${identityComparison[1]} == ${identityComparison[2]}:\n    print("equal value")`,
+    });
+  }
+  if (/def\s+\w+\([^)]*=\s*(?:\[|\{|set\()/.test(code)) {
+    findings.push({
+      title: fr ? 'Argument par défaut mutable' : 'Mutable default argument',
+      explanation: fr ? 'La même collection par défaut est réutilisée entre les appels, ce qui conserve un état inattendu.' : 'The same default collection is reused across calls, which preserves unexpected state.',
+      correction: 'def collect(item, values=None):\n    if values is None:\n        values = []\n    values.append(item)\n    return values',
+    });
+  }
+  if (/range\s*\(\s*len\s*\([^)]+\)\s*\+\s*1\s*\)/.test(code)) {
+    findings.push({
+      title: fr ? 'Limite supérieure hors plage' : 'Off-by-one upper bound',
+      explanation: fr ? 'Le dernier indice valide vaut `len(sequence) - 1`. Inclure `len(sequence)` provoque un `IndexError`.' : 'The final valid index is `len(sequence) - 1`. Including `len(sequence)` causes an `IndexError`.',
+      correction: 'for index in range(len(items)):\n    print(items[index])',
+    });
+  }
+  const alias = code.match(/^\s*([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\s*$/m);
+  if (alias && new RegExp(`\\b${alias[1]}\\.(?:append|extend|sort|reverse|update|add)\\s*\\(`).test(code)) {
+    findings.push({
+      title: fr ? 'Alias contre copie' : 'Alias versus copy',
+      explanation: fr ? `\`${alias[1]} = ${alias[2]}\` ne copie pas l’objet ; les deux noms désignent la même collection.` : `\`${alias[1]} = ${alias[2]}\` does not copy the object; both names refer to the same collection.`,
+      correction: `${alias[1]} = ${alias[2]}.copy()`,
+    });
+  }
+  if (!findings.length) return null;
+  return [
+    `**${fr ? 'Diagnostic du malentendu Python' : 'Python misconception diagnosis'}**`,
+    ...findings.map((finding, index) => `${index + 1}. **${finding.title}**\n${finding.explanation}\n\n\`\`\`python\n${finding.correction}\n\`\`\``),
+    `**${fr ? 'Comment vérifier' : 'How to verify'}**\n${fr ? 'Affichez temporairement la valeur et son type avec `print(repr(value), type(value))`, puis testez au moins deux appels consécutifs.' : 'Temporarily inspect the value and type with `print(repr(value), type(value))`, then test at least two consecutive calls.'}`,
+  ].join('\n\n');
+};
+
+export const answerGeneralAiProgressRequest = (
+  question: string,
+  mastery: TutorMasteryProfile,
+  mistakes: GeneralAiMistakeProfile,
+  language: AdvancedAiLanguage,
+): string | null => {
+  if (!/\b(?:my progress|learning progress|progress report|weak areas?|strengths?|what should i revise|mastery report|mes progr[eè]s|rapport de progression|points? faibles?|points? forts?|que dois-je r[eé]viser|bilan d['’]apprentissage)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  const masteryEntries = Object.entries(mastery).sort(([, left], [, right]) => right.views - left.views);
+  const mistakeEntries = Object.entries(mistakes).sort(([, left], [, right]) => right.count - left.count || right.lastSeen - left.lastSeen);
+  const totalInteractions = masteryEntries.reduce((sum, [, entry]) => sum + entry.views, 0);
+  const totals = masteryEntries.reduce((sum, [, entry]) => ({
+    beginner: sum.beginner + entry.beginner,
+    intermediate: sum.intermediate + entry.intermediate,
+    expert: sum.expert + entry.expert,
+  }), { beginner: 0, intermediate: 0, expert: 0 });
+  const nextFocus = mistakeEntries[0]?.[1].lastMistake || masteryEntries.at(-1)?.[0] || (fr ? 'fondamentaux Python' : 'Python fundamentals');
+  return [
+    `**${fr ? 'Bilan d’apprentissage Python' : 'Python learning progress report'}**`,
+    `1. **${fr ? 'Activité enregistrée' : 'Recorded activity'}**\n${totalInteractions} ${fr ? 'interactions sur' : 'interactions across'} ${masteryEntries.length} ${fr ? 'sujets' : 'topics'}.`,
+    `2. **${fr ? 'Niveaux d’explication utilisés' : 'Explanation levels used'}**\n${fr ? 'débutant' : 'beginner'}=${totals.beginner}, ${fr ? 'intermédiaire' : 'intermediate'}=${totals.intermediate}, expert=${totals.expert}.`,
+    `3. **${fr ? 'Sujets les plus étudiés' : 'Most-studied topics'}**\n${masteryEntries.length ? masteryEntries.slice(0, 5).map(([subject, entry], index) => `${index + 1}. \`${subject}\` — ${entry.views}`).join('\n') : (fr ? 'Aucune activité enregistrée.' : 'No activity recorded yet.')}`,
+    `4. **${fr ? 'Points faibles enregistrés' : 'Recorded weak points'}**\n${mistakeEntries.length ? mistakeEntries.slice(0, 5).map(([, entry], index) => `${index + 1}. ${entry.lastMistake} — ${entry.count}×`).join('\n') : (fr ? 'Aucune erreur de quiz enregistrée.' : 'No quiz mistakes recorded yet.')}`,
+    `5. **${fr ? 'Prochaine priorité' : 'Next priority'}**\n${nextFocus}. ${fr ? 'Demandez une explication, un exemple, puis un quiz ciblé sur ce point.' : 'Ask for an explanation, one example, then a targeted quiz on this point.'}`,
+    `**${fr ? 'Interprétation correcte' : 'Correct interpretation'}**\n${fr ? 'Les interactions mesurent l’exposition, pas une maîtrise prouvée. Les erreurs proviennent uniquement des quiz évalués dans cette application.' : 'Interactions measure exposure, not proven mastery. Mistakes come only from quizzes evaluated in this app.'}`,
+  ].join('\n\n');
+};

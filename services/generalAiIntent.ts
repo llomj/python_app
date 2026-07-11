@@ -8,6 +8,8 @@ export type GeneralAiIntent =
   | 'code_comparison'
   | 'complexity_analysis'
   | 'module_project'
+  | 'misconception'
+  | 'learning_progress'
   | 'learning_path'
   | 'contract_search'
   | 'comparison'
@@ -54,6 +56,13 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:modules?|imports?|packages?|multi[- ]?file|project structure|circular import|relative import|absolute import|__init__|__main__|fichiers? multiples?|structure (?:du |de )?projet|importation circulaire|importation relative|paquets?)\b/i.test(value)) {
     return { intent: 'module_project', confidence: 0.97, reason: 'Python module, import, package, or multi-file request detected' };
+  }
+  if (/\b(?:my progress|learning progress|progress report|weak areas?|strengths?|what should i revise|mastery report|mes progr[eè]s|rapport de progression|points? faibles?|points? forts?|que dois-je r[eé]viser|bilan d['’]apprentissage)\b/i.test(value)) {
+    return { intent: 'learning_progress', confidence: 0.99, reason: 'Personal learning-progress request detected' };
+  }
+  if (/\b(?:misconception|what am i misunderstanding|common mistake|conceptual error|malentendu|qu['’]est-ce que je comprends mal|erreur de compr[eé]hension)\b/i.test(value)
+    || (containsCode(value) && /\b(?:returns? none|unexpected behavior|comportement inattendu)\b/i.test(value))) {
+    return { intent: 'misconception', confidence: 0.97, reason: 'Python misconception-diagnosis request detected' };
   }
   if (containsCode(value) && /\b(?:generate|create|write|suggest|show|make|g[eé]n[eè]re|cr[eé]e|[eé]cris|propose|montre).{0,25}\b(?:tests?|test cases?|edge cases?|cas de test|cas limites?)\b/i.test(value)) {
     return { intent: 'test_generation', confidence: 0.99, reason: 'Test-case generation request detected' };
