@@ -16095,13 +16095,13 @@ print(result)
                             </button>
                             {showActionPanel && (
                                 <div className="flex justify-center gap-2 sm:gap-3 px-2 pb-3 animate-in fade-in slide-in-from-top-1 duration-200">
-                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description="Info" onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
-                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => setShowModal('solution')} />
-                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description="AI" onClick={handleAiHint} />
-                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => setShowModal('customize')} />
-                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description="Win" onClick={handleMarkSuccess} />
-                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description="Failed" onClick={handleMarkFailed} />
-                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
+                                    <ActionButton icon={<Book size={16} />} iconColor={toolPanelColors.info} description={t('tool.info', appLang)} onClick={() => { setShowModal('instructions'); setModalTab('how'); }} />
+                                    <ActionButton icon={<Lightbulb size={16} />} iconColor={toolPanelColors.solution} description={t('tool.sol', appLang)} onClick={() => setShowModal('solution')} />
+                                    <ActionButton icon={<Bot size={16} />} iconColor={toolPanelColors.ai} description={t('tool.ai', appLang)} onClick={handleAiHint} />
+                                    <ActionButton icon={<SlidersHorizontal size={16} />} iconColor={toolPanelColors.custom} description={t('tool.custom', appLang)} onClick={() => setShowModal('customize')} />
+                                    <ActionButton icon={<CheckCircle size={16} />} iconColor={toolPanelColors.win} description={t('tool.win', appLang)} onClick={handleMarkSuccess} />
+                                    <ActionButton icon={<XCircle size={16} />} iconColor={toolPanelColors.failed} description={t('tool.failed', appLang)} onClick={handleMarkFailed} />
+                                    <ActionButton icon={<RotateCcw size={16} />} iconColor={toolPanelColors.reset} description={t('tool.reset', appLang)} onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} />
                                 </div>
                             )}
                         </div>
@@ -16925,17 +16925,17 @@ print(result)
                                                     className="mb-3 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em]"
                                                     style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), color: toolPanelColors.toggleText }}
                                                 >
-                                                    <span>Hide Tools</span>
+                                                    <span>{t('output.hideTools', appLang)}</span>
                                                     <ChevronDown size={14} />
                                                 </div>
                                                 <div className="flex flex-nowrap justify-center gap-1 overflow-x-auto">
-                                                    <ActionButton icon={<Book size={13} />} iconColor={toolPanelColors.info} description="Info" onClick={() => undefined} />
-                                                    <ActionButton icon={<Lightbulb size={13} />} iconColor={toolPanelColors.solution} description="Sol" onClick={() => undefined} />
-                                                    <ActionButton icon={<Bot size={13} />} iconColor={toolPanelColors.ai} description="AI" onClick={() => undefined} />
-                                                    <ActionButton icon={<SlidersHorizontal size={13} />} iconColor={toolPanelColors.custom} description="Custom" onClick={() => undefined} />
-                                                    <ActionButton icon={<CheckCircle size={13} />} iconColor={toolPanelColors.win} description="Win" onClick={() => undefined} />
-                                                    <ActionButton icon={<XCircle size={13} />} iconColor={toolPanelColors.failed} description="Failed" onClick={() => undefined} />
-                                                    <ActionButton icon={<RotateCcw size={13} />} iconColor={toolPanelColors.reset} description="Reset" onClick={() => undefined} />
+                                                    <ActionButton icon={<Book size={13} />} iconColor={toolPanelColors.info} description={t('tool.info', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<Lightbulb size={13} />} iconColor={toolPanelColors.solution} description={t('tool.sol', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<Bot size={13} />} iconColor={toolPanelColors.ai} description={t('tool.ai', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<SlidersHorizontal size={13} />} iconColor={toolPanelColors.custom} description={t('tool.custom', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<CheckCircle size={13} />} iconColor={toolPanelColors.win} description={t('tool.win', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<XCircle size={13} />} iconColor={toolPanelColors.failed} description={t('tool.failed', appLang)} onClick={() => undefined} />
+                                                    <ActionButton icon={<RotateCcw size={13} />} iconColor={toolPanelColors.reset} description={t('tool.reset', appLang)} onClick={() => undefined} />
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
