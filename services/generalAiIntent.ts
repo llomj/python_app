@@ -13,6 +13,7 @@ export type GeneralAiIntent =
   | 'version_compatibility'
   | 'function_contract'
   | 'test_execution'
+  | 'doctest_execution'
   | 'learning_path'
   | 'contract_search'
   | 'comparison'
@@ -59,6 +60,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (containsCode(value) && /\b(?:function contract|analy[sz]e (?:the )?contract|parameters?,? returns?|input.?output contract|preconditions?|postconditions?|contrat (?:de la )?fonction|analyse le contrat|param[eè]tres?,? retours?|pr[eé]conditions?|postconditions?)\b/i.test(value)) {
     return { intent: 'function_contract', confidence: 0.99, reason: 'Function contract analysis request detected' };
+  }
+  if (containsCode(value) && /(?:doctests?|tests? de documentation|exemples? >>>)/i.test(value) && /(?:>>>|doctests?)/i.test(value)) {
+    return { intent: 'doctest_execution', confidence: 0.99, reason: 'Bounded local doctest request detected' };
   }
   if (containsCode(value) && /\b(?:run|execute|check|verify|lance|ex[eé]cute|v[eé]rifie).{0,20}\b(?:tests?|assertions?)\b/i.test(value)) {
     return { intent: 'test_execution', confidence: 0.99, reason: 'Bounded local assertion-test request detected' };

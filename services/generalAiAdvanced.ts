@@ -656,3 +656,18 @@ export const answerPythonTestExecutionRequest = (question: string, language: Adv
     fr ? 'Le rapport distinguera résultat attendu, résultat réel, réussite et exception.' : 'The report will separate expected value, actual value, pass status, and exceptions.',
   ].join('\n\n');
 };
+
+export const answerPythonDoctestExecutionRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/(?:doctests?|tests? de documentation|exemples? >>>)/i.test(question) || !/>>>/.test(question)) return null;
+  const fr = language === 'fr';
+  const examples = (question.match(/^\s*>>>\s+/gm) || []).length;
+  return [
+    `**${fr ? 'Exécution locale des doctests demandée' : 'Local doctest execution requested'}**`,
+    fr
+      ? `${examples} exemple(s) \`>>>\` détecté(s). Python comparera chaque résultat réel à la sortie écrite dans la docstring.`
+      : `${examples} \`>>>\` example(s) detected. Python will compare each actual result with the output written in the docstring.`,
+    fr
+      ? 'Le rapport conservera les différences exactes produites par le module `doctest`.'
+      : 'The report will preserve the exact differences produced by Python’s `doctest` module.',
+  ].join('\n\n');
+};

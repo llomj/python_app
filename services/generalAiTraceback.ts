@@ -18,6 +18,11 @@ export interface ParsedPythonTraceback {
   errorMessage: string;
   failingFrame: TracebackFrame | null;
   caretDetail: string;
+  exceptionChain: Array<{
+    errorType: string;
+    errorMessage: string;
+    relationship: 'initial' | 'direct_cause' | 'during_handling';
+  }>;
 }
 
 const ERROR_LINE = /^([A-Za-z_][A-Za-z0-9_.]*(?:Error|Exception|Warning))(?::\s*(.*))?$/;
@@ -39,6 +44,25 @@ export const parsePythonTraceback = (text: string): ParsedPythonTraceback | null
   }
   let errorType = 'PythonError';
   let errorMessage = '';
+  const exceptionChain: ParsedPythonTraceback['exceptionChain'] = [];
+  let relationship: ParsedPythonTraceback['exceptionChain'][number]['relationship'] = 'initial';
+  for (const line of lines) {
+    if (/direct cause of the following exception/i.test(line)) {
+      relationship = 'direct_cause';
+      continue;
+    }
+    if (/during handling of the above exception/i.test(line)) {
+      relationship = 'during_handling';
+      continue;
+    }
+    const match = line.trim().match(ERROR_LINE);
+    if (!match) continue;
+    exceptionChain.push({
+      errorType: match[1],
+      errorMessage: match[2]?.trim() || '',
+      relationship: exceptionChain.length ? relationship : 'initial',
+    });
+  }
   for (let index = lines.length - 1; index >= 0; index -= 1) {
     const match = lines[index].trim().match(ERROR_LINE);
     if (match) {
@@ -48,7 +72,26 @@ export const parsePythonTraceback = (text: string): ParsedPythonTraceback | null
     }
   }
   const caretDetail = lines.find(line => /^\s*[~^]+\s*$/.test(line))?.trim() || '';
-  return { frames, errorType, errorMessage, failingFrame: frames.at(-1) || null, caretDetail };
+  return { frames, errorType, errorMessage, failingFrame: frames.at(-1) || null, caretDetail, exceptionChain };
+};
+
+const formatExceptionChain = (parsed: ParsedPythonTraceback, language: GeneralAiTracebackLanguage): string => {
+  if (parsed.exceptionChain.length < 2) return '';
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Chaîne d’exceptions' : 'Exception chain'}**`,
+    ...parsed.exceptionChain.map((item, index) => {
+      const relation = item.relationship === 'direct_cause'
+        ? (fr ? 'cause directe déclarée avec `raise ... from ...`' : 'explicit direct cause from `raise ... from ...`')
+        : item.relationship === 'during_handling'
+          ? (fr ? 'levée pendant le traitement de l’exception précédente' : 'raised while handling the previous exception')
+          : (fr ? 'exception initiale' : 'initial exception');
+      return `${index + 1}. \`${item.errorType}\`${item.errorMessage ? `: ${item.errorMessage}` : ''} — ${relation}`;
+    }),
+    fr
+      ? 'Corrigez d’abord l’exception initiale lorsqu’elle explique la panne ; l’exception finale peut seulement ajouter du contexte.'
+      : 'Fix the initial exception first when it explains the failure; the final exception may only add context.',
+  ].join('\n');
 };
 
 const likelyCause = (parsed: ParsedPythonTraceback, language: GeneralAiTracebackLanguage): string => {
@@ -121,6 +164,8 @@ export const answerPythonTraceback = (text: string, language: GeneralAiTraceback
   return [
     fr ? '**1. Erreur exacte**' : '**1. Exact error**',
     `\`${parsed.errorType}\`${parsed.errorMessage ? `: ${parsed.errorMessage}` : ''}`,
+    '',
+    formatExceptionChain(parsed, language),
     '',
     fr ? '**2. Pile d’appels**' : '**2. Call stack**',
     frames,

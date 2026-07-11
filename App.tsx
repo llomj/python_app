@@ -56,8 +56,8 @@ import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocal
 import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
-import { assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonFunctionContractRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonVersionCompatibilityRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
+import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonDoctestExecutionRequest, answerPythonFunctionContractRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonVersionCompatibilityRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
@@ -1047,7 +1047,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isCodeAnswer) return answer;
     const isTutorLevelAnswer = /—\s*(?:beginner|intermediate|expert|niveau débutant|niveau intermédiaire|niveau expert)\s*(?:level)?\*\*/i.test(answer);
     if (isTutorLevelAnswer) return answer;
-    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Python learning progress report|Bilan d’apprentissage Python|Python misconception diagnosis|Diagnostic du malentendu Python|Python version compatibility check|Vérification de compatibilité Python|Analyzed function contract|Contrat de fonction analysé|Local test execution requested|Exécution locale des tests demandée|Code-quality review|Revue de qualité du code|Complexity analysis|Analyse de complexité|Two-solution code comparison|Comparaison de deux solutions|Python modules and files guide|Guide des modules et fichiers Python|Multi-file Python project audit|Audit du projet Python multi-fichiers|Generated test cases|Cas de test générés|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
+    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Python learning progress report|Bilan d’apprentissage Python|Python misconception diagnosis|Diagnostic du malentendu Python|Python version compatibility check|Vérification de compatibilité Python|Analyzed function contract|Contrat de fonction analysé|Local test execution requested|Exécution locale des tests demandée|Local doctest execution requested|Exécution locale des doctests demandée|Code-quality review|Revue de qualité du code|Complexity analysis|Analyse de complexité|Two-solution code comparison|Comparaison de deux solutions|Python modules and files guide|Guide des modules et fichiers Python|Multi-file Python project audit|Audit du projet Python multi-fichiers|Generated test cases|Cas de test générés|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
     if (isInteractiveTutorAnswer) return answer;
     const isTracebackAnswer = /\*\*1\. (?:Exact error|Erreur exacte)\*\*/i.test(answer);
     if (isTracebackAnswer) return answer;
@@ -14851,6 +14851,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             let refAnswer: string | null = codeCommand.directAnswer
                 || answerPythonTraceback(effectiveQuestion, appLang)
                 || answerPythonFunctionContractRequest(effectiveQuestion, appLang)
+                || answerPythonDoctestExecutionRequest(effectiveQuestion, appLang)
                 || answerPythonTestExecutionRequest(effectiveQuestion, appLang)
                 || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
@@ -14919,6 +14920,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 case 'test_execution':
                     refAnswer = answerPythonTestExecutionRequest(effectiveQuestion, appLang);
                     break;
+                case 'doctest_execution':
+                    refAnswer = answerPythonDoctestExecutionRequest(effectiveQuestion, appLang);
+                    break;
                 case 'code_quality':
                     refAnswer = answerPythonCodeQuality(effectiveQuestion, appLang);
                     break;
@@ -14981,6 +14985,23 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setGeneralAiProgress(100);
                 let enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang, knowledge);
                 let evidenceKind: GeneralAiEvidenceKind = /https?:\/\//.test(enrichedAnswer) ? 'documentation' : 'static';
+                if (intent.intent === 'doctest_execution') {
+                    const safety = assessGeneralAiDoctestSafety(effectiveQuestion);
+                    if (safety.safe && pyodide) {
+                        try {
+                            const doctestJson = await pyodide.runPythonAsync(buildGeneralAiDoctestRunnerScript(safety.code));
+                            const doctestResult = JSON.parse(String(doctestJson)) as GeneralAiDoctestRunResult;
+                            enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiDoctestResults(doctestResult, appLang)}`;
+                            evidenceKind = 'runtime';
+                        } catch {
+                            enrichedAnswer = `${enrichedAnswer}\n\n${appLang === 'fr' ? 'Le moteur local n’a pas pu terminer ces doctests.' : 'The local engine could not complete these doctests.'}`;
+                        }
+                    } else if (!safety.safe) {
+                        enrichedAnswer = `${enrichedAnswer}\n\n**${appLang === 'fr' ? 'Doctest non exécuté' : 'Doctest not executed'}**\n${safety.reason}`;
+                    } else if (!pyodide) {
+                        enrichedAnswer = `${enrichedAnswer}\n\n**${appLang === 'fr' ? 'Doctest non exécuté' : 'Doctest not executed'}**\n${appLang === 'fr' ? 'Le moteur Python local n’est pas encore prêt.' : 'The local Python engine is not ready yet.'}`;
+                    }
+                }
                 if (intent.intent === 'test_execution') {
                     const safety = assessGeneralAiTestSafety(effectiveQuestion);
                     if (safety.safe && pyodide) {

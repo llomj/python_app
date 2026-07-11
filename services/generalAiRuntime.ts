@@ -33,11 +33,22 @@ export interface GeneralAiTestResult {
   errorType: string;
   errorMessage: string;
   stdout: string;
+  mismatchKind?: string;
+  mismatchPath?: string;
+  mismatchDetail?: string;
 }
 
 export interface GeneralAiTestRunResult {
   ok: boolean;
   tests: GeneralAiTestResult[];
+  setupError: string;
+}
+
+export interface GeneralAiDoctestRunResult {
+  ok: boolean;
+  attempted: number;
+  failed: number;
+  report: string;
   setupError: string;
 }
 
@@ -111,6 +122,15 @@ export const assessGeneralAiTestSafety = (question: string): GeneralAiRuntimeSaf
   return { safe: true, reason: 'Assertions use the bounded local runtime policy.', code: base.code };
 };
 
+export const assessGeneralAiDoctestSafety = (question: string): GeneralAiRuntimeSafety => {
+  const base = assessGeneralAiRuntimeSafety(question);
+  if (!base.safe) return base;
+  const examples = base.code.match(/^\s*>>>\s+/gm) || [];
+  if (!examples.length) return { safe: false, reason: 'No doctest prompts were found.', code: base.code };
+  if (examples.length > 20) return { safe: false, reason: 'A maximum of 20 doctest examples can run at once.', code: base.code };
+  return { safe: true, reason: 'Doctest examples use the bounded local runtime policy.', code: base.code };
+};
+
 export const buildGeneralAiTestRunnerScript = (code: string): string => `
 import ast, contextlib, io, json
 __test_source = ${JSON.stringify(code)}
@@ -132,6 +152,9 @@ try:
             "errorType": "",
             "errorMessage": "",
             "stdout": "",
+            "mismatchKind": "",
+            "mismatchPath": "",
+            "mismatchDetail": "",
         }
         try:
             if isinstance(__test_node.test, ast.Compare) and len(__test_node.test.ops) == 1 and isinstance(__test_node.test.ops[0], ast.Eq):
@@ -145,6 +168,33 @@ try:
                     __test_actual = eval(compile(__test_actual_node, "<general-ai-test-actual>", "eval"), __test_namespace, __test_namespace)
                 __test_item["passed"] = __test_actual == __test_expected
                 __test_item["actual"] = repr(__test_actual)
+                if not __test_item["passed"]:
+                    if type(__test_actual) is not type(__test_expected):
+                        __test_item["mismatchKind"] = "type"
+                        __test_item["mismatchDetail"] = f"{type(__test_actual).__name__} != {type(__test_expected).__name__}"
+                    elif isinstance(__test_actual, (int, float)) and not isinstance(__test_actual, bool):
+                        __test_item["mismatchKind"] = "number"
+                        __test_item["mismatchDetail"] = repr(__test_actual - __test_expected)
+                    elif isinstance(__test_actual, (str, list, tuple)):
+                        __test_item["mismatchKind"] = "sequence"
+                        __test_item["mismatchDetail"] = f"length {len(__test_actual)} != {len(__test_expected)}"
+                        for __test_index, (__test_left, __test_right) in enumerate(zip(__test_actual, __test_expected)):
+                            if __test_left != __test_right:
+                                __test_item["mismatchPath"] = f"[{__test_index}]"
+                                __test_item["mismatchDetail"] = f"{repr(__test_left)} != {repr(__test_right)}"
+                                break
+                    elif isinstance(__test_actual, dict):
+                        __test_missing = [repr(key) for key in __test_expected.keys() - __test_actual.keys()]
+                        __test_extra = [repr(key) for key in __test_actual.keys() - __test_expected.keys()]
+                        __test_different = [repr(key) for key in __test_actual.keys() & __test_expected.keys() if __test_actual[key] != __test_expected[key]]
+                        __test_item["mismatchKind"] = "mapping"
+                        __test_item["mismatchDetail"] = f"missing={__test_missing}; extra={__test_extra}; different={__test_different}"
+                    elif isinstance(__test_actual, (set, frozenset)):
+                        __test_item["mismatchKind"] = "set"
+                        __test_item["mismatchDetail"] = f"missing={repr(__test_expected - __test_actual)}; extra={repr(__test_actual - __test_expected)}"
+                    else:
+                        __test_item["mismatchKind"] = "value"
+                        __test_item["mismatchDetail"] = "values are not equal"
             else:
                 __test_expression = ast.Expression(__test_node.test)
                 ast.fix_missing_locations(__test_expression)
@@ -163,6 +213,41 @@ except Exception as __test_setup_error:
 json.dumps(__test_payload)
 `;
 
+export const buildGeneralAiDoctestRunnerScript = (code: string): string => `
+import contextlib, doctest, io, json, types
+__doctest_source = ${JSON.stringify(code)}
+__doctest_payload = {"ok": False, "attempted": 0, "failed": 0, "report": "", "setupError": ""}
+try:
+    __doctest_module = types.ModuleType("general_ai_doctest")
+    exec(compile(__doctest_source, "<general-ai-doctest>", "exec"), __doctest_module.__dict__, __doctest_module.__dict__)
+    __doctest_finder = doctest.DocTestFinder(exclude_empty=True)
+    __doctest_runner = doctest.DocTestRunner(optionflags=doctest.NORMALIZE_WHITESPACE)
+    __doctest_output = io.StringIO()
+    for __doctest_case in __doctest_finder.find(__doctest_module):
+        __doctest_runner.run(__doctest_case, out=__doctest_output.write)
+    with contextlib.redirect_stdout(__doctest_output):
+        __doctest_summary = __doctest_runner.summarize(verbose=False)
+    __doctest_payload.update({
+        "ok": True,
+        "attempted": __doctest_summary.attempted,
+        "failed": __doctest_summary.failed,
+        "report": __doctest_output.getvalue(),
+    })
+except Exception as __doctest_error:
+    __doctest_payload["setupError"] = f"{type(__doctest_error).__name__}: {__doctest_error}"
+json.dumps(__doctest_payload)
+`;
+
+export const formatGeneralAiDoctestResults = (result: GeneralAiDoctestRunResult, language: GeneralAiRuntimeLanguage): string => {
+  const fr = language === 'fr';
+  if (!result.ok) return `**${fr ? 'Exécution locale des doctests' : 'Local doctest execution'}**\n${fr ? 'Échec de préparation' : 'Setup failed'}: \`${result.setupError || 'unknown error'}\`.`;
+  const passed = result.attempted - result.failed;
+  return [
+    `**${fr ? 'Résultats des doctests locaux' : 'Local doctest results'}: ${passed}/${result.attempted} ${fr ? 'réussis' : 'passed'}**`,
+    result.report ? `${fr ? 'Rapport exact de Python' : 'Exact Python report'}:\n\`\`\`text\n${result.report.trim()}\n\`\`\`` : (fr ? 'Tous les exemples produisent la sortie attendue.' : 'Every example produced the expected output.'),
+  ].join('\n\n');
+};
+
 export const formatGeneralAiTestResults = (result: GeneralAiTestRunResult, language: GeneralAiRuntimeLanguage): string => {
   const fr = language === 'fr';
   if (!result.ok) return `**${fr ? 'Exécution locale des tests' : 'Local test execution'}**\n${fr ? 'Échec de préparation' : 'Setup failed'}: \`${result.setupError || 'unknown error'}\`.`;
@@ -174,6 +259,15 @@ export const formatGeneralAiTestResults = (result: GeneralAiTestRunResult, langu
       `${fr ? 'Attendu' : 'Expected'}: \`${test.expected}\``,
       `${fr ? 'Réel' : 'Actual'}: \`${test.actual || (test.errorType ? 'no value' : 'None')}\``,
       test.errorType ? `${fr ? 'Exception' : 'Exception'}: \`${test.errorType}: ${test.errorMessage}\`` : '',
+      !test.passed && test.mismatchKind ? `${fr ? 'Diagnostic' : 'Diagnosis'}: ${
+        test.mismatchKind === 'number'
+          ? (fr ? `écart réel − attendu = \`${test.mismatchDetail}\`` : `actual − expected = \`${test.mismatchDetail}\``)
+          : test.mismatchKind === 'sequence'
+            ? `${test.mismatchPath ? `${fr ? 'première différence à' : 'first difference at'} \`${test.mismatchPath}\`: ` : ''}\`${test.mismatchDetail}\``
+            : test.mismatchKind === 'type'
+              ? `${fr ? 'types différents' : 'different types'}: \`${test.mismatchDetail}\``
+              : `\`${test.mismatchDetail}\``
+      }` : '',
       test.stdout ? `${fr ? 'Sortie' : 'Output'}:\n\`\`\`text\n${test.stdout.trim()}\n\`\`\`` : '',
     ].filter(Boolean).join('\n')).join('\n\n'),
   ].join('\n\n');

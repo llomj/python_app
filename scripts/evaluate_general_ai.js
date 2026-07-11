@@ -223,6 +223,7 @@ try {
     ['Will this run on Python 3.9?\n```python\nmatch command:\n    case "go":\n        print("go")\n```', 'version_compatibility'],
     ['Analyze the function contract: parameters, return, and exceptions.\n```python\ndef first(values: list[int]) -> int:\n    return values[0]\n```', 'function_contract'],
     ['Run these tests:\n```python\ndef square(number):\n    return number ** 2\nassert square(2) == 4\n```', 'test_execution'],
+    ['Run these doctests:\n```python\ndef square(number):\n    """\n    >>> square(2)\n    4\n    """\n    return number ** 2\n```', 'doctest_execution'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -336,6 +337,20 @@ try {
   if (!frenchTracebackAnswer.includes('Pile d’appels') || !frenchTracebackAnswer.includes('hors des limites')) failures.push('Native French traceback explanation failed');
   const crossFileTraceback = traceback.answerPythonTraceback(`${tracebackText}\n\n\`\`\`python\n# file: main.py\nvalue = 1\nvalue = 2\nvalue = 3\nvalue = 4\nvalue = 5\nvalue = 6\nvalue = 7\ncalculate()\n\`\`\`\n\n\`\`\`python\n# file: helpers.py\ndef calculate():\n    values = [1]\n    return values[5]\n\`\`\``, 'en') || '';
   if (!crossFileTraceback.includes('Verified cross-file context') || !crossFileTraceback.includes('>   3 |     return values[5]') || !crossFileTraceback.includes('`main.py:8` → `helpers.py:3`')) failures.push('Cross-file traceback context failed');
+  const chainedTraceback = traceback.answerPythonTraceback([
+    'Traceback (most recent call last):',
+    '  File "parser.py", line 2, in parse',
+    '    int("bad")',
+    "ValueError: invalid literal for int() with base 10: 'bad'",
+    '',
+    'The above exception was the direct cause of the following exception:',
+    '',
+    'Traceback (most recent call last):',
+    '  File "main.py", line 4, in <module>',
+    '    parse()',
+    'RuntimeError: parsing failed',
+  ].join('\n'), 'en') || '';
+  if (!chainedTraceback.includes('Exception chain') || !chainedTraceback.includes('ValueError') || !chainedTraceback.includes('RuntimeError') || !chainedTraceback.includes('explicit direct cause')) failures.push('Chained-exception traceback analysis failed');
 
   const safeRuntime = runtime.assessGeneralAiRuntimeSafety('Explain this code:\n```python\nitems = [1, 2]\nitems.append(3)\nprint(items)\n```');
   const unsafeImport = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nimport os\nprint(os.listdir())\n```');
@@ -356,7 +371,16 @@ try {
     const executableTestScript = runtime.buildGeneralAiTestRunnerScript(assertionSafety.code).replace(/\njson\.dumps\(__test_payload\)\n$/, '\nprint(json.dumps(__test_payload))\n');
     const testRun = JSON.parse(execFileSync('python3', ['-c', executableTestScript], { encoding: 'utf8' }));
     const testReport = runtime.formatGeneralAiTestResults(testRun, 'en');
-    if (testRun.tests.length !== 3 || !testRun.tests[0].passed || testRun.tests[1].passed || testRun.tests[2].errorType !== 'ZeroDivisionError' || !testReport.includes('1/3 passed') || !testReport.includes('Expected: `8`') || !testReport.includes('Actual: `9`')) failures.push('Local assertion execution failed');
+    if (testRun.tests.length !== 3 || !testRun.tests[0].passed || testRun.tests[1].passed || testRun.tests[1].mismatchKind !== 'number' || testRun.tests[2].errorType !== 'ZeroDivisionError' || !testReport.includes('1/3 passed') || !testReport.includes('Expected: `8`') || !testReport.includes('Actual: `9`') || !testReport.includes('actual − expected = `1`')) failures.push('Local assertion execution failed');
+  }
+  const doctestSource = 'def square(number):\n    """\n    >>> square(2)\n    4\n    >>> square(3)\n    8\n    """\n    return number ** 2';
+  const doctestSafety = runtime.assessGeneralAiDoctestSafety(`Run these doctests:\n\`\`\`python\n${doctestSource}\n\`\`\``);
+  if (!doctestSafety.safe) failures.push('Bounded doctest safety policy failed');
+  if (doctestSafety.safe) {
+    const executableDoctestScript = runtime.buildGeneralAiDoctestRunnerScript(doctestSafety.code).replace(/\njson\.dumps\(__doctest_payload\)\n$/, '\nprint(json.dumps(__doctest_payload))\n');
+    const doctestRun = JSON.parse(execFileSync('python3', ['-c', executableDoctestScript], { encoding: 'utf8' }));
+    const doctestReport = runtime.formatGeneralAiDoctestResults(doctestRun, 'en');
+    if (doctestRun.attempted !== 2 || doctestRun.failed !== 1 || !doctestReport.includes('1/2 passed') || !doctestReport.includes('Expected:') || !doctestReport.includes('Got:')) failures.push('Local doctest execution failed');
   }
 
   const learningPath = advanced.answerPythonLearningPath('Build me a learning path for dictionaries', {}, 'en') || '';
@@ -397,6 +421,7 @@ try {
   const functionContract = advanced.answerPythonFunctionContractRequest('Analyze the function contract:\n```python\ndef first(values: list[int], fallback: int = 0) -> int:\n    if values:\n        return values[0]\n    return fallback\n```', 'en') || '';
   const frenchContract = advanced.answerPythonFunctionContractRequest('Analyse le contrat de la fonction :\n```python\ndef add_item(items: list, value) -> list:\n    items.append(value)\n    return items\n```', 'fr') || '';
   const testExecutionIntro = advanced.answerPythonTestExecutionRequest('Run these tests:\n```python\ndef square(number):\n    return number ** 2\nassert square(2) == 4\n```', 'en') || '';
+  const doctestExecutionIntro = advanced.answerPythonDoctestExecutionRequest('Exécute ces doctests :\n```python\ndef square(number):\n    """\n    >>> square(2)\n    4\n    """\n    return number ** 2\n```', 'fr') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
@@ -427,6 +452,7 @@ try {
   if (!functionContract.includes('Analyzed function contract') || !functionContract.includes('`values` — list[int]; required') || !functionContract.includes('`fallback` — int; optional, default=`0`') || !functionContract.includes('IndexError') || functionContract.includes('may reach the end')) failures.push('Function-contract analysis failed');
   if (!frenchContract.includes('Contrat de fonction analysé') || !frenchContract.includes('Modifie potentiellement : `items`')) failures.push('French mutation contract failed');
   if (!testExecutionIntro.includes('Local test execution requested') || !testExecutionIntro.includes('1 assertion')) failures.push('Test-execution request failed');
+  if (!doctestExecutionIntro.includes('Exécution locale des doctests demandée') || !doctestExecutionIntro.includes('1 exemple')) failures.push('French doctest-execution request failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';
