@@ -53,6 +53,106 @@ export const getPythonReferenceCounts = () => ({
 
 export const answerPythonReferenceQuestion = (question: string): string | null => answerGeneralPythonQuestion(question);
 
+const catalogEntriesForType = (type: string): RefEntry[] => {
+  const seen = new Set<string>();
+  return allReferenceEntries()
+    .filter(entry => entry.type === type)
+    .sort((left, right) => left.name.localeCompare(right.name))
+    .filter(entry => {
+      const key = `${entry.type}:${entry.signature}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+};
+
+const formatCatalogEntries = (entries: RefEntry[], language: KnowledgeLanguage, start = 1): string => entries
+  .map((entry, index) => `${index + start}. \`${entry.signature}\` — ${language === 'fr' ? localizeAiText(entry.desc, 'fr') : entry.desc}`)
+  .join('\n\n');
+
+export const answerPythonCatalogQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const q = question.toLowerCase().replace(/[?!.]+$/g, '').trim();
+  const asksForCatalog = /\b(?:list|show|give|name|display|all|every|how many|number of|count of|liste|lister|montre|donne|tous|toutes|combien|nombre de)\b/i.test(q);
+  if (!asksForCatalog) return null;
+  const fr = language === 'fr';
+  const typeMatch = q.match(/\b(string|str|list|dict|dictionary|set|tuple)\s+methods?\b|\bmethods?\s+(?:of|for|on)\s+(?:a\s+)?(string|str|list|dict|dictionary|set|tuple)\b/i);
+  const methodType = (typeMatch?.[1] || typeMatch?.[2] || '').replace('string', 'str').replace('dictionary', 'dict');
+
+  if (/\bmethods?\b|\bm[eé]thodes?\b/i.test(q)) {
+    if (methodType) {
+      const entries = catalogEntriesForType(methodType);
+      return [
+        `**${fr ? 'Catalogue Python' : 'Python catalog'}: ${methodType} ${fr ? 'méthodes' : 'methods'} (${entries.length})**`,
+        fr ? `Voici les ${entries.length} méthodes référencées avec leur signature complète :` : `Here are all ${entries.length} referenced methods with their complete signatures:`,
+        formatCatalogEntries(entries, language),
+        fr ? 'Demandez ensuite une méthode précise pour obtenir des exemples, l’ordre des arguments et les erreurs fréquentes.' : 'Ask about any specific method for examples, argument order, and common mistakes.',
+      ].join('\n\n');
+    }
+    const groups = ['str', 'list', 'dict', 'set', 'tuple'];
+    const grouped = groups.map(type => ({ type, entries: catalogEntriesForType(type) }));
+    const total = grouped.reduce((sum, group) => sum + group.entries.length, 0);
+    return [
+      `**${fr ? 'Catalogue Python' : 'Python catalog'}: ${fr ? 'toutes les méthodes intégrées principales' : 'all core built-in-type methods'} (${total})**`,
+      fr ? 'Les méthodes sont regroupées par type. Un même nom peut appartenir à plusieurs types.' : 'Methods are grouped by owner type. The same method name may exist on several types.',
+      ...grouped.map(group => [
+        `**${group.type} ${fr ? 'méthodes' : 'methods'} (${group.entries.length})**`,
+        formatCatalogEntries(group.entries, language),
+      ].join('\n\n')),
+    ].join('\n\n');
+  }
+
+  if (/\b(?:built.?ins?|built.?in functions?|fonctions? int[eé]gr[eé]es?)\b/i.test(q) && !/\b(?:data types?|types? de donn[eé]es)\b/i.test(q)) {
+    const entries = catalogEntriesForType('builtin');
+    return [
+      `**${fr ? 'Catalogue Python' : 'Python catalog'}: ${fr ? 'fonctions intégrées' : 'built-in functions'} (${entries.length})**`,
+      fr ? 'Ces fonctions sont disponibles sans importer de bibliothèque :' : 'These functions are available without importing a library:',
+      formatCatalogEntries(entries, language),
+      fr ? 'Demandez une fonction précise pour connaître son nombre d’arguments, leur ordre, son retour et des exemples.' : 'Ask about any function for its argument count, argument order, return value, and examples.',
+    ].join('\n\n');
+  }
+
+  if (/\bkeywords?\b|\bmots?[- ]cl[eé]s?\b/i.test(q)) {
+    const entries = catalogEntriesForType('keyword');
+    return [`**${fr ? 'Catalogue Python' : 'Python catalog'}: ${fr ? 'mots-clés' : 'keywords'} (${entries.length})**`, formatCatalogEntries(entries, language)].join('\n\n');
+  }
+
+  if (/\b(?:data types?|types? de donn[eé]es)\b/i.test(q)) {
+    const types = [
+      ['bool', 'boolean truth value'], ['int', 'integer number'], ['float', 'decimal number'], ['complex', 'complex number'],
+      ['str', 'text sequence'], ['list', 'mutable sequence'], ['tuple', 'immutable sequence'], ['range', 'integer sequence'],
+      ['dict', 'key-value mapping'], ['set', 'mutable unique collection'], ['frozenset', 'immutable unique collection'],
+      ['bytes', 'immutable bytes'], ['bytearray', 'mutable bytes'], ['memoryview', 'zero-copy binary view'], ['None', 'absence of a value'],
+    ];
+    return [`**${fr ? 'Catalogue Python' : 'Python catalog'}: ${fr ? 'types de données intégrés' : 'built-in data types'} (${types.length})**`, ...types.map(([name, description], index) => `${index + 1}. \`${name}\` — ${description}`)].join('\n\n');
+  }
+
+  if (/\boperators?\b|\bop[eé]rateurs?\b/i.test(q)) {
+    const operators = ['+ addition', '- subtraction', '* multiplication', '/ true division', '// floor division', '% remainder', '** exponentiation', '== equality', '!= inequality', '< <= > >= ordering', 'and boolean AND', 'or boolean OR', 'not boolean negation', 'is identity', 'in membership', '& | ^ set/bitwise operations', '<< >> bit shifts', ':= assignment expression'];
+    return [`**${fr ? 'Catalogue Python' : 'Python catalog'}: ${fr ? 'opérateurs principaux' : 'core operators'} (${operators.length})**`, ...operators.map((operator, index) => `${index + 1}. \`${operator.split(' ')[0]}\` — ${operator.split(' ').slice(1).join(' ')}`)].join('\n\n');
+  }
+
+  if (/\bcomprehensions?\b|\bcompr[eé]hensions?\b/i.test(q)) {
+    const forms = [
+      ['[expression for item in iterable]', 'list comprehension'],
+      ['{expression for item in iterable}', 'set comprehension'],
+      ['{key: value for item in iterable}', 'dictionary comprehension'],
+      ['(expression for item in iterable)', 'generator expression'],
+    ];
+    return [`**${fr ? 'Catalogue Python' : 'Python catalog'}: ${fr ? 'formes de compréhension' : 'comprehension forms'} (${forms.length})**`, ...forms.map(([signature, description], index) => `${index + 1}. \`${signature}\` — ${description}`)].join('\n\n');
+  }
+
+  if (/\bfunctions?\b|\bfonctions?\b/i.test(q) && /\b(?:how many|number of|count|combien|nombre)\b/i.test(q)) {
+    const count = catalogEntriesForType('builtin').length;
+    return [
+      `**${fr ? 'Nombre de fonctions Python' : 'Python function count'}**`,
+      fr ? `Les utilisateurs et bibliothèques peuvent définir un nombre illimité de fonctions. Cette application référence **${count} fonctions intégrées**.` : `Users and libraries can define unlimited functions. This app references **${count} built-in functions**.`,
+      fr ? 'Demandez « liste toutes les fonctions intégrées » pour afficher la liste numérotée complète.' : 'Ask “list all built-in functions” to display the complete numbered catalog.',
+    ].join('\n\n');
+  }
+
+  return null;
+};
+
 const splitSignatureParameters = (signature: string): { parameters: string[]; required: number; variadic: boolean } | null => {
   const open = signature.indexOf('(');
   const close = signature.lastIndexOf(')');

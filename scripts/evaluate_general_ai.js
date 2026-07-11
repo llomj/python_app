@@ -100,6 +100,23 @@ try {
   if (!comprehensionOrder.includes('first `for` iterable') || !comprehensionOrder.includes('`if` filters')) failures.push('Comprehension evaluation-order answer failed');
   if (!scopeOrder.includes('LEGB') || !scopeOrder.includes('Enclosing') || !scopeOrder.includes('Built-ins')) failures.push('Variable-scope answer failed');
 
+  const allMethodsCatalog = knowledge.answerPythonCatalogQuestion('list all methods', 'en') || '';
+  const listMethodsCatalog = knowledge.answerPythonCatalogQuestion('list all list methods', 'en') || '';
+  const builtinsCatalog = knowledge.answerPythonCatalogQuestion('list all built-in functions', 'en') || '';
+  const builtinsCountCatalog = knowledge.answerPythonCatalogQuestion('how many built-in functions are there?', 'en') || '';
+  const keywordCatalog = knowledge.answerPythonCatalogQuestion('show all Python keywords', 'en') || '';
+  const typeCatalog = knowledge.answerPythonCatalogQuestion('list all built-in data types', 'en') || '';
+  const operatorCatalog = knowledge.answerPythonCatalogQuestion('list all operators', 'en') || '';
+  const comprehensionCatalog = knowledge.answerPythonCatalogQuestion('show all comprehension forms', 'en') || '';
+  if (!allMethodsCatalog.includes('all core built-in-type methods') || !allMethodsCatalog.includes('str.capitalize()') || !allMethodsCatalog.includes('list.append(x)') || !allMethodsCatalog.includes('dict.get(key[, default])')) failures.push('Complete grouped method catalog failed');
+  if (!listMethodsCatalog.includes('list methods') || !listMethodsCatalog.includes('list.extend(iterable)') || listMethodsCatalog.includes('str methods')) failures.push('Type-specific method catalog failed');
+  if (!builtinsCatalog.includes('built-in functions') || !builtinsCatalog.includes('len(s)') || !builtinsCatalog.includes('map(function, iterable, ...)')) failures.push('Built-in function catalog failed');
+  if (!builtinsCountCatalog.includes('built-in functions') || !builtinsCountCatalog.includes('`abs(x)`') || !builtinsCountCatalog.includes('71')) failures.push('Built-in count plus numbered catalog failed');
+  if (!keywordCatalog.includes('keywords') || !keywordCatalog.includes('`for var in iterable:`')) failures.push('Keyword catalog failed');
+  if (!typeCatalog.includes('built-in data types') || !typeCatalog.includes('`dict`')) failures.push('Data-type catalog failed');
+  if (!operatorCatalog.includes('core operators') || !operatorCatalog.includes('`**`')) failures.push('Operator catalog failed');
+  if (!comprehensionCatalog.includes('comprehension forms') || !comprehensionCatalog.includes('[expression for item in iterable]')) failures.push('Comprehension catalog failed');
+
   const comparisonCases = [
     ['sort vs sorted', ['Sorts the list in place', 'Returns a new sorted list', 'Mutates object']],
     ['difference between list and tuple', ['list', 'tuple', 'Criterion']],

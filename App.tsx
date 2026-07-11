@@ -1052,6 +1052,8 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isTracebackAnswer) return answer;
     const isDocumentationAnswer = /\*\*(?:Matching Python documentation|Documentation Python correspondante)\*\*/i.test(answer);
     if (isDocumentationAnswer) return answer;
+    const isCatalogAnswer = /\*\*(?:Python catalog|Catalogue Python|Python function count|Nombre de fonctions Python)/i.test(answer);
+    if (isCatalogAnswer) return answer;
     const isCallableContractAnswer = /\*\*(?:Signature and argument count|Signature et nombre d[’']arguments|Lambda evaluation order|Ordre d[’']évaluation d[’']une lambda|Comprehension evaluation order|Ordre d[’']une compréhension|Variable resolution: the LEGB rule|Résolution des variables : règle LEGB)/i.test(answer);
     if (isCallableContractAnswer) return answer;
     const isVersionAnswer = /\*\*.+version information\*\*/i.test(answer);
@@ -14789,6 +14791,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
             let refAnswer: string | null = codeCommand.directAnswer
+                || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang)
                 || tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang);
