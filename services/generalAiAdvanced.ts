@@ -219,3 +219,125 @@ export const answerPythonTestCaseRequest = (question: string, language: Advanced
     `**${fr ? 'Étape suivante' : 'Next step'}**\n${fr ? 'Ajoutez les sorties attendues de l’énoncé, puis transformez chaque cas en assertion.' : 'Add the expected outputs from the specification, then convert each case into an assertion.'}`,
   ].join('\n\n');
 };
+
+interface CodeMetrics {
+  lines: number;
+  loops: number;
+  maxLoopDepth: number;
+  comprehensions: number;
+  sorts: number;
+  collectionBuilds: number;
+  branches: number;
+  functions: number;
+  recursive: boolean;
+  mutations: number;
+}
+
+const extractPythonBlocks = (question: string): string[] => [...question.matchAll(/```(?:python)?\s*\n?([\s\S]*?)```/gi)]
+  .map(match => match[1].trim())
+  .filter(Boolean);
+
+const codeMetrics = (code: string): CodeMetrics => {
+  const sourceLines = code.split('\n').filter(line => line.trim() && !line.trim().startsWith('#'));
+  let maxLoopDepth = 0;
+  const loopIndents: number[] = [];
+  for (const line of sourceLines) {
+    const indent = line.match(/^\s*/)?.[0].replace(/\t/g, '    ').length || 0;
+    while (loopIndents.length && indent <= loopIndents[loopIndents.length - 1]) loopIndents.pop();
+    if (/^\s*(?:for|while)\b/.test(line)) {
+      loopIndents.push(indent);
+      maxLoopDepth = Math.max(maxLoopDepth, loopIndents.length);
+    }
+  }
+  const functionNames = [...code.matchAll(/^\s*def\s+([A-Za-z_]\w*)\s*\(/gm)].map(match => match[1]);
+  return {
+    lines: sourceLines.length,
+    loops: (code.match(/^\s*(?:for|while)\b/gm) || []).length,
+    maxLoopDepth,
+    comprehensions: (code.match(/[\[({][^\n\]}]*\bfor\s+\w+\s+in\b/g) || []).length,
+    sorts: (code.match(/\b(?:sorted\s*\(|\.sort\s*\()/g) || []).length,
+    collectionBuilds: (code.match(/\b(?:append|extend|add|update)\s*\(|(?:list|dict|set)\s*\(/g) || []).length,
+    branches: (code.match(/^\s*(?:if|elif|match|case)\b/gm) || []).length,
+    functions: functionNames.length,
+    recursive: functionNames.some(name => new RegExp(`\\b${name}\\s*\\(`, 'g').test(code.replace(new RegExp(`def\\s+${name}\\s*\\(`), ''))),
+    mutations: (code.match(/\.(?:append|extend|insert|remove|pop|clear|sort|reverse|add|discard|update)\s*\(/g) || []).length,
+  };
+};
+
+const complexityEstimate = (metrics: CodeMetrics, fr: boolean): { time: string; space: string; evidence: string[]; caveat: string } => {
+  let time = 'O(1)';
+  const evidence: string[] = [];
+  if (metrics.recursive) {
+    time = fr ? 'dépend de la récurrence' : 'depends on the recurrence';
+    evidence.push(fr ? 'Un appel récursif est détecté.' : 'A recursive call was detected.');
+  } else if (metrics.maxLoopDepth >= 2) {
+    time = `O(n^${metrics.maxLoopDepth})`;
+    evidence.push(fr ? `${metrics.maxLoopDepth} boucles imbriquées ont été détectées.` : `${metrics.maxLoopDepth} nested loops were detected.`);
+  } else if (metrics.sorts && (metrics.loops || metrics.comprehensions)) {
+    time = 'O(n log n)';
+    evidence.push(fr ? 'Un tri et un parcours de taille n ont été détectés.' : 'A sort and a size-n traversal were detected.');
+  } else if (metrics.sorts) {
+    time = 'O(n log n)';
+    evidence.push(fr ? 'Un appel de tri domine généralement le coût.' : 'A sorting call normally dominates the cost.');
+  } else if (metrics.loops || metrics.comprehensions) {
+    time = 'O(n)';
+    evidence.push(fr ? 'Un parcours simple ou une compréhension a été détecté.' : 'A single traversal or comprehension was detected.');
+  } else {
+    evidence.push(fr ? 'Aucune boucle, récursion ou opération de tri n’a été détectée.' : 'No loop, recursion, or sorting operation was detected.');
+  }
+  const growsCollection = metrics.comprehensions > 0 || metrics.collectionBuilds > 0 || metrics.sorts > 0;
+  const space = growsCollection ? 'O(n)' : 'O(1)';
+  if (growsCollection) evidence.push(fr ? 'Une collection proportionnelle à l’entrée peut être créée.' : 'A collection proportional to the input may be created.');
+  else evidence.push(fr ? 'Seul un nombre constant de variables visibles est créé.' : 'Only a constant number of visible variables is created.');
+  return {
+    time,
+    space,
+    evidence,
+    caveat: fr
+      ? 'Estimation statique : `n` représente la taille de l’entrée. Les appels de bibliothèque, les tailles de plusieurs entrées et les chemins de branchement peuvent modifier le coût réel.'
+      : 'Static estimate: `n` represents input size. Library calls, multiple input sizes, and branch paths can change the actual cost.',
+  };
+};
+
+export const answerPythonComplexityRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:time complexity|space complexity|big[- ]?o|complexity|runtime cost|memory cost|complexit[eé]|notation grand o|co[uû]t temporel|co[uû]t m[eé]moire)(?=\s|[?:.,]|$)/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  if (!code || !/\n|def |for |while |sorted\(|\.sort\(/.test(code)) return null;
+  const fr = language === 'fr';
+  const metrics = codeMetrics(code);
+  const estimate = complexityEstimate(metrics, fr);
+  return [
+    `**${fr ? 'Analyse de complexité' : 'Complexity analysis'}**`,
+    `1. **${fr ? 'Temps estimé' : 'Estimated time'}: ${estimate.time}**`,
+    `2. **${fr ? 'Espace auxiliaire estimé' : 'Estimated auxiliary space'}: ${estimate.space}**`,
+    `3. **${fr ? 'Éléments détectés' : 'Detected evidence'}**\n${estimate.evidence.map(item => `- ${item}`).join('\n')}`,
+    `4. **${fr ? 'Mesures structurelles' : 'Structural metrics'}**\n${fr ? 'lignes' : 'lines'}=${metrics.lines}, ${fr ? 'boucles' : 'loops'}=${metrics.loops}, ${fr ? 'profondeur' : 'depth'}=${metrics.maxLoopDepth}, ${fr ? 'compréhensions' : 'comprehensions'}=${metrics.comprehensions}, ${fr ? 'tris' : 'sorts'}=${metrics.sorts}.`,
+    `5. **${fr ? 'Hypothèse et limite' : 'Assumption and limit'}**\n${estimate.caveat}`,
+  ].join('\n\n');
+};
+
+export const answerPythonCodeComparison = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:compare|comparison|versus|vs\.?|which (?:code|solution|approach)|better solution|comparaison|compare|quelle solution|meilleure solution)\b/i.test(question)) return null;
+  const blocks = extractPythonBlocks(question);
+  if (blocks.length < 2) return null;
+  const fr = language === 'fr';
+  const first = codeMetrics(blocks[0]);
+  const second = codeMetrics(blocks[1]);
+  const firstEstimate = complexityEstimate(first, fr);
+  const secondEstimate = complexityEstimate(second, fr);
+  const complexityRank = (value: string) => value === 'O(1)' ? 1 : value === 'O(n)' ? 2 : value === 'O(n log n)' ? 3 : value.startsWith('O(n^') ? 4 : 5;
+  const recommendation = firstEstimate.time === secondEstimate.time
+    ? (first.lines <= second.lines
+      ? (fr ? 'La solution A est plus concise, avec la même classe de complexité estimée.' : 'Solution A is more concise with the same estimated complexity class.')
+      : (fr ? 'La solution B est plus concise, avec la même classe de complexité estimée.' : 'Solution B is more concise with the same estimated complexity class.'))
+    : (complexityRank(firstEstimate.time) < complexityRank(secondEstimate.time)
+      ? (fr ? 'La solution A présente la meilleure complexité asymptotique estimée.' : 'Solution A has the better estimated asymptotic complexity.')
+      : (fr ? 'La solution B présente la meilleure complexité asymptotique estimée.' : 'Solution B has the better estimated asymptotic complexity.'));
+  return [
+    `**${fr ? 'Comparaison de deux solutions' : 'Two-solution code comparison'}**`,
+    `| ${fr ? 'Critère' : 'Criterion'} | ${fr ? 'Solution A' : 'Solution A'} | ${fr ? 'Solution B' : 'Solution B'} |\n|---|---:|---:|\n| ${fr ? 'Temps estimé' : 'Estimated time'} | ${firstEstimate.time} | ${secondEstimate.time} |\n| ${fr ? 'Espace estimé' : 'Estimated space'} | ${firstEstimate.space} | ${secondEstimate.space} |\n| ${fr ? 'Lignes utiles' : 'Useful lines'} | ${first.lines} | ${second.lines} |\n| ${fr ? 'Boucles / profondeur' : 'Loops / depth'} | ${first.loops} / ${first.maxLoopDepth} | ${second.loops} / ${second.maxLoopDepth} |\n| ${fr ? 'Modifications visibles' : 'Visible mutations'} | ${first.mutations} | ${second.mutations} |`,
+    `**${fr ? 'Recommandation' : 'Recommendation'}**\n${recommendation}`,
+    `**${fr ? 'Pourquoi' : 'Why'}**\nA: ${firstEstimate.evidence.join(' ')}\n\nB: ${secondEstimate.evidence.join(' ')}`,
+    `**${fr ? 'Vérification nécessaire' : 'Required verification'}**\n${fr ? 'Cette comparaison est structurelle. Exécutez les deux solutions avec les mêmes tests avant de conclure qu’elles produisent exactement le même comportement.' : 'This is a structural comparison. Run both solutions against the same tests before concluding that their behavior is identical.'}`,
+  ].join('\n\n');
+};

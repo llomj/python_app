@@ -213,6 +213,8 @@ try {
     ['What does this print?\n```python\nprint(1 + 2)\n```', 'output_prediction'],
     ['Step through this code and show variable changes:\n```python\nfor n in range(2):\n    print(n)\n```', 'interactive_debug'],
     ['Generate test cases for this function:\n```python\ndef square(number):\n    return number ** 2\n```', 'test_generation'],
+    ['What is the time complexity?\n```python\nfor item in values:\n    print(item)\n```', 'complexity_analysis'],
+    ['Compare these solutions:\n```python\nfor a in values:\n    for b in values:\n        print(a, b)\n```\n```python\nfor value in values:\n    print(value)\n```', 'code_comparison'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -345,6 +347,11 @@ try {
   const mistakeProfile = advanced.updateGeneralAiMistakes({}, quiz);
   const generatedTests = advanced.answerPythonTestCaseRequest('Generate test cases:\n```python\ndef total(values):\n    return sum(values)\n```', 'en') || '';
   const frenchGeneratedTests = advanced.answerPythonTestCaseRequest('Génère des cas de test :\n```python\ndef total(values):\n    return sum(values)\n```', 'fr') || '';
+  const linearComplexity = advanced.answerPythonComplexityRequest('What is the complexity?\n```python\nresult = [value * 2 for value in values]\n```', 'en') || '';
+  const nestedComplexity = advanced.answerPythonComplexityRequest('Analyse la complexité :\n```python\nfor left in values:\n    for right in values:\n        print(left, right)\n```', 'fr') || '';
+  const sortedComplexity = advanced.answerPythonComplexityRequest('What is the Big O?\n```python\nresult = sorted(values)\n```', 'en') || '';
+  const codeComparison = advanced.answerPythonCodeComparison('Compare these solutions:\n```python\nfor left in values:\n    for right in values:\n        if left == right:\n            return True\n```\n```python\nseen = set()\nfor value in values:\n    if value in seen:\n        return True\n    seen.add(value)\n```', 'en') || '';
+  const frenchCodeComparison = advanced.answerPythonCodeComparison('Compare ces solutions :\n```python\nfor value in values:\n    print(value)\n```\n```python\nprint(*values)\n```', 'fr') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
@@ -352,6 +359,11 @@ try {
   if (Object.values(mistakeProfile)[0]?.count !== 1 || !Object.values(mistakeProfile)[0]?.lastMistake) failures.push('Mistake profile tracking failed');
   if (!generatedTests.includes('Generated test cases') || !generatedTests.includes('total([])') || !generatedTests.includes('Executable harness')) failures.push('Test-case generation failed');
   if (!frenchGeneratedTests.includes('Cas de test générés') || !frenchGeneratedTests.includes('Harnais exécutable')) failures.push('French test-case generation failed');
+  if (!linearComplexity.includes('Estimated time: O(n)') || !linearComplexity.includes('Estimated auxiliary space: O(n)')) failures.push('Linear complexity analysis failed');
+  if (!nestedComplexity.includes('Temps estimé: O(n^2)') || !nestedComplexity.includes('2 boucles imbriquées')) failures.push('French nested-loop complexity analysis failed');
+  if (!sortedComplexity.includes('O(n log n)') || !sortedComplexity.includes('sorting call')) failures.push('Sorting complexity analysis failed');
+  if (!codeComparison.includes('Two-solution code comparison') || !codeComparison.includes('Solution B has the better') || !codeComparison.includes('Required verification')) failures.push('Two-solution comparison failed');
+  if (!frenchCodeComparison.includes('Comparaison de deux solutions') || !frenchCodeComparison.includes('Vérification nécessaire')) failures.push('French code comparison failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';

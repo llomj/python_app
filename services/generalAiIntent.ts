@@ -5,6 +5,8 @@ export type GeneralAiIntent =
   | 'interactive_debug'
   | 'test_generation'
   | 'code_quality'
+  | 'code_comparison'
+  | 'complexity_analysis'
   | 'learning_path'
   | 'contract_search'
   | 'comparison'
@@ -42,6 +44,12 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (containsCode(value) && /\b(?:step through|debug step|trace execution|show variable changes|loop iterations|pas à pas|trace l['’]exécution|changements? de variables?|itérations? de boucle)\b/i.test(value)) {
     return { intent: 'interactive_debug', confidence: 0.99, reason: 'Interactive execution-trace request detected' };
+  }
+  if ((value.match(/```(?:python)?/gi) || []).length >= 2 && /\b(?:compare|comparison|versus|vs\.?|which (?:code|solution|approach)|better solution|comparaison|quelle solution|meilleure solution)\b/i.test(value)) {
+    return { intent: 'code_comparison', confidence: 0.99, reason: 'Two Python snippets and a comparison request detected' };
+  }
+  if (containsCode(value) && /\b(?:time complexity|space complexity|big[- ]?o|complexity|runtime cost|memory cost|complexit[eé]|notation grand o|co[uû]t temporel|co[uû]t m[eé]moire)(?=\s|[?:.,]|$)/i.test(value)) {
+    return { intent: 'complexity_analysis', confidence: 0.99, reason: 'Algorithm complexity request detected' };
   }
   if (containsCode(value) && /\b(?:generate|create|write|suggest|show|make|g[eé]n[eè]re|cr[eé]e|[eé]cris|propose|montre).{0,25}\b(?:tests?|test cases?|edge cases?|cas de test|cas limites?)\b/i.test(value)) {
     return { intent: 'test_generation', confidence: 0.99, reason: 'Test-case generation request detected' };
