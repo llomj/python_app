@@ -3,6 +3,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { buildSync } = require('esbuild');
 
 const root = path.resolve(__dirname, '..');
@@ -220,6 +221,8 @@ try {
     ['Show my learning progress and weak areas', 'learning_progress'],
     ['What am I misunderstanding? This returns None:\n```python\nitems = [1, 2]\nresult = items.append(3)\n```', 'misconception'],
     ['Will this run on Python 3.9?\n```python\nmatch command:\n    case "go":\n        print("go")\n```', 'version_compatibility'],
+    ['Analyze the function contract: parameters, return, and exceptions.\n```python\ndef first(values: list[int]) -> int:\n    return values[0]\n```', 'function_contract'],
+    ['Run these tests:\n```python\ndef square(number):\n    return number ** 2\nassert square(2) == 4\n```', 'test_execution'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -331,6 +334,8 @@ try {
     if (!tracebackAnswer.includes(fragment)) failures.push(`Traceback answer missing ${JSON.stringify(fragment)}`);
   }
   if (!frenchTracebackAnswer.includes('Pile d’appels') || !frenchTracebackAnswer.includes('hors des limites')) failures.push('Native French traceback explanation failed');
+  const crossFileTraceback = traceback.answerPythonTraceback(`${tracebackText}\n\n\`\`\`python\n# file: main.py\nvalue = 1\nvalue = 2\nvalue = 3\nvalue = 4\nvalue = 5\nvalue = 6\nvalue = 7\ncalculate()\n\`\`\`\n\n\`\`\`python\n# file: helpers.py\ndef calculate():\n    values = [1]\n    return values[5]\n\`\`\``, 'en') || '';
+  if (!crossFileTraceback.includes('Verified cross-file context') || !crossFileTraceback.includes('>   3 |     return values[5]') || !crossFileTraceback.includes('`main.py:8` → `helpers.py:3`')) failures.push('Cross-file traceback context failed');
 
   const safeRuntime = runtime.assessGeneralAiRuntimeSafety('Explain this code:\n```python\nitems = [1, 2]\nitems.append(3)\nprint(items)\n```');
   const unsafeImport = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nimport os\nprint(os.listdir())\n```');
@@ -341,6 +346,18 @@ try {
   const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '', variables: { total: '3' }, executionTrace: [{ line: 1, event: 'call', function: 'total', variables: {}, changedVariables: {} }, { line: 2, event: 'line', function: 'total', variables: { total: '3' }, changedVariables: { total: '3' } }, { line: 2, event: 'return', function: 'total', variables: { total: '3' }, changedVariables: {}, returnValue: '3' }] }, 'en');
   const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type', errorLine: 4, variables: { value: "'x'" }, executionTrace: [{ line: 4, event: 'line', function: 'change', variables: { value: "'x'" }, changedVariables: { value: "'x'" } }] }, 'fr');
   if (!runtimeEvidence.includes('Actual output') || !runtimeEvidence.includes('Final variable state') || !runtimeEvidence.includes('Verified step-by-step debugging') || !runtimeEvidence.includes('return `total()`') || !runtimeEvidence.includes('value=`3`') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('Trace avant l’erreur')) failures.push('Runtime evidence formatting failed');
+
+  const assertionSource = 'def square(number):\n    return number ** 2\n\ndef divide(left, right):\n    return left / right\n\nassert square(2) == 4\nassert square(3) == 8\nassert divide(1, 0) == 0';
+  const assertionSafety = runtime.assessGeneralAiTestSafety(`Run tests:\n\`\`\`python\n${assertionSource}\n\`\`\``);
+  const recursiveSafety = runtime.assessGeneralAiTestSafety('Run tests:\n```python\ndef recurse(value):\n    return recurse(value)\nassert recurse(1) == 1\n```');
+  const oversizedSafety = runtime.assessGeneralAiTestSafety('Run tests:\n```python\ndef square(value):\n    return value ** 2\nassert square(6000) == 36000000\n```');
+  if (!assertionSafety.safe || recursiveSafety.safe || oversizedSafety.safe) failures.push('Bounded assertion safety policy failed');
+  if (assertionSafety.safe) {
+    const executableTestScript = runtime.buildGeneralAiTestRunnerScript(assertionSafety.code).replace(/\njson\.dumps\(__test_payload\)\n$/, '\nprint(json.dumps(__test_payload))\n');
+    const testRun = JSON.parse(execFileSync('python3', ['-c', executableTestScript], { encoding: 'utf8' }));
+    const testReport = runtime.formatGeneralAiTestResults(testRun, 'en');
+    if (testRun.tests.length !== 3 || !testRun.tests[0].passed || testRun.tests[1].passed || testRun.tests[2].errorType !== 'ZeroDivisionError' || !testReport.includes('1/3 passed') || !testReport.includes('Expected: `8`') || !testReport.includes('Actual: `9`')) failures.push('Local assertion execution failed');
+  }
 
   const learningPath = advanced.answerPythonLearningPath('Build me a learning path for dictionaries', {}, 'en') || '';
   const frenchLearningPath = advanced.answerPythonLearningPath('Construis un parcours pour les dictionnaires', {}, 'fr') || '';
@@ -377,6 +394,9 @@ try {
   const frenchWalrusCompatibility = advanced.answerPythonVersionCompatibilityRequest('Fonctionnera sous Python 3.7 ?\n```python\nif (size := len(items)) > 2:\n    print(size)\n```', 'fr') || '';
   const frenchAdjectiveCompatibility = advanced.answerPythonVersionCompatibilityRequest('Est-ce compatible avec Python 3.9 ?\n```python\nmatch command:\n    case "go":\n        print("go")\n```', 'fr') || '';
   const unionCompatibility = advanced.answerPythonVersionCompatibilityRequest('What minimum Python version is required?\n```python\ndef parse(value: int | str) -> str:\n    return str(value)\n```', 'en') || '';
+  const functionContract = advanced.answerPythonFunctionContractRequest('Analyze the function contract:\n```python\ndef first(values: list[int], fallback: int = 0) -> int:\n    if values:\n        return values[0]\n    return fallback\n```', 'en') || '';
+  const frenchContract = advanced.answerPythonFunctionContractRequest('Analyse le contrat de la fonction :\n```python\ndef add_item(items: list, value) -> list:\n    items.append(value)\n    return items\n```', 'fr') || '';
+  const testExecutionIntro = advanced.answerPythonTestExecutionRequest('Run these tests:\n```python\ndef square(number):\n    return number ** 2\nassert square(2) == 4\n```', 'en') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
@@ -404,6 +424,9 @@ try {
   if (!frenchWalrusCompatibility.includes('Python 3.8') || !frenchWalrusCompatibility.includes('non compatible sans modification') || !frenchWalrusCompatibility.includes('ligne séparée')) failures.push('French walrus compatibility failed');
   if (!frenchAdjectiveCompatibility.includes('Python 3.10') || !frenchAdjectiveCompatibility.includes('non compatible sans modification')) failures.push('French adjective compatibility phrasing failed');
   if (!unionCompatibility.includes('Python 3.10') || !unionCompatibility.includes('typing.Union')) failures.push('Union-type compatibility failed');
+  if (!functionContract.includes('Analyzed function contract') || !functionContract.includes('`values` — list[int]; required') || !functionContract.includes('`fallback` — int; optional, default=`0`') || !functionContract.includes('IndexError') || functionContract.includes('may reach the end')) failures.push('Function-contract analysis failed');
+  if (!frenchContract.includes('Contrat de fonction analysé') || !frenchContract.includes('Modifie potentiellement : `items`')) failures.push('French mutation contract failed');
+  if (!testExecutionIntro.includes('Local test execution requested') || !testExecutionIntro.includes('1 assertion')) failures.push('Test-execution request failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';
@@ -418,6 +441,11 @@ try {
   const offTopicAnswer = verification.verifyGeneralAiAnswer('What is a dictionary?', 'A tuple is an immutable ordered sequence of values.');
   const groundedAnswer = verification.verifyGeneralAiAnswer('What is a dictionary?', 'A dictionary stores key-value pairs and supports lookup by key.');
   if (!verifiedAnswer.valid || badFence.valid || badSource.valid || offTopicAnswer.valid || !groundedAnswer.valid) failures.push('Answer verification gates failed');
+  const runtimeLabel = verification.formatGeneralAiEvidenceLabel('runtime', 'en');
+  const documentationLabel = verification.formatGeneralAiEvidenceLabel('documentation', 'fr');
+  const staticLabel = verification.formatGeneralAiEvidenceLabel('static', 'en');
+  const modelLabel = verification.formatGeneralAiEvidenceLabel('model', 'fr');
+  if (!runtimeLabel.includes('Runtime verified') || !runtimeLabel.includes('high') || !documentationLabel.includes('Documentation vérifiée') || !staticLabel.includes('Static analysis') || !modelLabel.includes('à vérifier')) failures.push('Evidence label formatting failed');
 
   const frenchDirectExample = knowledge.resolveKnowledgeFollowUp('donne des exemples de dictionnaire', 'what is list', 'normal');
   const frenchDeepFollowUp = knowledge.resolveKnowledgeFollowUp('approfondis les tuples', 'what is list', 'normal');

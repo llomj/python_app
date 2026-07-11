@@ -581,3 +581,78 @@ export const answerPythonVersionCompatibilityRequest = (question: string, langua
     `**${fr ? 'Limite' : 'Limit'}**\n${fr ? 'Cette vérification couvre les fonctionnalités explicitement reconnues. Les versions des dépendances externes, les API supprimées et les branches non collées doivent être vérifiées séparément.' : 'This check covers explicitly recognized features. External dependency versions, removed APIs, and code paths not pasted here require separate verification.'}`,
   ].join('\n\n');
 };
+
+export const answerPythonFunctionContractRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:function contract|analy[sz]e (?:the )?contract|parameters?,? returns?|input.?output contract|preconditions?|postconditions?|contrat (?:de la )?fonction|analyse le contrat|param[eè]tres?,? retours?|pr[eé]conditions?|postconditions?)\b/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  const definition = code.match(/def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)\s*(?:->\s*([^:\n]+))?\s*:/);
+  if (!definition) return null;
+  const fr = language === 'fr';
+  const name = definition[1];
+  const rawParameters = definition[2].split(',').map(value => value.trim()).filter(Boolean);
+  const parameters = rawParameters.map(parameter => {
+    const clean = parameter.replace(/^\*{1,2}/, '');
+    const nameMatch = clean.match(/^([A-Za-z_]\w*)/);
+    const typeMatch = clean.match(/:\s*([^=]+?)(?:\s*=|$)/);
+    const defaultMatch = clean.match(/=\s*(.+)$/);
+    return {
+      name: nameMatch?.[1] || clean,
+      type: typeMatch?.[1]?.trim() || (fr ? 'non annoté' : 'unannotated'),
+      required: !defaultMatch && !parameter.startsWith('*'),
+      defaultValue: defaultMatch?.[1]?.trim() || '',
+      variadic: parameter.startsWith('*'),
+    };
+  });
+  const parameterNames = new Set(parameters.map(parameter => parameter.name));
+  const mutated = [...parameterNames].filter(parameter => (
+    new RegExp(`\\b${parameter}\\.(?:append|extend|insert|remove|pop|clear|sort|reverse|add|discard|update)\\s*\\(`).test(code)
+    || new RegExp(`\\b${parameter}\\s*\\[[^\\]]+\\]\\s*=`).test(code)
+  ));
+  const explicitRaises = [...code.matchAll(/\braise\s+([A-Za-z_]\w*)/g)].map(match => match[1]);
+  const indexedParameters = parameters.filter(parameter => new RegExp(`\\b${parameter.name}\\s*\\[`).test(code));
+  const indexedException = indexedParameters.some(parameter => /dict|mapping/.test(parameter.type.toLowerCase()))
+    ? (fr ? '`KeyError` si la clé est absente' : '`KeyError` when the key is absent')
+    : indexedParameters.length
+      ? (fr ? '`IndexError` si l’indice est hors limites' : '`IndexError` when the index is out of range')
+      : '';
+  const inferredRaises = [
+    indexedException,
+    /\b(?:int|float)\s*\(/.test(code) ? (fr ? '`ValueError` pour une conversion invalide' : '`ValueError` for invalid conversion') : '',
+    /\s\/\s|\/\//.test(code) ? (fr ? '`ZeroDivisionError` si le diviseur vaut zéro' : '`ZeroDivisionError` when the divisor is zero') : '',
+  ].filter(Boolean);
+  const returnExpressions = [...code.matchAll(/^\s*return(?:\s+(.+))?$/gm)].map(match => match[1]?.trim() || 'None');
+  const returnType = definition[3]?.trim() || (returnExpressions.length ? (fr ? 'inféré depuis les chemins `return`' : 'inferred from `return` paths') : 'None');
+  const definitionIndent = code.match(/^(\s*)def\s+[A-Za-z_]\w*/m)?.[1].replace(/\t/g, '    ').length || 0;
+  const hasFunctionLevelReturn = [...code.matchAll(/^(\s*)return\b/gm)].some(match => match[1].replace(/\t/g, '    ').length === definitionIndent + 4);
+  const missingReturnRisk = /\bif\b/.test(code) && returnExpressions.length > 0 && !hasFunctionLevelReturn && !/\belse\b/.test(code);
+  const edgeCases = parameters.flatMap(parameter => {
+    const type = parameter.type.toLowerCase();
+    if (/list|sequence|iterable|dict|set|tuple/.test(type) || /items|values|numbers|data/.test(parameter.name)) return [fr ? `${parameter.name} vide` : `empty ${parameter.name}`];
+    if (/str|string/.test(type) || /text|word|name/.test(parameter.name)) return [fr ? `${parameter.name} vide et Unicode` : `empty and Unicode ${parameter.name}`];
+    if (/int|float|number/.test(type) || /count|number|value|size/.test(parameter.name)) return [fr ? `${parameter.name} égal à 0, négatif et très grand` : `${parameter.name} equal to 0, negative, and very large`];
+    return [];
+  });
+  return [
+    `**${fr ? 'Contrat de fonction analysé' : 'Analyzed function contract'}: ${name}()**`,
+    `1. **${fr ? 'Signature' : 'Signature'}**\n\`${definition[0].replace(/:\s*$/, '')}\``,
+    `2. **${fr ? 'Paramètres' : 'Parameters'}**\n${parameters.length ? parameters.map((parameter, index) => `${index + 1}. \`${parameter.name}\` — ${parameter.type}; ${parameter.variadic ? (fr ? 'variadique' : 'variadic') : parameter.required ? (fr ? 'obligatoire' : 'required') : `${fr ? 'facultatif, défaut' : 'optional, default'}=\`${parameter.defaultValue}\``}`).join('\n') : (fr ? 'Aucun paramètre.' : 'No parameters.')}`,
+    `3. **${fr ? 'Retour' : 'Return contract'}**\n${fr ? 'Type' : 'Type'}: ${returnType}. ${fr ? 'Chemins visibles' : 'Visible paths'}: ${returnExpressions.length ? returnExpressions.map(value => `\`${value}\``).join(', ') : '`None`'}${missingReturnRisk ? (fr ? '. Attention : un chemin conditionnel peut atteindre la fin et renvoyer `None`.' : '. Warning: a conditional path may reach the end and return `None`.') : '.'}`,
+    `4. **${fr ? 'Modification des entrées' : 'Input mutation'}**\n${mutated.length ? (fr ? `Modifie potentiellement : ${mutated.map(value => `\`${value}\``).join(', ')}.` : `Potentially mutates: ${mutated.map(value => `\`${value}\``).join(', ')}.`) : (fr ? 'Aucune modification visible des paramètres.' : 'No visible parameter mutation.')}`,
+    `5. **${fr ? 'Exceptions' : 'Exceptions'}**\n${[...new Set([...explicitRaises.map(value => `\`${value}\` ${fr ? 'levée explicitement' : 'raised explicitly'}`), ...inferredRaises])].map((value, index) => `${index + 1}. ${value}`).join('\n') || (fr ? 'Aucune exception explicite ou opération risquée reconnue.' : 'No explicit exception or recognized risky operation.')}`,
+    `6. **${fr ? 'Cas limites à tester' : 'Edge cases to test'}**\n${[...new Set(edgeCases)].map((value, index) => `${index + 1}. ${value}`).join('\n') || (fr ? 'Testez les valeurs limites définies par l’énoncé.' : 'Test the boundary values defined by the specification.')}`,
+    `**${fr ? 'Limite de l’analyse' : 'Analysis limit'}**\n${fr ? 'Les annotations et opérations visibles sont analysées statiquement. Les appels externes et les exigences non écrites dans le code doivent être vérifiés séparément.' : 'Visible annotations and operations are analyzed statically. External calls and requirements not written in the code require separate verification.'}`,
+  ].join('\n\n');
+};
+
+export const answerPythonTestExecutionRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:run|execute|check|verify|lance|ex[eé]cute|v[eé]rifie).{0,20}\b(?:tests?|assertions?)\b/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  const assertionCount = (code.match(/^\s*assert\s+/gm) || []).length;
+  if (!assertionCount) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Exécution locale des tests demandée' : 'Local test execution requested'}**`,
+    `${assertionCount} ${fr ? 'assertion(s) détectée(s). Chaque assertion sera exécutée séparément dans le moteur Python local borné.' : 'assertion(s) detected. Each assertion will run separately in the bounded local Python engine.'}`,
+    fr ? 'Le rapport distinguera résultat attendu, résultat réel, réussite et exception.' : 'The report will separate expected value, actual value, pass status, and exceptions.',
+  ].join('\n\n');
+};

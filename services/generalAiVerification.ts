@@ -4,6 +4,20 @@ export interface GeneralAiVerificationResult {
   reason: string;
 }
 
+export type GeneralAiEvidenceKind = 'runtime' | 'documentation' | 'static' | 'model';
+
+export const formatGeneralAiEvidenceLabel = (kind: GeneralAiEvidenceKind, language: 'en' | 'fr'): string => {
+  const fr = language === 'fr';
+  const labels = {
+    runtime: fr ? ['Exécution locale vérifiée', 'élevée', 'Le code ou les assertions ont été exécutés dans le moteur Python local borné.'] : ['Runtime verified', 'high', 'The code or assertions ran in the bounded local Python engine.'],
+    documentation: fr ? ['Documentation vérifiée', 'élevée', 'La réponse contient une source appartenant à une documentation approuvée.'] : ['Documentation verified', 'high', 'The answer contains a source from an approved documentation host.'],
+    static: fr ? ['Analyse statique', 'moyenne', 'La conclusion est déduite du code ou des données structurées sans exécuter tous les chemins.'] : ['Static analysis', 'medium', 'The conclusion is inferred from code or structured data without executing every path.'],
+    model: fr ? ['Réponse du modèle', 'à vérifier', 'La réponse a passé les contrôles de structure, mais elle doit être confirmée par des tests ou la documentation.'] : ['Model-generated answer', 'requires verification', 'The answer passed structural checks but should be confirmed with tests or documentation.'],
+  } as const;
+  const [evidence, confidence, detail] = labels[kind];
+  return `**${fr ? 'Preuve et confiance' : 'Evidence and confidence'}**\n${fr ? 'Preuve' : 'Evidence'}: **${evidence}** · ${fr ? 'Confiance' : 'Confidence'}: **${confidence}**\n${detail}`;
+};
+
 const ALLOWED_SOURCE_HOSTS = new Set([
   'docs.python.org', 'docs.djangoproject.com', 'fastapi.tiangolo.com', 'flask.palletsprojects.com',
   'matplotlib.org', 'numpy.org', 'pandas.pydata.org', 'requests.readthedocs.io', 'docs.scipy.org',

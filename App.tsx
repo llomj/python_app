@@ -56,9 +56,9 @@ import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocal
 import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
-import { assessGeneralAiRuntimeSafety, buildGeneralAiRuntimeScript, formatGeneralAiRuntimeEvidence, type GeneralAiRuntimeResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonVersionCompatibilityRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
-import { verifyGeneralAiAnswer } from './services/generalAiVerification';
+import { assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
+import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonFunctionContractRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonVersionCompatibilityRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
@@ -1047,7 +1047,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isCodeAnswer) return answer;
     const isTutorLevelAnswer = /—\s*(?:beginner|intermediate|expert|niveau débutant|niveau intermédiaire|niveau expert)\s*(?:level)?\*\*/i.test(answer);
     if (isTutorLevelAnswer) return answer;
-    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Python learning progress report|Bilan d’apprentissage Python|Python misconception diagnosis|Diagnostic du malentendu Python|Python version compatibility check|Vérification de compatibilité Python|Code-quality review|Revue de qualité du code|Complexity analysis|Analyse de complexité|Two-solution code comparison|Comparaison de deux solutions|Python modules and files guide|Guide des modules et fichiers Python|Multi-file Python project audit|Audit du projet Python multi-fichiers|Generated test cases|Cas de test générés|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
+    const isInteractiveTutorAnswer = /\*\*(?:Socratic mode|Mode socratique|Debug mode|Mode débogage|Compare mode|Mode comparaison|Adaptive quiz|Quiz adaptatif|Quiz result|Résultat du quiz|Adaptive learning path|Parcours d’apprentissage adaptatif|Python learning progress report|Bilan d’apprentissage Python|Python misconception diagnosis|Diagnostic du malentendu Python|Python version compatibility check|Vérification de compatibilité Python|Analyzed function contract|Contrat de fonction analysé|Local test execution requested|Exécution locale des tests demandée|Code-quality review|Revue de qualité du code|Complexity analysis|Analyse de complexité|Two-solution code comparison|Comparaison de deux solutions|Python modules and files guide|Guide des modules et fichiers Python|Multi-file Python project audit|Audit du projet Python multi-fichiers|Generated test cases|Cas de test générés|Python contract search|Recherche dans les contrats Python|Targeted practice|Exercice ciblé|Python tools matching the goal|Outils Python correspondant au besoin|Concept map|Carte de concepts|Progressive examples|Exemples progressifs)/i.test(answer);
     if (isInteractiveTutorAnswer) return answer;
     const isTracebackAnswer = /\*\*1\. (?:Exact error|Erreur exacte)\*\*/i.test(answer);
     if (isTracebackAnswer) return answer;
@@ -14793,7 +14793,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
         const startsNewQuiz = /\b(?:another|new|next|start|quiz|autre|nouveau|suivant|commence)\b/i.test(question);
-        const asksNewQuestion = /\b(?:what|why|how|which|where|when|is|does|can|could|would|show|explain|define|compare|review|generate|analyze|analyse|complexity|progress|report|revise|help|qu['’]est|quel(?:le)?s?|où|quand|est-ce|peut|montre|pourquoi|comment|combien|explique|définis|compare|génère|analyse|complexité|progr[eè]s|bilan|réviser|aide)\b/i.test(question)
+        const asksNewQuestion = /\b(?:what|why|how|which|where|when|is|does|can|could|would|show|run|execute|test|explain|define|compare|review|generate|analyze|analyse|complexity|progress|report|revise|help|qu['’]est|quel(?:le)?s?|où|quand|est-ce|peut|montre|lance|exécute|teste|pourquoi|comment|combien|explique|définis|compare|génère|analyse|complexité|progr[eè]s|bilan|réviser|aide)\b/i.test(question)
             || question.includes('```')
             || question.endsWith('?');
         if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion) {
@@ -14801,7 +14801,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             setGeneralAiMessages(prev => [
                 ...prev,
                 { id: Date.now(), role: 'user', source: 'user', text: question },
-                { id: Date.now() + 1, role: 'assistant', source: 'built_in', text: result.text },
+                { id: Date.now() + 1, role: 'assistant', source: 'built_in', text: `${result.text}\n\n${formatGeneralAiEvidenceLabel('static', appLang)}` },
             ]);
             setGeneralAiDraft('');
             if (result.correct) {
@@ -14849,6 +14849,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             let creationAnswer: string | null = null;
             const shouldCreateQuiz = generalAiTutorMode === 'quiz' || intent.intent === 'quiz';
             let refAnswer: string | null = codeCommand.directAnswer
+                || answerPythonTraceback(effectiveQuestion, appLang)
+                || answerPythonFunctionContractRequest(effectiveQuestion, appLang)
+                || answerPythonTestExecutionRequest(effectiveQuestion, appLang)
                 || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang)
@@ -14909,6 +14912,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'version_compatibility':
                     refAnswer = answerPythonVersionCompatibilityRequest(effectiveQuestion, appLang);
+                    break;
+                case 'function_contract':
+                    refAnswer = answerPythonFunctionContractRequest(effectiveQuestion, appLang);
+                    break;
+                case 'test_execution':
+                    refAnswer = answerPythonTestExecutionRequest(effectiveQuestion, appLang);
                     break;
                 case 'code_quality':
                     refAnswer = answerPythonCodeQuality(effectiveQuestion, appLang);
@@ -14971,6 +14980,24 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             if (refAnswer) {
                 setGeneralAiProgress(100);
                 let enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang, knowledge);
+                let evidenceKind: GeneralAiEvidenceKind = /https?:\/\//.test(enrichedAnswer) ? 'documentation' : 'static';
+                if (intent.intent === 'test_execution') {
+                    const safety = assessGeneralAiTestSafety(effectiveQuestion);
+                    if (safety.safe && pyodide) {
+                        try {
+                            const testJson = await pyodide.runPythonAsync(buildGeneralAiTestRunnerScript(safety.code));
+                            const testResult = JSON.parse(String(testJson)) as GeneralAiTestRunResult;
+                            enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiTestResults(testResult, appLang)}`;
+                            evidenceKind = 'runtime';
+                        } catch {
+                            enrichedAnswer = `${enrichedAnswer}\n\n${appLang === 'fr' ? 'Le moteur local n’a pas pu terminer ces tests.' : 'The local engine could not complete these tests.'}`;
+                        }
+                    } else if (!safety.safe) {
+                        enrichedAnswer = `${enrichedAnswer}\n\n**${appLang === 'fr' ? 'Test non exécuté' : 'Test not executed'}**\n${safety.reason}`;
+                    } else if (!pyodide) {
+                        enrichedAnswer = `${enrichedAnswer}\n\n**${appLang === 'fr' ? 'Test non exécuté' : 'Test not executed'}**\n${appLang === 'fr' ? 'Le moteur Python local n’est pas encore prêt.' : 'The local Python engine is not ready yet.'}`;
+                    }
+                }
                 if (['code_explanation', 'output_prediction', 'interactive_debug', 'code_quality'].includes(intent.intent) && pyodide) {
                     const safety = assessGeneralAiRuntimeSafety(effectiveQuestion);
                     if (safety.safe) {
@@ -14978,11 +15005,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                             const runtimeJson = await pyodide.runPythonAsync(buildGeneralAiRuntimeScript(safety.code));
                             const runtimeResult = JSON.parse(String(runtimeJson)) as GeneralAiRuntimeResult;
                             enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiRuntimeEvidence(runtimeResult, appLang)}`;
+                            evidenceKind = 'runtime';
                         } catch {
                             /* Static analysis remains available if isolated runtime evidence fails. */
                         }
                     }
                 }
+                enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiEvidenceLabel(evidenceKind, appLang)}`;
                 const answerText = appLang === 'fr' && (countAnswer || creationAnswer)
                     ? enrichedAnswer
                     : localizeAiText(enrichedAnswer, appLang);
@@ -15019,7 +15048,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         id: Date.now() + 1,
                         role: 'assistant',
                         source: 'offline',
-                        text: localizeAiText(aiAnswer, appLang),
+                        text: `${localizeAiText(aiAnswer, appLang)}\n\n${formatGeneralAiEvidenceLabel('model', appLang)}`,
                     }]);
                     return;
                 }

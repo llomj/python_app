@@ -25,6 +25,22 @@ export interface GeneralAiRuntimeResult {
   }>;
 }
 
+export interface GeneralAiTestResult {
+  expression: string;
+  passed: boolean;
+  actual: string;
+  expected: string;
+  errorType: string;
+  errorMessage: string;
+  stdout: string;
+}
+
+export interface GeneralAiTestRunResult {
+  ok: boolean;
+  tests: GeneralAiTestResult[];
+  setupError: string;
+}
+
 export const extractGeneralAiPythonCode = (question: string): string => {
   const fenced = question.match(/```(?:python)?\s*\n?([\s\S]*?)```/i);
   if (fenced) return fenced[1].trim();
@@ -67,6 +83,100 @@ export const assessGeneralAiRuntimeSafety = (question: string): GeneralAiRuntime
   const unknownCall = calls.find(name => !SAFE_CALLS.has(name) && !userCallables.has(name));
   if (unknownCall) return { safe: false, reason: `Call to ${unknownCall}() is outside the safe runtime allowlist.`, code };
   return { safe: true, reason: 'Straight-line snippet uses only safe built-ins and expressions.', code };
+};
+
+export const assessGeneralAiTestSafety = (question: string): GeneralAiRuntimeSafety => {
+  const base = assessGeneralAiRuntimeSafety(question);
+  if (!base.safe) return base;
+  const assertions = base.code.match(/^\s*assert\s+/gm) || [];
+  if (!assertions.length) return { safe: false, reason: 'No assertions were found.', code: base.code };
+  if (assertions.length > 20) return { safe: false, reason: 'A maximum of 20 assertions can run at once.', code: base.code };
+  if ([...base.code.matchAll(/\b\d+(?:\.\d+)?\b/g)].some(match => Number(match[0]) > 5000)) {
+    return { safe: false, reason: 'Test literals must not exceed 5000.', code: base.code };
+  }
+  const lines = base.code.split('\n');
+  for (let index = 0; index < lines.length; index += 1) {
+    const definition = lines[index].match(/^def\s+([A-Za-z_]\w*)\s*\([^\n]*\):/);
+    if (!definition) continue;
+    const body: string[] = [];
+    for (let bodyIndex = index + 1; bodyIndex < lines.length; bodyIndex += 1) {
+      if (!lines[bodyIndex].trim()) continue;
+      if (!/^\s+/.test(lines[bodyIndex])) break;
+      body.push(lines[bodyIndex]);
+    }
+    if (new RegExp(`\\b${definition[1]}\\s*\\(`).test(body.join('\n'))) {
+      return { safe: false, reason: 'Recursive functions are not executed by the local test runner.', code: base.code };
+    }
+  }
+  return { safe: true, reason: 'Assertions use the bounded local runtime policy.', code: base.code };
+};
+
+export const buildGeneralAiTestRunnerScript = (code: string): string => `
+import ast, contextlib, io, json
+__test_source = ${JSON.stringify(code)}
+__test_payload = {"ok": False, "tests": [], "setupError": ""}
+try:
+    __test_tree = ast.parse(__test_source, mode="exec")
+    __test_assertions = [node for node in __test_tree.body if isinstance(node, ast.Assert)]
+    __test_setup = ast.Module(body=[node for node in __test_tree.body if not isinstance(node, ast.Assert)], type_ignores=[])
+    ast.fix_missing_locations(__test_setup)
+    __test_namespace = {"__builtins__": __builtins__}
+    exec(compile(__test_setup, "<general-ai-tests>", "exec"), __test_namespace, __test_namespace)
+    for __test_node in __test_assertions:
+        __test_stdout = io.StringIO()
+        __test_item = {
+            "expression": ast.get_source_segment(__test_source, __test_node.test) or "assert",
+            "passed": False,
+            "actual": "",
+            "expected": "True",
+            "errorType": "",
+            "errorMessage": "",
+            "stdout": "",
+        }
+        try:
+            if isinstance(__test_node.test, ast.Compare) and len(__test_node.test.ops) == 1 and isinstance(__test_node.test.ops[0], ast.Eq):
+                __test_actual_node = ast.Expression(__test_node.test.left)
+                __test_expected_node = ast.Expression(__test_node.test.comparators[0])
+                ast.fix_missing_locations(__test_actual_node)
+                ast.fix_missing_locations(__test_expected_node)
+                with contextlib.redirect_stdout(__test_stdout):
+                    __test_expected = eval(compile(__test_expected_node, "<general-ai-test-expected>", "eval"), __test_namespace, __test_namespace)
+                    __test_item["expected"] = repr(__test_expected)
+                    __test_actual = eval(compile(__test_actual_node, "<general-ai-test-actual>", "eval"), __test_namespace, __test_namespace)
+                __test_item["passed"] = __test_actual == __test_expected
+                __test_item["actual"] = repr(__test_actual)
+            else:
+                __test_expression = ast.Expression(__test_node.test)
+                ast.fix_missing_locations(__test_expression)
+                with contextlib.redirect_stdout(__test_stdout):
+                    __test_actual = eval(compile(__test_expression, "<general-ai-test-condition>", "eval"), __test_namespace, __test_namespace)
+                __test_item["passed"] = bool(__test_actual)
+                __test_item["actual"] = repr(__test_actual)
+        except Exception as __test_error:
+            __test_item["errorType"] = type(__test_error).__name__
+            __test_item["errorMessage"] = str(__test_error)
+        __test_item["stdout"] = __test_stdout.getvalue()
+        __test_payload["tests"].append(__test_item)
+    __test_payload["ok"] = True
+except Exception as __test_setup_error:
+    __test_payload["setupError"] = f"{type(__test_setup_error).__name__}: {__test_setup_error}"
+json.dumps(__test_payload)
+`;
+
+export const formatGeneralAiTestResults = (result: GeneralAiTestRunResult, language: GeneralAiRuntimeLanguage): string => {
+  const fr = language === 'fr';
+  if (!result.ok) return `**${fr ? 'Exécution locale des tests' : 'Local test execution'}**\n${fr ? 'Échec de préparation' : 'Setup failed'}: \`${result.setupError || 'unknown error'}\`.`;
+  const passed = result.tests.filter(test => test.passed).length;
+  return [
+    `**${fr ? 'Résultats des tests locaux' : 'Local test results'}: ${passed}/${result.tests.length} ${fr ? 'réussis' : 'passed'}**`,
+    result.tests.map((test, index) => [
+      `${index + 1}. ${test.passed ? '✓' : '✗'} \`${test.expression}\``,
+      `${fr ? 'Attendu' : 'Expected'}: \`${test.expected}\``,
+      `${fr ? 'Réel' : 'Actual'}: \`${test.actual || (test.errorType ? 'no value' : 'None')}\``,
+      test.errorType ? `${fr ? 'Exception' : 'Exception'}: \`${test.errorType}: ${test.errorMessage}\`` : '',
+      test.stdout ? `${fr ? 'Sortie' : 'Output'}:\n\`\`\`text\n${test.stdout.trim()}\n\`\`\`` : '',
+    ].filter(Boolean).join('\n')).join('\n\n'),
+  ].join('\n\n');
 };
 
 export const buildGeneralAiRuntimeScript = (code: string): string => `

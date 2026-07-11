@@ -11,6 +11,8 @@ export type GeneralAiIntent =
   | 'misconception'
   | 'learning_progress'
   | 'version_compatibility'
+  | 'function_contract'
+  | 'test_execution'
   | 'learning_path'
   | 'contract_search'
   | 'comparison'
@@ -54,6 +56,12 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (containsCode(value) && /\b(?:time complexity|space complexity|big[- ]?o|complexity|runtime cost|memory cost|complexit[eé]|notation grand o|co[uû]t temporel|co[uû]t m[eé]moire)(?=\s|[?:.,]|$)/i.test(value)) {
     return { intent: 'complexity_analysis', confidence: 0.99, reason: 'Algorithm complexity request detected' };
+  }
+  if (containsCode(value) && /\b(?:function contract|analy[sz]e (?:the )?contract|parameters?,? returns?|input.?output contract|preconditions?|postconditions?|contrat (?:de la )?fonction|analyse le contrat|param[eè]tres?,? retours?|pr[eé]conditions?|postconditions?)\b/i.test(value)) {
+    return { intent: 'function_contract', confidence: 0.99, reason: 'Function contract analysis request detected' };
+  }
+  if (containsCode(value) && /\b(?:run|execute|check|verify|lance|ex[eé]cute|v[eé]rifie).{0,20}\b(?:tests?|assertions?)\b/i.test(value)) {
+    return { intent: 'test_execution', confidence: 0.99, reason: 'Bounded local assertion-test request detected' };
   }
   if (/\b(?:modules?|imports?|packages?|multi[- ]?file|project structure|circular import|relative import|absolute import|__init__|__main__|fichiers? multiples?|structure (?:du |de )?projet|importation circulaire|importation relative|paquets?)\b/i.test(value)) {
     return { intent: 'module_project', confidence: 0.97, reason: 'Python module, import, package, or multi-file request detected' };

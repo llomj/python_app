@@ -7,6 +7,11 @@ interface TracebackFrame {
   source?: string;
 }
 
+interface SuppliedPythonFile {
+  path: string;
+  lines: string[];
+}
+
 export interface ParsedPythonTraceback {
   frames: TracebackFrame[];
   errorType: string;
@@ -64,6 +69,45 @@ const likelyCause = (parsed: ParsedPythonTraceback, language: GeneralAiTraceback
   ])[language === 'fr' ? 1 : 0];
 };
 
+const suppliedPythonFiles = (text: string): SuppliedPythonFile[] => [...text.matchAll(/```(?:python)?\s*\n?([\s\S]*?)```/gi)].map((match, index) => {
+  const raw = match[1].trim();
+  const lines = raw.split('\n');
+  const commentPath = lines[0]?.trim().match(/^#\s*(?:file\s*:\s*)?([\w./-]+\.py)\s*$/i)?.[1];
+  return {
+    path: commentPath || `file${index + 1}.py`,
+    lines: commentPath ? lines.slice(1) : lines,
+  };
+});
+
+const crossFileContext = (text: string, parsed: ParsedPythonTraceback, language: GeneralAiTracebackLanguage): string => {
+  const files = suppliedPythonFiles(text);
+  if (!files.length) return '';
+  const fr = language === 'fr';
+  const contexts = parsed.frames.map(frame => {
+    const normalizedFrame = frame.file.replace(/^.*[\\/]/, '');
+    const file = files.find(candidate => candidate.path === frame.file || candidate.path.endsWith(`/${normalizedFrame}`) || candidate.path === normalizedFrame);
+    if (!file) return '';
+    const start = Math.max(0, frame.line - 2);
+    const end = Math.min(file.lines.length, frame.line + 1);
+    const source = file.lines.slice(start, end).map((line, offset) => {
+      const lineNumber = start + offset + 1;
+      return `${lineNumber === frame.line ? '>' : ' '} ${String(lineNumber).padStart(3, ' ')} | ${line}`;
+    }).join('\n');
+    return `**\`${frame.file}:${frame.line}\` — \`${frame.functionName}\`**\n\`\`\`python\n${source}\n\`\`\``;
+  }).filter(Boolean);
+  if (!contexts.length) return '';
+  const transitions = parsed.frames.slice(1).map((frame, index) => {
+    const caller = parsed.frames[index];
+    return `${index + 1}. \`${caller.file}:${caller.line}\` → \`${frame.file}:${frame.line}\` (${frame.functionName})`;
+  });
+  return [
+    `**${fr ? 'Contexte multi-fichiers vérifié' : 'Verified cross-file context'}**`,
+    ...contexts,
+    transitions.length ? `**${fr ? 'Transitions d’appel' : 'Call transitions'}**\n${transitions.join('\n')}` : '',
+    `**${fr ? 'Portée de la preuve' : 'Evidence scope'}**\n${fr ? 'Les lignes ci-dessus proviennent uniquement des fichiers collés et correspondent aux numéros de la pile d’appels.' : 'The lines above come only from the pasted files and match the traceback line numbers.'}`,
+  ].filter(Boolean).join('\n\n');
+};
+
 export const answerPythonTraceback = (text: string, language: GeneralAiTracebackLanguage): string | null => {
   const parsed = parsePythonTraceback(text);
   if (!parsed) return null;
@@ -91,5 +135,7 @@ export const answerPythonTraceback = (text: string, language: GeneralAiTraceback
     fr
       ? 'Vérifiez les valeurs et les types sur la ligne d’échec, corrigez cette première erreur, puis relancez le code car les erreurs suivantes peuvent en découler.'
       : 'Inspect the values and types on the failing line, fix this first error, then run again because later errors may be consequences of it.',
-  ].join('\n');
+    '',
+    crossFileContext(text, parsed, language),
+  ].filter(Boolean).join('\n');
 };
