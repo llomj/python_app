@@ -7,6 +7,7 @@ export type GeneralAiIntent =
   | 'code_quality'
   | 'code_comparison'
   | 'complexity_analysis'
+  | 'module_project'
   | 'learning_path'
   | 'contract_search'
   | 'comparison'
@@ -50,6 +51,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (containsCode(value) && /\b(?:time complexity|space complexity|big[- ]?o|complexity|runtime cost|memory cost|complexit[eé]|notation grand o|co[uû]t temporel|co[uû]t m[eé]moire)(?=\s|[?:.,]|$)/i.test(value)) {
     return { intent: 'complexity_analysis', confidence: 0.99, reason: 'Algorithm complexity request detected' };
+  }
+  if (/\b(?:modules?|imports?|packages?|multi[- ]?file|project structure|circular import|relative import|absolute import|__init__|__main__|fichiers? multiples?|structure (?:du |de )?projet|importation circulaire|importation relative|paquets?)\b/i.test(value)) {
+    return { intent: 'module_project', confidence: 0.97, reason: 'Python module, import, package, or multi-file request detected' };
   }
   if (containsCode(value) && /\b(?:generate|create|write|suggest|show|make|g[eé]n[eè]re|cr[eé]e|[eé]cris|propose|montre).{0,25}\b(?:tests?|test cases?|edge cases?|cas de test|cas limites?)\b/i.test(value)) {
     return { intent: 'test_generation', confidence: 0.99, reason: 'Test-case generation request detected' };

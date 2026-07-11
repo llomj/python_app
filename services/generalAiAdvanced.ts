@@ -341,3 +341,106 @@ export const answerPythonCodeComparison = (question: string, language: AdvancedA
     `**${fr ? 'Vérification nécessaire' : 'Required verification'}**\n${fr ? 'Cette comparaison est structurelle. Exécutez les deux solutions avec les mêmes tests avant de conclure qu’elles produisent exactement le même comportement.' : 'This is a structural comparison. Run both solutions against the same tests before concluding that their behavior is identical.'}`,
   ].join('\n\n');
 };
+
+interface PythonProjectFile {
+  path: string;
+  module: string;
+  code: string;
+  imports: Array<{ module: string; names: string[]; relative: boolean }>;
+  exports: Set<string>;
+}
+
+const projectFilesFromQuestion = (question: string): PythonProjectFile[] => {
+  const blocks = [...question.matchAll(/```(?:python)?\s*\n?([\s\S]*?)```/gi)];
+  return blocks.map((match, index) => {
+    const raw = match[1].trim();
+    const firstLine = raw.split('\n')[0]?.trim() || '';
+    const commentName = firstLine.match(/^#\s*(?:file\s*:\s*)?([\w./-]+\.py)\s*$/i)?.[1];
+    const prefix = question.slice(Math.max(0, (match.index || 0) - 100), match.index || 0);
+    const labelName = prefix.match(/(?:^|\n)\s*([\w./-]+\.py)\s*:?[ \t]*$/i)?.[1];
+    const path = commentName || labelName || `file${index + 1}.py`;
+    const code = commentName ? raw.split('\n').slice(1).join('\n').trim() : raw;
+    const module = path.replace(/\.py$/i, '').replace(/\/__init__$/, '').replace(/\//g, '.');
+    const imports: PythonProjectFile['imports'] = [];
+    for (const importMatch of code.matchAll(/^\s*import\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)/gm)) {
+      imports.push({ module: importMatch[1], names: [], relative: false });
+    }
+    for (const fromMatch of code.matchAll(/^\s*from\s+(\.*[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)\s+import\s+([^\n#]+)/gm)) {
+      imports.push({
+        module: fromMatch[1].replace(/^\.+/, ''),
+        names: fromMatch[2].split(',').map(name => name.trim().split(/\s+as\s+/i)[0]).filter(Boolean),
+        relative: fromMatch[1].startsWith('.'),
+      });
+    }
+    const exports = new Set<string>();
+    for (const exported of code.matchAll(/^(?:def|class)\s+([A-Za-z_]\w*)|^([A-Za-z_]\w*)\s*=/gm)) {
+      exports.add(exported[1] || exported[2]);
+    }
+    return { path, module, code, imports, exports };
+  });
+};
+
+export const answerPythonModuleProjectRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:modules?|imports?|packages?|multi[- ]?file|project structure|circular import|relative import|absolute import|__init__|__main__|fichiers? multiples?|structure (?:du |de )?projet|importation circulaire|importation relative|paquets?)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  const files = projectFilesFromQuestion(question);
+  if (files.length < 2) {
+    return [
+      `**${fr ? 'Guide des modules et fichiers Python' : 'Python modules and files guide'}**`,
+      `1. **${fr ? 'Module' : 'Module'}**\n${fr ? 'Chaque fichier `.py` est un module. Son nom importable vient de son chemin dans le projet.' : 'Each `.py` file is a module. Its importable name comes from its path in the project.'}`,
+      `2. **${fr ? 'Paquet' : 'Package'}**\n${fr ? 'Un dossier de modules forme un paquet. `__init__.py` reste utile pour initialiser le paquet et exposer une API claire.' : 'A directory of modules forms a package. `__init__.py` remains useful for package initialization and a clear public API.'}`,
+      `3. **${fr ? 'Import absolu' : 'Absolute import'}**\n\`from app.helpers import format_name\` — ${fr ? 'clair depuis la racine du paquet' : 'clear from the package root'}.`,
+      `4. **${fr ? 'Import relatif' : 'Relative import'}**\n\`from .helpers import format_name\` — ${fr ? 'réservé au code exécuté dans un paquet' : 'for code running inside a package'}.`,
+      `5. **${fr ? 'Point d’entrée' : 'Entry point'}**\n\`if __name__ == "__main__":\` ${fr ? 'sépare l’exécution directe du comportement lors d’un import' : 'separates direct execution from import behavior'}.`,
+      `6. **${fr ? 'Structure recommandée' : 'Recommended structure'}**\n\`\`\`text\nproject/\n  app/\n    __init__.py\n    main.py\n    helpers.py\n  tests/\n    test_helpers.py\n\`\`\``,
+      `7. **${fr ? 'Règle essentielle' : 'Core rule'}**\n${fr ? 'Placez la logique réutilisable dans des fonctions ou classes, gardez `main.py` léger et évitez les effets de bord au niveau du module.' : 'Put reusable logic in functions or classes, keep `main.py` thin, and avoid module-level side effects.'}`,
+    ].join('\n\n');
+  }
+
+  const moduleMap = new Map(files.map(file => [file.module.split('.').at(-1) || file.module, file]));
+  const edges: Array<{ from: string; to: string }> = [];
+  const issues: string[] = [];
+  for (const file of files) {
+    for (const imported of file.imports) {
+      const targetName = imported.module.split('.').at(-1) || imported.module;
+      const target = moduleMap.get(targetName);
+      if (!target) continue;
+      edges.push({ from: file.module, to: target.module });
+      for (const name of imported.names.filter(name => name !== '*')) {
+        if (!target.exports.has(name)) {
+          issues.push(fr
+            ? `\`${file.path}\` importe \`${name}\` depuis \`${target.path}\`, mais aucune définition de niveau module portant ce nom n’est visible.`
+            : `\`${file.path}\` imports \`${name}\` from \`${target.path}\`, but no module-level definition with that name is visible.`);
+        }
+      }
+      if (imported.relative && !file.path.includes('/') && !files.some(candidate => candidate.path.endsWith('/__init__.py'))) {
+        issues.push(fr
+          ? `\`${file.path}\` utilise un import relatif sans contexte de paquet visible.`
+          : `\`${file.path}\` uses a relative import without a visible package context.`);
+      }
+    }
+  }
+  for (const edge of edges) {
+    if (edges.some(candidate => candidate.from === edge.to && candidate.to === edge.from)) {
+      const cycle = [edge.from, edge.to].sort().join(' ↔ ');
+      if (!issues.some(issue => issue.includes(cycle))) {
+        issues.push(fr ? `Dépendance circulaire détectée : ${cycle}.` : `Circular dependency detected: ${cycle}.`);
+      }
+    }
+  }
+  const entryFiles = files.filter(file => /(?:^|\/)main\.py$/.test(file.path));
+  for (const entry of entryFiles) {
+    if (!/if\s+__name__\s*==\s*["']__main__["']\s*:/.test(entry.code) && /\bprint\s*\(|\binput\s*\(/.test(entry.code)) {
+      issues.push(fr
+        ? `\`${entry.path}\` exécute du code au niveau du module ; ajoutez une fonction \`main()\` et la garde \`if __name__ == "__main__":\`.`
+        : `\`${entry.path}\` executes module-level code; add a \`main()\` function and an \`if __name__ == "__main__":\` guard.`);
+    }
+  }
+  return [
+    `**${fr ? 'Audit du projet Python multi-fichiers' : 'Multi-file Python project audit'}**`,
+    `**${fr ? 'Fichiers détectés' : 'Detected files'} (${files.length})**\n${files.map((file, index) => `${index + 1}. \`${file.path}\` — ${file.exports.size} ${fr ? 'symboles exportés' : 'exported symbols'}`).join('\n')}`,
+    `**${fr ? 'Graphe des imports locaux' : 'Local import graph'}**\n${edges.length ? edges.map(edge => `- \`${edge.from}\` → \`${edge.to}\``).join('\n') : (fr ? 'Aucun import entre les fichiers fournis.' : 'No imports between the supplied files.')}`,
+    `**${fr ? 'Problèmes vérifiables' : 'Verifiable issues'}**\n${issues.length ? issues.map((issue, index) => `${index + 1}. ${issue}`).join('\n') : (fr ? 'Aucun nom importé manquant ni cycle direct n’a été détecté.' : 'No missing imported name or direct cycle was detected.')}`,
+    `**${fr ? 'Limite de l’audit' : 'Audit limit'}**\n${fr ? 'Seuls les fichiers collés sont analysés. Les bibliothèques installées, les imports dynamiques et les chemins configurés à l’exécution ne sont pas vérifiés.' : 'Only pasted files are analyzed. Installed libraries, dynamic imports, and runtime path configuration are not verified.'}`,
+  ].join('\n\n');
+};

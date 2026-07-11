@@ -215,6 +215,8 @@ try {
     ['Generate test cases for this function:\n```python\ndef square(number):\n    return number ** 2\n```', 'test_generation'],
     ['What is the time complexity?\n```python\nfor item in values:\n    print(item)\n```', 'complexity_analysis'],
     ['Compare these solutions:\n```python\nfor a in values:\n    for b in values:\n        print(a, b)\n```\n```python\nfor value in values:\n    print(value)\n```', 'code_comparison'],
+    ['How should I organize imports across multiple Python modules?', 'module_project'],
+    ['Audit these files:\n```python\n# file: main.py\nfrom helpers import greet\nprint(greet("Noll"))\n```\n```python\n# file: helpers.py\ndef greet(name):\n    return f"Hi {name}"\n```', 'module_project'],
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
@@ -352,6 +354,10 @@ try {
   const sortedComplexity = advanced.answerPythonComplexityRequest('What is the Big O?\n```python\nresult = sorted(values)\n```', 'en') || '';
   const codeComparison = advanced.answerPythonCodeComparison('Compare these solutions:\n```python\nfor left in values:\n    for right in values:\n        if left == right:\n            return True\n```\n```python\nseen = set()\nfor value in values:\n    if value in seen:\n        return True\n    seen.add(value)\n```', 'en') || '';
   const frenchCodeComparison = advanced.answerPythonCodeComparison('Compare ces solutions :\n```python\nfor value in values:\n    print(value)\n```\n```python\nprint(*values)\n```', 'fr') || '';
+  const moduleGuide = advanced.answerPythonModuleProjectRequest('How do modules, packages, and imports work?', 'en') || '';
+  const projectAudit = advanced.answerPythonModuleProjectRequest('Audit these modules:\n```python\n# file: main.py\nfrom helpers import greet\nprint(greet("Noll"))\n```\n```python\n# file: helpers.py\ndef greet(name):\n    return f"Hi {name}"\n```', 'en') || '';
+  const missingImportAudit = advanced.answerPythonModuleProjectRequest('Check imports:\n```python\n# file: main.py\nfrom helpers import missing_name\n```\n```python\n# file: helpers.py\ndef available():\n    return True\n```', 'en') || '';
+  const circularAudit = advanced.answerPythonModuleProjectRequest('Analyse ces fichiers multiples :\n```python\n# file: first.py\nimport second\n```\n```python\n# file: second.py\nimport first\n```', 'fr') || '';
   if (!learningPath.includes('Adaptive learning path') || !learningPath.includes('key-value literals')) failures.push('Adaptive learning path failed');
   if (!frenchLearningPath.includes('Parcours d’apprentissage adaptatif') || !frenchLearningPath.includes('paires clé-valeur') || frenchLearningPath.includes('nested dictionaries')) failures.push('French adaptive learning path failed');
   if (!qualityReview.includes('mutable default') || !qualityReview.includes('bare `except:`')) failures.push('Code-quality review failed');
@@ -364,6 +370,10 @@ try {
   if (!sortedComplexity.includes('O(n log n)') || !sortedComplexity.includes('sorting call')) failures.push('Sorting complexity analysis failed');
   if (!codeComparison.includes('Two-solution code comparison') || !codeComparison.includes('Solution B has the better') || !codeComparison.includes('Required verification')) failures.push('Two-solution comparison failed');
   if (!frenchCodeComparison.includes('Comparaison de deux solutions') || !frenchCodeComparison.includes('Vérification nécessaire')) failures.push('French code comparison failed');
+  if (!moduleGuide.includes('Python modules and files guide') || !moduleGuide.includes('__init__.py') || !moduleGuide.includes('__main__')) failures.push('Module and package guide failed');
+  if (!projectAudit.includes('Multi-file Python project audit') || !projectAudit.includes('`main` → `helpers`') || !projectAudit.includes('add a `main()` function')) failures.push('Multi-file project audit failed');
+  if (!missingImportAudit.includes('missing_name') || !missingImportAudit.includes('no module-level definition')) failures.push('Missing imported symbol audit failed');
+  if (!circularAudit.includes('Audit du projet Python multi-fichiers') || !circularAudit.includes('Dépendance circulaire détectée')) failures.push('French circular-import audit failed');
 
   const removeContracts = knowledge.answerPythonContractSearch('Which methods remove or delete items?', 'en') || '';
   const noneContracts = knowledge.answerPythonContractSearch('List methods that mutate in place and return None', 'en') || '';
