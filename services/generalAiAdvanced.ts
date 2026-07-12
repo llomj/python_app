@@ -554,6 +554,22 @@ export const answerPythonMisconceptionRequest = (question: string, language: Adv
       correction: 'g = [x*2 for x in range(5)]   # list comprehension — reusable\ng = (x*2 for x in range(5))   # generator — one pass only\nprint(list(g))  # first pass: [0, 2, 4, 6, 8]\nprint(list(g))  # second pass: []',
     });
   }
+  // String immutability: trying to assign to a string index
+  if (/\[-?\d+\]\s*=\s*['"]/.test(code) && code.split('\n').some(line => /^\s*(?:str\s*=|[A-Za-z_]\w*\s*=\s*['"])/.test(line) && /\[-?\d+\]\s*=\s*['"]/.test(line))) {
+    findings.push({
+      title: fr ? 'Immutabilité des chaînes' : 'String immutability',
+      explanation: fr ? 'Les chaînes Python sont immuables. Vous ne pouvez pas modifier un caractère par index ; créez une nouvelle chaîne.' : 'Python strings are immutable. You cannot change a character by index; create a new string instead.',
+      correction: 'text = "hello"\ntext = text[:0] + "H" + text[1:]  # "Hello"\n# Or use text.replace("h", "H")',
+    });
+  }
+  // Shadowing built-ins: using built-in names as variable names
+  if (/^(?:list|dict|str|int|float|bool|set|tuple|type|input|print|len|range|zip|map|filter|sorted|enumerate)\s*=.*[{(\[]/.test(code.trim())) {
+    findings.push({
+      title: fr ? 'Masquage d\'un nom natif' : 'Shadowing a built-in name',
+      explanation: fr ? `Réaffecter un nom natif comme \`${code.match(/^\w+/)[0]}\` empêche d'utiliser la fonction native dans la suite du programme.` : `Reassigning a built-in name like \`${code.match(/^\w+/)[0]}\` prevents using the native function later in the program.`,
+      correction: 'original_list = [1, 2, 3]  # not "list ="\nitems_count = len(items)        # not "len = "',
+    });
+  }
   if (!findings.length) return null;
   return [
     `**${fr ? 'Diagnostic du malentendu Python' : 'Python misconception diagnosis'}**`,
@@ -616,6 +632,9 @@ const PYTHON_VERSION_FEATURES: PythonVersionFeature[] = [
   { id: 'batched', version: [3, 12], label: ['`itertools.batched()`', '`itertools.batched()`'], detect: /\bbatched\s*\(/, alternative: ['Implement a manual batching loop with `range(0, len(seq), n)`.', 'Implémentez une boucle de groupement manuelle avec `range(0, len(seq), n)`.'], source: 'https://docs.python.org/3/whatsnew/3.12.html#itertools' },
   { id: 'override', version: [3, 12], label: ['`typing.override` decorator', 'le décorateur `typing.override`'], detect: /\boverride\s*$|\boverride\s*\(/m, alternative: ['Use a comment or a consistent naming convention to mark overrides.', 'Utilisez un commentaire ou une convention de nommage cohérente pour signaler les surcharges.'], source: 'https://docs.python.org/3/whatsnew/3.12.html#typing' },
   { id: 'path-walk', version: [3, 12], label: ['`Path.walk()` method', 'la méthode `Path.walk()`'], detect: /\.walk\s*\(/, alternative: ['Use `os.walk()` on older Python (returns tuples, not a generator of `Path`).', 'Utilisez `os.walk()` sur une version plus ancienne (renvoie des tuples, pas un générateur de `Path`).'], source: 'https://docs.python.org/3/library/pathlib.html#pathlib.Path.walk' },
+  { id: 'fstring-backslash', version: [3, 12], label: ['backslashes and quotes inside f-strings', 'antislash et guillemets dans les f-strings'], detect: /f["'][^\n]*?(?:\\[nrt'"\\]|["']\s*\{)/m, alternative: ['Pre-assign the escaped value to a variable outside the f-string.', 'Affectez la valeur échappée à une variable en dehors du f-string.'], source: 'https://docs.python.org/3/whatsnew/3.12.html#pep-701-fstring' },
+  { id: 'deprecated-decorator', version: [3, 13], label: ['the `@warnings.deprecated()` decorator', 'le décorateur `@warnings.deprecated()`'], detect: /@(?:warnings\.)?deprecated/, alternative: ['Use a custom `@deprecated` decorator that calls `warnings.warn()`.', 'Utilisez un décorateur `@deprecated` personnalisé qui appelle `warnings.warn()`.'], source: 'https://docs.python.org/3/library/warnings.html#deprecated' },
+  { id: 'copy-replace', version: [3, 13], label: ['`copy.replace()` for dataclasses', '`copy.replace()` pour les dataclasses'], detect: /\bcopy\.replace\s*\(/, alternative: ['Use `dataclasses.replace()` on older Python.', 'Utilisez `dataclasses.replace()` sur une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.13.html#copy' },
 ];
 
 const comparePythonVersions = (left: [number, number], right: [number, number]): number => left[0] - right[0] || left[1] - right[1];

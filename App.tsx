@@ -2864,6 +2864,93 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
             'Use `global x` or `nonlocal x` if you intend to modify the outer variable, or rename the local variable to avoid shadowing.',
         ].join('\n');
     }
+    if (/importerror|import error|cannot import|no module named|modulenotfounderror/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`ImportError` (or `ModuleNotFoundError` in Python 3.6+) means Python could not find or load the module you tried to import.',
+            '',
+            '2. Common causes',
+            '- The module is not installed (`pip install <name>`).',
+            '- The module name is misspelled (case-sensitive on some platforms).',
+            '- The module is in a different directory and not on `sys.path`.',
+            '- A circular import between two files.',
+            '',
+            '3. Example fixes',
+            '```python',
+            '# pip install requests in the terminal first',
+            'import requests  # works after installation',
+            '',
+            '# Fix path for local modules:',
+            'import sys',
+            'sys.path.append("/path/to/module")  # add directory to search path',
+            '```',
+        ].join('\n');
+    }
+    if (/overflowerror|overflow error|integer overflow|math range error/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`OverflowError` is raised when a floating-point operation produces a result too large to represent. Python integers have unlimited precision, so this only applies to floats and the `decimal` module.',
+            '',
+            '2. Common causes',
+            '- `math.exp(1000)` produces a float too large for your platform.',
+            '- `decimal.Decimal` operations with extreme values.',
+            '',
+            '3. Difference from integers',
+            'Python integers never overflow — they grow until memory runs out (`MemoryError`). `OverflowError` only affects `float`, `Decimal`, and C extension types.',
+        ].join('\n');
+    }
+    if (/connectionerror|connection error|connection refused|connection reset|connection aborted|broken pipe/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`ConnectionError` is the parent class for network-related errors: `ConnectionRefusedError`, `ConnectionResetError`, `ConnectionAbortedError`, and `BrokenPipeError`.',
+            '',
+            '2. Common causes',
+            '- `ConnectionRefusedError`: nothing is listening on the target port.',
+            '- `ConnectionResetError`: the remote peer closed the connection.',
+            '- `ConnectionAbortedError`: the connection was aborted by the remote side.',
+            '- `BrokenPipeError`: writing to a pipe/socket that the reader closed.',
+            '',
+            '3. Solutions',
+            '- Verify the server is running and reachable.',
+            '- Check firewall and port settings.',
+            '- Handle gracefully with retry logic or timeouts.',
+        ].join('\n');
+    }
+    if (/generatorexit|generator exit/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`GeneratorExit` is raised when a generator or coroutine is closed via `.close()`. It is not an error you normally catch — it signals the generator to clean up and exit.',
+            '',
+            '2. Behavior',
+            'Calling `gen.close()` raises `GeneratorExit` inside the generator. If the generator catches it and yields instead of raising `StopIteration` (or returning), Python raises `RuntimeError`.',
+            '',
+            '3. Not for normal code',
+            'You should not raise or catch `GeneratorExit` directly unless you are implementing a context manager with a generator (`@contextmanager` handles this automatically).',
+        ].join('\n');
+    }
+    if (/warning|deprecationwarning|userwarning|futurewarning|runtimewarning/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            'Warnings are Python\'s way of telling you something is not ideal but not an error. They print to stderr and do not stop execution.',
+            '',
+            '2. Common warning types',
+            '- `DeprecationWarning`: a feature is deprecated and may be removed.',
+            '- `UserWarning`: a user-defined warning (default for `warn()`).',
+            '- `FutureWarning`: behavior will change in a future version.',
+            '- `RuntimeWarning`: suspicious runtime behavior (e.g., overflow in `~=`, division by zero comparison).',
+            '',
+            '3. Example',
+            '```python',
+            'import warnings',
+            'warnings.warn("this feature will be removed", DeprecationWarning)',
+            '',
+            '# Suppress warnings temporarily:',
+            'with warnings.catch_warnings():',
+            '    warnings.simplefilter("ignore")',
+            '    # your deprecated code here',
+            '```',
+        ].join('\n');
+    }
     return [
         '1. Error helper',
         'Python errors usually tell you the error type, line number, and what went wrong.',
