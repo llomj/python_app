@@ -29,6 +29,12 @@ const PATHS: Record<string, string[]> = {
   function: ['parameters and arguments', 'return values', 'defaults and keywords', '*args and **kwargs', 'scope and LEGB', 'higher-order functions', 'closures', 'decorators'],
   oop: ['classes and objects', '__init__ and attributes', 'instance methods', 'class and static methods', 'inheritance', 'composition', 'properties', 'protocols and special methods'],
   async: ['coroutines', 'await', 'tasks', 'gather()', 'timeouts', 'cancellation', 'queues', 'structured concurrency'],
+  string: ['string literals and quotes', 'indexing and slicing', 'immutability', 'methods (upper, split, join, replace)', 'f-strings', 'string formatting', 'regex basics', 'Unicode and encoding'],
+  tuple: ['tuple literals', 'indexing and unpacking', 'immutability', 'namedtuple', 'tuple vs list', 'hashability', 'returning multiple values'],
+  set: ['set literals', 'membership tests', 'union, intersection, difference', 'mutation methods', 'frozenset', 'set comprehensions', 'performance'],
+  'exception-handling': ['try/except basics', 'catching specific exceptions', 'else and finally', 'raising exceptions', 'exception chaining', 'custom exceptions', 'context managers'],
+  'file-io': ['open() and modes', 'reading (read, readline, readlines)', 'writing (write, writelines)', 'context managers (with)', 'encoding and binary mode', 'pathlib basics', 'CSV and JSON files'],
+  'decorator-generator': ['iterators and iter()', 'generators and yield', 'generator expressions', 'decorator basics', 'decorators with arguments', 'generator-based pipelines', 'async generators'],
 };
 
 const PATHS_FR: Record<string, string[]> = {
@@ -38,6 +44,12 @@ const PATHS_FR: Record<string, string[]> = {
   function: ['paramètres et arguments', 'valeurs de retour', 'valeurs par défaut et mots-clés', '*args et **kwargs', 'portée et règle LEGB', 'fonctions d’ordre supérieur', 'fermetures', 'décorateurs'],
   oop: ['classes et objets', '__init__ et attributs', 'méthodes d’instance', 'méthodes de classe et statiques', 'héritage', 'composition', 'propriétés', 'protocoles et méthodes spéciales'],
   async: ['coroutines', 'await', 'tâches', 'gather()', 'délais d’attente', 'annulation', 'files', 'concurrence structurée'],
+  string: ['littéraux de chaîne et guillemets', 'indexation et découpage', 'immutabilité', 'méthodes (upper, split, join, replace)', 'f-strings', 'formatage de chaîne', 'bases des regex', 'Unicode et encodage'],
+  tuple: ['littéraux de tuple', 'indexation et déballage', 'immutabilité', 'namedtuple', 'tuple vs liste', 'hachabilité', 'renvoi de plusieurs valeurs'],
+  set: ['littéraux d\'ensemble', 'tests d\'appartenance', 'union, intersection, différence', 'méthodes de modification', 'frozenset', 'compréhensions d\'ensemble', 'performances'],
+  'exception-handling': ['bases try/except', 'capture d\'exceptions précises', 'else et finally', 'lever des exceptions', 'chaînage d\'exceptions', 'exceptions personnalisées', 'gestionnaires de contexte'],
+  'file-io': ['open() et modes', 'lecture (read, readline, readlines)', 'écriture (write, writelines)', 'gestionnaires de contexte (with)', 'encodage et mode binaire', 'bases de pathlib', 'fichiers CSV et JSON'],
+  'decorator-generator': ['itérateurs et iter()', 'générateurs et yield', 'expressions génératrices', 'bases des décorateurs', 'décorateurs avec arguments', 'pipelines basés sur générateurs', 'générateurs asynchrones'],
 };
 
 const pathKey = (question: string): string => {
@@ -47,6 +59,12 @@ const pathKey = (question: string): string => {
   if (/\b(?:functions?|fonctions?)\b/.test(value)) return 'function';
   if (/\b(?:oop|poo|object.oriented|orient[eé]e objet|classes?)\b/.test(value)) return 'oop';
   if (/\b(?:async|asynchrone|await|asyncio)\b/.test(value)) return 'async';
+  if (/\b(?:strings?|cha[îi]nes?|str|text)\b/.test(value)) return 'string';
+  if (/\b(?:tuples?|tuples?)\b/.test(value)) return 'tuple';
+  if (/\b(?:sets?|ensembles?)\b/.test(value) && !/\b(?:dict|dictionnary|dictionnaire)\b/.test(value)) return 'set';
+  if (/\b(?:exception|error|erreur|try|except)\b/.test(value)) return 'exception-handling';
+  if (/\b(?:file.?io|fichiers?|file operations?|lecture|write|read|open)\b/.test(value)) return 'file-io';
+  if (/\b(?:decorator|generator|générateur|décorateur|yield|itérateur|iterator)\b/.test(value)) return 'decorator-generator';
   return 'python';
 };
 
