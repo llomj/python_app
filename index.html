@@ -111,6 +111,30 @@
         }
 
         /* Solution 37: Remove ALL constraints - let content expand naturally */
+        /* Landscape mode: reduce fixed element overhead, let content fill width */
+        @media (orientation: landscape) and (max-height: 500px) {
+            [data-landscape-hide="problem-panel"] {
+                display: none !important;
+            }
+            [data-landscape-toolbar] {
+                top: 78px !important;
+            }
+            [data-landscape-main-scroll] {
+                padding-top: 132px !important;
+            }
+            [data-editor-panel] .cm-editor {
+                min-height: 160px !important;
+                height: 160px !important;
+            }
+            [data-editor-panel] .cm-scroller {
+                min-height: 160px !important;
+            }
+            #root > div > div:first-child {
+                padding-top: max(0.5rem, calc(env(safe-area-inset-top) + 0.25rem)) !important;
+                padding-bottom: 0.25rem !important;
+            }
+        }
+
         div[data-problem-description],
         div.problem-description-scroll,
         div[data-problem-description].problem-description-scroll,

@@ -27,6 +27,7 @@ export type GeneralAiIntent =
   | 'purpose'
   | 'relationships'
   | 'definition'
+  | 'mechanism'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -127,6 +128,10 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:syntaxerror|typeerror|nameerror|valueerror|keyerror|indexerror|indentationerror|attributeerror|exception|error|erreur)\b/i.test(lower)) {
     return { intent: 'error_help', confidence: 0.91, reason: 'Python error name or error request detected' };
+  }
+  if (/^how\s+(?:does|do|is|are)\s+.+\bwork(?:s|ing)?\b/i.test(value)
+    || /\bhow\s+(?:does|do|is|are)\s+.+\b(?:internally|under the hood|behind the scenes|mechanism)\b/i.test(value)) {
+    return { intent: 'mechanism', confidence: 0.96, reason: 'How-does-it-work mechanism request detected' };
   }
   if (/^(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell me about|qu['’]est-ce que|d[eé]finis?|explique|d[eé]cris)\b/i.test(value)
     || value.split(/\s+/).length <= 4) {

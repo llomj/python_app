@@ -175,6 +175,8 @@ const GENERAL_AI_TOPIC_ALIASES: Record<string, string[]> = {
     'keyword argument': ['keyword argument', 'keyword arguments', 'kwarg', 'kwargs', 'keyboard argument', 'keyboard arguments'],
     identifier: ['identifier', 'identifiers', 'identify'],
     variable: ['variable', 'variables'],
+    expression: ['expression', 'expressions', 'exp'],
+    statement: ['statement', 'statements', 'stmt'],
     syntax: ['syntax'],
     indentation: ['indentation', 'indent', 'indents'],
     comment: ['comment', 'comments', 'commerce'],
@@ -192,6 +194,11 @@ const GENERAL_AI_TOPIC_ALIASES: Record<string, string[]> = {
     comprehension: ['comprehension', 'comprehensions', 'list comprehension', 'dict comprehension', 'set comprehension'],
     slicing: ['slicing', 'slice', 'slices'],
     'built-in function': ['built-in function', 'built in function', 'builtin function', 'built-ins', 'builtins'],
+    'f-string': ['f-string', 'fstring', 'f string', 'formatted string', 'formatted string literal'],
+    'is-operator': ['is operator', 'is keyword', 'is not', 'identity operator', 'identity comparison'],
+    truthy: ['truthy', 'truthy value', 'truthy values', 'falsy', 'falsy value', 'falsy values', 'falsey', 'truth value testing'],
+    unpacking: ['unpacking', 'unpack', 'starred', 'starred expression', 'star operator', 'asterisk operator', '*args'],
+    none: ['none', 'None', 'NoneType', 'null', 'nil', 'absence of value'],
 };
 
 const detectGeneralPythonTopic = (question: string): string => {
@@ -411,7 +418,7 @@ const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
     }
     const conceptSpec = GENERAL_AI_CONCEPT_SPECS[topic];
     if (conceptSpec) {
-        return [
+        const parts = [
             `**${conceptSpec.label}**`,
             '',
             conceptSpec.summary,
@@ -423,7 +430,11 @@ const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
             '```python',
             conceptSpec.example,
             '```',
-        ].join('\n');
+        ];
+        if (conceptSpec.mistakes) {
+            parts.push('', `4. Common mistakes: ${conceptSpec.mistakes}`);
+        }
+        return parts.join('\n');
     }
     const answers: Record<string, string> = {
         list: [
@@ -501,6 +512,7 @@ type GeneralAiConceptSpec = {
     bestFor: string;
     example: string;
     mistakes?: string;
+    related?: string[];
 };
 
 const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
@@ -510,6 +522,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`[1, 2, 3]`',
         bestFor: 'Sequences you need to edit, append to, sort, slice, or loop through.',
         example: 'items = ["a", "b"]\nitems.append("c")\nprint(items[0])',
+        mistakes: 'Lists are mutable and unhashable — they cannot be dict keys or set items. `[1, 2] == [1, 2]` checks value equality (True), not identity. A trailing comma is allowed.',
+        related: ['tuple', 'set', 'comprehension', 'slicing', 'loop'],
     },
     tuple: {
         label: 'Tuple',
@@ -517,6 +531,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`(1, 2, 3)`',
         bestFor: 'Fixed records, coordinates, unpacking, and values that should not change.',
         example: 'point = (10, 20)\nx, y = point\nprint(x)',
+        mistakes: 'A single-element tuple needs a trailing comma: `(1,)` not `(1)`. Tuples are immutable — you cannot append, remove, or reassign items. Tuples are hashable only when all items are hashable.',
+        related: ['list', 'unpacking', 'dictionary'],
     },
     set: {
         label: 'Set',
@@ -524,6 +540,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`{1, 2, 3}` or `set()` for empty set',
         bestFor: 'Removing duplicates, fast membership checks, union, intersection, and difference.',
         example: 'values = {1, 1, 2, 3}\nprint(values)      # {1, 2, 3}\nprint(2 in values) # True',
+        mistakes: '`{}` creates an empty dict, not a set — use `set()`. Sets are unordered; `{1, 2, 3}[0]` raises TypeError. Set elements must be hashable (lists and dicts cannot be set items).',
+        related: ['list', 'dictionary', 'boolean'],
     },
     dictionary: {
         label: 'Dictionary',
@@ -531,6 +549,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`{"name": "Noll", "age": 30}`',
         bestFor: 'Looking up values by meaningful keys such as names, IDs, or labels.',
         example: 'user = {"name": "Noll", "age": 30}\nprint(user["name"])\nuser["city"] = "Paris"',
+        mistakes: 'Accessing a missing key with `dict[key]` raises KeyError — use `.get(key, default)` for safe access. Dict keys must be hashable (strings, numbers, tuples; not lists or dicts). Python 3.7+ preserves insertion order.',
+        related: ['list', 'set', 'comprehension'],
     },
     string: {
         label: 'String',
@@ -538,6 +558,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`"hello"` or `\'hello\'`',
         bestFor: 'Text, characters, formatting, splitting, searching, and validation methods like `isdigit()`.',
         example: 'text = "hello"\nprint(text[0])\nprint(text.upper())',
+        mistakes: 'Strings are immutable — `text[0] = "a"` raises TypeError. String methods return new strings; they never modify the original. Single-character strings are still strings, not a `char` type.',
+        related: ['f-string', 'slicing', 'boolean'],
     },
     boolean: {
         label: 'Boolean',
@@ -545,6 +567,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`True` / `False`',
         bestFor: 'Conditions, comparisons, flags, and yes/no logic.',
         example: 'age = 20\nis_adult = age >= 18\nprint(is_adult)',
+        mistakes: '`True` and `False` are also integers (`True == 1`, `False == 0`), which can cause subtle bugs in numeric comparisons. Use `is` to distinguish `True` from `1`. Empty collections, `0`, `None`, and `""` are falsy.',
+        related: ['truthy', 'condition', 'is-operator', 'none'],
     },
     integer: {
         label: 'Integer',
@@ -552,6 +576,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`42`, `-3`, `0`',
         bestFor: 'Counting, indexing, loop ranges, and exact whole-number arithmetic.',
         example: 'count = 3\nprint(count + 2)',
+        mistakes: 'Division with `/` always returns a float — use `//` for integer division. Python integers have unlimited precision but large numbers use more memory. `True` and `False` behave as `1` and `0` in integer contexts.',
+        related: ['float', 'boolean'],
     },
     float: {
         label: 'Float',
@@ -559,6 +585,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`3.14`, `0.5`, `-2.0`',
         bestFor: 'Measurements, averages, division results, and decimal calculations.',
         example: 'price = 19.99\nprint(price * 1.1)',
+        mistakes: 'Floating-point arithmetic can produce tiny rounding errors: `0.1 + 0.2` is not exactly `0.3`. Use `round(value, places)` or the `decimal.Decimal` type for exact decimal math. Division with `/` always returns a float.',
+        related: ['integer', 'boolean'],
     },
     function: {
         label: 'Function',
@@ -566,6 +594,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`def name(parameters):`',
         bestFor: 'Reusable logic that receives inputs and returns or prints a result.',
         example: 'def add(a, b):\n    return a + b\nprint(add(2, 3))',
+        mistakes: 'Don\'t forget the colon after the parameter list and the indented body. A function without `return` returns `None`. Default argument values are evaluated once at definition time, not each call.',
+        related: ['method', 'return', 'parameter', 'argument', 'lambda', 'scope'],
     },
     method: {
         label: 'Method',
@@ -573,6 +603,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`object.method()`',
         bestFor: 'Operations that belong to a specific object, such as string/list/dict methods.',
         example: 'text = "hello"\nprint(text.upper())',
+        mistakes: 'Call methods with parentheses: `text.upper()` not `text.upper`. Most list/dict methods mutate in place and return `None`. String methods return new strings instead.',
+        related: ['function', 'class', 'object', 'attribute'],
     },
     module: {
         label: 'Module',
@@ -580,6 +612,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`import math`',
         bestFor: 'Organizing reusable code and using standard-library tools.',
         example: 'import math\nprint(math.sqrt(16))',
+        mistakes: 'Import once at the top of the file — Python caches imports. Use `from module import name` to import only what you need. `import *` is discouraged because it pollutes the namespace.',
+        related: ['package', 'library', 'file'],
     },
     file: {
         label: 'Python file',
@@ -587,6 +621,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`helper.py`',
         bestFor: 'Saving scripts, functions, classes, and reusable code on disk.',
         example: '# helper.py\ndef greet(name):\n    return f"Hi {name}"',
+        mistakes: 'Filenames should start with a letter/underscore and contain only letters, digits, and underscores. A `.py` file becomes a module with the same name as the filename. Files in subdirectories need `__init__.py`.',
+        related: ['module', 'package', 'identifier'],
     },
     package: {
         label: 'Package',
@@ -594,6 +630,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`package_name.module_name`',
         bestFor: 'Organizing many related modules under one namespace.',
         example: 'from pathlib import Path\nprint(Path("."))',
+        mistakes: 'A package directory needs `__init__.py` (explicit namespace package in older Python). Importing a package does not auto-import its submodules — you must import them explicitly or in `__init__.py`.',
+        related: ['module', 'library', 'file'],
     },
     library: {
         label: 'Library',
@@ -601,6 +639,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`import random` / installed libraries like `requests`',
         bestFor: 'Using prebuilt tools instead of writing everything yourself.',
         example: 'import random\nprint(random.randint(1, 10))',
+        mistakes: 'Most libraries need `pip install` before importing. Only the standard library is built-in. Avoid importing the entire library when you only need one function — use `from library import function`.',
+        related: ['module', 'package', 'built-in function'],
     },
     class: {
         label: 'Class',
@@ -608,6 +648,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`class Name:`',
         bestFor: 'Grouping related data and behavior together.',
         example: 'class Dog:\n    def __init__(self, name):\n        self.name = name',
+        mistakes: 'Instance methods need `self` as the first parameter. `__init__` is the initializer, not the constructor. Class variables are shared across all instances. Don\'t forget `()` when creating instances: `Dog()` not `Dog`.',
+        related: ['object', 'oop', 'attribute', 'method'],
     },
     object: {
         label: 'Object',
@@ -615,6 +657,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`pet = Dog("Noll")`',
         bestFor: 'Working with values that have attributes and methods.',
         example: 'text = "hello"\nprint(type(text))\nprint(text.upper())',
+        mistakes: 'Almost everything in Python is an object — functions, classes, modules included. Use `isinstance(obj, type)` for type checks, not `type(obj) is Type`. Objects have identity, type, and value.',
+        related: ['class', 'attribute', 'method', 'oop'],
     },
     attribute: {
         label: 'Attribute',
@@ -622,6 +666,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`object.attribute`',
         bestFor: 'Storing object data such as `user.name` or `pet.age`.',
         example: 'class User:\n    def __init__(self, name):\n        self.name = name\n\nuser = User("Noll")\nprint(user.name)',
+        mistakes: 'Accessing a missing attribute raises AttributeError. Use `getattr(obj, "name", default)` for safe access. Names starting with `_` are conventionally private but not enforced by Python.',
+        related: ['object', 'class', 'method', 'variable'],
     },
     argument: {
         label: 'Argument',
@@ -629,6 +675,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`greet("Noll")`',
         bestFor: 'Supplying input values when calling functions.',
         example: 'def greet(name):\n    return f"Hi {name}"\n\nprint(greet("Noll"))',
+        mistakes: 'Positional arguments must come before keyword arguments. Mutable default arguments are shared across calls — use `None` as default and create a new mutable inside the function. Extra or missing arguments raise TypeError.',
+        related: ['parameter', 'keyword argument', 'function'],
     },
     parameter: {
         label: 'Parameter',
@@ -636,6 +684,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`def greet(name):`',
         bestFor: 'Naming the inputs a function expects.',
         example: 'def greet(name):\n    return f"Hi {name}"',
+        mistakes: 'Default parameter values are evaluated once at definition time, not each call. Parameters with defaults must come after parameters without defaults. `*args` captures extra positional args; `**kwargs` captures extra keyword args.',
+        related: ['argument', 'keyword argument', 'function'],
     },
     'keyword argument': {
         label: 'Keyword argument',
@@ -643,6 +693,35 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`name=value`',
         bestFor: 'Making function calls clearer and passing optional/default values.',
         example: 'def greet(name, loud=False):\n    return name.upper() if loud else name\n\nprint(greet(name="Noll", loud=True))',
+        mistakes: 'Keyword arguments must follow positional arguments in a call. Misspelling a keyword argument raises TypeError. `**kwargs` in a definition captures all extra keyword arguments as a dict.',
+        related: ['argument', 'parameter', 'function'],
+    },
+    expression: {
+        label: 'Expression',
+        summary: 'A piece of code that produces a value. Simple expressions are literals like `42` or `"hello"`; compound expressions combine values with operators like `x + y` or `len(items)`. Every expression evaluates to a single value.',
+        syntax: 'Any code that returns a value: `42`, `"text"`, `x + y`, `len(items)`, `max(a, b, c)`',
+        bestFor: 'Computing values, making decisions in conditions (e.g. `if x > 0:`), and providing arguments to functions.',
+        example: 'result = 42 + 8       # 42 + 8 is an expression -> 50\nprint(max(10, 20) * 2)  # max(10, 20) * 2 is an expression -> 40',
+        mistakes: 'Expressions always produce a value but a bare expression like `42` on its own line is valid but useless. `=` is assignment (statement), not an expression; `==` is the equality comparison (expression). `if`, `for`, `while` are statements, not expressions.',
+        related: ['statement', 'variable', 'return'],
+    },
+    statement: {
+        label: 'Statement',
+        summary: 'A complete instruction that Python executes. Statements do work: assign variables, loop, branch, define functions, import modules, or return values. Unlike expressions, statements do not produce a value by themselves.',
+        syntax: '`x = 42`, `if condition:`, `for item in items:`, `def name():`, `return value`, `import math`',
+        bestFor: 'Controlling program flow, defining structure, assigning variables, and organizing code into functions and classes.',
+        example: 'x = 42          # assignment statement (no value produced)\nif x > 0:        # if statement\n    print(x)      # print statement\n# This whole if-block is statements, not expressions',
+        mistakes: 'You cannot put a statement where Python expects an expression — for example inside an f-string `{}`, a lambda body, or a comprehension expression part. `x = 42` is a statement; `x == 42` is an expression. Most Python lines are statements.',
+        related: ['expression', 'syntax', 'indentation'],
+    },
+    variable: {
+        label: 'Variable',
+        summary: 'A named reference to a value stored in memory. You assign a variable with `=` and read it by using its name. Python variables do not have a fixed type — they hold whatever value was last assigned.',
+        syntax: '`name = value` — no type declaration needed',
+        bestFor: 'Storing intermediate results, tracking state, reusing values, and making code readable.',
+        example: 'count = 10                 # variable stores 10\nname = "Noll"               # variable stores "Noll"\ncount = count + 1           # update variable\nprint(count, name)',
+        mistakes: 'Variable names are case-sensitive and must start with a letter or underscore. Accessing an unassigned variable raises NameError. Variables bound in a `for` loop leak to the enclosing scope after the loop ends (Python 3 still leaks in comprehensions in older Python versions, but not in 3.12+).',
+        related: ['identifier', 'expression', 'scope'],
     },
     identifier: {
         label: 'Identifier',
@@ -650,6 +729,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`my_var`, `_private`, `User2`',
         bestFor: 'Naming things in code.',
         example: 'total_score = 95\nprint(total_score)',
+        mistakes: 'Identifiers cannot start with a digit, cannot be Python keywords (`if`, `for`, `while`, etc.), and cannot contain spaces or special characters except underscores. Names starting with `_` are conventionally private.',
+        related: ['variable', 'syntax', 'keyword argument'],
     },
     syntax: {
         label: 'Syntax',
@@ -657,6 +738,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`if condition:` then an indented block',
         bestFor: 'Making code understandable to the Python interpreter.',
         example: 'if True:\n    print("valid syntax")',
+        mistakes: 'Python uses indentation for blocks — no braces. The most common syntax errors: missing colons, unclosed quotes or parentheses, mixing tabs and spaces, and invalid variable names.',
+        related: ['statement', 'indentation', 'expression'],
     },
     indentation: {
         label: 'Indentation',
@@ -664,6 +747,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '4 spaces per block level',
         bestFor: 'Showing which code belongs inside `if`, `for`, `while`, `def`, and `class` blocks.',
         example: 'if True:\n    print("inside block")',
+        mistakes: 'Use 4 spaces per level and never mix tabs with spaces. Inconsistent indentation raises IndentationError. Lines at the same indent are in the same block. Your editor should convert tabs to spaces automatically.',
+        related: ['syntax', 'condition', 'loop'],
     },
     comment: {
         label: 'Comment',
@@ -671,6 +756,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`# this is a comment`',
         bestFor: 'Notes, reminders, and explaining non-obvious logic.',
         example: '# Calculate the total price\ntotal = price * quantity',
+        mistakes: 'Comments start with `#` and go to the end of the line — there is no multi-line comment syntax. Use triple-quoted strings (`"""..."""`) for multi-line comments/docstrings. Over-commenting obvious code is not helpful.',
+        related: ['syntax', 'docstring'],
     },
     comma: {
         label: 'Comma',
@@ -678,6 +765,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`,`',
         bestFor: 'Separating values in lists, tuples, function calls, and function definitions.',
         example: 'items = [1, 2, 3]\nprint("a", "b", "c")',
+        mistakes: 'A trailing comma is allowed in lists, tuples, dicts, and function calls. A single-element tuple requires a trailing comma: `(1,)` not `(1)`. A trailing comma in a function definition makes parameters a tuple.',
+        related: ['syntax', 'tuple', 'argument'],
     },
     return: {
         label: 'return',
@@ -685,6 +774,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`return value`',
         bestFor: 'Function answers that need to be reused, tested, or stored.',
         example: 'def square(x):\n    return x * x\n\nresult = square(4)',
+        mistakes: 'A function without a `return` statement returns `None`. Code written after `return` is unreachable. `return` with no value also returns `None`. `print()` displays a value but does not act as a `return`.',
+        related: ['print', 'function', 'none'],
     },
     print: {
         label: 'print()',
@@ -692,6 +783,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`print(value)`',
         bestFor: 'Showing results, debugging, and script output.',
         example: 'print("Hello")',
+        mistakes: '`print()` returns `None`, not the displayed value. `print()` adds a newline by default; use `print(..., end="")` to suppress it. `print()` writes to stdout, not to a variable — you cannot capture its output with assignment.',
+        related: ['return', 'function', 'f-string'],
     },
     'for loop': {
         label: 'for loop',
@@ -699,6 +792,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`for item in iterable:`',
         bestFor: 'Known sequences such as lists, strings, dictionaries, ranges, and files.',
         example: 'for item in ["a", "b"]:\n    print(item)',
+        mistakes: 'The loop variable keeps its last value after the loop ends. Do not mutate the iterable you are looping over — it can cause skipped items or runtime errors. Use `enumerate()` for index-value pairs.',
+        related: ['while loop', 'comprehension', 'iterator', 'condition'],
     },
     'while loop': {
         label: 'while loop',
@@ -706,6 +801,8 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`while condition:`',
         bestFor: 'Repeating until user input, a counter, or a state condition changes.',
         example: 'count = 0\nwhile count < 3:\n    print(count)\n    count += 1',
+        mistakes: 'Ensure the condition eventually becomes false — infinite loops freeze your program. `while True:` needs a `break` statement. The condition is checked only at the start of each iteration, not continuously.',
+        related: ['for loop', 'condition', 'loop'],
     },
     condition: {
         label: 'Condition',
@@ -713,6 +810,134 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         syntax: '`if value > 0:`',
         bestFor: 'Branching logic and yes/no decisions.',
         example: 'if score >= 50:\n    print("pass")\nelse:\n    print("fail")',
+        mistakes: 'Conditions must be expressions. Do not use `=` (assignment) when you mean `==` (comparison). Non-boolean values work: empty collections, `0`, `None`, and `""` are falsy; everything else is truthy.',
+        related: ['boolean', 'truthy', 'expression'],
+    },
+    lambda: {
+        label: 'Lambda',
+        summary: 'A small anonymous function defined in a single expression. A lambda takes parameters and returns the result of one expression after the `:`.',
+        syntax: '`lambda parameters: expression`',
+        bestFor: 'Short throwaway functions for `map()`, `filter()`, `sorted()` key, and callbacks.',
+        example: 'add = lambda a, b: a + b\nprint(add(2, 3))  # 5\n\npairs = [(1, "b"), (2, "a")]\nsorted(pairs, key=lambda pair: pair[1])',
+        mistakes: 'A lambda body can only contain a single expression — no statements, no assignments with `=`, no loops, no `if/elif/else` blocks (though ternary `x if cond else y` works). Lambdas cannot use type annotations. For anything complex, write a `def` function instead.',
+        related: ['function', 'closure', 'generator'],
+    },
+    closure: {
+        label: 'Closure',
+        summary: 'A nested function that remembers and continues to access variables from its enclosing scope, even after the outer function has finished executing.',
+        syntax: '`def outer(x):\n    def inner(y):\n        return x + y\n    return inner`',
+        bestFor: 'Creating functions with preset state (function factories), decorators, callbacks that carry context, and data hiding.',
+        example: 'def make_multiplier(factor):\n    def multiply(value):\n        return value * factor\n    return multiply\n\ndouble = make_multiplier(2)\nprint(double(5))  # 10',
+        mistakes: 'Closures capture variable references, not values at closure time — if the outer variable changes later, the closure sees the new value. To capture the current value in a loop, use a default argument: `lambda x, n=i: x + n`. You cannot assign to captured variables without `nonlocal`.',
+        related: ['function', 'lambda', 'decorator', 'scope'],
+    },
+    decorator: {
+        label: 'Decorator',
+        summary: 'A function that takes another function or class and extends or modifies its behavior without changing its source code.',
+        syntax: '`@decorator\ndef func():`',
+        bestFor: 'Adding logging, timing, access control, caching, validation, or registration to existing functions without modifying them.',
+        example: 'def log_call(func):\n    def wrapper(*args, **kwargs):\n        print(f"Calling {func.__name__}")\n        return func(*args, **kwargs)\n    return wrapper\n\n@log_call\ndef greet(name):\n    return f"Hi {name}"\n\nprint(greet("Noll"))',
+        mistakes: 'The decorator syntax `@deco` is equivalent to `func = deco(func)`. A decorator that takes arguments needs an extra wrapper layer. When decorating, `help(func)` shows the wrapper\'s signature unless you use `functools.wraps`. Decorators run at definition time, not call time.',
+        related: ['function', 'closure', 'class'],
+    },
+    generator: {
+        label: 'Generator',
+        summary: 'A function that produces a sequence of values lazily using `yield` instead of `return`. Each call to `next()` resumes the function from where it paused.',
+        syntax: '`def gen():\n    yield value`',
+        bestFor: 'Producing large or infinite sequences without storing them all in memory, processing streams of data, and implementing custom iterators.',
+        example: 'def count_up_to(limit):\n    n = 1\n    while n <= limit:\n        yield n\n        n += 1\n\nfor num in count_up_to(3):\n    print(num)  # 1 2 3',
+        mistakes: 'A generator function returns a generator object, not a value. Generators are single-use and become exhausted after iteration — you cannot reuse them. `next()` raises StopIteration when the generator is exhausted. Generator expressions use `()` not `[]`.',
+        related: ['iterator', 'function', 'comprehension'],
+    },
+    iterator: {
+        label: 'Iterator',
+        summary: 'An object that produces values one at a time using `__next__()`. Iterables (lists, strings, files) can be turned into iterators with `iter()`.',
+        syntax: '`iterator = iter(iterable)` then `next(iterator)`',
+        bestFor: 'Lazy data processing, looping over collections, streaming large datasets, and creating custom iteration behavior.',
+        example: 'items = [1, 2, 3]\nit = iter(items)\nnext(it)  # 1\nnext(it)  # 2\n\nfor value in items:\n    print(value)',
+        mistakes: 'Iterators are exhausted after a single pass — you cannot reset them. Most collections are iterables (you can call `iter()` on them), not iterators themselves. `next()` raises StopIteration when done; `for` loops handle this automatically.',
+        related: ['generator', 'loop', 'comprehension'],
+    },
+    comprehension: {
+        label: 'Comprehension',
+        summary: 'A compact syntax for building collections by transforming and filtering items from an iterable. Supports list, dict, and set comprehensions.',
+        syntax: '`[expression for item in iterable if condition]`, `{key: value for item in iterable}`, `{expression for item in iterable}`',
+        bestFor: 'Creating a new list, dict, or set by mapping and/or filtering existing data without manual loops.',
+        example: 'numbers = [1, 2, 3, 4, 5]\nsquares = [n**2 for n in numbers]          # [1, 4, 9, 16, 25]\nevens = [n for n in numbers if n % 2 == 0]  # [2, 4]\n\nsquare_dict = {n: n**2 for n in range(3)}   # {0: 0, 1: 1, 2: 4}',
+        mistakes: 'Comprehensions produce a new collection; they do not modify the original. The expression part must be an expression (no statements like `if/else` blocks, but ternary `x if cond else y` works). Deeply nested comprehensions are hard to read — use normal loops instead.',
+        related: ['list', 'dictionary', 'set', 'generator', 'loop'],
+    },
+    slicing: {
+        label: 'Slicing',
+        summary: 'Extracting a contiguous portion of a sequence using `[start:stop:step]`. The start position is included; the stop position is excluded.',
+        syntax: '`sequence[start:stop:step]` — all three parts are optional',
+        bestFor: 'Getting subsequences, copying lists (`[:]`), reversing (`[::-1]`), skipping items, and accessing ranges by index.',
+        example: 'text = "hello"\nprint(text[1:4])   # "ell"\nprint(text[:3])    # "hel"\nprint(text[::2])   # "hlo"\nprint(text[::-1])  # "olleh"',
+        mistakes: 'The stop index is exclusive — `text[0:3]` gives indices 0,1,2 not 3. Negative indexes count from the end. Slicing out of bounds does not raise an error — it returns as much as is available. Slicing creates a (shallow) copy for lists.',
+        related: ['list', 'string', 'tuple'],
+    },
+    oop: {
+        label: 'Object-Oriented Programming',
+        summary: 'A programming paradigm that organizes code around objects — instances of classes that bundle data (attributes) and behavior (methods) together.',
+        syntax: '`class ClassName:\n    def __init__(self, ...):\n        self.attribute = value`',
+        bestFor: 'Modeling real-world entities, code organization in large projects, reusing behavior via inheritance, and encapsulating state with methods.',
+        example: 'class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n\naccount = BankAccount("Noll", 100)\naccount.deposit(50)\nprint(account.balance)  # 150',
+        mistakes: 'Don\'t force OOP where functions suffice — over-engineering small scripts with classes adds complexity. Instance methods need `self` as the first parameter. Inheritance can create deep fragile hierarchies; prefer composition over inheritance. Python uses duck typing, not strict interfaces.',
+        related: ['class', 'object', 'attribute', 'method', 'inheritance'],
+    },
+    'built-in function': {
+        label: 'Built-in function',
+        summary: 'A function that is always available without importing anything. Python has about 70 built-in functions covering type conversion, math, iteration, I/O, and introspection.',
+        syntax: '`print()`, `len()`, `int()`, `range()`, `type()`, `sum()`, `max()`, `sorted()`, `zip()`, `map()`, `filter()`, `isinstance()`, `enumerate()`, `open()`',
+        bestFor: 'Common operations that every Python program needs: displaying output, converting types, getting collection sizes, generating sequences, and introspecting objects.',
+        example: '# Commonly used built-ins\nprint(len([1, 2, 3]))          # 3\nprint(sum([10, 20, 30]))       # 60\nprint(list(range(5)))          # [0, 1, 2, 3, 4]\nprint(type(42))                # <class \'int\'>',
+        mistakes: 'Built-ins can be accidentally shadowed by using their name as a variable (e.g. `list = [1,2]` prevents using `list()`). Not everything is a built-in — `math`, `random`, `json`, and `re` need importing. Use `dir(__builtins__)` to list all built-ins.',
+        related: ['function', 'module', 'library'],
+    },
+    'f-string': {
+        label: 'f-string',
+        summary: 'A formatted string literal that embeds expressions inside `{}` directly in a string prefixed with `f`. Expressions are evaluated at runtime and converted to strings.',
+        syntax: '`f"value is {expression}"`',
+        bestFor: 'Readable string formatting with variables, expressions, and function calls embedded directly in the string.',
+        example: 'name = "Noll"\nage = 30\nprint(f"Hi {name}, you are {age} years old")  # Hi Noll, you are 30 years old\nprint(f"Next year you will be {age + 1}")   # Next year you will be 31',
+        mistakes: 'The `{}` inside an f-string can only contain expressions — no statements, no `=`, no `pass`, no `for`. To include a literal `{` or `}`, double them: `{{` or `}}`. f-strings are available from Python 3.6 onward.',
+        related: ['string', 'print', 'expression'],
+    },
+    'is-operator': {
+        label: '`is` operator',
+        summary: 'Checks whether two references point to the exact same object in memory. Unlike `==`, `is` does not compare values — it checks identity.',
+        syntax: '`object1 is object2`',
+        bestFor: 'Checking for `None` (`value is None`), comparing singletons, and verifying that two variables reference the same object rather than equal but separate objects.',
+        example: 'a = [1, 2]\nb = [1, 2]\nc = a\nprint(a == b)  # True (same value)\nprint(a is b)  # False (different objects)\nprint(a is c)  # True (same object)\n\nprint(None is None)  # True (None is a singleton)',
+        mistakes: 'Use `is` for `None` checks (`x is None`), not for general value comparison. `is` is faster than `==` for singletons. Avoid `is` for numbers and strings — Python caches small integers and short strings, but `1000 is 1000` is implementation-dependent.',
+        related: ['boolean', 'none', 'expression'],
+    },
+    truthy: {
+        label: 'Truthy and falsy values',
+        summary: 'In Python, every value has an implicit Boolean truth value. Values that are "falsy" evaluate to `False` in a Boolean context; everything else is "truthy".',
+        syntax: '`bool(value)` returns `False` for falsy values, `True` otherwise',
+        bestFor: 'Writing clean conditions like `if items:` instead of `if len(items) > 0:`, and understanding when loops and conditions execute.',
+        example: 'falsy_values = [0, 0.0, "", [], {}, None, False]\nfor val in falsy_values:\n    if not val:\n        print(f"{val} is falsy")\n\n# Common pattern:\nitems = []\nif items:  # equivalent to: if len(items) > 0\n    print("has items")\nelse:\n    print("empty — falsy")',
+        mistakes: 'Being falsy does not mean the value IS `False` — `0 == False` is True because `bool` is a subclass of `int`, but `0 is False` is False. `None` is falsy, but `None == False` is False. Empty collections are falsy, but they are not equal to `False` in all contexts.',
+        related: ['boolean', 'condition', 'none', 'is-operator'],
+    },
+    unpacking: {
+        label: 'Unpacking',
+        summary: 'Extracting items from an iterable into separate variables or arguments in a single operation. The `*` operator unpacks iterables into positional arguments; `**` unpacks dictionaries into keyword arguments.',
+        syntax: '`a, b, c = iterable` — iterable unpacking\n`func(*iterable)` — function call unpacking\n`func(**dict)` — keyword unpacking',
+        bestFor: 'Assigning multiple variables at once, passing iterable items as separate function arguments, merging dictionaries, and handling variable-length arguments in function definitions.',
+        example: '# Tuple unpacking\npoint = (10, 20)\nx, y = point\nprint(x, y)  # 10 20\n\n# Function call unpacking\ndef add(a, b, c):\n    return a + b + c\nvalues = [1, 2, 3]\nprint(add(*values))  # 6\n\n# Dictionary unpacking (merge)\nd1 = {"a": 1, "b": 2}\nd2 = {"c": 3}\nmerged = {**d1, **d2}  # {"a": 1, "b": 2, "c": 3}',
+        mistakes: 'Unpacking requires the number of variables to match the number of items (use `*rest` to capture extras). A single `*` unpacks positional arguments; `**` unpacks keyword arguments — they are not interchangeable. `*args` in a function definition collects extra positional args into a tuple.',
+        related: ['tuple', 'list', 'dictionary', 'lambda', 'function'],
+    },
+    none: {
+        label: 'None',
+        summary: 'A special Python value representing the absence of a value. None is a singleton — there is only one `None` object in memory. Functions without `return` implicitly return `None`.',
+        syntax: '`None`',
+        bestFor: 'Indicating "no value", representing missing or optional data, as a default parameter for mutable arguments, and for functions that perform an action without returning a result.',
+        example: 'result = print("hello")  # print() returns None\nprint(result)             # None\n\ndef find_user(id):\n    if id == 1:\n        return "Noll"\n    return None   # user not found\n\nuser = find_user(2)\nif user is None:\n    print("User not found")',
+        mistakes: 'Use `is None` to check for None, not `== None` — `is` is the idiomatic identity check. `None` is falsy, but `None is False` is False. `None` is not the same as `0`, `""`, or `[]`. A function without an explicit `return` returns `None`.',
+        related: ['boolean', 'return', 'truthy', 'is-operator'],
     },
 };
 
@@ -729,8 +954,21 @@ const normalizeGeneralAiConceptName = (value: string): string | null => {
     return GENERAL_AI_CONCEPT_SPECS[normalized] ? normalized : null;
 };
 
-const extractGeneralAiComparisonPair = (question: string): [string, string] | null => {
+const extractGeneralAiComparisonPair = (question: string): string[] | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    // Multi-item: "difference between list, tuple, and set" (3+ items)
+    const multiMatch = lowerQ.match(
+        /(?:what(?:'s| is)?|can you explain|explain|tell me)?\s*(?:the\s+)?difference\s+between\s+(.+?)(?:\?|$)/i
+    );
+    if (multiMatch) {
+        const items = multiMatch[1]
+            .split(/\s*,?\s+(?:and|or|vs\.?|versus)\s*|\s*,\s*/)
+            .map(s => normalizeGeneralAiConceptName(s.trim()))
+            .filter(Boolean);
+        const uniqueItems = [...new Set(items)];
+        if (uniqueItems.length >= 2) return uniqueItems;
+    }
+    // Pair patterns: "difference between X and Y", "X vs Y", "compare X and Y"
     const pairPatterns = [
         /(?:what(?:'s| is)?|can you explain|explain|tell me)?\s*(?:the\s+)?difference\s+between\s+(.+?)\s+(?:and|vs\.?|versus)\s+(.+?)(?:\?|$)/i,
         /(?:compare|contrast)\s+(.+?)\s+(?:and|with|vs\.?|versus)\s+(.+?)(?:\?|$)/i,
@@ -749,7 +987,7 @@ const extractGeneralAiComparisonPair = (question: string): [string, string] | nu
     });
     const unique = [...new Set(detected)];
     if (/\bdifference|different|compare|contrast|vs\.?|versus\b/.test(lowerQ) && unique.length >= 2) {
-        return [unique[0], unique[1]];
+        return unique;
     }
     return null;
 };
@@ -801,11 +1039,38 @@ const buildGeneralAiComparisonAnswer = (question: string): string | null => {
 
     const pair = extractGeneralAiComparisonPair(question);
     if (!pair) return null;
-    const [firstKey, secondKey] = pair;
-    const first = GENERAL_AI_CONCEPT_SPECS[firstKey];
-    const second = GENERAL_AI_CONCEPT_SPECS[secondKey];
-    if (!first || !second) return null;
+    const specs = pair.map(k => GENERAL_AI_CONCEPT_SPECS[k]).filter(Boolean);
+    if (specs.length < 2) return null;
 
+    // Multi-item (3+): generate N-column table
+    if (specs.length >= 3) {
+        const header = `| Point | ${specs.map(s => s.label).join(' | ')} |`;
+        const divider = `|${specs.map(() => '---').join('|')}|`;
+        const meaningRow = `| Meaning | ${specs.map(s => s.summary).join(' | ')} |`;
+        const syntaxRow = `| Syntax | ${specs.map(s => s.syntax).join(' | ')} |`;
+        const bestForRow = `| Best for | ${specs.map(s => s.bestFor).join(' | ')} |`;
+        const examples = specs.map((s, i) =>
+            [`${i + 2}. ${s.label} example`, '```python', s.example, '```'].join('\n')
+        ).join('\n\n');
+        const rules = specs.map(s => `- Use **${s.label}** when: ${s.bestFor.toLowerCase()}`).join('\n');
+
+        return [
+            `1. Differences between ${specs.map(s => s.label).join(', ')}`,
+            header,
+            divider,
+            meaningRow,
+            syntaxRow,
+            bestForRow,
+            '',
+            examples,
+            '',
+            `${specs.length + 2}. Quick guide`,
+            rules,
+        ].join('\n');
+    }
+
+    // Two-item comparison
+    const [first, second] = specs;
     return [
         `1. Difference between ${first.label} and ${second.label}`,
         `| Point | ${first.label} | ${second.label} |`,
@@ -828,6 +1093,291 @@ const buildGeneralAiComparisonAnswer = (question: string): string | null => {
         `Use **${first.label}** when you need: ${first.bestFor.toLowerCase()}`,
         `Use **${second.label}** when you need: ${second.bestFor.toLowerCase()}`,
     ].join('\n');
+};
+
+const GENERAL_AI_MECHANISM_EXPLAINERS: Record<string, string> = {
+    'slicing': [
+        '**How slicing works**',
+        '',
+        'Slicing creates a new sequence from part of the original. It does not modify the original.',
+        '',
+        '1. Syntax: `sequence[start:stop:step]`',
+        '- `start`: index to begin (default: 0).',
+        '- `stop`: index to end **before** (default: end).',
+        '- `step`: how many items to skip (default: 1).',
+        '',
+        '2. Example',
+        '```python',
+        'nums = [0, 1, 2, 3, 4, 5]',
+        'print(nums[1:4])   # [1, 2, 3]',
+        'print(nums[:3])    # [0, 1, 2]',
+        'print(nums[::2])   # [0, 2, 4]',
+        'print(nums[::-1])  # [5, 4, 3, 2, 1, 0]  (reverse copy)',
+        '```',
+        '',
+        '3. How it works internally',
+        'Python calls `__getitem__(slice(start, stop, step))` on the object. The object\'s `__getitem__` knows how to interpret slice objects. For lists and strings, CPython iterates from `start` to `stop` by `step`, copying references (list) or characters (string) into a new object.',
+        '',
+        '4. Common mistake',
+        '`stop` is **exclusive**. `nums[1:3]` gives indices 1 and 2, not 3. Slices silently clamp out-of-bounds indices — they never raise IndexError.',
+    ].join('\n'),
+    'list': [
+        '**How a list works internally**',
+        '',
+        'Python lists are dynamic arrays of pointers, not linked lists.',
+        '',
+        '1. Memory layout',
+        'A list stores a contiguous C array of `PyObject*` pointers. Each pointer references the actual Python object stored elsewhere in memory.',
+        '',
+        '2. Growth strategy',
+        'When the array is full, CPython allocates a new, larger array, copies all pointers over, and frees the old array. The growth factor is approximately 1.125 (12.5% extra capacity). This makes `append()` amortized O(1).',
+        '',
+        '3. Performance',
+        '- Indexing: O(1) — direct pointer arithmetic.',
+        '- Append: amortized O(1).',
+        '- Insert/delete at front: O(n) — all elements shift.',
+        '- Search (`in`): O(n) — must scan each element.',
+        '',
+        '4. Example',
+        '```python',
+        'items = [1, 2, 3]  # array of 3 pointers + spare capacity',
+        'items.append(4)    # O(1), may need resize',
+        'x = items[0]       # O(1), direct pointer lookup',
+        '```',
+    ].join('\n'),
+    'for loop': [
+        '**How a for loop works internally**',
+        '',
+        'Python\'s `for` loop follows the iterator protocol. It does not use index variables like C.',
+        '',
+        '1. Step-by-step',
+        'When you write `for x in obj:`:',
+        '- Python calls `iter(obj)` which calls `obj.__iter__()` to get an iterator.',
+        '- In each iteration, Python calls `next(iterator)` which calls `iterator.__next__()`.',
+        '- When `StopIteration` is raised, the loop exits.',
+        '',
+        '2. Example',
+        '```python',
+        'for x in [1, 2, 3]:',
+        '    print(x)',
+        '# Equivalent manual iteration:',
+        'it = iter([1, 2, 3])',
+        'while True:',
+        '    try:',
+        '        x = next(it)',
+        '        print(x)',
+        '    except StopIteration:',
+        '        break',
+        '```',
+        '',
+        '3. Common mistake',
+        'Modifying a list while iterating over it can skip items. Iterate over a copy (`list[:]`) instead.',
+    ].join('\n'),
+    'function': [
+        '**How function calls work**',
+        '',
+        'Each function call pushes a new stack frame onto the call stack.',
+        '',
+        '1. Stack frame contents',
+        '- Local variable bindings.',
+        '- Return address (where execution resumes after the call).',
+        '- The function\'s code object and current instruction pointer.',
+        '',
+        '2. Example',
+        '```python',
+        'def outer():',
+        '    x = 1',
+        '    return inner()',
+        '',
+        'def inner():',
+        '    y = 2',
+        '    return y',
+        '',
+        'print(outer())',
+        '```',
+        'When `outer()` is called, frame A is pushed. Inside `outer`, `inner()` pushes frame B on top. When `inner` returns, frame B is popped and execution resumes in frame A.',
+        '',
+        '3. Note',
+        'Python has a recursion limit (default ~1000 frames) controlled by `sys.getrecursionlimit()`.',
+    ].join('\n'),
+    'inheritance': [
+        '**How inheritance works**',
+        '',
+        'Inheritance lets a child class reuse and extend a parent class\'s behavior.',
+        '',
+        '1. Attribute lookup (MRO)',
+        'Python uses the C3 linearization algorithm (Method Resolution Order, or MRO). When you access `obj.attr`, Python searches:',
+        '- The object\'s instance `__dict__`.',
+        '- The class\'s `__dict__`.',
+        '- Each parent class in MRO order.',
+        '- If not found anywhere, raise `AttributeError`.',
+        '',
+        '2. Example',
+        '```python',
+        'class Parent:',
+        '    def greet(self):',
+        '        return "hello"',
+        '',
+        'class Child(Parent):',
+        '    pass',
+        '',
+        'c = Child()',
+        'print(c.greet())  # "hello" — found on Parent',
+        '```',
+        '',
+        '3. `super()`',
+        '`super()` follows MRO, not just the immediate parent. This is critical with multiple inheritance and mixins.',
+    ].join('\n'),
+    'dictionary': [
+        '**How a dictionary works internally**',
+        '',
+        'Python dictionaries are hash tables with open addressing.',
+        '',
+        '1. Hashing',
+        'Each key\'s hash value (`hash(key)`) determines its slot. If the slot is taken (collision), CPython probes for the next free slot using a pseudorandom probe sequence.',
+        '',
+        '2. Performance',
+        '- Average-case lookup/insert/delete: O(1).',
+        '- Worst-case (many collisions): O(n).',
+        '- Python 3.6+ preserves insertion order as a side effect of the compact dict layout.',
+        '',
+        '3. Example',
+        '```python',
+        'd = {"a": 1, "b": 2}',
+        'print(d["a"])  # hash("a") -> slot -> value',
+        '```',
+    ].join('\n'),
+    'with': [
+        '**How the `with` statement works (context managers)**',
+        '',
+        'The `with` statement wraps a block in setup/teardown via the context manager protocol.',
+        '',
+        '1. Protocol',
+        '- `__enter__(self)`: runs when entering the block. Returns the value bound by `as`.',
+        '- `__exit__(self, exc_type, exc_val, exc_tb)`: runs when leaving the block (even on exception). Return `True` to suppress an exception.',
+        '',
+        '2. Example',
+        '```python',
+        'with open("file.txt", "r") as f:',
+        '    data = f.read()',
+        '# f.__exit__ is called automatically, closing the file',
+        '```',
+        '',
+        '3. Logical flow',
+        'Python calls `__enter__`, executes the body, then calls `__exit__`. If the body raises, `__exit__` receives exception info and decides whether to suppress it.',
+    ].join('\n'),
+    'decorator': [
+        '**How decorators work**',
+        '',
+        'A decorator is a function that takes a function and returns a replacement.',
+        '',
+        '1. Desugaring',
+        '```python',
+        '@decorator',
+        'def func():',
+        '    pass',
+        '# Equivalent: func = decorator(func)',
+        '```',
+        '',
+        '2. Example',
+        '```python',
+        'def log_calls(func):',
+        '    def wrapper(*args, **kwargs):',
+        '        print(f"Calling {func.__name__}")',
+        '        return func(*args, **kwargs)',
+        '    return wrapper',
+        '',
+        '@log_calls',
+        'def add(a, b):',
+        '    return a + b',
+        '',
+        'print(add(2, 3))',
+        '# Prints: Calling add',
+        '# Prints: 5',
+        '```',
+        '',
+        '3. At decoration time',
+        'The decorator runs when Python defines the function (at module load), not when the function is called. This is why decorators with arguments need an extra layer of nesting.',
+    ].join('\n'),
+    'generator': [
+        '**How generators work**',
+        '',
+        'A generator is a function that uses `yield` and returns an iterator. Each call to `next()` resumes execution until the next `yield`.',
+        '',
+        '1. State suspension',
+        'When a generator hits `yield`, Python freezes the entire stack frame: local variables, instruction pointer, and exception state. On the next `next()`, it unfreezes and continues.',
+        '',
+        '2. Example',
+        '```python',
+        'def count_up_to(n):',
+        '    i = 0',
+        '    while i < n:',
+        '        yield i',
+        '        i += 1',
+        '',
+        'for x in count_up_to(3):',
+        '    print(x)',
+        '# Prints 0, 1, 2 lazily',
+        '```',
+        '',
+        '3. Lazy evaluation',
+        'Generators compute one value at a time. They never store the full sequence. Use them for large/infinite sequences.',
+    ].join('\n'),
+    'import': [
+        '**How imports work**',
+        '',
+        'Python\'s import system finds, loads, and caches modules.',
+        '',
+        '1. Module search path',
+        'When you run `import foo`:',
+        '- Python checks `sys.modules` (module cache). If found, skip loading.',
+        '- Searches `sys.path` for `foo.py`, `foo/__init__.py`, or a compiled extension.',
+        '- If found, reads and executes the file, creating a module object.',
+        '- Stores the module in `sys.modules` and binds it in the local namespace.',
+        '',
+        '2. Example',
+        '```python',
+        'import math        # finds math.py in stdlib',
+        'print(math.pi)     # accesses module object from sys.modules',
+        '```',
+        '',
+        '3. Circular import',
+        'A circular import happens when module A imports module B and B imports A. Since `sys.modules` already has a partial module object, the import succeeds but the module may lack attributes defined after the import statement.',
+    ].join('\n'),
+};
+
+const buildGeneralAiMechanismAnswer = (question: string): string | null => {
+    const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
+    if (!/^how\s+(?:does|do|is|are)\b.*\bwork/.test(lowerQ)) return null;
+
+    const mechanismKeys: Record<string, string> = {
+        'slic': 'slicing',
+        'slice': 'slicing',
+        'list': 'list',
+        'for': 'for loop',
+        'for loop': 'for loop',
+        'function': 'function',
+        'call': 'function',
+        'inherit': 'inheritance',
+        'dict': 'dictionary',
+        'dictionar': 'dictionary',
+        'hash': 'dictionary',
+        'with': 'with',
+        'context': 'with',
+        'decorator': 'decorator',
+        'generator': 'generator',
+        'import': 'import',
+        'load': 'import',
+        'module': 'import',
+    };
+
+    for (const [keyword, key] of Object.entries(mechanismKeys)) {
+        if (lowerQ.includes(keyword)) {
+            const explainer = GENERAL_AI_MECHANISM_EXPLAINERS[key];
+            if (explainer) return explainer;
+        }
+    }
+    return null;
 };
 
 const buildGeneralAiErrorAnswer = (question: string): string | null => {
@@ -872,6 +1422,115 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
             '```python',
             '# Wrong: "5" + 2',
             'print(int("5") + 2)  # 7',
+            '```',
+        ].join('\n');
+    }
+    if (/nameerror|name error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`NameError` means Python could not find a variable or name you tried to use.',
+            '',
+            '2. Common causes',
+            '- You misspelled the variable name.',
+            '- You forgot to assign the variable before reading it.',
+            '- The variable exists in a different scope (inside a function vs outside).',
+            '- You forgot to import a module before using its name.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'name = "Noll"        # assign first',
+            'print(name)           # then read — no NameError',
+            '```',
+        ].join('\n');
+    }
+    if (/keyerror|key error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`KeyError` means you tried to access a dictionary key that does not exist.',
+            '',
+            '2. Common causes',
+            '- The key was never added to the dictionary.',
+            '- You misspelled the key name.',
+            '- You forgot to populate the dictionary before reading from it.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'user = {"name": "Noll", "age": 30}',
+            'print(user.get("city", "unknown"))  # safe access with default',
+            '```',
+        ].join('\n');
+    }
+    if (/indexerror|index error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`IndexError` means you tried to access a list/tuple index that does not exist.',
+            '',
+            '2. Common causes',
+            '- The index is larger than or equal to the collection length.',
+            '- The collection is empty.',
+            '- You used a negative index past the beginning of the list.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'items = [10, 20, 30]',
+            'if len(items) > 3:        # check bounds first',
+            '    print(items[3])',
+            'print(items[-1])           # -1 is safe: last item',
+            '```',
+        ].join('\n');
+    }
+    if (/valueerror|value error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`ValueError` means a function received a value of the right type but with an inappropriate value.',
+            '',
+            '2. Common causes',
+            '- `int("hello")` — the string is not a valid number.',
+            '- `list.remove(x)` — x is not in the list.',
+            '- `str.index(sub)` — substring not found.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'text = "hello"',
+            'if "x" in text:              # check first',
+            '    print(text.index("x"))',
+            'print(text.find("x"))         # -1 instead of ValueError',
+            '```',
+        ].join('\n');
+    }
+    if (/attributeerror|attribute error/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`AttributeError` means you tried to access a method or property that does not exist on that object.',
+            '',
+            '2. Common causes',
+            '- You have the wrong type: you called a string method on a list, or vice versa.',
+            '- You misspelled the attribute/method name.',
+            '- You forgot to import something and used a `None` value.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'text = "hello"',
+            'print(text.upper())      # correct: string method on a string',
+            '# text.append("!")       # AttributeError: str has no append',
+            '```',
+        ].join('\n');
+    }
+    if (/importerror|import error|modulenotfounderror|module not found/.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`ImportError` / `ModuleNotFoundError` means Python could not find the module you tried to import.',
+            '',
+            '2. Common causes',
+            '- The module is not installed (needs `pip install`).',
+            '- You misspelled the module name.',
+            '- The file is not in the Python path.',
+            '- Circular imports between files in your project.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            '# pip install requests first',
+            'import requests           # now this works',
             '```',
         ].join('\n');
     }
@@ -14980,6 +15639,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 case 'error_help':
                     refAnswer = buildGeneralAiErrorAnswer(effectiveQuestion) || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
                     break;
+                case 'mechanism':
+                    refAnswer = buildGeneralAiMechanismAnswer(effectiveQuestion);
+                    break;
                 case 'definition':
                     refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonAtLevel(effectiveQuestion, appLang, effectiveMode === 'simple' ? 'beginner' : effectiveMode === 'deep' ? 'expert' : 'intermediate')
@@ -15777,12 +16439,12 @@ print(result)
 
     return (
         <div
-            className="h-screen text-white flex flex-col max-w-2xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
+            className="h-screen text-white flex flex-col max-w-4xl mx-auto overflow-hidden animate-in fade-in duration-700 relative"
             style={{ backgroundColor: '#050c18' }}
         >
             <div
                 ref={headerRef}
-                className="fixed left-1/2 z-20 w-full max-w-2xl -translate-x-1/2"
+                className="fixed left-1/2 z-20 w-full max-w-4xl -translate-x-1/2"
                 style={{
                     top: 0,
                     backgroundColor: hexToRgba(panelColors.background, 0.18),
@@ -15966,7 +16628,8 @@ print(result)
 
             {!plainMode && (
                 <div
-                    className="fixed z-20 w-full max-w-2xl"
+                    data-landscape-hide="problem-panel"
+                    className="fixed z-20 w-full max-w-4xl"
                     style={{
                         left: 0,
                         right: 0,
@@ -16034,7 +16697,8 @@ print(result)
                 </div>
             )}
             <div
-                className="fixed left-1/2 z-[110] w-full max-w-2xl -translate-x-1/2 px-4"
+                data-landscape-toolbar="true"
+                className="fixed left-1/2 z-[110] w-full max-w-4xl -translate-x-1/2 px-4"
                 style={{
                     top: `${editorToolbarTop}px`,
                     pointerEvents: 'none'
@@ -16078,6 +16742,7 @@ print(result)
             </div>
 
             <div
+                data-landscape-main-scroll="true"
                 ref={mainScrollRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
@@ -16292,7 +16957,7 @@ print(result)
 
             {/* Fixed footer - centered version button */}
             <div
-                className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-20 border-t py-2 px-4"
+                className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl z-20 border-t py-2 px-4"
                 style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))', backgroundColor: hexToRgba(panelColors.background, panelAlpha), borderColor: panelBorderSoft }}
             >
                 <div className="relative flex items-center justify-center">
@@ -16886,7 +17551,7 @@ print(result)
                                     )}
                                 </div>
 
-                                <div className="min-h-0 min-w-0 flex-1 space-y-3 overflow-y-auto overflow-x-hidden pr-1" style={{ touchAction: 'pan-y' }}>
+                                <div className="min-h-0 min-w-0 flex-1 space-y-3 overflow-y-auto pr-1">
                                     {generalAiMessages.slice(-80).map(message => (
                                         <div
                                             key={message.id}

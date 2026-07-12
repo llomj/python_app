@@ -161,11 +161,45 @@ const cleanPrompt = (description: string): string => {
     .replace(/[.\s]+$/, '');
 };
 
+interface SolutionPatterns {
+  hasLambda: boolean;
+  hasUnpacking: boolean;
+  hasComprehension: boolean;
+  hasGenerator: boolean;
+  hasLoop: boolean;
+  hasConditional: boolean;
+  hasClass: boolean;
+  hasTryExcept: boolean;
+  hasWith: boolean;
+  hasComparison: boolean;
+  hasFString: boolean;
+}
+
 interface SolutionAnalysis {
   snippet: string;
   calls: string[];
   receiverByMethod: Record<string, string>;
+  patterns: SolutionPatterns;
 }
+
+type ProblemType = 'function-def' | 'script-output' | 'class-def';
+
+const detectSolutionPatterns = (code: string): SolutionPatterns => {
+  const stripped = code.replace(/#.*$/gm, '');
+  return {
+    hasLambda: /\blambda\s+\w+\s*:/.test(stripped),
+    hasUnpacking: /\*\w+/.test(stripped),
+    hasComprehension: /[[({]\s*(?:\w+\s*=\s*)?[^\]]*?\bfor\b\s+\w+\s+\bin\b/.test(stripped),
+    hasGenerator: /\([^)]*?\bfor\b\s+\w+\s+\bin\b[^)]*?\)/.test(stripped) && !/[[{][^]*?\bfor\b/.test(stripped),
+    hasLoop: /\b(?:for|while)\s+\w+\s+(?:in|:)/.test(stripped),
+    hasConditional: /\bif\s+.+:\s*$|\belif\b|\belse\s*:/m.test(stripped),
+    hasClass: /\bclass\s+\w+/.test(stripped),
+    hasTryExcept: /\btry\s*:|\bexcept\b/.test(stripped),
+    hasWith: /\bwith\s+\w+\s*(?:=\s*[^:]+)?\s*:/.test(stripped),
+    hasComparison: /(?:==|!=|<=|>=|<|>)\s*(?:True|False|None|\d|['"])|(?:True|False|None|\d|['"])\s*(?:==|!=|<=|>=|<|>)/.test(stripped) || /\b(?:and|or|not)\b/.test(stripped),
+    hasFString: /f['"]/.test(stripped),
+  };
+};
 
 const analyzeCanonicalSolution = (exercise: Exercise, grader?: AutoGrader | null): SolutionAnalysis => {
   const lines = exercise.solution.split('\n');
@@ -190,7 +224,18 @@ const analyzeCanonicalSolution = (exercise: Exercise, grader?: AutoGrader | null
   const calls = [...snippet.matchAll(/(?:\.\s*|\b)([A-Za-z_]\w*)\s*\(/g)]
     .map(match => match[1])
     .filter(name => !functionNames.has(name));
-  return { snippet, calls: [...new Set(calls)].slice(0, 10), receiverByMethod };
+  return {
+    snippet,
+    calls: [...new Set(calls)].slice(0, 10),
+    receiverByMethod,
+    patterns: detectSolutionPatterns(snippet),
+  };
+};
+
+const classifyProblemType = (grader: AutoGrader | null | undefined, patterns: SolutionPatterns): ProblemType => {
+  if (patterns.hasClass) return 'class-def';
+  if (grader?.mode === 'script' || (!grader?.functionNames?.length && !patterns.hasLambda && !patterns.hasClass)) return 'script-output';
+  return 'function-def';
 };
 
 const receiverContract = (method: string, receiver: string, language: ProblemAiLanguage): string => {
@@ -216,9 +261,20 @@ const methodReference = (analysis: SolutionAnalysis, language: ProblemAiLanguage
 
 const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
   const fr = language === 'fr';
+  const p = analysis.patterns;
   return analysis.snippet.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('#')).slice(0, 12).map(line => {
+    if (/lambda\s+\w+\s*:/.test(line)) return fr
+      ? `\`${line}\` — crée une fonction anonyme (lambda) ; l'expression après \`:\` est renvoyée automatiquement.`
+      : `\`${line}\` — creates an anonymous function (lambda); the expression after \`:\` is returned automatically.`;
+    if (/\*\w+/.test(line) && /\(.*\*\w+/.test(line)) return fr
+      ? `\`${line}\` — déballe un itérable avec \`*\` pour passer ses éléments comme arguments séparés.`
+      : `\`${line}\` — unpacks an iterable with \`*\` to pass its items as separate arguments.`;
     if (/^def\s+/.test(line)) return fr ? `\`${line}\` — crée la fonction ; son corps attend un appel avant de s’exécuter.` : `\`${line}\` — defines the function; its body waits until the function is called.`;
+    if (/^class\s+/.test(line)) return fr ? `\`${line}\` — définit la classe ; les méthodes sont des fonctions à l’intérieur de son bloc indenté.` : `\`${line}\` — defines the class; methods are functions inside its indented block.`;
     if (/^return\s+/.test(line)) {
+      if (p.hasLambda) return fr
+        ? `\`${line}\` — renvoie le résultat de l’appel de la lambda.`
+        : `\`${line}\` — returns the result of calling the lambda.`;
       if (/\bor\b/.test(line)) return fr ? `\`${line}\` — évalue la condition gauche, puis la droite seulement si nécessaire, et renvoie le résultat booléen.` : `\`${line}\` — evaluates the left condition, evaluates the right only if needed, and returns the Boolean result.`;
       return fr ? `\`${line}\` — calcule l’expression puis renvoie sa valeur à l’appelant.` : `\`${line}\` — evaluates the expression and returns its value to the caller.`;
     }
@@ -226,12 +282,28 @@ const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLan
     if (/^(?:for|while)\s+/.test(line)) return fr ? `\`${line}\` — démarre la répétition du bloc indenté.` : `\`${line}\` — begins repetition of the indented block.`;
     if (/^(?:import|from)\s+/.test(line)) return fr ? `\`${line}\` — charge le module ou le nom nécessaire.` : `\`${line}\` — loads the required module or name.`;
     if (/\s=\s/.test(line)) {
+      if (/lambda\b/.test(line)) return fr
+        ? `\`${line}\` — affecte la lambda à une variable pour pouvoir l’utiliser plus tard.`
+        : `\`${line}\` — assigns the lambda to a variable for later use.`;
+      if (/\*[A-Za-z_]/.test(line)) return fr
+        ? `\`${line}\` — déballe l’itérable dans des variables séparées.`
+        : `\`${line}\` — unpacks the iterable into separate variables.`;
+      if (/f['"]/.test(line)) return fr
+        ? `\`${line}\` — chaîne f-string avec expressions intégrées entre {} pour produire la sortie.`
+        : `\`${line}\` — f-string with embedded expressions in {} to build the output.`;
+      if (/\[.*for\b/.test(line) || /\{.*for\b/.test(line)) return fr
+        ? `\`${line}\` — compréhension qui construit la collection par transformation et filtrage.`
+        : `\`${line}\` — comprehension that builds the collection by transforming and filtering.`;
       const stringValue = /=\s*['"]/.test(line);
       return fr
         ? `\`${line}\` — crée ou met à jour la variable${stringValue ? ' avec une valeur de type chaîne (`str`)' : ''}.`
         : `\`${line}\` — creates or updates the variable${stringValue ? ' with a string (`str`) value' : ''}.`;
     }
     if (/^print\s*\(/.test(line)) return fr ? `\`${line}\` — affiche la valeur finale dans le panneau de sortie.` : `\`${line}\` — displays the final value in the output panel.`;
+    if (/^@\w+/.test(line)) return fr ? `\`${line}\` — décorateur qui modifie le comportement de la définition suivante.` : `\`${line}\` — decorator that modifies the following definition's behavior.`;
+    if (/^try\s*:/.test(line)) return fr ? `\`${line}\` — commence un bloc de protection contre les exceptions.` : `\`${line}\` — starts a block that guards against exceptions.`;
+    if (/^except\b/.test(line)) return fr ? `\`${line}\` — attrape l’exception et exécute le code de récupération.` : `\`${line}\` — catches the exception and runs recovery code.`;
+    if (/^with\s+/.test(line)) return fr ? `\`${line}\` — garantit le nettoyage automatique de la ressource.` : `\`${line}\` — guarantees automatic resource cleanup.`;
     return fr ? `\`${line}\` — exécute cette instruction dans l’ordre indiqué.` : `\`${line}\` — executes this statement in order.`;
   });
 };
@@ -366,10 +438,12 @@ const requiredSyntax = (grader: AutoGrader | null | undefined, language: Problem
   return [...new Set(lines)].slice(0, 10);
 };
 
-const buildSteps = (description: string, grader: AutoGrader | null | undefined, language: ProblemAiLanguage, analysis: SolutionAnalysis): string[] => {
+const buildSteps = (description: string, grader: AutoGrader | null | undefined, language: ProblemAiLanguage, analysis: SolutionAnalysis, concepts: string[] = []): string[] => {
   const fr = language === 'fr';
   const lower = description.toLowerCase();
   const steps: string[] = [];
+  const hasLambda = concepts.includes('lambda') || /lambda/.test(lower);
+  const hasUnpack = concepts.includes('unpacking') || /\bunpack|\*args|starred\b/.test(lower);
   if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit') && grader?.requiredBoolOps?.includes('Or')) {
     return fr ? [
       'Définissez la fonction demandée et créez une variable texte contenant une chaîne (`str`).',
@@ -385,11 +459,11 @@ const buildSteps = (description: string, grader: AutoGrader | null | undefined, 
       'Return that Boolean. A mixed string such as `"abc123"` must produce `False`.',
     ];
   }
-  if (/three numbers|trois nombres/.test(lower) && /lambda/.test(lower) && /unpack/.test(lower)) {
+  if (/three numbers|trois nombres/.test(lower) && hasLambda && hasUnpack) {
     return fr ? [
       'Regroupez trois nombres dans un tuple ou une liste, par exemple `valeurs = (2, 3, 4)`.',
-      'Créez une lambda avec trois paramètres et une expression d’addition : `lambda a, b, c: a + b + c`.',
-      'Appelez la lambda avec `*valeurs`. L’étoile distribue les trois éléments vers `a`, `b` et `c`.',
+      'Créez une lambda avec trois paramètres et une expression d\'addition : `lambda a, b, c: a + b + c`.',
+      'Appelez la lambda avec `*valeurs`. L\'étoile distribue les trois éléments vers `a`, `b` et `c`.',
       'Affichez ou stockez le nombre renvoyé par cet appel.',
     ] : [
       'Group three numbers in a tuple or list, for example `values = (2, 3, 4)`.',
@@ -398,13 +472,39 @@ const buildSteps = (description: string, grader: AutoGrader | null | undefined, 
       'Print or store the number returned by that call.',
     ];
   }
-  const names = grader?.functionNames?.filter(Boolean) || [];
-  if (names.length && grader?.mode !== 'script') steps.push(fr ? `Définissez \`${names[0]}()\` avec un paramètre pour chaque entrée décrite.` : `Define \`${names[0]}()\` with one parameter for each described input.`);
-  else steps.push(fr ? 'Préparez les données d’entrée avec des noms qui décrivent leur rôle.' : 'Prepare the input data with names that describe each value’s role.');
+  if (hasLambda && hasUnpack) {
+    return fr ? [
+      'Créez une lambda avec le nombre de paramètres correspondant aux valeurs à traiter.',
+      'Utilisez une expression à l\'intérieur de la lambda (après `:`) qui produit le résultat demandé.',
+      'Regroupez les valeurs d\'entrée dans un tuple ou une liste.',
+      'Appelez la lambda avec l\'opérateur `*` pour déballer le conteneur en arguments séparés.',
+      'Récupérez la valeur renvoyée et traitez-la selon l\'énoncé.',
+    ] : [
+      'Create a lambda with one parameter for each value you need to process.',
+      'Write an expression after `:` that computes the required result.',
+      'Group the input values in a tuple or list.',
+      'Call the lambda with `*` to unpack the container into separate arguments.',
+      'Capture the returned value and handle it as the problem requires.',
+    ];
+  }
+  if (hasLambda) {
+    steps.push(fr ? 'Définissez une lambda avec la syntaxe `lambda paramètres: expression`.' : 'Define a lambda using `lambda parameters: expression`.');
+    steps.push(fr ? 'L\'expression après `:` est automatiquement renvoyée — pas besoin de `return`.' : 'The expression after `:` is automatically returned — no `return` needed.');
+    steps.push(fr ? 'Stockez la lambda dans une variable ou appelez-la directement avec `(lambda ...)(args)`.' : 'Store the lambda in a variable or call it directly with `(lambda ...)(args)`.');
+  }
+  if (hasUnpack) {
+    steps.push(fr ? 'Utilisez `*conteneur` pour déballer les éléments d\'un itérable en arguments séparés.' : 'Use `*container` to unpack iterable items into separate arguments.');
+    steps.push(fr ? 'Sans `*`, tout le conteneur est passé comme un seul argument.' : 'Without `*`, the entire container is passed as a single argument.');
+  }
+  if (!hasLambda && !hasUnpack) {
+    const names = grader?.functionNames?.filter(Boolean) || [];
+    if (names.length && grader?.mode !== 'script') steps.push(fr ? `Définissez \`${names[0]}()\` avec un paramètre pour chaque entrée décrite.` : `Define \`${names[0]}()\` with one parameter for each described input.`);
+    else steps.push(fr ? 'Préparez les données d\'entrée avec des noms qui décrivent leur rôle.' : 'Prepare the input data with names that describe each value\'s role.');
+  }
   for (const line of requiredSyntax(grader, language, description, analysis).slice(0, 4)) steps.push(line);
   steps.push(/\breturn|returns?\b|\brenvoie\b|\bretourne\b/i.test(description)
     ? (fr ? 'Renvoyez la valeur calculée avec `return`.' : 'Return the calculated value with `return`.')
-    : (fr ? 'Produisez la sortie demandée avec `print()` ou l’opération indiquée.' : 'Produce the requested output with `print()` or the stated operation.'));
+    : (fr ? 'Produisez la sortie demandée avec `print()` ou l\'opération indiquée.' : 'Produce the requested output with `print()` or the stated operation.'));
   return [...new Set(steps)].slice(0, 7);
 };
 
@@ -425,6 +525,7 @@ const commonMistakes = (concepts: string[], grader: AutoGrader | null | undefine
 
 const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
   const fr = language === 'fr';
+  const p = analysis.patterns;
   if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit')) return fr ? [
     'Python crée la fonction sans exécuter immédiatement son corps.',
     'Lors de l’appel, la variable `text` doit référencer une chaîne (`str`).',
@@ -438,8 +539,47 @@ const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage):
     'If that result is `True`, `or` short-circuits. Otherwise Python calls `text.isdigit()`.',
     'The final Boolean is returned to the caller and can then be displayed with `print()`.',
   ];
+  if (p.hasLambda) {
+    return fr ? [
+      'Python rencontre la lambda et crée un objet fonction sans exécuter l\'expression.',
+      'Lors de l\'appel, Python évalue d\'abord les arguments de gauche à droite.',
+      'Les paramètres reçoivent les valeurs, puis l\'expression après `:` est évaluée.',
+      p.hasUnpacking ? 'L\'opérateur `*` étend l\'itérable pour que chaque élément devienne un argument séparé.' : '',
+      'Le résultat de l\'expression est renvoyé automatiquement — pas besoin de `return`.',
+    ].filter(Boolean) : [
+      'Python encounters the lambda and creates a function object without running the expression.',
+      'When called, Python evaluates arguments left to right first.',
+      'Parameters receive the values, then the expression after `:` is evaluated.',
+      p.hasUnpacking ? 'The `*` operator expands the iterable so each item becomes a separate argument.' : '',
+      'The expression result is returned automatically — no `return` needed.',
+    ].filter(Boolean);
+  }
+  if (p.hasComprehension) {
+    return fr ? [
+      'Python évalue l\'itérable de la première clause `for`.',
+      'La variable de boucle reçoit chaque élément.',
+      'Les clauses `for` et filtres `if` suivants sont évalués de gauche à droite.',
+      'Si les filtres passent, l\'expression de sortie est évaluée et le résultat est collecté dans la nouvelle structure.',
+    ] : [
+      'Python evaluates the first `for` clause\'s iterable.',
+      'The loop variable is bound to each item.',
+      'Later `for` clauses and `if` filters are evaluated left to right.',
+      'When filters pass, the output expression is evaluated and collected into the new structure.',
+    ];
+  }
+  if (p.hasClass) {
+    return fr ? [
+      'Python lit la définition de classe et crée un objet classe.',
+      'Les méthodes définies avec `def` à l\'intérieur de la classe sont liées à cette classe.',
+      'Lorsqu\'une méthode est appelée sur une instance, `self` reçoit automatiquement l\'instance.',
+    ] : [
+      'Python reads the class definition and creates a class object.',
+      'Methods defined with `def` inside the class are bound to that class.',
+      'When a method is called on an instance, `self` automatically receives the instance.',
+    ];
+  }
   return [fr
-    ? 'Python crée d’abord les valeurs et fonctions, évalue les arguments de gauche à droite, exécute l’opération, puis transmet le résultat à `return`, `print()` ou à la variable cible.'
+    ? 'Python crée d\'abord les valeurs et fonctions, évalue les arguments de gauche à droite, exécute l\'opération, puis transmet le résultat à `return`, `print()` ou à la variable cible.'
     : 'Python first creates values and functions, evaluates arguments from left to right, performs the operation, and sends the result to `return`, `print()`, or the target variable.'];
 };
 
@@ -457,14 +597,32 @@ const alternativeApproaches = (analysis: SolutionAnalysis, language: ProblemAiLa
   return [fr ? 'Vous pouvez utiliser des noms de variables différents tant que les types, les opérations et le résultat restent conformes.' : 'You may use different variable names as long as the types, operations, and result remain correct.'];
 };
 
+const problemTypeTag = (type: ProblemType, fr: boolean): string => ({
+  'function-def': fr ? 'fonction à définir' : 'function to write',
+  'script-output': fr ? 'script à produire' : 'script to write',
+  'class-def': fr ? 'classe à définir' : 'class to write',
+}[type]);
+
+const codeCount = (analysis: SolutionAnalysis): number => {
+  const nonEmpty = analysis.snippet.split('\n').filter(line => line.trim() && !line.startsWith('#')).length;
+  return nonEmpty || 3;
+};
+
+const hasRelevantContent = (items: unknown[] | string | undefined | null): boolean => {
+  if (!items) return false;
+  if (Array.isArray(items)) return items.length > 0;
+  return typeof items === 'string' && items.trim().length > 0;
+};
+
 export const buildProblemAiTutorAnswer = ({ exercise, description, grader, language }: ProblemAiTutorContext): string => {
   const fr = language === 'fr';
   const goal = cleanPrompt(description);
   const concepts = detectConcepts(description, grader);
   const analysis = analyzeCanonicalSolution(exercise, grader);
+  const problemType = classifyProblemType(grader, analysis.patterns);
   const methods = methodReference(analysis, language);
   const syntax = requiredSyntax(grader, language, description, analysis);
-  const steps = buildSteps(description, grader, language, analysis);
+  const steps = buildSteps(description, grader, language, analysis, concepts);
   const mistakes = commonMistakes(concepts, grader, language, analysis);
   const walkthrough = explainSolutionLines(analysis, language);
   const tests = concreteTests(exercise, grader, language);
@@ -473,18 +631,75 @@ export const buildProblemAiTutorAnswer = ({ exercise, description, grader, langu
     return `- **${concept.name}** — ${fr ? concept.fr : concept.en}\n  Syntax: \`${concept.syntax}\``;
   });
   const execution = steps.map((step, index) => `${index + 1}. ${step}`);
-  return [
-    `**1. ${fr ? 'Ce que demande exactement le problème' : 'What this problem asks'}**\n${fr ? 'Comportement demandé' : 'Required behavior'}: ${goal}.`,
-    `**2. ${fr ? 'Entrées et résultat' : 'Inputs and result'}**\n${inferContract(description, grader, language).map(line => `- ${line}`).join('\n')}`,
-    `**3. ${fr ? 'Mots et concepts importants' : 'Key words and concepts'}**\n${definitions.length ? definitions.join('\n') : (fr ? '- Aucun concept spécial n’est imposé ; concentrez-vous sur la transformation décrite.' : '- No special construct is required; focus on the transformation described.')}`,
-    `**4. ${fr ? 'Référence des méthodes et fonctions' : 'Method and function reference'}**\n${methods.length ? methods.map(line => `- ${line}`).join('\n') : (fr ? '- Cet exercice repose surtout sur la syntaxe et les opérateurs décrits ci-dessous.' : '- This exercise mainly relies on the syntax and operators described below.')}`,
-    `**5. ${fr ? 'Syntaxe que le correcteur recherche' : 'Syntax the grader requires'}**\n${syntax.length ? syntax.map(line => `- ${line}`).join('\n') : (fr ? '- Plusieurs implémentations sont acceptées si elles produisent le comportement demandé.' : '- Multiple implementations are accepted when they produce the requested behavior.')}`,
-    `**6. ${fr ? 'Modèle de code de référence' : 'Reference code pattern'}**\n\`\`\`python\n${analysis.snippet}\n\`\`\``,
-    `**7. ${fr ? 'Plan de construction' : 'Step-by-step plan'}**\n${execution.join('\n')}`,
-    `**8. ${fr ? 'Explication ligne par ligne' : 'Line-by-line explanation'}**\n${walkthrough.length ? walkthrough.map((line, index) => `${index + 1}. ${line}`).join('\n') : (fr ? '1. Construisez les données, appliquez l’opération, puis renvoyez ou affichez le résultat.' : '1. Build the data, apply the operation, then return or print the result.')}`,
-    `**9. ${fr ? 'Ordre d’exécution' : 'Execution flow'}**\n${executionFlow(analysis, language).map((line, index) => `${index + 1}. ${line}`).join('\n')}`,
-    `**10. ${fr ? 'Erreurs fréquentes à éviter' : 'Common mistakes to avoid'}**\n${mistakes.length ? mistakes.map(line => `- ${line}`).join('\n') : (fr ? '- Vérifiez les types d’entrée, l’indentation et la différence entre `return` et `print()`.' : '- Check input types, indentation, and the difference between `return` and `print()`.')}`,
-    `**11. ${fr ? 'Cas de test concrets' : 'Concrete test cases'}**\n${tests.length ? tests.map(line => `- ${line}`).join('\n') : (fr ? '- Testez au moins deux entrées différentes et un cas limite.' : '- Test at least two different inputs and one edge case.')}`,
-    `**12. ${fr ? 'Autres façons correctes de l’écrire' : 'Other correct ways to write it'}**\n${alternativeApproaches(analysis, language).map(line => `- ${line}`).join('\n')}`,
-  ].join('\n\n');
+  const p = analysis.patterns;
+  const sections: string[] = [];
+
+  // 1 — type-aware intro
+  const codelines = codeCount(analysis);
+  const codeIntro = problemType === 'function-def'
+    ? (fr ? `La solution de référence contient environ **${codelines} lignes** de code dans la définition de fonction.` : `The reference solution contains about **${codelines} lines** of code inside the function definition.`)
+    : problemType === 'class-def'
+      ? (fr ? `La solution de référence définit une classe avec environ **${codelines} lignes** de code.` : `The reference solution defines a class with about **${codelines} lines** of code.`)
+      : (fr ? `La solution de référence contient environ **${codelines} lignes** de code en script.` : `The reference solution contains about **${codelines} lines** of script code.`);
+  const patternTags = [
+    p.hasLambda && (fr ? 'λ lambda' : 'λ lambda'),
+    p.hasUnpacking && (fr ? '* déballage' : '* unpacking'),
+    p.hasComprehension && (fr ? '⊔ compréhension' : '⊔ comprehension'),
+    p.hasLoop && (fr ? '↻ boucle' : '↻ loop'),
+    p.hasConditional && (fr ? '◆ condition' : '◆ condition'),
+    p.hasClass && (fr ? '■ classe' : '■ class'),
+    p.hasComparison && (fr ? '= comparaison' : '= comparison'),
+  ].filter(Boolean);
+  sections.push(
+    `**1. ${fr ? 'Ce que demande exactement le problème' : 'What this problem asks'}**\n`
+    + (fr ? '**Type**' : '**Type**') + `: ${problemTypeTag(problemType, fr)}.\n`
+    + (fr ? '**Comportement demandé**' : '**Required behavior**') + `: ${goal}.\n`
+    + codeIntro
+    + (patternTags.length ? `\n${fr ? '**Constructions Python détectées**' : '**Python constructs detected**'}: ${patternTags.join(' · ')}.` : '')
+  );
+
+  // 2
+  sections.push(`**2. ${fr ? 'Entrées et résultat' : 'Inputs and result'}**\n${inferContract(description, grader, language).map(line => `- ${line}`).join('\n')}`);
+
+  // 3
+  sections.push(`**3. ${fr ? 'Mots et concepts importants' : 'Key words and concepts'}**\n${definitions.length ? definitions.join('\n') : (fr ? '- Aucun concept spécial n\'est imposé ; concentrez-vous sur la transformation décrite.' : '- No special construct is required; focus on the transformation described.')}`);
+
+  // 4 — skip if no methods referenced
+  if (hasRelevantContent(methods)) {
+    sections.push(`**4. ${fr ? 'Référence des méthodes et fonctions' : 'Method and function reference'}**\n${methods.map(line => `- ${line}`).join('\n')}`);
+  }
+
+  // 5 — skip if grader syntax empty
+  if (hasRelevantContent(syntax)) {
+    sections.push(`**5. ${fr ? 'Syntaxe que le correcteur recherche' : 'Syntax the grader requires'}**\n${syntax.map(line => `- ${line}`).join('\n')}`);
+  }
+
+  // 6 — reference code pattern
+  sections.push(`**6. ${fr ? 'Modèle de code de référence' : 'Reference code pattern'}**\n\`\`\`python\n${analysis.snippet}\n\`\`\``);
+
+  // 7 — step-by-step plan
+  sections.push(`**7. ${fr ? 'Plan de construction' : 'Step-by-step plan'}**\n${execution.join('\n')}`);
+
+  // 8 — line-by-line, skip if very generic
+  if (hasRelevantContent(walkthrough)) {
+    sections.push(`**8. ${fr ? 'Explication ligne par ligne' : 'Line-by-line explanation'}**\n${walkthrough.map((line, index) => `${index + 1}. ${line}`).join('\n')}`);
+  }
+
+  // 9
+  sections.push(`**9. ${fr ? 'Ordre d\'exécution' : 'Execution flow'}**\n${executionFlow(analysis, language).map((line, index) => `${index + 1}. ${line}`).join('\n')}`);
+
+  // 10
+  if (hasRelevantContent(mistakes)) {
+    sections.push(`**10. ${fr ? 'Erreurs fréquentes à éviter' : 'Common mistakes to avoid'}**\n${mistakes.map(line => `- ${line}`).join('\n')}`);
+  }
+
+  // 11
+  if (hasRelevantContent(tests)) {
+    sections.push(`**11. ${fr ? 'Cas de test concrets' : 'Concrete test cases'}**\n${tests.map(line => `- ${line}`).join('\n')}`);
+  }
+
+  // 12
+  sections.push(`**12. ${fr ? 'Autres façons correctes de l\'écrire' : 'Other correct ways to write it'}**\n${alternativeApproaches(analysis, language).map(line => `- ${line}`).join('\n')}`);
+
+  return sections.join('\n\n');
 };
