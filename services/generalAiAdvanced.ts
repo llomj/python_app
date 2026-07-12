@@ -554,6 +554,17 @@ export const answerPythonMisconceptionRequest = (question: string, language: Adv
       correction: 'g = [x*2 for x in range(5)]   # list comprehension — reusable\ng = (x*2 for x in range(5))   # generator — one pass only\nprint(list(g))  # first pass: [0, 2, 4, 6, 8]\nprint(list(g))  # second pass: []',
     });
   }
+  // Integer division: expecting `/` to floor in Python 3
+  if (/print.*\d+\s*\/\s*\d+/.test(code) && !/\bfrom\s+__future__\s+import\s+division\b/.test(code)) {
+    const divMatch = code.match(/(\d+)\s*\/\s*(\d+)/);
+    if (divMatch && parseInt(divMatch[1]) % parseInt(divMatch[2]) !== 0) {
+      findings.push({
+        title: fr ? '`/` contre `//` en Python 3' : '`/` versus `//` in Python 3',
+        explanation: fr ? 'Python 3 utilise la vraie division : `3 / 2` donne `1.5`. Utilisez `//` pour la division entière.' : 'Python 3 uses true division: `3 / 2` yields `1.5`. Use `//` for floor division.',
+        correction: 'print(3 // 2)  # 1 — floor division\nprint(3 / 2)   # 1.5 — true division',
+      });
+    }
+  }
   // String immutability: trying to assign to a string index
   if (/\[-?\d+\]\s*=\s*['"]/.test(code) && code.split('\n').some(line => /^\s*(?:str\s*=|[A-Za-z_]\w*\s*=\s*['"])/.test(line) && /\[-?\d+\]\s*=\s*['"]/.test(line))) {
     findings.push({
@@ -635,6 +646,9 @@ const PYTHON_VERSION_FEATURES: PythonVersionFeature[] = [
   { id: 'fstring-backslash', version: [3, 12], label: ['backslashes and quotes inside f-strings', 'antislash et guillemets dans les f-strings'], detect: /f["'][^\n]*?(?:\\[nrt'"\\]|["']\s*\{)/m, alternative: ['Pre-assign the escaped value to a variable outside the f-string.', 'Affectez la valeur échappée à une variable en dehors du f-string.'], source: 'https://docs.python.org/3/whatsnew/3.12.html#pep-701-fstring' },
   { id: 'deprecated-decorator', version: [3, 13], label: ['the `@warnings.deprecated()` decorator', 'le décorateur `@warnings.deprecated()`'], detect: /@(?:warnings\.)?deprecated/, alternative: ['Use a custom `@deprecated` decorator that calls `warnings.warn()`.', 'Utilisez un décorateur `@deprecated` personnalisé qui appelle `warnings.warn()`.'], source: 'https://docs.python.org/3/library/warnings.html#deprecated' },
   { id: 'copy-replace', version: [3, 13], label: ['`copy.replace()` for dataclasses', '`copy.replace()` pour les dataclasses'], detect: /\bcopy\.replace\s*\(/, alternative: ['Use `dataclasses.replace()` on older Python.', 'Utilisez `dataclasses.replace()` sur une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.13.html#copy' },
+  { id: 'parenthesized-context-managers', version: [3, 10], label: ['parenthesized context managers', 'gestionnaires de contexte parenthésés'], detect: /\bwith\s*\(\s*(?:open|mock|patch|contextlib\.)/s, alternative: ['Use separate `with` statements or `contextlib.ExitStack` on older Python.', 'Utilisez des instructions `with` séparées ou `contextlib.ExitStack` avec une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.10.html#pep-634' },
+  { id: 'match-case', version: [3, 10], label: ['`match`/`case` structural pattern matching', '`match`/`case` filtrage structurel'], detect: /\bmatch\s+\w+\s*:\s*\n\s*case\s/, alternative: ['Use `if`/`elif` chains with `isinstance()` checks on Python 3.9 and earlier.', 'Utilisez des chaînes `if`/`elif` avec des vérifications `isinstance()` avec Python 3.9 et antérieur.'], source: 'https://docs.python.org/3/whatsnew/3.10.html#pep-634' },
+  { id: 'typing-self', version: [3, 11], label: ['`typing.Self` return type', 'le type de retour `typing.Self`'], detect: /\bSelf\b/, alternative: ['Use `from __future__ import annotations` or type the class name as a string literal on Python 3.10 and earlier.', 'Utilisez `from __future__ import annotations` ou tapez le nom de la classe en chaîne littérale avec Python 3.10 et antérieur.'], source: 'https://docs.python.org/3/whatsnew/3.11.html#pep-673' },
 ];
 
 const comparePythonVersions = (left: [number, number], right: [number, number]): number => left[0] - right[0] || left[1] - right[1];
