@@ -35,6 +35,10 @@ const PATHS: Record<string, string[]> = {
   'exception-handling': ['try/except basics', 'catching specific exceptions', 'else and finally', 'raising exceptions', 'exception chaining', 'custom exceptions', 'context managers'],
   'file-io': ['open() and modes', 'reading (read, readline, readlines)', 'writing (write, writelines)', 'context managers (with)', 'encoding and binary mode', 'pathlib basics', 'CSV and JSON files'],
   'decorator-generator': ['iterators and iter()', 'generators and yield', 'generator expressions', 'decorator basics', 'decorators with arguments', 'generator-based pipelines', 'async generators'],
+  'boolean': ['truth values (True/False)', 'truthiness protocol', 'comparison operators', 'and/or/not logic', 'short-circuit evaluation', 'boolean in conditions', 'De Morgan\'s laws'],
+  'collections': ['list operations', 'dictionary operations', 'set operations', 'tuple usage', 'defaultdict for grouping', 'Counter for frequencies', 'namedtuple for records', 'deque for queues'],
+  'type-hints': ['basic annotations', 'function signatures', 'Optional and Union', 'collections as types', 'type aliases', 'Protocol and structural typing', 'Generics'],
+  'testing': ['test structure (arrange/act/assert)', 'pytest basics', 'fixtures', 'parameterized tests', 'mocking', 'property-based testing', 'test coverage'],
 };
 
 const PATHS_FR: Record<string, string[]> = {
@@ -50,6 +54,10 @@ const PATHS_FR: Record<string, string[]> = {
   'exception-handling': ['bases try/except', 'capture d\'exceptions précises', 'else et finally', 'lever des exceptions', 'chaînage d\'exceptions', 'exceptions personnalisées', 'gestionnaires de contexte'],
   'file-io': ['open() et modes', 'lecture (read, readline, readlines)', 'écriture (write, writelines)', 'gestionnaires de contexte (with)', 'encodage et mode binaire', 'bases de pathlib', 'fichiers CSV et JSON'],
   'decorator-generator': ['itérateurs et iter()', 'générateurs et yield', 'expressions génératrices', 'bases des décorateurs', 'décorateurs avec arguments', 'pipelines basés sur générateurs', 'générateurs asynchrones'],
+  'boolean': ['valeurs de vérité (True/False)', 'protocole de vérité', 'opérateurs de comparaison', 'logique and/or/not', 'évaluation court-circuit', 'booléens dans les conditions', 'lois de De Morgan'],
+  'collections': ['opérations sur les listes', 'opérations sur les dictionnaires', 'opérations sur les ensembles', 'utilisation des tuples', 'defaultdict pour le groupement', 'Counter pour les fréquences', 'namedtuple pour les enregistrements', 'deque pour les files'],
+  'type-hints': ['annotations de base', 'signatures de fonctions', 'Optional et Union', 'collections comme types', 'alias de types', 'Protocol et typage structurel', 'Generics'],
+  'testing': ['structure de test (arranger/agir/affirmer)', 'bases de pytest', 'fixtures', 'tests paramétrés', 'mocking', 'tests basés sur les propriétés', 'couverture de test'],
 };
 
 const pathKey = (question: string): string => {
@@ -65,6 +73,10 @@ const pathKey = (question: string): string => {
   if (/\b(?:exception|error|erreur|try|except)\b/.test(value)) return 'exception-handling';
   if (/\b(?:file.?io|fichiers?|file operations?|lecture|write|read|open)\b/.test(value)) return 'file-io';
   if (/\b(?:decorator|generator|générateur|décorateur|yield|itérateur|iterator)\b/.test(value)) return 'decorator-generator';
+  if (/\b(?:boolean?|bool|truthy?|falsy?|vrai|faux|truth value)\b/.test(value) && !/set|dict/.test(value)) return 'boolean';
+  if (/\b(?:defaultdict|counter|namedtuple|deque|ordereddict|collections)\b/.test(value)) return 'collections';
+  if (/\b(?:type.?hint|annotation|typing|mypy)\b/.test(value)) return 'type-hints';
+  if (/\b(?:test|pytest|unittest|testing|tests? unitaire)\b/.test(value)) return 'testing';
   return 'python';
 };
 
@@ -139,6 +151,24 @@ export const answerPythonCodeQuality = (question: string, language: AdvancedAiLa
   const indentLevels = code.split('\n').map(line => line.search(/\S/)).filter(indent => indent > 0);
   const maxIndent = indentLevels.length ? Math.max(...indentLevels) : 0;
   if (maxIndent > 24) findings.push({ severity: 'medium', text: fr ? `Niveau d'indentation max : ${maxIndent / 4}. Envisagez d'extraire des fonctions.` : `Max indent level: ${maxIndent / 4}. Consider extracting functions.` });
+  // String concatenation in loops: `result += chunk` is O(n²)
+  if (/for\s+\w+\s+in\b[\s\S]*?result\s*\+=\s*\w+/ms.test(code) || /for\s+\w+\s+in\b[\s\S]*?\w+\s*\+=?\s*['"]/ms.test(code)) {
+    findings.push({ severity: 'medium', text: fr ? 'Concaténation de chaînes dans une boucle — coût O(n²). Utilisez une liste et `"".join()`.' : 'String concatenation in a loop — O(n²) cost. Use a list and `"".join()`.' });
+  }
+  // Magic numbers: unexplained numeric literals
+  const magicNumbers = code.match(/(?:^|[\s=,(+\-])(\d{3,})(?!\s*\%|\s*\*|\s*\/|\.\w)/gm);
+  if (magicNumbers && magicNumbers.length >= 2) {
+    findings.push({ severity: 'low', text: fr ? `Nombres magiques détectés : ${[...new Set(magicNumbers.map(m => m.trim()))].join(', ')}. Définissez des constantes nommées.` : `Magic numbers detected: ${[...new Set(magicNumbers.map(m => m.trim()))].join(', ')}. Define named constants.` });
+  }
+  // Missing docstrings on public functions
+  const publicFunctions = [...code.matchAll(/^\s*def\s+(\w+)\s*\(/gm)].filter(([match]) => !match.includes('_')).map(m => m[1]);
+  const documentedFunctions = [...code.matchAll(/^\s*def\s+\w+\s*\([^)]*\)\s*:\s*\n\s*"""/gm)].map(m => m[0].match(/def\s+(\w+)/)?.[1]);
+  const missingDocs = publicFunctions.filter(name => !documentedFunctions?.includes(name));
+  if (missingDocs.length > 1) findings.push({ severity: 'low', text: fr ? `Fonctions publiques sans docstring : ${missingDocs.join(', ')}.` : `Public functions without docstrings: ${missingDocs.join(', ')}.` });
+  // Bare `raise` outside `except` block
+  if (/^\s*raise\s(?!\w)/m.test(code)) findings.push({ severity: 'low', text: fr ? '`raise` nu (sans type d\'exception) ne fonctionne que dans un bloc `except`.' : 'A bare `raise` (without an exception type) only works inside an `except` block.' });
+  // `except Exception` too broad
+  if (/except\s+Exception\s*:/.test(code) && !/\bexcept\s+(?!Exception)\w+/.test(code)) findings.push({ severity: 'medium', text: fr ? '`except Exception:` attrape 99 % des erreurs Python. Capturez des exceptions précises.' : '`except Exception:` catches 99 % of Python errors. Catch specific exceptions instead.' });
   // `isinstance` chains
   const isinstanceCount = (code.match(/\bisinstance\s*\(/g) || []).length;
   if (isinstanceCount >= 3) findings.push({ severity: 'low', text: fr ? `${isinstanceCount} appels \`isinstance\` détectés. Envisagez le polymorphisme.` : `${isinstanceCount} \`isinstance\` calls detected. Consider polymorphism.` });
@@ -186,12 +216,34 @@ const QUIZ_BANK: Record<string, QuizTemplate[]> = {
     { id: 'python-precedence', code: 'print(2 + 3 * 4 ** 2)', expected: ['50'], explanation: ['Exponentiation runs first, then multiplication, then addition: 16, 48, 50.', 'L’exponentiation s’exécute d’abord, puis la multiplication et l’addition : 16, 48, 50.'], misconception: ['operator precedence', 'priorité des opérateurs'], hint: ['Resolve `**`, then `*`, then `+`.', 'Résolvez `**`, puis `*`, puis `+`.'] },
     { id: 'python-boolean', code: 'value = 5\nprint(value > 2 and value < 5 or value == 5)', expected: ['True'], explanation: ['`and` is evaluated before `or`; the first group is false, but `value == 5` is true.', '`and` est évalué avant `or` ; le premier groupe est faux, mais `value == 5` est vrai.'], misconception: ['boolean operator precedence', 'priorité des opérateurs booléens'], hint: ['Evaluate both comparisons around `and`, then apply `or`.', 'Évaluez les comparaisons autour de `and`, puis appliquez `or`.'] },
   ],
+  string: [
+    { id: 'string-upper', code: 'text = "hello"\nprint(text.upper())', expected: ['HELLO'], explanation: ['`.upper()` returns a new string with all characters converted to uppercase.', '`.upper()` renvoie une nouvelle chaîne avec tous les caractères convertis en majuscules.'], misconception: ['string method immutability', 'immutabilité des méthodes de chaîne'], hint: ['String methods always return new strings — the original is never modified.', 'Les méthodes de chaîne renvoient toujours de nouvelles chaînes — l\'originale n\'est jamais modifiée.'] },
+    { id: 'string-split', code: 'data = "a,b,c"\nprint(data.split(","))', expected: ["['a', 'b', 'c']"], explanation: ['`.split(",")` splits the string at each comma and returns a list of substrings.', '`.split(",")` divise la chaîne à chaque virgule et renvoie une liste de sous-chaînes.'], misconception: ['split output type', 'type du résultat de split'], hint: ['`split()` always returns a list of strings, never a single string.', '`split()` renvoie toujours une liste de chaînes, jamais une seule chaîne.'] },
+  ],
+  tuple: [
+    { id: 'tuple-index', code: 't = (10, 20, 30)\nprint(t[1])', expected: ['20'], explanation: ['Tuple indexing works like list indexing — `t[1]` returns the second element (index 1).', 'L\'indexation des tuples fonctionne comme celle des listes — `t[1]` renvoie le deuxième élément (indice 1).'], misconception: ['parentheses confusion with generator', 'confusion parenthèses avec générateur'], hint: ['`(x)` is just x; `(x,)` is a tuple with one element.', '`(x)` est simplement x ; `(x,)` est un tuple à un élément.'] },
+  ],
+  set: [
+    { id: 'set-unique', code: 'values = {1, 2, 2, 3}\nprint(len(values))', expected: ['3'], explanation: ['Sets remove duplicates automatically, so `{1, 2, 2, 3}` contains only 1, 2, and 3.', 'Les ensembles suppriment automatiquement les doublons, donc `{1, 2, 2, 3}` ne contient que 1, 2 et 3.'], misconception: ['set deduplication', 'déduplication des ensembles'], hint: ['Sets only store unique elements — duplicates are silently discarded.', 'Les ensembles ne stockent que des éléments uniques — les doublons sont ignorés silencieusement.'] },
+  ],
+  boolean: [
+    { id: 'boolean-not', code: 'print(not True)', expected: ['False'], explanation: ['`not True` evaluates to `False` — the negation of the boolean value.', '`not True` s\'évalue à `False` — la négation de la valeur booléenne.'], misconception: ['not operator as reversal', 'opérateur not comme inversion'], hint: ['`not` always returns a boolean. `not x` is True when x is falsy.', '`not` renvoie toujours un booléen. `not x` est True quand x est faux.'] },
+  ],
+  class: [
+    { id: 'class-init', code: 'class Dog:\n    def __init__(self, name):\n        self.name = name\n\nd = Dog("Noll")\nprint(d.name)', expected: ['Noll'], explanation: ['`__init__` runs when the object is created, storing `"Noll"` in `self.name`.', '`__init__` s\'exécute à la création de l\'objet et stocke `"Noll"` dans `self.name`.'], misconception: ['self is passed automatically', 'self est passé automatiquement'], hint: ['`self` is the instance being created — Python passes it automatically.', '`self` est l\'instance en cours de création — Python le passe automatiquement.'] },
+  ],
+  generator: [
+    { id: 'generator-next', code: 'def gen():\n    yield 1\n    yield 2\n\ng = gen()\nprint(next(g))\nprint(next(g))', expected: ['1\n2'], explanation: ['Each `next()` call resumes the generator and runs until the next `yield`.', 'Chaque appel `next()` reprend le générateur et s\'exécute jusqu\'au prochain `yield`.'], misconception: ['generator runs all at once', 'le générateur s\'exécute en une fois'], hint: ['Generators pause at each `yield` — they are lazy, not eager.', 'Les générateurs font une pause à chaque `yield` — ils sont paresseux, pas immédiats.'] },
+  ],
+  'exception-handling': [
+    { id: 'exception-basic', code: 'try:\n    1 / 0\nexcept ZeroDivisionError:\n    print("caught")', expected: ['caught'], explanation: ['The `try` block raises `ZeroDivisionError`, which is caught by the matching `except` clause.', 'Le bloc `try` lève `ZeroDivisionError`, qui est attrapé par la clause `except` correspondante.'], misconception: ['exception breaks the program', 'l\'exception interrompt le programme'], hint: ['An `except` block handles the error — the program continues after it.', 'Un bloc `except` gère l\'erreur — le programme continue après.'] },
+  ],
 };
 
 export const createAdaptiveQuiz = (subject: string, mode: GeneralAiResponseMode, language: AdvancedAiLanguage, variantIndex = 0, priorFocus = ''): GeneralAiQuizState => {
   const fr = language === 'fr';
   const key = pathKey(subject);
-  const subjectLabel = fr ? ({ list: 'listes', dictionary: 'dictionnaires', function: 'fonctions', python: 'Python' } as Record<string, string>)[key] || key : key;
+  const subjectLabel = fr ? ({ list: 'listes', dictionary: 'dictionnaires', function: 'fonctions', python: 'Python', string: 'chaînes', tuple: 'tuples', set: 'ensembles', boolean: 'booléens', class: 'classes', generator: 'générateurs', 'exception-handling': 'gestion des exceptions' } as Record<string, string>)[key] || key : key;
   const subjectBank = QUIZ_BANK[key] || QUIZ_BANK.python;
   const item = subjectBank[Math.abs(variantIndex) % subjectBank.length];
   return {
@@ -597,6 +649,44 @@ export const answerPythonMisconceptionRequest = (question: string, language: Adv
       correction: 'original_list = [1, 2, 3]  # not "list ="\nitems_count = len(items)        # not "len = "',
     });
   }
+  // `sorted()` vs `.sort()`: returning a new list vs mutating in-place
+  if (/\.sort\s*\(\s*\)\s*$|\.sort\s*\(\s*\)\s*\n/.test(code)) {
+    const sortReturn = code.match(/\b(\w+)\s*=\s*\w+\.sort\s*\(/);
+    if (sortReturn) {
+      findings.push({
+        title: fr ? '`.sort()` contre `sorted()`' : '`.sort()` versus `sorted()`',
+        explanation: fr ? '`list.sort()` modifie la liste sur place et renvoie `None`. Utilisez `sorted(list)` pour créer une nouvelle liste triée.' : '`list.sort()` mutates the list in place and returns `None`. Use `sorted(list)` to create a new sorted list.',
+        correction: 'result = sorted(items)  # returns a new list\nitems.sort()             # returns None, items is sorted in-place',
+      });
+    }
+  }
+  // `isinstance()` vs `type()`: isinstance respects inheritance
+  if (/\btype\s*\([^)]+\)\s*(?:==|is)\s*\w+\b/.test(code)) {
+    findings.push({
+      title: fr ? '`type()` contre `isinstance()`' : '`type()` versus `isinstance()`',
+      explanation: fr ? '`type(x) == Class` ne fonctionne pas avec l\'héritage (sous-classes). Préférez `isinstance(x, Class)` qui respecte les hiérarchies.' : '`type(x) == Class` does not work with inheritance (subclasses). Prefer `isinstance(x, Class)` which respects class hierarchies.',
+      correction: 'if isinstance(value, Class):  # correct: works with subclasses\nif type(value) == Class:    # fragile: fails on subclasses',
+    });
+  }
+  // `__init__` is not a constructor
+  if (/__init__.*construct/i.test(code) || /\b__new__\b/.test(code)) {
+    findings.push({
+      title: fr ? '`__init__` n\'est pas un constructeur' : '`__init__` is not a constructor',
+      explanation: fr ? '`__init__` initialise une instance déjà créée. `__new__` est le vrai constructeur (crée l\'instance). Pour la plupart des classes, vous n\'avez besoin que de `__init__`.' : '`__init__` initialises an already-created instance. `__new__` is the actual constructor (creates the instance). For most classes, you only need `__init__`.',
+      correction: 'class MyClass:\n    def __init__(self, value):   # initialiser — pas créer\n        self.value = value\n    def __new__(cls, value):      # constructeur — rarement nécessaire\n        return super().__new__(cls)',
+    });
+  }
+  // Comprehension variable leaking (fixed in Python 3): list comps no longer leak
+  if (/\[.*\bfor\s+\w+\s+in\b|\{.*\bfor\s+\w+\s+in\b|\(.*\bfor\s+\w+\s+in\b/.test(code)) {
+    const loopVar = code.match(/for\s+(\w+)\s+in\b/);
+    if (loopVar && new RegExp(`\\\\b${loopVar[1]}\\\\b`).test(code.replace(/\[[^\]]*\]/, ''))) {
+      findings.push({
+        title: fr ? 'Variable de compréhension (Python 3)' : 'Comprehension variable (Python 3)',
+        explanation: fr ? 'En Python 3, les variables de compréhension de liste n\'affichent pas l\'espace de nommage englobant. Ce code fonctionne — aucun correctif nécessaire.' : 'In Python 3, list comprehension variables do not pollute the surrounding namespace. This code works — no fix needed.',
+        correction: '# Python 3 guard: the loop variable stays inside the comprehension\nsquares = [x * x for x in range(5)]\n# "x" is NOT accessible here',
+      });
+    }
+  }
   if (!findings.length) return null;
   return [
     `**${fr ? 'Diagnostic du malentendu Python' : 'Python misconception diagnosis'}**`,
@@ -662,10 +752,13 @@ const PYTHON_VERSION_FEATURES: PythonVersionFeature[] = [
   { id: 'fstring-backslash', version: [3, 12], label: ['backslashes and quotes inside f-strings', 'antislash et guillemets dans les f-strings'], detect: /f["'][^\n]*?(?:\\[nrt'"\\]|["']\s*\{)/m, alternative: ['Pre-assign the escaped value to a variable outside the f-string.', 'Affectez la valeur échappée à une variable en dehors du f-string.'], source: 'https://docs.python.org/3/whatsnew/3.12.html#pep-701-fstring' },
   { id: 'deprecated-decorator', version: [3, 13], label: ['the `@warnings.deprecated()` decorator', 'le décorateur `@warnings.deprecated()`'], detect: /@(?:warnings\.)?deprecated/, alternative: ['Use a custom `@deprecated` decorator that calls `warnings.warn()`.', 'Utilisez un décorateur `@deprecated` personnalisé qui appelle `warnings.warn()`.'], source: 'https://docs.python.org/3/library/warnings.html#deprecated' },
   { id: 'copy-replace', version: [3, 13], label: ['`copy.replace()` for dataclasses', '`copy.replace()` pour les dataclasses'], detect: /\bcopy\.replace\s*\(/, alternative: ['Use `dataclasses.replace()` on older Python.', 'Utilisez `dataclasses.replace()` sur une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.13.html#copy' },
-  { id: 'walrus-operator', version: [3, 8], label: ['the walrus operator `:=`', 'l\'opérateur morse `:=`'], detect: /:=/, alternative: ['Compute and store the expression value on the line before the condition on Python 3.7 and earlier.', 'Calculez et stockez la valeur de l\'expression dans une variable avant la condition avec Python 3.7 et antérieur.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#pep-572' },
   { id: 'parenthesized-context-managers', version: [3, 10], label: ['parenthesized context managers', 'gestionnaires de contexte parenthésés'], detect: /\bwith\s*\(\s*(?:open|mock|patch|contextlib\.)/s, alternative: ['Use separate `with` statements or `contextlib.ExitStack` on older Python.', 'Utilisez des instructions `with` séparées ou `contextlib.ExitStack` avec une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.10.html#pep-634' },
   { id: 'match-case', version: [3, 10], label: ['`match`/`case` structural pattern matching', '`match`/`case` filtrage structurel'], detect: /\bmatch\s+\w+\s*:\s*\n\s*case\s/, alternative: ['Use `if`/`elif` chains with `isinstance()` checks on Python 3.9 and earlier.', 'Utilisez des chaînes `if`/`elif` avec des vérifications `isinstance()` avec Python 3.9 et antérieur.'], source: 'https://docs.python.org/3/whatsnew/3.10.html#pep-634' },
   { id: 'typing-self', version: [3, 11], label: ['`typing.Self` return type', 'le type de retour `typing.Self`'], detect: /\bSelf\b/, alternative: ['Use `from __future__ import annotations` or type the class name as a string literal on Python 3.10 and earlier.', 'Utilisez `from __future__ import annotations` ou tapez le nom de la classe en chaîne littérale avec Python 3.10 et antérieur.'], source: 'https://docs.python.org/3/whatsnew/3.11.html#pep-673' },
+  { id: 'breakpoint', version: [3, 7], label: ['the `breakpoint()` built-in function', 'la fonction intégrée `breakpoint()`'], detect: /\bbreakpoint\s*\(/, alternative: ['Use `import pdb; pdb.set_trace()` on older Python.', 'Utilisez `import pdb; pdb.set_trace()` avec une version plus ancienne.'], source: 'https://docs.python.org/3/whatsnew/3.7.html#pep-553-breakpoint-built-in' },
+  { id: 'positional-only', version: [3, 8], label: ['positional-only parameter syntax `/`', 'la syntaxe de paramètre positionnel seul `/`'], detect: /def\s+\w+[^)]*\/\s*[,)]/, alternative: ['Design around named parameters; there is no syntax-equivalent before 3.8.', 'Évitez de forcer le positionnel ; il n\'existe pas de syntaxe équivalente avant 3.8.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#positional-only-parameters' },
+  { id: 'fstring-equal', version: [3, 8], label: ['the `f"{x=}"` debug syntax', 'la syntaxe de débogage `f"{x=}"`'], detect: /f["'][^"']*=\s*(\{|\s*\{)/m, alternative: ['Print the name and value separately on older Python.', 'Affichez le nom et la valeur séparément avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#f-strings-support-for-self-documenting-expressions-and-debugging' },
+  { id: 'cached-property', version: [3, 8], label: ['the `@functools.cached_property` decorator', 'le décorateur `@functools.cached_property`'], detect: /\bcached_property\s*\(/, alternative: ['Store the computed value in `self.__dict__` manually on older Python.', 'Stockez la valeur calculée manuellement dans `self.__dict__` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#functools' },
 ];
 
 const comparePythonVersions = (left: [number, number], right: [number, number]): number => left[0] - right[0] || left[1] - right[1];
