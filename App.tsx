@@ -2509,21 +2509,26 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
             '```',
         ].join('\n');
     }
-    if (/importerror|import error|modulenotfounderror|module not found/.test(lowerQ)) {
+    if (/timeouterror|timeout error|timed out|operation timed out/i.test(lowerQ)) {
         return [
             '1. What it means',
-            '`ImportError` / `ModuleNotFoundError` means Python could not find the module you tried to import.',
+            '`TimeoutError` (a subclass of `OSError`) is raised when a system operation takes longer than the allowed time.',
             '',
             '2. Common causes',
-            '- The module is not installed (needs `pip install`).',
-            '- You misspelled the module name.',
-            '- The file is not in the Python path.',
-            '- Circular imports between files in your project.',
+            '- A network request that did not complete within the timeout.',
+            '- Reading from a slow or stuck I/O device.',
+            '- A subprocess that did not finish in the allotted time.',
             '',
-            '3. Example of the fix',
+            '3. Example fix',
             '```python',
-            '# pip install requests first',
-            'import requests           # now this works',
+            'import socket',
+            'socket.setdefaulttimeout(5)  # seconds',
+            '',
+            'import requests',
+            'try:',
+            '    r = requests.get("https://example.com", timeout=3)',
+            'except requests.Timeout:',
+            '    print("Request timed out")',
             '```',
         ].join('\n');
     }
