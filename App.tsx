@@ -2037,6 +2037,216 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
             '`assert` statements can be disabled with the `-O` (optimize) flag. Do not use `assert` for validation that must always run — use `if` + `raise` instead.',
         ].join('\n');
     }
+    if (/runtimeerror|runtime error/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`RuntimeError` is a generic error raised when no more specific exception applies. It means something went wrong during execution that does not fit other categories.',
+            '',
+            '2. Common causes',
+            '- A bug in the code logic that does not correspond to a standard error type.',
+            '- Some third-party libraries raise `RuntimeError` for internal failures.',
+            '- Rare CPython internal states.',
+        ].join('\n');
+    }
+    if (/ioerror|oserror|i\/o error|input.output error|input-output error/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`OSError` (and its alias `IOError` in older Python) is raised when a system operation fails: file access, network, device, or permission issues.',
+            '',
+            '2. Common causes',
+            '- File not found, permission denied, disk full, or device disconnected.',
+            '- Invalid file descriptor or operation on a closed file.',
+            '- Network timeout or broken pipe.',
+            '',
+            '3. Subclasses',
+            '`FileNotFoundError`, `PermissionError`, `TimeoutError`, `ConnectionError`, and `BlockingIOError` are all subclasses of `OSError`. Catch specific subclasses when possible.',
+        ].join('\n');
+    }
+    if (/notimplementederror|not implemented|abstract method/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`NotImplementedError` indicates an abstract method that subclasses should override but have not.',
+            '',
+            '2. Common causes',
+            '- Calling a method on a base class that was meant to be overridden.',
+            '- Using an abstract base class (ABC) without implementing all abstract methods.',
+            '- Incomplete refactoring where a stub method was not filled in.',
+            '',
+            '3. Example',
+            '```python',
+            'class Base:',
+            '    def process(self):',
+            '        raise NotImplementedError("subclasses must implement process()")',
+            '```',
+        ].join('\n');
+    }
+    if (/taberror|tab error|inconsistent use of tabs and spaces/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`TabError` means your code mixes tabs and spaces for indentation, and Python cannot determine the block structure.',
+            '',
+            '2. Solution',
+            'Convert all tabs to spaces (4 spaces per indent level). Most editors have a "convert tabs to spaces" option. Set your editor to insert spaces when you press Tab.',
+            '',
+            '3. Prevention',
+            'Configure your editor to use 4 spaces for Python. PEP 8 recommends spaces over tabs.',
+        ].join('\n');
+    }
+    if (/unicodeerror|unicode error/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`UnicodeError` is the parent class for encoding/decoding errors. It means Python could not convert between bytes and text.',
+            '',
+            '2. Common subclasses',
+            '- `UnicodeEncodeError`: character cannot be encoded to the target encoding.',
+            '- `UnicodeDecodeError`: byte sequence cannot be decoded to text.',
+            '- `UnicodeTranslateError`: character cannot be translated.',
+            '',
+            '3. Example fixes',
+            '```python',
+            '# Specify encoding when reading/writing files:',
+            'with open("file.txt", "r", encoding="utf-8") as f:',
+            '    text = f.read()',
+            '',
+            '# Handle decode errors:',
+            'text = data.decode("utf-8", errors="ignore")  # or "replace"',
+            '```',
+        ].join('\n');
+    }
+    if (/unicodeencodeerror|unicode encode/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`UnicodeEncodeError` means a character in your string cannot be represented in the target encoding (e.g., ASCII, Latin-1).',
+            '',
+            '2. Common causes',
+            '- Writing text to a file opened without a Unicode-capable encoding.',
+            '- Printing a string that contains non-ASCII characters to an ASCII-only terminal.',
+            '- Passing Unicode to a function that expects ASCII.',
+            '',
+            '3. Example fix',
+            '```python',
+            'text = "café"',
+            'text.encode("ascii", errors="ignore")     # "caf"',
+            'text.encode("ascii", errors="replace")   # "caf?"',
+            'text.encode("ascii", errors="xmlcharrefreplace")  # "caf&#233;"',
+            '```',
+        ].join('\n');
+    }
+    if (/unicodedecodeerror|unicode decode/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`UnicodeDecodeError` means a byte sequence could not be interpreted as text using the specified encoding.',
+            '',
+            '2. Common causes',
+            '- Opening a file with the wrong encoding (e.g., opening a UTF-16 file as UTF-8).',
+            '- Reading binary data as text.',
+            '- Corrupted file content.',
+            '',
+            '3. Example fix',
+            '```python',
+            'with open("file.txt", "r", encoding="utf-8", errors="replace") as f:',
+            '    content = f.read()',
+            '```',
+        ].join('\n');
+    }
+    if (/memoryerror|memory error|out of memory/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`MemoryError` means Python tried to allocate memory but the system could not provide it.',
+            '',
+            '2. Common causes',
+            '- Loading an extremely large dataset into memory.',
+            '- An infinite loop that keeps appending to a list or building a string.',
+            '- A memory leak (e.g., holding references in a cache without bounds).',
+            '',
+            '3. Solutions',
+            '- Process data in chunks instead of loading everything at once.',
+            '- Use generators or streaming for large files.',
+            '- Profile memory usage with `tracemalloc` or `memory_profiler`.',
+        ].join('\n');
+    }
+    if (/systemexit|sys\.exit|system exit/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`SystemExit` is raised by `sys.exit()` to request the program to exit. It is not an error — it is a controlled shutdown signal.',
+            '',
+            '2. Behavior',
+            '- `sys.exit(0)` exits successfully.',
+            '- `sys.exit(1)` exits with an error code.',
+            '- If not caught, Python exits. If caught in `except:`, the program continues.',
+            '',
+            '3. Note',
+            'Bare `except:` catches `SystemExit`, which is usually wrong. Use `except Exception:` to avoid catching `SystemExit` and `KeyboardInterrupt`.',
+        ].join('\n');
+    }
+    if (/keyboardinterrupt|keyboard interrupt|ctrl.?c/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`KeyboardInterrupt` is raised when the user presses Ctrl+C (or Cmd+C on macOS) to stop the program.',
+            '',
+            '2. Behavior',
+            '- Python raises `KeyboardInterrupt` in the main thread.',
+            '- If not caught, the program stops with a traceback.',
+            '- Can be caught to perform cleanup before exiting.',
+            '',
+            '3. Example',
+            '```python',
+            'try:',
+            '    while True:',
+            '        print("working...")',
+            'except KeyboardInterrupt:',
+            '    print("\\nShutting down gracefully")',
+            '```',
+        ].join('\n');
+    }
+    if (/eoferror|eof error|end of file|unexpected EOF/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`EOFError` is raised when `input()` or a file read function hits the end of input unexpectedly.',
+            '',
+            '2. Common causes',
+            '- Calling `input()` when stdin has been closed (e.g., piping an empty file).',
+            '- Reading past the end of a file.',
+            '- `pickle.load()` on an empty or truncated file.',
+            '',
+            '3. Example fix',
+            '```python',
+            'try:',
+            '    data = input()',
+            'except EOFError:',
+            '    data = ""  # default when no input',
+            '```',
+        ].join('\n');
+    }
+    if (/floatingpointerror|floating point error|floating exception/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`FloatingPointError` is raised when a floating-point operation on some platforms produces an exception (e.g., division by zero with the `fpectl` module enabled). It is rare in standard Python.',
+            '',
+            '2. Note',
+            'By default, Python does not raise `FloatingPointError` for division by zero or overflow — those produce `inf` or `nan` instead. This error requires explicit `fpectl` registration and is uncommon in real code.',
+        ].join('\n');
+    }
+    if (/unboundlocalerror|unbound local|local variable.*referenced before assignment/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`UnboundLocalError` (a subclass of `NameError`) means you used a local variable before assigning a value to it.',
+            '',
+            '2. Common cause',
+            'You have a variable with the same name used both inside and outside a function. Python sees an assignment in the function and treats the variable as local, so the reference before that assignment fails.',
+            '',
+            '3. Example',
+            '```python',
+            'x = 10',
+            'def f():',
+            '    print(x)   # UnboundLocalError!',
+            '    x = 5',
+            '```',
+            '',
+            '4. Fix',
+            'Use `global x` or `nonlocal x` if you intend to modify the outer variable, or rename the local variable to avoid shadowing.',
+        ].join('\n');
+    }
     return [
         '1. Error helper',
         'Python errors usually tell you the error type, line number, and what went wrong.',
