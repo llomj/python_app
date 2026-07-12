@@ -188,7 +188,7 @@ const GENERAL_AI_TOPIC_ALIASES: Record<string, string[]> = {
     condition: ['condition', 'conditions', 'conditional', 'conditionals', 'if statement'],
     lambda: ['lambda', 'lambada'],
     closure: ['closure', 'closures'],
-    decorator: ['decorator', 'decorators'],
+    decorator: ['decorator', 'decorators', 'decorator with argument', 'decorator arguments', 'nested decorator'],
     generator: ['generator', 'generators'],
     iterator: ['iterator', 'iterators'],
     comprehension: ['comprehension', 'comprehensions', 'list comprehension', 'dict comprehension', 'set comprehension'],
@@ -199,6 +199,21 @@ const GENERAL_AI_TOPIC_ALIASES: Record<string, string[]> = {
     truthy: ['truthy', 'truthy value', 'truthy values', 'falsy', 'falsy value', 'falsy values', 'falsey', 'truth value testing'],
     unpacking: ['unpacking', 'unpack', 'starred', 'starred expression', 'star operator', 'asterisk operator', '*args'],
     none: ['none', 'None', 'NoneType', 'null', 'nil', 'absence of value'],
+    inheritance: ['inheritance', 'inherit', 'subclass', 'parent class', 'child class', 'super class', 'base class', 'derived class'],
+    'async-await': ['async', 'await', 'async await', 'coroutine', 'asyncio', 'asynchronous', 'async function'],
+    'match-case': ['match case', 'match/case', 'pattern matching', 'structural pattern matching'],
+    'type-hints': ['type hints', 'type hint', 'type annotation', 'type annotations', 'typing module', 'type hinting'],
+    'context-manager': ['context manager', 'context managers', 'with statement', 'with block', 'contextlib'],
+    'exception-handling': ['exception handling', 'try except', 'try/except', 'catch exception', 'exception handler'],
+    property: ['property', '@property', 'getter', 'setter', 'getters', 'setters', 'decorator property'],
+    dataclass: ['dataclass', '@dataclass', 'data class', 'data classes'],
+    'file-io': ['file io', 'file input output', 'file reading', 'read file', 'write file', 'open file', 'file operations'],
+    recursion: ['recursion', 'recursive', 'recursive function', 'recursion limit', 'stack overflow python'],
+    enum: ['enum', 'enumeration', 'python enum', 'enum class'],
+    frozenset: ['frozenset', 'frozen set'],
+    regex: ['regex', 'regular expression', 'regular expressions', 're module', 'python regex'],
+    'walrus-operator': ['walrus operator', 'assignment expression', 'walrus', ':= operator'],
+    debugging: ['debug', 'debugging', 'pdb', 'breakpoint', 'debug code'],
 };
 
 const detectGeneralPythonTopic = (question: string): string => {
@@ -939,6 +954,96 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         mistakes: 'Use `is None` to check for None, not `== None` — `is` is the idiomatic identity check. `None` is falsy, but `None is False` is False. `None` is not the same as `0`, `""`, or `[]`. A function without an explicit `return` returns `None`.',
         related: ['boolean', 'return', 'truthy', 'is-operator'],
     },
+    inheritance: {
+        label: 'Inheritance',
+        summary: 'A mechanism where a class (child/subclass) inherits attributes and methods from another class (parent/superclass).',
+        syntax: '`class Child(Parent):`',
+        bestFor: 'Reusing code across related classes, overriding behavior, and building class hierarchies.',
+        example: 'class Animal:\n    def speak(self):\n        return "..."\n\nclass Dog(Animal):\n    def speak(self):\n        return "woof"\n\npet = Dog()\nprint(pet.speak())',
+        mistakes: 'Deep inheritance hierarchies make code hard to follow. Use composition over inheritance when possible. `super()` follows MRO, not just the immediate parent — critical with multiple inheritance. Attribute lookup traverses MRO at runtime.',
+        related: ['oop', 'class', 'object', 'method'],
+    },
+    'async-await': {
+        label: 'Async/await',
+        summary: 'A syntax for writing concurrent code using coroutines. `async def` defines a coroutine; `await` suspends it until the awaited task completes.',
+        syntax: '`async def name():` / `await coroutine()`',
+        bestFor: 'I/O-bound tasks: network requests, file reads, database queries, API calls. Not for CPU-heavy work.',
+        example: 'import asyncio\n\nasync def fetch_data():\n    await asyncio.sleep(1)\n    return "done"\n\nasync def main():\n    result = await fetch_data()\n    print(result)\n\nasyncio.run(main())',
+        mistakes: 'You cannot call `await` outside an `async def`. Calling a coroutine without `await` returns a coroutine object, not the result. `asyncio.run()` creates a new event loop each call. Async is not faster for CPU-bound tasks.',
+        related: ['function', 'generator', 'for loop'],
+    },
+    'match-case': {
+        label: 'Match/case (structural pattern matching)',
+        summary: 'Python 3.10+ feature that matches a value against structured patterns, similar to switch/case in other languages but much more powerful.',
+        syntax: '`match value: case pattern: ...`',
+        bestFor: 'Matching against multiple shapes, destructuring data structures, literal comparisons, and guard conditions.',
+        example: 'def describe(point):\n    match point:\n        case (0, 0):\n            return "origin"\n        case (x, 0):\n            return f"x={x}"\n        case (0, y):\n            return f"y={y}"\n        case (x, y):\n            return f"({x}, {y})"\n        case _:\n            return "unknown"',
+        mistakes: '`match`/`case` are soft keywords — they work as identifiers outside match blocks. Patterns bind variables, so `case (x, y):` captures values; use guards (`case ... if condition:`) for comparison against existing variables. Wildcard `_` does not bind.',
+        related: ['condition', 'tuple', 'unpacking'],
+    },
+    'type-hints': {
+        label: 'Type hints',
+        summary: 'Optional annotations that indicate the expected type of variables, parameters, and return values. They are ignored at runtime but checked by external tools like mypy.',
+        syntax: '`def func(name: str) -> int:`',
+        bestFor: 'Making code self-documenting, enabling static type checking, catching type-related bugs before runtime, and improving IDE autocompletion.',
+        example: 'from typing import List\n\ndef greet(names: List[str]) -> str:\n    return f"Hello, {\', \'.join(names)}"\n\nprint(greet(["Alice", "Bob"]))',
+        mistakes: 'Type hints do not enforce types at runtime — `func(5)` will not error even if `name: str`. Use `Optional[X]` for values that could be `None`. `List[int]` and `list[int]` both work (Python 3.9+). Avoid circular imports with `TYPE_CHECKING`.',
+        related: ['function', 'variable', 'parameter', 'built-in function'],
+    },
+    'context-manager': {
+        label: 'Context manager',
+        summary: 'An object that defines setup/teardown logic using `__enter__` and `__exit__`, invoked by the `with` statement.',
+        syntax: '`with expression as variable:`',
+        bestFor: 'Managing resources: file handles, database connections, locks, network sockets, temporary files.',
+        example: 'with open("file.txt", "r") as f:\n    data = f.read()\n# file is automatically closed here',
+        mistakes: 'Not using context managers for file/resource handling causes resource leaks. `__exit__` runs even if the body raises. Returning `True` from `__exit__` suppresses exceptions. Custom context managers can use `contextlib.contextmanager`.',
+        related: ['file-io', 'function', 'class'],
+    },
+    'exception-handling': {
+        label: 'Exception handling',
+        summary: 'A structured way to handle runtime errors using `try`/`except`/`else`/`finally`. Prevents crashes and allows graceful recovery.',
+        syntax: '`try: ... except SomeError: ... else: ... finally: ...`',
+        bestFor: 'Handling predictable failures: file not found, network timeout, invalid input, missing keys. Not for normal control flow.',
+        example: 'try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print("Cannot divide by zero")\nelse:\n    print(result)\nfinally:\n    print("Cleanup runs always")',
+        mistakes: 'Avoid bare `except:` — it catches everything including `KeyboardInterrupt` and `SystemExit`. Catch specific exceptions. `else` runs only if no exception occurred. `finally` runs no matter what. Use `raise` to re-raise. Use `raise ... from ...` for exception chaining.',
+        related: ['error_help', 'condition', 'file-io'],
+    },
+    property: {
+        label: 'Property (@property)',
+        summary: 'A decorator that turns a method into a read-only attribute. Combined with setter/deleter, it controls attribute access with get/set/delete logic.',
+        syntax: '`@property` on a method / `@name.setter` / `@name.deleter`',
+        bestFor: 'Computed attributes, validation on set, read-only attributes, backwards-compatible API evolution from attribute to method.',
+        example: 'class Circle:\n    def __init__(self, radius):\n        self._radius = radius\n\n    @property\n    def area(self):\n        return 3.14 * self._radius ** 2\n\n    @property\n    def radius(self):\n        return self._radius\n\n    @radius.setter\n    def radius(self, value):\n        if value < 0:\n            raise ValueError\n        self._radius = value',
+        mistakes: 'The property name and the setter/deleter method name must match. Properties are class-level descriptors, not instance attributes. Avoid expensive computations in properties — users expect attribute access to be fast. The getter runs every time you access the attribute.',
+        related: ['decorator', 'class', 'method', 'attribute'],
+    },
+    dataclass: {
+        label: 'Dataclass',
+        summary: 'A decorator (`@dataclass`) that auto-generates `__init__`, `__repr__`, `__eq__`, and `__hash__` based on class attributes.',
+        syntax: '`@dataclass` above a class with type-annotated fields',
+        bestFor: 'Data containers, value objects, configuration objects, and records where boilerplate `__init__` would be repetitive.',
+        example: 'from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\np = Point(3.0, 4.0)\nprint(p)          # Point(x=3.0, y=4.0)\nprint(p == Point(3.0, 4.0))  # True',
+        mistakes: '`@dataclass` requires type annotations. Mutable default values use `field(default_factory=list)` not `[]`. `frozen=True` makes the instance immutable and enables `__hash__`. Inheritance with dataclasses requires careful field ordering.',
+        related: ['class', 'object', 'type-hints', 'inheritance'],
+    },
+    'file-io': {
+        label: 'File I/O',
+        summary: 'Reading from and writing to files using Python\'s built-in `open()` function and file object methods.',
+        syntax: '`open(filename, mode)` — modes: `"r"` (read), `"w"` (write), `"a"` (append), `"rb"` (binary read)',
+        bestFor: 'Loading data from files, saving output, logging, configuration files, and binary data processing.',
+        example: 'with open("data.txt", "r") as f:\n    content = f.read()\n    lines = f.readlines()\n    for line in f:\n        print(line.strip())',
+        mistakes: 'Always use `with open(...) as f:` to auto-close files. `"w"` overwrites the file without warning — use `"x"` for exclusive creation. `"r"` is the default mode. For text files, specify encoding via `encoding="utf-8"`. The file cursor moves as you read.',
+        related: ['context-manager', 'string', 'exception-handling'],
+    },
+    recursion: {
+        label: 'Recursion',
+        summary: 'A technique where a function calls itself to solve smaller instances of the same problem. Requires a base case to stop.',
+        syntax: '`def func(n): if base_case: return value; return func(smaller_n)`',
+        bestFor: 'Tree traversal, graph search, divide-and-conquer algorithms, mathematical definitions (factorial, Fibonacci), and problems with recursive structure.',
+        example: 'def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(5))  # 120',
+        mistakes: 'Missing base case causes infinite recursion → `RecursionError`. Python\'s recursion limit is ~1000 — use iteration for deep recursion. Each call consumes a stack frame. Tail recursion is not optimized. Consider `functools.lru_cache` for repeated recursive calls.',
+        related: ['function', 'for loop', 'while loop', 'built-in function'],
+    },
 };
 
 const normalizeGeneralAiConceptName = (value: string): string | null => {
@@ -1532,6 +1637,133 @@ const buildGeneralAiErrorAnswer = (question: string): string | null => {
             '# pip install requests first',
             'import requests           # now this works',
             '```',
+        ].join('\n');
+    }
+    if (/stopiteration|stop iteration/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`StopIteration` is raised by `next()` when an iterator has no more items. It is the normal way iterators signal completion.',
+            '',
+            '2. Common causes',
+            '- Calling `next(iterator)` manually after the iterator is exhausted.',
+            '- Not catching `StopIteration` in manual iteration (use `for` loops instead — they handle it).',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'items = [1, 2, 3]',
+            'it = iter(items)',
+            'for x in it:   # for loop catches StopIteration automatically',
+            '    print(x)',
+            '```',
+        ].join('\n');
+    }
+    if (/recursionerror|recursion limit|recursion depth|maximum recursion/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`RecursionError` means a function called itself too many times and hit the recursion limit (default ~1000).',
+            '',
+            '2. Common causes',
+            '- Missing or incorrect base case in a recursive function.',
+            '- Infinite recursion due to wrong condition.',
+            '- The recursion depth genuinely exceeds 1000 (use iteration for deep recursion).',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'def factorial(n):',
+            '    if n <= 1:           # base case prevents infinite recursion',
+            '        return 1',
+            '    return n * factorial(n - 1)',
+            '',
+            '# For deep recursion, use iteration:',
+            'def factorial_iter(n):',
+            '    result = 1',
+            '    for i in range(2, n + 1):',
+            '        result *= i',
+            '    return result',
+            '```',
+        ].join('\n');
+    }
+    if (/zerodivisionerror|zero division|divide by zero|division by zero/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`ZeroDivisionError` means you tried to divide a number by zero, which is mathematically undefined.',
+            '',
+            '2. Common causes',
+            '- Using a variable that may be zero as the divisor.',
+            '- Integer division `//` and modulo `%` also raise this with zero divisor.',
+            '- Dividing by a user input that could be zero.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'def safe_divide(a, b):',
+            '    if b == 0:',
+            '        return None      # handle gracefully',
+            '    return a / b',
+            '```',
+        ].join('\n');
+    }
+    if (/filenotfounderror|file not found|no such file|no such file or directory/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`FileNotFoundError` means Python tried to open a file that does not exist at the given path.',
+            '',
+            '2. Common causes',
+            '- The filename is misspelled.',
+            '- The file is in a different directory.',
+            '- You are using a relative path from the wrong working directory.',
+            '- The file has not been created yet.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            'import os',
+            'if os.path.exists("data.txt"):',
+            '    with open("data.txt", "r") as f:',
+            '        print(f.read())',
+            'else:',
+            '    print("File not found")',
+            '```',
+        ].join('\n');
+    }
+    if (/permissionerror|permission denied|access denied/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`PermissionError` means your program does not have the required OS permissions to access a file or resource.',
+            '',
+            '2. Common causes',
+            '- Trying to write to a read-only file.',
+            '- Trying to access a file owned by another user or system file.',
+            '- The file is locked by another process.',
+            '- You need administrator/root privileges.',
+            '',
+            '3. Example of the fix',
+            '```python',
+            '# Check if file is writable before writing',
+            'import os',
+            'if os.access("output.txt", os.W_OK):',
+            '    with open("output.txt", "w") as f:',
+            '        f.write("data")',
+            'else:',
+            '    print("Cannot write — check file permissions")',
+            '```',
+        ].join('\n');
+    }
+    if (/assertionerror|assertion error|assert failed/i.test(lowerQ)) {
+        return [
+            '1. What it means',
+            '`AssertionError` is raised by an `assert` statement when its condition is `False`.',
+            '',
+            '2. Common causes',
+            '- The condition in `assert condition` evaluated to `False`.',
+            '- Used for debugging/invariant checking, but the assertion failed.',
+            '',
+            '3. Example',
+            '```python',
+            'x = -1',
+            'assert x >= 0, "x must be non-negative"   # raises AssertionError',
+            '```',
+            '',
+            '4. Important',
+            '`assert` statements can be disabled with the `-O` (optimize) flag. Do not use `assert` for validation that must always run — use `if` + `raise` instead.',
         ].join('\n');
     }
     return [
@@ -15641,6 +15873,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'mechanism':
                     refAnswer = buildGeneralAiMechanismAnswer(effectiveQuestion);
+                    break;
+                case 'refactoring':
+                    refAnswer = knowledge.answerPythonCodeQuality(effectiveQuestion, appLang);
+                    break;
+                case 'best_practices':
+                    refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
+                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;
                 case 'definition':
                     refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)

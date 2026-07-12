@@ -28,6 +28,8 @@ export type GeneralAiIntent =
   | 'relationships'
   | 'definition'
   | 'mechanism'
+  | 'refactoring'
+  | 'best_practices'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -87,6 +89,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   if (containsCode(value) && /\b(?:review|quality|readability|pythonic|pep\s*8|performance|security|improve|refactor|qualit[eé]|lisibilit[eé]|am[eé]liore|refactorise)\b/i.test(value)) {
     return { intent: 'code_quality', confidence: 0.98, reason: 'Python code and quality-review request detected' };
   }
+  if (/\b(?:refactor|rewrite|clean.?up|clean.?code|restructure|simplif)(?:\s+(?:this|the|my|function|code|class))?\b/i.test(value)) {
+    return { intent: 'refactoring', confidence: 0.96, reason: 'Code refactoring request detected' };
+  }
   if (/\b(?:learning path|roadmap|study plan|what should i learn|parcours|feuille de route|plan d['’][eé]tude)\b/i.test(lower)) {
     return { intent: 'learning_path', confidence: 0.97, reason: 'Structured learning-path request detected' };
   }
@@ -100,6 +105,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:difference between|compare|versus|vs\.?|diff[eé]rence entre|compar(?:e|er))\b/i.test(lower)) {
     return { intent: 'comparison', confidence: 0.98, reason: 'Comparison phrasing detected' };
+  }
+  if (/\b(?:best pract|recommended way|pythonic way|proper way|correct way)\b/i.test(lower)) {
+    return { intent: 'best_practices', confidence: 0.96, reason: 'Best practices request detected' };
   }
   if (/\b(?:how can i|what should i use|which (?:method|function|type|tool)|best way to|comment (?:puis-je|faire)(?:\s+pour)?|que dois-je utiliser)\b/i.test(lower)) {
     return { intent: 'purpose', confidence: 0.95, reason: 'Purpose-based tool request detected' };
