@@ -355,26 +355,97 @@ const buildGeneralAiExampleSet = (topic: string, language: 'en' | 'fr' = 'en'): 
     '```',
 ].join('\n');
 
-const buildGeneralAiQuiz = (topic: string, language: 'en' | 'fr' = 'en'): string => [
-    `1. ${language === 'fr' ? 'Mini-quiz' : 'Mini quiz'}: ${topic}`,
-    language === 'fr' ? 'Question 1 : quelle valeur ce code produit-il ?' : 'Question 1: What value does this produce?',
-    '```python',
-    topic === 'list' ? 'items = [10, 20, 30]\nprint(items[1])' :
-    topic === 'dictionary' ? 'data = {"a": 1, "b": 2}\nprint(data["b"])' :
-    topic === 'function' ? 'def square(x):\n    return x * x\nprint(square(4))' :
-    'print("python"[0])',
-    '```',
-    '',
-    language === 'fr' ? '2. Exercice pratique' : '2. Practice task',
-    language === 'fr'
-        ? `Écrivez un petit exemple utilisant **${topic}**. Demandez-moi ensuite : \`Vérifie ma réponse sur ${topic}\`.`
-        : `Write one small example using **${topic}**. Then ask me: \`Check my answer for ${topic}\`.`,
-    '',
-    language === 'fr' ? '3. Auto-vérification' : '3. Self-check',
-    language === 'fr' ? '- Avez-vous utilisé la syntaxe correcte ?' : '- Did you use the correct syntax?',
-    language === 'fr' ? '- Avez-vous utilisé `print` ou `return` selon l’objectif ?' : '- Did you print or return based on the goal?',
-    language === 'fr' ? '- La sortie correspond-elle à la logique du code ?' : '- Did the output match what the code logically produces?',
-].join('\n');
+const GENERAL_AI_QUIZ_BANK: Record<string, { q: string; code: string; answer: string }[]> = {
+    list: [
+        { q: 'What does this list code produce?', code: 'items = [10, 20, 30]\nprint(items[1])', answer: '20' },
+        { q: 'What does `len([1, 2, 3, 4])` return?', code: 'print(len([1, 2, 3, 4]))', answer: '4' },
+    ],
+    dictionary: [
+        { q: 'What does this dictionary code produce?', code: 'data = {"a": 1, "b": 2}\nprint(data["b"])', answer: '2' },
+        { q: 'What does `.get()` return when the key is missing?', code: 'd = {"x": 10}\nprint(d.get("y", 0))', answer: '0' },
+    ],
+    function: [
+        { q: 'What does calling this function produce?', code: 'def square(x):\n    return x * x\nprint(square(4))', answer: '16' },
+        { q: 'What does a function return if there is no `return`?', code: 'def f():\n    pass\nprint(f())', answer: 'None' },
+    ],
+    string: [
+        { q: 'What does `"hello".upper()` return?', code: 'print("hello".upper())', answer: 'HELLO' },
+        { q: 'What does `"a,b,c".split(",")` return?', code: 'print("a,b,c".split(","))', answer: "['a', 'b', 'c']" },
+    ],
+    tuple: [
+        { q: 'What does indexing into a tuple produce?', code: 't = (10, 20, 30)\nprint(t[1])', answer: '20' },
+        { q: 'Can you modify a tuple after creation?', code: 't = (1, 2)\nt[0] = 5  # what happens?', answer: 'TypeError' },
+    ],
+    set: [
+        { q: 'What does this set contain?', code: 's = {1, 2, 2, 3}\nprint(s)', answer: '{1, 2, 3}' },
+        { q: 'What does `{1, 2, 3} & {2, 3, 4}` produce?', code: 'print({1, 2, 3} & {2, 3, 4})', answer: '{2, 3}' },
+    ],
+    boolean: [
+        { q: 'What does `not True` evaluate to?', code: 'print(not True)', answer: 'False' },
+        { q: 'What does `bool([])` return?', code: 'print(bool([]))', answer: 'False' },
+    ],
+    class: [
+        { q: 'What does accessing an attribute on an object produce?', code: 'class Dog:\n    def __init__(self):\n        self.name = "Noll"\n\npet = Dog()\nprint(pet.name)', answer: 'Noll' },
+        { q: 'What does calling a method on an object do?', code: 'class Calc:\n    def add(self, a, b):\n        return a + b\n\nc = Calc()\nprint(c.add(2, 3))', answer: '5' },
+    ],
+    generator: [
+        { q: 'What does calling `next()` on a generator do?', code: 'def gen():\n    yield 1\n    yield 2\n\ng = gen()\nprint(next(g))', answer: '1' },
+        { q: 'What does a generator return after yielding all values?', code: 'def gen():\n    yield 1\n\ng = gen()\nnext(g)\nnext(g)  # what happens?', answer: 'StopIteration' },
+    ],
+    iterator: [
+        { q: 'What does `iter()` return?', code: 'items = [1, 2, 3]\nit = iter(items)\nprint(next(it))', answer: '1' },
+    ],
+    decorator: [
+        { q: 'What does a decorator do with the original function?', code: 'def log(f):\n    def wrapper(x):\n        print("called")\n        return f(x)\n    return wrapper\n\n@log\ndef double(x):\n    return x * 2\n\nprint(double(3))', answer: '6' },
+    ],
+    slicing: [
+        { q: 'What does `nums[1:4]` produce?', code: 'nums = [0, 1, 2, 3, 4, 5]\nprint(nums[1:4])', answer: '[1, 2, 3]' },
+        { q: 'What does `"python"[::-1]` produce?', code: 'print("python"[::-1])', answer: 'nohtyp' },
+    ],
+    lambda: [
+        { q: 'What does this lambda produce when called?', code: 'add = lambda x, y: x + y\nprint(add(2, 3))', answer: '5' },
+    ],
+    comprehension: [
+        { q: 'What does this list comprehension produce?', code: 'squares = [x**2 for x in range(3)]\nprint(squares)', answer: '[0, 1, 4]' },
+        { q: 'What does this dict comprehension produce?', code: 'd = {x: x**2 for x in range(3)}\nprint(d)', answer: '{0: 0, 1: 1, 2: 4}' },
+    ],
+    recursion: [
+        { q: 'What does this recursive function return?', code: 'def fact(n):\n    return 1 if n <= 1 else n * fact(n - 1)\n\nprint(fact(3))', answer: '6' },
+    ],
+    'exception-handling': [
+        { q: 'What gets printed when a ZeroDivisionError is caught?', code: 'try:\n    1 / 0\nexcept ZeroDivisionError:\n    print("caught")', answer: 'caught' },
+    ],
+    'file-io': [
+        { q: 'What mode opens a file for writing?', code: '# Which mode is correct for writing?\n# open("f.txt", "r")  # A\n# open("f.txt", "w")  # B\n# open("f.txt", "a")  # C\nprint("B")', answer: 'B' },
+    ],
+};
+
+const buildGeneralAiQuiz = (topic: string, language: 'en' | 'fr' = 'en'): string => {
+    const quiz = GENERAL_AI_QUIZ_BANK[topic] || GENERAL_AI_QUIZ_BANK.list;
+    const questions = quiz.map((item, i) => [
+        `${language === 'fr' ? `Question ${i + 1}` : `Question ${i + 1}`}: ${item.q}`,
+        '```python',
+        item.code,
+        '```',
+        language === 'fr' ? `(Réponse : ${item.answer})` : `(Answer: ${item.answer})`,
+    ].join('\n')).join('\n\n');
+
+    return [
+        `**${language === 'fr' ? 'Mini-quiz' : 'Mini quiz'}: ${topic}**`,
+        '',
+        questions,
+        '',
+        language === 'fr' ? '**Pratique**' : '**Practice**',
+        language === 'fr'
+            ? `Écrivez votre propre exemple utilisant **${topic}**. Puis demandez : \`Vérifie ma réponse sur ${topic}\`.`
+            : `Write your own example using **${topic}**. Then ask: \`Check my answer for ${topic}\`.`,
+        '',
+        language === 'fr' ? '**Auto-vérification**' : '**Self-check**',
+        language === 'fr' ? '- Syntaxe correcte ?' : '- Correct syntax?',
+        language === 'fr' ? '- `print` ou `return` selon le contexte ?' : '- `print` or `return` based on context?',
+        language === 'fr' ? '- Le résultat correspond-il ?' : '- Does the result match?',
+    ].join('\n');
+};
 
 const buildGeneralAiCoreTopicAnswer = (question: string): string | null => {
     const lowerQ = normalizeGeneralPythonQuestion(question).toLowerCase();
