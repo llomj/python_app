@@ -87,6 +87,12 @@ const pathKey = (question: string): string => {
   if (/\b(?:module|modules?|paquets?|packages?)\b/.test(value) && !/import/.test(value)) return 'module';
   if (/\b(?:variable|variables?)\b/.test(value)) return 'variable';
   if (/\b(?:inheritance|h[eé]ritage|inherit|h[eé]riter)\b/.test(value)) return 'inheritance';
+  if (/\blambda\b/.test(value)) return 'lambda';
+  if (/\b(for|while)\s+loop/i.test(value)) return `${value.match(/\b(for|while)\b/i)![1].toLowerCase()}-loop`;
+  if (/\bf[- ]?string\b/i.test(value)) return 'f-string';
+  if (/\bunpack(?:ing)?\b/i.test(value)) return 'unpacking';
+  if (/\bNone\b/.test(value)) return 'none';
+  if (/\benumerate\b/i.test(value)) return 'enumerate';
   return 'python';
 };
 
@@ -278,12 +284,39 @@ const QUIZ_BANK: Record<string, QuizTemplate[]> = {
   inheritance: [
     { id: 'inheritance-super', code: 'class A:\n    def __init__(self):\n        self.v = 1\n\nclass B(A):\n    def __init__(self):\n        super().__init__()\n        self.v += 1\n\nb = B()\nprint(b.v)', expected: ['2'], explanation: ['`super().__init__()` calls `A.__init__`, setting `v = 1`. Then `B.__init__` increments it to 2.', '`super().__init__()` appelle `A.__init__`, qui définit `v = 1`. Puis `B.__init__` l\'incrémente à 2.'], misconception: ['overriding __init__ skips parent', 'surcharger __init__ saute le parent'], hint: ['Without `super()`, `v` would never be set. Trace the execution order.', 'Sans `super()`, `v` ne serait jamais défini. Suivez l\'ordre d\'exécution.'] },
   ],
+  lambda: [
+    { id: 'lambda-basic', code: 'f = lambda x, y: x + y\nprint(f(3, 4))', expected: ['7'], explanation: ['The lambda defines an anonymous function that adds two arguments then immediately returns the result.', 'Le lambda définit une fonction anonyme qui additionne deux arguments et renvoie immédiatement le résultat.'], misconception: ['lambda needs explicit return', 'lambda a besoin d\'un return explicite'], hint: ['A lambda body is a single expression — it is automatically returned.', 'Le corps d\'un lambda est une expression unique — elle est automatiquement renvoyée.'] },
+  ],
+  'for-loop': [
+    { id: 'forloop-else', code: 'for n in [1, 2]:\n    print(n)\nelse:\n    print("done")', expected: ['1\n2\ndone'], explanation: ['The `else` clause runs after the loop finishes naturally (no `break`).', 'La clause `else` s\'exécute après la fin naturelle de la boucle (pas de `break`).'], misconception: ['else only runs with if', 'else ne s\'exécute qu\'avec if'], hint: ['A `for`\'s `else` runs when no `break` was hit — not when a condition is false.', 'Le `else` d\'un `for` s\'exécute quand aucun `break` n\'a été atteint — pas quand une condition est fausse.'] },
+  ],
+  'while-loop': [
+    { id: 'while-break', code: 'n = 0\nwhile n < 10:\n    n += 3\n    if n > 5:\n        break\nprint(n)', expected: ['6'], explanation: ['`n` increments: 0→3→6. After the increment, `n > 5` is True, so `break` exits the loop.', '`n` s\'incrémente : 0→3→6. Après l\'incrément, `n > 5` est vrai, donc `break` quitte la boucle.'], misconception: ['break only ends the current iteration', 'break ne termine que l\'itération en cours'], hint: ['`break` exits the entire loop immediately, not just the current pass.', '`break` quitte la boucle entière immédiatement, pas seulement le passage en cours.'] },
+  ],
+  'file-io': [
+    { id: 'fileio-read', code: 'with open("/tmp/demo.txt", "w") as f:\n    f.write("hello")\n\nwith open("/tmp/demo.txt") as f:\n    print(f.read())', expected: ['hello'], explanation: ['The first `with` block writes `"hello"`, then the second opens for reading and prints the content.', 'Le premier bloc `with` écrit `"hello"`, puis le second ouvre en lecture et affiche le contenu.'], misconception: ['file content exists without write', 'le contenu du fichier existe sans écriture'], hint: ['Trace the file state: empty → write "hello" → read → print.', 'Suivez l\'état du fichier : vide → écrire "hello" → lire → afficher.'] },
+  ],
+  none: [
+    { id: 'none-is', code: 'def get_value(flag):\n    return None if flag else 42\n\nresult = get_value(True)\nprint(result is None)', expected: ['True'], explanation: ['`get_value(True)` returns `None`, and `None is None` is identity-true.', '`get_value(True)` renvoie `None`, et `None is None` est vrai par identité.'], misconception: ['None is checked with ==', 'None se vérifie avec =='], hint: ['Always use `is None` — None is a singleton, not just equal to itself.', 'Utilisez toujours `is None` — None est un singleton, pas seulement égal à lui-même.'] },
+  ],
+  'f-string': [
+    { id: 'fstring-expression', code: 'x = 5\ny = 3\nprint(f"{x} + {y} = {x + y}")', expected: ['5 + 3 = 8'], explanation: ['Each `{expr}` in the f-string is evaluated and converted to a string inline.', 'Chaque `{expr}` dans la f-string est évalué et converti en chaîne en ligne.'], misconception: ['only variables work in f-string braces', 'seules les variables fonctionnent dans les accolades'], hint: ['Any valid Python expression can go inside `{}` in an f-string, not just variable names.', 'Toute expression Python valide peut aller dans les `{}` d\'une f-string, pas seulement des noms de variables.'] },
+  ],
+  unpacking: [
+    { id: 'unpacking-list', code: 'pairs = [(1, "a"), (2, "b")]\nfor num, char in pairs:\n    print(num, char)', expected: ['1 a\n2 b'], explanation: ['Each tuple is unpacked into `num` and `char` directly in the `for` loop target.', 'Chaque tuple est déballé dans `num` et `char` directement dans la cible de la boucle `for`.'], misconception: ['iteration returns the whole tuple', 'l\'itération renvoie le tuple entier'], hint: ['`for num, char in pairs` unpacks each element — no indexing needed inside the loop.', '`for num, char in pairs` déballage de chaque élément — pas d\'indexation nécessaire dans la boucle.'] },
+  ],
+  async: [
+    { id: 'async-coroutine', code: 'async def say():\n    return "hello"\n\nimport asyncio\nresult = asyncio.run(say())\nprint(result)', expected: ['hello'], explanation: ['`asyncio.run()` executes the coroutine and returns its value synchronously.', '`asyncio.run()` exécute la coroutine et renvoie sa valeur de manière synchrone.'], misconception: ['async functions return the value immediately', 'les fonctions async renvoient la valeur immédiatement'], hint: ['An `async def` returns a coroutine object — you need `await` or `asyncio.run()` to get the actual value.', 'Un `async def` renvoie un objet coroutine — vous avez besoin de `await` ou `asyncio.run()` pour obtenir la valeur réelle.'] },
+  ],
+  enumerate: [
+    { id: 'enumerate-start', code: 'items = ["a", "b", "c"]\nfor i, v in enumerate(items, start=1):\n    print(i, v)', expected: ['1 a\n2 b\n3 c'], explanation: ['`enumerate()` yields (index, value) pairs starting from the specified `start` value.', '`enumerate()` produit des paires (indice, valeur) à partir de la valeur `start` spécifiée.'], misconception: ['enumerate always starts at 0', 'enumerate commence toujours à 0'], hint: ['`enumerate(items, start=1)` makes 1-based indices — useful for human-readable output.', '`enumerate(items, start=1)` produit des indices basés sur 1 — utile pour une sortie lisible.'] },
+  ],
 };
 
 export const createAdaptiveQuiz = (subject: string, mode: GeneralAiResponseMode, language: AdvancedAiLanguage, variantIndex = 0, priorFocus = ''): GeneralAiQuizState => {
   const fr = language === 'fr';
   const key = pathKey(subject);
-  const subjectLabel = fr ? ({ list: 'listes', dictionary: 'dictionnaires', function: 'fonctions', python: 'Python', string: 'chaînes', tuple: 'tuples', set: 'ensembles', boolean: 'booléens', class: 'classes', generator: 'générateurs', 'exception-handling': 'gestion des exceptions', integer: 'entiers', float: 'flottants', method: 'méthodes', slicing: 'découpage', comprehension: 'compréhensions', decorator: 'décorateurs', recursion: 'récursion', module: 'modules', variable: 'variables', inheritance: 'héritage' } as Record<string, string>)[key] || key : key;
+  const subjectLabel = fr ? ({ list: 'listes', dictionary: 'dictionnaires', function: 'fonctions', python: 'Python', string: 'chaînes', tuple: 'tuples', set: 'ensembles', boolean: 'booléens', class: 'classes', generator: 'générateurs', 'exception-handling': 'gestion des exceptions', integer: 'entiers', float: 'flottants', method: 'méthodes', slicing: 'découpage', comprehension: 'compréhensions', decorator: 'décorateurs', recursion: 'récursion', module: 'modules', variable: 'variables', inheritance: 'héritage', lambda: 'lambda', 'for-loop': 'boucles for', 'while-loop': 'boucles while', 'file-io': 'fichiers', none: 'None', 'f-string': 'f-strings', unpacking: 'déballage', async: 'async', enumerate: 'enumerate' } as Record<string, string>)[key] || key : key;
   const subjectBank = QUIZ_BANK[key] || QUIZ_BANK.python;
   const item = subjectBank[Math.abs(variantIndex) % subjectBank.length];
   return {
