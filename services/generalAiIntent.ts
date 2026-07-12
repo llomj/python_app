@@ -158,7 +158,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
     || /\bhow\s+(?:does|do|is|are)\s+.+\b(?:internally|under the hood|behind the scenes|mechanism)\b/i.test(value)) {
     return { intent: 'mechanism', confidence: 0.96, reason: 'How-does-it-work mechanism request detected' };
   }
-  if (/^(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell me about|qu['’]est-ce que|d[eé]finis?|explique|d[eé]cris)\b/i.test(value)
+  if (/^(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell me about|tell me what|qu['’]est-ce que|d[eé]finis?|explique|d[eé]cris)\b/i.test(value)
+    || /^(?:(?:can|could|would)\s+you\s+(?:explain|tell me about|describe|define)|do\s+you\s+know\s+(?:what|how)|i\s+(?:want\s+(?:to\s+)?(?:know|understand|learn)|'?m\s+(?:confused about|curious about|wondering)|'?d\s+like\s+to\s+(?:know|understand)))\b/i.test(value)
+    || /^remind\s+me\s+(what|about)\b/i.test(value)
     || value.split(/\s+/).length <= 4) {
     return { intent: 'definition', confidence: 0.82, reason: 'Definition or short concept query detected' };
   }
