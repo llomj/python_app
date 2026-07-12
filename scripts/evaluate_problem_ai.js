@@ -29,8 +29,9 @@ try {
   const { EXERCISES, AUTO_GRADERS, EXERCISES_FR, buildProblemAiTutorAnswer } = require(bundleFile);
   const failures = [];
   const requiredHeadings = [
-    'What this problem asks', 'Inputs and result', 'Key words and concepts', 'Syntax the grader requires',
-    'Step-by-step plan', 'Execution flow', 'Common mistakes to avoid', 'How to check your answer',
+    'What this problem asks', 'Inputs and result', 'Key words and concepts', 'Method and function reference',
+    'Syntax the grader requires', 'Reference code pattern', 'Step-by-step plan', 'Line-by-line explanation',
+    'Execution flow', 'Common mistakes to avoid', 'Concrete test cases', 'Other correct ways to write it',
   ];
   const banned = [
     /your_function/i,
@@ -54,9 +55,12 @@ try {
     });
     const missingHeading = requiredHeadings.find(heading => !answer.includes(heading));
     if (missingHeading) failures.push(`Problem ${exercise.id}: missing ${missingHeading}`);
-    if (answer.length < 650) failures.push(`Problem ${exercise.id}: explanation too short (${answer.length})`);
+    if (answer.length < 1100) failures.push(`Problem ${exercise.id}: explanation too short (${answer.length})`);
     const bannedPattern = banned.find(pattern => pattern.test(answer));
     if (bannedPattern) failures.push(`Problem ${exercise.id}: generic banned wording ${bannedPattern}`);
+    const referenceCode = answer.match(/\*\*6\. Reference code pattern\*\*\n```python\n([\s\S]*?)```/)?.[1] || '';
+    const topLevelDefinitions = [...referenceCode.matchAll(/^(?:def|class)\s+([A-Za-z_]\w*)/gm)].map(match => match[1]);
+    if (new Set(topLevelDefinitions).size !== topLevelDefinitions.length) failures.push(`Problem ${exercise.id}: duplicate top-level definition leaked into reference code`);
 
     const promptLine = exercise.description.split('\n').find(line => line.trim()) || '';
     const promptWords = (promptLine.toLowerCase().match(/[a-z_]{5,}/g) || [])
@@ -86,6 +90,16 @@ try {
   }
   if (/sum\(\)|solve\(\)|your_function/.test(answer898)) failures.push('Problem 898 regression: stale unrelated breakdown leaked into answer');
 
+  const exercise1287 = EXERCISES.find(exercise => exercise.id === 1287);
+  const answer1287 = buildProblemAiTutorAnswer({ exercise: exercise1287, description: exercise1287.description, grader: AUTO_GRADERS[1287], language: 'en' });
+  for (const fragment of [
+    '`text.isalpha()`', '`text.isdigit()`', 'must be a string (`str`)', 'Combine the two Booleans with `or`',
+    '`or` short-circuits', '`text.isalnum()` is not equivalent', '`input value(s): "abc"` → `true`',
+    '`input value(s): "abc123"` → `false`',
+  ]) {
+    if (!answer1287.includes(fragment)) failures.push(`Problem 1287 method regression: missing ${JSON.stringify(fragment)}`);
+  }
+
   const exercise191 = EXERCISES.find(exercise => exercise.id === 191);
   const answer191 = buildProblemAiTutorAnswer({ exercise: exercise191, description: exercise191.description, grader: AUTO_GRADERS[191], language: 'en' });
   if (!answer191.includes('Result type stated by the prompt: number') || answer191.includes('Expected result type: string')) {
@@ -111,6 +125,7 @@ try {
   console.log(`Structural requirements explained: ${structural}`);
   console.log(`Required callables explained: ${callableRequirements}`);
   console.log('Problem 898 lambda/unpacking regression: checked');
+  console.log('Problem 1287 string-method/Boolean regression: checked');
 
   if (failures.length) {
     console.error(`\nFailures (${failures.length}):`);

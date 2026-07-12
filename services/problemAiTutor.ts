@@ -24,6 +24,7 @@ const CONCEPTS: Record<string, ConceptGuide> = {
   function: { name: 'function', syntax: 'def name(parameters):', en: 'A function is reusable code that receives arguments and can return a result.', fr: 'Une fonction est un bloc réutilisable qui reçoit des arguments et peut renvoyer un résultat.' },
   return: { name: 'return', syntax: 'return expression', en: '`return` sends a value from a function back to its caller; it does not display the value.', fr: '`return` renvoie une valeur de la fonction vers l’appelant ; il ne l’affiche pas.' },
   print: { name: 'print', syntax: 'print(value)', en: '`print()` displays a value in the output panel. It does not replace a required return value.', fr: '`print()` affiche une valeur dans la sortie. Il ne remplace pas une valeur de retour demandée.' },
+  string: { name: 'string', syntax: 'text = "characters"', en: 'A string (`str`) is an immutable sequence of Unicode characters. String methods must be called on a string value.', fr: 'Une chaîne (`str`) est une séquence immuable de caractères Unicode. Les méthodes de chaîne doivent être appelées sur une chaîne.' },
   list: { name: 'list', syntax: '[item1, item2]', en: 'A list is an ordered, mutable collection addressed with zero-based indexes.', fr: 'Une liste est une collection ordonnée et modifiable dont les indices commencent à zéro.' },
   tuple: { name: 'tuple', syntax: '(item1, item2)', en: 'A tuple is an ordered, immutable collection that can be packed and unpacked.', fr: 'Un tuple est une collection ordonnée et immuable qui peut être regroupée et déballée.' },
   dictionary: { name: 'dictionary', syntax: '{key: value}', en: 'A dictionary maps unique hashable keys to values.', fr: 'Un dictionnaire associe des clés uniques et hachables à des valeurs.' },
@@ -96,7 +97,12 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   get: ['mapping.get(key, default=None)', 'Reads a mapping value without raising `KeyError` for a missing key.', 'Lit une valeur sans lever `KeyError` lorsque la clé est absente.'],
   input: ['input(prompt="")', 'Reads user input and returns it as a string.', 'Lit la saisie utilisateur et la renvoie sous forme de chaîne.'],
   int: ['int(value)', 'Converts a compatible value to an integer.', 'Convertit une valeur compatible en entier.'],
+  isalnum: ['text.isalnum()', 'String method. Returns `True` when the non-empty string contains only letters and digits.', 'Méthode de chaîne. Renvoie `True` lorsque la chaîne non vide contient uniquement des lettres et des chiffres.'],
+  isalpha: ['text.isalpha()', 'String method. Returns `True` when the non-empty string contains only letters. Spaces, signs, and digits make it `False`.', 'Méthode de chaîne. Renvoie `True` lorsque la chaîne non vide contient uniquement des lettres. Les espaces, signes et chiffres donnent `False`.'],
+  isdigit: ['text.isdigit()', 'String method. Returns `True` when the non-empty string contains only digit characters. A minus sign or decimal point makes it `False`.', 'Méthode de chaîne. Renvoie `True` lorsque la chaîne non vide contient uniquement des chiffres. Un signe moins ou un point décimal donne `False`.'],
+  islower: ['text.islower()', 'String method. Checks whether all cased characters are lowercase.', 'Méthode de chaîne. Vérifie si tous les caractères alphabétiques sont en minuscules.'],
   isinstance: ['isinstance(object, type)', 'Checks whether an object has the specified type.', 'Vérifie si un objet possède le type indiqué.'],
+  isupper: ['text.isupper()', 'String method. Checks whether all cased characters are uppercase.', 'Méthode de chaîne. Vérifie si tous les caractères alphabétiques sont en majuscules.'],
   items: ['mapping.items()', 'Provides `(key, value)` pairs from a mapping.', 'Fournit les paires `(clé, valeur)` d’un dictionnaire.'],
   join: ['separator.join(strings)', 'Combines strings with the separator between them.', 'Combine des chaînes en plaçant le séparateur entre elles.'],
   keys: ['mapping.keys()', 'Provides the keys from a mapping.', 'Fournit les clés d’un dictionnaire.'],
@@ -110,6 +116,7 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   next: ['next(iterator, default)', 'Reads the next iterator item or returns the optional default.', 'Lit l’élément suivant d’un itérateur ou renvoie la valeur par défaut facultative.'],
   open: ['open(path, mode="r")', 'Opens a file and returns a file object.', 'Ouvre un fichier et renvoie un objet fichier.'],
   pop: ['collection.pop(key_or_index)', 'Removes and returns one item.', 'Supprime et renvoie un élément.'],
+  print: ['print(*values, sep=" ", end="\\n")', 'Displays values in the output panel and returns `None`.', 'Affiche des valeurs dans le panneau de sortie et renvoie `None`.'],
   range: ['range(start, stop, step)', 'Creates an integer sequence whose stop value is excluded.', 'Crée une séquence d’entiers dont la borne de fin est exclue.'],
   reduce: ['reduce(function, iterable)', 'Combines iterable items into one accumulated value.', 'Combine les éléments d’un itérable en une seule valeur accumulée.'],
   replace: ['text.replace(old, new)', 'Returns a copy with matching text replaced.', 'Renvoie une copie dans laquelle le texte correspondant est remplacé.'],
@@ -118,6 +125,7 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   setdefault: ['mapping.setdefault(key, default)', 'Returns a key’s value, inserting the default when the key is absent.', 'Renvoie la valeur d’une clé et insère la valeur par défaut si la clé est absente.'],
   sorted: ['sorted(iterable, key=None, reverse=False)', 'Returns a new sorted list without mutating the input.', 'Renvoie une nouvelle liste triée sans modifier l’entrée.'],
   split: ['text.split(separator=None)', 'Breaks a string into a list of parts.', 'Découpe une chaîne en une liste de parties.'],
+  startswith: ['text.startswith(prefix)', 'String method. Checks whether text begins with the specified prefix.', 'Méthode de chaîne. Vérifie si le texte commence par le préfixe indiqué.'],
   str: ['str(value)', 'Converts a value to its string representation.', 'Convertit une valeur en représentation textuelle.'],
   strip: ['text.strip()', 'Returns a copy without leading or trailing whitespace.', 'Renvoie une copie sans espaces au début ni à la fin.'],
   sub: ['re.sub(pattern, replacement, text)', 'Replaces regex matches in a string.', 'Remplace les correspondances regex dans une chaîne.'],
@@ -130,6 +138,19 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   zip: ['zip(*iterables)', 'Pairs items from multiple iterables by position.', 'Associe par position les éléments de plusieurs itérables.'],
 };
 
+const STRING_METHODS = new Set([
+  'capitalize', 'casefold', 'center', 'count', 'encode', 'endswith', 'expandtabs', 'find', 'format',
+  'index', 'isalnum', 'isalpha', 'isascii', 'isdecimal', 'isdigit', 'isidentifier', 'islower',
+  'isnumeric', 'isprintable', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip',
+  'partition', 'removeprefix', 'removesuffix', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition',
+  'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate',
+  'upper', 'zfill',
+]);
+
+const LIST_METHODS = new Set(['append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort']);
+
+const DICT_METHODS = new Set(['clear', 'copy', 'fromkeys', 'get', 'items', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values']);
+
 const cleanPrompt = (description: string): string => {
   const first = description.split('\n').map(line => line.trim()).find(line => line && !/^examples?:/i.test(line)) || description.trim();
   return first.replace(/^(?:write|create|build|define|implement)\s+(?:a\s+)?python\s+(?:program|function|script)(?:\s+called\s+`?[A-Za-z_]\w*`?)?(?:\s+that|\s+which|\s+to)?\s+/i, '')
@@ -138,6 +159,100 @@ const cleanPrompt = (description: string): string => {
     .replace(/^(?:écrivez|créez|construisez|définissez|implémentez)\s+(?:une?\s+)?(?:fonction|programme|script)\s+python\s+(?:appelée?\s+`?\w+`?\s+)?(?:qui\s+|pour\s+)?/i, '')
     .replace(/^(?:écrivez|créez|construisez|définissez|implémentez)\s+/i, '')
     .replace(/[.\s]+$/, '');
+};
+
+interface SolutionAnalysis {
+  snippet: string;
+  calls: string[];
+  receiverByMethod: Record<string, string>;
+}
+
+const analyzeCanonicalSolution = (exercise: Exercise, grader?: AutoGrader | null): SolutionAnalysis => {
+  const lines = exercise.solution.split('\n');
+  const startMarker = lines.findIndex(line => /^#\s*Using function approach/i.test(line.trim()));
+  const start = startMarker >= 0 ? startMarker + 1 : 0;
+  const selected: string[] = [];
+  const topLevelDefinitions = new Set<string>();
+  for (let index = start; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (selected.some(item => item.trim()) && /^#\s*(?:Using|Script|Direct)\b/i.test(line.trim())) break;
+    const definition = line.match(/^(?:def|class)\s+([A-Za-z_]\w*)/);
+    if (definition && topLevelDefinitions.has(definition[1])) break;
+    if (definition) topLevelDefinitions.add(definition[1]);
+    if (/^#\s*Expected output/i.test(line.trim())) continue;
+    selected.push(line.replace(/\s+#\s*(?:Expected.*|Convert .*|If .*|Update .*)$/i, ''));
+    if (selected.filter(item => item.trim()).length >= 16) break;
+  }
+  const snippet = selected.join('\n').trim() || exercise.initialCode.trim();
+  const functionNames = new Set(grader?.functionNames || []);
+  const receiverByMethod: Record<string, string> = {};
+  for (const match of snippet.matchAll(/\b([A-Za-z_]\w*)\.([A-Za-z_]\w*)\s*\(/g)) receiverByMethod[match[2]] = match[1];
+  const calls = [...snippet.matchAll(/(?:\.\s*|\b)([A-Za-z_]\w*)\s*\(/g)]
+    .map(match => match[1])
+    .filter(name => !functionNames.has(name));
+  return { snippet, calls: [...new Set(calls)].slice(0, 10), receiverByMethod };
+};
+
+const receiverContract = (method: string, receiver: string, language: ProblemAiLanguage): string => {
+  const fr = language === 'fr';
+  if (STRING_METHODS.has(method)) return fr
+    ? `Le récepteur \`${receiver}\` doit être une chaîne (\`str\`) car \`${method}()\` est une méthode de chaîne. Appelez-la avec la notation pointée : \`${receiver}.${method}()\`.`
+    : `The receiver \`${receiver}\` must be a string (\`str\`) because \`${method}()\` is a string method. Call it with dot syntax: \`${receiver}.${method}()\`.`;
+  if (LIST_METHODS.has(method)) return fr
+    ? `Le récepteur \`${receiver}\` doit être une liste car \`${method}()\` est une méthode de liste.`
+    : `The receiver \`${receiver}\` must be a list because \`${method}()\` is a list method.`;
+  if (DICT_METHODS.has(method)) return fr
+    ? `Le récepteur \`${receiver}\` doit être un dictionnaire car \`${method}()\` est une méthode de dictionnaire.`
+    : `The receiver \`${receiver}\` must be a dictionary because \`${method}()\` is a dictionary method.`;
+  return '';
+};
+
+const methodReference = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => analysis.calls.map(name => {
+  const base = describeCall(name, language);
+  const receiver = analysis.receiverByMethod[name];
+  const contract = receiver ? receiverContract(name, receiver, language) : '';
+  return contract ? `${base}\n  ${contract}` : base;
+});
+
+const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  return analysis.snippet.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('#')).slice(0, 12).map(line => {
+    if (/^def\s+/.test(line)) return fr ? `\`${line}\` — crée la fonction ; son corps attend un appel avant de s’exécuter.` : `\`${line}\` — defines the function; its body waits until the function is called.`;
+    if (/^return\s+/.test(line)) {
+      if (/\bor\b/.test(line)) return fr ? `\`${line}\` — évalue la condition gauche, puis la droite seulement si nécessaire, et renvoie le résultat booléen.` : `\`${line}\` — evaluates the left condition, evaluates the right only if needed, and returns the Boolean result.`;
+      return fr ? `\`${line}\` — calcule l’expression puis renvoie sa valeur à l’appelant.` : `\`${line}\` — evaluates the expression and returns its value to the caller.`;
+    }
+    if (/^if\s+/.test(line)) return fr ? `\`${line}\` — évalue la condition et choisit le bloc indenté.` : `\`${line}\` — evaluates the condition and selects an indented branch.`;
+    if (/^(?:for|while)\s+/.test(line)) return fr ? `\`${line}\` — démarre la répétition du bloc indenté.` : `\`${line}\` — begins repetition of the indented block.`;
+    if (/^(?:import|from)\s+/.test(line)) return fr ? `\`${line}\` — charge le module ou le nom nécessaire.` : `\`${line}\` — loads the required module or name.`;
+    if (/\s=\s/.test(line)) {
+      const stringValue = /=\s*['"]/.test(line);
+      return fr
+        ? `\`${line}\` — crée ou met à jour la variable${stringValue ? ' avec une valeur de type chaîne (`str`)' : ''}.`
+        : `\`${line}\` — creates or updates the variable${stringValue ? ' with a string (`str`) value' : ''}.`;
+    }
+    if (/^print\s*\(/.test(line)) return fr ? `\`${line}\` — affiche la valeur finale dans le panneau de sortie.` : `\`${line}\` — displays the final value in the output panel.`;
+    return fr ? `\`${line}\` — exécute cette instruction dans l’ordre indiqué.` : `\`${line}\` — executes this statement in order.`;
+  });
+};
+
+const concreteTests = (exercise: Exercise, grader: AutoGrader | null | undefined, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  const functionName = grader?.functionNames?.[0];
+  const parameterText = exercise.initialCode.match(/def\s+[A-Za-z_]\w*\s*\(([^)]*)\)/)?.[1];
+  const declaredParameters = parameterText === undefined ? undefined : parameterText.split(',').map(value => value.trim()).filter(Boolean).length;
+  const cases = [...(grader?.optionalTests || []), ...(grader?.tests || [])]
+    .filter(test => test.expected !== null && test.expected !== undefined)
+    .slice(0, 4);
+  return cases.map(test => {
+    const args = test.args.map(value => JSON.stringify(value)).join(', ');
+    const call = functionName && (declaredParameters === undefined || test.args.length <= declaredParameters)
+      ? `${functionName}(${args})`
+      : test.args.length
+        ? `${fr ? 'valeur(s) d’entrée' : 'input value(s)'}: ${args}`
+        : (functionName ? `${functionName}()` : (fr ? 'entrée du script' : 'script input'));
+    return `\`${call}\` → \`${JSON.stringify(test.expected)}\``;
+  });
 };
 
 const valueType = (value: unknown, language: ProblemAiLanguage): string => {
@@ -160,7 +275,7 @@ const detectConcepts = (description: string, grader?: AutoGrader | null): string
   const concepts: string[] = [];
   const promptPatterns: Array<[RegExp, string]> = [
     [/\blambda\b/, 'lambda'], [/\bunpack|starred|\*args\b/, 'unpacking'], [/\btuple\b/, 'tuple'],
-    [/\blist\b|\bliste\b/, 'list'], [/\bdictionar|\bdict\b|\bdictionnaire\b/, 'dictionary'], [/\bset\b|\bensemble\b/, 'set'],
+    [/\bstring\b|\bstr\b|\bchaîne\b|\btexte\b/, 'string'], [/\blist\b|\bliste\b/, 'list'], [/\bdictionar|\bdict\b|\bdictionnaire\b/, 'dictionary'], [/\bset\b|\bensemble\b/, 'set'],
     [/\bslic|\bindex|\bdécoupage|\bindice/, 'slicing'], [/\bcomprehension\b|\bcompréhension\b/, 'comprehension'], [/\bgenerator\b|\bgénérateur/, 'generator'],
     [/\bfor loop|\bwhile loop|\bloop\b|\bboucle\b/, 'loop'], [/\bcondition|\bif\b/, 'conditional'],
     [/\bclass\b|\bclasse\b|\bobject-oriented|\boop\b|\bpoo\b/, 'class'], [/\bexception|\btry\b/, 'exception'],
@@ -195,7 +310,9 @@ const describeCall = (name: string, language: ProblemAiLanguage): string => {
 
 const inferContract = (description: string, grader: AutoGrader | null | undefined, language: ProblemAiLanguage): string[] => {
   const fr = language === 'fr';
-  const firstTest = grader?.tests?.[0];
+  const firstTest = grader?.optionalTests?.find(test => test.args.length > 0)
+    || grader?.tests?.find(test => test.args.length > 0)
+    || grader?.tests?.[0];
   const explicitOutputType = promptOutputType(description, language);
   const names = grader?.functionNames?.filter(Boolean) || [];
   const lines: string[] = [];
@@ -221,7 +338,7 @@ const inferContract = (description: string, grader: AutoGrader | null | undefine
   return lines;
 };
 
-const requiredSyntax = (grader: AutoGrader | null | undefined, language: ProblemAiLanguage, description = ''): string[] => {
+const requiredSyntax = (grader: AutoGrader | null | undefined, language: ProblemAiLanguage, description = '', analysis?: SolutionAnalysis): string[] => {
   const frIndex = language === 'fr' ? 1 : 0;
   const lines: string[] = [];
   for (const requirement of grader?.requiredNodePatterns || []) {
@@ -249,10 +366,25 @@ const requiredSyntax = (grader: AutoGrader | null | undefined, language: Problem
   return [...new Set(lines)].slice(0, 10);
 };
 
-const buildSteps = (description: string, grader: AutoGrader | null | undefined, language: ProblemAiLanguage): string[] => {
+const buildSteps = (description: string, grader: AutoGrader | null | undefined, language: ProblemAiLanguage, analysis: SolutionAnalysis): string[] => {
   const fr = language === 'fr';
   const lower = description.toLowerCase();
   const steps: string[] = [];
+  if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit') && grader?.requiredBoolOps?.includes('Or')) {
+    return fr ? [
+      'Définissez la fonction demandée et créez une variable texte contenant une chaîne (`str`).',
+      'Évaluez `text.isalpha()` pour savoir si la chaîne non vide contient uniquement des lettres.',
+      'Évaluez `text.isdigit()` pour savoir si la chaîne non vide contient uniquement des chiffres.',
+      'Combinez les deux booléens avec `or` : `text.isalpha() or text.isdigit()`.',
+      'Renvoyez ce booléen. Une chaîne mélangée comme `"abc123"` doit produire `False`.',
+    ] : [
+      'Define the requested function and create a text variable containing a string (`str`).',
+      'Evaluate `text.isalpha()` to check whether the non-empty string contains only letters.',
+      'Evaluate `text.isdigit()` to check whether the non-empty string contains only digit characters.',
+      'Combine the two Booleans with `or`: `text.isalpha() or text.isdigit()`.',
+      'Return that Boolean. A mixed string such as `"abc123"` must produce `False`.',
+    ];
+  }
   if (/three numbers|trois nombres/.test(lower) && /lambda/.test(lower) && /unpack/.test(lower)) {
     return fr ? [
       'Regroupez trois nombres dans un tuple ou une liste, par exemple `valeurs = (2, 3, 4)`.',
@@ -269,14 +401,14 @@ const buildSteps = (description: string, grader: AutoGrader | null | undefined, 
   const names = grader?.functionNames?.filter(Boolean) || [];
   if (names.length && grader?.mode !== 'script') steps.push(fr ? `Définissez \`${names[0]}()\` avec un paramètre pour chaque entrée décrite.` : `Define \`${names[0]}()\` with one parameter for each described input.`);
   else steps.push(fr ? 'Préparez les données d’entrée avec des noms qui décrivent leur rôle.' : 'Prepare the input data with names that describe each value’s role.');
-  for (const line of requiredSyntax(grader, language, description).slice(0, 4)) steps.push(line);
+  for (const line of requiredSyntax(grader, language, description, analysis).slice(0, 4)) steps.push(line);
   steps.push(/\breturn|returns?\b|\brenvoie\b|\bretourne\b/i.test(description)
     ? (fr ? 'Renvoyez la valeur calculée avec `return`.' : 'Return the calculated value with `return`.')
     : (fr ? 'Produisez la sortie demandée avec `print()` ou l’opération indiquée.' : 'Produce the requested output with `print()` or the stated operation.'));
   return [...new Set(steps)].slice(0, 7);
 };
 
-const commonMistakes = (concepts: string[], grader: AutoGrader | null | undefined, language: ProblemAiLanguage): string[] => {
+const commonMistakes = (concepts: string[], grader: AutoGrader | null | undefined, language: ProblemAiLanguage, analysis: SolutionAnalysis): string[] => {
   const fr = language === 'fr';
   const mistakes: string[] = [];
   if (concepts.includes('lambda')) mistakes.push(fr ? 'Une lambda contient une expression après `:` ; elle ne possède pas de bloc d’instructions indenté.' : 'A lambda has one expression after `:`; it does not have an indented statement block.');
@@ -284,17 +416,58 @@ const commonMistakes = (concepts: string[], grader: AutoGrader | null | undefine
   if (concepts.includes('subscript') || concepts.includes('slicing')) mistakes.push(fr ? 'Les indices commencent à `0`, et la borne de fin d’un découpage est exclue.' : 'Indexes start at `0`, and a slice stop position is excluded.');
   if (concepts.includes('return')) mistakes.push(fr ? '`print()` affiche une valeur mais ne la renvoie pas à l’appelant.' : '`print()` displays a value but does not return it to the caller.');
   if (concepts.includes('loop')) mistakes.push(fr ? 'Le corps de la boucle doit être indenté ; une boucle `while` doit progresser vers son arrêt.' : 'The loop body must be indented; a `while` loop must progress toward termination.');
+  if (analysis.calls.some(call => STRING_METHODS.has(call))) mistakes.push(fr ? 'N’appelez pas une méthode de chaîne sur un entier ou une liste : cela lève `AttributeError`. Le récepteur doit être de type `str`.' : 'Do not call a string method on an integer or list: that raises `AttributeError`. The receiver must be a `str`.');
+  if (analysis.calls.includes('isalpha') || analysis.calls.includes('isdigit')) mistakes.push(fr ? 'Écrivez les parenthèses : `text.isalpha()` appelle la méthode, tandis que `text.isalpha` désigne seulement l’objet méthode.' : 'Include parentheses: `text.isalpha()` calls the method, while `text.isalpha` only refers to the method object.');
+  if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit')) mistakes.push(fr ? 'Utilisez `or`, pas `and` : une chaîne non vide ne peut pas être à la fois composée uniquement de lettres et uniquement de chiffres.' : 'Use `or`, not `and`: a non-empty string cannot be both letters-only and digits-only.');
   if (grader?.mode === 'script') mistakes.push(fr ? 'Ne définissez pas seulement une fonction inutilisée : le script doit exécuter l’opération demandée.' : 'Do not only define an unused function: the script must execute the requested operation.');
   return [...new Set(mistakes)].slice(0, 5);
+};
+
+const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit')) return fr ? [
+    'Python crée la fonction sans exécuter immédiatement son corps.',
+    'Lors de l’appel, la variable `text` doit référencer une chaîne (`str`).',
+    'Python appelle d’abord `text.isalpha()`.',
+    'Si ce résultat est `True`, `or` s’arrête immédiatement. Sinon, Python appelle `text.isdigit()`.',
+    'Le booléen final est renvoyé à l’appelant, puis peut être affiché avec `print()`.',
+  ] : [
+    'Python creates the function without immediately running its body.',
+    'When called, `text` must refer to a string (`str`).',
+    'Python calls `text.isalpha()` first.',
+    'If that result is `True`, `or` short-circuits. Otherwise Python calls `text.isdigit()`.',
+    'The final Boolean is returned to the caller and can then be displayed with `print()`.',
+  ];
+  return [fr
+    ? 'Python crée d’abord les valeurs et fonctions, évalue les arguments de gauche à droite, exécute l’opération, puis transmet le résultat à `return`, `print()` ou à la variable cible.'
+    : 'Python first creates values and functions, evaluates arguments from left to right, performs the operation, and sends the result to `return`, `print()`, or the target variable.'];
+};
+
+const alternativeApproaches = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit')) return fr ? [
+    'Forme directe : `return text.isalpha() or text.isdigit()`.',
+    'Forme pédagogique : stockez `letters_only = text.isalpha()` et `digits_only = text.isdigit()`, puis renvoyez `letters_only or digits_only`.',
+    '`text.isalnum()` n’est pas équivalent : il accepte les mélanges comme `"abc123"`, qui doivent être refusés ici.',
+  ] : [
+    'Direct form: `return text.isalpha() or text.isdigit()`.',
+    'Teaching form: store `letters_only = text.isalpha()` and `digits_only = text.isdigit()`, then return `letters_only or digits_only`.',
+    '`text.isalnum()` is not equivalent: it accepts mixed text such as `"abc123"`, which this task must reject.',
+  ];
+  return [fr ? 'Vous pouvez utiliser des noms de variables différents tant que les types, les opérations et le résultat restent conformes.' : 'You may use different variable names as long as the types, operations, and result remain correct.'];
 };
 
 export const buildProblemAiTutorAnswer = ({ exercise, description, grader, language }: ProblemAiTutorContext): string => {
   const fr = language === 'fr';
   const goal = cleanPrompt(description);
   const concepts = detectConcepts(description, grader);
-  const syntax = requiredSyntax(grader, language, description);
-  const steps = buildSteps(description, grader, language);
-  const mistakes = commonMistakes(concepts, grader, language);
+  const analysis = analyzeCanonicalSolution(exercise, grader);
+  const methods = methodReference(analysis, language);
+  const syntax = requiredSyntax(grader, language, description, analysis);
+  const steps = buildSteps(description, grader, language, analysis);
+  const mistakes = commonMistakes(concepts, grader, language, analysis);
+  const walkthrough = explainSolutionLines(analysis, language);
+  const tests = concreteTests(exercise, grader, language);
   const definitions = concepts.map(key => {
     const concept = CONCEPTS[key];
     return `- **${concept.name}** — ${fr ? concept.fr : concept.en}\n  Syntax: \`${concept.syntax}\``;
@@ -304,10 +477,14 @@ export const buildProblemAiTutorAnswer = ({ exercise, description, grader, langu
     `**1. ${fr ? 'Ce que demande exactement le problème' : 'What this problem asks'}**\n${fr ? 'Comportement demandé' : 'Required behavior'}: ${goal}.`,
     `**2. ${fr ? 'Entrées et résultat' : 'Inputs and result'}**\n${inferContract(description, grader, language).map(line => `- ${line}`).join('\n')}`,
     `**3. ${fr ? 'Mots et concepts importants' : 'Key words and concepts'}**\n${definitions.length ? definitions.join('\n') : (fr ? '- Aucun concept spécial n’est imposé ; concentrez-vous sur la transformation décrite.' : '- No special construct is required; focus on the transformation described.')}`,
-    `**4. ${fr ? 'Syntaxe que le correcteur recherche' : 'Syntax the grader requires'}**\n${syntax.length ? syntax.map(line => `- ${line}`).join('\n') : (fr ? '- Plusieurs implémentations sont acceptées si elles produisent le comportement demandé.' : '- Multiple implementations are accepted when they produce the requested behavior.')}`,
-    `**5. ${fr ? 'Plan de construction' : 'Step-by-step plan'}**\n${execution.join('\n')}`,
-    `**6. ${fr ? 'Ordre d’exécution' : 'Execution flow'}**\n${fr ? 'Python crée d’abord les valeurs et les fonctions, évalue ensuite les arguments de l’appel de gauche à droite, exécute l’opération, puis transmet le résultat à `return`, `print()` ou à la variable cible.' : 'Python first creates values and functions, then evaluates call arguments from left to right, performs the operation, and finally sends the result to `return`, `print()`, or the target variable.'}`,
-    `**7. ${fr ? 'Erreurs fréquentes à éviter' : 'Common mistakes to avoid'}**\n${mistakes.length ? mistakes.map(line => `- ${line}`).join('\n') : (fr ? '- Vérifiez les types d’entrée, l’indentation et la différence entre `return` et `print()`.' : '- Check input types, indentation, and the difference between `return` and `print()`.')}`,
-    `**8. ${fr ? 'Comment vérifier votre réponse' : 'How to check your answer'}**\n${fr ? 'Testez au moins deux jeux de valeurs différents. Le comportement doit rester correct lorsque les valeurs changent ; la valeur de l’exemple n’est qu’une illustration.' : 'Test at least two different sets of values. The behavior must remain correct when values change; the example value is only an illustration.'}`,
+    `**4. ${fr ? 'Référence des méthodes et fonctions' : 'Method and function reference'}**\n${methods.length ? methods.map(line => `- ${line}`).join('\n') : (fr ? '- Cet exercice repose surtout sur la syntaxe et les opérateurs décrits ci-dessous.' : '- This exercise mainly relies on the syntax and operators described below.')}`,
+    `**5. ${fr ? 'Syntaxe que le correcteur recherche' : 'Syntax the grader requires'}**\n${syntax.length ? syntax.map(line => `- ${line}`).join('\n') : (fr ? '- Plusieurs implémentations sont acceptées si elles produisent le comportement demandé.' : '- Multiple implementations are accepted when they produce the requested behavior.')}`,
+    `**6. ${fr ? 'Modèle de code de référence' : 'Reference code pattern'}**\n\`\`\`python\n${analysis.snippet}\n\`\`\``,
+    `**7. ${fr ? 'Plan de construction' : 'Step-by-step plan'}**\n${execution.join('\n')}`,
+    `**8. ${fr ? 'Explication ligne par ligne' : 'Line-by-line explanation'}**\n${walkthrough.length ? walkthrough.map((line, index) => `${index + 1}. ${line}`).join('\n') : (fr ? '1. Construisez les données, appliquez l’opération, puis renvoyez ou affichez le résultat.' : '1. Build the data, apply the operation, then return or print the result.')}`,
+    `**9. ${fr ? 'Ordre d’exécution' : 'Execution flow'}**\n${executionFlow(analysis, language).map((line, index) => `${index + 1}. ${line}`).join('\n')}`,
+    `**10. ${fr ? 'Erreurs fréquentes à éviter' : 'Common mistakes to avoid'}**\n${mistakes.length ? mistakes.map(line => `- ${line}`).join('\n') : (fr ? '- Vérifiez les types d’entrée, l’indentation et la différence entre `return` et `print()`.' : '- Check input types, indentation, and the difference between `return` and `print()`.')}`,
+    `**11. ${fr ? 'Cas de test concrets' : 'Concrete test cases'}**\n${tests.length ? tests.map(line => `- ${line}`).join('\n') : (fr ? '- Testez au moins deux entrées différentes et un cas limite.' : '- Test at least two different inputs and one edge case.')}`,
+    `**12. ${fr ? 'Autres façons correctes de l’écrire' : 'Other correct ways to write it'}**\n${alternativeApproaches(analysis, language).map(line => `- ${line}`).join('\n')}`,
   ].join('\n\n');
 };
