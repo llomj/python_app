@@ -95,6 +95,24 @@ export const answerPythonCodeQuality = (question: string, language: AdvancedAiLa
   const duplicates = duplicateAssignments(code);
   if (duplicates.length) findings.push({ severity: 'medium', text: fr ? 'Des instructions identiques sont répétées ; extrayez une fonction ou une boucle.' : 'Identical statements are repeated; extract a function or loop.' });
   if (!/\bdef\b/.test(code) && code.split('\n').length > 12) findings.push({ severity: 'medium', text: fr ? 'Le script est assez long pour être découpé en fonctions testables.' : 'The script is long enough to split into testable functions.' });
+  // PEP 8 naming: detect camelCase variables (should be snake_case)
+  const camelVars = code.match(/\b[a-z][a-z]*[A-Z][a-zA-Z]*\s*=\s*[^=]/g);
+  if (camelVars && camelVars.length > 1) findings.push({ severity: 'low', text: fr ? `Variables en camelCase détectées : utilisez snake_case (PEP 8). Ex. : ${camelVars[0].trim().split('=')[0].trim()}` : `camelCase variables detected: use snake_case (PEP 8). E.g.: ${camelVars[0].trim().split('=')[0].trim()}` });
+  // Complex boolean expressions
+  const boolCount = (code.match(/\b(?:and|or)\s/g) || []).length;
+  if (boolCount >= 3) findings.push({ severity: 'low', text: fr ? `L'expression contient ${boolCount} opérateurs booléens. Envisagez de la décomposer.` : `The expression contains ${boolCount} boolean operators. Consider breaking it apart.` });
+  // Deeply nested code
+  const indentLevels = code.split('\n').map(line => line.search(/\S/)).filter(indent => indent > 0);
+  const maxIndent = indentLevels.length ? Math.max(...indentLevels) : 0;
+  if (maxIndent > 24) findings.push({ severity: 'medium', text: fr ? `Niveau d'indentation max : ${maxIndent / 4}. Envisagez d'extraire des fonctions.` : `Max indent level: ${maxIndent / 4}. Consider extracting functions.` });
+  // `isinstance` chains
+  const isinstanceCount = (code.match(/\bisinstance\s*\(/g) || []).length;
+  if (isinstanceCount >= 3) findings.push({ severity: 'low', text: fr ? `${isinstanceCount} appels \`isinstance\` détectés. Envisagez le polymorphisme.` : `${isinstanceCount} \`isinstance\` calls detected. Consider polymorphism.` });
+  // Unused variables (defined but never referenced after)
+  const definedNames = [...code.matchAll(/\b([a-zA-Z_]\w*)\s*=\s*(?!.*for\s+\1)/g)].map(m => m[1]).filter(n => !['True', 'False', 'None'].includes(n));
+  const usedNames = new Set([...code.matchAll(/\b([a-zA-Z_]\w*)\b/g)].map(m => m[1]));
+  const unused = definedNames.filter(name => !usedNames.has(name) || code.match(new RegExp(`\\b${name}\\b`, 'g'))!.length <= 1);
+  if (unused.length > 1) findings.push({ severity: 'low', text: fr ? `Variables potentiellement inutilisées : ${unused.join(', ')}` : `Potentially unused variables: ${unused.join(', ')}` });
   if (!findings.length) findings.push({ severity: 'pass', text: fr ? 'Aucun problème structurel évident détecté dans cet extrait.' : 'No obvious structural quality issue was detected in this snippet.' });
   return [
     `**${fr ? 'Revue de qualité du code' : 'Code-quality review'}**`,
