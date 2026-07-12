@@ -193,6 +193,23 @@ export const answerPythonCodeQuality = (question: string, language: AdvancedAiLa
   const usedNames = new Set([...code.matchAll(/\b([a-zA-Z_]\w*)\b/g)].map(m => m[1]));
   const unused = definedNames.filter(name => !usedNames.has(name) || code.match(new RegExp(`\\b${name}\\b`, 'g'))!.length <= 1);
   if (unused.length > 1) findings.push({ severity: 'low', text: fr ? `Variables potentiellement inutilisées : ${unused.join(', ')}` : `Potentially unused variables: ${unused.join(', ')}` });
+  // — Security scan rules —
+  // `subprocess.run(shell=True)` or `shell=True` anywhere
+  if (/\bshell\s*=\s*True\b/i.test(code)) findings.push({ severity: 'high', text: fr ? '`shell=True` crée un risque d’injection de commande. Passez une liste d\'arguments plutôt qu\'une chaîne.' : '`shell=True` creates a command-injection risk. Pass an argument list instead of a single string.' });
+  // `pickle.loads()` / `pickle.load()` — arbitrary code execution
+  if (/pickle\.loads?\s*\(/.test(code)) findings.push({ severity: 'high', text: fr ? '`pickle.load()`/`loads()` exécute du code arbitraire lors de la désérialisation. Utilisez un format sécurisé (JSON) ou validez l\'origine.' : '`pickle.load()`/`loads()` executes arbitrary code on deserialization. Use a safe format (JSON) or verify the source.' });
+  // `yaml.load()` without explicit Loader
+  if (/yaml\.load\s*\(/.test(code) && !/yaml\.load\s*\([^)]*Loader/i.test(code)) findings.push({ severity: 'high', text: fr ? '`yaml.load()` sans `Loader` désactive toutes les protections. Utilisez `yaml.safe_load()` ou `Loader=yaml.SafeLoader`.' : '`yaml.load()` without `Loader` disables all protections. Use `yaml.safe_load()` or `Loader=yaml.SafeLoader`.' });
+  // `requests.get()` / `requests.post()` without timeout
+  if (/\brequests\.(?:get|post|put|delete|head)\s*\(/.test(code) && !/\btimeout\s*=/.test(code)) findings.push({ severity: 'medium', text: fr ? 'Appel `requests` sans `timeout` peut bloquer indéfiniment. Ajoutez `timeout=10` (ou une valeur adaptée).' : 'A `requests` call without `timeout` can hang forever. Add `timeout=10` (or an appropriate value).' });
+  // `os.system()` or `os.popen()` — shell injection
+  if (/\bos\.(?:system|popen)\s*\(/.test(code)) findings.push({ severity: 'high', text: fr ? '`os.system()`/`os.popen()` appelle un shell. Utilisez `subprocess.run()` avec une liste d\'arguments.' : '`os.system()`/`os.popen()` invokes a shell. Use `subprocess.run()` with an argument list.' });
+  // SQL injection: f-string or `+` concatenation in a SQL query
+  if (/(?:cursor\.execute|execute|executemany)\s*\(\s*f["']/.test(code) || /(?:cursor\.execute|execute)\s*\(\s*["'][^"']*\+(?:\s*["']|.*\bstr\b)/.test(code)) {
+    findings.push({ severity: 'high', text: fr ? 'Concaténation dans une requête SQL — risque d\'injection SQL. Utilisez des paramètres (`?` ou `%s`) et passez les valeurs en second argument.' : 'String concatenation in a SQL query — SQL injection risk. Use parameterized queries (`?` or `%s`) and pass values as the second argument.' });
+  }
+  // Unsafe temp file: `tempfile.mktemp()`
+  if (/tempfile\.mktemp\s*\(/.test(code)) findings.push({ severity: 'high', text: fr ? '`tempfile.mktemp()` est vulnérable aux attaques par course. Utilisez `tempfile.mkstemp()` ou `TemporaryFile()`.' : '`tempfile.mktemp()` is vulnerable to race-condition attacks. Use `tempfile.mkstemp()` or `TemporaryFile()`.' });
   if (!findings.length) findings.push({ severity: 'pass', text: fr ? 'Aucun problème structurel évident détecté dans cet extrait.' : 'No obvious structural quality issue was detected in this snippet.' });
   return [
     `**${fr ? 'Revue de qualité du code' : 'Code-quality review'}**`,
