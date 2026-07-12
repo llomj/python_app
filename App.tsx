@@ -214,6 +214,11 @@ const GENERAL_AI_TOPIC_ALIASES: Record<string, string[]> = {
     regex: ['regex', 'regular expression', 'regular expressions', 're module', 'python regex'],
     'walrus-operator': ['walrus operator', 'assignment expression', 'walrus', ':= operator'],
     debugging: ['debug', 'debugging', 'pdb', 'breakpoint', 'debug code'],
+    defaultdict: ['defaultdict', 'default dict', 'default-dict', 'collections.defaultdict'],
+    counter: ['counter', 'Counter', 'collections.Counter', 'frequency counter', 'count occurrences'],
+    namedtuple: ['namedtuple', 'named tuple', 'named-tuple', 'collections.namedtuple'],
+    deque: ['deque', 'double-ended queue', 'collections.deque', 'd e que'],
+    ordereddict: ['ordereddict', 'ordered dict', 'OrderedDict', 'collections.OrderedDict'],
 };
 
 const detectGeneralPythonTopic = (question: string): string => {
@@ -1114,6 +1119,51 @@ const GENERAL_AI_CONCEPT_SPECS: Record<string, GeneralAiConceptSpec> = {
         example: 'def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(5))  # 120',
         mistakes: 'Missing base case causes infinite recursion → `RecursionError`. Python\'s recursion limit is ~1000 — use iteration for deep recursion. Each call consumes a stack frame. Tail recursion is not optimized. Consider `functools.lru_cache` for repeated recursive calls.',
         related: ['function', 'for loop', 'while loop', 'built-in function'],
+    },
+    defaultdict: {
+        label: 'defaultdict',
+        summary: 'A `dict` subclass from `collections` that auto-creates missing keys using a factory function.',
+        syntax: '`defaultdict(factory)` — factory is a callable like `list`, `int`, `set`, or `str`',
+        bestFor: 'Grouping items, counting, building lists of values per key, and avoiding `KeyError` boilerplate.',
+        example: 'from collections import defaultdict\n\ngroups = defaultdict(list)\ngroups["a"].append(1)\ngroups["a"].append(2)\ngroups["b"].append(3)\nprint(dict(groups))  # {\'a\': [1, 2], \'b\': [3]}',
+        mistakes: 'The factory is called with no arguments for each missing key. `defaultdict(list)` creates a new empty list; `defaultdict(int)` creates `0`. Accessing a missing key creates and stores the default value — it does not just return it. `defaultdict` has a `default_factory` attribute that can be set to `None` to disable.',
+        related: ['dictionary', 'list', 'set'],
+    },
+    counter: {
+        label: 'Counter',
+        summary: 'A `dict` subclass from `collections` that counts hashable items. Elements are stored as keys, counts as values.',
+        syntax: '`Counter(iterable)` or `Counter(key=value)`',
+        bestFor: 'Counting item frequencies, finding most common elements, and multi-set operations (union, intersection).',
+        example: 'from collections import Counter\n\ncolors = ["red", "blue", "red", "green", "blue", "red"]\ncounts = Counter(colors)\nprint(counts["red"])        # 3\nprint(counts.most_common(2)) # [(\'red\', 3), (\'blue\', 2)]',
+        mistakes: 'Accessing a missing key returns `0`, not `KeyError`. `elements()` repeats each element by its count. `Counter` supports `+`, `-`, `&`, `|` for multiset operations. Counts must be integers; zeros and negatives are handled in subtraction.',
+        related: ['dictionary', 'defaultdict', 'list', 'set'],
+    },
+    namedtuple: {
+        label: 'namedtuple',
+        summary: 'A factory from `collections` that creates tuple subclasses with named field access.',
+        syntax: '`namedtuple("Name", ["field1", "field2"])`',
+        bestFor: 'Lightweight immutable data containers with named attributes, replacing verbose class definitions for simple records.',
+        example: 'from collections import namedtuple\n\nPoint = namedtuple("Point", ["x", "y"])\np = Point(3, 4)\nprint(p.x, p.y)        # 3 4\nprint(p[0], p[1])       # 3 4 — also indexable\nx, y = p                # unpackable',
+        mistakes: '`namedtuple` fields cannot start with a digit. The second argument can be a string of field names separated by whitespace or commas. `_make(iterable)` creates from an iterable, `_asdict()` returns an OrderedDict. Named tuples are immutable — no field reassignment after creation.',
+        related: ['tuple', 'class', 'dictionary', 'unpacking'],
+    },
+    deque: {
+        label: 'deque (double-ended queue)',
+        summary: 'A list-like container from `collections` optimized for fast appends and pops from both ends. O(1) for both `append`/`appendleft` and `pop`/`popleft`.',
+        syntax: '`deque(iterable, maxlen=N)`',
+        bestFor: 'Queues, stacks, sliding windows, round-robin processing, and any scenario requiring fast operations at both ends.',
+        example: 'from collections import deque\n\nq = deque([1, 2, 3])\nq.append(4)\nq.appendleft(0)\nprint(q)         # deque([0, 1, 2, 3, 4])\nprint(q.popleft())  # 0\nprint(q.pop())      # 4',
+        mistakes: 'Indexing into the middle of a deque is O(n), not O(1). `maxlen` creates a bounded deque that discards from the opposite end when full. Deques are thread-safe for `append` and `pop` from both ends. List-like methods (`remove`, `count`, `reverse`) also work.',
+        related: ['list', 'collections'],
+    },
+    ordereddict: {
+        label: 'OrderedDict',
+        summary: 'A `dict` subclass from `collections` that preserves key insertion order. Python 3.7+ dicts also preserve order, but OrderedDict has extra methods.',
+        syntax: '`OrderedDict()` or `OrderedDict([("key", "val"), ...])`',
+        bestFor: 'When insertion order matters and you need `move_to_end()` or order-sensitive equality checks (`==` respects order unlike regular dict).',
+        example: 'from collections import OrderedDict\n\nod = OrderedDict()\nod["a"] = 1\nod["b"] = 2\nod["c"] = 3\nod.move_to_end("a")\nprint(list(od.keys()))  # [\'b\', \'c\', \'a\']\nfor key in od:\n    print(key)          # b, c, a — order preserved',
+        mistakes: 'In Python 3.7+, regular dicts also preserve order, but `OrderedDict` still offers `move_to_end()`, `popitem(last=True)`, and order-aware equality. `reversed()` works on OrderedDict but not on regular dicts before 3.8. Use `dict(od)` to convert to a regular dict.',
+        related: ['dictionary', 'defaultdict', 'counter'],
     },
 };
 
