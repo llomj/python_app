@@ -16102,6 +16102,23 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
                         || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;
+                case 'async_await':
+                    refAnswer = knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
+                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
+                    break;
+                case 'type_hints':
+                    refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
+                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
+                    break;
+                case 'performance':
+                    refAnswer = knowledge.answerPythonComplexityRequest(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'debugging':
+                    refAnswer = knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
+                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
+                    break;
                 case 'definition':
                     refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonAtLevel(effectiveQuestion, appLang, effectiveMode === 'simple' ? 'beginner' : effectiveMode === 'deep' ? 'expert' : 'intermediate')

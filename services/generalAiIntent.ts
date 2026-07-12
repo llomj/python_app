@@ -30,6 +30,10 @@ export type GeneralAiIntent =
   | 'mechanism'
   | 'refactoring'
   | 'best_practices'
+  | 'async_await'
+  | 'type_hints'
+  | 'performance'
+  | 'debugging'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -55,11 +59,17 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   if (containsCode(value) && /\b(?:step through|debug step|trace execution|show variable changes|loop iterations|pas à pas|trace l['’]exécution|changements? de variables?|itérations? de boucle)\b/i.test(value)) {
     return { intent: 'interactive_debug', confidence: 0.99, reason: 'Interactive execution-trace request detected' };
   }
+  if (/\b(?:how (?:to|do (?:i|you)|can (?:i|you)) .{0,40} debug|debugging (?:tips?|strateg|technique|approach)|how to use pdb|breakpoint|debugg\b.{0,20}(?:python|code))\b/i.test(value)) {
+    return { intent: 'debugging', confidence: 0.96, reason: 'Debugging strategy request detected' };
+  }
   if ((value.match(/```(?:python)?/gi) || []).length >= 2 && /\b(?:compare|comparison|versus|vs\.?|which (?:code|solution|approach)|better solution|comparaison|quelle solution|meilleure solution)\b/i.test(value)) {
     return { intent: 'code_comparison', confidence: 0.99, reason: 'Two Python snippets and a comparison request detected' };
   }
   if (containsCode(value) && /\b(?:time complexity|space complexity|big[- ]?o|complexity|runtime cost|memory cost|complexit[eé]|notation grand o|co[uû]t temporel|co[uû]t m[eé]moire)(?=\s|[?:.,]|$)/i.test(value)) {
     return { intent: 'complexity_analysis', confidence: 0.99, reason: 'Algorithm complexity request detected' };
+  }
+  if (/\b(?:performance|speed.?up|fast(?:er)?|optimize?|optimis.|bottleneck|slow)\b.{0,30}\b(?:python|code|function|loop|script)\b/i.test(value)) {
+    return { intent: 'performance', confidence: 0.95, reason: 'Performance optimization request detected' };
   }
   if (containsCode(value) && /\b(?:function contract|analy[sz]e (?:the )?contract|parameters?,? returns?|input.?output contract|preconditions?|postconditions?|contrat (?:de la )?fonction|analyse le contrat|param[eè]tres?,? retours?|pr[eé]conditions?|postconditions?)\b/i.test(value)) {
     return { intent: 'function_contract', confidence: 0.99, reason: 'Function contract analysis request detected' };
@@ -92,6 +102,10 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   if (/\b(?:refactor|rewrite|clean.?up|clean.?code|restructure|simplif)(?:\s+(?:this|the|my|function|code|class))?\b/i.test(value)) {
     return { intent: 'refactoring', confidence: 0.96, reason: 'Code refactoring request detected' };
   }
+  if (/\b(?:async|await|coroutine|asyncio|asynchronous)\b/i.test(value)
+    && !/\b(?:modules?|imports?|packages?)\b/i.test(value)) {
+    return { intent: 'async_await', confidence: 0.96, reason: 'Async/await request detected' };
+  }
   if (/\b(?:learning path|roadmap|study plan|what should i learn|parcours|feuille de route|plan d['’][eé]tude)\b/i.test(lower)) {
     return { intent: 'learning_path', confidence: 0.97, reason: 'Structured learning-path request detected' };
   }
@@ -105,6 +119,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:difference between|compare|versus|vs\.?|diff[eé]rence entre|compar(?:e|er))\b/i.test(lower)) {
     return { intent: 'comparison', confidence: 0.98, reason: 'Comparison phrasing detected' };
+  }
+  if (/\b(?:type (?:hint|annotation)|typing\b|mypy|type.?safe)\b/i.test(lower)) {
+    return { intent: 'type_hints', confidence: 0.96, reason: 'Type hints request detected' };
   }
   if (/\b(?:best pract|recommended way|pythonic way|proper way|correct way)\b/i.test(lower)) {
     return { intent: 'best_practices', confidence: 0.96, reason: 'Best practices request detected' };
