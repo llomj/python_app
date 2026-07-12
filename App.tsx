@@ -59,6 +59,7 @@ import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
 import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonComplexityRequest, answerPythonDoctestExecutionRequest, answerPythonFunctionContractRequest, answerPythonLearningPath, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonVersionCompatibilityRequest, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
+import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
@@ -93,6 +94,11 @@ interface ProblemAiMessage {
     text: string;
     source?: 'built_in' | 'offline' | 'user';
 }
+
+const localizeProblemAiBuiltInAnswer = (answer: string, language: 'en' | 'fr'): string => {
+    if (language === 'fr' && answer.includes('**1. Ce que demande exactement le problème**')) return answer;
+    return localizeAiText(answer, language);
+};
 
 type GeneralAiMode = 'simple' | 'normal' | 'deep' | 'examples';
 type GeneralAiKnowledgeModule = typeof import('./services/pythonKnowledge');
@@ -13228,6 +13234,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const lookupQuestion = normalizeAiQuestionForLookup(question, appLang);
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
+        const wantsGroundedBreakdown = /(?:explain|break down|breakdown|understand|what does|what is|what.*want|how do i start|help me start).*(?:problem|task|exercise)|(?:explique|décompose|comprendre|que demande|comment commencer).*(?:problème|tâche|exercice)/i.test(lookupQuestion);
+        if (wantsGroundedBreakdown) {
+            return buildProblemAiTutorAnswer({
+                exercise,
+                description,
+                grader: AUTO_GRADERS[exercise.id] || null,
+                language: appLang,
+                question,
+            });
+        }
         const hint = exercise.hint?.trim();
         const breakdown = exercise.breakdown?.trim();
         const code = request.userCode || '';
@@ -15098,7 +15114,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now(),
                 role: 'assistant',
                 source: 'built_in',
-                text: localizeAiText(buildBuiltInProblemAiAnswer(
+                text: localizeProblemAiBuiltInAnswer(buildBuiltInProblemAiAnswer(
                     outputStatus === 'fail' ? 'Why did my output fail?' : 'Explain this problem.',
                     request,
                 ), appLang),
@@ -15177,7 +15193,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: localizeAiText(buildBuiltInProblemAiAnswer(question, request), appLang),
+                    text: localizeProblemAiBuiltInAnswer(buildBuiltInProblemAiAnswer(question, request), appLang),
                 }]);
                 return;
             }
@@ -15186,7 +15202,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     id: Date.now() + 1,
                     role: 'assistant',
                     source: 'built_in',
-                    text: localizeAiText(buildBuiltInProblemAiAnswer(question, request), appLang),
+                    text: localizeProblemAiBuiltInAnswer(buildBuiltInProblemAiAnswer(question, request), appLang),
                 }]);
                 return;
             }
@@ -15199,14 +15215,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: review.source === 'diagnostic' ? 'built_in' : 'offline',
-                text: localizeAiText(answer || buildBuiltInProblemAiAnswer(question, request), appLang),
+                text: localizeProblemAiBuiltInAnswer(answer || buildBuiltInProblemAiAnswer(question, request), appLang),
             }]);
         } catch {
             setProblemAiMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 role: 'assistant',
                 source: 'built_in',
-                text: localizeAiText(`Offline AI could not answer this time, so built-in help answered instead.\n\n${buildBuiltInProblemAiAnswer(question, request)}`, appLang),
+                text: `${appLang === 'fr' ? 'L’IA hors ligne n’a pas pu répondre cette fois ; l’aide intégrée répond à sa place.' : 'Offline AI could not answer this time, so built-in help answered instead.'}\n\n${localizeProblemAiBuiltInAnswer(buildBuiltInProblemAiAnswer(question, request), appLang)}`,
             }]);
         } finally {
             setProblemAiRunning(false);
