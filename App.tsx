@@ -457,6 +457,138 @@ const GENERAL_AI_QUIZ_BANK: Record<string, { q: string; code: string; answer: st
     'walrus-operator': [
         { q: 'What value does `(x := 5)` produce?', code: 'print((x := 5))', answer: '5' },
     ],
+    integer: [
+        { q: 'What type does `3 // 2` return?', code: 'print(type(3 // 2))', answer: "<class 'int'>" },
+        { q: 'What does `10 / 3` return?', code: 'print(10 / 3)', answer: '3.3333333333333335' },
+    ],
+    float: [
+        { q: 'What does `0.1 + 0.2 == 0.3` produce?', code: 'print(0.1 + 0.2 == 0.3)', answer: 'False' },
+        { q: 'What type does `3 / 2` return?', code: 'print(type(3 / 2))', answer: "<class 'float'>" },
+    ],
+    method: [
+        { q: 'How do you call a method on an object?', code: 'text = "hello"\nprint(text.upper())', answer: 'HELLO' },
+        { q: 'What does `[1, 2, 3].append(4)` return?', code: 'result = [1, 2, 3].append(4)\nprint(result)', answer: 'None' },
+    ],
+    module: [
+        { q: 'How do you import a module?', code: 'import math\nprint(math.sqrt(9))', answer: '3.0' },
+        { q: 'How do you import only one function?', code: 'from math import sqrt\nprint(sqrt(16))', answer: '4.0' },
+    ],
+    package: [
+        { q: 'What file marks a folder as a Python package?', code: '# What file is needed?\nprint("__init__.py")', answer: '__init__.py' },
+    ],
+    library: [
+        { q: 'What does `import this` print?', code: 'import this  # what is this?', answer: 'The Zen of Python' },
+    ],
+    object: [
+        { q: 'What does `isinstance("hello", object)` return?', code: 'print(isinstance("hello", object))', answer: 'True' },
+    ],
+    oop: [
+        { q: 'What keyword defines a class in Python?', code: '# Which keyword?\n# def / class / struct\nprint("class")', answer: 'class' },
+        { q: 'What does `self` represent in a method?', code: 'class Dog:\n    def __init__(self, name):\n        self.name = name\n\nd = Dog("Noll")\nprint(d.name)', answer: 'Noll' },
+    ],
+    attribute: [
+        { q: 'How do you access an attribute of an object?', code: 'class Box:\n    def __init__(self):\n        self.size = 10\n\nb = Box()\nprint(b.size)', answer: '10' },
+    ],
+    inheritance: [
+        { q: 'Does a child class inherit methods from its parent?', code: 'class Parent:\n    def greet(self):\n        return "hello"\n\nclass Child(Parent):\n    pass\n\nc = Child()\nprint(c.greet())', answer: 'hello' },
+        { q: 'What function checks if an object is an instance of a class?', code: 'class A:\n    pass\n\nobj = A()\nprint(isinstance(obj, A))', answer: 'True' },
+    ],
+    property: [
+        { q: 'What decorator defines a getter property?', code: 'class C:\n    @property\n    def x(self):\n        return 42\n\nprint(C().x)', answer: '42' },
+        { q: 'How do you set a property value?', code: 'class C:\n    @property\n    def x(self):\n        return self._x\n\n    @x.setter\n    def x(self, value):\n        self._x = value\n\nc = C()\nc.x = 5\nprint(c.x)', answer: '5' },
+    ],
+    'async-await': [
+        { q: 'What keyword defines an async function?', code: '# async def / def async / coroutine def\nprint("async def")', answer: 'async def' },
+        { q: 'What keyword suspends execution until a result is ready?', code: '# await / yield / suspend\nprint("await")', answer: 'await' },
+    ],
+    'match-case': [
+        { q: 'What Python version introduced match-case?', code: '# 3.8 / 3.9 / 3.10 / 3.11\nprint("3.10")', answer: '3.10' },
+        { q: 'What wildcard pattern matches anything in a match-case?', code: '# _ / * / ? / any\nprint("_")', answer: '_' },
+    ],
+    'type-hints': [
+        { q: 'Are type hints enforced at runtime?', code: 'def add(x: int, y: int) -> int:\n    return x + y\n\nprint(add("a", "b"))  # what happens?', answer: 'ab' },
+        { q: 'Where are type hints stored?', code: 'def f(x: int) -> str:\n    return str(x)\n\nprint(f.__annotations__)', answer: "{'x': <class 'int'>, 'return': <class 'str'>}" },
+    ],
+    'context-manager': [
+        { q: 'What statement creates a context manager?', code: '# try / with / using\nprint("with")', answer: 'with' },
+    ],
+    dataclass: [
+        { q: 'What does a dataclass generate automatically?', code: 'from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: int\n    y: int\n\np = Point(1, 2)\nprint(p)', answer: 'Point(x=1, y=2)' },
+    ],
+    'f-string': [
+        { q: 'What does `f"{2 + 2}"` produce?', code: 'print(f"{2 + 2}")', answer: '4' },
+        { q: 'How do you include a variable in an f-string?', code: 'name = "Noll"\nprint(f"Hello {name}")', answer: 'Hello Noll' },
+    ],
+    'is-operator': [
+        { q: 'What does `is` compare?', code: 'a = [1]\nb = [1]\nprint(a is b)', answer: 'False' },
+        { q: 'What does `==` compare?', code: 'a = [1]\nb = [1]\nprint(a == b)', answer: 'True' },
+    ],
+    truthy: [
+        { q: 'Is an empty list truthy or falsy?', code: 'if []:\n    print("truthy")\nelse:\n    print("falsy")', answer: 'falsy' },
+        { q: 'Is `0` truthy or falsy?', code: 'if 0:\n    print("truthy")\nelse:\n    print("falsy")', answer: 'falsy' },
+    ],
+    unpacking: [
+        { q: 'What does `a, b = (1, 2)` assign to `a`?', code: 'a, b = (1, 2)\nprint(a)', answer: '1' },
+        { q: 'What does `*rest` capture in unpacking?', code: 'first, *rest = [1, 2, 3]\nprint(rest)', answer: '[2, 3]' },
+    ],
+    none: [
+        { q: 'What does a function without a `return` statement return?', code: 'def f():\n    pass\n\nprint(f())', answer: 'None' },
+        { q: 'How do you check if something is None?', code: 'x = None\nprint(x is None)', answer: 'True' },
+    ],
+    parameter: [
+        { q: 'What stores the value passed into a function?', code: 'def greet(name):\n    print(name)\n\ngreet("Noll")\n# What is "name" called?', answer: 'parameter' },
+    ],
+    argument: [
+        { q: 'What is the value passed to a function called?', code: 'def greet(name):\n    print(name)\n\ngreet("Noll")\n# What is "Noll" called?', answer: 'argument' },
+    ],
+    identifier: [
+        { q: 'Can an identifier start with a number?', code: '# Is 1var valid?\nprint("no")', answer: 'no' },
+        { q: 'What characters are allowed in identifiers?', code: '# Which is valid Python?\n# my-var / my_var / 1var\nprint("my_var")', answer: 'my_var' },
+    ],
+    variable: [
+        { q: 'How do you assign a value to a variable?', code: 'x = 10\nprint(x)', answer: '10' },
+        { q: 'What happens when you assign a new value to a variable?', code: 'x = 1\nx = 2\nprint(x)', answer: '2' },
+    ],
+    expression: [
+        { q: 'What does the expression `2 + 3` evaluate to?', code: 'print(2 + 3)', answer: '5' },
+    ],
+    statement: [
+        { q: 'Is `x = 5` an expression or a statement?', code: '# expression / statement\nprint("statement")', answer: 'statement' },
+    ],
+    syntax: [
+        { q: 'What character ends a simple statement in Python?', code: '# ; (semicolon) / newline / . (dot)\nprint("newline")', answer: 'newline' },
+    ],
+    indentation: [
+        { q: 'What is the standard indentation unit in Python?', code: '# 2 spaces / 4 spaces / tab\nprint("4 spaces")', answer: '4 spaces' },
+        { q: 'What error do you get with wrong indentation?', code: 'if True:\nprint("no indent")  # error?', answer: 'IndentationError' },
+    ],
+    comment: [
+        { q: 'What symbol starts a comment in Python?', code: '# / // / /*\nprint("#")', answer: '#' },
+        { q: 'Does Python ignore comments?', code: '# This is a comment\nprint("yes")  # Python ignores comments', answer: 'yes' },
+    ],
+    comma: [
+        { q: 'Can a trailing comma after the last item cause an error?', code: 'items = [1, 2, 3,]\nprint(len(items))', answer: '3' },
+    ],
+    'for loop': [
+        { q: 'What does this for loop print?', code: 'for i in range(3):\n    print(i)', answer: '0\n1\n2' },
+        { q: 'Does the loop variable persist after the loop?', code: 'for x in [1, 2]:\n    pass\nprint(x)', answer: '2' },
+    ],
+    'while loop': [
+        { q: 'How many times does this loop run?', code: 'count = 0\nwhile count < 3:\n    count += 1\nprint(count)', answer: '3' },
+        { q: 'What keyword exits a loop immediately?', code: '# stop / break / exit\nprint("break")', answer: 'break' },
+    ],
+    condition: [
+        { q: 'What does the `elif` keyword do?', code: 'x = 10\nif x < 5:\n    print("a")\nelif x < 15:\n    print("b")\nelse:\n    print("c")', answer: 'b' },
+        { q: 'What does `not True` evaluate to?', code: 'print(not True)', answer: 'False' },
+    ],
+    'keyword-argument': [
+        { q: 'Can keyword arguments be passed in any order?', code: 'def f(a, b):\n    print(a, b)\n\nf(b=2, a=1)', answer: '1 2' },
+        { q: 'Must keyword arguments come before or after positional args?', code: '# before / after\nprint("after")', answer: 'after' },
+    ],
+    'built-in function': [
+        { q: 'What built-in function returns the length of a sequence?', code: 'print(len([1, 2, 3]))', answer: '3' },
+        { q: 'What built-in function returns the type of an object?', code: 'print(type(42))', answer: "<class 'int'>" },
+    ],
 };
 
 const buildGeneralAiQuiz = (topic: string, language: 'en' | 'fr' = 'en'): string => {
