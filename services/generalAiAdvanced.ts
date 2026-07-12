@@ -72,11 +72,21 @@ const pathKey = (question: string): string => {
   if (/\b(?:sets?|ensembles?)\b/.test(value) && !/\b(?:dict|dictionnary|dictionnaire)\b/.test(value)) return 'set';
   if (/\b(?:exception|error|erreur|try|except)\b/.test(value)) return 'exception-handling';
   if (/\b(?:file.?io|fichiers?|file operations?|lecture|write|read|open)\b/.test(value)) return 'file-io';
-  if (/\b(?:decorator|generator|générateur|décorateur|yield|itérateur|iterator)\b/.test(value)) return 'decorator-generator';
+  if (/\b(?:generator|générateur|yield|itérateur|iterator)\b/.test(value)) return 'decorator-generator';
   if (/\b(?:boolean?|bool|truthy?|falsy?|vrai|faux|truth value)\b/.test(value) && !/set|dict/.test(value)) return 'boolean';
   if (/\b(?:defaultdict|counter|namedtuple|deque|ordereddict|collections)\b/.test(value)) return 'collections';
   if (/\b(?:type.?hint|annotation|typing|mypy)\b/.test(value)) return 'type-hints';
   if (/\b(?:test|pytest|unittest|testing|tests? unitaire)\b/.test(value)) return 'testing';
+  if (/\b(?:integer|entier|int|number|nombre|numeric)\b/.test(value) && !/float|flottant/.test(value)) return 'integer';
+  if (/\b(?:float|flottant|double|r[eé]el)\b/.test(value)) return 'float';
+  if (/\b(?:method|m[eé]thode)\b/.test(value)) return 'method';
+  if (/\b(?:slicing|slice|decoupage|d[eé]coupage|sous.?cha[îi]ne)\b/.test(value)) return 'slicing';
+  if (/\b(?:comprehension|compr[eé]hension)\b/.test(value)) return 'comprehension';
+  if (/\b(?:decorator|d[eé]corateur)\b/.test(value)) return 'decorator';
+  if (/\b(?:recursion|r[eé]cursion|r[eé]cursif|recursive)\b/.test(value)) return 'recursion';
+  if (/\b(?:module|modules?|paquets?|packages?)\b/.test(value) && !/import/.test(value)) return 'module';
+  if (/\b(?:variable|variables?)\b/.test(value)) return 'variable';
+  if (/\b(?:inheritance|h[eé]ritage|inherit|h[eé]riter)\b/.test(value)) return 'inheritance';
   return 'python';
 };
 
@@ -238,12 +248,42 @@ const QUIZ_BANK: Record<string, QuizTemplate[]> = {
   'exception-handling': [
     { id: 'exception-basic', code: 'try:\n    1 / 0\nexcept ZeroDivisionError:\n    print("caught")', expected: ['caught'], explanation: ['The `try` block raises `ZeroDivisionError`, which is caught by the matching `except` clause.', 'Le bloc `try` lève `ZeroDivisionError`, qui est attrapé par la clause `except` correspondante.'], misconception: ['exception breaks the program', 'l\'exception interrompt le programme'], hint: ['An `except` block handles the error — the program continues after it.', 'Un bloc `except` gère l\'erreur — le programme continue après.'] },
   ],
+  integer: [
+    { id: 'integer-division', code: 'print(3 / 2)\nprint(3 // 2)', expected: ['1.5\n1'], explanation: ['`/` always returns a float in Python 3; `//` performs floor (integer) division.', '`/` renvoie toujours un flottant en Python 3 ; `//` effectue la division entière.'], misconception: ['division operator behavior', 'comportement des opérateurs de division'], hint: ['`/` is true division; `//` is floor division. Try predicting both.', '`/` est la division exacte ; `//` est la division entière par défaut.'] },
+  ],
+  float: [
+    { id: 'float-precision', code: 'print(0.1 + 0.2 == 0.3)\nprint(round(0.1 + 0.2, 1) == 0.3)', expected: ['False\nTrue'], explanation: ['`0.1 + 0.2` yields `0.30000000000000004`, so direct equality fails; rounding fixes the comparison.', '`0.1 + 0.2` donne `0.30000000000000004` ; l\'égalité directe échoue, l\'arrondi corrige la comparaison.'], misconception: ['floating-point precision is exact', 'la précision des flottants est exacte'], hint: ['Binary floating point cannot represent 0.1 or 0.2 exactly — a tiny rounding error exists.', 'Les flottants binaires ne peuvent pas représenter 0.1 ou 0.2 exactement — une petite erreur d\'arrondi existe.'] },
+  ],
+  method: [
+    { id: 'method-return-none', code: 'items = [3, 1, 2]\nresult = items.sort()\nprint(items, result)', expected: ['[1, 2, 3] None'], explanation: ['.sort() mutates the list in-place and returns None; the variable `result` holds None.', '.sort() modifie la liste sur place et renvoie None ; la variable `result` contient None.'], misconception: ['mutating methods return the collection', 'les méthodes de modification renvoient la collection'], hint: ['`append()`, `sort()`, `reverse()` all modify in place and return None.', '`append()`, `sort()`, `reverse()` modifient sur place et renvoient None.'] },
+  ],
+  slicing: [
+    { id: 'slicing-reverse', code: 'text = "python"\nprint(text[::-1])', expected: ['nohtyp'], explanation: ['A step of `-1` reverses the sequence: start at the end, move backward by one.', 'Un pas de `-1` inverse la séquence : commence à la fin, recule d\'un à chaque pas.'], misconception: ['reverse step direction', 'direction du pas inversé'], hint: ['A negative step means reverse traversal — `[::-1]` is the idiomatic reversal.', 'Un pas négatif signifie parcours inversé — `[::-1]` est l\'inversion idiomatique.'] },
+  ],
+  comprehension: [
+    { id: 'comprehension-order', code: 'nums = [1, 2, 3, 4, 5]\nprint([n * 10 for n in nums if n % 2])', expected: ['[10, 30, 50]'], explanation: ['The `if` filters for truthy odd numbers, then the expression multiplies each by 10.', 'Le `if` filtre les nombres impairs (truthy), puis l\'expression multiplie chaque valeur par 10.'], misconception: ['comprehension expression runs before filter', 'l\'expression s\'exécute avant le filtre'], hint: ['The `if` clause comes after `for` and runs on each iteration before the expression.', 'La clause `if` vient après `for` et s\'exécute à chaque itération avant l\'expression.'] },
+  ],
+  decorator: [
+    { id: 'decorator-wrapping', code: 'def decorator(func):\n    def wrapper():\n        print("before")\n        func()\n        print("after")\n    return wrapper\n\n@decorator\ndef say_hello():\n    print("hello")\n\nsay_hello()', expected: ['before\nhello\nafter'], explanation: ['The decorator replaces `say_hello` with `wrapper`, which calls the original between extra prints.', 'Le décorateur remplace `say_hello` par `wrapper`, qui appelle l\'original entre des prints supplémentaires.'], misconception: ['decorator only adds behavior after', 'le décorateur n\'ajoute qu\'après'], hint: ['Trace what `say_hello` actually points to after `@decorator` runs on the definition.', 'Suivez ce à quoi `say_hello` pointe après que `@decorator` s\'est exécuté sur la définition.'] },
+  ],
+  recursion: [
+    { id: 'recursion-factorial', code: 'def factorial(n):\n    return 1 if n <= 1 else n * factorial(n - 1)\n\nprint(factorial(4))', expected: ['24'], explanation: ['`factorial(4)` unfolds as 4 × (3 × (2 × 1)) = 24, with each call stacking until the base case.', '`factorial(4)` se déplie comme 4 × (3 × (2 × 1)) = 24, chaque appel s\'empilant jusqu\'au cas de base.'], misconception: ['recursion result without understanding the stack', 'résultat de récursion sans comprendre la pile'], hint: ['Expand the expression: `factorial(4)` → `4 * factorial(3)` → `4 * (3 * factorial(2))` → etc.', 'Développez l\'expression : `factorial(4)` → `4 * factorial(3)` → `4 * (3 * factorial(2))` → etc.'] },
+  ],
+  module: [
+    { id: 'module-import', code: 'from math import sqrt\nprint(sqrt(9))\nprint(sqrt)', expected: ['3.0\n<built-in function sqrt>'], explanation: ['`sqrt(9)` returns 3.0, and the bare name `sqrt` reveals a function object, not a number.', '`sqrt(9)` renvoie 3.0, et le nom `sqrt` seul révèle un objet fonction, pas un nombre.'], misconception: ['function objects vs call results', 'objet fonction vs résultat d\'appel'], hint: ['`print(sqrt)` prints the function itself; `print(sqrt(9)` prints the result of calling it.', '`print(sqrt)` affiche la fonction elle-même ; `print(sqrt(9))` affiche le résultat de son appel.'] },
+  ],
+  variable: [
+    { id: 'variable-rebind', code: 'a = 1\nb = a\na = 2\nprint(a, b)', expected: ['2 1'], explanation: ['Integers are immutable. `b = a` copies the reference; reassigning `a` does not affect `b`.', 'Les entiers sont immuables. `b = a` copie la référence ; réaffecter `a` n\'affecte pas `b`.'], misconception: ['variables behave like pointers to shared state', 'les variables sont comme des pointeurs vers un état partagé'], hint: ['`b` holds the value it was assigned at that moment — later changes to `a` don\'t reach it.', '`b` contient la valeur qu\'il avait au moment de l\'affectation — les changements ultérieurs de `a` ne l\'atteignent pas.'] },
+  ],
+  inheritance: [
+    { id: 'inheritance-super', code: 'class A:\n    def __init__(self):\n        self.v = 1\n\nclass B(A):\n    def __init__(self):\n        super().__init__()\n        self.v += 1\n\nb = B()\nprint(b.v)', expected: ['2'], explanation: ['`super().__init__()` calls `A.__init__`, setting `v = 1`. Then `B.__init__` increments it to 2.', '`super().__init__()` appelle `A.__init__`, qui définit `v = 1`. Puis `B.__init__` l\'incrémente à 2.'], misconception: ['overriding __init__ skips parent', 'surcharger __init__ saute le parent'], hint: ['Without `super()`, `v` would never be set. Trace the execution order.', 'Sans `super()`, `v` ne serait jamais défini. Suivez l\'ordre d\'exécution.'] },
+  ],
 };
 
 export const createAdaptiveQuiz = (subject: string, mode: GeneralAiResponseMode, language: AdvancedAiLanguage, variantIndex = 0, priorFocus = ''): GeneralAiQuizState => {
   const fr = language === 'fr';
   const key = pathKey(subject);
-  const subjectLabel = fr ? ({ list: 'listes', dictionary: 'dictionnaires', function: 'fonctions', python: 'Python', string: 'chaînes', tuple: 'tuples', set: 'ensembles', boolean: 'booléens', class: 'classes', generator: 'générateurs', 'exception-handling': 'gestion des exceptions' } as Record<string, string>)[key] || key : key;
+  const subjectLabel = fr ? ({ list: 'listes', dictionary: 'dictionnaires', function: 'fonctions', python: 'Python', string: 'chaînes', tuple: 'tuples', set: 'ensembles', boolean: 'booléens', class: 'classes', generator: 'générateurs', 'exception-handling': 'gestion des exceptions', integer: 'entiers', float: 'flottants', method: 'méthodes', slicing: 'découpage', comprehension: 'compréhensions', decorator: 'décorateurs', recursion: 'récursion', module: 'modules', variable: 'variables', inheritance: 'héritage' } as Record<string, string>)[key] || key : key;
   const subjectBank = QUIZ_BANK[key] || QUIZ_BANK.python;
   const item = subjectBank[Math.abs(variantIndex) % subjectBank.length];
   return {
