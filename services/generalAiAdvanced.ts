@@ -501,6 +501,23 @@ export const answerPythonMisconceptionRequest = (question: string, language: Adv
       correction: `${alias[1]} = ${alias[2]}.copy()`,
     });
   }
+  // Late binding closure loop capture: `funcs = [lambda: i for i in range(5)]` or similar
+  const loopLambda = code.match(/(?:for\s+(\w+)\s+in\s+.+:\s*)?\s*(?:funcs?|closures?|fns?)\s*=\s*\[.*(?:lambda|def\s+\w+).*\1/);
+  if (loopLambda || /\[.*lambda\s*[:\w]*\s*:.*\b(\w+)\b.*\bfor\b.*\b\1\b/.test(code)) {
+    findings.push({
+      title: fr ? 'Fermeture à liaison tardive (boucle)' : 'Late-binding closure (loop capture)',
+      explanation: fr ? 'Les fonctions créées dans la boucle capturent la variable de boucle (pas sa valeur au moment de la définition). Quand vous appelez la fonction, elle utilise la valeur finale de la boucle.' : 'Functions created in a loop capture the loop variable (not its value at definition time). When you call the function, it uses the final loop value.',
+      correction: 'funcs = [lambda x=i: x for i in range(5)]  # capture current value\n# Or use functools.partial',
+    });
+  }
+  // Generator exhaustion: using a generator twice
+  if (/\bg\s*=\s*\(.*\)/.test(code) && /list\s*\(\s*g\s*\).*\n.*list\s*\(\s*g\s*\)/.test(code)) {
+    findings.push({
+      title: fr ? 'Épuisement du générateur' : 'Generator exhaustion',
+      explanation: fr ? 'Un générateur se consomme une seule fois. Après l\'avoir parcouru entièrement, il est vide. Pour le réutiliser, créez-en un nouveau ou convertissez-le en liste.' : 'A generator can be iterated only once. After fully traversing it, it is empty. To reuse it, create a new one or convert it to a list.',
+      correction: 'g = [x*2 for x in range(5)]   # list comprehension — reusable\ng = (x*2 for x in range(5))   # generator — one pass only\nprint(list(g))  # first pass: [0, 2, 4, 6, 8]\nprint(list(g))  # second pass: []',
+    });
+  }
   if (!findings.length) return null;
   return [
     `**${fr ? 'Diagnostic du malentendu Python' : 'Python misconception diagnosis'}**`,
