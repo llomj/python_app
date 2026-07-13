@@ -2477,3 +2477,241 @@ export const answerPythonLoggingPatterns = (question: string, language: Advanced
       : 'Never use `print()` for logs — the `logging` module handles levels, files, timestamps, and rotation. Use `log.exception()` in `except` blocks to capture the full traceback.',
   ].join('\n');
 };
+
+export const answerPythonEnvGuide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:venv|virtual.?env|virtual environment|conda|poetry|pip|pipenv|environnement virtuel|gestionnaire de paquets|package manager|requirements\.txt|install.*package)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Guide de gestion d\'environnement Python' : 'Python environment management guide'}**`,
+    '',
+    `**1. ${fr ? 'Environnement virtuel (`venv`)' : 'Virtual environment (`venv`)**'}`,
+    '```bash',
+    'python -m venv .venv          # create environment',
+    'source .venv/bin/activate     # activate (macOS/Linux)',
+    '.venv\\Scripts\\activate       # activate (Windows)',
+    'deactivate                    # exit environment',
+    '```',
+    fr
+      ? 'Toujours créer un environnement virtuel par projet. Il isole les dépendances pour éviter les conflits.'
+      : 'Always create one virtual environment per project. It isolates dependencies to avoid conflicts.',
+    '',
+    `**2. ${fr ? 'Installer des paquets (`pip`)' : 'Installing packages (`pip`)**'}`,
+    '```bash',
+    'pip install requests          # latest version',
+    'pip install requests==2.31.0  # exact version',
+    'pip install "requests>=2.0"   # minimum version',
+    'pip install -r requirements.txt  # from file',
+    'pip list                      # show installed',
+    'pip freeze > requirements.txt # save current versions',
+    '```',
+    '',
+    `**3. ${fr ? '`requirements.txt` vs `pyproject.toml`' : '`requirements.txt` vs `pyproject.toml`**'}`,
+    fr
+      ? '`requirements.txt` : verrouillage pour déploiement (`pip freeze > requirements.txt`). `pyproject.toml` : métadonnées du projet, dépendances déclaratives. Préférez `pyproject.toml` pour les projets distribuables.'
+      : '`requirements.txt` : deployment lock (`pip freeze > requirements.txt`). `pyproject.toml` : project metadata, declarative deps. Prefer `pyproject.toml` for distributable projects.',
+    '',
+    `**4. ${fr ? '`conda`' : '`conda`**'}`,
+    '```bash',
+    'conda create -n myenv python=3.12  # create env with Python version',
+    'conda activate myenv               # activate',
+    'conda install numpy pandas         # install from conda-forge',
+    'conda env export > environment.yml # export',
+    '```',
+    fr
+      ? 'Conda gère aussi les binaires non-Python (CUDA, BLAS, etc.). Utile pour la data science.'
+      : 'Conda also manages non-Python binaries (CUDA, BLAS, etc.). Useful for data science.',
+    '',
+    `**5. ${fr ? '`poetry` — gestionnaire moderne' : '`poetry` — modern package manager**'}`,
+    '```bash',
+    'poetry new my-project          # create new project',
+    'poetry add requests            # add dependency',
+    'poetry add --dev pytest        # dev dependency',
+    'poetry install                 # install all deps',
+    'poetry shell                   # activate env',
+    '```',
+    '',
+    `**6. ${fr ? 'Bonnes pratiques' : 'Best practices'}**`,
+    (fr ? '- .gitignore : incluez .venv/, __pycache__/, *.pyc.' : '- .gitignore: include .venv/, __pycache__/, *.pyc.'),
+    (fr ? '- Ne commitez jamais .venv/.' : '- Never commit .venv/.'),
+    (fr ? '- Utilisez des versions exactes dans requirements.txt pour la reproductibilite.' : '- Use exact versions in requirements.txt for reproducibility.'),
+    (fr ? '- Un seul environnement par projet, pas un global pour tout.' : '- One environment per project, not one global environment for everything.'),
+  ].join('\n');
+};
+
+export const answerPythonToolingGuide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:pdb|debug(?:ger|ging)|breakpoint|linter|lint|ruff|flake8|mypy|type.?check|black|formatter|code.?style|vs.?code|ide|extension|outil|formateur)\b/i.test(question) &&
+    !/\b(?:comment.*debug|how.*debug|what.*debug|setting? up|configure.*python|python.*configure|install.*python.*tool)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Guide des outils Python' : 'Python tooling guide'}**`,
+    '',
+    `**1. ${fr ? 'Débogage avec `pdb`' : 'Debugging with `pdb`**'}`,
+    '```python',
+    'import pdb; pdb.set_trace()   # Python < 3.7',
+    'breakpoint()                   # Python 3.7+ — same thing',
+    '',
+    '# Once in debugger:',
+    '# n      — next line',
+    '# s      — step into function',
+    '# c      — continue to next breakpoint',
+    '# p x    — print variable x',
+    '# l      — list source around current line',
+    '# q      — quit',
+    '```',
+    '',
+    `**2. ${fr ? 'Post-mortem debugging' : 'Post-mortem debugging**'}`,
+    '```bash',
+    'python -m pdb script.py  # run under debugger, stops on exception',
+    '',
+    '# Or from code:',
+    'import traceback; traceback.print_exc()  # print full traceback',
+    '```',
+    '',
+    `**3. ${fr ? 'Linters et formateurs' : 'Linters and formatters'}**`,
+    (fr ? '| Outil | Role | Usage |' : '| Tool | Role | Usage |'),
+    (fr ? '|-------|------|-------|' : '|------|------|-------|'),
+    '| ruff | Linter + formatter (rapide, remplace flake8 + isort) | `ruff check .` / `ruff format .` |',
+    '| black | Formateur auto (opinionated, zéro config) | `black .` |',
+    '| mypy | Vérificateur de types statique | `mypy src/` |',
+    '| isort | Trie les imports | `isort .` |',
+    '| flake8 | Linter classique (pyflakes + pycodestyle) | `flake8 src/` |',
+    '',
+    `**4. ${fr ? 'Configuration VS Code' : 'VS Code setup'}**`,
+    (fr ? 'Extensions recommandees : Python (Microsoft), Pylance, Ruff. Creez .vscode/settings.json :' : 'Recommended extensions: Python (Microsoft), Pylance, Ruff. Create .vscode/settings.json:'),
+    '```json',
+    '{',
+    '    "python.defaultInterpreterPath": ".venv/bin/python",',
+    '    "python.analysis.typeCheckingMode": "basic",',
+    '    "[python]": { "editor.formatOnSave": true, "editor.defaultFormatter": "charliermarsh.ruff" },',
+    '    "python.terminal.activateEnvironment": true',
+    '}',
+    '```',
+    '',
+    (fr ? '**5. Configuration pyproject.toml**' : '**5. pyproject.toml tool config**'),
+    '```toml',
+    '[tool.ruff]',
+    'line-length = 100',
+    'target-version = "py312"',
+    '',
+    '[tool.ruff.lint]',
+    'select = ["E", "F", "I", "N", "W", "UP"]',
+    '',
+    '[tool.mypy]',
+    'strict = true',
+    'python_version = "3.12"',
+    '```',
+  ].join('\n');
+};
+
+export const TOPIC_RELATIONSHIPS: Record<string, Array<{ topic: string; questionEn: string; questionFr: string }>> = {
+  'list': [
+    { topic: 'tuple', questionEn: 'When should I use a tuple instead of a list?', questionFr: 'Quand utiliser un tuple plutôt qu\'une liste ?' },
+    { topic: 'list-comprehension', questionEn: 'How do list comprehensions work?', questionFr: 'Comment fonctionnent les compréhensions de liste ?' },
+    { topic: 'dictionary', questionEn: 'What about dictionaries?', questionFr: 'Et les dictionnaires ?' },
+  ],
+  'tuple': [
+    { topic: 'list', questionEn: 'When should I use a list instead of a tuple?', questionFr: 'Quand utiliser une liste plutôt qu\'un tuple ?' },
+    { topic: 'dictionary', questionEn: 'Can I use a tuple as a dict key?', questionFr: 'Puis-je utiliser un tuple comme clé de dict ?' },
+    { topic: 'unpacking', questionEn: 'How does tuple unpacking work?', questionFr: 'Comment fonctionne le déballage de tuple ?' },
+  ],
+  'dictionary': [
+    { topic: 'set', questionEn: 'What\'s the difference between dict and set?', questionFr: 'Quelle est la différence entre dict et set ?' },
+    { topic: 'defaultdict', questionEn: 'How does defaultdict help?', questionFr: 'Comment defaultdict peut-il aider ?' },
+    { topic: 'json', questionEn: 'How do I convert dict to JSON?', questionFr: 'Comment convertir un dict en JSON ?' },
+  ],
+  'set': [
+    { topic: 'list', questionEn: 'When to use set vs list?', questionFr: 'Quand utiliser set vs list ?' },
+    { topic: 'dictionary', questionEn: 'How is a set different from a dict?', questionFr: 'En quoi set diffère de dict ?' },
+    { topic: 'frozenset', questionEn: 'What is a frozenset?', questionFr: 'Qu\'est-ce qu\'un frozenset ?' },
+  ],
+  'string': [
+    { topic: 'formatting', questionEn: 'How do I choose an f-string vs .format()?', questionFr: 'Comment choisir entre f-string et .format() ?' },
+    { topic: 'regex', questionEn: 'How do I use regex with strings?', questionFr: 'Comment utiliser les regex avec les chaînes ?' },
+    { topic: 'bytes', questionEn: 'What\'s the difference between str and bytes?', questionFr: 'Quelle est la différence entre str et bytes ?' },
+  ],
+  'function': [
+    { topic: 'lambda', questionEn: 'When should I use a lambda?', questionFr: 'Quand utiliser une lambda ?' },
+    { topic: 'decorator', questionEn: 'How do decorators work?', questionFr: 'Comment fonctionnent les décorateurs ?' },
+    { topic: 'args-kwargs', questionEn: 'How do *args and **kwargs work?', questionFr: 'Comment fonctionnent *args et **kwargs ?' },
+  ],
+  'class': [
+    { topic: 'inheritance', questionEn: 'How does inheritance work?', questionFr: 'Comment fonctionne l\'héritage ?' },
+    { topic: 'dataclass', questionEn: 'What are dataclasses?', questionFr: 'Que sont les dataclasses ?' },
+    { topic: 'type-hints', questionEn: 'How do I type-hint a class?', questionFr: 'Comment typer une classe ?' },
+  ],
+  'exception': [
+    { topic: 'exception-chaining', questionEn: 'How does exception chaining work?', questionFr: 'Comment fonctionne le chaînage d\'exceptions ?' },
+    { topic: 'try-except-finally', questionEn: 'How do try/except/finally work?', questionFr: 'Comment fonctionne try/except/finally ?' },
+    { topic: 'logging', questionEn: 'How do I log exceptions properly?', questionFr: 'Comment journaliser les exceptions correctement ?' },
+  ],
+  'import': [
+    { topic: 'project-structure', questionEn: 'How should I structure my project?', questionFr: 'Comment structurer mon projet ?' },
+    { topic: 'module', questionEn: 'What is a Python module?', questionFr: 'Qu\'est-ce qu\'un module Python ?' },
+    { topic: 'package', questionEn: 'How do I create a package?', questionFr: 'Comment créer un paquet ?' },
+  ],
+  'file-io': [
+    { topic: 'pathlib', questionEn: 'How does pathlib work?', questionFr: 'Comment fonctionne pathlib ?' },
+    { topic: 'encoding', questionEn: 'How do I handle file encodings?', questionFr: 'Comment gérer les encodages de fichiers ?' },
+    { topic: 'tempfile', questionEn: 'How do I use temporary files?', questionFr: 'Comment utiliser les fichiers temporaires ?' },
+  ],
+  'for-loop': [
+    { topic: 'while-loop', questionEn: 'When to use for vs while?', questionFr: 'Quand utiliser for vs while ?' },
+    { topic: 'enumerate', questionEn: 'How does enumerate work?', questionFr: 'Comment fonctionne enumerate ?' },
+    { topic: 'list-comprehension', questionEn: 'Can I replace this for-loop with a comprehension?', questionFr: 'Puis-je remplacer cette boucle par une compréhension ?' },
+  ],
+  'decorator': [
+    { topic: 'closure', questionEn: 'How do closures relate to decorators?', questionFr: 'Quel est le lien entre fermetures et décorateurs ?' },
+    { topic: 'classmethod', questionEn: 'What\'s the difference between @classmethod and @staticmethod?', questionFr: 'Différence entre @classmethod et @staticmethod ?' },
+    { topic: 'wraps', questionEn: 'Why use @functools.wraps?', questionFr: 'Pourquoi utiliser @functools.wraps ?' },
+  ],
+  'async-await': [
+    { topic: 'coroutine', questionEn: 'How do coroutines work?', questionFr: 'Comment fonctionnent les coroutines ?' },
+    { topic: 'asyncio-gather', questionEn: 'How does asyncio.gather() compare to TaskGroup?', questionFr: 'Comparaison asyncio.gather() vs TaskGroup ?' },
+    { topic: 'concurrency', questionEn: 'When to use asyncio vs threading vs multiprocessing?', questionFr: 'Quand utiliser asyncio vs threading vs multiprocessing ?' },
+  ],
+  'type-hints': [
+    { topic: 'mypy', questionEn: 'How do I set up mypy?', questionFr: 'Comment configurer mypy ?' },
+    { topic: 'protocol', questionEn: 'What is typing.Protocol?', questionFr: 'Qu\'est-ce que typing.Protocol ?' },
+    { topic: 'typeddict', questionEn: 'How does TypedDict work?', questionFr: 'Comment fonctionne TypedDict ?' },
+  ],
+  'generator': [
+    { topic: 'iterator', questionEn: 'What\'s the difference between a generator and an iterator?', questionFr: 'Différence entre générateur et itérateur ?' },
+    { topic: 'yield', questionEn: 'How does yield work?', questionFr: 'Comment fonctionne yield ?' },
+    { topic: 'comprehension', questionEn: 'Generator expression vs list comprehension?', questionFr: 'Expression génératrice vs compréhension de liste ?' },
+  ],
+  'comprehension': [
+    { topic: 'generator', questionEn: 'Generator expression vs list comprehension?', questionFr: 'Expression génératrice vs compréhension de liste ?' },
+    { topic: 'map-filter-reduce', questionEn: 'Should I use map/filter or comprehension?', questionFr: 'Faut-il utiliser map/filter ou les compréhensions ?' },
+    { topic: 'for-loop', questionEn: 'Can I rewrite this loop as a comprehension?', questionFr: 'Puis-je réécrire cette boucle en compréhension ?' },
+  ],
+  'venv': [
+    { topic: 'pip', questionEn: 'How do I install packages with pip?', questionFr: 'Comment installer des paquets avec pip ?' },
+    { topic: 'poetry', questionEn: 'What is poetry and should I use it?', questionFr: 'Qu\'est-ce que poetry et devrais-je l\'utiliser ?' },
+    { topic: 'pyproject-toml', questionEn: 'How does pyproject.toml work?', questionFr: 'Comment fonctionne pyproject.toml ?' },
+  ],
+  'pip': [
+    { topic: 'venv', questionEn: 'How do virtual environments work?', questionFr: 'Comment fonctionnent les environnements virtuels ?' },
+    { topic: 'requirements-txt', questionEn: 'What is requirements.txt?', questionFr: 'Qu\'est-ce que requirements.txt ?' },
+    { topic: 'pyproject-toml', questionEn: 'pyproject.toml vs requirements.txt?', questionFr: 'pyproject.toml vs requirements.txt ?' },
+  ],
+  'pdb': [
+    { topic: 'debugging', questionEn: 'What debugging tools exist?', questionFr: 'Quels outils de débogage existent ?' },
+    { topic: 'breakpoint', questionEn: 'How does breakpoint() work?', questionFr: 'Comment fonctionne breakpoint() ?' },
+    { topic: 'logging', questionEn: 'When to use logging vs print?', questionFr: 'Quand utiliser logging vs print ?' },
+  ],
+  'logging': [
+    { topic: 'debugging', questionEn: 'How do I debug Python code?', questionFr: 'Comment déboguer du code Python ?' },
+    { topic: 'exception-handling', questionEn: 'How to log exceptions properly?', questionFr: 'Comment journaliser les exceptions ?' },
+    { topic: 'print', questionEn: 'Why not use print for logging?', questionFr: 'Pourquoi ne pas utiliser print pour journaliser ?' },
+  ],
+};
+
+export const buildGeneralAiSmartFollowUp = (topic: string, language: AdvancedAiLanguage): string | null => {
+  const relations = TOPIC_RELATIONSHIPS[topic];
+  if (!relations || relations.length === 0) return null;
+  const fr = language === 'fr';
+  return [
+    fr ? '**Suggestions pour aller plus loin**' : '**Suggested next topics**',
+    ...relations.slice(0, 3).map((r, i) => `${i + 1}. \`${r.questionEn}\``),
+  ].join('\n');
+};

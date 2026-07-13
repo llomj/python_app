@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionContractRequest, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPep8Guide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonStringMethods, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionContractRequest, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPep8Guide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -4064,6 +4064,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     const generatedExamples = (mode === 'examples' || mode === 'deep') && !/```python\b/.test(answer) && supportsGeneratedExamples
         ? buildGeneralAiExampleSet(topic, language)
         : '';
+    const topicRelations = buildGeneralAiSmartFollowUp(topic, language);
     return composeGeneralAiAnswer({
         answer,
         topic,
@@ -4071,7 +4072,10 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
         language,
         examples: generatedExamples,
         relatedConcepts: language === 'fr' ? [] : getConceptMapItems(topic),
-        followUps: buildGeneralAiSuggestedFollowUpText(question, language),
+        followUps: [
+            buildGeneralAiSuggestedFollowUpText(question, language),
+            topicRelations,
+        ].filter(Boolean).join('\n\n'),
     });
 };
 
@@ -17876,6 +17880,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonDictMethods(effectiveQuestion, appLang)
                 || answerPythonFileIoPatterns(effectiveQuestion, appLang)
                 || answerPythonLoggingPatterns(effectiveQuestion, appLang)
+                || answerPythonEnvGuide(effectiveQuestion, appLang)
+                || answerPythonToolingGuide(effectiveQuestion, appLang)
                 || answerPythonTestCaseRequest(effectiveQuestion, appLang)
                 || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
             if (!refAnswer && shouldCreateQuiz) {
@@ -18024,6 +18030,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'logging':
                     refAnswer = answerPythonLoggingPatterns(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'env_guide':
+                    refAnswer = answerPythonEnvGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'tooling':
+                    refAnswer = answerPythonToolingGuide(effectiveQuestion, appLang)
                         || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'project_structure':

@@ -52,6 +52,8 @@ export type GeneralAiIntent =
   | 'dict_methods'
   | 'file_io_patterns'
   | 'logging'
+  | 'env_guide'
+  | 'tooling'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -182,6 +184,12 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:logging|logger|log.*config|handler|formatter|basicConfig)\b/i.test(lower)) {
     return { intent: 'logging', confidence: 0.94, reason: 'Logging patterns request detected' };
+  }
+  if (/\b(?:venv|virtual.?env|virtual environment|conda|poetry|pipenv|environnement virtuel|gestionnaire de paquets|package manager|requirements\.txt|install.*package)\b/i.test(lower)) {
+    return { intent: 'env_guide', confidence: 0.95, reason: 'Environment management request detected' };
+  }
+  if (/\b(?:pdb|debug(?:ger|ging)|breakpoint|linter|lint|ruff|flake8|mypy|type.?check|black|formatter|code.?style|vs.?code|ide|outil de débogage|formateur)\b/i.test(lower)) {
+    return { intent: 'tooling', confidence: 0.94, reason: 'Tooling/debugging request detected' };
   }
   if (/\b(?:project structure|folder structure|how to structure|how to organize|project layout|src layout|structure du projet)\b/i.test(lower)) {
     return { intent: 'project_structure', confidence: 0.96, reason: 'Project structure request detected' };
