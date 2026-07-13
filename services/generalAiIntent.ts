@@ -47,6 +47,11 @@ export type GeneralAiIntent =
   | 'project_structure'
   | 'testing'
   | 'cli'
+  | 'string_methods'
+  | 'list_methods'
+  | 'dict_methods'
+  | 'file_io_patterns'
+  | 'logging'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -162,6 +167,21 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:type (?:hint|annotation)|typing\b|mypy|type.?safe)\b/i.test(lower)) {
     return { intent: 'type_hints', confidence: 0.96, reason: 'Type hints request detected' };
+  }
+  if (/\b(?:string.*method|str\.\w+\(|\.upper|\.lower|\.strip|\.split|\.join|\.replace|\.find)\b/i.test(lower) && !/\b(?:format|Template)\b/i.test(lower)) {
+    return { intent: 'string_methods', confidence: 0.93, reason: 'String methods reference request detected' };
+  }
+  if (/\b(?:list.*method|\.append|\.extend|\.insert|\.remove|\.pop|\.sort|\.reverse)\b/i.test(lower)) {
+    return { intent: 'list_methods', confidence: 0.93, reason: 'List methods reference request detected' };
+  }
+  if (/\b(?:dict.*method|\.get|\.keys|\.values|\.items|\.setdefault|\.popitem)\b/i.test(lower)) {
+    return { intent: 'dict_methods', confidence: 0.93, reason: 'Dict methods reference request detected' };
+  }
+  if (/\b(?:file.?io|file.?read|file.?write|open.*file|encoding|binary.*file|text.*file|StringIO|BytesIO|tempfile)\b/i.test(lower)) {
+    return { intent: 'file_io_patterns', confidence: 0.93, reason: 'File I/O patterns request detected' };
+  }
+  if (/\b(?:logging|logger|log.*config|handler|formatter|basicConfig)\b/i.test(lower)) {
+    return { intent: 'logging', confidence: 0.94, reason: 'Logging patterns request detected' };
   }
   if (/\b(?:project structure|folder structure|how to structure|how to organize|project layout|src layout|structure du projet)\b/i.test(lower)) {
     return { intent: 'project_structure', confidence: 0.96, reason: 'Project structure request detected' };

@@ -2144,3 +2144,336 @@ export const answerPythonEdgeCases = (question: string, language: AdvancedAiLang
       : 'When behavior seems strange, check: (1) identity vs equality, (2) mutability, (3) variable scope, (4) lazy evaluation (generators, `or`/`and`).',
   ].join('\n\n');
 };
+
+const STRING_METHODS = [
+  { category: 'Transform', methods: [
+    { name: '.upper()', desc: '→ uppercase', example: '"hello".upper() → "HELLO"' },
+    { name: '.lower()', desc: '→ lowercase', example: '"HELLO".lower() → "hello"' },
+    { name: '.capitalize()', desc: 'First char uppercase, rest lower', example: '"hello".capitalize() → "Hello"' },
+    { name: '.title()', desc: 'First char of each word uppercase', example: '"hello world".title() → "Hello World"' },
+    { name: '.swapcase()', desc: 'Swap upper↔lower', example: '"Hello".swapcase() → "hELLO"' },
+  ]},
+  { category: 'Strip/Pad', methods: [
+    { name: '.strip([chars])', desc: 'Remove leading/trailing chars (default: whitespace)', example: '"  hi  ".strip() → "hi"' },
+    { name: '.lstrip()', desc: 'Remove leading chars', example: '"  hi".lstrip() → "hi"' },
+    { name: '.rstrip()', desc: 'Remove trailing chars', example: '"hi  ".rstrip() → "hi"' },
+    { name: '.zfill(width)', desc: 'Pad with zeros on left', example: '"42".zfill(5) → "00042"' },
+    { name: '.center(width)', desc: 'Center in field of given width', example: '"hi".center(5) → "  hi  "' },
+  ]},
+  { category: 'Split/Join', methods: [
+    { name: '.split([sep])', desc: '→ list of substrings', example: '"a,b,c".split(",") → ["a","b","c"]' },
+    { name: '.rsplit([sep])', desc: 'Split from right', example: '"a,b,c".rsplit(",", 1) → ["a,b","c"]' },
+    { name: '.splitlines()', desc: 'Split on line breaks', example: '"a\\nb".splitlines() → ["a","b"]' },
+    { name: '.join(iterable)', desc: 'Join strings with separator', example: '",".join(["a","b"]) → "a,b"' },
+    { name: '.partition(sep)', desc: '→ (head, sep, tail)', example: '"a-b".partition("-") → ("a","-","b")' },
+  ]},
+  { category: 'Search/Replace', methods: [
+    { name: '.find(sub)', desc: '→ index of first occurrence (-1 if not found)', example: '"hello".find("l") → 2' },
+    { name: '.index(sub)', desc: 'Like find but raises ValueError', example: '"hello".index("l") → 2' },
+    { name: '.count(sub)', desc: 'Count non-overlapping occurrences', example: '"ababa".count("aba") → 1' },
+    { name: '.replace(old, new)', desc: 'Replace all occurrences', example: '"a b a".replace("a","x") → "x b x"' },
+    { name: '.startswith(prefix)', desc: 'Check prefix', example: '"hello".startswith("he") → True' },
+    { name: '.endswith(suffix)', desc: 'Check suffix', example: '"hello".endswith("lo") → True' },
+  ]},
+  { category: 'Test/Check', methods: [
+    { name: '.isalpha()', desc: 'All letters?', example: '"abc".isalpha() → True' },
+    { name: '.isdigit()', desc: 'All digits?', example: '"123".isdigit() → True' },
+    { name: '.isalnum()', desc: 'Letters + digits only?', example: '"ab123".isalnum() → True' },
+    { name: '.isspace()', desc: 'All whitespace?', example: '"   ".isspace() → True' },
+    { name: '.isupper()', desc: 'All uppercase?', example: '"HI".isupper() → True' },
+    { name: '.islower()', desc: 'All lowercase?', example: '"hi".islower() → True' },
+  ]},
+  { category: 'Formatting', methods: [
+    { name: '.format(*args)', desc: 'Format with placeholders', example: '"Hello {}!".format("world")' },
+    { name: '.ljust(width)', desc: 'Left-justify in field', example: '"hi".ljust(5) → "hi   "' },
+    { name: '.rjust(width)', desc: 'Right-justify in field', example: '"hi".rjust(5) → "   hi"' },
+    { name: '.expandtabs(size)', desc: 'Replace tabs with spaces', example: '"\\t".expandtabs(4) → "    "' },
+    { name: '.removeprefix(prefix)', desc: 'Remove prefix if present (3.9+)', example: '"hello".removeprefix("he") → "llo"' },
+    { name: '.removesuffix(suffix)', desc: 'Remove suffix if present (3.9+)', example: '"hello".removesuffix("lo") → "hel"' },
+  ]},
+];
+
+export const answerPythonStringMethods = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:string.*method|str\.|method.*string|m[ée]thode.*cha[îi]ne|cha[îi]ne.*m[ée]thode|\.upper|\.lower|\.strip|\.split|\.join|\.replace|\.find|\.format)\b/i.test(question) &&
+    !/^(?:list|show|tell|what|which).*(?:string.*method|method.*string)/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Référence des méthodes str' : 'str methods reference'}**`,
+    ...STRING_METHODS.map(cat => [
+      `**${cat.category}**`,
+      '| Method | Description | Example |',
+      '|--------|-------------|---------|',
+      ...cat.methods.map(m => `| \`${m.name}\` | ${m.desc} | \`${m.example}\` |`),
+    ].join('\n')),
+    `**${fr ? 'Exemple complet' : 'Full example'}**`,
+    '```python',
+    'text = "  Hello, World!  "',
+    'print(text.strip())          # "Hello, World!"',
+    'print(text.lower())          # "  hello, world!  "',
+    'print(text.split(","))       # ["  Hello", " World!  "]',
+    'print(" ".join(["a","b"]))   # "a b"',
+    'print("hello".replace("l", "x"))  # "hexxo"',
+    '```',
+  ].join('\n\n');
+};
+
+const LIST_METHODS = [
+  { category: 'Add/Extend', methods: [
+    { name: '.append(x)', desc: 'Add x to end. O(1)', example: '[1,2].append(3) → [1,2,3]' },
+    { name: '.extend(iter)', desc: 'Extend with iterable elements. O(k)', example: '[1,2].extend([3,4]) → [1,2,3,4]' },
+    { name: '.insert(i, x)', desc: 'Insert x at index i. O(n)', example: '[1,3].insert(1,2) → [1,2,3]' },
+  ]},
+  { category: 'Remove', methods: [
+    { name: '.remove(x)', desc: 'Remove first occurrence of x. O(n)', example: '[1,2,1].remove(1) → [2,1]' },
+    { name: '.pop([i])', desc: 'Remove & return element at i (default: last). O(1) from end, O(n) from start', example: '[1,2,3].pop(0) → 1, list is [2,3]' },
+    { name: '.clear()', desc: 'Remove all elements. O(n)', example: '[1,2].clear() → []' },
+  ]},
+  { category: 'Query', methods: [
+    { name: '.index(x)', desc: 'Index of first occurrence (raises ValueError)', example: '[10,20,30].index(20) → 1' },
+    { name: '.count(x)', desc: 'Count occurrences of x', example: '[1,2,1,1].count(1) → 3' },
+  ]},
+  { category: 'Order', methods: [
+    { name: '.sort(key, reverse)', desc: 'Sort in-place. O(n log n). Returns None', example: '[3,1,2].sort() → [1,2,3]' },
+    { name: '.reverse()', desc: 'Reverse in-place. O(n). Returns None', example: '[1,2,3].reverse() → [3,2,1]' },
+  ]},
+  { category: 'Copy', methods: [
+    { name: '.copy()', desc: 'Shallow copy of list. O(n)', example: 'orig.copy() → new list with same refs' },
+  ]},
+];
+
+export const answerPythonListMethods = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:list.*method|\.append|\.extend|\.insert|\.remove|\.pop|\.sort|\.reverse|\.index|\.count|\.copy|m[ée]thode.*liste)\b/i.test(question) &&
+    !/^(?:how|what|list|show).*list.*method/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Référence des méthodes list' : 'list methods reference'}**`,
+    '',
+    ...LIST_METHODS.map(cat => [
+      `**${cat.category}**`,
+      '| Method | Description | Example |',
+      '|--------|-------------|---------|',
+      ...cat.methods.map(m => `| \`${m.name}\` | ${m.desc} | \`${m.example}\` |`),
+    ].join('\n')),
+    '',
+    `**${fr ? 'Différence clé' : 'Key difference'}**`,
+    fr
+      ? '`.append(x)` ajoute `x` comme UN élément (même si `x` est une liste). `.extend(iter)` ajoute chaque élément de l\'itérable.'
+      : '`.append(x)` adds `x` as ONE element (even if `x` is a list). `.extend(iter)` adds each element of the iterable.',
+    '```python',
+    'items = [1, 2]',
+    'items.append([3, 4])    # [1, 2, [3, 4]]',
+    'items = [1, 2]',
+    'items.extend([3, 4])    # [1, 2, 3, 4]',
+    '```',
+  ].join('\n');
+};
+
+const DICT_METHODS = [
+  { category: 'Access', methods: [
+    { name: 'd[key]', desc: 'Get value for key (raises KeyError if missing)', example: 'd["a"] → 1 (if key exists)' },
+    { name: '.get(key, default)', desc: 'Get value or default (no error)', example: 'd.get("x", 0) → 0' },
+    { name: '.setdefault(key, default)', desc: 'Get value or insert default and return it', example: 'd.setdefault("k", []).append(1)' },
+    { name: 'd[key] = val', desc: 'Set value for key', example: 'd["b"] = 2' },
+  ]},
+  { category: 'Remove', methods: [
+    { name: '.pop(key, default)', desc: 'Remove key & return value (raises KeyError or returns default)', example: 'd.pop("a", None) → 1' },
+    { name: '.popitem()', desc: 'Remove & return last inserted (key, value). O(1)', example: 'd.popitem() → ("b", 2)' },
+    { name: '.clear()', desc: 'Remove all items', example: 'd.clear() → {}' },
+    { name: 'del d[key]', desc: 'Delete specific key (raises KeyError)', example: 'del d["a"]' },
+  ]},
+  { category: 'Iteration', methods: [
+    { name: '.keys()', desc: 'View of keys', example: 'list(d.keys()) → ["a", "b"]' },
+    { name: '.values()', desc: 'View of values', example: 'list(d.values()) → [1, 2]' },
+    { name: '.items()', desc: 'View of (key, value) pairs', example: 'for k, v in d.items():' },
+  ]},
+  { category: 'Merge/Update', methods: [
+    { name: '.update(other)', desc: 'Merge dict into this one (overwrites)', example: 'd.update({"c": 3})' },
+    { name: 'd1 | d2', desc: 'New merged dict (3.9+)', example: 'merged = a | b' },
+    { name: 'd1 |= d2', desc: 'In-place merge (3.9+)', example: 'a |= b' },
+  ]},
+  { category: 'Query', methods: [
+    { name: 'key in d', desc: 'Check if key exists (preferred)', example: '"a" in d → True/False' },
+    { name: 'len(d)', desc: 'Number of key/value pairs', example: 'len({"a":1}) → 1' },
+    { name: '.copy()', desc: 'Shallow copy', example: 'd.copy() → new dict' },
+    { name: '@dataclass', desc: 'Typed dict alternative', example: 'from dataclasses import dataclass' },
+  ]},
+];
+
+export const answerPythonDictMethods = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:dict.*method|dictionar|\.get|\.keys|\.values|\.items|\.setdefault|\.update|\.pop|\.popitem|m[ée]thode.*dict|m[ée]thode.*dictionnaire)\b/i.test(question) &&
+    !/^(?:how|what|list|show).*dict.*method/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Référence des méthodes dict' : 'dict methods reference'}**`,
+    '',
+    ...DICT_METHODS.map(cat => [
+      `**${cat.category}**`,
+      '| Method | Description | Example |',
+      '|--------|-------------|---------|',
+      ...cat.methods.map(m => `| \`${m.name}\` | ${m.desc} | \`${m.example}\` |`),
+    ].join('\n')),
+    '',
+    `**${fr ? '`.get()` vs `[key]` vs `.setdefault()`' : '`.get()` vs `[key]` vs `.setdefault()`'}**`,
+    '```python',
+    'd = {"a": 1}',
+    '',
+    'val = d["b"]       # KeyError — crashes if missing',
+    'val = d.get("b", 0)  # 0 — safe, no exception',
+    'val = d.setdefault("b", 0)  # 0 AND sets d["b"] = 0',
+    '```',
+  ].join('\n');
+};
+
+export const answerPythonFileIoPatterns = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:file.?io|file.?read|file.?write|open.*file|with.*open|encoding|binary.*file|text.*file|\\.txt|pathlib|StringIO|BytesIO|tempfile|os\.path|.*fichier|encodage)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Patrons d\'entrée/sortie de fichiers' : 'File I/O patterns'}**`,
+    '',
+    `**1. ${fr ? 'Lecture/écriture texte' : 'Text read/write'}**`,
+    '```python',
+    'with open("file.txt", encoding="utf-8") as f:',
+    '    content = f.read()          # entire file → str',
+    '    lines = f.readlines()       # → list[str]',
+    '    for line in f:              # lazy iteration',
+    '        process(line)',
+    '',
+    'with open("out.txt", "w", encoding="utf-8") as f:',
+    '    f.write("hello\\n")',
+    '    print("world", file=f)',
+    '```',
+    '',
+    `**2. ${fr ? 'Fichiers binaires' : 'Binary files'}**`,
+    '```python',
+    'with open("data.bin", "rb") as f:',
+    '    raw = f.read(1024)  # first 1024 bytes',
+    '',
+    'with open("out.bin", "wb") as f:',
+    '    f.write(b"\\x00\\x01\\x02")',
+    '```',
+    '',
+    `**3. ${fr ? '`pathlib` (moderne, recommandé)' : '`pathlib` (modern, recommended)'}**`,
+    '```python',
+    'from pathlib import Path',
+    '',
+    'p = Path("data/file.txt")',
+    'p.parent.mkdir(parents=True, exist_ok=True)',
+    'p.write_text("hello", encoding="utf-8")',
+    'content = p.read_text(encoding="utf-8")',
+    'p.write_bytes(b"binary")',
+    'raw = p.read_bytes()',
+    '',
+    '# Iterate directory',
+    'for py_file in Path("src").rglob("*.py"):',
+    '    print(py_file.name)',
+    '```',
+    '',
+    `**4. ${fr ? 'Flux en mémoire (StringIO / BytesIO)' : 'In-memory streams (StringIO / BytesIO)'}**`,
+    '```python',
+    'from io import StringIO, BytesIO',
+    '',
+    'buf = StringIO()',
+    'print("hello", file=buf)',
+    'print("world", file=buf)',
+    'result = buf.getvalue()  # "hello\\nworld\\n"',
+    '',
+    'buf = BytesIO()',
+    'buf.write(b"\\x00\\x01")',
+    'buf.seek(0)',
+    'data = buf.read()',
+    '```',
+    '',
+    `**5. ${fr ? 'Fichiers temporaires' : 'Temporary files'}**`,
+    '```python',
+    'from tempfile import NamedTemporaryFile, TemporaryDirectory',
+    '',
+    'with NamedTemporaryFile(mode="w", suffix=".txt", delete=True) as f:',
+    '    f.write("temporary data")',
+    '    path = f.name  # automatically cleaned up',
+    '',
+    'with TemporaryDirectory() as tmpdir:',
+    '    tmp = Path(tmpdir) / "work.txt"',
+    '    tmp.write_text("data")',
+    '```',
+  ].join('\n');
+};
+
+export const answerPythonLoggingPatterns = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:log|logging|logger|handler|formatter|basicConfig|loguru|debug.*log|info.*log|error.*log|journalisation|log.*fichier)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Patrons de logging Python' : 'Python logging patterns'}**`,
+    '',
+    `**1. ${fr ? 'Configuration rapide' : 'Quick setup'}**`,
+    '```python',
+    'import logging',
+    '',
+    'logging.basicConfig(',
+    '    level=logging.INFO,',
+    '    format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",',
+    '    datefmt="%H:%M:%S",',
+    ')',
+    'log = logging.getLogger(__name__)',
+    'log.info("App started")  # 14:30:01 | INFO     | __main__ | App started',
+    '```',
+    '',
+    `**2. ${fr ? 'Niveaux de log' : 'Log levels'}**`,
+    '```python',
+    'logging.debug("verbose detail")     # 10 — dev only',
+    'logging.info("normal operation")    # 20 — default if no config',
+    'logging.warning("something odd")    # 30',
+    'logging.error("failed!")            # 40',
+    'logging.critical("crash!")          # 50',
+    '```',
+    '',
+    `**3. ${fr ? 'Logger hiérarchique' : 'Hierarchical logger'}**`,
+    '```python',
+    '# In mypackage/module.py',
+    'log = logging.getLogger(__name__)  # "mypackage.module"',
+    '# Inherits config from "mypackage" or root logger',
+    'log.info("module loaded")',
+    '',
+    '# Control by name:',
+    'logging.getLogger("mypackage").setLevel(logging.DEBUG)',
+    'logging.getLogger("mypackage.module").setLevel(logging.WARNING)',
+    '```',
+    '',
+    `**4. ${fr ? 'Plusieurs handlers' : 'Multiple handlers'}**`,
+    '```python',
+    'log = logging.getLogger("app")',
+    'log.setLevel(logging.DEBUG)',
+    '',
+    '# Console: INFO+',
+    'console = logging.StreamHandler()',
+    'console.setLevel(logging.INFO)',
+    'console.setFormatter(logging.Formatter("%(message)s"))',
+    'log.addHandler(console)',
+    '',
+    '# File: DEBUG+ with timestamps',
+    'file_h = logging.FileHandler("app.log")',
+    'file_h.setLevel(logging.DEBUG)',
+    `file_h.setFormatter(logging.Formatter('`,
+    `    "%(asctime)s | %(levelname)s | %(filename)s:%(lineno)d | %(message)s"`,
+    `))`,
+    'log.addHandler(file_h)',
+    '```',
+    '',
+    `**5. ${fr ? 'Configuration depuis un dict' : 'Config from dict'}**`,
+    '```python',
+    'import logging.config',
+    '',
+    'LOGGING_CONFIG = {',
+    '    "version": 1,',
+    '    "formatters": {"simple": {"format": "%(levelname)s | %(message)s"}},',
+    '    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "simple"}},',
+    '    "root": {"level": "INFO", "handlers": ["console"]},',
+    '}',
+    'logging.config.dictConfig(LOGGING_CONFIG)',
+    '```',
+    '',
+    `**${fr ? 'Conseil' : 'Tip'}**`,
+    fr
+      ? 'N\'utilisez pas `print()` pour les logs — le module `logging` gère les niveaux, les fichiers, les timestamps et la rotation. Utilisez `log.exception()` dans les blocs `except` pour capturer la trace complète.'
+      : 'Never use `print()` for logs — the `logging` module handles levels, files, timestamps, and rotation. Use `log.exception()` in `except` blocks to capture the full traceback.',
+  ].join('\n');
+};
