@@ -13,6 +13,8 @@
         "audit:metamorphic": "node scripts/audit_metamorphic_graders.js",
         "audit:script-fallback": "node scripts/audit_script_fallback.js",
         "audit:solutions": "node scripts/audit_solution_sections.js",
+        "audit:solution-variations": "node scripts/audit_solution_variations.js",
+        "generate:solution-manifest": "node scripts/generate_solution_section_manifest.js",
         "audit:starters": "node scripts/audit_starter_signatures.js",
         "audit:concepts": "node scripts/audit_python_concepts.js",
         "eval:general-ai": "node scripts/evaluate_general_ai.js",

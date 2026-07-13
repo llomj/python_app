@@ -64,6 +64,7 @@ import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
+import { buildSolutionVariations } from './services/solutionVariations';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -14052,6 +14053,10 @@ const localizeSolutionCodeDisplay = (solution: string, lang: 'en' | 'fr') => {
         .replace(/^# Using function approach/gm, '# Approche avec fonction')
         .replace(/^# Using script approach/gm, '# Approche script')
         .replace(/^# Direct approach/gm, '# Approche directe')
+        .replace(/^# Example (\d+): simplest reference/gm, '# Exemple $1 : référence la plus simple')
+        .replace(/^# Example (\d+):/gm, '# Exemple $1 :')
+        .replace(/^# Nested function approach \(intermediate\)/gm, '# Approche avec fonction imbriquée (intermédiaire)')
+        .replace(/^# Callable class approach \(advanced\)/gm, '# Approche avec classe appelable (avancée)')
         .replace(/^# Manual step-by-step approach/gm, '# Approche manuelle étape par étape')
         .replace(/^# Script approach/gm, '# Approche script')
         .replace(/^# Step (\d+): store the answer in a clear name\./gm, '# Étape $1 : stocker la réponse dans un nom clair.')
@@ -15221,10 +15226,10 @@ const App: React.FC = () => {
         const avgIndex = modes.reduce((sum, s) => sum + RANKS.indexOf(getModeRank(s)), 0) / modes.length;
         return RANKS[Math.min(Math.round(avgIndex), RANKS.length - 1)];
     }, [statsByMode]);
-    const displaySolution = useMemo(
-        () => localizeSolutionCodeDisplay(normalizeSolutionHeadings(exercise.solution), appLang),
-        [exercise.solution, appLang],
-    );
+    const displaySolution = useMemo(() => {
+        const variations = buildSolutionVariations(exercise.solution, exercise.id, AUTO_GRADERS[exercise.id]);
+        return localizeSolutionCodeDisplay(normalizeSolutionHeadings(variations), appLang);
+    }, [exercise.id, exercise.solution, appLang]);
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
