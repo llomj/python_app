@@ -1345,3 +1345,196 @@ export const answerPythonDesignRationaleQuestion = (question: string, language: 
       : 'Python values readability, simplicity, and explicitness over implicitness. Many design choices follow from these principles.',
   ].join('\n\n');
 };
+
+const STRING_FORMATTING_COMPARISON: Array<{ method: string; example: string; pros: string; cons: string }> = [
+  { method: 'f-strings', example: 'f"Hello, {name}!"', pros: 'Fastest, most readable, supports inline expressions, preferred since Python 3.6', cons: 'Python 3.6+ only, no lazy evaluation, fixed at definition time' },
+  { method: '.format()', example: '"Hello, {}!".format(name)', pros: 'Supports positional/named args, reusable format strings, works since Python 2.6', cons: 'Verbose for simple cases, slower than f-strings, can raise KeyError' },
+  { method: '%‑formatting', example: '"Hello, %s!" % name', pros: 'Familiar from C/printf, works in Python 2, concise for simple cases', cons: 'Hard to read with many args, limited type specifiers, deprecated in favor of .format()' },
+  { method: 'string.Template', example: 'Template("Hello, $name!").substitute(name=name)', pros: 'Safest for user‑supplied format strings, avoids injection issues', cons: 'No type formatting, no expressions, slowest option' },
+];
+
+export const answerPythonFormattingGuide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:f.?string|%.*format|\.?format|template|string.?format|format.*string|printf|%-formatting|%-style)\b/i.test(question) &&
+    !/(?:how|when|why|which|difference)\b.*\b(format|style|method|print|string|chaîne|pourcent)/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Comparaison des méthodes de formatage de chaînes' : 'String formatting comparison'}**`,
+    '',
+    '| Method | Example | Pros | Cons |',
+    '|--------|---------|------|------|',
+    ...STRING_FORMATTING_COMPARISON.map(r => `| ${r.method} | \`${r.example}\` | ${r.pros} | ${r.cons} |`),
+    '',
+    `**${fr ? 'Recommandation' : 'Recommendation'}**`,
+    fr
+      ? 'Utilisez les **f-strings** pour la plupart des cas (Python 3.6+). Utilisez `.format()` quand vous devez séparer le modèle des données. Utilisez `Template` quand des utilisateurs fournissent le modèle. Évitez `%` dans le nouveau code.'
+      : 'Use **f-strings** for most cases (Python 3.6+). Use `.format()` when you need to separate the template from the data. Use `Template` when users supply the template. Avoid `%` in new code.',
+  ].join('\n\n');
+};
+
+export const answerPythonDataStructureChoice = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:which (?:data )?structure|should i use|list vs|set vs|dict vs|tuple vs|difference between|choisir|quelle structure)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Guide de choix des structures de données' : 'Data structure decision guide'}**`,
+    '',
+    fr
+      ? '**Liste** — `[1, 2, 3]` : ordre conservé, accès par index, éléments mutables. Utilisez pour séquences modifiables, piles, files simples.'
+      : '**List** — `[1, 2, 3]` : ordered, indexable, mutable elements. Use for modifiable sequences, stacks, simple queues.',
+    '',
+    fr
+      ? '**Tuple** — `(1, 2, 3)` : ordre conservé, hachable, immuable. Utilisez pour clés de dictionnaire, coordonnées fixes, retours de fonctions.'
+      : '**Tuple** — `(1, 2, 3)` : ordered, hashable, immutable. Use for dict keys, fixed coordinates, function return values.',
+    '',
+    fr
+      ? '**Set** — `{1, 2, 3}` : non ordonné, élimine les doublons, tests d\'appartenance O(1). Utilisez pour union/intersection/différence, filtrage de doublons.'
+      : '**Set** — `{1, 2, 3}` : unordered, deduplicated, O(1) membership tests. Use for union/intersection/difference, duplicate filtering.',
+    '',
+    fr
+      ? '**Dict** — `{"a": 1}` : associations clé→valeur, hachable, O(1) par clé. Utilisez pour tables de correspondance, compteurs, caches.'
+      : '**Dict** — `{"a": 1}` : key→value mappings, hashable keys, O(1) by key. Use for lookup tables, counters, caches.',
+    '',
+    '```python',
+    '# Decision flowchart:',
+    '# Need key→value mapping? → dict',
+    '# Need fast membership/unique items? → set',
+    '# Need ordered, mutable sequence? → list',
+    '# Need immutable, hashable, ordered? → tuple',
+    '```',
+  ].join('\n\n');
+};
+
+export const answerPythonImportGuide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:import|sys\.path|__init__|circular import|relative import|absolute import|module.*not found|import.*error|package.*structure)\b/i.test(question) &&
+    !/\bhow.*import|\bmodule.*not found|importlib|reload/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  const fr = language === 'fr';
+
+  const guide: string[] = [
+    `**${fr ? 'Guide du système d\'importation Python' : 'Python import system guide'}**`,
+    '',
+    `1. **${fr ? 'Ordre de recherche' : 'Search order'}**`,
+    fr
+      ? '`import foo` cherche dans : (1) `sys.modules` (cache), (2) les modules natifs, (3) `sys.path` (répertoire courant, `PYTHONPATH`, chemins des paquets installés).'
+      : '`import foo` searches: (1) `sys.modules` (cache), (2) built-in modules, (3) `sys.path` (current dir, `PYTHONPATH`, site-packages).',
+  ];
+
+  if (code && /\bimport\b|\bfrom\b.*\bimport\b/.test(code)) {
+    guide.push('', `2. **${fr ? 'Analyse du code' : 'Code analysis'}**`);
+    if (/from\s+\./.test(code)) {
+      guide.push(fr
+        ? '- **Import relatif** détecté (`from .module import ...`). Utilisez dans les paquets, jamais dans les scripts principaux. Le nombre de points indique le niveau parent (`.` = même paquet, `..` = paquet parent).'
+        : '- **Relative import** detected (`from .module import ...`). Use inside packages only, never in top-level scripts. Dots indicate parent depth (`.` = same package, `..` = parent package).');
+    }
+    if (/import\s+\*\b/.test(code)) {
+      guide.push(fr
+        ? '- **Import wildcard** (`from x import *`) détecté. Déconseillé — pollue l\'espace de nommage et rend le code illisible. Importez des noms explicites ou utilisez `__all__`.'
+        : '- **Wildcard import** (`from x import *`) detected. Discouraged — pollutes namespace and makes code hard to read. Import explicit names or use `__all__`.');
+    }
+    if (/\bsys\.path\.append|sys\.path\.insert/.test(code)) {
+      guide.push(fr
+        ? '- **Modification de `sys.path`** détectée. Préférez un paquet correctement structuré avec `__init__.py` et `pip install -e .` en développement.'
+        : '- **`sys.path` modification** detected. Prefer a properly structured package with `__init__.py` and `pip install -e .` during development.');
+    }
+  }
+
+  guide.push(
+    '',
+    `3. **${fr ? 'Paquet vs module' : 'Package vs module'}**`,
+    fr
+      ? '- **Module** : un fichier `.py`. **Paquet** : un dossier avec `__init__.py` (ou implicitement un namespace package). `import pkg.sub` importe `pkg/__init__.py` puis `pkg/sub.py`.'
+      : '- **Module**: a `.py` file. **Package**: a directory with `__init__.py` (or implicitly a namespace package). `import pkg.sub` loads `pkg/__init__.py` then `pkg/sub.py`.',
+    '',
+    `4. **${fr ? 'Importations circulaires' : 'Circular imports'}**`,
+    fr
+      ? '- Se produisent quand A importe B et B importe A. Solution : déplacer l\'import dans la fonction, restructurer en module partagé C, ou utiliser l\'import tardif (`import` à l\'intérieur de la fonction).'
+      : '- Happen when A imports B and B imports A. Fix: move import inside a function, restructure into a shared module C, or use lazy imports (`import` inside the function).',
+    '',
+    `5. **${fr ? '`__init__.py`' : '`__init__.py`'}**`,
+    fr
+      ? '- Contrôle ce que `from pkg import *` exporte via `__all__`. S\'exécute une fois au premier import du paquet. Peut importer des sous-modules pour une API plus courte.'
+      : '- Controls what `from pkg import *` exports via `__all__`. Runs once on first package import. Can import sub-modules for a shorter public API.',
+  );
+
+  return guide.join('\n');
+};
+
+export const answerPythonCodeReview = (question: string, language: AdvancedAiLanguage): string | null => {
+  const code = extractGeneralAiPythonCode(question);
+  if (!code || !/\breview|r[eé]vise|audit|check.*code|correct.*code|review.*code|relire|vérifie.*code\b/i.test(question)) return null;
+  const fr = language === 'fr';
+
+  const lines = code.split('\n');
+
+  // Score categories
+  let score = 100;
+  const issues: Array<{ category: string; severity: 'critical' | 'major' | 'minor'; message: string; line: number | null }> = [];
+
+  lines.forEach((line, i) => {
+    const n = i + 1;
+    if (/^\s+$/.test(line)) { issues.push({ category: fr ? 'Style' : 'Style', severity: 'minor', message: fr ? 'Ligne vide avec espaces superflus' : 'Blank line with trailing whitespace', line: n }); score -= 1; }
+    if (/^\s*except\s*:/.test(line)) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? '`except:` nu attrape BaseException (inclut KeyboardInterrupt)' : 'Bare `except:` catches BaseException (includes KeyboardInterrupt)', line: n }); score -= 10; }
+    if (/^\s*except\s*:\s*\n\s*pass/.test(code)) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? '`except: pass` avale silencieusement toutes les erreurs' : '`except: pass` silently swallows all errors', line: n }); score -= 5; }
+    if (/\btry\s*:[\s\S]*?\bexcept\b(?!\s*(Exception|ValueError|TypeError|KeyError|OSError|IndexError|AttributeError|RuntimeError|IOError|StopIteration|ZeroDivisionError|FileNotFoundError|PermissionError|TimeoutError))/ && /^\s*except\s*:/.test(line)) { /* already caught above */ }
+    if (/==\s*True\b|==\s*False\b/.test(line) && !/['"]/.test(line)) { issues.push({ category: fr ? 'Style' : 'Style', severity: 'minor', message: fr ? '`== True`/`== False` redondant — utilisez `if x:`/`if not x:`' : '`== True`/`== False` is redundant — use `if x:`/`if not x:`', line: n }); score -= 2; }
+    if (/^\s*for\s+\w+\s+in\s+range\s*\(\s*len\s*\(/.test(line)) { issues.push({ category: fr ? 'Performance' : 'Performance', severity: 'major', message: fr ? '`range(len(...))` est indirect — utilisez `enumerate()` ou l\'itération directe' : '`range(len(...))` is indirect — use `enumerate()` or direct iteration', line: n }); score -= 5; }
+    if (/^\s*(?:list|dict|str|int|float|bool|set|type|input|print|len|range)\s*=/.test(line.trim())) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? 'Masquage d\'un nom natif' : 'Shadowing a built-in', line: n }); score -= 8; }
+    if (/\.sort\s*\(\s*\)\s*$/.test(line.trim()) && /\w+\s*=\s*\w+\.sort/.test(line)) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'major', message: fr ? '`.sort()` renvoie `None` — utilisez `sorted()` pour une nouvelle liste' : '`.sort()` returns `None` — use `sorted()` for a new list', line: n }); score -= 6; }
+    if (/\bopen\s*\([^)]+\)\b(?!\s*\.)/.test(line) && !/^\s*with\s+open/.test(line)) { issues.push({ category: fr ? 'Ressources' : 'Resources', severity: 'major', message: fr ? 'Fichier ouvert sans gestionnaire de contexte `with`' : 'File opened without a `with` context manager', line: n }); score -= 5; }
+    if (/^\s*def\s+\w+\([^)]*=\s*\[|=\s*\{|=\s*set\(/.test(line)) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? 'Argument par défaut mutable partagé entre les appels' : 'Mutable default argument shared across calls', line: n }); score -= 8; }
+    if (/^\s*import\s+\*\b|^\s*from\s+\w+\s+import\s+\*\b/.test(line)) { issues.push({ category: fr ? 'Style' : 'Style', severity: 'major', message: fr ? 'Import wildcard `*` — importez des noms explicites' : 'Wildcard `*` import — import explicit names', line: n }); score -= 4; }
+    if (line.length > 100) { issues.push({ category: fr ? 'Style' : 'Style', severity: 'minor', message: fr ? 'Ligne de plus de 100 caractères' : 'Line exceeds 100 characters', line: n }); score -= 1; }
+  });
+
+  if (!issues.length) return null;
+
+  score = Math.max(0, score);
+  const grade: string = score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F';
+
+  const critical = issues.filter(i => i.severity === 'critical');
+  const major = issues.filter(i => i.severity === 'major');
+  const minor = issues.filter(i => i.severity === 'minor');
+
+  const catLabels = { critical: fr ? '🔴 Critique' : '🔴 Critical', major: fr ? '🟡 Majeur' : '🟡 Major', minor: fr ? '🟢 Mineur' : '🟢 Minor' };
+
+  return [
+    `**${fr ? 'Revue de code' : 'Code review'}**`,
+    '',
+    `**${fr ? 'Score' : 'Score'}: ${score}/100 (${grade})** — ${critical.length} ${fr ? 'critique(s)' : 'critical'}, ${major.length} ${fr ? 'majeur(s)' : 'major'}, ${minor.length} ${fr ? 'mineur(s)' : 'minor'}`,
+    '',
+    ...issues.map(iss => `${catLabels[iss.severity]} | ${fr ? 'Ligne' : 'Line'} ${iss.line} | ${iss.message}`),
+  ].join('\n');
+};
+
+const TYPE_HINT_GUIDE: Array<{ pattern: string; example: string; useCase: string }> = [
+  { pattern: 'Optional / Union', example: 'def find(id: int | None) -> str | None:', useCase: 'Values that can be None or multiple types' },
+  { pattern: 'Protocol', example: 'class Drawable(Protocol):\n    def draw(self) -> None: ...', useCase: 'Structural subtyping (duck typing with types)' },
+  { pattern: 'TypedDict', example: 'class Point(TypedDict):\n    x: float\n    y: float', useCase: 'Dicts with known, typed keys' },
+  { pattern: 'TypeVar', example: 'T = TypeVar("T")\ndef first(items: list[T]) -> T:', useCase: 'Generic functions preserving type relationships' },
+  { pattern: 'Generic', example: 'class Stack[T]:\n    def push(self, item: T) -> None:', useCase: 'Generic classes parameterized by type' },
+  { pattern: 'overload', example: '@overload\ndef process(x: int) -> str: ...\n@overload\ndef process(x: str) -> int: ...', useCase: 'Multiple type signatures for one function' },
+  { pattern: 'Literal', example: 'from typing import Literal\ndef set_mode(m: Literal["r", "w", "a"]) -> None:', useCase: 'Restricting argument to exact values' },
+  { pattern: 'Final', example: 'from typing import Final\nMAX: Final = 100', useCase: 'Constants that should not be reassigned' },
+];
+
+export const answerPythonTypeHintGuide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:type.?hint|type.?annot|typing|Protocol|TypedDict|TypeVar|overload|Generic|Optional|Union)\b/i.test(question) &&
+    !/\bhow.*type|comment.*type|what.*type|annotation/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Guide des patrons de typage' : 'Type hint pattern guide'}**`,
+    '',
+    fr
+      ? 'Ces patrons couvrent 90 % des besoins de typage dans les projets réels.'
+      : 'These patterns cover 90 % of typing needs in real-world projects.',
+    '',
+    ...TYPE_HINT_GUIDE.map(p => [
+      `**${p.pattern}**`,
+      `\`\`\`python\n${p.example}\n\`\`\``,
+      `_${fr ? 'Usage' : 'Use case'}: ${p.useCase}_`,
+    ].join('\n\n')),
+    `**${fr ? 'Conseil' : 'Tip'}**`,
+    fr
+      ? 'Activez `strict = true` dans `pyproject.toml` pour myrc ou pytype afin de bénéficier de la vérification la plus complète.'
+      : 'Enable `strict = true` in `pyproject.toml` for mypy or pytype to get the most thorough type checking.',
+  ].join('\n\n');
+};

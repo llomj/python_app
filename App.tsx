@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonComplexityRequest, answerPythonDesignRationaleQuestion, answerPythonDoctestExecutionRequest, answerPythonFunctionContractRequest, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTraceRequest, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiProgressRequest, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComplexityRequest, answerPythonDataStructureChoice, answerPythonDesignRationaleQuestion, answerPythonDoctestExecutionRequest, answerPythonFormattingGuide, answerPythonFunctionContractRequest, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -17856,6 +17856,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonWhatIfQuestion(effectiveQuestion, appLang)
                 || answerPythonLibraryHelp(effectiveQuestion, appLang)
                 || answerPythonDesignRationaleQuestion(effectiveQuestion, appLang)
+                || answerPythonFormattingGuide(effectiveQuestion, appLang)
+                || answerPythonDataStructureChoice(effectiveQuestion, appLang)
+                || answerPythonImportGuide(effectiveQuestion, appLang)
+                || answerPythonCodeReview(effectiveQuestion, appLang)
+                || answerPythonTypeHintGuide(effectiveQuestion, appLang)
                 || answerPythonTestCaseRequest(effectiveQuestion, appLang)
                 || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
             if (!refAnswer && shouldCreateQuiz) {
@@ -17946,6 +17951,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 case 'documentation':
                     refAnswer = knowledge.answerPythonDocumentationQuestion(effectiveQuestion, appLang);
                     break;
+                case 'formatting':
+                    refAnswer = answerPythonFormattingGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'data_structure':
+                    refAnswer = answerPythonDataStructureChoice(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'import_help':
+                    refAnswer = answerPythonImportGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'code_review':
+                    refAnswer = answerPythonCodeReview(effectiveQuestion, appLang)
+                        || knowledge.answerPythonCodeQuality(effectiveQuestion, appLang);
+                    break;
                 case 'purpose':
                     refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang);
                     break;
@@ -17971,7 +17992,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;
                 case 'type_hints':
-                    refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
+                    refAnswer = answerPythonTypeHintGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
                         || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;

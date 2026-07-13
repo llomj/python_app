@@ -37,6 +37,10 @@ export type GeneralAiIntent =
   | 'what_if'
   | 'library_help'
   | 'design_rationale'
+  | 'formatting'
+  | 'data_structure'
+  | 'import_help'
+  | 'code_review'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -134,6 +138,21 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:difference between|compare|versus|vs\.?|diff[eé]rence entre|compar(?:e|er))\b/i.test(lower)) {
     return { intent: 'comparison', confidence: 0.98, reason: 'Comparison phrasing detected' };
+  }
+  if (/\b(?:format.*(?:string|chaîne|str)|f.?string|%-formatting|printf|template.*string|which.*format|diff(?:érence|erence).*format)\b/i.test(lower)
+    && (/\bf["']/i.test(value) || /\.format\b|%[sdfer%]|Template\b/i.test(value))) {
+    return { intent: 'formatting', confidence: 0.95, reason: 'String formatting comparison request detected' };
+  }
+  if (/\b(?:which (?:data )?structure|list vs|tuple vs|set vs|dict vs|when to use|should i use|what (?:data )?structure|quelle structure|liste ou|tuple ou|set ou|dict ou)\b/i.test(lower)) {
+    return { intent: 'data_structure', confidence: 0.94, reason: 'Data structure choice request detected' };
+  }
+  if (/\b(?:import|sys\.path|__init__|circular import|module.*not found|import.*error|package.*structure|importlib)\b/i.test(lower)
+    && /\b(?:how|what|why|can'?t|not|problem|error|fix|solve|résoudre|problème|erreur)\b/i.test(lower)) {
+    return { intent: 'import_help', confidence: 0.93, reason: 'Import system help request detected' };
+  }
+  if (/\b(?:review|audit|revise|code review|review.*code|check my code)\b/i.test(lower)
+    && containsCode(value)) {
+    return { intent: 'code_review', confidence: 0.96, reason: 'Code review request detected' };
   }
   if (/\b(?:type (?:hint|annotation)|typing\b|mypy|type.?safe)\b/i.test(lower)) {
     return { intent: 'type_hints', confidence: 0.96, reason: 'Type hints request detected' };
