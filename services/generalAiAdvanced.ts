@@ -1538,3 +1538,278 @@ export const answerPythonTypeHintGuide = (question: string, language: AdvancedAi
       : 'Enable `strict = true` in `pyproject.toml` for mypy or pytype to get the most thorough type checking.',
   ].join('\n\n');
 };
+
+const PACKAGE_ADVICE: Array<{ category: string; recommendation: string; runnerUp: string; advice: string }> = [
+  { category: 'HTTP APIs', recommendation: 'httpx', runnerUp: 'requests', advice: 'httpx is async-first, has HTTP/2, and a modern API. Use `requests` for simple sync scripts.' },
+  { category: 'CLI tools', recommendation: 'typer', runnerUp: 'argparse / click', advice: 'typer builds on click with type-annotation-based CLI definitions — minimal boilerplate.' },
+  { category: 'Testing', recommendation: 'pytest', runnerUp: 'unittest', advice: 'pytest has simpler assertions, fixtures, parameterization, and excellent plugin ecosystem.' },
+  { category: 'ORM/DB', recommendation: 'SQLAlchemy', runnerUp: 'Django ORM / peewee', advice: 'SQLAlchemy 2.0 has both ORM and Core SQL. Django ORM is great if you already use Django.' },
+  { category: 'Data frames', recommendation: 'polars', runnerUp: 'pandas', advice: 'polars is faster, lazy by default, and has a cleaner API. pandas is older with larger ecosystem.' },
+  { category: 'Async framework', recommendation: 'asyncio', runnerUp: 'trio / anyio', advice: 'asyncio is built-in. trio has cleaner cancellation semantics; anyio provides a unified API over both.' },
+  { category: 'Validation', recommendation: 'pydantic', runnerUp: 'attrs / msgspec', advice: 'pydantic v2 is the standard for data validation with JSON Schema support.' },
+  { category: 'Configuration', recommendation: 'pydantic-settings', runnerUp: 'python-decouple / dynaconf', advice: 'pydantic-settings reads from env vars, .env files, secrets — validated out of the box.' },
+  { category: 'Serialization', recommendation: 'orjson / msgspec', runnerUp: 'json (stdlib)', advice: 'orjson is 3-10× faster than stdlib json. msgspec also handles binary protocols.' },
+  { category: 'Task queues', recommendation: 'arq (async) / huey (sync)', runnerUp: 'celery / rq', advice: 'arq for Redis-backed async tasks. huey for simple sync. celery is heavy but proven.' },
+];
+
+export const answerPythonPackageAdvice = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:best (?:library|package|tool|framework)|recommend|suggestion|what (?:library|package|tool|framework)|which.*(?:library|package|tool|framework)|quel(?:le)? (?:biblioth[eè]que|paquet|outil)|recommande|sugg[eè]re)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  const category = PACKAGE_ADVICE.find(p => new RegExp(p.category.replace(/[/\s]/g, '|'), 'i').test(question));
+  if (!category) {
+    const categories = PACKAGE_ADVICE.map(p => p.category).join(', ');
+    return [
+      `**${fr ? 'Conseils de paquets Python' : 'Python package advice'}**`,
+      fr
+        ? `Je connais ces catégories : ${categories}. Précisez le type de projet pour une recommandation ciblée.`
+        : `I can advise on: ${categories}. Specify the project type for a targeted recommendation.`,
+    ].join('\n\n');
+  }
+  return [
+    `**${category.category}**`,
+    fr
+      ? `**Recommandation** : ${category.recommendation}` + (category.runnerUp ? `\n**Alternative** : ${category.runnerUp}` : '')
+      : `**Recommendation** : ${category.recommendation}` + (category.runnerUp ? `\n**Alternative** : ${category.runnerUp}` : ''),
+    category.advice,
+  ].join('\n\n');
+};
+
+export const answerPythonAsyncPatterns = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:asyncio|async|await|coroutine|gather|TaskGroup|semaphore|queue|timeout|event.?loop)\b/i.test(question) &&
+    !/\b(?:how.*async|async.*pattern|concurrent.*task)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+
+  const patterns: string[] = [
+    `**${fr ? '1. `asyncio.gather()` — exécution parallèle simple' : '1. `asyncio.gather()` — simple parallel execution'}**`,
+    '```python',
+    'import asyncio',
+    '',
+    'async def fetch(url: str) -> str:',
+    '    await asyncio.sleep(1)',
+    '    return f"data from {url}"',
+    '',
+    'async def main():',
+    '    results = await asyncio.gather(',
+    '        fetch("a.com"),',
+    '        fetch("b.com"),',
+    '        fetch("c.com"),',
+    '        return_exceptions=True,',
+    '    )',
+    '    print(results)',
+    '',
+    "asyncio.run(main())",
+    '```',
+  ].join('\n');
+
+  patterns.push(
+    '',
+    `**${fr ? '2. `asyncio.TaskGroup` — structuré avec annulation' : '2. `asyncio.TaskGroup` — structured with cancellation'}**`,
+    fr
+      ? '`TaskGroup` (Python 3.11+) annule automatiquement toutes les tâches si l\'une échoue. Plus sûr que `gather`.'
+      : '`TaskGroup` (Python 3.11+) automatically cancels all tasks if one fails. Safer than `gather`.',
+    '```python',
+    'async def main():',
+    '    async with asyncio.TaskGroup() as tg:',
+    '        t1 = tg.create_task(fetch("a.com"))',
+    '        t2 = tg.create_task(fetch("b.com"))',
+    '    # Both done or all cancelled on first failure',
+    '```',
+  );
+
+  patterns.push(
+    '',
+    `**${fr ? '3. `asyncio.Semaphore` — limitation de concurrence' : '3. `asyncio.Semaphore` — concurrency limiting'}**`,
+    '```python',
+    'sem = asyncio.Semaphore(5)  # max 5 concurrent',
+    '',
+    'async def rate_limited_fetch(url: str) -> str:',
+    '    async with sem:',
+    '        return await fetch(url)',
+    '```',
+  );
+
+  patterns.push(
+    '',
+    `**${fr ? '4. `asyncio.Queue` — producteur/consommateur' : '4. `asyncio.Queue` — producer/consumer'}**`,
+    '```python',
+    'async def producer(queue: asyncio.Queue):',
+    '    for i in range(20):',
+    '        await queue.put(i)',
+    '    await queue.join()',
+    '',
+    'async def consumer(queue: asyncio.Queue, name: str):',
+    '    while True:',
+    '        item = await queue.get()',
+    '        print(f"{name} got {item}")',
+    '        queue.task_done()',
+    '',
+    'async def main():',
+    '    q: asyncio.Queue[int] = asyncio.Queue()',
+    '    await asyncio.gather(producer(q), consumer(q, "A"), consumer(q, "B"))',
+    '```',
+  );
+
+  patterns.push(
+    '',
+    `**${fr ? '5. Timeouts' : '5. Timeouts'}**`,
+    '```python',
+    'try:',
+    '    result = await asyncio.wait_for(fetch("slow.com"), timeout=2.0)',
+    'except asyncio.TimeoutError:',
+    '    print("Request timed out")',
+    '```',
+  );
+
+  return patterns.join('\n');
+};
+
+export const answerPythonRefactoringRecipes = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:refactor|rewrite|improve|make better|clean.?up|transform|convert|change)\b.*\b(?:loop|comprehension|enumerate|ternary|lambda|filter|map|join|defaultdict|any.?all)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  const recipes: Array<{ before: string; after: string; title: string }> = [
+    {
+      title: 'Replace loop with list comprehension',
+      before: 'result = []\nfor x in items:\n    result.append(x * 2)',
+      after: 'result = [x * 2 for x in items]',
+    },
+    {
+      title: 'Replace range(len) with enumerate',
+      before: 'for i in range(len(items)):\n    print(i, items[i])',
+      after: 'for i, item in enumerate(items):\n    print(i, item)',
+    },
+    {
+      title: 'Replace manual counter with enumerate',
+      before: 'i = 0\nfor x in items:\n    print(i, x)\n    i += 1',
+      after: 'for i, x in enumerate(items):\n    print(i, x)',
+    },
+    {
+      title: 'Replace if/else with ternary',
+      before: 'if x > 0:\n    label = "positive"\nelse:\n    label = "non-positive"',
+      after: 'label = "positive" if x > 0 else "non-positive"',
+    },
+    {
+      title: 'Replace filter+lambda with comprehension',
+      before: 'result = list(filter(lambda x: x > 0, numbers))',
+      after: 'result = [x for x in numbers if x > 0]',
+    },
+    {
+      title: 'Replace manual string concat with join',
+      before: 's = ""\nfor x in parts:\n    s += x + ","',
+      after: 's = ",".join(parts)',
+    },
+    {
+      title: 'Replace repeated .get() with defaultdict',
+      before: 'counts = {}\nfor word in words:\n    counts[word] = counts.get(word, 0) + 1',
+      after: 'from collections import defaultdict\ncounts: dict[str, int] = defaultdict(int)\nfor word in words:\n    counts[word] += 1',
+    },
+    {
+      title: 'Replace manual file close with with',
+      before: 'f = open("file.txt")\ndata = f.read()\nf.close()',
+      after: 'with open("file.txt") as f:\n    data = f.read()',
+    },
+    {
+      title: 'Replace repeated boolean checks with any/all',
+      before: 'found = False\nfor x in items:\n    if condition(x):\n        found = True\n        break',
+      after: 'found = any(condition(x) for x in items)',
+    },
+    {
+      title: 'Replace manual grouping with itertools.groupby',
+      before: 'groups = {}\nfor item in items:\n    key = item["type"]\n    if key not in groups:\n        groups[key] = []\n    groups[key].append(item)',
+      after: 'from itertools import groupby\nfor key, group in groupby(sorted(items, key=lambda x: x["type"]), key=lambda x: x["type"]):\n    groups[key] = list(group)',
+    },
+  ];
+  return [
+    `**${fr ? '10 recettes de refactorisation Python' : '10 Python refactoring recipes'}**`,
+    ...recipes.map(r => [
+      `**${r.title}**`,
+      '```python',
+      `# BEFORE\n${r.before}`,
+      '',
+      `# AFTER\n${r.after}`,
+      '```',
+    ].join('\n\n')),
+    `**${fr ? 'Conseil' : 'Tip'}**`,
+    fr
+      ? 'Appliquez une transformation à la fois et testez après chaque changement.'
+      : 'Apply one transformation at a time and test after each change.',
+  ].join('\n\n');
+};
+
+export const answerPythonPep8Guide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:pep.?8|style guide|naming convention|import order|line length|docstring convention|whitespace rule|code style|convention de nommage|longueur de ligne|ordre des imports)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Guide de référence PEP 8' : 'PEP 8 quick reference'}**`,
+    '',
+    `**${fr ? 'Imports' : 'Imports'}**`,
+    fr
+      ? 'Ordre : (1) stdlib, (2) tiers, (3) local. Séparez chaque groupe par une ligne vide. Pas d\'imports sauvages (`from x import *`).'
+      : 'Order: (1) stdlib, (2) third-party, (3) local. Separate groups with blank lines. No wildcard imports (`from x import *`).',
+    '```python',
+    'import os\nimport sys\n\nimport requests\nimport typer\n\nfrom mypackage import mymodule',
+    '```',
+    '',
+    `**${fr ? 'Longueur de ligne' : 'Line length'}**`,
+    fr
+      ? '79 caractères pour le code, 72 pour les docstrings/comments. PEP 8 tolère 99 (Django) ou 120 (Black).'
+      : '79 characters for code, 72 for docstrings/comments. PEP 8 tolerates 99 (Django style) or 120 (Black default).',
+    '',
+    `**${fr ? 'Lignes vides' : 'Blank lines'}**`,
+    fr
+      ? '— 2 lignes vides avant les définitions de classe ou de fonction de niveau supérieur.\n— 1 ligne vide avant les méthodes de classe.\n— 1 ligne vide autour des fonctions auxiliaires dans une classe.'
+      : '— 2 blank lines before top-level class/function definitions.\n— 1 blank line before class methods.\n— 1 blank line around helper functions inside a class.',
+    '',
+    `**${fr ? 'Espaces' : 'Whitespace'}**`,
+    fr
+      ? '— `spy = 1` (espaces autour de `=`)\n— `func(x, y)` (pas d\'espace avant `(`)\n— `items[0]` (pas d\'espace avant `[`)\n— `x += 1` (espaces autour des opérateurs)\n— `(a + b) * c` (parenthèses pour la priorité)'
+      : '— `spy = 1` (spaces around `=`)\n— `func(x, y)` (no space before `(`)\n— `items[0]` (no space before `[`)\n— `x += 1` (spaces around operators)\n— `(a + b) * c` (parentheses for precedence)',
+    '',
+    `**${fr ? 'Conventions de nommage' : 'Naming conventions'}**`,
+    '| Element | Convention | Example |',
+    '|---------|-----------|---------|',
+    '| Variable | snake_case | `user_name` |',
+    '| Function | snake_case | `get_user()` |',
+    '| Class | PascalCase | `UserProfile` |',
+    '| Constant | UPPER_CASE | `MAX_RETRIES` |',
+    '| Module/package | short_lower | `http_utils` |',
+    '| "Private" | `_` prefix | `_internal_fn()` |',
+    '| Name-mangled | `__` prefix | `__private()` |',
+    '| Dunder | `__name__` | avoid creating new |',
+    '',
+    `**${fr ? 'Docstrings' : 'Docstrings'}**`,
+    '```python',
+    'def example(param: str) -> int:',
+    '    """Single line summary.',
+    '',
+    '    Longer description if needed.',
+    '',
+    '    Args:',
+    '        param: Description of parameter.',
+    '',
+    '    Returns:',
+    '        Description of return value.',
+    '    """',
+    '```',
+  ].join('\n');
+};
+
+export const answerPythonComparisonReference = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:diff(?:erence|érence)|versus|vs|compar(?:e|ison|er)|vs\.|or\s+)\b.*\b(?:is|==|copy|deepcopy|shallow|deep|str|repr|classmethod|staticmethod|new|init|eq|hash)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+
+  const comparisons: Array<{ title: string; shortEn: string; shortFr: string }> = [
+    { title: '`is` vs `==`', shortEn: '`==` checks value equality. `is` checks object identity (same memory address). Use `is` with None, True, False, and singletons. Use `==` for everything else.', shortFr: '`==` vérifie l\'égalité de valeur. `is` vérifie l\'identité (même adresse mémoire). Utilisez `is` avec None, True, False et les singletons. Utilisez `==` pour tout le reste.' },
+    { title: '`copy.copy` vs `copy.deepcopy`', shortEn: '`copy.copy()` creates a shallow copy — the top-level container is new but nested objects are shared. `copy.deepcopy()` recursively duplicates everything — completely independent.', shortFr: '`copy.copy()` crée une copie superficielle — le conteneur est nouveau mais les objets imbriqués sont partagés. `copy.deepcopy()` duplique récursivement tout — complètement indépendant.' },
+    { title: '`__str__` vs `__repr__`', shortEn: '`__repr__` is for developers — unambiguous, ideally `eval(repr(x)) == x`. `__str__` is for users — readable. Falls back to `__repr__` if `__str__` is not defined.', shortFr: '`__repr__` est pour les développeurs — non ambigu, idéalement `eval(repr(x)) == x`. `__str__` est pour les utilisateurs — lisible. Utilise `__repr__` par défaut si `__str__` n\'est pas défini.' },
+    { title: '`@classmethod` vs `@staticmethod`', shortEn: '`@classmethod` receives `cls` as first arg — can access/modify class state. `@staticmethod` receives nothing extra — just a function namespaced in the class.', shortFr: '`@classmethod` reçoit `cls` comme premier argument — peut accéder/modifier l\'état de la classe. `@staticmethod` ne reçoit rien de plus — juste une fonction dans l\'espace de nommage de la classe.' },
+    { title: '`__new__` vs `__init__`', shortEn: '`__new__` creates the instance (called first, returns the instance). `__init__` initializes the instance (called second, returns None). Override `__new__` only for immutable types or metaclasses.', shortFr: '`__new__` crée l\'instance (appelé en premier, renvoie l\'instance). `__init__` initialise l\'instance (appelé en second, renvoie None). Surchargez `__new__` seulement pour les types immuables ou les métaclasses.' },
+    { title: '`__eq__` vs `__hash__`', shortEn: '`__eq__` defines equality. `__hash__` enables dict key/set membership. Mutable objects should not be hashable. If you define `__eq__`, set `__hash__ = None` for mutable classes.', shortFr: '`__eq__` définit l\'égalité. `__hash__` permet l\'utilisation comme clé de dict/ensemble. Les objets mutables ne devraient pas être hachables. Si vous définissez `__eq__`, définissez `__hash__ = None` pour les classes mutables.' },
+    { title: '`@property` vs regular attribute', shortEn: '`@property` lets you define computed attributes accessed without `()`. Use for derived values, validation, or to maintain backward compatibility when replacing an attribute with logic.', shortFr: '`@property` permet de définir des attributs calculés accessibles sans `()`. Utilisez pour les valeurs dérivées, la validation ou la compatibilité ascendante lors du remplacement d\'un attribut par une logique.' },
+  ];
+
+  return [
+    `**${fr ? 'Guide de référence des comparaisons Python' : 'Python comparison reference'}**`,
+    '',
+    ...comparisons.map(c => `**${c.title}**\n${fr ? c.shortFr : c.shortEn}`),
+  ].join('\n\n');
+};

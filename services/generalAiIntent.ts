@@ -41,6 +41,9 @@ export type GeneralAiIntent =
   | 'data_structure'
   | 'import_help'
   | 'code_review'
+  | 'package_advice'
+  | 'pep8'
+  | 'comparison_reference'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -156,6 +159,15 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:type (?:hint|annotation)|typing\b|mypy|type.?safe)\b/i.test(lower)) {
     return { intent: 'type_hints', confidence: 0.96, reason: 'Type hints request detected' };
+  }
+  if (/\b(?:best (?:library|package|tool|framework)|recommend.*(?:library|package|framework)|what.*(?:library|package|tool).*use|which.*library|quel.*(?:biblioth[eè]que|module|paquet))\b/i.test(lower)) {
+    return { intent: 'package_advice', confidence: 0.95, reason: 'Package/library recommendation request detected' };
+  }
+  if (/\b(?:pep.?8|style guide|naming conventions?|import order|line length|docstring convention)\b/i.test(lower)) {
+    return { intent: 'pep8', confidence: 0.96, reason: 'PEP 8 / style guide request detected' };
+  }
+  if (/\b(?:is vs ==|== vs is|copy vs deepcopy|deepcopy vs copy|str vs repr|repr vs str|classmethod vs staticmethod|staticmethod vs classmethod|new vs init|init vs new|eq vs hash)\b/i.test(lower)) {
+    return { intent: 'comparison_reference', confidence: 0.97, reason: 'Specific Python comparison reference request detected' };
   }
   if (/\b(?:best pract|recommended way|pythonic way|proper way|correct way)\b/i.test(lower)) {
     return { intent: 'best_practices', confidence: 0.96, reason: 'Best practices request detected' };
