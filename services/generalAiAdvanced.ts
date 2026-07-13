@@ -890,6 +890,78 @@ export const answerPythonMisconceptionRequest = (question: string, language: Adv
       });
     }
   }
+  // `x += y` vs `x = x + y` for mutable types
+  if (/\+=\s*\[/.test(code) || /\+=\s*\{/.test(code) || /\+=\s*set\(/.test(code)) {
+    findings.push({
+      title: fr ? '`+=` sur les listes/sets' : '`+=` on lists/sets',
+      explanation: fr ? '`list += other` étend la liste sur place (appelle `__iadd__`). Pour les listes imbriquées ou dans des conteneurs, préférez `extend()` ou une nouvelle affectation.' : '`list += other` extends the list in-place (calls `__iadd__`). For nested lists or within containers, prefer `extend()` or a new assignment.',
+      correction: '# In-place: modifies original\nitems += [4, 5]  # items is now [1, 2, 3, 4, 5]\n\n# Rebind: creates new list\nitems = items + [4, 5]',
+    });
+  }
+  // Chained `==` or `!=` with non-transitive compares
+  if (/==\s+\w+\s+==|!=\s+\w+\s+!=/.test(code)) {
+    findings.push({
+      title: fr ? 'Comparaisons chaînées' : 'Chained comparisons',
+      explanation: fr ? '`a < b < c` se traduit par `a < b and b < c` (pas `(a < b) < c`). Python évalue b une seule fois. Cela fonctionne pour tous les opérateurs de comparaison.' : '`a < b < c` translates to `a < b and b < c` (not `(a < b) < c`). Python evaluates b only once. This works for all comparison operators.',
+      correction: '# Chained comparison: a < b < c  →  a < b and b < c\nx, y, z = 1, 5, 10\nprint(x < y < z)  # True — chained correctly\nprint((x < y) < z)  # False — (True) < 10 → True < 10 → 1 < 10 → True',
+    });
+  }
+  // Shared mutable initializer via `a = b = []`
+  if (/\w+\s*=\s*\w+\s*=\s*\[\]|\w+\s*=\s*\w+\s*=\s*\{\}|\w+\s*=\s*\w+\s*=\s*set\(\)/.test(code)) {
+    findings.push({
+      title: fr ? 'Initialiseur mutable partagé' : 'Shared mutable initializer',
+      explanation: fr ? '`a = b = []` crée une seule liste — `a` et `b` pointent vers le même objet. Les modifications via `b.append(x)` affectent aussi `a`.' : '`a = b = []` creates one list — both `a` and `b` point to the same object. Mutations via `b.append(x)` also affect `a`.',
+      correction: 'a = []\nb = []   # separate lists\n\na.append(1)\nb.append(2)\nprint(a, b)  # [1] [2] — independent',
+    });
+  }
+  // `except:` vs `except Exception:`
+  if (/\bexcept\s*:/.test(code) && !/except\s+\w+/.test(code)) {
+    findings.push({
+      title: fr ? '`except:` nu attrape tout' : 'Bare `except:` catches everything',
+      explanation: fr ? 'Un `except:` nu attrape `BaseException` — y compris `KeyboardInterrupt`, `SystemExit` et `GeneratorExit`. Utilisez `except Exception:` pour cibler les erreurs normales du programme.' : 'A bare `except:` catches `BaseException` — including `KeyboardInterrupt`, `SystemExit`, and `GeneratorExit`. Use `except Exception:` to target normal program errors.',
+      correction: 'try:\n    risky_operation()\nexcept Exception:  # not bare except:\n    log_error()\n    raise',
+    });
+  }
+  // Integer interning / small integer cache
+  if (/\bis\b.*\d{3,}/.test(code) || /\d{3,}.*\bis\b/.test(code)) {
+    findings.push({
+      title: fr ? 'Mise en cache des petits entiers' : 'Small integer caching',
+      explanation: fr ? 'Python met en cache les entiers de -5 à 256. `x is y` pour des entiers hors de cette plage peut être `False` même si les valeurs sont égales. Utilisez `==` pour comparer des valeurs.' : 'Python caches integers from -5 to 256. `x is y` for integers outside this range may be `False` even when values are equal. Use `==` to compare values.',
+      correction: 'a, b = 257, 257\nprint(a is b)    # False (or True) — implementation-dependent\nprint(a == b)    # True — always correct',
+    });
+  }
+  // `True == 1` and `False == 0` (bool is subclass of int)
+  if (/True\s*==\s*1|False\s*==\s*0|sum\s*\([^)]*\[True/.test(code)) {
+    findings.push({
+      title: fr ? '`bool` est une sous-classe de `int`' : '`bool` is a subclass of `int`',
+      explanation: fr ? '`True == 1` et `False == 0` sont vrais car `bool` hérite de `int`. `sum([True, False, True])` donne `2`. Utilisez `isinstance(x, bool)` avant `isinstance(x, int)` pour distinguer.' : '`True == 1` and `False == 0` are true because `bool` inherits from `int`. `sum([True, False, True])` yields `2`. Check `isinstance(x, bool)` before `isinstance(x, int)` to distinguish.',
+      correction: 'total = sum([True, False, True])  # 2 — bools behave as ints\nprint(True + False)  # 1\n# Use explicit conversion if you need int:\ncount = sum(1 for x in items if condition(x))',
+    });
+  }
+  // `copy.copy` vs `copy.deepcopy`
+  if (/\.copy\s*\(\)/.test(code) && (/\blist\b|\bdict\b|nested/.test(code))) {
+    findings.push({
+      title: fr ? 'Copie superficielle contre copie profonde' : 'Shallow copy versus deep copy',
+      explanation: fr ? '`list.copy()`, `dict.copy()` et `copy.copy()` créent une copie superficielle — la structure est copiée mais les objets imbriqués sont partagés. `copy.deepcopy()` copie récursivement tout.' : '`list.copy()`, `dict.copy()`, and `copy.copy()` create a shallow copy — the structure is copied but nested objects are shared. `copy.deepcopy()` recursively copies everything.',
+      correction: 'import copy\n\noriginal = [[1, 2], [3, 4]]\nshallow = copy.copy(original)\ndeep = copy.deepcopy(original)\n\nshallow[0].append(99)  # affects original too\nprint(original)  # [[1, 2, 99], [3, 4]]\n\ndeep[0].append(99)  # does not affect original\nprint(original)  # [[1, 2, 99], [3, 4]]',
+    });
+  }
+  // `re.match` vs `re.search`
+  if (/\bre\.match\b/.test(code) || /regex.*match.*start|rechercher.*début/.test(lowerQ)) {
+    findings.push({
+      title: fr ? '`re.match()` contre `re.search()`' : '`re.match()` versus `re.search()`',
+      explanation: fr ? '`re.match()` ne cherche une correspondance qu\'au début de la chaîne. `re.search()` cherche dans toute la chaîne. Beaucoup de développeurs utilisent `match` en pensant qu\'il cherche partout.' : '`re.match()` only checks the beginning of the string. `re.search()` searches the entire string. Many developers use `match` thinking it searches everywhere.',
+      correction: 'import re\ntext = "hello world"\n\nprint(re.match("world", text))  # None — match at start only\nprint(re.search("world", text))  # <match> — search anywhere\n\n# For full-string match use fullmatch():\nprint(re.fullmatch("hello world", text))  # <match>',
+    });
+  }
+  // `super().__init__()` call signature
+  if (/\bsuper\(\).*\.__init__\(\)/.test(code) || /\bsuper\(\)\.__init__\([^)]*\)/.test(code)) {
+    findings.push({
+      title: fr ? 'Paramètres de `super().__init__()`' : '`super().__init__()` parameters',
+      explanation: fr ? '`super().__init__()` appelle le constructeur de la classe parente. Vous devez passer *tous* les paramètres que le parent attend sauf `self` (le `self` est passé automatiquement).' : '`super().__init__()` calls the parent class constructor. You must pass *all* the parameters the parent expects except `self` (which is passed automatically).',
+      correction: 'class Parent:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\nclass Child(Parent):\n    def __init__(self, name, age, extra):\n        super().__init__(name, age)  # passes self automatically\n        self.extra = extra',
+    });
+  }
   if (!findings.length) return null;
   return [
     `**${fr ? 'Diagnostic du malentendu Python' : 'Python misconception diagnosis'}**`,
@@ -962,6 +1034,16 @@ const PYTHON_VERSION_FEATURES: PythonVersionFeature[] = [
   { id: 'positional-only', version: [3, 8], label: ['positional-only parameter syntax `/`', 'la syntaxe de paramètre positionnel seul `/`'], detect: /def\s+\w+[^)]*\/\s*[,)]/, alternative: ['Design around named parameters; there is no syntax-equivalent before 3.8.', 'Évitez de forcer le positionnel ; il n\'existe pas de syntaxe équivalente avant 3.8.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#positional-only-parameters' },
   { id: 'fstring-equal', version: [3, 8], label: ['the `f"{x=}"` debug syntax', 'la syntaxe de débogage `f"{x=}"`'], detect: /f["'][^"']*=\s*(\{|\s*\{)/m, alternative: ['Print the name and value separately on older Python.', 'Affichez le nom et la valeur séparément avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#f-strings-support-for-self-documenting-expressions-and-debugging' },
   { id: 'cached-property', version: [3, 8], label: ['the `@functools.cached_property` decorator', 'le décorateur `@functools.cached_property`'], detect: /\bcached_property\s*\(/, alternative: ['Store the computed value in `self.__dict__` manually on older Python.', 'Stockez la valeur calculée manuellement dans `self.__dict__` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#functools' },
+  { id: 'asyncio-run', version: [3, 7], label: ['the `asyncio.run()` entry point', 'le point d\'entrée `asyncio.run()`'], detect: /\basyncio\.run\s*\(/, alternative: ['Use `loop = asyncio.get_event_loop(); loop.run_until_complete(...)` on older Python.', 'Utilisez `loop = asyncio.get_event_loop(); loop.run_until_complete(...)` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.7.html#asyncio' },
+  { id: 'dict-ordering', version: [3, 7], label: ['guaranteed dict insertion order', 'l\'ordre d\'insertion garanti des dictionnaires'], detect: /\b(?:dict|from collections import OrderedDict)\b(?!.*\bfrom __future__\b)/, alternative: ['On older Python, use `collections.OrderedDict` for guaranteed ordering.', 'Avec une version antérieure, utilisez `collections.OrderedDict` pour garantir l\'ordre.'], source: 'https://docs.python.org/3/whatsnew/3.7.html#python-3-7-data-model' },
+  { id: 'functools-cache', version: [3, 9], label: ['`@functools.cache` decorator', 'le décorateur `@functools.cache`'], detect: /@functools\.cache|\bfunctools\.cache\b(?!\s*\()/, alternative: ['Use `@functools.lru_cache(maxsize=None)` on older Python.', 'Utilisez `@functools.lru_cache(maxsize=None)` avec une version antérieure.'], source: 'https://docs.python.org/3/library/functools.html#functools.cache' },
+  { id: 'math-comb-perm', version: [3, 8], label: ['`math.comb()` and `math.perm()`', '`math.comb()` et `math.perm()`'], detect: /\bmath\.(?:comb|perm)\s*\(/, alternative: ['Implement manually using `math.factorial` or `scipy.special.comb` on older Python.', 'Implémentez manuellement avec `math.factorial` ou `scipy.special.comb` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#math' },
+  { id: 'int-bitcount', version: [3, 8], label: ['`int.bit_count()` population count', 'le comptage de population `int.bit_count()`'], detect: /\.bit_count\s*\(/, alternative: ['Use `bin(x).count("1")` on older Python (slower but equivalent).', 'Utilisez `bin(x).count("1")` avec une version antérieure (plus lent mais équivalent).'], source: 'https://docs.python.org/3/whatsnew/3.8.html#int' },
+  { id: 'math-prod', version: [3, 8], label: ['`math.prod()` product function', 'la fonction produit `math.prod()`'], detect: /\bmath\.prod\s*\(/, alternative: ['Use `functools.reduce(operator.mul, iterable, 1)` on older Python.', 'Utilisez `functools.reduce(operator.mul, iterable, 1)` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#math' },
+  { id: 'typing-final', version: [3, 8], label: ['the `@typing.final` decorator', 'le décorateur `@typing.final`'], detect: /@(?:typing\.)?final\s*(?:\n|$)/m, alternative: ['Use a comment like `# final` and a custom metaclass on older Python.', 'Utilisez un commentaire `# final` et une métaclasse personnalisée avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#typing' },
+  { id: 'typing-literal', version: [3, 8], label: ['`typing.Literal` type', 'le type `typing.Literal`'], detect: /\bLiteral\b/, alternative: ['Use string compare or `enum.Enum` on older Python.', 'Utilisez la comparaison de chaînes ou `enum.Enum` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.8.html#typing' },
+  { id: 'nullcontext', version: [3, 7], label: ['`contextlib.nullcontext`', '`contextlib.nullcontext`'], detect: /\bnullcontext\s*\(/, alternative: ['Create a dummy class that implements `__enter__`/`__exit__` on older Python.', 'Créez une classe factice qui implémente `__enter__`/`__exit__` avec une version antérieure.'], source: 'https://docs.python.org/3/library/contextlib.html#contextlib.nullcontext' },
+  { id: 'typing-annotated', version: [3, 9], label: ['`typing.Annotated` type metadata', 'les métadonnées de type `typing.Annotated`'], detect: /\bAnnotated\b/, alternative: ['Use a comment or a custom `__metadata__` attribute on older Python.', 'Utilisez un commentaire ou un attribut personnalisé `__metadata__` avec une version antérieure.'], source: 'https://docs.python.org/3/whatsnew/3.9.html#typing' },
 ];
 
 const comparePythonVersions = (left: [number, number], right: [number, number]): number => left[0] - right[0] || left[1] - right[1];
