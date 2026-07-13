@@ -384,6 +384,119 @@ export const updateGeneralAiMistakes = (profile: GeneralAiMistakeProfile, quiz: 
   };
 };
 
+export const answerPythonTraceRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  const code = extractGeneralAiPythonCode(question);
+  if (!code) return null;
+  const fr = language === 'fr';
+  const lines = code.split('\n').filter(line => line.trim() && !/^\s*#/.test(line));
+  if (lines.length < 2) return null;
+
+  const state: Record<string, string> = {};
+  const steps: string[] = [];
+  let output = '';
+  let loopGuard = 0;
+
+  const substitute = (expr: string, depth = 0): string => {
+    if (depth > 5) return expr;
+    let result = expr;
+    for (const [key, val] of Object.entries(state)) {
+      result = result.replace(new RegExp(`\\b${key}\\b`, 'g'), val);
+    }
+    const simplify = (s: string): string => {
+      const prev = s;
+      s = s.replace(/(\d+)\s*\+\s*(\d+)/g, (_, a, b) => String(Number(a) + Number(b)));
+      s = s.replace(/(\d+)\s*\*\s*(\d+)/g, (_, a, b) => String(Number(a) * Number(b)));
+      s = s.replace(/(\d+)\s*-\s*(\d+)/g, (_, a, b) => String(Number(a) - Number(b)));
+      return s === prev ? s : simplify(s);
+    };
+    const simplified = simplify(result);
+    return simplified !== result ? substitute(simplified, depth + 1) : result;
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const indent = line.match(/^\s*/)?.[0] || '';
+    const stripped = line.trim();
+    const step = (text: string, stateUpdate: string, traceOut: string) => {
+      steps.push([
+        fr ? 'N' : 'S',
+        i + 1,
+        stripped.length > 60 ? stripped.slice(0, 57) + '...' : stripped,
+        text,
+        stateUpdate ? `${fr ? 'État' : 'State'}: {${stateUpdate}}` : '',
+        traceOut ? `${fr ? 'Sortie' : 'Output'}: \`${traceOut}\`` : '',
+      ].join(' | '));
+    };
+
+    if (/^\s*print\s*\(/.test(line)) {
+      const content = stripped.match(/print\s*\((.+)\)/)?.[1] || '';
+      const subbed = substitute(content);
+      step(`${fr ? 'Affiche' : 'Prints'} \`${subbed}\``, '', subbed);
+      output += (output ? '\n' : '') + subbed;
+    } else if (/^\s*(?:return|yield)\s+(.+)/.test(line)) {
+      const val = substitute(stripped.match(/^\s*(?:return|yield)\s+(.+)/)![1]);
+      step(`${fr ? 'Renvoie' : 'Returns'} \`${val}\``, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+    } else if (/^\s*([A-Za-z_]\w*)\s*=\s*(.+)/.test(line)) {
+      const [, name, expr] = stripped.match(/^\s*([A-Za-z_]\w*)\s*=\s*(.+)/)!;
+      const subbed = substitute(expr);
+      const displayVal = subbed;
+      state[name] = displayVal;
+      step(`${name} = ${displayVal}`, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+    } else if (new RegExp('^\\s*([A-Za-z_]\\w*)\\s*([+\\-*\\/%]|\\/\\/)\\s*=\\s*(.+)').test(line)) {
+      const m = stripped.match(new RegExp('^\\s*([A-Za-z_]\\w*)\\s*([+\\-*\\/%]|\\/\\/)\\s*=\\s*(.+)'))!;
+      const name = m[1], op = m[2], expr = m[3];
+      const subbed = substitute(expr);
+      const prev = state[name] || '?';
+      const full = `${prev} ${op}= ${subbed}`;
+      const resolved = substitute(`${prev} ${op} ${subbed}`);
+      state[name] = resolved;
+      step(`${full} → ${resolved}`, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+    } else if (/^\s*for\s+(\w+)\s+in\s+(.+):/.test(stripped)) {
+      const [, loopVar, iterable] = stripped.match(/^\s*for\s+(\w+)\s+in\s+(.+):/)!;
+      const raw = substitute(iterable);
+      const items = raw.match(/\[([^\]]*)\]/)?.[1]?.split(',').map(s => s.trim()).filter(Boolean) || ['...'];
+      if (loopGuard++ > 3) { steps.push(`⚠️ ${fr ? 'Boucle for limitée à 4 itérations' : 'For loop limited to 4 iterations'}`); break; }
+      step(`${fr ? 'Boucle for sur' : 'For-loop over'} ${raw}`, '', '');
+      for (let j = 0; j < items.length; j++) {
+        state[loopVar] = items[j];
+        const body = lines.slice(i + 1).find(l => l.trim() && /^\s*(?:print|[A-Za-z]|for|if|while)/.test(l)) || '';
+        step(`  ${fr ? 'Itération' : 'Iter'} ${j + 1}: ${loopVar} = ${items[j]}${body ? ` → ${fr ? 'exécute' : 'runs'} \`${body.trim().slice(0, 30)}\`` : ''}`, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+      }
+    } else if (/^\s*if\s+(.+):/.test(stripped)) {
+      const cond = substitute(stripped.match(/^\s*if\s+(.+):/)![1]);
+      const isTruthy = cond !== 'False' && !cond.startsWith('0') && cond !== 'None' && cond !== "''" && cond !== '""' && !cond.includes('==');
+      step(`${fr ? 'Condition' : 'Condition'} \`${cond}\` ${isTruthy ? `${fr ? 'est vraie' : 'is truthy'}` : `${fr ? 'est fausse' : 'is falsy'}`}`, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+    } else if (/^\s*elif\s+(.+):/.test(stripped)) {
+      const cond = substitute(stripped.match(/^\s*elif\s+(.+):/)![1]);
+      step(`${fr ? 'Condition elif' : 'Elif condition'} \`${cond}\``, '', '');
+    } else if (/^\s*else\s*:/.test(stripped)) {
+      step(`${fr ? 'Branche else' : 'Else branch'}`, '', '');
+    } else if (/^\s*while\s+(.+):/.test(stripped)) {
+      if (loopGuard++ > 2) { steps.push(`⚠️ ${fr ? 'Boucle while limitée à 3 itérations' : 'While loop limited to 3 iterations'}`); break; }
+      step(`${fr ? 'Boucle while' : 'While-loop'}`, '', '');
+    } else if (/^\s*def\s+(\w+)/.test(stripped)) {
+      const fnName = stripped.match(/^\s*def\s+(\w+)/)![1];
+      step(`${fr ? 'Définit' : 'Defines'} \`${fnName}()\``, '', '');
+    } else if (/^\s*class\s+(\w+)/.test(stripped)) {
+      const clsName = stripped.match(/^\s*class\s+(\w+)/)![1];
+      step(`${fr ? 'Définit' : 'Defines'} \`${clsName}\``, '', '');
+    } else if (/\b(?:\.append\s*\(|\.extend\s*\()/.test(line)) {
+      step(`${fr ? 'Modifie la liste' : 'Mutates list'}`, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+    } else {
+      step(`${fr ? 'Exécute' : 'Executes'}`, Object.entries(state).map(([k, v]) => `${k}: ${v}`).join(', '), '');
+    }
+  }
+
+  const finalState = Object.entries(state).filter(([k]) => !k.startsWith('_'));
+  return [
+    `**${fr ? 'Trace pas à pas' : 'Step-through trace'}**`,
+    fr ? 'Voici comment ce code s\'exécute, ligne par ligne :' : 'Here is how this code runs, line by line:',
+    ...steps.map((step, idx) => `${idx + 1}. ${step}`),
+    finalState.length ? `**${fr ? 'État final' : 'Final state'}**\n\`${finalState.map(([k, v]) => `${k} = ${v}`).join(', ')}\`` : '',
+    output ? `**${fr ? 'Sortie totale' : 'Total output'}**\n\`\`\`\n${output}\n\`\`\`` : '',
+  ].filter(Boolean).join('\n\n');
+};
+
 const testValueForParameter = (name: string, index: number): [string, string, string, string] => {
   if (/text|string|word|name|char|sentence/.test(name)) return ['"python"', '""', '"a"', '"naïve"'];
   if (/items|values|numbers|nums|list|sequence|data/.test(name)) return ['[1, 2, 3]', '[]', '[0]', '[-2, -2, 5]'];
