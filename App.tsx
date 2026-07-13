@@ -14863,6 +14863,7 @@ const App: React.FC = () => {
     const [bootStage, setBootStage] = useState<'loading' | 'ready' | 'launched'>('loading');
     const [bootLog, setBootLog] = useState<string>('Handshaking...');
     const [offlinePackageReady, setOfflinePackageReady] = useState(false);
+    const [storagePersistence, setStoragePersistence] = useState<'checking' | 'requesting' | 'persistent' | 'best_effort' | 'unsupported'>('checking');
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
@@ -15788,15 +15789,25 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v261') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v262') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v261')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v262')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
+    }, []);
+
+    useEffect(() => {
+        if (!navigator.storage || typeof navigator.storage.persisted !== 'function') {
+            setStoragePersistence('unsupported');
+            return;
+        }
+        navigator.storage.persisted()
+            .then(persistent => setStoragePersistence(persistent ? 'persistent' : 'best_effort'))
+            .catch(() => setStoragePersistence('unsupported'));
     }, []);
 
     useEffect(() => {
@@ -15840,7 +15851,19 @@ const App: React.FC = () => {
         initPyodide();
     }, []);
 
+    const requestPersistentStorage = () => {
+        if (!navigator.storage || typeof navigator.storage.persist !== 'function') {
+            setStoragePersistence('unsupported');
+            return;
+        }
+        setStoragePersistence('requesting');
+        navigator.storage.persist()
+            .then(persistent => setStoragePersistence(persistent ? 'persistent' : 'best_effort'))
+            .catch(() => setStoragePersistence('best_effort'));
+    };
+
     const handleLaunch = () => {
+        requestPersistentStorage();
         setBootStage('launched');
     };
 
@@ -18945,6 +18968,11 @@ print(result)
                         <p className={`max-w-xs text-[10px] font-black uppercase tracking-wider ${offlinePackageReady ? 'text-[#4ade80]' : 'text-[#f59e0b]'}`}>
                             {offlinePackageReady ? 'Complete app saved for offline use' : 'Installing complete offline package in background...'}
                         </p>
+                        <p className={`mt-2 max-w-xs text-[10px] font-bold ${storagePersistence === 'persistent' ? 'text-[#4ade80]' : 'text-gray-400'}`}>
+                            {storagePersistence === 'persistent'
+                                ? 'Long-term storage protection is active.'
+                                : 'Enter Editor will request long-term storage protection.'}
+                        </p>
                         <button onClick={handleLaunch} className="mt-4 bg-[#3b82f6] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-[0_0_40px_rgba(59,130,246,0.3)] active:scale-95 transition-all flex items-center gap-2"><Zap size={20} fill="currentColor" /> ENTER EDITOR</button>
                         <button onClick={clearAppCacheAndReload} disabled={cacheClearBusy} className="mt-4 w-full max-w-xs bg-red-500/10 border border-red-500/25 text-red-400 py-3 rounded-2xl font-black text-[10px] uppercase flex items-center justify-center gap-2 disabled:opacity-60"><Trash2 size={14} /> {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache'}</button>
                     </div>
@@ -21155,8 +21183,31 @@ print(result)
                                     </button>
                                     {appCacheSectionOpen && (
                                         <div className="mt-3 animate-in fade-in duration-200">
+                                            <div className="mb-3 rounded-xl border border-[#1d2d44] bg-[#020817]/60 p-3">
+                                                <div className="mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-gray-300">
+                                                    {t('settings.storageProtection', appLang)}
+                                                </div>
+                                                <p className={`text-[11px] leading-relaxed ${storagePersistence === 'persistent' ? 'text-[#86efac]' : storagePersistence === 'unsupported' ? 'text-gray-400' : 'text-[#fbbf24]'}`}>
+                                                    {storagePersistence === 'persistent'
+                                                        ? t('settings.storagePersistent', appLang)
+                                                        : storagePersistence === 'unsupported'
+                                                            ? t('settings.storageUnsupported', appLang)
+                                                            : t('settings.storageBestEffort', appLang)}
+                                                </p>
+                                                {storagePersistence !== 'persistent' && storagePersistence !== 'unsupported' && (
+                                                    <button
+                                                        onClick={requestPersistentStorage}
+                                                        disabled={storagePersistence === 'requesting'}
+                                                        className="mt-3 w-full rounded-xl border border-[#3b82f6]/40 bg-[#3b82f6]/15 px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.13em] text-[#93c5fd] disabled:opacity-60"
+                                                    >
+                                                        {storagePersistence === 'requesting'
+                                                            ? t('settings.requestingPersistence', appLang)
+                                                            : t('settings.requestPersistence', appLang)}
+                                                    </button>
+                                                )}
+                                            </div>
                                             <p className="mb-3 text-[11px] leading-relaxed text-gray-300">
-                                                If the phone app is stuck on an old GitHub Pages version, clear only the app cache and service worker. Progress, stats, saved problems, and settings stay in place.
+                                                {t('settings.appCacheDesc', appLang)}
                                             </p>
                                             <button
                                                 onClick={clearAppCacheAndReload}
@@ -21164,7 +21215,7 @@ print(result)
                                                 className="w-full rounded-xl border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all disabled:opacity-60 hover:brightness-125"
                                                 style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), backgroundColor: hexToRgba(toolPanelColors.failed, 0.15), color: toolPanelColors.failed }}
                                             >
-                                                {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache & Reload'}
+                                                {cacheClearBusy ? t('settings.clearingCache', appLang) : t('settings.clearCache', appLang)}
                                             </button>
                                         </div>
                                     )}

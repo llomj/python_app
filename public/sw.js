@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v261';
+const CACHE_VERSION = 'v262';
 const CACHE_NAME = `python-mastery-${CACHE_VERSION}`;
 const MANIFEST_URL = './offline-assets.json';
 
