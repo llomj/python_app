@@ -1075,3 +1075,191 @@ export const answerPythonDoctestExecutionRequest = (question: string, language: 
       : 'The report will preserve the exact differences produced by Python’s `doctest` module.',
   ].join('\n\n');
 };
+
+const pythonicFixups: Array<{ pattern: RegExp; fix: string; reasonEn: string; reasonFr: string }> = [
+  { pattern: /\bfor\s+\w+\s+in\s+range\s*\(\s*len\s*\(/, fix: 'Use `enumerate()` or direct iteration', reasonEn: '`range(len(...))` is indirect and slower — iterate the collection directly', reasonFr: '`range(len(...))` est indirect et plus lent — itérez la collection directement' },
+  { pattern: /\bnot\s+\w+\s+is\b/, fix: 'Use `x is not y` instead of `not x is y`', reasonEn: 'PEP 8 recommends `x is not y` as more readable', reasonFr: 'PEP 8 recommande `x is not y` pour une meilleure lisibilité' },
+  { pattern: /^\s*(?:result|output)\s*=\s*""\s*\n[\s\S]*?for\s+\w+\s+in\b[\s\S]*?\1\s*\+=\s*\w+/m, fix: 'Use a list and `"".join()`', reasonEn: 'String concatenation in a loop is O(n²) — `"".join(list)` is O(n)', reasonFr: 'La concaténation de chaînes dans une boucle est O(n²) — `"".join(liste)` est O(n)' },
+  { pattern: /if\s+\w+\s*==\s*True\b/, fix: 'Use `if x:` instead of `if x == True:`', reasonEn: '`== True` is redundant — `if x:` checks truthiness directly', reasonFr: '`== True` est redondant — `if x:` vérifie directement la vérité' },
+  { pattern: /if\s+\w+\s*==\s*False\b/, fix: 'Use `if not x:` instead of `if x == False:`', reasonEn: '`== False` is redundant — `if not x:` is the idiomatic form', reasonFr: '`== False` est redondant — `if not x:` est la forme idiomatique' },
+  { pattern: /except\s*:.*\n\s*pass/, fix: 'Catch a specific exception or at least log the error', reasonEn: 'A bare `except: pass` silently swallows every error including KeyboardInterrupt', reasonFr: 'Un `except: pass` nu avale silencieusement toutes les erreurs, y compris KeyboardInterrupt' },
+  { pattern: /\bexec\s*\(|eval\s*\(/, fix: 'Avoid `exec()`/`eval()` — use safer alternatives', reasonEn: '`exec()`/`eval()` can execute arbitrary code and create security risks', reasonFr: '`exec()`/`eval()` peuvent exécuter du code arbitraire et créent des risques de sécurité' },
+  { pattern: /=\s*\[\s*\]/, fix: 'Use `list()` or a literal directly', reasonEn: 'Prefer `[]` over `list()` for empty lists; use `list()` only when converting an iterable', reasonFr: 'Préférez `[]` à `list()` pour les listes vides ; utilisez `list()` seulement pour convertir un itérable' },
+  { pattern: /\blambda\s+\w+\s*:\s*[^,)]+\s*\+\s*1\b/, fix: 'Inline the operation or define a named function', reasonEn: '`lambda x: x + 1` is better written as a named function if used more than once', reasonFr: '`lambda x: x + 1` est mieux écrit comme fonction nommée si utilisé plus d\'une fois' },
+  { pattern: /\btry\s*:[\s\S]*?except\s*:\s*\n\s*pass/, fix: 'Never use bare `except: pass` — at minimum log the exception', reasonEn: 'Bare `except: pass` hides bugs and makes debugging impossible', reasonFr: 'Un `except: pass` nu cache les bugs et rend le débogage impossible' },
+  { pattern: /while\s+True[\s\S]*?if\s+/, fix: 'Consider `for` with a break condition or a clear exit path', reasonEn: '`while True` with `break` works but should have a clearly bounded or documented exit path', reasonFr: '`while True` avec `break` fonctionne mais doit avoir un chemin de sortie clairement délimité ou documenté' },
+  { pattern: /\bopen\s*\([^)]+\)[^.]*\n(?!\s*with\b)/, fix: 'Use `with open(...) as f:` for automatic cleanup', reasonEn: 'Files opened without `with` must be manually closed — `with` handles it automatically', reasonFr: 'Les fichiers ouverts sans `with` doivent être fermés manuellement — `with` le fait automatiquement' },
+  { pattern: /\'[a-z]+(?:\s+[a-z]+){2,}\'/i, fix: 'Consider using a constant or variable', reasonEn: 'Repeated string literals should be stored in a named constant', reasonFr: 'Les chaînes littérales répétées doivent être stockées dans une constante nommée' },
+];
+
+export const answerPythonCodeRewriteRequest = (question: string, language: AdvancedAiLanguage): string | null => {
+  const code = extractGeneralAiPythonCode(question);
+  if (!code || code.split('\n').length < 2) return null;
+  const fr = language === 'fr';
+  const improvements: Array<{ line: number; before: string; after: string; reason: string }> = [];
+  const lines = code.split('\n');
+  let rewritten = code;
+  for (const fixup of pythonicFixups) {
+    if (fixup.pattern.test(code)) {
+      const matchedLine = lines.findIndex(l => fixup.pattern.test(l));
+      if (matchedLine >= 0) {
+        improvements.push({
+          line: matchedLine + 1,
+          before: lines[matchedLine].trim(),
+          after: fixup.fix,
+          reason: fr ? fixup.reasonFr : fixup.reasonEn,
+        });
+      }
+    }
+  }
+  if (!improvements.length) return null;
+  return [
+    `**${fr ? 'Réécriture de code' : 'Code rewrite'}**`,
+    fr
+      ? `${improvements.length} amélioration(s) détectée(s) :`
+      : `${improvements.length} improvement(s) detected:`,
+    '| # | Line | Before | After | Reason |',
+    '|---|---|---|---|---|',
+    ...improvements.map((imp, i) => `| ${i + 1} | ${imp.line} | \`${imp.before}\` | ${imp.after} | ${imp.reason} |`),
+    '',
+    `**${fr ? 'Résumé' : 'Summary'}**`,
+    fr
+      ? 'Ces modifications rendent le code plus lisible, plus performant et plus conforme à PEP 8.'
+      : 'These changes make the code more readable, more performant, and more PEP 8 compliant.',
+  ].join('\n');
+};
+
+export const answerPythonWhatIfQuestion = (question: string, _language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:what (?:if|happens?)|what about|suppose|imagine|scenario)\b/i.test(question)) return null;
+  const code = extractGeneralAiPythonCode(question);
+  if (!code) return null;
+  const fr = _language === 'fr';
+  const lowerQ = question.toLowerCase();
+  const scenarios: string[] = [];
+
+  if (/\b(?:append|add|insert|extend)\b.*\b(?:while|for|loop|iterat)/i.test(lowerQ)) {
+    scenarios.push(fr
+      ? '**Scénario : modifier une liste pendant l\'itération**\nModifier une liste avec `append()`/`insert()` dans une boucle peut créer une boucle infinie car la liste grandit à chaque itération. Copiez d\'abord la liste ou itérez sur une copie : `for item in original[:]:`.'
+      : '**Scenario: modifying a list while iterating**\nMutating a list with `append()`/`insert()` inside a loop can create an infinite loop because the list grows each iteration. Copy the list first or iterate over a copy: `for item in original[:]:`');
+  }
+  if (/\b(?:remove|pop|delete|del)\b.*\b(?:while|for|loop|iterat)/i.test(lowerQ)) {
+    scenarios.push(fr
+      ? '**Scénario : supprimer des éléments pendant l\'itération**\nSupprimer des éléments d\'une liste avec `remove()` ou `pop()` pendant l\'itération provoque un décalage des indices — des éléments sont sautés. Itérez sur une copie avec `for item in original[:]:` et filtrez.'
+      : '**Scenario: removing items while iterating**\nRemoving elements from a list with `remove()` or `pop()` while iterating causes index shifting — elements are skipped. Iterate over a copy with `for item in original[:]:` and filter.');
+  }
+  if (/\b(?:defaultdict|default.?dict)\b|\bmissing\s+key\b/i.test(lowerQ)) {
+    scenarios.push(fr
+      ? '**Scénario : accéder à une clé manquante**\nSans `defaultdict`, `dict[key]` sur une clé inexistante lève `KeyError`. Utilisez `dict.get(key, default)` ou `defaultdict` pour gérer les clés manquantes automatiquement.'
+      : '**Scenario: accessing a missing key**\nWithout `defaultdict`, `dict[key]` on a missing key raises `KeyError`. Use `dict.get(key, default)` or `defaultdict` to handle missing keys automatically.');
+  }
+  if (/\b(?:infinite|while\s+True|never.?end|never.?stop)\b/i.test(lowerQ)) {
+    scenarios.push(fr
+      ? '**Scénario : boucle infinie**\nUne boucle `while True` sans `break` ou une boucle `while` dont la condition ne devient jamais fausse s\'exécute indéfiniment. Assurez-vous que la condition progresse vers `False` ou utilisez `break` avec un compteur de sécurité.'
+      : '**Scenario: infinite loop**\nA `while True` without `break` or a `while` whose condition never becomes false runs forever. Ensure the condition progresses toward `False` or use `break` with a safety counter.');
+  }
+  if (/\b(?:mutab|mutate|change|modif)\b.*\b(?:tuple|str(?:ing)?)\b|\b(?:tuple|str(?:ing)?)\b.*\b(?:mutab|mutate|change|modif)\b/i.test(lowerQ)) {
+    scenarios.push(fr
+      ? '**Scénario : modifier un tuple ou une chaîne**\nLes tuples et les chaînes sont immuables. `t[0] = x` lève `TypeError`. Créez un nouvel objet au lieu de modifier l\'original.'
+      : '**Scenario: modifying a tuple or string**\nTuples and strings are immutable. `t[0] = x` raises `TypeError`. Create a new object instead of modifying the original.');
+  }
+  if (!scenarios.length) return null;
+  return [
+    `**${fr ? 'Simulation de scénario "Et si…" ?' : '"What if?" scenario simulation'}**`,
+    ...scenarios,
+    `**${fr ? 'Pour explorer davantage' : 'To explore further'}**`,
+    fr
+      ? 'Si vous avez un scénario spécifique en tête, partagez le code et je tracerai l\'exécution pas à pas.'
+      : 'If you have a specific scenario in mind, share the code and I will trace the execution step by step.',
+  ].join('\n\n');
+};
+
+const LIBRARY_HELP: Record<string, { descEn: string; descFr: string; usageEn: string; usageFr: string }> = {
+  requests: {
+    descEn: 'HTTP library for making API calls, fetching web pages, and interacting with web services.',
+    descFr: 'Bibliothèque HTTP pour les appels API, le téléchargement de pages web et l\'interaction avec les services web.',
+    usageEn: '```python\nimport requests\n\n# GET request\nresponse = requests.get("https://api.github.com", timeout=10)\ndata = response.json()  # parse JSON\n\n# POST with data\npayload = {"name": "Noll", "role": "developer"}\nresponse = requests.post("https://httpbin.org/post", json=payload, timeout=10)\nprint(response.status_code, response.json())\n```',
+    usageFr: '```python\nimport requests\n\n# Requête GET\nréponse = requests.get("https://api.github.com", timeout=10)\ndonnées = réponse.json()  # analyse JSON\n\n# POST avec données\npayload = {"nom": "Noll", "rôle": "développeur"}\nr = requests.post("https://httpbin.org/post", json=payload, timeout=10)\nprint(r.status_code, r.json())\n```',
+  },
+  json: {
+    descEn: 'Standard-library module for parsing and generating JSON data — converting between JSON strings and Python dicts/lists.',
+    descFr: 'Module de la bibliothèque standard pour analyser et générer des données JSON — conversion entre chaînes JSON et dictionnaires/listes Python.',
+    usageEn: '```python\nimport json\n\n# Parse JSON string → dict\ndata = \'{"name": "Noll", "age": 30}\'\nparsed = json.loads(data)\nprint(parsed["name"])  # Noll\n\n# Dict → JSON string\noutput = json.dumps(parsed, indent=2)\nprint(output)\n\n# Read/Write JSON files\nwith open("data.json") as f:\n    data = json.load(f)\n\nwith open("data.json", "w") as f:\n    json.dump(data, f, indent=2)\n```',
+    usageFr: '```python\nimport json\n\n# Analyser une chaîne JSON → dict\ndonnées = \'{"nom": "Noll", "âge": 30}\'\nanalysé = json.loads(données)\nprint(analysé["nom"])  # Noll\n\n# Dict → chaîne JSON\nsortie = json.dumps(analysé, indent=2)\nprint(sortie)\n\n# Lire/Écrire des fichiers JSON\nwith open("données.json") as f:\n    données = json.load(f)\n\nwith open("données.json", "w") as f:\n    json.dump(données, f, indent=2)\n```',
+  },
+  pathlib: {
+    descEn: 'Modern, object-oriented approach to filesystem paths — replaces `os.path` with `.`-chained Path methods.',
+    descFr: 'Approche moderne et orientée objet des chemins du système de fichiers — remplace `os.path` par des méthodes enchaînées de Path.',
+    usageEn: '```python\nfrom pathlib import Path\n\n# Create path\nhome = Path.home()\ndata_dir = home / "data" / "project"\ndata_dir.mkdir(parents=True, exist_ok=True)\n\n# Read/write\nfile = data_dir / "notes.txt"\nfile.write_text("Hello, world!")\ncontent = file.read_text()\n\n# Iterate\nfor py_file in data_dir.glob("*.py"):\n    print(py_file.name, py_file.stat().st_size)\n```',
+    usageFr: '```python\nfrom pathlib import Path\n\n# Créer un chemin\nhome = Path.home()\ndossier_données = home / "données" / "projet"\ndossier_données.mkdir(parents=True, exist_ok=True)\n\n# Lire/Écrire\nfichier = dossier_données / "notes.txt"\nfichier.write_text("Bonjour tout le monde !")\ncontenu = fichier.read_text()\n\n# Itérer\nfor fichier_py in dossier_données.glob("*.py"):\n    print(fichier_py.name, fichier_py.stat().st_size)\n```',
+  },
+  datetime: {
+    descEn: 'Module for working with dates, times, time deltas, and time zones — parsing, formatting, arithmetic.',
+    descFr: 'Module pour travailler avec les dates, heures, intervalles et fuseaux horaires — analyse, formatage, calculs.',
+    usageEn: '```python\nfrom datetime import datetime, timedelta, date\n\n# Now\nnow = datetime.now()\nprint(now.strftime("%Y-%m-%d %H:%M"))\n\n# Parse from string\ndt = datetime.strptime("2024-01-15", "%Y-%m-%d")\n\n# Arithmetic\nnext_week = now + timedelta(days=7)\ndelta = next_week - now\nprint(delta.days)\n\n# Date only\ntoday = date.today()\n```',
+    usageFr: '```python\nfrom datetime import datetime, timedelta, date\n\n# Maintenant\nmaintenant = datetime.now()\nprint(maintenant.strftime("%d/%m/%Y %H:%M"))\n\n# Analyse depuis une chaîne\ndt = datetime.strptime("15/01/2024", "%d/%m/%Y")\n\n# Calculs\nsemaine_prochaine = maintenant + timedelta(days=7)\ndelta = semaine_prochaine - maintenant\nprint(delta.days)\n```',
+  },
+  itertools: {
+    descEn: 'Module of fast, memory-efficient iterator tools — chain, cycle, count, permutations, combinations, groupby, islice, and more.',
+    descFr: 'Module d\'outils d\'itération rapides et économes en mémoire — chain, cycle, count, permutations, combinations, groupby, islice, etc.',
+    usageEn: '```python\nfrom itertools import chain, product, groupby, islice\n\n# Chain multiple iterables\ncombined = list(chain([1, 2], [3, 4], [5]))  # [1, 2, 3, 4, 5]\n\n# Cartesian product\npairs = list(product("AB", [1, 2]))  # [(A,1), (A,2), (B,1), (B,2)]\n\n# Group sorted data\nitems = [("a", 1), ("a", 2), ("b", 3)]\nfor key, group in groupby(items, key=lambda x: x[0]):\n    print(key, list(group))\n\n# Take first 5\nfirst_5 = list(islice(range(100), 5))  # [0, 1, 2, 3, 4]\n```',
+    usageFr: '```python\nfrom itertools import chain, product, groupby, islice\n\n# Chaîner plusieurs itérables\ncombiné = list(chain([1, 2], [3, 4], [5]))  # [1, 2, 3, 4, 5]\n\n# Produit cartésien\npaires = list(product("AB", [1, 2]))  # [(A,1), (A,2), (B,1), (B,2)]\n\n# Grouper des données triées\nitems = [("a", 1), ("a", 2), ("b", 3)]\npour clé, groupe in groupby(items, key=lambda x: x[0]):\n    print(clé, list(groupe))\n\n# Prendre les 5 premiers\npremiers_5 = list(islice(range(100), 5))  # [0, 1, 2, 3, 4]\n```',
+  },
+};
+
+export const answerPythonLibraryHelp = (question: string, language: AdvancedAiLanguage): string | null => {
+  const lowerQ = question.toLowerCase();
+  const fr = language === 'fr';
+  const matchedLib = Object.entries(LIBRARY_HELP).find(([lib]) => new RegExp(`\\b${lib}\\b`, 'i').test(lowerQ));
+  if (!matchedLib) return null;
+  const [lib, info] = matchedLib;
+  return [
+    `**${fr ? 'Bibliothèque' : 'Library'}: ${lib}**`,
+    fr ? info.descFr : info.descEn,
+    '',
+    `**${fr ? 'Utilisation courante' : 'Common usage'}**`,
+    fr ? info.usageFr : info.usageEn,
+    '',
+    `**${fr ? 'Conseil' : 'Tip'}**`,
+    fr
+      ? `La documentation officielle de \`${lib}\` donne plus de détails : https://docs.python.org/3/library/${lib}.html`
+      : `The official \`${lib}\` documentation has full details: https://docs.python.org/3/library/${lib}.html`,
+  ].join('\n\n');
+};
+
+export const answerPythonDesignRationaleQuestion = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:why (?:does|is|was|did|would|are)|design (?:choice|decision|rationale)|reason (?:behind|for)|rationale)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  const lowerQ = question.toLowerCase();
+
+  const rationales: Array<{ pattern: RegExp; answerEn: string; answerFr: string }> = [
+    { pattern: /\bsort\b.*\bNone\b|\bNone\b.*\bsort\b/, answerEn: '`list.sort()` mutates in place and returns `None` to avoid confusing the two behaviors. `sorted()` returns a new list. This design forces you to choose explicitly: mutate or copy.', answerFr: '`list.sort()` modifie sur place et renvoie `None` pour éviter de confondre les deux comportements. `sorted()` renvoie une nouvelle liste. Cette conception vous oblige à choisir explicitement : modifier ou copier.' },
+    { pattern: /\bjoin\b.*\bstr(?:ing)?\b|\bstr(?:ing)?\b.*\bjoin\b/, answerEn: '`" ".join(list)` is a method on the separator string, not on the list. This works with any iterable of strings and avoids type-checking — any iterable works, not just lists.', answerFr: '`" ".join(liste)` est une méthode sur la chaîne séparatrice, pas sur la liste. Cela fonctionne avec n\'importe quel itérable de chaînes et évite la vérification de type — n\'importe quel itérable fonctionne, pas seulement les listes.' },
+    { pattern: /\brandint\b/, answerEn: '`random.randint(1, 6)` includes both endpoints (unlike `range` which excludes the stop). This matches the natural language "pick a number from 1 to 6".', answerFr: '`random.randint(1, 6)` inclut les deux extrémités (contrairement à `range` qui exclut la fin). Cela correspond au langage naturel "choisis un nombre de 1 à 6".' },
+    { pattern: /\brange\b.*\bexclu|\brange\b.*\bstop\b|\bstop\b.*\brange\b/, answerEn: '`range(n)` yields 0 to n-1 (exclusive) because zero-based indexing is consistent with lists and slices. `range(len(seq))` matches list indices directly.', answerFr: '`range(n)` produit 0 à n-1 (exclu) car l\'indexation basée sur zéro est cohérente avec les listes et les tranches. `range(len(seq))` correspond directement aux indices de liste.' },
+    { pattern: /\bimmutab/, answerEn: 'Strings and tuples are immutable by design. Immutability makes them hashable (usable as dict keys), thread-safe, and enables internal optimizations like string interning.', answerFr: 'Les chaînes et les tuples sont immuables par conception. L\'immuabilité les rend hachables (utilisables comme clés de dictionnaire), thread-safe et permet des optimisations internes comme l\'internement des chaînes.' },
+    { pattern: /\btry\b.*\belse\b|\belse\b.*\btry\b/, answerEn: 'The `else` clause on `try` runs only if no exception occurred. This separates success-path code from the `try` block that might accidentally catch exceptions from unrelated code.', answerFr: 'La clause `else` d\'un `try` ne s\'exécute que si aucune exception n\'a eu lieu. Cela sépare le code du chemin de réussite du bloc `try` qui pourrait accidentellement attraper des exceptions de code non lié.' },
+    { pattern: /\bpriv[ae]t\b|\bunderscore\b|_\b(?:name|method|attr)/, answerEn: 'Python uses `_` prefix as a convention for "internal use" rather than enforcing true private access. This reflects the philosophy "we are all consenting adults" — trust over enforcement.', answerFr: 'Python utilise le préfixe `_` comme convention pour "usage interne" plutôt que d\'imposer un véritable accès privé. Cela reflète la philosophie "nous sommes tous des adultes consentants" — la confiance plutôt que l\'application.' },
+    { pattern: /\bpass\b/, answerEn: '`pass` is a no-op statement required because Python uses indentation for block structure. An empty block would be ambiguous, so `pass` explicitly says "do nothing here".', answerFr: '`pass` est une instruction vide nécessaire car Python utilise l\'indentation pour la structure des blocs. Un bloc vide serait ambigu, donc `pass` dit explicitement "ne rien faire ici".' },
+    { pattern: /\bGIL\b|global\s+interpreter\s+lock/, answerEn: 'The GIL ensures only one thread executes Python bytecode at a time, simplifying memory management. True parallelism requires `multiprocessing` (separate processes) or C extensions that release the GIL.', answerFr: 'Le GIL garantit qu\'un seul thread exécute le bytecode Python à la fois, ce qui simplifie la gestion de la mémoire. Le véritable parallélisme nécessite `multiprocessing` (processus séparés) ou des extensions C qui libèrent le GIL.' },
+    { pattern: /\biter\b.*\bnext\b|\bnext\b.*\biter\b/, answerEn: 'Separating `iter()` (creates iterator) from `next()` (drives iteration) decouples the "make something iterable" protocol from the "advance one step" protocol. This lets `for` loops work with any iterable via the same interface.', answerFr: 'Séparer `iter()` (crée un itérateur) de `next()` (avance d\'un pas) découple le protocole "rendre quelque chose itérable" du protocole "avancer d\'un pas". Cela permet aux boucles `for` de fonctionner avec n\'importe quel itérable via la même interface.' },
+  ];
+
+  const matched = rationales.find(r => r.pattern.test(lowerQ));
+  if (!matched) {
+    return [
+      `**${fr ? 'Conception Python' : 'Python design rationale'}**`,
+      fr
+        ? 'Je ne connais pas la raison de conception spécifique pour ce sujet. La philosophie de Python est résumée dans le PEP 20 (Zen de Python) : "Il devrait y avoir une — et de préférence une seule — façon évidente de le faire."'
+        : 'I do not know the specific design rationale for this topic. Python\'s philosophy is summarized in PEP 20 (The Zen of Python): "There should be one — and preferably only one — obvious way to do it."',
+    ].join('\n\n');
+  }
+  return [
+    `**${fr ? 'Raison de conception Python' : 'Python design rationale'}**`,
+    matched.answerEn,
+    '',
+    `**${fr ? 'Philosophie plus large' : 'Broader philosophy'}**`,
+    fr
+      ? 'Python privilégie la lisibilité, la simplicité et l\'explícite plutôt que l\'implicite. De nombreux choix de conception découlent de ces principes.'
+      : 'Python values readability, simplicity, and explicitness over implicitness. Many design choices follow from these principles.',
+  ].join('\n\n');
+};

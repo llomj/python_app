@@ -34,6 +34,9 @@ export type GeneralAiIntent =
   | 'type_hints'
   | 'performance'
   | 'debugging'
+  | 'what_if'
+  | 'library_help'
+  | 'design_rationale'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -101,6 +104,18 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:refactor|rewrite|clean.?up|clean.?code|restructure|simplif)(?:\s+(?:this|the|my|function|code|class))?\b/i.test(value)) {
     return { intent: 'refactoring', confidence: 0.96, reason: 'Code refactoring request detected' };
+  }
+  if (/\b(?:what (?:if|happens?|would|when)|what happens (?:when|if)|scenario|imagine|suppose)\b/i.test(value)
+    && /\b(?:modif|mutat|append|remove|delete|change|loop|iterat|add|insert|while|infinite)\b/i.test(value)) {
+    return { intent: 'what_if', confidence: 0.94, reason: 'What-if scenario simulation request detected' };
+  }
+  if (/\b(?:how (?:do|can|to)\s+use\s+(?:the\s+)?|usage of|example of using|guide to using|how to work with)\b/i.test(value)
+    && /\b(?:requests?|json|pathlib|re|regex|datetime|subprocess|os\.|sys|itertools|collections|random|math|string|typing)\b/i.test(value)) {
+    return { intent: 'library_help', confidence: 0.95, reason: 'Standard-library usage request detected' };
+  }
+  if (/\b(?:why (?:does|is|was|did|would|are)|design (?:choice|decision|rationale)|reason (?:behind|for)|rationale)\b/i.test(value)
+    && /\b(?:python|list|tuple|dict|str|int|print|sort|join|map|filter|lambda|return|none|null|immutable|mutable)\b/i.test(value)) {
+    return { intent: 'design_rationale', confidence: 0.93, reason: 'Python design-rationale request detected' };
   }
   if (/\b(?:async|await|coroutine|asyncio|asynchronous)\b/i.test(value)
     && !/\b(?:modules?|imports?|packages?)\b/i.test(value)) {
