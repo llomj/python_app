@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonDataStructureChoice, answerPythonDesignRationaleQuestion, answerPythonDoctestExecutionRequest, answerPythonFormattingGuide, answerPythonFunctionContractRequest, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPep8Guide, answerPythonRefactoringRecipes, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonFormattingGuide, answerPythonFunctionContractRequest, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPep8Guide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -17866,6 +17866,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonRefactoringRecipes(effectiveQuestion, appLang)
                 || answerPythonPep8Guide(effectiveQuestion, appLang)
                 || answerPythonComparisonReference(effectiveQuestion, appLang)
+                || answerPythonProjectStructureGuide(effectiveQuestion, appLang)
+                || answerPythonDecoratorPatterns(effectiveQuestion, appLang)
+                || answerPythonTestingPatterns(effectiveQuestion, appLang)
+                || answerPythonCliPatterns(effectiveQuestion, appLang)
+                || answerPythonEdgeCases(effectiveQuestion, appLang)
                 || answerPythonTestCaseRequest(effectiveQuestion, appLang)
                 || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
             if (!refAnswer && shouldCreateQuiz) {
@@ -17995,6 +18000,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 case 'comparison_reference':
                     refAnswer = answerPythonComparisonReference(effectiveQuestion, appLang)
                         || knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang);
+                    break;
+                case 'project_structure':
+                    refAnswer = answerPythonProjectStructureGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'testing':
+                    refAnswer = answerPythonTestingPatterns(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'cli':
+                    refAnswer = answerPythonCliPatterns(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'refactoring':
                     refAnswer = answerPythonCodeRewriteRequest(effectiveQuestion, appLang)

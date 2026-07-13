@@ -44,6 +44,9 @@ export type GeneralAiIntent =
   | 'package_advice'
   | 'pep8'
   | 'comparison_reference'
+  | 'project_structure'
+  | 'testing'
+  | 'cli'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -159,6 +162,15 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:type (?:hint|annotation)|typing\b|mypy|type.?safe)\b/i.test(lower)) {
     return { intent: 'type_hints', confidence: 0.96, reason: 'Type hints request detected' };
+  }
+  if (/\b(?:project structure|folder structure|how to structure|how to organize|project layout|src layout|structure du projet)\b/i.test(lower)) {
+    return { intent: 'project_structure', confidence: 0.96, reason: 'Project structure request detected' };
+  }
+  if (/\b(?:pytest|unit.?test|how to test|write.*test|test.*pattern|testing.*fixture|parametrize|mock|tester|test.*écrire)\b/i.test(lower)) {
+    return { intent: 'testing', confidence: 0.94, reason: 'Testing/testing patterns request detected' };
+  }
+  if (/\b(?:CLI|command.?line|if __name__|argparse|sys\.argv|entry.?point|console.?script|point d['’]entr[eé]e|ligne de commande)\b/i.test(lower)) {
+    return { intent: 'cli', confidence: 0.94, reason: 'CLI/command-line patterns request detected' };
   }
   if (/\b(?:best (?:library|package|tool|framework)|recommend.*(?:library|package|framework)|what.*(?:library|package|tool).*use|which.*library|quel.*(?:biblioth[eè]que|module|paquet))\b/i.test(lower)) {
     return { intent: 'package_advice', confidence: 0.95, reason: 'Package/library recommendation request detected' };

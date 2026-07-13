@@ -1813,3 +1813,334 @@ export const answerPythonComparisonReference = (question: string, language: Adva
     ...comparisons.map(c => `**${c.title}**\n${fr ? c.shortFr : c.shortEn}`),
   ].join('\n\n');
 };
+
+export const answerPythonProjectStructureGuide = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:project structure|directory structure|folder structure|how to structure|how to organize|package structure|src layout|flat layout|project layout|structure du projet|organisation.*projet|layout.*python)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+
+  const srcExample = [
+    'my_project/',
+    '├── pyproject.toml          # project metadata & deps',
+    '├── README.md',
+    '├── src/',
+    '│   └── my_project/',
+    '│       ├── __init__.py',
+    '│       ├── core.py',
+    '│       └── utils.py',
+    '├── tests/',
+    '│   ├── __init__.py',
+    '│   └── test_core.py',
+    '└── .gitignore',
+  ].join('\n');
+
+  return [
+    `**${fr ? 'Structure de projet Python' : 'Python project structure'}**`,
+    '',
+    `**${fr ? 'Layout recommandé (src layout)' : 'Recommended layout (src layout)'}**`,
+    '```',
+    srcExample,
+    '```',
+    '',
+    `**${fr ? 'Pourquoi `src/` ?' : 'Why `src/`?'}**`,
+    fr
+      ? 'Le dossier `src/` sépare le code de la racine du projet, évitant les imports accidentels depuis le répertoire de travail. `pip install -e .` installe votre paquet proprement.'
+      : 'The `src/` directory separates your code from the project root, preventing accidental imports from the working directory. `pip install -e .` installs your package cleanly.',
+    '',
+    `**${fr ? 'Fichiers clés' : 'Key files'}**`,
+    fr
+      ? '- `pyproject.toml` : norme moderne pour métadonnées, dépendances, configuration des outils (black, ruff, mypy, pytest).'
+      : '- `pyproject.toml` : modern standard for metadata, dependencies, tool config (black, ruff, mypy, pytest).',
+    fr
+      ? '- `setup.py` : legacy — seulement si nécessaire pour les scripts ou extensions C.'
+      : '- `setup.py` : legacy — only if needed for scripts or C extensions.',
+    fr
+      ? '- `requirements.txt` : facultatif — verrouille les dépendances pour le déploiement.'
+      : '- `requirements.txt` : optional — lock dependencies for deployment.',
+    '',
+    `**${fr ? 'Flat vs src layout' : 'Flat vs src layout'}**`,
+    fr
+      ? '**Flat** : `my_project/` + `tests/` à la racine. Plus simple mais peut causer des conflits d\'import avec les tests. Préféré pour les petits scripts ou projets < 500 lignes.'
+      : '**Flat** : `my_project/` + `tests/` at root. Simpler but can cause import conflicts with tests. Preferred for small scripts or projects < 500 lines.',
+    fr
+      ? '**Src** : `src/` wrapper. Plus propre pour les paquets distribuables. Recommandé par `pyOpenSci` et `scientific-python.org`.'
+      : '**Src** : `src/` wrapper. Cleaner for distributable packages. Recommended by `pyOpenSci` and `scientific-python.org`.',
+    '',
+    `**${fr ? 'Minimal `pyproject.toml`' : 'Minimal `pyproject.toml`'}**`,
+    '```toml',
+    '[build-system]',
+    'requires = ["setuptools"]',
+    'build-backend = "setuptools.backends._legacy:_Backend"',
+    '',
+    '[project]',
+    'name = "my-project"',
+    'version = "0.1.0"',
+    'requires-python = ">=3.10"',
+    '```',
+  ].join('\n');
+};
+
+export const answerPythonDecoratorPatterns = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:decorator pattern|decorator with arg|decorator.*wraps|class.*decorator|stack.*decorator|@.*decorator|multiple.*decorator|decorator.*param[ée]tre|cr[ée]er.*d[ée]corateur)\b/i.test(question) &&
+    !/^how.*decorator/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Patrons de décorateurs Python' : 'Python decorator patterns'}**`,
+    '',
+    `**1. ${fr ? 'Décorateur simple' : 'Simple decorator'}**`,
+    '```python',
+    'from functools import wraps',
+    '',
+    'def log_time(func):',
+    '    @wraps(func)  # preserves __name__, __doc__',
+    '    def wrapper(*args, **kwargs):',
+    '        import time',
+    '        start = time.time()',
+    '        result = func(*args, **kwargs)',
+    '        print(f"{func.__name__} took {time.time() - start:.3f}s")',
+    '        return result',
+    '    return wrapper',
+    '',
+    '@log_time',
+    'def process(): ...',
+    '```',
+    '',
+    `**2. ${fr ? 'Décorateur avec paramètres' : 'Decorator with arguments'}**`,
+    '```python',
+    'from functools import wraps',
+    '',
+    'def retry(max_attempts: int = 3):',
+    '    def decorator(func):',
+    '        @wraps(func)',
+    '        def wrapper(*args, **kwargs):',
+    '            for attempt in range(max_attempts):',
+    '                try:',
+    '                    return func(*args, **kwargs)',
+    '                except Exception as e:',
+    '                    if attempt == max_attempts - 1:',
+    '                        raise',
+    '        return wrapper',
+    '    return decorator',
+    '',
+    '@retry(max_attempts=5)',
+    'def fetch_data(): ...',
+    '```',
+    '',
+    `**3. ${fr ? 'Décorateur de classe' : 'Class-based decorator'}**`,
+    '```python',
+    'from functools import wraps',
+    '',
+    'class CountCalls:',
+    '    def __init__(self, func):',
+    '        self.func = func',
+    '        self.count = 0',
+    '    def __call__(self, *args, **kwargs):',
+    '        self.count += 1',
+    '        print(f"Call #{self.count} of {self.func.__name__}")',
+    '        return self.func(*args, **kwargs)',
+    '',
+    '@CountCalls',
+    'def say_hello():',
+    '    print("Hello!")',
+    '```',
+    '',
+    `**4. ${fr ? 'Empilement de décorateurs' : 'Stacking decorators'}**`,
+    '```python',
+    '@log_time',
+    '@retry(max_attempts=3)',
+    'def unstable_operation():',
+    '    ...',
+    '# Executes bottom-up: retry wraps first, then log_time wraps that',
+    '```',
+    '',
+    `**${fr ? 'Conseil' : 'Tip'}**`,
+    fr
+      ? 'Utilisez toujours `@functools.wraps` dans les décorateurs de fonction. Sans lui, l\'introspection (aide, débogueur) montre le `wrapper` au lieu de la fonction originale.'
+      : 'Always use `@functools.wraps` in function decorators. Without it, introspection (help, debugger) shows the `wrapper` instead of the original function.',
+  ].join('\n');
+};
+
+export const answerPythonTestingPatterns = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:pytest|unit.?test|test.?case|fixture|parametrize|mock|monkey.?patch|tmp.?path|caplog|how to test|test.*pattern|test.*écrire|comment tester|tester.*code)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Patrons de test pytest' : 'pytest testing patterns'}**`,
+    '',
+    `**1. ${fr ? 'Fixture de base' : 'Basic fixture'}**`,
+    '```python',
+    'import pytest',
+    '',
+    '@pytest.fixture',
+    'def db_connection():',
+    '    conn = create_connection()',
+    '    yield conn  # setup before, teardown after',
+    '    conn.close()',
+    '',
+    'def test_query(db_connection):',
+    '    result = db_connection.query("SELECT 1")',
+    '    assert result == 1',
+    '```',
+    '',
+    `**2. ${fr ? 'Paramétrage' : 'Parametrize'}**`,
+    '```python',
+    '@pytest.mark.parametrize("input,expected", [',
+    '    (1, 2),',
+    '    (2, 4),',
+    '    (3, 6),',
+    '])',
+    'def test_double(input, expected):',
+    '    assert double(input) == expected',
+    '```',
+    '',
+    `**3. ${fr ? 'Mocking' : 'Mocking'}**`,
+    '```python',
+    'from unittest.mock import patch, Mock',
+    '',
+    'def test_fetch_data():',
+    '    mock_response = Mock(status_code=200)',
+    '    mock_response.json.return_value = {"key": "value"}',
+    '',
+    '    with patch("requests.get", return_value=mock_response):',
+    '        result = fetch_data("http://example.com")',
+    '        assert result["key"] == "value"',
+    '```',
+    '',
+    `**4. ${fr ? 'Fichiers temporaires' : 'Temp files'}**`,
+    '```python',
+    'def test_write_read(tmp_path):',
+    '    file = tmp_path / "test.txt"',
+    '    file.write_text("hello")',
+    '    assert file.read_text() == "hello"',
+    '```',
+    '',
+    `**5. ${fr ? 'Capture de logs' : 'Log capture'}**`,
+    '```python',
+    'def test_logging(caplog):',
+    '    import logging',
+    '    caplog.set_level(logging.INFO)',
+    '    my_function()',
+    '    assert "expected message" in caplog.text',
+    '```',
+  ].join('\n');
+};
+
+export const answerPythonCliPatterns = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:if __name__|__name__ ==.|main|argparse|click|typer|sys\.argv|entry.?point|console.?script|CLI|command.?line|ligne de commande|point d['’]entr[eé]e)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  return [
+    `**${fr ? 'Patrons CLI Python' : 'Python CLI patterns'}**`,
+    '',
+    `**1. ${fr ? 'Garde `if __name__ == "__main__"`' : 'The `if __name__ == "__main__"` guard'}**`,
+    '```python',
+    'def main():',
+    '    """Entry point of the script."""',
+    '    print("Running as script")',
+    '',
+    'if __name__ == "__main__":',
+    '    main()',
+    '```',
+    fr
+      ? 'Le code sous ce garde ne s\'exécute que quand le fichier est lancé directement (pas importé). Permet de réutiliser les fonctions depuis un autre module.'
+      : 'Code under this guard runs only when the file is executed directly (not imported). Allows reusing functions from other modules.',
+    '',
+    `**2. ${fr ? '`sys.argv` — arguments bruts' : '`sys.argv` — raw arguments'}**`,
+    '```python',
+    'import sys',
+    'if len(sys.argv) > 1:',
+    '    print(f"Args: {sys.argv[1:]}")',
+    'else:',
+    '    print("No arguments")',
+    '```',
+    '',
+    `**3. ${fr ? '`argparse` — arguments structurés' : '`argparse` — structured arguments'}**`,
+    '```python',
+    'import argparse',
+    '',
+    'parser = argparse.ArgumentParser(description="Process some data.")',
+    'parser.add_argument("input", help="input file path")',
+    'parser.add_argument("-o", "--output", default="out.txt")',
+    'parser.add_argument("-v", "--verbose", action="store_true")',
+    'args = parser.parse_args()',
+    '',
+    'print(args.input, args.output, args.verbose)',
+    '```',
+    '',
+    `**4. ${fr ? 'Codes de sortie' : 'Exit codes'}**`,
+    '```python',
+    'import sys',
+    'def main():',
+    '    if error_condition:',
+    '        print("Error occurred", file=sys.stderr)',
+    '        sys.exit(1)  # non-zero = failure',
+    '    sys.exit(0)  # 0 = success',
+    '```',
+    '',
+    `**5. ${fr ? 'Point d\'entrée `pyproject.toml`' : '`pyproject.toml` entry point'}**`,
+    '```toml',
+    '[project.scripts]',
+    'my-cli = "my_project.cli:main"',
+    '```',
+    fr
+      ? 'Après `pip install .`, la commande `my-cli` est disponible dans le terminal.'
+      : 'After `pip install .`, the `my-cli` command is available in your terminal.',
+  ].join('\n');
+};
+
+export const answerPythonEdgeCases = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:edge.?case|gotcha|surprise|weird|unexpected behavior|strange|floating.*point|NaN||short.?circuit|truthy|falsy|mutable.*default|late.?bind|scope.*loop|integer.*cache|is vs ==)\b/i.test(question) &&
+    !/\b(?:why.*(?:None|wrong|change|weird|strange|unexpected)|what.*happens? when)\b/i.test(question)) return null;
+  const fr = language === 'fr';
+
+  const edgeCases: Array<{ title: string; descEn: string; descFr: string; code: string }> = [
+    {
+      title: 'Mutable default arguments',
+      descEn: 'Default arguments are evaluated once at function definition, not each call. A mutable default (like `[]`) is shared across all calls.',
+      descFr: 'Les arguments par défaut sont évalués une fois à la définition, pas à chaque appel. Un défaut mutable (comme `[]`) est partagé entre tous les appels.',
+      code: 'def add(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add(1))  # [1]\nprint(add(2))  # [1, 2] — not [2]!\n\n# Fix:\ndef add(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items',
+    },
+    {
+      title: 'Late-binding closures in loops',
+      descEn: 'Functions created in a loop capture the loop variable by reference, not by value. All functions see the final value of the loop variable.',
+      descFr: 'Les fonctions créées dans une boucle capturent la variable par référence, pas par valeur. Toutes les fonctions voient la valeur finale de la variable de boucle.',
+      code: 'funcs = [lambda: i for i in range(5)]\nprint([f() for f in funcs])  # [4, 4, 4, 4, 4]\n\n# Fix:\nfuncs = [lambda x=i: x for i in range(5)]\nprint([f() for f in funcs])  # [0, 1, 2, 3, 4]',
+    },
+    {
+      title: 'Floating point precision',
+      descEn: '`0.1 + 0.2 != 0.3` due to IEEE 754 binary floating-point representation. Use `math.isclose()` or `decimal.Decimal` for exact decimal arithmetic.',
+      descFr: '`0.1 + 0.2 != 0.3` à cause de la représentation binaire IEEE 754. Utilisez `math.isclose()` ou `decimal.Decimal` pour les calculs décimaux exacts.',
+      code: 'print(0.1 + 0.2)        # 0.30000000000000004\nprint(0.1 + 0.2 == 0.3) # False\n\n# Fix:\nimport math\nprint(math.isclose(0.1 + 0.2, 0.3))  # True',
+    },
+    {
+      title: 'Short-circuit `or` and `and`',
+      descEn: '`or` returns the first truthy value (or the last falsy), `and` returns the first falsy (or the last truthy). Not boolean — they return one of the operands.',
+      descFr: '`or` renvoie la première valeur vraie (ou la dernière fausse), `and` renvoie la première fausse (ou la dernière vraie). Pas booléen — il renvoie l\'un des opérandes.',
+      code: 'print(0 or 42)     # 42 — 0 is falsy\nprint("" or "fallback")  # "fallback"\nprint(42 and 0)  # 0 — 42 is truthy, returns 0\n\n# Using for default:\nname = user_input or "default_name"',
+    },
+    {
+      title: 'Integer interning / small integer cache',
+      descEn: 'Python caches integers from -5 to 256. `a is b` may be True for small ints but False for larger ones — always use `==` for value comparison.',
+      descFr: 'Python met en cache les entiers de -5 à 256. `a is b` peut être True pour les petits entiers mais False pour les plus grands — utilisez toujours `==` pour comparer des valeurs.',
+      code: 'a, b = 256, 256\nprint(a is b)   # True (cached)\n\nx, y = 257, 257\nprint(x is y)   # False (or True — implementation-dependent)\nprint(x == y)   # True — always correct',
+    },
+    {
+      title: '`NaN` comparison always False',
+      descEn: '`float("nan")` is not equal to itself (`NaN != NaN`). Use `math.isnan(x)` to check for NaN.',
+      descFr: '`float("nan")` n\'est pas égal à lui-même (`NaN != NaN`). Utilisez `math.isnan(x)` pour vérifier.',
+      code: 'nan = float("nan")\nprint(nan == nan)               # False!\nprint(nan is nan)               # True (same object)\n\nimport math\nprint(math.isnan(nan))          # True — correct check',
+    },
+  ];
+
+  return [
+    `**${fr ? 'Pièges Python courants' : 'Common Python gotchas'}**`,
+    ...edgeCases.map((e, i) => [
+      `**${i + 1}. ${e.title}**`,
+      fr ? e.descFr : e.descEn,
+      '```python',
+      e.code,
+      '```',
+    ].join('\n\n')),
+    `**${fr ? 'Règle générale' : 'General rule'}**`,
+    fr
+      ? 'Quand le comportement semble étrange, vérifiez : (1) l\'identité vs l\'égalité, (2) la mutabilité, (3) la portée des variables, (4) l\'évaluation paresseuse (générateurs, `or`/`and`).'
+      : 'When behavior seems strange, check: (1) identity vs equality, (2) mutability, (3) variable scope, (4) lazy evaluation (generators, `or`/`and`).',
+  ].join('\n\n');
+};
