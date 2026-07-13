@@ -18,6 +18,7 @@
         "generate:solution-manifest": "node scripts/generate_solution_section_manifest.js",
         "generate:solution-behavior": "node scripts/generate_solution_behavior_manifest.js",
         "generate:solution-alternatives": "node scripts/generate_semantic_solution_alternatives.js",
+        "generate:script-examples": "node scripts/generate_simple_script_examples.js",
         "audit:starters": "node scripts/audit_starter_signatures.js",
         "audit:concepts": "node scripts/audit_python_concepts.js",
         "eval:general-ai": "node scripts/evaluate_general_ai.js",

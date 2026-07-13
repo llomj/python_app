@@ -41,9 +41,15 @@ function loadTsExports(fileName) {
 const { EXERCISES } = loadTsExports('exercises.ts');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const { buildSolutionVariations, countDistinctSolutionVariations } = loadTsExports('services/solutionVariations.ts');
+const { GENERATED_SIMPLE_SCRIPT_EXAMPLES } = loadTsExports('services/generatedSimpleScriptExamples.ts');
 
 const records = [];
 const failures = [];
+const scriptRecords = Object.entries(GENERATED_SIMPLE_SCRIPT_EXAMPLES).map(([id, code]) => ({ id: Number(id), code }));
+
+if (scriptRecords.length < 1500) {
+  failures.push(`only ${scriptRecords.length} exercises have a validated simple script example`);
+}
 
 for (const exercise of EXERCISES) {
   const rendered = buildSolutionVariations(exercise.solution, exercise.id, AUTO_GRADERS[exercise.id]);
@@ -84,9 +90,31 @@ if (python.error) failures.push(`Python syntax audit could not start: ${python.e
 if (python.status !== 0) failures.push(`Python syntax audit exited ${python.status}: ${python.stderr.trim()}`);
 if (python.stdout.trim()) failures.push(...python.stdout.trim().split('\n'));
 
+const scriptChecker = [
+  'import ast, json, sys',
+  'for line in sys.stdin:',
+  '    record = json.loads(line)',
+  '    try:',
+  '        tree = ast.parse(record["code"])',
+  '        blocked = [node for node in ast.walk(tree) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda))]',
+  '        if blocked: raise ValueError(f"contains {type(blocked[0]).__name__}")',
+  '        compile(tree, f"problem_{record[\"id\"]}_simple_script", "exec")',
+  '    except Exception as error:',
+  '        print(f"{record[\'id\']} simple script: {type(error).__name__}: {error}")',
+].join('\n');
+const scriptPython = spawnSync('python3', ['-c', scriptChecker], {
+  input: scriptRecords.map(record => JSON.stringify(record)).join('\n'),
+  encoding: 'utf8',
+  maxBuffer: 20 * 1024 * 1024,
+});
+if (scriptPython.error) failures.push(`Simple-script audit could not start: ${scriptPython.error.message}`);
+if (scriptPython.status !== 0) failures.push(`Simple-script audit exited ${scriptPython.status}: ${scriptPython.stderr.trim()}`);
+if (scriptPython.stdout.trim()) failures.push(...scriptPython.stdout.trim().split('\n'));
+
 console.log('Solution variation audit');
 console.log(`Exercises: ${EXERCISES.length}`);
 console.log(`Generated variations: ${records.length * 3}+`);
+console.log(`Validated simple scripts: ${scriptRecords.length}`);
 console.log(`Failures: ${failures.length}`);
 
 if (failures.length) {

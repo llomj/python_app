@@ -3,6 +3,7 @@ import { INVALID_SOLUTION_SECTION_INDEXES } from './solutionSectionManifest';
 import { SOLUTION_REFERENCE_OVERRIDES } from './solutionReferenceOverrides';
 import { INVALID_SOLUTION_BODY_KEYS } from './solutionBehaviorManifest';
 import { GENERATED_SOLUTION_ALTERNATIVES } from './generatedSolutionAlternatives';
+import { GENERATED_SIMPLE_SCRIPT_EXAMPLES } from './generatedSimpleScriptExamples';
 
 interface SolutionSection {
     heading: string;
@@ -162,10 +163,18 @@ export const buildSolutionVariations = (
 ): string => {
     const generatedAlternatives = GENERATED_SOLUTION_ALTERNATIVES[exerciseId];
     if (generatedAlternatives?.length >= 3) {
-        return generatedAlternatives.slice(0, 4).map((alternative, index) => [
+        const rendered = generatedAlternatives.slice(0, 4).map((alternative, index) => [
             `# Example ${index + 1}: ${index === 0 ? 'simplest reference' : alternative.heading.replace(/^#\s*/, '')}`,
             alternative.body,
-        ].join('\n')).join('\n\n');
+        ].join('\n'));
+        const scriptExample = GENERATED_SIMPLE_SCRIPT_EXAMPLES[exerciseId];
+        if (scriptExample) {
+            rendered.push([
+                `# Example ${rendered.length + 1}: simple script approach`,
+                scriptExample,
+            ].join('\n'));
+        }
+        return rendered.join('\n\n');
     }
     const effectiveSolution = SOLUTION_REFERENCE_OVERRIDES[exerciseId] ?? solution;
     const { prefix, sections } = parseSections(effectiveSolution);
