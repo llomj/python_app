@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionContractRequest, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPep8Guide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -17882,6 +17882,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonLoggingPatterns(effectiveQuestion, appLang)
                 || answerPythonEnvGuide(effectiveQuestion, appLang)
                 || answerPythonToolingGuide(effectiveQuestion, appLang)
+                || answerPythonConcurrencyGuide(effectiveQuestion, appLang)
+                || answerPythonHttpApiGuide(effectiveQuestion, appLang)
+                || answerPythonDatabaseGuide(effectiveQuestion, appLang)
+                || answerPythonSerializationGuide(effectiveQuestion, appLang)
+                || answerPythonDatetimeGuide(effectiveQuestion, appLang)
+                || answerPythonProfilingGuide(effectiveQuestion, appLang)
+                || answerPythonPackagingGuide(effectiveQuestion, appLang)
+                || answerPythonFunctionalGuide(effectiveQuestion, appLang)
+                || answerPythonSecurityGuide(effectiveQuestion, appLang)
+                || answerPythonContextManagerGuide(effectiveQuestion, appLang)
                 || answerPythonTestCaseRequest(effectiveQuestion, appLang)
                 || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
             if (!refAnswer && shouldCreateQuiz) {
@@ -18038,6 +18048,46 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'tooling':
                     refAnswer = answerPythonToolingGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'concurrency':
+                    refAnswer = answerPythonConcurrencyGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'http_api':
+                    refAnswer = answerPythonHttpApiGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'database':
+                    refAnswer = answerPythonDatabaseGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'serialization':
+                    refAnswer = answerPythonSerializationGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'datetime':
+                    refAnswer = answerPythonDatetimeGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'profiling':
+                    refAnswer = answerPythonProfilingGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'packaging':
+                    refAnswer = answerPythonPackagingGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'functional':
+                    refAnswer = answerPythonFunctionalGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'security':
+                    refAnswer = answerPythonSecurityGuide(effectiveQuestion, appLang)
+                        || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'context_manager':
+                    refAnswer = answerPythonContextManagerGuide(effectiveQuestion, appLang)
                         || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'project_structure':

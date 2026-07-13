@@ -54,6 +54,16 @@ export type GeneralAiIntent =
   | 'logging'
   | 'env_guide'
   | 'tooling'
+  | 'concurrency'
+  | 'http_api'
+  | 'database'
+  | 'serialization'
+  | 'datetime'
+  | 'profiling'
+  | 'packaging'
+  | 'functional'
+  | 'security'
+  | 'context_manager'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -190,6 +200,36 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:pdb|debug(?:ger|ging)|breakpoint|linter|lint|ruff|flake8|mypy|type.?check|black|formatter|code.?style|vs.?code|ide|outil de débogage|formateur)\b/i.test(lower)) {
     return { intent: 'tooling', confidence: 0.94, reason: 'Tooling/debugging request detected' };
+  }
+  if (/\b(?:threading|multiprocessing|gil|race.?condition|deadlock|thread.?safe|parallelis|concurrent\.futures|executor|pool|concurrence)\b/i.test(lower)) {
+    return { intent: 'concurrency', confidence: 0.94, reason: 'Concurrency / parallel request detected' };
+  }
+  if (/\b(?:http|requests?|httpx|api|rest|endpoint|session|retry|pagination|webhook|resp\.json|resp\.text|status_code)\b/i.test(lower)) {
+    return { intent: 'http_api', confidence: 0.93, reason: 'HTTP / API request detected' };
+  }
+  if (/\b(?:sql(?:ite|alchemy)?|database|orm|query|migration|connection.?pool|cursor|insert|select|from.*where|db\.|alembic)\b/i.test(lower)) {
+    return { intent: 'database', confidence: 0.94, reason: 'Database / SQL request detected' };
+  }
+  if (/\b(?:serialize|deserialize|json|pickle|msgpack|yaml|marshal|encode.*object|decode.*object|dump.*load)\b/i.test(lower)) {
+    return { intent: 'serialization', confidence: 0.93, reason: 'Serialization request detected' };
+  }
+  if (/\b(?:datetime|date.*time|timezone|strftime|strptime|timedelta|dateutil|pytz|tzinfo)\b/i.test(lower)) {
+    return { intent: 'datetime', confidence: 0.94, reason: 'Date/time request detected' };
+  }
+  if (/\b(?:profile|profiler|cprofile|timeit|benchmark|optimize|bottleneck|memory.?usage|cpu.?time|perf_counter)\b/i.test(lower)) {
+    return { intent: 'profiling', confidence: 0.93, reason: 'Performance profiling request detected' };
+  }
+  if (/\b(?:publish|distribute|pypi|setuptools|wheel|egg|twine|package.*build|upload.*pip|pip.*publish|distribution.*python)\b/i.test(lower)) {
+    return { intent: 'packaging', confidence: 0.94, reason: 'Python packaging / distribution request detected' };
+  }
+  if (/\b(?:itertools|functools|map.*filter|filter.*map|reduce.*list|partial|compose|operator\.\w+|curry|pure.?function)\b/i.test(lower)) {
+    return { intent: 'functional', confidence: 0.93, reason: 'Functional programming request detected' };
+  }
+  if (/\b(?:security|hash|encrypt|sanitize|injection|sql.*inject|secret|env.*var(?:iable)?|token|password.*safe)\b/i.test(lower)) {
+    return { intent: 'security', confidence: 0.93, reason: 'Security / safe-patterns request detected' };
+  }
+  if (/\b(?:context.?manager|with.*statement|contextlib|contextvar|exitstack|@contextmanager|__enter__|__exit__)\b/i.test(lower)) {
+    return { intent: 'context_manager', confidence: 0.94, reason: 'Context manager request detected' };
   }
   if (/\b(?:project structure|folder structure|how to structure|how to organize|project layout|src layout|structure du projet)\b/i.test(lower)) {
     return { intent: 'project_structure', confidence: 0.96, reason: 'Project structure request detected' };
