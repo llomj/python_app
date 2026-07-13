@@ -16,6 +16,10 @@ export type GeneralAiIntent =
   | 'doctest_execution'
   | 'learning_path'
   | 'contract_search'
+  | 'classification'
+  | 'protocol_taxonomy'
+  | 'syntax_role'
+  | 'execution_model'
   | 'comparison'
   | 'count'
   | 'creation'
@@ -110,6 +114,9 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   if (containsCode(value) && /\b(?:run|execute|check|verify|lance|ex[eé]cute|v[eé]rifie).{0,20}\b(?:tests?|assertions?)\b/i.test(value)) {
     return { intent: 'test_execution', confidence: 0.99, reason: 'Bounded local assertion-test request detected' };
   }
+  if (/\b(?:order of (?:operations|evaluation|execution)|evaluation order|execution order|what happens first|definition time|call time|short[- ]?circuit|default arguments?|decorator order|generator execution|import execution|scope lookup|ordre d['’](?:op[eé]rations|[eé]valuation|ex[eé]cution)|qu['’]est-ce qui se passe d['’]abord|court-circuit)\b/i.test(value)) {
+    return { intent: 'execution_model', confidence: 0.98, reason: 'Python execution timing or evaluation-order request detected' };
+  }
   if (/\b(?:modules?|imports?|packages?|multi[- ]?file|project structure|circular import|relative import|absolute import|__init__|__main__|fichiers? multiples?|structure (?:du |de )?projet|importation circulaire|importation relative|paquets?)\b/i.test(value)) {
     return { intent: 'module_project', confidence: 0.97, reason: 'Python module, import, package, or multi-file request detected' };
   }
@@ -156,6 +163,17 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
     && /\b(?:return|accept|iterable|mutat|modify|in place|remove|delete|sort|copy|none|renvoie|accepte|modifie|supprime|trie|copie)\b/i.test(lower)) {
     return { intent: 'contract_search', confidence: 0.96, reason: 'API contract search detected' };
   }
+  if (/\b(?:what (?:kind|type|category) of (?:python )?(?:thing|object|construct)|classify|is .{1,50} (?:a|an) (?:(?:string|str|list|dict|dictionary|set|tuple|built[- ]?in) )?(?:function|method|keyword|operator|type|class|protocol|expression|statement)|quel(?:le)? (?:type|cat[eé]gorie)|classe .{1,50}|est-ce que .{1,50} est (?:une?|un))\b/i.test(value)) {
+    return { intent: 'classification', confidence: 0.98, reason: 'Python construct classification request detected' };
+  }
+  if (/\b(?:iterable|iterator|generator|sequence|mapping|hashable|mutable|immutable|callable|awaitable|descriptor|context manager|async iterable|async iterator|protocole|it[eé]rable|it[eé]rateur|g[eé]n[eé]rateur|s[eé]quence|hachable|appelable)\b/i.test(value)
+    && /\b(?:what|which|is|difference|relationship|classif|protocol|does|can|qu['’]est|quel|est|diff[eé]rence|relation)\b/i.test(value)) {
+    return { intent: 'protocol_taxonomy', confidence: 0.97, reason: 'Python protocol or object taxonomy request detected' };
+  }
+  if (/\b(?:what does|meaning of|role of|what is .{0,12} used for|que signifie|r[oô]le de|[aà] quoi sert)\b/i.test(value)
+    && /(?:`(?:\*\*|\/\/|:=|->|\[\]|\{\}|\(\)|\*|\/|%|@|:|\.|,|_)`|["'](?:\*\*|\/\/|:=|->|\[\]|\{\}|\(\)|\*|\/|%|@|:|\.|,|_)["'])/.test(value)) {
+    return { intent: 'syntax_role', confidence: 0.98, reason: 'Context-sensitive Python syntax-symbol request detected' };
+  }
   if (containsCode(value) && /explain|analyse|analyze|debug|why|output|code|ligne|erreur/i.test(value)) {
     return { intent: 'code_explanation', confidence: 0.98, reason: 'Python code and an analysis request detected' };
   }
@@ -166,7 +184,8 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
     && (/\bf["']/i.test(value) || /\.format\b|%[sdfer%]|Template\b/i.test(value))) {
     return { intent: 'formatting', confidence: 0.95, reason: 'String formatting comparison request detected' };
   }
-  if (/\b(?:which (?:data )?structure|list vs|tuple vs|set vs|dict vs|when to use|should i use|what (?:data )?structure|quelle structure|liste ou|tuple ou|set ou|dict ou)\b/i.test(lower)) {
+  if (/\b(?:which (?:data )?structure|list vs|tuple vs|set vs|dict vs|what (?:data )?structure|quelle structure|liste ou|tuple ou|set ou|dict ou)\b/i.test(lower)
+    || (/\b(?:when to use|should i use)\b/i.test(lower) && /\b(?:list|tuple|set|dict|dictionary|sequence|mapping)\b/i.test(lower))) {
     return { intent: 'data_structure', confidence: 0.94, reason: 'Data structure choice request detected' };
   }
   if (/\b(?:import|sys\.path|__init__|circular import|module.*not found|import.*error|package.*structure|importlib)\b/i.test(lower)

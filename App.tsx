@@ -4032,7 +4032,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     if (isDocumentationAnswer) return answer;
     const isCatalogAnswer = /\*\*(?:Python catalog|Catalogue Python|Python function count|Nombre de fonctions Python)/i.test(answer);
     if (isCatalogAnswer) return answer;
-    const isCallableContractAnswer = /\*\*(?:Signature and argument count|Signature et nombre d[’']arguments|Lambda evaluation order|Ordre d[’']évaluation d[’']une lambda|Comprehension evaluation order|Ordre d[’']une compréhension|Variable resolution: the LEGB rule|Résolution des variables : règle LEGB)/i.test(answer);
+    const isCallableContractAnswer = /\*\*(?:Signature and argument count|Signature et nombre d[’']arguments|Lambda evaluation order|Ordre d[’']évaluation d[’']une lambda|Comprehension evaluation order|Ordre d[’']une compréhension|Variable resolution: the LEGB rule|Résolution des variables : règle LEGB|Python classification|Classification Python|Ambiguous classification|Classification ambiguë|Python taxonomy and protocol|Taxonomie et protocole|Syntax roles|Rôles syntaxiques|Default-argument evaluation timing|Moment d’évaluation des arguments par défaut|Decorator evaluation and application order|Ordre d’évaluation des décorateurs|Generator execution model|Modèle d’exécution d’un générateur|Import execution order|Ordre d’exécution d’une importation|Boolean short-circuit evaluation|Évaluation booléenne avec court-circuit|Function-call execution order|Ordre d’un appel de fonction)/i.test(answer);
     if (isCallableContractAnswer) return answer;
     const isVersionAnswer = /\*\*.+version information\*\*/i.test(answer);
     if (isVersionAnswer) return answer;
@@ -17846,6 +17846,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonTestExecutionRequest(effectiveQuestion, appLang)
                 || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
+                || knowledge.answerPythonClassificationQuestion(effectiveQuestion, appLang)
+                || knowledge.answerPythonProtocolQuestion(effectiveQuestion, appLang)
+                || knowledge.answerPythonSyntaxRoleQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonContractSearch(effectiveQuestion, appLang)
                 || answerPythonLearningPath(effectiveQuestion, nextMastery, appLang)
@@ -17958,6 +17961,18 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'contract_search':
                     refAnswer = knowledge.answerPythonContractSearch(effectiveQuestion, appLang);
+                    break;
+                case 'classification':
+                    refAnswer = knowledge.answerPythonClassificationQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'protocol_taxonomy':
+                    refAnswer = knowledge.answerPythonProtocolQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'syntax_role':
+                    refAnswer = knowledge.answerPythonSyntaxRoleQuestion(effectiveQuestion, appLang);
+                    break;
+                case 'execution_model':
+                    refAnswer = knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'comparison':
                     refAnswer = knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang) || buildGeneralAiComparisonAnswer(effectiveQuestion);

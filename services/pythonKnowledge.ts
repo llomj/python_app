@@ -260,7 +260,66 @@ export const answerPythonEvaluationAndScopeQuestion = (question: string, languag
       fr ? '`global name` permet d’affecter le nom du module ; `nonlocal name` permet d’affecter le nom d’une fonction englobante. Sans ces mots-clés, une affectation crée normalement un nom local.' : '`global name` allows assignment to the module name; `nonlocal name` allows assignment to an enclosing-function name. Without them, assignment normally creates a local name.',
     ].join('\n\n');
   }
-  if (!/\b(?:order of (?:operations|evaluation|execution)|evaluation order|lambda|list comprehension|dict comprehension|set comprehension|ordre d['’](?:ex[eé]cution|[eé]valuation)|compr[eé]hension)\b/i.test(question)) return null;
+  if (!/\b(?:order of (?:operations|evaluation|execution)|evaluation order|execution order|lambda|list comprehension|dict comprehension|set comprehension|default arguments?|default parameters?|mutable defaults?|decorators?|generator execution|import execution|short[- ]?circuit|function calls?|call order|argument evaluation|ordre d['’](?:op[eé]rations|ex[eé]cution|[eé]valuation)|compr[eé]hension|arguments? par d[eé]faut|param[eè]tres? par d[eé]faut|d[eé]corateurs?|g[eé]n[eé]rateur|importation|court-circuit|appel de fonction)\b/i.test(question)) return null;
+  if (/\b(?:default arguments?|default parameters?|mutable defaults?|arguments? par d[eé]faut|param[eè]tres? par d[eé]faut)\b/i.test(question)) {
+    return [
+      fr ? '**Moment d’évaluation des arguments par défaut**' : '**Default-argument evaluation timing**',
+      `1. ${fr ? 'Python évalue chaque expression par défaut une seule fois, lorsque l’instruction `def` s’exécute.' : 'Python evaluates each default expression once, when the `def` statement executes.'}`,
+      `2. ${fr ? 'L’objet obtenu est stocké dans la fonction et réutilisé lors des appels qui omettent cet argument.' : 'The resulting object is stored on the function and reused by calls that omit that argument.'}`,
+      `3. ${fr ? 'Un défaut mutable peut donc conserver les modifications entre les appels.' : 'A mutable default can therefore retain changes across calls.'}`,
+      '```python\ndef collect(value, items=None):\n    if items is None:\n        items = []\n    items.append(value)\n    return items\n```',
+      fr ? 'Utilisez `None`, puis créez l’objet mutable dans le corps lorsque chaque appel doit recevoir une nouvelle valeur.' : 'Use `None`, then create the mutable object in the body when each call needs a fresh value.',
+    ].join('\n\n');
+  }
+  if (/\b(?:decorators?|d[eé]corateurs?)\b/i.test(question)) {
+    return [
+      fr ? '**Ordre d’évaluation des décorateurs**' : '**Decorator evaluation and application order**',
+      `1. ${fr ? 'Les expressions de décorateur sont évaluées de haut en bas lorsque `def` ou `class` s’exécute.' : 'Decorator expressions are evaluated top to bottom when the `def` or `class` statement executes.'}`,
+      `2. ${fr ? 'Le corps de la fonction n’est pas exécuté ; un objet fonction est créé.' : 'The function body does not run; a function object is created.'}`,
+      `3. ${fr ? 'Les décorateurs sont ensuite appliqués de bas en haut.' : 'The decorators are then applied bottom to top.'}`,
+      '```python\n@outer\n@inner\ndef work():\n    pass\n\n# Equivalent to:\nwork = outer(inner(work))\n```',
+    ].join('\n\n');
+  }
+  if (/\b(?:generator|yield|g[eé]n[eé]rateur)\b/i.test(question)) {
+    return [
+      fr ? '**Modèle d’exécution d’un générateur**' : '**Generator execution model**',
+      `1. ${fr ? 'Appeler une fonction contenant `yield` crée un générateur sans exécuter son corps.' : 'Calling a function containing `yield` creates a generator without running its body.'}`,
+      `2. ${fr ? '`next()` démarre ou reprend le corps jusqu’au prochain `yield`.' : '`next()` starts or resumes the body until the next `yield`.'}`,
+      `3. ${fr ? 'La valeur est produite et l’état local est suspendu.' : 'The value is produced and local state is suspended.'}`,
+      `4. ${fr ? 'Un `return` ou la fin du corps déclenche `StopIteration`.' : 'A `return` or reaching the end raises `StopIteration`.'}`,
+      '```python\ndef numbers():\n    yield 1\n    yield 2\n\ngen = numbers()  # body has not run\nfirst = next(gen) # runs through yield 1\n```',
+    ].join('\n\n');
+  }
+  if (/\b(?:import|module|importation)\b/i.test(question)) {
+    return [
+      fr ? '**Ordre d’exécution d’une importation**' : '**Import execution order**',
+      `1. ${fr ? 'Python cherche d’abord le nom dans `sys.modules`.' : 'Python first checks the name in `sys.modules`.'}`,
+      `2. ${fr ? 'S’il est absent, le système d’importation trouve et crée le module.' : 'If absent, the import system locates and creates the module.'}`,
+      `3. ${fr ? 'Le code de niveau module s’exécute de haut en bas une fois pour cette instance de module.' : 'Module-level code executes top to bottom once for that module instance.'}`,
+      `4. ${fr ? 'Le module est mis en cache ; une importation ultérieure réutilise normalement le même objet.' : 'The module is cached; a later import normally reuses the same object.'}`,
+      fr ? 'Une importation circulaire peut observer un module seulement partiellement initialisé.' : 'A circular import can observe a module that is only partially initialized.',
+    ].join('\n\n');
+  }
+  if (/\b(?:short[- ]?circuit|\band\b|\bor\b|court-circuit)\b/i.test(question)) {
+    return [
+      fr ? '**Évaluation booléenne avec court-circuit**' : '**Boolean short-circuit evaluation**',
+      `1. ${fr ? 'Python évalue les opérandes de gauche à droite.' : 'Python evaluates operands left to right.'}`,
+      `2. \`a and b\` ${fr ? 'renvoie `a` s’il est faux ; sinon il évalue et renvoie `b`.' : 'returns `a` when it is falsy; otherwise it evaluates and returns `b`.'}`,
+      `3. \`a or b\` ${fr ? 'renvoie `a` s’il est vrai ; sinon il évalue et renvoie `b`.' : 'returns `a` when it is truthy; otherwise it evaluates and returns `b`.'}`,
+      `4. ${fr ? 'Ces opérateurs renvoient un opérande, pas nécessairement un `bool`.' : 'These operators return an operand, not necessarily a `bool`.'}`,
+      '```python\nname = supplied_name or "Guest"\nvalid = value is not None and value > 0\n```',
+    ].join('\n\n');
+  }
+  if (/\b(?:function calls?|call order|argument evaluation|appel de fonction|ordre des arguments?)\b/i.test(question)) {
+    return [
+      fr ? '**Ordre d’un appel de fonction**' : '**Function-call execution order**',
+      `1. ${fr ? 'Évaluer l’expression qui produit l’objet appelable.' : 'Evaluate the expression that produces the callable.'}`,
+      `2. ${fr ? 'Évaluer les arguments de gauche à droite, y compris les déballages `*` et `**`.' : 'Evaluate arguments left to right, including `*` and `**` unpacking.'}`,
+      `3. ${fr ? 'Associer les valeurs aux paramètres positionnels, nommés, variadiques et par défaut.' : 'Bind values to positional, keyword, variadic, and default parameters.'}`,
+      `4. ${fr ? 'Exécuter le corps jusqu’à `return`, une exception ou la fin.' : 'Execute the body until `return`, an exception, or the end.'}`,
+      `5. ${fr ? 'La fin sans `return` explicite produit `None`.' : 'Reaching the end without explicit `return` produces `None`.'}`,
+    ].join('\n\n');
+  }
   if (/\blambda\b/i.test(question)) {
     return [
       fr ? '**Ordre d’évaluation d’une lambda**' : '**Lambda evaluation order**',
@@ -278,6 +337,135 @@ export const answerPythonEvaluationAndScopeQuestion = (question: string, languag
     `3. ${fr ? 'Évaluez les clauses `for` suivantes puis les filtres `if`, de gauche à droite.' : 'Evaluate later `for` clauses and then `if` filters, left to right.'}`,
     `4. ${fr ? 'Si les filtres réussissent, évaluez l’expression de sortie (ou la paire clé/valeur).' : 'When filters pass, evaluate the output expression (or key/value pair).'}`,
     '```python\nsquares = [number ** 2 for number in range(6) if number % 2 == 0]\n# [0, 4, 16]\n```',
+  ].join('\n\n');
+};
+
+const classificationSubject = (question: string): string | null => {
+  const cleaned = question.replace(/[`"']/g, '').replace(/[?!]+$/g, '').trim();
+  const patterns = [
+    /\bis\s+(.+?)\s+(?:a|an)\s+(?:(?:string|str|list|dict|dictionary|set|tuple|built[- ]?in)\s+)?(?:function|method|keyword|operator|type|class|protocol|expression|statement)\b/i,
+    /\bwhat\s+(?:kind|type|category)\s+of\s+(?:python\s+)?(?:thing|object|construct)\s+is\s+(.+)$/i,
+    /\bclassify\s+(.+)$/i,
+    /\best-ce que\s+(.+?)\s+est\s+(?:un|une)\b/i,
+    /\bquel(?:le)?\s+(?:type|cat[eé]gorie).+?\s+est\s+(.+)$/i,
+    /\bclasse\s+(.+)$/i,
+  ];
+  for (const pattern of patterns) {
+    const match = cleaned.match(pattern);
+    if (match?.[1]) return normalizeTerm(match[1].replace(/\(\)$/g, ''));
+  }
+  return null;
+};
+
+const SPECIAL_CLASSIFICATIONS: Record<string, { kind: string; behavior: string; syntax: string; distinction: string }> = {
+  yield: { kind: 'keyword and expression', behavior: 'Suspends a generator and produces a value to its caller.', syntax: 'yield value', distinction: 'Using `yield` makes the enclosing function a generator function; it is not a normal function call.' },
+  lambda: { kind: 'keyword that starts a lambda expression', behavior: 'Creates an anonymous function whose single expression is returned automatically.', syntax: 'lambda parameters: expression', distinction: 'A lambda is an expression, while `def` is a statement.' },
+  range: { kind: 'built-in immutable sequence type', behavior: 'Calling it constructs a lazy arithmetic sequence object.', syntax: 'range(stop) or range(start, stop, step)', distinction: '`range` is technically a type/class, not a regular user-defined function.' },
+  list: { kind: 'built-in mutable sequence type', behavior: 'Stores ordered values and supports indexed mutation.', syntax: 'list(iterable) or [items]', distinction: '`list` is a type; `list()` constructs an instance and `[]` is a list display.' },
+  dict: { kind: 'built-in mutable mapping type', behavior: 'Maps unique hashable keys to values.', syntax: 'dict(...) or {key: value}', distinction: '`dict` is a type; methods such as `dict.get` belong to its instances.' },
+  print: { kind: 'built-in function', behavior: 'Writes textual representations to a stream and returns `None`.', syntax: 'print(*objects, sep=" ", end="\\n", file=None, flush=False)', distinction: 'It displays values; it does not return the displayed value.' },
+};
+
+export const answerPythonClassificationQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const subject = classificationSubject(question);
+  if (!subject) return null;
+  const fr = language === 'fr';
+  const special = SPECIAL_CLASSIFICATIONS[subject.toLowerCase()];
+  const resolution = resolvePythonKnowledge(subject, typeFromPrefix(subject));
+  if (!special && !resolution.record && !resolution.alternatives.length) return null;
+  if (resolution.alternatives.length) {
+    return [
+      fr ? `**Classification ambiguë : \`${subject}\`**` : `**Ambiguous classification: \`${subject}\`**`,
+      fr ? 'Ce nom a plusieurs classifications selon son propriétaire :' : 'This name has multiple classifications depending on its owner:',
+      ...resolution.alternatives.map((record, index) => `${index + 1}. \`${record.signature}\` — ${record.kind === 'builtin' ? (fr ? 'fonction intégrée' : 'built-in function') : `${record.kind} ${fr ? 'méthode' : 'method'}`}`),
+      fr ? `Précisez le propriétaire, par exemple \`str.${subject}\` ou \`list.${subject}\`.` : `Specify the owner, for example \`str.${subject}\` or \`list.${subject}\`.`,
+    ].join('\n\n');
+  }
+  const record = resolution.record;
+  const kind = special?.kind || (record?.kind === 'builtin' ? 'built-in function' : record?.kind === 'keyword' ? 'keyword' : record?.kind === 'concept' ? 'Python concept' : `${record?.kind} method`);
+  const behavior = special?.behavior || record?.summary || '';
+  const syntax = special?.syntax || record?.signature || subject;
+  const distinction = special?.distinction || (record?.kind && !['builtin', 'keyword', 'concept'].includes(record.kind)
+    ? `It must be accessed through a ${record.kind} object (or through the owner type); it is not a standalone built-in function.`
+    : 'Its classification determines where it can appear and how Python invokes it.');
+  return [
+    fr ? `**Classification Python : \`${subject}\`**` : `**Python classification: \`${subject}\`**`,
+    `1. **${fr ? 'Classification exacte' : 'Exact classification'}**\n${fr ? localizeAiText(kind, 'fr') : kind}.`,
+    `2. **${fr ? 'Pourquoi' : 'Why'}**\n${fr ? localizeAiText(behavior, 'fr') : behavior}`,
+    `3. **${fr ? 'Forme correcte' : 'Correct form'}**\n\`${syntax}\``,
+    `4. **${fr ? 'Distinction importante' : 'Important distinction'}**\n${fr ? localizeAiText(distinction, 'fr') : distinction}`,
+    record?.sourceUrl ? `5. **${fr ? 'Source' : 'Source'}**\n${record.sourceUrl}` : '',
+  ].filter(Boolean).join('\n\n');
+};
+
+type ProtocolRecord = { definition: string; methods: string; examples: string; relation: string; check: string };
+const PROTOCOLS: Record<string, ProtocolRecord> = {
+  iterable: { definition: 'An object that can produce an iterator.', methods: '`__iter__()` or sequence-style `__getitem__()`', examples: '`list`, `tuple`, `str`, `dict`, `set`, `range`, generators', relation: 'Every iterator is iterable, but a reusable iterable is not necessarily an iterator.', check: 'isinstance(value, collections.abc.Iterable)' },
+  iterator: { definition: 'A stateful, single-pass object that produces the next value.', methods: '`__iter__()` returning itself and `__next__()`', examples: '`iter([1, 2])`, `enumerate(...)`, `zip(...)`, generator objects', relation: 'An iterator is also iterable. Exhaustion is reported with `StopIteration`.', check: 'isinstance(value, collections.abc.Iterator)' },
+  generator: { definition: 'An iterator created by a generator function or generator expression.', methods: '`__iter__()`, `__next__()`, `send()`, `throw()`, `close()`', examples: '`(x * 2 for x in values)` or a function containing `yield`', relation: 'Every generator object is an iterator and iterable; a generator function is a callable that creates one.', check: 'isinstance(value, types.GeneratorType)' },
+  sequence: { definition: 'An ordered collection supporting integer indexing and usually slicing.', methods: '`__len__()`, `__getitem__()`, plus sequence operations', examples: '`list`, `tuple`, `str`, `range`, `bytes`', relation: 'Sequences are iterable, but sets, mappings, and generators are iterable without being sequences.', check: 'isinstance(value, collections.abc.Sequence)' },
+  mapping: { definition: 'An object that associates hashable keys with values.', methods: '`__getitem__(key)`, `__iter__()`, `__len__()`', examples: '`dict`, `collections.defaultdict`, `collections.ChainMap`', relation: 'A mapping iterates over keys by default and is not a positional sequence.', check: 'isinstance(value, collections.abc.Mapping)' },
+  hashable: { definition: 'An object with a stable hash value that can participate in equality comparisons.', methods: '`__hash__()` and compatible `__eq__()` behavior', examples: 'numbers, strings, bytes, and tuples whose elements are hashable', relation: 'Hashable objects can be dictionary keys and set elements. Mutable containers are normally unhashable.', check: 'isinstance(value, collections.abc.Hashable)' },
+  mutable: { definition: 'An object whose observable state or contents can change without replacing the object.', methods: 'No universal mutable protocol; each type exposes its own mutating operations.', examples: '`list`, `dict`, `set`, `bytearray`, and most user-defined instances', relation: 'Mutability is an object property, not the same as variable reassignment. Mutable built-in containers are normally unhashable.', check: 'Check the concrete type contract; Python has no universal Mutable ABC.' },
+  immutable: { definition: 'An object whose value cannot be changed after construction.', methods: 'No universal immutable protocol; operations create or return other objects.', examples: '`int`, `float`, `bool`, `str`, `bytes`, `tuple`, `frozenset`, `range`', relation: 'An immutable container is hashable only when all values participating in its hash are hashable.', check: 'Check the concrete type contract; Python has no universal Immutable ABC.' },
+  callable: { definition: 'An object that Python can invoke with call syntax.', methods: '`__call__()`', examples: 'functions, classes, bound methods, and instances defining `__call__`', relation: 'A callable is not necessarily a function; classes and callable instances are separate kinds.', check: 'callable(value)' },
+  descriptor: { definition: 'An object that controls attribute lookup, assignment, or deletion on another class.', methods: '`__get__()`, `__set__()`, and/or `__delete__()`', examples: '`property`, functions stored on classes, `classmethod`, `staticmethod`', relation: 'Data descriptors outrank instance attributes; non-data descriptors can be shadowed by them.', check: 'hasattr(type(value), "__get__")' },
+  'context manager': { definition: 'An object that establishes and reliably cleans up a runtime context.', methods: '`__enter__()` and `__exit__()` (or async variants)', examples: 'files, locks, database transactions, `contextlib` managers', relation: 'The `with` statement invokes the protocol and calls cleanup even when the body raises.', check: 'hasattr(value, "__enter__") and hasattr(value, "__exit__")' },
+  awaitable: { definition: 'An object whose completion can be suspended on with `await`.', methods: '`__await__()`', examples: 'coroutine objects, `asyncio.Task`, `asyncio.Future`', relation: 'Coroutine objects are awaitable, but an arbitrary awaitable need not be a coroutine.', check: 'isinstance(value, collections.abc.Awaitable)' },
+  'async iterable': { definition: 'An object that can create an asynchronous iterator.', methods: '`__aiter__()`', examples: 'asynchronous streams and objects used by `async for`', relation: 'An async iterable is consumed with `async for`, not ordinary `for` unless it also implements the synchronous protocol.', check: 'isinstance(value, collections.abc.AsyncIterable)' },
+  'async iterator': { definition: 'A stateful object that asynchronously produces its next value.', methods: '`__aiter__()` returning itself and `__anext__()` returning an awaitable', examples: 'asynchronous generator objects', relation: 'Every async iterator is an async iterable; exhaustion is reported with `StopAsyncIteration`.', check: 'isinstance(value, collections.abc.AsyncIterator)' },
+};
+
+const PROTOCOL_ALIASES: Record<string, string> = { 'it[eé]rable': 'iterable', 'it[eé]rateur': 'iterator', 'g[eé]n[eé]rateur': 'generator', 's[eé]quence': 'sequence', mappage: 'mapping', 'hac?chable': 'hashable', appelable: 'callable', descripteur: 'descriptor', 'gestionnaire de contexte': 'context manager' };
+
+const findProtocol = (question: string): string | null => Object.keys(PROTOCOLS)
+  .sort((left, right) => right.length - left.length)
+  .find(name => new RegExp(`\\b${name.replace(' ', '[- ]')}s?\\b`, 'i').test(question))
+  || Object.entries(PROTOCOL_ALIASES).find(([alias]) => new RegExp(`\\b${alias}s?\\b`, 'i').test(question))?.[1]
+  || null;
+
+export const answerPythonProtocolQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const name = findProtocol(question);
+  if (!name) return null;
+  const fr = language === 'fr';
+  const item = PROTOCOLS[name];
+  return [
+    fr ? `**Taxonomie et protocole : ${localizeAiText(name, 'fr')}**` : `**Python taxonomy and protocol: ${name}**`,
+    `1. **${fr ? 'Définition' : 'Definition'}**\n${fr ? localizeAiText(item.definition, 'fr') : item.definition}`,
+    `2. **${fr ? 'Contrat minimal' : 'Minimum contract'}**\n${item.methods}`,
+    `3. **${fr ? 'Exemples' : 'Examples'}**\n${item.examples}`,
+    `4. **${fr ? 'Relation et limite' : 'Relationship and boundary'}**\n${fr ? localizeAiText(item.relation, 'fr') : item.relation}`,
+    `5. **${fr ? 'Vérification pratique' : 'Practical check'}**\n\`${item.check}\``,
+  ].join('\n\n');
+};
+
+const SYNTAX_ROLES: Record<string, string[]> = {
+  '*': ['multiplication: `left * right`', 'iterable unpacking: `[*items]` or `func(*args)`', 'collecting positional arguments: `def func(*args)`', 'keyword-only separator in a signature: `def func(value, *, option=False)`'],
+  '**': ['exponentiation: `base ** power`', 'mapping unpacking: `{**mapping}` or `func(**kwargs)`', 'collecting keyword arguments: `def func(**kwargs)`'],
+  '/': ['true division: `left / right`', 'positional-only separator inside a function signature'],
+  '//': ['floor division: `left // right`'],
+  ':=': ['assignment expression (walrus): assign a value while an expression is being evaluated'],
+  '->': ['return annotation in a function definition; it documents a type and is not runtime return control'],
+  '@': ['matrix multiplication operator', 'decorator prefix above a function or class'],
+  ':': ['starts an indented suite after statements such as `if`, `for`, `def`, and `class`', 'separates keys from values in dictionaries', 'separates slice bounds', 'separates parameters from the expression in a lambda'],
+  '.': ['attribute or method access: `object.name`', 'decimal point in a numeric literal', 'relative-import level when used in `from . import name`'],
+  ',': ['separates items or arguments', 'creates a tuple through comma syntax: `value,`'],
+  '[]': ['list display: `[1, 2]`', 'subscription/indexing: `items[0]`', 'slicing: `items[start:stop:step]`', 'generic type parameters: `list[int]`'],
+  '{}': ['dictionary display when it contains key-value pairs', 'set display when it contains values', 'replacement fields in format strings'],
+  '()': ['function or callable invocation', 'grouping to control precedence', 'tuple display when commas are present', 'generator expression delimiters'],
+  '_': ['ordinary identifier character', 'conventional throwaway name', 'previous result in the interactive interpreter', 'wildcard in structural pattern matching'],
+};
+
+export const answerPythonSyntaxRoleQuestion = (question: string, language: KnowledgeLanguage): string | null => {
+  const token = Object.keys(SYNTAX_ROLES).sort((a, b) => b.length - a.length).find(candidate => question.includes(`\`${candidate}\``) || question.includes(`"${candidate}"`) || question.includes(`'${candidate}'`));
+  if (!token) return null;
+  const fr = language === 'fr';
+  const roles = SYNTAX_ROLES[token];
+  return [
+    fr ? `**Rôles syntaxiques de \`${token}\`**` : `**Syntax roles of \`${token}\`**`,
+    fr ? 'Ce symbole dépend de son contexte. Python détermine son rôle à partir de l’endroit où il apparaît :' : 'This symbol is context-sensitive. Python determines its role from where it appears:',
+    ...roles.map((role, index) => `${index + 1}. ${fr ? localizeAiText(role, 'fr') : role}.`),
+    fr ? 'Pour une réponse exacte sur une ligne particulière, fournissez cette ligne de code.' : 'For an exact answer about a particular line, provide that line of code.',
   ].join('\n\n');
 };
 

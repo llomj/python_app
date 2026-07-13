@@ -97,12 +97,53 @@ try {
   const lambdaOrder = knowledge.answerPythonEvaluationAndScopeQuestion('what is the order of evaluation for lambda?', 'en') || '';
   const comprehensionOrder = knowledge.answerPythonEvaluationAndScopeQuestion('explain list comprehension order of operations', 'en') || '';
   const scopeOrder = knowledge.answerPythonEvaluationAndScopeQuestion('which local or global variable does Python use first?', 'en') || '';
+  const defaultTiming = knowledge.answerPythonEvaluationAndScopeQuestion('When are mutable default arguments evaluated?', 'en') || '';
+  const decoratorOrder = knowledge.answerPythonEvaluationAndScopeQuestion('Explain decorator evaluation order', 'en') || '';
+  const generatorOrder = knowledge.answerPythonEvaluationAndScopeQuestion('Explain generator execution order', 'en') || '';
+  const importOrder = knowledge.answerPythonEvaluationAndScopeQuestion('What is the import execution order?', 'en') || '';
+  const shortCircuitOrder = knowledge.answerPythonEvaluationAndScopeQuestion('Explain short-circuit evaluation with and and or', 'en') || '';
+  const functionCallOrder = knowledge.answerPythonEvaluationAndScopeQuestion('What is the function call execution order?', 'en') || '';
   if (!anySignature.includes('exactly 1') || !anySignature.includes('any(iterable)')) failures.push('any() argument-count answer failed');
   if (!mapSignature.includes('at least 2') || !mapSignature.includes('function first')) failures.push('map() argument-order answer failed');
   if (!countSignature.includes('str.count(sub[, start[, end]])') || !countSignature.includes('1 required and 2 optional')) failures.push('str.count() optional-argument answer failed');
   if (!lambdaOrder.includes('single expression after `:`') || !lambdaOrder.includes('returned automatically')) failures.push('Lambda evaluation-order answer failed');
   if (!comprehensionOrder.includes('first `for` iterable') || !comprehensionOrder.includes('`if` filters')) failures.push('Comprehension evaluation-order answer failed');
   if (!scopeOrder.includes('LEGB') || !scopeOrder.includes('Enclosing') || !scopeOrder.includes('Built-ins')) failures.push('Variable-scope answer failed');
+  if (!defaultTiming.includes('evaluates each default expression once') || !defaultTiming.includes('items=None')) failures.push('Default-argument timing answer failed');
+  if (!decoratorOrder.includes('top to bottom') || !decoratorOrder.includes('bottom to top') || !decoratorOrder.includes('outer(inner(work))')) failures.push('Decorator order answer failed');
+  if (!generatorOrder.includes('without running its body') || !generatorOrder.includes('StopIteration')) failures.push('Generator execution answer failed');
+  if (!importOrder.includes('sys.modules') || !importOrder.includes('partially initialized')) failures.push('Import execution answer failed');
+  if (!shortCircuitOrder.includes('returns `a` when it is falsy') || !shortCircuitOrder.includes('not necessarily a `bool`')) failures.push('Short-circuit execution answer failed');
+  if (!functionCallOrder.includes('Evaluate arguments left to right') || !functionCallOrder.includes('Bind values')) failures.push('Function-call order answer failed');
+
+  const lenClassification = knowledge.answerPythonClassificationQuestion('Is len a function?', 'en') || '';
+  const isalphaClassification = knowledge.answerPythonClassificationQuestion('Is isalpha a string method?', 'en') || '';
+  const yieldClassification = knowledge.answerPythonClassificationQuestion('Classify yield', 'en') || '';
+  const ambiguousCountClassification = knowledge.answerPythonClassificationQuestion('Classify count', 'en') || '';
+  if (!lenClassification.includes('built-in function') || !lenClassification.includes('len(s)')) failures.push('Built-in classification failed');
+  if (!isalphaClassification.includes('str method') || !isalphaClassification.includes('str.isalpha()')) failures.push('Method classification failed');
+  if (!yieldClassification.includes('keyword and expression') || !yieldClassification.includes('generator function')) failures.push('Keyword/expression classification failed');
+  if (!ambiguousCountClassification.includes('Ambiguous classification') || !ambiguousCountClassification.includes('str.count') || !ambiguousCountClassification.includes('list.count')) failures.push('Ambiguous classification failed');
+
+  const iterableProtocol = knowledge.answerPythonProtocolQuestion('What is the iterable protocol?', 'en') || '';
+  const iteratorProtocol = knowledge.answerPythonProtocolQuestion('Quelle est la différence avec un itérateur ?', 'fr') || '';
+  const descriptorProtocol = knowledge.answerPythonProtocolQuestion('What is a descriptor protocol?', 'en') || '';
+  const contextProtocol = knowledge.answerPythonProtocolQuestion('What is a context manager protocol?', 'en') || '';
+  const mutableTaxonomy = knowledge.answerPythonProtocolQuestion('What does mutable mean?', 'en') || '';
+  const asyncIteratorProtocol = knowledge.answerPythonProtocolQuestion('What is an async iterator?', 'en') || '';
+  if (!iterableProtocol.includes('__iter__') || !iterableProtocol.includes('Every iterator is iterable')) failures.push('Iterable protocol answer failed');
+  if (!iteratorProtocol.includes('__next__') || !iteratorProtocol.includes('Taxonomie et protocole')) failures.push('French iterator protocol answer failed');
+  if (!descriptorProtocol.includes('__get__') || !descriptorProtocol.includes('hasattr(type(value)')) failures.push('Descriptor protocol answer failed');
+  if (!contextProtocol.includes('__enter__') || contextProtocol.includes('collections.abc.ContextManager')) failures.push('Context-manager protocol answer failed');
+  if (!mutableTaxonomy.includes('No universal mutable protocol') || !mutableTaxonomy.includes('variable reassignment')) failures.push('Mutability taxonomy answer failed');
+  if (!asyncIteratorProtocol.includes('__anext__') || !asyncIteratorProtocol.includes('StopAsyncIteration')) failures.push('Async-iterator protocol answer failed');
+
+  const starSyntax = knowledge.answerPythonSyntaxRoleQuestion('What does `*` mean in Python?', 'en') || '';
+  const bracketsSyntax = knowledge.answerPythonSyntaxRoleQuestion('What is `[]` used for?', 'en') || '';
+  const colonSyntaxFr = knowledge.answerPythonSyntaxRoleQuestion('Que signifie `:` en Python ?', 'fr') || '';
+  if (!starSyntax.includes('multiplication') || !starSyntax.includes('func(*args)') || !starSyntax.includes('keyword-only')) failures.push('Star syntax-role answer failed');
+  if (!bracketsSyntax.includes('list display') || !bracketsSyntax.includes('subscription') || !bracketsSyntax.includes('slicing')) failures.push('Bracket syntax-role answer failed');
+  if (!colonSyntaxFr.includes('Rôles syntaxiques') || !colonSyntaxFr.includes('lambda')) failures.push('French colon syntax-role answer failed');
 
   const allMethodsCatalog = knowledge.answerPythonCatalogQuestion('list all methods', 'en') || '';
   const listMethodsCatalog = knowledge.answerPythonCatalogQuestion('list all list methods', 'en') || '';
@@ -227,6 +268,15 @@ try {
     ['Review this code for readability:\n```python\nvalues = []\n```', 'code_quality'],
     ['Build me a learning path for OOP', 'learning_path'],
     ['Which list methods return None and mutate in place?', 'contract_search'],
+    ['Is len a function?', 'classification'],
+    ['Classify yield', 'classification'],
+    ['What is the iterable protocol?', 'protocol_taxonomy'],
+    ['Quelle est la différence avec un itérateur ?', 'protocol_taxonomy'],
+    ['What does `*` mean in Python?', 'syntax_role'],
+    ['Que signifie `:` en Python ?', 'syntax_role'],
+    ['When are mutable default arguments evaluated?', 'execution_model'],
+    ['Explain decorator evaluation order', 'execution_model'],
+    ['What is the import execution order?', 'execution_model'],
     ['Traceback (most recent call last):\n  File "main.py", line 2, in <module>\nNameError: name x is not defined', 'traceback'],
   ];
   for (const [question, expected] of intentCases) {

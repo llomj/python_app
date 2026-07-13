@@ -755,6 +755,7 @@ export const answerPythonModuleProjectRequest = (question: string, language: Adv
 export const answerPythonMisconceptionRequest = (question: string, language: AdvancedAiLanguage): string | null => {
   if (!/\b(?:misconception|what am i misunderstanding|common mistake|why (?:is|does|do|am|are).*(?:none|wrong|change)|returns? none|unexpected behavior|conceptual error|malentendu|qu['’]est-ce que je comprends mal|erreur de compr[eé]hension|pourquoi.*(?:none|faux|change)|comportement inattendu)\b/i.test(question)) return null;
   const code = extractGeneralAiPythonCode(question);
+  const lowerQ = question.toLowerCase();
   const fr = language === 'fr';
   const findings: Array<{ title: string; explanation: string; correction: string }> = [];
   const inPlaceAssignment = code.match(/\b([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\.(append|extend|insert|sort|reverse|remove|clear|update|add)\s*\(([^\n)]*)\)/);
