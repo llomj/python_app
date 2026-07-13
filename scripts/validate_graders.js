@@ -493,7 +493,12 @@ def declaration_variants(source):
     except SyntaxError:
         return [source]
     allowed = (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
-    declaration_nodes = [node for node in tree.body if isinstance(node, allowed)]
+    declaration_nodes = [
+        node for node in tree.body
+        if isinstance(node, allowed) or (
+            isinstance(node, ast.Assign) and isinstance(node.value, ast.Lambda)
+        )
+    ]
     variants = []
     for end in range(1, len(declaration_nodes) + 1):
         variant_tree = ast.Module(body=declaration_nodes[:end], type_ignores=[])
@@ -519,7 +524,7 @@ def call_name(node):
         return node.attr
     return None
 
-def source_requirements_ok(source, grader):
+def source_requirements_ok(source, grader, behavior_only=False):
     call_patterns = grader.get("requiredCallPatterns", [])
     any_call_patterns = grader.get("requiredAnyCallPatterns", [])
     node_patterns = grader.get("requiredNodePatterns", [])
@@ -548,6 +553,8 @@ def source_requirements_ok(source, grader):
     )
     if needs_random and not any(call_name(call.func) in random_call_names for call in calls):
         return False
+    if behavior_only:
+        return True
     if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
         return True
     for pattern in call_patterns:
@@ -1747,7 +1754,7 @@ def run_metamorphic_tests(target, function_names, tests, compare):
             return False
     return True
 
-def run_grader(source, grader):
+def run_grader(source, grader, behavior_only=False):
     compare = grader.get("compare", "exact")
     tests = grader.get("tests", [])
     if grader.get("mode") == "script":
@@ -1758,7 +1765,7 @@ def run_grader(source, grader):
                 last_solution = ""
                 for solution in runnable_variants(source, prefer_markers=True):
                     last_solution = solution
-                    if not source_requirements_ok(solution, grader):
+                    if not source_requirements_ok(solution, grader, behavior_only):
                         continue
                     with time_limit(1.0):
                         if run_script_tests(solution, tests, compare):
@@ -1770,7 +1777,7 @@ def run_grader(source, grader):
     last_solution = ""
     for solution in runnable_variants(source):
         for candidate_solution in declaration_variants(solution):
-            if not source_requirements_ok(candidate_solution, grader):
+            if not source_requirements_ok(candidate_solution, grader, behavior_only):
                 continue
             namespace = {"__name__": "__main__", "re": re, "math": math, "json": json}
             old_stdout = sys.stdout
@@ -1803,7 +1810,7 @@ def run_grader(source, grader):
                     os.chdir(old_cwd)
                     sys.stdout = old_stdout
                     builtins.input = old_input
-    if source_requirements_ok(source, grader):
+    if source_requirements_ok(source, grader, behavior_only):
         for solution in runnable_variants(source):
             last_solution = solution
             try:
@@ -2243,7 +2250,11 @@ for exercise in payload["exercises"]:
     if not grader:
         continue
     try:
-        passed, error, selected = run_grader(exercise.get("solution", ""), grader)
+        passed, error, selected = run_grader(
+            exercise.get("solution", ""),
+            grader,
+            bool(exercise.get("behaviorOnly")),
+        )
     except BaseException as exc:
         passed, error, selected = False, f"validator raised {type(exc).__name__}: {exc}", ""
     results.append({

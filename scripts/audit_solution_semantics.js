@@ -62,12 +62,14 @@ def call_name(node):
     if isinstance(node, ast.Name):
         return node.id
     if isinstance(node, ast.Attribute):
-        return node.attr
+        owner = call_name(node.value)
+        return f'{owner}.{node.attr}' if owner else node.attr
     return ''
 
 def technique(code, names, category):
     try:
         tree = ast.parse(code)
+        compile(tree, '<solution>', 'exec')
     except SyntaxError:
         return 'INVALID'
     ignored = {'print', 'main', 'solve', 'run_solution', *names}
@@ -89,17 +91,38 @@ def technique(code, names, category):
         architecture = sorted(type(node).__name__ for node in tree.body if isinstance(node, (
             ast.FunctionDef, ast.ClassDef, ast.Assign, ast.Expr,
         )))
-    return repr((calls, structures, sorted(operators), architecture))
+    class_details = []
+    for class_node in (node for node in ast.walk(tree) if isinstance(node, ast.ClassDef) and not node.name.startswith('Exercise')):
+        decorators = tuple(call_name(item) for item in class_node.decorator_list)
+        bases = tuple(call_name(item) for item in class_node.bases)
+        methods = tuple(statement.name for statement in class_node.body if isinstance(statement, (ast.FunctionDef, ast.AsyncFunctionDef)))
+        class_assignments = sum(isinstance(statement, (ast.Assign, ast.AnnAssign)) for statement in class_node.body)
+        class_details.append((class_node.name, decorators, bases, methods, class_assignments))
+    return repr((calls, structures, sorted(operators), architecture, sorted(class_details)))
 
 distribution = collections.Counter()
 under_three = []
+technique_counts = {}
+gap_features = collections.Counter()
 for line in sys.stdin:
     record = json.loads(line)
     signatures = {technique(section, set(record['names']), record['category']) for section in sections(record['code'])}
     distribution[len(signatures)] += 1
+    technique_counts[record['id']] = len(signatures)
     if len(signatures) < 3:
         under_three.append(record['id'])
-print(json.dumps({'distribution': distribution, 'underThree': under_three}))
+        try:
+            first_tree = ast.parse(sections(record['code'])[0])
+            for node in ast.walk(first_tree):
+                if isinstance(node, ast.Call):
+                    name = call_name(node.func)
+                    if name and name not in {'print', *record['names']}:
+                        gap_features[f'call:{name}'] += 1
+                elif isinstance(node, (ast.ClassDef, ast.For, ast.While, ast.If, ast.Try, ast.With, ast.Match, ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)):
+                    gap_features[f'node:{type(node).__name__}'] += 1
+        except Exception:
+            gap_features['INVALID'] += 1
+print(json.dumps({'distribution': distribution, 'underThree': under_three, 'techniqueCounts': technique_counts, 'gapFeatures': gap_features.most_common(30)}))
 `;
 const result = spawnSync('python3', ['-c', auditor], {
   input: records.map(record => JSON.stringify(record)).join('\n'),
@@ -111,11 +134,24 @@ if (result.status !== 0) throw new Error(result.stderr || `Python exited ${resul
 const report = JSON.parse(result.stdout);
 const maxArg = process.argv.find(argument => argument.startsWith('--max-under3='));
 const maxUnderThree = maxArg ? Number(maxArg.split('=')[1]) : null;
+const inspectArg = process.argv.find(argument => argument.startsWith('--inspect='));
+if (inspectArg) {
+  const inspectId = Number(inspectArg.split('=')[1]);
+  const record = records.find(item => item.id === inspectId);
+  if (!record) throw new Error(`Unknown exercise ${inspectId}`);
+  console.log(`\nRendered solution for ${inspectId}:\n${record.code}\n`);
+}
 
 console.log('Solution semantic-diversity audit');
 console.log(`Exercises: ${records.length}`);
 console.log(`Technique-count distribution: ${JSON.stringify(report.distribution)}`);
 console.log(`Exercises below three semantic techniques: ${report.underThree.length}`);
+const categoryGaps = records.reduce((counts, record) => {
+  if ((report.techniqueCounts[record.id] ?? 0) < 3) counts[record.category] = (counts[record.category] ?? 0) + 1;
+  return counts;
+}, {});
+console.log(`Coverage gaps by category: ${JSON.stringify(categoryGaps)}`);
+console.log(`Top gap features: ${JSON.stringify(report.gapFeatures)}`);
 if (process.argv.includes('--show')) console.log(report.underThree.join(', '));
 if (maxUnderThree !== null && report.underThree.length > maxUnderThree) {
   console.error(`Semantic-diversity regression: ${report.underThree.length} exceeds ${maxUnderThree}.`);

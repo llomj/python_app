@@ -2,6 +2,7 @@ import type { AutoGrader } from '../graders';
 import { INVALID_SOLUTION_SECTION_INDEXES } from './solutionSectionManifest';
 import { SOLUTION_REFERENCE_OVERRIDES } from './solutionReferenceOverrides';
 import { INVALID_SOLUTION_BODY_KEYS } from './solutionBehaviorManifest';
+import { GENERATED_SOLUTION_ALTERNATIVES } from './generatedSolutionAlternatives';
 
 interface SolutionSection {
     heading: string;
@@ -9,11 +10,10 @@ interface SolutionSection {
     index: number;
 }
 
-const HEADING_PATTERN = /^#\s*(Using|Script|Direct|Built|Manual|Alternative|Try|Another|Equivalent|Convert|Modify|Consider|Nested|Advanced|Callable|Example|Reference)\b/i;
+const HEADING_PATTERN = /^#\s*(?:[-=]+\s*)?(Using|Approach|Method|Version|Script|Direct|Built|Manual|Alternative|Try|Another|Equivalent|Convert|Modify|Consider|Nested|Advanced|Callable|Example|Reference)\b/i;
 
 const normalizeCode = (code: string) => code
     .replace(/#.*$/gm, '')
-    .replace(/^\s*print\s*\(.*\)\s*$/gm, '')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -160,6 +160,13 @@ export const buildSolutionVariations = (
     exerciseId: number,
     grader?: AutoGrader,
 ): string => {
+    const generatedAlternatives = GENERATED_SOLUTION_ALTERNATIVES[exerciseId];
+    if (!SOLUTION_REFERENCE_OVERRIDES[exerciseId] && generatedAlternatives?.length >= 3) {
+        return generatedAlternatives.slice(0, 4).map((alternative, index) => [
+            `# Example ${index + 1}: ${index === 0 ? 'simplest reference' : alternative.heading.replace(/^#\s*/, '')}`,
+            alternative.body,
+        ].join('\n')).join('\n\n');
+    }
     const effectiveSolution = SOLUTION_REFERENCE_OVERRIDES[exerciseId] ?? solution;
     const { prefix, sections } = parseSections(effectiveSolution);
     const invalidIndexes = new Set(SOLUTION_REFERENCE_OVERRIDES[exerciseId]

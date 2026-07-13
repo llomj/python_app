@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Audit Python concept definitions
-        run: npm run audit:concepts && npm run audit:solution-variations && npm run audit:solution-semantics -- --max-under3=2025 && npm run eval:general-ai && npm run eval:general-ai-final && npm run eval:problem-ai
+        run: npm run audit:concepts && npm run audit:solution-variations && npm run audit:solution-semantics -- --max-under3=157 && npm run eval:general-ai && npm run eval:general-ai-final && npm run eval:problem-ai
 
       - name: Build
         run: npm run build

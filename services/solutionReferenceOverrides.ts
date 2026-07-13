@@ -208,6 +208,43 @@ print(next_with_default([]))
 numbers = [1, 3, 5]
 first_even = next((number for number in numbers if number % 2 == 0), 'Nothing')
 print(first_even)`,
+    1626: `# Using contextlib.contextmanager
+from contextlib import contextmanager
+
+@contextmanager
+def my_context():
+    print('Entering context')
+    try:
+        yield 'context value'
+    finally:
+        print('Exiting context')
+
+with my_context() as value:
+    print(f'Inside context: {value}')
+
+# Using a context-manager class
+class MyContext:
+    def __enter__(self):
+        print('Entering context')
+        return 'context value'
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print('Exiting context')
+
+with MyContext() as value:
+    print(f'Inside context: {value}')
+
+# Using a reusable generator helper
+from contextlib import contextmanager
+
+def context_events():
+    print('Entering context')
+    yield 'context value'
+    print('Exiting context')
+
+my_context = contextmanager(context_events)
+with my_context() as value:
+    print(f'Inside context: {value}')`,
     1882: `# Using an f-string approach
 def format_address(street, city, state, zipcode):
     return f'{street}\\n{city}, {state} {zipcode}'
