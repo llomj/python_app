@@ -72,7 +72,8 @@ const formatCatalogEntries = (entries: RefEntry[], language: KnowledgeLanguage, 
 
 export const answerPythonCatalogQuestion = (question: string, language: KnowledgeLanguage): string | null => {
   const q = question.toLowerCase().replace(/[?!.]+$/g, '').trim();
-  const asksForCatalog = /\b(?:list|show|give|name|display|all|every|how many|number of|count of|liste|lister|montre|donne|tous|toutes|combien|nombre de)\b/i.test(q);
+  const asksForCatalog = /\b(?:show|give|name|display|all|every|how many|number of|count of|montre|donne|tous|toutes|combien|nombre de)\b/i.test(q)
+    || /^(?:please\s+)?(?:list|liste|lister)\s+(?:all|every|the|methods?|functions?|keywords?|operators?|types?|built-ins?|toutes?|les|des|m[eé]thodes?|fonctions?|mots?[- ]cl[eé]s?|op[eé]rateurs?|types?)\b/i.test(q);
   if (!asksForCatalog) return null;
   const fr = language === 'fr';
   const typeMatch = q.match(/\b(string|str|list|dict|dictionary|set|tuple)\s+methods?\b|\bmethods?\s+(?:of|for|on)\s+(?:a\s+)?(string|str|list|dict|dictionary|set|tuple)\b/i);
@@ -202,15 +203,24 @@ const splitSignatureParameters = (signature: string): { parameters: string[]; re
 };
 
 export const answerPythonCallableSignatureQuestion = (question: string, language: KnowledgeLanguage): string | null => {
-  if (!/\b(?:how many|number of|which|what|order|first|arguments?|parameters?|takes?|accepts?|combien|nombre|ordre|arguments?|param[eè]tres?)\b/i.test(question)) return null;
+  if (!/\b(?:how many|number of|order|arguments?|parameters?|takes?|accepts?|combien|nombre|ordre|arguments?|param[eè]tres?|prend|accepte)\b/i.test(question)) return null;
   const explicitCalls = [...question.matchAll(/\b([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)\s*\(\s*\)/g)].map(match => match[1]);
   const dottedNames = [...question.matchAll(/\b([A-Za-z_]\w*\.[A-Za-z_]\w*)\b/g)].map(match => match[1]);
+  const explicitSubjects = [
+    ...question.matchAll(/\b(?:does|do)\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)\s+(?:take|accept)/gi),
+    ...question.matchAll(/\b(?:arguments?|parameters?)\s+(?:of|for|in|de|des|pour)\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)/gi),
+    ...question.matchAll(/\b(?:prend|accepte)\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)/gi),
+  ].map(match => match[1]);
   const stopWords = new Set(['how', 'many', 'number', 'of', 'arguments', 'argument', 'parameters', 'parameter', 'does', 'do', 'take', 'takes', 'accept', 'accepts', 'what', 'is', 'the', 'order', 'in', 'for', 'first', 'combien', 'nombre', 'de', 'des', 'ordre', 'prend', 'accepte']);
   const plainNames = [...question.matchAll(/\b([A-Za-z_]\w*)\b/g)].map(match => match[1]).filter(value => !stopWords.has(value.toLowerCase()));
-  const candidates = [...new Set([...explicitCalls, ...dottedNames, ...plainNames])];
+  const candidates = [...new Set([...explicitCalls, ...dottedNames, ...explicitSubjects, ...plainNames])];
   const subject = candidates.find(candidate => {
     const candidateResolution = resolvePythonKnowledge(candidate, typeFromPrefix(candidate));
-    return Boolean(candidateResolution.record || candidateResolution.alternatives.length);
+    const records = candidateResolution.record ? [candidateResolution.record] : candidateResolution.alternatives;
+    return records.some(record => (
+      (record.kind === 'builtin' || ['str', 'list', 'dict', 'set', 'tuple'].includes(record.kind))
+      && /\([^)]*\)/.test(record.signature)
+    ));
   });
   if (!subject) return null;
   const resolution = resolvePythonKnowledge(subject, typeFromPrefix(subject));
@@ -809,8 +819,8 @@ export const resolvePythonKnowledge = (rawTerm: string, preferredType?: string):
 export const extractKnowledgeTerm = (question: string): string | null => {
   const cleaned = question.trim().replace(/[?!]+$/g, '').trim();
   if (!cleaned || /\b(?:difference between|compare|versus|\bvs\.?\b)\b/i.test(cleaned)) return null;
-  const match = cleaned.match(/^(?:(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell\s+me\s+about)|can\s+you\s+(?:define|describe|explain))\s+(.+)$/i);
-  if (match) return normalizeTerm(match[1].replace(/\s+(?:do|does|mean|work)$/i, ''));
+  const match = cleaned.match(/^(?:(?:please\s+)?(?:what(?:'s|\s+is|\s+are|\s+does)|define|describe|explain|tell\s+me\s+about|d[eé]finis?|explique|d[eé]cris|parle-moi\s+de)|can\s+you\s+(?:define|describe|explain))\s+(.+)$/i);
+  if (match) return normalizeTerm(match[1].replace(/\s+(?:do|does|mean|work|to\s+me|in\s+python|en\s+python)$/i, ''));
   return cleaned.split(/\s+/).length <= 4 ? normalizeTerm(cleaned) : null;
 };
 
@@ -1128,7 +1138,8 @@ const parseComparisonPair = (question: string): [string, string] | null => {
   const patterns = [
     /(?:what(?:'s| is)?\s+)?(?:the\s+)?difference between\s+(.+?)\s+and\s+(.+)$/i,
     /(?:compare|comparison of)\s+(.+?)\s+(?:with|to|and)\s+(.+)$/i,
-    /^(?:(?:what(?:'s| is)?|define|explain)\s+)?(.+?)\s+(?:vs\.?|versus)\s+(.+)$/i,
+    /^(?:(?:what(?:'s| is)?|define|explain|compare)\s+)?(.+?)\s+(?:vs\.?|versus)\s+(.+)$/i,
+    /(?:compare|compar(?:e|er))\s+(.+?)\s+(?:avec|with|to|and|et)\s+(.+)$/i,
   ];
   for (const pattern of patterns) {
     const match = cleaned.match(pattern);
@@ -1224,14 +1235,14 @@ export const resolveKnowledgeFollowUp = (
   if (directFrenchSimple) return { question: `what is ${normalizeTerm(directFrenchSimple[1])}`, mode: 'simple', usedContext: true };
   if (!previousQuestion) return { question: trimmed, mode: currentMode, usedContext: false };
   const subject = subjectFromQuestion(previousQuestion);
+  if (/^(?:simplify|explain simply|explain more simply|simple|explique simplement)\b/i.test(trimmed)) {
+    return { question: previousQuestion, mode: 'simple', usedContext: true };
+  }
   if (/^(?:go deeper|more detail|explain more|break it down|approfondis|plus de details?)\b/i.test(trimmed)) {
     return { question: previousQuestion, mode: 'deep', usedContext: true };
   }
   if (/^(?:examples?|give (?:another )?examples?|show (?:another )?examples?|donne des exemples?)\b/i.test(trimmed)) {
     return { question: previousQuestion, mode: 'examples', usedContext: true };
-  }
-  if (/^(?:simplify|explain simply|explain more simply|simple|explique simplement)\b/i.test(trimmed)) {
-    return { question: previousQuestion, mode: 'simple', usedContext: true };
   }
   const newSubject = trimmed.match(/^(?:what about|how about|et|et pour)\s+(.+?)[?.!]*$/i);
   if (newSubject) return { question: `what is ${normalizeTerm(newSubject[1])}`, mode: currentMode, usedContext: true };

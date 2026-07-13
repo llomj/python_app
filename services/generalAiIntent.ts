@@ -84,6 +84,10 @@ const containsCode = (question: string): boolean => (
 export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult => {
   const value = question.trim();
   const lower = value.toLowerCase();
+  if (/\b(?:pizza|restaurant|weather|forecast|temperature|football|soccer|basketball|election|celebrity)\b/i.test(value)
+    || /\b(?:who won (?:the )?match|match score|sports? score)\b/i.test(value)) {
+    return { intent: 'unknown', confidence: 0.98, reason: 'Clearly outside the Python tutoring scope' };
+  }
   if (/traceback \(most recent call last\)|(^|\n)\s*file ".+", line \d+/i.test(value)) {
     return { intent: 'traceback', confidence: 1, reason: 'Python traceback frames detected' };
   }
@@ -318,6 +322,6 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
 export const shouldClarifyGeneralAiQuestion = (question: string): boolean => {
   const value = question.trim();
   if (!value) return true;
-  if (/^(?:it|this|that|more|why|how|yes|no|cela|ça|pourquoi|comment)[?.!]*$/i.test(value)) return true;
+  if (/^(?:it|this|that|more|why|how|yes|no|cela|ça|pourquoi|comment)\s*[?.!]*$/i.test(value)) return true;
   return classifyGeneralAiIntent(value).intent === 'unknown' && value.split(/\s+/).length < 3;
 };
