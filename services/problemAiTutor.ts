@@ -201,15 +201,63 @@ const detectSolutionPatterns = (code: string): SolutionPatterns => {
   };
 };
 
+const candidateMatchesNode = (code: string, nodeType: string): boolean => {
+  const patterns: Record<string, RegExp> = {
+    Lambda: /\blambda\b/,
+    Starred: /(?:^|[(,\[])\s*\*[A-Za-z_]\w*/m,
+    For: /\bfor\s+[A-Za-z_]\w*\s+in\b/,
+    While: /\bwhile\s+.+:/,
+    If: /\bif\s+.+:/,
+    FunctionDef: /^\s*def\s+[A-Za-z_]\w*\s*\(/m,
+    ClassDef: /^\s*class\s+[A-Za-z_]\w*/m,
+    Return: /^\s*return\b/m,
+    Try: /^\s*try\s*:/m,
+    With: /^\s*(?:async\s+)?with\b/m,
+    ListComp: /\[[^\]]*\bfor\b[^\]]*\]/s,
+    SetComp: /\{[^{}:]*\bfor\b[^{}]*\}/s,
+    DictComp: /\{[^{}]*:[^{}]*\bfor\b[^{}]*\}/s,
+    GeneratorExp: /\([^()]*\bfor\b[^()]*\)/s,
+    Subscript: /[A-Za-z_][\w.]*\s*\[[^\]]+\]/,
+    Dict: /\{\s*(?:[^{}]*:[^{}]*)?\}/s,
+    Set: /\{\s*[^{}:]+(?:,\s*[^{}:]+)*\s*\}/s,
+    List: /\[[^\]]*\]/s,
+    Tuple: /\([^()]*,[^()]*\)/s,
+    Compare: /(?:==|!=|<=|>=|<|>|\bis\b|\bin\b)/,
+    BoolOp: /\b(?:and|or)\b/,
+  };
+  return patterns[nodeType]?.test(code) ?? true;
+};
+
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const canonicalCandidateScore = (code: string, grader?: AutoGrader | null): number => {
+  let score = 0;
+  for (const requirement of grader?.requiredNodePatterns || []) score += candidateMatchesNode(code, requirement.nodeType) ? 20 : -20;
+  for (const requirement of grader?.requiredCallPatterns || []) score += new RegExp(`\\b${escapeRegExp(requirement.functionName)}\\s*\\(`).test(code) ? 10 : -5;
+  for (const requirement of grader?.requiredAnyCallPatterns || []) score += new RegExp(`\\b${escapeRegExp(requirement.functionName)}\\s*\\(`).test(code) ? 5 : 0;
+  for (const name of grader?.functionNames || []) score += new RegExp(`^\\s*def\\s+${escapeRegExp(name)}\\s*\\(`, 'm').test(code) ? 10 : 0;
+  if (grader?.mode === 'script' && /^(?!\s*(?:def|class)\b)\s*\S/m.test(code)) score += 2;
+  return score;
+};
+
+const chooseCanonicalSection = (solution: string, grader?: AutoGrader | null): string => {
+  const candidates = solution
+    .split(/(?=^#\s*(?:Using|Script|Direct)\b)/mi)
+    .map(section => section.replace(/^#\s*(?:Using|Script|Direct)[^\n]*\n?/i, '').trim())
+    .filter(Boolean);
+  if (candidates.length <= 1) return candidates[0] || solution;
+  return candidates.reduce((best, candidate) => (
+    canonicalCandidateScore(candidate, grader) > canonicalCandidateScore(best, grader) ? candidate : best
+  ), candidates[0]);
+};
+
 const analyzeCanonicalSolution = (exercise: Exercise, grader?: AutoGrader | null): SolutionAnalysis => {
-  const lines = exercise.solution.split('\n');
-  const startMarker = lines.findIndex(line => /^#\s*Using function approach/i.test(line.trim()));
-  const start = startMarker >= 0 ? startMarker + 1 : 0;
+  const lines = chooseCanonicalSection(exercise.solution, grader).split('\n');
+  const start = 0;
   const selected: string[] = [];
   const topLevelDefinitions = new Set<string>();
   for (let index = start; index < lines.length; index += 1) {
     const line = lines[index];
-    if (selected.some(item => item.trim()) && /^#\s*(?:Using|Script|Direct)\b/i.test(line.trim())) break;
     const definition = line.match(/^(?:def|class)\s+([A-Za-z_]\w*)/);
     if (definition && topLevelDefinitions.has(definition[1])) break;
     if (definition) topLevelDefinitions.add(definition[1]);
@@ -614,6 +662,64 @@ const hasRelevantContent = (items: unknown[] | string | undefined | null): boole
   return typeof items === 'string' && items.trim().length > 0;
 };
 
+const methodFallback = (problemType: ProblemType, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  if (problemType === 'function-def') return [fr
+    ? 'Aucune fonction intégrée précise n’est obligatoire. La fonction définie par l’utilisateur doit appliquer le comportement demandé et renvoyer le résultat.'
+    : 'No particular built-in function is mandatory. The user-defined function must implement the requested behavior and return the result.'];
+  if (problemType === 'class-def') return [fr
+    ? 'Aucune méthode intégrée précise n’est obligatoire. Définissez la classe et ses méthodes publiques conformément à l’énoncé.'
+    : 'No particular built-in method is mandatory. Define the class and its public methods according to the prompt.'];
+  return [fr
+    ? 'Aucune fonction intégrée précise n’est obligatoire. Le script peut utiliser toute opération Python équivalente qui produit le comportement demandé.'
+    : 'No particular built-in function is mandatory. The script may use any equivalent Python operation that produces the requested behavior.'];
+};
+
+const syntaxFallback = (problemType: ProblemType, description: string, analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  const declaration = analysis.snippet.split('\n').find(line => /^\s*(?:def|class)\s+/.test(line));
+  const lines = [fr
+    ? 'Aucune construction AST supplémentaire n’est imposée : le correcteur vérifie principalement le comportement et le résultat.'
+    : 'No additional AST construct is mandatory: the grader primarily checks behavior and the result.'];
+  if (declaration) lines.push(`${fr ? 'Conservez le contrat de déclaration' : 'Preserve the declaration contract'}: \`${declaration.trim()}\``);
+  if (problemType === 'function-def' || /\breturns?|\breturn\b|renvoie|retourne/i.test(description)) {
+    lines.push(fr ? 'Utilisez `return result` pour transmettre la valeur à l’appelant.' : 'Use `return result` to give the value back to the caller.');
+  } else if (problemType === 'script-output' || /\bprint|display|affich/i.test(description)) {
+    lines.push(fr ? 'Exécutez l’opération dans le script et utilisez `print(result)` lorsque l’énoncé demande un affichage.' : 'Execute the operation in the script and use `print(result)` when the prompt asks for displayed output.');
+  }
+  return lines;
+};
+
+const mistakeFallback = (problemType: ProblemType, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  const resultRule = problemType === 'function-def'
+    ? (fr ? 'Ne remplacez pas `return` par `print()` : le correcteur doit pouvoir récupérer la valeur renvoyée.' : 'Do not replace `return` with `print()`: the grader must be able to receive the returned value.')
+    : (fr ? 'N’écrivez pas seulement une valeur attendue en dur ; le script doit exécuter l’opération décrite.' : 'Do not hard-code only one expected value; the script must execute the described operation.');
+  return [
+    resultRule,
+    fr ? 'Respectez les types d’entrée et de résultat décrits dans l’énoncé.' : 'Preserve the input and result types described by the prompt.',
+  ];
+};
+
+const walkthroughFallback = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  const firstLine = analysis.snippet.split('\n').find(line => line.trim())?.trim();
+  return [firstLine
+    ? (fr ? `La première instruction, \`${firstLine}\`, établit la structure ou les données nécessaires à la solution.` : `The first statement, \`${firstLine}\`, establishes the structure or data needed by the solution.`)
+    : (fr ? 'Commencez par créer les données ou la déclaration demandées par l’énoncé.' : 'Start by creating the data or declaration requested by the prompt.'),
+  fr ? 'Les instructions suivantes appliquent la transformation demandée avant de renvoyer ou d’afficher le résultat.' : 'The remaining statements apply the requested transformation before returning or displaying the result.'];
+};
+
+const testFallback = (problemType: ProblemType, language: ProblemAiLanguage): string[] => {
+  const fr = language === 'fr';
+  return [
+    fr ? 'Cas normal : utilisez une valeur représentative du type d’entrée indiqué et vérifiez le comportement décrit.' : 'Normal case: use a representative value of the stated input type and verify the described behavior.',
+    problemType === 'function-def'
+      ? (fr ? 'Cas limite : appelez la fonction avec la plus petite entrée valide autorisée par l’énoncé.' : 'Boundary case: call the function with the smallest valid input allowed by the prompt.')
+      : (fr ? 'Cas de variation : changez les données du script et vérifiez que le résultat change logiquement.' : 'Variation case: change the script data and verify that the result changes logically.'),
+  ];
+};
+
 export const buildProblemAiTutorAnswer = ({ exercise, description, grader, language }: ProblemAiTutorContext): string => {
   const fr = language === 'fr';
   const goal = cleanPrompt(description);
@@ -664,15 +770,13 @@ export const buildProblemAiTutorAnswer = ({ exercise, description, grader, langu
   // 3
   sections.push(`**3. ${fr ? 'Mots et concepts importants' : 'Key words and concepts'}**\n${definitions.length ? definitions.join('\n') : (fr ? '- Aucun concept spécial n\'est imposé ; concentrez-vous sur la transformation décrite.' : '- No special construct is required; focus on the transformation described.')}`);
 
-  // 4 — skip if no methods referenced
-  if (hasRelevantContent(methods)) {
-    sections.push(`**4. ${fr ? 'Référence des méthodes et fonctions' : 'Method and function reference'}**\n${methods.map(line => `- ${line}`).join('\n')}`);
-  }
+  // 4
+  const methodLines = hasRelevantContent(methods) ? methods : methodFallback(problemType, language);
+  sections.push(`**4. ${fr ? 'Référence des méthodes et fonctions' : 'Method and function reference'}**\n${methodLines.map(line => `- ${line}`).join('\n')}`);
 
-  // 5 — skip if grader syntax empty
-  if (hasRelevantContent(syntax)) {
-    sections.push(`**5. ${fr ? 'Syntaxe que le correcteur recherche' : 'Syntax the grader requires'}**\n${syntax.map(line => `- ${line}`).join('\n')}`);
-  }
+  // 5
+  const syntaxLines = hasRelevantContent(syntax) ? syntax : syntaxFallback(problemType, description, analysis, language);
+  sections.push(`**5. ${fr ? 'Syntaxe que le correcteur recherche' : 'Syntax the grader requires'}**\n${syntaxLines.map(line => `- ${line}`).join('\n')}`);
 
   // 6 — reference code pattern
   sections.push(`**6. ${fr ? 'Modèle de code de référence' : 'Reference code pattern'}**\n\`\`\`python\n${analysis.snippet}\n\`\`\``);
@@ -680,23 +784,20 @@ export const buildProblemAiTutorAnswer = ({ exercise, description, grader, langu
   // 7 — step-by-step plan
   sections.push(`**7. ${fr ? 'Plan de construction' : 'Step-by-step plan'}**\n${execution.join('\n')}`);
 
-  // 8 — line-by-line, skip if very generic
-  if (hasRelevantContent(walkthrough)) {
-    sections.push(`**8. ${fr ? 'Explication ligne par ligne' : 'Line-by-line explanation'}**\n${walkthrough.map((line, index) => `${index + 1}. ${line}`).join('\n')}`);
-  }
+  // 8
+  const walkthroughLines = hasRelevantContent(walkthrough) ? walkthrough : walkthroughFallback(analysis, language);
+  sections.push(`**8. ${fr ? 'Explication ligne par ligne' : 'Line-by-line explanation'}**\n${walkthroughLines.map((line, index) => `${index + 1}. ${line}`).join('\n')}`);
 
   // 9
-  sections.push(`**9. ${fr ? 'Ordre d\'exécution' : 'Execution flow'}**\n${executionFlow(analysis, language).map((line, index) => `${index + 1}. ${line}`).join('\n')}`);
+  sections.push(`**9. ${fr ? 'Ordre d’exécution' : 'Execution flow'}**\n${executionFlow(analysis, language).map((line, index) => `${index + 1}. ${line}`).join('\n')}`);
 
   // 10
-  if (hasRelevantContent(mistakes)) {
-    sections.push(`**10. ${fr ? 'Erreurs fréquentes à éviter' : 'Common mistakes to avoid'}**\n${mistakes.map(line => `- ${line}`).join('\n')}`);
-  }
+  const mistakeLines = hasRelevantContent(mistakes) ? mistakes : mistakeFallback(problemType, language);
+  sections.push(`**10. ${fr ? 'Erreurs fréquentes à éviter' : 'Common mistakes to avoid'}**\n${mistakeLines.map(line => `- ${line}`).join('\n')}`);
 
   // 11
-  if (hasRelevantContent(tests)) {
-    sections.push(`**11. ${fr ? 'Cas de test concrets' : 'Concrete test cases'}**\n${tests.map(line => `- ${line}`).join('\n')}`);
-  }
+  const testLines = hasRelevantContent(tests) ? tests : testFallback(problemType, language);
+  sections.push(`**11. ${fr ? 'Cas de test concrets' : 'Concrete test cases'}**\n${testLines.map(line => `- ${line}`).join('\n')}`);
 
   // 12
   sections.push(`**12. ${fr ? 'Autres façons correctes de l\'écrire' : 'Other correct ways to write it'}**\n${alternativeApproaches(analysis, language).map(line => `- ${line}`).join('\n')}`);

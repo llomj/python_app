@@ -88,6 +88,8 @@ try {
   for (const fragment of ['three numbers', 'lambda a, b, c: a + b + c', '*values', 'separate positional arguments', 'Result type stated by the prompt: number']) {
     if (!answer898.includes(fragment)) failures.push(`Problem 898 regression: missing ${JSON.stringify(fragment)}`);
   }
+  const reference898 = answer898.match(/\*\*6\. Reference code pattern\*\*\n```python\n([\s\S]*?)```/)?.[1] || '';
+  if (!/\blambda\b/.test(reference898) || !/\*[A-Za-z_]\w*/.test(reference898)) failures.push('Problem 898 reference code does not satisfy its lambda and starred-unpacking requirements');
   if (/sum\(\)|solve\(\)|your_function/.test(answer898)) failures.push('Problem 898 regression: stale unrelated breakdown leaked into answer');
 
   const exercise1287 = EXERCISES.find(exercise => exercise.id === 1287);
