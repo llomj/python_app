@@ -30,7 +30,11 @@ function loadTsExports(fileName) {
   return sandbox.module.exports;
 }
 
-const { EXERCISES } = loadTsExports('exercises.ts');
+const candidateFileArg = process.argv.find(arg => arg.startsWith('--candidate-file='));
+const candidateFile = candidateFileArg ? candidateFileArg.slice('--candidate-file='.length) : null;
+const EXERCISES = candidateFile
+  ? JSON.parse(fs.readFileSync(candidateFile, 'utf8'))
+  : loadTsExports('exercises.ts').EXERCISES;
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 
 const exerciseIds = EXERCISES.map(exercise => exercise.id);
@@ -40,7 +44,7 @@ const graderIds = Object.keys(AUTO_GRADERS).map(Number);
 const missingGraders = exerciseIds.filter(id => !AUTO_GRADERS[id]);
 const orphanGraders = graderIds.filter(id => !uniqueExerciseIds.has(id));
 
-if (duplicateExerciseIds.length || missingGraders.length || orphanGraders.length) {
+if (!candidateFile && (duplicateExerciseIds.length || missingGraders.length || orphanGraders.length)) {
   if (duplicateExerciseIds.length) {
     console.error(`Duplicate exercise IDs: ${[...new Set(duplicateExerciseIds)].join(', ')}`);
   }
@@ -2244,6 +2248,7 @@ for exercise in payload["exercises"]:
         passed, error, selected = False, f"validator raised {type(exc).__name__}: {exc}", ""
     results.append({
         "id": exercise["id"],
+        "candidateId": exercise.get("candidateId"),
         "passed": bool(passed),
         "error": error,
         "selectedLines": len(selected.splitlines()) if selected else 0
@@ -2270,6 +2275,10 @@ if (result.status !== 0) {
 }
 
 const results = JSON.parse(result.stdout);
+const resultsFileArg = process.argv.find(arg => arg.startsWith('--results-file='));
+if (resultsFileArg) {
+  fs.writeFileSync(resultsFileArg.slice('--results-file='.length), JSON.stringify(results, null, 2));
+}
 const failures = results.filter(item => !item.passed);
 const maxFailuresArg = process.argv.find(arg => arg.startsWith('--max-failures='));
 const maxFailures = maxFailuresArg ? Number(maxFailuresArg.split('=')[1]) : 0;

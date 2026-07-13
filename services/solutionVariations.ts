@@ -1,6 +1,7 @@
 import type { AutoGrader } from '../graders';
 import { INVALID_SOLUTION_SECTION_INDEXES } from './solutionSectionManifest';
 import { SOLUTION_REFERENCE_OVERRIDES } from './solutionReferenceOverrides';
+import { INVALID_SOLUTION_BODY_KEYS } from './solutionBehaviorManifest';
 
 interface SolutionSection {
     heading: string;
@@ -16,13 +17,23 @@ const normalizeCode = (code: string) => code
     .replace(/\s+/g, ' ')
     .trim();
 
+export const solutionBodyKey = (code: string): string => {
+    const normalized = normalizeCode(code);
+    let hash = 0x811c9dc5;
+    for (let index = 0; index < normalized.length; index += 1) {
+        hash ^= normalized.charCodeAt(index);
+        hash = Math.imul(hash, 0x01000193);
+    }
+    return (hash >>> 0).toString(16).padStart(8, '0');
+};
+
 const parseSections = (solution: string): { prefix: string; sections: SolutionSection[] } => {
     const prefix: string[] = [];
     const sections: SolutionSection[] = [];
     let current: SolutionSection | null = null;
 
     for (const line of solution.split('\n')) {
-        if (HEADING_PATTERN.test(line.trim())) {
+        if (HEADING_PATTERN.test(line)) {
             if (current) sections.push({ ...current, body: current.body.trim() });
             current = { heading: line.trim(), body: '', index: sections.length };
             continue;
@@ -36,6 +47,40 @@ const parseSections = (solution: string): { prefix: string; sections: SolutionSe
         sections.push({ heading: '# Reference approach', body: solution.trim(), index: 0 });
     }
     return { prefix: prefix.join('\n').trim(), sections };
+};
+
+const splitRepeatedCallableDefinitions = (
+    section: SolutionSection,
+    grader?: AutoGrader,
+): SolutionSection[] => {
+    if (!grader || grader.functionNames.length === 0) return [section];
+    const names = new Set(grader.functionNames);
+    const lines = section.body.split('\n');
+    const definitions = lines.flatMap((line, lineIndex) => {
+        const match = line.match(/^(?:async\s+)?(?:def|class)\s+([A-Za-z_]\w*)\b/);
+        return match && names.has(match[1]) ? [{ lineIndex, name: match[1] }] : [];
+    });
+    const counts = new Map<string, number>();
+    for (const definition of definitions) counts.set(definition.name, (counts.get(definition.name) ?? 0) + 1);
+    const repeatedName = [...counts.entries()].sort((left, right) => right[1] - left[1])[0];
+    if (!repeatedName || repeatedName[1] < 2) return [section];
+
+    const starts = definitions.filter(definition => definition.name === repeatedName[0]).map(definition => definition.lineIndex);
+    return starts.map((start, subIndex) => {
+        const end = starts[subIndex + 1] ?? lines.length;
+        const segment = lines.slice(start, end);
+        const techniqueComment = segment
+            .slice(1, 6)
+            .map(line => line.trim())
+            .find(line => /^#\s*Using\b/i.test(line));
+        return {
+            heading: techniqueComment ?? (subIndex === 0 ? section.heading : `# Alternative implementation ${subIndex + 1}`),
+            body: [subIndex === 0 ? lines.slice(0, start).join('\n').trim() : '', segment.join('\n').trim()]
+                .filter(Boolean)
+                .join('\n'),
+            index: section.index,
+        };
+    });
 };
 
 const requiredSyntaxScore = (body: string, grader?: AutoGrader): number => {
@@ -120,18 +165,31 @@ export const buildSolutionVariations = (
     const invalidIndexes = new Set(SOLUTION_REFERENCE_OVERRIDES[exerciseId]
         ? []
         : (INVALID_SOLUTION_SECTION_INDEXES[exerciseId] ?? []));
-    const ranked = sections
+    const invalidBodyKeys = new Set(INVALID_SOLUTION_BODY_KEYS[exerciseId] ?? []);
+    const expandedSections = sections.flatMap(section => splitRepeatedCallableDefinitions(section, grader));
+    const syntaxSafeSections = expandedSections.filter(section => (
+        section.body.trim()
+        && !invalidIndexes.has(section.index)
+        && definesRequestedCallable(section.body, grader)
+    ));
+    const ranked = syntaxSafeSections
         .filter(section => (
-            section.body.trim()
-            && !invalidIndexes.has(section.index)
-            && definesRequestedCallable(section.body, grader)
+            !invalidBodyKeys.has(solutionBodyKey(section.body))
         ))
         .map(section => ({ ...section, score: requiredSyntaxScore(section.body, grader) }))
         .sort((left, right) => right.score - left.score || left.index - right.index);
-    const reference = ranked[0] ?? { heading: '# Reference approach', body: solution.trim(), index: 0, score: 0 };
+    const safeFallback = syntaxSafeSections[0];
+    const reference = ranked[0] ?? (safeFallback
+        ? { ...safeFallback, score: requiredSyntaxScore(safeFallback.body, grader) }
+        : { heading: '# Reference approach', body: solution.trim(), index: 0, score: 0 });
     const requiredScore = reference.score;
     const selected: SolutionSection[] = [];
     const seen = new Set<string>();
+
+    if (ranked.length === 0 && safeFallback) {
+        selected.push(safeFallback);
+        seen.add(normalizeCode(safeFallback.body));
+    }
 
     for (const section of ranked) {
         if (selected.length >= 4) break;

@@ -36,7 +36,7 @@ for (const exercise of loadTsExports('exercises.ts').EXERCISES) {
   const sections = [];
   let current = null;
   for (const line of String(exercise.solution).split('\n')) {
-    if (heading.test(line.trim())) {
+    if (heading.test(line)) {
       if (current) sections.push(current);
       current = [];
     } else if (current) current.push(line);

@@ -1,5 +1,36 @@
 /** Problem-specific repairs for legacy solution text that cannot be safely parsed. */
 export const SOLUTION_REFERENCE_OVERRIDES: Readonly<Record<number, string>> = {
+    2: `# Using the multiplication operator
+def multiply_numbers(a, b):
+    return a * b
+
+# Using repeated addition
+def multiply_numbers(a, b):
+    total = 0
+    for _ in range(abs(b)):
+        total += a
+    return total if b >= 0 else -total
+
+# Using operator.mul
+from operator import mul
+
+def multiply_numbers(a, b):
+    return mul(a, b)`,
+    5: `# Using an explicit loop
+def count_vowels(text):
+    count = 0
+    for char in text.lower():
+        if char in 'aeiou':
+            count += 1
+    return count
+
+# Using a list comprehension
+def count_vowels(text):
+    return len([char for char in text.lower() if char in 'aeiou'])
+
+# Using sum and a generator expression
+def count_vowels(text):
+    return sum(char in 'aeiou' for char in text.lower())`,
     42: `# Using a generator expression approach
 def table(number):
     return '\\n'.join(f'{number} * {factor} = {number * factor}' for factor in range(11))
@@ -30,6 +61,30 @@ def histogram(numbers):
 # Using map approach
 def histogram(numbers):
     return '\\n'.join(map(lambda number: '*' * number, numbers))`,
+    1380: `# Using dict.get with defaults
+def greet(**kwargs):
+    name = kwargs.get('name', 'Guest')
+    age = kwargs.get('age', 'N/A')
+    return f'Hello {name}, age {age}'
+
+# Using merged defaults and key indexing
+def greet(**kwargs):
+    values = {'name': 'Guest', 'age': 'N/A'}
+    values.update(kwargs)
+    return f"Hello {values['name']}, age {values['age']}"
+
+# Using collections.ChainMap
+from collections import ChainMap
+
+def greet(**kwargs):
+    values = ChainMap(kwargs, {'name': 'Guest', 'age': 'N/A'})
+    return f"Hello {values['name']}, age {values['age']}"
+
+# Using conditional key access
+def greet(**kwargs):
+    name = kwargs['name'] if 'name' in kwargs else 'Guest'
+    age = kwargs['age'] if 'age' in kwargs else 'N/A'
+    return f'Hello {name}, age {age}'`,
     669: `# Using a generator expression approach
 def countries_capitals(data):
     return '\\n'.join(f'{country}: {capital}' for country, capital in data.items())
@@ -139,6 +194,20 @@ def first_even_or_empty(items):
     return next((item for item in items if item % 2 == 0), 'Empty')
 
 print(first_even_or_empty([1, 3, 5]))`,
+    1509: `# Using next directly with a default
+items = iter([])
+print(next(items, 'Nothing'))
+
+# Using a reusable helper function
+def next_with_default(iterable, default='Nothing'):
+    return next(iter(iterable), default)
+
+print(next_with_default([]))
+
+# Using a generator expression with a default
+numbers = [1, 3, 5]
+first_even = next((number for number in numbers if number % 2 == 0), 'Nothing')
+print(first_even)`,
     1882: `# Using an f-string approach
 def format_address(street, city, state, zipcode):
     return f'{street}\\n{city}, {state} {zipcode}'
