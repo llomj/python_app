@@ -1279,11 +1279,12 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         ]
     },
     157: {
-        functionNames: ['remove_duplicates', 'main'],
+        functionNames: ['remove_duplicates'],
         compare: 'unorderedWords',
         tests: [
             { args: ['and here is was and in the'], expected: ['and'] },
-            { args: ['hot cold hot warm cold'], expected: ['hot', 'cold'] }
+            { args: ['hot cold hot warm cold'], expected: ['hot', 'cold'] },
+            { args: ['each word appears once'], expected: [] }
         ]
     },
     158: {

@@ -104,6 +104,7 @@ distribution = collections.Counter()
 under_three = []
 technique_counts = {}
 gap_features = collections.Counter()
+gap_features_by_id = {}
 for line in sys.stdin:
     record = json.loads(line)
     signatures = {technique(section, set(record['names']), record['category']) for section in sections(record['code'])}
@@ -111,6 +112,7 @@ for line in sys.stdin:
     technique_counts[record['id']] = len(signatures)
     if len(signatures) < 3:
         under_three.append(record['id'])
+        record_features = set()
         try:
             first_tree = ast.parse(sections(record['code'])[0])
             for node in ast.walk(first_tree):
@@ -118,11 +120,15 @@ for line in sys.stdin:
                     name = call_name(node.func)
                     if name and name not in {'print', *record['names']}:
                         gap_features[f'call:{name}'] += 1
+                        record_features.add(f'call:{name}')
                 elif isinstance(node, (ast.ClassDef, ast.For, ast.While, ast.If, ast.Try, ast.With, ast.Match, ast.ListComp, ast.DictComp, ast.SetComp, ast.GeneratorExp)):
                     gap_features[f'node:{type(node).__name__}'] += 1
+                    record_features.add(f'node:{type(node).__name__}')
         except Exception:
             gap_features['INVALID'] += 1
-print(json.dumps({'distribution': distribution, 'underThree': under_three, 'techniqueCounts': technique_counts, 'gapFeatures': gap_features.most_common(30)}))
+            record_features.add('INVALID')
+        gap_features_by_id[record['id']] = sorted(record_features)
+print(json.dumps({'distribution': distribution, 'underThree': under_three, 'techniqueCounts': technique_counts, 'gapFeatures': gap_features.most_common(30), 'gapFeaturesById': gap_features_by_id}))
 `;
 const result = spawnSync('python3', ['-c', auditor], {
   input: records.map(record => JSON.stringify(record)).join('\n'),
@@ -136,10 +142,12 @@ const maxArg = process.argv.find(argument => argument.startsWith('--max-under3='
 const maxUnderThree = maxArg ? Number(maxArg.split('=')[1]) : null;
 const inspectArg = process.argv.find(argument => argument.startsWith('--inspect='));
 if (inspectArg) {
-  const inspectId = Number(inspectArg.split('=')[1]);
-  const record = records.find(item => item.id === inspectId);
-  if (!record) throw new Error(`Unknown exercise ${inspectId}`);
-  console.log(`\nRendered solution for ${inspectId}:\n${record.code}\n`);
+  const inspectIds = inspectArg.split('=')[1].split(',').map(Number);
+  for (const inspectId of inspectIds) {
+    const record = records.find(item => item.id === inspectId);
+    if (!record) throw new Error(`Unknown exercise ${inspectId}`);
+    console.log(`\nRendered solution for ${inspectId}:\n${record.code}\n`);
+  }
 }
 
 console.log('Solution semantic-diversity audit');
@@ -153,6 +161,11 @@ const categoryGaps = records.reduce((counts, record) => {
 console.log(`Coverage gaps by category: ${JSON.stringify(categoryGaps)}`);
 console.log(`Top gap features: ${JSON.stringify(report.gapFeatures)}`);
 if (process.argv.includes('--show')) console.log(report.underThree.join(', '));
+if (process.argv.includes('--show-details')) {
+  for (const id of report.underThree) {
+    console.log(`${id}\t${report.techniqueCounts[id]}\t${(report.gapFeaturesById[id] ?? []).join(',')}`);
+  }
+}
 if (maxUnderThree !== null && report.underThree.length > maxUnderThree) {
   console.error(`Semantic-diversity regression: ${report.underThree.length} exceeds ${maxUnderThree}.`);
   process.exit(1);

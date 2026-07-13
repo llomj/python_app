@@ -161,7 +161,7 @@ export const buildSolutionVariations = (
     grader?: AutoGrader,
 ): string => {
     const generatedAlternatives = GENERATED_SOLUTION_ALTERNATIVES[exerciseId];
-    if (!SOLUTION_REFERENCE_OVERRIDES[exerciseId] && generatedAlternatives?.length >= 3) {
+    if (generatedAlternatives?.length >= 3) {
         return generatedAlternatives.slice(0, 4).map((alternative, index) => [
             `# Example ${index + 1}: ${index === 0 ? 'simplest reference' : alternative.heading.replace(/^#\s*/, '')}`,
             alternative.body,

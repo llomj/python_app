@@ -61,6 +61,7 @@ const validator = String.raw`
 import ast
 import builtins
 import contextlib
+import copy
 import io
 import inspect
 import json
@@ -448,6 +449,23 @@ def runnable_prefix(source, prefer_markers=False):
         return candidate
     return source
 
+def is_declaration_assignment(node):
+    if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+        return False
+    target = node.targets[0]
+    if isinstance(node.value, ast.Lambda):
+        return isinstance(target, ast.Name)
+    if isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name) and isinstance(node.value, ast.Name):
+        return True
+    if not isinstance(target, ast.Name) or not isinstance(node.value, ast.Call):
+        return False
+    function = node.value.func
+    return (
+        isinstance(function, ast.Name) and function.id == 'type'
+    ) or (
+        isinstance(function, ast.Attribute) and function.attr == 'new_class'
+    )
+
 def declarations_only(source):
     try:
         tree = ast.parse(source)
@@ -460,7 +478,7 @@ def declarations_only(source):
         ast.AsyncFunctionDef,
         ast.ClassDef,
     )
-    tree.body = [node for node in tree.body if isinstance(node, allowed)]
+    tree.body = [node for node in tree.body if isinstance(node, allowed) or is_declaration_assignment(node)]
     ast.fix_missing_locations(tree)
     try:
         return ast.unparse(tree) + "\n"
@@ -480,6 +498,8 @@ def declarations_first_defs(source):
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name not in seen:
             seen.add(node.name)
             kept.append(node)
+        elif is_declaration_assignment(node):
+            kept.append(node)
     tree.body = kept
     ast.fix_missing_locations(tree)
     try:
@@ -495,9 +515,7 @@ def declaration_variants(source):
     allowed = (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
     declaration_nodes = [
         node for node in tree.body
-        if isinstance(node, allowed) or (
-            isinstance(node, ast.Assign) and isinstance(node.value, ast.Lambda)
-        )
+        if isinstance(node, allowed) or is_declaration_assignment(node)
     ]
     variants = []
     for end in range(1, len(declaration_nodes) + 1):
@@ -1971,7 +1989,7 @@ def run_function_script_tests(solution, grader, tests, compare):
         if has_hardcoded_expected_output(solution, expected):
             return False
         expected_exception = case.get("expectedException")
-        args = list(case.get("args", []))
+        args = copy.deepcopy(list(case.get("args", [])))
         expression_args = [eval(expression, {"math": math, "re": re, "json": json}) for expression in case.get("argExpressions", [])]
         args = args + expression_args
         helper_names = list(case.get("argFunctionNames", []))
@@ -1987,7 +2005,7 @@ def run_function_script_tests(solution, grader, tests, compare):
         method_name = case.get("callMethod")
         method_args = list(case.get("callMethodArgs", []))
         attr_names = list(case.get("getAttrs", []))
-        kwargs = dict(case.get("kwargs", {}))
+        kwargs = copy.deepcopy(dict(case.get("kwargs", {})))
         get_files = list(case.get("getFiles", []))
         set_attrs = dict(case.get("setAttrs", {}))
         delete_attrs = list(case.get("deleteAttrs", []))
@@ -2164,14 +2182,20 @@ def run_function_tests(namespace, grader, tests, compare):
     else:
         test_cases = list(active_tests) + input_generated_cases(function_names, active_tests) + named_metamorphic_cases(function_names, active_tests) + kwargs_metamorphic_cases(function_names, active_tests)
     for index, case in enumerate(test_cases, start=1):
-        args = list(case.get("args", []))
-        kwargs = case.get("kwargs", {})
+        args = copy.deepcopy(list(case.get("args", [])))
+        kwargs = copy.deepcopy(case.get("kwargs", {}))
         expected = case.get("expected")
         required_name = case.get("functionName")
         if case.get("functionListArgNames") is not None:
-            args = [[namespace[name] for name in case.get("functionListArgNames")]] + args
+            functions = [namespace.get(name) or script_helper_function(name) for name in case.get("functionListArgNames")]
+            if any(function is None for function in functions):
+                return False
+            args = [functions] + args
         for name in case.get("argFunctionNames", []):
-            args.append(namespace[name])
+            function = namespace.get(name) or script_helper_function(name)
+            if function is None:
+                return False
+            args.append(function)
         for expression in case.get("argExpressions", []):
             args.append(eval(expression, namespace))
         case_target_name, case_target = target_name, target

@@ -70,7 +70,8 @@ const { EXERCISES } = loadTsExports('exercises.ts');
 const { AUTO_GRADERS } = loadTsExports('graders.ts');
 const { buildSolutionVariations } = loadTsExports('services/solutionVariations.ts');
 const { SOLUTION_REFERENCE_OVERRIDES } = loadTsExports('services/solutionReferenceOverrides.ts');
-const baseRecords = EXERCISES.map(exercise => ({
+const requestedIds = new Set((process.env.SOLUTION_IDS ?? '').split(',').filter(value => value.trim()).map(Number).filter(Number.isFinite));
+const baseRecords = EXERCISES.filter(exercise => !requestedIds.size || requestedIds.has(exercise.id)).map(exercise => ({
   id: exercise.id,
   category: exercise.category,
   description: exercise.description,
@@ -351,7 +352,6 @@ class GeneratorMaterializationTransformer(ast.NodeTransformer):
 class FStringFormatTransformer(ast.NodeTransformer):
     changed = False
     def visit_JoinedStr(self, node):
-        node = self.generic_visit(node)
         template = ''
         arguments = []
         for value in node.values:
@@ -368,6 +368,17 @@ class FStringFormatTransformer(ast.NodeTransformer):
                 return node
         self.changed = True
         return ast.copy_location(ast.Call(ast.Attribute(ast.Constant(template), 'format', ast.Load()), arguments, []), node)
+
+class DynamicFStringFormatTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_JoinedStr(self, node):
+        if len(node.values) != 1 or not isinstance(node.values[0], ast.FormattedValue):
+            return self.generic_visit(node)
+        formatted = node.values[0]
+        if not isinstance(formatted.format_spec, ast.JoinedStr):
+            return self.generic_visit(node)
+        self.changed = True
+        return ast.copy_location(ast.Call(ast.Name('format', ast.Load()), [formatted.value, formatted.format_spec], []), node)
 
 class DynamicAttributeTransformer(ast.NodeTransformer):
     changed = False
@@ -739,17 +750,113 @@ class ManualDataclassTransformer(ast.NodeTransformer):
     changed = False
     def visit_ClassDef(self, node):
         node = self.generic_visit(node)
-        decorator_names = {decorator.id for decorator in node.decorator_list if isinstance(decorator, ast.Name)}
-        if 'dataclass' not in decorator_names:
+        dataclass_decorators = [decorator for decorator in node.decorator_list if (
+            isinstance(decorator, ast.Name) and decorator.id == 'dataclass'
+        ) or (
+            isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name) and decorator.func.id == 'dataclass'
+        )]
+        if not dataclass_decorators:
             return node
         fields = [statement for statement in node.body if isinstance(statement, ast.AnnAssign) and isinstance(statement.target, ast.Name)]
         if not fields:
             return node
-        arguments = ast.arguments([], [ast.arg('self'), *[ast.arg(field.target.id, field.annotation) for field in fields]], None, [], [], None, [])
-        assignments = [ast.Assign([ast.Attribute(ast.Name('self', ast.Load()), field.target.id, ast.Store())], ast.Name(field.target.id, ast.Load())) for field in fields]
-        node.decorator_list = [decorator for decorator in node.decorator_list if not (isinstance(decorator, ast.Name) and decorator.id == 'dataclass')]
+        defaults = []
+        assignments = []
+        for field in fields:
+            value = ast.Name(field.target.id, ast.Load())
+            default = field.value
+            if isinstance(default, ast.Call) and isinstance(default.func, ast.Name) and default.func.id == 'field':
+                direct = next((keyword.value for keyword in default.keywords if keyword.arg == 'default'), None)
+                factory = next((keyword.value for keyword in default.keywords if keyword.arg == 'default_factory'), None)
+                if direct is not None:
+                    default = direct
+                elif factory is not None:
+                    default = ast.Constant(None)
+                    value = ast.IfExp(
+                        ast.Compare(ast.Name(field.target.id, ast.Load()), [ast.Is()], [ast.Constant(None)]),
+                        ast.Call(factory, [], []),
+                        ast.Name(field.target.id, ast.Load()),
+                    )
+            if default is not None:
+                defaults.append(default)
+            assignments.append(ast.Assign([ast.Attribute(ast.Name('self', ast.Load()), field.target.id, ast.Store())], value))
+        arguments = ast.arguments([], [ast.arg('self'), *[ast.arg(field.target.id, field.annotation) for field in fields]], None, [], [], None, defaults)
+        node.decorator_list = [decorator for decorator in node.decorator_list if decorator not in dataclass_decorators]
         node.body = [ast.FunctionDef('__init__', arguments, assignments or [ast.Pass()], [], None)]
         self.changed = True
+        return node
+
+class MakeDataclassTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_ClassDef(self, node):
+        node = self.generic_visit(node)
+        dataclass_decorator = next((decorator for decorator in node.decorator_list if (
+            isinstance(decorator, ast.Name) and decorator.id == 'dataclass'
+        ) or (
+            isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name) and decorator.func.id == 'dataclass'
+        )), None)
+        if dataclass_decorator is None:
+            return node
+        fields = []
+        for statement in node.body:
+            if not isinstance(statement, ast.AnnAssign) or not isinstance(statement.target, ast.Name):
+                return node
+            parts = [ast.Constant(statement.target.id), statement.annotation]
+            if statement.value is not None:
+                parts.append(statement.value)
+            fields.append(ast.Tuple(parts, ast.Load()))
+        keywords = copy.deepcopy(dataclass_decorator.keywords) if isinstance(dataclass_decorator, ast.Call) else []
+        self.changed = True
+        return ast.Assign(
+            [ast.Name(node.name, ast.Store())],
+            ast.Call(ast.Attribute(ast.Name('dataclasses', ast.Load()), 'make_dataclass', ast.Load()), [ast.Constant(node.name), ast.List(fields, ast.Load())], keywords),
+        )
+
+def make_dataclass(tree):
+    instance = MakeDataclassTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('dataclasses')]))
+    return ast.fix_missing_locations(output)
+
+class AssignedOverrideTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Module(self, node):
+        node = self.generic_visit(node)
+        class_names = {statement.name for statement in node.body if isinstance(statement, ast.ClassDef)}
+        rewritten = []
+        for statement in node.body:
+            if not isinstance(statement, ast.ClassDef) or not any(isinstance(base, ast.Name) and base.id in class_names for base in statement.bases):
+                rewritten.append(statement)
+                continue
+            base_name = next(base.id for base in statement.bases if isinstance(base, ast.Name) and base.id in class_names)
+            methods = [item for item in statement.body if isinstance(item, ast.FunctionDef) and item.name != '__init__']
+            if not methods:
+                rewritten.append(statement)
+                continue
+            retained = [item for item in statement.body if item not in methods]
+            statement.body = retained or [ast.Pass()]
+            rewritten.append(statement)
+            for method in methods:
+                class ExplicitSuper(ast.NodeTransformer):
+                    def visit_Call(self, call):
+                        call = self.generic_visit(call)
+                        if isinstance(call.func, ast.Attribute) and isinstance(call.func.value, ast.Call) and isinstance(call.func.value.func, ast.Name) and call.func.value.func.id == 'super' and not call.func.value.args:
+                            call.func = ast.Attribute(ast.Name(base_name, ast.Load()), call.func.attr, ast.Load())
+                            call.args.insert(0, ast.Name('self', ast.Load()))
+                        return call
+                helper = ExplicitSuper().visit(copy.deepcopy(method))
+                helper.name = f'_{statement.name}_{method.name}'
+                rewritten.extend([
+                    helper,
+                    ast.Assign(
+                        [ast.Attribute(ast.Name(statement.name, ast.Load()), method.name, ast.Store())],
+                        ast.Name(helper.name, ast.Load()),
+                    ),
+                ])
+            self.changed = True
+        node.body = rewritten
         return node
 
 class DataDrivenOverrideTransformer(ast.NodeTransformer):
@@ -833,6 +940,1051 @@ class ReduceLoopTransformer(ast.NodeTransformer):
         ]
         self.changed = True
         return node
+
+class InlineNestedHelperTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        helpers = {
+            statement.name: statement
+            for statement in node.body
+            if isinstance(statement, ast.FunctionDef)
+            and not statement.decorator_list
+            and not statement.args.posonlyargs
+            and not statement.args.kwonlyargs
+            and statement.args.vararg is None
+            and statement.args.kwarg is None
+            and len(statement.body) == 1
+            and isinstance(statement.body[0], ast.Return)
+        }
+        if not helpers:
+            return node
+
+        used = set()
+        class InlineCalls(ast.NodeTransformer):
+            def visit_Call(self, call):
+                call = self.generic_visit(call)
+                if not isinstance(call.func, ast.Name) or call.func.id not in helpers or call.keywords:
+                    return call
+                helper = helpers[call.func.id]
+                parameters = helper.args.args
+                required = len(parameters) - len(helper.args.defaults)
+                if not (required <= len(call.args) <= len(parameters)):
+                    return call
+                values = list(call.args)
+                if len(values) < len(parameters):
+                    values.extend(copy.deepcopy(helper.args.defaults[len(values) - required:]))
+                replacements = dict(zip((parameter.arg for parameter in parameters), values))
+                class Substitute(ast.NodeTransformer):
+                    def visit_Name(self, value):
+                        if isinstance(value.ctx, ast.Load) and value.id in replacements:
+                            return copy.deepcopy(replacements[value.id])
+                        return value
+                used.add(call.func.id)
+                return ast.copy_location(Substitute().visit(copy.deepcopy(helper.body[0].value)), call)
+
+        inliner = InlineCalls()
+        rewritten = [inliner.visit(statement) for statement in node.body]
+        if not used:
+            return node
+        node.body = [
+            statement for statement in rewritten
+            if not (isinstance(statement, ast.FunctionDef) and statement.name in used)
+        ]
+        self.changed = True
+        return node
+
+def inline_then_operator(tree):
+    inline = InlineNestedHelperTransformer()
+    output = inline.visit(clone(tree))
+    if not inline.changed:
+        return None
+    operator_transform = OperatorTransformer()
+    output = operator_transform.visit(output)
+    if not operator_transform.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('operator')]))
+    return ast.fix_missing_locations(output)
+
+class MultiIterableMapTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not (isinstance(node.func, ast.Name) and node.func.id in {'list', 'tuple', 'set'} and len(node.args) == 1 and not node.keywords):
+            return node
+        mapped = node.args[0]
+        if not (isinstance(mapped, ast.Call) and isinstance(mapped.func, ast.Name) and mapped.func.id == 'map' and len(mapped.args) > 2 and not mapped.keywords):
+            return node
+        self.counter += 1
+        names = [f'_mapped_{self.counter}_{index}' for index in range(len(mapped.args) - 1)]
+        target = ast.Tuple([ast.Name(name, ast.Store()) for name in names], ast.Store())
+        zipped = ast.Call(ast.Name('zip', ast.Load()), mapped.args[1:], [])
+        expression = ast.Call(mapped.args[0], [ast.Name(name, ast.Load()) for name in names], [])
+        comprehension = ast.ListComp(expression, [ast.comprehension(target, zipped, [], 0)])
+        self.changed = True
+        if node.func.id == 'list':
+            return ast.copy_location(comprehension, node)
+        return ast.copy_location(ast.Call(ast.Name(node.func.id, ast.Load()), [comprehension], []), node)
+
+class ReduceWithoutInitialTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        name = node.func.id if isinstance(node.func, ast.Name) else node.func.attr if isinstance(node.func, ast.Attribute) else ''
+        if name == 'reduce' and len(node.args) == 2 and not node.keywords:
+            node.func = ast.Name('_solution_reduce_without_initial', ast.Load())
+            self.changed = True
+        return node
+
+def reduce_without_initial(tree):
+    instance = ReduceWithoutInitialTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    helper = ast.parse('''
+def _solution_reduce_without_initial(function, iterable):
+    iterator = iter(iterable)
+    result = next(iterator)
+    for item in iterator:
+        result = function(result, item)
+    return result
+''').body[0]
+    output.body.insert(0, helper)
+    return ast.fix_missing_locations(output)
+
+class ReverseMethodTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        rewritten = []
+        index = 0
+        while index < len(node.body):
+            statement = node.body[index]
+            following = node.body[index + 1] if index + 1 < len(node.body) else None
+            if (
+                isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call)
+                and isinstance(statement.value.func, ast.Attribute) and statement.value.func.attr == 'reverse'
+                and not statement.value.args and not statement.value.keywords
+                and isinstance(statement.value.func.value, ast.Name)
+                and isinstance(following, ast.Return) and isinstance(following.value, ast.Name)
+                and following.value.id == statement.value.func.value.id
+            ):
+                value = ast.Name(following.value.id, ast.Load())
+                rewritten.append(ast.Return(ast.Subscript(value, ast.Slice(None, None, ast.UnaryOp(ast.USub(), ast.Constant(1))), ast.Load())))
+                self.changed = True
+                index += 2
+                continue
+            rewritten.append(statement)
+            index += 1
+        node.body = rewritten
+        return node
+
+class ReverseMethodReversedTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) < 2:
+            return node
+        first, second = node.body[-2], node.body[-1]
+        if not (isinstance(first, ast.Expr) and isinstance(first.value, ast.Call) and isinstance(first.value.func, ast.Attribute) and first.value.func.attr == 'reverse' and not first.value.args):
+            return node
+        value = first.value.func.value
+        if not (isinstance(value, ast.Name) and isinstance(second, ast.Return) and isinstance(second.value, ast.Name) and second.value.id == value.id):
+            return node
+        node.body[-2:] = [ast.Return(ast.Call(ast.Name('list', ast.Load()), [ast.Call(ast.Name('reversed', ast.Load()), [ast.Name(value.id, ast.Load())], [])], []))]
+        self.changed = True
+        return node
+
+class DictionaryViewTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        constructor = None
+        view = node
+        if isinstance(node.func, ast.Name) and node.func.id in {'list', 'tuple', 'set'} and len(node.args) == 1 and not node.keywords:
+            constructor, view = node.func.id, node.args[0]
+        if not (isinstance(view, ast.Call) and isinstance(view.func, ast.Attribute) and view.func.attr in {'keys', 'values'} and not view.args and not view.keywords):
+            return node
+        self.counter += 1
+        key = f'_key_{self.counter}'
+        mapping = view.func.value
+        element = ast.Name(key, ast.Load()) if view.func.attr == 'keys' else ast.Subscript(copy.deepcopy(mapping), ast.Name(key, ast.Load()), ast.Load())
+        result = ast.ListComp(element, [ast.comprehension(ast.Name(key, ast.Store()), mapping, [], 0)])
+        self.changed = True
+        if constructor and constructor != 'list':
+            result = ast.Call(ast.Name(constructor, ast.Load()), [result], [])
+        return ast.copy_location(result, node)
+
+class PairDictionaryTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not (isinstance(node.func, ast.Name) and node.func.id == 'dict' and len(node.args) == 1 and not node.keywords):
+            return node
+        self.counter += 1
+        key, value = f'_key_{self.counter}', f'_value_{self.counter}'
+        target = ast.Tuple([ast.Name(key, ast.Store()), ast.Name(value, ast.Store())], ast.Store())
+        self.changed = True
+        return ast.copy_location(ast.DictComp(
+            ast.Name(key, ast.Load()), ast.Name(value, ast.Load()),
+            [ast.comprehension(target, node.args[0], [], 0)],
+        ), node)
+
+class TupleLiteralTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Tuple(self, node):
+        node = self.generic_visit(node)
+        if not isinstance(node.ctx, ast.Load) or any(isinstance(item, ast.Starred) for item in node.elts):
+            return node
+        self.changed = True
+        return ast.copy_location(ast.Call(ast.Name('tuple', ast.Load()), [ast.List(node.elts, ast.Load())], []), node)
+
+class SliceGetItemTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Subscript(self, node):
+        node = self.generic_visit(node)
+        if not isinstance(node.slice, ast.Slice):
+            return node
+        arguments = [part if part is not None else ast.Constant(None) for part in (node.slice.lower, node.slice.upper, node.slice.step)]
+        self.changed = True
+        return ast.copy_location(ast.Call(
+            ast.Attribute(ast.Name('operator', ast.Load()), 'getitem', ast.Load()),
+            [node.value, ast.Call(ast.Name('slice', ast.Load()), arguments, [])], [],
+        ), node)
+
+class ChainedComparisonTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Compare(self, node):
+        node = self.generic_visit(node)
+        if len(node.ops) < 2:
+            return node
+        operands = [node.left, *node.comparators]
+        comparisons = [
+            ast.Compare(copy.deepcopy(operands[index]), [operator], [copy.deepcopy(operands[index + 1])])
+            for index, operator in enumerate(node.ops)
+        ]
+        self.changed = True
+        return ast.copy_location(ast.Call(ast.Name('all', ast.Load()), [ast.Tuple(comparisons, ast.Load())], []), node)
+
+class CartesianProductTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_ListComp(self, node):
+        node = self.generic_visit(node)
+        if len(node.generators) < 2 or any(generator.is_async or generator.ifs or not isinstance(generator.target, ast.Name) for generator in node.generators):
+            return node
+        previously_bound = set()
+        for generator in node.generators:
+            if any(isinstance(item, ast.Name) and isinstance(item.ctx, ast.Load) and item.id in previously_bound for item in ast.walk(generator.iter)):
+                return node
+            previously_bound.add(generator.target.id)
+        target = ast.Tuple([copy.deepcopy(generator.target) for generator in node.generators], ast.Store())
+        product = ast.Call(ast.Attribute(ast.Name('itertools', ast.Load()), 'product', ast.Load()), [generator.iter for generator in node.generators], [])
+        self.changed = True
+        return ast.copy_location(ast.ListComp(node.elt, [ast.comprehension(target, product, [], 0)]), node)
+
+def cartesian_product(tree):
+    instance = CartesianProductTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('itertools')]))
+    return ast.fix_missing_locations(output)
+
+class FlattenChainTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_ListComp(self, node):
+        node = self.generic_visit(node)
+        if len(node.generators) != 2:
+            return node
+        outer, inner = node.generators
+        if outer.ifs or inner.ifs or outer.is_async or inner.is_async:
+            return node
+        if not (isinstance(outer.target, ast.Name) and isinstance(inner.target, ast.Name) and isinstance(inner.iter, ast.Name)):
+            return node
+        if inner.iter.id != outer.target.id or not isinstance(node.elt, ast.Name) or node.elt.id != inner.target.id:
+            return node
+        chained = ast.Call(
+            ast.Attribute(ast.Attribute(ast.Name('itertools', ast.Load()), 'chain', ast.Load()), 'from_iterable', ast.Load()),
+            [outer.iter], [],
+        )
+        self.changed = True
+        return ast.copy_location(ast.Call(ast.Name('list', ast.Load()), [chained], []), node)
+
+def flatten_chain(tree):
+    instance = FlattenChainTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('itertools')]))
+    return ast.fix_missing_locations(output)
+
+class ExplicitPopTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def pop_call(self, value):
+        return isinstance(value, ast.Call) and isinstance(value.func, ast.Attribute) and value.func.attr == 'pop' and len(value.args) <= 1 and not value.keywords
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        rewritten = []
+        for statement in node.body:
+            call = None
+            target = None
+            if isinstance(statement, ast.Return) and self.pop_call(statement.value):
+                call = statement.value
+            elif isinstance(statement, ast.Assign) and len(statement.targets) == 1 and isinstance(statement.targets[0], ast.Name) and self.pop_call(statement.value):
+                call, target = statement.value, statement.targets[0]
+            if call is None:
+                rewritten.append(statement)
+                continue
+            self.counter += 1
+            result = target or ast.Name(f'_popped_{self.counter}', ast.Store())
+            index = call.args[0] if call.args else ast.UnaryOp(ast.USub(), ast.Constant(1))
+            rewritten.extend([
+                ast.Assign([result], ast.Subscript(copy.deepcopy(call.func.value), copy.deepcopy(index), ast.Load())),
+                ast.Delete([ast.Subscript(copy.deepcopy(call.func.value), copy.deepcopy(index), ast.Del())]),
+            ])
+            if isinstance(statement, ast.Return):
+                rewritten.append(ast.Return(ast.Name(result.id, ast.Load())))
+            self.changed = True
+        node.body = rewritten
+        return node
+
+class ConditionalDictionaryPopTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 1 or not isinstance(node.body[0], ast.Return):
+            return node
+        call = node.body[0].value
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'pop' and len(call.args) in {1, 2} and not call.keywords):
+            return node
+        mapping, key = call.func.value, call.args[0]
+        default = call.args[1] if len(call.args) == 2 else None
+        success = [
+            ast.Assign([ast.Name('_value', ast.Store())], ast.Subscript(copy.deepcopy(mapping), copy.deepcopy(key), ast.Load())),
+            ast.Delete([ast.Subscript(copy.deepcopy(mapping), copy.deepcopy(key), ast.Del())]),
+            ast.Return(ast.Name('_value', ast.Load())),
+        ]
+        fallback = [ast.Return(default)] if default is not None else [ast.Raise(ast.Call(ast.Name('KeyError', ast.Load()), [copy.deepcopy(key)], []), None)]
+        node.body = [ast.If(ast.Compare(copy.deepcopy(key), [ast.In()], [copy.deepcopy(mapping)]), success, fallback)]
+        self.changed = True
+        return node
+
+class ClearByDeletionTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        rewritten = []
+        for statement in node.body:
+            if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call) and isinstance(statement.value.func, ast.Attribute) and statement.value.func.attr == 'clear' and not statement.value.args and not statement.value.keywords:
+                rewritten.append(ast.Delete([ast.Subscript(statement.value.func.value, ast.Slice(None, None, None), ast.Del())]))
+                self.changed = True
+            else:
+                rewritten.append(statement)
+        node.body = rewritten
+        return node
+
+class PathToOsTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not isinstance(node.func, ast.Attribute):
+            return node
+        owner = node.func.value
+        if isinstance(owner, ast.Call) and isinstance(owner.func, ast.Name) and owner.func.id == 'Path' and len(owner.args) == 1:
+            source = owner.args[0]
+        elif isinstance(owner, ast.Name):
+            source = owner
+        else:
+            return node
+        methods = {
+            'rename': 'rename', 'replace': 'replace', 'rmdir': 'rmdir',
+            'unlink': 'remove', 'mkdir': 'makedirs',
+        }
+        if node.func.attr == 'symlink_to' and node.args:
+            self.changed = True
+            return ast.copy_location(ast.Call(ast.Attribute(ast.Name('os', ast.Load()), 'symlink', ast.Load()), [node.args[0], source], node.keywords), node)
+        function = methods.get(node.func.attr)
+        if function is None:
+            return node
+        keywords = node.keywords
+        if node.func.attr == 'mkdir':
+            converted = []
+            for keyword in keywords:
+                if keyword.arg == 'parents':
+                    continue
+                converted.append(ast.keyword('exist_ok', keyword.value) if keyword.arg == 'exist_ok' else keyword)
+            keywords = converted
+        self.changed = True
+        return ast.copy_location(ast.Call(ast.Attribute(ast.Name('os', ast.Load()), function, ast.Load()), [source, *node.args], keywords), node)
+
+def path_to_os(tree):
+    instance = PathToOsTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('os')]))
+    return ast.fix_missing_locations(output)
+
+class PathReadWriteTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_With(self, node):
+        node = self.generic_visit(node)
+        if len(node.items) != 1 or not isinstance(node.items[0].optional_vars, ast.Name):
+            return node
+        context = node.items[0].context_expr
+        if not (isinstance(context, ast.Call) and isinstance(context.func, ast.Name) and context.func.id == 'open' and context.args):
+            return node
+        handle = node.items[0].optional_vars.id
+        path_object = ast.Call(ast.Attribute(ast.Name('pathlib', ast.Load()), 'Path', ast.Load()), [context.args[0]], [])
+        mode = context.args[1].value if len(context.args) > 1 and isinstance(context.args[1], ast.Constant) else 'r'
+        if len(node.body) == 1 and isinstance(node.body[0], ast.Return):
+            value = node.body[0].value
+            if isinstance(value, ast.Call) and isinstance(value.func, ast.Attribute) and isinstance(value.func.value, ast.Name) and value.func.value.id == handle and value.func.attr == 'read' and not value.args:
+                self.changed = True
+                return ast.Return(ast.Call(ast.Attribute(path_object, 'read_text', ast.Load()), [], []))
+        if len(node.body) == 1 and isinstance(node.body[0], ast.Expr):
+            value = node.body[0].value
+            if isinstance(value, ast.Call) and isinstance(value.func, ast.Attribute) and isinstance(value.func.value, ast.Name) and value.func.value.id == handle and value.func.attr == 'write' and len(value.args) == 1:
+                method = 'write_bytes' if 'b' in mode else 'write_text'
+                self.changed = True
+                return ast.Expr(ast.Call(ast.Attribute(path_object, method, ast.Load()), value.args, []))
+        return node
+
+def path_read_write(tree):
+    instance = PathReadWriteTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('pathlib')]))
+    return ast.fix_missing_locations(output)
+
+class ConditionalAssignmentTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_If(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 1 or len(node.orelse) != 1:
+            return node
+        left, right = node.body[0], node.orelse[0]
+        if not (isinstance(left, ast.Assign) and isinstance(right, ast.Assign) and len(left.targets) == len(right.targets) == 1):
+            return node
+        if ast.dump(left.targets[0], include_attributes=False) != ast.dump(right.targets[0], include_attributes=False):
+            return node
+        self.changed = True
+        return ast.Assign([left.targets[0]], ast.IfExp(node.test, left.value, right.value))
+
+class ComprehensionToLoopTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 1 or not isinstance(node.body[0], ast.Return):
+            return node
+        comprehension = node.body[0].value
+        if not isinstance(comprehension, (ast.ListComp, ast.SetComp, ast.DictComp)) or len(comprehension.generators) != 1:
+            return node
+        generator = comprehension.generators[0]
+        if generator.is_async:
+            return node
+        self.counter += 1
+        result = f'_result_{self.counter}'
+        if isinstance(comprehension, ast.ListComp):
+            initial = ast.List([], ast.Load())
+            action = ast.Expr(ast.Call(ast.Attribute(ast.Name(result, ast.Load()), 'append', ast.Load()), [comprehension.elt], []))
+        elif isinstance(comprehension, ast.SetComp):
+            initial = ast.Set([])
+            action = ast.Expr(ast.Call(ast.Attribute(ast.Name(result, ast.Load()), 'add', ast.Load()), [comprehension.elt], []))
+        else:
+            initial = ast.Dict([], [])
+            action = ast.Assign([ast.Subscript(ast.Name(result, ast.Load()), comprehension.key, ast.Store())], comprehension.value)
+        body = [action]
+        for condition in reversed(generator.ifs):
+            body = [ast.If(condition, body, [])]
+        node.body = [
+            ast.Assign([ast.Name(result, ast.Store())], initial),
+            ast.For(generator.target, generator.iter, body, []),
+            ast.Return(ast.Name(result, ast.Load())),
+        ]
+        self.changed = True
+        return node
+
+class DefaultAggregateConditionalTransformer(ast.NodeTransformer):
+    changed = False
+    use_sorted = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not (isinstance(node.func, ast.Name) and node.func.id in {'max', 'min'} and len(node.args) == 1):
+            return node
+        default = next((keyword.value for keyword in node.keywords if keyword.arg == 'default'), None)
+        other_keywords = [keyword for keyword in node.keywords if keyword.arg != 'default']
+        if default is None:
+            return node
+        source = node.args[0]
+        if self.use_sorted:
+            index = ast.UnaryOp(ast.USub(), ast.Constant(1)) if node.func.id == 'max' else ast.Constant(0)
+            selected = ast.Subscript(ast.Call(ast.Name('sorted', ast.Load()), [copy.deepcopy(source)], other_keywords), index, ast.Load())
+        else:
+            selected = ast.Call(copy.deepcopy(node.func), [copy.deepcopy(source)], other_keywords)
+        self.changed = True
+        return ast.copy_location(ast.IfExp(copy.deepcopy(source), selected, default), node)
+
+class DefaultAggregateSortedTransformer(DefaultAggregateConditionalTransformer):
+    use_sorted = True
+
+class SentinelInputLoopTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_While(self, node):
+        node = self.generic_visit(node)
+        if node.orelse or len(node.body) != 1 or not isinstance(node.body[0], ast.Assign):
+            return node
+        assignment = node.body[0]
+        if len(assignment.targets) != 1 or not isinstance(assignment.targets[0], ast.Name) or not isinstance(assignment.value, ast.Call):
+            return node
+        target = assignment.targets[0]
+        if not (isinstance(assignment.value.func, ast.Name) and assignment.value.func.id == 'input'):
+            return node
+        if not (isinstance(node.test, ast.Compare) and isinstance(node.test.left, ast.Name) and node.test.left.id == target.id and len(node.test.ops) == 1 and isinstance(node.test.ops[0], ast.NotEq) and len(node.test.comparators) == 1):
+            return node
+        callback = ast.Lambda(ast.arguments([], [], None, [], [], None, []), assignment.value)
+        iterator = ast.Call(ast.Name('iter', ast.Load()), [callback, node.test.comparators[0]], [])
+        self.changed = True
+        return ast.For(ast.Name(target.id, ast.Store()), iterator, [ast.Pass()], [])
+
+class SuppressExceptionTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Try(self, node):
+        node = self.generic_visit(node)
+        if node.orelse or node.finalbody or len(node.body) != 1 or len(node.handlers) != 1:
+            return node
+        handler = node.handlers[0]
+        if handler.type is None or len(handler.body) != 1:
+            return node
+        protected, fallback = node.body[0], handler.body[0]
+        if not isinstance(protected, ast.Return) or not isinstance(fallback, ast.Return):
+            return node
+        context = ast.Call(ast.Attribute(ast.Name('contextlib', ast.Load()), 'suppress', ast.Load()), [handler.type], [])
+        self.changed = True
+        return [ast.With([ast.withitem(context, None)], [protected]), fallback]
+
+def suppress_exception(tree):
+    instance = SuppressExceptionTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('contextlib')]))
+    return ast.fix_missing_locations(output)
+
+class JoinLoopTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 1 or not isinstance(node.body[0], ast.Return):
+            return node
+        call = node.body[0].value
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'join' and len(call.args) == 1 and not call.keywords):
+            return node
+        strings, separator = call.args[0], call.func.value
+        node.body = [
+            ast.If(ast.UnaryOp(ast.Not(), copy.deepcopy(strings)), [ast.Return(ast.Constant(''))], []),
+            ast.Assign([ast.Name('_result', ast.Store())], ast.Subscript(copy.deepcopy(strings), ast.Constant(0), ast.Load())),
+            ast.For(ast.Name('_item', ast.Store()), ast.Subscript(copy.deepcopy(strings), ast.Slice(ast.Constant(1), None, None), ast.Load()), [
+                ast.AugAssign(ast.Name('_result', ast.Store()), ast.Add(), ast.BinOp(copy.deepcopy(separator), ast.Add(), ast.Name('_item', ast.Load()))),
+            ], []),
+            ast.Return(ast.Name('_result', ast.Load())),
+        ]
+        self.changed = True
+        return node
+
+class TupleSliceTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'tuple' and len(node.args) == 1 and not node.keywords:
+            self.changed = True
+            return ast.copy_location(ast.Subscript(node.args[0], ast.Slice(None, None, None), ast.Load()), node)
+        return node
+
+class TypeNameAttributeTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not (isinstance(node.func, ast.Name) and node.func.id == 'str' and len(node.args) == 1):
+            return node
+        value = node.args[0]
+        if isinstance(value, ast.Attribute) and value.attr == '__name__' and isinstance(value.value, ast.Call) and isinstance(value.value.func, ast.Name) and value.value.func.id == 'type' and len(value.value.args) == 1:
+            self.changed = True
+            return ast.copy_location(ast.Attribute(ast.Attribute(value.value.args[0], '__class__', ast.Load()), '__name__', ast.Load()), node)
+        return node
+
+class GlobalsMappingTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        global_names = {name for statement in node.body if isinstance(statement, ast.Global) for name in statement.names}
+        if not global_names:
+            return node
+        rewritten = []
+        for statement in node.body:
+            if isinstance(statement, ast.Global):
+                continue
+            if isinstance(statement, ast.Assign) and len(statement.targets) == 1 and isinstance(statement.targets[0], ast.Name) and statement.targets[0].id in global_names:
+                target = ast.Subscript(ast.Call(ast.Name('globals', ast.Load()), [], []), ast.Constant(statement.targets[0].id), ast.Store())
+                rewritten.append(ast.Assign([target], statement.value))
+                self.changed = True
+            else:
+                rewritten.append(statement)
+        node.body = rewritten
+        return node
+
+class ItemsListComprehensionTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not (isinstance(node.func, ast.Name) and node.func.id == 'list' and len(node.args) == 1 and not node.keywords):
+            return node
+        items = node.args[0]
+        if not (isinstance(items, ast.Call) and isinstance(items.func, ast.Attribute) and items.func.attr == 'items' and not items.args):
+            return node
+        self.counter += 1
+        key = f'_key_{self.counter}'
+        mapping = items.func.value
+        pair = ast.Tuple([ast.Name(key, ast.Load()), ast.Subscript(copy.deepcopy(mapping), ast.Name(key, ast.Load()), ast.Load())], ast.Load())
+        self.changed = True
+        return ast.copy_location(ast.ListComp(pair, [ast.comprehension(ast.Name(key, ast.Store()), mapping, [], 0)]), node)
+
+class SumGeneratorLoopTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 1 or not isinstance(node.body[0], ast.Return):
+            return node
+        call = node.body[0].value
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name) and call.func.id == 'sum' and len(call.args) == 1 and isinstance(call.args[0], ast.GeneratorExp)):
+            return node
+        generator = call.args[0]
+        if len(generator.generators) != 1 or generator.generators[0].is_async:
+            return node
+        self.counter += 1
+        total = f'_total_{self.counter}'
+        iterator = generator.generators[0]
+        action = ast.AugAssign(ast.Name(total, ast.Store()), ast.Add(), generator.elt)
+        body = [action]
+        for condition in reversed(iterator.ifs):
+            body = [ast.If(condition, body, [])]
+        node.body = [
+            ast.Assign([ast.Name(total, ast.Store())], ast.Constant(0)),
+            ast.For(iterator.target, iterator.iter, body, []),
+            ast.Return(ast.Name(total, ast.Load())),
+        ]
+        self.changed = True
+        return node
+
+class ReduceAccumulateTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        name = node.func.id if isinstance(node.func, ast.Name) else node.func.attr if isinstance(node.func, ast.Attribute) else ''
+        if name != 'reduce' or len(node.args) not in {2, 3} or node.keywords:
+            return node
+        keywords = [ast.keyword('initial', node.args[2])] if len(node.args) == 3 else []
+        accumulated = ast.Call(ast.Attribute(ast.Name('itertools', ast.Load()), 'accumulate', ast.Load()), [node.args[1], node.args[0]], keywords)
+        values = ast.Call(ast.Name('list', ast.Load()), [accumulated], [])
+        self.changed = True
+        return ast.copy_location(ast.Subscript(values, ast.UnaryOp(ast.USub(), ast.Constant(1)), ast.Load()), node)
+
+def reduce_accumulate(tree):
+    instance = ReduceAccumulateTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('itertools')]))
+    return ast.fix_missing_locations(output)
+
+class NamedExtremaBuiltinTransformer(ast.NodeTransformer):
+    changed = False
+    use_sorted = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        lowered = node.name.lower()
+        operation = 'max' if 'max' in lowered or 'longest' in lowered else 'min' if 'min' in lowered or 'shortest' in lowered else None
+        parameters = node.args.posonlyargs + node.args.args
+        if operation is None or len(parameters) < 2 or node.args.vararg or node.args.kwarg:
+            return node
+        values = ast.List([ast.Name(parameter.arg, ast.Load()) for parameter in parameters], ast.Load())
+        if self.use_sorted:
+            index = ast.UnaryOp(ast.USub(), ast.Constant(1)) if operation == 'max' else ast.Constant(0)
+            result = ast.Subscript(ast.Call(ast.Name('sorted', ast.Load()), [values], []), index, ast.Load())
+        else:
+            result = ast.Call(ast.Name(operation, ast.Load()), [values], [])
+        node.body = [ast.Return(result)]
+        self.changed = True
+        return node
+
+class NamedExtremaSortedTransformer(NamedExtremaBuiltinTransformer):
+    use_sorted = True
+
+class MappingCopyTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Attribute) and node.func.attr == 'copy' and not node.args and not node.keywords:
+            self.changed = True
+            return ast.copy_location(ast.Dict([None], [node.func.value]), node)
+        return node
+
+class MappingUnionUpdateTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Expr(self, node):
+        node = self.generic_visit(node)
+        call = node.value
+        if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'update' and len(call.args) == 1 and not call.keywords:
+            self.changed = True
+            return ast.AugAssign(call.func.value, ast.BitOr(), call.args[0])
+        return node
+
+class ExtendConcatenationTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Expr(self, node):
+        node = self.generic_visit(node)
+        call = node.value
+        if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'extend' and len(call.args) == 1 and not call.keywords:
+            self.changed = True
+            return ast.AugAssign(call.func.value, ast.Add(), ast.Call(ast.Name('list', ast.Load()), [call.args[0]], []))
+        return node
+
+class TypeToClassTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'type' and len(node.args) == 1 and not node.keywords:
+            self.changed = True
+            return ast.copy_location(ast.Attribute(node.args[0], '__class__', ast.Load()), node)
+        return node
+
+class NextDunderTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'next' and len(node.args) == 1 and not node.keywords:
+            self.changed = True
+            return ast.copy_location(ast.Call(ast.Attribute(node.args[0], '__next__', ast.Load()), [], []), node)
+        return node
+
+class SquareRootPowerTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Attribute) and node.func.attr == 'sqrt' and len(node.args) == 1 and not node.keywords:
+            self.changed = True
+            return ast.copy_location(ast.BinOp(node.args[0], ast.Pow(), ast.Constant(0.5)), node)
+        return node
+
+class CopyThenAssignUnionTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 3 or not isinstance(node.body[0], ast.Assign) or not isinstance(node.body[1], ast.Assign) or not isinstance(node.body[2], ast.Return):
+            return node
+        copied, inserted, returned = node.body
+        if len(copied.targets) != 1 or not isinstance(copied.targets[0], ast.Name) or not isinstance(copied.value, ast.Call):
+            return node
+        result = copied.targets[0]
+        if not (isinstance(copied.value.func, ast.Attribute) and copied.value.func.attr == 'copy' and not copied.value.args):
+            return node
+        if len(inserted.targets) != 1 or not isinstance(inserted.targets[0], ast.Subscript) or not isinstance(inserted.targets[0].value, ast.Name) or inserted.targets[0].value.id != result.id:
+            return node
+        if not isinstance(returned.value, ast.Name) or returned.value.id != result.id:
+            return node
+        addition = ast.Dict([inserted.targets[0].slice], [inserted.value])
+        node.body = [ast.Return(ast.BinOp(copied.value.func.value, ast.BitOr(), addition))]
+        self.changed = True
+        return node
+
+class NextDefaultChainTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if not (isinstance(node.func, ast.Name) and node.func.id == 'next' and len(node.args) == 2 and not node.keywords):
+            return node
+        chained = ast.Call(
+            ast.Attribute(ast.Name('itertools', ast.Load()), 'chain', ast.Load()),
+            [node.args[0], ast.Tuple([node.args[1]], ast.Load())], [],
+        )
+        self.changed = True
+        return ast.copy_location(ast.Call(ast.Name('next', ast.Load()), [chained], []), node)
+
+def next_default_chain(tree):
+    instance = NextDefaultChainTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('itertools')]))
+    return ast.fix_missing_locations(output)
+
+class DictionaryUnpackUnionTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Dict(self, node):
+        node = self.generic_visit(node)
+        if len(node.keys) == 2 and all(key is None for key in node.keys):
+            self.changed = True
+            return ast.copy_location(ast.BinOp(node.values[0], ast.BitOr(), node.values[1]), node)
+        return node
+
+class GuardReturnConditionalTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 2 or not isinstance(node.body[0], ast.If) or not isinstance(node.body[1], ast.Return):
+            return node
+        guard = node.body[0]
+        if guard.orelse or len(guard.body) != 1 or not isinstance(guard.body[0], ast.Return):
+            return node
+        node.body = [ast.Return(ast.IfExp(guard.test, guard.body[0].value, node.body[1].value))]
+        self.changed = True
+        return node
+
+class MembershipKeysTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Compare(self, node):
+        node = self.generic_visit(node)
+        if len(node.ops) == 1 and isinstance(node.ops[0], (ast.In, ast.NotIn)) and len(node.comparators) == 1 and isinstance(node.comparators[0], ast.Name):
+            mapping = node.comparators[0]
+            node.comparators[0] = ast.Call(ast.Attribute(mapping, 'keys', ast.Load()), [], [])
+            self.changed = True
+        return node
+
+class TruthinessLengthTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_UnaryOp(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.op, ast.Not) and isinstance(node.operand, ast.Name):
+            self.changed = True
+            return ast.copy_location(ast.Compare(ast.Call(ast.Name('len', ast.Load()), [node.operand], []), [ast.Eq()], [ast.Constant(0)]), node)
+        return node
+
+class MatchToIfTransformer(ast.NodeTransformer):
+    changed = False
+    def condition(self, subject, pattern, guard):
+        if isinstance(pattern, ast.MatchValue):
+            condition = ast.Compare(copy.deepcopy(subject), [ast.Eq()], [pattern.value])
+        elif isinstance(pattern, ast.MatchSingleton):
+            condition = ast.Compare(copy.deepcopy(subject), [ast.Is()], [ast.Constant(pattern.value)])
+        elif isinstance(pattern, ast.MatchOr):
+            conditions = [self.condition(subject, item, None) for item in pattern.patterns]
+            if any(item is None for item in conditions): return None
+            condition = ast.BoolOp(ast.Or(), conditions)
+        elif isinstance(pattern, ast.MatchAs) and pattern.pattern is None:
+            condition = ast.Constant(True)
+            if pattern.name and guard is not None:
+                class Substitute(ast.NodeTransformer):
+                    def visit_Name(self, node):
+                        if isinstance(node.ctx, ast.Load) and node.id == pattern.name:
+                            return copy.deepcopy(subject)
+                        return node
+                guard = Substitute().visit(copy.deepcopy(guard))
+        else:
+            return None
+        if guard is not None:
+            condition = ast.BoolOp(ast.And(), [condition, guard])
+        return condition
+    def visit_Match(self, node):
+        node = self.generic_visit(node)
+        fallback = []
+        for case in reversed(node.cases):
+            condition = self.condition(node.subject, case.pattern, case.guard)
+            if condition is None:
+                return node
+            if isinstance(condition, ast.Constant) and condition.value is True:
+                fallback = case.body
+            else:
+                fallback = [ast.If(condition, case.body, fallback)]
+        if not fallback:
+            return node
+        self.changed = True
+        return fallback
+
+class MatchConditionalTransformer(MatchToIfTransformer):
+    changed = False
+    def visit_Match(self, node):
+        node = self.generic_visit(node)
+        expression = None
+        for case in reversed(node.cases):
+            if len(case.body) != 1 or not isinstance(case.body[0], ast.Return):
+                return node
+            condition = self.condition(node.subject, case.pattern, case.guard)
+            if condition is None:
+                return node
+            if isinstance(condition, ast.Constant) and condition.value is True:
+                expression = case.body[0].value
+            elif expression is not None:
+                expression = ast.IfExp(condition, case.body[0].value, expression)
+            else:
+                return node
+        if expression is None:
+            return node
+        self.changed = True
+        return ast.Return(expression)
+
+class AssertToRaiseTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Assert(self, node):
+        node = self.generic_visit(node)
+        message = node.msg if node.msg is not None else ast.Constant(None)
+        self.changed = True
+        return ast.If(ast.UnaryOp(ast.Not(), node.test), [ast.Raise(ast.Call(ast.Name('AssertionError', ast.Load()), [message], []), None)], [])
+
+class PopExpressionDeleteTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Expr(self, node):
+        node = self.generic_visit(node)
+        call = node.value
+        if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'pop' and len(call.args) <= 1 and not call.keywords:
+            index = call.args[0] if call.args else ast.UnaryOp(ast.USub(), ast.Constant(1))
+            self.changed = True
+            return ast.Delete([ast.Subscript(call.func.value, index, ast.Del())])
+        return node
+
+class PopWhileClearTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_While(self, node):
+        node = self.generic_visit(node)
+        if node.orelse or len(node.body) != 1 or not isinstance(node.test, ast.Name):
+            return node
+        statement = node.body[0]
+        if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call) and isinstance(statement.value.func, ast.Attribute) and statement.value.func.attr == 'pop' and isinstance(statement.value.func.value, ast.Name) and statement.value.func.value.id == node.test.id:
+            self.changed = True
+            return ast.Expr(ast.Call(ast.Attribute(ast.Name(node.test.id, ast.Load()), 'clear', ast.Load()), [], []))
+        return node
+
+class ShuffleSampleTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 2 or not isinstance(node.body[0], ast.Expr) or not isinstance(node.body[1], ast.Return):
+            return node
+        call = node.body[0].value
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'shuffle' and len(call.args) == 1):
+            return node
+        value = call.args[0]
+        if not isinstance(node.body[1].value, ast.Name) or not isinstance(value, ast.Name) or node.body[1].value.id != value.id:
+            return node
+        node.body = [ast.Return(ast.Call(ast.Attribute(call.func.value, 'sample', ast.Load()), [value, ast.Call(ast.Name('len', ast.Load()), [copy.deepcopy(value)], [])], []))]
+        self.changed = True
+        return node
+
+class WhileGuardBreakTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_While(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.test, ast.Constant) and node.test.value is True:
+            return node
+        guard = ast.If(ast.UnaryOp(ast.Not(), node.test), [ast.Break()], [])
+        self.changed = True
+        return ast.While(ast.Constant(True), [guard, *node.body], node.orelse)
+
+class ExitStackTransformer(ast.NodeTransformer):
+    changed = False
+    counter = 0
+    def visit_With(self, node):
+        node = self.generic_visit(node)
+        if len(node.items) != 1 or node.items[0].optional_vars is None:
+            return node
+        self.counter += 1
+        stack = f'_stack_{self.counter}'
+        entered = ast.Call(ast.Attribute(ast.Name(stack, ast.Load()), 'enter_context', ast.Load()), [node.items[0].context_expr], [])
+        assignment = ast.Assign([node.items[0].optional_vars], entered)
+        manager = ast.Call(ast.Attribute(ast.Name('contextlib', ast.Load()), 'ExitStack', ast.Load()), [], [])
+        self.changed = True
+        return ast.With([ast.withitem(manager, ast.Name(stack, ast.Store()))], [assignment, *node.body])
+
+def exit_stack(tree):
+    instance = ExitStackTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.Import([ast.alias('contextlib')]))
+    return ast.fix_missing_locations(output)
+
+class PopTryPrecheckTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Try(self, node):
+        node = self.generic_visit(node)
+        if node.orelse or node.finalbody or len(node.body) != 1 or len(node.handlers) != 1:
+            return node
+        protected, handler = node.body[0], node.handlers[0]
+        if not (isinstance(protected, ast.Expr) and isinstance(protected.value, ast.Call) and isinstance(protected.value.func, ast.Attribute) and protected.value.func.attr == 'pop'):
+            return node
+        if not (isinstance(handler.type, ast.Name) and handler.type.id == 'IndexError'):
+            return node
+        self.changed = True
+        return ast.If(protected.value.func.value, [protected], handler.body)
+
+class PrintMappingCopyTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'print' and len(node.args) == 1 and isinstance(node.args[0], ast.Name) and node.args[0].id == 'kwargs':
+            node.args[0] = ast.Call(ast.Name('dict', ast.Load()), [node.args[0]], [])
+            self.changed = True
+        return node
+
+class OrderedMoveTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        if len(node.body) != 2 or not isinstance(node.body[0], ast.Expr) or not isinstance(node.body[1], ast.Return):
+            return node
+        call = node.body[0].value
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == 'move_to_end' and len(call.args) == 1):
+            return node
+        mapping, key = call.func.value, call.args[0]
+        node.body = [
+            ast.Assign([ast.Name('_value', ast.Store())], ast.Call(ast.Attribute(copy.deepcopy(mapping), 'pop', ast.Load()), [copy.deepcopy(key)], [])),
+            ast.Assign([ast.Subscript(copy.deepcopy(mapping), copy.deepcopy(key), ast.Store())], ast.Name('_value', ast.Load())),
+            node.body[1],
+        ]
+        self.changed = True
+        return node
+
+class IndexEnumerateTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_FunctionDef(self, node):
+        node = self.generic_visit(node)
+        calls = [item for item in ast.walk(node) if isinstance(item, ast.Call) and isinstance(item.func, ast.Attribute) and item.func.attr == 'index' and len(item.args) == 1]
+        if len(calls) != 1:
+            return node
+        call = calls[0]
+        sequence, element = call.func.value, call.args[0]
+        node.body = [
+            ast.For(ast.Tuple([ast.Name('_index', ast.Store()), ast.Name('_item', ast.Store())], ast.Store()), ast.Call(ast.Name('enumerate', ast.Load()), [copy.deepcopy(sequence)], []), [
+                ast.If(ast.Compare(ast.Name('_item', ast.Load()), [ast.Eq()], [copy.deepcopy(element)]), [ast.Return(ast.Name('_index', ast.Load()))], []),
+            ], []),
+            ast.Return(ast.UnaryOp(ast.USub(), ast.Constant(1))),
+        ]
+        self.changed = True
+        return node
+
+class RenamePathTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Attribute) and isinstance(node.func.value, ast.Name) and node.func.value.id == 'os' and node.func.attr in {'rename', 'replace'} and len(node.args) == 2:
+            self.changed = True
+            return ast.copy_location(ast.Call(ast.Attribute(ast.Call(ast.Name('Path', ast.Load()), [node.args[0]], []), 'rename', ast.Load()), [node.args[1]], []), node)
+        return node
+
+def rename_path(tree):
+    instance = RenamePathTransformer()
+    output = instance.visit(clone(tree))
+    if not instance.changed:
+        return None
+    output.body.insert(0, ast.ImportFrom('pathlib', [ast.alias('Path')], 0))
+    return ast.fix_missing_locations(output)
 
 class InsertionSortTransformer(ast.NodeTransformer):
     changed = False
@@ -956,8 +2108,6 @@ class DynamicTypeTransformer(ast.NodeTransformer):
                 continue
             else:
                 return node
-        if not namespace_keys:
-            return node
         bases = ast.Tuple(node.bases or [ast.Name('object', ast.Load())], ast.Load())
         assignment = ast.Assign(
             [ast.Name(node.name, ast.Store())],
@@ -969,9 +2119,23 @@ class DynamicTypeTransformer(ast.NodeTransformer):
 class ComprehensionToFunctionalTransformer(ast.NodeTransformer):
     changed = False
     def lambda_for(self, target, expression):
-        if not isinstance(target, ast.Name):
-            return None
-        return ast.Lambda(ast.arguments([], [ast.arg(target.id)], None, [], [], None, []), expression)
+        if isinstance(target, ast.Name):
+            return ast.Lambda(ast.arguments([], [ast.arg(target.id)], None, [], [], None, []), expression)
+        if isinstance(target, (ast.Tuple, ast.List)) and all(isinstance(item, ast.Name) for item in target.elts):
+            replacements = {
+                item.id: ast.Subscript(ast.Name('_pair', ast.Load()), ast.Constant(index), ast.Load())
+                for index, item in enumerate(target.elts)
+            }
+            class Substitute(ast.NodeTransformer):
+                def visit_Name(self, node):
+                    if isinstance(node.ctx, ast.Load) and node.id in replacements:
+                        return copy.deepcopy(replacements[node.id])
+                    return node
+            return ast.Lambda(
+                ast.arguments([], [ast.arg('_pair')], None, [], [], None, []),
+                Substitute().visit(copy.deepcopy(expression)),
+            )
+        return None
     def functional(self, element, generators, constructor):
         if len(generators) != 1 or generators[0].is_async:
             return None
@@ -1005,13 +2169,16 @@ class AggregateAlternativeTransformer(ast.NodeTransformer):
     changed = False
     def visit_Call(self, node):
         node = self.generic_visit(node)
-        if not isinstance(node.func, ast.Name) or len(node.args) != 1 or node.keywords:
+        if not isinstance(node.func, ast.Name) or not node.args:
             return node
         if node.func.id in {'max', 'min'}:
+            if any(keyword.arg != 'key' for keyword in node.keywords) or (len(node.args) > 1 and node.keywords):
+                return node
             index = ast.UnaryOp(ast.USub(), ast.Constant(1)) if node.func.id == 'max' else ast.Constant(0)
+            values = node.args[0] if len(node.args) == 1 else ast.List(node.args, ast.Load())
             self.changed = True
-            return ast.copy_location(ast.Subscript(ast.Call(ast.Name('sorted', ast.Load()), node.args, []), index, ast.Load()), node)
-        if node.func.id == 'sum':
+            return ast.copy_location(ast.Subscript(ast.Call(ast.Name('sorted', ast.Load()), [values], node.keywords), index, ast.Load()), node)
+        if node.func.id == 'sum' and len(node.args) == 1 and not node.keywords:
             module = ast.Call(ast.Name('__import__', ast.Load()), [ast.Constant('functools')], [])
             operator_module = ast.Call(ast.Name('__import__', ast.Load()), [ast.Constant('operator')], [])
             self.changed = True
@@ -1047,10 +2214,11 @@ class LibraryBuiltinTransformer(ast.NodeTransformer):
     needs_math = False
     def visit_Call(self, node):
         node = self.generic_visit(node)
-        if isinstance(node.func, ast.Name) and node.func.id in {'max', 'min'} and len(node.args) == 1 and not node.keywords:
+        if isinstance(node.func, ast.Name) and node.func.id in {'max', 'min'} and node.args and all(keyword.arg == 'key' for keyword in node.keywords):
             self.needs_heapq = True
             function = 'nlargest' if node.func.id == 'max' else 'nsmallest'
-            values = ast.Call(ast.Attribute(ast.Name('heapq', ast.Load()), function, ast.Load()), [ast.Constant(1), node.args[0]], [])
+            source = node.args[0] if len(node.args) == 1 else ast.List(node.args, ast.Load())
+            values = ast.Call(ast.Attribute(ast.Name('heapq', ast.Load()), function, ast.Load()), [ast.Constant(1), source], node.keywords)
             self.changed = True
             return ast.copy_location(ast.Subscript(values, ast.Constant(0), ast.Load()), node)
         if isinstance(node.func, ast.Name) and node.func.id == 'sum' and len(node.args) == 1 and not node.keywords:
@@ -1060,6 +2228,15 @@ class LibraryBuiltinTransformer(ast.NodeTransformer):
         if isinstance(node.func, ast.Name) and node.func.id == 'isinstance' and len(node.args) == 2 and not node.keywords:
             self.changed = True
             return ast.copy_location(ast.Call(ast.Name('issubclass', ast.Load()), [ast.Call(ast.Name('type', ast.Load()), [node.args[0]], []), node.args[1]], []), node)
+        return node
+
+class RoundDunderTransformer(ast.NodeTransformer):
+    changed = False
+    def visit_Call(self, node):
+        node = self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'round' and len(node.args) in {1, 2} and not node.keywords:
+            self.changed = True
+            return ast.copy_location(ast.Call(ast.Attribute(node.args[0], '__round__', ast.Load()), node.args[1:], []), node)
         return node
 
 def library_builtins(tree):
@@ -1164,8 +2341,6 @@ class NewClassTransformer(ast.NodeTransformer):
                 continue
             else:
                 return node
-        if not keys:
-            return node
         bases = ast.Tuple(node.bases or [ast.Name('object', ast.Load())], ast.Load())
         namespace = ast.Dict(keys, values)
         callback = ast.Lambda(
@@ -1291,6 +2466,7 @@ TRANSFORMS = [
     ('comprehension instead of map or filter', lambda tree: apply(tree, FunctionalToComprehensionTransformer)),
     ('eager comprehension approach', lambda tree: apply(tree, GeneratorMaterializationTransformer)),
     ('str.format approach', lambda tree: apply(tree, FStringFormatTransformer)),
+    ('dynamic format built-in approach', lambda tree: apply(tree, DynamicFStringFormatTransformer)),
     ('dynamic setattr approach', lambda tree: apply(tree, DynamicAttributeTransformer)),
     ('reflective getattr approach', lambda tree: apply(tree, ReflectiveReadTransformer)),
     ('generator counting approach', lambda tree: apply(tree, CountToGeneratorTransformer)),
@@ -1313,10 +2489,70 @@ TRANSFORMS = [
     ('heap-based sorting approach', lambda tree: heap_sorted(tree)),
     ('generator-based length approach', lambda tree: apply(tree, LenGeneratorTransformer)),
     ('manual class instead of dataclass', lambda tree: apply(tree, ManualDataclassTransformer)),
+    ('dataclass factory approach', lambda tree: make_dataclass(tree)),
     ('data-driven method override approach', lambda tree: apply(tree, DataDrivenOverrideTransformer)),
+    ('post-definition method assignment approach', lambda tree: apply(tree, AssignedOverrideTransformer)),
     ('collection unpacking approach', lambda tree: apply(tree, CollectionUnpackTransformer)),
     ('unpacking copy approach', lambda tree: apply(tree, CopyUnpackTransformer)),
     ('explicit reduction loop approach', lambda tree: apply(tree, ReduceLoopTransformer)),
+    ('inlined helper expression approach', lambda tree: apply(tree, InlineNestedHelperTransformer)),
+    ('inlined helper with operator module', lambda tree: inline_then_operator(tree)),
+    ('zip comprehension approach', lambda tree: apply(tree, MultiIterableMapTransformer)),
+    ('iterator reduction without initial value', lambda tree: reduce_without_initial(tree)),
+    ('non-mutating reverse slice approach', lambda tree: apply(tree, ReverseMethodTransformer)),
+    ('reversed iterator approach', lambda tree: apply(tree, ReverseMethodReversedTransformer)),
+    ('dictionary view comprehension approach', lambda tree: apply(tree, DictionaryViewTransformer)),
+    ('dictionary pair comprehension approach', lambda tree: apply(tree, PairDictionaryTransformer)),
+    ('tuple constructor approach', lambda tree: apply(tree, TupleLiteralTransformer)),
+    ('operator getitem slice approach', lambda tree: apply(tree, SliceGetItemTransformer, True)),
+    ('all-based chained comparison approach', lambda tree: apply(tree, ChainedComparisonTransformer)),
+    ('itertools Cartesian-product approach', lambda tree: cartesian_product(tree)),
+    ('itertools flattening approach', lambda tree: flatten_chain(tree)),
+    ('explicit indexed removal approach', lambda tree: apply(tree, ExplicitPopTransformer)),
+    ('conditional dictionary removal approach', lambda tree: apply(tree, ConditionalDictionaryPopTransformer)),
+    ('slice deletion clear approach', lambda tree: apply(tree, ClearByDeletionTransformer)),
+    ('os path-operation approach', lambda tree: path_to_os(tree)),
+    ('pathlib read-write convenience approach', lambda tree: path_read_write(tree)),
+    ('conditional assignment expression approach', lambda tree: apply(tree, ConditionalAssignmentTransformer)),
+    ('explicit comprehension loop approach', lambda tree: apply(tree, ComprehensionToLoopTransformer)),
+    ('conditional aggregate fallback approach', lambda tree: apply(tree, DefaultAggregateConditionalTransformer)),
+    ('sorted aggregate fallback approach', lambda tree: apply(tree, DefaultAggregateSortedTransformer)),
+    ('iter sentinel input approach', lambda tree: apply(tree, SentinelInputLoopTransformer)),
+    ('contextlib suppress approach', lambda tree: suppress_exception(tree)),
+    ('manual separator loop approach', lambda tree: apply(tree, JoinLoopTransformer)),
+    ('tuple slice-copy approach', lambda tree: apply(tree, TupleSliceTransformer)),
+    ('class-name attribute approach', lambda tree: apply(tree, TypeNameAttributeTransformer)),
+    ('globals mapping approach', lambda tree: apply(tree, GlobalsMappingTransformer)),
+    ('dictionary-items comprehension approach', lambda tree: apply(tree, ItemsListComprehensionTransformer)),
+    ('explicit generator summation loop', lambda tree: apply(tree, SumGeneratorLoopTransformer)),
+    ('itertools accumulate reduction approach', lambda tree: reduce_accumulate(tree)),
+    ('named extrema built-in approach', lambda tree: apply(tree, NamedExtremaBuiltinTransformer)),
+    ('named extrema sorting approach', lambda tree: apply(tree, NamedExtremaSortedTransformer)),
+    ('mapping unpack copy approach', lambda tree: apply(tree, MappingCopyTransformer)),
+    ('mapping union update approach', lambda tree: apply(tree, MappingUnionUpdateTransformer)),
+    ('list concatenation extension approach', lambda tree: apply(tree, ExtendConcatenationTransformer)),
+    ('class attribute type approach', lambda tree: apply(tree, TypeToClassTransformer)),
+    ('iterator dunder next approach', lambda tree: apply(tree, NextDunderTransformer)),
+    ('power square-root approach', lambda tree: apply(tree, SquareRootPowerTransformer)),
+    ('dictionary union insertion approach', lambda tree: apply(tree, CopyThenAssignUnionTransformer)),
+    ('chained iterator default approach', lambda tree: next_default_chain(tree)),
+    ('dictionary union approach', lambda tree: apply(tree, DictionaryUnpackUnionTransformer)),
+    ('guard conditional return approach', lambda tree: apply(tree, GuardReturnConditionalTransformer)),
+    ('dictionary keys-view membership approach', lambda tree: apply(tree, MembershipKeysTransformer)),
+    ('explicit length truthiness approach', lambda tree: apply(tree, TruthinessLengthTransformer)),
+    ('if-elif pattern matching approach', lambda tree: apply(tree, MatchToIfTransformer)),
+    ('conditional-expression pattern approach', lambda tree: apply(tree, MatchConditionalTransformer)),
+    ('explicit assertion raise approach', lambda tree: apply(tree, AssertToRaiseTransformer)),
+    ('indexed deletion instead of pop', lambda tree: apply(tree, PopExpressionDeleteTransformer)),
+    ('clear instead of repeated pop', lambda tree: apply(tree, PopWhileClearTransformer)),
+    ('random sample shuffle approach', lambda tree: apply(tree, ShuffleSampleTransformer)),
+    ('guarded infinite while-loop approach', lambda tree: apply(tree, WhileGuardBreakTransformer)),
+    ('ExitStack context-management approach', lambda tree: exit_stack(tree)),
+    ('prechecked pop approach', lambda tree: apply(tree, PopTryPrecheckTransformer)),
+    ('explicit kwargs dictionary display', lambda tree: apply(tree, PrintMappingCopyTransformer)),
+    ('pop and reinsert ordered-key approach', lambda tree: apply(tree, OrderedMoveTransformer)),
+    ('enumerated index lookup approach', lambda tree: apply(tree, IndexEnumerateTransformer)),
+    ('pathlib rename approach', lambda tree: rename_path(tree)),
     ('stable insertion-sort approach', lambda tree: apply(tree, InsertionSortTransformer)),
     ('standalone insertion-sort helper', lambda tree: any_sorted(tree)),
     ('standalone reduction helper', lambda tree: any_reduce(tree)),
@@ -1327,6 +2563,7 @@ TRANSFORMS = [
     ('slice-copy approach', lambda tree: apply(tree, CopySliceTransformer)),
     ('split-based substring counting approach', lambda tree: apply(tree, SubstringSplitCountTransformer)),
     ('standard-library built-in alternative', lambda tree: library_builtins(tree)),
+    ('numeric dunder rounding approach', lambda tree: apply(tree, RoundDunderTransformer)),
     ('conditional setdefault approach', lambda tree: apply(tree, SetDefaultConditionalTransformer)),
     ('list concatenation instead of append', lambda tree: apply(tree, AppendConcatenationTransformer)),
     ('dictionary key iteration approach', lambda tree: apply(tree, ItemsKeyIterationTransformer)),
@@ -1372,7 +2609,7 @@ const transformed = spawnSync('python3', ['-c', transformer], {
   cwd: root,
   encoding: 'utf8',
   maxBuffer: 100 * 1024 * 1024,
-  timeout: 300000,
+  timeout: 900000,
 });
 if (transformed.error) throw transformed.error;
 if (transformed.status !== 0) throw new Error(transformed.stderr);
@@ -1396,6 +2633,14 @@ if (validation.error) throw validation.error;
 if (validation.status !== 0) throw new Error(validation.stderr || validation.stdout);
 const results = JSON.parse(fs.readFileSync(resultsFile, 'utf8'));
 const passedIds = new Set(results.filter(result => result.passed).map(result => result.candidateId));
+if (process.env.SOLUTION_DEBUG) {
+  const resultById = new Map(results.map(result => [result.candidateId, result]));
+  for (const candidate of candidates) {
+    const result = resultById.get(candidate.candidateId);
+    console.error(`${candidate.id}\t${result?.passed ? 'PASS' : 'FAIL'}\t${candidate.heading}\t${candidate.technique}\t${result?.error ?? ''}`);
+    if (process.env.SOLUTION_DEBUG_SOURCE) console.error(candidate.solution.replaceAll('\n', '\\n'));
+  }
+}
 const selected = {};
 for (const candidate of candidates) {
   if (!passedIds.has(candidate.candidateId)) continue;
@@ -1413,6 +2658,8 @@ const output = [
   `export const GENERATED_SOLUTION_ALTERNATIVES: Readonly<Record<number, readonly { heading: string; body: string }[]>> = ${JSON.stringify(selected, null, 2)};`,
   '',
 ].join('\n');
-fs.writeFileSync(path.join(root, 'services/generatedSolutionAlternatives.ts'), output);
+if (!process.env.SOLUTION_NO_WRITE) {
+  fs.writeFileSync(path.join(root, 'services/generatedSolutionAlternatives.ts'), output);
+}
 fs.rmSync(temporaryDirectory, { recursive: true, force: true });
-console.log(`Generated ${candidates.length} candidates; ${Object.keys(selected).length}/${EXERCISES.length} exercises have at least three passing techniques.`);
+console.log(`Generated ${candidates.length} candidates; ${Object.keys(selected).length}/${baseRecords.length} selected exercises have at least three passing techniques.`);
