@@ -1,5 +1,7 @@
 node_modules
 dist
+public/pyodide
+public/tailwind.generated.css
 .DS_Store
 *.log
 .env

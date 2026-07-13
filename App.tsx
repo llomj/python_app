@@ -14862,6 +14862,7 @@ const App: React.FC = () => {
     const [pyodide, setPyodide] = useState<any>(null);
     const [bootStage, setBootStage] = useState<'loading' | 'ready' | 'launched'>('loading');
     const [bootLog, setBootLog] = useState<string>('Handshaking...');
+    const [offlinePackageReady, setOfflinePackageReady] = useState(false);
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
@@ -15773,8 +15774,8 @@ const App: React.FC = () => {
             interval = setInterval(() => {
                 setLoadTime(prev => {
                     const next = prev + 1;
-                    if (next === 3) setBootLog('Network verified...');
-                    if (next === 8) setBootLog('Streaming binaries...');
+                    if (next === 3) setBootLog('Runtime verified...');
+                    if (next === 8) setBootLog('Loading local binaries...');
                     if (next === 15) setBootLog('Extracting modules...');
                     if (next === 25) setBootLog('Finalizing compile...');
                     return next;
@@ -15783,6 +15784,20 @@ const App: React.FC = () => {
         }
         return () => clearInterval(interval);
     }, [bootStage]);
+
+    useEffect(() => {
+        if (!navigator.serviceWorker) return;
+        const handleOfflineMessage = (event: MessageEvent) => {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v261') {
+                setOfflinePackageReady(true);
+            }
+        };
+        navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
+        navigator.serviceWorker.ready.then(registration => {
+            if (registration.active?.scriptURL.includes('v=v261')) setOfflinePackageReady(true);
+        }).catch(() => undefined);
+        return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
+    }, []);
 
     useEffect(() => {
         async function initPyodide() {
@@ -15796,7 +15811,7 @@ const App: React.FC = () => {
             window.__PYODIDE_INIT_LOCK__ = true;
 
             try {
-                setBootLog('Fetching interpreter...');
+                setBootLog('Loading local interpreter...');
 
                 let retries = 0;
                 while (typeof window.loadPyodide === 'undefined' && retries < 120) {
@@ -15809,7 +15824,7 @@ const App: React.FC = () => {
                 }
 
                 const py = await window.loadPyodide({
-                    indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/"
+                    indexURL: new URL('./pyodide/', window.location.href).href,
                 });
 
                 await py.loadPackage([]);
@@ -18909,7 +18924,7 @@ print(result)
             <div className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-16 p-8 text-center text-white overflow-y-auto animate-in fade-in duration-500" style={{ backgroundColor: '#050c18' }}>
                 <div className="relative mb-8 flex-shrink-0">
                     <div className="absolute inset-0 bg-[#3b82f6]/20 blur-3xl rounded-full animate-pulse"></div>
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" className={`w-20 h-20 relative z-10 ${bootStage === 'loading' ? 'animate-bounce' : 'scale-110'}`} alt="Python" />
+                    <img src="./python-icon.svg" className={`w-20 h-20 relative z-10 ${bootStage === 'loading' ? 'animate-bounce' : 'scale-110'}`} alt="Python" />
                 </div>
 
                 {bootStage === 'loading' ? (
@@ -18917,7 +18932,7 @@ print(result)
                         <Loader2 className="animate-spin text-[#3b82f6] mb-4" size={40} />
                         <h1 className="text-2xl font-black tracking-tighter mb-2 italic uppercase">Starting Engine...</h1>
                         <p className="text-[#3b82f6] text-[10px] font-mono tracking-widest mb-6 uppercase animate-pulse">{bootLog}</p>
-                        <p className="text-gray-400 text-[11px] max-w-xs leading-relaxed mb-8">Caching Standard Library (20MB) for offline use.</p>
+                        <p className="text-gray-400 text-[11px] max-w-xs leading-relaxed mb-8">Installing the complete app and Python runtime for offline use.</p>
                         <div className="flex flex-col gap-3 w-full max-w-xs animate-in slide-in-from-bottom-4">
                             <button onClick={() => window.location.reload()} className="w-full bg-[#1d2d44] text-white py-4 rounded-2xl font-black text-[10px] uppercase border border-white/5 flex items-center justify-center gap-2"><RefreshCw size={14} /> Refresh</button>
                             <button onClick={clearAppCacheAndReload} disabled={cacheClearBusy} className="w-full bg-red-500/10 border border-red-500/20 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase flex items-center justify-center gap-2 disabled:opacity-60"><Trash2 size={14} /> {cacheClearBusy ? 'Clearing...' : 'Clear App Cache'}</button>
@@ -18927,6 +18942,9 @@ print(result)
                     <div className="animate-in fade-in zoom-in duration-500 flex flex-col items-center flex-shrink-0">
                         <h1 className="text-3xl font-black tracking-tighter mb-2 text-[#3b82f6]">LOCAL ENGINE READY</h1>
                         <p className="text-gray-400 text-xs mb-6 uppercase tracking-widest font-bold">Standard Library Loaded</p>
+                        <p className={`max-w-xs text-[10px] font-black uppercase tracking-wider ${offlinePackageReady ? 'text-[#4ade80]' : 'text-[#f59e0b]'}`}>
+                            {offlinePackageReady ? 'Complete app saved for offline use' : 'Installing complete offline package in background...'}
+                        </p>
                         <button onClick={handleLaunch} className="mt-4 bg-[#3b82f6] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-[0_0_40px_rgba(59,130,246,0.3)] active:scale-95 transition-all flex items-center gap-2"><Zap size={20} fill="currentColor" /> ENTER EDITOR</button>
                         <button onClick={clearAppCacheAndReload} disabled={cacheClearBusy} className="mt-4 w-full max-w-xs bg-red-500/10 border border-red-500/25 text-red-400 py-3 rounded-2xl font-black text-[10px] uppercase flex items-center justify-center gap-2 disabled:opacity-60"><Trash2 size={14} /> {cacheClearBusy ? 'Clearing Cache...' : 'Clear App Cache'}</button>
                     </div>
