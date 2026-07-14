@@ -65,6 +65,7 @@ import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/general
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 import { buildSolutionVariations } from './services/solutionVariations';
+import { getExerciseEditorCode } from './services/codeScaffold';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -14957,11 +14958,12 @@ const pythonSnippets = (context: CompletionContext) => {
 
 const App: React.FC = () => {
     const initialExercise = useMemo(() => getInitialExercise(), []);
+    const [codeScaffoldEnabled, setCodeScaffoldEnabled] = useState(() => localStorage.getItem('python_code_scaffold') === 'true');
     const [exercise, setExercise] = useState<Exercise>(initialExercise);
     const [files, setFiles] = useState<ProjectFile[]>(() =>
         localStorage.getItem('python_plain_mode') === 'true'
             ? [{ name: 'main.py', content: '' }]
-            : [{ name: 'main.py', content: initialExercise.initialCode }]
+            : [{ name: 'main.py', content: getExerciseEditorCode(initialExercise, localStorage.getItem('python_code_scaffold') === 'true', AUTO_GRADERS[initialExercise.id], getLanguage()) }]
     );
     const [activeFileIndex, setActiveFileIndex] = useState(0);
     const [isEditingFileName, setIsEditingFileName] = useState(false);
@@ -15214,7 +15216,7 @@ const App: React.FC = () => {
         if (ex) {
             setPlainMode(false);
             setExercise(ex);
-            setFiles([{ name: 'main.py', content: ex.initialCode }]);
+            setFiles([{ name: 'main.py', content: getExerciseEditorCode(ex, codeScaffoldEnabled, AUTO_GRADERS[ex.id], appLang) }]);
             setActiveFileIndex(0);
             setOutput(t('output.runPrompt', appLang));
             setOutputStatus('idle');
@@ -15260,7 +15262,7 @@ const App: React.FC = () => {
         if (ex) {
             setPlainMode(false);
             setExercise(ex);
-            setFiles([{ name: 'main.py', content: ex.initialCode }]);
+            setFiles([{ name: 'main.py', content: getExerciseEditorCode(ex, codeScaffoldEnabled, AUTO_GRADERS[ex.id], appLang) }]);
             setActiveFileIndex(0);
             setOutput(t('output.runPrompt', appLang));
             setOutputStatus('idle');
@@ -15907,13 +15909,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v264') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v265') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v264')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v265')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16018,7 +16020,7 @@ const App: React.FC = () => {
         const ex = getExerciseById(id) ?? EXERCISES[0];
         setExercise(ex);
         localStorage.setItem('python_current_problem_id', String(ex.id));
-        setFiles([{ name: 'main.py', content: ex.initialCode }]);
+        setFiles([{ name: 'main.py', content: getExerciseEditorCode(ex, codeScaffoldEnabled, AUTO_GRADERS[ex.id], appLang) }]);
         setActiveFileIndex(0);
         setOutput(t('output.runPrompt', appLang));
         setOutputStatus('idle');
@@ -16036,13 +16038,26 @@ const App: React.FC = () => {
     const loadRandomExercise = useCallback((mode: ProblemMode = difficultyMode) => {
         const randomExercise = getRandomExerciseForMode(mode, exercise.id);
         setProblemById(randomExercise.id);
-    }, [difficultyMode, exercise.id]);
+    }, [difficultyMode, exercise.id, codeScaffoldEnabled, appLang]);
 
     const handleDifficultyModeSelect = (mode: ProblemMode) => {
         setDifficultyMode(mode);
         localStorage.setItem('python_difficulty_mode', mode);
         const nextExercise = getRandomExerciseForMode(mode, exercise.id);
         setProblemById(nextExercise.id);
+    };
+
+    const handleCodeScaffoldToggle = () => {
+        const enabled = !codeScaffoldEnabled;
+        setCodeScaffoldEnabled(enabled);
+        localStorage.setItem('python_code_scaffold', String(enabled));
+        if (!plainMode) {
+            setFiles([{ name: 'main.py', content: getExerciseEditorCode(exercise, enabled, AUTO_GRADERS[exercise.id], appLang) }]);
+            setActiveFileIndex(0);
+            setOutput(t('output.runPrompt', appLang));
+            setOutputStatus('idle');
+            setPendingNextProblem(false);
+        }
     };
 
     const updateCurrentModeStats = (result: 'success' | 'failed') => {
@@ -20726,7 +20741,7 @@ print(result)
                                     {modeSectionOpen && (
                                         <div className="mt-3 grid grid-cols-2 gap-2 animate-in fade-in duration-200">
                                             <button
-                                                onClick={() => { setPlainMode(false); setExercise(getInitialExercise()); setFiles([{ name: 'main.py', content: getInitialExercise().initialCode }]); }}
+                                                onClick={() => { const nextExercise = getInitialExercise(); setPlainMode(false); setExercise(nextExercise); setFiles([{ name: 'main.py', content: getExerciseEditorCode(nextExercise, codeScaffoldEnabled, AUTO_GRADERS[nextExercise.id], appLang) }]); }}
                                                 className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
                                                 style={!plainMode ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
                                             >
@@ -20836,6 +20851,25 @@ print(result)
                                     </div>
                                     {problemModeSectionOpen && (
                                         <div className="mt-3 animate-in fade-in duration-200">
+                                            <button
+                                                type="button"
+                                                onClick={handleCodeScaffoldToggle}
+                                                className="mb-3 w-full rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={codeScaffoldEnabled
+                                                    ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' }
+                                                    : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-1 flex items-center justify-between gap-3">
+                                                    <span className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em]">
+                                                        <FileCode size={15} style={{ color: codeScaffoldEnabled ? countRowColors.wins : countRowColors.count }} />
+                                                        {t('settings.codeScaffold', appLang)}
+                                                    </span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: codeScaffoldEnabled ? countRowColors.wins : '#6b7280' }}>
+                                                        {codeScaffoldEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}
+                                                    </span>
+                                                </span>
+                                                <span className="block text-[10px] leading-relaxed text-gray-400">{t('settings.codeScaffoldDesc', appLang)}</span>
+                                            </button>
                                             <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
                                                 {DIFFICULTY_MODES.map(mode => {
                                                     const isSelected = difficultyMode === mode.id;

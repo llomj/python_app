@@ -5,7 +5,7 @@
     "scripts": {
         "prepare:offline-assets": "node scripts/prepare_offline_assets.js && tailwindcss -c tailwind.config.cjs -i ./styles/tailwind.css -o ./public/tailwind.generated.css --minify",
         "dev": "npm run prepare:offline-assets && vite",
-        "build": "npm run prepare:offline-assets && vite build && cp level1_*_codelogic.py level1_*_requirements*.py level1_*_syntax.py level1_*_fr.py dist/ 2>/dev/null; node scripts/generate_offline_manifest.js && node scripts/audit_offline_build.js",
+        "build": "npm run audit:scaffolds && npm run prepare:offline-assets && vite build && cp level1_*_codelogic.py level1_*_requirements*.py level1_*_syntax.py level1_*_fr.py dist/ 2>/dev/null; node scripts/generate_offline_manifest.js && node scripts/audit_offline_build.js",
         "audit:offline": "node scripts/audit_offline_build.js",
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",
@@ -22,6 +22,7 @@
         "generate:solution-alternatives": "node scripts/generate_semantic_solution_alternatives.js",
         "generate:script-examples": "node scripts/generate_simple_script_examples.js",
         "audit:starters": "node scripts/audit_starter_signatures.js",
+        "audit:scaffolds": "node scripts/audit_code_scaffolds.js",
         "audit:concepts": "node scripts/audit_python_concepts.js",
         "eval:general-ai": "node scripts/evaluate_general_ai.js",
         "eval:general-ai-final": "node scripts/evaluate_general_ai_adversarial.js",
