@@ -15,5 +15,5 @@ function walk(directory) {
 }
 
 const assets = ['./', ...walk(dist)].filter((asset, index, all) => all.indexOf(asset) === index).sort();
-fs.writeFileSync(manifestPath, `${JSON.stringify({ version: 'v265', assets }, null, 2)}\n`);
+fs.writeFileSync(manifestPath, `${JSON.stringify({ version: 'v266', assets }, null, 2)}\n`);
 console.log(`Generated offline manifest with ${assets.length} local assets.`);

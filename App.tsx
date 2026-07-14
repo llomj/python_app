@@ -15909,13 +15909,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v265') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v266') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v265')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v266')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -20764,6 +20764,25 @@ print(result)
                                                 <span className="block text-xs font-bold">{t('settings.freeIde', appLang)}</span>
                                                 <span className="mt-1 block text-[10px] text-gray-400">{t('settings.plainDesc', appLang)}</span>
                                             </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleCodeScaffoldToggle}
+                                                className="col-span-2 w-full rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                style={codeScaffoldEnabled
+                                                    ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' }
+                                                    : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                            >
+                                                <span className="mb-1 flex items-center justify-between gap-3">
+                                                    <span className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em]">
+                                                        <FileCode size={15} style={{ color: codeScaffoldEnabled ? countRowColors.wins : countRowColors.count }} />
+                                                        {t('settings.codeScaffold', appLang)}
+                                                    </span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: codeScaffoldEnabled ? countRowColors.wins : '#6b7280' }}>
+                                                        {codeScaffoldEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}
+                                                    </span>
+                                                </span>
+                                                <span className="block text-[10px] leading-relaxed text-gray-400">{t('settings.codeScaffoldDesc', appLang)}</span>
+                                            </button>
                                         </div>
                                     )}
                                 </div>
@@ -20851,25 +20870,6 @@ print(result)
                                     </div>
                                     {problemModeSectionOpen && (
                                         <div className="mt-3 animate-in fade-in duration-200">
-                                            <button
-                                                type="button"
-                                                onClick={handleCodeScaffoldToggle}
-                                                className="mb-3 w-full rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                                style={codeScaffoldEnabled
-                                                    ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' }
-                                                    : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                            >
-                                                <span className="mb-1 flex items-center justify-between gap-3">
-                                                    <span className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em]">
-                                                        <FileCode size={15} style={{ color: codeScaffoldEnabled ? countRowColors.wins : countRowColors.count }} />
-                                                        {t('settings.codeScaffold', appLang)}
-                                                    </span>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: codeScaffoldEnabled ? countRowColors.wins : '#6b7280' }}>
-                                                        {codeScaffoldEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}
-                                                    </span>
-                                                </span>
-                                                <span className="block text-[10px] leading-relaxed text-gray-400">{t('settings.codeScaffoldDesc', appLang)}</span>
-                                            </button>
                                             <div className="flex flex-col gap-2 max-h-[240px] overflow-y-auto overscroll-contain pr-1">
                                                 {DIFFICULTY_MODES.map(mode => {
                                                     const isSelected = difficultyMode === mode.id;
