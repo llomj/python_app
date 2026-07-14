@@ -59,7 +59,7 @@ const findClassNames = (code: string) => [...code.matchAll(/^class\s+([A-Za-z_]\
 
 const GENERIC_COMMENT_PATTERN = /^#\s*(?:(?:write|enter|add|type|put)\b.*|(?:your|the)\s+(?:code|solution)\s+here\.?|todo\b.*)$/i;
 
-const isGenericStarter = (code: string): boolean => {
+export const isGenericExerciseStarter = (code: string): boolean => {
   const lines = code.trim().split('\n').map(line => line.trim()).filter(Boolean);
   return lines.length === 0 || lines.every(line => (
     /^(?:from\s+[A-Za-z_.]+\s+import\s+.+|import\s+[A-Za-z_., ]+)$/.test(line)
@@ -155,7 +155,7 @@ const buildScriptStarterFromSolution = (exercise: Exercise, language: 'en' | 'fr
 
 const buildScriptStarter = (exercise: Exercise, language: 'en' | 'fr'): string => {
   const initial = exercise.initialCode.trimEnd();
-  if (!isGenericStarter(initial)) return initial;
+  if (!isGenericExerciseStarter(initial)) return initial;
   return buildCallableStarterFromSolution(exercise, language) || buildScriptStarterFromSolution(exercise, language);
 };
 

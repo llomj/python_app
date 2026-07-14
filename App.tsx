@@ -65,7 +65,7 @@ import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/general
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
 import { AUTO_GRADERS, AutoGrader } from './graders';
 import { buildSolutionVariations } from './services/solutionVariations';
-import { getExerciseEditorCode } from './services/codeScaffold';
+import { getExerciseEditorCode, isGenericExerciseStarter } from './services/codeScaffold';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -15129,6 +15129,17 @@ const App: React.FC = () => {
     const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [rankUpCelebration, setRankUpCelebration] = useState(() => localStorage.getItem('python_rank_up_celebration') !== 'false');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
+    useEffect(() => {
+        if (!codeScaffoldEnabled || plainMode) return;
+        const scaffold = getExerciseEditorCode(exercise, true, AUTO_GRADERS[exercise.id], appLang);
+        setFiles(current => {
+            if (current.length !== 1 || current[0].name !== 'main.py') return current;
+            const currentCode = current[0].content.trimEnd();
+            const untouchedStarter = currentCode === exercise.initialCode.trimEnd() || isGenericExerciseStarter(currentCode);
+            if (!untouchedStarter || currentCode === scaffold.trimEnd()) return current;
+            return [{ name: 'main.py', content: scaffold }];
+        });
+    }, [appLang, codeScaffoldEnabled, exercise, plainMode]);
     const [logExpanded, setLogExpanded] = useState(false);
     const [showSnippetSaveInput, setShowSnippetSaveInput] = useState(false);
     const [snippetNameInput, setSnippetNameInput] = useState('');
@@ -15909,13 +15920,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v268') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v269') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v268')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v269')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
