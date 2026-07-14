@@ -14986,15 +14986,15 @@ const App: React.FC = () => {
     const [cacheClearBusy, setCacheClearBusy] = useState(false);
     const [loadTime, setLoadTime] = useState<number>(0);
     const [isInFrame, setIsInFrame] = useState(false);
-    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai' | 'general_ai' | 'problem_mode_help'>('none');
+    const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai' | 'general_ai' | 'problem_mode_help' | 'concept_mode_help'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax' | 'concept'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
-    const [showHowToUse, setShowHowToUse] = useState(false);
     const [modeSectionOpen, setModeSectionOpen] = useState(false);
     const [soundsSectionOpen, setSoundsSectionOpen] = useState(false);
     const [problemModeSectionOpen, setProblemModeSectionOpen] = useState(false);
+    const [conceptModeSectionOpen, setConceptModeSectionOpen] = useState(false);
     const [statsByModeSectionOpen, setStatsByModeSectionOpen] = useState(false);
     const [savedProblemsSectionOpen, setSavedProblemsSectionOpen] = useState(false);
     const [idLogSectionOpen, setIdLogSectionOpen] = useState(false);
@@ -15909,13 +15909,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v266') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v267') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v266')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v267')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -18055,8 +18055,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
             const shouldCreateQuiz = generalAiTutorMode === 'quiz' || intent.intent === 'quiz';
-            let refAnswer: string | null = codeCommand.directAnswer
-                || (apiCatalog ? `**${apiCatalog.title}**\n\n${apiCatalog.intro}` : null)
+            const prioritizedTutorAnswer = !shouldCreateQuiz && generalAiTutorMode !== 'explain'
+                ? tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang)
+                : null;
+            const prioritizedComparisonAnswer = asksApiComparison
+                ? answerPythonApiComparison(effectiveQuestion, appLang)
+                    || knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang)
+                : null;
+            let refAnswer: string | null = codeCommand.directAnswer || prioritizedTutorAnswer || prioritizedComparisonAnswer;
+            if (!refAnswer && !shouldCreateQuiz) {
+                refAnswer = (apiCatalog ? `**${apiCatalog.title}**\n\n${apiCatalog.intro}` : null)
                 || answerPythonApiComparison(effectiveQuestion, appLang)
                 || immediateApiAnswer
                 || answerPythonBuiltinQuery(effectiveQuestion, appLang)
@@ -18119,7 +18127,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonSecurityGuide(effectiveQuestion, appLang)
                 || answerPythonContextManagerGuide(effectiveQuestion, appLang)
                 || answerPythonTestCaseRequest(effectiveQuestion, appLang)
-                || (shouldCreateQuiz ? null : tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang));
+                || tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang);
+            }
             if (!refAnswer && shouldCreateQuiz) {
                 const quizSubject = startsNewQuiz && generalAiActiveQuiz?.subject ? generalAiActiveQuiz.subject : effectiveQuestion;
                 const quizNumber = generalAiMessages.filter(message => message.role === 'assistant' && /\*\*(?:Adaptive quiz|Quiz adaptatif)/i.test(message.text)).length;
@@ -20184,6 +20193,9 @@ print(result)
                                     </button>
                                     {generalAiModePanelOpen && (
                                     <div className="mt-2 rounded-xl border p-2" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(0,0,0,0.12)' }}>
+                                    <p className="mb-1.5 text-[9px] font-black uppercase tracking-[0.12em] text-gray-400">
+                                        {appLang === 'fr' ? 'Profondeur de la réponse' : 'Answer depth'}
+                                    </p>
                                     <div className="flex flex-wrap gap-1.5">
                                         <button
                                             type="button"
@@ -20215,12 +20227,18 @@ print(result)
                                             </button>
                                         ))}
                                     </div>
+                                    <p className="mb-1.5 mt-3 text-[9px] font-black uppercase tracking-[0.12em] text-gray-400">
+                                        {appLang === 'fr' ? 'Style d’apprentissage' : 'Teaching style'}
+                                    </p>
                                     <div className="mt-2 flex flex-wrap gap-1.5 pb-1">
                                         {(['explain', 'compare', 'quiz', 'practice'] as GeneralAiTutorMode[]).map(mode => (
                                             <button
                                                 key={mode}
                                                 type="button"
-                                                onClick={() => setGeneralAiTutorMode(mode)}
+                                                onClick={() => {
+                                                    setGeneralAiTutorMode(mode);
+                                                    setGeneralAiActiveQuiz(null);
+                                                }}
                                                 className="shrink-0 rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] transition-all active:scale-95"
                                                 style={{
                                                     borderColor: generalAiTutorMode === mode ? hexToRgba('#22c55e', 0.5) : hexToRgba(toolPanelColors.ai, 0.18),
@@ -20234,6 +20252,14 @@ print(result)
                                             </button>
                                         ))}
                                     </div>
+                                    <p className="mt-2 rounded-lg border border-[#1d2d44] bg-[#050c18]/60 px-2.5 py-2 text-[10px] leading-relaxed text-gray-300">
+                                        {appLang === 'fr'
+                                            ? `${generalAiAdaptiveLevel ? 'Auto choisit la profondeur selon la question et votre progression.' : ({ simple: 'Débutant utilise des phrases courtes et un petit exemple.', normal: 'Intermédiaire ajoute le déroulement et les erreurs fréquentes.', deep: 'Expert ajoute les mécanismes internes, les cas limites et les compromis.', examples: 'Exemples privilégie plusieurs exemples progressifs.' } as const)[generalAiMode]} ${({ explain: 'Expliquer enseigne directement le sujet.', compare: 'Comparer attend deux concepts et explique leurs différences.', quiz: 'Quiz pose une question puis vérifie votre prochaine réponse.', practice: 'Pratique crée un exercice ciblé à réaliser.' } as const)[generalAiTutorMode]}`
+                                            : `${generalAiAdaptiveLevel ? 'Auto chooses depth from the question and your learning history.' : ({ simple: 'Beginner uses short wording and one small example.', normal: 'Intermediate adds workflow and common mistakes.', deep: 'Expert adds internals, edge cases, and tradeoffs.', examples: 'Examples prioritizes several progressive examples.' } as const)[generalAiMode]} ${({ explain: 'Explain teaches the subject directly.', compare: 'Compare expects two concepts and explains their differences.', quiz: 'Quiz asks a question and checks your next answer.', practice: 'Practice creates a focused exercise for you to complete.' } as const)[generalAiTutorMode]}`}
+                                    </p>
+                                    <p className="mt-1.5 text-[9px] leading-relaxed text-gray-500">
+                                        {appLang === 'fr' ? 'Ces choix modifient la prochaine réponse de Python AI.' : 'These choices affect the next Python AI response.'}
+                                    </p>
                                     </div>
                                     )}
                                     {latestGeneralAiMastery && (
@@ -20889,57 +20915,58 @@ print(result)
                                                     );
                                                 })}
                                             </div>
-                                            <div className="mt-3 rounded-2xl border border-[#1d2d44] bg-[#050c18]/55 p-3">
-                                                <div className="mb-2 flex items-center justify-between gap-2">
-                                                    <div>
-                                                        <h4 className="m-0 text-xs font-black uppercase tracking-[0.16em] text-gray-200">{t('settings.chooseConcept', appLang)}</h4>
-                                                        <p className="mt-1 text-[10px] text-gray-400">{t('settings.chooseConceptDesc', appLang)}</p>
-                                                    </div>
-                                                    {selectedConceptMode && (
-                                                        <span className="rounded-full border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em]" style={{ borderColor: 'rgba(156, 163, 175, 0.4)', color: '#ffffff' }}>
-                                                            {selectedConceptMode.label}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <div className="max-h-64 space-y-2 overflow-y-auto overflow-x-hidden overscroll-contain pr-1" style={{ touchAction: 'pan-y' }}>
-                                                    {PYTHON_CONCEPT_MODES.map(concept => {
-                                                        const isSelected = difficultyMode === concept.id;
-                                                        const count = getExercisePoolForMode(concept.id).length;
-                                                        return (
-                                                            <button
-                                                                key={concept.id}
-                                                                onClick={() => handleDifficultyModeSelect(concept.id)}
-                                                                className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
-                                                                style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
-                                                            >
-                                                                <span className="flex items-center justify-between gap-3">
-                                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
-                                                                    <span className="flex items-center gap-2 text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>
-                                                                        {count} problems
-                                                                        {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
-                                                                    </span>
-                                                                </span>
-                                                                <span className="mt-1 block text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>{concept.description}</span>
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                            {showHowToUse && (
-                                                <div className="mt-3 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 text-[11px] text-gray-300 leading-relaxed space-y-2">
-                                                    <p className="font-bold text-white text-xs">Problem Mode</p>
-                                                    <p><strong>Difficulty modes</strong> filter problems by how hard they are. <strong>Normal</strong> mixes everything together. <strong>Beginner</strong> is the new atomic first-step level. <strong>Easy</strong> is the old beginner level with simple functions, strings, and lists. <strong>Intermediate</strong> adds loops, dictionaries, and patterns. <strong>Expert</strong> and <strong>Legend</strong> are harder challenges.</p>
-                                                    <p className="font-bold text-white text-xs mt-3">Concepts</p>
-                                                    <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic below. The app will only show problems that match that concept.</p>
-                                                    <p className="font-bold text-white text-xs mt-3">Win / Failed Tools</p>
-                                                    <p>When you run code, the auto-grader tries to check your answer, but it's <span className="text-yellow-300">not 100% accurate</span>. Use the <CheckCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.win }} /> <strong>Win</strong> and <XCircle size={12} className="inline align-text-top" style={{ color: toolPanelColors.failed }} /> <strong>Failed</strong> buttons at the bottom to manually mark the result. This is how your rank and win rate are tracked — the more you get right, and the more problems you do, the higher your rank climbs.</p>
-                                                    <p className="font-bold text-white text-xs mt-3">Ranking</p>
-                                                    <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
-                                                </div>
-                                            )}
                                             <p className="mt-2 text-[10px] text-gray-300">
                                                 {t('misc.currentMode', appLang, selectedModeLabel, String(modeExerciseCount))}
                                             </p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="mb-6 rounded-2xl border border-[#1d2d44] bg-[#071225]/70 p-3">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex min-w-0 items-center gap-2">
+                                            <button onClick={() => setShowModal('concept_mode_help')} className="inline-flex shrink-0 items-center justify-center rounded-full p-1 transition-all hover:bg-[#1d2d44] hover:brightness-125" title={appLang === 'fr' ? 'À propos du choix de concept' : 'About Choose Concept'} style={{ color: countRowColors.count }}>
+                                                <Info size={16} />
+                                            </button>
+                                            <div className="min-w-0">
+                                                <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">{t('settings.chooseConcept', appLang)}</h3>
+                                                {selectedConceptMode && <p className="mt-0.5 truncate text-[10px]" style={{ color: countRowColors.wins }}>{selectedConceptMode.label}</p>}
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setConceptModeSectionOpen(prev => !prev)}
+                                            className="inline-flex items-center justify-center rounded-full p-1.5 transition-all hover:bg-[#1d2d44]"
+                                            title={conceptModeSectionOpen ? (appLang === 'fr' ? 'Réduire' : 'Collapse') : (appLang === 'fr' ? 'Développer' : 'Expand')}
+                                        >
+                                            <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: conceptModeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                        </button>
+                                    </div>
+                                    {conceptModeSectionOpen && (
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <p className="mb-3 text-[10px] leading-relaxed text-gray-400">{t('settings.chooseConceptDesc', appLang)}</p>
+                                            <div className="max-h-72 space-y-2 overflow-y-auto overflow-x-hidden overscroll-contain pr-1" style={{ touchAction: 'pan-y' }}>
+                                                {PYTHON_CONCEPT_MODES.map(concept => {
+                                                    const isSelected = difficultyMode === concept.id;
+                                                    const count = getExercisePoolForMode(concept.id).length;
+                                                    return (
+                                                        <button
+                                                            key={concept.id}
+                                                            onClick={() => handleDifficultyModeSelect(concept.id)}
+                                                            className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
+                                                            style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
+                                                        >
+                                                            <span className="flex items-center justify-between gap-3">
+                                                                <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
+                                                                <span className="flex items-center gap-2 text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>
+                                                                    {count} {appLang === 'fr' ? 'problèmes' : 'problems'}
+                                                                    {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
+                                                                </span>
+                                                            </span>
+                                                            <span className="mt-1 block text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>{concept.description}</span>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -21591,11 +21618,6 @@ print(result)
                                     </div>
 
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
-                                        <p className="font-bold text-white text-xs">Concepts</p>
-                                        <p><strong>Concepts</strong> let you focus on one Python topic instead of a difficulty. Pick <strong>Functions</strong>, <strong>Methods</strong>, <strong>Lists</strong>, <strong>Strings</strong>, <strong>Dictionaries</strong>, <strong>For Loops</strong>, <strong>OOP / Classes</strong>, <strong>Regex</strong>, or any other topic. The app will only show problems that match that concept.</p>
-                                    </div>
-
-                                    <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
                                         <p className="font-bold text-white text-xs">{t('settings.statsByMode', appLang)}</p>
                                         <p>{t('howto.statsByModeDesc', appLang)}</p>
                                     </div>
@@ -21613,6 +21635,34 @@ print(result)
                                     <div className="rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4 space-y-2">
                                         <p className="font-bold text-white text-xs">Ranking</p>
                                         <p>Your rank is calculated from <strong>all modes combined</strong> using a weighted score: <code className="text-[#93c5fd]">shots × winRate</code>. Doing more problems and keeping a high win rate both matter.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {showModal === 'concept_mode_help' && (
+                            <div className="flex h-full min-h-0 flex-col py-2">
+                                <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">{t('settings.chooseConcept', appLang)}</h2>
+                                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain pb-8 pr-1 text-[11px] leading-relaxed text-gray-300">
+                                    <div className="space-y-2 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4">
+                                        <p className="text-xs font-bold text-white">{appLang === 'fr' ? 'Ce que fait ce réglage' : 'What this setting does'}</p>
+                                        <p>{appLang === 'fr'
+                                            ? 'Choisir un concept limite les exercices aléatoires à un seul sujet Python. Par exemple, For Loops affiche uniquement les problèmes classés comme exercices de boucle for.'
+                                            : 'Choose Concept limits randomized exercises to one Python topic. For example, For Loops shows only problems classified as for-loop exercises.'}</p>
+                                    </div>
+                                    <div className="space-y-2 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4">
+                                        <p className="text-xs font-bold text-white">{appLang === 'fr' ? 'Comment l’utiliser' : 'How to use it'}</p>
+                                        <ol className="list-decimal space-y-1 pl-4 text-gray-400">
+                                            <li>{appLang === 'fr' ? 'Ouvrez Choisir un Concept.' : 'Open Choose Concept.'}</li>
+                                            <li>{appLang === 'fr' ? 'Sélectionnez un sujet comme Listes, Méthodes, Regex ou POO.' : 'Select a topic such as Lists, Methods, Regex, or OOP.'}</li>
+                                            <li>{appLang === 'fr' ? 'Les boutons Suivant et les sélections aléatoires resteront dans ce sujet.' : 'Next and random selections will stay inside that topic.'}</li>
+                                            <li>{appLang === 'fr' ? 'Pour quitter ce filtre, choisissez un niveau dans Mode Problème.' : 'To leave the concept filter, choose a difficulty under Problem Mode.'}</li>
+                                        </ol>
+                                    </div>
+                                    <div className="space-y-2 rounded-xl border border-[#1d2d44] bg-[#071225]/80 p-4">
+                                        <p className="text-xs font-bold text-white">{appLang === 'fr' ? 'Progression' : 'Progress tracking'}</p>
+                                        <p>{appLang === 'fr'
+                                            ? 'Les tentatives, réussites, échecs et taux sont enregistrés séparément pour chaque concept dans Statistiques par Mode.'
+                                            : 'Attempts, wins, failures, and rate are tracked separately for each concept under Stats By Mode.'}</p>
                                     </div>
                                 </div>
                             </div>
