@@ -6332,7 +6332,7 @@ const formatBuiltinSpec = (spec: BuiltinSpec, language: AdvancedAiLanguage, pref
     `**${fr ? 'Valeur de retour' : 'Return type'}**: \`${spec.returnType}\``,
     '',
     `**${fr ? 'Ordre des operations' : 'Order of operations'}**:`,
-    ...order.map((s: string, i: number) => `${i + 1}. ${s}`),
+    ...order.map((s: string, i: number) => `${i + 1}. ${s.replace(/^\d+\.\s*/, '')}`),
     '',
     `**${fr ? 'Exemples' : 'Examples'}**:`,
     '```python',
@@ -6344,6 +6344,21 @@ const formatBuiltinSpec = (spec: BuiltinSpec, language: AdvancedAiLanguage, pref
   ];
   return parts.join('\n');
 };
+
+export interface GeneralAiApiCatalogItem {
+  key: string;
+  name: string;
+  signature: string;
+  summary: string;
+  category: string;
+  kind: 'builtin' | 'method';
+}
+
+export interface GeneralAiApiCatalog {
+  title: string;
+  intro: string;
+  items: GeneralAiApiCatalogItem[];
+}
 
 // Fast exact-match lookup against any spec name (plain or with ())
 const matchBuiltinExact = (text: string): [string, BuiltinSpec] | null => {
@@ -7640,16 +7655,8 @@ export const answerPythonMethodQuery = (question: string, language: AdvancedAiLa
       const spec = BUILTIN_METHOD_SPECS[dottedName];
       return formatBuiltinSpec(spec as unknown as BuiltinSpec, language);
     }
-    // Try bare method name: capitalize, append, etc.
-    if (cleaned === methodName || cleaned === `${methodName}()`) {
-      const spec = BUILTIN_METHOD_SPECS[dottedName];
-      return formatBuiltinSpec(spec as unknown as BuiltinSpec, language, [
-        `**${fr ? 'M\u00e9thode' : 'Method'}: \`${dottedName}()\`**`,
-      ]);
-    }
     // Regex patterns
     const patterns = [
-      new RegExp(`\\b${methodName}\\b`, 'i'),
       new RegExp(`what\\s+is\\s+${typeName}\\.${methodName}`, 'i'),
       new RegExp(`explain\\s+${typeName}\\.${methodName}`, 'i'),
       new RegExp(`\\b${typeName}\\.${methodName}`, 'i'),
@@ -7662,6 +7669,115 @@ export const answerPythonMethodQuery = (question: string, language: AdvancedAiLa
     }
   }
 
+  // A bare method name is safe only when it identifies exactly one owner.
+  const bareMethod = cleaned.replace(/\(\)$/, '');
+  const bareMatches = methodNames.filter(name => name.split('.')[1] === bareMethod);
+  if (bareMatches.length === 1) {
+    const dottedName = bareMatches[0];
+    const spec = BUILTIN_METHOD_SPECS[dottedName];
+    return formatBuiltinSpec(spec as unknown as BuiltinSpec, language, [
+      `**${fr ? 'M\u00e9thode' : 'Method'}: \`${dottedName}()\`**`,
+    ]);
+  }
+  if (bareMatches.length > 1) {
+    return [
+      `**${fr ? 'Pr\u00e9cisez le type' : 'Choose the owning type'}**`,
+      fr
+        ? `\`${bareMethod}()\` existe sur plusieurs types. Choisissez la m\u00e9thode voulue :`
+        : `\`${bareMethod}()\` exists on more than one type. Choose the method you mean:`,
+      ...bareMatches.sort().map(name => `- \`${name}()\``),
+    ].join('\n');
+  }
+
+  return null;
+};
+
+const normalizeApiCatalogQuestion = (question: string): string => question
+  .toLowerCase()
+  .replace(/[’']/g, '')
+  .replace(/[-_]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+export const buildGeneralAiApiCatalog = (
+  question: string,
+  language: AdvancedAiLanguage,
+): GeneralAiApiCatalog | null => {
+  const normalized = normalizeApiCatalogQuestion(question);
+  const fr = language === 'fr';
+  const asksForMethods = /^(?:methods?|methodes?|m[ée]thodes?)$/.test(normalized)
+    || /\b(?:list|show|display|name|give|all|every|liste|affiche|montre|toutes?)\b.*\b(?:methods?|methodes?|m[ée]thodes?)\b/.test(normalized)
+    || /\b(?:methods?|methodes?|m[ée]thodes?)\b.*\b(?:list|show|all|every|available|liste|toutes?|disponibles?)\b/.test(normalized);
+  const asksForBuiltins = /^(?:builtins?|built in functions?|fonctions? integrees?)$/.test(normalized)
+    || /\b(?:list|show|display|name|give|all|every|how many|liste|affiche|montre|toutes?|combien)\b.*\b(?:built in functions?|builtins?|fonctions? integrees?)\b/.test(normalized);
+  if (!asksForMethods && !asksForBuiltins) return null;
+
+  if (asksForBuiltins) {
+    const items = Object.entries(BUILTIN_SPECS)
+      .filter(([, spec]) => spec.type === 'function')
+      .map(([name, spec]) => ({
+        key: `builtin:${name}`,
+        name,
+        signature: spec.signature,
+        summary: fr ? spec.descriptionFr : spec.descriptionEn,
+        category: fr ? 'Fonctions int\u00e9gr\u00e9es' : 'Built-in functions',
+        kind: 'builtin' as const,
+      }))
+      .sort((left, right) => left.name.localeCompare(right.name));
+    return {
+      title: fr ? 'Fonctions int\u00e9gr\u00e9es Python' : 'Python built-in functions',
+      intro: fr
+        ? `Touchez une fonction parmi les ${items.length} entr\u00e9es pour afficher sa d\u00e9finition, sa signature, son ordre d\u2019ex\u00e9cution et des exemples.`
+        : `Tap any of the ${items.length} functions to expand its definition, signature, execution order, and examples.`,
+      items,
+    };
+  }
+
+  const typeAliases: Record<string, string> = {
+    string: 'str', strings: 'str', chaine: 'str', chaines: 'str',
+    list: 'list', lists: 'list', liste: 'list', listes: 'list',
+    dictionary: 'dict', dictionaries: 'dict', dict: 'dict', dictionnaire: 'dict', dictionnaires: 'dict',
+    set: 'set', sets: 'set', ensemble: 'set', ensembles: 'set',
+    tuple: 'tuple', tuples: 'tuple',
+  };
+  const requestedType = Object.entries(typeAliases).find(([alias]) => (
+    new RegExp(`\\b${alias}\\s+(?:type\\s+)?(?:methods?|methodes?|m[ée]thodes?)\\b`).test(normalized)
+    || new RegExp(`\\b(?:methods?|methodes?|m[ée]thodes?)\\s+(?:for|of|on|pour|de|des)\\s+${alias}\\b`).test(normalized)
+  ))?.[1];
+  const items = Object.entries(BUILTIN_METHOD_SPECS)
+    .filter(([name]) => !requestedType || name.startsWith(`${requestedType}.`))
+    .map(([name, spec]) => ({
+      key: `method:${name}`,
+      name,
+      signature: spec.signature,
+      summary: fr ? spec.descriptionFr : spec.descriptionEn,
+      category: name.split('.')[0],
+      kind: 'method' as const,
+    }))
+    .sort((left, right) => left.category.localeCompare(right.category) || left.name.localeCompare(right.name));
+  const scope = requestedType ? ` ${requestedType}` : '';
+  return {
+    title: fr ? `M\u00e9thodes${scope} Python` : `Python${scope} methods`,
+    intro: fr
+      ? `Touchez une m\u00e9thode parmi les ${items.length} entr\u00e9es pour afficher une explication approfondie et des exemples.`
+      : `Tap any of the ${items.length} methods to expand an in-depth explanation and examples.`,
+    items,
+  };
+};
+
+export const answerGeneralAiApiCatalogItem = (
+  key: string,
+  language: AdvancedAiLanguage,
+): string | null => {
+  const [kind, name] = key.split(':', 2);
+  if (kind === 'builtin') {
+    const spec = BUILTIN_SPECS[name];
+    return spec ? formatBuiltinSpec(spec, language) : null;
+  }
+  if (kind === 'method') {
+    const spec = BUILTIN_METHOD_SPECS[name];
+    return spec ? formatBuiltinSpec(spec as unknown as BuiltinSpec, language) : null;
+  }
   return null;
 };
 

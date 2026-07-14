@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiApiCatalogItem, answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiApiCatalog, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiApiCatalog, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -94,6 +94,7 @@ interface ProblemAiMessage {
     role: 'user' | 'assistant';
     text: string;
     source?: 'built_in' | 'offline' | 'user';
+    apiCatalog?: GeneralAiApiCatalog;
 }
 
 const localizeProblemAiBuiltInAnswer = (answer: string, language: 'en' | 'fr'): string => {
@@ -14930,6 +14931,7 @@ const App: React.FC = () => {
     const [generalAiProgress, setGeneralAiProgress] = useState(0);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
     const [generalAiControlsOpen, setGeneralAiControlsOpen] = useState(false);
+    const [expandedGeneralAiApiItem, setExpandedGeneralAiApiItem] = useState<string | null>(null);
     const [generalAiClearFeedback, setGeneralAiClearFeedback] = useState(false);
     const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
         try {
@@ -15789,13 +15791,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v262') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v263') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v262')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v263')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -17826,11 +17828,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
+        const immediateApiAnswer = answerPythonBuiltinQuery(question, appLang) || answerPythonMethodQuery(question, appLang);
+        const immediateApiCatalog = buildGeneralAiApiCatalog(question, appLang);
         const startsNewQuiz = /\b(?:another|new|next|start|quiz|autre|nouveau|suivant|commence)\b/i.test(question);
         const asksNewQuestion = /\b(?:what|why|how|which|where|when|is|does|can|could|would|show|run|execute|test|explain|define|compare|review|generate|analyze|analyse|complexity|progress|report|revise|help|qu['’]est|quel(?:le)?s?|où|quand|est-ce|peut|montre|lance|exécute|teste|pourquoi|comment|combien|explique|définis|compare|génère|analyse|complexité|progr[eè]s|bilan|réviser|aide)\b/i.test(question)
             || question.includes('```')
             || question.endsWith('?');
-        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion) {
+        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion && !immediateApiAnswer && !immediateApiCatalog) {
             const result = evaluateAdaptiveQuiz(question, generalAiActiveQuiz, appLang);
             setGeneralAiMessages(prev => [
                 ...prev,
@@ -17879,10 +17883,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         try {
             const topic = detectGeneralPythonTopic(effectiveQuestion);
             const intent = classifyGeneralAiIntent(effectiveQuestion);
+            const apiCatalog = immediateApiCatalog || buildGeneralAiApiCatalog(effectiveQuestion, appLang);
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
             const shouldCreateQuiz = generalAiTutorMode === 'quiz' || intent.intent === 'quiz';
             let refAnswer: string | null = codeCommand.directAnswer
+                || (apiCatalog ? `**${apiCatalog.title}**\n\n${apiCatalog.intro}` : null)
+                || immediateApiAnswer
                 || answerPythonBuiltinQuery(effectiveQuestion, appLang)
                 || answerPythonMethodQuery(effectiveQuestion, appLang)
                 || answerPythonScopeVariable(effectiveQuestion, appLang)
@@ -18282,6 +18289,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     role: 'assistant',
                     source: 'built_in',
                     text: answerText,
+                    apiCatalog: apiCatalog || undefined,
                 }]);
                 return;
             }
@@ -20142,7 +20150,48 @@ print(result)
                                                 )}
                                             </div>
                                             {message.role === 'assistant' ? (
-                                                <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
+                                                <>
+                                                    <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
+                                                    {message.apiCatalog && (
+                                                        <div className="mt-3 space-y-2" data-general-ai-api-catalog={message.apiCatalog.items.length}>
+                                                            {message.apiCatalog.items.map((item, index) => {
+                                                                const panelKey = `${message.id}:${item.key}`;
+                                                                const expanded = expandedGeneralAiApiItem === panelKey;
+                                                                const showCategory = index === 0 || message.apiCatalog?.items[index - 1]?.category !== item.category;
+                                                                const detail = expanded ? answerGeneralAiApiCatalogItem(item.key, appLang) : null;
+                                                                return (
+                                                                    <React.Fragment key={item.key}>
+                                                                        {showCategory && (
+                                                                            <div className="pt-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
+                                                                                {item.category}
+                                                                            </div>
+                                                                        )}
+                                                                        <div className="overflow-hidden rounded-xl border" style={{ borderColor: hexToRgba(toolPanelColors.ai, expanded ? 0.55 : 0.24), backgroundColor: hexToRgba(toolPanelColors.ai, expanded ? 0.1 : 0.04) }}>
+                                                                            <button
+                                                                                type="button"
+                                                                                data-general-ai-api-item={item.key}
+                                                                                aria-expanded={expanded}
+                                                                                onClick={() => setExpandedGeneralAiApiItem(current => current === panelKey ? null : panelKey)}
+                                                                                className="flex w-full min-w-0 items-center justify-between gap-3 px-3 py-2 text-left"
+                                                                            >
+                                                                                <span className="min-w-0">
+                                                                                    <span className="block truncate font-mono text-xs font-bold" style={{ color: editorColors.builtin }}>{item.signature}</span>
+                                                                                    <span className="mt-0.5 block truncate text-[11px] text-gray-300">{item.summary}</span>
+                                                                                </span>
+                                                                                {expanded ? <ChevronUp className="h-4 w-4 flex-none" /> : <ChevronDown className="h-4 w-4 flex-none" />}
+                                                                            </button>
+                                                                            {detail && (
+                                                                                <div className="border-t px-3 py-3" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.24) }} data-general-ai-api-detail={item.key}>
+                                                                                    <ProblemAiText text={detail} editorColors={editorColors} accentColor={toolPanelColors.ai} />
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </>
                                             ) : (
                                                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-100">{message.text}</p>
                                             )}

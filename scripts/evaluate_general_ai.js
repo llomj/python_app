@@ -162,6 +162,38 @@ try {
   if (!operatorCatalog.includes('core operators') || !operatorCatalog.includes('`**`')) failures.push('Operator catalog failed');
   if (!comprehensionCatalog.includes('comprehension forms') || !comprehensionCatalog.includes('[expression for item in iterable]')) failures.push('Comprehension catalog failed');
 
+  const interactiveMethods = advanced.buildGeneralAiApiCatalog('list all methods', 'en');
+  const interactiveListMethods = advanced.buildGeneralAiApiCatalog('show all list methods', 'en');
+  const interactiveBuiltins = advanced.buildGeneralAiApiCatalog('list all built-in functions', 'en');
+  if (!interactiveMethods || interactiveMethods.items.length < 50 || !interactiveMethods.items.some(item => item.key === 'method:list.append')) {
+    failures.push('Interactive all-method catalog is missing or incomplete');
+  }
+  if (!interactiveListMethods || interactiveListMethods.items.length < 8 || interactiveListMethods.items.some(item => item.category !== 'list')) {
+    failures.push('Interactive list-method catalog did not stay type-specific');
+  }
+  if (!interactiveBuiltins || interactiveBuiltins.items.length < 50 || !interactiveBuiltins.items.some(item => item.key === 'builtin:isinstance')) {
+    failures.push('Interactive built-in catalog is missing or incomplete');
+  }
+  const appendDetail = advanced.answerGeneralAiApiCatalogItem('method:list.append', 'en') || '';
+  const isinstanceDetail = advanced.answerGeneralAiApiCatalogItem('builtin:isinstance', 'en') || '';
+  if (!appendDetail.includes('list.append') || !appendDetail.includes('Examples') || !appendDetail.includes('Order of operations')) {
+    failures.push('Expanded list.append panel lacks in-depth reference content');
+  }
+  if (!isinstanceDetail.includes('isinstance(') || !isinstanceDetail.includes('Return type') || !isinstanceDetail.includes('Examples')) {
+    failures.push('Expanded isinstance panel lacks definition and examples');
+  }
+  for (const query of ['isinstance', 'isinstance()', 'type', 'type()']) {
+    const direct = advanced.answerPythonBuiltinQuery(query, 'en') || '';
+    const name = query.replace(/\(\)$/, '');
+    if (!direct.includes(`**${name}()**`) || !direct.includes('Signature') || !direct.includes('Examples')) {
+      failures.push(`Direct API lookup returned a generic answer for ${JSON.stringify(query)}`);
+    }
+  }
+  const ambiguousCount = advanced.answerPythonMethodQuery('count()', 'en') || '';
+  if (!ambiguousCount.includes('Choose the owning type') || !ambiguousCount.includes('list.count') || !ambiguousCount.includes('str.count')) {
+    failures.push('Ambiguous bare method count() did not ask the user to choose its owning type');
+  }
+
   const comparisonCases = [
     ['sort vs sorted', ['Sorts the list in place', 'Returns a new sorted list', 'Mutates object']],
     ['difference between list and tuple', ['list', 'tuple', 'Criterion']],
