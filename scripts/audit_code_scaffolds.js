@@ -44,6 +44,17 @@ const failures = [];
 const generated = [];
 let functionScaffolds = 0;
 let scriptStarters = 0;
+let generatedScriptScaffolds = 0;
+
+const genericCommentPattern = /^#\s*(?:(?:write|enter|add|type|put)\b.*|(?:your|the)\s+(?:code|solution)\s+here\.?|todo\b.*)$/i;
+const isGenericStarter = code => {
+  const lines = code.trim().split('\n').map(line => line.trim()).filter(Boolean);
+  return lines.length === 0 || lines.every(line => (
+    /^(?:from\s+[A-Za-z_.]+\s+import\s+.+|import\s+[A-Za-z_., ]+)$/.test(line)
+    || line === 'pass'
+    || genericCommentPattern.test(line)
+  ));
+};
 
 for (const exercise of EXERCISES) {
   const grader = AUTO_GRADERS[exercise.id];
@@ -52,7 +63,12 @@ for (const exercise of EXERCISES) {
 
   if (!grader || grader.mode === 'script' || !grader.tests?.length) {
     scriptStarters += 1;
-    if (scaffold !== exercise.initialCode.trimEnd()) failures.push(`Problem ${exercise.id}: script starter was unexpectedly changed`);
+    const hadGenericStarter = isGenericStarter(exercise.initialCode.trimEnd());
+    if (hadGenericStarter && scaffold !== exercise.initialCode.trimEnd()) generatedScriptScaffolds += 1;
+    if (isGenericStarter(scaffold)) failures.push(`Problem ${exercise.id}: script scaffold is still empty or generic`);
+    if (hadGenericStarter && !/\b(?:def|class|result\s*=|print\s*\()/.test(scaffold)) failures.push(`Problem ${exercise.id}: generated script scaffold has no usable structure`);
+    if (hadGenericStarter && !/# TODO:/.test(scaffold)) failures.push(`Problem ${exercise.id}: generated script scaffold does not identify the missing logic`);
+    if (/Expected\s*:/i.test(scaffold)) failures.push(`Problem ${exercise.id}: script scaffold leaked an expected result`);
     continue;
   }
 
@@ -69,6 +85,8 @@ const representativeChecks = [
   [495, 'example = Dog()', 'class construction'],
   [495, 'print(example.speak())', 'class method call'],
   [598, 'print(compose(add_one, multiply_by_two)(5))', 'callable arguments and returned call'],
+  [1597, 'def rsplit_string(s, delimiter, maxsplit):', 'script-mode function structure'],
+  [1597, "print(rsplit_string('one.two.three.four', '.', 2))", 'script-mode representative call'],
 ];
 for (const [id, expectedSnippet, label] of representativeChecks) {
   if (!scaffoldById.get(id)?.includes(expectedSnippet)) failures.push(`Problem ${id}: scaffold does not preserve ${label}`);
@@ -96,7 +114,8 @@ if (pythonAudit.status !== 0) {
 console.log('Code scaffold audit');
 console.log(`Exercises checked: ${EXERCISES.length}`);
 console.log(`Function/class scaffolds: ${functionScaffolds}`);
-console.log(`Preserved script starters: ${scriptStarters}`);
+console.log(`Script-mode scaffolds: ${scriptStarters}`);
+console.log(`Generated script scaffolds: ${generatedScriptScaffolds}`);
 console.log(`Failures: ${failures.length}`);
 
 if (failures.length) {

@@ -57,6 +57,108 @@ const findTopLevelFunctions = (code: string) => [...code.matchAll(/^(async\s+)?d
 
 const findClassNames = (code: string) => [...code.matchAll(/^class\s+([A-Za-z_]\w*)\b/gm)].map(match => match[1]);
 
+const GENERIC_COMMENT_PATTERN = /^#\s*(?:(?:write|enter|add|type|put)\b.*|(?:your|the)\s+(?:code|solution)\s+here\.?|todo\b.*)$/i;
+
+const isGenericStarter = (code: string): boolean => {
+  const lines = code.trim().split('\n').map(line => line.trim()).filter(Boolean);
+  return lines.length === 0 || lines.every(line => (
+    /^(?:from\s+[A-Za-z_.]+\s+import\s+.+|import\s+[A-Za-z_., ]+)$/.test(line)
+    || line === 'pass'
+    || GENERIC_COMMENT_PATTERN.test(line)
+  ));
+};
+
+const stripTrailingComment = (line: string): string => line.replace(/\s+#.*$/, '').trimEnd();
+
+const isBalancedSingleLine = (line: string): boolean => {
+  if (!line || /\\\s*$/.test(line)) return false;
+  const withoutEscapes = line.replace(/\\./g, '');
+  const count = (character: string) => [...withoutEscapes].filter(item => item === character).length;
+  return count("'") % 2 === 0
+    && count('"') % 2 === 0
+    && count('(') === count(')')
+    && count('[') === count(']')
+    && count('{') === count('}');
+};
+
+interface RepresentativeCall {
+  lines: string[];
+  sourceIndex: number;
+}
+
+const findRepresentativeCall = (solution: string, name: string): RepresentativeCall | null => {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const callPattern = new RegExp(`^(?!\\s*(?:def|class)\\b).*\\b${escaped}\\s*\\(`);
+  const candidates = solution.split('\n')
+    .map((source, sourceIndex) => ({ line: stripTrailingComment(source).trim(), sourceIndex, topLevel: source === source.trimStart() }))
+    .filter(item => item.topLevel
+      && callPattern.test(item.line)
+      && /^(?:print\s*\(|assert\s+|[A-Za-z_]\w*\s*=|[A-Za-z_]\w*\s*\()/.test(item.line)
+      && isBalancedSingleLine(item.line));
+  const candidate = candidates.find(item => /^print\s*\(/.test(item.line))
+    || candidates.find(item => /^assert\s+/.test(item.line))
+    || candidates[0];
+  if (!candidate) return null;
+  if (/^print\s*\(/.test(candidate.line)) return { lines: [candidate.line], sourceIndex: candidate.sourceIndex };
+  if (/^assert\s+/.test(candidate.line)) return { lines: [candidate.line, 'print("Assertion passed")'], sourceIndex: candidate.sourceIndex };
+  const assignment = candidate.line.match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/);
+  if (assignment) return { lines: [candidate.line, `print(${assignment[1]})`], sourceIndex: candidate.sourceIndex };
+  return { lines: [`print(${candidate.line})`], sourceIndex: candidate.sourceIndex };
+};
+
+const buildCallableStarterFromSolution = (exercise: Exercise, language: 'en' | 'fr'): string | null => {
+  const match = exercise.solution.match(/^(async\s+)?def\s+([A-Za-z_]\w*)\s*\(([^\n]*)\)\s*(?:->\s*[^:]*)?:/m);
+  if (!match) return null;
+  const signature = match[0];
+  const functionName = match[2];
+  const call = findRepresentativeCall(exercise.solution, functionName);
+  const imports = [...new Set(`${exercise.initialCode}\n${exercise.solution.slice(0, match.index || 0)}`.split('\n')
+    .map(line => line.trim())
+    .filter(line => /^(?:from\s+[A-Za-z_.]+\s+import\s+.+|import\s+[A-Za-z_., ]+)$/.test(line)))];
+  const setup = call ? exercise.solution.split('\n')
+    .slice(0, call.sourceIndex)
+    .filter(line => line === line.trimStart() && isSafeSetupLine(line))
+    .map(stripTrailingComment)
+    .filter(line => !imports.includes(line.trim()))
+    .slice(-6) : [];
+  const todo = language === 'fr' ? 'écrivez uniquement la logique ici' : 'write only the logic here';
+  return [
+    ...imports,
+    imports.length ? '' : null,
+    signature,
+    `    # TODO: ${todo}`,
+    '    pass',
+    setup.length || call ? '' : null,
+    ...setup,
+    ...(call?.lines || []),
+  ].filter(line => line !== null).join('\n');
+};
+
+const isSafeSetupLine = (line: string): boolean => {
+  const trimmed = stripTrailingComment(line).trim();
+  if (/^(?:from\s+[A-Za-z_.]+\s+import\s+.+|import\s+[A-Za-z_., ]+)$/.test(trimmed)) return true;
+  const assignment = trimmed.match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/);
+  if (!assignment) return false;
+  const value = assignment[2].trim();
+  return /^(?:None|True|False|-?\d+(?:\.\d+)?|[rubfRUBF]*["']|\[|\{|\()/.test(value) && isBalancedSingleLine(trimmed);
+};
+
+const buildScriptStarterFromSolution = (exercise: Exercise, language: 'en' | 'fr'): string => {
+  const scriptSection = exercise.solution.match(/#\s*(?:Using\s+)?Script approach\s*\n([\s\S]*?)(?=\n\s*#\s*(?:Using|Direct|Function|Built-in|Manual)\b|$)/i)?.[1] || exercise.solution;
+  const lines = scriptSection.split('\n');
+  const setup = lines.filter(isSafeSetupLine).map(stripTrailingComment).slice(0, 6);
+  const todo = language === 'fr' ? '# TODO: écrivez la logique demandée ici' : '# TODO: write the requested logic here';
+  return [...setup, setup.length ? '' : null, todo, 'result = None', 'print(result)']
+    .filter(line => line !== null)
+    .join('\n');
+};
+
+const buildScriptStarter = (exercise: Exercise, language: 'en' | 'fr'): string => {
+  const initial = exercise.initialCode.trimEnd();
+  if (!isGenericStarter(initial)) return initial;
+  return buildCallableStarterFromSolution(exercise, language) || buildScriptStarterFromSolution(exercise, language);
+};
+
 const hasExecutableCall = (code: string, name: string) => {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return new RegExp(`^(?:print[ \\t]*\\()?[ \\t]*${escaped}[ \\t]*\\(`, 'm').test(code);
@@ -111,7 +213,7 @@ const buildCallLines = (code: string, grader: AutoGrader, test: AutoTestCase, fu
 
 export const buildExerciseCodeScaffold = (exercise: Exercise, grader?: AutoGrader, language: 'en' | 'fr' = 'en'): string => {
   const initial = exercise.initialCode.trimEnd();
-  if (!grader || grader.mode === 'script' || !grader.tests?.length) return initial;
+  if (!grader || grader.mode === 'script' || !grader.tests?.length) return buildScriptStarter(exercise, language);
 
   const test = grader.tests[0];
   const classNames = findClassNames(initial);
