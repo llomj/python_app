@@ -68,6 +68,7 @@ export type GeneralAiIntent =
   | 'functional'
   | 'security'
   | 'context_manager'
+  | 'builtin_query'
   | 'unknown';
 
 export interface GeneralAiIntentResult {
@@ -253,6 +254,10 @@ export const classifyGeneralAiIntent = (question: string): GeneralAiIntentResult
   }
   if (/\b(?:context.?manager|with.*statement|contextlib|contextvar|exitstack|@contextmanager|__enter__|__exit__)\b/i.test(lower)) {
     return { intent: 'context_manager', confidence: 0.94, reason: 'Context manager request detected' };
+  }
+  if (/\b(?:what (?:is|does|are)|explain|tell me about|how does.*work|how to use|built.?in)\b/i.test(lower)
+    && /\b(?:abs\b|all\b|any\b|ascii\b|bin\b|bool\b|bytearray\b|bytes\b|callable\b|chr\b|classmethod\b|compile\b|complex\b|delattr\b|dict\b|dir\b|divmod\b|enumerate\b|eval\b|exec\b|filter\b|float\b|format\b|frozenset\b|getattr\b|globals\b|hasattr\b|hash\b|help\b|hex\b|id\b|input\b|int\b|isinstance\b|issubclass\b|iter\b|len\b|list\b|locals\b|map\b|max\b|memoryview\b|min\b|next\b|object\b|oct\b|open\b|ord\b|pow\b|print\b|property\b|range\b|repr\b|reversed\b|round\b|set\b|setattr\b|slice\b|sorted\b|staticmethod\b|str\b|sum\b|super\b|tuple\b|type\b|vars\b|zip\b)\b/i.test(lower)) {
+    return { intent: 'builtin_query', confidence: 0.97, reason: 'Built-in function query detected' };
   }
   if (/\b(?:project structure|folder structure|how to structure|how to organize|project layout|src layout|structure du projet)\b/i.test(lower)) {
     return { intent: 'project_structure', confidence: 0.96, reason: 'Project structure request detected' };

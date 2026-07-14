@@ -3253,6 +3253,2393 @@ export const answerPythonContextManagerGuide = (question: string, language: Adva
 
 
 
+
+// BUILTIN_SPECS — comprehensive reference for all built-in functions, types, and constructs
+// Each entry: name, type, signature, description_en, description_fr, return_type, examples_en, examples_fr, order_en, order_fr, mistakes_en, mistakes_fr
+interface BuiltinSpec {
+  name: string;
+  type: string;
+  signature: string;
+  descriptionEn: string;
+  descriptionFr: string;
+  returnType: string;
+  examplesEn: string[];
+  examplesFr: string[];
+  orderEn: string[];
+  orderFr: string[];
+  mistakesEn: string[];
+  mistakesFr: string[];
+}
+
+const BUILTIN_SPECS: Record<string, BuiltinSpec> = {
+  "abs": {
+    name: "abs",
+    type: "function",
+    signature: "abs(x) -> number",
+    descriptionEn: "Returns the absolute value of a number. Works with int, float, and complex numbers.",
+    descriptionFr: "Retourne la valeur absolue d\'un nombre. Fonctionne avec int, float et les nombres complexes.",
+    returnType: "int, float, or complex",
+    examplesEn: [
+      "abs(-5)           # 5",
+      "abs(3.14)          # 3.14",
+      "abs(3+4j)          # 5.0",
+    ],
+    examplesFr: [
+      "abs(-5)           # 5",
+      "abs(3.14)          # 3.14",
+      "abs(3+4j)          # 5.0",
+    ],
+    orderEn: [
+      "1. Python checks the argument type",
+      "2. If complex: returns sqrt(real^2 + imag^2)",
+      "3. Otherwise: returns the non-negative value",
+    ],
+    orderFr: [
+      "1. Python verifie le type de l'argument",
+      "2. Si complexe : retourne sqrt(reel^2 + imag^2)",
+      "3. Sinon : retourne la valeur non negative",
+    ],
+    mistakesEn: [
+      "Confusing absolute value with `math.fabs()` — `abs()` works on int/float/complex, `math.fabs()` only on float",
+    ],
+    mistakesFr: [
+      "Confondre valeur absolue avec `math.fabs()` — `abs()` marche avec int/float/complex, `math.fabs()` seulement float",
+    ],
+  },
+  "all": {
+    name: "all",
+    type: "function",
+    signature: "all(iterable) -> bool",
+    descriptionEn: "Returns True if every element of the iterable is truthy. Short-circuits on the first falsy value.",
+    descriptionFr: "Retourne True si tous les elements de l\'iterable sont vrais. S\'arrete au premier element faux.",
+    returnType: "bool",
+    examplesEn: [
+      "all([1, 2, 3])         # True",
+      "all([1, 0, 3])         # False (0 is falsy)",
+      "all([])                 # True (vacuous truth)",
+    ],
+    examplesFr: [
+      "all([1, 2, 3])         # True",
+      "all([1, 0, 3])         # False (0 est faux)",
+      "all([])                 # True (verite vide)",
+    ],
+    orderEn: [
+      "1. Iterates over each element",
+      "2. If any element is falsy (0, '', None, False, []), immediately returns False",
+      "3. If all elements are truthy, returns True",
+      "4. Empty iterable returns True (vacuous truth)",
+    ],
+    orderFr: [
+      "1. Parcourt chaque element",
+      "2. Si un element est faux (0, '', None, False, []), retourne False immediatement",
+      "3. Si tous sont vrais, retourne True",
+      "4. Iterable vide retourne True (verite vide)",
+    ],
+    mistakesEn: [
+      "`all([])` returns True (vacuous truth) — surprising to beginners",
+      "`all()` checks truthiness, not equality — `all([1, 2, 3])` is True, not about any specific value",
+    ],
+    mistakesFr: [
+      "`all([])` retourne True (verite vide) — surprenant pour les debutants",
+      "`all()` verifie la veracite, pas l'egalite",
+    ],
+  },
+  "any": {
+    name: "any",
+    type: "function",
+    signature: "any(iterable) -> bool",
+    descriptionEn: "Returns True if at least one element of the iterable is truthy. Short-circuits on the first truthy value.",
+    descriptionFr: "Retourne True si au moins un element de l\'iterable est vrai. S\'arrete au premier vrai.",
+    returnType: "bool",
+    examplesEn: [
+      "any([0, 0, 1])         # True",
+      "any([0, 0, 0])         # False",
+      "any([])                 # False",
+    ],
+    examplesFr: [
+      "any([0, 0, 1])         # True",
+      "any([0, 0, 0])         # False",
+      "any([])                 # False",
+    ],
+    orderEn: [
+      "1. Iterates over each element",
+      "2. If any element is truthy, immediately returns True",
+      "3. If all are falsy, returns False",
+      "4. Empty iterable returns False",
+    ],
+    orderFr: [
+      "1. Parcourt chaque element",
+      "2. Si un element est vrai, retourne True immediatement",
+      "3. Si tous sont faux, retourne False",
+      "4. Iterable vide retourne False",
+    ],
+    mistakesEn: [
+      "`any([])` returns False (unlike `all([])` which returns True)",
+      "Empty iterable always returns the identity element — False for `or`, True for `and`",
+    ],
+    mistakesFr: [
+      "`any([])` retourne False (contrairement a `all([])` qui retourne True)",
+      "Iterable vide retourne toujours l'element identite",
+    ],
+  },
+  "ascii": {
+    name: "ascii",
+    type: "function",
+    signature: "ascii(obj) -> str",
+      descriptionEn: "Returns a string containing a printable representation of an object, escaping non-ASCII characters with backslash x, backslash u, or backslash U escapes.",
+      descriptionFr: "Retourne une chaine contenant une representation imprimable d\\'un objet, en echappant les caracteres non-ASCII.",
+    returnType: "str",
+    examplesEn: [
+      "ascii('cafe')      # \"'cafe'\"",
+      "ascii('caf\u00e9')     # \"'caf\\xe9'\"",
+      "ascii(42)            # '42'",
+    ],
+    examplesFr: [
+      "ascii('cafe')       # \"'cafe'\"",
+      "ascii('caf\u00e9')     # \"'caf\\xe9'\"",
+      "ascii(42)            # '42'",
+    ],
+    orderEn: [
+      "1. Calls `repr()` on the object",
+      "2. Replaces non-ASCII characters with escape sequences",
+    ],
+    orderFr: [
+      "1. Appelle `repr()` sur l'objet",
+      "2. Remplace les caracteres non-ASCII par des sequences d'echappement",
+    ],
+    mistakesEn: [
+      "Confusing `ascii()` with `repr()` — `ascii()` forces ASCII-only output",
+      "`ascii()` is Python 3+; Python 2 had `repr()` that behaved similarly",
+    ],
+    mistakesFr: [
+      "Confondre `ascii()` et `repr()` — `ascii()` force une sortie ASCII uniquement",
+    ],
+  },
+  "bin": {
+    name: "bin",
+    type: "function",
+    signature: "bin(x) -> str",
+    descriptionEn: "Converts an integer to its binary string representation prefixed with \'0b\'.",
+    descriptionFr: "Convertit un entier en sa representation binaire prefixee de \'0b\'.",
+    returnType: "str",
+    examplesEn: [
+      "bin(5)              # '0b101'",
+      "bin(255)             # '0b11111111'",
+      "bin(42)              # '0b101010'",
+    ],
+    examplesFr: [
+      "bin(5)              # '0b101'",
+      "bin(255)             # '0b11111111'",
+      "bin(42)              # '0b101010'",
+    ],
+    orderEn: [
+      "1. Python converts the integer to base-2",
+      "2. Prepends '0b' to indicate binary format",
+    ],
+    orderFr: [
+      "1. Python convertit l'entier en base 2",
+      "2. Ajoute '0b' pour indiquer le format binaire",
+    ],
+    mistakesEn: [
+      "`bin()` only works on integers — use `format()` for other types",
+      "The result is a string, not a number",
+    ],
+    mistakesFr: [
+      "`bin()` ne fonctionne qu'avec les entiers",
+    ],
+  },
+  "bool": {
+    name: "bool",
+    type: "type",
+    signature: "bool(x=False) -> bool",
+    descriptionEn: "Returns a Boolean value (True or False). When called with no argument or with a falsy value, returns False. With any truthy value, returns True.",
+    descriptionFr: "Retourne une valeur booleenne (True ou False). Sans argument ou avec une valeur fausse, retourne False.",
+    returnType: "bool",
+    examplesEn: [
+      "bool(1)              # True",
+      "bool(0)              # False",
+      "bool([])             # False",
+      "bool('hello')        # True",
+    ],
+    examplesFr: [
+      "bool(1)              # True",
+      "bool(0)              # False",
+      "bool([])             # False",
+      "bool('hello')        # True",
+    ],
+    orderEn: [
+      "1. Python checks the truthiness of the argument",
+      "2. Returns False if the argument is falsy (0, '', None, False, 0.0, [], (), {}, empty range, zero in numeric types)",
+      "3. Returns True otherwise",
+    ],
+    orderFr: [
+      "1. Python verifie la veracite de l'argument",
+      "2. Retourne False si l'argument est faux",
+      "3. Retourne True sinon",
+    ],
+    mistakesEn: [
+      "`bool` is a subclass of `int` — True == 1 and False == 0",
+      "Some objects are falsy by default if `__bool__` or `__len__` returns 0",
+    ],
+    mistakesFr: [
+      "`bool` est une sous-classe de `int`",
+    ],
+  },
+  "bytearray": {
+    name: "bytearray",
+    type: "type",
+    signature: "bytearray(source=b'') -> bytearray",
+    descriptionEn: "Returns a mutable array of bytes (0-255). Can be created from a string (with encoding), iterable of ints, or bytes-like object.",
+    descriptionFr: "Retourne un tableau mutable d\'octets (0-255). Cree depuis une chaine (avec encodage), un iterable d\'entiers, ou un objet bytes.",
+    returnType: "bytearray",
+    examplesEn: [
+      "bytearray(5)         # bytearray(b'\\x00\\x00\\x00\\x00\\x00')",
+      "bytearray([65, 66, 67])  # bytearray(b'ABC')",
+      "bytearray('abc', 'utf-8')  # bytearray(b'abc')",
+    ],
+    examplesFr: [
+      "bytearray(5)         # bytearray(b'\\x00\\x00\\x00\\x00\\x00')",
+      "bytearray([65, 66, 67])  # bytearray(b'ABC')",
+      "bytearray('abc', 'utf-8')  # bytearray(b'abc')",
+    ],
+    orderEn: [
+      "1. Determines the source type: int creates a zero-filled array of that size",
+      "2. String + encoding encodes the string to bytes",
+      "3. Iterable of ints creates bytes from each integer value",
+    ],
+    orderFr: [
+      "1. Determine le type de la source : int cree un tableau de cette taille rempli de zeros",
+      "2. Chaine + encodage encode la chaine en octets",
+      "3. Iterable d'entiers cree les octets",
+    ],
+    mistakesEn: [
+      "`bytearray` is mutable, `bytes` is immutable",
+      "Elements must be integers in range 0-255",
+    ],
+    mistakesFr: [
+      "`bytearray` est mutable, `bytes` est immuable",
+    ],
+  },
+  "bytes": {
+    name: "bytes",
+    type: "type",
+    signature: "bytes(source=b'') -> bytes",
+    descriptionEn: "Returns an immutable sequence of bytes (0-255). Similar to `bytearray` but read-only.",
+    descriptionFr: "Retourne une sequence immuable d\'octets (0-255). Similaire a `bytearray` mais en lecture seule.",
+    returnType: "bytes",
+    examplesEn: [
+      "bytes(5)           # b'\\x00\\x00\\x00\\x00\\x00'",
+      "bytes([65, 66, 67])  # b'ABC'",
+      "b'hello'             # bytes literal",
+    ],
+    examplesFr: [
+      "bytes(5)           # b'\\x00\\x00\\x00\\x00\\x00'",
+      "bytes([65, 66, 67])  # b'ABC'",
+      "b'hello'             # bytes literal",
+    ],
+    orderEn: [
+      "1. Same construction rules as `bytearray`",
+      "2. The resulting bytes object is immutable",
+    ],
+    orderFr: [
+      "1. Memes regles de construction que `bytearray`",
+      "2. L'objet bytes resultant est immuable",
+    ],
+    mistakesEn: [
+      "`bytes` vs `bytearray` — immutable vs mutable",
+      "`b'...'` literal produces bytes, not str",
+    ],
+    mistakesFr: [
+      "`bytes` vs `bytearray` — immuable vs mutable",
+    ],
+  },
+  "callable": {
+    name: "callable",
+    type: "function",
+    signature: "callable(obj) -> bool",
+    descriptionEn: "Returns True if the object appears callable (can be invoked with ()).",
+    descriptionFr: "Retourne True si l\'objet semble appelable (peut etre invoque avec ()).",
+    returnType: "bool",
+    examplesEn: [
+      "callable(len)        # True",
+      "callable(42)          # False",
+      "callable(lambda x: x) # True",
+    ],
+    examplesFr: [
+      "callable(len)        # True",
+      "callable(42)          # False",
+      "callable(lambda x: x) # True",
+    ],
+    orderEn: [
+      "1. Checks if the object has a `__call__` method",
+      "2. Returns True for functions, methods, classes, lambdas, and objects with `__call__`",
+    ],
+    orderFr: [
+      "1. Verifie si l'objet a une methode `__call__`",
+      "2. Retourne True pour les fonctions, methodes, classes, lambdas",
+    ],
+    mistakesEn: [
+      "`callable()` can return True but calling may still fail (e.g., `__call__` raises)",
+      "Classes are callable — calling a class creates an instance",
+    ],
+    mistakesFr: [
+      "`callable()` peut retourner True meme si l'appel echoue",
+    ],
+  },
+  "chr": {
+    name: "chr",
+    type: "function",
+    signature: "chr(i) -> str",
+    descriptionEn: "Returns the Unicode string character for the given integer codepoint. Inverse of `ord()`.",
+    descriptionFr: "Retourne le caractere Unicode pour le point de code entier donne. Inverse de `ord()`.",
+    returnType: "str",
+    examplesEn: [
+      "chr(65)             # 'A'",
+      "chr(8364)            # '\u20ac' (Euro sign)",
+      "chr(128640)          # '\U0001f680' (rocket)",
+    ],
+    examplesFr: [
+      "chr(65)             # 'A'",
+      "chr(8364)            # '\u20ac' (Euro sign)",
+      "chr(128640)          # '\U0001f680' (rocket)",
+    ],
+    orderEn: [
+      "1. Validates that i is an integer in range 0-0x10FFFF (Unicode maximum)",
+      "2. Raises ValueError if out of range",
+      "3. Returns the single-character string for that codepoint",
+    ],
+    orderFr: [
+      "1. Valide que i est un entier dans la plage 0-0x10FFFF (maximum Unicode)",
+      "2. Leve ValueError si hors plage",
+      "3. Retourne la chaine d'un seul caractere",
+    ],
+    mistakesEn: [
+      "`chr(65)` is 'A' not 65 — converts int to character",
+      "`chr()` takes an int, `ord()` takes a str — they are inverses",
+    ],
+    mistakesFr: [
+      "`chr(65)` est 'A' pas 65 — convertit entier en caractere",
+    ],
+  },
+  "classmethod": {
+    name: "classmethod",
+    type: "function",
+    signature: "classmethod(function) -> classmethod descriptor",
+    descriptionEn: "Transforms a method into a class method. A class method receives the class as the first implicit argument (cls), not the instance.",
+    descriptionFr: "Transforme une methode en methode de classe. Une methode de classe recoit la classe comme premier argument implicite (cls).",
+    returnType: "classmethod descriptor",
+    examplesEn: [
+      "class MyClass:\n    @classmethod\n    def create(cls, val):\n        return cls()",
+    ],
+    examplesFr: [
+      "class MyClass:\n    @classmethod\n    def create(cls, val):\n        return cls()",
+    ],
+    orderEn: [
+      "1. `@classmethod` decorator wraps the function in a classmethod descriptor",
+      "2. When accessed on an instance or class, it binds the method to the class",
+      "3. The class (cls) is automatically passed as the first argument",
+    ],
+    orderFr: [
+      "1. Le decorateur `@classmethod` enveloppe la fonction dans un descripteur",
+      "2. Quand il est accede sur une instance ou classe, il lie la methode a la classe",
+      "3. La classe (cls) est automatiquement passee comme premier argument",
+    ],
+    mistakesEn: [
+      "Confusing `@classmethod` with `@staticmethod` — classmethod receives `cls`, staticmethod receives nothing",
+      "Can be called on both instances and classes",
+    ],
+    mistakesFr: [
+      "Confondre `@classmethod` et `@staticmethod`",
+    ],
+  },
+  "compile": {
+    name: "compile",
+    type: "function",
+    signature: "compile(source, filename, mode) -> code object",
+    descriptionEn: "Compiles source code into a code object that can be executed with `exec()` or `eval()`. Mode: \'exec\', \'eval\', or \'single\'.",
+    descriptionFr: "Compile du code source en un objet code qui peut etre execute avec `exec()` ou `eval()`.",
+    returnType: "code object",
+    examplesEn: [
+      "code = compile('x = 42', '<string>', 'exec')\nexec(code)",
+    ],
+    examplesFr: [
+      "code = compile('x = 42', '<string>', 'exec')\nexec(code)",
+    ],
+    orderEn: [
+      "1. Parses the source string into an AST",
+      "2. Compiles the AST into bytecode",
+      "3. Returns a code object ready for execution",
+    ],
+    orderFr: [
+      "1. Analyse la chaine source en AST",
+      "2. Compile l'AST en bytecode",
+      "3. Retourne un objet code pret pour l'execution",
+    ],
+    mistakesEn: [
+      "`compile()` does NOT execute the code — use `exec()` or `eval()` for that",
+      "Filename is used for traceback messages",
+    ],
+    mistakesFr: [
+      "`compile()` n'execute PAS le code",
+    ],
+  },
+  "complex": {
+    name: "complex",
+    type: "type",
+    signature: "complex(real=0, imag=0) -> complex",
+    descriptionEn: "Creates a complex number from real and imaginary parts. Can also parse a string representation.",
+    descriptionFr: "Cree un nombre complexe a partir de parties reelles et imaginaires.",
+    returnType: "complex",
+    examplesEn: [
+      "complex(3, 4)       # (3+4j)",
+      "complex('3+4j')      # (3+4j)",
+      "3 + 4j               # complex literal",
+    ],
+    examplesFr: [
+      "complex(3, 4)       # (3+4j)",
+      "complex('3+4j')      # (3+4j)",
+      "3 + 4j               # complex literal",
+    ],
+    orderEn: [
+      "1. If a string is provided, parse it as a complex number literal",
+      "2. Otherwise, creates complex(real, imag)",
+      "3. The 'j' suffix denotes the imaginary unit",
+    ],
+    orderFr: [
+      "1. Si une chaine est fournie, l'analyser comme un litteral complexe",
+      "2. Sinon, cree complex(reel, imag)",
+      "3. Le suffixe 'j' denote l'unite imaginaire",
+    ],
+    mistakesEn: [
+      "Python uses `j` not `i` for the imaginary unit",
+      "Use `z.real` and `z.imag` to access parts",
+    ],
+    mistakesFr: [
+      "Python utilise `j` pas `i` pour l'unite imaginaire",
+    ],
+  },
+  "delattr": {
+    name: "delattr",
+    type: "function",
+    signature: "delattr(obj, name) -> None",
+    descriptionEn: "Deletes an attribute from an object by name string. Equivalent to `del obj.name`.",
+    descriptionFr: "Supprime un attribut d\'un objet par son nom (chaine). Equivalent a `del obj.name`.",
+    returnType: "None",
+    examplesEn: [
+      "delattr(obj, 'x')   # same as del obj.x",
+    ],
+    examplesFr: [
+      "delattr(obj, 'x')   # identique a del obj.x",
+    ],
+    orderEn: [
+      "1. Looks up the attribute name on the object",
+      "2. Calls `__delattr__` to remove it",
+      "3. Raises AttributeError if the attribute doesn't exist",
+    ],
+    orderFr: [
+      "1. Cherche l'attribut sur l'objet",
+      "2. Appelle `__delattr__` pour le supprimer",
+      "3. Leve AttributeError si l'attribut n'existe pas",
+    ],
+    mistakesEn: [
+      "Use `delattr(obj, 'name')` when the attribute name is dynamic (a variable)",
+      "`del obj.name` is preferred when the name is known statically",
+    ],
+    mistakesFr: [
+      "Utilisez `delattr(obj, 'nom')` quand le nom est dynamique",
+    ],
+  },
+  "dict": {
+    name: "dict",
+    type: "type",
+    signature: "dict(**kwargs) -> dict",
+    descriptionEn: "Creates a dictionary (mapping of keys to values). Keys must be hashable.",
+    descriptionFr: "Cree un dictionnaire (association de cles a des valeurs). Les cles doivent etre hachables.",
+    returnType: "dict",
+    examplesEn: [
+      "dict(a=1, b=2)      # {'a': 1, 'b': 2}",
+      "dict([('x', 1), ('y', 2)])  # {'x': 1, 'y': 2}",
+      "{}                    # empty dict literal",
+    ],
+    examplesFr: [
+      "dict(a=1, b=2)      # {'a': 1, 'b': 2}",
+      "dict([('x', 1), ('y', 2)])  # {'x': 1, 'y': 2}",
+      "{}                    # dict vide",
+    ],
+    orderEn: [
+      "1. From keyword args: maps each key to its value",
+      "2. From iterable of pairs: each (key, value) becomes an entry",
+      "3. Keys must be hashable (immutable types like str, int, tuple of immutables)",
+    ],
+    orderFr: [
+      "1. Depuis des arguments nommes : associe chaque cle a sa valeur",
+      "2. Depuis un iterable de paires : chaque (cle, valeur) devient une entree",
+      "3. Les cles doivent etre hachables",
+    ],
+    mistakesEn: [
+      "Keys must be immutable/hashable — lists and dicts cannot be keys",
+      "Python 3.7+ preserves insertion order of dictionaries",
+    ],
+    mistakesFr: [
+      "Les cles doivent etre immuables/hachables",
+    ],
+  },
+  "dir": {
+    name: "dir",
+    type: "function",
+    signature: "dir([object]) -> list of str",
+    descriptionEn: "Without arguments: returns the names in the current local scope. With an object: returns a sorted list of valid attribute names for that object.",
+    descriptionFr: "Sans argument : retourne les noms dans la portee locale actuelle. Avec un objet : retourne la liste triee des noms d\'attributs valides.",
+    returnType: "list of str",
+    examplesEn: [
+      "dir()                # names in current scope",
+      "dir([])              # list methods",
+      "dir(\"hello\")         # string methods",
+    ],
+    examplesFr: [
+      "dir()                # noms dans la portee actuelle",
+      "dir([])              # methodes de liste",
+      "dir(\"hello\")         # methodes de chaine",
+    ],
+    orderEn: [
+      "1. Without args: returns sorted list of names in current scope",
+      "2. With object: returns sorted list of the object's attribute names",
+      "3. Tries to use `__dir__()` method if available",
+    ],
+    orderFr: [
+      "1. Sans argument : retourne la liste triee des noms de la portee actuelle",
+      "2. Avec objet : retourne la liste triee des noms d'attributs",
+      "3. Essaie d'utiliser `__dir__()` si disponible",
+    ],
+    mistakesEn: [
+      "`dir()` includes inherited attributes and special methods (__xxx__)",
+      "For more detail, use `help()` or `vars()`",
+    ],
+    mistakesFr: [
+      "`dir()` inclut les attributs herites et les methodes speciales",
+    ],
+  },
+  "divmod": {
+    name: "divmod",
+    type: "function",
+    signature: "divmod(a, b) -> tuple[int, int]",
+    descriptionEn: "Returns a tuple (a // b, a % b). Takes two numbers and returns both the quotient and remainder.",
+    descriptionFr: "Retourne un tuple (a // b, a % b). Prend deux nombres et retourne le quotient et le reste.",
+    returnType: "tuple of two numbers",
+    examplesEn: [
+      "divmod(13, 4)       # (3, 1)  -- 13 = 3*4 + 1",
+      "divmod(25, 7)        # (3, 4)  -- 25 = 3*7 + 4",
+    ],
+    examplesFr: [
+      "divmod(13, 4)       # (3, 1)  -- 13 = 3*4 + 1",
+      "divmod(25, 7)        # (3, 4)  -- 25 = 3*7 + 4",
+    ],
+    orderEn: [
+      "1. Computes floor division: a // b",
+      "2. Computes modulo: a % b",
+      "3. Returns both as a tuple",
+    ],
+    orderFr: [
+      "1. Calcule la division entiere : a // b",
+      "2. Calcule le modulo : a % b",
+      "3. Retourne les deux sous forme de tuple",
+    ],
+    mistakesEn: [
+      "For negative numbers, Python's `//` floors toward negative infinity",
+      "`divmod(a, b)[0] * b + divmod(a, b)[1] == a` always holds",
+    ],
+    mistakesFr: [
+      "Pour les nombres negatifs, `//` arrondit vers -infini",
+    ],
+  },
+  "enumerate": {
+    name: "enumerate",
+    type: "function",
+    signature: "enumerate(iterable, start=0) -> iterator of (index, value)",
+    descriptionEn: "Returns an iterator yielding pairs of (index, value) from an iterable. Useful for getting both the index and element in a loop.",
+    descriptionFr: "Retourne un iterateur produisant des paires (index, valeur) depuis un iterable. Utile pour obtenir index et element dans une boucle.",
+    returnType: "iterator of (int, T) tuples",
+    examplesEn: [
+      "list(enumerate(['a', 'b', 'c']))  # [(0, 'a'), (1, 'b'), (2, 'c')]",
+      "list(enumerate(['a', 'b'], start=1))  # [(1, 'a'), (2, 'b')]",
+    ],
+    examplesFr: [
+      "list(enumerate(['a', 'b', 'c']))  # [(0, 'a'), (1, 'b'), (2, 'c')]",
+      "list(enumerate(['a', 'b'], start=1))  # [(1, 'a'), (2, 'b')]",
+    ],
+    orderEn: [
+      "1. Creates an iterator from the iterable",
+      "2. On each iteration: yields (current_index, next_value)",
+      "3. Increments the counter by start (default 0)",
+    ],
+    orderFr: [
+      "1. Cree un iterateur depuis l'iterable",
+      "2. A chaque iteration : produit (index_courant, valeur_suivante)",
+      "3. Incremente le compteur par start (defaut 0)",
+    ],
+    mistakesEn: [
+      "`enumerate()` returns an iterator, not a list — use `list(enumerate(...))` to materialize",
+      "Common pattern: `for i, val in enumerate(items):`",
+    ],
+    mistakesFr: [
+      "`enumerate()` retourne un iterateur, pas une liste",
+    ],
+  },
+  "eval": {
+    name: "eval",
+    type: "function",
+    signature: "eval(expression, globals=None, locals=None) -> object",
+    descriptionEn: "Parses and evaluates a single Python expression from a string and returns the result.",
+    descriptionFr: "Analyse et evalue une seule expression Python depuis une chaine et retourne le resultat.",
+    returnType: "result of the expression",
+    examplesEn: [
+      "eval('2 + 3 * 4')   # 14",
+      "eval('pow(2, 10)')   # 1024",
+      "x = 42\neval('x + 1')   # 43",
+    ],
+    examplesFr: [
+      "eval('2 + 3 * 4')   # 14",
+      "eval('pow(2, 10)')   # 1024",
+      "x = 42\neval('x + 1')   # 43",
+    ],
+    orderEn: [
+      "1. Parses the string as a Python expression",
+      "2. Compiles it to bytecode",
+      "3. Executes in the given namespace (or current scope)",
+      "4. Returns the result value",
+    ],
+    orderFr: [
+      "1. Analyse la chaine comme une expression Python",
+      "2. La compile en bytecode",
+      "3. Execute dans l'espace de noms donne",
+      "4. Retourne la valeur resultat",
+    ],
+    mistakesEn: [
+      "`eval()` only evaluates expressions (not statements like `if`, `for`, `def`)",
+      "NEVER use `eval()` on untrusted input — it can execute arbitrary code",
+    ],
+    mistakesFr: [
+      "`eval()` evalue seulement les expressions (pas les instructions)",
+    ],
+  },
+  "exec": {
+    name: "exec",
+    type: "function",
+    signature: "exec(source, globals=None, locals=None) -> None",
+    descriptionEn: "Executes Python code (statements or expressions) from a string or code object. Unlike `eval()`, can execute arbitrary statements.",
+    descriptionFr: "Execute du code Python (instructions ou expressions) depuis une chaine ou un objet code.",
+    returnType: "None",
+    examplesEn: [
+      "exec('x = 42')      # sets x = 42 in current scope",
+      "exec('def f(): return 1')  # defines f",
+    ],
+    examplesFr: [
+      "exec('x = 42')      # definit x = 42 dans la portee courante",
+      "exec('def f(): return 1')  # definit f",
+    ],
+    orderEn: [
+      "1. Parses the source as Python code (statements allowed)",
+      "2. Compiles and executes it",
+      "3. Modifications to the namespace persist",
+    ],
+    orderFr: [
+      "1. Analyse la source comme du code Python (instructions autorisees)",
+      "2. Compile et execute",
+      "3. Les modifications de l'espace de noms persistent",
+    ],
+    mistakesEn: [
+      "`exec()` can execute statements, `eval()` only expressions",
+      "NEVER use `exec()` on untrusted input",
+    ],
+    mistakesFr: [
+      "`exec()` peut executer des instructions, `eval()` seulement des expressions",
+    ],
+  },
+  "filter": {
+    name: "filter",
+    type: "function",
+    signature: "filter(function, iterable) -> iterator",
+    descriptionEn: "Constructs an iterator that yields elements of iterable for which function returns True. If function is None, yields truthy elements.",
+    descriptionFr: "Construit un iterateur qui produit les elements de iterable pour lesquels la fonction retourne True.",
+    returnType: "iterator",
+    examplesEn: [
+      "list(filter(lambda x: x > 0, [-1, 0, 1, 2]))  # [1, 2]",
+      "list(filter(None, [0, 1, '', 'hello']))  # [1, 'hello']",
+    ],
+    examplesFr: [
+      "list(filter(lambda x: x > 0, [-1, 0, 1, 2]))  # [1, 2]",
+      "list(filter(None, [0, 1, '', 'hello']))  # [1, 'hello']",
+    ],
+    orderEn: [
+      "1. Takes each element from the iterable",
+      "2. Calls function(element) — if function is None, uses the element's truthiness",
+      "3. If the result is truthy, yields the element",
+      "4. Returns a lazy iterator",
+    ],
+    orderFr: [
+      "1. Prend chaque element de l'iterable",
+      "2. Appelle fonction(element) — si None, utilise la veracite de l'element",
+      "3. Si le resultat est vrai, produit l'element",
+      "4. Retourne un iterateur paresseux",
+    ],
+    mistakesEn: [
+      "`filter()` returns an iterator in Python 3 (not a list like Python 2)",
+      "Comprehensions are often more readable: `[x for x in items if x > 0]`",
+    ],
+    mistakesFr: [
+      "`filter()` retourne un iterateur en Python 3",
+    ],
+  },
+  "float": {
+    name: "float",
+    type: "type",
+    signature: "float(x=0.0) -> float",
+    descriptionEn: "Converts a number or string to a floating-point number (double precision).",
+    descriptionFr: "Convertit un nombre ou une chaine en nombre a virgule flottante (double precision).",
+    returnType: "float",
+    examplesEn: [
+      "float(42)           # 42.0",
+      "float('3.14')        # 3.14",
+      "float('inf')         # inf",
+      "float('nan')         # nan",
+    ],
+    examplesFr: [
+      "float(42)           # 42.0",
+      "float('3.14')        # 3.14",
+      "float('inf')         # inf",
+      "float('nan')         # nan",
+    ],
+    orderEn: [
+      "1. If x is a string, parse it as a floating-point literal",
+      "2. If x is a number, convert it to float",
+      "3. Special strings: 'inf', '-inf', 'nan'",
+    ],
+    orderFr: [
+      "1. Si x est une chaine, l'analyser comme un litteral flottant",
+      "2. Si x est un nombre, le convertir en float",
+      "3. Chaines speciales : 'inf', '-inf', 'nan'",
+    ],
+    mistakesEn: [
+      "Floating-point precision issues: `0.1 + 0.2 != 0.3`",
+      "Use `math.isclose()` for float comparison",
+    ],
+    mistakesFr: [
+      "Problemes de precision : `0.1 + 0.2 != 0.3`",
+    ],
+  },
+  "format": {
+    name: "format",
+    type: "function",
+    signature: "format(value, format_spec='') -> str",
+    descriptionEn: "Converts a value to a formatted string using the format specification mini-language.",
+    descriptionFr: "Convertit une valeur en chaine formatee utilisant le mini-langage de specification de format.",
+    returnType: "str",
+    examplesEn: [
+      "format(42, 'b')     # '101010' (binary)",
+      "format(255, 'x')     # 'ff' (hex)",
+      "format(3.14159, '.2f')  # '3.14'",
+    ],
+    examplesFr: [
+      "format(42, 'b')     # '101010' (binaire)",
+      "format(255, 'x')     # 'ff' (hex)",
+      "format(3.14159, '.2f')  # '3.14'",
+    ],
+    orderEn: [
+      "1. Calls `value.__format__(format_spec)`",
+      "2. The format spec determines alignment, padding, precision, type representation",
+      "3. Returns the formatted string",
+    ],
+    orderFr: [
+      "1. Appelle `value.__format__(format_spec)`",
+      "2. Le spec de format determine alignement, remplissage, precision",
+      "3. Retourne la chaine formatee",
+    ],
+    mistakesEn: [
+      "`format()` is the underlying function for f-strings: `f'{value:spec}'`",
+      "Each type has its own format spec (int: b, x, o; float: .precisionf)",
+    ],
+    mistakesFr: [
+      "`format()` est la fonction sous-jacente des f-strings",
+    ],
+  },
+  "frozenset": {
+    name: "frozenset",
+    type: "type",
+    signature: "frozenset(iterable=set()) -> frozenset",
+    descriptionEn: "Returns an immutable (unchangeable) set. Can be used as a dictionary key or set element.",
+    descriptionFr: "Retourne un ensemble immuable (non modifiable). Peut etre utilise comme cle de dictionnaire ou element d\'ensemble.",
+    returnType: "frozenset",
+    examplesEn: [
+      "frozenset([1, 2, 2, 3])  # frozenset({1, 2, 3})",
+      "frozenset()          # empty frozenset",
+    ],
+    examplesFr: [
+      "frozenset([1, 2, 2, 3])  # frozenset({1, 2, 3})",
+      "frozenset()          # frozenset vide",
+    ],
+    orderEn: [
+      "1. Creates a set from the iterable (duplicates removed)",
+      "2. Wraps it in an immutable container",
+    ],
+    orderFr: [
+      "1. Cree un ensemble depuis l'iterable (doublons supprimes)",
+      "2. L'enveloppe dans un conteneur immuable",
+    ],
+    mistakesEn: [
+      "`frozenset` is hashable (can be a dict key); `set` is not",
+      "`frozenset()` is the only built-in mutable→immutable converter",
+    ],
+    mistakesFr: [
+      "`frozenset` est hachable (peut etre une cle de dict)",
+    ],
+  },
+  "getattr": {
+    name: "getattr",
+    type: "function",
+    signature: "getattr(object, name[, default]) -> value",
+    descriptionEn: "Returns the value of the named attribute of an object. If not found, returns default if provided, otherwise raises AttributeError.",
+    descriptionFr: "Retourne la valeur de l\'attribut nomme d\'un objet. Si absent, retourne default ou leve AttributeError.",
+    returnType: "any",
+    examplesEn: [
+      "getattr(obj, 'x')         # obj.x",
+      "getattr(obj, 'y', 42)      # 42 if no y attribute",
+    ],
+    examplesFr: [
+      "getattr(obj, 'x')         # obj.x",
+      "getattr(obj, 'y', 42)      # 42 si pas d'attribut y",
+    ],
+    orderEn: [
+      "1. Looks up the attribute name on the object using `__getattribute__`",
+      "2. If not found and default is given, returns default",
+      "3. If not found and no default, raises AttributeError",
+    ],
+    orderFr: [
+      "1. Cherche l'attribut sur l'objet via `__getattribute__`",
+      "2. Si absent et default fourni, retourne default",
+      "3. Si absent et pas de default, leve AttributeError",
+    ],
+    mistakesEn: [
+      "Use `getattr(obj, 'attr')` when the attribute name is dynamic",
+      "`getattr(obj, 'attr', default)` is cleaner than try/except AttributeError",
+    ],
+    mistakesFr: [
+      "Utilisez `getattr(obj, 'attr')` quand le nom est dynamique",
+    ],
+  },
+  "globals": {
+    name: "globals",
+    type: "function",
+    signature: "globals() -> dict",
+    descriptionEn: "Returns the dictionary implementing the current module\'s global namespace.",
+    descriptionFr: "Retourne le dictionnaire implementant l\'espace de noms global du module courant.",
+    returnType: "dict",
+    examplesEn: [
+      "globals()           # {'__name__': '__main__', ...}",
+    ],
+    examplesFr: [
+      "globals()           # {'__name__': '__main__', ...}",
+    ],
+    orderEn: [
+      "1. Returns a reference to the global namespace dict",
+      "2. Modifications to this dict affect the global scope",
+    ],
+    orderFr: [
+      "1. Retourne une reference au dict de l'espace de noms global",
+      "2. Les modifications affectent la portee globale",
+    ],
+    mistakesEn: [
+      "Modifying `globals()` adds/removes global variables — use with caution",
+      "`globals()` returns the actual dict, not a copy",
+    ],
+    mistakesFr: [
+      "Modifier `globals()` ajoute/supprime des variables globales",
+    ],
+  },
+  "hasattr": {
+    name: "hasattr",
+    type: "function",
+    signature: "hasattr(object, name) -> bool",
+    descriptionEn: "Returns True if the object has an attribute with the given name.",
+    descriptionFr: "Retourne True si l\'objet a un attribut avec le nom donne.",
+    returnType: "bool",
+    examplesEn: [
+      "hasattr(obj, 'x')  # True if obj has x attribute",
+      "hasattr([], 'sort') # True (list has sort method)",
+    ],
+    examplesFr: [
+      "hasattr(obj, 'x')  # True si obj a l'attribut x",
+      "hasattr([], 'sort') # True (list a la methode sort)",
+    ],
+    orderEn: [
+      "1. Calls `getattr(object, name)` behind the scenes",
+      "2. Returns True if no AttributeError is raised",
+      "3. Returns False if AttributeError is raised",
+    ],
+    orderFr: [
+      "1. Appelle `getattr(object, name)` en coulisses",
+      "2. Retourne True si aucune AttributeError n'est levee",
+      "3. Retourne False si AttributeError est levee",
+    ],
+    mistakesEn: [
+      "`hasattr()` catches ALL AttributeErrors including those raised inside properties",
+      "Prefer EAFP (try/except) over LBYL (hasattr) in some cases",
+    ],
+    mistakesFr: [
+      "`hasattr()` attrape TOUTES les AttributeError",
+    ],
+  },
+  "hash": {
+    name: "hash",
+    type: "function",
+    signature: "hash(object) -> int",
+    descriptionEn: "Returns the hash value of an object (an integer). Hashable objects can be used as dictionary keys and set members.",
+    descriptionFr: "Retourne la valeur de hachage d\'un objet (un entier). Les objets hachables peuvent etre des cles de dictionnaire.",
+    returnType: "int",
+    examplesEn: [
+      "hash(42)            # 42",
+      "hash('hello')        # some integer",
+      "hash((1, 2, 3))      # hash depends on contents",
+    ],
+    examplesFr: [
+      "hash(42)            # 42",
+      "hash('hello')        # un entier",
+      "hash((1, 2, 3))      # le hachage depend du contenu",
+    ],
+    orderEn: [
+      "1. Calls `object.__hash__()`",
+      "2. Returns an integer",
+      "3. Equal objects must have equal hashes (but the converse is not required)",
+    ],
+    orderFr: [
+      "1. Appelle `object.__hash__()`",
+      "2. Retourne un entier",
+      "3. Les objets egaux doivent avoir des hash egaux",
+    ],
+    mistakesEn: [
+      "Lists and dicts are unhashable (mutable)",
+      "Hash collisions are possible — `__eq__` and `__hash__` must be consistent",
+    ],
+    mistakesFr: [
+      "Les listes et dicts ne sont pas hachables",
+    ],
+  },
+  "help": {
+    name: "help",
+    type: "function",
+    signature: "help([object]) -> None",
+    descriptionEn: "Invokes the built-in help system. Without arguments, starts interactive help. With an object, shows documentation.",
+    descriptionFr: "Invoque le systeme d\'aide integre. Sans argument, demarre l\'aide interactive. Avec un objet, affiche la documentation.",
+    returnType: "None",
+    examplesEn: [
+      "help(len)           # shows documentation for len",
+      "help(str)           # shows string documentation",
+    ],
+    examplesFr: [
+      "help(len)           # affiche la documentation de len",
+      "help(str)           # affiche la documentation de str",
+    ],
+    orderEn: [
+      "1. Without args: enters interactive help viewer",
+      "2. With object: formats and displays the object's `__doc__` and other metadata",
+      "3. Pages through a pager for long output",
+    ],
+    orderFr: [
+      "1. Sans argument : entre dans le visualiseur d'aide interactif",
+      "2. Avec objet : formate et affiche la documentation",
+    ],
+    mistakesEn: [
+      "`help()` uses the pydoc module to format output",
+      "For a plain string docstring, use `object.__doc__`",
+    ],
+    mistakesFr: [
+      "Pour une docstring brute, utilisez `object.__doc__`",
+    ],
+  },
+  "hex": {
+    name: "hex",
+    type: "function",
+    signature: "hex(x) -> str",
+    descriptionEn: "Converts an integer to a hexadecimal string prefixed with \'0x\'.",
+    descriptionFr: "Convertit un entier en chaine hexadecimale prefixee de \'0x\'.",
+    returnType: "str",
+    examplesEn: [
+      "hex(255)           # '0xff'",
+      "hex(42)             # '0x2a'",
+      "hex(0)              # '0x0'",
+    ],
+    examplesFr: [
+      "hex(255)           # '0xff'",
+      "hex(42)             # '0x2a'",
+      "hex(0)              # '0x0'",
+    ],
+    orderEn: [
+      "1. Converts the integer to base-16",
+      "2. Prepends '0x' to indicate hexadecimal format",
+    ],
+    orderFr: [
+      "1. Convertit l'entier en base 16",
+      "2. Ajoute '0x' pour indiquer le format hexadecimal",
+    ],
+    mistakesEn: [
+      "`hex()` only works on integers",
+      "Use `format(x, '04x')` for zero-padded hex without '0x' prefix",
+    ],
+    mistakesFr: [
+      "Utilisez `format(x, '04x')` pour du hex avec remplissage",
+    ],
+  },
+  "id": {
+    name: "id",
+    type: "function",
+    signature: "id(object) -> int",
+    descriptionEn: "Returns the memory address (identity) of an object as an integer. The identity is unique and constant for the object\'s lifetime.",
+    descriptionFr: "Retourne l\'adresse memoire (identite) d\'un objet sous forme d\'entier. L\'identite est unique et constante.",
+    returnType: "int",
+    examplesEn: [
+      "id(42)             # 4345956784 (varies)",
+      "x = [1, 2]; id(x)   # same before and after modification",
+    ],
+    examplesFr: [
+      "id(42)             # 4345956784 (varie)",
+      "x = [1, 2]; id(x)   # identique avant et apres modification",
+    ],
+    orderEn: [
+      "1. Returns the CPython memory address of the object",
+      "2. Use `is` operator to check identity, not `id()` directly",
+    ],
+    orderFr: [
+      "1. Retourne l'adresse memoire CPython de l'objet",
+      "2. Utilisez `is` pour verifier l'identite",
+    ],
+    mistakesEn: [
+      "`a is b` is equivalent to `id(a) == id(b)`",
+      "Small integers (-5 to 256) are cached and may share ids",
+      "After an object is garbage collected, its id can be reused",
+    ],
+    mistakesFr: [
+      "Les petits entiers (-5 a 256) sont mis en cache",
+    ],
+  },
+  "input": {
+    name: "input",
+    type: "function",
+    signature: "input([prompt]) -> str",
+    descriptionEn: "Reads a line from standard input, strips the trailing newline, and returns it. The prompt string is printed to stdout first if given.",
+    descriptionFr: "Lit une ligne depuis l\'entree standard, supprime le saut de ligne final et la retourne.",
+    returnType: "str",
+    examplesEn: [
+      "name = input('Enter name: ')  # waits for user input",
+    ],
+    examplesFr: [
+      "name = input('Enter name: ')  # attend la saisie utilisateur",
+    ],
+    orderEn: [
+      "1. If prompt is provided, prints it to stdout without newline",
+      "2. Reads a line from stdin",
+      "3. Strips the trailing newline character",
+      "4. Returns the string",
+    ],
+    orderFr: [
+      "1. Si prompt est fourni, l'affiche sans saut de ligne",
+      "2. Lit une ligne depuis stdin",
+      "3. Supprime le caractere de nouvelle ligne",
+      "4. Retourne la chaine",
+    ],
+    mistakesEn: [
+      "`input()` always returns a string — convert with `int()` or `float()` if needed",
+      "In Python 2, `input()` evaluated the input as Python code — in Python 3+ it's safe",
+    ],
+    mistakesFr: [
+      "`input()` retourne toujours une chaine",
+    ],
+  },
+  "int": {
+    name: "int",
+    type: "type",
+    signature: "int(x=0, base=10) -> int",
+    descriptionEn: "Converts a number or string to an integer. The base parameter specifies the number base (2-36) for string conversion.",
+    descriptionFr: "Convertit un nombre ou une chaine en entier. Le parametre base specifie la base numerique (2-36).",
+    returnType: "int",
+    examplesEn: [
+      "int(3.14)          # 3 (truncates toward zero)",
+      "int('42')           # 42",
+      "int('1010', 2)      # 10 (binary)",
+      "int('ff', 16)       # 255 (hex)",
+    ],
+    examplesFr: [
+      "int(3.14)          # 3 (tronque vers zero)",
+      "int('42')           # 42",
+      "int('1010', 2)      # 10 (binaire)",
+      "int('ff', 16)       # 255 (hex)",
+    ],
+    orderEn: [
+      "1. If x is a string, parse using the given base (default 10)",
+      "2. If x is a float, truncate toward zero",
+      "3. If x is another int, return it unchanged",
+    ],
+    orderFr: [
+      "1. Si x est une chaine, l'analyser avec la base donnee",
+      "2. Si x est un float, tronquer vers zero",
+      "3. Si x est un autre int, le retourner inchang",
+    ],
+    mistakesEn: [
+      "`int()` truncates toward zero (not floor) — `int(-3.9)` is -3, not -4",
+      "String `int('42')` vs float `int(42.0)` behave differently",
+    ],
+    mistakesFr: [
+      "`int()` tronque vers zero (pas plancher)",
+    ],
+  },
+  "isinstance": {
+    name: "isinstance",
+    type: "function",
+    signature: "isinstance(obj, classinfo) -> bool",
+    descriptionEn: "Returns True if obj is an instance of classinfo (or any subclass). classinfo can be a type or a tuple of types.",
+    descriptionFr: "Retourne True si obj est une instance de classinfo (ou d\'une sous-classe). classinfo peut etre un type ou un tuple de types.",
+    returnType: "bool",
+    examplesEn: [
+      "isinstance(42, int)        # True",
+      "isinstance('hello', str)   # True",
+      "isinstance([1,2], (list, tuple))  # True",
+      "isinstance(True, int)       # True (bool is subclass of int)",
+    ],
+    examplesFr: [
+      "isinstance(42, int)        # True",
+      "isinstance('hello', str)   # True",
+      "isinstance([1,2], (list, tuple))  # True",
+      "isinstance(True, int)       # True (bool est sous-classe de int)",
+    ],
+    orderEn: [
+      "1. Checks if type(obj) is classinfo or any subclass of classinfo",
+      "2. If classinfo is a tuple, checks against each element (OR logic)",
+      "3. Returns True on first match, False if none match",
+    ],
+    orderFr: [
+      "1. Verifie si type(obj) est classinfo ou une sous-classe",
+      "2. Si classinfo est un tuple, verifie chaque element (OU logique)",
+      "3. Retourne True au premier match, False sinon",
+    ],
+    mistakesEn: [
+      "`isinstance()` considers inheritance, `type(obj) == T` does not",
+      "`isinstance(True, int)` is True because bool is a subclass of int",
+    ],
+    mistakesFr: [
+      "`isinstance()` considere l'heritage, pas `type(obj) == T`",
+    ],
+  },
+  "issubclass": {
+    name: "issubclass",
+    type: "function",
+    signature: "issubclass(cls, classinfo) -> bool",
+    descriptionEn: "Returns True if cls is a subclass of classinfo. classinfo can be a type or a tuple of types.",
+    descriptionFr: "Retourne True si cls est une sous-classe de classinfo. classinfo peut etre un type ou un tuple de types.",
+    returnType: "bool",
+    examplesEn: [
+      "issubclass(bool, int)  # True",
+      "issubclass(bool, (int, str))  # True",
+      "issubclass(int, bool)  # False",
+    ],
+    examplesFr: [
+      "issubclass(bool, int)  # True",
+      "issubclass(bool, (int, str))  # True",
+      "issubclass(int, bool)  # False",
+    ],
+    orderEn: [
+      "1. Checks if cls inherits from classinfo",
+      "2. A class is considered a subclass of itself",
+      "3. If classinfo is a tuple, checks against each element",
+    ],
+    orderFr: [
+      "1. Verifie si cls herite de classinfo",
+      "2. Une classe est consideree comme sous-classe d'elle-meme",
+      "3. Si classinfo est un tuple, verifie chaque element",
+    ],
+    mistakesEn: [
+      "`issubclass(bool, int)` is True but `issubclass(int, bool)` is False",
+      "`issubclass(A, A)` is always True (a class is a subclass of itself)",
+    ],
+    mistakesFr: [
+      "`issubclass(A, A)` est toujours True",
+    ],
+  },
+  "iter": {
+    name: "iter",
+    type: "function",
+    signature: "iter(object[, sentinel]) -> iterator",
+    descriptionEn: "Returns an iterator object. With one arg: creates an iterator from an iterable. With two args: calls callable until it returns sentinel.",
+    descriptionFr: "Retourne un objet iterateur. Avec un argument : cree un iterateur depuis un iterable. Avec deux : appelle callable jusqu\'a sentinel.",
+    returnType: "iterator",
+    examplesEn: [
+      "iter([1, 2, 3])    # list_iterator",
+      "iter('hello')       # str_iterator",
+    ],
+    examplesFr: [
+      "iter([1, 2, 3])    # list_iterator",
+      "iter('hello')       # str_iterator",
+    ],
+    orderEn: [
+      "1. Single arg: calls `object.__iter__()` to get an iterator",
+      "2. Two args: repeatedly calls callable, yields results until sentinel is returned",
+    ],
+    orderFr: [
+      "1. Un argument : appelle `object.__iter__()`",
+      "2. Deux arguments : appelle callable jusqu'a sentinel",
+    ],
+    mistakesEn: [
+      "`next(iterator)` manually advances the iterator",
+      "Not all iterables are iterators (iterators are exhausted after one pass)",
+    ],
+    mistakesFr: [
+      "`next(iterator)` avance manuellement l'iterateur",
+    ],
+  },
+  "len": {
+    name: "len",
+    type: "function",
+    signature: "len(obj) -> int",
+    descriptionEn: "Returns the length (number of items) of a container. Works with sequences, mappings, and sets.",
+    descriptionFr: "Retourne la longueur (nombre d\'elements) d\'un conteneur. Fonctionne avec les sequences, mappings et ensembles.",
+    returnType: "int",
+    examplesEn: [
+      "len([1, 2, 3])     # 3",
+      "len('hello')        # 5",
+      "len({'a': 1, 'b': 2})  # 2",
+    ],
+    examplesFr: [
+      "len([1, 2, 3])     # 3",
+      "len('hello')        # 5",
+      "len({'a': 1, 'b': 2})  # 2",
+    ],
+    orderEn: [
+      "1. Calls `obj.__len__()`",
+      "2. Returns the result as an integer",
+    ],
+    orderFr: [
+      "1. Appelle `obj.__len__()`",
+      "2. Retourne le resultat sous forme d'entier",
+    ],
+    mistakesEn: [
+      "`len()` only works on objects that define `__len__`",
+      "For iterators, count with `sum(1 for _ in iterator)`",
+    ],
+    mistakesFr: [
+      "`len()` ne fonctionne que sur les objets qui definissent `__len__`",
+    ],
+  },
+  "list": {
+    name: "list",
+    type: "type",
+    signature: "list(iterable=()) -> list",
+    descriptionEn: "Creates a list from an iterable. Lists are mutable, ordered sequences that can hold items of any type.",
+    descriptionFr: "Cree une liste a partir d\'un iterable. Les listes sont des sequences mutables et ordonnees.",
+    returnType: "list",
+    examplesEn: [
+      "list('hello')      # ['h', 'e', 'l', 'l', 'o']",
+      "list(range(5))      # [0, 1, 2, 3, 4]",
+      "[1, 2, 3]           # list literal",
+    ],
+    examplesFr: [
+      "list('hello')      # ['h', 'e', 'l', 'l', 'o']",
+      "list(range(5))      # [0, 1, 2, 3, 4]",
+      "[1, 2, 3]           # liste litterale",
+    ],
+    orderEn: [
+      "1. Iterates over the iterable",
+      "2. Collects all items into a new list",
+      "3. Returns the list",
+    ],
+    orderFr: [
+      "1. Parcourt l'iterable",
+      "2. Collecte tous les elements dans une nouvelle liste",
+      "3. Retourne la liste",
+    ],
+    mistakesEn: [
+      "`list()` creates a shallow copy — nested objects are shared",
+      "Empty list literal `[]` is faster than `list()`",
+    ],
+    mistakesFr: [
+      "`list()` cree une copie superficielle",
+    ],
+  },
+  "locals": {
+    name: "locals",
+    type: "function",
+    signature: "locals() -> dict",
+    descriptionEn: "Returns a dictionary of the current local symbol table (variables in the current scope).",
+    descriptionFr: "Retourne un dictionnaire de la table des symboles locaux actuels (variables dans la portee courante).",
+    returnType: "dict",
+    examplesEn: [
+      "def f():\n    x = 42\n    print(locals())  # {'x': 42}",
+    ],
+    examplesFr: [
+      "def f():\n    x = 42\n    print(locals())  # {'x': 42}",
+    ],
+    orderEn: [
+      "1. Returns a dictionary of local variable names to values",
+      "2. At module level, `locals()` returns the same as `globals()`",
+    ],
+    orderFr: [
+      "1. Retourne un dictionnaire des noms de variables locales vers leurs valeurs",
+      "2. Au niveau module, `locals()` retourne la meme chose que `globals()`",
+    ],
+    mistakesEn: [
+      "Modifications to the `locals()` dict do NOT always affect local variables",
+      "In a function, `locals()` returns a copy, not the actual namespace",
+    ],
+    mistakesFr: [
+      "Les modifications du dict `locals()` n'affectent pas toujours les variables",
+    ],
+  },
+  "map": {
+    name: "map",
+    type: "function",
+    signature: "map(function, *iterables) -> iterator",
+    descriptionEn: "Applies function to each item of the iterable(s) and yields the results. If multiple iterables, function must take that many arguments.",
+    descriptionFr: "Applique fonction a chaque element de l\'iterable et produit les resultats. Si plusieurs iterables, la fonction doit prendre autant d\'arguments.",
+    returnType: "iterator",
+    examplesEn: [
+      "list(map(str.upper, ['a', 'b']))  # ['A', 'B']",
+      "list(map(lambda x, y: x + y, [1, 2], [3, 4]))  # [4, 6]",
+    ],
+    examplesFr: [
+      "list(map(str.upper, ['a', 'b']))  # ['A', 'B']",
+      "list(map(lambda x, y: x + y, [1, 2], [3, 4]))  # [4, 6]",
+    ],
+    orderEn: [
+      "1. Function is called FIRST (applied)",
+      "2. Iterable is consumed SECOND (as data)",
+      "3. For each item in iterable, calls function(item)",
+      "4. Yields results lazily (one at a time)",
+      "5. Stops when the shortest iterable is exhausted",
+    ],
+    orderFr: [
+      "1. La fonction est appelee en PREMIER (appliquee)",
+      "2. L'iterable est consomme en SECOND (donnees)",
+      "3. Pour chaque element, appelle fonction(element)",
+      "4. Produit les resultats paresseusement",
+      "5. S'arrete quand l'iterable le plus court est epuise",
+    ],
+    mistakesEn: [
+      "`map()` returns an iterator in Python 3 (not a list like Python 2)",
+      "Wrap with `list()` to materialize results",
+      "Comprehensions are often more readable: `[str.upper(x) for x in items]`",
+    ],
+    mistakesFr: [
+      "`map()` retourne un iterateur en Python 3",
+    ],
+  },
+  "max": {
+    name: "max",
+    type: "function",
+    signature: "max(iterable, *[, key, default]) -> value",
+    descriptionEn: "Returns the largest item in an iterable or the largest of two or more arguments.",
+    descriptionFr: "Retourne le plus grand element d\'un iterable ou le plus grand de deux ou plusieurs arguments.",
+    returnType: "any",
+    examplesEn: [
+      "max([3, 1, 4, 1, 5])  # 5",
+      "max('a', 'b', 'c')   # 'c'",
+      "max([], default=0)   # 0 (empty with default)",
+    ],
+    examplesFr: [
+      "max([3, 1, 4, 1, 5])  # 5",
+      "max('a', 'b', 'c')   # 'c'",
+      "max([], default=0)   # 0 (vide avec default)",
+    ],
+    orderEn: [
+      "1. If single iterable: iterates over items and finds the maximum",
+      "2. If multiple args: compares them directly",
+      "3. Uses `>` comparisons (objects must support them)",
+      "4. If iterable is empty and default is given, returns default",
+    ],
+    orderFr: [
+      "1. Si un seul iterable : parcourt et trouve le maximum",
+      "2. Si plusieurs arguments : les compare directement",
+      "3. Utilise les comparaisons `>`",
+      "4. Si iterable vide et default donne, retourne default",
+    ],
+    mistakesEn: [
+      "`max()` raises ValueError on empty iterable without default",
+      "Use `key=str.lower` for case-insensitive comparison",
+    ],
+    mistakesFr: [
+      "`max()` leve ValueError si iterable vide sans default",
+    ],
+  },
+  "memoryview": {
+    name: "memoryview",
+    type: "function",
+    signature: "memoryview(obj) -> memoryview",
+    descriptionEn: "Returns a memory view object that exposes an object\'s internal buffer (allows direct memory access without copying).",
+    descriptionFr: "Retourne un objet de vue memoire qui expose le tampon interne d\'un objet (acces memoire direct sans copie).",
+    returnType: "memoryview",
+    examplesEn: [
+      "mv = memoryview(b'hello')\nmv[0]  # 104 (b'h' as int)",
+    ],
+    examplesFr: [
+      "mv = memoryview(b'hello')\nmv[0]  # 104 (b'h' comme int)",
+    ],
+    orderEn: [
+      "1. Takes a buffer-supporting object (bytes, bytearray, array.array)",
+      "2. Exposes the buffer without copying the underlying data",
+      "3. Supports slicing and indexing",
+    ],
+    orderFr: [
+      "1. Prend un objet supportant le tampon",
+      "2. Expose le tampon sans copier les donnees sous-jacentes",
+      "3. Supporte le decoupage et l'indexation",
+    ],
+    mistakesEn: [
+      "`memoryview` avoids copying large binary data",
+      "Use `.tobytes()` or `.tolist()` to convert the view",
+    ],
+    mistakesFr: [
+      "`memoryview` evite de copier de grandes donnees binaires",
+    ],
+  },
+  "min": {
+    name: "min",
+    type: "function",
+    signature: "min(iterable, *[, key, default]) -> value",
+    descriptionEn: "Returns the smallest item in an iterable or the smallest of two or more arguments.",
+    descriptionFr: "Retourne le plus petit element d\'un iterable ou le plus petit de deux ou plusieurs arguments.",
+    returnType: "any",
+    examplesEn: [
+      "min([3, 1, 4, 1, 5])  # 1",
+      "min('a', 'b', 'c')   # 'a'",
+      "min([], default=0)   # 0 (empty with default)",
+    ],
+    examplesFr: [
+      "min([3, 1, 4, 1, 5])  # 1",
+      "min('a', 'b', 'c')   # 'a'",
+      "min([], default=0)   # 0 (vide avec default)",
+    ],
+    orderEn: [
+      "1. If single iterable: iterates and finds the minimum",
+      "2. If multiple args: compares them",
+      "3. Uses `<` comparisons",
+      "4. If iterable is empty and default given, returns default",
+    ],
+    orderFr: [
+      "1. Si un seul iterable : parcourt et trouve le minimum",
+      "2. Si plusieurs arguments : les compare",
+      "3. Utilise les comparaisons `<`",
+      "4. Si iterable vide et default donne, retourne default",
+    ],
+    mistakesEn: [
+      "`min()` raises ValueError on empty iterable without default",
+      "Same behavior as `max()` but reversed",
+    ],
+    mistakesFr: [
+      "`min()` leve ValueError si iterable vide sans default",
+    ],
+  },
+  "next": {
+    name: "next",
+    type: "function",
+    signature: "next(iterator[, default]) -> value",
+    descriptionEn: "Returns the next item from an iterator. If the iterator is exhausted and default is given, returns default — otherwise raises StopIteration.",
+    descriptionFr: "Retourne l\'element suivant d\'un iterateur. Si epuise et default donne, retourne default — sinon leve StopIteration.",
+    returnType: "any",
+    examplesEn: [
+      "it = iter([1, 2, 3])\nnext(it)  # 1\nnext(it)  # 2\nnext(it)  # 3\nnext(it, 'done')  # 'done'",
+    ],
+    examplesFr: [
+      "it = iter([1, 2, 3])\nnext(it)  # 1\nnext(it)  # 2\nnext(it)  # 3\nnext(it, 'done')  # 'done'",
+    ],
+    orderEn: [
+      "1. Calls `iterator.__next__()`",
+      "2. If there is a next item, returns it",
+      "3. If exhausted and default given, returns default",
+      "4. If exhausted and no default, raises StopIteration",
+    ],
+    orderFr: [
+      "1. Appelle `iterator.__next__()`",
+      "2. S'il y a un element suivant, le retourne",
+      "3. Si epuise et default donne, retourne default",
+      "4. Si epuise et pas de default, leve StopIteration",
+    ],
+    mistakesEn: [
+      "`for` loops implicitly call `next()` and catch StopIteration",
+      "Use `next(iterator, default)` instead of try/except StopIteration",
+    ],
+    mistakesFr: [
+      "Les boucles `for` appellent implicitement `next()`",
+    ],
+  },
+  "object": {
+    name: "object",
+    type: "type",
+    signature: "object() -> object",
+    descriptionEn: "Returns a new featureless object. `object` is the base class for all classes in Python.",
+    descriptionFr: "Retourne un nouvel objet sans caracteristiques. `object` est la classe de base de toutes les classes en Python.",
+    returnType: "object",
+    examplesEn: [
+      "obj = object()     # creates a base object",
+      "isinstance(obj, object)  # True for everything",
+    ],
+    examplesFr: [
+      "obj = object()     # cree un objet de base",
+      "isinstance(obj, object)  # True pour tout",
+    ],
+    orderEn: [
+      "1. Allocates a new base object",
+      "2. All classes inherit from `object` implicitly",
+    ],
+    orderFr: [
+      "1. Alloue un nouvel objet de base",
+      "2. Toutes les classes heritent de `object` implicitement",
+    ],
+    mistakesEn: [
+      "`object()` instances are featureless — no attributes by default",
+      "All Python classes are subclasses of `object`",
+    ],
+    mistakesFr: [
+      "Les instances de `object()` sont sans caracteristiques",
+    ],
+  },
+  "oct": {
+    name: "oct",
+    type: "function",
+    signature: "oct(x) -> str",
+    descriptionEn: "Converts an integer to an octal string prefixed with \'0o\'.",
+    descriptionFr: "Convertit un entier en chaine octale prefixee de \'0o\'.",
+    returnType: "str",
+    examplesEn: [
+      "oct(8)             # '0o10'",
+      "oct(255)            # '0o377'",
+      "oct(42)             # '0o52'",
+    ],
+    examplesFr: [
+      "oct(8)             # '0o10'",
+      "oct(255)            # '0o377'",
+      "oct(42)             # '0o52'",
+    ],
+    orderEn: [
+      "1. Converts the integer to base-8",
+      "2. Prepends '0o' to indicate octal",
+    ],
+    orderFr: [
+      "1. Convertit l'entier en base 8",
+      "2. Ajoute '0o' pour indiquer l'octal",
+    ],
+    mistakesEn: [
+      "In Python 3, `010` is a syntax error — use `0o10` for octal literal",
+      "`oct()` only works with integers",
+    ],
+    mistakesFr: [
+      "En Python 3, `010` est une erreur de syntaxe",
+    ],
+  },
+  "open": {
+    name: "open",
+    type: "function",
+    signature: "open(file, mode='r', ...) -> file object",
+    descriptionEn: "Opens a file and returns a file object. Mode: \'r\' (read), \'w\' (write), \'a\' (append), \'b\' (binary), \'x\' (exclusive create).",
+    descriptionFr: "Ouvre un fichier et retourne un objet fichier. Mode : \'r\' (lecture), \'w\' (ecriture), \'a\' (ajout), \'b\' (binaire), \'x\' (creation exclusive).",
+    returnType: "file object",
+    examplesEn: [
+      "open('file.txt')            # read text",
+      "open('file.txt', 'w')        # write text",
+      "open('file.txt', 'rb')       # read binary",
+      "open('file.txt', encoding='utf-8')  # specify encoding",
+    ],
+    examplesFr: [
+      "open('fichier.txt')         # lire texte",
+      "open('fichier.txt', 'w')     # ecrire texte",
+      "open('fichier.txt', 'rb')    # lire binaire",
+    ],
+    orderEn: [
+      "1. Checks the file exists and permissions (for read)",
+      "2. Creates/truncates if writing",
+      "3. Returns a file object that supports iteration and reading/writing",
+      "4. Always use `with open(...) as f:` for automatic cleanup",
+    ],
+    orderFr: [
+      "1. Verifie l'existence du fichier et les permissions",
+      "2. Cree/tronque si ecriture",
+      "3. Retourne un objet fichier",
+    ],
+    mistakesEn: [
+      "ALWAYS use `with open(...) as f:` to automatically close the file",
+      "Specify `encoding='utf-8'` for text files to avoid platform-dependent behavior",
+      "Binary mode ('rb', 'wb') returns bytes, not str",
+    ],
+    mistakesFr: [
+      "TOUJOURS utiliser `with open(...) as f:`",
+    ],
+  },
+  "ord": {
+    name: "ord",
+    type: "function",
+    signature: "ord(c) -> int",
+    descriptionEn: "Returns the Unicode codepoint (integer) for a single character string. Inverse of `chr()`.",
+    descriptionFr: "Retourne le point de code Unicode (entier) pour une chaine d\'un seul caractere. Inverse de `chr()`.",
+    returnType: "int",
+    examplesEn: [
+      "ord('A')           # 65",
+      "ord('\u20ac')        # 8364 (Euro sign)",
+      "ord('\U0001f680')    # 128640 (rocket)",
+    ],
+    examplesFr: [
+      "ord('A')           # 65",
+      "ord('\u20ac')        # 8364 (Euro sign)",
+      "ord('\U0001f680')    # 128640 (rocket)",
+    ],
+    orderEn: [
+      "1. Takes a single character string",
+      "2. Returns its Unicode codepoint as an integer",
+      "3. Raises TypeError if c is not a string or len(c) != 1",
+    ],
+    orderFr: [
+      "1. Prend une chaine d'un seul caractere",
+      "2. Retourne son point de code Unicode",
+      "3. Leve TypeError si ce n'est pas un seul caractere",
+    ],
+    mistakesEn: [
+      "`ord('A')` is 65, `chr(65)` is 'A' — they are inverses",
+      "Only works on single characters",
+    ],
+    mistakesFr: [
+      "`ord()` ne fonctionne que sur un seul caractere",
+    ],
+  },
+  "pow": {
+    name: "pow",
+    type: "function",
+    signature: "pow(base, exp[, mod]) -> number",
+    descriptionEn: "Returns base raised to power exp. If mod is given, returns (base ** exp) % mod efficiently (modular exponentiation).",
+    descriptionFr: "Retourne base eleve a la puissance exp. Si mod est donne, retourne (base ** exp) % mod efficacement.",
+    returnType: "int or float",
+    examplesEn: [
+      "pow(2, 10)         # 1024",
+      "pow(2, 10, 100)     # 24 (modular exponentiation)",
+      "pow(9, 0.5)         # 3.0 (square root)",
+    ],
+    examplesFr: [
+      "pow(2, 10)         # 1024",
+      "pow(2, 10, 100)     # 24 (exponentiation modulaire)",
+      "pow(9, 0.5)         # 3.0 (racine carree)",
+    ],
+    orderEn: [
+      "1. Computes base ** exp",
+      "2. If mod is given, computes (base ** exp) % mod efficiently",
+      "3. Three-argument form only works with integers",
+    ],
+    orderFr: [
+      "1. Calcule base ** exp",
+      "2. Si mod est donne, calcule (base ** exp) % mod efficacement",
+      "3. La forme a trois arguments ne marche qu'avec les entiers",
+    ],
+    mistakesEn: [
+      "`pow(base, exp, mod)` is much faster than `(base ** exp) % mod` for large exponents",
+      "The three-argument form requires all three arguments to be integers",
+    ],
+    mistakesFr: [
+      "`pow(base, exp, mod)` est bien plus rapide",
+    ],
+  },
+  "print": {
+    name: "print",
+    type: "function",
+    signature: "print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False) -> None",
+    descriptionEn: "Prints objects to the text stream, separated by sep and followed by end. All non-keyword arguments are converted to strings.",
+    descriptionFr: "Affiche les objets dans le flux texte, separes par sep et suivis de end.",
+    returnType: "None",
+    examplesEn: [
+      "print('hello')              # hello",
+      "print(1, 2, 3, sep=', ')    # 1, 2, 3",
+      "print('loading', end='')     # no newline at end",
+    ],
+    examplesFr: [
+      "print('bonjour')            # bonjour",
+      "print(1, 2, 3, sep=', ')    # 1, 2, 3",
+      "print('chargement', end='')  # pas de nouvelle ligne",
+    ],
+    orderEn: [
+      "1. Converts each argument to string via `str()`",
+      "2. Joins them with sep (default space)",
+      "3. Writes to file (default stdout)",
+      "4. Appends end (default newline)",
+      "5. If flush=True, flushes the buffer",
+    ],
+    orderFr: [
+      "1. Convertit chaque argument en chaine via `str()`",
+      "2. Les joint avec sep (espace par defaut)",
+      "3. Ecrit dans file (stdout par defaut)",
+      "4. Ajoute end (nouvelle ligne par defaut)",
+      "5. Si flush=True, vide le tampon",
+    ],
+    mistakesEn: [
+      "`print()` adds a space between arguments and a newline at the end",
+      "Use `print(..., file=sys.stderr)` to print to stderr",
+      "In Python 2, `print` was a statement, not a function",
+    ],
+    mistakesFr: [
+      "`print()` ajoute un espace entre les arguments",
+    ],
+  },
+  "property": {
+    name: "property",
+    type: "function",
+    signature: "property(fget=None, fset=None, fdel=None, doc=None) -> property",
+    descriptionEn: "Returns a property attribute. When accessed, calls fget; when assigned, calls fset; when deleted, calls fdel.",
+    descriptionFr: "Retourne un attribut de propriete. Quand il est accede, appelle fget ; quand assigne, appelle fset ; quand supprime, appelle fdel.",
+    returnType: "property descriptor",
+    examplesEn: [
+      "class C:\n    @property\n    def x(self):\n        return self._x",
+    ],
+    examplesFr: [
+      "class C:\n    @property\n    def x(self):\n        return self._x",
+    ],
+    orderEn: [
+      "1. Creates a descriptor that intercepts attribute access",
+      "2. `obj.prop` calls the getter function",
+      "3. `obj.prop = value` calls the setter",
+      "4. `del obj.prop` calls the deleter",
+    ],
+    orderFr: [
+      "1. Cree un descripteur qui intercepte l'acces aux attributs",
+      "2. `obj.prop` appelle le getter",
+      "3. `obj.prop = valeur` appelle le setter",
+      "4. `del obj.prop` appelle le deleter",
+    ],
+    mistakesEn: [
+      "`@property` makes computed attributes look like plain attributes",
+      "Avoid expensive operations in property getters (users expect O(1) attribute access)",
+    ],
+    mistakesFr: [
+      "`@property` fait ressembler les attributs calcules a des attributs simples",
+    ],
+  },
+  "range": {
+    name: "range",
+    type: "type",
+    signature: "range(start, stop[, step]) -> range",
+    descriptionEn: "Returns an immutable sequence of numbers from start (inclusive) to stop (exclusive) with step increment. Memory-efficient (lazy).",
+    descriptionFr: "Retourne une sequence immuable de nombres de start (inclus) a stop (exclu) avec un pas step. Econome en memoire (paresseux).",
+    returnType: "range",
+    examplesEn: [
+      "list(range(5))         # [0, 1, 2, 3, 4]",
+      "list(range(2, 7))       # [2, 3, 4, 5, 6]",
+      "list(range(0, 10, 2))   # [0, 2, 4, 6, 8]",
+      "list(range(5, 0, -1))   # [5, 4, 3, 2, 1]",
+    ],
+    examplesFr: [
+      "list(range(5))         # [0, 1, 2, 3, 4]",
+      "list(range(2, 7))       # [2, 3, 4, 5, 6]",
+      "list(range(0, 10, 2))   # [0, 2, 4, 6, 8]",
+      "list(range(5, 0, -1))   # [5, 4, 3, 2, 1]",
+    ],
+    orderEn: [
+      "1. Validates parameters: start, stop, step must be integers",
+      "2. Step must be non-zero (default 1)",
+      "3. Generates values lazily (not stored in memory)",
+      "4. Supports O(1) membership testing and indexing",
+    ],
+    orderFr: [
+      "1. Valide les parametres : start, stop, step doivent etre des entiers",
+      "2. Step doit etre non nul (defaut 1)",
+      "3. Genere les valeurs paresseusement",
+      "4. Supporte le test d'appartenance et l'indexation en O(1)",
+    ],
+    mistakesEn: [
+      "`range()` in Python 3 returns a lazy range object (not a list like Python 2)",
+      "`range(10)` is NOT a list — wrap with `list()` if needed",
+      "Negative step works: `range(5, 0, -1)`",
+    ],
+    mistakesFr: [
+      "`range()` renvoie un objet range paresseux",
+    ],
+  },
+  "repr": {
+    name: "repr",
+    type: "function",
+    signature: "repr(obj) -> str",
+    descriptionEn: "Returns a string containing a printable representation of an object. For most types, `eval(repr(obj)) == obj`.",
+    descriptionFr: "Retourne une chaine contenant une representation imprimable d\'un objet. Pour la plupart des types, `eval(repr(obj)) == obj`.",
+    returnType: "str",
+    examplesEn: [
+      "repr('hello')      # \"'hello'\" (includes quotes)",
+      "repr([1, 2, 3])     # '[1, 2, 3]'",
+      "repr(42)            # '42'",
+    ],
+    examplesFr: [
+      "repr('hello')      # \"'hello'\" (inclut les guillemets)",
+      "repr([1, 2, 3])     # '[1, 2, 3]'",
+      "repr(42)            # '42'",
+    ],
+    orderEn: [
+      "1. Calls `obj.__repr__()`",
+      "2. Returns a string that should be unambiguous (ideally recreation of the object)",
+      "3. Falls back to `<ClassName object at 0x...>` if `__repr__` is not defined",
+    ],
+    orderFr: [
+      "1. Appelle `obj.__repr__()`",
+      "2. Retourne une chaine non ambigue",
+      "3. Utilise `<ClassName object at 0x...>` si `__repr__` n'est pas defini",
+    ],
+    mistakesEn: [
+      "`repr()` vs `str()` — `str()` is for humans, `repr()` is for developers",
+      "If `eval(repr(obj))` works, `repr()` output is a valid Python expression",
+    ],
+    mistakesFr: [
+      "`repr()` vs `str()` — `str()` est pour les humains, `repr()` pour les developpeurs",
+    ],
+  },
+  "reversed": {
+    name: "reversed",
+    type: "function",
+    signature: "reversed(seq) -> reverse iterator",
+    descriptionEn: "Returns a reverse iterator that iterates over a sequence in reverse order. The sequence must implement `__reversed__` or `__len__` + `__getitem__`.",
+    descriptionFr: "Retourne un iterateur inversee qui parcourt une sequence en ordre inverse.",
+    returnType: "reverse iterator",
+    examplesEn: [
+      "list(reversed([1, 2, 3]))  # [3, 2, 1]",
+      "''.join(reversed('hello'))  # 'olleh'",
+    ],
+    examplesFr: [
+      "list(reversed([1, 2, 3]))  # [3, 2, 1]",
+      "''.join(reversed('bonjour'))  # 'ruojnob'",
+    ],
+    orderEn: [
+      "1. Checks for `__reversed__` method (optimized)",
+      "2. Falls back to `__len__` + `__getitem__` for generic sequences",
+      "3. Returns a lazy iterator (not a list)",
+    ],
+    orderFr: [
+      "1. Verifie la methode `__reversed__` (optimisee)",
+      "2. Utilise `__len__` + `__getitem__` comme repli",
+      "3. Retourne un iterateur paresseux",
+    ],
+    mistakesEn: [
+      "`reversed()` returns an iterator (not a list)",
+      "For dicts in Python 3.8+, `list(reversed(d))` reverses insertion order",
+    ],
+    mistakesFr: [
+      "`reversed()` retourne un iterateur",
+    ],
+  },
+  "round": {
+    name: "round",
+    type: "function",
+    signature: "round(number[, ndigits]) -> number",
+    descriptionEn: "Rounds a number to ndigits precision after the decimal point. If ndigits is omitted or None, returns the nearest integer (as int).",
+    descriptionFr: "Arrondit un nombre a ndigits decimales. Si ndigits est omis, retourne l\'entier le plus proche.",
+    returnType: "int or float",
+    examplesEn: [
+      "round(3.14159)     # 3",
+      "round(3.14159, 2)   # 3.14",
+      "round(2.5)          # 2 (banker's rounding)",
+      "round(3.5)          # 4 (banker's rounding)",
+    ],
+    examplesFr: [
+      "round(3.14159)     # 3",
+      "round(3.14159, 2)   # 3.14",
+      "round(2.5)          # 2 (arrondi bancaire)",
+      "round(3.5)          # 4 (arrondi bancaire)",
+    ],
+    orderEn: [
+      "1. Computes the rounded value",
+      "2. Uses banker's rounding (round half to even) for .5 cases",
+      "3. Without ndigits: returns int; with ndigits: returns float",
+    ],
+    orderFr: [
+      "1. Calcule la valeur arrondie",
+      "2. Utilise l'arrondi bancaire (demi arrondi au pair) pour .5",
+      "3. Sans ndigits : retourne int ; avec ndigits : retourne float",
+    ],
+    mistakesEn: [
+      "Python uses banker's rounding (tie goes to even): `round(2.5)` is 2, not 3",
+      "Floating-point precision can cause unexpected results: `round(2.675, 2)` is 2.67, not 2.68",
+    ],
+    mistakesFr: [
+      "Python utilise l'arrondi bancaire",
+    ],
+  },
+  "set": {
+    name: "set",
+    type: "type",
+    signature: "set(iterable=()) -> set",
+    descriptionEn: "Creates a mutable, unordered collection of unique, hashable elements.",
+    descriptionFr: "Cree un ensemble mutable et non ordonne d\'elements uniques et hachables.",
+    returnType: "set",
+    examplesEn: [
+      "set([1, 2, 2, 3])  # {1, 2, 3}",
+      "set('hello')        # {'h', 'e', 'l', 'o'}",
+      "{1, 2, 3}           # set literal",
+    ],
+    examplesFr: [
+      "set([1, 2, 2, 3])  # {1, 2, 3}",
+      "set('hello')        # {'h', 'e', 'l', 'o'}",
+      "{1, 2, 3}           # ensemble litteral",
+    ],
+    orderEn: [
+      "1. Iterates over the iterable",
+      "2. Inserts each element into the set (duplicates are discarded)",
+      "3. Elements must be hashable (immutable)",
+    ],
+    orderFr: [
+      "1. Parcourt l'iterable",
+      "2. Insere chaque element dans l'ensemble (les doublons sont ignores)",
+      "3. Les elements doivent etre hachables",
+    ],
+    mistakesEn: [
+      "Sets are unordered — do not rely on iteration order",
+      "`{1, 2, 3}` is a set, `{}` is an empty dict (not empty set)",
+      "Frozenset is the immutable version",
+    ],
+    mistakesFr: [
+      "Les ensembles ne sont pas ordonnes",
+    ],
+  },
+  "setattr": {
+    name: "setattr",
+    type: "function",
+    signature: "setattr(obj, name, value) -> None",
+    descriptionEn: "Sets the named attribute on an object to the given value. Equivalent to `obj.name = value`.",
+    descriptionFr: "Definit l\'attribut nomme d\'un objet a la valeur donnee. Equivalent a `obj.name = value`.",
+    returnType: "None",
+    examplesEn: [
+      "setattr(obj, 'x', 42)  # same as obj.x = 42",
+    ],
+    examplesFr: [
+      "setattr(obj, 'x', 42)  # identique a obj.x = 42",
+    ],
+    orderEn: [
+      "1. Looks up the attribute on the object",
+      "2. Calls `__setattr__` to assign the value",
+    ],
+    orderFr: [
+      "1. Cherche l'attribut sur l'objet",
+      "2. Appelle `__setattr__` pour assigner la valeur",
+    ],
+    mistakesEn: [
+      "Use `setattr(obj, name, val)` when the attribute name is dynamic",
+      "`obj.name = val` is preferred when the name is known statically",
+    ],
+    mistakesFr: [
+      "Utilisez `setattr(obj, nom, val)` quand le nom est dynamique",
+    ],
+  },
+  "slice": {
+    name: "slice",
+    type: "function",
+    signature: "slice(start, stop[, step]) -> slice",
+    descriptionEn: "Returns a slice object representing a range for indexing sequences. Used internally by `obj[start:stop:step]`.",
+    descriptionFr: "Retourne un objet slice representant une plage pour l\'indexation de sequences.",
+    returnType: "slice",
+    examplesEn: [
+      "s = slice(1, 5, 2)\nlist(range(10)[s])  # [1, 3]",
+      "'hello'[slice(1, 4)]   # 'ell'",
+    ],
+    examplesFr: [
+      "s = slice(1, 5, 2)\nlist(range(10)[s])  # [1, 3]",
+      "'bonjour'[slice(1, 4)]   # 'onj'",
+    ],
+    orderEn: [
+      "1. Stores start, stop, step parameters",
+      "2. Passed to `__getitem__` when using subscript notation",
+      "3. Slices are themselves slice objects",
+    ],
+    orderFr: [
+      "1. Stocke les parametres start, stop, step",
+      "2. Passe a `__getitem__` lors de l'utilisation de la notation entre crochets",
+      "3. Les slices sont eux-memes des objets",
+    ],
+    mistakesEn: [
+      "`obj[1:5:2]` is syntactic sugar for `obj[slice(1, 5, 2)]`",
+      "Negative indices work when the slice is applied to a sequence",
+    ],
+    mistakesFr: [
+      "`obj[1:5:2]` est du sucre syntaxique pour `obj[slice(1, 5, 2)]`",
+    ],
+  },
+  "sorted": {
+    name: "sorted",
+    type: "function",
+    signature: "sorted(iterable, *, key=None, reverse=False) -> list",
+    descriptionEn: "Returns a new sorted list from the items in iterable. The original iterable is not modified.",
+    descriptionFr: "Retourne une nouvelle liste triee a partir des elements de l\'iterable. L\'iterable original n\'est pas modifie.",
+    returnType: "list",
+    examplesEn: [
+      "sorted([3, 1, 2])              # [1, 2, 3]",
+      "sorted('hello')                 # ['e', 'h', 'l', 'l', 'o']",
+    ],
+    examplesFr: [
+      "sorted([3, 1, 2])              # [1, 2, 3]",
+      "sorted('bonjour')               # ['b', 'j', 'n', 'o', 'o', 'r', 'u']",
+    ],
+    orderEn: [
+      "1. Creates a list from the iterable",
+      "2. Sorts the list using Timsort algorithm (O(n log n))",
+      "3. Key function is applied to each element for comparison",
+      "4. If reverse=True, sorts in descending order",
+      "5. Returns the new sorted list",
+    ],
+    orderFr: [
+      "1. Cree une liste a partir de l'iterable",
+      "2. Trie la liste avec l'algorithme Timsort (O(n log n))",
+      "3. La fonction key est appliquee a chaque element pour la comparaison",
+      "4. Si reverse=True, tri en ordre descendant",
+      "5. Retourne la nouvelle liste triee",
+    ],
+    mistakesEn: [
+      "`sorted()` returns a new list — `list.sort()` sorts in-place (and returns None)",
+      "Use `key=str.lower` for case-insensitive sorting",
+      "`sorted()` works on ANY iterable, not just lists",
+    ],
+    mistakesFr: [
+      "`sorted()` retourne une nouvelle liste",
+    ],
+  },
+  "staticmethod": {
+    name: "staticmethod",
+    type: "function",
+    signature: "staticmethod(function) -> staticmethod descriptor",
+    descriptionEn: "Transforms a method into a static method. A static method does NOT receive an implicit first argument (neither cls nor self).",
+    descriptionFr: "Transforme une methode en methode statique. Une methode statique ne recoit PAS de premier argument implicite.",
+    returnType: "staticmethod descriptor",
+    examplesEn: [
+      "class MyClass:\n    @staticmethod\n    def util(x):\n        return x * 2",
+    ],
+    examplesFr: [
+      "class MyClass:\n    @staticmethod\n    def util(x):\n        return x * 2",
+    ],
+    orderEn: [
+      "1. Wraps the function in a staticmethod descriptor",
+      "2. When accessed, returns the original function directly (no binding)",
+    ],
+    orderFr: [
+      "1. Enveloppe la fonction dans un descripteur staticmethod",
+      "2. Quand il est accede, retourne la fonction originale directement",
+    ],
+    mistakesEn: [
+      "`@staticmethod` receives nothing extra (no `self` or `cls`)",
+      "Use `@classmethod` when you need access to the class, `@staticmethod` when you don't",
+    ],
+    mistakesFr: [
+      "`@staticmethod` ne recoit rien de supplementaire",
+    ],
+  },
+  "str": {
+    name: "str",
+    type: "type",
+    signature: "str(object='') -> str",
+    descriptionEn: "Returns a string version of object. Strings are immutable sequences of Unicode codepoints.",
+    descriptionFr: "Retourne une version chaine de l\'objet. Les chaines sont des sequences immuables de points de code Unicode.",
+    returnType: "str",
+    examplesEn: [
+      "str(42)            # '42'",
+      "str([1, 2, 3])      # '[1, 2, 3]'",
+      "str(3.14)           # '3.14'",
+    ],
+    examplesFr: [
+      "str(42)            # '42'",
+      "str([1, 2, 3])      # '[1, 2, 3]'",
+      "str(3.14)           # '3.14'",
+    ],
+    orderEn: [
+      "1. Calls `object.__str__()`",
+      "2. Falls back to `__repr__()` if `__str__` is not defined",
+    ],
+    orderFr: [
+      "1. Appelle `object.__str__()`",
+      "2. Utilise `__repr__()` si `__str__` n'est pas defini",
+    ],
+    mistakesEn: [
+      "`str()` is for readable output, `repr()` for unambiguous",
+      "Strings are immutable — every operation returns a new string",
+    ],
+    mistakesFr: [
+      "`str()` est pour une sortie lisible",
+    ],
+  },
+  "sum": {
+    name: "sum",
+    type: "function",
+    signature: "sum(iterable, start=0) -> number",
+    descriptionEn: "Sums all items of an iterable and returns the total, starting from start (default 0). The items must support addition.",
+    descriptionFr: "Additionne tous les elements d\'un iterable et retourne le total, en commencant par start (defaut 0).",
+    returnType: "number",
+    examplesEn: [
+      "sum([1, 2, 3, 4, 5])  # 15",
+      "sum([1, 2, 3], 10)      # 16 (start at 10)",
+      "sum(range(101))         # 5050",
+    ],
+    examplesFr: [
+      "sum([1, 2, 3, 4, 5])  # 15",
+      "sum([1, 2, 3], 10)      # 16 (commence a 10)",
+      "sum(range(101))         # 5050",
+    ],
+    orderEn: [
+      "1. Starts with the start value",
+      "2. For each item in the iterable: total += item",
+      "3. Returns the final total",
+    ],
+    orderFr: [
+      "1. Commence avec la valeur start",
+      "2. Pour chaque element : total += element",
+      "3. Retourne le total final",
+    ],
+    mistakesEn: [
+      "`sum()` does not work with strings — use `''.join(seq)` instead",
+      "For nested lists, use `itertools.chain.from_iterable()`",
+    ],
+    mistakesFr: [
+      "`sum()` ne fonctionne pas avec les chaines",
+    ],
+  },
+  "super": {
+    name: "super",
+    type: "function",
+    signature: "super([type[, object-or-type]]) -> super object",
+    descriptionEn: "Returns a proxy object that delegates method calls to the parent or sibling class. Used to call parent class methods.",
+    descriptionFr: "Retourne un objet proxy qui delegue les appels de methode a la classe parente ou soeur.",
+    returnType: "super object",
+    examplesEn: [
+      "class Dog(Animal):\n    def speak(self):\n        return super().speak()",
+    ],
+    examplesFr: [
+      "class Dog(Animal):\n    def speak(self):\n        return super().speak()",
+    ],
+    orderEn: [
+      "1. Returns a proxy that follows the MRO (Method Resolution Order)",
+      "2. Calls the next class in the MRO that defines the method",
+      "3. Without arguments in Python 3, automatically uses current class and self",
+    ],
+    orderFr: [
+      "1. Retourne un proxy qui suit le MRO (Method Resolution Order)",
+      "2. Appelle la classe suivante dans le MRO qui definit la methode",
+      "3. Sans arguments en Python 3, utilise automatiquement la classe courante",
+    ],
+    mistakesEn: [
+      "`super()` without args works in Python 3 (not Python 2)",
+      "`super().__init__()` is the standard way to call parent constructors",
+      "`super()` works with multiple inheritance via C3 linearization",
+    ],
+    mistakesFr: [
+      "`super()` sans arguments fonctionne en Python 3",
+    ],
+  },
+  "tuple": {
+    name: "tuple",
+    type: "type",
+    signature: "tuple(iterable=()) -> tuple",
+    descriptionEn: "Creates a tuple from an iterable. Tuples are immutable, ordered sequences that can hold items of any type.",
+    descriptionFr: "Cree un tuple a partir d\'un iterable. Les tuples sont des sequences immuables et ordonnees.",
+    returnType: "tuple",
+    examplesEn: [
+      "tuple('hello')     # ('h', 'e', 'l', 'l', 'o')",
+      "tuple([1, 2, 3])    # (1, 2, 3)",
+      "(1, 2, 3)           # tuple literal",
+    ],
+    examplesFr: [
+      "tuple('hello')     # (\'h\', \'e\', \'l\', \'l\', \'o\')",
+      "tuple([1, 2, 3])    # (1, 2, 3)",
+      "(1, 2, 3)           # tuple litteral",
+    ],
+    orderEn: [
+      "1. Iterates over the iterable",
+      "2. Collects items into a new tuple",
+      "3. Tuples are immutable — cannot be modified after creation",
+    ],
+    orderFr: [
+      "1. Parcourt l'iterable",
+      "2. Collecte les elements dans un nouveau tuple",
+      "3. Les tuples sont immuables",
+    ],
+    mistakesEn: [
+      "`(1)` is just the integer 1 — use `(1,)` for a single-element tuple",
+      "Tuples are hashable (usable as dict keys) if all elements are hashable",
+    ],
+    mistakesFr: [
+      "`(1)` est juste l'entier 1",
+    ],
+  },
+  "type": {
+    name: "type",
+    type: "function",
+    signature: "type(object) -> type / type(name, bases, dict) -> type",
+    descriptionEn: "With one argument: returns the type of an object. With three arguments: creates a new type (dynamic class).",
+    descriptionFr: "Avec un argument : retourne le type d\'un objet. Avec trois arguments : cree un nouveau type (classe dynamique).",
+    returnType: "type (the type of the object, or a new type)",
+    examplesEn: [
+      "type(42)            # <class 'int'>",
+      "type('hello')        # <class 'str'>",
+      "type('Dog', (Animal,), {'speak': lambda self: 'Woof'})  # dynamic class",
+    ],
+    examplesFr: [
+      "type(42)            # <class 'int'>",
+      "type('hello')        # <class 'str'>",
+      "type('Dog', (Animal,), {'speak': lambda self: 'Woof'})  # classe dynamique",
+    ],
+    orderEn: [
+      "1. One arg: returns `object.__class__` (the object's type)",
+      "2. Three args: creates a new class with name, bases (tuple of parent classes), and namespace dict",
+    ],
+    orderFr: [
+      "1. Un argument : retourne `object.__class__` (le type de l'objet)",
+      "2. Trois arguments : cree une nouvelle classe avec nom, bases et dict d'espace de noms",
+    ],
+    mistakesEn: [
+      "`type(obj)` does NOT consider inheritance — use `isinstance()` for that",
+      "`type(True)` is `<class 'bool'>`, `type(True) == int` is False (but isinstance is True)",
+    ],
+    mistakesFr: [
+      "`type(obj)` ne considere PAS l'heritage",
+    ],
+  },
+  "vars": {
+    name: "vars",
+    type: "function",
+    signature: "vars([object]) -> dict",
+    descriptionEn: "Without arguments: returns the local namespace (same as `locals()`). With an object: returns the object\'s `__dict__` attribute.",
+    descriptionFr: "Sans argument : retourne l\'espace de noms local (identique a `locals()`). Avec un objet : retourne l\'attribut `__dict__`.",
+    returnType: "dict",
+    examplesEn: [
+      "vars()             # local namespace",
+      "vars([])            # list.__dict__ (attributes of list object)",
+    ],
+    examplesFr: [
+      "vars()             # espace de noms local",
+      "vars([])            # list.__dict__",
+    ],
+    orderEn: [
+      "1. Without args: returns local scope dict",
+      "2. With object: returns `object.__dict__` (the object's writable attributes)",
+    ],
+    orderFr: [
+      "1. Sans argument : retourne le dict de la portee locale",
+      "2. Avec objet : retourne `object.__dict__`",
+    ],
+    mistakesEn: [
+      "`vars(obj)` raises TypeError if obj doesn't have `__dict__`",
+      "Use `dir(obj)` to see all attributes (including inherited)",
+    ],
+    mistakesFr: [
+      "`vars(obj)` leve TypeError si obj n'a pas `__dict__`",
+    ],
+  },
+  "zip": {
+    name: "zip",
+    type: "function",
+    signature: "zip(*iterables, strict=False) -> iterator of tuples",
+    descriptionEn: "Iterates over multiple iterables in parallel, yielding tuples of the i-th elements. Stops when the shortest iterable is exhausted (unless strict=True).",
+    descriptionFr: "Parcourt plusieurs iterables en parallele, produisant des tuples des i-emes elements. S\'arrete quand le plus court est epuise.",
+    returnType: "iterator of tuples",
+    examplesEn: [
+      "list(zip([1, 2, 3], ['a', 'b', 'c']))  # [(1, 'a'), (2, 'b'), (3, 'c')]",
+      "list(zip([1, 2], ['a', 'b', 'c']))   # [(1, 'a'), (2, 'b')] (shortest wins)",
+    ],
+    examplesFr: [
+      "list(zip([1, 2, 3], ['a', 'b', 'c']))  # [(1, 'a'), (2, 'b'), (3, 'c')]",
+      "list(zip([1, 2], ['a', 'b', 'c']))   # [(1, 'a'), (2, 'b')] (le plus court gagne)",
+    ],
+    orderEn: [
+      "1. Retrieves the i-th element from each iterable",
+      "2. Zips them into a tuple",
+      "3. Stops when the shortest iterable is exhausted (default) or raises ValueError if strict=True and lengths differ",
+      "4. Returns a lazy iterator",
+    ],
+    orderFr: [
+      "1. Recupere le i-eme element de chaque iterable",
+      "2. Les assemble en un tuple",
+      "3. S'arrete quand le plus court est epuise (ou leve ValueError si strict=True)",
+      "4. Retourne un iterateur paresseux",
+    ],
+    mistakesEn: [
+      "`zip()` returns an iterator in Python 3 (not a list like Python 2)",
+      "Use `zip(..., strict=True)` (Python 3.10+) to require equal-length iterables",
+      "`zip(*pairs)` unzips: `list(zip(*[(1,'a'),(2,'b')]))` => [(1,2), ('a','b')]",
+    ],
+    mistakesFr: [
+      "`zip()` retourne un iterateur en Python 3",
+    ],
+  },
+};
+
+// Regex to detect any builtin name in a question
+function builtinNameRegex(specs: Record<string, BuiltinSpec>): RegExp {
+  const names = Object.keys(specs);
+  // Sort by length descending so longer names match before shorter (e.g., "isinstance" before "is")
+  const sorted = names.sort((a, b) => b.length - a.length).map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  return new RegExp(
+    `(?:what\\s+(?:is|does|are|about)\\s+)?` +
+    `(?:explain\\s+(?:to\\s+me\\s+)?)?` +
+    `(?:can\\s+you\\s+(?:explain|tell\\s+me)\\s+)?` +
+    `(?:how\\s+(?:does|do)\\s+)?` +
+    `(?:the\\s+)?` +
+    `(?:\\b(?:${sorted.join('|')})\\b)` +
+    `(?:\\(\\))?` +
+    `(?:\\s+(?:function|method|built.?in))?` +
+    `(?:\\?)?$`,
+    'i'
+  );
+}
+
+export const answerPythonBuiltinQuery = (question: string, language: AdvancedAiLanguage): string | null => {
+  const fr = language === 'fr';
+  const lower = question.toLowerCase().trim();
+
+  // Try to match a builtin name in the question
+  const names = Object.keys(BUILTIN_SPECS).sort((a, b) => b.length - a.length);
+  for (const name of names) {
+    // Check for various ways the user might ask about this builtin
+    const patterns = [
+      new RegExp(`\\b${name}\\b`, 'i'),
+      new RegExp(`what\\s+is\\s+${name}`, 'i'),
+      new RegExp(`explain\\s+${name}`, 'i'),
+      new RegExp(`what\\s+does\\s+${name}\\s+do`, 'i'),
+      new RegExp(`how\\s+does\\s+${name}\\s+work`, 'i'),
+      new RegExp(`^${name}\\s*$`, 'i'),
+      new RegExp(`^${name}\\(\\)\\s*$`, 'i'),
+      new RegExp(`tell\\s+me\\s+(?:about|how)\\s+${name}`, 'i'),
+      new RegExp(`\\b${name}\\s+function`, 'i'),
+      new RegExp(`\\b${name}\\s+build.?in`, 'i'),
+    ];
+
+    let matched = false;
+    for (const p of patterns) {
+      if (p.test(lower)) { matched = true; break; }
+    }
+    if (!matched) continue;
+
+    const spec = BUILTIN_SPECS[name];
+    if (!spec) continue;
+
+    const desc = fr ? spec.descriptionFr : spec.descriptionEn;
+    const examples = fr ? spec.examplesFr : spec.examplesEn;
+    const order = fr ? spec.orderFr : spec.orderEn;
+    const mistakes = fr ? spec.mistakesFr : spec.mistakesEn;
+
+    const parts: string[] = [
+      `**${spec.name}()** — ${spec.signature}`,
+      '',
+      `**${fr ? 'Description' : 'Description'}**:`,
+      desc,
+      '',
+      `**${fr ? 'Signature' : 'Signature'}**: \`${spec.signature}\``,
+      '',
+      `**${fr ? 'Valeur de retour' : 'Return type'}**: \`${spec.returnType}\``,
+      '',
+      `**${fr ? 'Ordre des operations' : 'Order of operations'}**:`,
+      ...order.map((s: string, i: number) => `${i + 1}. ${s}`),
+      '',
+      `**${fr ? 'Exemples' : 'Examples'}**:`,
+      '```python',
+      ...examples,
+      '```',
+      '',
+      `**${fr ? 'Erreurs frequentes' : 'Common mistakes'}**:`,
+      ...mistakes.map((s: string) => `- ${s}`),
+    ];
+
+    return parts.join('\n');
+  }
+  return null;
+};
+
+
 export const buildGeneralAiSmartFollowUp = (topic: string, language: AdvancedAiLanguage): string | null => {
   const relations = TOPIC_RELATIONSHIPS[topic];
   if (!relations || relations.length === 0) return null;

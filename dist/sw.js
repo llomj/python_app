@@ -1,84 +1,71 @@
-const CACHE_VERSION = "v260";
-// Pre-cache stable runtime deps. The app shell and bundles are cached after a
-// successful network fetch so phones do not get stuck on old UI code.
-const CORE_ASSETS = [
-    './manifest.json',
-    'https://cdn.tailwindcss.com',
-    'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js',
-    'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.asm.js',
-    'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.asm.wasm',
-    'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/python_stdlib.zip',
-    'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/repodata.json',
-    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
-];
+const CACHE_VERSION = 'v262';
+const CACHE_NAME = `python-mastery-${CACHE_VERSION}`;
+const MANIFEST_URL = './offline-assets.json';
+
+const cacheCompleteBuild = async () => {
+    const manifestResponse = await fetch(MANIFEST_URL, { cache: 'no-store' });
+    if (!manifestResponse.ok) throw new Error(`Offline manifest failed: ${manifestResponse.status}`);
+    const manifest = await manifestResponse.json();
+    if (manifest.version !== CACHE_VERSION || !Array.isArray(manifest.assets)) {
+        throw new Error('Offline manifest does not match this service worker.');
+    }
+
+    const cache = await caches.open(CACHE_NAME);
+    const assets = [MANIFEST_URL, ...manifest.assets];
+    for (let index = 0; index < assets.length; index += 20) {
+        await cache.addAll(assets.slice(index, index + 20));
+    }
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    windows.forEach(client => client.postMessage({ type: 'OFFLINE_READY', version: CACHE_VERSION }));
+};
 
 self.addEventListener('install', event => {
-    console.log('Service Worker Installing:', CACHE_VERSION);
-
-    event.waitUntil(
-        caches.open(CACHE_VERSION)
-            .then(cache => cache.addAll(CORE_ASSETS))
-            .catch(error => {
-                console.warn('Core pre-cache failed; continuing with runtime cache.', error);
-            })
-            .then(() => self.skipWaiting())
-    );
+    event.waitUntil(cacheCompleteBuild().then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {
-    console.log('Service Worker Activated:', CACHE_VERSION);
-
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_VERSION) {
-                        console.log('Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => {
-            return self.clients.claim();
-        })
-    );
+    event.waitUntil((async () => {
+        const cacheNames = await caches.keys();
+        const previousCaches = cacheNames
+            .filter(cacheName => cacheName.startsWith('python-mastery-') && cacheName !== CACHE_NAME)
+            .sort()
+            .reverse();
+        const retainedCaches = new Set([CACHE_NAME, previousCaches[0]].filter(Boolean));
+        await Promise.all(cacheNames
+            .filter(cacheName => cacheName.startsWith('python-mastery-') && !retainedCaches.has(cacheName))
+            .map(cacheName => caches.delete(cacheName)));
+        await self.clients.claim();
+    })());
 });
 
-// Network-first with cache fallback: try network, on failure serve from cache. Enables FULL OFFLINE support.
+const cachedResponse = request => caches.open(CACHE_NAME)
+    .then(cache => cache.match(request, { ignoreSearch: true }));
+
 self.addEventListener('fetch', event => {
     const request = event.request;
+    if (request.method !== 'GET') return;
 
-    if (request.method !== 'GET') {
-        event.respondWith(fetch(request));
-        return;
-    }
+    event.respondWith((async () => {
+        const cached = await cachedResponse(request);
+        if (cached) return cached;
 
-    event.respondWith(
-        fetch(request)
-            .then(networkResponse => {
-                if (networkResponse.ok) {
-                    caches.open(CACHE_VERSION).then(cache => cache.put(request, networkResponse.clone()));
-                }
-                return networkResponse;
-            })
-            .catch(() =>
-                caches.open(CACHE_VERSION).then(cache =>
-                    cache.match(request).then(cached => cached || new Response('', { status: 503, statusText: 'Offline' }))
-                )
-            )
-    );
+        try {
+            const response = await fetch(request);
+            if (response.ok) {
+                const cache = await caches.open(CACHE_NAME);
+                await cache.put(request, response.clone());
+            }
+            return response;
+        } catch {
+            if (request.mode === 'navigate') {
+                return (await cachedResponse(new Request('./index.html'))) || Response.error();
+            }
+            return new Response('Offline asset unavailable', { status: 503 });
+        }
+    })());
 });
 
-self.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-        console.log('⏳ Client told me to skip version check');
-        self.skipWaiting();
-    }
-
-    if (event.data && event.data.type === 'FORCE_UPDATE_NOW') {
-        console.log('🔄 Force update initiated');
-        self.registration.update();
-    }
+self.addEventListener('message', event => {
+    if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+    if (event.data?.type === 'FORCE_UPDATE_NOW') self.registration.update();
 });
-
-console.log('Service Worker loaded, version:', CACHE_VERSION);
