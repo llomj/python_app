@@ -6352,6 +6352,9 @@ export interface GeneralAiApiCatalogItem {
   summary: string;
   category: string;
   kind: 'builtin' | 'method';
+  returnType: string;
+  mutates: boolean;
+  exampleCode: string;
 }
 
 export interface GeneralAiApiCatalog {
@@ -7641,6 +7644,80 @@ const BUILTIN_METHOD_SPECS: Record<string, MethodSpec> = {
   },
 };
 
+const supplementalMethodSpec = (
+  name: string,
+  signature: string,
+  descriptionEn: string,
+  descriptionFr: string,
+  returnType: string,
+  example: string,
+  mutates = false,
+): MethodSpec => ({
+  name,
+  type: 'method',
+  signature,
+  descriptionEn,
+  descriptionFr,
+  returnType,
+  examplesEn: [example],
+  examplesFr: [example],
+  orderEn: [
+    `1. Validate the receiver and supplied arguments for ${name}().`,
+    `2. Apply the method's operation${mutates ? ' to the existing object' : ''}.`,
+    `3. Return ${returnType === 'None' ? 'None after the in-place change' : `a ${returnType} result`}.`,
+  ],
+  orderFr: [
+    `1. Valider l'objet et les arguments fournis à ${name}().`,
+    `2. Appliquer l'opération${mutates ? ' sur l’objet existant' : ''}.`,
+    `3. Retourner ${returnType === 'None' ? 'None après la modification sur place' : `un résultat ${returnType}`}.`,
+  ],
+  mistakesEn: [mutates ? 'This method changes the existing object; do not assign its None return value.' : 'Check the receiver type and argument types before calling this method.'],
+  mistakesFr: [mutates ? 'Cette méthode modifie l’objet existant ; ne réaffectez pas sa valeur de retour None.' : 'Vérifiez le type de l’objet et des arguments avant cet appel.'],
+});
+
+Object.assign(BUILTIN_METHOD_SPECS, {
+  'bytes.decode': supplementalMethodSpec('bytes.decode', 'bytes.decode(encoding="utf-8", errors="strict")', 'Decodes bytes into text using the selected character encoding.', 'Décode des octets en texte avec l’encodage choisi.', 'str', 'b"caf\\xc3\\xa9".decode("utf-8")  # "café"'),
+  'bytes.hex': supplementalMethodSpec('bytes.hex', 'bytes.hex(sep=None, bytes_per_sep=1)', 'Returns a hexadecimal string representing every byte.', 'Retourne une chaîne hexadécimale représentant chaque octet.', 'str', 'b"\\x0f\\xff".hex()  # "0fff"'),
+  'bytes.count': supplementalMethodSpec('bytes.count', 'bytes.count(sub[, start[, end]])', 'Counts non-overlapping occurrences of a byte subsequence.', 'Compte les occurrences non chevauchantes d’une sous-séquence d’octets.', 'int', 'b"banana".count(b"an")  # 2'),
+  'bytes.find': supplementalMethodSpec('bytes.find', 'bytes.find(sub[, start[, end]])', 'Returns the first index of a byte subsequence, or -1 when absent.', 'Retourne le premier indice d’une sous-séquence, ou -1 si elle est absente.', 'int', 'b"python".find(b"th")  # 2'),
+  'bytes.split': supplementalMethodSpec('bytes.split', 'bytes.split(sep=None, maxsplit=-1)', 'Splits bytes into a list of byte strings.', 'Découpe des octets en une liste de chaînes d’octets.', 'list[bytes]', 'b"a,b,c".split(b",")  # [b"a", b"b", b"c"]'),
+  'bytes.replace': supplementalMethodSpec('bytes.replace', 'bytes.replace(old, new, count=-1)', 'Returns new bytes with occurrences replaced.', 'Retourne de nouveaux octets avec les occurrences remplacées.', 'bytes', 'b"banana".replace(b"a", b"o")  # b"bonono"'),
+  'bytearray.append': supplementalMethodSpec('bytearray.append', 'bytearray.append(item)', 'Appends one integer byte from 0 through 255.', 'Ajoute un octet entier compris entre 0 et 255.', 'None', 'data = bytearray(b"AB")\ndata.append(67)\nprint(data)  # bytearray(b"ABC")', true),
+  'bytearray.extend': supplementalMethodSpec('bytearray.extend', 'bytearray.extend(iterable)', 'Appends every byte from an iterable.', 'Ajoute chaque octet d’un itérable.', 'None', 'data = bytearray(b"A")\ndata.extend(b"BC")\nprint(data)  # bytearray(b"ABC")', true),
+  'bytearray.reverse': supplementalMethodSpec('bytearray.reverse', 'bytearray.reverse()', 'Reverses the bytearray in place.', 'Inverse le bytearray sur place.', 'None', 'data = bytearray(b"ABC")\ndata.reverse()\nprint(data)  # bytearray(b"CBA")', true),
+  'bytearray.decode': supplementalMethodSpec('bytearray.decode', 'bytearray.decode(encoding="utf-8", errors="strict")', 'Decodes the bytearray into a new string.', 'Décode le bytearray en une nouvelle chaîne.', 'str', 'bytearray(b"hello").decode()  # "hello"'),
+  'bytearray.hex': supplementalMethodSpec('bytearray.hex', 'bytearray.hex(sep=None, bytes_per_sep=1)', 'Returns a hexadecimal text representation.', 'Retourne une représentation textuelle hexadécimale.', 'str', 'bytearray([15, 255]).hex()  # "0fff"'),
+  'bytearray.clear': supplementalMethodSpec('bytearray.clear', 'bytearray.clear()', 'Removes every byte in place.', 'Supprime tous les octets sur place.', 'None', 'data = bytearray(b"ABC")\ndata.clear()\nprint(data)  # bytearray(b"")', true),
+  'bytearray.pop': supplementalMethodSpec('bytearray.pop', 'bytearray.pop(index=-1)', 'Removes and returns one integer byte.', 'Supprime et retourne un octet entier.', 'int', 'data = bytearray(b"ABC")\nprint(data.pop())  # 67', true),
+  'iterator.__iter__': supplementalMethodSpec('iterator.__iter__', 'iterator.__iter__()', 'Returns the iterator itself so it can participate in iteration.', 'Retourne l’itérateur lui-même pour permettre l’itération.', 'iterator', 'items = iter([1, 2])\nprint(iter(items) is items)  # True'),
+  'iterator.__next__': supplementalMethodSpec('iterator.__next__', 'iterator.__next__()', 'Returns the next item or raises StopIteration when exhausted.', 'Retourne l’élément suivant ou lève StopIteration à la fin.', 'object', 'items = iter([10, 20])\nprint(next(items))  # 10'),
+  'generator.send': supplementalMethodSpec('generator.send', 'generator.send(value)', 'Resumes a generator and sends a value into its suspended yield expression.', 'Reprend un générateur et envoie une valeur dans l’expression yield suspendue.', 'object', 'def receiver():\n    value = yield "ready"\n    yield value * 2\ngen = receiver()\nprint(next(gen))\nprint(gen.send(5))  # 10'),
+  'generator.throw': supplementalMethodSpec('generator.throw', 'generator.throw(type[, value[, traceback]])', 'Raises an exception at the generator’s suspended point.', 'Lève une exception au point suspendu du générateur.', 'object', 'def values():\n    try:\n        yield 1\n    except ValueError:\n        yield 2\ngen = values()\nnext(gen)\nprint(gen.throw(ValueError))  # 2'),
+  'generator.close': supplementalMethodSpec('generator.close', 'generator.close()', 'Stops a generator by raising GeneratorExit inside it.', 'Arrête un générateur en levant GeneratorExit à l’intérieur.', 'None', 'gen = (number for number in range(3))\ngen.close()'),
+  'generator.__next__': supplementalMethodSpec('generator.__next__', 'generator.__next__()', 'Resumes execution until the next yield or completion.', 'Reprend l’exécution jusqu’au prochain yield ou jusqu’à la fin.', 'object', 'gen = (number * 2 for number in [1, 2])\nprint(next(gen))  # 2'),
+  'io.TextIOBase.read': supplementalMethodSpec('io.TextIOBase.read', 'file.read(size=-1)', 'Reads up to size text characters, or all remaining text.', 'Lit jusqu’à size caractères, ou tout le texte restant.', 'str', 'with open("notes.txt", encoding="utf-8") as file:\n    text = file.read()'),
+  'io.TextIOBase.write': supplementalMethodSpec('io.TextIOBase.write', 'file.write(text)', 'Writes text and returns the number of characters written.', 'Écrit du texte et retourne le nombre de caractères écrits.', 'int', 'with open("notes.txt", "w", encoding="utf-8") as file:\n    count = file.write("hello")'),
+  'io.TextIOBase.readline': supplementalMethodSpec('io.TextIOBase.readline', 'file.readline(size=-1)', 'Reads one line, retaining its newline when present.', 'Lit une ligne en conservant le saut de ligne lorsqu’il existe.', 'str', 'with open("notes.txt", encoding="utf-8") as file:\n    first_line = file.readline()'),
+  'io.TextIOBase.seek': supplementalMethodSpec('io.TextIOBase.seek', 'file.seek(offset, whence=0)', 'Moves the stream position and returns the new position.', 'Déplace la position du flux et retourne la nouvelle position.', 'int', 'file.seek(0)  # move back to the beginning', true),
+  'io.TextIOBase.tell': supplementalMethodSpec('io.TextIOBase.tell', 'file.tell()', 'Returns the current stream position.', 'Retourne la position actuelle du flux.', 'int', 'position = file.tell()'),
+  'io.TextIOBase.flush': supplementalMethodSpec('io.TextIOBase.flush', 'file.flush()', 'Forces buffered output to the underlying stream.', 'Force l’écriture du tampon vers le flux sous-jacent.', 'None', 'file.write("saved")\nfile.flush()', true),
+  'io.TextIOBase.close': supplementalMethodSpec('io.TextIOBase.close', 'file.close()', 'Flushes and closes the stream; further I/O raises ValueError.', 'Vide le tampon et ferme le flux ; les opérations suivantes lèvent ValueError.', 'None', 'file.close()', true),
+  'object.__repr__': supplementalMethodSpec('object.__repr__', 'object.__repr__()', 'Returns the developer-oriented representation used by repr().', 'Retourne la représentation destinée au développeur utilisée par repr().', 'str', 'class Point:\n    def __repr__(self):\n        return "Point(2, 3)"'),
+  'object.__str__': supplementalMethodSpec('object.__str__', 'object.__str__()', 'Returns the user-facing text used by str() and print().', 'Retourne le texte destiné à l’utilisateur utilisé par str() et print().', 'str', 'class User:\n    def __str__(self):\n        return "Ada"'),
+  'object.__eq__': supplementalMethodSpec('object.__eq__', 'object.__eq__(other)', 'Implements equality for the == operator.', 'Implémente l’égalité pour l’opérateur ==.', 'bool or NotImplemented', 'class Box:\n    def __eq__(self, other):\n        return isinstance(other, Box)'),
+  'object.__hash__': supplementalMethodSpec('object.__hash__', 'object.__hash__()', 'Returns a stable integer hash for hashable objects.', 'Retourne un hash entier stable pour les objets hashables.', 'int', 'print(hash("python"))'),
+  'object.__getattribute__': supplementalMethodSpec('object.__getattribute__', 'object.__getattribute__(name)', 'Controls every instance attribute lookup.', 'Contrôle chaque recherche d’attribut sur une instance.', 'object', 'value = object.__getattribute__(instance, "name")'),
+  'object.__setattr__': supplementalMethodSpec('object.__setattr__', 'object.__setattr__(name, value)', 'Controls attribute assignment on an instance.', 'Contrôle l’affectation d’attribut sur une instance.', 'None', 'object.__setattr__(instance, "name", "Ada")', true),
+  'frozenset.union': supplementalMethodSpec('frozenset.union', 'frozenset.union(*others)', 'Returns a new frozenset containing elements from all inputs.', 'Retourne un nouveau frozenset contenant les éléments de toutes les entrées.', 'frozenset', 'frozenset({1, 2}).union({2, 3})  # frozenset({1, 2, 3})'),
+  'frozenset.intersection': supplementalMethodSpec('frozenset.intersection', 'frozenset.intersection(*others)', 'Returns elements common to every input.', 'Retourne les éléments communs à toutes les entrées.', 'frozenset', 'frozenset({1, 2}).intersection({2, 3})  # frozenset({2})'),
+  'frozenset.difference': supplementalMethodSpec('frozenset.difference', 'frozenset.difference(*others)', 'Returns elements absent from the other inputs.', 'Retourne les éléments absents des autres entrées.', 'frozenset', 'frozenset({1, 2, 3}).difference({2})  # frozenset({1, 3})'),
+  'range.index': supplementalMethodSpec('range.index', 'range.index(value)', 'Returns the zero-based position of a value or raises ValueError.', 'Retourne la position d’une valeur ou lève ValueError.', 'int', 'range(10, 20, 2).index(16)  # 3'),
+  'range.count': supplementalMethodSpec('range.count', 'range.count(value)', 'Returns 1 when the value belongs to the range, otherwise 0.', 'Retourne 1 si la valeur appartient au range, sinon 0.', 'int', 'range(5).count(3)  # 1'),
+  'memoryview.tobytes': supplementalMethodSpec('memoryview.tobytes', 'memoryview.tobytes(order="C")', 'Copies the viewed data into an immutable bytes object.', 'Copie les données observées dans un objet bytes immuable.', 'bytes', 'memoryview(b"ABC").tobytes()  # b"ABC"'),
+  'memoryview.hex': supplementalMethodSpec('memoryview.hex', 'memoryview.hex(sep=None, bytes_per_sep=1)', 'Returns a hexadecimal representation of the viewed bytes.', 'Retourne une représentation hexadécimale des octets observés.', 'str', 'memoryview(b"AB").hex()  # "4142"'),
+  'memoryview.release': supplementalMethodSpec('memoryview.release', 'memoryview.release()', 'Releases the exported buffer and prevents further access.', 'Libère le tampon exporté et empêche tout accès ultérieur.', 'None', 'view = memoryview(b"ABC")\nview.release()', true),
+});
+
 export const answerPythonMethodQuery = (question: string, language: AdvancedAiLanguage): string | null => {
   const fr = language === 'fr';
   const lower = question.toLowerCase().trim();
@@ -7649,7 +7726,9 @@ export const answerPythonMethodQuery = (question: string, language: AdvancedAiLa
   // 1. Exact match against type.method pattern
   const methodNames = Object.keys(BUILTIN_METHOD_SPECS);
   for (const dottedName of methodNames) {
-    const [typeName, methodName] = dottedName.split('.');
+    const separator = dottedName.lastIndexOf('.');
+    const typeName = dottedName.slice(0, separator);
+    const methodName = dottedName.slice(separator + 1);
     // Try exact: str.capitalize, list.append, etc.
     if (cleaned === dottedName || cleaned === `${dottedName}()`) {
       const spec = BUILTIN_METHOD_SPECS[dottedName];
@@ -7671,7 +7750,7 @@ export const answerPythonMethodQuery = (question: string, language: AdvancedAiLa
 
   // A bare method name is safe only when it identifies exactly one owner.
   const bareMethod = cleaned.replace(/\(\)$/, '');
-  const bareMatches = methodNames.filter(name => name.split('.')[1] === bareMethod);
+  const bareMatches = methodNames.filter(name => name.slice(name.lastIndexOf('.') + 1) === bareMethod);
   if (bareMatches.length === 1) {
     const dottedName = bareMatches[0];
     const spec = BUILTIN_METHOD_SPECS[dottedName];
@@ -7722,6 +7801,9 @@ export const buildGeneralAiApiCatalog = (
         summary: fr ? spec.descriptionFr : spec.descriptionEn,
         category: fr ? 'Fonctions int\u00e9gr\u00e9es' : 'Built-in functions',
         kind: 'builtin' as const,
+        returnType: spec.returnType,
+        mutates: false,
+        exampleCode: (fr ? spec.examplesFr : spec.examplesEn).join('\n'),
       }))
       .sort((left, right) => left.name.localeCompare(right.name));
     return {
@@ -7739,6 +7821,13 @@ export const buildGeneralAiApiCatalog = (
     dictionary: 'dict', dictionaries: 'dict', dict: 'dict', dictionnaire: 'dict', dictionnaires: 'dict',
     set: 'set', sets: 'set', ensemble: 'set', ensembles: 'set',
     tuple: 'tuple', tuples: 'tuple',
+    bytes: 'bytes', byte: 'bytes', octets: 'bytes',
+    bytearray: 'bytearray',
+    iterator: 'iterator', iterators: 'iterator', iterateur: 'iterator', iterateurs: 'iterator',
+    generator: 'generator', generators: 'generator', generateur: 'generator', generateurs: 'generator',
+    file: 'io.TextIOBase', files: 'io.TextIOBase', fichier: 'io.TextIOBase', fichiers: 'io.TextIOBase',
+    object: 'object', objects: 'object', objet: 'object', objets: 'object',
+    frozenset: 'frozenset', range: 'range', memoryview: 'memoryview',
   };
   const requestedType = Object.entries(typeAliases).find(([alias]) => (
     new RegExp(`\\b${alias}\\s+(?:type\\s+)?(?:methods?|methodes?|m[ée]thodes?)\\b`).test(normalized)
@@ -7751,8 +7840,11 @@ export const buildGeneralAiApiCatalog = (
       name,
       signature: spec.signature,
       summary: fr ? spec.descriptionFr : spec.descriptionEn,
-      category: name.split('.')[0],
+      category: name.slice(0, name.lastIndexOf('.')),
       kind: 'method' as const,
+      returnType: spec.returnType,
+      mutates: spec.returnType === 'None' || /\b(?:modifies?|mutates?|in place|modifie|sur place)\b/i.test(fr ? spec.descriptionFr : spec.descriptionEn),
+      exampleCode: (fr ? spec.examplesFr : spec.examplesEn).join('\n'),
     }))
     .sort((left, right) => left.category.localeCompare(right.category) || left.name.localeCompare(right.name));
   const scope = requestedType ? ` ${requestedType}` : '';
@@ -7762,6 +7854,35 @@ export const buildGeneralAiApiCatalog = (
       ? `Touchez une m\u00e9thode parmi les ${items.length} entr\u00e9es pour afficher une explication approfondie et des exemples.`
       : `Tap any of the ${items.length} methods to expand an in-depth explanation and examples.`,
     items,
+  };
+};
+
+export const buildGeneralAiApiAmbiguityCatalog = (
+  question: string,
+  language: AdvancedAiLanguage,
+): GeneralAiApiCatalog | null => {
+  const cleaned = question.toLowerCase().trim().replace(/[?!.]+$/g, '').replace(/\(\)$/, '');
+  if (!/^[a-z_]\w*$/.test(cleaned)) return null;
+  const matches = Object.entries(BUILTIN_METHOD_SPECS)
+    .filter(([name]) => name.slice(name.lastIndexOf('.') + 1) === cleaned);
+  if (matches.length < 2) return null;
+  const fr = language === 'fr';
+  return {
+    title: fr ? `Choisissez la m\u00e9thode \`${cleaned}()\`` : `Choose the \`${cleaned}()\` method`,
+    intro: fr
+      ? 'Cette m\u00e9thode existe sur plusieurs types. Touchez le type voulu pour afficher son comportement exact.'
+      : 'This method exists on multiple types. Tap the owning type to see its exact behavior.',
+    items: matches.map(([name, spec]) => ({
+      key: `method:${name}`,
+      name,
+      signature: spec.signature,
+      summary: fr ? spec.descriptionFr : spec.descriptionEn,
+      category: name.slice(0, name.lastIndexOf('.')),
+      kind: 'method' as const,
+      returnType: spec.returnType,
+      mutates: spec.returnType === 'None' || /\b(?:modifies?|mutates?|in place|modifie|sur place)\b/i.test(fr ? spec.descriptionFr : spec.descriptionEn),
+      exampleCode: (fr ? spec.examplesFr : spec.examplesEn).join('\n'),
+    })).sort((left, right) => left.name.localeCompare(right.name)),
   };
 };
 

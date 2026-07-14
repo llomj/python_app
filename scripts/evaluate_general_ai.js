@@ -165,7 +165,7 @@ try {
   const interactiveMethods = advanced.buildGeneralAiApiCatalog('list all methods', 'en');
   const interactiveListMethods = advanced.buildGeneralAiApiCatalog('show all list methods', 'en');
   const interactiveBuiltins = advanced.buildGeneralAiApiCatalog('list all built-in functions', 'en');
-  if (!interactiveMethods || interactiveMethods.items.length < 50 || !interactiveMethods.items.some(item => item.key === 'method:list.append')) {
+  if (!interactiveMethods || interactiveMethods.items.length < 125 || !interactiveMethods.items.some(item => item.key === 'method:list.append')) {
     failures.push('Interactive all-method catalog is missing or incomplete');
   }
   if (!interactiveListMethods || interactiveListMethods.items.length < 8 || interactiveListMethods.items.some(item => item.category !== 'list')) {
@@ -193,6 +193,19 @@ try {
   if (!ambiguousCount.includes('Choose the owning type') || !ambiguousCount.includes('list.count') || !ambiguousCount.includes('str.count')) {
     failures.push('Ambiguous bare method count() did not ask the user to choose its owning type');
   }
+  const selectableCount = advanced.buildGeneralAiApiAmbiguityCatalog('count()', 'en');
+  if (!selectableCount || selectableCount.items.length < 4 || !selectableCount.items.some(item => item.key === 'method:range.count')) {
+    failures.push('Ambiguous method choices are not structured and selectable');
+  }
+  for (const key of ['method:bytes.decode', 'method:bytearray.append', 'method:iterator.__next__', 'method:generator.send', 'method:io.TextIOBase.read', 'method:object.__repr__', 'method:frozenset.union', 'method:range.index', 'method:memoryview.tobytes']) {
+    const item = interactiveMethods?.items.find(candidate => candidate.key === key);
+    if (!item || !item.signature || !item.summary || !item.returnType || !item.exampleCode) failures.push(`Expanded API family is incomplete for ${key}`);
+    const detail = advanced.answerGeneralAiApiCatalogItem(key, 'en') || '';
+    if (!detail.includes('Signature') || !detail.includes('Examples') || !detail.includes('Common mistakes')) failures.push(`Expanded API detail failed for ${key}`);
+  }
+  const bytearrayAppend = interactiveMethods?.items.find(item => item.key === 'method:bytearray.append');
+  const bytesDecode = interactiveMethods?.items.find(item => item.key === 'method:bytes.decode');
+  if (!bytearrayAppend?.mutates || bytesDecode?.mutates) failures.push('Mutation metadata is incorrect for supplemental methods');
 
   const comparisonCases = [
     ['sort vs sorted', ['Sorts the list in place', 'Returns a new sorted list', 'Mutates object']],
@@ -223,10 +236,16 @@ try {
   const deepFollowUp = knowledge.resolveKnowledgeFollowUp('go deeper', 'what is len', 'normal');
   const exampleFollowUp = knowledge.resolveKnowledgeFollowUp('give another example', 'what is list', 'normal');
   const pronounFollowUp = knowledge.resolveKnowledgeFollowUp('why does it return None', 'what is list.sort', 'normal');
+  const simplerFollowUp = knowledge.resolveKnowledgeFollowUp('make it simpler', 'what is generator.send', 'normal');
+  const harderExampleFollowUp = knowledge.resolveKnowledgeFollowUp('show me a harder example', 'what is list comprehension', 'normal');
+  const comparisonFollowUp = knowledge.resolveKnowledgeFollowUp('compare that with tuple', 'what is list', 'normal');
   const chainedContext = knowledge.selectKnowledgeContextQuestion(['give another example', 'go deeper', 'what is list.count']);
   if (deepFollowUp.mode !== 'deep' || deepFollowUp.question !== 'what is len') failures.push('Deep follow-up lost context');
   if (exampleFollowUp.mode !== 'examples' || exampleFollowUp.question !== 'what is list') failures.push('Example follow-up lost context');
   if (!pronounFollowUp.question.includes('list.sort')) failures.push('Pronoun follow-up did not restore the previous subject');
+  if (!simplerFollowUp.usedContext || simplerFollowUp.mode !== 'simple' || !simplerFollowUp.question.includes('generator.send')) failures.push('Simpler contextual follow-up failed');
+  if (!harderExampleFollowUp.usedContext || harderExampleFollowUp.mode !== 'examples') failures.push('Harder-example contextual follow-up failed');
+  if (!comparisonFollowUp.usedContext || !comparisonFollowUp.question.includes('list') || !comparisonFollowUp.question.includes('tuple')) failures.push('Contextual comparison follow-up failed');
   if (chainedContext !== 'what is list.count') failures.push('Chained follow-ups lost the last substantive question');
   if (knowledge.isKnowledgeFollowUpQuestion('Explain this code:\n```python\nprint(1)\n```')) failures.push('Pasted code was incorrectly classified as a pronoun follow-up');
   const countDeep = knowledge.buildPythonKnowledgeDeepSupplement('what is list.count', 'en');

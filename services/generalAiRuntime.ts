@@ -62,12 +62,13 @@ export const extractGeneralAiPythonCode = (question: string): string => {
 };
 
 const SAFE_CALLS = new Set([
-  'abs', 'all', 'any', 'bool', 'dict', 'enumerate', 'float', 'int', 'len', 'list',
-  'max', 'min', 'print', 'range', 'repr', 'reversed', 'round', 'set', 'sorted',
-  'str', 'sum', 'tuple', 'type', 'zip', 'append', 'capitalize', 'clear', 'copy',
+  'abs', 'all', 'any', 'bool', 'bytearray', 'bytes', 'dict', 'enumerate', 'float',
+  'frozenset', 'int', 'iter', 'len', 'list', 'max', 'memoryview', 'min', 'next',
+  'print', 'range', 'repr', 'reversed', 'round', 'set', 'sorted', 'str', 'sum',
+  'tuple', 'type', 'zip', 'append', 'capitalize', 'clear', 'close', 'copy', 'decode',
   'count', 'endswith', 'extend', 'find', 'get', 'index', 'insert', 'items', 'join',
   'keys', 'lower', 'pop', 'remove', 'replace', 'reverse', 'sort', 'split', 'startswith',
-  'strip', 'update', 'upper', 'values',
+  'strip', 'send', 'throw', 'tobytes', 'update', 'upper', 'values', 'hex',
 ]);
 
 export const assessGeneralAiRuntimeSafety = (question: string): GeneralAiRuntimeSafety => {

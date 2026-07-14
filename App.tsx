@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiApiCatalogItem, answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiApiCatalog, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiApiCatalog, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiApiCatalogItem, answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiApiAmbiguityCatalog, buildGeneralAiApiCatalog, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiApiCatalog, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -14815,6 +14815,119 @@ function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: 
     );
 }
 
+function GeneralAiApiCatalogView({
+    catalog,
+    language,
+    editorColors,
+    accentColor,
+    onRunExample,
+    onOpenExample,
+}: {
+    catalog: GeneralAiApiCatalog;
+    language: 'en' | 'fr';
+    editorColors: EditorColorSettings;
+    accentColor: string;
+    onRunExample: (code: string) => Promise<string>;
+    onOpenExample: (code: string) => void;
+}) {
+    const [search, setSearch] = useState('');
+    const [category, setCategory] = useState('all');
+    const [returnFilter, setReturnFilter] = useState('all');
+    const [behavior, setBehavior] = useState('all');
+    const [expandedKey, setExpandedKey] = useState<string | null>(null);
+    const [runningKey, setRunningKey] = useState<string | null>(null);
+    const [runResults, setRunResults] = useState<Record<string, string>>({});
+    const fr = language === 'fr';
+    const categories = [...new Set(catalog.items.map(item => item.category))];
+    const normalizedSearch = search.trim().toLowerCase();
+    const visibleItems = catalog.items.filter(item => {
+        const matchesSearch = !normalizedSearch || `${item.name} ${item.signature} ${item.summary} ${item.returnType}`.toLowerCase().includes(normalizedSearch);
+        const matchesCategory = category === 'all' || item.category === category;
+        const matchesReturn = returnFilter === 'all'
+            || (returnFilter === 'none' && item.returnType === 'None')
+            || (returnFilter === 'bool' && /bool/i.test(item.returnType))
+            || (returnFilter === 'collection' && /list|dict|set|tuple|str|bytes|iterator|generator/i.test(item.returnType))
+            || (returnFilter === 'value' && item.returnType !== 'None');
+        const matchesBehavior = behavior === 'all' || (behavior === 'mutates' ? item.mutates : !item.mutates);
+        return matchesSearch && matchesCategory && matchesReturn && matchesBehavior;
+    });
+
+    const runExample = async (key: string, code: string) => {
+        setRunningKey(key);
+        const result = await onRunExample(code);
+        setRunResults(current => ({ ...current, [key]: result }));
+        setRunningKey(null);
+    };
+
+    return (
+        <div className="mt-3 space-y-2" data-general-ai-api-catalog={catalog.items.length}>
+            <div className="sticky top-0 z-10 space-y-2 rounded-xl border p-2 backdrop-blur-md" style={{ borderColor: hexToRgba(accentColor, 0.3), backgroundColor: 'rgba(5, 12, 24, 0.92)' }}>
+                <input
+                    value={search}
+                    onChange={event => setSearch(event.target.value)}
+                    placeholder={fr ? 'Rechercher un nom, un type ou un retour…' : 'Search name, type, return value…'}
+                    className="w-full rounded-lg border bg-[#07111f] px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none"
+                    style={{ borderColor: hexToRgba(accentColor, 0.28) }}
+                    data-general-ai-catalog-search
+                />
+                <div className="grid grid-cols-3 gap-1.5">
+                    <select value={category} onChange={event => setCategory(event.target.value)} className="min-w-0 rounded-lg border bg-[#07111f] px-1.5 py-2 text-[10px] text-white" style={{ borderColor: hexToRgba(accentColor, 0.24) }} aria-label={fr ? 'Type' : 'Type'}>
+                        <option value="all">{fr ? 'Tous types' : 'All types'}</option>
+                        {categories.map(value => <option key={value} value={value}>{value}</option>)}
+                    </select>
+                    <select value={returnFilter} onChange={event => setReturnFilter(event.target.value)} className="min-w-0 rounded-lg border bg-[#07111f] px-1.5 py-2 text-[10px] text-white" style={{ borderColor: hexToRgba(accentColor, 0.24) }} aria-label={fr ? 'Retour' : 'Return'}>
+                        <option value="all">{fr ? 'Tous retours' : 'All returns'}</option>
+                        <option value="value">{fr ? 'Valeur' : 'Value'}</option>
+                        <option value="none">None</option>
+                        <option value="bool">bool</option>
+                        <option value="collection">{fr ? 'Collection' : 'Collection'}</option>
+                    </select>
+                    <select value={behavior} onChange={event => setBehavior(event.target.value)} className="min-w-0 rounded-lg border bg-[#07111f] px-1.5 py-2 text-[10px] text-white" style={{ borderColor: hexToRgba(accentColor, 0.24) }} aria-label={fr ? 'Comportement' : 'Behavior'}>
+                        <option value="all">{fr ? 'Tout comportement' : 'All behavior'}</option>
+                        <option value="mutates">{fr ? 'Modifie' : 'Mutates'}</option>
+                        <option value="new">{fr ? 'Nouvelle valeur' : 'New value'}</option>
+                    </select>
+                </div>
+                <div className="text-[10px] font-bold text-gray-400" data-general-ai-catalog-result-count>{visibleItems.length} / {catalog.items.length}</div>
+            </div>
+            {visibleItems.map((item, index) => {
+                const expanded = expandedKey === item.key;
+                const showCategory = index === 0 || visibleItems[index - 1]?.category !== item.category;
+                const detail = expanded ? answerGeneralAiApiCatalogItem(item.key, language) : null;
+                return (
+                    <React.Fragment key={item.key}>
+                        {showCategory && <div className="pt-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: accentColor }}>{item.category}</div>}
+                        <div className="overflow-hidden rounded-xl border" style={{ borderColor: hexToRgba(accentColor, expanded ? 0.55 : 0.24), backgroundColor: hexToRgba(accentColor, expanded ? 0.1 : 0.04) }}>
+                            <button type="button" data-general-ai-api-item={item.key} aria-expanded={expanded} onClick={() => setExpandedKey(current => current === item.key ? null : item.key)} className="flex w-full min-w-0 items-center justify-between gap-3 px-3 py-2 text-left">
+                                <span className="min-w-0">
+                                    <span className="block truncate font-mono text-xs font-bold" style={{ color: editorColors.builtin }}>{item.signature}</span>
+                                    <span className="mt-0.5 block truncate text-[11px] text-gray-300">{item.summary}</span>
+                                </span>
+                                {expanded ? <ChevronUp className="h-4 w-4 flex-none" /> : <ChevronDown className="h-4 w-4 flex-none" />}
+                            </button>
+                            {detail && (
+                                <div className="space-y-2 border-t px-3 py-3" style={{ borderColor: hexToRgba(accentColor, 0.24) }} data-general-ai-api-detail={item.key}>
+                                    <ProblemAiText text={detail} editorColors={editorColors} accentColor={accentColor} />
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button type="button" disabled={runningKey === item.key} onClick={() => runExample(item.key, item.exampleCode)} className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] disabled:opacity-50" style={{ borderColor: hexToRgba(accentColor, 0.4), color: accentColor }} data-general-ai-run-example={item.key}>
+                                            {runningKey === item.key ? (fr ? 'Exécution…' : 'Running…') : (fr ? 'Exécuter' : 'Run example')}
+                                        </button>
+                                        <button type="button" onClick={() => onOpenExample(item.exampleCode)} className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em]" style={{ borderColor: hexToRgba(accentColor, 0.4), color: accentColor }}>
+                                            {fr ? 'Ouvrir dans l’éditeur' : 'Open in editor'}
+                                        </button>
+                                    </div>
+                                    {runResults[item.key] && <pre className="max-h-40 overflow-auto whitespace-pre-wrap rounded-lg border bg-black/35 p-2 text-xs text-gray-100" style={{ borderColor: hexToRgba(accentColor, 0.24) }} data-general-ai-run-result={item.key}>{runResults[item.key]}</pre>}
+                                </div>
+                            )}
+                        </div>
+                    </React.Fragment>
+                );
+            })}
+            {visibleItems.length === 0 && <div className="rounded-xl border p-3 text-xs text-gray-400" style={{ borderColor: hexToRgba(accentColor, 0.2) }}>{fr ? 'Aucune référence ne correspond à ces filtres.' : 'No references match these filters.'}</div>}
+        </div>
+    );
+}
+
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
@@ -14931,7 +15044,7 @@ const App: React.FC = () => {
     const [generalAiProgress, setGeneralAiProgress] = useState(0);
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
     const [generalAiControlsOpen, setGeneralAiControlsOpen] = useState(false);
-    const [expandedGeneralAiApiItem, setExpandedGeneralAiApiItem] = useState<string | null>(null);
+    const [generalAiModePanelOpen, setGeneralAiModePanelOpen] = useState(false);
     const [generalAiClearFeedback, setGeneralAiClearFeedback] = useState(false);
     const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
         try {
@@ -17825,16 +17938,51 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         setShowModal('general_ai');
     }, [appLang, generalAiMessages.length]);
 
+    const runGeneralAiApiExample = useCallback(async (code: string): Promise<string> => {
+        if (!pyodide) return appLang === 'fr' ? 'Le moteur Python local n’est pas encore prêt.' : 'The local Python engine is not ready yet.';
+        const safety = assessGeneralAiRuntimeSafety(code);
+        if (!safety.safe) return `${appLang === 'fr' ? 'Exemple non exécuté' : 'Example not run'}: ${safety.reason}`;
+        try {
+            const raw = await pyodide.runPythonAsync(buildGeneralAiRuntimeScript(safety.code));
+            const result = JSON.parse(String(raw)) as GeneralAiRuntimeResult;
+            if (!result.ok) {
+                return `${result.errorType}${result.errorMessage ? `: ${result.errorMessage}` : ''}${result.errorLine ? ` (${appLang === 'fr' ? 'ligne' : 'line'} ${result.errorLine})` : ''}`;
+            }
+            const outputLines = [
+                result.stdout.trim() ? `${appLang === 'fr' ? 'Sortie' : 'Output'}:\n${result.stdout.trim()}` : '',
+                result.resultRepr ? `${appLang === 'fr' ? 'Résultat' : 'Result'}: ${result.resultRepr}` : '',
+                !result.stdout.trim() && !result.resultRepr ? (appLang === 'fr' ? 'Exécution terminée sans sortie.' : 'Execution completed with no output.') : '',
+            ].filter(Boolean);
+            return outputLines.join('\n');
+        } catch (error) {
+            return `${appLang === 'fr' ? 'Échec du moteur local' : 'Local engine failed'}: ${error instanceof Error ? error.message : String(error)}`;
+        }
+    }, [appLang, pyodide]);
+
+    const openGeneralAiApiExample = useCallback((code: string) => {
+        setFiles(current => {
+            const existingIndex = current.findIndex(file => file.name === 'ai_example.py');
+            if (existingIndex >= 0) {
+                setActiveFileIndex(existingIndex);
+                return current.map((file, index) => index === existingIndex ? { ...file, content: code } : file);
+            }
+            setActiveFileIndex(current.length);
+            return [...current, { name: 'ai_example.py', content: code }];
+        });
+        setShowModal('none');
+    }, []);
+
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
         const immediateApiAnswer = answerPythonBuiltinQuery(question, appLang) || answerPythonMethodQuery(question, appLang);
         const immediateApiCatalog = buildGeneralAiApiCatalog(question, appLang);
+        const immediateApiAmbiguity = buildGeneralAiApiAmbiguityCatalog(question, appLang);
         const startsNewQuiz = /\b(?:another|new|next|start|quiz|autre|nouveau|suivant|commence)\b/i.test(question);
         const asksNewQuestion = /\b(?:what|why|how|which|where|when|is|does|can|could|would|show|run|execute|test|explain|define|compare|review|generate|analyze|analyse|complexity|progress|report|revise|help|qu['’]est|quel(?:le)?s?|où|quand|est-ce|peut|montre|lance|exécute|teste|pourquoi|comment|combien|explique|définis|compare|génère|analyse|complexité|progr[eè]s|bilan|réviser|aide)\b/i.test(question)
             || question.includes('```')
             || question.endsWith('?');
-        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion && !immediateApiAnswer && !immediateApiCatalog) {
+        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion && !immediateApiAnswer && !immediateApiCatalog && !immediateApiAmbiguity) {
             const result = evaluateAdaptiveQuiz(question, generalAiActiveQuiz, appLang);
             setGeneralAiMessages(prev => [
                 ...prev,
@@ -17883,7 +18031,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         try {
             const topic = detectGeneralPythonTopic(effectiveQuestion);
             const intent = classifyGeneralAiIntent(effectiveQuestion);
-            const apiCatalog = immediateApiCatalog || buildGeneralAiApiCatalog(effectiveQuestion, appLang);
+            const apiCatalog = immediateApiCatalog || immediateApiAmbiguity || buildGeneralAiApiCatalog(effectiveQuestion, appLang) || buildGeneralAiApiAmbiguityCatalog(effectiveQuestion, appLang);
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
             const shouldCreateQuiz = generalAiTutorMode === 'quiz' || intent.intent === 'quiz';
@@ -19948,7 +20096,7 @@ print(result)
                                     </button>
                                     {generalAiControlsOpen && (
                                     <div className="mt-2 rounded-xl border p-2" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(0,0,0,0.12)' }}>
-                                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                                    <div className="flex flex-wrap items-center gap-1.5">
                                         <button
                                             onClick={() => {
                                                 const label = generalAiMessages.filter(m => m.role === 'user').slice(-1)[0]?.text.slice(0, 50) || 'Python AI chat';
@@ -20002,7 +20150,20 @@ print(result)
                                             {t('generalAi.clear', appLang)}
                                         </button>
                                     </div>
-                                    <div className="mt-2 flex flex-wrap gap-1.5">
+                                    </div>
+                                    )}
+                                    <button
+                                        type="button"
+                                        onClick={() => setGeneralAiModePanelOpen(open => !open)}
+                                        className="mt-2 flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left text-[10px] font-black uppercase tracking-[0.12em]"
+                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}
+                                    >
+                                        <span>{appLang === 'fr' ? 'Mode et niveau' : 'Mode & level'}</span>
+                                        <ChevronDown size={14} style={{ transform: generalAiModePanelOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    </button>
+                                    {generalAiModePanelOpen && (
+                                    <div className="mt-2 rounded-xl border p-2" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2), backgroundColor: 'rgba(0,0,0,0.12)' }}>
+                                    <div className="flex flex-wrap gap-1.5">
                                         <button
                                             type="button"
                                             onClick={() => setGeneralAiAdaptiveLevel(true)}
@@ -20034,7 +20195,7 @@ print(result)
                                         ))}
                                     </div>
                                     <div className="mt-2 flex flex-wrap gap-1.5 pb-1">
-                                        {(['explain', 'socratic', 'debug', 'compare', 'quiz', 'practice'] as GeneralAiTutorMode[]).map(mode => (
+                                        {(['explain', 'compare', 'quiz', 'practice'] as GeneralAiTutorMode[]).map(mode => (
                                             <button
                                                 key={mode}
                                                 type="button"
@@ -20047,7 +20208,7 @@ print(result)
                                                 }}
                                             >
                                                 {appLang === 'fr'
-                                                    ? ({ explain: 'expliquer', socratic: 'socratique', debug: 'déboguer', compare: 'comparer', quiz: 'quiz', practice: 'pratique' } as const)[mode]
+                                                    ? ({ explain: 'expliquer', compare: 'comparer', quiz: 'quiz', practice: 'pratique' } as const)[mode]
                                                     : mode}
                                             </button>
                                         ))}
@@ -20153,43 +20314,14 @@ print(result)
                                                 <>
                                                     <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
                                                     {message.apiCatalog && (
-                                                        <div className="mt-3 space-y-2" data-general-ai-api-catalog={message.apiCatalog.items.length}>
-                                                            {message.apiCatalog.items.map((item, index) => {
-                                                                const panelKey = `${message.id}:${item.key}`;
-                                                                const expanded = expandedGeneralAiApiItem === panelKey;
-                                                                const showCategory = index === 0 || message.apiCatalog?.items[index - 1]?.category !== item.category;
-                                                                const detail = expanded ? answerGeneralAiApiCatalogItem(item.key, appLang) : null;
-                                                                return (
-                                                                    <React.Fragment key={item.key}>
-                                                                        {showCategory && (
-                                                                            <div className="pt-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
-                                                                                {item.category}
-                                                                            </div>
-                                                                        )}
-                                                                        <div className="overflow-hidden rounded-xl border" style={{ borderColor: hexToRgba(toolPanelColors.ai, expanded ? 0.55 : 0.24), backgroundColor: hexToRgba(toolPanelColors.ai, expanded ? 0.1 : 0.04) }}>
-                                                                            <button
-                                                                                type="button"
-                                                                                data-general-ai-api-item={item.key}
-                                                                                aria-expanded={expanded}
-                                                                                onClick={() => setExpandedGeneralAiApiItem(current => current === panelKey ? null : panelKey)}
-                                                                                className="flex w-full min-w-0 items-center justify-between gap-3 px-3 py-2 text-left"
-                                                                            >
-                                                                                <span className="min-w-0">
-                                                                                    <span className="block truncate font-mono text-xs font-bold" style={{ color: editorColors.builtin }}>{item.signature}</span>
-                                                                                    <span className="mt-0.5 block truncate text-[11px] text-gray-300">{item.summary}</span>
-                                                                                </span>
-                                                                                {expanded ? <ChevronUp className="h-4 w-4 flex-none" /> : <ChevronDown className="h-4 w-4 flex-none" />}
-                                                                            </button>
-                                                                            {detail && (
-                                                                                <div className="border-t px-3 py-3" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.24) }} data-general-ai-api-detail={item.key}>
-                                                                                    <ProblemAiText text={detail} editorColors={editorColors} accentColor={toolPanelColors.ai} />
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
-                                                                    </React.Fragment>
-                                                                );
-                                                            })}
-                                                        </div>
+                                                        <GeneralAiApiCatalogView
+                                                            catalog={message.apiCatalog}
+                                                            language={appLang}
+                                                            editorColors={editorColors}
+                                                            accentColor={toolPanelColors.ai}
+                                                            onRunExample={runGeneralAiApiExample}
+                                                            onOpenExample={openGeneralAiApiExample}
+                                                        />
                                                     )}
                                                 </>
                                             ) : (

@@ -1235,14 +1235,18 @@ export const resolveKnowledgeFollowUp = (
   if (directFrenchSimple) return { question: `what is ${normalizeTerm(directFrenchSimple[1])}`, mode: 'simple', usedContext: true };
   if (!previousQuestion) return { question: trimmed, mode: currentMode, usedContext: false };
   const subject = subjectFromQuestion(previousQuestion);
-  if (/^(?:simplify|explain simply|explain more simply|simple|explique simplement)\b/i.test(trimmed)) {
+  if (/^(?:simplify|make (?:it|this|that) simpler|explain simply|explain more simply|simple|simplifie|rends? (?:cela|ca|ceci) plus simple|explique simplement)\b/i.test(trimmed)) {
     return { question: previousQuestion, mode: 'simple', usedContext: true };
   }
-  if (/^(?:go deeper|more detail|explain more|break it down|approfondis|plus de details?)\b/i.test(trimmed)) {
+  if (/^(?:go deeper|make (?:it|this|that) more detailed|more detail|explain more|break it down|approfondis|plus de d[eé]tails?|rends? (?:cela|ca|ceci) plus d[eé]taill[eé])\b/i.test(trimmed)) {
     return { question: previousQuestion, mode: 'deep', usedContext: true };
   }
-  if (/^(?:examples?|give (?:another )?examples?|show (?:another )?examples?|donne des exemples?)\b/i.test(trimmed)) {
+  if (/^(?:another example|harder example|simpler example|examples?|give (?:me )?(?:a )?(?:another |harder |simpler )?examples?|show (?:me )?(?:a )?(?:another |harder |simpler )?examples?|donne (?:un autre |des )?exemples?)\b/i.test(trimmed)) {
     return { question: previousQuestion, mode: 'examples', usedContext: true };
+  }
+  const contextualComparison = trimmed.match(/^(?:compare|difference between|how (?:is|does))\s+(?:it|this|that|cela|ca|ceci)\s+(?:with|to|and|different from|et|avec|de)\s+(.+?)[?.!]*$/i);
+  if (contextualComparison) {
+    return { question: `difference between ${subject} and ${normalizeTerm(contextualComparison[1])}`, mode: currentMode, usedContext: true };
   }
   const newSubject = trimmed.match(/^(?:what about|how about|et|et pour)\s+(.+?)[?.!]*$/i);
   if (newSubject) return { question: `what is ${normalizeTerm(newSubject[1])}`, mode: currentMode, usedContext: true };
