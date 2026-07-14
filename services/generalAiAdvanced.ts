@@ -6261,107 +6261,571 @@ const BUILTIN_TYPOS: Record<string, string> = {
   "optmize": "optimize",
 };
 
+const formatBuiltinSpec = (spec: BuiltinSpec, language: AdvancedAiLanguage, prefixLines?: string[]): string => {
+  const fr = language === 'fr';
+  const desc = fr ? spec.descriptionFr : spec.descriptionEn;
+  const examples = fr ? spec.examplesFr : spec.examplesEn;
+  const order = fr ? spec.orderFr : spec.orderEn;
+  const mistakes = fr ? spec.mistakesFr : spec.mistakesEn;
+  const parts = [
+    ...(prefixLines || []),
+    ...(prefixLines?.length ? [''] : []),
+    `**${spec.name}()** — ${spec.signature}`,
+    '',
+    `**${fr ? 'Description' : 'Description'}**:`,
+    desc,
+    '',
+    `**${fr ? 'Signature' : 'Signature'}**: \`${spec.signature}\``,
+    '',
+    `**${fr ? 'Valeur de retour' : 'Return type'}**: \`${spec.returnType}\``,
+    '',
+    `**${fr ? 'Ordre des operations' : 'Order of operations'}**:`,
+    ...order.map((s: string, i: number) => `${i + 1}. ${s}`),
+    '',
+    `**${fr ? 'Exemples' : 'Examples'}**:`,
+    '```python',
+    ...examples,
+    '```',
+    '',
+    `**${fr ? 'Erreurs frequentes' : 'Common mistakes'}**:`,
+    ...mistakes.map((s: string) => `- ${s}`),
+  ];
+  return parts.join('\n');
+};
+
+// Fast exact-match lookup against any spec name (plain or with ())
+const matchBuiltinExact = (text: string): [string, BuiltinSpec] | null => {
+  for (const [name, spec] of Object.entries(BUILTIN_SPECS)) {
+    if (text === name || text === `${name}()` || text === `${name}?`) {
+      return [name, spec];
+    }
+  }
+  return null;
+};
+
 export const answerPythonBuiltinQuery = (question: string, language: AdvancedAiLanguage): string | null => {
   const fr = language === 'fr';
   const lower = question.toLowerCase().trim();
   const cleaned = lower.replace(/[?!.]+$/g, '').trim();
+  const stripped = cleaned.replace(/[()+]/g, '').trim();
+  const bareMatch = stripped === cleaned ? null : stripped;
 
-  // Check for typo correction first
-  if (BUILTIN_TYPOS[cleaned] || BUILTIN_TYPOS[cleaned.replace(/\(\)$/g, '')]) {
-    const corrected = BUILTIN_TYPOS[cleaned] || BUILTIN_TYPOS[cleaned.replace(/\(\)$/g, '')];
+  // 1. Exact match against any spec name (bare word or with ())
+  const exact = matchBuiltinExact(cleaned);
+  if (exact) return formatBuiltinSpec(exact[1], language);
+
+  // 2. Try extracting the last bare word from multi-word queries
+  //    e.g., "what is dir" -> try "dir" and "what is dir"
+  const words = cleaned.split(/\s+/);
+  for (let i = words.length - 1; i >= 0; i--) {
+    const candidate = words.slice(i).join(' ').replace(/[?!]+$/, '');
+    const match = matchBuiltinExact(candidate) || matchBuiltinExact(`${candidate}()`);
+    if (match) return formatBuiltinSpec(match[1], language);
+  }
+
+  // 3. Check for typo correction
+  const typoInput = bareMatch || cleaned;
+  if (BUILTIN_TYPOS[typoInput]) {
+    const corrected = BUILTIN_TYPOS[typoInput];
     const spec = BUILTIN_SPECS[corrected];
     if (spec) {
-      const prefix = fr
-        ? `**Correction probable**\nJ\u2019ai interpr\u00e9t\u00e9 \`${cleaned}\` comme \`${corrected}\`.`
-        : `**Likely correction**\nI interpreted \`${cleaned}\` as \`${corrected}\`.`;
-      const desc = fr ? spec.descriptionFr : spec.descriptionEn;
-      const examples = fr ? spec.examplesFr : spec.examplesEn;
-      const order = fr ? spec.orderFr : spec.orderEn;
-      const mistakes = fr ? spec.mistakesFr : spec.mistakesEn;
-      return [
-        prefix,
-        '',
-        `**${spec.name}()** — ${spec.signature}`,
-        '',
-        `**${fr ? 'Description' : 'Description'}**:`,
-        desc,
-        '',
-        `**${fr ? 'Signature' : 'Signature'}**: \`${spec.signature}\``,
-        '',
-        `**${fr ? 'Valeur de retour' : 'Return type'}**: \`${spec.returnType}\``,
-        '',
-        `**${fr ? 'Ordre des operations' : 'Order of operations'}**:`,
-        ...order.map((s: string, i: number) => `${i + 1}. ${s}`),
-        '',
-        `**${fr ? 'Exemples' : 'Examples'}**:`,
-        '```python',
-        ...examples,
-        '```',
-        '',
-        `**${fr ? 'Erreurs frequentes' : 'Common mistakes'}**:`,
-        ...mistakes.map((s: string) => `- ${s}`),
-      ].join('\n');
+      return formatBuiltinSpec(spec, language, [
+        fr
+          ? `**Correction probable**\nJ\u2019ai interpr\u00e9t\u00e9 \`${typoInput}\` comme \`${corrected}\`.`
+          : `**Likely correction**\nI interpreted \`${typoInput}\` as \`${corrected}\`.`,
+      ]);
     }
   }
 
-  // Try to match a builtin name in the question
+  // 4. Regex pattern matching against all spec names
   const names = Object.keys(BUILTIN_SPECS).sort((a, b) => b.length - a.length);
   for (const name of names) {
     const patterns = [
-      new RegExp(`\\b${name}\\b`, 'i'),
-      new RegExp(`what\\s+is\\s+${name}`, 'i'),
-      new RegExp(`explain\\s+${name}`, 'i'),
+      new RegExp(`what\\s+(?:is|are)\\s+(?:a\\s+|an\\s+)?${name}`, 'i'),
       new RegExp(`what\\s+does\\s+${name}\\s+do`, 'i'),
+      new RegExp(`explain\\s+${name}`, 'i'),
       new RegExp(`how\\s+does\\s+${name}\\s+work`, 'i'),
-      new RegExp(`^${name}\\s*$`, 'i'),
-      new RegExp(`^${name}\\(\\)\\s*$`, 'i'),
       new RegExp(`tell\\s+me\\s+(?:about|how)\\s+${name}`, 'i'),
-      new RegExp(`\\b${name}\\s+function`, 'i'),
-      new RegExp(`\\b${name}\\s+build.?in`, 'i'),
-      new RegExp(`^${name}s?\\s*$`, 'i'),
-      new RegExp(`^${name}s?\\(\\)\\s*$`, 'i'),
+      new RegExp(`\\b${name}\\s+(?:function|keyword|method|build.?in)`, 'i'),
       new RegExp(`define\\s+${name}`, 'i'),
       new RegExp(`what\\s+means?\\s+${name}`, 'i'),
       new RegExp(`what\\s+${name}\\s+means?`, 'i'),
-      new RegExp(`${name}\\s+keyword`, 'i'),
     ];
 
     let matched = false;
     for (const p of patterns) {
       if (p.test(lower)) { matched = true; break; }
     }
-    if (!matched) continue;
-
-    const spec = BUILTIN_SPECS[name];
-    if (!spec) continue;
-
-    const desc = fr ? spec.descriptionFr : spec.descriptionEn;
-    const examples = fr ? spec.examplesFr : spec.examplesEn;
-    const order = fr ? spec.orderFr : spec.orderEn;
-    const mistakes = fr ? spec.mistakesFr : spec.mistakesEn;
-
-    return [
-      `**${spec.name}()** — ${spec.signature}`,
-      '',
-      `**${fr ? 'Description' : 'Description'}**:`,
-      desc,
-      '',
-      `**${fr ? 'Signature' : 'Signature'}**: \`${spec.signature}\``,
-      '',
-      `**${fr ? 'Valeur de retour' : 'Return type'}**: \`${spec.returnType}\``,
-      '',
-      `**${fr ? 'Ordre des operations' : 'Order of operations'}**:`,
-      ...order.map((s: string, i: number) => `${i + 1}. ${s}`),
-      '',
-      `**${fr ? 'Exemples' : 'Examples'}**:`,
-      '```python',
-      ...examples,
-      '```',
-      '',
-      `**${fr ? 'Erreurs frequentes' : 'Common mistakes'}**:`,
-      ...mistakes.map((s: string) => `- ${s}`),
-    ].join('\n');
+    if (matched) {
+      const spec = BUILTIN_SPECS[name];
+      if (spec) return formatBuiltinSpec(spec, language);
+    }
   }
+  return null;
+};
+
+// ---- Method specs ----
+
+interface MethodSpec {
+  name: string;
+  type: string;
+  signature: string;
+  descriptionEn: string;
+  descriptionFr: string;
+  returnType: string;
+  examplesEn: string[];
+  examplesFr: string[];
+  orderEn: string[];
+  orderFr: string[];
+  mistakesEn: string[];
+  mistakesFr: string[];
+}
+
+const BUILTIN_METHOD_SPECS: Record<string, MethodSpec> = {
+  "str.capitalize": {
+    name: "str.capitalize",
+    type: "method",
+    signature: "str.capitalize()",
+    descriptionEn: "Returns a copy of the string with its first character capitalized and the rest lowercased. Does not modify the original string.",
+    descriptionFr: "Retourne une copie de la cha\u00eene avec la premi\u00e8re lettre en majuscule et le reste en minuscule. Ne modifie pas la cha\u00eene originale.",
+    returnType: "str",
+    examplesEn: ["'hello world'.capitalize()  # 'Hello world'"],
+    examplesFr: ["'bonjour tout le monde'.capitalize()  # 'Bonjour tout le monde'"],
+    orderEn: ["1. Take the first character of the string", "2. Convert it to uppercase via Unicode case-folding", "3. Convert all remaining characters to lowercase", "4. Return the resulting new string"],
+    orderFr: ["1. Prendre le premier caract\u00e8re de la cha\u00eene", "2. Le convertir en majuscule", "3. Convertir tous les caract\u00e8res restants en minuscule", "4. Retourner la nouvelle cha\u00eene"],
+    mistakesEn: ["capitalize() lowercases the REST of the string (unlike title())", "Only the very first character is uppercased; words after spaces are NOT capitalized", "Original string is never modified (strings are immutable)"],
+    mistakesFr: ["capitalize() met le RESTE en minuscule (contrairement \u00e0 title())", "Seul le premier caract\u00e8re est mis en majuscule", "La cha\u00eene originale n'est jamais modifi\u00e9e"],
+  },
+  "str.upper": {
+    name: "str.upper",
+    type: "method",
+    signature: "str.upper()",
+    descriptionEn: "Returns a copy of the string with all cased characters converted to uppercase. Locale-independent (uses Unicode case mapping).",
+    descriptionFr: "Retourne une copie de la cha\u00eene avec tous les caract\u00e8res en majuscule. Ind\u00e9pendant de la locale (utilise le mappage Unicode).",
+    returnType: "str",
+    examplesEn: ["'Hello World'.upper()  # 'HELLO WORLD'"],
+    examplesFr: ["'Bonjour tout le monde'.upper()  # 'BONJOUR TOUT LE MONDE'"],
+    orderEn: ["1. For each character in the string, look up its uppercase equivalent via Unicode case mapping", "2. Characters without an uppercase mapping (e.g., digits, symbols) pass through unchanged", "3. Return the new string"],
+    orderFr: ["1. Pour chaque caract\u00e8re, chercher son \u00e9quivalent majuscule dans le mappage Unicode", "2. Les caract\u00e8res sans \u00e9quivalent majuscule (chiffres, symboles) restent inchang\u00e9s", "3. Retourner la nouvelle cha\u00eene"],
+    mistakesEn: ["upper() does NOT modify in place (strings are immutable)", "upper() handles non-ASCII letters: '\\u00e9'.upper() == '\\u00c9'", "For case-insensitive comparison, use str.casefold() instead, which is more aggressive"],
+    mistakesFr: ["upper() ne modifie PAS sur place (les cha\u00eenes sont immuables)", "upper() g\u00e8re les lettres non-ASCII", "Pour une comparaison insensible \u00e0 la casse, pr\u00e9f\u00e9rez str.casefold()"],
+  },
+  "str.lower": {
+    name: "str.lower",
+    type: "method",
+    signature: "str.lower()",
+    descriptionEn: "Returns a copy of the string with all cased characters converted to lowercase.",
+    descriptionFr: "Retourne une copie de la cha\u00eene avec tous les caract\u00e8res en minuscule.",
+    returnType: "str",
+    examplesEn: ["'HELLO World'.lower()  # 'hello world'"],
+    examplesFr: ["'BONJOUR TOUT LE MONDE'.lower()  # 'bonjour tout le monde'"],
+    orderEn: ["1. For each character, look up its lowercase equivalent via Unicode case mapping", "2. Characters without a lowercase mapping pass through unchanged", "3. Return the new string"],
+    orderFr: ["1. Pour chaque caract\u00e8re, chercher son \u00e9quivalent minuscule", "2. Les caract\u00e8res sans \u00e9quivalent restent inchang\u00e9s", "3. Retourner la nouvelle cha\u00eene"],
+    mistakesEn: ["lower() returns a NEW string (strings are immutable)", "For aggressive case-folding (e.g., German '\u00df'), use str.casefold()"],
+    mistakesFr: ["lower() retourne une NOUVELLE cha\u00eene", "Pour un pliage de casse agressif, utilisez str.casefold()"],
+  },
+  "str.split": {
+    name: "str.split",
+    type: "method",
+    signature: "str.split(sep=None, maxsplit=-1)",
+    descriptionEn: "Splits the string into a list of substrings using sep as the delimiter. If sep is None, splits on whitespace and discards empty strings. If maxsplit is given, at most maxsplit splits are performed.",
+    descriptionFr: "Divise la cha\u00eene en une liste de sous-cha\u00eenes en utilisant sep comme d\u00e9limiteur. Si sep est None, divise sur les espaces et ignore les cha\u00eenes vides.",
+    returnType: "list of str",
+    examplesEn: ["'a b   c'.split()         # ['a', 'b', 'c']", "'a,b,c'.split(',')      # ['a', 'b', 'c']", "'a,b,c'.split(',', 1)   # ['a', 'b,c']"],
+    examplesFr: ["'a b   c'.split()         # ['a', 'b', 'c']", "'a,b,c'.split(',')      # ['a', 'b', 'c']", "'a,b,c'.split(',', 1)   # ['a', 'b,c']"],
+    orderEn: ["1. If sep is None (default), split on any whitespace sequence, discarding empty results", "2. If sep is a string, use it as the exact delimiter; consecutive delimiters produce empty strings", "3. If maxsplit > 0, stop after maxsplit splits (the last element contains the remainder)", "4. Return the list of substrings"],
+    orderFr: ["1. Si sep est None (d\u00e9faut), diviser sur les espaces en ignorant les r\u00e9sultats vides", "2. Si sep est une cha\u00eene, l'utiliser comme d\u00e9limiteur exact", "3. Si maxsplit > 0, s'arr\u00eater apr\u00e8s maxsplit divisions", "4. Retourner la liste de sous-cha\u00eenes"],
+    mistakesEn: ["split() with no arguments splits on ANY whitespace and discards empties; split(' ') splits on single spaces only", "split() without arguments treats leading/trailing whitespace differently from split(' ')", "The original string is never modified"],
+    mistakesFr: ["split() sans argument divise sur TOUS les espaces ; split(' ') divise sur les espaces simples seulement"],
+  },
+  "str.join": {
+    name: "str.join",
+    type: "method",
+    signature: "str.join(iterable)",
+    descriptionEn: "Concatenates an iterable of strings using self as the separator between each element. The iterable must contain only strings.",
+    descriptionFr: "Concat\u00e8ne un it\u00e9rable de cha\u00eenes en utilisant self comme s\u00e9parateur entre chaque \u00e9l\u00e9ment.",
+    returnType: "str",
+    examplesEn: ["','.join(['a', 'b', 'c'])  # 'a,b,c'", "' '.join(['hello', 'world'])  # 'hello world'", "''.join(['a', 'b', 'c'])     # 'abc'"],
+    examplesFr: ["','.join(['a', 'b', 'c'])  # 'a,b,c'", "' '.join(['bonjour', 'monde'])  # 'bonjour monde'", "''.join(['a', 'b', 'c'])     # 'abc'"],
+    orderEn: ["1. Create a new empty list for building the result", "2. Iterate over the iterable: append each element, then append self (except after the last element)", "3. Join the built list into a single string (efficient O(n) approach)", "4. Return the final string"],
+    orderFr: ["1. Cr\u00e9er une nouvelle liste pour construire le r\u00e9sultat", "2. It\u00e9rer sur l'it\u00e9rable: ajouter chaque \u00e9l\u00e9ment, puis ajouter self (sauf apr\u00e8s le dernier)", "3. Joindre la liste en une seule cha\u00eene", "4. Retourner la cha\u00eene finale"],
+    mistakesEn: ["join is called ON the separator, not on the list: separator.join(list)", "All elements must be strings; join will raise TypeError if any element is not a string", "join does NOT add trailing separator"],
+    mistakesFr: ["join s'appelle SUR le s\u00e9parateur, pas sur la liste : s\u00e9parateur.join(liste)", "Tous les \u00e9l\u00e9ments doivent \u00eatre des cha\u00eenes"],
+  },
+  "str.strip": {
+    name: "str.strip",
+    type: "method",
+    signature: "str.strip(chars=None)",
+    descriptionEn: "Returns a copy of the string with leading and trailing characters removed. If chars is None, removes whitespace. If chars is given, removes any characters in that string (not a prefix/suffix match).",
+    descriptionFr: "Retourne une copie de la cha\u00eene sans les caract\u00e8res de d\u00e9but et de fin. Si chars est None, supprime les espaces.",
+    returnType: "str",
+    examplesEn: ["'  hello  '.strip()        # 'hello'", "'...hello...'.strip('.')  # 'hello'", "'abchelloabc'.strip('abc') # 'hello'"],
+    examplesFr: ["'  bonjour  '.strip()        # 'bonjour'", "'...bonjour...'.strip('.')  # 'bonjour'"],
+    orderEn: ["1. If chars is None, strip all Unicode whitespace characters from both ends", "2. If chars is given, strip any character in chars from both ends until a non-matching char is found on each side", "3. Return the resulting string"],
+    orderFr: ["1. Si chars est None, supprimer tous les espaces Unicode aux deux extr\u00e9mit\u00e9s", "2. Si chars est donn\u00e9, supprimer tout caract\u00e8re dans chars aux deux extr\u00e9mit\u00e9s", "3. Retourner la cha\u00eene r\u00e9sultante"],
+    mistakesEn: ["strip() removes INDIVIDUAL characters, not a whole prefix/suffix string", "Use removeprefix()/removesuffix() (Python 3.9+) for exact prefix/suffix removal", "strip('abc') removes 'a', 'b', AND 'c' individually, not the substring 'abc'"],
+    mistakesFr: ["strip() supprime des caract\u00e8res INDIVIDUELS, pas une cha\u00eene enti\u00e8re", "Utilisez removeprefix()/removesuffix() (Python 3.9+) pour une suppression exacte"],
+  },
+  "str.replace": {
+    name: "str.replace",
+    type: "method",
+    signature: "str.replace(old, new, count=-1)",
+    descriptionEn: "Returns a copy of the string with all occurrences of substring old replaced by new. If count is given, only the first count occurrences are replaced.",
+    descriptionFr: "Retourne une copie de la cha\u00eene avec toutes les occurrences de old remplac\u00e9es par new. Si count est donn\u00e9, seules les premi\u00e8res count occurrences sont remplac\u00e9es.",
+    returnType: "str",
+    examplesEn: ["'hello world'.replace('world', 'Python')  # 'hello Python'", "'a,a,a'.replace('a', 'b', 2)  # 'b,b,a'"],
+    examplesFr: ["'bonjour le monde'.replace('monde', 'Python')  # 'bonjour le Python'"],
+    orderEn: ["1. Scan the string for non-overlapping occurrences of old", "2. For each occurrence (up to count), replace it with new", "3. If count is -1 (default), replace ALL occurrences", "4. Return the new string"],
+    orderFr: ["1. Parcourir la cha\u00eene pour les occurrences non chevauchantes de old", "2. Pour chaque occurrence (jusqu'\u00e0 count), la remplacer par new", "3. Si count est -1 (d\u00e9faut), remplacer TOUTES les occurrences", "4. Retourner la nouvelle cha\u00eene"],
+    mistakesEn: ["replace returns a new string (strings are immutable)", "replace does NOT support regex; use re.sub() for regex replacements", "replace replaces substrings, not individual characters (use str.translate() for that)"],
+    mistakesFr: ["replace retourne une nouvelle cha\u00eene (les cha\u00eenes sont immuables)"],
+  },
+  "str.find": {
+    name: "str.find",
+    type: "method",
+    signature: "str.find(sub, start=0, end=len(str))",
+    descriptionEn: "Returns the lowest index where substring sub is found in the slice s[start:end]. Returns -1 if sub is not found. Use index() for an error-raising alternative.",
+    descriptionFr: "Retourne l'indice le plus bas o\u00f9 la sous-cha\u00eene sub est trouv\u00e9e dans s[start:end]. Retourne -1 si sub n'est pas trouv\u00e9e.",
+    returnType: "int",
+    examplesEn: ["'hello world'.find('world')  # 6", "'hello world'.find('xyz')    # -1", "'hello hello'.find('hello', 3)  # 6"],
+    examplesFr: ["'bonjour le monde'.find('monde')  # 12"],
+    orderEn: ["1. Check the substring s[start:end]", "2. Scan left to right for the first occurrence of sub", "3. If found, return its start index", "4. If not found, return -1"],
+    orderFr: ["1. Examiner la tranche s[start:end]", "2. Parcourir de gauche \u00e0 droite pour la premi\u00e8re occurrence de sub", "3. Si trouv\u00e9e, retourner son indice de d\u00e9but", "4. Si non trouv\u00e9e, retourner -1"],
+    mistakesEn: ["str.find returns -1 (not an exception) when not found; use str.index() to raise ValueError", "find only finds the FIRST occurrence; use rfind() for the last", "find is case-sensitive; use lower() before find for case-insensitive search"],
+    mistakesFr: ["str.find retourne -1 (pas une exception) si non trouv\u00e9"],
+  },
+  "str.index": {
+    name: "str.index",
+    type: "method",
+    signature: "str.index(sub, start=0, end=len(str))",
+    descriptionEn: "Like str.find() but raises ValueError if the substring is not found, instead of returning -1.",
+    descriptionFr: "Comme str.find() mais l\u00e8ve ValueError si la sous-cha\u00eene n'est pas trouv\u00e9e.",
+    returnType: "int",
+    examplesEn: ["'hello world'.index('world')  # 6", "'hello world'.index('xyz')    # ValueError"],
+    examplesFr: ["'bonjour monde'.index('monde')  # 8"],
+    orderEn: ["1. Same search as find()", "2. If substring is found, return the start index", "3. If not found, raise ValueError instead of returning -1"],
+    orderFr: ["1. M\u00eame recherche que find()", "2. Si trouv\u00e9e, retourner l'indice", "3. Si non trouv\u00e9e, lever ValueError"],
+    mistakesEn: ["Uncaught ValueError from index() will crash your program; use find() if you want to test existence", "index() on an empty substring always returns 0 (empty string is found at index 0)"],
+    mistakesFr: ["index() non attrap\u00e9e fera planter le programme"],
+  },
+  "str.startswith": {
+    name: "str.startswith",
+    type: "method",
+    signature: "str.startswith(prefix, start=0, end=len(str))",
+    descriptionEn: "Returns True if the string starts with the given prefix (or one of the prefixes in a tuple), within the optional start/end slice.",
+    descriptionFr: "Retourne True si la cha\u00eene commence par le pr\u00e9fixe donn\u00e9 (ou l'un des pr\u00e9fixes dans un tuple).",
+    returnType: "bool",
+    examplesEn: ["'hello.py'.startswith('hello')  # True", "'hello.py'.startswith(('hello', 'bye'))  # True"],
+    examplesFr: ["'bonjour.py'.startswith('bonjour')  # True"],
+    orderEn: ["1. Slice the string using start/end if provided", "2. Compare the beginning of the sliced string with prefix", "3. If prefix is a tuple, check each element", "4. Return True if any matches, False otherwise"],
+    orderFr: ["1. Trancher la cha\u00eene si start/end sont fournis", "2. Comparer le d\u00e9but avec prefix", "3. Si prefix est un tuple, v\u00e9rifier chaque \u00e9l\u00e9ment", "4. Retourner True si correspondance, False sinon"],
+    mistakesEn: ["startswith accepts a TUPLE of prefixes, not a list (use tuple(prefixes))", "startswith with start/end slices the string virtually (does not create a new string)"],
+    mistakesFr: ["startswith accepte un TUPLE de pr\u00e9fixes, pas une liste"],
+  },
+  "str.endswith": {
+    name: "str.endswith",
+    type: "method",
+    signature: "str.endswith(suffix, start=0, end=len(str))",
+    descriptionEn: "Returns True if the string ends with the given suffix (or one of the suffixes in a tuple), within the optional start/end slice.",
+    descriptionFr: "Retourne True si la cha\u00eene se termine par le suffixe donn\u00e9 (ou l'un des suffixes dans un tuple).",
+    returnType: "bool",
+    examplesEn: ["'file.txt'.endswith('.txt')  # True", "'file.txt'.endswith(('.txt', '.md'))  # True"],
+    examplesFr: ["'fichier.txt'.endswith('.txt')  # True"],
+    orderEn: ["1. Slice the string using start/end if provided", "2. Compare the end of the sliced string with suffix", "3. If suffix is a tuple, check each element", "4. Return True if any matches, False otherwise"],
+    orderFr: ["1. Trancher la cha\u00eene si start/end sont fournis", "2. Comparer la fin avec suffix", "3. Si suffix est un tuple, v\u00e9rifier chaque \u00e9l\u00e9ment", "4. Retourner True si correspondance, False sinon"],
+    mistakesEn: ["endswith accepts a TUPLE of suffixes, not a list", "Checking file extension with endswith('.py') is case-sensitive on Linux"],
+    mistakesFr: ["endswith accepte un TUPLE de suffixes, pas une liste"],
+  },
+  "list.append": {
+    name: "list.append",
+    type: "method",
+    signature: "list.append(x)",
+    descriptionEn: "Adds item x to the end of the list. Modifies the list in place and returns None (not the modified list).",
+    descriptionFr: "Ajoute l'\u00e9l\u00e9ment x \u00e0 la fin de la liste. Modifie la liste sur place et retourne None.",
+    returnType: "None",
+    examplesEn: ["nums = [1, 2]\nnums.append(3)\nprint(nums)  # [1, 2, 3]"],
+    examplesFr: ["nombres = [1, 2]\nnombres.append(3)\nprint(nombres)  # [1, 2, 3]"],
+    orderEn: ["1. Add x as the last element of the list", "2. The list grows by one slot (amortized O(1), occasional resize)", "3. Return None"],
+    orderFr: ["1. Ajouter x comme dernier \u00e9l\u00e9ment de la liste", "2. La liste grandit d'un emplacement (O(1) amorti)", "3. Retourner None"],
+    mistakesEn: ["append returns None, NOT the modified list (common beginner mistake: my_list = my_list.append(x))", "append adds ONE element; use extend() to add multiple elements from an iterable", "append does NOT create a new list — it mutates in place"],
+    mistakesFr: ["append retourne None, PAS la liste modifi\u00e9e", "append ajoute UN \u00e9l\u00e9ment; utilisez extend() pour plusieurs"],
+  },
+  "list.extend": {
+    name: "list.extend",
+    type: "method",
+    signature: "list.extend(iterable)",
+    descriptionEn: "Extends the list by appending all elements from the iterable. Modifies in place and returns None.",
+    descriptionFr: "\u00c9tend la liste en ajoutant tous les \u00e9l\u00e9ments de l'it\u00e9rable. Modifie sur place et retourne None.",
+    returnType: "None",
+    examplesEn: ["nums = [1, 2]\nnums.extend([3, 4])\nprint(nums)  # [1, 2, 3, 4]"],
+    examplesFr: ["nombres = [1, 2]\nnombres.extend([3, 4])\nprint(nombres)  # [1, 2, 3, 4]"],
+    orderEn: ["1. Iterate over the provided iterable", "2. Append each element to the end of the list (in order)", "3. Return None"],
+    orderFr: ["1. It\u00e9rer sur l'it\u00e9rable fourni", "2. Ajouter chaque \u00e9l\u00e9ment \u00e0 la fin de la liste", "3. Retourner None"],
+    mistakesEn: ["extend mutates in place and returns None (like append)", "extend expects an iterable; passing a string extends with characters, not the string itself", "extend is different from + which creates a new list"],
+    mistakesFr: ["extend modifie sur place et retourne None", "extend attend un it\u00e9rable; passer une cha\u00eene ajoute les caract\u00e8res, pas la cha\u00eene"],
+  },
+  "list.pop": {
+    name: "list.pop",
+    type: "method",
+    signature: "list.pop(index=-1)",
+    descriptionEn: "Removes and returns the item at the given index. If no index is given, removes and returns the last item. Raises IndexError if the list is empty or index is out of range.",
+    descriptionFr: "Supprime et retourne l'\u00e9l\u00e9ment \u00e0 l'indice donn\u00e9. Sans indice, supprime et retourne le dernier \u00e9l\u00e9ment. L\u00e8ve IndexError si la liste est vide.",
+    returnType: "Any (the removed element)",
+    examplesEn: ["nums = [10, 20, 30]\nlast = nums.pop()\nprint(last)      # 30\nprint(nums)      # [10, 20]"],
+    examplesFr: ["nombres = [10, 20, 30]\nder = nombres.pop()\nprint(der)       # 30\nprint(nombres)   # [10, 20]"],
+    orderEn: ["1. Check that the index is valid (within bounds)", "2. Save the item at that index", "3. Remove the item from the list (shift subsequent elements left)", "4. Return the saved item"],
+    orderFr: ["1. V\u00e9rifier que l'indice est valide", "2. Sauvegarder l'\u00e9l\u00e9ment \u00e0 cet indice", "3. Supprimer l'\u00e9l\u00e9ment (d\u00e9caler les suivants vers la gauche)", "4. Retourner l'\u00e9l\u00e9ment sauvegard\u00e9"],
+    mistakesEn: ["pop on an empty list raises IndexError (check len(list) > 0 first)", "pop(0) is O(n) because all following elements shift left; collections.deque is better for popping from the front", "pop with no argument pops the LAST element (like a stack)"],
+    mistakesFr: ["pop sur une liste vide l\u00e8ve IndexError", "pop(0) est O(n); utilisez collections.deque pour la file d'attente"],
+  },
+  "list.remove": {
+    name: "list.remove",
+    type: "method",
+    signature: "list.remove(x)",
+    descriptionEn: "Removes the first occurrence of value x from the list. Raises ValueError if x is not found. Modifies in place and returns None.",
+    descriptionFr: "Supprime la premi\u00e8re occurrence de la valeur x de la liste. L\u00e8ve ValueError si x n'est pas trouv\u00e9.",
+    returnType: "None",
+    examplesEn: ["nums = [1, 2, 3, 2]\nnums.remove(2)\nprint(nums)  # [1, 3, 2]"],
+    examplesFr: ["nombres = [1, 2, 3, 2]\nnombres.remove(2)\nprint(nombres)  # [1, 3, 2]"],
+    orderEn: ["1. Scan the list from left to right for an element equal to x (using ==)", "2. If found, remove it (shift subsequent elements left) and return None", "3. If not found, raise ValueError"],
+    orderFr: ["1. Parcourir la liste de gauche \u00e0 droite pour un \u00e9l\u00e9ment \u00e9gal \u00e0 x", "2. Si trouv\u00e9, le supprimer et retourner None", "3. Si non trouv\u00e9, lever ValueError"],
+    mistakesEn: ["remove only removes the FIRST occurrence (not all of them)", "remove mutates the list in place and returns None", "remove compares by value (==), not by identity (is)"],
+    mistakesFr: ["remove supprime seulement la PREMI\u00c8RE occurrence"],
+  },
+  "list.sort": {
+    name: "list.sort",
+    type: "method",
+    signature: "list.sort(*, key=None, reverse=False)",
+    descriptionEn: "Sorts the list in place. Uses Python's Timsort algorithm. Returns None. The key parameter specifies a function of one argument used to extract comparison keys.",
+    descriptionFr: "Trie la liste sur place. Utilise l'algorithme Timsort de Python. Retourne None.",
+    returnType: "None",
+    examplesEn: ["nums = [3, 1, 2]\nnums.sort()\nprint(nums)       # [1, 2, 3]", "words = ['aa', 'b', 'ccc']\nwords.sort(key=len)\nprint(words)  # ['b', 'aa', 'ccc']"],
+    examplesFr: ["nombres = [3, 1, 2]\nnombres.sort()\nprint(nombres)  # [1, 2, 3]"],
+    orderEn: ["1. Timsort checks for pre-existing sorted runs in the data (best case O(n))", "2. Merge sorted runs using a stable merge sort", "3. If key is provided, compute the key for each element once (Schwartzian transform)", "4. If reverse=True, reverse the final sorted order", "5. Return None"],
+    orderFr: ["1. Timsort v\u00e9rifie les s\u00e9quences tri\u00e9es existantes", "2. Fusionner les s\u00e9quences avec un tri stable", "3. Si key est fournie, calculer la cl\u00e9 une fois par \u00e9l\u00e9ment", "4. Si reverse=True, inverser l'ordre final", "5. Retourner None"],
+    mistakesEn: ["list.sort() returns None, NOT the sorted list (use sorted() for a new list)", "list.sort() modifies the list in place; sorted() returns a new list", "list.sort() is stable: elements with equal keys maintain their original relative order"],
+    mistakesFr: ["list.sort() retourne None, PAS la liste tri\u00e9e (utilisez sorted() pour une nouvelle liste)"],
+  },
+  "list.reverse": {
+    name: "list.reverse",
+    type: "method",
+    signature: "list.reverse()",
+    descriptionEn: "Reverses the list in place. Returns None. For a reversed copy or iterator, use reversed() or slicing [::-1].",
+    descriptionFr: "Inverse la liste sur place. Retourne None. Pour une copie invers\u00e9e, utilisez reversed() ou le slicing [::-1].",
+    returnType: "None",
+    examplesEn: ["nums = [1, 2, 3]\nnums.reverse()\nprint(nums)  # [3, 2, 1]"],
+    examplesFr: ["nombres = [1, 2, 3]\nnombres.reverse()\nprint(nombres)  # [3, 2, 1]"],
+    orderEn: ["1. Swap elements pairwise from the ends toward the center", "2. Time complexity O(n)", "3. Return None"],
+    orderFr: ["1. \u00c9changer les \u00e9l\u00e9ments par paires des extr\u00e9mit\u00e9s vers le centre", "2. Complexit\u00e9 temporelle O(n)", "3. Retourner None"],
+    mistakesEn: ["list.reverse() returns None (not the reversed list)", "Use reversed(list) for an iterator or list[::-1] for a reversed copy", "reverse acts on the list in place"],
+    mistakesFr: ["list.reverse() retourne None (pas la liste invers\u00e9e)"],
+  },
+  "list.insert": {
+    name: "list.insert",
+    type: "method",
+    signature: "list.insert(index, x)",
+    descriptionEn: "Inserts item x at the given index. Elements after index shift right. Modifies in place, returns None. If index >= len(list), x is appended.",
+    descriptionFr: "Ins\u00e8re l'\u00e9l\u00e9ment x \u00e0 l'indice donn\u00e9. Les \u00e9l\u00e9ments apr\u00e8s index se d\u00e9calent vers la droite.",
+    returnType: "None",
+    examplesEn: ["nums = [1, 3]\nnums.insert(1, 2)\nprint(nums)  # [1, 2, 3]"],
+    examplesFr: ["nombres = [1, 3]\nnombres.insert(1, 2)\nprint(nombres)  # [1, 2, 3]"],
+    orderEn: ["1. Shift all elements from index to the end one position right", "2. Place x at the now-vacant index position", "3. Return None"],
+    orderFr: ["1. D\u00e9caler tous les \u00e9l\u00e9ments de index \u00e0 la fin d'une position", "2. Placer x \u00e0 la position index", "3. Retourner None"],
+    mistakesEn: ["insert(0, x) is O(n) (shifts the entire list right); use collections.deque for front insertion", "insert with an index >= len(list) appends to the end (same as append)", "insert returns None (common mistake: my_list = my_list.insert(0, x))"],
+    mistakesFr: ["insert(0, x) est O(n); utilisez collections.deque pour l'insertion en t\u00eate"],
+  },
+  "list.count": {
+    name: "list.count",
+    type: "method",
+    signature: "list.count(x)",
+    descriptionEn: "Returns the number of times x appears in the list. Compares by value (==).",
+    descriptionFr: "Retourne le nombre d'occurrences de x dans la liste. Compare par valeur (==).",
+    returnType: "int",
+    examplesEn: ["[1, 2, 2, 3].count(2)  # 2"],
+    examplesFr: ["[1, 2, 2, 3].count(2)  # 2"],
+    orderEn: ["1. Scan the list from left to right", "2. Count each element equal to x (using ==)", "3. Return the total count"],
+    orderFr: ["1. Parcourir la liste de gauche \u00e0 droite", "2. Compter chaque \u00e9l\u00e9ment \u00e9gal \u00e0 x", "3. Retourner le total"],
+    mistakesEn: ["list.count scans the entire list (O(n)); for repeated counting, use collections.Counter", "count compares by value (==), not identity (is)"],
+    mistakesFr: ["list.count parcourt toute la liste (O(n))"],
+  },
+  "list.index": {
+    name: "list.index",
+    type: "method",
+    signature: "list.index(x, start=0, end=len(list))",
+    descriptionEn: "Returns the index of the first occurrence of x in the list (within optional start/end slice). Raises ValueError if not found.",
+    descriptionFr: "Retourne l'indice de la premi\u00e8re occurrence de x dans la liste. L\u00e8ve ValueError si non trouv\u00e9.",
+    returnType: "int",
+    examplesEn: ["[10, 20, 30].index(20)  # 1"],
+    examplesFr: ["[10, 20, 30].index(20)  # 1"],
+    orderEn: ["1. Scan the slice list[start:end] from left to right", "2. Find the first element equal to x (using ==)", "3. Return its absolute index (not relative to start)", "4. If not found, raise ValueError"],
+    orderFr: ["1. Parcourir la tranche list[start:end] de gauche \u00e0 droite", "2. Trouver le premier \u00e9l\u00e9ment \u00e9gal \u00e0 x", "3. Retourner l'indice absolu", "4. Si non trouv\u00e9, lever ValueError"],
+    mistakesEn: ["list.index raises ValueError (not -1) if not found", "index scans the list (O(n)); for repeated lookups, consider a dict or set", "start and end slice the list VIRTUALLY (no copy created)"],
+    mistakesFr: ["list.index l\u00e8ve ValueError (pas -1) si non trouv\u00e9"],
+  },
+  "list.clear": {
+    name: "list.clear",
+    type: "method",
+    signature: "list.clear()",
+    descriptionEn: "Removes all items from the list. Modifies in place and returns None. Equivalent to del list[:].",
+    descriptionFr: "Supprime tous les \u00e9l\u00e9ments de la liste. Modifie sur place et retourne None.",
+    returnType: "None",
+    examplesEn: ["nums = [1, 2, 3]\nnums.clear()\nprint(nums)  # []"],
+    examplesFr: ["nombres = [1, 2, 3]\nnombres.clear()\nprint(nombres)  # []"],
+    orderEn: ["1. Remove all elements from the list", "2. The list becomes empty (length 0)", "3. Return None"],
+    orderFr: ["1. Supprimer tous les \u00e9l\u00e9ments de la liste", "2. La liste devient vide", "3. Retourner None"],
+    mistakesEn: ["list.clear() returns None (not [])", "Unlike reassignment (list = []), clear() affects all references to the same list object", "clear() is O(n) for the references, but the objects themselves are garbage-collected separately"],
+    mistakesFr: ["list.clear() retourne None (pas [])"],
+  },
+  "list.copy": {
+    name: "list.copy",
+    type: "method",
+    signature: "list.copy()",
+    descriptionEn: "Returns a shallow copy of the list. Equivalent to list[:]. The new list contains references to the same objects as the original.",
+    descriptionFr: "Retourne une copie superficielle de la liste. \u00c9quivalent \u00e0 list[:].",
+    returnType: "list",
+    examplesEn: ["nums = [1, 2, 3]\nnums2 = nums.copy()\nnums2.append(4)\nprint(nums)   # [1, 2, 3]\nprint(nums2)  # [1, 2, 3, 4]"],
+    examplesFr: ["nombres = [1, 2, 3]\ncopie = nombres.copy()\ncopie.append(4)\nprint(nombres)  # [1, 2, 3]\nprint(copie)    # [1, 2, 3, 4]"],
+    orderEn: ["1. Create a new list object", "2. Copy each reference from the original list to the new list (shallow copy)", "3. Return the new list"],
+    orderFr: ["1. Cr\u00e9er un nouvel objet liste", "2. Copier chaque r\u00e9f\u00e9rence de la liste originale dans la nouvelle", "3. Retourner la nouvelle liste"],
+    mistakesEn: ["copy() is a SHALLOW copy: nested objects are shared, not cloned", "For deep copying of nested structures, use copy.deepcopy()", "Simply assigning (list2 = list1) does NOT create a copy (same object)"],
+    mistakesFr: ["copy() est une copie SUPERFICIELLE: les objets imbriqu\u00e9s sont partag\u00e9s"],
+  },
+  "dict.keys": {
+    name: "dict.keys",
+    type: "method",
+    signature: "dict.keys()",
+    descriptionEn: "Returns a dynamic view object of the dictionary's keys. The view reflects changes to the dictionary. Use list() to get a static list.",
+    descriptionFr: "Retourne une vue dynamique des cl\u00e9s du dictionnaire. La vue refl\u00e8te les modifications. Utilisez list() pour une liste statique.",
+    returnType: "dict_keys (view)",
+    examplesEn: ["d = {'a': 1, 'b': 2}\nlist(d.keys())  # ['a', 'b']"],
+    examplesFr: ["d = {'a': 1, 'b': 2}\nlist(d.keys())  # ['a', 'b']"],
+    orderEn: ["1. Return a dict_keys view that dynamically reflects the current keys", "2. The view supports iteration, membership testing (in), and len()", "3. Convert to list() if you need a static snapshot"],
+    orderFr: ["1. Retourner une vue dict_keys qui refl\u00e8te dynamiquement les cl\u00e9s", "2. La vue supporte l'it\u00e9ration, le test d'appartenance et len()", "3. Convertir avec list() pour un instantan\u00e9 statique"],
+    mistakesEn: ["dict.keys() returns a VIEW, not a list; it's dynamic", "Iterating directly over a dict (for key in dict) is equivalent to dict.keys()", "In Python 2, dict.keys() returned a list; in Python 3, it returns a view"],
+    mistakesFr: ["dict.keys() retourne une VUE, pas une liste"],
+  },
+  "dict.values": {
+    name: "dict.values",
+    type: "method",
+    signature: "dict.values()",
+    descriptionEn: "Returns a dynamic view object of the dictionary's values. The view reflects changes to the dictionary.",
+    descriptionFr: "Retourne une vue dynamique des valeurs du dictionnaire. La vue refl\u00e8te les modifications.",
+    returnType: "dict_values (view)",
+    examplesEn: ["d = {'a': 1, 'b': 2}\nlist(d.values())  # [1, 2]"],
+    examplesFr: ["d = {'a': 1, 'b': 2}\nlist(d.values())  # [1, 2]"],
+    orderEn: ["1. Return a dict_values view over the current values", "2. Supports iteration, membership (in), len(), but NOT indexing"],
+    orderFr: ["1. Retourner une vue dict_values sur les valeurs actuelles", "2. Supporte l'it\u00e9ration, l'appartenance, len(), mais PAS l'indexation"],
+    mistakesEn: ["Values view does NOT support indexing (use list(dict.values())[0] instead)", "Values are not guaranteed to be unique (unlike keys)", "The view is dynamic; convert to list() for a snapshot"],
+    mistakesFr: ["La vue values ne supporte PAS l'indexation"],
+  },
+  "dict.items": {
+    name: "dict.items",
+    type: "method",
+    signature: "dict.items()",
+    descriptionEn: "Returns a dynamic view of (key, value) pairs as 2-tuples. The most common way to iterate over a dictionary.",
+    descriptionFr: "Retourne une vue dynamique des paires (cl\u00e9, valeur) sous forme de 2-uplets.",
+    returnType: "dict_items (view of tuples)",
+    examplesEn: ["d = {'a': 1, 'b': 2}\nfor k, v in d.items():\n    print(k, v)\n# a 1\n# b 2"],
+    examplesFr: ["d = {'a': 1, 'b': 2}\nfor k, v in d.items():\n    print(k, v)\n# a 1\n# b 2"],
+    orderEn: ["1. Return a dict_items view of (key, value) pairs", "2. The order matches insertion order (Python 3.7+)"],
+    orderFr: ["1. Retourner une vue dict_items des paires (cl\u00e9, valeur)", "2. L'ordre correspond \u00e0 l'ordre d'insertion (Python 3.7+)"],
+    mistakesEn: ["In Python 2, iteritems() was used instead of items()", "items() returns a VIEW, not a list", "Modifying the dict while iterating over items() can raise RuntimeError"],
+    mistakesFr: ["items() retourne une VUE, pas une liste"],
+  },
+  "dict.get": {
+    name: "dict.get",
+    type: "method",
+    signature: "dict.get(key, default=None)",
+    descriptionEn: "Returns the value for key if it exists, otherwise returns default (no KeyError raised). Safe alternative to bracket access.",
+    descriptionFr: "Retourne la valeur pour la cl\u00e9 si elle existe, sinon retourne default (pas de KeyError). Alternative s\u00e9curis\u00e9e \u00e0 l'acc\u00e8s par crochets.",
+    returnType: "Any (or default if key not found)",
+    examplesEn: ["d = {'a': 1}\nd.get('a')        # 1\nd.get('b')        # None (no KeyError)\nd.get('b', 0)     # 0"],
+    examplesFr: ["d = {'a': 1}\nd.get('a')        # 1\nd.get('b')        # None (pas de KeyError)\nd.get('b', 0)     # 0"],
+    orderEn: ["1. Check if key exists in the dictionary", "2. If yes, return dict[key]", "3. If no, return default (None if not specified)"],
+    orderFr: ["1. V\u00e9rifier si la cl\u00e9 existe dans le dictionnaire", "2. Si oui, retourner dict[cl\u00e9]", "3. Si non, retourner default (None si non sp\u00e9cifi\u00e9)"],
+    mistakesEn: ["get() NEVER raises KeyError (that's the whole point)", "Default is None, not an empty string or 0", "get() does NOT add the key to the dict (use setdefault() for that)"],
+    mistakesFr: ["get() ne l\u00e8ve JAMAIS KeyError (c'est le but)"],
+  },
+  "dict.setdefault": {
+    name: "dict.setdefault",
+    type: "method",
+    signature: "dict.setdefault(key, default=None)",
+    descriptionEn: "If key is in the dictionary, returns its value. If not, inserts key with default and returns default. Useful for initializing nested structures.",
+    descriptionFr: "Si la cl\u00e9 existe, retourne sa valeur. Sinon, ins\u00e8re la cl\u00e9 avec default et retourne default.",
+    returnType: "Any (existing or default value)",
+    examplesEn: ["d = {}\nd.setdefault('count', 0)  # 0 (inserts 'count': 0)\nd.setdefault('count', 5)  # 0 (already exists)"],
+    examplesFr: ["d = {}\nd.setdefault('count', 0)  # 0 (ins\u00e8re 'count': 0)\nd.setdefault('count', 5)  # 0 (existe d\u00e9j\u00e0)"],
+    orderEn: ["1. Check if key exists in the dictionary", "2. If yes, return dict[key] (do NOT modify)", "3. If no, insert dict[key] = default, then return default"],
+    orderFr: ["1. V\u00e9rifier si la cl\u00e9 existe", "2. Si oui, retourner dict[cl\u00e9] (ne pas modifier)", "3. Si non, ins\u00e9rer dict[cl\u00e9] = default, retourner default"],
+    mistakesEn: ["Unlike get(), setdefault() MUTATES the dict when the key is missing", "default is always evaluated (even if key exists); use defaultdict or a conditional for expensive defaults", "setdefault is often better replaced by collections.defaultdict"],
+    mistakesFr: ["Contrairement \u00e0 get(), setdefault() MODIFIE le dict si la cl\u00e9 manque"],
+  },
+  "dict.pop": {
+    name: "dict.pop",
+    type: "method",
+    signature: "dict.pop(key, default=<no default>)",
+    descriptionEn: "Removes the key and returns its value. If key is not found, returns default if provided, otherwise raises KeyError.",
+    descriptionFr: "Supprime la cl\u00e9 et retourne sa valeur. Si la cl\u00e9 n'existe pas, retourne default si fourni, sinon l\u00e8ve KeyError.",
+    returnType: "Any (the removed value)",
+    examplesEn: ["d = {'a': 1, 'b': 2}\nd.pop('a')     # 1 (d becomes {'b': 2})\nd.pop('z', -1)  # -1 (no KeyError)"],
+    examplesFr: ["d = {'a': 1, 'b': 2}\nd.pop('a')     # 1 (d devient {'b': 2})\nd.pop('z', -1)  # -1"],
+    orderEn: ["1. Check if key exists in the dictionary", "2. If yes, remove the key-value pair and return the value", "3. If no: if default provided, return default; otherwise raise KeyError"],
+    orderFr: ["1. V\u00e9rifier si la cl\u00e9 existe", "2. Si oui, supprimer et retourner la valeur", "3. Si non: si default fourni, retourner default; sinon lever KeyError"],
+    mistakesEn: ["dict.pop with NO default raises KeyError for missing keys", "Unlike list.pop(), dict.pop() requires a key argument"],
+    mistakesFr: ["dict.pop SANS default l\u00e8ve KeyError pour les cl\u00e9s manquantes"],
+  },
+  "dict.update": {
+    name: "dict.update",
+    type: "method",
+    signature: "dict.update(other_dict_or_iterable)",
+    descriptionEn: "Updates the dictionary with key-value pairs from other, overwriting existing keys. Accepts another dict, an iterable of (key, value) pairs, or keyword arguments.",
+    descriptionFr: "Met \u00e0 jour le dictionnaire avec les paires cl\u00e9-valeur de other, en \u00e9crasant les cl\u00e9s existantes.",
+    returnType: "None",
+    examplesEn: ["d = {'a': 1}\nd.update({'b': 2, 'a': 99})\nprint(d)  # {'a': 99, 'b': 2}"],
+    examplesFr: ["d = {'a': 1}\nd.update({'b': 2, 'a': 99})\nprint(d)  # {'a': 99, 'b': 2}"],
+    orderEn: ["1. Iterate over the provided key-value pairs", "2. For each (key, value), set dict[key] = value (overwrites existing keys)", "3. Return None"],
+    orderFr: ["1. It\u00e9rer sur les paires cl\u00e9-valeur fournies", "2. Pour chaque (cl\u00e9, valeur), d\u00e9finir dict[cl\u00e9] = valeur", "3. Retourner None"],
+    mistakesEn: ["update() mutates the dict IN PLACE and returns None", "update() can be called with keyword arguments: dict.update(a=1, b=2)", "update() overwrites existing keys (use setdefault to preserve)"],
+    mistakesFr: ["update() modifie le dict SUR PLACE et retourne None"],
+  },
+};
+
+export const answerPythonMethodQuery = (question: string, language: AdvancedAiLanguage): string | null => {
+  const fr = language === 'fr';
+  const lower = question.toLowerCase().trim();
+  const cleaned = lower.replace(/[?!.]+$/g, '').trim();
+
+  // 1. Exact match against type.method pattern
+  const methodNames = Object.keys(BUILTIN_METHOD_SPECS);
+  for (const dottedName of methodNames) {
+    const [typeName, methodName] = dottedName.split('.');
+    // Try exact: str.capitalize, list.append, etc.
+    if (cleaned === dottedName || cleaned === `${dottedName}()`) {
+      const spec = BUILTIN_METHOD_SPECS[dottedName];
+      return formatBuiltinSpec(spec as unknown as BuiltinSpec, language);
+    }
+    // Try bare method name: capitalize, append, etc.
+    if (cleaned === methodName || cleaned === `${methodName}()`) {
+      const spec = BUILTIN_METHOD_SPECS[dottedName];
+      return formatBuiltinSpec(spec as unknown as BuiltinSpec, language, [
+        `**${fr ? 'M\u00e9thode' : 'Method'}: \`${dottedName}()\`**`,
+      ]);
+    }
+    // Regex patterns
+    const patterns = [
+      new RegExp(`\\b${methodName}\\b`, 'i'),
+      new RegExp(`what\\s+is\\s+${typeName}\\.${methodName}`, 'i'),
+      new RegExp(`explain\\s+${typeName}\\.${methodName}`, 'i'),
+      new RegExp(`\\b${typeName}\\.${methodName}`, 'i'),
+    ];
+    for (const p of patterns) {
+      if (p.test(lower)) {
+        const spec = BUILTIN_METHOD_SPECS[dottedName];
+        return formatBuiltinSpec(spec as unknown as BuiltinSpec, language);
+      }
+    }
+  }
+
   return null;
 };
 
@@ -6384,18 +6848,34 @@ export const buildGeneralAiDisambiguationList = (language: AdvancedAiLanguage): 
     if (!byType[type]) byType[type] = [];
     byType[type].push(name);
   }
+  // Add methods grouped by type
+  const methodGroups: Record<string, string[]> = {};
+  for (const [dottedName] of Object.entries(BUILTIN_METHOD_SPECS)) {
+    const [typeName] = dottedName.split('.');
+    if (!methodGroups[typeName]) methodGroups[typeName] = [];
+    methodGroups[typeName].push(dottedName);
+  }
+
+  const totalBuiltin = ALL_BUILTIN_NAMES.length;
+  const totalMethods = Object.keys(BUILTIN_METHOD_SPECS).length;
 
   const parts: string[] = [
     `**${fr ? 'Voici ce que je peux vous expliquer' : 'Here is what I can explain'}**`,
     fr
-      ? `Je ne suis pas sûr de comprendre votre question. Voici une liste de ${ALL_BUILTIN_NAMES.length} entrées que je connais. Essayez d\u2019en taper une pour obtenir sa définition :`
-      : `I\u2019m not sure I understood your question. Here is a list of ${ALL_BUILTIN_NAMES.length} entries I know about. Try typing one to get its definition:`,
+      ? `Je ne suis pas sûr de comprendre votre question. Voici une liste de ${totalBuiltin} entrées et ${totalMethods} méthodes intégrées que je connais. Essayez d\u2019en taper une pour obtenir sa définition :`
+      : `I\u2019m not sure I understood your question. Here is a list of ${totalBuiltin} entries and ${totalMethods} methods I know about. Try typing one to get its definition:`,
     ...headers,
   ];
 
   for (const [type, names] of Object.entries(byType).sort()) {
     parts.push(`**${type.charAt(0).toUpperCase() + type.slice(1)}**`);
     parts.push(names.map(n => `\`${n}\``).join(', '));
+    parts.push('');
+  }
+
+  for (const [typeName, methods] of Object.entries(methodGroups).sort()) {
+    parts.push(`**${typeName} ${fr ? 'méthodes' : 'methods'}**`);
+    parts.push(methods.map(m => `\`${m}\``).join(', '));
     parts.push('');
   }
 
