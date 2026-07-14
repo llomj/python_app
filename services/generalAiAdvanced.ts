@@ -3251,6 +3251,143 @@ export const answerPythonContextManagerGuide = (question: string, language: Adva
   ].join('\n');
 };
 
+export const answerPythonScopeVariable = (question: string, language: AdvancedAiLanguage): string | null => {
+  if (!/\b(?:global(?:\s+(?:variable|keyword|scope|vs|and|local))?|local(?:\s+(?:variable|scope|vs|and|global))?|nonlocal\b|scope\s+(?:of\s+)?variable|LEGB\b|variable\s+(?:scope|visibility)|port[e\u00e9]e\s+(?:des\s+)?variables?|globale?\s+(?:variable|port[e\u00e9]e)|locale?\s+(?:variable|port[e\u00e9]e)|diff(?:\u00e9rence|erence)\s+(?:entre|between)\s+(?:global|local))\b/i.test(question)) return null;
+  const fr = language === 'fr';
+  const parts: string[] = [];
+
+  parts.push(`**${fr ? "Port\u00e9e des variables en Python (Global vs Local)" : "Variable scope in Python (Global vs Local)"}**`);
+  parts.push('');
+
+  parts.push(`**${fr ? "1. Qu\u2019est-ce qu\u2019une variable globale ?" : "1. What is a global variable?"}**`);
+  parts.push(fr
+    ? "Une variable **globale** est d\u00e9finie en dehors de toute fonction, au niveau du module. Elle est accessible depuis n\u2019importe o\u00f9 dans le fichier (fonctions, classes, autres modules apr\u00e8s import). Sa dur\u00e9e de vie est celle du programme."
+    : "A **global** variable is defined outside any function, at the module level. It is accessible from anywhere in the file (functions, classes, other modules after import). Its lifetime equals the program\u2019s lifetime.");
+  parts.push('');
+  parts.push('```python');
+  parts.push('# Global variable');
+  parts.push("count = 0  # 'count' is global \u2014 defined at module level");
+  parts.push('');
+  parts.push('def increment():');
+  parts.push('    print(count)  # Accessible here \u2014 reads 0');
+  parts.push('');
+  parts.push('increment()');
+  parts.push('```');
+  parts.push('');
+
+  parts.push(`**${fr ? "2. Qu\u2019est-ce qu\u2019une variable locale ?" : "2. What is a local variable?"}**`);
+  parts.push(fr
+    ? "Une variable **locale** est d\u00e9finie \u00e0 l\u2019int\u00e9rieur d\u2019une fonction. Elle n\u2019existe que pendant l\u2019appel de cette fonction et n\u2019est pas accessible en dehors. Chaque appel de fonction cr\u00e9e un nouvel espace de noms local."
+    : "A **local** variable is defined inside a function. It exists only during that function call and is not accessible outside. Each function call creates a fresh local namespace.");
+  parts.push('');
+  parts.push('```python');
+  parts.push('def show():');
+  parts.push("    msg = 'Hello'  # 'msg' is local \u2014 only exists inside show()");
+  parts.push('    print(msg)');
+  parts.push('');
+  parts.push('show()            # prints: Hello');
+  parts.push("print(msg)        # NameError: name 'msg' is not defined");
+  parts.push('```');
+  parts.push('');
+
+  parts.push(`**${fr ? "3. Le mot-cl\u00e9 `global`" : "3. The `global` keyword"}**`);
+  parts.push(fr
+    ? "Par d\u00e9faut, assigner une valeur \u00e0 une variable dans une fonction la cr\u00e9e comme **locale**. Pour modifier une variable globale, d\u00e9clarez-la avec `global` dans la fonction."
+    : "By default, assigning to a variable inside a function creates it as **local**. To modify a global variable, declare it with `global` inside the function.");
+  parts.push('');
+  parts.push('```python');
+  parts.push('count = 0              # global');
+  parts.push('');
+  parts.push('def increment():');
+  parts.push("    global count        # 'count' now refers to the global");
+  parts.push('    count += 1');
+  parts.push('');
+  parts.push('increment()');
+  parts.push('print(count)          # 1');
+  parts.push('');
+  parts.push('def broken():');
+  parts.push("    count = 5          # creates NEW local, does NOT modify global");
+  parts.push('');
+  parts.push('broken()');
+  parts.push('print(count)          # still 1');
+  parts.push('```');
+  parts.push('');
+
+  parts.push(`**${fr ? "4. Le mot-cl\u00e9 `nonlocal`" : "4. The `nonlocal` keyword"}**`);
+  parts.push(fr
+    ? "`nonlocal` est utilis\u00e9 dans les fonctions imbriqu\u00e9es pour modifier une variable de la fonction englobante (ni globale, ni locale \u2014 la port\u00e9e interm\u00e9diaire)."
+    : "`nonlocal` is used in nested functions to modify a variable from the enclosing function (neither global nor local \u2014 the scope in between).");
+  parts.push('');
+  parts.push('```python');
+  parts.push('def outer():');
+  parts.push("    x = 'outer'       # enclosing scope");
+  parts.push('');
+  parts.push('    def inner():');
+  parts.push('        nonlocal x    # refer to x from outer');
+  parts.push("        x = 'inner'   # modifies outer\u2019s x");
+  parts.push('');
+  parts.push('    inner()');
+  parts.push('    print(x)          # "inner" \u2014 modified by inner()');
+  parts.push('```');
+  parts.push('');
+
+  parts.push(`**${fr ? "5. La r\u00e8gle LEGB (ordre de r\u00e9solution des noms)" : "5. The LEGB rule (name resolution order)"}**`);
+  parts.push(fr
+    ? "Quand Python rencontre un nom, il le cherche dans cet ordre :"
+    : "When Python encounters a name, it looks it up in this order:");
+  parts.push('');
+  for (const entry of [
+    { letter: 'L', nameEn: 'Local', nameFr: 'Locale', descEn: 'Inside the current function', descFr: "À l\u2019intérieur de la fonction courante" },
+    { letter: 'E', nameEn: 'Enclosing', nameFr: 'Englobante', descEn: 'Any enclosing function (outer functions in nested scopes)', descFr: 'Les fonctions englobantes (port\u00e9es ext\u00e9rieures)' },
+    { letter: 'G', nameEn: 'Global', nameFr: 'Globale', descEn: 'The module level (top-level names)', descFr: 'Le niveau du module (noms de premier niveau)' },
+    { letter: 'B', nameEn: 'Built-in', nameFr: 'Int\u00e9gr\u00e9e', descEn: "Python\u2019s built-in namespace (print, len, etc.)", descFr: "L\u2019espace de noms int\u00e9gr\u00e9 de Python (print, len, etc.)" },
+  ]) {
+    parts.push(`**${entry.letter}** \u2014 ${fr ? entry.nameFr : entry.nameEn}: ${fr ? entry.descFr : entry.descEn}`);
+  }
+  parts.push('');
+  parts.push('```python');
+  parts.push('x = "global"          # G');
+  parts.push('');
+  parts.push('def outer():');
+  parts.push("    x = 'enclosing'   # E");
+  parts.push('');
+  parts.push('    def inner():');
+  parts.push("        x = 'local'   # L \u2014 shadows enclosing and global");
+  parts.push('        print(x)      # "local"');
+  parts.push('    inner()');
+  parts.push('outer()');
+  parts.push('```');
+  parts.push('');
+
+  parts.push(`**${fr ? "6. Erreurs fr\u00e9quentes" : "6. Common mistakes"}**`);
+  const mistakes = [
+    { en: "**UnboundLocalError**: assigning to a variable inside a function makes it local \u2014 even if a global with the same name exists. Use `global` to opt in.", fr: "**UnboundLocalError** : assigner \u00e0 une variable dans une fonction la rend locale, m\u00eame si une variable globale du m\u00eame nom existe. Utilisez `global` pour l\u2019indiquer." },
+    { en: "**Shadowing**: a local variable with the same name as a global one silently hides the global inside the function.", fr: "**Shadowing (masquage)** : une variable locale du m\u00eame nom qu\u2019une variable globale cache silencieusement la globale dans la fonction." },
+    { en: "**Overusing `global`**: modifying globals from many functions makes code hard to reason about. Prefer passing parameters and returning values.", fr: "**Utilisation excessive de `global`** : modifier des globales depuis plusieurs fonctions rend le code difficile \u00e0 suivre. Pr\u00e9f\u00e9rez passer des param\u00e8tres et retourner des valeurs." },
+    { en: "**Forgetting `nonlocal`**: assigning to a variable in a nested function creates a local \u2014 use `nonlocal` to modify the enclosing scope variable.", fr: "**Oubli de `nonlocal`** : assigner \u00e0 une variable dans une fonction imbriqu\u00e9e cr\u00e9e une locale \u2014 utilisez `nonlocal` pour modifier la variable de la port\u00e9e englobante." },
+    { en: "**Mutable globals without `global`**: modifying a mutable global (e.g., `my_list.append(1)`) works without `global` because you\u2019re mutating, not reassigning. But reassigning (`my_list = []`) requires `global`.", fr: "**Globale mutable sans `global`** : modifier une globale mutable (ex. `my_list.append(1)`) fonctionne sans `global` car vous muteze, pas r\u00e9assignez. Mais r\u00e9assigner (`my_list = []`) n\u00e9cessite `global`." },
+  ];
+  for (const m of mistakes) {
+    parts.push(`- ${fr ? m.fr : m.en}`);
+  }
+  parts.push('');
+
+  parts.push(`**${fr ? "7. Aide-m\u00e9moire rapide" : "7. Quick reference"}**`);
+  parts.push('');
+  parts.push('| ' + (fr ? 'Situation' : 'Situation') + ' | ' + (fr ? 'Code' : 'Code') + ' | ' + (fr ? 'R\u00e9sultat' : 'Result') + ' |');
+  parts.push('|---|---|---|');
+  parts.push('| ' + (fr ? 'Lire une globale' : 'Read a global') + ' | `print(x)` | \u2705 ' + (fr ? 'Lit la globale' : 'Reads the global') + ' |');
+  parts.push('| ' + (fr ? 'Assigner sans `global`' : 'Assign without `global`') + ' | `x = 1` | \u274c ' + (fr ? 'Cr\u00e9e une locale' : 'Creates local') + ' |');
+  parts.push('| ' + (fr ? 'Assigner avec `global`' : 'Assign with `global`') + ' | `global x; x = 1` | \u2705 ' + (fr ? 'Modifie la globale' : 'Modifies global') + ' |');
+  parts.push('| ' + (fr ? 'Muter une globale' : 'Mutate a global') + ' | `lst.append(1)` | \u2705 ' + (fr ? 'Mute sans `global`' : 'Mutates without `global`') + ' |');
+  parts.push('| ' + (fr ? 'Fct imbriqu\u00e9e, assigner' : 'Nested, assign') + ' | `nonlocal x; x = 1` | \u2705 ' + (fr ? 'Modifie la port\u00e9e englobante' : 'Modifies enclosing scope') + ' |');
+
+  return parts.join('\n');
+};
+
+
+
+
 
 
 
@@ -5556,8 +5693,6 @@ const BUILTIN_SPECS: Record<string, BuiltinSpec> = {
       "`zip()` retourne un iterateur en Python 3",
     ],
   },
-};
-
   "__import__": {
     name: "__import__",
     type: "function",
@@ -5894,6 +6029,7 @@ const BUILTIN_SPECS: Record<string, BuiltinSpec> = {
     mistakesEn: ["False is 0 (but use is False for comparison)", "is and ==: False == 0 is True, False is 0 is False (different objects)"],
     mistakesFr: ["False est 0 (mais utilisez is False pour comparer)"],
   },
+};
 
 
 // Regex to detect any builtin name in a question
