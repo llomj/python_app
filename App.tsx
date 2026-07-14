@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -17887,6 +17887,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonFunctionContractRequest(effectiveQuestion, appLang)
                 || answerPythonDoctestExecutionRequest(effectiveQuestion, appLang)
                 || answerPythonTestExecutionRequest(effectiveQuestion, appLang)
+                || answerPythonScopeVariable(effectiveQuestion, appLang)
                 || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang)
@@ -17922,7 +17923,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonTestingPatterns(effectiveQuestion, appLang)
                 || answerPythonCliPatterns(effectiveQuestion, appLang)
                 || answerPythonEdgeCases(effectiveQuestion, appLang)
-                || answerPythonScopeVariable(effectiveQuestion, appLang)
                 || answerPythonStringMethods(effectiveQuestion, appLang)
                 || answerPythonListMethods(effectiveQuestion, appLang)
                 || answerPythonDictMethods(effectiveQuestion, appLang)
@@ -18196,16 +18196,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;
                 case 'definition':
-                    refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
+                    refAnswer = answerPythonBuiltinQuery(effectiveQuestion, appLang)
+                        || answerPythonScopeVariable(effectiveQuestion, appLang)
+                        || knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonAtLevel(effectiveQuestion, appLang, effectiveMode === 'simple' ? 'beginner' : effectiveMode === 'deep' ? 'expert' : 'intermediate')
                         || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonReferenceQuestion(effectiveQuestion)
-                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
+                        || buildGeneralAiCoreTopicAnswer(effectiveQuestion)
+                        || buildGeneralAiDisambiguationList(appLang);
                     break;
                 default:
-                    refAnswer = knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
+                    refAnswer = answerPythonBuiltinQuery(effectiveQuestion, appLang)
+                        || answerPythonScopeVariable(effectiveQuestion, appLang)
+                        || knowledge.answerPythonBareOrFuzzyQuestion(effectiveQuestion, appLang)
                         || knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
-                        || knowledge.answerPythonRelationships(effectiveQuestion, appLang);
+                        || knowledge.answerPythonRelationships(effectiveQuestion, appLang)
+                        || buildGeneralAiDisambiguationList(appLang);
                     break;
             }
             if (refAnswer) {

@@ -6029,6 +6029,160 @@ const BUILTIN_SPECS: Record<string, BuiltinSpec> = {
     mistakesEn: ["False is 0 (but use is False for comparison)", "is and ==: False == 0 is True, False is 0 is False (different objects)"],
     mistakesFr: ["False est 0 (mais utilisez is False pour comparer)"],
   },
+  "__init__": {
+    name: "__init__",
+    type: "dunder method",
+    signature: "__init__(self, ...)",
+    descriptionEn: "The instance initializer method. Called automatically after __new__() when an instance is created. Sets up initial state for the object.",
+    descriptionFr: "La m\u00e9thode d\u2019initialisation d\u2019instance. Appel\u00e9e automatiquement apr\u00e8s __new__() lors de la cr\u00e9ation d\u2019une instance.",
+    returnType: "None",
+    examplesEn: ["class Person:\n    def __init__(self, name):\n        self.name = name\np = Person('Alice')  # calls __init__"],
+    examplesFr: ["class Personne:\n    def __init__(self, nom):\n        self.nom = nom\np = Personne('Alice')"],
+    orderEn: ["1. __new__() creates the raw instance", "2. __init__() is called with the instance and the constructor arguments"],
+    orderFr: ["1. __new__() cr\u00e9e l\u2019instance brute", "2. __init__() est appel\u00e9e avec l\u2019instance et les arguments du constructeur"],
+    mistakesEn: ["__init__ must return None (returning a value raises TypeError)", "__init__ is not the constructor (__new__ is). __init__ initializes, it does not allocate"],
+    mistakesFr: ["__init__ doit retourner None (retourner une valeur l\u00e8ve TypeError)", "__init__ n\u2019est pas le constructeur (__new__ l\u2019est)"],
+  },
+  "__str__": {
+    name: "__str__",
+    type: "dunder method",
+    signature: "__str__(self) -> str",
+    descriptionEn: "Called by str(), print(), and format() to get an informal, human-readable string representation of an object.",
+    descriptionFr: "Appel\u00e9e par str(), print() et format() pour obtenir une repr\u00e9sentation lisible pour un humain.",
+    returnType: "str",
+    examplesEn: ["class Point:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def __str__(self):\n        return f'({self.x}, {self.y})'\nprint(Point(1, 2))  # (1, 2)"],
+    examplesFr: ["class Point:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def __str__(self):\n        return f'({self.x}, {self.y})'\nprint(Point(1, 2))  # (1, 2)"],
+    orderEn: ["1. str(obj) or print(obj) calls obj.__str__()", "2. Falls back to __repr__() if __str__ is not defined"],
+    orderFr: ["1. str(obj) ou print(obj) appelle obj.__str__()", "2. Utilise __repr__() si __str__ n\u2019est pas d\u00e9fini"],
+    mistakesEn: ["__str__ must return a string object (not print it!)", "Use __repr__ for debugging/developer representation, __str__ for end-user display"],
+    mistakesFr: ["__str__ doit retourner une cha\u00eene (pas l\u2019afficher !)", "Utilisez __repr__ pour le d\u00e9bogage, __str__ pour l\u2019affichage utilisateur"],
+  },
+  "__repr__": {
+    name: "__repr__",
+    type: "dunder method",
+    signature: "__repr__(self) -> str",
+    descriptionEn: "Called by repr() and the interactive interpreter. Should return an unambiguous, developer-friendly string, ideally one that recreates the object.",
+    descriptionFr: "Appel\u00e9e par repr() et l\u2019interpr\u00e9teur interactif. Doit retourner une cha\u00eene non ambigu\u00eb qui id\u00e9alement recr\u00e9e l\u2019objet.",
+    returnType: "str",
+    examplesEn: ["class Point:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def __repr__(self):\n        return f'Point({self.x}, {self.y})'\np = Point(1, 2)\nrepr(p)  # \"Point(1, 2)\""],
+    examplesFr: ["class Point:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def __repr__(self):\n        return f'Point({self.x}, {self.y})'\np = Point(1, 2)\nrepr(p)  # \"Point(1, 2)\""],
+    orderEn: ["1. repr(obj) calls obj.__repr__()", "2. Falls back to the default implementation (class name + memory address)"],
+    orderFr: ["1. repr(obj) appelle obj.__repr__()", "2. Utilise l'impl\u00e9mentation par d\u00e9faut (nom de classe + adresse m\u00e9moire)"],
+    mistakesEn: ["If both __repr__ and __str__ are defined, __str__ takes priority in print/str, __repr__ in repr/interactive", "Without __repr__, the default shows <MyClass object at 0x...>"],
+    mistakesFr: ["Si les deux sont d\u00e9finis, __str__ est prioritaire dans print/str, __repr__ dans l\u2019interpr\u00e9teur"],
+  },
+  "__len__": {
+    name: "__len__",
+    type: "dunder method",
+    signature: "__len__(self) -> int",
+    descriptionEn: "Called by len(obj). Returns the length (number of items) of a container object. Also used by bool() — if __len__ returns 0, the object is falsy.",
+    descriptionFr: "Appel\u00e9e par len(obj). Retourne la longueur d\u2019un conteneur. Utilis\u00e9e aussi par bool() — si __len__ retourne 0, l\u2019objet est faux.",
+    returnType: "int",
+    examplesEn: ["class Team:\n    def __init__(self):\n        self.members = []\n    def __len__(self):\n        return len(self.members)\nteam = Team()\nlen(team)  # 0"],
+    examplesFr: ["class Equipe:\n    def __init__(self):\n        self.membres = []\n    def __len__(self):\n        return len(self.membres)\ne = Equipe()\nlen(e)  # 0"],
+    orderEn: ["1. len(obj) calls obj.__len__()", "2. If __len__ returns 0 and no __bool__ is defined, bool(obj) is False"],
+    orderFr: ["1. len(obj) appelle obj.__len__()", "2. Si __len__ retourne 0 et que __bool__ n\u2019est pas d\u00e9fini, bool(obj) est False"],
+    mistakesEn: ["__len__ must return a non-negative integer", "__len__ should be O(1), not O(n) — store the length, don\u2019t recompute it"],
+    mistakesFr: ["__len__ doit retourner un entier positif ou nul"],
+  },
+  "__call__": {
+    name: "__call__",
+    type: "dunder method",
+    signature: "__call__(self, ...) -> Any",
+    descriptionEn: "Makes an instance callable like a function. Called when you use obj(...). Useful for creating function-like objects with state.",
+    descriptionFr: "Rend une instance appelable comme une fonction. Appel\u00e9e quand vous utilisez obj(...). Utile pour cr\u00e9er des objets fonctionnels avec \u00e9tat.",
+    returnType: "Any",
+    examplesEn: ["class Counter:\n    def __init__(self):\n        self.n = 0\n    def __call__(self):\n        self.n += 1\n        return self.n\nc = Counter()\nc()  # 1\nc()  # 2"],
+    examplesFr: ["class Compteur:\n    def __init__(self):\n        self.n = 0\n    def __call__(self):\n        self.n += 1\n        return self.n\nc = Compteur()\nc()  # 1\nc()  # 2"],
+    orderEn: ["1. obj(args) calls type(obj).__call__(obj, args)", "2. Commonly used for decorators, currying, and function-like objects"],
+    orderFr: ["1. obj(args) appelle type(obj).__call__(obj, args)", "2. Utilis\u00e9 pour les d\u00e9corateurs, le curryfication et les objets fonctionnels"],
+    mistakesEn: ["__call__ can take any arguments (like a normal function)", "Functors (callable objects) are an alternative to closures"],
+    mistakesFr: ["__call__ peut prendre n\u2019importe quels arguments"],
+  },
+  "__getitem__": {
+    name: "__getitem__",
+    type: "dunder method",
+    signature: "__getitem__(self, key) -> Any",
+    descriptionEn: "Called by self[key] indexing. Enables bracket access on custom objects. Also called for iteration if __iter__ is not defined.",
+    descriptionFr: "Appel\u00e9e par self[key] (indexation). Permet l\u2019acc\u00e8s par crochets sur les objets personnalis\u00e9s.",
+    returnType: "Any",
+    examplesEn: ["class MyList:\n    def __init__(self, items):\n        self.items = items\n    def __getitem__(self, index):\n        return self.items[index]\nml = MyList([10, 20, 30])\nml[1]  # 20"],
+    examplesFr: ["class MaListe:\n    def __init__(self, items):\n        self.items = items\n    def __getitem__(self, index):\n        return self.items[index]\nml = MaListe([10, 20, 30])\nml[1]  # 20"],
+    orderEn: ["1. obj[key] calls type(obj).__getitem__(obj, key)", "2. Also enables iteration via for x in obj (if no __iter__)"],
+    orderFr: ["1. obj[cl\u00e9] appelle type(obj).__getitem__(obj, cl\u00e9)", "2. Permet aussi l\u2019it\u00e9ration via for x in obj (si pas de __iter__)"],
+    mistakesEn: ["__getitem__ with integer keys should raise IndexError for out-of-bounds", "__getitem__ with non-integer keys should raise KeyError if not found"],
+    mistakesFr: ["__getitem__ avec des cl\u00e9s enti\u00e8res doit lever IndexError si hors limites"],
+  },
+  "__setitem__": {
+    name: "__setitem__",
+    type: "dunder method",
+    signature: "__setitem__(self, key, value) -> None",
+    descriptionEn: "Called by self[key] = value assignment. Enables item assignment on custom objects.",
+    descriptionFr: "Appel\u00e9e par self[key] = valeur (assignation). Permet l\u2019assignation par index sur les objets personnalis\u00e9s.",
+    returnType: "None",
+    examplesEn: ["class MyDict:\n    def __init__(self):\n        self.data = {}\n    def __setitem__(self, key, value):\n        self.data[key] = value\nmd = MyDict()\nmd['a'] = 1"],
+    examplesFr: ["class MonDict:\n    def __init__(self):\n        self.data = {}\n    def __setitem__(self, key, value):\n        self.data[key] = value\nmd = MonDict()\nmd['a'] = 1"],
+    orderEn: ["1. obj[key] = value calls type(obj).__setitem__(obj, key, value)"],
+    orderFr: ["1. obj[cl\u00e9] = valeur appelle type(obj).__setitem__(obj, cl\u00e9, valeur)"],
+    mistakesEn: ["Missing __setitem__ while having __getitem__ makes the object read-only via brackets"],
+    mistakesFr: ["L\u2019absence de __setitem__ avec __getitem__ rend l\u2019objet en lecture seule via les crochets"],
+  },
+  "__iter__": {
+    name: "__iter__",
+    type: "dunder method",
+    signature: "__iter__(self) -> Iterator",
+    descriptionEn: "Called by iter(obj) and for x in obj. Should return an iterator object (usually self for iterables). Part of the iterator protocol.",
+    descriptionFr: "Appel\u00e9e par iter(obj) et for x in obj. Doit retourner un it\u00e9rateur (g\u00e9n\u00e9ralement self pour les it\u00e9rables).",
+    returnType: "Iterator",
+    examplesEn: ["class MyRange:\n    def __init__(self, n):\n        self.n = n\n    def __iter__(self):\n        self.i = 0\n        return self\n    def __next__(self):\n        if self.i >= self.n: raise StopIteration\n        val = self.i\n        self.i += 1\n        return val"],
+    examplesFr: ["class MaRange:\n    def __init__(self, n):\n        self.n = n\n    def __iter__(self):\n        self.i = 0\n        return self\n    def __next__(self):\n        if self.i >= self.n: raise StopIteration\n        val = self.i\n        self.i += 1\n        return val"],
+    orderEn: ["1. for x in obj calls iter(obj) which calls __iter__(obj)", "2. __iter__ should return an iterator object (with __next__)"],
+    orderFr: ["1. for x in obj appelle iter(obj) qui appelle __iter__(obj)", "2. __iter__ doit retourner un it\u00e9rateur (avec __next__)"],
+    mistakesEn: ["An iterable has __iter__ (returns iterator), an iterator has __iter__ (returns self) + __next__", "If __iter__ is not defined, Python falls back to __getitem__ with sequential integer keys"],
+    mistakesFr: ["Un it\u00e9rable a __iter__, un it\u00e9rateur a __iter__ + __next__"],
+  },
+  "__next__": {
+    name: "__next__",
+    type: "dunder method",
+    signature: "__next__(self) -> Any",
+    descriptionEn: "Called by next(iterator). Returns the next item in the iteration. Raises StopIteration when there are no more items.",
+    descriptionFr: "Appel\u00e9e par next(it\u00e9rateur). Retourne l\u2019\u00e9l\u00e9ment suivant. L\u00e8ve StopIteration quand il n\u2019y a plus d\u2019\u00e9l\u00e9ments.",
+    returnType: "Any",
+    examplesEn: ["class Counter:\n    def __init__(self, max):\n        self.n = 0\n        self.max = max\n    def __next__(self):\n        if self.n >= self.max: raise StopIteration\n        self.n += 1\n        return self.n"],
+    examplesFr: ["class Compteur:\n    def __init__(self, max):\n        self.n = 0\n        self.max = max\n    def __next__(self):\n        if self.n >= self.max: raise StopIteration\n        self.n += 1\n        return self.n"],
+    orderEn: ["1. next(iterator) calls iterator.__next__()", "2. for loops call __next__ internally until StopIteration is raised"],
+    orderFr: ["1. next(it\u00e9rateur) appelle it\u00e9rateur.__next__()", "2. Les boucles for appellent __next__ jusqu\u2019\u00e0 StopIteration"],
+    mistakesEn: ["__next__ must raise StopIteration (not return None) to signal completion", "A generator function automatically implements __next__"],
+    mistakesFr: ["__next__ doit lever StopIteration (pas retourner None) pour signaler la fin"],
+  },
+  "__enter__": {
+    name: "__enter__",
+    type: "dunder method",
+    signature: "__enter__(self) -> Any",
+    descriptionEn: "Called when entering a with statement block. Sets up the context and returns the value bound to the as variable.",
+    descriptionFr: "Appel\u00e9e \u00e0 l\u2019entr\u00e9e d\u2019un bloc with. Configure le contexte et retourne la valeur li\u00e9e \u00e0 la variable as.",
+    returnType: "Any (typically self)",
+    examplesEn: ["class File:\n    def __init__(self, name):\n        self.name = name\n    def __enter__(self):\n        print(f'Opening {self.name}')\n        return self\n    def __exit__(self, *args):\n        print(f'Closing {self.name}')\nwith File('test.txt') as f:\n    print('Working')"],
+    examplesFr: ["class Fichier:\n    def __init__(self, nom):\n        self.nom = nom\n    def __enter__(self):\n        print(f'Ouverture de {self.nom}')\n        return self\n    def __exit__(self, *args):\n        print(f'Fermeture de {self.nom}')\nwith Fichier('test.txt') as f:\n    print('Travail')"],
+    orderEn: ["1. The with expression is evaluated", "2. __enter__ is called on the context manager", "3. The return value is bound to the as variable", "4. The with block executes", "5. __exit__ is called (even if an exception occurred)"],
+    orderFr: ["1. L\u2019expression with est \u00e9valu\u00e9e", "2. __enter__ est appel\u00e9e sur le gestionnaire", "3. La valeur retourn\u00e9e est li\u00e9e \u00e0 la variable as", "4. Le bloc with s\u2019ex\u00e9cute", "5. __exit__ est appel\u00e9e (m\u00eame en cas d\u2019exception)"],
+    mistakesEn: ["Without __enter__/__exit__, the object cannot be used with with", "__enter__ should return the managed resource (often self)"],
+    mistakesFr: ["Sans __enter__/__exit__, l\u2019objet ne peut pas \u00eatre utilis\u00e9 avec with"],
+  },
+  "__exit__": {
+    name: "__exit__",
+    type: "dunder method",
+    signature: "__exit__(self, exc_type, exc_val, exc_tb) -> bool",
+    descriptionEn: "Called when exiting a with statement block. Handles cleanup and optionally suppresses exceptions. Parameters are None / the exception info if an error occurred.",
+    descriptionFr: "Appel\u00e9e \u00e0 la sortie d\u2019un bloc with. G\u00e8re le nettoyage et peut supprimer les exceptions si elle retourne True.",
+    returnType: "bool (or None — implicit False)",
+    examplesEn: ["class Manager:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type:\n            print(f'Error: {exc_val}')\n        return True  # suppress exception\nwith Manager():\n    1/0  # no crash"],
+    examplesFr: ["class Gestionnaire:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if exc_type:\n            print(f'Erreur: {exc_val}')\n        return True  # supprime l'exception\nwith Gestionnaire():\n    1/0  # pas de crash"],
+    orderEn: ["1. The with block finishes (or an exception occurs)", "2. __exit__ is called with exception info (or three Nones)", "3. If __exit__ returns True, any exception is suppressed"],
+    orderFr: ["1. Le bloc with se termine (ou une exception survient)", "2. __exit__ est appel\u00e9e avec les infos d\u2019exception", "3. Si __exit__ retourne True, l\u2019exception est supprim\u00e9e"],
+    mistakesEn: ["__exit__ swallowing all exceptions by returning True can hide bugs", "__exit__ is always called — even on return, break, or exception in the with block"],
+    mistakesFr: ["__exit__ qui retourne True peut cacher des bugs", "__exit__ est toujours appel\u00e9e — m\u00eame sur return, break ou exception"],
+  },
 };
 
 
@@ -6051,14 +6205,108 @@ function builtinNameRegex(specs: Record<string, BuiltinSpec>): RegExp {
   );
 }
 
+// Common misspellings for built-in functions, keywords, and Python concepts
+const BUILTIN_TYPOS: Record<string, string> = {
+  "isintance": "isinstance",
+  "isintances": "isinstance",
+  "instace": "isinstance",
+  "instaces": "isinstance",
+  "isintence": "isinstance",
+  "lenght": "len",
+  "legnth": "len",
+  "prnt": "print",
+  "pritn": "print",
+  "retrun": "return",
+  "retruns": "return",
+  "retruning": "return",
+  "defintion": "definition",
+  "definitoin": "definition",
+  "funciton": "function",
+  "funcitons": "function",
+  "fucntion": "function",
+  "dictonary": "dict",
+  "dictonaries": "dict",
+  "dicionary": "dict",
+  "touple": "tuple",
+  "touples": "tuple",
+  "tupple": "tuple",
+  "boollen": "bool",
+  "booleen": "bool",
+  "flaot": "float",
+  "stirng": "str",
+  "stirngs": "str",
+  "integar": "int",
+  "interger": "int",
+  "variabel": "variable",
+  "variabels": "variable",
+  "enviroment": "environment",
+  "inheritence": "inheritance",
+  "inhertiance": "inheritance",
+  "iterateable": "iterable",
+  "iteratable": "iterable",
+  "iteratore": "iterator",
+  "generatore": "generator",
+  "decoratore": "decorator",
+  "contxt manager": "context manager",
+  "comprehesion": "comprehension",
+  "appened": "append",
+  "apped": "append",
+  "extendd": "extend",
+  "remve": "remove",
+  "delte": "delete",
+  "sliice": "slice",
+  "writen": "write",
+  "writtn": "write",
+  "perfomance": "performance",
+  "optmize": "optimize",
+};
+
 export const answerPythonBuiltinQuery = (question: string, language: AdvancedAiLanguage): string | null => {
   const fr = language === 'fr';
   const lower = question.toLowerCase().trim();
+  const cleaned = lower.replace(/[?!.]+$/g, '').trim();
+
+  // Check for typo correction first
+  if (BUILTIN_TYPOS[cleaned] || BUILTIN_TYPOS[cleaned.replace(/\(\)$/g, '')]) {
+    const corrected = BUILTIN_TYPOS[cleaned] || BUILTIN_TYPOS[cleaned.replace(/\(\)$/g, '')];
+    const spec = BUILTIN_SPECS[corrected];
+    if (spec) {
+      const prefix = fr
+        ? `**Correction probable**\nJ\u2019ai interpr\u00e9t\u00e9 \`${cleaned}\` comme \`${corrected}\`.`
+        : `**Likely correction**\nI interpreted \`${cleaned}\` as \`${corrected}\`.`;
+      const desc = fr ? spec.descriptionFr : spec.descriptionEn;
+      const examples = fr ? spec.examplesFr : spec.examplesEn;
+      const order = fr ? spec.orderFr : spec.orderEn;
+      const mistakes = fr ? spec.mistakesFr : spec.mistakesEn;
+      return [
+        prefix,
+        '',
+        `**${spec.name}()** — ${spec.signature}`,
+        '',
+        `**${fr ? 'Description' : 'Description'}**:`,
+        desc,
+        '',
+        `**${fr ? 'Signature' : 'Signature'}**: \`${spec.signature}\``,
+        '',
+        `**${fr ? 'Valeur de retour' : 'Return type'}**: \`${spec.returnType}\``,
+        '',
+        `**${fr ? 'Ordre des operations' : 'Order of operations'}**:`,
+        ...order.map((s: string, i: number) => `${i + 1}. ${s}`),
+        '',
+        `**${fr ? 'Exemples' : 'Examples'}**:`,
+        '```python',
+        ...examples,
+        '```',
+        '',
+        `**${fr ? 'Erreurs frequentes' : 'Common mistakes'}**:`,
+        ...mistakes.map((s: string) => `- ${s}`),
+      ].join('\n');
+    }
+  }
 
   // Try to match a builtin name in the question
   const names = Object.keys(BUILTIN_SPECS).sort((a, b) => b.length - a.length);
   for (const name of names) {
-    // Check for various ways the user might ask about this builtin
     const patterns = [
       new RegExp(`\\b${name}\\b`, 'i'),
       new RegExp(`what\\s+is\\s+${name}`, 'i'),
@@ -6070,6 +6318,12 @@ export const answerPythonBuiltinQuery = (question: string, language: AdvancedAiL
       new RegExp(`tell\\s+me\\s+(?:about|how)\\s+${name}`, 'i'),
       new RegExp(`\\b${name}\\s+function`, 'i'),
       new RegExp(`\\b${name}\\s+build.?in`, 'i'),
+      new RegExp(`^${name}s?\\s*$`, 'i'),
+      new RegExp(`^${name}s?\\(\\)\\s*$`, 'i'),
+      new RegExp(`define\\s+${name}`, 'i'),
+      new RegExp(`what\\s+means?\\s+${name}`, 'i'),
+      new RegExp(`what\\s+${name}\\s+means?`, 'i'),
+      new RegExp(`${name}\\s+keyword`, 'i'),
     ];
 
     let matched = false;
@@ -6086,7 +6340,7 @@ export const answerPythonBuiltinQuery = (question: string, language: AdvancedAiL
     const order = fr ? spec.orderFr : spec.orderEn;
     const mistakes = fr ? spec.mistakesFr : spec.mistakesEn;
 
-    const parts: string[] = [
+    return [
       `**${spec.name}()** — ${spec.signature}`,
       '',
       `**${fr ? 'Description' : 'Description'}**:`,
@@ -6106,13 +6360,53 @@ export const answerPythonBuiltinQuery = (question: string, language: AdvancedAiL
       '',
       `**${fr ? 'Erreurs frequentes' : 'Common mistakes'}**:`,
       ...mistakes.map((s: string) => `- ${s}`),
-    ];
-
-    return parts.join('\n');
+    ].join('\n');
   }
   return null;
 };
 
+
+// Sorted list of every builtin name for disambiguation
+const ALL_BUILTIN_NAMES: string[] = Object.keys(BUILTIN_SPECS).sort((a, b) => a.localeCompare(b));
+
+export const buildGeneralAiDisambiguationList = (language: AdvancedAiLanguage): string => {
+  const fr = language === 'fr';
+  const headers = [
+    '',
+    '---',
+    '',
+  ];
+  const byType: Record<string, string[]> = {};
+  for (const name of ALL_BUILTIN_NAMES) {
+    const spec = BUILTIN_SPECS[name];
+    if (!spec) continue;
+    const type = spec.type;
+    if (!byType[type]) byType[type] = [];
+    byType[type].push(name);
+  }
+
+  const parts: string[] = [
+    `**${fr ? 'Voici ce que je peux vous expliquer' : 'Here is what I can explain'}**`,
+    fr
+      ? `Je ne suis pas sûr de comprendre votre question. Voici une liste de ${ALL_BUILTIN_NAMES.length} entrées que je connais. Essayez d\u2019en taper une pour obtenir sa définition :`
+      : `I\u2019m not sure I understood your question. Here is a list of ${ALL_BUILTIN_NAMES.length} entries I know about. Try typing one to get its definition:`,
+    ...headers,
+  ];
+
+  for (const [type, names] of Object.entries(byType).sort()) {
+    parts.push(`**${type.charAt(0).toUpperCase() + type.slice(1)}**`);
+    parts.push(names.map(n => `\`${n}\``).join(', '));
+    parts.push('');
+  }
+
+  parts.push(
+    fr
+      ? 'Vous pouvez aussi poser des questions comme "différence entre list et tuple", "expliquer isinstance", ou "comment utiliser zip".'
+      : 'You can also ask questions like "difference between list and tuple", "explain isinstance", or "how to use zip".'
+  );
+
+  return parts.join('\n');
+};
 
 export const buildGeneralAiSmartFollowUp = (topic: string, language: AdvancedAiLanguage): string | null => {
   const relations = TOPIC_RELATIONSHIPS[topic];
