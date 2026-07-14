@@ -197,6 +197,10 @@ try {
   if (!selectableCount || selectableCount.items.length < 4 || !selectableCount.items.some(item => item.key === 'method:range.count')) {
     failures.push('Ambiguous method choices are not structured and selectable');
   }
+  const selectableHex = advanced.buildGeneralAiApiAmbiguityCatalog('hex()', 'en');
+  if (!selectableHex || !selectableHex.items.some(item => item.key === 'builtin:hex') || !selectableHex.items.some(item => item.key === 'method:bytes.hex')) {
+    failures.push('Function-versus-method ambiguity choices are incomplete');
+  }
   for (const key of ['method:bytes.decode', 'method:bytearray.append', 'method:iterator.__next__', 'method:generator.send', 'method:io.TextIOBase.read', 'method:object.__repr__', 'method:frozenset.union', 'method:range.index', 'method:memoryview.tobytes']) {
     const item = interactiveMethods?.items.find(candidate => candidate.key === key);
     if (!item || !item.signature || !item.summary || !item.returnType || !item.exampleCode) failures.push(`Expanded API family is incomplete for ${key}`);
@@ -239,6 +243,7 @@ try {
   const simplerFollowUp = knowledge.resolveKnowledgeFollowUp('make it simpler', 'what is generator.send', 'normal');
   const harderExampleFollowUp = knowledge.resolveKnowledgeFollowUp('show me a harder example', 'what is list comprehension', 'normal');
   const comparisonFollowUp = knowledge.resolveKnowledgeFollowUp('compare that with tuple', 'what is list', 'normal');
+  const apiComparison = advanced.answerPythonApiComparison('difference between generator.send and generator.throw', 'en') || '';
   const chainedContext = knowledge.selectKnowledgeContextQuestion(['give another example', 'go deeper', 'what is list.count']);
   if (deepFollowUp.mode !== 'deep' || deepFollowUp.question !== 'what is len') failures.push('Deep follow-up lost context');
   if (exampleFollowUp.mode !== 'examples' || exampleFollowUp.question !== 'what is list') failures.push('Example follow-up lost context');
@@ -246,6 +251,7 @@ try {
   if (!simplerFollowUp.usedContext || simplerFollowUp.mode !== 'simple' || !simplerFollowUp.question.includes('generator.send')) failures.push('Simpler contextual follow-up failed');
   if (!harderExampleFollowUp.usedContext || harderExampleFollowUp.mode !== 'examples') failures.push('Harder-example contextual follow-up failed');
   if (!comparisonFollowUp.usedContext || !comparisonFollowUp.question.includes('list') || !comparisonFollowUp.question.includes('tuple')) failures.push('Contextual comparison follow-up failed');
+  if (!apiComparison.includes('API comparison') || !apiComparison.includes('generator.send(value)') || !apiComparison.includes('generator.throw(type[, value[, traceback]])')) failures.push('API comparison answer failed');
   if (chainedContext !== 'what is list.count') failures.push('Chained follow-ups lost the last substantive question');
   if (knowledge.isKnowledgeFollowUpQuestion('Explain this code:\n```python\nprint(1)\n```')) failures.push('Pasted code was incorrectly classified as a pronoun follow-up');
   const countDeep = knowledge.buildPythonKnowledgeDeepSupplement('what is list.count', 'en');

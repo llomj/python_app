@@ -57,7 +57,7 @@ import { composeGeneralAiAnswer } from './services/generalAiMode';
 import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
 import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiApiCatalogItem, answerGeneralAiProgressRequest, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiApiAmbiguityCatalog, buildGeneralAiApiCatalog, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, updateGeneralAiMistakes, type GeneralAiApiCatalog, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { answerGeneralAiApiCatalogItem, answerGeneralAiProgressRequest, answerPythonApiComparison, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiApiAmbiguityCatalog, buildGeneralAiApiCatalog, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, getGeneralAiApiCatalogExample, updateGeneralAiMistakes, type GeneralAiApiCatalog, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -14839,15 +14839,17 @@ function GeneralAiApiCatalogView({
     const [runResults, setRunResults] = useState<Record<string, string>>({});
     const fr = language === 'fr';
     const categories = [...new Set(catalog.items.map(item => item.category))];
-    const normalizedSearch = search.trim().toLowerCase();
+    const normalizeCatalogSearch = (value: string) => value.toLowerCase().replace(/[._()\[\],-]/g, ' ').replace(/\s+/g, ' ').trim();
+    const normalizedSearch = normalizeCatalogSearch(search);
     const visibleItems = catalog.items.filter(item => {
-        const matchesSearch = !normalizedSearch || `${item.name} ${item.signature} ${item.summary} ${item.returnType}`.toLowerCase().includes(normalizedSearch);
+        const returnType = item.returnType || '';
+        const matchesSearch = !normalizedSearch || normalizeCatalogSearch(`${item.name} ${item.signature} ${item.summary} ${returnType}`).includes(normalizedSearch);
         const matchesCategory = category === 'all' || item.category === category;
         const matchesReturn = returnFilter === 'all'
-            || (returnFilter === 'none' && item.returnType === 'None')
-            || (returnFilter === 'bool' && /bool/i.test(item.returnType))
-            || (returnFilter === 'collection' && /list|dict|set|tuple|str|bytes|iterator|generator/i.test(item.returnType))
-            || (returnFilter === 'value' && item.returnType !== 'None');
+            || (returnFilter === 'none' && returnType === 'None')
+            || (returnFilter === 'bool' && /bool/i.test(returnType))
+            || (returnFilter === 'collection' && /list|dict|set|tuple|str|bytes|iterator|generator/i.test(returnType))
+            || (returnFilter === 'value' && returnType !== 'None');
         const matchesBehavior = behavior === 'all' || (behavior === 'mutates' ? item.mutates : !item.mutates);
         return matchesSearch && matchesCategory && matchesReturn && matchesBehavior;
     });
@@ -14892,6 +14894,7 @@ function GeneralAiApiCatalogView({
             </div>
             {visibleItems.map((item, index) => {
                 const expanded = expandedKey === item.key;
+                const exampleCode = item.exampleCode || getGeneralAiApiCatalogExample(item.key, language);
                 const showCategory = index === 0 || visibleItems[index - 1]?.category !== item.category;
                 const detail = expanded ? answerGeneralAiApiCatalogItem(item.key, language) : null;
                 return (
@@ -14909,10 +14912,10 @@ function GeneralAiApiCatalogView({
                                 <div className="space-y-2 border-t px-3 py-3" style={{ borderColor: hexToRgba(accentColor, 0.24) }} data-general-ai-api-detail={item.key}>
                                     <ProblemAiText text={detail} editorColors={editorColors} accentColor={accentColor} />
                                     <div className="grid grid-cols-2 gap-2">
-                                        <button type="button" disabled={runningKey === item.key} onClick={() => runExample(item.key, item.exampleCode)} className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] disabled:opacity-50" style={{ borderColor: hexToRgba(accentColor, 0.4), color: accentColor }} data-general-ai-run-example={item.key}>
+                                        <button type="button" disabled={runningKey === item.key || !exampleCode} onClick={() => runExample(item.key, exampleCode)} className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] disabled:opacity-50" style={{ borderColor: hexToRgba(accentColor, 0.4), color: accentColor }} data-general-ai-run-example={item.key}>
                                             {runningKey === item.key ? (fr ? 'Exécution…' : 'Running…') : (fr ? 'Exécuter' : 'Run example')}
                                         </button>
-                                        <button type="button" onClick={() => onOpenExample(item.exampleCode)} className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em]" style={{ borderColor: hexToRgba(accentColor, 0.4), color: accentColor }}>
+                                        <button type="button" disabled={!exampleCode} onClick={() => onOpenExample(exampleCode)} className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] disabled:opacity-50" style={{ borderColor: hexToRgba(accentColor, 0.4), color: accentColor }}>
                                             {fr ? 'Ouvrir dans l’éditeur' : 'Open in editor'}
                                         </button>
                                     </div>
@@ -15904,13 +15907,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v263') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v264') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v263')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v264')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -17975,14 +17978,16 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
-        const immediateApiAnswer = answerPythonBuiltinQuery(question, appLang) || answerPythonMethodQuery(question, appLang);
+        const asksApiComparison = /\b(?:compare|difference between|versus|vs\.?|different from)\b/i.test(question);
+        const immediateApiAnswer = asksApiComparison ? null : answerPythonBuiltinQuery(question, appLang) || answerPythonMethodQuery(question, appLang);
         const immediateApiCatalog = buildGeneralAiApiCatalog(question, appLang);
         const immediateApiAmbiguity = buildGeneralAiApiAmbiguityCatalog(question, appLang);
+        const asksContextualFollowUp = /^(?:simplify|make (?:it|this|that)|go deeper|more detail|explain more|break it down|another example|harder example|simpler example|examples?|give (?:me )?(?:a )?(?:another |harder |simpler )?examples?|show (?:me )?(?:a )?(?:another |harder |simpler )?examples?|compare (?:it|this|that)|difference between (?:it|this|that)|when should i use (?:it|this|that)|what does (?:it|this|that) return|simplifie|rends? (?:cela|ca|ceci)|approfondis|plus de d[eé]tails?|donne (?:un autre |des )?exemples?|compare (?:cela|ca|ceci)|quand utiliser (?:cela|ca|ceci))\b/i.test(question);
         const startsNewQuiz = /\b(?:another|new|next|start|quiz|autre|nouveau|suivant|commence)\b/i.test(question);
         const asksNewQuestion = /\b(?:what|why|how|which|where|when|is|does|can|could|would|show|run|execute|test|explain|define|compare|review|generate|analyze|analyse|complexity|progress|report|revise|help|qu['’]est|quel(?:le)?s?|où|quand|est-ce|peut|montre|lance|exécute|teste|pourquoi|comment|combien|explique|définis|compare|génère|analyse|complexité|progr[eè]s|bilan|réviser|aide)\b/i.test(question)
             || question.includes('```')
             || question.endsWith('?');
-        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion && !immediateApiAnswer && !immediateApiCatalog && !immediateApiAmbiguity) {
+        if (generalAiActiveQuiz && !startsNewQuiz && !asksNewQuestion && !asksContextualFollowUp && !immediateApiAnswer && !immediateApiCatalog && !immediateApiAmbiguity) {
             const result = evaluateAdaptiveQuiz(question, generalAiActiveQuiz, appLang);
             setGeneralAiMessages(prev => [
                 ...prev,
@@ -18037,6 +18042,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const shouldCreateQuiz = generalAiTutorMode === 'quiz' || intent.intent === 'quiz';
             let refAnswer: string | null = codeCommand.directAnswer
                 || (apiCatalog ? `**${apiCatalog.title}**\n\n${apiCatalog.intro}` : null)
+                || answerPythonApiComparison(effectiveQuestion, appLang)
                 || immediateApiAnswer
                 || answerPythonBuiltinQuery(effectiveQuestion, appLang)
                 || answerPythonMethodQuery(effectiveQuestion, appLang)

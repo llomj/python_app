@@ -7863,16 +7863,28 @@ export const buildGeneralAiApiAmbiguityCatalog = (
 ): GeneralAiApiCatalog | null => {
   const cleaned = question.toLowerCase().trim().replace(/[?!.]+$/g, '').replace(/\(\)$/, '');
   if (!/^[a-z_]\w*$/.test(cleaned)) return null;
-  const matches = Object.entries(BUILTIN_METHOD_SPECS)
+  const methodMatches = Object.entries(BUILTIN_METHOD_SPECS)
     .filter(([name]) => name.slice(name.lastIndexOf('.') + 1) === cleaned);
-  if (matches.length < 2) return null;
+  const builtinMatch = BUILTIN_SPECS[cleaned];
+  if (methodMatches.length + (builtinMatch ? 1 : 0) < 2) return null;
   const fr = language === 'fr';
+  const builtinItems: GeneralAiApiCatalogItem[] = builtinMatch ? [{
+    key: `builtin:${cleaned}`,
+    name: cleaned,
+    signature: builtinMatch.signature,
+    summary: fr ? builtinMatch.descriptionFr : builtinMatch.descriptionEn,
+    category: fr ? 'Fonction intégrée' : 'Built-in function',
+    kind: 'builtin',
+    returnType: builtinMatch.returnType,
+    mutates: false,
+    exampleCode: (fr ? builtinMatch.examplesFr : builtinMatch.examplesEn).join('\n'),
+  }] : [];
   return {
     title: fr ? `Choisissez la m\u00e9thode \`${cleaned}()\`` : `Choose the \`${cleaned}()\` method`,
     intro: fr
       ? 'Cette m\u00e9thode existe sur plusieurs types. Touchez le type voulu pour afficher son comportement exact.'
       : 'This method exists on multiple types. Tap the owning type to see its exact behavior.',
-    items: matches.map(([name, spec]) => ({
+    items: [...builtinItems, ...methodMatches.map(([name, spec]) => ({
       key: `method:${name}`,
       name,
       signature: spec.signature,
@@ -7882,8 +7894,55 @@ export const buildGeneralAiApiAmbiguityCatalog = (
       returnType: spec.returnType,
       mutates: spec.returnType === 'None' || /\b(?:modifies?|mutates?|in place|modifie|sur place)\b/i.test(fr ? spec.descriptionFr : spec.descriptionEn),
       exampleCode: (fr ? spec.examplesFr : spec.examplesEn).join('\n'),
-    })).sort((left, right) => left.name.localeCompare(right.name)),
+    }))].sort((left, right) => left.name.localeCompare(right.name)),
   };
+};
+
+export const getGeneralAiApiCatalogExample = (key: string, language: AdvancedAiLanguage): string => {
+  const [kind, name] = key.split(':', 2);
+  const spec = kind === 'builtin' ? BUILTIN_SPECS[name] : BUILTIN_METHOD_SPECS[name];
+  if (!spec) return '';
+  return (language === 'fr' ? spec.examplesFr : spec.examplesEn).join('\n');
+};
+
+const resolveApiComparisonSpec = (rawName: string): BuiltinSpec | MethodSpec | null => {
+  const name = rawName.toLowerCase().trim().replace(/\(.*\)$/, '').replace(/[?!.]+$/, '');
+  if (BUILTIN_SPECS[name]) return BUILTIN_SPECS[name];
+  if (BUILTIN_METHOD_SPECS[name]) return BUILTIN_METHOD_SPECS[name];
+  const methodMatches = Object.entries(BUILTIN_METHOD_SPECS).filter(([key]) => key.slice(key.lastIndexOf('.') + 1) === name);
+  return methodMatches.length === 1 ? methodMatches[0][1] : null;
+};
+
+export const answerPythonApiComparison = (question: string, language: AdvancedAiLanguage): string | null => {
+  const match = question.trim().match(/(?:difference between|compare)\s+(.+?)\s+(?:and|with|to|vs\.?|versus)\s+(.+?)[?.!]*$/i);
+  if (!match) return null;
+  const left = resolveApiComparisonSpec(match[1]);
+  const right = resolveApiComparisonSpec(match[2]);
+  if (!left || !right) return null;
+  const fr = language === 'fr';
+  const description = (spec: BuiltinSpec | MethodSpec) => fr ? spec.descriptionFr : spec.descriptionEn;
+  const mutates = (spec: BuiltinSpec | MethodSpec) => spec.returnType === 'None' || /\b(?:modifies?|mutates?|in place|modifie|sur place)\b/i.test(description(spec));
+  const example = (spec: BuiltinSpec | MethodSpec) => (fr ? spec.examplesFr : spec.examplesEn)[0] || '';
+  return [
+    `**${fr ? 'Comparaison API' : 'API comparison'}: \`${left.name}\` ${fr ? 'et' : 'vs'} \`${right.name}\`**`,
+    '',
+    `| ${fr ? 'Critère' : 'Criterion'} | \`${left.name}\` | \`${right.name}\` |`,
+    '|---|---|---|',
+    `| ${fr ? 'Rôle' : 'Purpose'} | ${description(left)} | ${description(right)} |`,
+    `| ${fr ? 'Signature' : 'Signature'} | \`${left.signature}\` | \`${right.signature}\` |`,
+    `| ${fr ? 'Retour' : 'Returns'} | \`${left.returnType}\` | \`${right.returnType}\` |`,
+    `| ${fr ? 'Modifie l’objet' : 'Mutates object'} | ${mutates(left) ? (fr ? 'Oui' : 'Yes') : (fr ? 'Non' : 'No')} | ${mutates(right) ? (fr ? 'Oui' : 'Yes') : (fr ? 'Non' : 'No')} |`,
+    '',
+    `**${fr ? 'Exemple de gauche' : 'Left example'}**`,
+    '```python',
+    example(left),
+    '```',
+    '',
+    `**${fr ? 'Exemple de droite' : 'Right example'}**`,
+    '```python',
+    example(right),
+    '```',
+  ].join('\n');
 };
 
 export const answerGeneralAiApiCatalogItem = (
