@@ -1,27 +1,49 @@
 export type AiCodeExplanationLanguage = 'en' | 'fr';
 
-const MAX_SOURCE_LINES = 24;
-const MAX_ANNOTATED_LINES = 180;
+const MAX_SOURCE_LINES = 56;
+const MAX_ANNOTATED_LINES = 260;
 
 const primarySolutionCode = (solution: string) => {
     const lines = solution.trim().split('\n');
-    const start = lines.findIndex(line => /^\s*(?:def|class|from\s+|import\s+)/.test(line));
+    const isApproachHeading = (line: string) => /^\s*#\s*(?:Using|Script|Direct|Built|Manual|Alternative)\b/i.test(line);
+    const functionHeading = lines.findIndex(line => /^\s*#\s*Using function approach\b/i.test(line));
+    const leadingImports = lines
+        .slice(0, functionHeading >= 0 ? functionHeading : lines.length)
+        .filter(line => /^\s*(?:from\s+\S+\s+import\s+|import\s+)/.test(line));
+
+    if (functionHeading >= 0) {
+        const section: string[] = [];
+        for (let index = functionHeading + 1; index < lines.length; index += 1) {
+            if (isApproachHeading(lines[index])) break;
+            section.push(lines[index]);
+            if (leadingImports.length + section.length >= MAX_SOURCE_LINES) break;
+        }
+        return [...leadingImports, ...(leadingImports.length ? [''] : []), ...section].join('\n').trim();
+    }
+
+
+    const firstApproachHeading = lines.findIndex(isApproachHeading);
+    if (firstApproachHeading >= 0) {
+        const imports = lines
+            .slice(0, firstApproachHeading)
+            .filter(line => /^\s*(?:from\s+\S+\s+import\s+|import\s+)/.test(line));
+        const section: string[] = [];
+        for (let index = firstApproachHeading + 1; index < lines.length; index += 1) {
+            if (isApproachHeading(lines[index])) break;
+            section.push(lines[index]);
+            if (imports.length + section.length >= MAX_SOURCE_LINES) break;
+        }
+        return [...imports, ...(imports.length ? [''] : []), ...section].join('\n').trim();
+    }
+
+    const start = lines.findIndex(line => /^\s*(?:def|class|from\s+|import\s+|[A-Za-z_]\w*\s*=|print\s*\()/.test(line));
     const selected = start >= 0 ? lines.slice(start) : lines;
     const result: string[] = [];
-
     for (const line of selected) {
-        if (result.length && /^#\s*(?:Using|Script|Direct|Built|Manual|Alternative)\b/i.test(line.trim())) break;
-        if (
-            result.length
-            && line.trim()
-            && !/^\s/.test(line)
-            && /^(?:def|class)\s+/.test(line)
-            && result.some(existing => /^(?:def|class)\s+/.test(existing.trim()))
-        ) break;
+        if (result.length && isApproachHeading(line)) break;
         result.push(line);
         if (result.length >= MAX_SOURCE_LINES) break;
     }
-
     return result.join('\n').trim();
 };
 
@@ -41,15 +63,36 @@ const extractFunctionExample = (code: string) => {
         .split(',')
         .map(param => param.trim().replace(/^\*{1,2}/, '').split(/[:=]/)[0].trim())
         .filter(Boolean);
-    const calls = [...code.matchAll(new RegExp(`\\b${name}\\s*\\(([^\\n()]*(?:\\([^\\n()]*\\)[^\\n()]*)*)\\)`, 'g'))];
-    const call = calls.find(match => {
-        const prefix = code.slice(Math.max(0, (match.index || 0) - 5), match.index || 0);
-        return !/\bdef\s*$/.test(prefix) && match[1].trim();
-    });
-    const args = call?.[1]
-        .split(/,(?=(?:[^'"]|'[^']*'|"[^"]*")*$)/)
-        .map(arg => arg.trim())
-        .filter(Boolean) || [];
+    let rawArguments = '';
+    for (const line of code.split('\n')) {
+        if (new RegExp(`^\\s*def\\s+${name}\\s*\\(`).test(line)) continue;
+        const marker = new RegExp(`\\b${name}\\s*\\(`).exec(line);
+        if (!marker) continue;
+        const openIndex = marker.index + marker[0].lastIndexOf('(');
+        let depth = 0;
+        let quote = '';
+        let escaped = false;
+        for (let index = openIndex; index < line.length; index += 1) {
+            const char = line[index];
+            if (quote) {
+                if (escaped) escaped = false;
+                else if (char === '\\') escaped = true;
+                else if (char === quote) quote = '';
+                continue;
+            }
+            if (char === "'" || char === '"') quote = char;
+            else if (char === '(') depth += 1;
+            else if (char === ')') {
+                depth -= 1;
+                if (depth === 0) {
+                    rawArguments = line.slice(openIndex + 1, index).trim();
+                    break;
+                }
+            }
+        }
+        if (rawArguments) break;
+    }
+    const args = splitTopLevel(rawArguments);
     return { name, params, args };
 };
 
@@ -88,6 +131,502 @@ const normalizeDisplayLine = (
         );
     }
     return normalized;
+};
+
+type TracedValue = {
+    known: boolean;
+    value?: unknown;
+    type: string;
+    operation: string;
+};
+
+const unknownValue = (type = 'value', operation = 'Python evaluates the expression at runtime.'): TracedValue => ({
+    known: false,
+    type,
+    operation,
+});
+
+const knownValue = (value: unknown, operation: string): TracedValue => {
+    let type = typeof value;
+    if (value === null) type = 'NoneType';
+    else if (Array.isArray(value)) type = 'list';
+    else if (value instanceof Set) type = 'set';
+    else if (value && typeof value === 'object') type = 'dict';
+    else if (type === 'number') type = Number.isInteger(value) ? 'int' : 'float';
+    else if (type === 'string') type = 'str';
+    else if (type === 'boolean') type = 'bool';
+    return { known: true, value, type, operation };
+};
+
+const displayValue = (value: unknown): string => {
+    if (value === null) return 'None';
+    if (typeof value === 'string') return quotePythonString(value);
+    if (typeof value === 'boolean') return value ? 'True' : 'False';
+    if (value instanceof Set) return `{${[...value].map(displayValue).join(', ')}}`;
+    if (Array.isArray(value)) return `[${value.map(displayValue).join(', ')}]`;
+    if (value && typeof value === 'object') {
+        return `{${Object.entries(value as Record<string, unknown>).map(([key, item]) => `${quotePythonString(key)}: ${displayValue(item)}`).join(', ')}}`;
+    }
+    return String(value);
+};
+
+const splitTopLevel = (text: string, delimiter = ','): string[] => {
+    const parts: string[] = [];
+    let start = 0;
+    let depth = 0;
+    let quote = '';
+    let escaped = false;
+    for (let index = 0; index < text.length; index += 1) {
+        const char = text[index];
+        if (quote) {
+            if (escaped) escaped = false;
+            else if (char === '\\') escaped = true;
+            else if (char === quote) quote = '';
+            continue;
+        }
+        if (char === "'" || char === '"') quote = char;
+        else if ('([{'.includes(char)) depth += 1;
+        else if (')]}'.includes(char)) depth -= 1;
+        else if (depth === 0 && text.startsWith(delimiter, index)) {
+            parts.push(text.slice(start, index).trim());
+            start = index + delimiter.length;
+            index += delimiter.length - 1;
+        }
+    }
+    parts.push(text.slice(start).trim());
+    return parts.filter(Boolean);
+};
+
+const stripOuterParentheses = (expression: string) => {
+    let text = expression.trim();
+    while (text.startsWith('(') && text.endsWith(')')) {
+        let depth = 0;
+        let closesAtEnd = false;
+        for (let index = 0; index < text.length; index += 1) {
+            if (text[index] === '(') depth += 1;
+            if (text[index] === ')') depth -= 1;
+            if (depth === 0) {
+                closesAtEnd = index === text.length - 1;
+                break;
+            }
+        }
+        if (!closesAtEnd) break;
+        text = text.slice(1, -1).trim();
+    }
+    return text;
+};
+
+const findTopLevelOperator = (expression: string, operators: string[]) => {
+    let depth = 0;
+    let quote = '';
+    let escaped = false;
+    for (let index = expression.length - 1; index >= 0; index -= 1) {
+        const char = expression[index];
+        if (quote) {
+            if (escaped) escaped = false;
+            else if (char === '\\') escaped = true;
+            else if (char === quote) quote = '';
+            continue;
+        }
+        if (char === "'" || char === '"') quote = char;
+        else if (')]}'.includes(char)) depth += 1;
+        else if ('([{'.includes(char)) depth -= 1;
+        if (depth !== 0 || quote) continue;
+        for (const operator of operators) {
+            const start = index - operator.length + 1;
+            if (start < 0 || expression.slice(start, index + 1) !== operator) continue;
+            const before = expression[start - 1] || ' ';
+            const after = expression[index + 1] || ' ';
+            if (/^[a-z]+$/i.test(operator) && (/\w/.test(before) || /\w/.test(after))) continue;
+            if ((operator === '+' || operator === '-') && start === 0) continue;
+            return { index: start, operator };
+        }
+    }
+    return null;
+};
+
+const inferExpression = (
+    rawExpression: string,
+    environment: Map<string, TracedValue>,
+    depth = 0,
+): TracedValue => {
+    if (depth > 10) return unknownValue();
+    const expression = stripOuterParentheses(rawExpression.replace(/\s+#.*$/, '').trim());
+    if (!expression) return unknownValue();
+
+    if (/^(?:None|True|False)$/.test(expression)) {
+        return knownValue(expression === 'None' ? null : expression === 'True', 'Read the literal value directly.');
+    }
+    if (/^-?\d+(?:\.\d+)?$/.test(expression)) {
+        return knownValue(Number(expression), 'Read the numeric literal directly.');
+    }
+    const stringMatch = expression.match(/^(?:[rubf]{0,2})(['"])([\s\S]*)\1$/i);
+    if (stringMatch && !/^f/i.test(expression)) {
+        return knownValue(stringMatch[2].replace(/\\n/g, '\n').replace(/\\t/g, '\t'), 'Read the string literal as text.');
+    }
+    if (/^f(['"])[\s\S]*\1$/i.test(expression)) {
+        return unknownValue('str', 'Evaluate each expression inside {...}, convert it to text, and insert it into the formatted string.');
+    }
+    if (/^not\s+/.test(expression)) {
+        const operand = inferExpression(expression.replace(/^not\s+/, ''), environment, depth + 1);
+        return operand.known
+            ? knownValue(!operand.value, 'Evaluate the operand, convert it to truth, then invert that bool with not.')
+            : unknownValue('bool', 'Evaluate the operand, convert it to truth, then invert that bool with not.');
+    }
+    if (/^[A-Za-z_]\w*$/.test(expression)) {
+        return environment.get(expression) || unknownValue('value', `Read the current value stored in ${expression}.`);
+    }
+    if (/^lambda\b/.test(expression)) return unknownValue('function', 'Create an anonymous function object; its body runs only when called.');
+
+    if (expression.startsWith('[') && expression.endsWith(']')) {
+        const body = expression.slice(1, -1).trim();
+        if (/\bfor\b/.test(body)) return unknownValue('list', 'Run the list-comprehension expression for each selected item and collect the results.');
+        const items = splitTopLevel(body).map(item => inferExpression(item, environment, depth + 1));
+        return items.every(item => item.known)
+            ? knownValue(items.map(item => item.value), 'Evaluate each item from left to right and collect them in a list.')
+            : unknownValue('list', 'Evaluate each item from left to right and collect them in a list.');
+    }
+    if (expression.startsWith('{') && expression.endsWith('}')) {
+        const body = expression.slice(1, -1).trim();
+        if (/\bfor\b/.test(body)) return unknownValue(body.includes(':') ? 'dict' : 'set', 'Run the comprehension and collect each generated item.');
+        if (!body) return knownValue({}, 'Create an empty dictionary.');
+        const items = splitTopLevel(body);
+        if (items.every(item => item.includes(':'))) {
+            const result: Record<string, unknown> = {};
+            let allKnown = true;
+            for (const item of items) {
+                const pair = splitTopLevel(item, ':');
+                const key = inferExpression(pair[0] || '', environment, depth + 1);
+                const value = inferExpression(pair.slice(1).join(':') || '', environment, depth + 1);
+                if (!key.known || !value.known) allKnown = false;
+                else result[String(key.value)] = value.value;
+            }
+            return allKnown ? knownValue(result, 'Evaluate every key-value pair and build a dictionary.') : unknownValue('dict', 'Evaluate every key-value pair and build a dictionary.');
+        }
+        const values = items.map(item => inferExpression(item, environment, depth + 1));
+        return values.every(item => item.known)
+            ? knownValue(new Set(values.map(item => item.value)), 'Evaluate the unique items and build a set.')
+            : unknownValue('set', 'Evaluate the unique items and build a set.');
+    }
+    if (expression.startsWith('(') && expression.endsWith(')') && expression.includes(',')) {
+        const items = splitTopLevel(expression.slice(1, -1)).map(item => inferExpression(item, environment, depth + 1));
+        return items.every(item => item.known)
+            ? { ...knownValue(items.map(item => item.value), 'Evaluate each item and pack the results into a tuple.'), type: 'tuple' }
+            : unknownValue('tuple', 'Evaluate each item and pack the results into a tuple.');
+    }
+
+    const booleanOperator = findTopLevelOperator(expression, [' or ', ' and ']);
+    if (booleanOperator) {
+        const left = inferExpression(expression.slice(0, booleanOperator.index), environment, depth + 1);
+        const right = inferExpression(expression.slice(booleanOperator.index + booleanOperator.operator.length), environment, depth + 1);
+        if (left.known && right.known) {
+            const value = booleanOperator.operator.trim() === 'or' ? (left.value || right.value) : (left.value && right.value);
+            return knownValue(value, `Evaluate the left side first, then short-circuit ${booleanOperator.operator.trim()} when possible.`);
+        }
+        return unknownValue('bool', `Evaluate the left side first, then short-circuit ${booleanOperator.operator.trim()} when possible.`);
+    }
+
+    const comparison = findTopLevelOperator(expression, ['==', '!=', '>=', '<=', ' is ', ' in ', '>', '<']);
+    if (comparison) {
+        const left = inferExpression(expression.slice(0, comparison.index), environment, depth + 1);
+        const right = inferExpression(expression.slice(comparison.index + comparison.operator.length), environment, depth + 1);
+        if (left.known && right.known) {
+            const operator = comparison.operator.trim();
+            let value = false;
+            if (operator === '==') value = left.value === right.value;
+            else if (operator === '!=') value = left.value !== right.value;
+            else if (operator === '>') value = (left.value as number) > (right.value as number);
+            else if (operator === '<') value = (left.value as number) < (right.value as number);
+            else if (operator === '>=') value = (left.value as number) >= (right.value as number);
+            else if (operator === '<=') value = (left.value as number) <= (right.value as number);
+            else if (operator === 'is') value = left.value === right.value;
+            else if (operator === 'in') value = Array.isArray(right.value) ? right.value.includes(left.value) : String(right.value).includes(String(left.value));
+            return knownValue(value, `Compare the two evaluated operands with ${operator}; comparisons produce bool.`);
+        }
+        return unknownValue('bool', `Compare the two evaluated operands with ${comparison.operator.trim()}; comparisons produce bool.`);
+    }
+
+    const arithmetic = findTopLevelOperator(expression, ['**', '//', '%', '+', '-', '*', '/']);
+    if (arithmetic) {
+        const left = inferExpression(expression.slice(0, arithmetic.index), environment, depth + 1);
+        const right = inferExpression(expression.slice(arithmetic.index + arithmetic.operator.length), environment, depth + 1);
+        const operation = `Evaluate both operands, then apply ${arithmetic.operator}.`;
+        if (left.known && right.known) {
+            try {
+                let value: unknown;
+                if (arithmetic.operator === '+') value = (left.value as number) + (right.value as number);
+                else if (arithmetic.operator === '-') value = (left.value as number) - (right.value as number);
+                else if (arithmetic.operator === '*') value = typeof left.value === 'string' ? left.value.repeat(Number(right.value)) : (left.value as number) * (right.value as number);
+                else if (arithmetic.operator === '/') value = (left.value as number) / (right.value as number);
+                else if (arithmetic.operator === '//') value = Math.floor((left.value as number) / (right.value as number));
+                else if (arithmetic.operator === '%') value = (left.value as number) % (right.value as number);
+                else value = (left.value as number) ** (right.value as number);
+                return knownValue(value, operation);
+            } catch { /* Keep the conservative inferred type below. */ }
+        }
+        return unknownValue(arithmetic.operator === '/' ? 'float' : left.type === 'str' ? 'str' : 'number', operation);
+    }
+
+    const method = expression.match(/^((?:[A-Za-z_]\w*|[A-Za-z_]\w*\([^()]*\))(?:\[[^\]]+\])?)\.([A-Za-z_]\w*)\((.*)\)$/s);
+    if (method) {
+        const target = inferExpression(method[1], environment, depth + 1);
+        const args = splitTopLevel(method[3]).map(arg => inferExpression(arg, environment, depth + 1));
+        const name = method[2];
+        const operation = `Evaluate ${method[1]}, then call its .${name}() method.`;
+        if (target.known && args.every(arg => arg.known)) {
+            const value = target.value;
+            const rawArgs = args.map(arg => arg.value);
+            try {
+                if (typeof value === 'string') {
+                    if (name === 'split') return knownValue(value.split(String(rawArgs[0] ?? ' ')), operation);
+                    if (name === 'rsplit') {
+                        const delimiter = String(rawArgs[0] ?? ' ');
+                        const pieces = value.split(delimiter);
+                        const count = Number(rawArgs[1] ?? -1);
+                        return knownValue(count < 0 || pieces.length <= count + 1 ? pieces : [pieces.slice(0, pieces.length - count).join(delimiter), ...pieces.slice(-count)], operation);
+                    }
+                    if (name === 'join' && Array.isArray(rawArgs[0])) return knownValue(rawArgs[0].join(value), operation);
+                    if (name === 'count') return knownValue(value.split(String(rawArgs[0])).length - 1, operation);
+                    if (name === 'lower') return knownValue(value.toLowerCase(), operation);
+                    if (name === 'upper') return knownValue(value.toUpperCase(), operation);
+                    if (name === 'strip') return knownValue(value.trim(), operation);
+                    if (name === 'replace') return knownValue(value.split(String(rawArgs[0])).join(String(rawArgs[1] ?? '')), operation);
+                    if (name === 'isdigit') return knownValue(/^\d+$/.test(value), operation);
+                    if (name === 'isalpha') return knownValue(/^[A-Za-z]+$/.test(value), operation);
+                    if (name === 'isalnum') return knownValue(/^[A-Za-z0-9]+$/.test(value), operation);
+                    if (name === 'startswith') return knownValue(value.startsWith(String(rawArgs[0])), operation);
+                    if (name === 'endswith') return knownValue(value.endsWith(String(rawArgs[0])), operation);
+                }
+                if (value && typeof value === 'object' && !Array.isArray(value)) {
+                    const record = value as Record<string, unknown>;
+                    if (name === 'get') return knownValue(record[String(rawArgs[0])] ?? rawArgs[1] ?? null, operation);
+                    if (name === 'keys') return knownValue(Object.keys(record), operation);
+                    if (name === 'values') return knownValue(Object.values(record), operation);
+                    if (name === 'items') return knownValue(Object.entries(record), operation);
+                }
+                if (Array.isArray(value) && name === 'count') return knownValue(value.filter(item => item === rawArgs[0]).length, operation);
+                if (Array.isArray(value) && name === 'copy') return knownValue([...value], operation);
+            } catch { /* Keep the conservative method return type below. */ }
+        }
+        const booleanMethods = /^(?:isdigit|isalpha|isalnum|islower|isupper|isspace|startswith|endswith)$/;
+        const listMethods = /^(?:split|rsplit|keys|values|items|copy)$/;
+        const mutatingMethods = /^(?:append|extend|insert|remove|sort|reverse|update|add|discard)$/;
+        return unknownValue(booleanMethods.test(name) ? 'bool' : listMethods.test(name) ? 'list' : mutatingMethods.test(name) ? 'NoneType' : 'value', operation);
+    }
+
+    const call = expression.match(/^([A-Za-z_][\w.]*)\((.*)\)$/s);
+    if (call) {
+        const name = call[1];
+        const args = splitTopLevel(call[2]).map(arg => inferExpression(arg.replace(/^\w+\s*=\s*/, ''), environment, depth + 1));
+        const operation = `Evaluate the arguments from left to right, then call ${name}().`;
+        const inferredFunctionReturn = environment.get(`@return:${name}`);
+        if (inferredFunctionReturn) {
+            return {
+                ...inferredFunctionReturn,
+                operation: `${operation} The function body produces the traced return value.`,
+            };
+        }
+        if (args.every(arg => arg.known)) {
+            const values = args.map(arg => arg.value);
+            try {
+                if (name === 'str') return knownValue(String(values[0]), operation);
+                if (name === 'int') return knownValue(Number.parseInt(String(values[0]), 10), operation);
+                if (name === 'float') return knownValue(Number.parseFloat(String(values[0])), operation);
+                if (name === 'bool') return knownValue(Boolean(values[0]), operation);
+                if (name === 'len' && values[0] != null) return knownValue((values[0] as { length?: number }).length ?? Object.keys(values[0] as object).length, operation);
+                if (name === 'sum' && Array.isArray(values[0])) return knownValue(values[0].reduce((total: number, item) => total + Number(item), Number(values[1] || 0)), operation);
+                if (name === 'min' && Array.isArray(values[0])) return knownValue(Math.min(...values[0].map(Number)), operation);
+                if (name === 'max' && Array.isArray(values[0])) return knownValue(Math.max(...values[0].map(Number)), operation);
+                if (name === 'abs') return knownValue(Math.abs(Number(values[0])), operation);
+                if (name === 'round') {
+                    const places = Number(values[1] || 0);
+                    const factor = 10 ** places;
+                    return knownValue(Math.round(Number(values[0]) * factor) / factor, operation);
+                }
+                if (name === 'pow') return knownValue(Number(values[0]) ** Number(values[1]), operation);
+                if (name === 'list') return knownValue(Array.isArray(values[0]) ? [...values[0]] : [...String(values[0] ?? '')], operation);
+                if (name === 'tuple') return { ...knownValue(Array.isArray(values[0]) ? [...values[0]] : [values[0]], operation), type: 'tuple' };
+                if (name === 'set') return knownValue(new Set(Array.isArray(values[0]) ? values[0] : String(values[0] ?? '')), operation);
+                if (name === 'sorted' && Array.isArray(values[0])) return knownValue([...values[0]].sort(), operation);
+                if (name === 'all' && Array.isArray(values[0])) return knownValue(values[0].every(Boolean), operation);
+                if (name === 'any' && Array.isArray(values[0])) return knownValue(values[0].some(Boolean), operation);
+            } catch { /* Keep the inferred call type below. */ }
+        }
+        const knownTypes: Record<string, string> = {
+            str: 'str', int: 'int', float: 'float', bool: 'bool', len: 'int', sum: 'number', min: 'value', max: 'value',
+            abs: 'number', round: 'number', pow: 'number', list: 'list', tuple: 'tuple', set: 'set', dict: 'dict',
+            sorted: 'list', range: 'range', enumerate: 'enumerate', zip: 'zip', map: 'map iterator', filter: 'filter iterator',
+            all: 'bool', any: 'bool', print: 'NoneType', input: 'str',
+        };
+        return unknownValue(knownTypes[name] || 'value', operation);
+    }
+
+    const index = expression.match(/^([A-Za-z_]\w*)\[([^\]]+)\]$/);
+    if (index) {
+        const target = environment.get(index[1]);
+        const accessor = index[2].trim();
+        if (target?.known) {
+            if (accessor.includes(':')) {
+                const parts = accessor.split(':').map(item => item.trim() ? inferExpression(item.trim(), environment, depth + 1) : knownValue(undefined, 'Use the default slice boundary.'));
+                if (typeof target.value === 'string' || Array.isArray(target.value)) {
+                    const sequence = target.value as string | unknown[];
+                    if (parts.every(part => part.known)) {
+                        const start = parts[0]?.value as number | undefined;
+                        const stop = parts[1]?.value as number | undefined;
+                        const step = parts[2]?.value as number | undefined;
+                        if (step === -1) return knownValue(typeof sequence === 'string' ? sequence.split('').reverse().join('') : [...sequence].reverse(), 'Apply the slice from start to stop using the requested step.');
+                        if (step === undefined || step === 1) return knownValue(sequence.slice(start, stop), 'Apply the slice; the stop position is excluded.');
+                    }
+                }
+            } else {
+                const key = inferExpression(accessor, environment, depth + 1);
+                if (key.known) {
+                    const value = target.value as Record<string, unknown> | unknown[] | string;
+                    const numericKey = Number(key.value);
+                    const resolvedKey = numericKey < 0 && (typeof value === 'string' || Array.isArray(value)) ? value.length + numericKey : key.value as never;
+                    return knownValue((value as never)[resolvedKey], 'Evaluate the index/key and retrieve that one item.');
+                }
+            }
+        }
+        return unknownValue(accessor.includes(':') ? target?.type || 'sequence' : 'item', accessor.includes(':') ? 'Apply the slice to create a selected subsequence.' : 'Use the index or key to retrieve one item.');
+    }
+
+    return unknownValue('value', 'Evaluate this Python expression using the current variables.');
+};
+
+const localizedTraceText = (text: string, language: AiCodeExplanationLanguage) => {
+    if (language === 'en') return text;
+    return text
+        .replace('Read the literal value directly.', 'Lire directement la valeur littérale.')
+        .replace('Read the numeric literal directly.', 'Lire directement le nombre littéral.')
+        .replace('Read the string literal as text.', 'Lire directement la chaîne comme texte.')
+        .replace(/^Read the current value stored in (.+)\.$/, 'Lire la valeur actuelle stockée dans $1.')
+        .replace('Evaluate both operands, then apply', 'Évaluer les deux opérandes, puis appliquer')
+        .replace(/^Evaluate the arguments from left to right, then call (.+)\.$/, 'Évaluer les arguments de gauche à droite, puis appeler $1.')
+        .replace(/^Evaluate (.+), then call its (.+) method\.$/, 'Évaluer $1, puis appeler sa méthode $2.')
+        .replace('Evaluate each item from left to right and collect them in a list.', 'Évaluer chaque élément de gauche à droite et les rassembler dans une liste.')
+        .replace('Evaluate every key-value pair and build a dictionary.', 'Évaluer chaque paire clé-valeur et construire un dictionnaire.')
+        .replace('Use the index or key to retrieve one item.', 'Utiliser l’indice ou la clé pour récupérer un élément.')
+        .replace('Apply the slice to create a selected subsequence.', 'Appliquer la tranche pour créer une sous-séquence.')
+        .replace('Python evaluates the expression at runtime.', 'Python évalue cette expression pendant l’exécution.')
+        .replace('Evaluate this Python expression using the current variables.', 'Évaluer cette expression Python avec les variables actuelles.');
+};
+
+const buildUniversalExecutionTrace = (
+    code: string,
+    language: AiCodeExplanationLanguage,
+    example: ReturnType<typeof extractFunctionExample>,
+) => {
+    const fr = language === 'fr';
+    const environment = new Map<string, TracedValue>();
+    for (const line of code.split('\n')) {
+        if (/^\s/.test(line)) continue;
+        const assignment = line.trim().replace(/\s+#.*$/, '').match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/s);
+        if (!assignment) continue;
+        const value = inferExpression(assignment[2], environment);
+        if (value.known) environment.set(assignment[1], value);
+    }
+    example?.params.forEach((param, index) => {
+        const argument = example.args[index];
+        if (argument) environment.set(param, inferExpression(argument, environment));
+    });
+    const steps: string[] = [];
+    let stepNumber = 0;
+    let currentFunction = '';
+    const lines = code.split('\n').slice(0, MAX_SOURCE_LINES);
+
+    lines.forEach((line, index) => {
+        const trimmed = line.trim().replace(/\s+#.*$/, '');
+        if (!trimmed) return;
+        const definition = trimmed.match(/^def\s+([A-Za-z_]\w*)\s*\(/);
+        if (definition) {
+            currentFunction = definition[1];
+            return;
+        }
+        if (!/^\s/.test(line) && !/^(?:@|def\b|class\b)/.test(trimmed)) currentFunction = '';
+        if (/^(?:class|from\s+|import\s+|global\b|nonlocal\b|pass$)/.test(trimmed)) return;
+        let label = trimmed;
+        let trace: TracedValue | null = null;
+        let destination = '';
+
+        const assignment = trimmed.match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/s);
+        const unpacking = !assignment && trimmed.match(/^([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)+)\s*=\s*(.+)$/s);
+        const targetAssignment = !assignment && !unpacking && trimmed.match(/^((?:self\.)?[A-Za-z_]\w*(?:\[[^\]]+\]|\.[A-Za-z_]\w*)+)\s*=\s*(?!=)(.+)$/s);
+        const augmentedAssignment = !assignment && !unpacking && !targetAssignment && trimmed.match(/^(.+?)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*(.+)$/s);
+        if (assignment) {
+            destination = assignment[1];
+            trace = inferExpression(assignment[2], environment);
+            environment.set(destination, trace);
+        } else if (unpacking) {
+            trace = inferExpression(unpacking[2], environment);
+            const names = unpacking[1].split(',').map(name => name.trim());
+            if (trace.known && Array.isArray(trace.value)) names.forEach((name, itemIndex) => environment.set(name, knownValue(trace!.value![itemIndex], 'Unpack the matching item by position.')));
+            else names.forEach(name => environment.set(name, unknownValue('item', 'Unpack the matching item by position.')));
+            destination = names.join(', ');
+        } else if (targetAssignment) {
+            destination = targetAssignment[1];
+            trace = inferExpression(targetAssignment[2], environment);
+            trace = { ...trace, operation: `Evaluate the right-hand expression, then store it at ${destination}.` };
+        } else if (augmentedAssignment) {
+            destination = augmentedAssignment[1];
+            trace = inferExpression(`${augmentedAssignment[1]} ${augmentedAssignment[2].slice(0, -1)} ${augmentedAssignment[3]}`, environment);
+            if (/^[A-Za-z_]\w*$/.test(destination)) environment.set(destination, trace);
+            trace = { ...trace, operation: `Read ${destination}, apply ${augmentedAssignment[2].slice(0, -1)}, then store the updated value back in the same place.` };
+        } else if (/^return\b/.test(trimmed)) {
+            label = trimmed.replace(/^return\s*/, '');
+            trace = inferExpression(label, environment);
+            destination = fr ? 'valeur renvoyée' : 'returned value';
+            if (currentFunction) environment.set(`@return:${currentFunction}`, trace);
+        } else if (/^print\s*\(/.test(trimmed)) {
+            const printedExpression = trimmed.replace(/^print\s*\(/, '').replace(/\)\s*$/, '');
+            const printedItems = splitTopLevel(printedExpression).map(item => inferExpression(item, environment));
+            trace = printedItems.length === 1
+                ? { ...printedItems[0], operation: `Evaluate the value, convert it to display text, then write it to the output panel.` }
+                : printedItems.every(item => item.known)
+                    ? knownValue(printedItems.map(item => item.value), 'Evaluate every print argument from left to right, separate them with spaces, and display them.')
+                    : unknownValue('display text', 'Evaluate every print argument from left to right, separate them with spaces, and display them.');
+            destination = fr ? 'sortie affichée' : 'printed output';
+        } else if (/^(?:if|elif|while)\b/.test(trimmed)) {
+            const condition = trimmed.replace(/^(?:if|elif|while)\s+/, '').replace(/:\s*$/, '');
+            trace = inferExpression(condition, environment);
+            destination = fr ? 'résultat de la condition' : 'condition result';
+        } else if (/^for\b/.test(trimmed)) {
+            const iterable = trimmed.match(/\bin\s+(.+):$/)?.[1] || '';
+            trace = inferExpression(iterable, environment);
+            destination = fr ? 'itérable de la boucle' : 'loop iterable';
+        } else if (/^yield\b/.test(trimmed)) {
+            const yielded = trimmed.replace(/^yield(?:\s+from)?\s*/, '');
+            trace = inferExpression(yielded, environment);
+            destination = fr ? 'valeur produite' : 'yielded value';
+            trace = { ...trace, operation: 'Pause the generator, send this value to its caller, and preserve local state for the next iteration.' };
+        } else if (/^(?:raise|assert|del)\b/.test(trimmed)) {
+            const keyword = trimmed.match(/^\w+/)?.[0] || 'statement';
+            trace = unknownValue(keyword === 'assert' ? 'bool check' : 'control-flow effect', `${keyword} changes normal execution: it checks, raises, or removes the named value.`);
+            destination = fr ? 'effet de contrôle' : 'control-flow effect';
+        } else if (/^(?:with|try|except|finally)\b/.test(trimmed)) {
+            trace = unknownValue('control-flow block', 'Enter the protected block and follow its resource-management or error-handling rules.');
+            destination = fr ? 'bloc de contrôle' : 'control-flow block';
+        } else if (/\.[A-Za-z_]\w*\s*\(/.test(trimmed)) {
+            trace = inferExpression(trimmed, environment);
+            destination = fr ? 'effet de la méthode' : 'method effect';
+        } else if (/^[A-Za-z_][\w.]*\s*\(/.test(trimmed)) {
+            trace = inferExpression(trimmed, environment);
+            destination = fr ? 'résultat de l’appel' : 'call result';
+        }
+
+        if (!trace) return;
+        const result = trace.known
+            ? `${destination} = ${displayValue(trace.value)} (${trace.type})`
+            : `${destination}: ${trace.type}${fr ? ' déterminé pendant l’exécution' : ' determined at runtime'}`;
+        stepNumber += 1;
+        steps.push(
+            `${fr ? 'Étape' : 'Step'} ${stepNumber} — ${fr ? 'ligne' : 'line'} ${index + 1}: ${label}`,
+            `${fr ? 'Opération' : 'Operation'}: ${localizedTraceText(trace.operation, language)}`,
+            `${fr ? 'Valeur intermédiaire et type' : 'Intermediate value and type'}: ${result}`,
+            '',
+        );
+    });
+    return steps.slice(0, 18 * 4);
 };
 
 const lineExplanation = (
@@ -451,6 +990,19 @@ export const buildDetailedCodeExplanation = (
         annotated.push('');
         annotated.push('');
         addComment(annotated, '', typeContrast);
+    }
+
+    const executionTrace = buildUniversalExecutionTrace(source, language, example);
+    if (executionTrace.length) {
+        annotated.push('');
+        annotated.push('');
+        addComment(annotated, '', [
+            fr
+                ? 'Trajet complet des valeurs pour l’exemple affiché :'
+                : 'Complete value path for the shown example:',
+            '',
+            ...executionTrace,
+        ]);
     }
 
     const summary = transformationSummary(source, language, example);

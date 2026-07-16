@@ -33,7 +33,14 @@ try {
     if (!explanation.includes('```python')) failures.push(`Problem ${exercise.id}: missing highlighted Python block`);
     if (!explanation.includes('So this function is doing these things:')) failures.push(`Problem ${exercise.id}: missing expanded final summary`);
     if (!/# (This|The|Python|print|return|pass|Example|Data|So)/.test(explanation)) failures.push(`Problem ${exercise.id}: missing line-specific comments`);
-    if (explanation.split('\n').length > 200) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
+    if (!explanation.includes('Complete value path for the shown example:')) failures.push(`Problem ${exercise.id}: missing complete value path`);
+    if (!explanation.includes('# Operation:')) failures.push(`Problem ${exercise.id}: missing operation trace`);
+    if (!explanation.includes('# Intermediate value and type:')) failures.push(`Problem ${exercise.id}: missing intermediate values and data types`);
+    if (explanation.split('\n').length > 280) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
+
+    const french = buildDetailedCodeExplanation('', exercise.solution, 'fr');
+    if (!french.includes('Trajet complet des valeurs pour l’exemple affiché :')) failures.push(`Problem ${exercise.id}: missing French value path`);
+    if (!french.includes('# Valeur intermédiaire et type :') && !french.includes('# Valeur intermédiaire et type:')) failures.push(`Problem ${exercise.id}: missing French value/type trace`);
   }
 
   const problem975 = EXERCISES.find(exercise => exercise.id === 975);
@@ -58,6 +65,23 @@ try {
   const french975 = buildDetailedCodeExplanation('', problem975.solution, 'fr');
   for (const fragment of ['Explication du code', 'Cela transforme', 'Cette solution effectue les étapes suivantes']) {
     if (!french975.includes(fragment)) failures.push(`Problem 975 French regression: missing ${JSON.stringify(fragment)}`);
+  }
+
+  const concreteCases = [
+    [1, 'returned value = 10 (int)'],
+    [8, 'returned value = 81 (int)'],
+    [550, 'returned value = 1 (int)'],
+    [869, 'first, second, third = [1, 2, 3] (list)'],
+    [1006, 'returned value = "ab" (str)'],
+    [1211, 'returned value = 60 (int)'],
+    [1410, 'returned value = "Python is great" (str)'],
+    [1725, 'returned value = True (bool)'],
+    [1900, 'returned value = 25 (int)'],
+  ];
+  for (const [id, fragment] of concreteCases) {
+    const exercise = EXERCISES.find(item => item.id === id);
+    const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en');
+    if (!explanation.includes(fragment)) failures.push(`Problem ${id} concrete trace regression: missing ${JSON.stringify(fragment)}`);
   }
 
   const formattedSections = splitAiReviewSteps([
@@ -95,6 +119,7 @@ try {
   console.log(`Exercises evaluated: ${EXERCISES.length}`);
   console.log('Problem 975 concrete transformation: checked');
   console.log('French explanation: checked');
+  console.log('Universal value/type traces: checked');
   console.log('Numbered panel formatting: checked');
   console.log('Authoritative Code Explanation panel: checked');
   if (failures.length) {
