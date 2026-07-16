@@ -39,9 +39,23 @@ const isCodeExplanationSection = (section: string) => {
         || normalized.includes('explication du code');
 };
 
+const isRedundantTeachingSection = (section: string) => {
+    const normalized = section.toLowerCase();
+    return normalized.includes('expected solution workflow')
+        || normalized.includes('function workflow')
+        || normalized.includes('solution workflow')
+        || normalized.includes('execution order')
+        || normalized.includes('order of operation')
+        || normalized.includes('déroulement de la solution')
+        || normalized.includes('flux de la solution')
+        || normalized.includes("ordre d'exécution")
+        || normalized.includes('ordre des opérations');
+};
+
 export const stripAiReviewCodeExplanation = (reviewText: string) => {
     return splitAiReviewSteps(reviewText)
         .filter(section => !isCodeExplanationSection(section))
+        .filter(section => !isRedundantTeachingSection(section))
         .filter(section => !/\bpart\s*(?:1|one)\b[\s\S]*\bpart\s*(?:2|two)\b/i.test(section))
         .join('\n\n');
 };

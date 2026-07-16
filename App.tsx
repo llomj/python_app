@@ -14638,9 +14638,46 @@ const splitAiStepParagraphs = (step: string) => {
         .filter(Boolean);
 };
 
-function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false, numbered = false, language = 'en' }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean; numbered?: boolean; language?: 'en' | 'fr' }) {
+const renderStaticPythonLine = (line: string, editorColors: EditorColorSettings, keyPrefix: string) => {
+    const tokens = line.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b|\s+|./g) || [''];
+    return tokens.map((token, index) => (
+        <span
+            key={`${keyPrefix}-${index}`}
+            style={{ color: /^\s+$/.test(token) ? undefined : getInlinePythonTokenColor(token, editorColors) }}
+        >
+            {token}
+        </span>
+    ));
+};
+
+function StaticPythonCodePanel({ code, editorColors, accentColor }: { code: string; editorColors: EditorColorSettings; accentColor: string }) {
+    const lines = code.split('\n');
+    return (
+        <div className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: editorColors.background }}>
+            <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
+                Python
+            </div>
+            <div className="overflow-x-hidden py-2 font-mono text-[11px] leading-[1.55] sm:text-xs">
+                {lines.map((line, index) => (
+                    <div key={`static-python-line-${index}`} data-python-line={index + 1} className="grid grid-cols-[34px_minmax(0,1fr)]">
+                        <span className="select-none border-r px-2 text-right" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: hexToRgba(editorColors.text, 0.38) }}>
+                            {index + 1}
+                        </span>
+                        <pre className="min-w-0 whitespace-pre-wrap break-words px-2" style={{ color: editorColors.text, fontFamily: 'inherit' }}>
+                            {line ? renderStaticPythonLine(line, editorColors, `static-python-${index}`) : '\u00a0'}
+                        </pre>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false, numbered = false, language = 'en', staticCode = false }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean; numbered?: boolean; language?: 'en' | 'fr'; staticCode?: boolean }) {
     const parts = parseAiTextParts(text);
-    const renderCode = (code: string, key: string) => (
+    const renderCode = (code: string, key: string) => staticCode
+        ? <StaticPythonCodePanel key={key} code={code} editorColors={editorColors} accentColor={accentColor} />
+        : (
         <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
             <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
                 Python
@@ -14654,7 +14691,7 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
                 basicSetup={{ lineNumbers: true, foldGutter: false, highlightActiveLine: false, bracketMatching: true }}
             />
         </div>
-    );
+        );
 
     if (detectBareCode && parts.length === 1 && parts[0].type === 'text' && looksLikePythonCode(parts[0].value)) {
         return renderCode(parts[0].value, 'ai-code-only');
@@ -15876,13 +15913,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v273') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v274') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v273')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v274')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -19949,15 +19986,6 @@ print(result)
                                                             {appLang === 'fr' ? 'Confiance' : 'Confidence'} {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source, appLang)}
                                                         </span>
                                                     </div>
-                                                    {stripAiReviewCodeExplanation(localizeAiText(latestAiReviewResult.explanation, appLang)) && (
-                                                        <AiReviewText
-                                                            text={stripAiReviewCodeExplanation(localizeAiText(latestAiReviewResult.explanation, appLang))}
-                                                            editorColors={editorColors}
-                                                            accentColor={toolPanelColors.ai}
-                                                            numbered={true}
-                                                            language={appLang}
-                                                        />
-                                                    )}
                                                     <div
                                                         data-testid="ai-review-detailed-code-explanation"
                                                         className="rounded-2xl border p-3"
@@ -19971,8 +19999,18 @@ print(result)
                                                             editorColors={editorColors}
                                                             accentColor={toolPanelColors.ai}
                                                             language={appLang}
+                                                            staticCode={true}
                                                         />
                                                     </div>
+                                                    {stripAiReviewCodeExplanation(localizeAiText(latestAiReviewResult.explanation, appLang)) && (
+                                                        <AiReviewText
+                                                            text={stripAiReviewCodeExplanation(localizeAiText(latestAiReviewResult.explanation, appLang))}
+                                                            editorColors={editorColors}
+                                                            accentColor={toolPanelColors.ai}
+                                                            numbered={true}
+                                                            language={appLang}
+                                                        />
+                                                    )}
                                                     {latestAiReviewResult.suggestedFix && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
                                                             <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>{t('aiReview.suggestedFix', appLang)}</div>

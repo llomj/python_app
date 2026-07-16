@@ -175,7 +175,7 @@
         // Keep the active offline cache until the replacement service worker
         // has completely downloaded and installed the next version.
         (function () {
-            var APP_VERSION = 'v273';
+            var APP_VERSION = 'v274';
             var forceReset = new URLSearchParams(window.location.search).has('reset-cache');
             if (forceReset) {
                 if (window.caches) {
@@ -285,7 +285,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 try {
-                    navigator.serviceWorker.register('./sw.js?v=v273', {
+                    navigator.serviceWorker.register('./sw.js?v=v274', {
                         updateViaCache: 'none',
                         scope: './'
                     });

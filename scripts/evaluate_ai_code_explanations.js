@@ -79,11 +79,16 @@ try {
     '',
     '3. Output analysis: Correct.',
     '',
+    '4. Expected solution workflow: step 1 def, step 2 return.',
+    '',
+    '5. Execution order: define, call, return.',
+    '',
     '4. Local model notes: the answer passes.',
   ].join('\n');
   const strippedReview = stripAiReviewCodeExplanation(modelReview);
   if (strippedReview.includes('Code explanation')) failures.push('Dedicated panel regression: model Code Explanation heading was not removed');
   if (strippedReview.includes('part 1: split handles text')) failures.push('Dedicated panel regression: generic part 1 / part 2 content was not removed');
+  if (strippedReview.includes('Expected solution workflow') || strippedReview.includes('Execution order')) failures.push('Dedicated panel regression: redundant two-line teaching cards were not removed');
   if (!explanation975.includes('The full transformation looks like this:')) failures.push('Dedicated panel regression: detailed standalone explanation is incomplete');
 
   console.log('AI Review code-explanation evaluation');
