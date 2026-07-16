@@ -372,7 +372,7 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
                 return {
                     ...offlineResult,
                     confidence: Math.max(offlineResult.confidence, diagnostic.confidence),
-                    explanation: `${offlineResult.explanation}\n\n---\nBuilt-in analysis: ${diagnostic.explanation}`,
+                    explanation: `${diagnostic.explanation}\n\n---\nLocal model notes: ${offlineResult.explanation}`,
                     suggestedFix: offlineResult.suggestedFix || diagnostic.suggestedFix,
                     source: 'offline_model',
                 };
@@ -408,6 +408,8 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
                 return {
                     ...onlineResult,
                     confidence: Math.max(onlineResult.confidence, diagnostic.confidence),
+                    explanation: `${diagnostic.explanation}\n\n---\nOnline AI notes: ${onlineResult.explanation}`,
+                    suggestedFix: onlineResult.suggestedFix || diagnostic.suggestedFix,
                 };
             }
         } catch {

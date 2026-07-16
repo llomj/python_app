@@ -31,25 +31,32 @@ try {
   for (const exercise of EXERCISES) {
     const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en');
     if (!explanation.includes('```python')) failures.push(`Problem ${exercise.id}: missing highlighted Python block`);
-    if (!explanation.includes('Workflow summary:')) failures.push(`Problem ${exercise.id}: missing workflow summary`);
-    if (!/# (This|The|Python|`|Workflow|Example|Data)/.test(explanation)) failures.push(`Problem ${exercise.id}: missing line-specific comments`);
-    if (explanation.split('\n').length > 120) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
+    if (!explanation.includes('So this function is doing these things:')) failures.push(`Problem ${exercise.id}: missing expanded final summary`);
+    if (!/# (This|The|Python|print|return|pass|Example|Data|So)/.test(explanation)) failures.push(`Problem ${exercise.id}: missing line-specific comments`);
+    if (explanation.split('\n').length > 200) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
   }
 
   const problem975 = EXERCISES.find(exercise => exercise.id === 975);
   const explanation975 = buildDetailedCodeExplanation('', problem975.solution, 'en');
   for (const fragment of [
-    'splits one large string wherever it finds',
-    'After split: ["10", "20", "30", "40"]',
+    'This function takes one string containing numbers separated by commas.',
+    '# Example input:',
+    '# "10,20,30,40"',
+    'splits the one big string wherever it finds',
+    '# into:',
+    '# ["10", "20", "30", "40"]',
     'int("10") -> 10',
-    '`list(...)` collects the produced values',
-    'The important difference: `"10"` is text, while `10` is an integer.',
+    'list(...) collects all the converted integers into one list.',
+    'The full transformation looks like this:',
+    '"10" is a string.',
+    '"10" + "10" gives "1010"',
+    'So this function is doing these things:',
   ]) {
     if (!explanation975.includes(fragment)) failures.push(`Problem 975 regression: missing ${JSON.stringify(fragment)}`);
   }
 
   const french975 = buildDetailedCodeExplanation('', problem975.solution, 'fr');
-  for (const fragment of ['Explication du code', 'Après split', 'Résumé du déroulement']) {
+  for (const fragment of ['Explication du code', 'Cela transforme', 'Cette solution effectue les étapes suivantes']) {
     if (!french975.includes(fragment)) failures.push(`Problem 975 French regression: missing ${JSON.stringify(fragment)}`);
   }
 
@@ -62,7 +69,7 @@ try {
   ].join('\n'));
   const codePanels = formattedSections.filter(section => section.includes('```python'));
   if (codePanels.length !== 1) failures.push(`Formatting regression: expected one code panel, got ${codePanels.length}`);
-  if (!codePanels[0]?.includes('After split: ["10", "20", "30", "40"]')) failures.push('Formatting regression: concrete walkthrough escaped the Code Explanation panel');
+  if (!codePanels[0]?.includes('# ["10", "20", "30", "40"]')) failures.push('Formatting regression: concrete walkthrough escaped the Code Explanation panel');
   if (formattedSections.some(section => ((section.match(/```/g) || []).length % 2) !== 0)) failures.push('Formatting regression: a Python fence was split across panels');
 
   console.log('AI Review code-explanation evaluation');
