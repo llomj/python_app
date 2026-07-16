@@ -66,7 +66,7 @@ import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } f
 import { AUTO_GRADERS, AutoGrader } from './graders';
 import { buildSolutionVariations } from './services/solutionVariations';
 import { getExerciseEditorCode, isGenericExerciseStarter } from './services/codeScaffold';
-import { composeAiReviewDisplay, splitAiReviewSteps } from './services/aiReviewFormatting';
+import { splitAiReviewSteps, stripAiReviewCodeExplanation } from './services/aiReviewFormatting';
 import { buildDetailedCodeExplanation } from './services/aiCodeExplanation';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
@@ -291,7 +291,7 @@ const stripCodeFences = (text: string): string => text
     .replace(/```/g, '')
     .trim();
 
-const buildGeneralAiCodeExplanation = (question: string): string | null => {
+const buildGeneralAiCodeExplanation = (question: string, language: 'en' | 'fr' = 'en'): string | null => {
     const lowerQ = question.toLowerCase();
     if (!looksLikeGeneralPythonCode(question) || !/(explain|line by line|what does|code)/.test(lowerQ)) return null;
     const code = stripCodeFences(question)
@@ -301,34 +301,7 @@ const buildGeneralAiCodeExplanation = (question: string): string | null => {
         .join('\n')
         .trim();
     if (!code) return null;
-    const explanations = code.split('\n').slice(0, 18).map((line, index) => {
-        const trimmed = line.trim();
-        if (!trimmed) return `${index + 1}. Blank line — separates code visually.`;
-        if (/^def\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` defines a reusable function.`;
-        if (/^class\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` defines a class blueprint for objects.`;
-        if (/^for\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` starts a loop over an iterable.`;
-        if (/^while\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` repeats while its condition is true.`;
-        if (/^if\s+|^elif\s+|^else:/.test(trimmed)) return `${index + 1}. \`${trimmed}\` controls which block runs.`;
-        if (/^return\b/.test(trimmed)) return `${index + 1}. \`${trimmed}\` sends a value back to the caller.`;
-        if (/^print\(/.test(trimmed)) return `${index + 1}. \`${trimmed}\` displays output in the console.`;
-        if (/^import\s+|^from\s+/.test(trimmed)) return `${index + 1}. \`${trimmed}\` imports reusable code from a module.`;
-        if (/=/.test(trimmed) && !/[=!<>]=/.test(trimmed)) return `${index + 1}. \`${trimmed}\` assigns a value to a variable/name.`;
-        return `${index + 1}. \`${trimmed}\` runs this Python statement/expression.`;
-    });
-    return [
-        '1. Code explanation',
-        '```python',
-        code,
-        '```',
-        '',
-        '2. Line-by-line breakdown',
-        explanations.join('\n'),
-        '',
-        '3. What to check',
-        '- Does the code print when it should return?',
-        '- Are blocks indented with 4 spaces?',
-        '- Are variables defined before they are used?',
-    ].join('\n');
+    return buildDetailedCodeExplanation(code, '', language);
 };
 
 const buildGeneralAiTracebackAnswer = (question: string): string | null => {
@@ -15903,13 +15876,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v272') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v273') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v272')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v273')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -18141,13 +18114,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     refAnswer = answerPythonTraceback(effectiveQuestion, appLang) || buildGeneralAiTracebackAnswer(effectiveQuestion);
                     break;
                 case 'code_explanation':
-                    refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion);
+                    refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion, appLang);
                     break;
                 case 'output_prediction':
-                    refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion);
+                    refAnswer = knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion, appLang);
                     break;
                 case 'interactive_debug':
-                    refAnswer = answerPythonTraceRequest(effectiveQuestion, appLang) || knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion);
+                    refAnswer = answerPythonTraceRequest(effectiveQuestion, appLang) || knowledge.answerPythonCodeQuestion(effectiveQuestion, appLang) || buildGeneralAiCodeExplanation(effectiveQuestion, appLang);
                     break;
                 case 'test_generation':
                     refAnswer = answerPythonTestCaseRequest(effectiveQuestion, appLang);
@@ -19976,16 +19949,30 @@ print(result)
                                                             {appLang === 'fr' ? 'Confiance' : 'Confidence'} {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source, appLang)}
                                                         </span>
                                                     </div>
-                                                    <AiReviewText
-                                                        text={composeAiReviewDisplay(
-                                                            localizeAiText(latestAiReviewResult.explanation, appLang),
-                                                            buildDetailedCodeExplanation('', displaySolution, appLang),
-                                                        )}
-                                                        editorColors={editorColors}
-                                                        accentColor={toolPanelColors.ai}
-                                                        numbered={true}
-                                                        language={appLang}
-                                                    />
+                                                    {stripAiReviewCodeExplanation(localizeAiText(latestAiReviewResult.explanation, appLang)) && (
+                                                        <AiReviewText
+                                                            text={stripAiReviewCodeExplanation(localizeAiText(latestAiReviewResult.explanation, appLang))}
+                                                            editorColors={editorColors}
+                                                            accentColor={toolPanelColors.ai}
+                                                            numbered={true}
+                                                            language={appLang}
+                                                        />
+                                                    )}
+                                                    <div
+                                                        data-testid="ai-review-detailed-code-explanation"
+                                                        className="rounded-2xl border p-3"
+                                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: 'rgba(8, 18, 34, 0.52)' }}
+                                                    >
+                                                        <div className="mb-2 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.ai }}>
+                                                            {appLang === 'fr' ? 'Explication Détaillée Du Code' : 'Detailed Code Explanation'}
+                                                        </div>
+                                                        <AiReviewText
+                                                            text={buildDetailedCodeExplanation('', exercise.solution, appLang)}
+                                                            editorColors={editorColors}
+                                                            accentColor={toolPanelColors.ai}
+                                                            language={appLang}
+                                                        />
+                                                    </div>
                                                     {latestAiReviewResult.suggestedFix && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
                                                             <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>{t('aiReview.suggestedFix', appLang)}</div>

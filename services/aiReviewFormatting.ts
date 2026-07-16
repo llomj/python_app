@@ -39,14 +39,9 @@ const isCodeExplanationSection = (section: string) => {
         || normalized.includes('explication du code');
 };
 
-export const composeAiReviewDisplay = (reviewText: string, detailedCodeExplanation: string) => {
-    const sections = splitAiReviewSteps(reviewText)
-        .filter(section => !isCodeExplanationSection(section));
-    const outputIndex = sections.findIndex(section => {
-        const normalized = section.toLowerCase();
-        return normalized.includes('output analysis') || normalized.includes('analyse de la sortie');
-    });
-    const insertionIndex = outputIndex >= 0 ? outputIndex + 1 : Math.min(3, sections.length);
-    sections.splice(insertionIndex, 0, detailedCodeExplanation);
-    return sections.join('\n\n');
+export const stripAiReviewCodeExplanation = (reviewText: string) => {
+    return splitAiReviewSteps(reviewText)
+        .filter(section => !isCodeExplanationSection(section))
+        .filter(section => !/\bpart\s*(?:1|one)\b[\s\S]*\bpart\s*(?:2|two)\b/i.test(section))
+        .join('\n\n');
 };
