@@ -66,7 +66,8 @@ import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } f
 import { AUTO_GRADERS, AutoGrader } from './graders';
 import { buildSolutionVariations } from './services/solutionVariations';
 import { getExerciseEditorCode, isGenericExerciseStarter } from './services/codeScaffold';
-import { splitAiReviewSteps } from './services/aiReviewFormatting';
+import { composeAiReviewDisplay, splitAiReviewSteps } from './services/aiReviewFormatting';
+import { buildDetailedCodeExplanation } from './services/aiCodeExplanation';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -15902,13 +15903,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v271') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v272') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v271')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v272')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -19975,7 +19976,16 @@ print(result)
                                                             {appLang === 'fr' ? 'Confiance' : 'Confidence'} {Math.round(latestAiReviewResult.confidence * 100)}% · {getAiReviewSourceLabel(latestAiReviewResult.source, appLang)}
                                                         </span>
                                                     </div>
-                                                    <AiReviewText text={localizeAiText(latestAiReviewResult.explanation, appLang)} editorColors={editorColors} accentColor={toolPanelColors.ai} numbered={true} language={appLang} />
+                                                    <AiReviewText
+                                                        text={composeAiReviewDisplay(
+                                                            localizeAiText(latestAiReviewResult.explanation, appLang),
+                                                            buildDetailedCodeExplanation('', displaySolution, appLang),
+                                                        )}
+                                                        editorColors={editorColors}
+                                                        accentColor={toolPanelColors.ai}
+                                                        numbered={true}
+                                                        language={appLang}
+                                                    />
                                                     {latestAiReviewResult.suggestedFix && (
                                                         <div className="rounded-xl border p-3" style={{ borderColor: 'rgba(251, 191, 36, 0.3)', backgroundColor: 'rgba(251, 191, 36, 0.08)' }}>
                                                             <div className="mb-1 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: '#fbbf24' }}>{t('aiReview.suggestedFix', appLang)}</div>

@@ -30,3 +30,23 @@ export const splitAiReviewSteps = (text: string) => {
 
     return (sentenceSections.length > 1 ? sentenceSections : [normalized]).map(restoreCodeFences);
 };
+
+const isCodeExplanationSection = (section: string) => {
+    const normalized = section.toLowerCase();
+    return normalized.includes('code explanation')
+        || normalized.includes('syntax explanation')
+        || normalized.includes('concept explanation')
+        || normalized.includes('explication du code');
+};
+
+export const composeAiReviewDisplay = (reviewText: string, detailedCodeExplanation: string) => {
+    const sections = splitAiReviewSteps(reviewText)
+        .filter(section => !isCodeExplanationSection(section));
+    const outputIndex = sections.findIndex(section => {
+        const normalized = section.toLowerCase();
+        return normalized.includes('output analysis') || normalized.includes('analyse de la sortie');
+    });
+    const insertionIndex = outputIndex >= 0 ? outputIndex + 1 : Math.min(3, sections.length);
+    sections.splice(insertionIndex, 0, detailedCodeExplanation);
+    return sections.join('\n\n');
+};

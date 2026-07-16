@@ -13,7 +13,7 @@ const entry = path.join(tempDir, 'entry.ts');
 fs.writeFileSync(entry, [
   `export { EXERCISES } from ${JSON.stringify(path.join(root, 'exercises.ts'))};`,
   `export { buildDetailedCodeExplanation } from ${JSON.stringify(path.join(root, 'services/aiCodeExplanation.ts'))};`,
-  `export { splitAiReviewSteps } from ${JSON.stringify(path.join(root, 'services/aiReviewFormatting.ts'))};`,
+  `export { composeAiReviewDisplay, splitAiReviewSteps } from ${JSON.stringify(path.join(root, 'services/aiReviewFormatting.ts'))};`,
 ].join('\n'));
 
 try {
@@ -25,7 +25,7 @@ try {
     format: 'cjs',
     logLevel: 'silent',
   });
-  const { EXERCISES, buildDetailedCodeExplanation, splitAiReviewSteps } = require(bundleFile);
+  const { EXERCISES, buildDetailedCodeExplanation, composeAiReviewDisplay, splitAiReviewSteps } = require(bundleFile);
   const failures = [];
 
   for (const exercise of EXERCISES) {
@@ -72,11 +72,28 @@ try {
   if (!codePanels[0]?.includes('# ["10", "20", "30", "40"]')) failures.push('Formatting regression: concrete walkthrough escaped the Code Explanation panel');
   if (formattedSections.some(section => ((section.match(/```/g) || []).length % 2) !== 0)) failures.push('Formatting regression: a Python fence was split across panels');
 
+  const modelReview = [
+    '1. Problem requirement: parse comma-separated integers.',
+    '',
+    '2. Code explanation: part 1: split handles text. part 2: map changes values.',
+    '',
+    '3. Output analysis: Correct.',
+    '',
+    '4. Local model notes: the answer passes.',
+  ].join('\n');
+  const composedReview = composeAiReviewDisplay(modelReview, explanation975);
+  const composedSections = splitAiReviewSteps(composedReview);
+  const codeExplanationSections = composedSections.filter(section => section.toLowerCase().includes('code explanation'));
+  if (codeExplanationSections.length !== 1) failures.push(`Authoritative panel regression: expected one Code Explanation, got ${codeExplanationSections.length}`);
+  if (composedReview.includes('part 1: split handles text')) failures.push('Authoritative panel regression: generic model Code Explanation was not removed');
+  if (!codeExplanationSections[0]?.includes('The full transformation looks like this:')) failures.push('Authoritative panel regression: detailed Code Explanation was not inserted');
+
   console.log('AI Review code-explanation evaluation');
   console.log(`Exercises evaluated: ${EXERCISES.length}`);
   console.log('Problem 975 concrete transformation: checked');
   console.log('French explanation: checked');
   console.log('Numbered panel formatting: checked');
+  console.log('Authoritative Code Explanation panel: checked');
   if (failures.length) {
     console.error(`Failures (${failures.length}):`);
     failures.slice(0, 100).forEach(failure => console.error(`- ${failure}`));
