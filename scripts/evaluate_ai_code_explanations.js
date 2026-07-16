@@ -36,11 +36,15 @@ try {
     if (!explanation.includes('Complete value path for the shown example:')) failures.push(`Problem ${exercise.id}: missing complete value path`);
     if (!explanation.includes('# Operation:')) failures.push(`Problem ${exercise.id}: missing operation trace`);
     if (!explanation.includes('# Intermediate value and type:')) failures.push(`Problem ${exercise.id}: missing intermediate values and data types`);
+    if (explanation.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: contains a clutter-only hash line`);
+    if (explanation.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: contains excessive blank-line spacing`);
     if (explanation.split('\n').length > 280) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
 
     const french = buildDetailedCodeExplanation('', exercise.solution, 'fr');
     if (!french.includes('Trajet complet des valeurs pour l’exemple affiché :')) failures.push(`Problem ${exercise.id}: missing French value path`);
     if (!french.includes('# Valeur intermédiaire et type :') && !french.includes('# Valeur intermédiaire et type:')) failures.push(`Problem ${exercise.id}: missing French value/type trace`);
+    if (french.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: French explanation contains a clutter-only hash line`);
+    if (french.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: French explanation contains excessive blank-line spacing`);
   }
 
   const problem975 = EXERCISES.find(exercise => exercise.id === 975);
@@ -83,6 +87,9 @@ try {
     const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en');
     if (!explanation.includes(fragment)) failures.push(`Problem ${id} concrete trace regression: missing ${JSON.stringify(fragment)}`);
   }
+
+  const explanation1699 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1699).solution, 'en');
+  if (!explanation1699.includes('printed output = "True False" (display text)')) failures.push('Problem 1699 multi-call trace did not evaluate each argument independently');
 
   const formattedSections = splitAiReviewSteps([
     '1. Problem requirement: parse comma-separated integers.',

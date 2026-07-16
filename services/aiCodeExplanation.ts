@@ -110,7 +110,7 @@ const unquote = (value: string) => {
 const pythonList = (values: string[]) => `[${values.map(value => JSON.stringify(value)).join(', ')}]`;
 
 const addComment = (target: string[], indent: string, lines: string[]) => {
-    for (const line of lines) target.push(line ? `${indent}# ${line}` : `${indent}#`);
+    for (const line of lines) target.push(line ? `${indent}# ${line}` : '');
 };
 
 const quotePythonString = (value: string) => `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
@@ -419,6 +419,19 @@ const inferExpression = (
         const name = call[1];
         const args = splitTopLevel(call[2]).map(arg => inferExpression(arg.replace(/^\w+\s*=\s*/, ''), environment, depth + 1));
         const operation = `Evaluate the arguments from left to right, then call ${name}().`;
+        const functionModel = environment.get(`@function:${name}`);
+        if (functionModel?.known && functionModel.value && typeof functionModel.value === 'object') {
+            const model = functionModel.value as { params: string[]; expression: string };
+            const callEnvironment = new Map(environment);
+            model.params.forEach((param, index) => {
+                if (args[index]) callEnvironment.set(param, args[index]);
+            });
+            const result = inferExpression(model.expression, callEnvironment, depth + 1);
+            return {
+                ...result,
+                operation: `${operation} Substitute this call's arguments into the function body and evaluate its return expression.`,
+            };
+        }
         const inferredFunctionReturn = environment.get(`@return:${name}`);
         if (inferredFunctionReturn) {
             return {
@@ -533,17 +546,22 @@ const buildUniversalExecutionTrace = (
     const steps: string[] = [];
     let stepNumber = 0;
     let currentFunction = '';
+    let currentFunctionParams: string[] = [];
     const lines = code.split('\n').slice(0, MAX_SOURCE_LINES);
 
     lines.forEach((line, index) => {
         const trimmed = line.trim().replace(/\s+#.*$/, '');
         if (!trimmed) return;
-        const definition = trimmed.match(/^def\s+([A-Za-z_]\w*)\s*\(/);
+        const definition = trimmed.match(/^def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)/);
         if (definition) {
             currentFunction = definition[1];
+            currentFunctionParams = splitTopLevel(definition[2]).map(param => param.trim().replace(/^\*{1,2}/, '').split(/[:=]/)[0].trim()).filter(Boolean);
             return;
         }
-        if (!/^\s/.test(line) && !/^(?:@|def\b|class\b)/.test(trimmed)) currentFunction = '';
+        if (!/^\s/.test(line) && !/^(?:@|def\b|class\b)/.test(trimmed)) {
+            currentFunction = '';
+            currentFunctionParams = [];
+        }
         if (/^(?:class|from\s+|import\s+|global\b|nonlocal\b|pass$)/.test(trimmed)) return;
         let label = trimmed;
         let trace: TracedValue | null = null;
@@ -576,14 +594,17 @@ const buildUniversalExecutionTrace = (
             label = trimmed.replace(/^return\s*/, '');
             trace = inferExpression(label, environment);
             destination = fr ? 'valeur renvoyée' : 'returned value';
-            if (currentFunction) environment.set(`@return:${currentFunction}`, trace);
+            if (currentFunction) {
+                environment.set(`@return:${currentFunction}`, trace);
+                environment.set(`@function:${currentFunction}`, knownValue({ params: currentFunctionParams, expression: label }, 'Store the function return expression for its later calls.'));
+            }
         } else if (/^print\s*\(/.test(trimmed)) {
             const printedExpression = trimmed.replace(/^print\s*\(/, '').replace(/\)\s*$/, '');
             const printedItems = splitTopLevel(printedExpression).map(item => inferExpression(item, environment));
             trace = printedItems.length === 1
                 ? { ...printedItems[0], operation: `Evaluate the value, convert it to display text, then write it to the output panel.` }
                 : printedItems.every(item => item.known)
-                    ? knownValue(printedItems.map(item => item.value), 'Evaluate every print argument from left to right, separate them with spaces, and display them.')
+                    ? { ...knownValue(printedItems.map(item => displayValue(item.value)).join(' '), 'Evaluate every print argument from left to right, separate them with spaces, and display them.'), type: 'display text' }
                     : unknownValue('display text', 'Evaluate every print argument from left to right, separate them with spaces, and display them.');
             destination = fr ? 'sortie affichée' : 'printed output';
         } else if (/^(?:if|elif|while)\b/.test(trimmed)) {
@@ -1014,7 +1035,8 @@ export const buildDetailedCodeExplanation = (
         ...summary.map((step, index) => `${index + 1}. ${step}`),
     ]);
 
-    const bounded = annotated.slice(0, MAX_ANNOTATED_LINES).join('\n').trim();
+    const compacted = annotated.filter((line, index) => line !== '' || annotated[index - 1] !== '');
+    const bounded = compacted.slice(0, MAX_ANNOTATED_LINES).join('\n').trim();
     const intro = fr
         ? 'Explication du code : voici le code réel expliqué à l’endroit où chaque opération se produit. Les commentaires montrent les types, les valeurs intermédiaires et le trajet vers le résultat.'
         : 'Code explanation: Here is the actual code explained where each operation happens. The comments show the data types, intermediate values, and path to the final result.';
