@@ -66,6 +66,7 @@ import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } f
 import { AUTO_GRADERS, AutoGrader } from './graders';
 import { buildSolutionVariations } from './services/solutionVariations';
 import { getExerciseEditorCode, isGenericExerciseStarter } from './services/codeScaffold';
+import { splitAiReviewSteps } from './services/aiReviewFormatting';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -14663,32 +14664,6 @@ const splitAiStepParagraphs = (step: string) => {
         .filter(Boolean);
 };
 
-const splitAiReviewSteps = (text: string) => {
-    const normalized = text
-        .replace(/\n\s*---\s*\n/g, '\n\n')
-        .replace(/\s+(?=(?:Problem requirement|Line-by-line code inspection|Code inspection|Output analysis|Code explanation|Syntax explanation|Concept explanation|Expected solution workflow|Function workflow|Execution order|Order of operation|The code still contains|The grader\/run system|The local model response|Specific built-in analysis|Built-in analysis|Suggested fix):)/g, '\n\n')
-        .replace(/\s+(?=The deterministic grader|A function that reaches|If this is|For this grader)/g, '\n\n')
-        .trim();
-
-    const explicitSections = normalized
-        .split(/\n\s*\n+/)
-        .map(section => section.trim())
-        .filter(Boolean);
-
-    if (explicitSections.length > 1) {
-        return explicitSections
-            .map(section => section.replace(/^\d+[.)]\s*/, '').trim())
-            .filter(section => !/^(Specific built-in analysis|Built-in analysis):?$/i.test(section));
-    }
-
-    const sentenceSections = normalized
-        .split(/(?<=[.!?])\s+(?=[A-Z])/)
-        .map(section => section.trim())
-        .filter(Boolean);
-
-    return sentenceSections.length > 1 ? sentenceSections : [normalized];
-};
-
 function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareCode = false, numbered = false, language = 'en' }: { text: string; editorColors: EditorColorSettings; accentColor?: string; detectBareCode?: boolean; numbered?: boolean; language?: 'en' | 'fr' }) {
     const parts = parseAiTextParts(text);
     const renderCode = (code: string, key: string) => (
@@ -14711,43 +14686,50 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
         return renderCode(parts[0].value, 'ai-code-only');
     }
 
+    if (numbered) {
+        const steps = splitAiReviewSteps(text);
+        return (
+            <div className="space-y-2.5 text-sm leading-relaxed text-gray-200">
+                {steps.map((step, stepIndex) => {
+                    const tone = getAiStepTone(step, accentColor);
+                    const stepParts = parseAiTextParts(step);
+                    return (
+                        <div key={`ai-step-${stepIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: tone.borderColor, backgroundColor: tone.backgroundColor }}>
+                            <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(tone.color, 0.16), color: tone.color }}>
+                                {stepIndex + 1}
+                            </div>
+                            <div className="min-w-0 space-y-2">
+                                <div className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: tone.color }}>
+                                    {getAiStepTitle(step, stepIndex, language)}
+                                </div>
+                                {stepParts.map((stepPart, partIndex) => {
+                                    if (stepPart.type === 'code') {
+                                        return renderCode(stepPart.value, `ai-step-code-${stepIndex}-${partIndex}`);
+                                    }
+                                    return (
+                                        <div key={`ai-step-text-${stepIndex}-${partIndex}`} className="space-y-1.5">
+                                            {splitAiStepParagraphs(stepPart.value).map((paragraph, paragraphIndex, paragraphs) => (
+                                                <p key={`ai-step-paragraph-${stepIndex}-${partIndex}-${paragraphIndex}`} className="whitespace-pre-wrap text-gray-200">
+                                                    {paragraphs.length > 1 && <span className="mr-2 text-gray-500">•</span>}
+                                                    {renderAiParagraphText(paragraph, editorColors, `ai-step-paragraph-${stepIndex}-${partIndex}-${paragraphIndex}`)}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-2 text-sm leading-relaxed text-gray-200">
             {parts.map((part, index) => {
                 if (part.type === 'code' || (detectBareCode && looksLikePythonCode(part.value))) {
                     return renderCode(part.value, `ai-code-${index}`);
-                }
-                if (numbered) {
-                    const steps = splitAiReviewSteps(part.value);
-                    return (
-                        <div key={`ai-numbered-${index}`} className="space-y-2.5">
-                            {steps.map((step, stepIndex) => {
-                                const tone = getAiStepTone(step, accentColor);
-                                return (
-                                <div key={`ai-step-${index}-${stepIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: tone.borderColor, backgroundColor: tone.backgroundColor }}>
-                                    <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(tone.color, 0.16), color: tone.color }}>
-                                        {stepIndex + 1}
-                                    </div>
-                                    <div className="min-w-0 space-y-2">
-                                        <div className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: tone.color }}>
-                                            {getAiStepTitle(step, stepIndex, language)}
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            {splitAiStepParagraphs(step).map((paragraph, paragraphIndex, paragraphs) => (
-                                                <p key={`ai-step-text-${index}-${stepIndex}-${paragraphIndex}`} className="whitespace-pre-wrap text-gray-200">
-                                                    {paragraphs.length > 1 && (
-                                                        <span className="mr-2 text-gray-500">•</span>
-                                                    )}
-                                                    {renderAiParagraphText(paragraph, editorColors, `ai-step-text-${index}-${stepIndex}-${paragraphIndex}`)}
-                                                </p>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                );
-                            })}
-                        </div>
-                    );
                 }
                 return (
                     <p key={`ai-text-${index}`} className="whitespace-pre-wrap">
@@ -15920,13 +15902,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v269') {
+            if (event.data?.type === 'OFFLINE_READY' && event.data?.version === 'v270') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v269')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v270')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);

@@ -1,5 +1,6 @@
 import { AiReviewRequest, AiReviewResult } from '../aiReviewTypes';
 import { localizeAiText } from './aiLocalization';
+import { buildDetailedCodeExplanation } from './aiCodeExplanation';
 
 const hasFunctionDefinition = (code: string) => /\bdef\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/.test(code);
 const hasReturn = (code: string) => /\breturn\b/.test(code);
@@ -426,12 +427,7 @@ const explainPythonConcepts = (code: string) => {
 };
 
 const summarizeCodeExplanation = (userCode: string, solution: string) => {
-    const source = userCode.trim() ? userCode : solution;
-    const concepts = explainPythonConcepts(source).slice(0, 10);
-    if (!concepts.length) {
-        return 'Code explanation: This code uses straightforward Python statements. Read it from top to bottom: assignments prepare values, expressions compute results, and the final `return` or `print` is what the app checks.';
-    }
-    return `Code explanation:\n${concepts.map((text, index) => `part ${index + 1}: ${text}`).join('\n')}`;
+    return buildDetailedCodeExplanation(userCode, solution, 'en');
 };
 
 const conciseOutput = (value: string | undefined, fallback = 'No visible output') => {
@@ -576,16 +572,7 @@ const buildFrenchDiagnosticReview = (
         outputAnalysis = `Le correcteur n’a pas accepté cette réponse. ${localizeAiText(request.graderMessage || 'Aucun détail supplémentaire.', 'fr')}`;
     }
 
-    const concepts = [
-        /\bdef\s+/.test(code) ? '`def` crée une fonction ; son bloc indenté ne s’exécute que lorsque la fonction est appelée.' : '',
-        /\breturn\b/.test(code) ? '`return` renvoie une valeur à l’appelant et au correcteur.' : '',
-        /\bprint\s*\(/.test(code) ? '`print()` affiche une valeur, mais ne la renvoie pas à une fonction appelante.' : '',
-        /\b(?:for|while)\b/.test(code) ? 'Une boucle répète son bloc indenté ; une boucle `for` parcourt des valeurs et une boucle `while` dépend d’une condition.' : '',
-        /\b(?:if|elif|else)\b/.test(code) ? '`if`, `elif` et `else` choisissent quelle branche exécuter.' : '',
-        /\[[^\]]*:[^\]]*\]/.test(code) ? 'Une tranche `[début:fin:pas]` sélectionne une partie d’une séquence ; la position `fin` est exclue.' : '',
-        /\[[^\]]*\]/.test(code) ? 'Les crochets peuvent créer une liste ou accéder à un élément par son index.' : '',
-        /\{[^}]*:[^}]*\}/.test(code) ? 'Les accolades contenant des paires `clé: valeur` créent un dictionnaire.' : '',
-    ].filter(Boolean);
+    const codeExplanation = buildDetailedCodeExplanation(code, request.visibleSolution || '', 'fr');
 
     const solutionLines = extractPrimarySolutionLines(request.visibleSolution || '')
         .map(line => line.trim())
@@ -609,7 +596,7 @@ const buildFrenchDiagnosticReview = (
             `1. Exigence du problème\n${request.description || request.title}`,
             `2. Vérification ligne par ligne\n${codeCheck}`,
             `3. Analyse de la sortie\n${outputAnalysis}`,
-            `4. Explication du code\n${concepts.length ? concepts.join('\n') : 'Le code utilise des instructions Python simples exécutées de haut en bas.'}`,
+            `4. ${codeExplanation}`,
             `5. Déroulement de la solution\n${workflow}`,
             `6. Point à corriger\n${suggestedFix}`,
         ].join('\n\n'),
