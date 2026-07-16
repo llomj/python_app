@@ -367,6 +367,35 @@ try {
   if (!progressiveSys.includes('Progressive examples: sys') || !progressiveSys.includes('import sys')) failures.push('Progressive sys examples failed');
   if (!contextualSys.includes('**sys — intermediate level**') || !contextualSys.includes('sys.argv') || contextualSys.includes('capsys')) failures.push('Contextual sys retrieval failed');
 
+  const beginnerComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'simple') || '';
+  const intermediateComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'normal') || '';
+  const expertComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'deep') || '';
+  const examplesComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'examples') || '';
+  if (!beginnerComparison.includes('list vs dict — beginner comparison')
+      || !beginnerComparison.includes('integer position')
+      || !beginnerComparison.includes('Use a key')
+      || !beginnerComparison.includes('Tiny example')) failures.push('Beginner comparison contract failed');
+  if (!intermediateComparison.includes('intermediate comparison')
+      || !intermediateComparison.includes('Behavior comparison')
+      || !intermediateComparison.includes('Order')
+      || !intermediateComparison.includes('Duplicates')
+      || !intermediateComparison.includes('Common mistakes')) failures.push('Intermediate comparison contract failed');
+  if (!expertComparison.includes('expert comparison')
+      || !expertComparison.includes('Internals and tradeoffs')
+      || !expertComparison.includes('Contracts and edge cases')
+      || !expertComparison.includes('Versions and official sources')
+      || !expertComparison.includes('docs.python.org')) failures.push('Expert comparison contract failed');
+  if (!examplesComparison.includes('examples comparison')
+      || !examplesComparison.includes('Beginner side-by-side example')
+      || !examplesComparison.includes('Try it')
+      || (examplesComparison.match(/```python/g) || []).length < 3) failures.push('Examples comparison contract failed');
+  if (!(expertComparison.length > intermediateComparison.length && intermediateComparison.length > beginnerComparison.length)) failures.push('Comparison depth does not increase from beginner to expert');
+  if (new Set([beginnerComparison, intermediateComparison, expertComparison, examplesComparison]).size !== 4) failures.push('Comparison modes returned duplicate answers');
+  for (const comparisonQuestion of ['tuple versus set', 'compare map with filter', 'difference between str and bytes']) {
+    const answer = knowledge.answerPythonKnowledgeComparisonAtLevel(comparisonQuestion, 'en', 'normal') || '';
+    if (!answer.includes('intermediate comparison') || !answer.includes('Behavior comparison')) failures.push(`Comparison form failed for ${comparisonQuestion}`);
+  }
+
   let mastery = tutor.parseTutorMasteryProfile(null);
   const adaptiveFirst = tutor.inferTutorLevel('What is a closure?', mastery, 'normal', true);
   mastery = tutor.updateTutorMastery(mastery, 'closure', adaptiveFirst);

@@ -1148,36 +1148,239 @@ const parseComparisonPair = (question: string): [string, string] | null => {
   return null;
 };
 
-export const answerPythonKnowledgeComparison = (question: string, language: KnowledgeLanguage): string | null => {
+type ComparisonTrait = {
+  meaning: string;
+  access: string;
+  order: string;
+  duplicates: string;
+  choose: string;
+  literal: string;
+};
+
+const CORE_COMPARISON_TRAITS: Record<string, ComparisonTrait> = {
+  list: {
+    meaning: 'An ordered, mutable sequence of values.',
+    access: 'Use an integer position such as `items[0]`.',
+    order: 'Keeps item order.',
+    duplicates: 'Allows duplicate values.',
+    choose: 'Choose it for an ordered collection that you will index, loop over, or modify.',
+    literal: 'items = ["Ada", "Lin", "Ada"]\nprint(items[0])  # Ada',
+  },
+  dict: {
+    meaning: 'A mutable mapping from unique, hashable keys to values.',
+    access: 'Use a key such as `person["name"]`.',
+    order: 'Keeps insertion order in current Python.',
+    duplicates: 'Keys are unique; values may repeat.',
+    choose: 'Choose it when each value needs a meaningful key or label.',
+    literal: 'person = {"name": "Ada", "age": 36}\nprint(person["name"])  # Ada',
+  },
+  dictionary: {
+    meaning: 'A mutable mapping from unique, hashable keys to values.',
+    access: 'Use a key such as `person["name"]`.',
+    order: 'Keeps insertion order in current Python.',
+    duplicates: 'Keys are unique; values may repeat.',
+    choose: 'Choose it when each value needs a meaningful key or label.',
+    literal: 'person = {"name": "Ada", "age": 36}\nprint(person["name"])  # Ada',
+  },
+  tuple: {
+    meaning: 'An ordered sequence that cannot be changed after creation.',
+    access: 'Use an integer position such as `point[0]`.',
+    order: 'Keeps item order.',
+    duplicates: 'Allows duplicate values.',
+    choose: 'Choose it for a fixed record or group of values that should not change.',
+    literal: 'point = (10, 20)\nprint(point[0])  # 10',
+  },
+  set: {
+    meaning: 'A mutable collection of unique, hashable values.',
+    access: 'Test membership with `value in items`; sets have no positional indexing.',
+    order: 'Do not rely on a stable positional order.',
+    duplicates: 'Automatically removes duplicates.',
+    choose: 'Choose it for uniqueness, fast membership checks, union, intersection, or difference.',
+    literal: 'tags = {"python", "web", "python"}\nprint(tags)  # two unique values',
+  },
+  frozenset: {
+    meaning: 'An immutable set of unique, hashable values.',
+    access: 'Test membership; there is no positional indexing.',
+    order: 'Do not rely on a stable positional order.',
+    duplicates: 'Automatically removes duplicates.',
+    choose: 'Choose it when set behavior is needed but the collection must be hashable and immutable.',
+    literal: 'permissions = frozenset({"read", "write"})\nprint("read" in permissions)  # True',
+  },
+  str: {
+    meaning: 'An immutable sequence of Unicode characters.',
+    access: 'Use integer indexes or slices such as `text[0]` and `text[1:3]`.',
+    order: 'Keeps character order.',
+    duplicates: 'Allows repeated characters.',
+    choose: 'Choose it for human-readable text.',
+    literal: 'text = "python"\nprint(text[0])  # p',
+  },
+  bytes: {
+    meaning: 'An immutable sequence of byte values from 0 to 255.',
+    access: 'Indexing returns an integer byte; slicing returns `bytes`.',
+    order: 'Keeps byte order.',
+    duplicates: 'Allows repeated bytes.',
+    choose: 'Choose it for encoded text, files, network data, or binary protocols.',
+    literal: 'data = b"ABC"\nprint(data[0])  # 65',
+  },
+  bytearray: {
+    meaning: 'A mutable sequence of byte values from 0 to 255.',
+    access: 'Indexing returns an integer byte and indexed values can be replaced.',
+    order: 'Keeps byte order.',
+    duplicates: 'Allows repeated bytes.',
+    choose: 'Choose it when binary data must be edited in place.',
+    literal: 'data = bytearray(b"ABC")\ndata[0] = 90\nprint(data)  # bytearray(b"ZBC")',
+  },
+  range: {
+    meaning: 'An immutable, lazy arithmetic sequence of integers.',
+    access: 'Index, slice, iterate, or test membership without storing every integer.',
+    order: 'Follows start, stop, and step.',
+    duplicates: 'A valid nonzero step does not repeat values.',
+    choose: 'Choose it for counted loops or compact integer sequences.',
+    literal: 'numbers = range(1, 6, 2)\nprint(list(numbers))  # [1, 3, 5]',
+  },
+};
+
+const comparisonTraitFor = (record: PythonKnowledgeRecord): ComparisonTrait => {
+  const key = record.canonicalName.toLowerCase().replace(/\(\)$/, '');
+  return CORE_COMPARISON_TRAITS[key] || CORE_COMPARISON_TRAITS[record.term.toLowerCase()] || {
+    meaning: record.summary,
+    access: `Use its documented form: \`${record.signature}\`.`,
+    order: 'Order or evaluation behavior depends on this API’s documented contract.',
+    duplicates: 'Duplicate behavior depends on the values and operation.',
+    choose: `Choose it when this purpose matches the task: ${record.summary}`,
+    literal: record.examples[0]?.code || record.signature,
+  };
+};
+
+const COMPARISON_TERM_ALIASES: Record<string, string> = {
+  array: 'list',
+  boolean: 'bool',
+  dic: 'dict',
+  dictionaries: 'dict',
+  dictionary: 'dict',
+  integer: 'int',
+  integers: 'int',
+  lst: 'list',
+  mapping: 'dict',
+  string: 'str',
+  strings: 'str',
+  tup: 'tuple',
+};
+
+const resolveComparisonSide = (term: string): KnowledgeResolution => {
+  const normalized = normalizeTerm(term).toLowerCase();
+  const canonicalTerm = COMPARISON_TERM_ALIASES[normalized] || normalized;
+  const exact = resolvePythonKnowledge(canonicalTerm, typeFromPrefix(canonicalTerm));
+  if (exact.record || exact.alternatives.length) return exact;
+  const fuzzy = resolveFuzzyPythonTerm(canonicalTerm);
+  if (fuzzy) return resolvePythonKnowledge(fuzzy.term, typeFromPrefix(fuzzy.term));
+  const semantic = searchPythonKnowledge(canonicalTerm, 1)[0];
+  return semantic && semantic.score >= 10
+    ? { term: semantic.matchedTerm, record: semantic.record, alternatives: [] }
+    : exact;
+};
+
+const localizedComparisonTrait = (text: string, language: KnowledgeLanguage): string => {
+  if (language === 'en') return text;
+  const translated = localizeAiText(text, 'fr');
+  return translated === text ? text : translated;
+};
+
+const comparisonExampleBlock = (record: PythonKnowledgeRecord, trait: ComparisonTrait, language: KnowledgeLanguage) => {
+  const code = trait.literal || record.examples[0]?.code || record.signature;
+  return `**${record.canonicalName}**\n\`\`\`python\n${code}\n\`\`\``;
+};
+
+export const answerPythonKnowledgeComparisonAtLevel = (
+  question: string,
+  language: KnowledgeLanguage,
+  mode: GeneralAiResponseMode = 'normal',
+): string | null => {
   const pair = parseComparisonPair(question);
   if (!pair) return null;
-  const first = resolvePythonKnowledge(pair[0]);
-  const second = resolvePythonKnowledge(pair[1]);
+  const first = resolveComparisonSide(pair[0]);
+  const second = resolveComparisonSide(pair[1]);
   if (first.alternatives.length) return ambiguityAnswer(first, language);
   if (second.alternatives.length) return ambiguityAnswer(second, language);
   if (!first.record || !second.record) return null;
   const a = first.record;
   const b = second.record;
-  const isFrench = language === 'fr';
-  return [
-    `**${a.canonicalName} ${isFrench ? 'et' : 'vs'} ${b.canonicalName}**`,
-    '',
-    `| ${isFrench ? 'Critère' : 'Criterion'} | ${a.canonicalName} | ${b.canonicalName} |`,
+  const traitA = comparisonTraitFor(a);
+  const traitB = comparisonTraitFor(b);
+  const fr = language === 'fr';
+  const titleLevel = mode === 'simple' ? (fr ? 'comparaison débutant' : 'beginner comparison')
+    : mode === 'deep' ? (fr ? 'comparaison expert' : 'expert comparison')
+      : mode === 'examples' ? (fr ? 'comparaison par exemples' : 'examples comparison')
+        : (fr ? 'comparaison intermédiaire' : 'intermediate comparison');
+  const biggestDifference = fr
+    ? `\`${a.canonicalName}\` : ${localizedComparisonTrait(traitA.access, language)} \`${b.canonicalName}\` : ${localizedComparisonTrait(traitB.access, language)}`
+    : `\`${a.canonicalName}\`: ${traitA.access} \`${b.canonicalName}\`: ${traitB.access}`;
+  const basicTable = [
+    `| ${fr ? 'Critère' : 'Criterion'} | ${a.canonicalName} | ${b.canonicalName} |`,
     '|---|---|---|',
-    `| ${isFrench ? 'Type' : 'Kind'} | ${a.kind} | ${b.kind} |`,
-    `| ${isFrench ? 'But' : 'Purpose'} | ${localizedKnowledgeSummary(a, language)} | ${localizedKnowledgeSummary(b, language)} |`,
-    `| ${isFrench ? 'Syntaxe' : 'Syntax'} | \`${a.signature}\` | \`${b.signature}\` |`,
-    `| ${isFrench ? 'Modifie l\'objet' : 'Mutates object'} | ${a.mutates} | ${b.mutates} |`,
-    `| ${isFrench ? 'Retour' : 'Returns'} | ${a.returns} | ${b.returns} |`,
-    `| ${isFrench ? 'Version' : 'Version'} | ${a.version} | ${b.version} |`,
-    '',
-    `**${isFrench ? 'Regle pratique' : 'Practical rule'}**`,
-    isFrench
-      ? `Choisissez \`${a.canonicalName}\` lorsque son but correspond à votre besoin ; choisissez \`${b.canonicalName}\` lorsque vous avez besoin de son comportement de retour ou de modification.`
-      : `Choose \`${a.canonicalName}\` when its purpose matches the task; choose \`${b.canonicalName}\` when you need its different return or mutation behavior.`,
-    '',
-    `**${isFrench ? 'Sources' : 'Sources'}**\n- ${a.sourceUrl}\n- ${b.sourceUrl}`,
+    `| ${fr ? 'Signification' : 'Meaning'} | ${fr ? localizedKnowledgeSummary(a, language) : traitA.meaning} | ${fr ? localizedKnowledgeSummary(b, language) : traitB.meaning} |`,
+    `| ${fr ? 'But' : 'Purpose'} | ${localizedKnowledgeSummary(a, language)} | ${localizedKnowledgeSummary(b, language)} |`,
+    `| ${fr ? 'Accès' : 'Access'} | ${localizedComparisonTrait(traitA.access, language)} | ${localizedComparisonTrait(traitB.access, language)} |`,
+    `| ${fr ? 'Syntaxe' : 'Syntax'} | \`${a.signature}\` | \`${b.signature}\` |`,
   ].join('\n');
+  const header = `**${a.canonicalName} vs ${b.canonicalName} — ${titleLevel}**`;
+
+  if (mode === 'simple') {
+    return [
+      header,
+      `**1. ${fr ? 'En termes simples' : 'In plain language'}**\n${localizedComparisonTrait(traitA.meaning, language)}\n\n${localizedComparisonTrait(traitB.meaning, language)}`,
+      `**2. ${fr ? 'La plus grande différence' : 'Biggest difference'}**\n${biggestDifference}`,
+      basicTable,
+      `**3. ${fr ? 'Petit exemple' : 'Tiny example'}**\n\`\`\`python\n${traitA.literal}\n\n${traitB.literal}\n\`\`\``,
+      `**4. ${fr ? 'Règle simple' : 'Simple rule'}**\n${localizedComparisonTrait(traitA.choose, language)}\n${localizedComparisonTrait(traitB.choose, language)}`,
+    ].join('\n\n');
+  }
+
+  const behaviorTable = [
+    basicTable,
+    `| ${fr ? 'Ordre' : 'Order'} | ${localizedComparisonTrait(traitA.order, language)} | ${localizedComparisonTrait(traitB.order, language)} |`,
+    `| ${fr ? 'Doublons' : 'Duplicates'} | ${localizedComparisonTrait(traitA.duplicates, language)} | ${localizedComparisonTrait(traitB.duplicates, language)} |`,
+    `| ${fr ? 'Type' : 'Kind'} | ${a.kind} | ${b.kind} |`,
+    `| ${fr ? 'Modifie l’objet' : 'Mutates object'} | ${a.mutates} | ${b.mutates} |`,
+    `| ${fr ? 'Retour' : 'Returns'} | ${a.returns} | ${b.returns} |`,
+    `| ${fr ? 'Version' : 'Version'} | ${a.version} | ${b.version} |`,
+  ].join('\n');
+
+  if (mode === 'examples') {
+    const exampleA = a.examples[0]?.code || traitA.literal;
+    const exampleB = b.examples[0]?.code || traitB.literal;
+    return [
+      header,
+      `**1. ${fr ? 'Différence à observer' : 'Difference to watch'}**\n${biggestDifference}`,
+      behaviorTable,
+      `**2. ${fr ? 'Exemple débutant côte à côte' : 'Beginner side-by-side example'}**\n\`\`\`python\n${traitA.literal}\n\n${traitB.literal}\n\`\`\``,
+      `**3. ${fr ? `Exemple avec ${a.canonicalName}` : `${a.canonicalName} example`}**\n\`\`\`python\n${exampleA}\n\`\`\``,
+      `**4. ${fr ? `Exemple avec ${b.canonicalName}` : `${b.canonicalName} example`}**\n\`\`\`python\n${exampleB}\n\`\`\``,
+      `**5. ${fr ? 'À vous' : 'Try it'}**\n${fr ? `Représentez les mêmes données une fois avec \`${a.canonicalName}\` et une fois avec \`${b.canonicalName}\`, puis comparez la façon d’accéder à une valeur.` : `Represent the same information once with ${a.canonicalName} and once with ${b.canonicalName}, then compare how one value is accessed.`}`,
+    ].join('\n\n');
+  }
+
+  const intermediate = [
+    header,
+    `**1. ${fr ? 'Différence principale' : 'Core difference'}**\n${biggestDifference}`,
+    `**2. ${fr ? 'Comparaison du comportement' : 'Behavior comparison'}**\n${behaviorTable}`,
+    `**3. ${fr ? 'Exemples côte à côte' : 'Side-by-side examples'}**\n${comparisonExampleBlock(a, traitA, language)}\n\n${comparisonExampleBlock(b, traitB, language)}`,
+    `**4. ${fr ? 'Quand choisir chacun' : 'When to choose each'}**\n- **${a.canonicalName}:** ${localizedComparisonTrait(traitA.choose, language)}\n- **${b.canonicalName}:** ${localizedComparisonTrait(traitB.choose, language)}`,
+    `**5. ${fr ? 'Erreurs fréquentes' : 'Common mistakes'}**\n- **${a.canonicalName}:** ${language === 'fr' ? localizeAiText(a.raises, 'fr') : a.raises}\n- **${b.canonicalName}:** ${language === 'fr' ? localizeAiText(b.raises, 'fr') : b.raises}`,
+    `**6. ${fr ? 'Sources' : 'Sources'}**\n- ${a.sourceUrl}\n- ${b.sourceUrl}`,
+  ];
+  if (mode === 'normal') return intermediate.join('\n\n');
+
+  return [
+    ...intermediate,
+    `**7. ${fr ? 'Mécanismes internes et compromis' : 'Internals and tradeoffs'}**\n**${a.canonicalName}:** ${language === 'fr' ? localizeAiText(a.details, 'fr') : a.details}\n\n**${b.canonicalName}:** ${language === 'fr' ? localizeAiText(b.details, 'fr') : b.details}`,
+    `**8. ${fr ? 'Contrats et cas limites' : 'Contracts and edge cases'}**\n- **${a.canonicalName}:** kind=${a.kind}, mutation=${a.mutates}, returns=${a.returns}\n- **${b.canonicalName}:** kind=${b.kind}, mutation=${b.mutates}, returns=${b.returns}`,
+    `**9. ${fr ? 'Versions et sources officielles' : 'Versions and official sources'}**\n- **${a.canonicalName}:** ${a.version} — ${a.sourceUrl}\n- **${b.canonicalName}:** ${b.version} — ${b.sourceUrl}`,
+  ].join('\n\n');
+};
+
+export const answerPythonKnowledgeComparison = (question: string, language: KnowledgeLanguage): string | null => {
+  return answerPythonKnowledgeComparisonAtLevel(question, language, 'normal');
 };
 
 export const answerPythonVersionQuestion = (question: string, language: KnowledgeLanguage): string | null => {

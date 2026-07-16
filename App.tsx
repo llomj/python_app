@@ -15913,13 +15913,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v277') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v278') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v277')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v278')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -18063,12 +18063,13 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ? tutor.answerTutorMode(effectiveQuestion, generalAiTutorMode, effectiveMode, appLang)
                 : null;
             const prioritizedComparisonAnswer = asksApiComparison
-                ? answerPythonApiComparison(effectiveQuestion, appLang)
-                    || knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang)
+                ? knowledge.answerPythonKnowledgeComparisonAtLevel(effectiveQuestion, appLang, effectiveMode)
+                    || answerPythonApiComparison(effectiveQuestion, appLang)
                 : null;
             let refAnswer: string | null = codeCommand.directAnswer || prioritizedTutorAnswer || prioritizedComparisonAnswer;
             if (!refAnswer && !shouldCreateQuiz) {
                 refAnswer = (apiCatalog ? `**${apiCatalog.title}**\n\n${apiCatalog.intro}` : null)
+                || knowledge.answerPythonKnowledgeComparisonAtLevel(effectiveQuestion, appLang, effectiveMode)
                 || answerPythonApiComparison(effectiveQuestion, appLang)
                 || immediateApiAnswer
                 || answerPythonBuiltinQuery(effectiveQuestion, appLang)
@@ -18080,7 +18081,6 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 || answerPythonTestExecutionRequest(effectiveQuestion, appLang)
                 || knowledge.answerPythonCatalogQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonCallableSignatureQuestion(effectiveQuestion, appLang)
-                || knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang)
                 || knowledge.answerPythonClassificationQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang)
                 || knowledge.answerPythonProtocolQuestion(effectiveQuestion, appLang)
@@ -18211,7 +18211,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     refAnswer = knowledge.answerPythonEvaluationAndScopeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'comparison':
-                    refAnswer = knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang) || buildGeneralAiComparisonAnswer(effectiveQuestion);
+                    refAnswer = knowledge.answerPythonKnowledgeComparisonAtLevel(effectiveQuestion, appLang, effectiveMode) || buildGeneralAiComparisonAnswer(effectiveQuestion);
                     break;
                 case 'count':
                     countAnswer = buildGeneralAiCountAnswer(effectiveQuestion, appLang, knowledge);
@@ -18271,7 +18271,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'comparison_reference':
                     refAnswer = answerPythonComparisonReference(effectiveQuestion, appLang)
-                        || knowledge.answerPythonKnowledgeComparison(effectiveQuestion, appLang);
+                        || knowledge.answerPythonKnowledgeComparisonAtLevel(effectiveQuestion, appLang, effectiveMode);
                     break;
                 case 'string_methods':
                     refAnswer = answerPythonStringMethods(effectiveQuestion, appLang)
