@@ -17,6 +17,7 @@ const runtimeBundle = path.join(tempDir, 'runtime.cjs');
 const verificationBundle = path.join(tempDir, 'verification.cjs');
 const tutorBundle = path.join(tempDir, 'tutor.cjs');
 const advancedBundle = path.join(tempDir, 'advanced.cjs');
+const plannerBundle = path.join(tempDir, 'planner.cjs');
 
 const bundle = (entry, outfile) => buildSync({
   entryPoints: [path.join(root, entry)],
@@ -37,6 +38,7 @@ try {
   bundle('services/generalAiVerification.ts', verificationBundle);
   bundle('services/generalAiTutor.ts', tutorBundle);
   bundle('services/generalAiAdvanced.ts', advancedBundle);
+  bundle('services/generalAiQueryPlanner.ts', plannerBundle);
 
   const knowledge = require(knowledgeBundle);
   const concepts = require(conceptBundle);
@@ -47,6 +49,7 @@ try {
   const verification = require(verificationBundle);
   const tutor = require(tutorBundle);
   const advanced = require(advancedBundle);
+  const planner = require(plannerBundle);
   const failures = [];
   const terms = concepts.getAllConceptTerms();
   let structuredRecords = 0;
@@ -367,6 +370,44 @@ try {
   if (!progressiveSys.includes('Progressive examples: sys') || !progressiveSys.includes('import sys')) failures.push('Progressive sys examples failed');
   if (!contextualSys.includes('**sys — intermediate level**') || !contextualSys.includes('sys.argv') || contextualSys.includes('capsys')) failures.push('Contextual sys retrieval failed');
 
+  const multiIntentPlan = planner.planGeneralAiQuestion(
+    'Compare list and dic, explain performance, show examples, and go in depth',
+    'en',
+    'normal',
+  );
+  const multiIntentNames = multiIntentPlan.intents.map(item => item.intent);
+  const multiEntityNames = multiIntentPlan.entities.map(item => item.canonical);
+  if (multiIntentPlan.primary.intent !== 'comparison'
+      || !multiIntentNames.includes('performance')
+      || !multiIntentNames.includes('examples')
+      || !multiEntityNames.includes('list')
+      || !multiEntityNames.includes('dict')
+      || multiIntentPlan.requestedDepth !== 'deep'
+      || multiIntentPlan.needsClarification
+      || !multiIntentPlan.groundingContext.includes('VERIFIED OFFLINE PYTHON REFERENCES')) failures.push('Structured multi-intent query planning failed');
+  const fuzzyPlan = planner.planGeneralAiQuestion('isintance', 'en', 'normal');
+  if (!fuzzyPlan.entities.some(item => item.canonical === 'isinstance')) failures.push('Planner fuzzy entity resolution failed');
+  const catalogPlan = planner.planGeneralAiQuestion('List all built-in functions', 'en', 'normal');
+  if (catalogPlan.entities.some(item => ['list', 'all'].includes(item.canonical))) failures.push('Catalog command words leaked into planner entities');
+  const ambiguousPlan = planner.planGeneralAiQuestion('What does append do?', 'en', 'normal');
+  if (!ambiguousPlan.needsClarification || !ambiguousPlan.clarification.includes('matches several APIs')) failures.push('Planner ambiguity clarification failed');
+  const conversationContext = planner.buildGeneralAiConversationContext([
+    { role: 'user', text: 'Explain list comprehensions' },
+    { role: 'assistant', text: 'A list comprehension creates a list.' },
+  ], 'en', 'normal');
+  const contextualPlan = planner.planGeneralAiQuestion('go deeper', 'en', 'normal', conversationContext);
+  if (!contextualPlan.usedConversationContext || !contextualPlan.entities.some(item => ['list', 'comprehension'].includes(item.canonical.toLowerCase())) || contextualPlan.requestedDepth !== 'deep') failures.push('Structured conversation context failed');
+  const codePlan = planner.planGeneralAiQuestion('Explain this code:\n```python\nvalues = [1, 2]\nprint(sum(values))\n```', 'en', 'normal');
+  if (codePlan.codeBlocks.length !== 1 || !codePlan.codeBlocks[0].includes('sum(values)')) failures.push('Planner code extraction failed');
+  const groundedQuestion = planner.buildGroundedGeneralAiModelQuestion(multiIntentPlan);
+  if (!groundedQuestion.includes('factual constraints') || !groundedQuestion.includes('[list]') || !groundedQuestion.includes('[dict]')) failures.push('Grounded model prompt failed');
+  const plannedExamples = planner.enrichGeneralAiAnswerFromPlan('A short verified answer.', { ...multiIntentPlan, requestedDepth: 'examples' }, 'en');
+  if ((plannedExamples.match(/```python/g) || []).length < 2 || !plannedExamples.includes('Verified progressive examples')) failures.push('Planned example composition failed');
+  const plannedPerformance = planner.enrichGeneralAiAnswerFromPlan('A comparison answer.', multiIntentPlan, 'en');
+  if (!plannedPerformance.includes('Verified performance notes') || !plannedPerformance.includes('Index access is O(1)') || !plannedPerformance.includes('Key lookup')) failures.push('Planned performance composition failed');
+  if (!planner.assessGeneralAiDepthContract('Internals and edge cases are explained.', 'deep').valid
+      || planner.assessGeneralAiDepthContract('One sentence.', 'examples').valid) failures.push('Answer-depth contract checks failed');
+
   const beginnerComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'simple') || '';
   const intermediateComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'normal') || '';
   const expertComparison = knowledge.answerPythonKnowledgeComparisonAtLevel('list vs dic', 'en', 'deep') || '';
@@ -494,6 +535,27 @@ try {
   const safeFunctionLoop = runtime.assessGeneralAiRuntimeSafety('What does this print?\n```python\ndef total(values):\n    result = 0\n    for value in values:\n        result += value\n    return result\nprint(total([1, 2, 3]))\n```');
   const unsafeLargeRange = runtime.assessGeneralAiRuntimeSafety('Explain:\n```python\nfor item in range(9000):\n    print(item)\n```');
   if (!safeRuntime.safe || !safeFunctionLoop.safe || unsafeImport.safe || unsafeLoop.safe || unsafeLargeRange.safe) failures.push('Guarded runtime safety policy failed');
+  const astSource = [
+    'import math',
+    'def total(values):',
+    '    result = 0',
+    '    for value in values:',
+    '        result += value',
+    '    values.append(result)',
+    '    return result',
+    'print(total([1, 2, 3]))',
+  ].join('\n');
+  const astScript = runtime.buildGeneralAiAstAnalysisScript(astSource).replace(/\njson\.dumps\(__ast_payload\)\n$/, '\nprint(json.dumps(__ast_payload))\n');
+  const astResult = JSON.parse(execFileSync('python3', ['-c', astScript], { encoding: 'utf8' }));
+  const astReport = runtime.formatGeneralAiAstAnalysis(astResult, 'en');
+  if (!astResult.ok
+      || astResult.functions[0]?.name !== 'total'
+      || !astResult.functions[0]?.parameters.includes('values')
+      || !astResult.loops.some(item => item.kind === 'For')
+      || !astResult.mutations.some(item => item.method === 'append')
+      || !astResult.imports.some(item => item.name === 'math')
+      || !astReport.includes('Verified Python structure (AST)')
+      || !astReport.includes('Detected mutations')) failures.push('Non-executing AST analysis failed');
   const runtimeEvidence = runtime.formatGeneralAiRuntimeEvidence({ ok: true, stdout: '3\n', resultRepr: '', resultType: 'NoneType', errorType: '', errorMessage: '', variables: { total: '3' }, executionTrace: [{ line: 1, event: 'call', function: 'total', variables: {}, changedVariables: {} }, { line: 2, event: 'line', function: 'total', variables: { total: '3' }, changedVariables: { total: '3' } }, { line: 2, event: 'return', function: 'total', variables: { total: '3' }, changedVariables: {}, returnValue: '3' }] }, 'en');
   const runtimeFailure = runtime.formatGeneralAiRuntimeEvidence({ ok: false, stdout: '', resultRepr: '', resultType: '', errorType: 'TypeError', errorMessage: 'bad type', errorLine: 4, variables: { value: "'x'" }, executionTrace: [{ line: 4, event: 'line', function: 'change', variables: { value: "'x'" }, changedVariables: { value: "'x'" } }] }, 'fr');
   if (!runtimeEvidence.includes('Actual output') || !runtimeEvidence.includes('Final variable state') || !runtimeEvidence.includes('Verified step-by-step debugging') || !runtimeEvidence.includes('return `total()`') || !runtimeEvidence.includes('value=`3`') || !runtimeFailure.includes('TypeError') || !runtimeFailure.includes('Trace avant l’erreur')) failures.push('Runtime evidence formatting failed');

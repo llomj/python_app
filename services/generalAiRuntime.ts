@@ -52,6 +52,24 @@ export interface GeneralAiDoctestRunResult {
   setupError: string;
 }
 
+export interface GeneralAiAstAnalysisResult {
+  ok: boolean;
+  errorType: string;
+  errorMessage: string;
+  errorLine?: number;
+  functions: Array<{ name: string; line: number; parameters: string[]; async: boolean; returns: number }>;
+  classes: Array<{ name: string; line: number; bases: string[] }>;
+  assignments: Array<{ line: number; targets: string[] }>;
+  calls: Array<{ line: number; name: string }>;
+  loops: Array<{ line: number; kind: string }>;
+  branches: Array<{ line: number; kind: string }>;
+  returns: Array<{ line: number; hasValue: boolean }>;
+  mutations: Array<{ line: number; target: string; method: string }>;
+  imports: Array<{ line: number; name: string }>;
+  loadedNames: string[];
+  storedNames: string[];
+}
+
 export const extractGeneralAiPythonCode = (question: string): string => {
   const fenced = question.match(/```(?:python)?\s*\n?([\s\S]*?)```/i);
   if (fenced) return fenced[1].trim();
@@ -130,6 +148,91 @@ export const assessGeneralAiDoctestSafety = (question: string): GeneralAiRuntime
   if (!examples.length) return { safe: false, reason: 'No doctest prompts were found.', code: base.code };
   if (examples.length > 20) return { safe: false, reason: 'A maximum of 20 doctest examples can run at once.', code: base.code };
   return { safe: true, reason: 'Doctest examples use the bounded local runtime policy.', code: base.code };
+};
+
+export const buildGeneralAiAstAnalysisScript = (code: string): string => `
+import ast, json
+__ast_source = ${JSON.stringify(code)}
+__ast_payload = {
+    "ok": False, "errorType": "", "errorMessage": "", "errorLine": None,
+    "functions": [], "classes": [], "assignments": [], "calls": [],
+    "loops": [], "branches": [], "returns": [], "mutations": [], "imports": [],
+    "loadedNames": [], "storedNames": [],
+}
+try:
+    __ast_tree = ast.parse(__ast_source, mode="exec")
+    __ast_mutating_methods = {"append", "clear", "discard", "extend", "insert", "pop", "popitem", "remove", "reverse", "setdefault", "sort", "update", "add"}
+    def __ast_name(node):
+        if isinstance(node, ast.Name):
+            return node.id
+        if isinstance(node, ast.Attribute):
+            prefix = __ast_name(node.value)
+            return f"{prefix}.{node.attr}" if prefix else node.attr
+        if isinstance(node, ast.Subscript):
+            return __ast_name(node.value)
+        if isinstance(node, (ast.Tuple, ast.List)):
+            return ", ".join(filter(None, (__ast_name(item) for item in node.elts)))
+        return ""
+    for __ast_node in ast.walk(__ast_tree):
+        if isinstance(__ast_node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            __ast_parameters = [arg.arg for arg in [*__ast_node.args.posonlyargs, *__ast_node.args.args, *__ast_node.args.kwonlyargs]]
+            if __ast_node.args.vararg:
+                __ast_parameters.append("*" + __ast_node.args.vararg.arg)
+            if __ast_node.args.kwarg:
+                __ast_parameters.append("**" + __ast_node.args.kwarg.arg)
+            __ast_return_count = sum(isinstance(item, ast.Return) for item in ast.walk(__ast_node))
+            __ast_payload["functions"].append({"name": __ast_node.name, "line": __ast_node.lineno, "parameters": __ast_parameters, "async": isinstance(__ast_node, ast.AsyncFunctionDef), "returns": __ast_return_count})
+        elif isinstance(__ast_node, ast.ClassDef):
+            __ast_payload["classes"].append({"name": __ast_node.name, "line": __ast_node.lineno, "bases": [__ast_name(base) for base in __ast_node.bases if __ast_name(base)]})
+        elif isinstance(__ast_node, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
+            __ast_targets = __ast_node.targets if isinstance(__ast_node, ast.Assign) else [__ast_node.target]
+            __ast_payload["assignments"].append({"line": __ast_node.lineno, "targets": [__ast_name(target) for target in __ast_targets if __ast_name(target)]})
+        elif isinstance(__ast_node, ast.Call):
+            __ast_call_name = __ast_name(__ast_node.func)
+            __ast_payload["calls"].append({"line": __ast_node.lineno, "name": __ast_call_name or "<expression>"})
+            if isinstance(__ast_node.func, ast.Attribute) and __ast_node.func.attr in __ast_mutating_methods:
+                __ast_payload["mutations"].append({"line": __ast_node.lineno, "target": __ast_name(__ast_node.func.value), "method": __ast_node.func.attr})
+        elif isinstance(__ast_node, (ast.For, ast.AsyncFor, ast.While)):
+            __ast_payload["loops"].append({"line": __ast_node.lineno, "kind": type(__ast_node).__name__})
+        elif isinstance(__ast_node, (ast.If, ast.IfExp, ast.Match, ast.Try)):
+            __ast_payload["branches"].append({"line": __ast_node.lineno, "kind": type(__ast_node).__name__})
+        elif isinstance(__ast_node, ast.Return):
+            __ast_payload["returns"].append({"line": __ast_node.lineno, "hasValue": __ast_node.value is not None})
+        elif isinstance(__ast_node, (ast.Import, ast.ImportFrom)):
+            if isinstance(__ast_node, ast.Import):
+                __ast_names = [alias.name for alias in __ast_node.names]
+            else:
+                __ast_names = [f"{__ast_node.module or ''}.{alias.name}".strip(".") for alias in __ast_node.names]
+            __ast_payload["imports"].extend({"line": __ast_node.lineno, "name": name} for name in __ast_names)
+        elif isinstance(__ast_node, ast.Name):
+            key = "storedNames" if isinstance(__ast_node.ctx, ast.Store) else "loadedNames" if isinstance(__ast_node.ctx, ast.Load) else None
+            if key and __ast_node.id not in __ast_payload[key]:
+                __ast_payload[key].append(__ast_node.id)
+    for __ast_key in ("functions", "classes", "assignments", "calls", "loops", "branches", "returns", "mutations", "imports"):
+        __ast_payload[__ast_key].sort(key=lambda item: (item["line"], item.get("name", "")))
+    __ast_payload["ok"] = True
+except SyntaxError as __ast_error:
+    __ast_payload.update({"errorType": "SyntaxError", "errorMessage": __ast_error.msg, "errorLine": __ast_error.lineno})
+except Exception as __ast_error:
+    __ast_payload.update({"errorType": type(__ast_error).__name__, "errorMessage": str(__ast_error)})
+json.dumps(__ast_payload)
+`;
+
+export const formatGeneralAiAstAnalysis = (result: GeneralAiAstAnalysisResult, language: GeneralAiRuntimeLanguage): string => {
+  const fr = language === 'fr';
+  if (!result.ok) {
+    return `**${fr ? 'Analyse syntaxique Python' : 'Python syntax analysis'}**\n${result.errorType || 'SyntaxError'}${result.errorLine ? ` (${fr ? 'ligne' : 'line'} ${result.errorLine})` : ''}: ${result.errorMessage || (fr ? 'syntaxe invalide' : 'invalid syntax')}`;
+  }
+  const sections: string[] = [`**${fr ? 'Structure Python vérifiée (AST)' : 'Verified Python structure (AST)'}**`];
+  if (result.functions.length) sections.push(`${fr ? 'Fonctions' : 'Functions'}:\n${result.functions.map(item => `- \`${item.async ? 'async ' : ''}${item.name}(${item.parameters.join(', ')})\` — ${fr ? 'ligne' : 'line'} ${item.line}; ${item.returns} ${fr ? 'instruction(s) return' : 'return statement(s)'}`).join('\n')}`);
+  if (result.classes.length) sections.push(`${fr ? 'Classes' : 'Classes'}:\n${result.classes.map(item => `- \`${item.name}\` — ${fr ? 'ligne' : 'line'} ${item.line}${item.bases.length ? `; ${fr ? 'bases' : 'bases'}: ${item.bases.join(', ')}` : ''}`).join('\n')}`);
+  if (result.assignments.length) sections.push(`${fr ? 'Affectations' : 'Assignments'}:\n${result.assignments.slice(0, 12).map(item => `- ${fr ? 'Ligne' : 'Line'} ${item.line}: \`${item.targets.join(', ') || '?'}\``).join('\n')}`);
+  if (result.calls.length) sections.push(`${fr ? 'Appels' : 'Calls'}:\n${result.calls.slice(0, 16).map(item => `- ${fr ? 'Ligne' : 'Line'} ${item.line}: \`${item.name}()\``).join('\n')}`);
+  if (result.loops.length || result.branches.length) sections.push(`${fr ? 'Flux de contrôle' : 'Control flow'}:\n${[...result.loops, ...result.branches].sort((a, b) => a.line - b.line).map(item => `- ${fr ? 'Ligne' : 'Line'} ${item.line}: ${item.kind}`).join('\n')}`);
+  if (result.mutations.length) sections.push(`${fr ? 'Mutations détectées' : 'Detected mutations'}:\n${result.mutations.map(item => `- ${fr ? 'Ligne' : 'Line'} ${item.line}: \`${item.target}.${item.method}()\``).join('\n')}`);
+  if (result.imports.length) sections.push(`${fr ? 'Importations (analysées, non exécutées)' : 'Imports (analyzed, not executed)'}:\n${result.imports.map(item => `- ${fr ? 'Ligne' : 'Line'} ${item.line}: \`${item.name}\``).join('\n')}`);
+  if (result.storedNames.length || result.loadedNames.length) sections.push(`${fr ? 'Résolution des noms' : 'Name resolution'}:\n- ${fr ? 'Écrits' : 'Stored'}: ${result.storedNames.map(name => `\`${name}\``).join(', ') || '—'}\n- ${fr ? 'Lus' : 'Loaded'}: ${result.loadedNames.map(name => `\`${name}\``).join(', ') || '—'}`);
+  return sections.join('\n\n');
 };
 
 export const buildGeneralAiTestRunnerScript = (code: string): string => `

@@ -16,6 +16,7 @@ fs.writeFileSync(entryFile, [
   `export * as intent from ${JSON.stringify(path.join(root, 'services/generalAiIntent.ts'))};`,
   `export * as verification from ${JSON.stringify(path.join(root, 'services/generalAiVerification.ts'))};`,
   `export * as localization from ${JSON.stringify(path.join(root, 'services/aiLocalization.ts'))};`,
+  `export * as planner from ${JSON.stringify(path.join(root, 'services/generalAiQueryPlanner.ts'))};`,
 ].join('\n'));
 
 const normalize = value => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -23,7 +24,7 @@ const includesAll = (answer, fragments) => fragments.every(fragment => normalize
 
 try {
   buildSync({ entryPoints: [entryFile], outfile: bundleFile, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent' });
-  const { knowledge, intent, verification, localization } = require(bundleFile);
+  const { knowledge, intent, verification, localization, planner } = require(bundleFile);
   const failures = [];
   const timings = [];
   let checks = 0;
@@ -182,6 +183,59 @@ try {
     check(switched.question === 'what is tuple', `Subject switch failed after ${subject}`);
   }
 
+  const plannerSubjects = ['list', 'dict', 'tuple', 'set', 'str', 'bytes', 'len', 'range', 'zip', 'enumerate', 'lambda', 'closure', 'decorator', 'generator', 'iterator', 'recursion', 'context manager', 'dataclass', 'namespace', 'scope'];
+  for (const subject of plannerSubjects) {
+    for (const question of [`What is ${subject}?`, `Explain ${subject}`, `${subject}`]) {
+      const plan = planner.planGeneralAiQuestion(question, 'en', 'normal');
+      check(plan.primary.intent !== 'unknown', `Planner lost intent: ${question}`);
+      check(plan.entities.length > 0, `Planner lost entity: ${question}`);
+      check(plan.confidence >= 0.7, `Planner confidence too low: ${question}`);
+      check(!plan.needsClarification, `Planner unnecessarily clarified: ${question}`);
+    }
+  }
+
+  const plannerComparisons = [['list', 'tuple'], ['dict', 'set'], ['str', 'bytes'], ['iterator', 'iterable'], ['generator', 'list']];
+  for (const [left, right] of plannerComparisons) {
+    for (const question of [`${left} vs ${right}`, `Compare ${left} with ${right}`, `What is the difference between ${left} and ${right}?`]) {
+      const plan = planner.planGeneralAiQuestion(question, 'en', 'normal');
+      check(plan.requests.comparison, `Planner lost comparison request: ${question}`);
+      check(plan.entities.some(item => normalize(item.canonical).includes(normalize(left))), `Planner lost left comparison entity: ${question}`);
+      check(plan.entities.some(item => normalize(item.canonical).includes(normalize(right))), `Planner lost right comparison entity: ${question}`);
+      check(!plan.needsClarification, `Planner unnecessarily clarified comparison: ${question}`);
+    }
+  }
+
+  const multiIntentCases = [
+    ['Compare list and tuple, show examples and explain performance', ['comparison', 'examples', 'performance']],
+    ['Explain list internals, workflow, common mistakes, and official documentation', ['mechanism', 'documentation']],
+    ['Show examples of dict and explain execution order', ['examples', 'execution_model']],
+    ['How many list methods exist and show examples?', ['count', 'examples']],
+  ];
+  for (const [question, expectedIntents] of multiIntentCases) {
+    const plan = planner.planGeneralAiQuestion(question, 'en', 'normal');
+    for (const expectedIntent of expectedIntents) check(plan.intents.some(item => item.intent === expectedIntent), `Planner lost ${expectedIntent}: ${question}`);
+    check(plan.intents.length >= 2, `Planner did not preserve multiple intents: ${question}`);
+  }
+
+  for (const [question, expectedDepth] of [['Explain list simply', 'simple'], ['Explain list at intermediate depth', 'normal'], ['Go deeper into list internals', 'deep'], ['Give several examples of list', 'examples']]) {
+    const plan = planner.planGeneralAiQuestion(question, 'en', 'normal');
+    check(plan.requestedDepth === expectedDepth, `Planner depth failed: ${question}`);
+  }
+
+  const plannerContext = planner.buildGeneralAiConversationContext([
+    { role: 'user', text: 'Explain generators' },
+    { role: 'assistant', text: 'A generator yields values lazily.' },
+  ], 'en', 'normal');
+  for (const followUp of ['go deeper', 'show another example', 'why?']) {
+    const plan = planner.planGeneralAiQuestion(followUp, 'en', 'normal', plannerContext);
+    check(plan.usedConversationContext && plan.entities.some(item => item.canonical === 'generator'), `Planner context failed: ${followUp}`);
+  }
+
+  for (const method of ['append', 'count', 'index', 'pop', 'remove', 'clear', 'copy', 'reverse']) {
+    const plan = planner.planGeneralAiQuestion(`What does ${method} do?`, 'en', 'normal');
+    check(plan.needsClarification && plan.clarification.includes('matches several APIs'), `Planner owner clarification failed: ${method}`);
+  }
+
   const misspellings = [
     ['leng', 'len'], ['dictonary', 'dict'], ['genrator', 'generator'], ['itterator', 'iterator'],
     ['decorater', 'decorator'], ['recurrsion', 'recursion'], ['comprehenshun', 'comprehension'], ['namepace', 'namespace'],
@@ -227,7 +281,7 @@ try {
   console.log(`Latency p50: ${percentile(0.5).toFixed(2)}ms`);
   console.log(`Latency p95: ${p95.toFixed(2)}ms`);
   console.log(`Latency max: ${maximum.toFixed(2)}ms`);
-  console.log('Coverage: bilingual definitions, comparisons, signatures, classifications, protocols, syntax, execution order, conversations, misspellings, ambiguity, uncertainty, verification');
+  console.log('Coverage: bilingual definitions, comparisons, signatures, classifications, protocols, syntax, execution order, structured planning, multi-intent questions, conversations, misspellings, ambiguity, uncertainty, verification');
 
   if (failures.length) {
     console.error(`\nFailures (${failures.length}):`);

@@ -54,10 +54,10 @@ import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
-import { classifyGeneralAiIntent, shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
+import { shouldClarifyGeneralAiQuestion } from './services/generalAiIntent';
 import { answerPythonTraceback } from './services/generalAiTraceback';
-import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
-import { answerGeneralAiApiCatalogItem, answerGeneralAiProgressRequest, answerPythonApiComparison, answerPythonAsyncPatterns, answerPythonBuiltinQuery, answerPythonCliPatterns, answerPythonCodeComparison, answerPythonCodeQuality, answerPythonCodeRewriteRequest, answerPythonCodeReview, answerPythonComparisonReference, answerPythonComplexityRequest, answerPythonConcurrencyGuide, answerPythonContextManagerGuide, answerPythonDatabaseGuide, answerPythonDatetimeGuide, answerPythonDataStructureChoice, answerPythonDecoratorPatterns, answerPythonDesignRationaleQuestion, answerPythonDictMethods, answerPythonDoctestExecutionRequest, answerPythonEdgeCases, answerPythonEnvGuide, answerPythonFileIoPatterns, answerPythonFormattingGuide, answerPythonFunctionalGuide, answerPythonFunctionContractRequest, answerPythonHttpApiGuide, answerPythonImportGuide, answerPythonLearningPath, answerPythonLibraryHelp, answerPythonListMethods, answerPythonLoggingPatterns, answerPythonMethodQuery, answerPythonMisconceptionRequest, answerPythonModuleProjectRequest, answerPythonPackageAdvice, answerPythonPackagingGuide, answerPythonPep8Guide, answerPythonProfilingGuide, answerPythonProjectStructureGuide, answerPythonRefactoringRecipes, answerPythonScopeVariable, answerPythonSecurityGuide, answerPythonSerializationGuide, answerPythonStringMethods, answerPythonToolingGuide, answerPythonTestCaseRequest, answerPythonTestExecutionRequest, answerPythonTestingPatterns, answerPythonTraceRequest, answerPythonTypeHintGuide, answerPythonVersionCompatibilityRequest, answerPythonWhatIfQuestion, buildGeneralAiApiAmbiguityCatalog, buildGeneralAiApiCatalog, buildGeneralAiDisambiguationList, buildGeneralAiSmartFollowUp, createAdaptiveQuiz, evaluateAdaptiveQuiz, getGeneralAiApiCatalogExample, updateGeneralAiMistakes, type GeneralAiApiCatalog, type GeneralAiMistakeProfile, type GeneralAiQuizState } from './services/generalAiAdvanced';
+import { assessGeneralAiDoctestSafety, assessGeneralAiRuntimeSafety, assessGeneralAiTestSafety, buildGeneralAiAstAnalysisScript, buildGeneralAiDoctestRunnerScript, buildGeneralAiRuntimeScript, buildGeneralAiTestRunnerScript, formatGeneralAiAstAnalysis, formatGeneralAiDoctestResults, formatGeneralAiRuntimeEvidence, formatGeneralAiTestResults, type GeneralAiAstAnalysisResult, type GeneralAiDoctestRunResult, type GeneralAiRuntimeResult, type GeneralAiTestRunResult } from './services/generalAiRuntime';
+import type { GeneralAiApiCatalog, GeneralAiMistakeProfile, GeneralAiQuizState } from './services/generalAiAdvanced';
 import { formatGeneralAiEvidenceLabel, verifyGeneralAiAnswer, type GeneralAiEvidenceKind } from './services/generalAiVerification';
 import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
@@ -4042,7 +4042,7 @@ const enrichGeneralAiAnswer = (answer: string, question: string, mode: GeneralAi
     const generatedExamples = (mode === 'examples' || mode === 'deep') && !/```python\b/.test(answer) && supportsGeneratedExamples
         ? buildGeneralAiExampleSet(topic, language)
         : '';
-    const topicRelations = buildGeneralAiSmartFollowUp(topic, language);
+    const topicRelations = knowledge.answerPythonRelationships(`what concepts are related to ${topic}?`, language) || '';
     return composeGeneralAiAnswer({
         answer,
         topic,
@@ -14829,6 +14829,9 @@ function GeneralAiApiCatalogView({
     const [returnFilter, setReturnFilter] = useState('all');
     const [behavior, setBehavior] = useState('all');
     const [expandedKey, setExpandedKey] = useState<string | null>(null);
+    const [catalogDetails, setCatalogDetails] = useState<Record<string, string>>({});
+    const [catalogExamples, setCatalogExamples] = useState<Record<string, string>>({});
+    const [loadingDetailKey, setLoadingDetailKey] = useState<string | null>(null);
     const [runningKey, setRunningKey] = useState<string | null>(null);
     const [runResults, setRunResults] = useState<Record<string, string>>({});
     const fr = language === 'fr';
@@ -14853,6 +14856,25 @@ function GeneralAiApiCatalogView({
         const result = await onRunExample(code);
         setRunResults(current => ({ ...current, [key]: result }));
         setRunningKey(null);
+    };
+
+    const toggleCatalogItem = async (key: string, fallbackExample: string) => {
+        if (expandedKey === key) {
+            setExpandedKey(null);
+            return;
+        }
+        setExpandedKey(key);
+        if (catalogDetails[key]) return;
+        setLoadingDetailKey(key);
+        try {
+            const advanced = await import('./services/generalAiAdvanced');
+            const detail = advanced.answerGeneralAiApiCatalogItem(key, language) || '';
+            const example = fallbackExample || advanced.getGeneralAiApiCatalogExample(key, language);
+            setCatalogDetails(current => ({ ...current, [key]: detail }));
+            setCatalogExamples(current => ({ ...current, [key]: example }));
+        } finally {
+            setLoadingDetailKey(current => current === key ? null : current);
+        }
     };
 
     return (
@@ -14888,20 +14910,25 @@ function GeneralAiApiCatalogView({
             </div>
             {visibleItems.map((item, index) => {
                 const expanded = expandedKey === item.key;
-                const exampleCode = item.exampleCode || getGeneralAiApiCatalogExample(item.key, language);
+                const exampleCode = item.exampleCode || catalogExamples[item.key] || '';
                 const showCategory = index === 0 || visibleItems[index - 1]?.category !== item.category;
-                const detail = expanded ? answerGeneralAiApiCatalogItem(item.key, language) : null;
+                const detail = expanded ? catalogDetails[item.key] : null;
                 return (
                     <React.Fragment key={item.key}>
                         {showCategory && <div className="pt-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: accentColor }}>{item.category}</div>}
                         <div className="overflow-hidden rounded-xl border" style={{ borderColor: hexToRgba(accentColor, expanded ? 0.55 : 0.24), backgroundColor: hexToRgba(accentColor, expanded ? 0.1 : 0.04) }}>
-                            <button type="button" data-general-ai-api-item={item.key} aria-expanded={expanded} onClick={() => setExpandedKey(current => current === item.key ? null : item.key)} className="flex w-full min-w-0 items-center justify-between gap-3 px-3 py-2 text-left">
+                            <button type="button" data-general-ai-api-item={item.key} aria-expanded={expanded} onClick={() => void toggleCatalogItem(item.key, item.exampleCode || '')} className="flex w-full min-w-0 items-center justify-between gap-3 px-3 py-2 text-left">
                                 <span className="min-w-0">
                                     <span className="block truncate font-mono text-xs font-bold" style={{ color: editorColors.builtin }}>{item.signature}</span>
                                     <span className="mt-0.5 block truncate text-[11px] text-gray-300">{item.summary}</span>
                                 </span>
                                 {expanded ? <ChevronUp className="h-4 w-4 flex-none" /> : <ChevronDown className="h-4 w-4 flex-none" />}
                             </button>
+                            {expanded && loadingDetailKey === item.key && (
+                                <div className="border-t px-3 py-3 text-[10px] font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(accentColor, 0.24), color: accentColor }}>
+                                    {fr ? 'Chargement de la référence…' : 'Loading reference…'}
+                                </div>
+                            )}
                             {detail && (
                                 <div className="space-y-2 border-t px-3 py-3" style={{ borderColor: hexToRgba(accentColor, 0.24) }} data-general-ai-api-detail={item.key}>
                                     <ProblemAiText text={detail} editorColors={editorColors} accentColor={accentColor} />
@@ -15043,6 +15070,7 @@ const App: React.FC = () => {
     const [generalAiKeyOpen, setGeneralAiKeyOpen] = useState(false);
     const [generalAiControlsOpen, setGeneralAiControlsOpen] = useState(false);
     const [generalAiModePanelOpen, setGeneralAiModePanelOpen] = useState(false);
+    const [generalAiLocalLearningEnabled, setGeneralAiLocalLearningEnabled] = useState(() => localStorage.getItem('python_general_ai_local_learning_enabled') === 'true');
     const [generalAiClearFeedback, setGeneralAiClearFeedback] = useState(false);
     const [savedConversations, setSavedConversations] = useState<{ time: string; label: string; text: string }[]>(() => {
         try {
@@ -15913,13 +15941,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v279') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v280') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v279')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v280')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -17937,6 +17965,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     }, [appLang, exercise, output, outputStatus]);
 
     const openGeneralAi = useCallback(() => {
+        void Promise.all([
+            import('./services/generalAiAdvanced'),
+            import('./services/pythonKnowledge'),
+            import('./services/generalAiQueryPlanner'),
+            import('./services/generalAiTutor'),
+        ]).catch(() => undefined);
         if (generalAiMessages.length === 0) {
             setGeneralAiMessages([{
                 id: Date.now(),
@@ -17997,6 +18031,67 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const sendGeneralAiQuestion = useCallback(async (rawQuestion: string) => {
         const question = rawQuestion.trim();
         if (!question || generalAiRunning) return;
+        const {
+            answerGeneralAiProgressRequest,
+            answerPythonApiComparison,
+            answerPythonAsyncPatterns,
+            answerPythonBuiltinQuery,
+            answerPythonCliPatterns,
+            answerPythonCodeComparison,
+            answerPythonCodeQuality,
+            answerPythonCodeRewriteRequest,
+            answerPythonCodeReview,
+            answerPythonComparisonReference,
+            answerPythonComplexityRequest,
+            answerPythonConcurrencyGuide,
+            answerPythonContextManagerGuide,
+            answerPythonDatabaseGuide,
+            answerPythonDatetimeGuide,
+            answerPythonDataStructureChoice,
+            answerPythonDecoratorPatterns,
+            answerPythonDesignRationaleQuestion,
+            answerPythonDictMethods,
+            answerPythonDoctestExecutionRequest,
+            answerPythonEdgeCases,
+            answerPythonEnvGuide,
+            answerPythonFileIoPatterns,
+            answerPythonFormattingGuide,
+            answerPythonFunctionalGuide,
+            answerPythonFunctionContractRequest,
+            answerPythonHttpApiGuide,
+            answerPythonImportGuide,
+            answerPythonLearningPath,
+            answerPythonLibraryHelp,
+            answerPythonListMethods,
+            answerPythonLoggingPatterns,
+            answerPythonMethodQuery,
+            answerPythonMisconceptionRequest,
+            answerPythonModuleProjectRequest,
+            answerPythonPackageAdvice,
+            answerPythonPackagingGuide,
+            answerPythonPep8Guide,
+            answerPythonProfilingGuide,
+            answerPythonProjectStructureGuide,
+            answerPythonRefactoringRecipes,
+            answerPythonScopeVariable,
+            answerPythonSecurityGuide,
+            answerPythonSerializationGuide,
+            answerPythonStringMethods,
+            answerPythonToolingGuide,
+            answerPythonTestCaseRequest,
+            answerPythonTestExecutionRequest,
+            answerPythonTestingPatterns,
+            answerPythonTraceRequest,
+            answerPythonTypeHintGuide,
+            answerPythonVersionCompatibilityRequest,
+            answerPythonWhatIfQuestion,
+            buildGeneralAiApiAmbiguityCatalog,
+            buildGeneralAiApiCatalog,
+            buildGeneralAiDisambiguationList,
+            createAdaptiveQuiz,
+            evaluateAdaptiveQuiz,
+            updateGeneralAiMistakes,
+        } = await import('./services/generalAiAdvanced');
         const asksApiComparison = /\b(?:compare|difference between|versus|vs\.?|different from)\b/i.test(question);
         const immediateApiAnswer = asksApiComparison ? null : answerPythonBuiltinQuery(question, appLang) || answerPythonMethodQuery(question, appLang);
         const immediateApiCatalog = buildGeneralAiApiCatalog(question, appLang);
@@ -18022,9 +18117,10 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             }
             return;
         }
-        const [knowledge, tutor] = await Promise.all([
+        const [knowledge, tutor, planner] = await Promise.all([
             import('./services/pythonKnowledge'),
             import('./services/generalAiTutor'),
+            import('./services/generalAiQueryPlanner'),
         ]);
         const previousAssistantAnswer = [...generalAiMessages].reverse().find(message => message.role === 'assistant')?.text || '';
         const codeCommand = tutor.resolveTutorCodeCommand(question, previousAssistantAnswer, appLang);
@@ -18037,7 +18133,21 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const followUp = knowledge.resolveKnowledgeFollowUp(normalizedQuestion, previousUserQuestion, generalAiMode);
         const effectiveQuestion = codeCommand.effectiveQuestion || followUp.question;
         const adaptiveMode = tutor.inferTutorLevel(effectiveQuestion, generalAiMastery, generalAiMode, generalAiAdaptiveLevel);
-        const effectiveMode = followUp.usedContext && followUp.mode !== generalAiMode ? followUp.mode : adaptiveMode;
+        const baseEffectiveMode = followUp.usedContext && followUp.mode !== generalAiMode ? followUp.mode : adaptiveMode;
+        const conversationContext = planner.buildGeneralAiConversationContext(
+            generalAiMessages.map(message => ({ role: message.role === 'user' ? 'user' as const : 'assistant' as const, text: message.text })),
+            appLang,
+            baseEffectiveMode,
+        );
+        const queryPlan = planner.planGeneralAiQuestion(effectiveQuestion, appLang, baseEffectiveMode, conversationContext);
+        const effectiveMode = queryPlan.requestedDepth;
+        localStorage.setItem('python_general_ai_structured_context', JSON.stringify({
+            subjects: queryPlan.entities.map(entity => entity.canonical),
+            intents: queryPlan.intents.map(item => item.intent),
+            depth: effectiveMode,
+            confidence: queryPlan.confidence,
+            usedConversationContext: queryPlan.usedConversationContext,
+        }));
         const previousMasterySubject = Object.entries(generalAiMastery)
             .sort(([, left], [, right]) => right.lastSeen - left.lastSeen)[0]?.[0];
         const tutorSubject = codeCommand.handled && previousMasterySubject
@@ -18054,7 +18164,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
         try {
             const topic = detectGeneralPythonTopic(effectiveQuestion);
-            const intent = classifyGeneralAiIntent(effectiveQuestion);
+            const intent = queryPlan.primary;
             const apiCatalog = immediateApiCatalog || immediateApiAmbiguity || buildGeneralAiApiCatalog(effectiveQuestion, appLang) || buildGeneralAiApiAmbiguityCatalog(effectiveQuestion, appLang);
             let countAnswer: string | null = null;
             let creationAnswer: string | null = null;
@@ -18066,7 +18176,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 ? knowledge.answerPythonKnowledgeComparisonAtLevel(effectiveQuestion, appLang, effectiveMode)
                     || answerPythonApiComparison(effectiveQuestion, appLang)
                 : null;
-            let refAnswer: string | null = codeCommand.directAnswer || prioritizedTutorAnswer || prioritizedComparisonAnswer;
+            let refAnswer: string | null = queryPlan.needsClarification
+                ? queryPlan.clarification
+                : codeCommand.directAnswer || prioritizedTutorAnswer || prioritizedComparisonAnswer;
             if (!refAnswer && !shouldCreateQuiz) {
                 refAnswer = (apiCatalog ? `**${apiCatalog.title}**\n\n${apiCatalog.intro}` : null)
                 || knowledge.answerPythonKnowledgeComparisonAtLevel(effectiveQuestion, appLang, effectiveMode)
@@ -18414,6 +18526,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             if (refAnswer) {
                 setGeneralAiProgress(100);
                 let enrichedAnswer = enrichGeneralAiAnswer(refAnswer, effectiveQuestion, effectiveMode, appLang, knowledge);
+                enrichedAnswer = planner.enrichGeneralAiAnswerFromPlan(enrichedAnswer, queryPlan, appLang);
                 let evidenceKind: GeneralAiEvidenceKind = /https?:\/\//.test(enrichedAnswer) ? 'documentation' : 'static';
                 if (intent.intent === 'doctest_execution') {
                     const safety = assessGeneralAiDoctestSafety(effectiveQuestion);
@@ -18449,7 +18562,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         enrichedAnswer = `${enrichedAnswer}\n\n**${appLang === 'fr' ? 'Test non exécuté' : 'Test not executed'}**\n${appLang === 'fr' ? 'Le moteur Python local n’est pas encore prêt.' : 'The local Python engine is not ready yet.'}`;
                     }
                 }
-                if (['code_explanation', 'output_prediction', 'interactive_debug', 'code_quality'].includes(intent.intent) && pyodide) {
+                const codeAnalysisIntent = ['code_explanation', 'output_prediction', 'interactive_debug', 'code_quality', 'code_review', 'complexity_analysis'].includes(intent.intent);
+                if (codeAnalysisIntent && pyodide && queryPlan.codeBlocks[0]) {
+                    try {
+                        const astJson = await pyodide.runPythonAsync(buildGeneralAiAstAnalysisScript(queryPlan.codeBlocks[0]));
+                        const astResult = JSON.parse(String(astJson)) as GeneralAiAstAnalysisResult;
+                        enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiAstAnalysis(astResult, appLang)}`;
+                    } catch {
+                        /* A static answer remains available if local AST parsing fails. */
+                    }
+                }
+                if (codeAnalysisIntent && pyodide) {
                     const safety = assessGeneralAiRuntimeSafety(effectiveQuestion);
                     if (safety.safe) {
                         try {
@@ -18462,6 +18585,8 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         }
                     }
                 }
+                const depthContract = planner.assessGeneralAiDepthContract(enrichedAnswer, effectiveMode);
+                if (!depthContract.valid) planner.recordGeneralAiCoverageGap(queryPlan, `depth-contract: ${depthContract.missing.join(', ')}`);
                 enrichedAnswer = `${enrichedAnswer}\n\n${formatGeneralAiEvidenceLabel(evidenceKind, appLang)}`;
                 const answerText = appLang === 'fr' && (countAnswer || creationAnswer)
                     ? enrichedAnswer
@@ -18476,6 +18601,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 return;
             }
             if (shouldClarifyGeneralAiQuestion(effectiveQuestion)) {
+                planner.recordGeneralAiCoverageGap(queryPlan, 'clarification-before-model');
                 const suggestion = knowledge.answerPythonSemanticSuggestion(effectiveQuestion, appLang);
                 setGeneralAiProgress(100);
                 setGeneralAiMessages(prev => [...prev, {
@@ -18491,8 +18617,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     role: m.role === 'user' ? 'user' as const : 'assistant' as const,
                     content: m.text,
                 }));
-                const onlineAnswer = await answerGeneralPythonWithOnlineAi(effectiveQuestion, aiHistory, appLang, effectiveMode).catch(() => null);
-                const aiAnswer = onlineAnswer || await answerGeneralPythonWithAvailableAi(effectiveQuestion, offlineAiState, aiHistory, appLang, effectiveMode);
+                const groundedQuestion = planner.buildGroundedGeneralAiModelQuestion(queryPlan);
+                const onlineAnswer = await answerGeneralPythonWithOnlineAi(groundedQuestion, aiHistory, appLang, effectiveMode).catch(() => null);
+                const aiAnswer = onlineAnswer || await answerGeneralPythonWithAvailableAi(groundedQuestion, offlineAiState, aiHistory, appLang, effectiveMode);
                 const verification = aiAnswer ? verifyGeneralAiAnswer(effectiveQuestion, aiAnswer) : null;
                 if (aiAnswer && verification?.valid) {
                     setGeneralAiProgress(100);
@@ -18507,6 +18634,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             } catch {
                 /* Offline model failed — fall through to clarification */
             }
+            planner.recordGeneralAiCoverageGap(queryPlan, 'no-verified-answer');
             const semanticSuggestion = knowledge.answerPythonSemanticSuggestion(effectiveQuestion, appLang);
             setGeneralAiProgress(100);
             setGeneralAiMessages(prev => [...prev, {
@@ -20207,6 +20335,35 @@ print(result)
                                         >
                                             {t('generalAi.clear', appLang)}
                                         </button>
+                                    </div>
+                                    <div className="mt-2 flex flex-wrap items-center gap-1.5 border-t border-[#1d2d44] pt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const next = !generalAiLocalLearningEnabled;
+                                                setGeneralAiLocalLearningEnabled(next);
+                                                localStorage.setItem('python_general_ai_local_learning_enabled', String(next));
+                                            }}
+                                            className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                            style={{
+                                                borderColor: hexToRgba(generalAiLocalLearningEnabled ? '#22c55e' : toolPanelColors.ai, 0.4),
+                                                color: generalAiLocalLearningEnabled ? '#86efac' : toolPanelColors.ai,
+                                                backgroundColor: hexToRgba(generalAiLocalLearningEnabled ? '#22c55e' : toolPanelColors.ai, 0.12),
+                                            }}
+                                        >
+                                            {appLang === 'fr' ? `Apprentissage local : ${generalAiLocalLearningEnabled ? 'actif' : 'inactif'}` : `Local learning: ${generalAiLocalLearningEnabled ? 'on' : 'off'}`}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => localStorage.removeItem('python_general_ai_coverage_gaps')}
+                                            className="rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all hover:brightness-125"
+                                            style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.35), color: toolPanelColors.failed, backgroundColor: hexToRgba(toolPanelColors.failed, 0.08) }}
+                                        >
+                                            {appLang === 'fr' ? 'Effacer les données locales' : 'Clear local learning data'}
+                                        </button>
+                                        <p className="w-full text-[9px] leading-relaxed text-gray-500">
+                                            {appLang === 'fr' ? 'Si activé, les questions non résolues restent uniquement sur cet appareil. Elles ne sont jamais envoyées automatiquement.' : 'When enabled, unresolved questions stay only on this device. They are never uploaded automatically.'}
+                                        </p>
                                     </div>
                                     </div>
                                     )}
