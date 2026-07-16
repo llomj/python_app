@@ -15913,13 +15913,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v278') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v279') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v278')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v279')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -20290,22 +20290,15 @@ print(result)
                                     </p>
                                     </div>
                                     )}
-                                    {latestGeneralAiMastery && (
-                                        <p className="mt-1 text-[10px] text-gray-500">
-                                            {appLang === 'fr' ? 'Suivi' : 'Mastery'}: <span className="font-bold text-gray-300">{latestGeneralAiMastery[0]}</span> · {latestGeneralAiMastery[1].views} {appLang === 'fr' ? 'interactions' : 'interactions'}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-
-
-                                <div className="rounded-2xl border p-3" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.22), backgroundColor: 'rgba(8, 18, 34, 0.42)' }}>
+                                <div
+                                    className="mt-2 rounded-xl border px-3 py-2"
+                                    style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.3), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08) }}
+                                >
                                     <button
                                         onClick={() => setGeneralAiKeyOpen(prev => !prev)}
                                         className="flex w-full items-center justify-between gap-2 text-left"
                                     >
-                                        <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: toolPanelColors.ai }}>
+                                        <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.12em]" style={{ color: toolPanelColors.ai }}>
                                             <Sparkles size={13} />
                                             {t('generalAi.onlineKey', appLang)}
                                         </span>
@@ -20365,6 +20358,13 @@ print(result)
                                         </div>
                                     )}
                                 </div>
+                                    {latestGeneralAiMastery && (
+                                        <p className="mt-1 text-[10px] text-gray-500">
+                                            {appLang === 'fr' ? 'Suivi' : 'Mastery'}: <span className="font-bold text-gray-300">{latestGeneralAiMastery[0]}</span> · {latestGeneralAiMastery[1].views} {appLang === 'fr' ? 'interactions' : 'interactions'}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
 
                                 <div className="min-h-0 min-w-0 flex-1 space-y-3 overflow-y-auto pr-1">
                                     {generalAiMessages.slice(-80).map(message => (
