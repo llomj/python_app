@@ -175,7 +175,8 @@
         // Keep the active offline cache until the replacement service worker
         // has completely downloaded and installed the next version.
         (function () {
-            var APP_VERSION = 'v274';
+            var APP_VERSION = 'v275';
+            window.__APP_CACHE_VERSION__ = APP_VERSION;
             var forceReset = new URLSearchParams(window.location.search).has('reset-cache');
             if (forceReset) {
                 if (window.caches) {
@@ -281,13 +282,34 @@
     </div>
     <script type="module" src="./index.tsx"></script>
     <script>
-        // Service worker registration (browsers that support ES modules)
+        // Register, check for a newer GitHub build immediately, then reload once
+        // when the replacement worker takes control.
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
+            window.addEventListener('load', async function () {
                 try {
-                    navigator.serviceWorker.register('./sw.js?v=v274', {
+                    var registration = await navigator.serviceWorker.register('./sw.js?v=v275', {
                         updateViaCache: 'none',
                         scope: './'
+                    });
+                    await registration.update();
+                    if (registration.waiting) {
+                        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    }
+                    registration.addEventListener('updatefound', function () {
+                        var worker = registration.installing;
+                        if (!worker) return;
+                        worker.addEventListener('statechange', function () {
+                            if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                                worker.postMessage({ type: 'SKIP_WAITING' });
+                            }
+                        });
+                    });
+                    navigator.serviceWorker.addEventListener('controllerchange', function () {
+                        var version = window.__APP_CACHE_VERSION__ || 'latest';
+                        var reloadKey = 'sw_controller_reloaded_' + version;
+                        if (sessionStorage.getItem(reloadKey) === '1') return;
+                        sessionStorage.setItem(reloadKey, '1');
+                        window.location.reload();
                     });
                 } catch (err) {
                     console.error('Service worker registration failed:', err);

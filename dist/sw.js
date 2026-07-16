@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v274';
+const CACHE_VERSION = 'v275';
 const CACHE_NAME = `python-mastery-${CACHE_VERSION}`;
 const MANIFEST_URL = './offline-assets.json';
 
@@ -26,26 +26,48 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil((async () => {
         const cacheNames = await caches.keys();
-        const previousCaches = cacheNames
-            .filter(cacheName => cacheName.startsWith('python-mastery-') && cacheName !== CACHE_NAME)
-            .sort()
-            .reverse();
-        const retainedCaches = new Set([CACHE_NAME, previousCaches[0]].filter(Boolean));
         await Promise.all(cacheNames
-            .filter(cacheName => cacheName.startsWith('python-mastery-') && !retainedCaches.has(cacheName))
+            .filter(cacheName => cacheName.startsWith('python-mastery-') && cacheName !== CACHE_NAME)
             .map(cacheName => caches.delete(cacheName)));
         await self.clients.claim();
+        const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+        windows.forEach(client => client.postMessage({ type: 'APP_UPDATED', version: CACHE_VERSION }));
     })());
 });
 
-const cachedResponse = request => caches.open(CACHE_NAME)
-    .then(cache => cache.match(request, { ignoreSearch: true }));
+const cachedResponse = async request => {
+    const url = new URL(typeof request === 'string' ? request : request.url, self.location.href);
+    url.search = '';
+    const cacheNames = await caches.keys();
+    const appCaches = cacheNames.filter(name => name.startsWith('python-mastery-'));
+    for (const cacheName of appCaches) {
+        const cache = await caches.open(cacheName);
+        const response = await cache.match(url.href);
+        if (response) return response;
+    }
+    return undefined;
+};
 
 self.addEventListener('fetch', event => {
     const request = event.request;
     if (request.method !== 'GET') return;
 
     event.respondWith((async () => {
+        // Always check GitHub for the current app shell while online. A cache-first
+        // navigation can trap an installed PWA on an old index.html indefinitely.
+        if (request.mode === 'navigate' || new URL(request.url).pathname.endsWith('/index.html')) {
+            try {
+                const response = await fetch(request, { cache: 'no-store' });
+                if (response.ok) {
+                    const cache = await caches.open(CACHE_NAME);
+                    await cache.put(new Request('./index.html'), response.clone());
+                }
+                return response;
+            } catch {
+                return (await cachedResponse(new Request('./index.html'))) || Response.error();
+            }
+        }
+
         const cached = await cachedResponse(request);
         if (cached) return cached;
 
@@ -57,9 +79,6 @@ self.addEventListener('fetch', event => {
             }
             return response;
         } catch {
-            if (request.mode === 'navigate') {
-                return (await cachedResponse(new Request('./index.html'))) || Response.error();
-            }
             return new Response('Offline asset unavailable', { status: 503 });
         }
     })());

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Updating PythonV2</title>
+    <style>
+        :root { color-scheme: dark; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+        body { min-height: 100vh; margin: 0; display: grid; place-items: center; background: #050c18; color: #e5e7eb; }
+        main { width: min(84vw, 420px); padding: 28px; border: 1px solid #2563eb; border-radius: 24px; background: #0b1930; text-align: center; }
+        h1 { margin: 0 0 12px; color: #60a5fa; font-size: 20px; }
+        p { margin: 0; color: #cbd5e1; font-size: 13px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Updating PythonV2</h1>
+        <p id="status">Removing the old offline version and loading the latest app...</p>
+    </main>
+    <script>
+        (async function () {
+            try {
+                if (window.caches) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(key => caches.delete(key)));
+                }
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(registration => registration.unregister()));
+                }
+                localStorage.removeItem('app_version');
+                sessionStorage.clear();
+                const destination = new URL('./', window.location.href);
+                destination.searchParams.set('updated', Date.now().toString());
+                window.location.replace(destination.toString());
+            } catch (error) {
+                document.getElementById('status').textContent = 'Update failed. Close the app completely, reopen this page, and try again.';
+            }
+        })();
+    </script>
+</body>
+</html>
