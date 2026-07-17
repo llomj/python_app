@@ -162,12 +162,16 @@ const exercises = specs.map((spec, index) => {
   const calls = spec.cases.slice(0, 2).map(([args, expected]) => `${spec.name}(${args.map(py).join(', ')}) -> ${py(expected)}`);
   const bodyEndsWithReturn = /^\s*return\b/.test(spec.body.split('\n').at(-1) || '');
   const canonical = bodyEndsWithReturn ? `${signature}:\n    ${spec.body}` : `${signature}:\n    ${spec.body}\n    return ${returnExpression(spec.name)}`;
+  const className = `Problem${id}WhileSolution`;
+  const classApproach = `class ${className}:\n    @staticmethod\n${canonical.split('\n').map(line => `    ${line}`).join('\n')}\n\nprint(${className}.${spec.name}(${spec.cases[0][0].map(py).join(', ')}))`;
+  const canonicalBody = canonical.split('\n').slice(1);
+  const helperApproach = `${signature}:\n    def execute_loop():\n${canonicalBody.map(line => `    ${line}`).join('\n')}\n    return execute_loop()`;
   return {
     id,
     title: `Problem ${id}`,
     description: `Write a Python function called \`${spec.name}\` that must ${spec.en}. Use a while loop.\nDifficulty: ${spec.level}.\nExamples:\n  ${calls.join('\n  ')}`,
     initialCode: `${signature}:\n    pass`,
-    solution: `# Using function approach\n${canonical}\n\n${spec.cases.slice(0,2).map(([args, expected]) => `print(${spec.name}(${args.map(py).join(', ')}))  # Expected: ${py(expected)}`).join('\n')}\n\n# Script approach\nresult = ${spec.name}(${spec.cases[0][0].map(py).join(', ')})\nprint(result)\n\n# Direct approach\nprint(${spec.name}(${spec.cases[1][0].map(py).join(', ')}))`,
+    solution: `# Using function approach\n${canonical}\n\n${spec.cases.slice(0,2).map(([args, expected]) => `print(${spec.name}(${args.map(py).join(', ')}))  # Expected: ${py(expected)}`).join('\n')}\n\n# Callable class approach\n${classApproach}\n\n# Nested helper approach\n${helperApproach}\n\n# Script approach\nresult = ${spec.name}(${spec.cases[0][0].map(py).join(', ')})\nprint(result)\n\n# Direct approach\nprint(${spec.name}(${spec.cases[1][0].map(py).join(', ')}))`,
     hint: `Identify the loop state, write the condition that keeps repetition valid, and update that state on every path. Focus: ${spec.focus}.`,
     breakdown: `1. Initialize the state needed before the loop.\n2. Write a while condition that stops at the correct boundary.\n3. Perform the required operation during each iteration.\n4. Update the loop state so the condition eventually becomes False.\n5. Return the completed result.`,
     category: `While Loop ${spec.level}`,
