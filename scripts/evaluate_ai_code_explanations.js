@@ -36,12 +36,14 @@ try {
     if (!explanation.includes('Complete value path for the shown example:')) failures.push(`Problem ${exercise.id}: missing complete value path`);
     if (!explanation.includes('# Operation:')) failures.push(`Problem ${exercise.id}: missing operation trace`);
     if (!explanation.includes('# Intermediate value and type:')) failures.push(`Problem ${exercise.id}: missing intermediate values and data types`);
+    if (/\w+\s*\(/.test(exercise.solution) && !explanation.includes('Module, function, and method breakdown:')) failures.push(`Problem ${exercise.id}: missing callable semantics breakdown`);
     if (explanation.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: contains a clutter-only hash line`);
     if (explanation.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: contains excessive blank-line spacing`);
     if (explanation.split('\n').length > 280) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
 
     const french = buildDetailedCodeExplanation('', exercise.solution, 'fr');
     if (!french.includes('Trajet complet des valeurs pour l’exemple affiché :')) failures.push(`Problem ${exercise.id}: missing French value path`);
+    if (/\w+\s*\(/.test(exercise.solution) && !french.includes('Détail des modules, fonctions et méthodes :')) failures.push(`Problem ${exercise.id}: missing French callable semantics breakdown`);
     if (!french.includes('# Valeur intermédiaire et type :') && !french.includes('# Valeur intermédiaire et type:')) failures.push(`Problem ${exercise.id}: missing French value/type trace`);
     if (french.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: French explanation contains a clutter-only hash line`);
     if (french.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: French explanation contains excessive blank-line spacing`);
@@ -91,6 +93,54 @@ try {
   const explanation1699 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1699).solution, 'en');
   if (!explanation1699.includes('printed output = "True False" (display text)')) failures.push('Problem 1699 multi-call trace did not evaluate each argument independently');
 
+  const explanation1179 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1179).solution, 'en');
+  for (const fragment of [
+    '`datetime` is the imported module',
+    '`datetime.datetime` is the `datetime` class stored inside that module',
+    'the second `datetime` is not a method',
+    '`now` is a class method of the `datetime` class',
+    'Left-to-right resolution: find the `datetime` module',
+    'Call order: Python resolves `datetime.datetime.now` first',
+  ]) {
+    if (!explanation1179.includes(fragment)) failures.push(`Problem 1179 callable semantics regression: missing ${JSON.stringify(fragment)}`);
+  }
+
+  const nestedCalls = buildDetailedCodeExplanation([
+    'def convert_all(values):',
+    '    return list(map(int, values))',
+    '',
+    'print(sum(convert_all(["1", "2", "3"])))',
+  ].join('\n'), '', 'en');
+  for (const fragment of [
+    'Built-in function: map(function, iterable, ...)',
+    'The first argument is the function to apply; the second is the iterable supplying items.',
+    'Nested call:',
+    'must finish before the outer call can begin.',
+    'At the call, Python binds arguments to values',
+  ]) {
+    if (!nestedCalls.includes(fragment)) failures.push(`Nested-call semantics regression: missing ${JSON.stringify(fragment)}`);
+  }
+
+  const importedAlias = buildDetailedCodeExplanation([
+    'from datetime import datetime as DateTime',
+    'print(DateTime.now())',
+  ].join('\n'), '', 'en');
+  if (!importedAlias.includes('`DateTime` is the local name for `datetime`, imported from the `datetime` module')) failures.push('Imported-alias semantics regression: imported class was not identified');
+  if (!importedAlias.includes('`DateTime` is the `datetime` class and `now` is its class method')) failures.push('Imported-alias semantics regression: class method was not identified');
+
+  const nestedHelper = buildDetailedCodeExplanation([
+    'def outer(value):',
+    '    def helper(item):',
+    '        return item * 2',
+    '    return helper(value)',
+    '',
+    'print(outer(3))',
+  ].join('\n'), '', 'en');
+  if (!nestedHelper.includes('a nested helper created while outer is running')) failures.push('Nested-helper semantics regression: nested scope was not explained');
+
+  const french1179 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1179).solution, 'fr');
+  if (!french1179.includes('le second `datetime` n’est pas une méthode')) failures.push('Problem 1179 French semantics regression: class/module distinction missing');
+
   const formattedSections = splitAiReviewSteps([
     '1. Problem requirement: parse comma-separated integers.',
     '',
@@ -129,6 +179,7 @@ try {
   console.log('Universal value/type traces: checked');
   console.log('Numbered panel formatting: checked');
   console.log('Authoritative Code Explanation panel: checked');
+  console.log('Callable/module/helper semantics: checked');
   if (failures.length) {
     console.error(`Failures (${failures.length}):`);
     failures.slice(0, 100).forEach(failure => console.error(`- ${failure}`));

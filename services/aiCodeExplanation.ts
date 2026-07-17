@@ -1,11 +1,118 @@
 export type AiCodeExplanationLanguage = 'en' | 'fr';
 
 const MAX_SOURCE_LINES = 56;
-const MAX_ANNOTATED_LINES = 260;
+const MAX_ANNOTATED_LINES = 340;
+
+type PythonCall = {
+    path: string;
+    args: string[];
+};
+
+const PYTHON_BUILTINS: Record<string, { signature: string; purpose: string; purposeFr: string }> = {
+    all: { signature: 'all(iterable)', purpose: 'returns True only when every item is truthy', purposeFr: 'renvoie True seulement si chaque élément est vrai' },
+    any: { signature: 'any(iterable)', purpose: 'returns True when at least one item is truthy', purposeFr: 'renvoie True si au moins un élément est vrai' },
+    bool: { signature: 'bool(value=False)', purpose: 'converts a value to True or False', purposeFr: 'convertit une valeur en True ou False' },
+    dict: { signature: 'dict(source=...)', purpose: 'creates a dictionary from key-value data', purposeFr: 'crée un dictionnaire à partir de données clé-valeur' },
+    enumerate: { signature: 'enumerate(iterable, start=0)', purpose: 'pairs each item with a counter', purposeFr: 'associe chaque élément à un compteur' },
+    filter: { signature: 'filter(function, iterable)', purpose: 'keeps items for which function(item) is truthy', purposeFr: 'conserve les éléments pour lesquels function(item) est vrai' },
+    float: { signature: 'float(value=0)', purpose: 'converts a compatible value to a decimal number', purposeFr: 'convertit une valeur compatible en nombre décimal' },
+    input: { signature: 'input(prompt="")', purpose: 'shows an optional prompt and returns the typed text as a string', purposeFr: 'affiche un message facultatif et renvoie le texte saisi comme chaîne' },
+    int: { signature: 'int(value=0, base=10)', purpose: 'converts a compatible value to an integer', purposeFr: 'convertit une valeur compatible en entier' },
+    len: { signature: 'len(object)', purpose: 'returns the number of items', purposeFr: 'renvoie le nombre d’éléments' },
+    list: { signature: 'list(iterable=())', purpose: 'consumes an iterable and collects its items in a list', purposeFr: 'parcourt un itérable et rassemble ses éléments dans une liste' },
+    map: { signature: 'map(function, iterable, ...)', purpose: 'calls function(item) lazily for every item from the iterable', purposeFr: 'appelle function(item) progressivement pour chaque élément de l’itérable' },
+    max: { signature: 'max(iterable, *, key=None)', purpose: 'returns the largest selected item', purposeFr: 'renvoie le plus grand élément sélectionné' },
+    min: { signature: 'min(iterable, *, key=None)', purpose: 'returns the smallest selected item', purposeFr: 'renvoie le plus petit élément sélectionné' },
+    print: { signature: 'print(*objects, sep=" ", end="\\n")', purpose: 'converts values to display text and writes them to the output', purposeFr: 'convertit les valeurs en texte et les écrit dans la sortie' },
+    range: { signature: 'range(start, stop, step=1)', purpose: 'creates an integer sequence whose stop value is excluded', purposeFr: 'crée une séquence d’entiers dont la valeur stop est exclue' },
+    set: { signature: 'set(iterable=())', purpose: 'collects unique hashable items', purposeFr: 'rassemble des éléments hachables uniques' },
+    sorted: { signature: 'sorted(iterable, *, key=None, reverse=False)', purpose: 'returns a new sorted list', purposeFr: 'renvoie une nouvelle liste triée' },
+    str: { signature: 'str(object="")', purpose: 'converts a value to text', purposeFr: 'convertit une valeur en texte' },
+    sum: { signature: 'sum(iterable, start=0)', purpose: 'adds the items to an optional starting value', purposeFr: 'additionne les éléments à une valeur initiale facultative' },
+    tuple: { signature: 'tuple(iterable=())', purpose: 'collects items in an immutable tuple', purposeFr: 'rassemble les éléments dans un tuple immuable' },
+    zip: { signature: 'zip(*iterables)', purpose: 'combines corresponding items from multiple iterables', purposeFr: 'combine les éléments correspondants de plusieurs itérables' },
+};
+
+const MODULE_PURPOSES: Record<string, [string, string]> = {
+    collections: ['specialized container data types', 'des types de conteneurs spécialisés'],
+    datetime: ['date and time types and operations', 'des types et opérations de date et d’heure'],
+    functools: ['higher-order function tools', 'des outils pour fonctions d’ordre supérieur'],
+    itertools: ['memory-efficient iterator tools', 'des outils d’itération économes en mémoire'],
+    json: ['JSON encoding and decoding', 'l’encodage et le décodage JSON'],
+    math: ['mathematical functions and constants', 'des fonctions et constantes mathématiques'],
+    os: ['portable operating-system services', 'des services portables du système d’exploitation'],
+    pathlib: ['object-oriented filesystem paths', 'des chemins de fichiers orientés objet'],
+    random: ['pseudo-random selections and numbers', 'des sélections et nombres pseudo-aléatoires'],
+    re: ['regular-expression matching', 'la recherche par expressions régulières'],
+    statistics: ['statistical calculations', 'des calculs statistiques'],
+    sys: ['Python interpreter and runtime information', 'des informations sur l’interpréteur et l’exécution Python'],
+};
+
+const METHOD_PURPOSES: Record<string, [string, string]> = {
+    append: ['adds one item to the end of the existing list and returns None', 'ajoute un élément à la fin de la liste existante et renvoie None'],
+    count: ['counts matching occurrences', 'compte les occurrences correspondantes'],
+    get: ['reads a dictionary value and can supply a default when the key is absent', 'lit une valeur du dictionnaire et peut fournir une valeur par défaut si la clé manque'],
+    items: ['returns a dynamic view of dictionary key-value pairs', 'renvoie une vue dynamique des paires clé-valeur du dictionnaire'],
+    join: ['joins an iterable of strings using the owner string as the separator', 'joint un itérable de chaînes en utilisant la chaîne propriétaire comme séparateur'],
+    lower: ['returns a lowercase copy of the string', 'renvoie une copie de la chaîne en minuscules'],
+    now: ['creates a datetime value for the current local date and time', 'crée une valeur datetime contenant la date et l’heure locales actuelles'],
+    replace: ['returns a copy with selected text replaced', 'renvoie une copie dans laquelle le texte choisi est remplacé'],
+    sort: ['sorts the existing list in place and returns None', 'trie la liste existante sur place et renvoie None'],
+    split: ['returns a list of substrings separated at the requested delimiter', 'renvoie une liste de sous-chaînes séparées au délimiteur demandé'],
+    strip: ['returns a copy with surrounding whitespace or selected characters removed', 'renvoie une copie sans les espaces ou caractères choisis autour'],
+    upper: ['returns an uppercase copy of the string', 'renvoie une copie de la chaîne en majuscules'],
+    values: ['returns a dynamic view of dictionary values', 'renvoie une vue dynamique des valeurs du dictionnaire'],
+};
+
+const extractPythonCalls = (code: string): PythonCall[] => {
+    const calls: PythonCall[] = [];
+    const seen = new Set<string>();
+    const callStart = /[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*/y;
+    for (let index = 0; index < code.length; index += 1) {
+        callStart.lastIndex = index;
+        const match = callStart.exec(code);
+        if (!match) continue;
+        const path = match[0];
+        let open = callStart.lastIndex;
+        while (/\s/.test(code[open] || '')) open += 1;
+        if (code[open] !== '(' || /\bdef\s+$/.test(code.slice(Math.max(0, index - 8), index))) {
+            index = callStart.lastIndex - 1;
+            continue;
+        }
+        let depth = 0;
+        let quote = '';
+        let escaped = false;
+        let close = -1;
+        for (let cursor = open; cursor < code.length; cursor += 1) {
+            const char = code[cursor];
+            if (quote) {
+                if (escaped) escaped = false;
+                else if (char === '\\') escaped = true;
+                else if (char === quote) quote = '';
+                continue;
+            }
+            if (char === "'" || char === '"') quote = char;
+            else if (char === '(') depth += 1;
+            else if (char === ')' && --depth === 0) {
+                close = cursor;
+                break;
+            }
+        }
+        if (close < 0) continue;
+        const args = splitTopLevel(code.slice(open + 1, close));
+        const key = `${path}(${args.join(',')})`;
+        if (!seen.has(key)) {
+            calls.push({ path, args });
+            seen.add(key);
+        }
+        index = callStart.lastIndex - 1;
+    }
+    return calls.slice(0, 10);
+};
 
 const primarySolutionCode = (solution: string) => {
     const lines = solution.trim().split('\n');
-    const isApproachHeading = (line: string) => /^\s*#\s*(?:Using|Script|Direct|Built|Manual|Alternative)\b/i.test(line);
+    const isApproachHeading = (line: string) => /^\s*#\s*(?:Using|Script|Direct|Built|Manual|Alternative).*\bapproach\b/i.test(line);
     const functionHeading = lines.findIndex(line => /^\s*#\s*Using function approach\b/i.test(line));
     const leadingImports = lines
         .slice(0, functionHeading >= 0 ? functionHeading : lines.length)
@@ -650,6 +757,140 @@ const buildUniversalExecutionTrace = (
     return steps.slice(0, 18 * 4);
 };
 
+const buildCallableSemanticsLesson = (
+    code: string,
+    language: AiCodeExplanationLanguage,
+) => {
+    const fr = language === 'fr';
+    const imports = new Map<string, { module: string; imported?: string }>();
+    const definitions = new Map<string, { params: string[]; nested: boolean; parent?: string }>();
+    const scopeByIndent: Array<{ indent: number; name: string }> = [];
+
+    for (const line of code.split('\n')) {
+        const trimmed = line.trim();
+        const importedModule = trimmed.match(/^import\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)(?:\s+as\s+([A-Za-z_]\w*))?/);
+        if (importedModule) imports.set(importedModule[2] || importedModule[1].split('.')[0], { module: importedModule[1] });
+        const importedName = trimmed.match(/^from\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)\s+import\s+([A-Za-z_]\w*)(?:\s+as\s+([A-Za-z_]\w*))?/);
+        if (importedName) imports.set(importedName[3] || importedName[2], { module: importedName[1], imported: importedName[2] });
+
+        const definition = trimmed.match(/^def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)/);
+        if (!definition) continue;
+        const indent = line.length - line.trimStart().length;
+        while (scopeByIndent.length && scopeByIndent[scopeByIndent.length - 1].indent >= indent) scopeByIndent.pop();
+        const parent = scopeByIndent[scopeByIndent.length - 1]?.name;
+        definitions.set(definition[1], {
+            params: splitTopLevel(definition[2]).map(param => param.trim()).filter(Boolean),
+            nested: Boolean(parent),
+            parent,
+        });
+        scopeByIndent.push({ indent, name: definition[1] });
+    }
+
+    const calls = extractPythonCalls(code);
+    if (!calls.length) return [];
+    const lesson: string[] = [
+        fr ? 'Détail des modules, fonctions et méthodes :' : 'Module, function, and method breakdown:',
+        '',
+    ];
+
+    calls.forEach((call, index) => {
+        const parts = call.path.split('.');
+        const root = parts[0];
+        const terminal = parts[parts.length - 1];
+        const imported = imports.get(root);
+        const local = definitions.get(root);
+        const builtin = PYTHON_BUILTINS[root];
+        lesson.push(`${index + 1}. ${call.path}(${call.args.join(', ')})`);
+
+        if (call.path === 'datetime.datetime.now' && imported?.module === 'datetime') {
+            lesson.push(
+                fr
+                    ? '`datetime` est le module importé : il fournit les outils de date et d’heure.'
+                    : '`datetime` is the imported module: it provides date and time tools.',
+                fr
+                    ? '`datetime.datetime` est la classe `datetime` stockée dans ce module ; le second `datetime` n’est pas une méthode.'
+                    : '`datetime.datetime` is the `datetime` class stored inside that module; the second `datetime` is not a method.',
+                fr
+                    ? '`now` est une méthode de classe de `datetime`. `now()` crée puis renvoie une nouvelle instance représentant la date et l’heure locales actuelles.'
+                    : '`now` is a class method of the `datetime` class. `now()` creates and returns a new instance representing the current local date and time.',
+                fr
+                    ? 'Résolution de gauche à droite : trouver le module `datetime` → lire sa classe `datetime` → lire la méthode `now` → appeler `now()`.'
+                    : 'Left-to-right resolution: find the `datetime` module → read its `datetime` class → read the `now` method → call `now()`.',
+            );
+        } else if (builtin && parts.length === 1) {
+            lesson.push(
+                fr ? `Fonction intégrée : ${builtin.signature}. Elle ${builtin.purposeFr}.` : `Built-in function: ${builtin.signature}. It ${builtin.purpose}.`,
+            );
+            if (root === 'map' || root === 'filter') {
+                lesson.push(fr
+                    ? 'Le premier argument est la fonction à appliquer ; le deuxième est l’itérable qui fournit les éléments. Le résultat est produit progressivement.'
+                    : 'The first argument is the function to apply; the second is the iterable supplying items. Results are produced lazily.');
+            } else if (root === 'sorted') {
+                lesson.push(fr
+                    ? 'L’itérable vient en premier ; `key=` et `reverse=` sont des options nommées évaluées ensuite.'
+                    : 'The iterable comes first; `key=` and `reverse=` are named options evaluated afterward.');
+            }
+        } else if (local && parts.length === 1) {
+            const signature = `${root}(${local.params.join(', ')})`;
+            lesson.push(fr
+                ? `${signature} est ${local.nested ? `une fonction imbriquée créée pendant l’appel de ${local.parent}` : 'une fonction définie par ce programme'}. Sa définition crée l’objet fonction ; son corps ne s’exécute qu’au moment de l’appel.`
+                : `${signature} is ${local.nested ? `a nested helper created while ${local.parent} is running` : 'a function defined by this program'}. Its definition creates the function object; its body does not run until the call.`);
+            lesson.push(fr
+                ? `À l’appel, Python lie les arguments aux paramètres ${local.params.join(', ') || '(aucun)'}, exécute le corps indenté, puis ` + '`return` rend le contrôle et la valeur à l’appelant.'
+                : `At the call, Python binds arguments to ${local.params.join(', ') || '(no parameters)'}, runs the indented body, then ` + '`return` sends control and the value back to the caller.');
+        } else if (imported && parts.length === 1) {
+            const modulePurpose = MODULE_PURPOSES[imported.module.split('.')[0]];
+            lesson.push(fr
+                ? `\`${root}\` est \`${imported.imported || imported.module}\` importé depuis le module \`${imported.module}\`${modulePurpose ? `, qui fournit ${modulePurpose[1]}` : ''}. L’appel exécute cet objet importé.`
+                : `\`${root}\` is \`${imported.imported || imported.module}\` imported from the \`${imported.module}\` module${modulePurpose ? `, which provides ${modulePurpose[0]}` : ''}. The call executes that imported callable.`);
+        } else if (parts.length > 1) {
+            const methodPurpose = METHOD_PURPOSES[terminal];
+            if (imported?.imported) {
+                lesson.push(fr
+                    ? `\`${root}\` est le nom local de \`${imported.imported}\`, importé depuis le module \`${imported.module}\`. C’est un membre du module, pas le module lui-même.`
+                    : `\`${root}\` is the local name for \`${imported.imported}\`, imported from the \`${imported.module}\` module. It is a member of that module, not the module itself.`);
+                if (imported.module === 'datetime' && imported.imported === 'datetime' && terminal === 'now') {
+                    lesson.push(fr
+                        ? `Ici, \`${root}\` est la classe \`datetime\` et \`${terminal}\` est sa méthode de classe, qui crée la date et l’heure locales actuelles.`
+                        : `Here, \`${root}\` is the \`datetime\` class and \`${terminal}\` is its class method, which creates the current local date and time.`);
+                } else {
+                    lesson.push(fr
+                        ? `Python résout ensuite l’attribut ou la méthode \`${parts.slice(1).join('.')}\` sur cet objet importé.`
+                        : `Python then resolves the \`${parts.slice(1).join('.')}\` attribute or method on that imported object.`);
+                }
+            } else if (imported) {
+                const modulePurpose = MODULE_PURPOSES[imported.module.split('.')[0]];
+                lesson.push(fr
+                    ? `\`${root}\` désigne le module importé \`${imported.module}\`${modulePurpose ? `, utilisé pour ${modulePurpose[1]}` : ''}.`
+                    : `\`${root}\` refers to the imported \`${imported.module}\` module${modulePurpose ? `, used for ${modulePurpose[0]}` : ''}.`);
+                lesson.push(fr
+                    ? `Python lit ensuite \`${parts.slice(1).join('.')}\` dans ce module, puis appelle la fonction ou méthode finale \`${terminal}\`.`
+                    : `Python then resolves \`${parts.slice(1).join('.')}\` from that module and calls the final \`${terminal}\` function or method.`);
+            } else {
+                lesson.push(fr
+                    ? `Python évalue d’abord l’objet \`${parts.slice(0, -1).join('.')}\`, puis recherche sa méthode \`${terminal}\`.`
+                    : `Python first evaluates the \`${parts.slice(0, -1).join('.')}\` object, then looks up its \`${terminal}\` method.`);
+            }
+            if (methodPurpose) lesson.push(fr ? `Cette méthode ${methodPurpose[1]}.` : `This method ${methodPurpose[0]}.`);
+        } else {
+            lesson.push(fr
+                ? `\`${root}\` est résolu comme un objet appelable au moment de l’exécution.`
+                : `\`${root}\` is resolved as a callable object at runtime.`);
+        }
+
+        const nestedArguments = call.args.filter(argument => /[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*\s*\(/.test(argument));
+        lesson.push(fr
+            ? `Ordre d’appel : Python résout d’abord \`${call.path}\`, puis évalue ${call.args.length ? `ses ${call.args.length} argument(s) de gauche à droite` : 'qu’il n’y a aucun argument'}, appelle la fonction, puis utilise sa valeur de retour.`
+            : `Call order: Python resolves \`${call.path}\` first, then evaluates ${call.args.length ? `its ${call.args.length} argument(s) from left to right` : 'that there are no arguments'}, calls it, and then uses its return value.`);
+        if (nestedArguments.length) lesson.push(fr
+            ? `Appel imbriqué : ${nestedArguments.map(value => `\`${value}\``).join(', ')} doit finir avant que l’appel extérieur puisse commencer.`
+            : `Nested call: ${nestedArguments.map(value => `\`${value}\``).join(', ')} must finish before the outer call can begin.`);
+        lesson.push('');
+    });
+
+    return lesson;
+};
+
 const lineExplanation = (
     trimmed: string,
     language: AiCodeExplanationLanguage,
@@ -997,6 +1238,13 @@ export const buildDetailedCodeExplanation = (
     if (!lessonInserted && expandedLesson.length) {
         annotated.push('');
         addComment(annotated, '', expandedLesson);
+    }
+
+    const callableLesson = buildCallableSemanticsLesson(source, language);
+    if (callableLesson.length) {
+        annotated.push('');
+        annotated.push('');
+        addComment(annotated, '', callableLesson);
     }
 
     const concreteTransformation = buildConcreteTransformation(source, language, example);
