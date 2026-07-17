@@ -22,6 +22,8 @@ function loadTsExports(fileName) {
     require: (specifier) => {
       if (specifier === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
       if (specifier === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
+      if (specifier === './whileLoopPracticeExercises') return loadTsExports('whileLoopPracticeExercises.ts');
+      if (specifier === './whileLoopPracticeGraders') return loadTsExports('whileLoopPracticeGraders.ts');
       return {};
     },
   };

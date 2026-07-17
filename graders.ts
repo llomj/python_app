@@ -1,4 +1,5 @@
 import { ATOMIC_BEGINNER_GRADERS } from './atomicBeginnerGraders';
+import { WHILE_LOOP_PRACTICE_GRADERS } from './whileLoopPracticeGraders';
 
 export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'dictAddedPair' | 'letterCounts' | 'vowelConsonantCounts';
 
@@ -74,6 +75,7 @@ const regexPracticeGrader = (
 
 export const AUTO_GRADERS: Record<number, AutoGrader> = {
   ...ATOMIC_BEGINNER_GRADERS,
+  ...WHILE_LOOP_PRACTICE_GRADERS,
     1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
         tests: [

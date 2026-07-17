@@ -51,6 +51,7 @@ import { DEFAULT_OFFLINE_AI_STATE, answerGeneralPythonWithAvailableAi, answerPro
 import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/translations';
 import { EXERCISES_FR } from './services/exercisesFr';
 import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
+import { WHILE_LOOP_PRACTICE_FR } from './services/whileLoopPracticeFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
@@ -15951,13 +15952,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v282') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v283') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v282')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v283')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16427,18 +16428,22 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const lookupQuestion = normalizeAiQuestionForLookup(question, appLang);
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
+        const whileLocalization = appLang === 'fr' ? WHILE_LOOP_PRACTICE_FR[exercise.id] : null;
+        const localizedExercise = whileLocalization
+            ? { ...exercise, description, hint: whileLocalization.hint, breakdown: whileLocalization.breakdown }
+            : exercise;
         const wantsGroundedBreakdown = /(?:explain|break down|breakdown|understand|what does|what is|what.*want|how do i start|help me start).*(?:problem|task|exercise)|(?:explique|décompose|comprendre|que demande|comment commencer).*(?:problème|tâche|exercice)/i.test(lookupQuestion);
         if (wantsGroundedBreakdown) {
             return buildProblemAiTutorAnswer({
-                exercise,
+                exercise: localizedExercise,
                 description,
                 grader: AUTO_GRADERS[exercise.id] || null,
                 language: appLang,
                 question,
             });
         }
-        const hint = exercise.hint?.trim();
-        const breakdown = exercise.breakdown?.trim();
+        const hint = localizedExercise.hint?.trim();
+        const breakdown = localizedExercise.breakdown?.trim();
         const code = request.userCode || '';
         const graderMessage = request.graderMessage || '';
         const promptMethods = Array.from(new Set(description.match(/`[^`]+`|\.[A-Za-z_]\w*\(\)|\b[A-Za-z_]\w*\(\)/g) || []))
@@ -18914,10 +18919,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const prompt = getExerciseDescription(targetExercise, lang).split('\nExamples:')[0].trim();
         const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
         const isRegexPractice = /regular expression|regex/i.test(targetExercise.description) || /\bimport\s+re\b/.test(targetExercise.solution);
-        const conceptName = isRegexPractice ? 'regular expressions' : 'for loops';
+        const isWhilePractice = /\bwhile loop\b/i.test(targetExercise.description) || /\bwhile\b/.test(targetExercise.solution);
+        const conceptName = isRegexPractice ? 'regular expressions' : isWhilePractice ? 'while loops' : 'for loops';
+        const localizedWhile = lang === 'fr' ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] : null;
+        const breakdown = localizedWhile?.breakdown ?? targetExercise.breakdown ?? '';
         const operationLine = isRegexPractice
             ? '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().'
-            : '# Use a for loop to process values one at a time.';
+            : isWhilePractice
+                ? '# Re-check the while condition before every iteration and update the loop state inside the body.'
+                : '# Use a for loop to process values one at a time.';
         const logic = `"""
 Problem: ${targetExercise.id}
 ${prompt}
@@ -18927,10 +18937,10 @@ ${prompt}
 # ${prompt}
 #
 # This problem demonstrates how to use Python ${conceptName}.
-${isRegexPractice ? '# A regex pattern describes what text to find, replace, split, or validate.' : '# The loop should update a result while it runs, then return the completed value.'}
+${isRegexPractice ? '# A regex pattern describes what text to find, replace, split, or validate.' : isWhilePractice ? '# A while loop repeats only while its condition is True. Its state update must make progress toward termination.' : '# The loop should update a result while it runs, then return the completed value.'}
 #
 # CODE LOGIC:
-${(targetExercise.breakdown || '').split('\n').map(line => `# ${line}`).join('\n')}
+${breakdown.split('\n').map(line => `# ${line}`).join('\n')}
 #------------------------------------------------------------------------------
 
 ${solutionCode}
@@ -18947,7 +18957,7 @@ ${solutionCode}
 #
 # Key Requirements:
 # - Define a function named ${functionName}.
-# - ${isRegexPractice ? "Import and use Python's re module." : 'Use at least one for loop.'}
+# - ${isRegexPractice ? "Import and use Python's re module." : isWhilePractice ? 'Use at least one while loop.' : 'Use at least one for loop.'}
 # - ${isRegexPractice ? 'Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.' : 'Build the result with loop logic.'}
 # - Use the input values from the function parameters.
 # - Do not hard-code the example output.
@@ -18962,7 +18972,7 @@ ${prompt}
 
 # SOLUTION EXPLANATION:
 # This solution defines a function that encapsulates the required logic.
-${isRegexPractice ? '# The regex pattern decides which text is matched, captured, replaced, or validated.' : '# The for loop repeats once for each item in the input data.'}
+${isRegexPractice ? '# The regex pattern decides which text is matched, captured, replaced, or validated.' : isWhilePractice ? '# The while condition is tested before each iteration; the state update determines when repetition stops.' : '# The for loop repeats once for each item in the input data.'}
 # The function returns the completed value after the operation has finished.
 
 ${solutionCode}`;
@@ -19011,6 +19021,42 @@ print(result)
 # The function receives input, applies the regex operation, and returns the result.
 #
 # Regex flow: pattern -> match/replace/split/validate -> result
+"""` : isWhilePractice ? `"""
+Problem ${targetExercise.id}:
+#
+# SYNTAX:
+# A while loop checks its condition before every iteration.
+#
+def ${functionName}(...):
+    state = ...  # initialize the counter, index, accumulator, or sentinel
+    while condition:
+        ...  # perform one step
+        state = ...  # update state so the loop can terminate
+    return result
+#
+# WHILE LOOP PARTS:
+# 1. Initialization creates the starting state.
+# 2. Condition is evaluated as True or False before the body.
+# 3. Body performs one iteration only when the condition is True.
+# 4. Update changes the state and moves toward termination.
+# 5. Exit occurs when the condition becomes False or break runs.
+#
+# EVALUATION ORDER:
+# Python evaluates the condition first. If True, it executes the indented
+# body from top to bottom, applies the state update, then checks the condition again.
+# Boolean operators short-circuit from left to right.
+#
+# EXECUTION ORDER:
+def ${functionName}(...):  # function object is created; body is not run yet
+result = ${functionName}(...)  # arguments are evaluated, then parameters are bound
+# initialize state -> test condition -> run body -> update state -> repeat test
+print(result)
+#
+# EXECUTION FLOW:
+# A return exits the function immediately.
+# A break exits only the nearest loop.
+# A continue jumps to the next condition check, so required updates must not be skipped.
+# Nested while loops complete their inner repetitions for each outer iteration.
 """` : `"""
 Problem ${targetExercise.id}:
 #
