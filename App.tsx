@@ -4467,6 +4467,7 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:exceptions', label: 'Exceptions', description: 'try, except, raise', patterns: [/\btry\b|\bexcept\b|\bfinally\b|\braise\b|\berror\s+handling\b|\bexception\b/] },
     { id: 'concept:regex', label: 'Regex', description: 'Regular expressions and patterns', patterns: [/\bregex\b|\bregular\s+expression\b|\bre\.(?:match|search|findall|sub|split)\b|\bpattern\s+matching\b/] },
     { id: 'concept:math', label: 'Math', description: 'Arithmetic, primes, gcd, lcm', patterns: [/\barithmetic\b|\bsum\b|\baverage\b|\bsquare\b|\bcube\b|\bprime\b|\bfactorial\b|\bgcd\b|\blcm\b|\bmodulo\b|\bremainder\b|\bpercentage\b|\bbmi\b|\bnumber\b|\bnumbers\b/] },
+    { id: 'concept:slicing', label: 'Slicing', description: 'Sequence ranges with start, stop, and step', patterns: [/\bslicing\b|\bslice\b|\bstart\s*:\s*stop(?:\s*:\s*step)?\b|\[[^\]\n]*:[^\]\n]*\]/] },
     { id: 'concept:sorting', label: 'Sorting', description: 'sort, sorted, key functions', patterns: [/\bsort\b|\bsorted\b|\bsorting\b|\bascending\b|\bdescending\b|\bkey\s+parameter\b|\border\b/] },
     { id: 'concept:patterns', label: 'Patterns', description: 'Stars, pyramids, grids', patterns: [/\bpattern\b|\bpyramid\b|\btriangle\b|\bhollow\b|\bstar\b|\bgrid\b|\bcheckerboard\b/] },
     { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport\b|\bmodule\b|\brandom\b|\bdatetime\b|\bcollections\b|\bitertools\b|\bstatistics\b/] },
@@ -4671,6 +4672,15 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         inDepth: 'Sets are unordered, so do not rely on position. Set elements must be hashable. Convert back to a list if the problem expects a list result.',
         examples: ['unique = set(items)', 'common = set(a) & set(b)', 'all_items = set(a) | set(b)', 'only_a = set(a) - set(b)'],
         common: ['set(items)', 'add(), remove(), discard()', '& intersection', '| union', '- difference']
+    },
+    'concept:slicing': {
+        shape: 'sequence[start:stop:step]',
+        overview: 'Slicing selects a range from an ordered sequence such as a string, list, or tuple. It returns a new sequence and does not select a single item like indexing does.',
+        simple: 'Write a slice inside square brackets. start is where selection begins, stop is where it ends but is not included, and step controls how far Python moves each time.',
+        intermediate: 'Any part may be omitted: sequence[:3] takes the first three items, sequence[2:] takes everything from index 2, sequence[::2] takes every second item, and sequence[::-1] returns a reversed copy. Negative indexes count from the end.',
+        inDepth: 'Python evaluates start, stop, and step, creates a slice object, and passes it to the sequence. The stop boundary is always exclusive. A negative step walks backward and changes the default boundaries. A step of zero raises ValueError. List slicing creates a shallow copy, so nested mutable objects are still shared. Out-of-range slice boundaries are clipped instead of raising IndexError.',
+        examples: ['text = "python"\nprint(text[1:4])  # yth', 'numbers = [0, 1, 2, 3, 4]\nprint(numbers[:3])  # [0, 1, 2]', 'print(numbers[1::2])  # [1, 3]', 'print(text[::-1])  # nohtyp', 'middle = values[-4:-1]'],
+        common: ['sequence[start:stop]', 'sequence[start:stop:step]', 'sequence[:stop] and sequence[start:]', 'sequence[::step]', 'sequence[::-1] reversed copy', 'stop is excluded; step cannot be zero']
     },
     'concept:sorting': {
         simple: 'Sorting puts values into a chosen order.',
@@ -15941,13 +15951,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v281') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v282') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v281')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v282')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -21115,7 +21125,7 @@ print(result)
                                             </button>
                                             <div className="min-w-0">
                                                 <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">{t('settings.chooseConcept', appLang)}</h3>
-                                                {selectedConceptMode && <p className="mt-0.5 truncate text-[10px]" style={{ color: countRowColors.wins }}>{selectedConceptMode.label}</p>}
+                                                {selectedConceptMode && <p className="mt-0.5 truncate text-[10px]" style={{ color: countRowColors.wins }}>{getModeLabel(selectedConceptMode.id, appLang)}</p>}
                                             </div>
                                         </div>
                                         <button
@@ -21133,6 +21143,9 @@ print(result)
                                                 {PYTHON_CONCEPT_MODES.map(concept => {
                                                     const isSelected = difficultyMode === concept.id;
                                                     const count = getExercisePoolForMode(concept.id).length;
+                                                    const translatedLabel = getModeLabel(concept.id, appLang);
+                                                    const descriptionKey = `${concept.id.replace(':', '.')}Desc`;
+                                                    const translatedDescription = t(descriptionKey, appLang);
                                                     return (
                                                         <button
                                                             key={concept.id}
@@ -21141,13 +21154,13 @@ print(result)
                                                             style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
                                                         >
                                                             <span className="flex items-center justify-between gap-3">
-                                                                <span className="text-xs font-black uppercase tracking-[0.14em]">{concept.label}</span>
+                                                                <span className="text-xs font-black uppercase tracking-[0.14em]">{translatedLabel}</span>
                                                                 <span className="flex items-center gap-2 text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>
                                                                     {count} {appLang === 'fr' ? 'problèmes' : 'problems'}
                                                                     {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
                                                                 </span>
                                                             </span>
-                                                            <span className="mt-1 block text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>{concept.description}</span>
+                                                            <span className="mt-1 block text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>{translatedDescription !== descriptionKey ? translatedDescription : concept.description}</span>
                                                         </button>
                                                     );
                                                 })}
