@@ -15160,7 +15160,6 @@ const App: React.FC = () => {
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
     const [focusLayoutEnabled, setFocusLayoutEnabled] = useState(() => localStorage.getItem('python_focus_layout') === 'true');
-    const [isEditorFocused, setIsEditorFocused] = useState(false);
     const [isMobileViewport, setIsMobileViewport] = useState(() => window.matchMedia('(max-width: 768px)').matches);
     const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [rankUpCelebration, setRankUpCelebration] = useState(() => localStorage.getItem('python_rank_up_celebration') !== 'false');
@@ -15356,6 +15355,8 @@ const App: React.FC = () => {
     };
 
     const mainScrollRef = useRef<HTMLDivElement>(null);
+    const problemPanelRef = useRef<HTMLDivElement>(null);
+    const editorToolbarRef = useRef<HTMLDivElement>(null);
     const editorShellRef = useRef<HTMLDivElement>(null);
     const activeEditorViewRef = useRef<EditorView | null>(null);
     const stdinValuesRef = useRef<string[]>([]);
@@ -15373,12 +15374,11 @@ const App: React.FC = () => {
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(70);
-    const focusLayoutActive = focusLayoutEnabled && isMobileViewport && isEditorFocused && !plainMode;
-    const standardFixedEnd = !plainMode
+    const scrollLayoutActive = focusLayoutEnabled && isMobileViewport && !plainMode;
+    const totalFixedEnd = !plainMode
         ? Math.max(headerHeight + 8, 78) + 190
         : headerHeight;
-    const totalFixedEnd = focusLayoutActive ? Math.max(headerHeight + 8, 78) : standardFixedEnd;
-    const editorToolbarTop = focusLayoutActive ? totalFixedEnd + 4 : Math.max(totalFixedEnd + 4, 270);
+    const editorToolbarTop = Math.max(totalFixedEnd + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
@@ -15449,7 +15449,6 @@ const App: React.FC = () => {
 
     useEffect(() => {
         localStorage.setItem('python_focus_layout', String(focusLayoutEnabled));
-        if (!focusLayoutEnabled) setIsEditorFocused(false);
     }, [focusLayoutEnabled]);
 
     useEffect(() => {
@@ -15711,6 +15710,17 @@ const App: React.FC = () => {
         keyboardRestoreTimersRef.current = [60, 140, 280, 520].map(delay => window.setTimeout(restore, delay));
     }, []);
 
+    const syncScrollableLayout = useCallback(() => {
+        const offset = scrollLayoutActive ? (mainScrollRef.current?.scrollTop ?? 0) : 0;
+        const verticalOffset = offset > 0 ? -offset : 0;
+        if (problemPanelRef.current) problemPanelRef.current.style.transform = `translate3d(0, ${verticalOffset}px, 0)`;
+        if (editorToolbarRef.current) editorToolbarRef.current.style.transform = `translate3d(-50%, ${verticalOffset}px, 0)`;
+    }, [scrollLayoutActive]);
+
+    useEffect(() => {
+        window.requestAnimationFrame(syncScrollableLayout);
+    }, [syncScrollableLayout]);
+
     useEffect(() => {
         setIsInFrame(window.self !== window.top);
 
@@ -15771,12 +15781,8 @@ const App: React.FC = () => {
         if (!editorShell) return;
 
         const handleEditorFocus = () => {
-            setIsEditorFocused(true);
             if (focusLayoutEnabled && isMobileViewport) {
-                window.requestAnimationFrame(() => {
-                    if (mainScrollRef.current) mainScrollRef.current.scrollTop = 0;
-                    if (window.scrollY !== 0) window.scrollTo(0, 0);
-                });
+                keyboardMainScrollRef.current = null;
                 return;
             }
             keyboardMainScrollRef.current = mainScrollRef.current?.scrollTop ?? 0;
@@ -15786,14 +15792,12 @@ const App: React.FC = () => {
         const handleEditorBlur = () => {
             window.setTimeout(() => {
                 keyboardMainScrollRef.current = null;
-                setIsEditorFocused(false);
             }, 650);
         };
 
         const handleViewportChange = () => {
             if (!editorShell.contains(document.activeElement)) return;
             if (focusLayoutEnabled && isMobileViewport) {
-                if (mainScrollRef.current) mainScrollRef.current.scrollTop = 0;
                 if (window.scrollY !== 0) window.scrollTo(0, 0);
                 return;
             }
@@ -15985,13 +15989,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v287') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v288') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v287')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v288')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -19477,9 +19481,11 @@ print(result)
         >
             <div
                 ref={headerRef}
+                data-stats-header="true"
                 className="fixed left-1/2 z-20 w-full max-w-4xl -translate-x-1/2"
                 style={{
                     top: 0,
+                    zIndex: scrollLayoutActive ? 115 : 20,
                     backgroundColor: hexToRgba(panelColors.background, 0.18),
                     paddingTop: 'max(0.75rem, calc(env(safe-area-inset-top) + 0.75rem))',
                     paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
@@ -19661,21 +19667,18 @@ print(result)
 
             {!plainMode && (
                 <div
+                    ref={problemPanelRef}
                     data-landscape-hide="problem-panel"
                     className="fixed w-full max-w-4xl"
                     style={{
                         left: 0,
                         right: 0,
                         margin: '0 auto',
-                        top: focusLayoutActive
-                            ? `${Math.max(headerHeight - 182, -104)}px`
-                            : `${Math.max(headerHeight + 8, 78)}px`,
-                        zIndex: focusLayoutActive ? 10 : 20,
+                        top: `${Math.max(headerHeight + 8, 78)}px`,
+                        zIndex: scrollLayoutActive ? 10 : 20,
                         paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                         paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
-                        transition: 'top 220ms ease, opacity 180ms ease',
-                        opacity: focusLayoutActive ? 0.35 : 1,
-                        pointerEvents: focusLayoutActive ? 'none' : 'auto',
+                        willChange: scrollLayoutActive ? 'transform' : 'auto',
                     }}
                 >
                     <div
@@ -19736,12 +19739,14 @@ print(result)
                 </div>
             )}
             <div
+                ref={editorToolbarRef}
                 data-landscape-toolbar="true"
                 className="fixed left-1/2 z-[110] w-full max-w-4xl -translate-x-1/2 px-4"
                 style={{
                     top: `${editorToolbarTop}px`,
                     pointerEvents: 'none',
-                    transition: 'top 220ms ease'
+                    zIndex: scrollLayoutActive ? 15 : 110,
+                    willChange: scrollLayoutActive ? 'transform' : 'auto',
                 }}
             >
                 <div
@@ -19784,14 +19789,14 @@ print(result)
             <div
                 data-landscape-main-scroll="true"
                 ref={mainScrollRef}
+                onScroll={syncScrollableLayout}
                 className="flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
                     paddingTop: `${editorContentTop}px`,
                     paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + 490, 620)}px))`,
                     scrollPaddingTop: `${editorContentTop}px`,
                     WebkitOverflowScrolling: 'touch',
-                    overscrollBehaviorY: 'contain',
-                    transition: 'padding-top 220ms ease'
+                    overscrollBehaviorY: 'contain'
                 }}
             >
                 <div
