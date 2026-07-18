@@ -4286,7 +4286,7 @@ type DifficultyMode = 'normal' | 'atomic_beginner' | 'beginner' | 'intermediate'
 type ConceptModeId = `concept:${string}`;
 type ProblemMode = DifficultyMode | ConceptModeId;
 type StatsByMode = Record<string, Stats>;
-type CustomizeModalTab = 'count' | 'ide' | 'tools' | 'panels';
+type CustomizeModalTab = 'count' | 'ide' | 'tools' | 'panels' | 'layout';
 
 interface CountRowColorSettings {
     background: string;
@@ -15159,6 +15159,9 @@ const App: React.FC = () => {
     const offlineAiBusy = offlineAiState.status === 'downloading' || offlineAiState.status === 'removing';
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
+    const [focusLayoutEnabled, setFocusLayoutEnabled] = useState(() => localStorage.getItem('python_focus_layout') === 'true');
+    const [isEditorFocused, setIsEditorFocused] = useState(false);
+    const [isMobileViewport, setIsMobileViewport] = useState(() => window.matchMedia('(max-width: 768px)').matches);
     const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [rankUpCelebration, setRankUpCelebration] = useState(() => localStorage.getItem('python_rank_up_celebration') !== 'false');
     const [plainMode, setPlainMode] = useState(() => localStorage.getItem('python_plain_mode') === 'true');
@@ -15370,10 +15373,12 @@ const App: React.FC = () => {
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(70);
-    const totalFixedEnd = !plainMode
+    const focusLayoutActive = focusLayoutEnabled && isMobileViewport && isEditorFocused && !plainMode;
+    const standardFixedEnd = !plainMode
         ? Math.max(headerHeight + 8, 78) + 190
         : headerHeight;
-    const editorToolbarTop = Math.max(totalFixedEnd + 4, 270);
+    const totalFixedEnd = focusLayoutActive ? Math.max(headerHeight + 8, 78) : standardFixedEnd;
+    const editorToolbarTop = focusLayoutActive ? totalFixedEnd + 4 : Math.max(totalFixedEnd + 4, 270);
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
@@ -15441,6 +15446,19 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('python_panel_colors', JSON.stringify(panelColors));
     }, [panelColors]);
+
+    useEffect(() => {
+        localStorage.setItem('python_focus_layout', String(focusLayoutEnabled));
+        if (!focusLayoutEnabled) setIsEditorFocused(false);
+    }, [focusLayoutEnabled]);
+
+    useEffect(() => {
+        const mobileQuery = window.matchMedia('(max-width: 768px)');
+        const updateMobileViewport = () => setIsMobileViewport(mobileQuery.matches);
+        updateMobileViewport();
+        mobileQuery.addEventListener?.('change', updateMobileViewport);
+        return () => mobileQuery.removeEventListener?.('change', updateMobileViewport);
+    }, []);
 
     useEffect(() => {
         saveOfflineAiState(offlineAiState);
@@ -15753,6 +15771,14 @@ const App: React.FC = () => {
         if (!editorShell) return;
 
         const handleEditorFocus = () => {
+            setIsEditorFocused(true);
+            if (focusLayoutEnabled && isMobileViewport) {
+                window.requestAnimationFrame(() => {
+                    if (mainScrollRef.current) mainScrollRef.current.scrollTop = 0;
+                    if (window.scrollY !== 0) window.scrollTo(0, 0);
+                });
+                return;
+            }
             keyboardMainScrollRef.current = mainScrollRef.current?.scrollTop ?? 0;
             preserveEditorKeyboardPosition();
         };
@@ -15760,11 +15786,17 @@ const App: React.FC = () => {
         const handleEditorBlur = () => {
             window.setTimeout(() => {
                 keyboardMainScrollRef.current = null;
+                setIsEditorFocused(false);
             }, 650);
         };
 
         const handleViewportChange = () => {
             if (!editorShell.contains(document.activeElement)) return;
+            if (focusLayoutEnabled && isMobileViewport) {
+                if (mainScrollRef.current) mainScrollRef.current.scrollTop = 0;
+                if (window.scrollY !== 0) window.scrollTo(0, 0);
+                return;
+            }
             preserveEditorKeyboardPosition();
         };
 
@@ -15781,7 +15813,7 @@ const App: React.FC = () => {
             keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
             keyboardRestoreTimersRef.current = [];
         };
-    }, [bootStage, preserveEditorKeyboardPosition]);
+    }, [bootStage, focusLayoutEnabled, isMobileViewport, preserveEditorKeyboardPosition]);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_stats', JSON.stringify(statsByMode));
@@ -15953,13 +15985,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v286') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v287') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v286')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v287')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -19630,14 +19662,20 @@ print(result)
             {!plainMode && (
                 <div
                     data-landscape-hide="problem-panel"
-                    className="fixed z-20 w-full max-w-4xl"
+                    className="fixed w-full max-w-4xl"
                     style={{
                         left: 0,
                         right: 0,
                         margin: '0 auto',
-                        top: `${Math.max(headerHeight + 8, 78)}px`,
+                        top: focusLayoutActive
+                            ? `${Math.max(headerHeight - 182, -104)}px`
+                            : `${Math.max(headerHeight + 8, 78)}px`,
+                        zIndex: focusLayoutActive ? 10 : 20,
                         paddingLeft: 'max(1rem, calc(var(--safe-area-inset-left, 0px) + 1rem))',
                         paddingRight: 'max(1rem, calc(var(--safe-area-inset-right, 0px) + 1rem))',
+                        transition: 'top 220ms ease, opacity 180ms ease',
+                        opacity: focusLayoutActive ? 0.35 : 1,
+                        pointerEvents: focusLayoutActive ? 'none' : 'auto',
                     }}
                 >
                     <div
@@ -19702,7 +19740,8 @@ print(result)
                 className="fixed left-1/2 z-[110] w-full max-w-4xl -translate-x-1/2 px-4"
                 style={{
                     top: `${editorToolbarTop}px`,
-                    pointerEvents: 'none'
+                    pointerEvents: 'none',
+                    transition: 'top 220ms ease'
                 }}
             >
                 <div
@@ -19751,7 +19790,8 @@ print(result)
                     paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + 490, 620)}px))`,
                     scrollPaddingTop: `${editorContentTop}px`,
                     WebkitOverflowScrolling: 'touch',
-                    overscrollBehaviorY: 'contain'
+                    overscrollBehaviorY: 'contain',
+                    transition: 'padding-top 220ms ease'
                 }}
             >
                 <div
@@ -20751,11 +20791,12 @@ print(result)
                         {showModal === 'customize' && (
                             <div className="flex h-full min-h-0 flex-col py-2">
                                  <h2 className="mb-4 flex-shrink-0 text-center text-lg font-bold">{t('customize.title', appLang)}</h2>
-                                 <div className="mb-4 flex flex-shrink-0 gap-3 border-b border-[#1d2d44]">
+                                 <div className="mb-4 flex flex-shrink-0 gap-3 overflow-x-auto border-b border-[#1d2d44] no-scrollbar">
                                      <TabButton active={customizeTab === 'count'} onClick={() => setCustomizeTab('count')} label={t('customize.countRow', appLang)} />
                                      <TabButton active={customizeTab === 'ide'} onClick={() => setCustomizeTab('ide')} label={t('customize.ide', appLang)} />
                                      <TabButton active={customizeTab === 'tools'} onClick={() => setCustomizeTab('tools')} label={t('customize.tools', appLang)} />
                                      <TabButton active={customizeTab === 'panels'} onClick={() => setCustomizeTab('panels')} label={t('customize.panels', appLang)} />
+                                     <TabButton active={customizeTab === 'layout'} onClick={() => setCustomizeTab('layout')} label={t('customize.layout', appLang)} />
                                 </div>
                                 <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 pb-8">
                                     {customizeTab === 'count' && (
@@ -20990,6 +21031,56 @@ print(result)
                                              >
                                                   Reset Panel Defaults
                                             </button>
+                                        </div>
+                                    )}
+                                    {customizeTab === 'layout' && (
+                                        <div className="space-y-4">
+                                            <div
+                                                className="rounded-2xl border p-4"
+                                                style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), borderColor: panelBorder }}
+                                            >
+                                                <div className="mb-4 overflow-hidden rounded-xl border" style={{ borderColor: panelBorder, backgroundColor: editorColors.background }}>
+                                                    <div className="flex items-center justify-center gap-3 px-3 py-2 text-[9px] font-black" style={{ backgroundColor: hexToRgba(panelColors.background, panelAlpha), color: countRowColors.value }}>
+                                                        <span style={{ color: countRowColors.count }}>{t('countRow.count', appLang)}</span>
+                                                        <span style={{ color: countRowColors.wins }}>{t('countRow.wins', appLang)}</span>
+                                                        <span style={{ color: countRowColors.fail }}>{t('countRow.fail', appLang)}</span>
+                                                        <span style={{ color: countRowColors.rate }}>{t('countRow.rate', appLang)}</span>
+                                                    </div>
+                                                    <div className="border-t px-3 py-3 text-[10px]" style={{ borderColor: panelBorder, color: editorColors.problemText }}>
+                                                        {t('customize.focusPreviewProblem', appLang)}
+                                                    </div>
+                                                    <div className="border-t px-3 py-2 font-mono text-[10px]" style={{ borderColor: panelBorder, color: editorColors.text }}>
+                                                        <span style={{ color: editorColors.keyword }}>def</span> solve(value):
+                                                        <br />    <span style={{ color: editorColors.keyword }}>return</span> value
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setFocusLayoutEnabled(current => !current)}
+                                                    className="flex w-full items-center justify-between gap-4 rounded-xl border px-4 py-4 text-left transition-all active:scale-[0.99]"
+                                                    style={focusLayoutEnabled
+                                                        ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.14) }
+                                                        : { borderColor: panelBorder, backgroundColor: hexToRgba(editorColors.background, 0.8) }}
+                                                    aria-pressed={focusLayoutEnabled}
+                                                >
+                                                    <span className="min-w-0">
+                                                        <span className="block text-sm font-black" style={{ color: editorColors.text }}>{t('customize.focusLayout', appLang)}</span>
+                                                        <span className="mt-1 block text-xs leading-5" style={{ color: editorColors.gutterText }}>{t('customize.focusLayoutDesc', appLang)}</span>
+                                                    </span>
+                                                    <span
+                                                        className="flex-shrink-0 rounded-full border px-3 py-1 text-[10px] font-black uppercase"
+                                                        style={{
+                                                            borderColor: focusLayoutEnabled ? countRowColors.wins : panelBorder,
+                                                            color: focusLayoutEnabled ? countRowColors.wins : editorColors.gutterText,
+                                                        }}
+                                                    >
+                                                        {focusLayoutEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}
+                                                    </span>
+                                                </button>
+                                                <p className="mb-0 mt-3 text-[10px] leading-5" style={{ color: editorColors.gutterText }}>
+                                                    {t('customize.focusLayoutNote', appLang)}
+                                                </p>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
