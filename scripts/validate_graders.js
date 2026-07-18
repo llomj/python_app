@@ -24,6 +24,8 @@ function loadTsExports(fileName) {
       if (specifier === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
       if (specifier === './whileLoopPracticeExercises') return loadTsExports('whileLoopPracticeExercises.ts');
       if (specifier === './whileLoopPracticeGraders') return loadTsExports('whileLoopPracticeGraders.ts');
+      if (specifier === './conceptExpansionExercises') return loadTsExports('conceptExpansionExercises.ts');
+      if (specifier === './conceptExpansionGraders') return loadTsExports('conceptExpansionGraders.ts');
       return {};
     },
   };

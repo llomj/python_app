@@ -4,6 +4,13 @@ const ts = require('typescript');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const moduleCache = new Map();
+
+function resolveLocalModule(fileName, specifier) {
+  const base = path.normalize(path.join(path.dirname(fileName), specifier));
+  return [base, `${base}.ts`, path.join(base, 'index.ts')]
+    .find(candidate => fs.existsSync(path.join(root, candidate))) || null;
+}
 
 function readNumberFlag(name) {
   const prefix = `--${name}=`;
@@ -20,6 +27,7 @@ function readNumberFlag(name) {
 }
 
 function loadTsExports(fileName) {
+  if (moduleCache.has(fileName)) return moduleCache.get(fileName).exports;
   const source = fs.readFileSync(path.join(root, fileName), 'utf8');
   const compiled = ts.transpileModule(source, {
     compilerOptions: {
@@ -29,18 +37,14 @@ function loadTsExports(fileName) {
     },
     fileName,
   }).outputText;
-  const sandbox = {
-    exports: {},
-    module: { exports: {} },
-    require: (specifier) => {
-      if (specifier === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
-      if (specifier === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
-      return {};
-    },
-  };
-  sandbox.exports = sandbox.module.exports;
+  const module = { exports: {} };
+  moduleCache.set(fileName, module);
+  const sandbox = { exports: module.exports, module, require: specifier => {
+    const resolved = resolveLocalModule(fileName, specifier);
+    return resolved ? loadTsExports(resolved) : {};
+  } };
   vm.runInNewContext(compiled, sandbox, { filename: fileName });
-  return sandbox.module.exports;
+  return module.exports;
 }
 
 function isSimpleCase(testCase) {
@@ -617,6 +621,7 @@ const covered = [];
 const uncoveredCommon = [];
 const guardedFixedCommon = [];
 const guardedObjectCommon = [];
+const guardedExplicitCommon = [];
 const ruleCounts = new Map();
 const commonSignals = [
   'square', 'even', 'odd', 'reverse', 'vowel', 'max', 'min', 'sum',
@@ -649,6 +654,11 @@ function isGuardedObjectCommon(grader) {
   );
 }
 
+function hasAdequateExplicitCases(grader) {
+  const tests = Array.isArray(grader.tests) ? grader.tests : [];
+  return tests.length >= 3 && tests.every(testCase => Array.isArray(testCase?.args));
+}
+
 for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   const id = Number(rawId);
   if (grader.mode === 'script') continue;
@@ -663,6 +673,10 @@ for (const [rawId, grader] of Object.entries(AUTO_GRADERS)) {
   }
   const searchable = `${functionNames.join(' ')} ${exerciseById.get(id)?.title || ''} ${exerciseById.get(id)?.description || ''}`.toLowerCase();
   if (commonSignals.some(signal => searchable.includes(signal))) {
+    if (hasAdequateExplicitCases(grader)) {
+      guardedExplicitCommon.push({ id, functionNames, title: exerciseById.get(id)?.title || `Problem ${id}` });
+      continue;
+    }
     if (isGuardedObjectCommon(grader)) {
       guardedObjectCommon.push({ id, functionNames, title: exerciseById.get(id)?.title || `Problem ${id}` });
       continue;
@@ -681,6 +695,7 @@ console.log(`Covered by generated metamorphic tests: ${covered.length}`);
 console.log(`Uncovered common-pattern function graders: ${uncoveredCommon.length}`);
 console.log(`Guarded fixed no-arg common-pattern graders: ${guardedFixedCommon.length}`);
 console.log(`Guarded object/class common-pattern graders: ${guardedObjectCommon.length}`);
+console.log(`Guarded by three explicit cases: ${guardedExplicitCommon.length}`);
 console.log(`Rule distribution: ${[...ruleCounts.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([rule, total]) => `${rule}:${total}`).join(', ')}`);
 
 if (showAll) {

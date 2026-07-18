@@ -4,6 +4,13 @@ const ts = require('typescript');
 const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
+const moduleCache = new Map();
+
+function resolveLocalModule(fileName, specifier) {
+  const base = path.normalize(path.join(path.dirname(fileName), specifier));
+  return [base, `${base}.ts`, path.join(base, 'index.ts')]
+    .find(candidate => fs.existsSync(path.join(root, candidate))) || null;
+}
 
 function readNumberFlag(name) {
   const prefix = `--${name}=`;
@@ -20,6 +27,7 @@ function readNumberFlag(name) {
 }
 
 function loadTsExports(fileName) {
+  if (moduleCache.has(fileName)) return moduleCache.get(fileName).exports;
   const source = fs.readFileSync(path.join(root, fileName), 'utf8');
   const compiled = ts.transpileModule(source, {
     compilerOptions: {
@@ -29,18 +37,14 @@ function loadTsExports(fileName) {
     },
     fileName,
   }).outputText;
-  const sandbox = {
-    exports: {},
-    module: { exports: {} },
-    require: (specifier) => {
-      if (specifier === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
-      if (specifier === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
-      return {};
-    },
-  };
-  sandbox.exports = sandbox.module.exports;
+  const module = { exports: {} };
+  moduleCache.set(fileName, module);
+  const sandbox = { exports: module.exports, module, require: specifier => {
+    const resolved = resolveLocalModule(fileName, specifier);
+    return resolved ? loadTsExports(resolved) : {};
+  } };
   vm.runInNewContext(compiled, sandbox, { filename: fileName });
-  return sandbox.module.exports;
+  return module.exports;
 }
 
 function hasValue(value) {

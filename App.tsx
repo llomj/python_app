@@ -52,6 +52,7 @@ import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/tra
 import { EXERCISES_FR } from './services/exercisesFr';
 import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { WHILE_LOOP_PRACTICE_FR } from './services/whileLoopPracticeFr';
+import { CONCEPT_EXPANSION_FR } from './services/conceptExpansionFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
@@ -15952,13 +15953,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v285') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v286') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v285')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v286')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16428,9 +16429,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const lookupQuestion = normalizeAiQuestionForLookup(question, appLang);
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
-        const whileLocalization = appLang === 'fr' ? WHILE_LOOP_PRACTICE_FR[exercise.id] : null;
-        const localizedExercise = whileLocalization
-            ? { ...exercise, description, hint: whileLocalization.hint, breakdown: whileLocalization.breakdown }
+        const generatedLocalization = appLang === 'fr'
+            ? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id]
+            : null;
+        const localizedExercise = generatedLocalization
+            ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
             : exercise;
         const wantsGroundedBreakdown = /(?:explain|break down|breakdown|understand|what does|what is|what.*want|how do i start|help me start).*(?:problem|task|exercise)|(?:explique|décompose|comprendre|que demande|comment commencer).*(?:problème|tâche|exercice)/i.test(lookupQuestion);
         if (wantsGroundedBreakdown) {
@@ -18917,12 +18920,43 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
     const createGeneratedPracticeDocs = (targetExercise: Exercise, lang: 'en' | 'fr') => {
         const functionName = targetExercise.initialCode.match(/def\s+([a-zA-Z_]\w*)\s*\(/)?.[1] ?? 'the_function';
         const prompt = getExerciseDescription(targetExercise, lang).split('\nExamples:')[0].trim();
-        const solutionCode = targetExercise.solution.split('# Script approach')[0].trim();
+        const solutionCode = targetExercise.solution.split(/\n# (?:Script approach|Example 2:|Alternative helper implementation)/)[0].trim();
         const isRegexPractice = /regular expression|regex/i.test(targetExercise.description) || /\bimport\s+re\b/.test(targetExercise.solution);
         const isWhilePractice = /\bwhile loop\b/i.test(targetExercise.description) || /\bwhile\b/.test(targetExercise.solution);
-        const conceptName = isRegexPractice ? 'regular expressions' : isWhilePractice ? 'while loops' : 'for loops';
-        const localizedWhile = lang === 'fr' ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] : null;
-        const breakdown = localizedWhile?.breakdown ?? targetExercise.breakdown ?? '';
+        const category = targetExercise.category.toLowerCase();
+        const isClosurePractice = category.startsWith('closure ');
+        const isComprehensionPractice = category.startsWith('comprehension ');
+        const isGeneratorPractice = category.startsWith('generator ');
+        const isRecursionPractice = category.startsWith('recursion ');
+        const isSlicingPractice = category.startsWith('slicing ');
+        const conceptName = isRegexPractice ? 'regular expressions'
+            : isWhilePractice ? 'while loops'
+                : isClosurePractice ? 'closures'
+                    : isComprehensionPractice ? 'comprehensions'
+                        : isGeneratorPractice ? 'generators'
+                            : isRecursionPractice ? 'recursion'
+                                : isSlicingPractice ? 'slicing'
+                                    : 'for loops';
+        const localizedGenerated = lang === 'fr'
+            ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id]
+            : null;
+        const breakdown = localizedGenerated?.breakdown ?? targetExercise.breakdown ?? '';
+        const requiredStructure = isRegexPractice ? "Import and use Python's re module."
+            : isWhilePractice ? 'Use at least one while loop.'
+                : isClosurePractice ? 'Define and return an inner function that captures an enclosing value.'
+                    : isComprehensionPractice ? 'Use the requested list or dictionary comprehension.'
+                        : isGeneratorPractice ? 'Use yield inside a generator function.'
+                            : isRecursionPractice ? `Include a base case and make ${functionName} call itself with a smaller input.`
+                                : isSlicingPractice ? 'Use Python start:stop:step slicing syntax.'
+                                    : 'Use at least one for loop.';
+        const conceptExplanation = isRegexPractice ? 'A regex pattern describes what text to find, replace, split, or validate.'
+            : isWhilePractice ? 'A while loop repeats only while its condition is True. Its state update must make progress toward termination.'
+                : isClosurePractice ? 'A closure is an inner function that remembers values from the enclosing function after that outer call has finished.'
+                    : isComprehensionPractice ? 'A comprehension combines an output expression, an iterable, and an optional filter into one collection-building expression.'
+                        : isGeneratorPractice ? 'A generator pauses at each yield and resumes from that point when the next value is requested.'
+                            : isRecursionPractice ? 'A recursive function solves a smaller version of the same problem until a base case stops further calls.'
+                                : isSlicingPractice ? 'A slice selects a sequence with start:stop:step; stop is excluded and negative indexes count from the end.'
+                                    : 'The loop should update a result while it runs, then return the completed value.';
         const operationLine = isRegexPractice
             ? '# Use Python regex functions such as re.search(), re.findall(), re.sub(), re.split(), or re.fullmatch().'
             : isWhilePractice
@@ -18937,7 +18971,7 @@ ${prompt}
 # ${prompt}
 #
 # This problem demonstrates how to use Python ${conceptName}.
-${isRegexPractice ? '# A regex pattern describes what text to find, replace, split, or validate.' : isWhilePractice ? '# A while loop repeats only while its condition is True. Its state update must make progress toward termination.' : '# The loop should update a result while it runs, then return the completed value.'}
+# ${conceptExplanation}
 #
 # CODE LOGIC:
 ${breakdown.split('\n').map(line => `# ${line}`).join('\n')}
@@ -18957,7 +18991,7 @@ ${solutionCode}
 #
 # Key Requirements:
 # - Define a function named ${functionName}.
-# - ${isRegexPractice ? "Import and use Python's re module." : isWhilePractice ? 'Use at least one while loop.' : 'Use at least one for loop.'}
+# - ${requiredStructure}
 # - ${isRegexPractice ? 'Choose the regex function that matches the task: search, findall, sub, split, match, or fullmatch.' : 'Build the result with loop logic.'}
 # - Use the input values from the function parameters.
 # - Do not hard-code the example output.
@@ -18972,8 +19006,30 @@ ${prompt}
 
 # SOLUTION EXPLANATION:
 # This solution defines a function that encapsulates the required logic.
-${isRegexPractice ? '# The regex pattern decides which text is matched, captured, replaced, or validated.' : isWhilePractice ? '# The while condition is tested before each iteration; the state update determines when repetition stops.' : '# The for loop repeats once for each item in the input data.'}
+# ${conceptExplanation}
 # The function returns the completed value after the operation has finished.
+
+${solutionCode}`;
+
+        const generatedConceptSyntax = `"""
+Problem ${targetExercise.id}: ${conceptName}
+#
+# REQUIRED STRUCTURE:
+# ${requiredStructure}
+#
+# CORE MEANING:
+# ${conceptExplanation}
+#
+# EVALUATION ORDER:
+# 1. Python evaluates the arguments at the call site.
+# 2. Parameters are bound to those argument values.
+# 3. Expressions inside the function are evaluated from their innermost parts outward.
+# 4. The required ${conceptName} structure controls how values are produced or selected.
+# 5. return evaluates the final expression and sends that value to the caller.
+#
+# EXECUTION FLOW:
+# function call -> bind inputs -> apply ${conceptName} logic -> build result -> return
+"""
 
 ${solutionCode}`;
 
@@ -19057,7 +19113,7 @@ print(result)
 # A break exits only the nearest loop.
 # A continue jumps to the next condition check, so required updates must not be skipped.
 # Nested while loops complete their inner repetitions for each outer iteration.
-"""` : `"""
+"""` : (isClosurePractice || isComprehensionPractice || isGeneratorPractice || isRecursionPractice || isSlicingPractice) ? generatedConceptSyntax : `"""
 Problem ${targetExercise.id}:
 #
 # SYNTAX:
