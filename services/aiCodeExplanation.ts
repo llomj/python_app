@@ -112,7 +112,7 @@ const extractPythonCalls = (code: string): PythonCall[] => {
 
 const primarySolutionCode = (solution: string) => {
     const lines = solution.trim().split('\n');
-    const isApproachHeading = (line: string) => /^\s*#\s*(?:Using|Script|Direct|Built|Manual|Alternative).*\bapproach\b/i.test(line);
+    const isApproachHeading = (line: string) => /^\s*#\s*(?:.*\bapproach\b|Alternative\b.*)/i.test(line);
     const functionHeading = lines.findIndex(line => /^\s*#\s*Using function approach\b/i.test(line));
     const leadingImports = lines
         .slice(0, functionHeading >= 0 ? functionHeading : lines.length)
@@ -217,7 +217,7 @@ const unquote = (value: string) => {
 const pythonList = (values: string[]) => `[${values.map(value => JSON.stringify(value)).join(', ')}]`;
 
 const addComment = (target: string[], indent: string, lines: string[]) => {
-    for (const line of lines) target.push(line ? `${indent}# ${line}` : '');
+    for (const line of lines) target.push(line ? `${indent}# ${line.replace(/`/g, '')}` : '');
 };
 
 const quotePythonString = (value: string) => `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
@@ -227,14 +227,16 @@ const normalizeDisplayLine = (
     example: ReturnType<typeof extractFunctionExample>,
 ) => {
     let normalized = line.replace(/\.split\(\s*(['"])(.*?)\1\s*\)/g, (_match, _quote, delimiter) => `.split(${quotePythonString(delimiter)})`);
-    if (example?.args.length && new RegExp(`\\b${example.name}\\s*\\(`).test(normalized)) {
-        const formattedArgs = example.args.map(arg => {
-            const value = unquote(arg);
-            return value === null ? arg : quotePythonString(value);
-        });
+    if (example && new RegExp(`\\b${example.name}\\s*\\(`).test(normalized)) {
         normalized = normalized.replace(
             new RegExp(`\\b${example.name}\\s*\\(([^\\n()]*(?:\\([^\\n()]*\\)[^\\n()]*)*)\\)`),
-            `${example.name}(${formattedArgs.join(', ')})`,
+            (_match, rawArguments) => {
+                const formattedArgs = splitTopLevel(rawArguments).map(arg => {
+            const value = unquote(arg);
+            return value === null ? arg : quotePythonString(value);
+                });
+                return `${example.name}(${formattedArgs.join(', ')})`;
+            },
         );
     }
     return normalized;
@@ -302,6 +304,23 @@ const splitTopLevel = (text: string, delimiter = ','): string[] => {
     }
     parts.push(text.slice(start).trim());
     return parts.filter(Boolean);
+};
+
+const stripInlinePythonComment = (line: string) => {
+    let quote = '';
+    let escaped = false;
+    for (let index = 0; index < line.length; index += 1) {
+        const char = line[index];
+        if (quote) {
+            if (escaped) escaped = false;
+            else if (char === '\\') escaped = true;
+            else if (char === quote) quote = '';
+            continue;
+        }
+        if (char === "'" || char === '"') quote = char;
+        else if (char === '#') return line.slice(0, index).trimEnd();
+    }
+    return line;
 };
 
 const stripOuterParentheses = (expression: string) => {
@@ -657,7 +676,7 @@ const buildUniversalExecutionTrace = (
     const lines = code.split('\n').slice(0, MAX_SOURCE_LINES);
 
     lines.forEach((line, index) => {
-        const trimmed = line.trim().replace(/\s+#.*$/, '');
+        const trimmed = stripInlinePythonComment(line).trim();
         if (!trimmed) return;
         const definition = trimmed.match(/^def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)/);
         if (definition) {
@@ -767,7 +786,7 @@ const buildCallableSemanticsLesson = (
     const scopeByIndent: Array<{ indent: number; name: string }> = [];
 
     for (const line of code.split('\n')) {
-        const trimmed = line.trim();
+        const trimmed = stripInlinePythonComment(line).trim();
         const importedModule = trimmed.match(/^import\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)(?:\s+as\s+([A-Za-z_]\w*))?/);
         if (importedModule) imports.set(importedModule[2] || importedModule[1].split('.')[0], { module: importedModule[1] });
         const importedName = trimmed.match(/^from\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)\s+import\s+([A-Za-z_]\w*)(?:\s+as\s+([A-Za-z_]\w*))?/);
@@ -891,6 +910,98 @@ const buildCallableSemanticsLesson = (
     return lesson;
 };
 
+const OPERATOR_LESSONS: Record<string, [string, string]> = {
+    '+': ['adds the right operand to the left operand', 'additionne l’opérande de droite à celui de gauche'],
+    '-': ['subtracts the right operand from the left operand', 'soustrait l’opérande de droite de celui de gauche'],
+    '*': ['multiplies the two operands', 'multiplie les deux opérandes'],
+    '/': ['performs true division and returns a floating-point result', 'effectue une division réelle et renvoie un résultat décimal'],
+    '//': ['performs floor division: it divides and rounds the quotient down to the nearest integer', 'effectue une division entière : il divise puis arrondit le quotient vers le bas'],
+    '%': ['returns the remainder left after division', 'renvoie le reste laissé par la division'],
+    '**': ['raises the left operand to the power of the right operand', 'élève l’opérande de gauche à la puissance de celui de droite'],
+    '==': ['tests whether the two values are equal', 'teste si les deux valeurs sont égales'],
+    '!=': ['tests whether the two values are different', 'teste si les deux valeurs sont différentes'],
+    '>': ['tests whether the left value is greater than the right value', 'teste si la valeur de gauche est supérieure à celle de droite'],
+    '<': ['tests whether the left value is less than the right value', 'teste si la valeur de gauche est inférieure à celle de droite'],
+    '>=': ['tests whether the left value is greater than or equal to the right value', 'teste si la valeur de gauche est supérieure ou égale à celle de droite'],
+    '<=': ['tests whether the left value is less than or equal to the right value', 'teste si la valeur de gauche est inférieure ou égale à celle de droite'],
+    'and': ['evaluates left to right and stops at the first falsy operand', 'évalue de gauche à droite et s’arrête au premier opérande faux'],
+    'or': ['evaluates left to right and stops at the first truthy operand', 'évalue de gauche à droite et s’arrête au premier opérande vrai'],
+    'in': ['tests whether the left value occurs inside the right container', 'teste si la valeur de gauche se trouve dans le conteneur de droite'],
+    'not in': ['tests whether the left value does not occur inside the right container', 'teste si la valeur de gauche ne se trouve pas dans le conteneur de droite'],
+    'is': ['tests object identity, not value equality', 'teste l’identité des objets, et non l’égalité de leurs valeurs'],
+    'is not': ['tests that two references do not point to the same object', 'teste que deux références ne désignent pas le même objet'],
+};
+
+const expressionOperatorLessons = (
+    expression: string,
+    language: AiCodeExplanationLanguage,
+) => {
+    const fr = language === 'fr';
+    const lessons: string[] = [];
+    const addOperator = (operator: string) => {
+        const lesson = OPERATOR_LESSONS[operator];
+        if (!lesson || lessons.some(line => line.startsWith(`\`${operator}\``))) return;
+        lessons.push(fr ? `\`${operator}\` ${lesson[1]}.` : `\`${operator}\` ${lesson[0]}.`);
+    };
+    const orderedOperators = ['is not', 'not in', '**', '//', '>=', '<=', '==', '!=', 'and', 'or', 'in', 'is', '%', '/', '*', '+', '-', '>', '<'];
+    for (const operator of orderedOperators) {
+        let pattern: RegExp;
+        if (operator === '**') pattern = /(?<!\*)\*\*(?!\*)/;
+        else if (operator === '*') pattern = /(?<!\*)\*(?!\*)/;
+        else if (operator === '//') pattern = /(?<!\/)\/\/(?!\/)/;
+        else if (operator === '/') pattern = /(?<!\/)\/(?!\/)/;
+        else if (operator === '>') pattern = /(?<![=>])>(?!=)/;
+        else if (operator === '<') pattern = /(?<![=<])<(?!=)/;
+        else {
+            const escaped = operator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+            pattern = new RegExp(/^[a-z]/i.test(operator) ? `\\b${escaped}\\b` : escaped);
+        }
+        if (pattern.test(expression)) addOperator(operator);
+    }
+    if (/\bnot\s+/.test(expression) && !/\bnot\s+(?:in|is)\b/.test(expression)) {
+        lessons.push(fr ? '`not` inverse la valeur de vérité obtenue.' : '`not` reverses the resulting truth value.');
+    }
+    if (/\[[^\]]*:[^\]]*\]/.test(expression)) {
+        lessons.push(fr
+            ? 'Une tranche `[début:fin:pas]` sélectionne une partie de la séquence ; la position `fin` est exclue.'
+            : 'A `[start:stop:step]` slice selects part of the sequence; the `stop` position is excluded.');
+    } else if (/\[[^\]]+\]/.test(expression)) {
+        lessons.push(fr
+            ? 'Les crochets évaluent l’indice ou la clé, puis récupèrent cet élément précis.'
+            : 'The brackets evaluate the index or key and then retrieve that specific item.');
+    }
+    if (/\/\/\s*10\b/.test(expression)) {
+        lessons.push(fr
+            ? 'Pour un entier positif, la division entière par `10` supprime le dernier chiffre décimal : `482 // 10` donne `48`.'
+            : 'For a positive integer, floor-dividing by `10` removes the final decimal digit: `482 // 10` gives `48`.');
+    }
+    if (/%\s*10\b/.test(expression)) {
+        lessons.push(fr
+            ? 'Pour un entier non négatif, `% 10` isole le dernier chiffre décimal : `482 % 10` donne `2`.'
+            : 'For a non-negative integer, `% 10` extracts the final decimal digit: `482 % 10` gives `2`.');
+    }
+    return lessons;
+};
+
+const augmentedAssignmentExplanation = (
+    target: string,
+    operator: string,
+    expression: string,
+    language: AiCodeExplanationLanguage,
+) => {
+    const fr = language === 'fr';
+    const binaryOperator = operator.slice(0, -1);
+    return [
+        fr
+            ? `\`${target} ${operator} ${expression}\` est une affectation augmentée, forme abrégée de \`${target} = ${target} ${binaryOperator} ${expression}\`.`
+            : `\`${target} ${operator} ${expression}\` is augmented assignment, shorthand for \`${target} = ${target} ${binaryOperator} ${expression}\`.`,
+        fr
+            ? `Python lit d’abord la valeur actuelle de \`${target}\`, évalue \`${expression}\`, applique \`${binaryOperator}\`, puis stocke le résultat dans \`${target}\`.`
+            : `Python first reads the current value of \`${target}\`, evaluates \`${expression}\`, applies \`${binaryOperator}\`, and stores the result back in \`${target}\`.`,
+        ...expressionOperatorLessons(`${target} ${binaryOperator} ${expression}`, language),
+    ];
+};
+
 const lineExplanation = (
     trimmed: string,
     language: AiCodeExplanationLanguage,
@@ -912,17 +1023,60 @@ const lineExplanation = (
     if (/^(?:from|import)\s+/.test(trimmed)) {
         return [fr ? 'Cette ligne charge un outil Python utilisé plus bas dans le programme.' : 'This line loads a Python tool used later in the program.'];
     }
+    const inlineCompound = trimmed.match(/^(if|elif|while)\s+(.+):\s*(\S.+)$/);
+    if (inlineCompound) {
+        return [
+            ...lineExplanation(`${inlineCompound[1]} ${inlineCompound[2]}:`, language, example),
+            ...(splitTopLevel(inlineCompound[3], ';').flatMap(statement => lineExplanation(statement, language, example))),
+        ];
+    }
+    const inlineElse = trimmed.match(/^else\s*:\s*(\S.+)$/);
+    if (inlineElse) {
+        return [
+            ...(fr ? ['Ce bloc s’exécute uniquement si les conditions précédentes étaient False.'] : ['This branch runs only when the preceding conditions were False.']),
+            ...(splitTopLevel(inlineElse[1], ';').flatMap(statement => lineExplanation(statement, language, example))),
+        ];
+    }
+    const simpleStatements = splitTopLevel(trimmed, ';');
+    if (simpleStatements.length > 1) {
+        return simpleStatements.flatMap(statement => lineExplanation(statement, language, example));
+    }
     if (/^return\b/.test(trimmed)) {
-        return [fr ? 'return renvoie le résultat final à l’appelant et au correcteur.' : 'return sends the final result back to the caller and grader.'];
+        const expression = trimmed.replace(/^return\s*/, '');
+        return [
+            fr ? `Python évalue d’abord \`${expression || 'None'}\` ; return arrête ensuite cette fonction et renvoie cette valeur à l’appelant et au correcteur.` : `Python evaluates \`${expression || 'None'}\` first; return then stops this function and sends that value back to the caller and grader.`,
+            ...expressionOperatorLessons(expression, language),
+        ];
     }
     if (/^print\s*\(/.test(trimmed)) {
         return [fr ? 'print(...) appelle la fonction et affiche le résultat dans la sortie.' : 'print(...) calls the function and displays the result in the output panel.'];
     }
-    if (/^(?:for|while)\b/.test(trimmed)) {
-        return [fr ? 'Cette boucle répète le bloc indenté ; les lignes décalées dessous appartiennent à la boucle.' : 'This loop repeats the indented block; the shifted lines below belong to the loop.'];
+    const whileStatement = trimmed.match(/^while\s+(.+):$/);
+    if (whileStatement) {
+        return [
+            fr
+                ? `Avant chaque itération, Python réévalue \`${whileStatement[1]}\`. Si le résultat est True, le bloc indenté s’exécute ; s’il est False, la boucle s’arrête.`
+                : `Before every iteration, Python reevaluates \`${whileStatement[1]}\`. If it is True, the indented body runs; if it is False, the loop stops.`,
+            fr ? 'Une ligne du corps doit modifier l’état utilisé par la condition, sinon la boucle peut ne jamais se terminer.' : 'A line in the body must change the state used by the condition, or the loop may never terminate.',
+            ...expressionOperatorLessons(whileStatement[1], language),
+        ];
     }
-    if (/^(?:if|elif|else)\b/.test(trimmed)) {
-        return [fr ? 'Cette condition choisit quelle branche indentée doit s’exécuter.' : 'This condition chooses which indented branch should run.'];
+    const forStatement = trimmed.match(/^for\s+(.+)\s+in\s+(.+):$/);
+    if (forStatement) {
+        return [
+            fr ? `Python évalue \`${forStatement[2]}\` une fois, obtient un itérable, puis affecte chaque élément successif à \`${forStatement[1]}\`.` : `Python evaluates \`${forStatement[2]}\` once, obtains an iterable, and assigns each successive item to \`${forStatement[1]}\`.`,
+            ...expressionOperatorLessons(forStatement[2], language),
+        ];
+    }
+    const conditionStatement = trimmed.match(/^(if|elif)\s+(.+):$/);
+    if (conditionStatement) {
+        return [
+            fr ? `Python évalue \`${conditionStatement[2]}\` comme un booléen. Le bloc indenté s’exécute seulement si cette condition est True.` : `Python evaluates \`${conditionStatement[2]}\` as a Boolean. The indented branch runs only when this condition is True.`,
+            ...expressionOperatorLessons(conditionStatement[2], language),
+        ];
+    }
+    if (/^else\s*:/.test(trimmed)) {
+        return [fr ? 'Ce bloc s’exécute uniquement si les conditions précédentes de la même chaîne étaient toutes False.' : 'This branch runs only when every preceding condition in the same chain was False.'];
     }
     if (/^with\b/.test(trimmed)) {
         return [fr ? 'Le bloc `with` gère automatiquement l’ouverture et le nettoyage de la ressource.' : 'The `with` block automatically manages opening and cleaning up the resource.'];
@@ -930,10 +1084,17 @@ const lineExplanation = (
     if (/^try\s*:|^except\b/.test(trimmed)) {
         return [fr ? 'Ce bloc exécute une opération risquée et traite une erreur prévue.' : 'This block runs a risky operation and handles an expected error.'];
     }
-    if (/^[A-Za-z_]\w*\s*=/.test(trimmed)) {
-        const name = trimmed.match(/^([A-Za-z_]\w*)/)?.[1] || 'value';
-        return [fr ? `Cette ligne calcule une valeur et la conserve dans la variable \`${name}\`.` : `This line calculates a value and stores it in the variable \`${name}\`.`];
+    const augmented = trimmed.match(/^(.+?)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*(.+)$/);
+    if (augmented) return augmentedAssignmentExplanation(augmented[1], augmented[2], augmented[3], language);
+    const assignment = trimmed.match(/^(.+?)\s*=\s*(?!=)(.+)$/);
+    if (assignment) {
+        return [
+            fr ? `Python évalue d’abord le côté droit \`${assignment[2]}\`, puis stocke le résultat dans \`${assignment[1]}\`.` : `Python evaluates the right-hand side \`${assignment[2]}\` first, then stores the result in \`${assignment[1]}\`.`,
+            ...expressionOperatorLessons(assignment[2], language),
+        ];
     }
+    if (trimmed === 'break') return [fr ? 'break arrête immédiatement la boucle la plus proche ; Python reprend après cette boucle.' : 'break immediately stops the nearest loop; Python resumes after that loop.'];
+    if (trimmed === 'continue') return [fr ? 'continue ignore le reste de cette itération et revient au test de la boucle.' : 'continue skips the rest of this iteration and returns to the loop test.'];
     if (trimmed === 'pass') {
         return [fr ? 'pass est seulement un emplacement vide ; il ne résout pas encore le problème.' : 'pass is only an empty placeholder; it does not solve the problem yet.'];
     }
@@ -1062,6 +1223,213 @@ const buildExpandedOperationLesson = (
     return comments;
 };
 
+const extractCallArgumentSets = (code: string, functionName: string) => {
+    const results: string[][] = [];
+    for (const line of code.split('\n')) {
+        if (new RegExp(`^\\s*def\\s+${functionName}\\s*\\(`).test(line)) continue;
+        let searchFrom = 0;
+        while (searchFrom < line.length) {
+            const marker = new RegExp(`\\b${functionName}\\s*\\(`).exec(line.slice(searchFrom));
+            if (!marker) break;
+            const openIndex = searchFrom + marker.index + marker[0].lastIndexOf('(');
+            let depth = 0;
+            let quote = '';
+            let escaped = false;
+            let closeIndex = -1;
+            for (let index = openIndex; index < line.length; index += 1) {
+                const char = line[index];
+                if (quote) {
+                    if (escaped) escaped = false;
+                    else if (char === '\\') escaped = true;
+                    else if (char === quote) quote = '';
+                    continue;
+                }
+                if (char === "'" || char === '"') quote = char;
+                else if (char === '(') depth += 1;
+                else if (char === ')' && --depth === 0) {
+                    closeIndex = index;
+                    break;
+                }
+            }
+            if (closeIndex < 0) break;
+            results.push(splitTopLevel(line.slice(openIndex + 1, closeIndex)));
+            searchFrom = closeIndex + 1;
+        }
+    }
+    return results;
+};
+
+const illustrativeArgumentScore = (args: string[]) => args.reduce((score, argument) => {
+    const value = inferExpression(argument, new Map());
+    if (!value.known) return score;
+    if (typeof value.value === 'number') return score + Math.min(1000, Math.abs(value.value)) + (value.value !== 0 ? 25 : 0);
+    if (typeof value.value === 'string') return score + value.value.length * 4;
+    if (Array.isArray(value.value)) return score + value.value.length * 8;
+    return score + 1;
+}, 0);
+
+const buildConcreteLoopWalkthrough = (
+    code: string,
+    language: AiCodeExplanationLanguage,
+    example: ReturnType<typeof extractFunctionExample>,
+) => {
+    if (!example || !/\bwhile\b/.test(code)) return [];
+    const fr = language === 'fr';
+    const sourceLines = code.split('\n');
+    const definitionIndex = sourceLines.findIndex(line => new RegExp(`^\\s*def\\s+${example.name}\\s*\\(`).test(line));
+    if (definitionIndex < 0) return [];
+    const definitionIndent = sourceLines[definitionIndex].length - sourceLines[definitionIndex].trimStart().length;
+    let functionEnd = sourceLines.length;
+    for (let index = definitionIndex + 1; index < sourceLines.length; index += 1) {
+        if (!sourceLines[index].trim()) continue;
+        const indent = sourceLines[index].length - sourceLines[index].trimStart().length;
+        if (indent <= definitionIndent) {
+            functionEnd = index;
+            break;
+        }
+    }
+    const functionLines = sourceLines.slice(definitionIndex + 1, functionEnd);
+    const whileIndex = functionLines.findIndex(line => /^\s*while\s+.+:\s*$/.test(line));
+    if (whileIndex < 0) return [];
+    const whileLine = functionLines[whileIndex];
+    const whileIndent = whileLine.length - whileLine.trimStart().length;
+    const condition = whileLine.trim().replace(/^while\s+/, '').replace(/:\s*$/, '');
+    let bodyEnd = functionLines.length;
+    for (let index = whileIndex + 1; index < functionLines.length; index += 1) {
+        if (!functionLines[index].trim()) continue;
+        const indent = functionLines[index].length - functionLines[index].trimStart().length;
+        if (indent <= whileIndent) {
+            bodyEnd = index;
+            break;
+        }
+    }
+    const bodyLines = functionLines.slice(whileIndex + 1, bodyEnd);
+    if (!bodyLines.length) return [];
+
+    const argumentSets = extractCallArgumentSets(code, example.name)
+        .filter(args => args.length >= example.params.length)
+        .sort((left, right) => illustrativeArgumentScore(right) - illustrativeArgumentScore(left));
+    const selectedArgs = argumentSets[0] || example.args;
+    if (!selectedArgs.length) return [];
+    const environment = new Map<string, TracedValue>();
+    example.params.forEach((param, index) => environment.set(param, inferExpression(selectedArgs[index] || '', environment)));
+    if ([...environment.values()].some(value => !value.known)) return [];
+
+    const applyMutation = (trimmed: string) => {
+        const augmented = trimmed.match(/^([A-Za-z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*(.+)$/);
+        if (augmented) {
+            const [, target, operator, rightExpression] = augmented;
+            const before = environment.get(target);
+            const right = inferExpression(rightExpression, environment);
+            const binaryOperator = operator.slice(0, -1);
+            const after = inferExpression(`${target} ${binaryOperator} ${rightExpression}`, environment);
+            if (!before?.known || !right.known || !after.known) return null;
+            environment.set(target, after);
+            return `${target} ${operator} ${rightExpression} → ${target} = ${displayValue(before.value)} ${binaryOperator} ${displayValue(right.value)} = ${displayValue(after.value)}`;
+        }
+        const assignment = trimmed.match(/^([A-Za-z_]\w*)\s*=\s*(?!=)(.+)$/);
+        if (assignment) {
+            const value = inferExpression(assignment[2], environment);
+            if (!value.known) return null;
+            environment.set(assignment[1], value);
+            return `${assignment[1]} = ${assignment[2]} → ${displayValue(value.value)}`;
+        }
+        return null;
+    };
+
+    for (const line of functionLines.slice(0, whileIndex)) {
+        const trimmed = stripInlinePythonComment(line).trim();
+        if (!trimmed || /^(?:if|elif|else|return|pass)\b/.test(trimmed)) continue;
+        applyMutation(trimmed);
+    }
+
+    const initialCondition = inferExpression(condition, environment);
+    if (!initialCondition.known || !initialCondition.value) return [];
+    const initialValues = [...environment.entries()]
+        .filter(([name]) => !name.startsWith('@'))
+        .map(([name, value]) => `${name} = ${displayValue(value.value)}`);
+    const callLabel = `${example.name}(${selectedArgs.join(', ')})`;
+    const walkthrough: string[] = [
+        fr ? `Exemple pas à pas pour ${callLabel} :` : `Step-by-step example for ${callLabel}:`,
+        '',
+        fr ? 'Départ :' : 'Start:',
+        ...initialValues,
+        '',
+    ];
+    let iterations = 0;
+    let terminated = false;
+    while (iterations < 12) {
+        const conditionValue = inferExpression(condition, environment);
+        if (!conditionValue.known || !conditionValue.value) {
+            terminated = Boolean(conditionValue.known);
+            break;
+        }
+        iterations += 1;
+        walkthrough.push(fr ? `Itération ${iterations} :` : `Loop ${iterations}:`);
+        const inactiveIndents: number[] = [];
+        let breakLoop = false;
+        for (const line of bodyLines) {
+            const indent = line.length - line.trimStart().length;
+            while (inactiveIndents.length && indent <= inactiveIndents[inactiveIndents.length - 1]) inactiveIndents.pop();
+            if (inactiveIndents.length) continue;
+            const trimmed = stripInlinePythonComment(line).trim();
+            if (!trimmed) continue;
+            const branch = trimmed.match(/^if\s+(.+):$/);
+            if (branch) {
+                const value = inferExpression(branch[1], environment);
+                walkthrough.push(
+                    `${fr ? 'Opération' : 'Operation'}: ${branch[1]} → ${value.known ? displayValue(Boolean(value.value)) : fr ? 'valeur inconnue' : 'unknown value'}`,
+                    `${fr ? 'Valeur intermédiaire et type' : 'Intermediate value and type'}: ${fr ? 'résultat de la condition' : 'condition result'} = ${value.known ? displayValue(Boolean(value.value)) : fr ? 'inconnu' : 'unknown'} (bool)`,
+                );
+                if (!value.known || !value.value) inactiveIndents.push(indent);
+                continue;
+            }
+            if (trimmed === 'break') {
+                walkthrough.push(fr ? 'break → arrêt immédiat de la boucle' : 'break → stop the loop immediately');
+                breakLoop = true;
+                break;
+            }
+            if (/^(?:continue|return)\b/.test(trimmed)) continue;
+            const mutation = applyMutation(trimmed);
+            if (mutation) {
+                walkthrough.push(`${fr ? 'Opération' : 'Operation'}: ${mutation}`);
+                const target = trimmed.match(/^([A-Za-z_]\w*)/)?.[1];
+                const value = target ? environment.get(target) : null;
+                if (target && value?.known) walkthrough.push(
+                    `${fr ? 'Valeur intermédiaire et type' : 'Intermediate value and type'}: ${target} = ${displayValue(value.value)} (${value.type})`,
+                );
+            }
+        }
+        walkthrough.push('');
+        if (breakLoop) {
+            terminated = true;
+            break;
+        }
+    }
+    const finalCondition = inferExpression(condition, environment);
+    if (finalCondition.known && !finalCondition.value) terminated = true;
+    if (!terminated) {
+        walkthrough.push(fr ? 'La trace est arrêtée après 12 itérations pour garder l’explication lisible.' : 'The trace stops after 12 iterations to keep the explanation readable.', '');
+    } else {
+        walkthrough.push(
+            fr ? `La condition \`${condition}\` vaut maintenant False, donc la boucle s’arrête.` : `The condition \`${condition}\` is now False, so the while loop stops.`,
+            '',
+        );
+    }
+    const returnLine = functionLines.slice(bodyEnd).map(line => line.trim()).find(line => /^return\b/.test(line));
+    if (returnLine) {
+        const expression = returnLine.replace(/^return\s*/, '');
+        const result = inferExpression(expression, environment);
+        if (result.known) walkthrough.push(fr ? 'Résultat final :' : 'Final result:', displayValue(result.value), '');
+    }
+    const changedValues = initialValues
+        .map(value => value.split(' = ')[0])
+        .map(name => environment.get(name)?.known ? `${name}: ${initialValues.find(item => item.startsWith(`${name} = `))?.split(' = ').slice(1).join(' = ')} → ${displayValue(environment.get(name)?.value)}` : '')
+        .filter(Boolean);
+    if (changedValues.length) walkthrough.push(fr ? 'Trajet de l’état :' : 'State path:', ...changedValues);
+    return walkthrough;
+};
+
 const buildConcreteTransformation = (
     code: string,
     language: AiCodeExplanationLanguage,
@@ -1169,6 +1537,34 @@ const transformationSummary = (
                 'Collecting those integers into a list.',
             ];
     }
+    const whileMatch = code.match(/while\s+(.+):/);
+    if (whileMatch) {
+        const steps: string[] = [];
+        const initializers = [...code.matchAll(/^\s*([A-Za-z_]\w*)\s*=\s*(?!=)(.+)$/gm)]
+            .filter(match => !match[0].includes('while '))
+            .slice(0, 3)
+            .map(match => `\`${match[1]} = ${match[2].trim()}\``);
+        if (initializers.length) steps.push(fr
+            ? `Initialiser l’état de départ avec ${initializers.join(', ')}.`
+            : `Initialize the starting state with ${initializers.join(', ')}.`);
+        steps.push(fr
+            ? `Tester \`${whileMatch[1].trim()}\` avant chaque itération et continuer seulement pendant que cette condition est True.`
+            : `Test \`${whileMatch[1].trim()}\` before every iteration and continue only while that condition is True.`);
+        const mutations = [...code.matchAll(/^\s*([A-Za-z_]\w*)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*(.+)$/gm)].slice(0, 4);
+        for (const mutation of mutations) {
+            const binaryOperator = mutation[2].slice(0, -1);
+            steps.push(fr
+                ? `Mettre à jour \`${mutation[1]}\` avec \`${mutation[1]} = ${mutation[1]} ${binaryOperator} ${mutation[3].trim()}\`.`
+                : `Update \`${mutation[1]}\` using \`${mutation[1]} = ${mutation[1]} ${binaryOperator} ${mutation[3].trim()}\`.`);
+        }
+        if (/\/\/=\s*10\b/.test(code)) steps.push(fr
+            ? 'Supprimer un chiffre décimal à droite à chaque division entière par 10.'
+            : 'Remove one decimal digit from the right on every floor division by 10.');
+        const returnedValues = [...code.matchAll(/^\s*return\s+(.+)$/gm)].map(match => match[1].trim());
+        const returned = returnedValues[returnedValues.length - 1];
+        if (returned) steps.push(fr ? `Renvoyer finalement \`${returned}\`.` : `Finally return \`${returned}\`.`);
+        return steps.slice(0, 8);
+    }
     const steps: string[] = [];
     if (/\.split\s*\(/.test(code)) steps.push(fr ? 'La chaîne est découpée en éléments séparés.' : 'The string is split into separate pieces.');
     if (/\bmap\s*\(\s*int\s*,/.test(code) || /\bint\s*\(/.test(code)) steps.push(fr ? 'Les morceaux numériques sont convertis du texte vers des entiers.' : 'Number-like pieces are converted from text into integers.');
@@ -1194,14 +1590,20 @@ export const buildDetailedCodeExplanation = (
             : 'Code explanation: No code is available yet. Write or run a solution to receive a line-by-line explanation.';
     }
 
-    const example = extractFunctionExample(source) || extractFunctionExample(primarySolutionCode(solution));
+    const baseExample = extractFunctionExample(source) || extractFunctionExample(primarySolutionCode(solution));
+    const illustrativeArgs = baseExample
+        ? extractCallArgumentSets(source, baseExample.name)
+            .filter(args => args.length >= baseExample.params.length)
+            .sort((left, right) => illustrativeArgumentScore(right) - illustrativeArgumentScore(left))[0]
+        : undefined;
+    const example = baseExample && illustrativeArgs ? { ...baseExample, args: illustrativeArgs } : baseExample;
     const annotated: string[] = [];
     const sourceLines = source.split('\n').slice(0, MAX_SOURCE_LINES);
     const expandedLesson = buildExpandedOperationLesson(source, language, example);
     let lessonInserted = false;
 
     for (const line of sourceLines) {
-        const trimmed = line.trim();
+        const trimmed = stripInlinePythonComment(line).trim();
         if (!trimmed || trimmed.startsWith('#')) {
             if (annotated.length && annotated[annotated.length - 1] !== '') annotated.push('');
             continue;
@@ -1229,9 +1631,8 @@ export const buildDetailedCodeExplanation = (
             addComment(annotated, indent, expandedLesson);
             annotated.push('');
             lessonInserted = true;
-        } else if (!/^print\s*\(/.test(trimmed) || !example) {
-            addComment(annotated, indent, lineExplanation(trimmed, language, example));
         }
+        addComment(annotated, indent, lineExplanation(trimmed, language, example));
         annotated.push(normalizeDisplayLine(line, example));
     }
 
@@ -1261,7 +1662,20 @@ export const buildDetailedCodeExplanation = (
         addComment(annotated, '', typeContrast);
     }
 
-    const executionTrace = buildUniversalExecutionTrace(source, language, example);
+    const loopWalkthrough = buildConcreteLoopWalkthrough(source, language, example);
+    if (loopWalkthrough.length) {
+        annotated.push('');
+        annotated.push('');
+        addComment(annotated, '', [
+            fr ? 'Trajet complet des valeurs pour l’exemple affiché :' : 'Complete value path for the shown example:',
+            '',
+            ...loopWalkthrough,
+        ]);
+    }
+
+    const concreteTraceIsComplete = loopWalkthrough.some(line => /^(?:Operation|Opération):/.test(line))
+        && loopWalkthrough.some(line => /^(?:Intermediate value and type|Valeur intermédiaire et type):/.test(line));
+    const executionTrace = concreteTraceIsComplete ? [] : buildUniversalExecutionTrace(source, language, example);
     if (executionTrace.length) {
         annotated.push('');
         annotated.push('');

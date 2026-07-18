@@ -39,9 +39,24 @@ try {
     if (/\w+\s*\(/.test(exercise.solution) && !explanation.includes('Module, function, and method breakdown:')) failures.push(`Problem ${exercise.id}: missing callable semantics breakdown`);
     if (explanation.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: contains a clutter-only hash line`);
     if (explanation.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: contains excessive blank-line spacing`);
-    if (explanation.split('\n').length > 280) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
+    if (explanation.split('\n').length > 342) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
 
     const french = buildDetailedCodeExplanation('', exercise.solution, 'fr');
+    const primarySection = exercise.solution
+      .replace(/^\s*#\s*(?:.*\bapproach\b|Alternative\b.*)[^\n]*\n/i, '')
+      .split(/\n\s*#\s*(?:.*\bapproach\b|Alternative\b.*)/i)[0];
+    const augmented = [...primarySection.matchAll(/((?:self\.)?[A-Za-z_]\w*(?:\[[^\]]+\]|\.[A-Za-z_]\w*)*)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*([^\n#]+)/g)];
+    for (const match of augmented) {
+      const binary = match[2].slice(0, -1);
+      const expanded = `${match[1]} = ${match[1]} ${binary} ${match[3].trim()}`;
+      if (!explanation.includes(expanded)) failures.push(`Problem ${exercise.id}: missing augmented-assignment expansion ${expanded}`);
+      if (!french.includes(expanded)) failures.push(`Problem ${exercise.id}: missing French augmented-assignment expansion ${expanded}`);
+    }
+    if (/\bwhile\s+.+:/.test(primarySection)) {
+      if (!explanation.includes('Before every iteration, Python reevaluates')) failures.push(`Problem ${exercise.id}: missing while-condition semantics`);
+      if (!french.includes('Avant chaque itération, Python réévalue')) failures.push(`Problem ${exercise.id}: missing French while-condition semantics`);
+    }
+
     if (!french.includes('Trajet complet des valeurs pour l’exemple affiché :')) failures.push(`Problem ${exercise.id}: missing French value path`);
     if (/\w+\s*\(/.test(exercise.solution) && !french.includes('Détail des modules, fonctions et méthodes :')) failures.push(`Problem ${exercise.id}: missing French callable semantics breakdown`);
     if (!french.includes('# Valeur intermédiaire et type :') && !french.includes('# Valeur intermédiaire et type:')) failures.push(`Problem ${exercise.id}: missing French value/type trace`);
@@ -73,6 +88,36 @@ try {
     if (!french975.includes(fragment)) failures.push(`Problem 975 French regression: missing ${JSON.stringify(fragment)}`);
   }
 
+  const problem2401 = EXERCISES.find(exercise => exercise.id === 2401);
+  const explanation2401 = buildDetailedCodeExplanation('', problem2401.solution, 'en');
+  for (const fragment of [
+    'count += 1 is augmented assignment, shorthand for count = count + 1.',
+    'number //= 10 is augmented assignment, shorthand for number = number // 10.',
+    '// performs floor division',
+    'floor-dividing by 10 removes the final decimal digit',
+    'Step-by-step example for digit_count(482):',
+    'number = 482 // 10 = 48',
+    'number = 48 // 10 = 4',
+    'number = 4 // 10 = 0',
+    'Final result:',
+    '# 3',
+    'Finally return count.',
+  ]) {
+    if (!explanation2401.includes(fragment)) failures.push(`Problem 2401 regression: missing ${JSON.stringify(fragment)}`);
+  }
+  if (explanation2401.includes('/ performs true division')) failures.push('Problem 2401 regression: floor division was incorrectly described as true division');
+  const french2401 = buildDetailedCodeExplanation('', problem2401.solution, 'fr');
+  for (const fragment of [
+    'forme abrégée de count = count + 1',
+    'forme abrégée de number = number // 10',
+    'division entière',
+    'supprime le dernier chiffre décimal',
+    'Exemple pas à pas pour digit_count(482)',
+    'number = 482 // 10 = 48',
+  ]) {
+    if (!french2401.includes(fragment)) failures.push(`Problem 2401 French regression: missing ${JSON.stringify(fragment)}`);
+  }
+
   const concreteCases = [
     [1, 'returned value = 10 (int)'],
     [8, 'returned value = 81 (int)'],
@@ -95,12 +140,12 @@ try {
 
   const explanation1179 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1179).solution, 'en');
   for (const fragment of [
-    '`datetime` is the imported module',
-    '`datetime.datetime` is the `datetime` class stored inside that module',
-    'the second `datetime` is not a method',
-    '`now` is a class method of the `datetime` class',
-    'Left-to-right resolution: find the `datetime` module',
-    'Call order: Python resolves `datetime.datetime.now` first',
+    'datetime is the imported module',
+    'datetime.datetime is the datetime class stored inside that module',
+    'the second datetime is not a method',
+    'now is a class method of the datetime class',
+    'Left-to-right resolution: find the datetime module',
+    'Call order: Python resolves datetime.datetime.now first',
   ]) {
     if (!explanation1179.includes(fragment)) failures.push(`Problem 1179 callable semantics regression: missing ${JSON.stringify(fragment)}`);
   }
@@ -125,8 +170,8 @@ try {
     'from datetime import datetime as DateTime',
     'print(DateTime.now())',
   ].join('\n'), '', 'en');
-  if (!importedAlias.includes('`DateTime` is the local name for `datetime`, imported from the `datetime` module')) failures.push('Imported-alias semantics regression: imported class was not identified');
-  if (!importedAlias.includes('`DateTime` is the `datetime` class and `now` is its class method')) failures.push('Imported-alias semantics regression: class method was not identified');
+  if (!importedAlias.includes('DateTime is the local name for datetime, imported from the datetime module')) failures.push('Imported-alias semantics regression: imported class was not identified');
+  if (!importedAlias.includes('DateTime is the datetime class and now is its class method')) failures.push('Imported-alias semantics regression: class method was not identified');
 
   const nestedHelper = buildDetailedCodeExplanation([
     'def outer(value):',
@@ -139,7 +184,7 @@ try {
   if (!nestedHelper.includes('a nested helper created while outer is running')) failures.push('Nested-helper semantics regression: nested scope was not explained');
 
   const french1179 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1179).solution, 'fr');
-  if (!french1179.includes('le second `datetime` n’est pas une méthode')) failures.push('Problem 1179 French semantics regression: class/module distinction missing');
+  if (!french1179.includes('le second datetime n’est pas une méthode')) failures.push('Problem 1179 French semantics regression: class/module distinction missing');
 
   const formattedSections = splitAiReviewSteps([
     '1. Problem requirement: parse comma-separated integers.',
