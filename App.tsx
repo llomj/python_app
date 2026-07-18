@@ -14664,11 +14664,11 @@ const renderStaticPythonLine = (line: string, editorColors: EditorColorSettings,
 function StaticPythonCodePanel({ code, editorColors, accentColor }: { code: string; editorColors: EditorColorSettings; accentColor: string }) {
     const lines = code.split('\n');
     return (
-        <div className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: editorColors.background }}>
+        <div className="my-2 min-w-0 max-w-full overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: editorColors.background, touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
             <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
                 Python
             </div>
-            <div className="overflow-x-hidden py-2 font-mono text-[11px] leading-[1.55] sm:text-xs">
+            <div className="min-w-0 max-w-full overflow-x-hidden py-2 font-mono text-[11px] leading-[1.55] sm:text-xs">
                 {lines.map((line, index) => (
                     <div key={`static-python-line-${index}`} data-python-line={index + 1} className="grid grid-cols-[34px_minmax(0,1fr)]">
                         <span className="select-none border-r px-2 text-right" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: hexToRgba(editorColors.text, 0.38) }}>
@@ -14711,12 +14711,12 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
     if (numbered) {
         const steps = splitAiReviewSteps(text);
         return (
-            <div className="space-y-2.5 text-sm leading-relaxed text-gray-200">
+            <div className="min-w-0 max-w-full space-y-2.5 overflow-x-hidden text-sm leading-relaxed text-gray-200" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
                 {steps.map((step, stepIndex) => {
                     const tone = getAiStepTone(step, accentColor);
                     const stepParts = parseAiTextParts(step);
                     return (
-                        <div key={`ai-step-${stepIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: tone.borderColor, backgroundColor: tone.backgroundColor }}>
+                        <div key={`ai-step-${stepIndex}`} className="grid min-w-0 max-w-full grid-cols-[28px_minmax(0,1fr)] gap-2 overflow-x-hidden rounded-xl border p-3" style={{ borderColor: tone.borderColor, backgroundColor: tone.backgroundColor }}>
                             <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(tone.color, 0.16), color: tone.color }}>
                                 {stepIndex + 1}
                             </div>
@@ -14748,7 +14748,7 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
     }
 
     return (
-        <div className="space-y-2 text-sm leading-relaxed text-gray-200">
+        <div className="min-w-0 max-w-full space-y-2 overflow-x-hidden text-sm leading-relaxed text-gray-200" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
             {parts.map((part, index) => {
                 if (part.type === 'code' || (detectBareCode && looksLikePythonCode(part.value))) {
                     return renderCode(part.value, `ai-code-${index}`);
@@ -15952,13 +15952,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v284') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v285') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v284')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v285')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -19919,7 +19919,7 @@ print(result)
 
             {showModal !== 'none' && (
                 <div
-                    className="fixed inset-0 backdrop-blur-md flex items-center justify-center p-4 z-[120] animate-in fade-in duration-200"
+                    className="fixed inset-0 flex touch-pan-y items-center justify-center overflow-hidden overscroll-none p-4 z-[120] animate-in fade-in duration-200 backdrop-blur-md"
                     onClick={(event) => {
                         if (event.target === event.currentTarget) {
                             setShowModal('none');
@@ -19930,17 +19930,22 @@ print(result)
                         paddingTop: 'max(1rem, calc(env(safe-area-inset-top) + 1rem))',
                         paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 1rem))',
                         paddingLeft: 'max(1rem, calc(env(safe-area-inset-left) + 1rem))',
-                        paddingRight: 'max(1rem, calc(env(safe-area-inset-right) + 1rem))'
+                        paddingRight: 'max(1rem, calc(env(safe-area-inset-right) + 1rem))',
+                        touchAction: 'pan-y',
+                        overscrollBehaviorX: 'none'
                     }}
                 >
                     <div
-                        className="rounded-3xl p-4 sm:p-6 max-w-4xl w-full border border-[#1d2d44] shadow-2xl relative flex flex-col overflow-hidden"
+                        className="relative flex min-w-0 max-w-4xl w-full touch-pan-y flex-col overflow-hidden rounded-3xl border border-[#1d2d44] p-4 shadow-2xl sm:p-6"
                         onClick={(event) => event.stopPropagation()}
                         style={{
                             backgroundColor: hexToRgba(panelColors.background, showModal === 'settings' || showModal === 'customize' || showModal === 'stats_by_mode' ? 0.82 : 0.96),
                             borderColor: panelColors.border,
                             backdropFilter: 'blur(18px)',
                             WebkitBackdropFilter: 'blur(18px)',
+                            maxWidth: '100%',
+                            overscrollBehaviorX: 'none',
+                            touchAction: 'pan-y',
                             height: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
                             maxHeight: 'calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
                         }}
@@ -20114,9 +20119,9 @@ print(result)
                             </div>
                         )}
                         {showModal === 'hint' && (
-                            <div className="flex h-full min-h-0 min-w-0 flex-col gap-3 overflow-x-hidden" style={{ touchAction: 'pan-y' }}>
+                            <div className="flex h-full min-h-0 min-w-0 max-w-full touch-pan-y flex-col gap-3 overflow-x-hidden" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
                                 <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('aiReview.title', appLang)}</h2>
-                                <div className="min-h-0 flex-1 overflow-y-auto -mx-1 px-1 space-y-3">
+                                <div className="min-h-0 min-w-0 max-w-full flex-1 touch-pan-y space-y-3 overflow-y-auto overflow-x-hidden overscroll-y-contain px-1" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
                                     <>
                                             {aiReviewRunning && (
                                                 <div className="rounded-2xl border px-3 py-2 text-xs font-black uppercase tracking-[0.12em]" style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: hexToRgba(toolPanelColors.ai, 0.08), color: toolPanelColors.ai }}>
@@ -20153,7 +20158,7 @@ print(result)
 
                                             {/* Analysis section */}
                                             {latestAiReviewResult ? (
-                                                <div className="space-y-3">
+                                                <div className="min-w-0 max-w-full touch-pan-y space-y-3 overflow-x-hidden" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
                                                     <div className="flex flex-wrap items-center gap-2">
                                                         <span className="rounded-full border px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em]"
                                                             style={{
@@ -20172,8 +20177,8 @@ print(result)
                                                     </div>
                                                     <div
                                                         data-testid="ai-review-detailed-code-explanation"
-                                                        className="rounded-2xl border p-3"
-                                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: 'rgba(8, 18, 34, 0.52)' }}
+                                                        className="min-w-0 max-w-full overflow-x-hidden rounded-2xl border p-3"
+                                                        style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.35), backgroundColor: 'rgba(8, 18, 34, 0.52)', touchAction: 'pan-y', overscrollBehaviorX: 'none' }}
                                                     >
                                                         <div className="mb-2 text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: toolPanelColors.ai }}>
                                                             {appLang === 'fr' ? 'Explication Détaillée Du Code' : 'Detailed Code Explanation'}
