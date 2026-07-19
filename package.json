@@ -5,7 +5,7 @@
     "scripts": {
         "prepare:offline-assets": "node scripts/prepare_offline_assets.js && tailwindcss -c tailwind.config.cjs -i ./styles/tailwind.css -o ./public/tailwind.generated.css --minify",
         "dev": "npm run prepare:offline-assets && vite",
-        "build": "npm run audit:scaffolds && npm run audit:while-loops && npm run audit:concept-expansion && npm run audit:advanced-concepts && npm run audit:foundation-intermediate && npm run audit:ai-code-explanations && npm run prepare:offline-assets && vite build && cp level1_*_codelogic.py level1_*_requirements*.py level1_*_syntax.py level1_*_fr.py dist/ 2>/dev/null; node scripts/generate_offline_manifest.js && node scripts/audit_offline_build.js",
+        "build": "npm run audit:scaffolds && npm run audit:while-loops && npm run audit:concept-expansion && npm run audit:advanced-concepts && npm run audit:foundation-intermediate && npm run eval:problem-ai && npm run audit:ai-code-explanations && npm run prepare:offline-assets && vite build && cp level1_*_codelogic.py level1_*_requirements*.py level1_*_syntax.py level1_*_fr.py dist/ 2>/dev/null; node scripts/generate_offline_manifest.js && node scripts/audit_offline_build.js",
         "audit:offline": "node scripts/audit_offline_build.js",
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",

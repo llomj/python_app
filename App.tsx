@@ -16338,13 +16338,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v292') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v293') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v292')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v293')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16820,7 +16820,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const localizedExercise = generatedLocalization
             ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
             : exercise;
-        const wantsGroundedBreakdown = /(?:explain|break down|breakdown|understand|what does|what is|what.*want|how do i start|help me start).*(?:problem|task|exercise)|(?:explique|décompose|comprendre|que demande|comment commencer).*(?:problème|tâche|exercice)/i.test(lookupQuestion);
+        const wantsGroundedBreakdown = /(?:explain|break down|breakdown|understand|what does|what is|what.*want|how do i start|help me start).*(?:problem|task|exercise)|(?:explique|décompose|comprendre|que demande|comment commencer).*(?:problème|tâche|exercice)|^(?:give me (?:a )?hint|hint|help me|how do i start|what should i do|donne-moi un indice|indice|aide-moi|comment commencer)/i.test(lookupQuestion);
         if (wantsGroundedBreakdown) {
             return buildProblemAiTutorAnswer({
                 exercise: localizedExercise,
@@ -16853,6 +16853,19 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const promptMethodNames = promptMethods
             .map(item => item.replace(/[`()]/g, '').trim())
             .filter(Boolean);
+        const asksExerciseOperation = asksMethod && promptMethodNames.some(name => {
+            const callable = name.split('.').pop()?.toLowerCase() || '';
+            return callable.length > 1 && q.includes(callable);
+        });
+        if (asksExerciseOperation) {
+            return buildProblemAiTutorAnswer({
+                exercise: localizedExercise,
+                description,
+                grader: AUTO_GRADERS[exercise.id] || null,
+                language: appLang,
+                question,
+            });
+        }
         const taskSummary = [
             `The task is asking you to build \`${functionName}\`, not just copy the example output.`,
             returnsBoolean ? 'The answer should be a Boolean result: `True` or `False`.' : '',

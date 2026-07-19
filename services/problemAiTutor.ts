@@ -39,6 +39,16 @@ const CONCEPTS: Record<string, ConceptGuide> = {
   exception: { name: 'exception handling', syntax: 'try: ... except Error:', en: 'Exception handling runs recovery code only when a matching runtime error occurs.', fr: 'La gestion des exceptions exécute le code de récupération uniquement lorsqu’une erreur correspondante survient.' },
   context: { name: 'context manager', syntax: 'with resource as value:', en: 'A context manager guarantees setup and cleanup around an indented block.', fr: 'Un gestionnaire de contexte garantit la préparation et le nettoyage autour d’un bloc indenté.' },
   boolean: { name: 'Boolean expression', syntax: 'left and right', en: 'A Boolean expression evaluates to `True` or `False` and may combine comparisons with `and`, `or`, or `not`.', fr: 'Une expression booléenne produit `True` ou `False` et peut combiner des comparaisons avec `and`, `or` ou `not`.' },
+  range: { name: 'range', syntax: 'range(start, stop, step)', en: '`range()` produces integers from `start` toward, but never including, `stop`, using `step`.', fr: '`range()` produit des entiers depuis `start` vers `stop` sans jamais inclure `stop`, avec le pas `step`.' },
+  enumerate: { name: 'enumerate', syntax: 'enumerate(iterable, start=0)', en: '`enumerate()` pairs each iterable item with a counter, optionally beginning at a chosen start value.', fr: '`enumerate()` associe chaque élément d’un itérable à un compteur, qui peut commencer à une valeur choisie.' },
+  zip: { name: 'zip', syntax: 'zip(left, right)', en: '`zip()` pairs items at matching positions and stops when the shortest iterable is exhausted.', fr: '`zip()` associe les éléments de même position et s’arrête lorsque l’itérable le plus court est épuisé.' },
+  sorting: { name: 'sorting key', syntax: 'sorted(values, key=lambda item: ...)', en: 'A sorting key converts each item into the comparison value Python uses to determine order.', fr: 'Une clé de tri transforme chaque élément en valeur de comparaison utilisée par Python pour déterminer l’ordre.' },
+  parsing: { name: 'parsing', syntax: 'converted = int(text.strip())', en: 'Parsing separates or normalizes text before converting it into the required Python data type.', fr: 'L’analyse sépare ou normalise le texte avant de le convertir dans le type Python demandé.' },
+  accumulation: { name: 'accumulation', syntax: 'total += value', en: 'An accumulator starts from an identity value and is updated once for each item.', fr: 'Un accumulateur commence avec une valeur initiale neutre et est mis à jour pour chaque élément.' },
+  filtering: { name: 'filtering and transformation', syntax: '[transform(item) for item in values if condition]', en: 'Filtering chooses which items remain; transformation computes the value stored for every retained item.', fr: 'Le filtrage choisit les éléments conservés ; la transformation calcule la valeur enregistrée pour chacun.' },
+  earlyExit: { name: 'early exit', syntax: 'if condition:\n    return result', en: 'An early return stops the function as soon as a decisive result is known.', fr: 'Un retour anticipé arrête la fonction dès qu’un résultat décisif est connu.' },
+  nested: { name: 'nested collection', syntax: 'outer[row][column]', en: 'A nested collection contains other collections, so each level must be accessed or iterated separately.', fr: 'Une collection imbriquée contient d’autres collections ; chaque niveau doit donc être parcouru ou indexé séparément.' },
+  cleaning: { name: 'data cleaning', syntax: 'clean = raw.strip().lower()', en: 'Data cleaning normalizes inconsistent input while preserving the information the task asks to keep.', fr: 'Le nettoyage des données normalise des entrées incohérentes tout en conservant les informations demandées.' },
 };
 
 const NODE_CONCEPT: Record<string, string> = {
@@ -87,16 +97,26 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   all: ['all(iterable)', 'Returns `True` only when every item is truthy.', 'Renvoie `True` uniquement lorsque tous les éléments sont vrais.'],
   any: ['any(iterable)', 'Returns `True` when at least one item is truthy.', 'Renvoie `True` lorsqu’au moins un élément est vrai.'],
   append: ['list.append(value)', 'Adds one value to the end of a list and returns `None`.', 'Ajoute une valeur à la fin d’une liste et renvoie `None`.'],
+  casefold: ['text.casefold()', 'Returns a Unicode-aware lowercase form intended for caseless comparisons.', 'Renvoie une forme minuscule compatible Unicode destinée aux comparaisons sans distinction de casse.'],
+  clear: ['collection.clear()', 'Removes every item from the mutable collection in place and returns `None`.', 'Supprime sur place tous les éléments de la collection modifiable et renvoie `None`.'],
+  copy: ['collection.copy()', 'Returns a shallow copy whose outer container is independent from the original.', 'Renvoie une copie superficielle dont le conteneur externe est indépendant de l’original.'],
   count: ['sequence.count(value)', 'Counts matching values in a sequence.', 'Compte les valeurs correspondantes dans une séquence.'],
   dict: ['dict(iterable_or_mapping)', 'Creates a dictionary from key-value data.', 'Crée un dictionnaire à partir de données clé-valeur.'],
+  divmod: ['divmod(number, divisor)', 'Returns `(quotient, remainder)` using floor division and modulo in one operation.', 'Renvoie `(quotient, reste)` en effectuant une division entière et un modulo en une opération.'],
+  endswith: ['text.endswith(suffix)', 'Checks whether a string ends with the specified suffix.', 'Vérifie si une chaîne se termine par le suffixe indiqué.'],
   enumerate: ['enumerate(iterable, start=0)', 'Produces `(index, value)` pairs.', 'Produit des paires `(indice, valeur)`.'],
+  extend: ['list.extend(iterable)', 'Appends every item from an iterable to a list in place and returns `None`.', 'Ajoute sur place chaque élément d’un itérable à une liste et renvoie `None`.'],
   filter: ['filter(function, iterable)', 'Keeps items for which the function returns a truthy value.', 'Conserve les éléments pour lesquels la fonction renvoie une valeur vraie.'],
+  find: ['text.find(substring)', 'Returns the first matching index, or `-1` when the substring is absent.', 'Renvoie le premier indice correspondant, ou `-1` si la sous-chaîne est absente.'],
   findall: ['re.findall(pattern, text)', 'Returns every non-overlapping regex match.', 'Renvoie toutes les correspondances non chevauchantes d’une expression régulière.'],
   float: ['float(value)', 'Converts a compatible value to a floating-point number.', 'Convertit une valeur compatible en nombre décimal.'],
   fullmatch: ['re.fullmatch(pattern, text)', 'Matches only when the complete string satisfies the regex.', 'Correspond uniquement lorsque toute la chaîne respecte l’expression régulière.'],
+  fromkeys: ['dict.fromkeys(keys, value=None)', 'Builds a new dictionary whose supplied keys initially share the specified value.', 'Construit un nouveau dictionnaire dont les clés fournies partagent initialement la valeur indiquée.'],
   get: ['mapping.get(key, default=None)', 'Reads a mapping value without raising `KeyError` for a missing key.', 'Lit une valeur sans lever `KeyError` lorsque la clé est absente.'],
   input: ['input(prompt="")', 'Reads user input and returns it as a string.', 'Lit la saisie utilisateur et la renvoie sous forme de chaîne.'],
   int: ['int(value)', 'Converts a compatible value to an integer.', 'Convertit une valeur compatible en entier.'],
+  index: ['sequence.index(value)', 'Returns the first matching position and raises `ValueError` when no match exists.', 'Renvoie la première position correspondante et lève `ValueError` si aucune correspondance n’existe.'],
+  insert: ['list.insert(index, value)', 'Inserts a value before the specified list position in place.', 'Insère sur place une valeur avant la position indiquée dans la liste.'],
   isalnum: ['text.isalnum()', 'String method. Returns `True` when the non-empty string contains only letters and digits.', 'Méthode de chaîne. Renvoie `True` lorsque la chaîne non vide contient uniquement des lettres et des chiffres.'],
   isalpha: ['text.isalpha()', 'String method. Returns `True` when the non-empty string contains only letters. Spaces, signs, and digits make it `False`.', 'Méthode de chaîne. Renvoie `True` lorsque la chaîne non vide contient uniquement des lettres. Les espaces, signes et chiffres donnent `False`.'],
   isdigit: ['text.isdigit()', 'String method. Returns `True` when the non-empty string contains only digit characters. A minus sign or decimal point makes it `False`.', 'Méthode de chaîne. Renvoie `True` lorsque la chaîne non vide contient uniquement des chiffres. Un signe moins ou un point décimal donne `False`.'],
@@ -115,9 +135,13 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   min: ['min(iterable)', 'Returns the smallest item.', 'Renvoie le plus petit élément.'],
   next: ['next(iterator, default)', 'Reads the next iterator item or returns the optional default.', 'Lit l’élément suivant d’un itérateur ou renvoie la valeur par défaut facultative.'],
   open: ['open(path, mode="r")', 'Opens a file and returns a file object.', 'Ouvre un fichier et renvoie un objet fichier.'],
+  partition: ['text.partition(separator)', 'Returns a three-item tuple containing the text before, the separator, and the text after the first match.', 'Renvoie un tuple de trois éléments : le texte avant, le séparateur et le texte après la première correspondance.'],
   pop: ['collection.pop(key_or_index)', 'Removes and returns one item.', 'Supprime et renvoie un élément.'],
+  popitem: ['mapping.popitem()', 'Removes and returns the most recently inserted key-value pair.', 'Supprime et renvoie la paire clé-valeur insérée le plus récemment.'],
   print: ['print(*values, sep=" ", end="\\n")', 'Displays values in the output panel and returns `None`.', 'Affiche des valeurs dans le panneau de sortie et renvoie `None`.'],
   range: ['range(start, stop, step)', 'Creates an integer sequence whose stop value is excluded.', 'Crée une séquence d’entiers dont la borne de fin est exclue.'],
+  remove: ['list.remove(value)', 'Removes the first equal value in place and raises `ValueError` if it is absent.', 'Supprime sur place la première valeur égale et lève `ValueError` si elle est absente.'],
+  reverse: ['list.reverse()', 'Reverses a list in place and returns `None`.', 'Inverse une liste sur place et renvoie `None`.'],
   reduce: ['reduce(function, iterable)', 'Combines iterable items into one accumulated value.', 'Combine les éléments d’un itérable en une seule valeur accumulée.'],
   replace: ['text.replace(old, new)', 'Returns a copy with matching text replaced.', 'Renvoie une copie dans laquelle le texte correspondant est remplacé.'],
   search: ['re.search(pattern, text)', 'Finds the first regex match anywhere in a string.', 'Trouve la première correspondance regex dans une chaîne.'],
@@ -125,6 +149,7 @@ const CALL_REFERENCE: Record<string, [string, string, string]> = {
   setdefault: ['mapping.setdefault(key, default)', 'Returns a key’s value, inserting the default when the key is absent.', 'Renvoie la valeur d’une clé et insère la valeur par défaut si la clé est absente.'],
   sorted: ['sorted(iterable, key=None, reverse=False)', 'Returns a new sorted list without mutating the input.', 'Renvoie une nouvelle liste triée sans modifier l’entrée.'],
   split: ['text.split(separator=None)', 'Breaks a string into a list of parts.', 'Découpe une chaîne en une liste de parties.'],
+  sort: ['list.sort(key=None, reverse=False)', 'Sorts a list in place and returns `None`.', 'Trie une liste sur place et renvoie `None`.'],
   startswith: ['text.startswith(prefix)', 'String method. Checks whether text begins with the specified prefix.', 'Méthode de chaîne. Vérifie si le texte commence par le préfixe indiqué.'],
   str: ['str(value)', 'Converts a value to its string representation.', 'Convertit une valeur en représentation textuelle.'],
   strip: ['text.strip()', 'Returns a copy without leading or trailing whitespace.', 'Renvoie une copie sans espaces au début ni à la fin.'],
@@ -189,8 +214,8 @@ const detectSolutionPatterns = (code: string): SolutionPatterns => {
   return {
     hasLambda: /\blambda\s+\w+\s*:/.test(stripped),
     hasUnpacking: /\*\w+/.test(stripped),
-    hasComprehension: /[[({]\s*(?:\w+\s*=\s*)?[^\]]*?\bfor\b\s+\w+\s+\bin\b/.test(stripped),
-    hasGenerator: /\([^)]*?\bfor\b\s+\w+\s+\bin\b[^)]*?\)/.test(stripped) && !/[[{][^]*?\bfor\b/.test(stripped),
+    hasComprehension: /[\[{][^\n\]}]*\bfor\s+\w+\s+in\b[^\n\]}]*[\]}]/.test(stripped),
+    hasGenerator: /\([^\n)]*\bfor\s+\w+\s+in\b[^\n)]*\)/.test(stripped),
     hasLoop: /\b(?:for|while)\s+\w+\s+(?:in|:)/.test(stripped),
     hasConditional: /\bif\s+.+:\s*$|\belif\b|\belse\s*:/m.test(stripped),
     hasClass: /\bclass\s+\w+/.test(stripped),
@@ -242,8 +267,8 @@ const canonicalCandidateScore = (code: string, grader?: AutoGrader | null): numb
 
 const chooseCanonicalSection = (solution: string, grader?: AutoGrader | null): string => {
   const candidates = solution
-    .split(/(?=^#\s*(?:Using|Script|Direct)\b)/mi)
-    .map(section => section.replace(/^#\s*(?:Using|Script|Direct)[^\n]*\n?/i, '').trim())
+    .split(/(?=^#\s*(?:Example\s+\d+\s*:|Using\b|Script\b|Direct\b))/mi)
+    .map(section => section.replace(/^#\s*(?:Example\s+\d+\s*:|Using\b|Script\b|Direct\b)[^\n]*\n?/i, '').trim())
     .filter(Boolean);
   if (candidates.length <= 1) return candidates[0] || solution;
   return candidates.reduce((best, candidate) => (
@@ -281,7 +306,7 @@ const analyzeCanonicalSolution = (exercise: Exercise, grader?: AutoGrader | null
 };
 
 const classifyProblemType = (grader: AutoGrader | null | undefined, patterns: SolutionPatterns): ProblemType => {
-  if (patterns.hasClass) return 'class-def';
+  if (patterns.hasClass || grader?.requiredNodePatterns?.some(requirement => requirement.nodeType === 'ClassDef')) return 'class-def';
   if (grader?.mode === 'script' || (!grader?.functionNames?.length && !patterns.hasLambda && !patterns.hasClass)) return 'script-output';
   return 'function-def';
 };
@@ -307,6 +332,46 @@ const methodReference = (analysis: SolutionAnalysis, language: ProblemAiLanguage
   return contract ? `${base}\n  ${contract}` : base;
 });
 
+const explainExpression = (expression: string, language: ProblemAiLanguage): string => {
+  const fr = language === 'fr';
+  const details: string[] = [];
+  const subscript = expression.match(/\b([A-Za-z_]\w*)\[([^\]]+)\]/);
+  if (subscript) {
+    const index = subscript[2].trim();
+    const negative = /^-\d+$/.test(index);
+    details.push(fr
+      ? `lit \`${subscript[1]}[${index}]\`, ${negative ? 'en comptant depuis la fin (`-1` est le dernier élément)' : 'avec une position commençant à zéro'}`
+      : `reads \`${subscript[1]}[${index}]\` ${negative ? 'from the end (`-1` is the final item)' : 'using a zero-based position'}`);
+  }
+  const callNames = [...expression.matchAll(/(?:\.\s*|\b)([A-Za-z_]\w*)\s*\(/g)].map(match => match[1]);
+  for (const name of [...new Set(callNames)].slice(0, 3)) {
+    const reference = CALL_REFERENCE[name];
+    if (reference) details.push(fr ? reference[2] : reference[1]);
+  }
+  if (/\[[^\]]*\bfor\b/.test(expression) || /\{[^}]*\bfor\b/.test(expression)) details.push(fr
+    ? 'parcourt les éléments de gauche à droite, applique le filtre éventuel, puis collecte chaque valeur transformée'
+    : 'iterates left to right, applies any filter, and collects each transformed value');
+  if (/\blambda\b/.test(expression)) details.push(fr
+    ? 'crée la fonction de clé ou de transformation sans l’exécuter avant son appel'
+    : 'creates the key or transformation function without running it until called');
+  const operators: Array<[RegExp, string, string]> = [
+    [/\s\*\*\s/, 'raises the left value to the right-hand power', 'élève la valeur gauche à la puissance indiquée à droite'],
+    [/\s\/\/\s/, 'uses floor division and discards the fractional part', 'effectue une division entière et supprime la partie fractionnaire'],
+    [/\s%\s/, 'computes the remainder after division', 'calcule le reste de la division'],
+    [/\s\+\s/, 'adds or concatenates the operands from left to right', 'additionne ou concatène les opérandes de gauche à droite'],
+    [/\s-\s/, 'subtracts the right operand from the left operand', 'soustrait l’opérande droit de l’opérande gauche'],
+    [/\s\*\s/, 'multiplies the operands', 'multiplie les opérandes'],
+    [/\s\/\s/, 'performs true division and produces a floating-point result', 'effectue une division réelle et produit un résultat décimal'],
+    [/\b(?:and|or|not)\b/, 'evaluates the Boolean operators with short-circuit rules', 'évalue les opérateurs booléens avec les règles de court-circuit'],
+    [/(?:==|!=|<=|>=|<|>)/, 'evaluates the comparison to `True` or `False`', 'évalue la comparaison en `True` ou `False`'],
+  ];
+  for (const [pattern, en, frText] of operators) if (pattern.test(expression)) details.push(fr ? frText : en);
+  if (!details.length) return fr
+    ? `évalue précisément l’expression \`${expression}\` avec les valeurs reçues`
+    : `evaluates the exact expression \`${expression}\` using the received values`;
+  return details.join(fr ? ' ; ' : '; ');
+};
+
 const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
   const fr = language === 'fr';
   const p = analysis.patterns;
@@ -320,15 +385,22 @@ const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLan
     if (/^def\s+/.test(line)) return fr ? `\`${line}\` — crée la fonction ; son corps attend un appel avant de s’exécuter.` : `\`${line}\` — defines the function; its body waits until the function is called.`;
     if (/^class\s+/.test(line)) return fr ? `\`${line}\` — définit la classe ; les méthodes sont des fonctions à l’intérieur de son bloc indenté.` : `\`${line}\` — defines the class; methods are functions inside its indented block.`;
     if (/^return\s+/.test(line)) {
+      const expression = line.replace(/^return\s+/, '').trim();
       if (p.hasLambda) return fr
         ? `\`${line}\` — renvoie le résultat de l’appel de la lambda.`
         : `\`${line}\` — returns the result of calling the lambda.`;
       if (/\bor\b/.test(line)) return fr ? `\`${line}\` — évalue la condition gauche, puis la droite seulement si nécessaire, et renvoie le résultat booléen.` : `\`${line}\` — evaluates the left condition, evaluates the right only if needed, and returns the Boolean result.`;
-      return fr ? `\`${line}\` — calcule l’expression puis renvoie sa valeur à l’appelant.` : `\`${line}\` — evaluates the expression and returns its value to the caller.`;
+      return fr
+        ? `\`${line}\` — ${explainExpression(expression, language)}, puis renvoie cette valeur à l’appelant.`
+        : `\`${line}\` — ${explainExpression(expression, language)}, then returns that value to the caller.`;
     }
     if (/^if\s+/.test(line)) return fr ? `\`${line}\` — évalue la condition et choisit le bloc indenté.` : `\`${line}\` — evaluates the condition and selects an indented branch.`;
     if (/^(?:for|while)\s+/.test(line)) return fr ? `\`${line}\` — démarre la répétition du bloc indenté.` : `\`${line}\` — begins repetition of the indented block.`;
     if (/^(?:import|from)\s+/.test(line)) return fr ? `\`${line}\` — charge le module ou le nom nécessaire.` : `\`${line}\` — loads the required module or name.`;
+    const augmented = line.match(/^([A-Za-z_]\w*)\s*([+\-*/%]|\/\/|\*\*)=\s*(.+)$/);
+    if (augmented) return fr
+      ? `\`${line}\` — raccourci de \`${augmented[1]} = ${augmented[1]} ${augmented[2]} ${augmented[3]}\` ; lit l’ancienne valeur, calcule la nouvelle, puis la réaffecte.`
+      : `\`${line}\` — shorthand for \`${augmented[1]} = ${augmented[1]} ${augmented[2]} ${augmented[3]}\`; it reads the old value, computes the new one, and stores it back.`;
     if (/\s=\s/.test(line)) {
       if (/lambda\b/.test(line)) return fr
         ? `\`${line}\` — affecte la lambda à une variable pour pouvoir l’utiliser plus tard.`
@@ -352,7 +424,9 @@ const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLan
     if (/^try\s*:/.test(line)) return fr ? `\`${line}\` — commence un bloc de protection contre les exceptions.` : `\`${line}\` — starts a block that guards against exceptions.`;
     if (/^except\b/.test(line)) return fr ? `\`${line}\` — attrape l’exception et exécute le code de récupération.` : `\`${line}\` — catches the exception and runs recovery code.`;
     if (/^with\s+/.test(line)) return fr ? `\`${line}\` — garantit le nettoyage automatique de la ressource.` : `\`${line}\` — guarantees automatic resource cleanup.`;
-    return fr ? `\`${line}\` — exécute cette instruction dans l’ordre indiqué.` : `\`${line}\` — executes this statement in order.`;
+    return fr
+      ? `\`${line}\` — ${explainExpression(line, language)} à cette étape précise.`
+      : `\`${line}\` — ${explainExpression(line, language)} at this exact step.`;
   });
 };
 
@@ -362,7 +436,7 @@ const concreteTests = (exercise: Exercise, grader: AutoGrader | null | undefined
   const parameterText = exercise.initialCode.match(/def\s+[A-Za-z_]\w*\s*\(([^)]*)\)/)?.[1];
   const declaredParameters = parameterText === undefined ? undefined : parameterText.split(',').map(value => value.trim()).filter(Boolean).length;
   const cases = [...(grader?.optionalTests || []), ...(grader?.tests || [])]
-    .filter(test => test.expected !== null && test.expected !== undefined)
+    .filter(test => test.expected !== undefined)
     .slice(0, 4);
   return cases.map(test => {
     const args = test.args.map(value => JSON.stringify(value)).join(', ');
@@ -400,6 +474,10 @@ const detectConcepts = (description: string, grader?: AutoGrader | null): string
     [/\bfor loop|\bwhile loop|\bloop\b|\bboucle\b/, 'loop'], [/\bcondition|\bif\b/, 'conditional'],
     [/\bclass\b|\bclasse\b|\bobject-oriented|\boop\b|\bpoo\b/, 'class'], [/\bexception|\btry\b/, 'exception'],
     [/\breturn\b|\breturns?\b|\brenvoie\b|\bretourne\b/, 'return'], [/\bprint\b|example output|exemple de sortie/, 'print'], [/\bfunction\b|\bfonction\b/, 'function'],
+    [/\brange\b/, 'range'], [/\benumerate\b|\bénumér/, 'enumerate'], [/\bzip\b/, 'zip'],
+    [/\bsort|\btri(?:e|er|age)?\b/, 'sorting'], [/\bpars|\banalys|\bconvert.*text|\bconvert.*texte/, 'parsing'],
+    [/\baccumul|\brunning total|\btotal cumul/, 'accumulation'], [/\bfilter|\btransformation|\bfiltr/, 'filtering'],
+    [/\bearly exit|\bearly return|\bretour anticip/, 'earlyExit'], [/\bnested|\bimbriqu/, 'nested'], [/\bdata clean|\bcleaning|\bnormalize|\bnettoy|\bnormalis/, 'cleaning'],
   ];
   for (const [pattern, concept] of promptPatterns) if (pattern.test(lower)) addConcept(concepts, concept);
   for (const requirement of grader?.requiredNodePatterns || []) addConcept(concepts, NODE_CONCEPT[requirement.nodeType]);
@@ -574,6 +652,7 @@ const commonMistakes = (concepts: string[], grader: AutoGrader | null | undefine
 const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
   const fr = language === 'fr';
   const p = analysis.patterns;
+  const codeLines = analysis.snippet.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('#'));
   if (analysis.calls.includes('isalpha') && analysis.calls.includes('isdigit')) return fr ? [
     'Python crée la fonction sans exécuter immédiatement son corps.',
     'Lors de l’appel, la variable `text` doit référencer une chaîne (`str`).',
@@ -588,14 +667,17 @@ const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage):
     'The final Boolean is returned to the caller and can then be displayed with `print()`.',
   ];
   if (p.hasLambda) {
+    const lambdaLine = codeLines.find(line => /\blambda\b/.test(line));
     return fr ? [
       'Python rencontre la lambda et crée un objet fonction sans exécuter l\'expression.',
+      lambdaLine ? `La construction exacte est \`${lambdaLine}\`.` : '',
       'Lors de l\'appel, Python évalue d\'abord les arguments de gauche à droite.',
       'Les paramètres reçoivent les valeurs, puis l\'expression après `:` est évaluée.',
       p.hasUnpacking ? 'L\'opérateur `*` étend l\'itérable pour que chaque élément devienne un argument séparé.' : '',
       'Le résultat de l\'expression est renvoyé automatiquement — pas besoin de `return`.',
     ].filter(Boolean) : [
       'Python encounters the lambda and creates a function object without running the expression.',
+      lambdaLine ? `The exact construction is \`${lambdaLine}\`.` : '',
       'When called, Python evaluates arguments left to right first.',
       'Parameters receive the values, then the expression after `:` is evaluated.',
       p.hasUnpacking ? 'The `*` operator expands the iterable so each item becomes a separate argument.' : '',
@@ -603,17 +685,20 @@ const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage):
     ].filter(Boolean);
   }
   if (p.hasComprehension) {
+    const comprehensionLine = codeLines.find(line => /[[{(].*\bfor\b/.test(line));
     return fr ? [
+      comprehensionLine ? `Python atteint \`${comprehensionLine}\`.` : '',
       'Python évalue l\'itérable de la première clause `for`.',
       'La variable de boucle reçoit chaque élément.',
       'Les clauses `for` et filtres `if` suivants sont évalués de gauche à droite.',
       'Si les filtres passent, l\'expression de sortie est évaluée et le résultat est collecté dans la nouvelle structure.',
-    ] : [
+    ].filter(Boolean) : [
+      comprehensionLine ? `Python reaches \`${comprehensionLine}\`.` : '',
       'Python evaluates the first `for` clause\'s iterable.',
       'The loop variable is bound to each item.',
       'Later `for` clauses and `if` filters are evaluated left to right.',
       'When filters pass, the output expression is evaluated and collected into the new structure.',
-    ];
+    ].filter(Boolean);
   }
   if (p.hasClass) {
     return fr ? [
@@ -626,9 +711,25 @@ const executionFlow = (analysis: SolutionAnalysis, language: ProblemAiLanguage):
       'When a method is called on an instance, `self` automatically receives the instance.',
     ];
   }
-  return [fr
-    ? 'Python crée d\'abord les valeurs et fonctions, évalue les arguments de gauche à droite, exécute l\'opération, puis transmet le résultat à `return`, `print()` ou à la variable cible.'
-    : 'Python first creates values and functions, evaluates arguments from left to right, performs the operation, and sends the result to `return`, `print()`, or the target variable.'];
+  const definition = codeLines.find(line => /^def\s+/.test(line));
+  const body = codeLines.filter(line => !/^def\s+/.test(line) && !/^print\s*\(/.test(line)).slice(0, 6);
+  const flow = [definition
+    ? (fr
+      ? `Python crée \`${definition}\` ; le corps attend que cette fonction soit appelée.`
+      : `Python creates \`${definition}\`; its body waits until that function is called.`)
+    : (fr ? 'Python commence par préparer les données du script.' : 'Python begins by preparing the script data.')];
+  for (const line of body) {
+    if (/^for\s+/.test(line)) flow.push(fr ? `La boucle \`${line}\` reçoit ensuite chaque élément de l’itérable dans l’ordre.` : `The loop \`${line}\` then receives each iterable item in order.`);
+    else if (/^while\s+/.test(line)) flow.push(fr ? `Python réévalue \`${line}\` avant chaque répétition et s’arrête lorsque la condition devient fausse.` : `Python reevaluates \`${line}\` before each repetition and stops when its condition becomes false.`);
+    else if (/^if\s+/.test(line)) flow.push(fr ? `Python teste \`${line}\` et n’exécute son bloc que si la condition vaut \`True\`.` : `Python tests \`${line}\` and runs its block only when the condition is \`True\`.`);
+    else if (/^return\s+/.test(line)) {
+      const expression = line.replace(/^return\s+/, '').trim();
+      flow.push(fr
+        ? `Enfin, Python atteint \`${line}\` : il ${explainExpression(expression, language)}, puis remet ce résultat à l’appelant.`
+        : `Finally, Python reaches \`${line}\`: it ${explainExpression(expression, language)}, then gives that result to the caller.`);
+    } else flow.push(fr ? `Python exécute ensuite \`${line}\` avant de passer à l’instruction suivante.` : `Python next executes \`${line}\` before moving to the following statement.`);
+  }
+  return flow;
 };
 
 const alternativeApproaches = (analysis: SolutionAnalysis, language: ProblemAiLanguage): string[] => {
@@ -642,7 +743,19 @@ const alternativeApproaches = (analysis: SolutionAnalysis, language: ProblemAiLa
     'Teaching form: store `letters_only = text.isalpha()` and `digits_only = text.isdigit()`, then return `letters_only or digits_only`.',
     '`text.isalnum()` is not equivalent: it accepts mixed text such as `"abc123"`, which this task must reject.',
   ];
-  return [fr ? 'Vous pouvez utiliser des noms de variables différents tant que les types, les opérations et le résultat restent conformes.' : 'You may use different variable names as long as the types, operations, and result remain correct.'];
+  const returnExpression = analysis.snippet.match(/^\s*return\s+(.+)$/m)?.[1]?.trim();
+  if (returnExpression) return fr ? [
+    `Forme directe : \`return ${returnExpression}\` calcule et renvoie le résultat en une étape.`,
+    `Forme de débogage : affectez d’abord \`result = ${returnExpression}\`, inspectez \`result\`, puis écrivez \`return result\`.`,
+    'Les noms de variables peuvent changer, mais conservez les opérations et les appels explicitement exigés par le correcteur.',
+  ] : [
+    `Direct form: \`return ${returnExpression}\` computes and returns the result in one step.`,
+    `Debuggable form: first assign \`result = ${returnExpression}\`, inspect \`result\`, and then write \`return result\`.`,
+    'Variable names may change, but preserve the operations and calls explicitly required by the grader.',
+  ];
+  return [fr
+    ? `Conservez la structure de \`${analysis.snippet.split('\n').find(line => line.trim())?.trim() || 'la solution'}\`, mais utilisez des noms descriptifs pour les valeurs intermédiaires.`
+    : `Keep the structure of \`${analysis.snippet.split('\n').find(line => line.trim())?.trim() || 'the solution'}\`, but use descriptive names for intermediate values.`];
 };
 
 const problemTypeTag = (type: ProblemType, fr: boolean): string => ({
