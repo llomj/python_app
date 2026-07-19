@@ -14481,14 +14481,14 @@ const isInlinePythonCodeLike = (code: string) => {
 const renderInlinePythonCode = (code: string, editorColors: EditorColorSettings, keyPrefix: string) => {
     if (!isInlinePythonCodeLike(code)) {
         return (
-            <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100">
+            <code className="max-w-full break-all rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100 [overflow-wrap:anywhere]">
                 {code}
             </code>
         );
     }
     const tokens = code.match(/#[^\n]*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b|\s+|./g) || [code];
     return (
-        <code className="rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100">
+        <code className="max-w-full break-all rounded-md border border-[#1d2d44] bg-[#050c18]/80 px-1.5 py-0.5 font-mono text-[0.92em] text-gray-100 [overflow-wrap:anywhere]">
             {tokens.map((token, index) => (
                 <span key={`${keyPrefix}-${index}`} style={{ color: /^\s+$/.test(token) ? undefined : getInlinePythonTokenColor(token, editorColors) }}>
                     {token}
@@ -15031,7 +15031,7 @@ function AiReviewText({ text, editorColors, accentColor = '#93c5fd', detectBareC
     const renderCode = (code: string, key: string) => staticCode
         ? <StaticPythonCodePanel key={key} code={code} editorColors={editorColors} accentColor={accentColor} />
         : (
-        <div key={key} className="my-2 overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
+        <div key={key} data-problem-ai-code className="my-2 min-w-0 max-w-full overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(88, 118, 160, 0.28)', backgroundColor: 'rgba(5, 12, 24, 0.72)' }}>
             <div className="border-b px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em]" style={{ borderColor: 'rgba(88, 118, 160, 0.16)', color: accentColor }}>
                 Python
             </div>
@@ -15124,7 +15124,7 @@ function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: 
     );
 
     return (
-        <div className="space-y-2.5 text-sm leading-relaxed text-gray-200">
+        <div data-problem-ai-content className="min-w-0 max-w-full space-y-2.5 overflow-x-hidden break-words text-sm leading-relaxed text-gray-200" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
             {parts.map((part, index) => {
                 if (part.type === 'code' || looksLikePythonCode(part.value)) {
                     return renderCode(part.value, `problem-ai-code-${index}`);
@@ -15136,18 +15136,18 @@ function ProblemAiText({ text, editorColors, accentColor = '#93c5fd' }: { text: 
                     .filter(Boolean);
 
                 return (
-                    <div key={`problem-ai-text-${index}`} className="space-y-2.5">
+                    <div key={`problem-ai-text-${index}`} className="min-w-0 max-w-full space-y-2.5 overflow-x-hidden">
                         {sections.map((section, sectionIndex) => {
                             const cleaned = section.replace(/^\d+[.)]\s*/, '').trim();
                             const lines = cleaned.split(/\n+/).map(line => line.trim()).filter(Boolean);
                             return (
-                                <div key={`problem-ai-section-${index}-${sectionIndex}`} className="grid grid-cols-[28px_1fr] gap-2 rounded-xl border p-3" style={{ borderColor: hexToRgba(accentColor, 0.24), backgroundColor: 'rgba(8, 18, 34, 0.48)' }}>
+                                <div key={`problem-ai-section-${index}-${sectionIndex}`} className="grid min-w-0 max-w-full grid-cols-[28px_minmax(0,1fr)] gap-2 overflow-x-hidden rounded-xl border p-3" style={{ borderColor: hexToRgba(accentColor, 0.24), backgroundColor: 'rgba(8, 18, 34, 0.48)' }}>
                                     <div className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black" style={{ backgroundColor: hexToRgba(accentColor, 0.16), color: accentColor }}>
                                         {sectionIndex + 1}
                                     </div>
                                     <div className="min-w-0 space-y-1.5 text-gray-200">
                                         {lines.map((line, lineIndex) => (
-                                            <p key={`problem-ai-line-${index}-${sectionIndex}-${lineIndex}`} className="whitespace-pre-wrap">
+                                            <p key={`problem-ai-line-${index}-${sectionIndex}-${lineIndex}`} className="min-w-0 max-w-full whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
                                                 {renderAiParagraphText(line, editorColors, `problem-ai-line-${index}-${sectionIndex}-${lineIndex}`)}
                                             </p>
                                         ))}
@@ -16338,13 +16338,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v293') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v294') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v293')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v294')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -20691,8 +20691,8 @@ print(result)
                             </div>
                         )}
                         {showModal === 'problem_ai' && (
-                            <div className="flex h-full min-h-0 flex-col gap-3">
-                                <div className="flex flex-shrink-0 items-start justify-between gap-3 pr-10">
+                            <div data-problem-ai-panel className="flex h-full min-h-0 min-w-0 max-w-full touch-pan-y flex-col gap-3 overflow-x-hidden" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none' }}>
+                                <div className="flex min-w-0 max-w-full flex-shrink-0 items-start justify-between gap-3 overflow-x-hidden pr-10">
                                     <div className="min-w-0 flex-1">
                                         <div className="flex items-center gap-2">
                                         <h2 className="text-lg font-bold" style={{ color: toolPanelColors.ai }}>{t('problemAi.title', appLang)}</h2>
@@ -20715,7 +20715,7 @@ print(result)
                                     </div>
                                 </div>
 
-                                <div className="relative flex-shrink-0">
+                                <div className="relative min-w-0 max-w-full flex-shrink-0 overflow-x-hidden">
                                     <input
                                         value={problemAiSearch}
                                         onChange={e => setProblemAiSearch(e.target.value)}
@@ -20724,7 +20724,7 @@ print(result)
                                         style={{ borderColor: hexToRgba(toolPanelColors.ai, 0.2) }}
                                     />
                                 </div>
-                                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+                                <div data-problem-ai-scroll className="min-h-0 min-w-0 max-w-full flex-1 touch-pan-y space-y-3 overflow-y-auto overflow-x-hidden overscroll-y-contain pr-1" style={{ touchAction: 'pan-y', overscrollBehaviorX: 'none', WebkitOverflowScrolling: 'touch' }}>
                                     {problemAiMessages.filter(m => {
                                         if (!problemAiSearch.trim()) return true;
                                         const s = problemAiSearch.toLowerCase();
@@ -20733,7 +20733,7 @@ print(result)
                                         <div
                                             key={message.id}
                                             data-problem-ai-message={message.role}
-                                            className="rounded-2xl border p-3"
+                                            className="min-w-0 max-w-full overflow-x-hidden break-words rounded-2xl border p-3 [overflow-wrap:anywhere]"
                                             style={{
                                                 borderColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.3) : hexToRgba(toolPanelColors.ai, 0.28),
                                                 backgroundColor: message.role === 'user' ? hexToRgba(countRowColors.count, 0.08) : 'rgba(8, 18, 34, 0.55)',
@@ -20750,7 +20750,7 @@ print(result)
                                             {message.role === 'assistant' ? (
                                                 <ProblemAiText text={message.text} editorColors={editorColors} accentColor={toolPanelColors.ai} />
                                             ) : (
-                                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-100">{message.text}</p>
+                                                <p className="min-w-0 max-w-full whitespace-pre-wrap break-words text-sm leading-relaxed text-gray-100 [overflow-wrap:anywhere]">{message.text}</p>
                                             )}
                                         </div>
                                     ))}
@@ -20762,7 +20762,7 @@ print(result)
                                 </div>
 
                                 <form
-                                    className="flex flex-shrink-0 gap-2 border-t border-[#1d2d44] pt-3"
+                                    className="flex min-w-0 max-w-full flex-shrink-0 gap-2 overflow-x-hidden border-t border-[#1d2d44] pt-3"
                                     onSubmit={(event) => {
                                         event.preventDefault();
                                         sendProblemAiQuestion(problemAiDraft);
