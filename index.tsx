@@ -1,6 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+
+const startLocalPython = () => {
+  if (window.__PYODIDE_INSTANCE__) return Promise.resolve(window.__PYODIDE_INSTANCE__);
+  if (window.__PYODIDE_BOOT_PROMISE__) return window.__PYODIDE_BOOT_PROMISE__;
+
+  window.__PYODIDE_INIT_LOCK__ = true;
+  window.__PYODIDE_BOOT_PROMISE__ = (async () => {
+    let retries = 0;
+    while (typeof window.loadPyodide === 'undefined' && retries < 120) {
+      await new Promise(resolve => window.setTimeout(resolve, 250));
+      retries += 1;
+    }
+    if (typeof window.loadPyodide === 'undefined') {
+      throw new Error('Local Python runtime is unavailable. Please refresh.');
+    }
+
+    const pyodide = await window.loadPyodide({
+      indexURL: new URL('./pyodide/', window.location.href).href,
+    });
+    await pyodide.loadPackage([]);
+    window.__PYODIDE_INSTANCE__ = pyodide;
+    return pyodide;
+  })();
+
+  return window.__PYODIDE_BOOT_PROMISE__;
+};
+
+// Python and the large editor/curriculum bundle load concurrently on mobile.
+startLocalPython().catch(() => undefined);
 
 class AppErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
   constructor(props: { children: React.ReactNode }) {
@@ -92,9 +120,23 @@ class AppErrorBoundary extends React.Component<{ children: React.ReactNode }, { 
 const rootElement = document.getElementById('root');
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <AppErrorBoundary>
-      <App />
-    </AppErrorBoundary>
-  );
+  import('./App')
+    .then(({ default: App }) => {
+      root.render(
+        <AppErrorBoundary>
+          <App />
+        </AppErrorBoundary>
+      );
+    })
+    .catch(error => {
+      root.render(
+        <AppErrorBoundary>
+          <StartupFailure error={error instanceof Error ? error : new Error(String(error))} />
+        </AppErrorBoundary>
+      );
+    });
+}
+
+function StartupFailure({ error }: { error: Error }) {
+  throw error;
 }

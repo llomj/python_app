@@ -79,6 +79,7 @@ declare global {
     interface Window {
         __PYODIDE_INSTANCE__: any;
         __PYODIDE_INIT_LOCK__: boolean;
+        __PYODIDE_BOOT_PROMISE__?: Promise<any>;
         loadPyodide: any;
         APP_VERSION?: string;
     }
@@ -16338,13 +16339,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v294') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v295') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v294')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v295')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16367,27 +16368,11 @@ const App: React.FC = () => {
                 return;
             }
 
-            if (window.__PYODIDE_INIT_LOCK__) return;
-            window.__PYODIDE_INIT_LOCK__ = true;
-
             try {
                 setBootLog('Loading local interpreter...');
-
-                let retries = 0;
-                while (typeof window.loadPyodide === 'undefined' && retries < 120) {
-                    await new Promise(r => setTimeout(r, 500));
-                    retries++;
-                }
-
-                if (typeof window.loadPyodide === 'undefined') {
-                    throw new Error("WASM source unavailable. Please refresh.");
-                }
-
-                const py = await window.loadPyodide({
-                    indexURL: new URL('./pyodide/', window.location.href).href,
-                });
-
-                await py.loadPackage([]);
+                const py = await (window.__PYODIDE_BOOT_PROMISE__ ?? Promise.reject(
+                    new Error('Python startup was not initialized. Please refresh.')
+                ));
                 window.__PYODIDE_INSTANCE__ = py;
                 setPyodide(py);
                 setBootStage('ready');
@@ -16534,7 +16519,14 @@ const App: React.FC = () => {
 
     const runCode = async () => {
         if (isRunning) return;
-        if (!pyodide) return;
+        const activePyodide = pyodide ?? window.__PYODIDE_INSTANCE__;
+        if (!activePyodide) {
+            setOutput(appLang === 'fr'
+                ? 'Le moteur Python local n’est pas prêt. Actualisez l’application.'
+                : 'The local Python engine is not ready. Refresh the app.');
+            setOutputStatus('fail');
+            return;
+        }
         const autoGrader = !plainMode ? AUTO_GRADERS[exercise.id] : null;
         setIsRunning(true);
         setOutputStatus('running');
@@ -16551,13 +16543,13 @@ const App: React.FC = () => {
                     pathParts.slice(0, -1).forEach(part => {
                         currentPath = currentPath ? `${currentPath}/${part}` : part;
                         try {
-                            pyodide.FS.mkdir(currentPath);
+                            activePyodide.FS.mkdir(currentPath);
                         } catch {
                             // Directory already exists.
                         }
                     });
                 }
-                pyodide.FS.writeFile(file.name, file.content);
+                activePyodide.FS.writeFile(file.name, file.content);
             });
 
             // Clear user-defined modules from sys.modules to ensure fresh imports
@@ -16588,13 +16580,13 @@ def __app_input(prompt=""):
     return value
 builtins.input = __app_input
 `;
-            pyodide.runPython(clearModulesCode);
+            activePyodide.runPython(clearModulesCode);
 
             const activeFile = files[activeFileIndex];
             let stdout = '';
             const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
-            await pyodide.runPythonAsync(code);
-            stdout = pyodide.runPython("sys.stdout.getvalue()");
+            await activePyodide.runPythonAsync(code);
+            stdout = activePyodide.runPython("sys.stdout.getvalue()");
             stdinValuesRef.current = [];
             setStdinValues([]);
 
@@ -16602,12 +16594,12 @@ builtins.input = __app_input
                 setOutput(stdout?.trim() || t('output.successNoOutput', appLang));
                 setOutputStatus('info');
             } else if (autoGrader) {
-                pyodide.runPython(`
+                activePyodide.runPython(`
 import builtins
 builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADER_INPUT_UNAVAILABLE__" + str(prompt)))
 `);
-                pyodide.runPython(buildAutoGradeScript(autoGrader, activeFile.content, activeFile.name));
-                const gradeResult = JSON.parse(pyodide.runPython("__auto_grader_json")) as AutoGradeResult;
+                activePyodide.runPython(buildAutoGradeScript(autoGrader, activeFile.content, activeFile.name));
+                const gradeResult = JSON.parse(activePyodide.runPython("__auto_grader_json")) as AutoGradeResult;
                 const graderOutput = gradeResult.output?.trim()
                     ? `${t('output.programOutput', appLang)}\n${gradeResult.output.trim()}\n\n`
                     : '';
@@ -16671,14 +16663,14 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
             const inputMarker = '__PY_INPUT_REQUIRED__';
             if (errorMessage.includes(inputMarker)) {
                 const prompt = errorMessage.split(inputMarker).pop()?.trim() || t('output.inputRequired', appLang);
-                const stdout = pyodide.runPython("sys.stdout.getvalue()");
+                const stdout = activePyodide.runPython("sys.stdout.getvalue()");
                 setOutputStatus('info');
                 setWaitingForInput(true);
                 setInputPrompt(prompt);
                 setOutput(`${stdout || ''}\n${t('output.waitingInput', appLang)}${prompt ? ` : ${prompt}` : ''}`);
                 return;
             }
-            const stdout = pyodide.runPython("sys.stdout.getvalue()");
+            const stdout = activePyodide.runPython("sys.stdout.getvalue()");
             const userOutput = stdout?.trim() ? `${t('output.programOutput', appLang)}\n${stdout.trim()}\n\n` : '';
             stdinValuesRef.current = [];
             setStdinValues([]);
@@ -20107,7 +20099,7 @@ print(result)
                 style={{
                     top: `${editorToolbarTop}px`,
                     pointerEvents: 'none',
-                    zIndex: scrollLayoutActive ? 15 : 110,
+                    zIndex: scrollLayoutActive ? 70 : 110,
                     willChange: scrollLayoutActive ? 'transform' : 'auto',
                 }}
             >
@@ -20141,7 +20133,16 @@ print(result)
                         >
                             &lt;
                         </button>
-                        <button onClick={runCode} disabled={isRunning} className={runButtonClass}>
+                        <button
+                            onClick={runCode}
+                            onKeyDown={(event) => {
+                                if (event.key !== 'Enter' && event.key !== ' ') return;
+                                event.preventDefault();
+                                runCode();
+                            }}
+                            disabled={isRunning}
+                            className={runButtonClass}
+                        >
                             {isRunning ? <Loader2 size={12} className="animate-spin" /> : <Play size={12} fill="currentColor" />} {runButtonLabel}
                         </button>
                     </div>
@@ -20152,8 +20153,14 @@ print(result)
                 data-landscape-main-scroll="true"
                 ref={mainScrollRef}
                 onScroll={syncScrollableLayout}
-                className="flex-1 overflow-y-auto overflow-x-hidden px-4"
+                className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4"
                 style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    height: '100%',
+                    boxSizing: 'border-box',
                     paddingTop: `${editorContentTop}px`,
                     paddingBottom: `max(16rem, calc(env(safe-area-inset-bottom) + ${Math.max(headerHeight + 490, 620)}px))`,
                     scrollPaddingTop: `${editorContentTop}px`,
