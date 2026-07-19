@@ -11,12 +11,17 @@ const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'advanced-concept-audit-')
 const entry = path.join(tempDir, 'entry.ts');
 const bundle = path.join(tempDir, 'bundle.cjs');
 const expectedCounts = {
-  Decorator: 50,
-  Iterator: 50,
-  'Context Manager': 50,
-  Dataclass: 50,
-  'Magic Method': 50,
-  'Bitwise Operation': 50,
+  Decorator: 100,
+  Iterator: 100,
+  'Context Manager': 100,
+  Dataclass: 100,
+  'Magic Method': 100,
+  'Bitwise Operation': 100,
+  'Type Hint': 50,
+  'Testing & Debugging': 50,
+  'Scope & Namespace': 50,
+  'Match Case': 50,
+  'Dates & Times': 50,
 };
 
 fs.writeFileSync(entry, [
@@ -33,9 +38,13 @@ try {
     ADVANCED_CONCEPT_FR: french,
   } = require(bundle);
   const failures = [];
-  const expectedIds = Array.from({ length: 300 }, (_, index) => 2808 + index);
-  if (exercises.length !== 300) failures.push(`expected 300 exercises, found ${exercises.length}`);
-  if (JSON.stringify(exercises.map(item => item.id)) !== JSON.stringify(expectedIds)) failures.push('IDs are not exactly 2808-3107');
+  const appSource = fs.readFileSync(path.join(root, 'App.tsx'), 'utf8');
+  if (!appSource.includes("exercise.category.endsWith(' Difficult')") || !appSource.includes("return 'expert'")) {
+    failures.push('Difficult generated exercises are not explicitly routed to Expert mode');
+  }
+  const expectedIds = Array.from({ length: 850 }, (_, index) => 2808 + index);
+  if (exercises.length !== 850) failures.push(`expected 850 exercises, found ${exercises.length}`);
+  if (JSON.stringify(exercises.map(item => item.id)) !== JSON.stringify(expectedIds)) failures.push('IDs are not exactly 2808-3657');
   const prompts = exercises.map(item => item.description.split('\n')[0].toLowerCase());
   if (new Set(prompts).size !== prompts.length) failures.push('duplicate English prompts found');
 
@@ -56,7 +65,7 @@ try {
     for (let example = 1; example <= 5; example += 1) {
       if (!exercise.solution.includes(`# Example ${example}:`)) failures.push(`${exercise.id}: Example ${example} missing`);
     }
-    const sourceMatch = exercise.solution.match(/^(?:#.*\n)+(?<source>def\s+[A-Za-z_]\w*\([^)]*\):[\s\S]*?)(?=\n\nprint\()/);
+    const sourceMatch = exercise.solution.match(/^(?:#.*\n)+(?<source>def\s+[A-Za-z_]\w*\([^)]*\)(?:\s*->\s*[^:]+)?:[\s\S]*?)(?=\n\nprint\()/);
     if (!sourceMatch?.groups?.source) {
       failures.push(`${exercise.id}: canonical solution could not be extracted`);
     } else if (grader) {
@@ -70,6 +79,11 @@ try {
     if (concept === 'Dataclass' && !grader?.requiredDecorators?.includes('dataclass')) failures.push(`${exercise.id}: dataclass requirement missing`);
     if (concept === 'Magic Method' && !grader?.requiredDefinedFunctions?.some(name => /^__.+__$/.test(name))) failures.push(`${exercise.id}: magic-method requirement missing`);
     if (concept === 'Bitwise Operation' && !grader?.requiredAstOperators?.length) failures.push(`${exercise.id}: bitwise operator requirement missing`);
+    if (concept === 'Type Hint' && (!grader?.requiredTypeHints?.minParameters || !grader?.requiredTypeHints?.requireReturn)) failures.push(`${exercise.id}: type-hint requirements missing`);
+    if (concept === 'Testing & Debugging' && !grader?.requiredNodePatterns?.some(pattern => pattern.nodeType === 'Assert')) failures.push(`${exercise.id}: assertion requirement missing`);
+    if (concept === 'Scope & Namespace' && !grader?.requiredNodePatterns?.some(pattern => ['Global', 'Nonlocal'].includes(pattern.nodeType))) failures.push(`${exercise.id}: scope requirement missing`);
+    if (concept === 'Match Case' && !grader?.requiredNodePatterns?.some(pattern => pattern.nodeType === 'Match')) failures.push(`${exercise.id}: match requirement missing`);
+    if (concept === 'Dates & Times' && !grader?.requiredCallPatterns?.some(pattern => pattern.functionName === 'strptime')) failures.push(`${exercise.id}: datetime parsing requirement missing`);
   }
 
   if (executionPayload.length) {

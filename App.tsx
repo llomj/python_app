@@ -4481,6 +4481,11 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:dataclasses', label: 'Dataclasses', description: '@dataclass, fields, and generated methods', patterns: [/\bdataclass\b|@dataclass\b|\bfield\(\)/], categoryPrefixes: ['Dataclass '] },
     { id: 'concept:magicMethods', label: 'Magic Methods', description: 'dunder methods and Python protocols', patterns: [/\bmagic method\b|\bdunder\b|\b__(?:str|repr|len|eq|lt|add|sub|mul|contains|bool)__\b/], categoryPrefixes: ['Magic Method '] },
     { id: 'concept:bitwise', label: 'Bitwise Operations', description: 'binary masks, shifts, AND, OR, and XOR', patterns: [/\bbitwise\b|\bbinary mask\b|\bbit mask\b|\bshift all bits\b|\bselected bit\b/], categoryPrefixes: ['Bitwise Operation '] },
+    { id: 'concept:typeHints', label: 'Type Hints', description: 'Parameter, return, union, and collection annotations', patterns: [/\btype hint\b|\btype annotation\b|\btyping\b|\boptional\b|\bunion\b/], categoryPrefixes: ['Type Hint '] },
+    { id: 'concept:testingDebugging', label: 'Testing & Debugging', description: 'Assertions, test cases, failures, and diagnosis', patterns: [/\bunit test\b|\bdebug\b|\bassert\b|\btest case\b|\btrace\b/], categoryPrefixes: ['Testing & Debugging '] },
+    { id: 'concept:scopeNamespaces', label: 'Scope & Namespaces', description: 'LEGB, local, enclosing, global, and nonlocal names', patterns: [/\bnamespace\b|\bscope\b|\bnonlocal\b|\bglobal\b|\benclosing\b|\blegb\b/], categoryPrefixes: ['Scope & Namespace '] },
+    { id: 'concept:matchCase', label: 'Match / Case', description: 'Structural pattern matching, captures, and guards', patterns: [/\bmatch\s*\/\s*case\b|\bmatch statement\b|\bstructural pattern\b|\bcase guard\b/], categoryPrefixes: ['Match Case '] },
+    { id: 'concept:datesTimes', label: 'Dates & Times', description: 'datetime parsing, formatting, differences, and timedelta', patterns: [/\bdatetime\b|\btimedelta\b|\bdate and time\b|\biso date\b|\bweekday\b/], categoryPrefixes: ['Dates & Times '] },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 interface ConceptDocGuide {
@@ -4563,6 +4568,46 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         inDepth: 'Masks select individual bits or fields. Use 1 << position to create a one-bit mask. Set with |, clear with & ~, toggle with ^, and test with bool(value & mask). Parentheses make mask and shift order explicit.',
         examples: ['mask = 1 << position', 'is_on = bool(number & mask)', 'number = number | mask  # set', 'number = number & ~mask  # clear', 'number = number ^ mask  # toggle'],
         common: ['& AND', '| OR', '^ XOR', '~ NOT', '<< left shift', '>> right shift', '1 << position creates a mask']
+    },
+    'concept:typeHints': {
+        shape: 'def function(value: int) -> str:',
+        simple: 'Type hints describe the kinds of values a function expects and returns without changing normal Python execution.',
+        intermediate: 'Annotate parameters after a colon and the return type after ->. Collection hints describe their item types, while union syntax describes multiple accepted types.',
+        inDepth: 'Annotations are stored in __annotations__ and can be inspected by tools, editors, linters, and type checkers. Python does not enforce them automatically at runtime, so validation remains a separate concern.',
+        examples: ['def double(value: int) -> int:\n    return value * 2', 'def label(value: int | str) -> str:\n    return str(value)', 'def total(values: list[int]) -> int:\n    return sum(values)'],
+        common: ['parameter: Type', '-> ReturnType', 'list[int] and dict[str, int]', 'TypeA | TypeB', 'None return annotations', 'Static checking versus runtime validation']
+    },
+    'concept:testingDebugging': {
+        shape: 'assert condition, "diagnostic message"',
+        simple: 'Testing checks that code produces expected results, while debugging finds the cause when behavior differs from those expectations.',
+        intermediate: 'Assertions express conditions that must be true. Strong tests cover normal values, boundaries, empty inputs, and invalid inputs instead of checking only one example.',
+        inDepth: 'A useful debugging workflow reproduces the failure, reduces it to a minimal case, inspects intermediate state, fixes the underlying cause, and adds a regression test. Tests should verify behavior rather than implementation details unless syntax is part of the task.',
+        examples: ['assert double(3) == 6', 'assert values, "values must not be empty"', 'try:\n    parse(value)\nexcept ValueError as error:\n    print(error)'],
+        common: ['assert and diagnostic messages', 'Normal and boundary tests', 'Expected exceptions', 'Trace intermediate values', 'Minimal reproduction', 'Regression tests']
+    },
+    'concept:scopeNamespaces': {
+        shape: 'local -> enclosing -> global -> built-in',
+        simple: 'Scope decides where a name can be read or changed. Python searches local, enclosing, global, then built-in namespaces.',
+        intermediate: 'global targets a module-level name. nonlocal targets an existing binding in the nearest enclosing function. Ordinary assignment creates or updates a local name by default.',
+        inDepth: 'A namespace maps names to objects, while scope is the rule used to search those mappings. Closures retain enclosing bindings. Avoid unnecessary global mutation because it creates hidden shared state and makes tests harder to isolate.',
+        examples: ['value = 1\ndef read():\n    return value', 'def outer():\n    count = 0\n    def add():\n        nonlocal count\n        count += 1', 'global setting'],
+        common: ['LEGB lookup order', 'Local assignment', 'Enclosing closures', 'nonlocal rebinding', 'global rebinding', 'Built-in namespace']
+    },
+    'concept:matchCase': {
+        shape: 'match subject:\n    case pattern if guard:',
+        simple: 'match/case chooses code by comparing a value with structural patterns.',
+        intermediate: 'Cases are tried from top to bottom. Patterns can match literals, sequences, mappings, classes, or capture names. A guard adds an extra if condition after a pattern matches.',
+        inDepth: 'A bare name is a capture pattern, not a comparison with an existing variable. Put specific cases before broad captures and use case _ as the fallback. Sequence and mapping patterns can unpack useful parts directly.',
+        examples: ['match command:\n    case "start":\n        return True\n    case _:\n        return False', 'match point:\n    case (0, y):\n        return y', 'case value if value > 0:'],
+        common: ['Literal patterns', 'Capture patterns', 'Sequence patterns', 'Mapping patterns', 'Guards with if', 'case _ fallback']
+    },
+    'concept:datesTimes': {
+        shape: 'datetime.strptime(text, format) + timedelta(...)',
+        simple: 'datetime represents dates and times, while timedelta represents a duration that can be added, subtracted, or compared.',
+        intermediate: 'strptime parses text into a datetime using format codes. strftime formats a datetime back into text. Subtracting two datetime values produces a timedelta.',
+        inDepth: 'Date arithmetic must account for month lengths, leap years, and time zones. Prefer datetime operations over manual day calculations. For aware times, attach and convert real time-zone information rather than hard-coding offsets.',
+        examples: ['from datetime import datetime, timedelta', 'date = datetime.strptime("2024-02-28", "%Y-%m-%d")', 'tomorrow = date + timedelta(days=1)', 'text = tomorrow.strftime("%Y-%m-%d")'],
+        common: ['datetime and date', 'timedelta durations', 'strptime parsing', 'strftime formatting', 'Date subtraction', 'Leap-year-safe arithmetic']
     },
     'concept:builtins': {
         simple: 'Built-ins are Python functions that are ready to use without importing anything.',
@@ -5050,6 +5095,9 @@ const loadStatsByMode = (): StatsByMode => {
 
 const classifyExerciseDifficulty = (exercise: Exercise): Exclude<DifficultyMode, 'normal'> => {
     if (exercise.category === 'Atomic Beginner' || (exercise.id >= 2081 && exercise.id <= 2380)) return 'atomic_beginner';
+    if (exercise.category.endsWith(' Difficult')) return 'expert';
+    if (exercise.category.endsWith(' Intermediate')) return 'intermediate';
+    if (exercise.category.endsWith(' Easy')) return 'beginner';
     const score = scoreExerciseDifficulty(exercise);
 
     if (score > 24) return 'legend';
@@ -5295,6 +5343,7 @@ def __auto_grader_check_source_requirements():
     unpack_patterns = __auto_grader_spec.get("requiredUnpackPatterns", [])
     required_decorators = __auto_grader_spec.get("requiredDecorators", [])
     required_defined_functions = __auto_grader_spec.get("requiredDefinedFunctions", [])
+    required_type_hints = __auto_grader_spec.get("requiredTypeHints")
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
@@ -5316,7 +5365,7 @@ def __auto_grader_check_source_requirements():
     )
     if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
         return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
-    if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns and not required_decorators and not required_defined_functions:
+    if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns and not required_decorators and not required_defined_functions and not required_type_hints:
         return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -5390,6 +5439,24 @@ def __auto_grader_check_source_requirements():
     for required_name in required_decorators:
         if required_name not in decorator_names:
             return f"Missing required decorator: @{required_name}"
+    if required_type_hints:
+        function_nodes = [
+            node for node in all_nodes
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name in __auto_grader_spec.get("functionNames", [])
+        ]
+        if not function_nodes:
+            return "Missing required typed function definition."
+        typed_function = function_nodes[0]
+        typed_parameters = sum(
+            argument.annotation is not None
+            for argument in typed_function.args.posonlyargs + typed_function.args.args + typed_function.args.kwonlyargs
+        )
+        minimum_parameters = int(required_type_hints.get("minParameters", 0))
+        if typed_parameters < minimum_parameters:
+            return f"Missing required type hints: annotate at least {minimum_parameters} parameter(s)."
+        if required_type_hints.get("requireReturn") and typed_function.returns is None:
+            return "Missing required return type hint after ->."
     class_defs = {node.name: node for node in all_nodes if isinstance(node, ast.ClassDef)}
     for pattern in inheritance_patterns:
         class_name = pattern.get("className")
@@ -16079,13 +16146,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v289') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v290') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v289')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v290')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);

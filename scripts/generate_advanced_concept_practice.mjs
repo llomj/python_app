@@ -206,18 +206,150 @@ bitFamilies.forEach((family, familyIndex) => family[6].forEach((constant, offset
     en: `${family[1]} using ${constant}`, fr: `${family[2]} avec ${constant}`,
     body: `return ${family[3](constant)}`,
     cases: bitCases.map(number => ({ args: [number], expected: family[4](number, constant) })), level: level(index), astOperators: [family[5]],
-    focus: 'the binary representation, mask or shift amount, and resulting bits' });
+  focus: 'the binary representation, mask or shift amount, and resulting bits' });
 }));
 
-const expectedCounts = { Decorator: 50, Iterator: 50, 'Context Manager': 50, Dataclass: 50, 'Magic Method': 50, 'Bitwise Operation': 50 };
-if (specs.length !== 300) throw new Error(`Expected 300 specs, found ${specs.length}`);
+// A second, structurally different pack deepens each of the six original concepts.
+operations.forEach((item, index) => {
+  const expression = replaceName(item.expression, 'value', 'original');
+  add({ concept: 'Decorator', key: 'decorators', name: `pipeline_${item.key}`, params: 'value',
+    en: `apply a result-transforming decorator that will ${item.en}`, fr: `applique un décorateur de résultat qui ${item.fr}`,
+    body: `def apply_transform(function):\n        def wrapped(value):\n            original = function(value)\n            return ${expression}\n        return wrapped\n\n    @apply_transform\n    def preserve(value):\n        return value\n\n    return preserve(value)`,
+    cases: item.cases, level: level(index), nodes: [{ nodeType: 'FunctionDef', minCount: 3 }], decorators: ['apply_transform'], definedFunctions: ['wrapped', 'preserve'],
+    focus: 'applying @apply_transform, preserving the original call, and transforming its returned value' });
+});
+
+operations.forEach((item, index) => {
+  const values = item.cases.map(test => test.args[0]);
+  const expected = item.cases.map(test => test.expected);
+  add({ concept: 'Iterator', key: 'iterators', name: `iterator_class_${item.key}`, params: 'values',
+    en: `build a custom iterator class that will ${item.en} for each supplied value`, fr: `construit une classe d’itérateur personnalisée qui ${item.fr} pour chaque valeur fournie`,
+    body: `class TransformIterator:\n        def __init__(self, values):\n            self.source = iter(values)\n\n        def __iter__(self):\n            return self\n\n        def __next__(self):\n            current = next(self.source)\n            return ${replaceName(item.expression, 'value', 'current')}\n\n    return list(TransformIterator(values))`,
+    cases: [
+      { args: [values], expected },
+      { args: [[values[2], values[0]]], expected: [expected[2], expected[0]] },
+      { args: [[values[1]]], expected: [expected[1]] },
+    ], level: level(index), nodes: [{ nodeType: 'ClassDef' }], calls: ['iter', 'next'], definedFunctions: ['__iter__', '__next__'],
+    focus: 'the iterator class state, __iter__, __next__, and automatic StopIteration propagation' });
+});
+
+operations.forEach((item, index) => add({ concept: 'Context Manager', key: 'contextManagers', name: `resource_${item.key}`, params: 'value',
+  en: `enter and leave a managed resource while you ${item.en}`, fr: `entre et sort d’une ressource gérée pendant que la fonction ${item.fr}`,
+  body: `class OperationResource:\n        def __init__(self, value):\n            self.value = value\n            self.active = False\n\n        def __enter__(self):\n            self.active = True\n            return self\n\n        def __exit__(self, exc_type, exc_value, traceback):\n            self.active = False\n            return False\n\n    with OperationResource(value) as resource:\n        return ${replaceName(item.expression, 'value', 'resource.value')}`,
+  cases: item.cases, level: level(index), nodes: [{ nodeType: 'With' }, { nodeType: 'ClassDef' }], definedFunctions: ['__enter__', '__exit__'],
+  focus: 'resource state, __enter__, the with block, and guaranteed __exit__ cleanup' }));
+
+operations.forEach((item, index) => add({ concept: 'Dataclass', key: 'dataclasses', name: `record_${item.key}`, params: 'value',
+  en: `model the input with a @dataclass record whose method will ${item.en}`, fr: `modélise l’entrée avec une fiche @dataclass dont la méthode ${item.fr}`,
+  body: `from dataclasses import dataclass\n\n    @dataclass\n    class OperationRecord:\n        source: object\n\n        def result(self):\n            return ${replaceName(item.expression, 'value', 'self.source')}\n\n    record = OperationRecord(value)\n    return record.result()`,
+  cases: item.cases, level: level(index), nodes: [{ nodeType: 'ClassDef' }, { nodeType: 'AnnAssign' }], decorators: ['dataclass'], definedFunctions: ['result'],
+  focus: 'the annotated dataclass field, generated initializer, instance construction, and result method' }));
+
+operations.forEach((item, index) => add({ concept: 'Magic Method', key: 'magicMethods', name: `callable_${item.key}`, params: 'value',
+  en: `make an object callable with __call__ so it can ${item.en}`, fr: `rend un objet appelable avec __call__ afin qu’il ${item.fr}`,
+  body: `class CallableOperation:\n        def __call__(self, current):\n            return ${replaceName(item.expression, 'value', 'current')}\n\n    operation = CallableOperation()\n    return operation(value)`,
+  cases: item.cases, level: level(index), nodes: [{ nodeType: 'ClassDef' }], definedFunctions: ['__call__'],
+  focus: 'the __call__ protocol, object construction, and invoking the instance like a function' }));
+
+const extraBitFamilies = [
+  ['advanced_and', 'keep bits selected by the additional mask', 'conserve les bits sélectionnés par le masque supplémentaire', (constant) => `number & ${constant}`, (number, constant) => number & constant, 'BitAnd', [2, 6, 12, 24, 48]],
+  ['advanced_or', 'enable bits selected by the additional mask', 'active les bits sélectionnés par le masque supplémentaire', (constant) => `number | ${constant}`, (number, constant) => number | constant, 'BitOr', [2, 6, 12, 24, 48]],
+  ['advanced_xor', 'toggle bits selected by the additional mask', 'inverse les bits sélectionnés par le masque supplémentaire', (constant) => `number ^ ${constant}`, (number, constant) => number ^ constant, 'BitXor', [2, 6, 12, 24, 48]],
+  ['scaled_left', 'left-shift then add one', 'décale à gauche puis ajoute un', (constant) => `(number << ${constant}) + 1`, (number, constant) => (number << constant) + 1, 'LShift', [1, 2, 3, 4, 5]],
+  ['scaled_right', 'right-shift then add one', 'décale à droite puis ajoute un', (constant) => `(number >> ${constant}) + 1`, (number, constant) => (number >> constant) + 1, 'RShift', [1, 2, 3, 4, 5]],
+  ['low_mask', 'extract the selected number of low bits', 'extrait le nombre choisi de bits faibles', (constant) => `number & ((1 << ${constant}) - 1)`, (number, constant) => number & ((1 << constant) - 1), 'BitAnd', [1, 2, 3, 4, 5]],
+  ['set_pair', 'set two adjacent bits beginning at the position', 'active deux bits adjacents à partir de la position', (constant) => `number | (0b11 << ${constant})`, (number, constant) => number | (3 << constant), 'BitOr', [0, 1, 2, 3, 4]],
+  ['clear_pair', 'clear two adjacent bits beginning at the position', 'désactive deux bits adjacents à partir de la position', (constant) => `number & ~(0b11 << ${constant})`, (number, constant) => number & ~(3 << constant), 'BitAnd', [0, 1, 2, 3, 4]],
+  ['toggle_pair', 'toggle two adjacent bits beginning at the position', 'inverse deux bits adjacents à partir de la position', (constant) => `number ^ (0b11 << ${constant})`, (number, constant) => number ^ (3 << constant), 'BitXor', [0, 1, 2, 3, 4]],
+  ['shift_mask', 'shift right and retain the lowest four bits', 'décale à droite et conserve les quatre bits faibles', (constant) => `(number >> ${constant}) & 0b1111`, (number, constant) => (number >> constant) & 15, 'RShift', [0, 1, 2, 3, 4]],
+];
+extraBitFamilies.forEach((family, familyIndex) => family[6].forEach((constant, offset) => {
+  const index = familyIndex * 5 + offset;
+  add({ concept: 'Bitwise Operation', key: 'bitwise', name: `${family[0]}_${constant}_bitwise`, params: 'number',
+    en: `${family[1]} using ${constant}`, fr: `${family[2]} avec ${constant}`, body: `return ${family[3](constant)}`,
+    cases: [0, 19, 86].map(number => ({ args: [number], expected: family[4](number, constant) })), level: level(index), astOperators: [family[5]],
+    focus: 'the input bits, the mask or shift, and the exact output bit pattern' });
+}));
+
+const pythonType = value => Array.isArray(value) ? 'list' : typeof value === 'string' ? 'str' : typeof value === 'boolean' ? 'bool' : Number.isInteger(value) ? 'int' : 'float';
+operations.forEach((item, index) => add({ concept: 'Type Hint', key: 'typeHints', name: `typed_${item.key}`,
+  params: `value: ${pythonType(item.cases[0].args[0])}`, returnType: pythonType(item.cases[0].expected),
+  en: `use parameter and return annotations while you ${item.en}`, fr: `utilise des annotations de paramètre et de retour pendant que la fonction ${item.fr}`,
+  body: `return ${item.expression}`, cases: item.cases, level: level(index), typeHints: { minParameters: 1, requireReturn: true },
+  focus: 'the parameter annotation, arrow return annotation, runtime value, and declared result type' }));
+
+operations.forEach((item, index) => add({ concept: 'Testing & Debugging', key: 'testingDebugging', name: `validated_${item.key}`, params: 'value',
+  en: `use an assertion to reject None before you ${item.en}`, fr: `utilise une assertion pour refuser None avant que la fonction ${item.fr}`,
+  body: `assert value is not None, "value must not be None"\n    return ${item.expression}`,
+  cases: item.cases, level: level(index), nodes: [{ nodeType: 'Assert' }],
+  focus: 'the precondition, assert statement, diagnostic message, and tested transformation' }));
+
+operations.forEach((item, index) => {
+  if (index < 25) {
+    add({ concept: 'Scope & Namespace', key: 'scopeNamespaces', name: `nonlocal_${item.key}`, params: 'value',
+      en: `use nonlocal state in an inner function to ${item.en}`, fr: `utilise un état nonlocal dans une fonction interne qui ${item.fr}`,
+      body: `result = value\n\n    def update():\n        nonlocal result\n        result = ${replaceName(item.expression, 'value', 'result')}\n\n    update()\n    return result`,
+      cases: item.cases, level: level(index), nodes: [{ nodeType: 'Nonlocal' }, { nodeType: 'FunctionDef', minCount: 2 }], definedFunctions: ['update'],
+      focus: 'the enclosing binding, nonlocal declaration, inner assignment, and final outer return' });
+  } else {
+    add({ concept: 'Scope & Namespace', key: 'scopeNamespaces', name: `global_${item.key}`, params: 'value',
+      en: `store the input in a global binding before you ${item.en}`, fr: `stocke l’entrée dans une liaison globale avant que la fonction ${item.fr}`,
+      body: `global operation_value\n    operation_value = value\n    return ${replaceName(item.expression, 'value', 'operation_value')}`,
+      cases: item.cases, level: level(index), nodes: [{ nodeType: 'Global' }],
+      focus: 'the global declaration, module-level namespace binding, and value lookup' });
+  }
+});
+
+operations.forEach((item, index) => add({ concept: 'Match Case', key: 'matchCase', name: `matched_${item.key}`, params: 'value',
+  en: `use match/case to bind the input and ${item.en}`, fr: `utilise match/case pour lier l’entrée et ${item.fr}`,
+  body: `match value:\n        case current:\n            return ${replaceName(item.expression, 'value', 'current')}`,
+  cases: item.cases, level: level(index), nodes: [{ nodeType: 'Match' }, { nodeType: 'match_case' }],
+  focus: 'the match subject, capture pattern, selected case, and returned transformation' }));
+
+const dateAt = (value, dayDelta = 0, hourDelta = 0) => {
+  const date = new Date(`${value}${value.includes('T') ? 'Z' : 'T00:00:00Z'}`);
+  date.setUTCDate(date.getUTCDate() + dayDelta);
+  date.setUTCHours(date.getUTCHours() + hourDelta);
+  return value.includes('T') ? date.toISOString().slice(0, 16) : date.toISOString().slice(0, 10);
+};
+const dateInputs = ['2024-01-15', '2024-02-28', '2025-12-30'];
+const dateTimeInputs = ['2024-01-15T10:30', '2024-02-28T23:15', '2025-12-30T04:00'];
+const dateSpecs = [];
+for (const amount of [1, 2, 3, 7, 14]) {
+  dateSpecs.push({ name: `add_${amount}_days`, en: `add ${amount} day(s) to an ISO date`, fr: `ajoute ${amount} jour(s) à une date ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%d")\n    return (date + timedelta(days=${amount})).strftime("%Y-%m-%d")`, cases: dateInputs.map(value => ({ args: [value], expected: dateAt(value, amount) })) });
+  dateSpecs.push({ name: `subtract_${amount}_days`, en: `subtract ${amount} day(s) from an ISO date`, fr: `soustrait ${amount} jour(s) d’une date ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%d")\n    return (date - timedelta(days=${amount})).strftime("%Y-%m-%d")`, cases: dateInputs.map(value => ({ args: [value], expected: dateAt(value, -amount) })) });
+  dateSpecs.push({ name: `weekday_after_${amount}_days`, en: `return the weekday name ${amount} day(s) after an ISO date`, fr: `retourne le jour de la semaine ${amount} jour(s) après une date ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%d")\n    return (date + timedelta(days=${amount})).strftime("%A")`, cases: dateInputs.map(value => ({ args: [value], expected: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date(`${dateAt(value, amount)}T00:00:00Z`).getUTCDay()] })) });
+  dateSpecs.push({ name: `day_number_after_${amount}`, en: `return the day-of-year number ${amount} day(s) after an ISO date`, fr: `retourne le numéro du jour dans l’année ${amount} jour(s) après une date ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%d")\n    return int((date + timedelta(days=${amount})).strftime("%j"))`, cases: dateInputs.map(value => { const shifted = new Date(`${dateAt(value, amount)}T00:00:00Z`); const start = new Date(Date.UTC(shifted.getUTCFullYear(), 0, 1)); return { args: [value], expected: Math.floor((shifted - start) / 86400000) + 1 }; }) });
+}
+for (const amount of [1, 2, 6, 12, 24]) {
+  dateSpecs.push({ name: `add_${amount}_hours`, en: `add ${amount} hour(s) to an ISO date-time`, fr: `ajoute ${amount} heure(s) à une date-heure ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%dT%H:%M")\n    return (date + timedelta(hours=${amount})).strftime("%Y-%m-%dT%H:%M")`, cases: dateTimeInputs.map(value => ({ args: [value], expected: dateAt(value, 0, amount) })) });
+  dateSpecs.push({ name: `subtract_${amount}_hours`, en: `subtract ${amount} hour(s) from an ISO date-time`, fr: `soustrait ${amount} heure(s) d’une date-heure ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%dT%H:%M")\n    return (date - timedelta(hours=${amount})).strftime("%Y-%m-%dT%H:%M")`, cases: dateTimeInputs.map(value => ({ args: [value], expected: dateAt(value, 0, -amount) })) });
+  dateSpecs.push({ name: `within_${amount}_days`, en: `test whether two ISO dates are no more than ${amount} day(s) apart`, fr: `teste si deux dates ISO sont séparées d’au plus ${amount} jour(s)`, params: 'start_text, end_text', body: `from datetime import datetime\n    start = datetime.strptime(start_text, "%Y-%m-%d")\n    end = datetime.strptime(end_text, "%Y-%m-%d")\n    return abs((end - start).days) <= ${amount}`, cases: [
+    { args: ['2024-01-01', dateAt('2024-01-01', amount)], expected: true },
+    { args: ['2024-01-01', dateAt('2024-01-01', amount + 1)], expected: false },
+    { args: ['2024-03-10', dateAt('2024-03-10', -amount)], expected: true },
+  ] });
+  dateSpecs.push({ name: `days_apart_plus_${amount}`, en: `return the absolute days between two ISO dates plus ${amount}`, fr: `retourne le nombre absolu de jours entre deux dates ISO plus ${amount}`, params: 'start_text, end_text', body: `from datetime import datetime\n    start = datetime.strptime(start_text, "%Y-%m-%d")\n    end = datetime.strptime(end_text, "%Y-%m-%d")\n    return abs((end - start).days) + ${amount}`, cases: [
+    { args: ['2024-01-01', '2024-01-10'], expected: 9 + amount },
+    { args: ['2024-02-28', '2024-03-01'], expected: 2 + amount },
+    { args: ['2025-12-31', '2025-12-30'], expected: 1 + amount },
+  ] });
+  dateSpecs.push({ name: `year_after_${amount}_days`, en: `return the year reached ${amount} day(s) after an ISO date`, fr: `retourne l’année atteinte ${amount} jour(s) après une date ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%d")\n    return (date + timedelta(days=${amount})).year`, cases: dateInputs.map(value => ({ args: [value], expected: new Date(`${dateAt(value, amount)}T00:00:00Z`).getUTCFullYear() })) });
+  dateSpecs.push({ name: `month_after_${amount}_days`, en: `return the month number reached ${amount} day(s) after an ISO date`, fr: `retourne le numéro du mois atteint ${amount} jour(s) après une date ISO`, params: 'date_text', body: `from datetime import datetime, timedelta\n    date = datetime.strptime(date_text, "%Y-%m-%d")\n    return (date + timedelta(days=${amount})).month`, cases: dateInputs.map(value => ({ args: [value], expected: new Date(`${dateAt(value, amount)}T00:00:00Z`).getUTCMonth() + 1 })) });
+}
+if (dateSpecs.length !== 50) throw new Error(`Expected 50 date specs, found ${dateSpecs.length}`);
+dateSpecs.forEach((item, index) => add({ concept: 'Dates & Times', key: 'datesTimes', ...item, level: level(index), calls: ['strptime'],
+  focus: 'parsing the ISO text, applying datetime or timedelta operations, and formatting or returning the result' }));
+
+const expectedCounts = { Decorator: 100, Iterator: 100, 'Context Manager': 100, Dataclass: 100, 'Magic Method': 100, 'Bitwise Operation': 100, 'Type Hint': 50, 'Testing & Debugging': 50, 'Scope & Namespace': 50, 'Match Case': 50, 'Dates & Times': 50 };
+if (specs.length !== 850) throw new Error(`Expected 850 specs, found ${specs.length}`);
 for (const [concept, count] of Object.entries(expectedCounts)) {
   const found = specs.filter(spec => spec.concept === concept).length;
   if (found !== count) throw new Error(`${concept}: expected ${count}, found ${found}`);
 }
 
-const labels = { Decorator: 'decorator', Iterator: 'iterator', 'Context Manager': 'context manager', Dataclass: 'dataclass', 'Magic Method': 'magic method', 'Bitwise Operation': 'bitwise operator' };
-const labelsFr = { Decorator: 'décorateur', Iterator: 'itérateur', 'Context Manager': 'gestionnaire de contexte', Dataclass: 'dataclass', 'Magic Method': 'méthode spéciale', 'Bitwise Operation': 'opérateur bit à bit' };
+const labels = { Decorator: 'decorator', Iterator: 'iterator', 'Context Manager': 'context manager', Dataclass: 'dataclass', 'Magic Method': 'magic method', 'Bitwise Operation': 'bitwise operator', 'Type Hint': 'type hint', 'Testing & Debugging': 'testing and debugging', 'Scope & Namespace': 'scope and namespace', 'Match Case': 'match/case', 'Dates & Times': 'date and time' };
+const labelsFr = { Decorator: 'décorateur', Iterator: 'itérateur', 'Context Manager': 'gestionnaire de contexte', Dataclass: 'dataclass', 'Magic Method': 'méthode spéciale', 'Bitwise Operation': 'opérateur bit à bit', 'Type Hint': 'annotation de type', 'Testing & Debugging': 'test et débogage', 'Scope & Namespace': 'portée et espace de noms', 'Match Case': 'match/case', 'Dates & Times': 'date et heure' };
 const exercises = [];
 const graders = {};
 const french = {};
@@ -225,14 +357,14 @@ const french = {};
 const invoke = (spec, test) => `${spec.name}(${test.args.map(py).join(', ')})`;
 specs.forEach((spec, index) => {
   const id = START_ID + index;
-  const canonical = `def ${spec.name}(${spec.params}):\n    ${spec.body}`;
+  const canonical = `def ${spec.name}(${spec.params})${spec.returnType ? ` -> ${spec.returnType}` : ''}:\n    ${spec.body}`;
   const nestedBody = canonical.split('\n').slice(1).map(line => `    ${line}`).join('\n');
   const classBody = canonical.split('\n').map(line => `    ${line}`).join('\n');
   const solution = `# Using function approach\n# Example 1: canonical ${labels[spec.concept]} solution\n${canonical}\n\nprint(${invoke(spec, spec.cases[0])})  # Expected: ${py(spec.cases[0].expected)}\nprint(${invoke(spec, spec.cases[1])})  # Expected: ${py(spec.cases[1].expected)}\n\n# Example 2: nested helper approach\ndef solve_problem_${id}(${spec.params}):\n    def execute():\n${nestedBody}\n    return execute()\n\nprint(solve_problem_${id}(${spec.cases[0].args.map(py).join(', ')}))\n\n# Example 3: static method approach\nclass Problem${id}Solution:\n    @staticmethod\n${classBody}\n\nprint(Problem${id}Solution.${spec.name}(${spec.cases[1].args.map(py).join(', ')}))\n\n# Example 4: assigned result approach\nresult = ${invoke(spec, spec.cases[0])}\nprint(result)\n\n# Example 5: direct call\nprint(${invoke(spec, spec.cases[2])})`;
   exercises.push({
     id, title: `Problem ${id}`,
     description: `Write a Python function called \`${spec.name}\` that must ${spec.en}. Use ${labels[spec.concept]} syntax.\nDifficulty: ${spec.level}.\nExamples:\n  ${invoke(spec, spec.cases[0])} -> ${py(spec.cases[0].expected)}\n  ${invoke(spec, spec.cases[1])} -> ${py(spec.cases[1].expected)}`,
-    initialCode: `def ${spec.name}(${spec.params}):\n    pass`, solution,
+    initialCode: `def ${spec.name}(${spec.params})${spec.returnType ? ` -> ${spec.returnType}` : ''}:\n    pass`, solution,
     hint: `Build the ${labels[spec.concept]} structure before implementing the result. Focus on ${spec.focus}.`,
     breakdown: `1. Identify the input and expected output.\n2. Build the required ${labels[spec.concept]} structure.\n3. Trace the value through that structure.\n4. Handle the boundary case shown by the hidden tests.\n5. Return the final result without hard-coding examples.`,
     category: `${spec.concept} ${spec.level}`,
@@ -243,6 +375,7 @@ specs.forEach((spec, index) => {
   if (spec.decorators) grader.requiredDecorators = spec.decorators;
   if (spec.definedFunctions) grader.requiredDefinedFunctions = spec.definedFunctions;
   if (spec.astOperators) grader.requiredAstOperators = spec.astOperators;
+  if (spec.typeHints) grader.requiredTypeHints = spec.typeHints;
   graders[id] = grader;
   french[id] = {
     description: `Écrivez une fonction Python appelée \`${spec.name}\` qui ${spec.fr}. Utilisez la syntaxe de ${labelsFr[spec.concept]}.\nDifficulté : ${spec.level === 'Easy' ? 'Facile' : spec.level === 'Intermediate' ? 'Intermédiaire' : 'Difficile'}.\nExemples :\n  ${invoke(spec, spec.cases[0])} -> ${py(spec.cases[0].expected)}\n  ${invoke(spec, spec.cases[1])} -> ${py(spec.cases[1].expected)}`,

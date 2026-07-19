@@ -50,6 +50,7 @@ export interface AutoGrader {
     requiredAstOperators?: string[];
     requiredDecorators?: string[];
     requiredDefinedFunctions?: string[];
+    requiredTypeHints?: { minParameters?: number; requireReturn?: boolean };
     requiredUnpackPatterns?: Array<{ targetCount: number; sourceType?: 'Any' | 'List' | 'Tuple'; allowStarred?: boolean }>;
     optionalTests?: AutoTestCase[];
     tests: AutoTestCase[];

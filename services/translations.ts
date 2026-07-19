@@ -229,6 +229,16 @@ const EN: Dict = {
   'concept.magicMethodsDesc': 'Dunder methods and Python protocols',
   'concept.bitwise': 'Bitwise Operations',
   'concept.bitwiseDesc': 'Binary masks, shifts, AND, OR, and XOR',
+  'concept.typeHints': 'Type Hints',
+  'concept.typeHintsDesc': 'Parameter, return, union, and collection annotations',
+  'concept.testingDebugging': 'Testing & Debugging',
+  'concept.testingDebuggingDesc': 'Assertions, test cases, failures, and diagnosis',
+  'concept.scopeNamespaces': 'Scope & Namespaces',
+  'concept.scopeNamespacesDesc': 'LEGB, local, enclosing, global, and nonlocal names',
+  'concept.matchCase': 'Match / Case',
+  'concept.matchCaseDesc': 'Structural pattern matching, captures, and guards',
+  'concept.datesTimes': 'Dates & Times',
+  'concept.datesTimesDesc': 'datetime parsing, formatting, differences, and timedelta',
 
   /* ── Output Area ──────────────────────────────────────────── */
   'output.title': 'Output',
@@ -632,6 +642,16 @@ const FR: Dict = {
   'concept.magicMethodsDesc': 'Méthodes dunder et protocoles Python',
   'concept.bitwise': 'Opérations bit à bit',
   'concept.bitwiseDesc': 'Masques binaires, décalages, AND, OR et XOR',
+  'concept.typeHints': 'Annotations de type',
+  'concept.typeHintsDesc': 'Annotations de paramètres, retours, unions et collections',
+  'concept.testingDebugging': 'Tests et débogage',
+  'concept.testingDebuggingDesc': 'Assertions, cas de test, échecs et diagnostic',
+  'concept.scopeNamespaces': 'Portée et espaces de noms',
+  'concept.scopeNamespacesDesc': 'LEGB, noms locaux, englobants, globaux et nonlocal',
+  'concept.matchCase': 'Match / Case',
+  'concept.matchCaseDesc': 'Correspondance structurelle, captures et gardes',
+  'concept.datesTimes': 'Dates et heures',
+  'concept.datesTimesDesc': 'Analyse, formatage, différences et timedelta',
 
   /* ── Output Area ──────────────────────────────────────────── */
   'output.title': 'Sortie',

@@ -1498,5 +1498,2755 @@ export const ADVANCED_CONCEPT_FR: Record<number, { description: string; hint: st
     "description": "Écrivez une fonction Python appelée `extract_field_4_bitwise` qui extrait un champ de trois bits commençant à la position choisie avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  extract_field_4_bitwise(0) -> 0\n  extract_field_4_bitwise(5) -> 0",
     "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
     "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3108": {
+    "description": "Écrivez une fonction Python appelée `pipeline_double` qui applique un décorateur de résultat qui double le nombre fourni. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_double(5) -> 10\n  pipeline_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3109": {
+    "description": "Écrivez une fonction Python appelée `pipeline_triple` qui applique un décorateur de résultat qui triple le nombre fourni. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_triple(5) -> 15\n  pipeline_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3110": {
+    "description": "Écrivez une fonction Python appelée `pipeline_square` qui applique un décorateur de résultat qui met le nombre fourni au carré. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_square(5) -> 25\n  pipeline_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3111": {
+    "description": "Écrivez une fonction Python appelée `pipeline_cube` qui applique un décorateur de résultat qui met le nombre fourni au cube. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_cube(5) -> 125\n  pipeline_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3112": {
+    "description": "Écrivez une fonction Python appelée `pipeline_increment` qui applique un décorateur de résultat qui ajoute un au nombre fourni. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_increment(5) -> 6\n  pipeline_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3113": {
+    "description": "Écrivez une fonction Python appelée `pipeline_decrement` qui applique un décorateur de résultat qui soustrait un au nombre fourni. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_decrement(5) -> 4\n  pipeline_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3114": {
+    "description": "Écrivez une fonction Python appelée `pipeline_negate` qui applique un décorateur de résultat qui inverse le signe du nombre fourni. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_negate(5) -> -5\n  pipeline_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3115": {
+    "description": "Écrivez une fonction Python appelée `pipeline_absolute` qui applique un décorateur de résultat qui retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_absolute(5) -> 5\n  pipeline_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3116": {
+    "description": "Écrivez une fonction Python appelée `pipeline_half` qui applique un décorateur de résultat qui divise le nombre fourni par deux. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_half(5) -> 2.5\n  pipeline_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3117": {
+    "description": "Écrivez une fonction Python appelée `pipeline_remainder_three` qui applique un décorateur de résultat qui retourne le nombre fourni modulo trois. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_remainder_three(5) -> 2\n  pipeline_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3118": {
+    "description": "Écrivez une fonction Python appelée `pipeline_last_digit` qui applique un décorateur de résultat qui retourne le dernier chiffre décimal. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_last_digit(5) -> 5\n  pipeline_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3119": {
+    "description": "Écrivez une fonction Python appelée `pipeline_distance_ten` qui applique un décorateur de résultat qui mesure la distance par rapport à dix. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_distance_ten(5) -> 5\n  pipeline_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3120": {
+    "description": "Écrivez une fonction Python appelée `pipeline_clamp_zero` qui applique un décorateur de résultat qui remplace les valeurs négatives par zéro. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_clamp_zero(5) -> 5\n  pipeline_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3121": {
+    "description": "Écrivez une fonction Python appelée `pipeline_is_even` qui applique un décorateur de résultat qui teste si le nombre est pair. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_is_even(5) -> False\n  pipeline_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3122": {
+    "description": "Écrivez une fonction Python appelée `pipeline_is_positive` qui applique un décorateur de résultat qui teste si le nombre est positif. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_is_positive(5) -> True\n  pipeline_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3123": {
+    "description": "Écrivez une fonction Python appelée `pipeline_sign_label` qui applique un décorateur de résultat qui retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_sign_label(5) -> \"positive\"\n  pipeline_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3124": {
+    "description": "Écrivez une fonction Python appelée `pipeline_digit_count` qui applique un décorateur de résultat qui compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de décorateur.\nDifficulté : Facile.\nExemples :\n  pipeline_digit_count(5) -> 1\n  pipeline_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3125": {
+    "description": "Écrivez une fonction Python appelée `pipeline_digit_sum` qui applique un décorateur de résultat qui additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_digit_sum(52) -> 7\n  pipeline_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3126": {
+    "description": "Écrivez une fonction Python appelée `pipeline_triangular` qui applique un décorateur de résultat qui calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_triangular(5) -> 15\n  pipeline_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3127": {
+    "description": "Écrivez une fonction Python appelée `pipeline_within_ten` qui applique un décorateur de résultat qui teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_within_ten(5) -> True\n  pipeline_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3128": {
+    "description": "Écrivez une fonction Python appelée `pipeline_uppercase` qui applique un décorateur de résultat qui convertit le texte en majuscules. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_uppercase(\"Python\") -> \"PYTHON\"\n  pipeline_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3129": {
+    "description": "Écrivez une fonction Python appelée `pipeline_lowercase` qui applique un décorateur de résultat qui convertit le texte en minuscules. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_lowercase(\"Python\") -> \"python\"\n  pipeline_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3130": {
+    "description": "Écrivez une fonction Python appelée `pipeline_reverse_text` qui applique un décorateur de résultat qui inverse tous les caractères du texte. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_reverse_text(\"Python\") -> \"nohtyP\"\n  pipeline_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3131": {
+    "description": "Écrivez une fonction Python appelée `pipeline_text_length` qui applique un décorateur de résultat qui retourne le nombre de caractères du texte. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_text_length(\"Python\") -> 6\n  pipeline_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3132": {
+    "description": "Écrivez une fonction Python appelée `pipeline_first_character` qui applique un décorateur de résultat qui retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_first_character(\"Python\") -> \"P\"\n  pipeline_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3133": {
+    "description": "Écrivez une fonction Python appelée `pipeline_last_character` qui applique un décorateur de résultat qui retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_last_character(\"Python\") -> \"n\"\n  pipeline_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3134": {
+    "description": "Écrivez une fonction Python appelée `pipeline_vowel_count` qui applique un décorateur de résultat qui compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_vowel_count(\"Python\") -> 1\n  pipeline_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3135": {
+    "description": "Écrivez une fonction Python appelée `pipeline_word_count` qui applique un décorateur de résultat qui compte les mots séparés par des espaces. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_word_count(\"Python\") -> 1\n  pipeline_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3136": {
+    "description": "Écrivez une fonction Python appelée `pipeline_remove_spaces` qui applique un décorateur de résultat qui supprime tous les espaces du texte. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_remove_spaces(\"Python\") -> \"Python\"\n  pipeline_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3137": {
+    "description": "Écrivez une fonction Python appelée `pipeline_hyphenate` qui applique un décorateur de résultat qui remplace les espaces par des tirets. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_hyphenate(\"Python\") -> \"Python\"\n  pipeline_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3138": {
+    "description": "Écrivez une fonction Python appelée `pipeline_title_words` qui applique un décorateur de résultat qui met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_title_words(\"Python\") -> \"Python\"\n  pipeline_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3139": {
+    "description": "Écrivez une fonction Python appelée `pipeline_palindrome` qui applique un décorateur de résultat qui teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_palindrome(\"Python\") -> False\n  pipeline_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3140": {
+    "description": "Écrivez une fonction Python appelée `pipeline_digit_characters` qui applique un décorateur de résultat qui compte les chiffres dans le texte. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_digit_characters(\"a1b2\") -> 2\n  pipeline_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3141": {
+    "description": "Écrivez une fonction Python appelée `pipeline_initials` qui applique un décorateur de résultat qui retourne les initiales majuscules de ses mots. Utilisez la syntaxe de décorateur.\nDifficulté : Intermédiaire.\nExemples :\n  pipeline_initials(\"python code\") -> \"PC\"\n  pipeline_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3142": {
+    "description": "Écrivez une fonction Python appelée `pipeline_bracket_text` qui applique un décorateur de résultat qui entoure le texte de crochets. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_bracket_text(\"Python\") -> \"[Python]\"\n  pipeline_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3143": {
+    "description": "Écrivez une fonction Python appelée `pipeline_sum_items` qui applique un décorateur de résultat qui additionne tous les nombres de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_sum_items([1, 2, 3]) -> 6\n  pipeline_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3144": {
+    "description": "Écrivez une fonction Python appelée `pipeline_maximum_item` qui applique un décorateur de résultat qui retourne le plus grand élément de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_maximum_item([1, 2, 3]) -> 3\n  pipeline_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3145": {
+    "description": "Écrivez une fonction Python appelée `pipeline_minimum_item` qui applique un décorateur de résultat qui retourne le plus petit élément de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_minimum_item([1, 2, 3]) -> 1\n  pipeline_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3146": {
+    "description": "Écrivez une fonction Python appelée `pipeline_reverse_items` qui applique un décorateur de résultat qui retourne la liste dans l’ordre inverse. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  pipeline_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3147": {
+    "description": "Écrivez une fonction Python appelée `pipeline_sort_items` qui applique un décorateur de résultat qui retourne une nouvelle liste croissante. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_sort_items([1, 2, 3]) -> [1, 2, 3]\n  pipeline_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3148": {
+    "description": "Écrivez une fonction Python appelée `pipeline_unique_items` qui applique un décorateur de résultat qui conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_unique_items([1, 2, 3]) -> [1, 2, 3]\n  pipeline_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3149": {
+    "description": "Écrivez une fonction Python appelée `pipeline_even_items` qui applique un décorateur de résultat qui retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_even_items([1, 2, 3]) -> [2]\n  pipeline_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3150": {
+    "description": "Écrivez une fonction Python appelée `pipeline_odd_items` qui applique un décorateur de résultat qui retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_odd_items([1, 2, 3]) -> [1, 3]\n  pipeline_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3151": {
+    "description": "Écrivez une fonction Python appelée `pipeline_positive_items` qui applique un décorateur de résultat qui retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_positive_items([1, 2, 3]) -> [1, 2, 3]\n  pipeline_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3152": {
+    "description": "Écrivez une fonction Python appelée `pipeline_square_items` qui applique un décorateur de résultat qui met chaque élément de la liste au carré. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_square_items([1, 2, 3]) -> [1, 4, 9]\n  pipeline_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3153": {
+    "description": "Écrivez une fonction Python appelée `pipeline_item_count` qui applique un décorateur de résultat qui retourne le nombre d’éléments de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_item_count([1, 2, 3]) -> 3\n  pipeline_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3154": {
+    "description": "Écrivez une fonction Python appelée `pipeline_average_items` qui applique un décorateur de résultat qui retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_average_items([1, 2, 3]) -> 2\n  pipeline_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3155": {
+    "description": "Écrivez une fonction Python appelée `pipeline_running_total` qui applique un décorateur de résultat qui retourne tous les totaux cumulés. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_running_total([1, 2, 3]) -> [1, 3, 6]\n  pipeline_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3156": {
+    "description": "Écrivez une fonction Python appelée `pipeline_index_pairs` qui applique un décorateur de résultat qui associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  pipeline_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3157": {
+    "description": "Écrivez une fonction Python appelée `pipeline_nonzero_count` qui applique un décorateur de résultat qui compte les éléments non nuls de la liste. Utilisez la syntaxe de décorateur.\nDifficulté : Difficile.\nExemples :\n  pipeline_nonzero_count([1, 2, 3]) -> 3\n  pipeline_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de décorateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de décorateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3158": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_double` qui construit une classe d’itérateur personnalisée qui double le nombre fourni pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_double([5, -4, 0]) -> [10, -8, 0]\n  iterator_class_double([0, 5]) -> [0, 10]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3159": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_triple` qui construit une classe d’itérateur personnalisée qui triple le nombre fourni pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_triple([5, -4, 0]) -> [15, -12, 0]\n  iterator_class_triple([0, 5]) -> [0, 15]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3160": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_square` qui construit une classe d’itérateur personnalisée qui met le nombre fourni au carré pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_square([5, -4, 0]) -> [25, 16, 0]\n  iterator_class_square([0, 5]) -> [0, 25]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3161": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_cube` qui construit une classe d’itérateur personnalisée qui met le nombre fourni au cube pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_cube([5, -4, 0]) -> [125, -64, 0]\n  iterator_class_cube([0, 5]) -> [0, 125]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3162": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_increment` qui construit une classe d’itérateur personnalisée qui ajoute un au nombre fourni pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_increment([5, -4, 0]) -> [6, -3, 1]\n  iterator_class_increment([0, 5]) -> [1, 6]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3163": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_decrement` qui construit une classe d’itérateur personnalisée qui soustrait un au nombre fourni pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_decrement([5, -4, 0]) -> [4, -5, -1]\n  iterator_class_decrement([0, 5]) -> [-1, 4]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3164": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_negate` qui construit une classe d’itérateur personnalisée qui inverse le signe du nombre fourni pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_negate([5, -4, 0]) -> [-5, 4, 0]\n  iterator_class_negate([0, 5]) -> [0, -5]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3165": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_absolute` qui construit une classe d’itérateur personnalisée qui retourne la valeur absolue du nombre fourni pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_absolute([5, -4, 0]) -> [5, 4, 0]\n  iterator_class_absolute([0, 5]) -> [0, 5]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3166": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_half` qui construit une classe d’itérateur personnalisée qui divise le nombre fourni par deux pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_half([5, -4, 0]) -> [2.5, -2, 0]\n  iterator_class_half([0, 5]) -> [0, 2.5]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3167": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_remainder_three` qui construit une classe d’itérateur personnalisée qui retourne le nombre fourni modulo trois pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_remainder_three([5, -4, 0]) -> [2, 2, 0]\n  iterator_class_remainder_three([0, 5]) -> [0, 2]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3168": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_last_digit` qui construit une classe d’itérateur personnalisée qui retourne le dernier chiffre décimal pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_last_digit([5, -4, 0]) -> [5, 6, 0]\n  iterator_class_last_digit([0, 5]) -> [0, 5]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3169": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_distance_ten` qui construit une classe d’itérateur personnalisée qui mesure la distance par rapport à dix pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_distance_ten([5, -4, 0]) -> [5, 14, 10]\n  iterator_class_distance_ten([0, 5]) -> [10, 5]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3170": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_clamp_zero` qui construit une classe d’itérateur personnalisée qui remplace les valeurs négatives par zéro pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_clamp_zero([5, -4, 0]) -> [5, 0, 0]\n  iterator_class_clamp_zero([0, 5]) -> [0, 5]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3171": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_is_even` qui construit une classe d’itérateur personnalisée qui teste si le nombre est pair pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_is_even([5, -4, 0]) -> [False, True, True]\n  iterator_class_is_even([0, 5]) -> [True, False]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3172": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_is_positive` qui construit une classe d’itérateur personnalisée qui teste si le nombre est positif pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_is_positive([5, -4, 0]) -> [True, False, False]\n  iterator_class_is_positive([0, 5]) -> [False, True]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3173": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_sign_label` qui construit une classe d’itérateur personnalisée qui retourne positif, négatif ou zéro selon le nombre pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_sign_label([5, -4, 0]) -> [\"positive\", \"negative\", \"zero\"]\n  iterator_class_sign_label([0, 5]) -> [\"zero\", \"positive\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3174": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_digit_count` qui construit une classe d’itérateur personnalisée qui compte ses chiffres décimaux sans compter le signe pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Facile.\nExemples :\n  iterator_class_digit_count([5, -4, 0]) -> [1, 1, 1]\n  iterator_class_digit_count([0, 5]) -> [1, 1]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3175": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_digit_sum` qui construit une classe d’itérateur personnalisée qui additionne ses chiffres décimaux sans compter le signe pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_digit_sum([52, -407, 0]) -> [7, 11, 0]\n  iterator_class_digit_sum([0, 52]) -> [0, 7]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3176": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_triangular` qui construit une classe d’itérateur personnalisée qui calcule le total triangulaire de zéro à sa valeur absolue pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_triangular([5, -4, 0]) -> [15, 10, 0]\n  iterator_class_triangular([0, 5]) -> [0, 15]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3177": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_within_ten` qui construit une classe d’itérateur personnalisée qui teste s’il se trouve entre moins dix et plus dix pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_within_ten([5, -14, 10]) -> [True, False, True]\n  iterator_class_within_ten([10, 5]) -> [True, True]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3178": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_uppercase` qui construit une classe d’itérateur personnalisée qui convertit le texte en majuscules pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_uppercase([\"Python\", \"level\", \"a b c\"]) -> [\"PYTHON\", \"LEVEL\", \"A B C\"]\n  iterator_class_uppercase([\"a b c\", \"Python\"]) -> [\"A B C\", \"PYTHON\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3179": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_lowercase` qui construit une classe d’itérateur personnalisée qui convertit le texte en minuscules pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_lowercase([\"Python\", \"level\", \"a b c\"]) -> [\"python\", \"level\", \"a b c\"]\n  iterator_class_lowercase([\"a b c\", \"Python\"]) -> [\"a b c\", \"python\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3180": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_reverse_text` qui construit une classe d’itérateur personnalisée qui inverse tous les caractères du texte pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_reverse_text([\"Python\", \"level\", \"a b c\"]) -> [\"nohtyP\", \"level\", \"c b a\"]\n  iterator_class_reverse_text([\"a b c\", \"Python\"]) -> [\"c b a\", \"nohtyP\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3181": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_text_length` qui construit une classe d’itérateur personnalisée qui retourne le nombre de caractères du texte pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_text_length([\"Python\", \"level\", \"a b c\"]) -> [6, 5, 5]\n  iterator_class_text_length([\"a b c\", \"Python\"]) -> [5, 6]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3182": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_first_character` qui construit une classe d’itérateur personnalisée qui retourne son premier caractère ou une chaîne vide pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_first_character([\"Python\", \"\", \"z\"]) -> [\"P\", \"\", \"z\"]\n  iterator_class_first_character([\"z\", \"Python\"]) -> [\"z\", \"P\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3183": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_last_character` qui construit une classe d’itérateur personnalisée qui retourne son dernier caractère ou une chaîne vide pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_last_character([\"Python\", \"\", \"z\"]) -> [\"n\", \"\", \"z\"]\n  iterator_class_last_character([\"z\", \"Python\"]) -> [\"z\", \"n\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3184": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_vowel_count` qui construit une classe d’itérateur personnalisée qui compte les voyelles sans tenir compte de la casse pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_vowel_count([\"Python\", \"level\", \"a b c\"]) -> [1, 2, 1]\n  iterator_class_vowel_count([\"a b c\", \"Python\"]) -> [1, 1]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3185": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_word_count` qui construit une classe d’itérateur personnalisée qui compte les mots séparés par des espaces pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_word_count([\"Python\", \"level\", \"a b c\"]) -> [1, 1, 3]\n  iterator_class_word_count([\"a b c\", \"Python\"]) -> [3, 1]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3186": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_remove_spaces` qui construit une classe d’itérateur personnalisée qui supprime tous les espaces du texte pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_remove_spaces([\"Python\", \"level\", \"a b c\"]) -> [\"Python\", \"level\", \"abc\"]\n  iterator_class_remove_spaces([\"a b c\", \"Python\"]) -> [\"abc\", \"Python\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3187": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_hyphenate` qui construit une classe d’itérateur personnalisée qui remplace les espaces par des tirets pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_hyphenate([\"Python\", \"level\", \"a b c\"]) -> [\"Python\", \"level\", \"a-b-c\"]\n  iterator_class_hyphenate([\"a b c\", \"Python\"]) -> [\"a-b-c\", \"Python\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3188": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_title_words` qui construit une classe d’itérateur personnalisée qui met une majuscule à chaque mot séparé par des espaces pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_title_words([\"Python\", \"level\", \"a b c\"]) -> [\"Python\", \"Level\", \"A B C\"]\n  iterator_class_title_words([\"a b c\", \"Python\"]) -> [\"A B C\", \"Python\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3189": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_palindrome` qui construit une classe d’itérateur personnalisée qui teste si le texte est un palindrome sensible à la casse pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_palindrome([\"Python\", \"level\", \"a b c\"]) -> [False, True, False]\n  iterator_class_palindrome([\"a b c\", \"Python\"]) -> [False, False]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3190": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_digit_characters` qui construit une classe d’itérateur personnalisée qui compte les chiffres dans le texte pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_digit_characters([\"a1b2\", \"2026\", \"none\"]) -> [2, 4, 0]\n  iterator_class_digit_characters([\"none\", \"a1b2\"]) -> [0, 2]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3191": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_initials` qui construit une classe d’itérateur personnalisée qui retourne les initiales majuscules de ses mots pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Intermédiaire.\nExemples :\n  iterator_class_initials([\"python code\", \"Ada Lovelace\", \"solo\"]) -> [\"PC\", \"AL\", \"S\"]\n  iterator_class_initials([\"solo\", \"python code\"]) -> [\"S\", \"PC\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3192": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_bracket_text` qui construit une classe d’itérateur personnalisée qui entoure le texte de crochets pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_bracket_text([\"Python\", \"level\", \"a b c\"]) -> [\"[Python]\", \"[level]\", \"[a b c]\"]\n  iterator_class_bracket_text([\"a b c\", \"Python\"]) -> [\"[a b c]\", \"[Python]\"]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3193": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_sum_items` qui construit une classe d’itérateur personnalisée qui additionne tous les nombres de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_sum_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [6, 3, 7]\n  iterator_class_sum_items([[3, 3, 1], [1, 2, 3]]) -> [7, 6]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3194": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_maximum_item` qui construit une classe d’itérateur personnalisée qui retourne le plus grand élément de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_maximum_item([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [3, 5, 3]\n  iterator_class_maximum_item([[3, 3, 1], [1, 2, 3]]) -> [3, 3]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3195": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_minimum_item` qui construit une classe d’itérateur personnalisée qui retourne le plus petit élément de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_minimum_item([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [1, -2, 1]\n  iterator_class_minimum_item([[3, 3, 1], [1, 2, 3]]) -> [1, 1]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3196": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_reverse_items` qui construit une classe d’itérateur personnalisée qui retourne la liste dans l’ordre inverse pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_reverse_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[3, 2, 1], [5, 0, -2], [1, 3, 3]]\n  iterator_class_reverse_items([[3, 3, 1], [1, 2, 3]]) -> [[1, 3, 3], [3, 2, 1]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3197": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_sort_items` qui construit une classe d’itérateur personnalisée qui retourne une nouvelle liste croissante pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_sort_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[1, 2, 3], [-2, 0, 5], [1, 3, 3]]\n  iterator_class_sort_items([[3, 3, 1], [1, 2, 3]]) -> [[1, 3, 3], [1, 2, 3]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3198": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_unique_items` qui construit une classe d’itérateur personnalisée qui conserve uniquement la première occurrence de chaque élément pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_unique_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[1, 2, 3], [-2, 0, 5], [3, 1]]\n  iterator_class_unique_items([[3, 3, 1], [1, 2, 3]]) -> [[3, 1], [1, 2, 3]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3199": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_even_items` qui construit une classe d’itérateur personnalisée qui retourne uniquement les éléments pairs de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_even_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[2], [-2, 0], []]\n  iterator_class_even_items([[3, 3, 1], [1, 2, 3]]) -> [[], [2]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3200": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_odd_items` qui construit une classe d’itérateur personnalisée qui retourne uniquement les éléments impairs de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_odd_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[1, 3], [5], [3, 3, 1]]\n  iterator_class_odd_items([[3, 3, 1], [1, 2, 3]]) -> [[3, 3, 1], [1, 3]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3201": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_positive_items` qui construit une classe d’itérateur personnalisée qui retourne uniquement les éléments positifs de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_positive_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[1, 2, 3], [5], [3, 3, 1]]\n  iterator_class_positive_items([[3, 3, 1], [1, 2, 3]]) -> [[3, 3, 1], [1, 2, 3]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3202": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_square_items` qui construit une classe d’itérateur personnalisée qui met chaque élément de la liste au carré pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_square_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[1, 4, 9], [4, 0, 25], [9, 9, 1]]\n  iterator_class_square_items([[3, 3, 1], [1, 2, 3]]) -> [[9, 9, 1], [1, 4, 9]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3203": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_item_count` qui construit une classe d’itérateur personnalisée qui retourne le nombre d’éléments de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_item_count([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [3, 3, 3]\n  iterator_class_item_count([[3, 3, 1], [1, 2, 3]]) -> [3, 3]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3204": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_average_items` qui construit une classe d’itérateur personnalisée qui retourne la moyenne arithmétique de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_average_items([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [2, 1, 2.3333333333333335]\n  iterator_class_average_items([[3, 3, 1], [1, 2, 3]]) -> [2.3333333333333335, 2]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3205": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_running_total` qui construit une classe d’itérateur personnalisée qui retourne tous les totaux cumulés pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_running_total([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[1, 3, 6], [-2, -2, 3], [3, 6, 7]]\n  iterator_class_running_total([[3, 3, 1], [1, 2, 3]]) -> [[3, 6, 7], [1, 3, 6]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3206": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_index_pairs` qui construit une classe d’itérateur personnalisée qui associe chaque élément à son indice commençant à zéro pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_index_pairs([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [[[0, 1], [1, 2], [2, 3]], [[0, -2], [1, 0], [2, 5]], [[0, 3], [1, 3], [2, 1]]]\n  iterator_class_index_pairs([[3, 3, 1], [1, 2, 3]]) -> [[[0, 3], [1, 3], [2, 1]], [[0, 1], [1, 2], [2, 3]]]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3207": {
+    "description": "Écrivez une fonction Python appelée `iterator_class_nonzero_count` qui construit une classe d’itérateur personnalisée qui compte les éléments non nuls de la liste pour chaque valeur fournie. Utilisez la syntaxe de itérateur.\nDifficulté : Difficile.\nExemples :\n  iterator_class_nonzero_count([[1, 2, 3], [-2, 0, 5], [3, 3, 1]]) -> [3, 2, 3]\n  iterator_class_nonzero_count([[3, 3, 1], [1, 2, 3]]) -> [3, 3]",
+    "hint": "Construisez d’abord la structure de itérateur, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de itérateur demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3208": {
+    "description": "Écrivez une fonction Python appelée `resource_double` qui entre et sort d’une ressource gérée pendant que la fonction double le nombre fourni. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_double(5) -> 10\n  resource_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3209": {
+    "description": "Écrivez une fonction Python appelée `resource_triple` qui entre et sort d’une ressource gérée pendant que la fonction triple le nombre fourni. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_triple(5) -> 15\n  resource_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3210": {
+    "description": "Écrivez une fonction Python appelée `resource_square` qui entre et sort d’une ressource gérée pendant que la fonction met le nombre fourni au carré. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_square(5) -> 25\n  resource_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3211": {
+    "description": "Écrivez une fonction Python appelée `resource_cube` qui entre et sort d’une ressource gérée pendant que la fonction met le nombre fourni au cube. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_cube(5) -> 125\n  resource_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3212": {
+    "description": "Écrivez une fonction Python appelée `resource_increment` qui entre et sort d’une ressource gérée pendant que la fonction ajoute un au nombre fourni. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_increment(5) -> 6\n  resource_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3213": {
+    "description": "Écrivez une fonction Python appelée `resource_decrement` qui entre et sort d’une ressource gérée pendant que la fonction soustrait un au nombre fourni. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_decrement(5) -> 4\n  resource_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3214": {
+    "description": "Écrivez une fonction Python appelée `resource_negate` qui entre et sort d’une ressource gérée pendant que la fonction inverse le signe du nombre fourni. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_negate(5) -> -5\n  resource_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3215": {
+    "description": "Écrivez une fonction Python appelée `resource_absolute` qui entre et sort d’une ressource gérée pendant que la fonction retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_absolute(5) -> 5\n  resource_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3216": {
+    "description": "Écrivez une fonction Python appelée `resource_half` qui entre et sort d’une ressource gérée pendant que la fonction divise le nombre fourni par deux. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_half(5) -> 2.5\n  resource_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3217": {
+    "description": "Écrivez une fonction Python appelée `resource_remainder_three` qui entre et sort d’une ressource gérée pendant que la fonction retourne le nombre fourni modulo trois. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_remainder_three(5) -> 2\n  resource_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3218": {
+    "description": "Écrivez une fonction Python appelée `resource_last_digit` qui entre et sort d’une ressource gérée pendant que la fonction retourne le dernier chiffre décimal. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_last_digit(5) -> 5\n  resource_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3219": {
+    "description": "Écrivez une fonction Python appelée `resource_distance_ten` qui entre et sort d’une ressource gérée pendant que la fonction mesure la distance par rapport à dix. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_distance_ten(5) -> 5\n  resource_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3220": {
+    "description": "Écrivez une fonction Python appelée `resource_clamp_zero` qui entre et sort d’une ressource gérée pendant que la fonction remplace les valeurs négatives par zéro. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_clamp_zero(5) -> 5\n  resource_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3221": {
+    "description": "Écrivez une fonction Python appelée `resource_is_even` qui entre et sort d’une ressource gérée pendant que la fonction teste si le nombre est pair. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_is_even(5) -> False\n  resource_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3222": {
+    "description": "Écrivez une fonction Python appelée `resource_is_positive` qui entre et sort d’une ressource gérée pendant que la fonction teste si le nombre est positif. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_is_positive(5) -> True\n  resource_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3223": {
+    "description": "Écrivez une fonction Python appelée `resource_sign_label` qui entre et sort d’une ressource gérée pendant que la fonction retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_sign_label(5) -> \"positive\"\n  resource_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3224": {
+    "description": "Écrivez une fonction Python appelée `resource_digit_count` qui entre et sort d’une ressource gérée pendant que la fonction compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Facile.\nExemples :\n  resource_digit_count(5) -> 1\n  resource_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3225": {
+    "description": "Écrivez une fonction Python appelée `resource_digit_sum` qui entre et sort d’une ressource gérée pendant que la fonction additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_digit_sum(52) -> 7\n  resource_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3226": {
+    "description": "Écrivez une fonction Python appelée `resource_triangular` qui entre et sort d’une ressource gérée pendant que la fonction calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_triangular(5) -> 15\n  resource_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3227": {
+    "description": "Écrivez une fonction Python appelée `resource_within_ten` qui entre et sort d’une ressource gérée pendant que la fonction teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_within_ten(5) -> True\n  resource_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3228": {
+    "description": "Écrivez une fonction Python appelée `resource_uppercase` qui entre et sort d’une ressource gérée pendant que la fonction convertit le texte en majuscules. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_uppercase(\"Python\") -> \"PYTHON\"\n  resource_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3229": {
+    "description": "Écrivez une fonction Python appelée `resource_lowercase` qui entre et sort d’une ressource gérée pendant que la fonction convertit le texte en minuscules. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_lowercase(\"Python\") -> \"python\"\n  resource_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3230": {
+    "description": "Écrivez une fonction Python appelée `resource_reverse_text` qui entre et sort d’une ressource gérée pendant que la fonction inverse tous les caractères du texte. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_reverse_text(\"Python\") -> \"nohtyP\"\n  resource_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3231": {
+    "description": "Écrivez une fonction Python appelée `resource_text_length` qui entre et sort d’une ressource gérée pendant que la fonction retourne le nombre de caractères du texte. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_text_length(\"Python\") -> 6\n  resource_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3232": {
+    "description": "Écrivez une fonction Python appelée `resource_first_character` qui entre et sort d’une ressource gérée pendant que la fonction retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_first_character(\"Python\") -> \"P\"\n  resource_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3233": {
+    "description": "Écrivez une fonction Python appelée `resource_last_character` qui entre et sort d’une ressource gérée pendant que la fonction retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_last_character(\"Python\") -> \"n\"\n  resource_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3234": {
+    "description": "Écrivez une fonction Python appelée `resource_vowel_count` qui entre et sort d’une ressource gérée pendant que la fonction compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_vowel_count(\"Python\") -> 1\n  resource_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3235": {
+    "description": "Écrivez une fonction Python appelée `resource_word_count` qui entre et sort d’une ressource gérée pendant que la fonction compte les mots séparés par des espaces. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_word_count(\"Python\") -> 1\n  resource_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3236": {
+    "description": "Écrivez une fonction Python appelée `resource_remove_spaces` qui entre et sort d’une ressource gérée pendant que la fonction supprime tous les espaces du texte. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_remove_spaces(\"Python\") -> \"Python\"\n  resource_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3237": {
+    "description": "Écrivez une fonction Python appelée `resource_hyphenate` qui entre et sort d’une ressource gérée pendant que la fonction remplace les espaces par des tirets. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_hyphenate(\"Python\") -> \"Python\"\n  resource_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3238": {
+    "description": "Écrivez une fonction Python appelée `resource_title_words` qui entre et sort d’une ressource gérée pendant que la fonction met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_title_words(\"Python\") -> \"Python\"\n  resource_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3239": {
+    "description": "Écrivez une fonction Python appelée `resource_palindrome` qui entre et sort d’une ressource gérée pendant que la fonction teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_palindrome(\"Python\") -> False\n  resource_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3240": {
+    "description": "Écrivez une fonction Python appelée `resource_digit_characters` qui entre et sort d’une ressource gérée pendant que la fonction compte les chiffres dans le texte. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_digit_characters(\"a1b2\") -> 2\n  resource_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3241": {
+    "description": "Écrivez une fonction Python appelée `resource_initials` qui entre et sort d’une ressource gérée pendant que la fonction retourne les initiales majuscules de ses mots. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Intermédiaire.\nExemples :\n  resource_initials(\"python code\") -> \"PC\"\n  resource_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3242": {
+    "description": "Écrivez une fonction Python appelée `resource_bracket_text` qui entre et sort d’une ressource gérée pendant que la fonction entoure le texte de crochets. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_bracket_text(\"Python\") -> \"[Python]\"\n  resource_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3243": {
+    "description": "Écrivez une fonction Python appelée `resource_sum_items` qui entre et sort d’une ressource gérée pendant que la fonction additionne tous les nombres de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_sum_items([1, 2, 3]) -> 6\n  resource_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3244": {
+    "description": "Écrivez une fonction Python appelée `resource_maximum_item` qui entre et sort d’une ressource gérée pendant que la fonction retourne le plus grand élément de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_maximum_item([1, 2, 3]) -> 3\n  resource_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3245": {
+    "description": "Écrivez une fonction Python appelée `resource_minimum_item` qui entre et sort d’une ressource gérée pendant que la fonction retourne le plus petit élément de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_minimum_item([1, 2, 3]) -> 1\n  resource_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3246": {
+    "description": "Écrivez une fonction Python appelée `resource_reverse_items` qui entre et sort d’une ressource gérée pendant que la fonction retourne la liste dans l’ordre inverse. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  resource_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3247": {
+    "description": "Écrivez une fonction Python appelée `resource_sort_items` qui entre et sort d’une ressource gérée pendant que la fonction retourne une nouvelle liste croissante. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_sort_items([1, 2, 3]) -> [1, 2, 3]\n  resource_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3248": {
+    "description": "Écrivez une fonction Python appelée `resource_unique_items` qui entre et sort d’une ressource gérée pendant que la fonction conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_unique_items([1, 2, 3]) -> [1, 2, 3]\n  resource_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3249": {
+    "description": "Écrivez une fonction Python appelée `resource_even_items` qui entre et sort d’une ressource gérée pendant que la fonction retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_even_items([1, 2, 3]) -> [2]\n  resource_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3250": {
+    "description": "Écrivez une fonction Python appelée `resource_odd_items` qui entre et sort d’une ressource gérée pendant que la fonction retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_odd_items([1, 2, 3]) -> [1, 3]\n  resource_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3251": {
+    "description": "Écrivez une fonction Python appelée `resource_positive_items` qui entre et sort d’une ressource gérée pendant que la fonction retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_positive_items([1, 2, 3]) -> [1, 2, 3]\n  resource_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3252": {
+    "description": "Écrivez une fonction Python appelée `resource_square_items` qui entre et sort d’une ressource gérée pendant que la fonction met chaque élément de la liste au carré. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_square_items([1, 2, 3]) -> [1, 4, 9]\n  resource_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3253": {
+    "description": "Écrivez une fonction Python appelée `resource_item_count` qui entre et sort d’une ressource gérée pendant que la fonction retourne le nombre d’éléments de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_item_count([1, 2, 3]) -> 3\n  resource_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3254": {
+    "description": "Écrivez une fonction Python appelée `resource_average_items` qui entre et sort d’une ressource gérée pendant que la fonction retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_average_items([1, 2, 3]) -> 2\n  resource_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3255": {
+    "description": "Écrivez une fonction Python appelée `resource_running_total` qui entre et sort d’une ressource gérée pendant que la fonction retourne tous les totaux cumulés. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_running_total([1, 2, 3]) -> [1, 3, 6]\n  resource_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3256": {
+    "description": "Écrivez une fonction Python appelée `resource_index_pairs` qui entre et sort d’une ressource gérée pendant que la fonction associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  resource_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3257": {
+    "description": "Écrivez une fonction Python appelée `resource_nonzero_count` qui entre et sort d’une ressource gérée pendant que la fonction compte les éléments non nuls de la liste. Utilisez la syntaxe de gestionnaire de contexte.\nDifficulté : Difficile.\nExemples :\n  resource_nonzero_count([1, 2, 3]) -> 3\n  resource_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de gestionnaire de contexte, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de gestionnaire de contexte demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3258": {
+    "description": "Écrivez une fonction Python appelée `record_double` qui modélise l’entrée avec une fiche @dataclass dont la méthode double le nombre fourni. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_double(5) -> 10\n  record_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3259": {
+    "description": "Écrivez une fonction Python appelée `record_triple` qui modélise l’entrée avec une fiche @dataclass dont la méthode triple le nombre fourni. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_triple(5) -> 15\n  record_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3260": {
+    "description": "Écrivez une fonction Python appelée `record_square` qui modélise l’entrée avec une fiche @dataclass dont la méthode met le nombre fourni au carré. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_square(5) -> 25\n  record_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3261": {
+    "description": "Écrivez une fonction Python appelée `record_cube` qui modélise l’entrée avec une fiche @dataclass dont la méthode met le nombre fourni au cube. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_cube(5) -> 125\n  record_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3262": {
+    "description": "Écrivez une fonction Python appelée `record_increment` qui modélise l’entrée avec une fiche @dataclass dont la méthode ajoute un au nombre fourni. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_increment(5) -> 6\n  record_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3263": {
+    "description": "Écrivez une fonction Python appelée `record_decrement` qui modélise l’entrée avec une fiche @dataclass dont la méthode soustrait un au nombre fourni. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_decrement(5) -> 4\n  record_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3264": {
+    "description": "Écrivez une fonction Python appelée `record_negate` qui modélise l’entrée avec une fiche @dataclass dont la méthode inverse le signe du nombre fourni. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_negate(5) -> -5\n  record_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3265": {
+    "description": "Écrivez une fonction Python appelée `record_absolute` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_absolute(5) -> 5\n  record_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3266": {
+    "description": "Écrivez une fonction Python appelée `record_half` qui modélise l’entrée avec une fiche @dataclass dont la méthode divise le nombre fourni par deux. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_half(5) -> 2.5\n  record_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3267": {
+    "description": "Écrivez une fonction Python appelée `record_remainder_three` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne le nombre fourni modulo trois. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_remainder_three(5) -> 2\n  record_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3268": {
+    "description": "Écrivez une fonction Python appelée `record_last_digit` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne le dernier chiffre décimal. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_last_digit(5) -> 5\n  record_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3269": {
+    "description": "Écrivez une fonction Python appelée `record_distance_ten` qui modélise l’entrée avec une fiche @dataclass dont la méthode mesure la distance par rapport à dix. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_distance_ten(5) -> 5\n  record_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3270": {
+    "description": "Écrivez une fonction Python appelée `record_clamp_zero` qui modélise l’entrée avec une fiche @dataclass dont la méthode remplace les valeurs négatives par zéro. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_clamp_zero(5) -> 5\n  record_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3271": {
+    "description": "Écrivez une fonction Python appelée `record_is_even` qui modélise l’entrée avec une fiche @dataclass dont la méthode teste si le nombre est pair. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_is_even(5) -> False\n  record_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3272": {
+    "description": "Écrivez une fonction Python appelée `record_is_positive` qui modélise l’entrée avec une fiche @dataclass dont la méthode teste si le nombre est positif. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_is_positive(5) -> True\n  record_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3273": {
+    "description": "Écrivez une fonction Python appelée `record_sign_label` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_sign_label(5) -> \"positive\"\n  record_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3274": {
+    "description": "Écrivez une fonction Python appelée `record_digit_count` qui modélise l’entrée avec une fiche @dataclass dont la méthode compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de dataclass.\nDifficulté : Facile.\nExemples :\n  record_digit_count(5) -> 1\n  record_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3275": {
+    "description": "Écrivez une fonction Python appelée `record_digit_sum` qui modélise l’entrée avec une fiche @dataclass dont la méthode additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_digit_sum(52) -> 7\n  record_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3276": {
+    "description": "Écrivez une fonction Python appelée `record_triangular` qui modélise l’entrée avec une fiche @dataclass dont la méthode calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_triangular(5) -> 15\n  record_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3277": {
+    "description": "Écrivez une fonction Python appelée `record_within_ten` qui modélise l’entrée avec une fiche @dataclass dont la méthode teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_within_ten(5) -> True\n  record_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3278": {
+    "description": "Écrivez une fonction Python appelée `record_uppercase` qui modélise l’entrée avec une fiche @dataclass dont la méthode convertit le texte en majuscules. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_uppercase(\"Python\") -> \"PYTHON\"\n  record_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3279": {
+    "description": "Écrivez une fonction Python appelée `record_lowercase` qui modélise l’entrée avec une fiche @dataclass dont la méthode convertit le texte en minuscules. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_lowercase(\"Python\") -> \"python\"\n  record_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3280": {
+    "description": "Écrivez une fonction Python appelée `record_reverse_text` qui modélise l’entrée avec une fiche @dataclass dont la méthode inverse tous les caractères du texte. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_reverse_text(\"Python\") -> \"nohtyP\"\n  record_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3281": {
+    "description": "Écrivez une fonction Python appelée `record_text_length` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne le nombre de caractères du texte. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_text_length(\"Python\") -> 6\n  record_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3282": {
+    "description": "Écrivez une fonction Python appelée `record_first_character` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_first_character(\"Python\") -> \"P\"\n  record_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3283": {
+    "description": "Écrivez une fonction Python appelée `record_last_character` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_last_character(\"Python\") -> \"n\"\n  record_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3284": {
+    "description": "Écrivez une fonction Python appelée `record_vowel_count` qui modélise l’entrée avec une fiche @dataclass dont la méthode compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_vowel_count(\"Python\") -> 1\n  record_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3285": {
+    "description": "Écrivez une fonction Python appelée `record_word_count` qui modélise l’entrée avec une fiche @dataclass dont la méthode compte les mots séparés par des espaces. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_word_count(\"Python\") -> 1\n  record_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3286": {
+    "description": "Écrivez une fonction Python appelée `record_remove_spaces` qui modélise l’entrée avec une fiche @dataclass dont la méthode supprime tous les espaces du texte. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_remove_spaces(\"Python\") -> \"Python\"\n  record_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3287": {
+    "description": "Écrivez une fonction Python appelée `record_hyphenate` qui modélise l’entrée avec une fiche @dataclass dont la méthode remplace les espaces par des tirets. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_hyphenate(\"Python\") -> \"Python\"\n  record_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3288": {
+    "description": "Écrivez une fonction Python appelée `record_title_words` qui modélise l’entrée avec une fiche @dataclass dont la méthode met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_title_words(\"Python\") -> \"Python\"\n  record_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3289": {
+    "description": "Écrivez une fonction Python appelée `record_palindrome` qui modélise l’entrée avec une fiche @dataclass dont la méthode teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_palindrome(\"Python\") -> False\n  record_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3290": {
+    "description": "Écrivez une fonction Python appelée `record_digit_characters` qui modélise l’entrée avec une fiche @dataclass dont la méthode compte les chiffres dans le texte. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_digit_characters(\"a1b2\") -> 2\n  record_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3291": {
+    "description": "Écrivez une fonction Python appelée `record_initials` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne les initiales majuscules de ses mots. Utilisez la syntaxe de dataclass.\nDifficulté : Intermédiaire.\nExemples :\n  record_initials(\"python code\") -> \"PC\"\n  record_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3292": {
+    "description": "Écrivez une fonction Python appelée `record_bracket_text` qui modélise l’entrée avec une fiche @dataclass dont la méthode entoure le texte de crochets. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_bracket_text(\"Python\") -> \"[Python]\"\n  record_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3293": {
+    "description": "Écrivez une fonction Python appelée `record_sum_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode additionne tous les nombres de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_sum_items([1, 2, 3]) -> 6\n  record_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3294": {
+    "description": "Écrivez une fonction Python appelée `record_maximum_item` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne le plus grand élément de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_maximum_item([1, 2, 3]) -> 3\n  record_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3295": {
+    "description": "Écrivez une fonction Python appelée `record_minimum_item` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne le plus petit élément de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_minimum_item([1, 2, 3]) -> 1\n  record_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3296": {
+    "description": "Écrivez une fonction Python appelée `record_reverse_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne la liste dans l’ordre inverse. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  record_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3297": {
+    "description": "Écrivez une fonction Python appelée `record_sort_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne une nouvelle liste croissante. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_sort_items([1, 2, 3]) -> [1, 2, 3]\n  record_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3298": {
+    "description": "Écrivez une fonction Python appelée `record_unique_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_unique_items([1, 2, 3]) -> [1, 2, 3]\n  record_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3299": {
+    "description": "Écrivez une fonction Python appelée `record_even_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_even_items([1, 2, 3]) -> [2]\n  record_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3300": {
+    "description": "Écrivez une fonction Python appelée `record_odd_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_odd_items([1, 2, 3]) -> [1, 3]\n  record_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3301": {
+    "description": "Écrivez une fonction Python appelée `record_positive_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_positive_items([1, 2, 3]) -> [1, 2, 3]\n  record_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3302": {
+    "description": "Écrivez une fonction Python appelée `record_square_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode met chaque élément de la liste au carré. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_square_items([1, 2, 3]) -> [1, 4, 9]\n  record_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3303": {
+    "description": "Écrivez une fonction Python appelée `record_item_count` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne le nombre d’éléments de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_item_count([1, 2, 3]) -> 3\n  record_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3304": {
+    "description": "Écrivez une fonction Python appelée `record_average_items` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_average_items([1, 2, 3]) -> 2\n  record_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3305": {
+    "description": "Écrivez une fonction Python appelée `record_running_total` qui modélise l’entrée avec une fiche @dataclass dont la méthode retourne tous les totaux cumulés. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_running_total([1, 2, 3]) -> [1, 3, 6]\n  record_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3306": {
+    "description": "Écrivez une fonction Python appelée `record_index_pairs` qui modélise l’entrée avec une fiche @dataclass dont la méthode associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  record_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3307": {
+    "description": "Écrivez une fonction Python appelée `record_nonzero_count` qui modélise l’entrée avec une fiche @dataclass dont la méthode compte les éléments non nuls de la liste. Utilisez la syntaxe de dataclass.\nDifficulté : Difficile.\nExemples :\n  record_nonzero_count([1, 2, 3]) -> 3\n  record_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de dataclass, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de dataclass demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3308": {
+    "description": "Écrivez une fonction Python appelée `callable_double` qui rend un objet appelable avec __call__ afin qu’il double le nombre fourni. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_double(5) -> 10\n  callable_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3309": {
+    "description": "Écrivez une fonction Python appelée `callable_triple` qui rend un objet appelable avec __call__ afin qu’il triple le nombre fourni. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_triple(5) -> 15\n  callable_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3310": {
+    "description": "Écrivez une fonction Python appelée `callable_square` qui rend un objet appelable avec __call__ afin qu’il met le nombre fourni au carré. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_square(5) -> 25\n  callable_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3311": {
+    "description": "Écrivez une fonction Python appelée `callable_cube` qui rend un objet appelable avec __call__ afin qu’il met le nombre fourni au cube. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_cube(5) -> 125\n  callable_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3312": {
+    "description": "Écrivez une fonction Python appelée `callable_increment` qui rend un objet appelable avec __call__ afin qu’il ajoute un au nombre fourni. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_increment(5) -> 6\n  callable_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3313": {
+    "description": "Écrivez une fonction Python appelée `callable_decrement` qui rend un objet appelable avec __call__ afin qu’il soustrait un au nombre fourni. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_decrement(5) -> 4\n  callable_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3314": {
+    "description": "Écrivez une fonction Python appelée `callable_negate` qui rend un objet appelable avec __call__ afin qu’il inverse le signe du nombre fourni. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_negate(5) -> -5\n  callable_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3315": {
+    "description": "Écrivez une fonction Python appelée `callable_absolute` qui rend un objet appelable avec __call__ afin qu’il retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_absolute(5) -> 5\n  callable_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3316": {
+    "description": "Écrivez une fonction Python appelée `callable_half` qui rend un objet appelable avec __call__ afin qu’il divise le nombre fourni par deux. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_half(5) -> 2.5\n  callable_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3317": {
+    "description": "Écrivez une fonction Python appelée `callable_remainder_three` qui rend un objet appelable avec __call__ afin qu’il retourne le nombre fourni modulo trois. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_remainder_three(5) -> 2\n  callable_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3318": {
+    "description": "Écrivez une fonction Python appelée `callable_last_digit` qui rend un objet appelable avec __call__ afin qu’il retourne le dernier chiffre décimal. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_last_digit(5) -> 5\n  callable_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3319": {
+    "description": "Écrivez une fonction Python appelée `callable_distance_ten` qui rend un objet appelable avec __call__ afin qu’il mesure la distance par rapport à dix. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_distance_ten(5) -> 5\n  callable_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3320": {
+    "description": "Écrivez une fonction Python appelée `callable_clamp_zero` qui rend un objet appelable avec __call__ afin qu’il remplace les valeurs négatives par zéro. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_clamp_zero(5) -> 5\n  callable_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3321": {
+    "description": "Écrivez une fonction Python appelée `callable_is_even` qui rend un objet appelable avec __call__ afin qu’il teste si le nombre est pair. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_is_even(5) -> False\n  callable_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3322": {
+    "description": "Écrivez une fonction Python appelée `callable_is_positive` qui rend un objet appelable avec __call__ afin qu’il teste si le nombre est positif. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_is_positive(5) -> True\n  callable_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3323": {
+    "description": "Écrivez une fonction Python appelée `callable_sign_label` qui rend un objet appelable avec __call__ afin qu’il retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_sign_label(5) -> \"positive\"\n  callable_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3324": {
+    "description": "Écrivez une fonction Python appelée `callable_digit_count` qui rend un objet appelable avec __call__ afin qu’il compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Facile.\nExemples :\n  callable_digit_count(5) -> 1\n  callable_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3325": {
+    "description": "Écrivez une fonction Python appelée `callable_digit_sum` qui rend un objet appelable avec __call__ afin qu’il additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_digit_sum(52) -> 7\n  callable_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3326": {
+    "description": "Écrivez une fonction Python appelée `callable_triangular` qui rend un objet appelable avec __call__ afin qu’il calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_triangular(5) -> 15\n  callable_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3327": {
+    "description": "Écrivez une fonction Python appelée `callable_within_ten` qui rend un objet appelable avec __call__ afin qu’il teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_within_ten(5) -> True\n  callable_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3328": {
+    "description": "Écrivez une fonction Python appelée `callable_uppercase` qui rend un objet appelable avec __call__ afin qu’il convertit le texte en majuscules. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_uppercase(\"Python\") -> \"PYTHON\"\n  callable_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3329": {
+    "description": "Écrivez une fonction Python appelée `callable_lowercase` qui rend un objet appelable avec __call__ afin qu’il convertit le texte en minuscules. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_lowercase(\"Python\") -> \"python\"\n  callable_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3330": {
+    "description": "Écrivez une fonction Python appelée `callable_reverse_text` qui rend un objet appelable avec __call__ afin qu’il inverse tous les caractères du texte. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_reverse_text(\"Python\") -> \"nohtyP\"\n  callable_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3331": {
+    "description": "Écrivez une fonction Python appelée `callable_text_length` qui rend un objet appelable avec __call__ afin qu’il retourne le nombre de caractères du texte. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_text_length(\"Python\") -> 6\n  callable_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3332": {
+    "description": "Écrivez une fonction Python appelée `callable_first_character` qui rend un objet appelable avec __call__ afin qu’il retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_first_character(\"Python\") -> \"P\"\n  callable_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3333": {
+    "description": "Écrivez une fonction Python appelée `callable_last_character` qui rend un objet appelable avec __call__ afin qu’il retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_last_character(\"Python\") -> \"n\"\n  callable_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3334": {
+    "description": "Écrivez une fonction Python appelée `callable_vowel_count` qui rend un objet appelable avec __call__ afin qu’il compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_vowel_count(\"Python\") -> 1\n  callable_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3335": {
+    "description": "Écrivez une fonction Python appelée `callable_word_count` qui rend un objet appelable avec __call__ afin qu’il compte les mots séparés par des espaces. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_word_count(\"Python\") -> 1\n  callable_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3336": {
+    "description": "Écrivez une fonction Python appelée `callable_remove_spaces` qui rend un objet appelable avec __call__ afin qu’il supprime tous les espaces du texte. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_remove_spaces(\"Python\") -> \"Python\"\n  callable_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3337": {
+    "description": "Écrivez une fonction Python appelée `callable_hyphenate` qui rend un objet appelable avec __call__ afin qu’il remplace les espaces par des tirets. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_hyphenate(\"Python\") -> \"Python\"\n  callable_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3338": {
+    "description": "Écrivez une fonction Python appelée `callable_title_words` qui rend un objet appelable avec __call__ afin qu’il met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_title_words(\"Python\") -> \"Python\"\n  callable_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3339": {
+    "description": "Écrivez une fonction Python appelée `callable_palindrome` qui rend un objet appelable avec __call__ afin qu’il teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_palindrome(\"Python\") -> False\n  callable_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3340": {
+    "description": "Écrivez une fonction Python appelée `callable_digit_characters` qui rend un objet appelable avec __call__ afin qu’il compte les chiffres dans le texte. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_digit_characters(\"a1b2\") -> 2\n  callable_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3341": {
+    "description": "Écrivez une fonction Python appelée `callable_initials` qui rend un objet appelable avec __call__ afin qu’il retourne les initiales majuscules de ses mots. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Intermédiaire.\nExemples :\n  callable_initials(\"python code\") -> \"PC\"\n  callable_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3342": {
+    "description": "Écrivez une fonction Python appelée `callable_bracket_text` qui rend un objet appelable avec __call__ afin qu’il entoure le texte de crochets. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_bracket_text(\"Python\") -> \"[Python]\"\n  callable_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3343": {
+    "description": "Écrivez une fonction Python appelée `callable_sum_items` qui rend un objet appelable avec __call__ afin qu’il additionne tous les nombres de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_sum_items([1, 2, 3]) -> 6\n  callable_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3344": {
+    "description": "Écrivez une fonction Python appelée `callable_maximum_item` qui rend un objet appelable avec __call__ afin qu’il retourne le plus grand élément de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_maximum_item([1, 2, 3]) -> 3\n  callable_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3345": {
+    "description": "Écrivez une fonction Python appelée `callable_minimum_item` qui rend un objet appelable avec __call__ afin qu’il retourne le plus petit élément de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_minimum_item([1, 2, 3]) -> 1\n  callable_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3346": {
+    "description": "Écrivez une fonction Python appelée `callable_reverse_items` qui rend un objet appelable avec __call__ afin qu’il retourne la liste dans l’ordre inverse. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  callable_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3347": {
+    "description": "Écrivez une fonction Python appelée `callable_sort_items` qui rend un objet appelable avec __call__ afin qu’il retourne une nouvelle liste croissante. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_sort_items([1, 2, 3]) -> [1, 2, 3]\n  callable_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3348": {
+    "description": "Écrivez une fonction Python appelée `callable_unique_items` qui rend un objet appelable avec __call__ afin qu’il conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_unique_items([1, 2, 3]) -> [1, 2, 3]\n  callable_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3349": {
+    "description": "Écrivez une fonction Python appelée `callable_even_items` qui rend un objet appelable avec __call__ afin qu’il retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_even_items([1, 2, 3]) -> [2]\n  callable_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3350": {
+    "description": "Écrivez une fonction Python appelée `callable_odd_items` qui rend un objet appelable avec __call__ afin qu’il retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_odd_items([1, 2, 3]) -> [1, 3]\n  callable_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3351": {
+    "description": "Écrivez une fonction Python appelée `callable_positive_items` qui rend un objet appelable avec __call__ afin qu’il retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_positive_items([1, 2, 3]) -> [1, 2, 3]\n  callable_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3352": {
+    "description": "Écrivez une fonction Python appelée `callable_square_items` qui rend un objet appelable avec __call__ afin qu’il met chaque élément de la liste au carré. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_square_items([1, 2, 3]) -> [1, 4, 9]\n  callable_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3353": {
+    "description": "Écrivez une fonction Python appelée `callable_item_count` qui rend un objet appelable avec __call__ afin qu’il retourne le nombre d’éléments de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_item_count([1, 2, 3]) -> 3\n  callable_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3354": {
+    "description": "Écrivez une fonction Python appelée `callable_average_items` qui rend un objet appelable avec __call__ afin qu’il retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_average_items([1, 2, 3]) -> 2\n  callable_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3355": {
+    "description": "Écrivez une fonction Python appelée `callable_running_total` qui rend un objet appelable avec __call__ afin qu’il retourne tous les totaux cumulés. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_running_total([1, 2, 3]) -> [1, 3, 6]\n  callable_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3356": {
+    "description": "Écrivez une fonction Python appelée `callable_index_pairs` qui rend un objet appelable avec __call__ afin qu’il associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  callable_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3357": {
+    "description": "Écrivez une fonction Python appelée `callable_nonzero_count` qui rend un objet appelable avec __call__ afin qu’il compte les éléments non nuls de la liste. Utilisez la syntaxe de méthode spéciale.\nDifficulté : Difficile.\nExemples :\n  callable_nonzero_count([1, 2, 3]) -> 3\n  callable_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de méthode spéciale, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de méthode spéciale demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3358": {
+    "description": "Écrivez une fonction Python appelée `advanced_and_2_bitwise` qui conserve les bits sélectionnés par le masque supplémentaire avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_and_2_bitwise(0) -> 0\n  advanced_and_2_bitwise(19) -> 2",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3359": {
+    "description": "Écrivez une fonction Python appelée `advanced_and_6_bitwise` qui conserve les bits sélectionnés par le masque supplémentaire avec 6. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_and_6_bitwise(0) -> 0\n  advanced_and_6_bitwise(19) -> 2",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3360": {
+    "description": "Écrivez une fonction Python appelée `advanced_and_12_bitwise` qui conserve les bits sélectionnés par le masque supplémentaire avec 12. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_and_12_bitwise(0) -> 0\n  advanced_and_12_bitwise(19) -> 0",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3361": {
+    "description": "Écrivez une fonction Python appelée `advanced_and_24_bitwise` qui conserve les bits sélectionnés par le masque supplémentaire avec 24. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_and_24_bitwise(0) -> 0\n  advanced_and_24_bitwise(19) -> 16",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3362": {
+    "description": "Écrivez une fonction Python appelée `advanced_and_48_bitwise` qui conserve les bits sélectionnés par le masque supplémentaire avec 48. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_and_48_bitwise(0) -> 0\n  advanced_and_48_bitwise(19) -> 16",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3363": {
+    "description": "Écrivez une fonction Python appelée `advanced_or_2_bitwise` qui active les bits sélectionnés par le masque supplémentaire avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_or_2_bitwise(0) -> 2\n  advanced_or_2_bitwise(19) -> 19",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3364": {
+    "description": "Écrivez une fonction Python appelée `advanced_or_6_bitwise` qui active les bits sélectionnés par le masque supplémentaire avec 6. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_or_6_bitwise(0) -> 6\n  advanced_or_6_bitwise(19) -> 23",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3365": {
+    "description": "Écrivez une fonction Python appelée `advanced_or_12_bitwise` qui active les bits sélectionnés par le masque supplémentaire avec 12. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_or_12_bitwise(0) -> 12\n  advanced_or_12_bitwise(19) -> 31",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3366": {
+    "description": "Écrivez une fonction Python appelée `advanced_or_24_bitwise` qui active les bits sélectionnés par le masque supplémentaire avec 24. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_or_24_bitwise(0) -> 24\n  advanced_or_24_bitwise(19) -> 27",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3367": {
+    "description": "Écrivez une fonction Python appelée `advanced_or_48_bitwise` qui active les bits sélectionnés par le masque supplémentaire avec 48. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_or_48_bitwise(0) -> 48\n  advanced_or_48_bitwise(19) -> 51",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3368": {
+    "description": "Écrivez une fonction Python appelée `advanced_xor_2_bitwise` qui inverse les bits sélectionnés par le masque supplémentaire avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_xor_2_bitwise(0) -> 2\n  advanced_xor_2_bitwise(19) -> 17",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3369": {
+    "description": "Écrivez une fonction Python appelée `advanced_xor_6_bitwise` qui inverse les bits sélectionnés par le masque supplémentaire avec 6. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_xor_6_bitwise(0) -> 6\n  advanced_xor_6_bitwise(19) -> 21",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3370": {
+    "description": "Écrivez une fonction Python appelée `advanced_xor_12_bitwise` qui inverse les bits sélectionnés par le masque supplémentaire avec 12. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_xor_12_bitwise(0) -> 12\n  advanced_xor_12_bitwise(19) -> 31",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3371": {
+    "description": "Écrivez une fonction Python appelée `advanced_xor_24_bitwise` qui inverse les bits sélectionnés par le masque supplémentaire avec 24. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_xor_24_bitwise(0) -> 24\n  advanced_xor_24_bitwise(19) -> 11",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3372": {
+    "description": "Écrivez une fonction Python appelée `advanced_xor_48_bitwise` qui inverse les bits sélectionnés par le masque supplémentaire avec 48. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  advanced_xor_48_bitwise(0) -> 48\n  advanced_xor_48_bitwise(19) -> 35",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3373": {
+    "description": "Écrivez une fonction Python appelée `scaled_left_1_bitwise` qui décale à gauche puis ajoute un avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  scaled_left_1_bitwise(0) -> 1\n  scaled_left_1_bitwise(19) -> 39",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3374": {
+    "description": "Écrivez une fonction Python appelée `scaled_left_2_bitwise` qui décale à gauche puis ajoute un avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Facile.\nExemples :\n  scaled_left_2_bitwise(0) -> 1\n  scaled_left_2_bitwise(19) -> 77",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3375": {
+    "description": "Écrivez une fonction Python appelée `scaled_left_3_bitwise` qui décale à gauche puis ajoute un avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_left_3_bitwise(0) -> 1\n  scaled_left_3_bitwise(19) -> 153",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3376": {
+    "description": "Écrivez une fonction Python appelée `scaled_left_4_bitwise` qui décale à gauche puis ajoute un avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_left_4_bitwise(0) -> 1\n  scaled_left_4_bitwise(19) -> 305",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3377": {
+    "description": "Écrivez une fonction Python appelée `scaled_left_5_bitwise` qui décale à gauche puis ajoute un avec 5. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_left_5_bitwise(0) -> 1\n  scaled_left_5_bitwise(19) -> 609",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3378": {
+    "description": "Écrivez une fonction Python appelée `scaled_right_1_bitwise` qui décale à droite puis ajoute un avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_right_1_bitwise(0) -> 1\n  scaled_right_1_bitwise(19) -> 10",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3379": {
+    "description": "Écrivez une fonction Python appelée `scaled_right_2_bitwise` qui décale à droite puis ajoute un avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_right_2_bitwise(0) -> 1\n  scaled_right_2_bitwise(19) -> 5",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3380": {
+    "description": "Écrivez une fonction Python appelée `scaled_right_3_bitwise` qui décale à droite puis ajoute un avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_right_3_bitwise(0) -> 1\n  scaled_right_3_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3381": {
+    "description": "Écrivez une fonction Python appelée `scaled_right_4_bitwise` qui décale à droite puis ajoute un avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_right_4_bitwise(0) -> 1\n  scaled_right_4_bitwise(19) -> 2",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3382": {
+    "description": "Écrivez une fonction Python appelée `scaled_right_5_bitwise` qui décale à droite puis ajoute un avec 5. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  scaled_right_5_bitwise(0) -> 1\n  scaled_right_5_bitwise(19) -> 1",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3383": {
+    "description": "Écrivez une fonction Python appelée `low_mask_1_bitwise` qui extrait le nombre choisi de bits faibles avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  low_mask_1_bitwise(0) -> 0\n  low_mask_1_bitwise(19) -> 1",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3384": {
+    "description": "Écrivez une fonction Python appelée `low_mask_2_bitwise` qui extrait le nombre choisi de bits faibles avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  low_mask_2_bitwise(0) -> 0\n  low_mask_2_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3385": {
+    "description": "Écrivez une fonction Python appelée `low_mask_3_bitwise` qui extrait le nombre choisi de bits faibles avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  low_mask_3_bitwise(0) -> 0\n  low_mask_3_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3386": {
+    "description": "Écrivez une fonction Python appelée `low_mask_4_bitwise` qui extrait le nombre choisi de bits faibles avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  low_mask_4_bitwise(0) -> 0\n  low_mask_4_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3387": {
+    "description": "Écrivez une fonction Python appelée `low_mask_5_bitwise` qui extrait le nombre choisi de bits faibles avec 5. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  low_mask_5_bitwise(0) -> 0\n  low_mask_5_bitwise(19) -> 19",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3388": {
+    "description": "Écrivez une fonction Python appelée `set_pair_0_bitwise` qui active deux bits adjacents à partir de la position avec 0. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  set_pair_0_bitwise(0) -> 3\n  set_pair_0_bitwise(19) -> 19",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3389": {
+    "description": "Écrivez une fonction Python appelée `set_pair_1_bitwise` qui active deux bits adjacents à partir de la position avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  set_pair_1_bitwise(0) -> 6\n  set_pair_1_bitwise(19) -> 23",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3390": {
+    "description": "Écrivez une fonction Python appelée `set_pair_2_bitwise` qui active deux bits adjacents à partir de la position avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  set_pair_2_bitwise(0) -> 12\n  set_pair_2_bitwise(19) -> 31",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3391": {
+    "description": "Écrivez une fonction Python appelée `set_pair_3_bitwise` qui active deux bits adjacents à partir de la position avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Intermédiaire.\nExemples :\n  set_pair_3_bitwise(0) -> 24\n  set_pair_3_bitwise(19) -> 27",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3392": {
+    "description": "Écrivez une fonction Python appelée `set_pair_4_bitwise` qui active deux bits adjacents à partir de la position avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  set_pair_4_bitwise(0) -> 48\n  set_pair_4_bitwise(19) -> 51",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3393": {
+    "description": "Écrivez une fonction Python appelée `clear_pair_0_bitwise` qui désactive deux bits adjacents à partir de la position avec 0. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  clear_pair_0_bitwise(0) -> 0\n  clear_pair_0_bitwise(19) -> 16",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3394": {
+    "description": "Écrivez une fonction Python appelée `clear_pair_1_bitwise` qui désactive deux bits adjacents à partir de la position avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  clear_pair_1_bitwise(0) -> 0\n  clear_pair_1_bitwise(19) -> 17",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3395": {
+    "description": "Écrivez une fonction Python appelée `clear_pair_2_bitwise` qui désactive deux bits adjacents à partir de la position avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  clear_pair_2_bitwise(0) -> 0\n  clear_pair_2_bitwise(19) -> 19",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3396": {
+    "description": "Écrivez une fonction Python appelée `clear_pair_3_bitwise` qui désactive deux bits adjacents à partir de la position avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  clear_pair_3_bitwise(0) -> 0\n  clear_pair_3_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3397": {
+    "description": "Écrivez une fonction Python appelée `clear_pair_4_bitwise` qui désactive deux bits adjacents à partir de la position avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  clear_pair_4_bitwise(0) -> 0\n  clear_pair_4_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3398": {
+    "description": "Écrivez une fonction Python appelée `toggle_pair_0_bitwise` qui inverse deux bits adjacents à partir de la position avec 0. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  toggle_pair_0_bitwise(0) -> 3\n  toggle_pair_0_bitwise(19) -> 16",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3399": {
+    "description": "Écrivez une fonction Python appelée `toggle_pair_1_bitwise` qui inverse deux bits adjacents à partir de la position avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  toggle_pair_1_bitwise(0) -> 6\n  toggle_pair_1_bitwise(19) -> 21",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3400": {
+    "description": "Écrivez une fonction Python appelée `toggle_pair_2_bitwise` qui inverse deux bits adjacents à partir de la position avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  toggle_pair_2_bitwise(0) -> 12\n  toggle_pair_2_bitwise(19) -> 31",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3401": {
+    "description": "Écrivez une fonction Python appelée `toggle_pair_3_bitwise` qui inverse deux bits adjacents à partir de la position avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  toggle_pair_3_bitwise(0) -> 24\n  toggle_pair_3_bitwise(19) -> 11",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3402": {
+    "description": "Écrivez une fonction Python appelée `toggle_pair_4_bitwise` qui inverse deux bits adjacents à partir de la position avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  toggle_pair_4_bitwise(0) -> 48\n  toggle_pair_4_bitwise(19) -> 35",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3403": {
+    "description": "Écrivez une fonction Python appelée `shift_mask_0_bitwise` qui décale à droite et conserve les quatre bits faibles avec 0. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  shift_mask_0_bitwise(0) -> 0\n  shift_mask_0_bitwise(19) -> 3",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3404": {
+    "description": "Écrivez une fonction Python appelée `shift_mask_1_bitwise` qui décale à droite et conserve les quatre bits faibles avec 1. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  shift_mask_1_bitwise(0) -> 0\n  shift_mask_1_bitwise(19) -> 9",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3405": {
+    "description": "Écrivez une fonction Python appelée `shift_mask_2_bitwise` qui décale à droite et conserve les quatre bits faibles avec 2. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  shift_mask_2_bitwise(0) -> 0\n  shift_mask_2_bitwise(19) -> 4",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3406": {
+    "description": "Écrivez une fonction Python appelée `shift_mask_3_bitwise` qui décale à droite et conserve les quatre bits faibles avec 3. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  shift_mask_3_bitwise(0) -> 0\n  shift_mask_3_bitwise(19) -> 2",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3407": {
+    "description": "Écrivez une fonction Python appelée `shift_mask_4_bitwise` qui décale à droite et conserve les quatre bits faibles avec 4. Utilisez la syntaxe de opérateur bit à bit.\nDifficulté : Difficile.\nExemples :\n  shift_mask_4_bitwise(0) -> 0\n  shift_mask_4_bitwise(19) -> 1",
+    "hint": "Construisez d’abord la structure de opérateur bit à bit, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de opérateur bit à bit demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3408": {
+    "description": "Écrivez une fonction Python appelée `typed_double` qui utilise des annotations de paramètre et de retour pendant que la fonction double le nombre fourni. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_double(5) -> 10\n  typed_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3409": {
+    "description": "Écrivez une fonction Python appelée `typed_triple` qui utilise des annotations de paramètre et de retour pendant que la fonction triple le nombre fourni. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_triple(5) -> 15\n  typed_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3410": {
+    "description": "Écrivez une fonction Python appelée `typed_square` qui utilise des annotations de paramètre et de retour pendant que la fonction met le nombre fourni au carré. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_square(5) -> 25\n  typed_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3411": {
+    "description": "Écrivez une fonction Python appelée `typed_cube` qui utilise des annotations de paramètre et de retour pendant que la fonction met le nombre fourni au cube. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_cube(5) -> 125\n  typed_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3412": {
+    "description": "Écrivez une fonction Python appelée `typed_increment` qui utilise des annotations de paramètre et de retour pendant que la fonction ajoute un au nombre fourni. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_increment(5) -> 6\n  typed_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3413": {
+    "description": "Écrivez une fonction Python appelée `typed_decrement` qui utilise des annotations de paramètre et de retour pendant que la fonction soustrait un au nombre fourni. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_decrement(5) -> 4\n  typed_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3414": {
+    "description": "Écrivez une fonction Python appelée `typed_negate` qui utilise des annotations de paramètre et de retour pendant que la fonction inverse le signe du nombre fourni. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_negate(5) -> -5\n  typed_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3415": {
+    "description": "Écrivez une fonction Python appelée `typed_absolute` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_absolute(5) -> 5\n  typed_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3416": {
+    "description": "Écrivez une fonction Python appelée `typed_half` qui utilise des annotations de paramètre et de retour pendant que la fonction divise le nombre fourni par deux. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_half(5) -> 2.5\n  typed_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3417": {
+    "description": "Écrivez une fonction Python appelée `typed_remainder_three` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne le nombre fourni modulo trois. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_remainder_three(5) -> 2\n  typed_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3418": {
+    "description": "Écrivez une fonction Python appelée `typed_last_digit` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne le dernier chiffre décimal. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_last_digit(5) -> 5\n  typed_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3419": {
+    "description": "Écrivez une fonction Python appelée `typed_distance_ten` qui utilise des annotations de paramètre et de retour pendant que la fonction mesure la distance par rapport à dix. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_distance_ten(5) -> 5\n  typed_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3420": {
+    "description": "Écrivez une fonction Python appelée `typed_clamp_zero` qui utilise des annotations de paramètre et de retour pendant que la fonction remplace les valeurs négatives par zéro. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_clamp_zero(5) -> 5\n  typed_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3421": {
+    "description": "Écrivez une fonction Python appelée `typed_is_even` qui utilise des annotations de paramètre et de retour pendant que la fonction teste si le nombre est pair. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_is_even(5) -> False\n  typed_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3422": {
+    "description": "Écrivez une fonction Python appelée `typed_is_positive` qui utilise des annotations de paramètre et de retour pendant que la fonction teste si le nombre est positif. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_is_positive(5) -> True\n  typed_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3423": {
+    "description": "Écrivez une fonction Python appelée `typed_sign_label` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_sign_label(5) -> \"positive\"\n  typed_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3424": {
+    "description": "Écrivez une fonction Python appelée `typed_digit_count` qui utilise des annotations de paramètre et de retour pendant que la fonction compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de annotation de type.\nDifficulté : Facile.\nExemples :\n  typed_digit_count(5) -> 1\n  typed_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3425": {
+    "description": "Écrivez une fonction Python appelée `typed_digit_sum` qui utilise des annotations de paramètre et de retour pendant que la fonction additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_digit_sum(52) -> 7\n  typed_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3426": {
+    "description": "Écrivez une fonction Python appelée `typed_triangular` qui utilise des annotations de paramètre et de retour pendant que la fonction calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_triangular(5) -> 15\n  typed_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3427": {
+    "description": "Écrivez une fonction Python appelée `typed_within_ten` qui utilise des annotations de paramètre et de retour pendant que la fonction teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_within_ten(5) -> True\n  typed_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3428": {
+    "description": "Écrivez une fonction Python appelée `typed_uppercase` qui utilise des annotations de paramètre et de retour pendant que la fonction convertit le texte en majuscules. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_uppercase(\"Python\") -> \"PYTHON\"\n  typed_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3429": {
+    "description": "Écrivez une fonction Python appelée `typed_lowercase` qui utilise des annotations de paramètre et de retour pendant que la fonction convertit le texte en minuscules. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_lowercase(\"Python\") -> \"python\"\n  typed_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3430": {
+    "description": "Écrivez une fonction Python appelée `typed_reverse_text` qui utilise des annotations de paramètre et de retour pendant que la fonction inverse tous les caractères du texte. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_reverse_text(\"Python\") -> \"nohtyP\"\n  typed_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3431": {
+    "description": "Écrivez une fonction Python appelée `typed_text_length` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne le nombre de caractères du texte. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_text_length(\"Python\") -> 6\n  typed_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3432": {
+    "description": "Écrivez une fonction Python appelée `typed_first_character` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_first_character(\"Python\") -> \"P\"\n  typed_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3433": {
+    "description": "Écrivez une fonction Python appelée `typed_last_character` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_last_character(\"Python\") -> \"n\"\n  typed_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3434": {
+    "description": "Écrivez une fonction Python appelée `typed_vowel_count` qui utilise des annotations de paramètre et de retour pendant que la fonction compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_vowel_count(\"Python\") -> 1\n  typed_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3435": {
+    "description": "Écrivez une fonction Python appelée `typed_word_count` qui utilise des annotations de paramètre et de retour pendant que la fonction compte les mots séparés par des espaces. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_word_count(\"Python\") -> 1\n  typed_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3436": {
+    "description": "Écrivez une fonction Python appelée `typed_remove_spaces` qui utilise des annotations de paramètre et de retour pendant que la fonction supprime tous les espaces du texte. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_remove_spaces(\"Python\") -> \"Python\"\n  typed_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3437": {
+    "description": "Écrivez une fonction Python appelée `typed_hyphenate` qui utilise des annotations de paramètre et de retour pendant que la fonction remplace les espaces par des tirets. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_hyphenate(\"Python\") -> \"Python\"\n  typed_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3438": {
+    "description": "Écrivez une fonction Python appelée `typed_title_words` qui utilise des annotations de paramètre et de retour pendant que la fonction met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_title_words(\"Python\") -> \"Python\"\n  typed_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3439": {
+    "description": "Écrivez une fonction Python appelée `typed_palindrome` qui utilise des annotations de paramètre et de retour pendant que la fonction teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_palindrome(\"Python\") -> False\n  typed_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3440": {
+    "description": "Écrivez une fonction Python appelée `typed_digit_characters` qui utilise des annotations de paramètre et de retour pendant que la fonction compte les chiffres dans le texte. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_digit_characters(\"a1b2\") -> 2\n  typed_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3441": {
+    "description": "Écrivez une fonction Python appelée `typed_initials` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne les initiales majuscules de ses mots. Utilisez la syntaxe de annotation de type.\nDifficulté : Intermédiaire.\nExemples :\n  typed_initials(\"python code\") -> \"PC\"\n  typed_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3442": {
+    "description": "Écrivez une fonction Python appelée `typed_bracket_text` qui utilise des annotations de paramètre et de retour pendant que la fonction entoure le texte de crochets. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_bracket_text(\"Python\") -> \"[Python]\"\n  typed_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3443": {
+    "description": "Écrivez une fonction Python appelée `typed_sum_items` qui utilise des annotations de paramètre et de retour pendant que la fonction additionne tous les nombres de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_sum_items([1, 2, 3]) -> 6\n  typed_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3444": {
+    "description": "Écrivez une fonction Python appelée `typed_maximum_item` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne le plus grand élément de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_maximum_item([1, 2, 3]) -> 3\n  typed_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3445": {
+    "description": "Écrivez une fonction Python appelée `typed_minimum_item` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne le plus petit élément de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_minimum_item([1, 2, 3]) -> 1\n  typed_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3446": {
+    "description": "Écrivez une fonction Python appelée `typed_reverse_items` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne la liste dans l’ordre inverse. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  typed_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3447": {
+    "description": "Écrivez une fonction Python appelée `typed_sort_items` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne une nouvelle liste croissante. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_sort_items([1, 2, 3]) -> [1, 2, 3]\n  typed_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3448": {
+    "description": "Écrivez une fonction Python appelée `typed_unique_items` qui utilise des annotations de paramètre et de retour pendant que la fonction conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_unique_items([1, 2, 3]) -> [1, 2, 3]\n  typed_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3449": {
+    "description": "Écrivez une fonction Python appelée `typed_even_items` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_even_items([1, 2, 3]) -> [2]\n  typed_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3450": {
+    "description": "Écrivez une fonction Python appelée `typed_odd_items` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_odd_items([1, 2, 3]) -> [1, 3]\n  typed_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3451": {
+    "description": "Écrivez une fonction Python appelée `typed_positive_items` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_positive_items([1, 2, 3]) -> [1, 2, 3]\n  typed_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3452": {
+    "description": "Écrivez une fonction Python appelée `typed_square_items` qui utilise des annotations de paramètre et de retour pendant que la fonction met chaque élément de la liste au carré. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_square_items([1, 2, 3]) -> [1, 4, 9]\n  typed_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3453": {
+    "description": "Écrivez une fonction Python appelée `typed_item_count` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne le nombre d’éléments de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_item_count([1, 2, 3]) -> 3\n  typed_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3454": {
+    "description": "Écrivez une fonction Python appelée `typed_average_items` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_average_items([1, 2, 3]) -> 2\n  typed_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3455": {
+    "description": "Écrivez une fonction Python appelée `typed_running_total` qui utilise des annotations de paramètre et de retour pendant que la fonction retourne tous les totaux cumulés. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_running_total([1, 2, 3]) -> [1, 3, 6]\n  typed_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3456": {
+    "description": "Écrivez une fonction Python appelée `typed_index_pairs` qui utilise des annotations de paramètre et de retour pendant que la fonction associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  typed_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3457": {
+    "description": "Écrivez une fonction Python appelée `typed_nonzero_count` qui utilise des annotations de paramètre et de retour pendant que la fonction compte les éléments non nuls de la liste. Utilisez la syntaxe de annotation de type.\nDifficulté : Difficile.\nExemples :\n  typed_nonzero_count([1, 2, 3]) -> 3\n  typed_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de annotation de type, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de annotation de type demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3458": {
+    "description": "Écrivez une fonction Python appelée `validated_double` qui utilise une assertion pour refuser None avant que la fonction double le nombre fourni. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_double(5) -> 10\n  validated_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3459": {
+    "description": "Écrivez une fonction Python appelée `validated_triple` qui utilise une assertion pour refuser None avant que la fonction triple le nombre fourni. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_triple(5) -> 15\n  validated_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3460": {
+    "description": "Écrivez une fonction Python appelée `validated_square` qui utilise une assertion pour refuser None avant que la fonction met le nombre fourni au carré. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_square(5) -> 25\n  validated_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3461": {
+    "description": "Écrivez une fonction Python appelée `validated_cube` qui utilise une assertion pour refuser None avant que la fonction met le nombre fourni au cube. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_cube(5) -> 125\n  validated_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3462": {
+    "description": "Écrivez une fonction Python appelée `validated_increment` qui utilise une assertion pour refuser None avant que la fonction ajoute un au nombre fourni. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_increment(5) -> 6\n  validated_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3463": {
+    "description": "Écrivez une fonction Python appelée `validated_decrement` qui utilise une assertion pour refuser None avant que la fonction soustrait un au nombre fourni. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_decrement(5) -> 4\n  validated_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3464": {
+    "description": "Écrivez une fonction Python appelée `validated_negate` qui utilise une assertion pour refuser None avant que la fonction inverse le signe du nombre fourni. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_negate(5) -> -5\n  validated_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3465": {
+    "description": "Écrivez une fonction Python appelée `validated_absolute` qui utilise une assertion pour refuser None avant que la fonction retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_absolute(5) -> 5\n  validated_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3466": {
+    "description": "Écrivez une fonction Python appelée `validated_half` qui utilise une assertion pour refuser None avant que la fonction divise le nombre fourni par deux. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_half(5) -> 2.5\n  validated_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3467": {
+    "description": "Écrivez une fonction Python appelée `validated_remainder_three` qui utilise une assertion pour refuser None avant que la fonction retourne le nombre fourni modulo trois. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_remainder_three(5) -> 2\n  validated_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3468": {
+    "description": "Écrivez une fonction Python appelée `validated_last_digit` qui utilise une assertion pour refuser None avant que la fonction retourne le dernier chiffre décimal. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_last_digit(5) -> 5\n  validated_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3469": {
+    "description": "Écrivez une fonction Python appelée `validated_distance_ten` qui utilise une assertion pour refuser None avant que la fonction mesure la distance par rapport à dix. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_distance_ten(5) -> 5\n  validated_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3470": {
+    "description": "Écrivez une fonction Python appelée `validated_clamp_zero` qui utilise une assertion pour refuser None avant que la fonction remplace les valeurs négatives par zéro. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_clamp_zero(5) -> 5\n  validated_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3471": {
+    "description": "Écrivez une fonction Python appelée `validated_is_even` qui utilise une assertion pour refuser None avant que la fonction teste si le nombre est pair. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_is_even(5) -> False\n  validated_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3472": {
+    "description": "Écrivez une fonction Python appelée `validated_is_positive` qui utilise une assertion pour refuser None avant que la fonction teste si le nombre est positif. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_is_positive(5) -> True\n  validated_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3473": {
+    "description": "Écrivez une fonction Python appelée `validated_sign_label` qui utilise une assertion pour refuser None avant que la fonction retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_sign_label(5) -> \"positive\"\n  validated_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3474": {
+    "description": "Écrivez une fonction Python appelée `validated_digit_count` qui utilise une assertion pour refuser None avant que la fonction compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de test et débogage.\nDifficulté : Facile.\nExemples :\n  validated_digit_count(5) -> 1\n  validated_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3475": {
+    "description": "Écrivez une fonction Python appelée `validated_digit_sum` qui utilise une assertion pour refuser None avant que la fonction additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_digit_sum(52) -> 7\n  validated_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3476": {
+    "description": "Écrivez une fonction Python appelée `validated_triangular` qui utilise une assertion pour refuser None avant que la fonction calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_triangular(5) -> 15\n  validated_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3477": {
+    "description": "Écrivez une fonction Python appelée `validated_within_ten` qui utilise une assertion pour refuser None avant que la fonction teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_within_ten(5) -> True\n  validated_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3478": {
+    "description": "Écrivez une fonction Python appelée `validated_uppercase` qui utilise une assertion pour refuser None avant que la fonction convertit le texte en majuscules. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_uppercase(\"Python\") -> \"PYTHON\"\n  validated_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3479": {
+    "description": "Écrivez une fonction Python appelée `validated_lowercase` qui utilise une assertion pour refuser None avant que la fonction convertit le texte en minuscules. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_lowercase(\"Python\") -> \"python\"\n  validated_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3480": {
+    "description": "Écrivez une fonction Python appelée `validated_reverse_text` qui utilise une assertion pour refuser None avant que la fonction inverse tous les caractères du texte. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_reverse_text(\"Python\") -> \"nohtyP\"\n  validated_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3481": {
+    "description": "Écrivez une fonction Python appelée `validated_text_length` qui utilise une assertion pour refuser None avant que la fonction retourne le nombre de caractères du texte. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_text_length(\"Python\") -> 6\n  validated_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3482": {
+    "description": "Écrivez une fonction Python appelée `validated_first_character` qui utilise une assertion pour refuser None avant que la fonction retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_first_character(\"Python\") -> \"P\"\n  validated_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3483": {
+    "description": "Écrivez une fonction Python appelée `validated_last_character` qui utilise une assertion pour refuser None avant que la fonction retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_last_character(\"Python\") -> \"n\"\n  validated_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3484": {
+    "description": "Écrivez une fonction Python appelée `validated_vowel_count` qui utilise une assertion pour refuser None avant que la fonction compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_vowel_count(\"Python\") -> 1\n  validated_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3485": {
+    "description": "Écrivez une fonction Python appelée `validated_word_count` qui utilise une assertion pour refuser None avant que la fonction compte les mots séparés par des espaces. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_word_count(\"Python\") -> 1\n  validated_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3486": {
+    "description": "Écrivez une fonction Python appelée `validated_remove_spaces` qui utilise une assertion pour refuser None avant que la fonction supprime tous les espaces du texte. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_remove_spaces(\"Python\") -> \"Python\"\n  validated_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3487": {
+    "description": "Écrivez une fonction Python appelée `validated_hyphenate` qui utilise une assertion pour refuser None avant que la fonction remplace les espaces par des tirets. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_hyphenate(\"Python\") -> \"Python\"\n  validated_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3488": {
+    "description": "Écrivez une fonction Python appelée `validated_title_words` qui utilise une assertion pour refuser None avant que la fonction met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_title_words(\"Python\") -> \"Python\"\n  validated_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3489": {
+    "description": "Écrivez une fonction Python appelée `validated_palindrome` qui utilise une assertion pour refuser None avant que la fonction teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_palindrome(\"Python\") -> False\n  validated_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3490": {
+    "description": "Écrivez une fonction Python appelée `validated_digit_characters` qui utilise une assertion pour refuser None avant que la fonction compte les chiffres dans le texte. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_digit_characters(\"a1b2\") -> 2\n  validated_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3491": {
+    "description": "Écrivez une fonction Python appelée `validated_initials` qui utilise une assertion pour refuser None avant que la fonction retourne les initiales majuscules de ses mots. Utilisez la syntaxe de test et débogage.\nDifficulté : Intermédiaire.\nExemples :\n  validated_initials(\"python code\") -> \"PC\"\n  validated_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3492": {
+    "description": "Écrivez une fonction Python appelée `validated_bracket_text` qui utilise une assertion pour refuser None avant que la fonction entoure le texte de crochets. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_bracket_text(\"Python\") -> \"[Python]\"\n  validated_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3493": {
+    "description": "Écrivez une fonction Python appelée `validated_sum_items` qui utilise une assertion pour refuser None avant que la fonction additionne tous les nombres de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_sum_items([1, 2, 3]) -> 6\n  validated_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3494": {
+    "description": "Écrivez une fonction Python appelée `validated_maximum_item` qui utilise une assertion pour refuser None avant que la fonction retourne le plus grand élément de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_maximum_item([1, 2, 3]) -> 3\n  validated_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3495": {
+    "description": "Écrivez une fonction Python appelée `validated_minimum_item` qui utilise une assertion pour refuser None avant que la fonction retourne le plus petit élément de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_minimum_item([1, 2, 3]) -> 1\n  validated_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3496": {
+    "description": "Écrivez une fonction Python appelée `validated_reverse_items` qui utilise une assertion pour refuser None avant que la fonction retourne la liste dans l’ordre inverse. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  validated_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3497": {
+    "description": "Écrivez une fonction Python appelée `validated_sort_items` qui utilise une assertion pour refuser None avant que la fonction retourne une nouvelle liste croissante. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_sort_items([1, 2, 3]) -> [1, 2, 3]\n  validated_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3498": {
+    "description": "Écrivez une fonction Python appelée `validated_unique_items` qui utilise une assertion pour refuser None avant que la fonction conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_unique_items([1, 2, 3]) -> [1, 2, 3]\n  validated_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3499": {
+    "description": "Écrivez une fonction Python appelée `validated_even_items` qui utilise une assertion pour refuser None avant que la fonction retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_even_items([1, 2, 3]) -> [2]\n  validated_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3500": {
+    "description": "Écrivez une fonction Python appelée `validated_odd_items` qui utilise une assertion pour refuser None avant que la fonction retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_odd_items([1, 2, 3]) -> [1, 3]\n  validated_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3501": {
+    "description": "Écrivez une fonction Python appelée `validated_positive_items` qui utilise une assertion pour refuser None avant que la fonction retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_positive_items([1, 2, 3]) -> [1, 2, 3]\n  validated_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3502": {
+    "description": "Écrivez une fonction Python appelée `validated_square_items` qui utilise une assertion pour refuser None avant que la fonction met chaque élément de la liste au carré. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_square_items([1, 2, 3]) -> [1, 4, 9]\n  validated_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3503": {
+    "description": "Écrivez une fonction Python appelée `validated_item_count` qui utilise une assertion pour refuser None avant que la fonction retourne le nombre d’éléments de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_item_count([1, 2, 3]) -> 3\n  validated_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3504": {
+    "description": "Écrivez une fonction Python appelée `validated_average_items` qui utilise une assertion pour refuser None avant que la fonction retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_average_items([1, 2, 3]) -> 2\n  validated_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3505": {
+    "description": "Écrivez une fonction Python appelée `validated_running_total` qui utilise une assertion pour refuser None avant que la fonction retourne tous les totaux cumulés. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_running_total([1, 2, 3]) -> [1, 3, 6]\n  validated_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3506": {
+    "description": "Écrivez une fonction Python appelée `validated_index_pairs` qui utilise une assertion pour refuser None avant que la fonction associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  validated_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3507": {
+    "description": "Écrivez une fonction Python appelée `validated_nonzero_count` qui utilise une assertion pour refuser None avant que la fonction compte les éléments non nuls de la liste. Utilisez la syntaxe de test et débogage.\nDifficulté : Difficile.\nExemples :\n  validated_nonzero_count([1, 2, 3]) -> 3\n  validated_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de test et débogage, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de test et débogage demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3508": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_double` qui utilise un état nonlocal dans une fonction interne qui double le nombre fourni. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_double(5) -> 10\n  nonlocal_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3509": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_triple` qui utilise un état nonlocal dans une fonction interne qui triple le nombre fourni. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_triple(5) -> 15\n  nonlocal_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3510": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_square` qui utilise un état nonlocal dans une fonction interne qui met le nombre fourni au carré. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_square(5) -> 25\n  nonlocal_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3511": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_cube` qui utilise un état nonlocal dans une fonction interne qui met le nombre fourni au cube. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_cube(5) -> 125\n  nonlocal_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3512": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_increment` qui utilise un état nonlocal dans une fonction interne qui ajoute un au nombre fourni. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_increment(5) -> 6\n  nonlocal_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3513": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_decrement` qui utilise un état nonlocal dans une fonction interne qui soustrait un au nombre fourni. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_decrement(5) -> 4\n  nonlocal_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3514": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_negate` qui utilise un état nonlocal dans une fonction interne qui inverse le signe du nombre fourni. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_negate(5) -> -5\n  nonlocal_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3515": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_absolute` qui utilise un état nonlocal dans une fonction interne qui retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_absolute(5) -> 5\n  nonlocal_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3516": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_half` qui utilise un état nonlocal dans une fonction interne qui divise le nombre fourni par deux. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_half(5) -> 2.5\n  nonlocal_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3517": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_remainder_three` qui utilise un état nonlocal dans une fonction interne qui retourne le nombre fourni modulo trois. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_remainder_three(5) -> 2\n  nonlocal_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3518": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_last_digit` qui utilise un état nonlocal dans une fonction interne qui retourne le dernier chiffre décimal. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_last_digit(5) -> 5\n  nonlocal_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3519": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_distance_ten` qui utilise un état nonlocal dans une fonction interne qui mesure la distance par rapport à dix. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_distance_ten(5) -> 5\n  nonlocal_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3520": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_clamp_zero` qui utilise un état nonlocal dans une fonction interne qui remplace les valeurs négatives par zéro. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_clamp_zero(5) -> 5\n  nonlocal_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3521": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_is_even` qui utilise un état nonlocal dans une fonction interne qui teste si le nombre est pair. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_is_even(5) -> False\n  nonlocal_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3522": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_is_positive` qui utilise un état nonlocal dans une fonction interne qui teste si le nombre est positif. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_is_positive(5) -> True\n  nonlocal_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3523": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_sign_label` qui utilise un état nonlocal dans une fonction interne qui retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_sign_label(5) -> \"positive\"\n  nonlocal_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3524": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_digit_count` qui utilise un état nonlocal dans une fonction interne qui compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Facile.\nExemples :\n  nonlocal_digit_count(5) -> 1\n  nonlocal_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3525": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_digit_sum` qui utilise un état nonlocal dans une fonction interne qui additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_digit_sum(52) -> 7\n  nonlocal_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3526": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_triangular` qui utilise un état nonlocal dans une fonction interne qui calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_triangular(5) -> 15\n  nonlocal_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3527": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_within_ten` qui utilise un état nonlocal dans une fonction interne qui teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_within_ten(5) -> True\n  nonlocal_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3528": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_uppercase` qui utilise un état nonlocal dans une fonction interne qui convertit le texte en majuscules. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_uppercase(\"Python\") -> \"PYTHON\"\n  nonlocal_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3529": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_lowercase` qui utilise un état nonlocal dans une fonction interne qui convertit le texte en minuscules. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_lowercase(\"Python\") -> \"python\"\n  nonlocal_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3530": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_reverse_text` qui utilise un état nonlocal dans une fonction interne qui inverse tous les caractères du texte. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_reverse_text(\"Python\") -> \"nohtyP\"\n  nonlocal_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3531": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_text_length` qui utilise un état nonlocal dans une fonction interne qui retourne le nombre de caractères du texte. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_text_length(\"Python\") -> 6\n  nonlocal_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3532": {
+    "description": "Écrivez une fonction Python appelée `nonlocal_first_character` qui utilise un état nonlocal dans une fonction interne qui retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  nonlocal_first_character(\"Python\") -> \"P\"\n  nonlocal_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3533": {
+    "description": "Écrivez une fonction Python appelée `global_last_character` qui stocke l’entrée dans une liaison globale avant que la fonction retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_last_character(\"Python\") -> \"n\"\n  global_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3534": {
+    "description": "Écrivez une fonction Python appelée `global_vowel_count` qui stocke l’entrée dans une liaison globale avant que la fonction compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_vowel_count(\"Python\") -> 1\n  global_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3535": {
+    "description": "Écrivez une fonction Python appelée `global_word_count` qui stocke l’entrée dans une liaison globale avant que la fonction compte les mots séparés par des espaces. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_word_count(\"Python\") -> 1\n  global_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3536": {
+    "description": "Écrivez une fonction Python appelée `global_remove_spaces` qui stocke l’entrée dans une liaison globale avant que la fonction supprime tous les espaces du texte. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_remove_spaces(\"Python\") -> \"Python\"\n  global_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3537": {
+    "description": "Écrivez une fonction Python appelée `global_hyphenate` qui stocke l’entrée dans une liaison globale avant que la fonction remplace les espaces par des tirets. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_hyphenate(\"Python\") -> \"Python\"\n  global_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3538": {
+    "description": "Écrivez une fonction Python appelée `global_title_words` qui stocke l’entrée dans une liaison globale avant que la fonction met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_title_words(\"Python\") -> \"Python\"\n  global_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3539": {
+    "description": "Écrivez une fonction Python appelée `global_palindrome` qui stocke l’entrée dans une liaison globale avant que la fonction teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_palindrome(\"Python\") -> False\n  global_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3540": {
+    "description": "Écrivez une fonction Python appelée `global_digit_characters` qui stocke l’entrée dans une liaison globale avant que la fonction compte les chiffres dans le texte. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_digit_characters(\"a1b2\") -> 2\n  global_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3541": {
+    "description": "Écrivez une fonction Python appelée `global_initials` qui stocke l’entrée dans une liaison globale avant que la fonction retourne les initiales majuscules de ses mots. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Intermédiaire.\nExemples :\n  global_initials(\"python code\") -> \"PC\"\n  global_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3542": {
+    "description": "Écrivez une fonction Python appelée `global_bracket_text` qui stocke l’entrée dans une liaison globale avant que la fonction entoure le texte de crochets. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_bracket_text(\"Python\") -> \"[Python]\"\n  global_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3543": {
+    "description": "Écrivez une fonction Python appelée `global_sum_items` qui stocke l’entrée dans une liaison globale avant que la fonction additionne tous les nombres de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_sum_items([1, 2, 3]) -> 6\n  global_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3544": {
+    "description": "Écrivez une fonction Python appelée `global_maximum_item` qui stocke l’entrée dans une liaison globale avant que la fonction retourne le plus grand élément de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_maximum_item([1, 2, 3]) -> 3\n  global_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3545": {
+    "description": "Écrivez une fonction Python appelée `global_minimum_item` qui stocke l’entrée dans une liaison globale avant que la fonction retourne le plus petit élément de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_minimum_item([1, 2, 3]) -> 1\n  global_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3546": {
+    "description": "Écrivez une fonction Python appelée `global_reverse_items` qui stocke l’entrée dans une liaison globale avant que la fonction retourne la liste dans l’ordre inverse. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  global_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3547": {
+    "description": "Écrivez une fonction Python appelée `global_sort_items` qui stocke l’entrée dans une liaison globale avant que la fonction retourne une nouvelle liste croissante. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_sort_items([1, 2, 3]) -> [1, 2, 3]\n  global_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3548": {
+    "description": "Écrivez une fonction Python appelée `global_unique_items` qui stocke l’entrée dans une liaison globale avant que la fonction conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_unique_items([1, 2, 3]) -> [1, 2, 3]\n  global_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3549": {
+    "description": "Écrivez une fonction Python appelée `global_even_items` qui stocke l’entrée dans une liaison globale avant que la fonction retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_even_items([1, 2, 3]) -> [2]\n  global_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3550": {
+    "description": "Écrivez une fonction Python appelée `global_odd_items` qui stocke l’entrée dans une liaison globale avant que la fonction retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_odd_items([1, 2, 3]) -> [1, 3]\n  global_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3551": {
+    "description": "Écrivez une fonction Python appelée `global_positive_items` qui stocke l’entrée dans une liaison globale avant que la fonction retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_positive_items([1, 2, 3]) -> [1, 2, 3]\n  global_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3552": {
+    "description": "Écrivez une fonction Python appelée `global_square_items` qui stocke l’entrée dans une liaison globale avant que la fonction met chaque élément de la liste au carré. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_square_items([1, 2, 3]) -> [1, 4, 9]\n  global_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3553": {
+    "description": "Écrivez une fonction Python appelée `global_item_count` qui stocke l’entrée dans une liaison globale avant que la fonction retourne le nombre d’éléments de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_item_count([1, 2, 3]) -> 3\n  global_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3554": {
+    "description": "Écrivez une fonction Python appelée `global_average_items` qui stocke l’entrée dans une liaison globale avant que la fonction retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_average_items([1, 2, 3]) -> 2\n  global_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3555": {
+    "description": "Écrivez une fonction Python appelée `global_running_total` qui stocke l’entrée dans une liaison globale avant que la fonction retourne tous les totaux cumulés. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_running_total([1, 2, 3]) -> [1, 3, 6]\n  global_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3556": {
+    "description": "Écrivez une fonction Python appelée `global_index_pairs` qui stocke l’entrée dans une liaison globale avant que la fonction associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  global_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3557": {
+    "description": "Écrivez une fonction Python appelée `global_nonzero_count` qui stocke l’entrée dans une liaison globale avant que la fonction compte les éléments non nuls de la liste. Utilisez la syntaxe de portée et espace de noms.\nDifficulté : Difficile.\nExemples :\n  global_nonzero_count([1, 2, 3]) -> 3\n  global_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de portée et espace de noms, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de portée et espace de noms demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3558": {
+    "description": "Écrivez une fonction Python appelée `matched_double` qui utilise match/case pour lier l’entrée et double le nombre fourni. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_double(5) -> 10\n  matched_double(-4) -> -8",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3559": {
+    "description": "Écrivez une fonction Python appelée `matched_triple` qui utilise match/case pour lier l’entrée et triple le nombre fourni. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_triple(5) -> 15\n  matched_triple(-4) -> -12",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3560": {
+    "description": "Écrivez une fonction Python appelée `matched_square` qui utilise match/case pour lier l’entrée et met le nombre fourni au carré. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_square(5) -> 25\n  matched_square(-4) -> 16",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3561": {
+    "description": "Écrivez une fonction Python appelée `matched_cube` qui utilise match/case pour lier l’entrée et met le nombre fourni au cube. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_cube(5) -> 125\n  matched_cube(-4) -> -64",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3562": {
+    "description": "Écrivez une fonction Python appelée `matched_increment` qui utilise match/case pour lier l’entrée et ajoute un au nombre fourni. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_increment(5) -> 6\n  matched_increment(-4) -> -3",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3563": {
+    "description": "Écrivez une fonction Python appelée `matched_decrement` qui utilise match/case pour lier l’entrée et soustrait un au nombre fourni. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_decrement(5) -> 4\n  matched_decrement(-4) -> -5",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3564": {
+    "description": "Écrivez une fonction Python appelée `matched_negate` qui utilise match/case pour lier l’entrée et inverse le signe du nombre fourni. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_negate(5) -> -5\n  matched_negate(-4) -> 4",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3565": {
+    "description": "Écrivez une fonction Python appelée `matched_absolute` qui utilise match/case pour lier l’entrée et retourne la valeur absolue du nombre fourni. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_absolute(5) -> 5\n  matched_absolute(-4) -> 4",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3566": {
+    "description": "Écrivez une fonction Python appelée `matched_half` qui utilise match/case pour lier l’entrée et divise le nombre fourni par deux. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_half(5) -> 2.5\n  matched_half(-4) -> -2",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3567": {
+    "description": "Écrivez une fonction Python appelée `matched_remainder_three` qui utilise match/case pour lier l’entrée et retourne le nombre fourni modulo trois. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_remainder_three(5) -> 2\n  matched_remainder_three(-4) -> 2",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3568": {
+    "description": "Écrivez une fonction Python appelée `matched_last_digit` qui utilise match/case pour lier l’entrée et retourne le dernier chiffre décimal. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_last_digit(5) -> 5\n  matched_last_digit(-4) -> 6",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3569": {
+    "description": "Écrivez une fonction Python appelée `matched_distance_ten` qui utilise match/case pour lier l’entrée et mesure la distance par rapport à dix. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_distance_ten(5) -> 5\n  matched_distance_ten(-4) -> 14",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3570": {
+    "description": "Écrivez une fonction Python appelée `matched_clamp_zero` qui utilise match/case pour lier l’entrée et remplace les valeurs négatives par zéro. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_clamp_zero(5) -> 5\n  matched_clamp_zero(-4) -> 0",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3571": {
+    "description": "Écrivez une fonction Python appelée `matched_is_even` qui utilise match/case pour lier l’entrée et teste si le nombre est pair. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_is_even(5) -> False\n  matched_is_even(-4) -> True",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3572": {
+    "description": "Écrivez une fonction Python appelée `matched_is_positive` qui utilise match/case pour lier l’entrée et teste si le nombre est positif. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_is_positive(5) -> True\n  matched_is_positive(-4) -> False",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3573": {
+    "description": "Écrivez une fonction Python appelée `matched_sign_label` qui utilise match/case pour lier l’entrée et retourne positif, négatif ou zéro selon le nombre. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_sign_label(5) -> \"positive\"\n  matched_sign_label(-4) -> \"negative\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3574": {
+    "description": "Écrivez une fonction Python appelée `matched_digit_count` qui utilise match/case pour lier l’entrée et compte ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de match/case.\nDifficulté : Facile.\nExemples :\n  matched_digit_count(5) -> 1\n  matched_digit_count(-4) -> 1",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3575": {
+    "description": "Écrivez une fonction Python appelée `matched_digit_sum` qui utilise match/case pour lier l’entrée et additionne ses chiffres décimaux sans compter le signe. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_digit_sum(52) -> 7\n  matched_digit_sum(-407) -> 11",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3576": {
+    "description": "Écrivez une fonction Python appelée `matched_triangular` qui utilise match/case pour lier l’entrée et calcule le total triangulaire de zéro à sa valeur absolue. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_triangular(5) -> 15\n  matched_triangular(-4) -> 10",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3577": {
+    "description": "Écrivez une fonction Python appelée `matched_within_ten` qui utilise match/case pour lier l’entrée et teste s’il se trouve entre moins dix et plus dix. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_within_ten(5) -> True\n  matched_within_ten(-14) -> False",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3578": {
+    "description": "Écrivez une fonction Python appelée `matched_uppercase` qui utilise match/case pour lier l’entrée et convertit le texte en majuscules. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_uppercase(\"Python\") -> \"PYTHON\"\n  matched_uppercase(\"level\") -> \"LEVEL\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3579": {
+    "description": "Écrivez une fonction Python appelée `matched_lowercase` qui utilise match/case pour lier l’entrée et convertit le texte en minuscules. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_lowercase(\"Python\") -> \"python\"\n  matched_lowercase(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3580": {
+    "description": "Écrivez une fonction Python appelée `matched_reverse_text` qui utilise match/case pour lier l’entrée et inverse tous les caractères du texte. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_reverse_text(\"Python\") -> \"nohtyP\"\n  matched_reverse_text(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3581": {
+    "description": "Écrivez une fonction Python appelée `matched_text_length` qui utilise match/case pour lier l’entrée et retourne le nombre de caractères du texte. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_text_length(\"Python\") -> 6\n  matched_text_length(\"level\") -> 5",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3582": {
+    "description": "Écrivez une fonction Python appelée `matched_first_character` qui utilise match/case pour lier l’entrée et retourne son premier caractère ou une chaîne vide. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_first_character(\"Python\") -> \"P\"\n  matched_first_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3583": {
+    "description": "Écrivez une fonction Python appelée `matched_last_character` qui utilise match/case pour lier l’entrée et retourne son dernier caractère ou une chaîne vide. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_last_character(\"Python\") -> \"n\"\n  matched_last_character(\"\") -> \"\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3584": {
+    "description": "Écrivez une fonction Python appelée `matched_vowel_count` qui utilise match/case pour lier l’entrée et compte les voyelles sans tenir compte de la casse. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_vowel_count(\"Python\") -> 1\n  matched_vowel_count(\"level\") -> 2",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3585": {
+    "description": "Écrivez une fonction Python appelée `matched_word_count` qui utilise match/case pour lier l’entrée et compte les mots séparés par des espaces. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_word_count(\"Python\") -> 1\n  matched_word_count(\"level\") -> 1",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3586": {
+    "description": "Écrivez une fonction Python appelée `matched_remove_spaces` qui utilise match/case pour lier l’entrée et supprime tous les espaces du texte. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_remove_spaces(\"Python\") -> \"Python\"\n  matched_remove_spaces(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3587": {
+    "description": "Écrivez une fonction Python appelée `matched_hyphenate` qui utilise match/case pour lier l’entrée et remplace les espaces par des tirets. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_hyphenate(\"Python\") -> \"Python\"\n  matched_hyphenate(\"level\") -> \"level\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3588": {
+    "description": "Écrivez une fonction Python appelée `matched_title_words` qui utilise match/case pour lier l’entrée et met une majuscule à chaque mot séparé par des espaces. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_title_words(\"Python\") -> \"Python\"\n  matched_title_words(\"level\") -> \"Level\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3589": {
+    "description": "Écrivez une fonction Python appelée `matched_palindrome` qui utilise match/case pour lier l’entrée et teste si le texte est un palindrome sensible à la casse. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_palindrome(\"Python\") -> False\n  matched_palindrome(\"level\") -> True",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3590": {
+    "description": "Écrivez une fonction Python appelée `matched_digit_characters` qui utilise match/case pour lier l’entrée et compte les chiffres dans le texte. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_digit_characters(\"a1b2\") -> 2\n  matched_digit_characters(\"2026\") -> 4",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3591": {
+    "description": "Écrivez une fonction Python appelée `matched_initials` qui utilise match/case pour lier l’entrée et retourne les initiales majuscules de ses mots. Utilisez la syntaxe de match/case.\nDifficulté : Intermédiaire.\nExemples :\n  matched_initials(\"python code\") -> \"PC\"\n  matched_initials(\"Ada Lovelace\") -> \"AL\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3592": {
+    "description": "Écrivez une fonction Python appelée `matched_bracket_text` qui utilise match/case pour lier l’entrée et entoure le texte de crochets. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_bracket_text(\"Python\") -> \"[Python]\"\n  matched_bracket_text(\"level\") -> \"[level]\"",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3593": {
+    "description": "Écrivez une fonction Python appelée `matched_sum_items` qui utilise match/case pour lier l’entrée et additionne tous les nombres de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_sum_items([1, 2, 3]) -> 6\n  matched_sum_items([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3594": {
+    "description": "Écrivez une fonction Python appelée `matched_maximum_item` qui utilise match/case pour lier l’entrée et retourne le plus grand élément de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_maximum_item([1, 2, 3]) -> 3\n  matched_maximum_item([-2, 0, 5]) -> 5",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3595": {
+    "description": "Écrivez une fonction Python appelée `matched_minimum_item` qui utilise match/case pour lier l’entrée et retourne le plus petit élément de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_minimum_item([1, 2, 3]) -> 1\n  matched_minimum_item([-2, 0, 5]) -> -2",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3596": {
+    "description": "Écrivez une fonction Python appelée `matched_reverse_items` qui utilise match/case pour lier l’entrée et retourne la liste dans l’ordre inverse. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_reverse_items([1, 2, 3]) -> [3, 2, 1]\n  matched_reverse_items([-2, 0, 5]) -> [5, 0, -2]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3597": {
+    "description": "Écrivez une fonction Python appelée `matched_sort_items` qui utilise match/case pour lier l’entrée et retourne une nouvelle liste croissante. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_sort_items([1, 2, 3]) -> [1, 2, 3]\n  matched_sort_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3598": {
+    "description": "Écrivez une fonction Python appelée `matched_unique_items` qui utilise match/case pour lier l’entrée et conserve uniquement la première occurrence de chaque élément. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_unique_items([1, 2, 3]) -> [1, 2, 3]\n  matched_unique_items([-2, 0, 5]) -> [-2, 0, 5]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3599": {
+    "description": "Écrivez une fonction Python appelée `matched_even_items` qui utilise match/case pour lier l’entrée et retourne uniquement les éléments pairs de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_even_items([1, 2, 3]) -> [2]\n  matched_even_items([-2, 0, 5]) -> [-2, 0]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3600": {
+    "description": "Écrivez une fonction Python appelée `matched_odd_items` qui utilise match/case pour lier l’entrée et retourne uniquement les éléments impairs de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_odd_items([1, 2, 3]) -> [1, 3]\n  matched_odd_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3601": {
+    "description": "Écrivez une fonction Python appelée `matched_positive_items` qui utilise match/case pour lier l’entrée et retourne uniquement les éléments positifs de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_positive_items([1, 2, 3]) -> [1, 2, 3]\n  matched_positive_items([-2, 0, 5]) -> [5]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3602": {
+    "description": "Écrivez une fonction Python appelée `matched_square_items` qui utilise match/case pour lier l’entrée et met chaque élément de la liste au carré. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_square_items([1, 2, 3]) -> [1, 4, 9]\n  matched_square_items([-2, 0, 5]) -> [4, 0, 25]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3603": {
+    "description": "Écrivez une fonction Python appelée `matched_item_count` qui utilise match/case pour lier l’entrée et retourne le nombre d’éléments de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_item_count([1, 2, 3]) -> 3\n  matched_item_count([-2, 0, 5]) -> 3",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3604": {
+    "description": "Écrivez une fonction Python appelée `matched_average_items` qui utilise match/case pour lier l’entrée et retourne la moyenne arithmétique de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_average_items([1, 2, 3]) -> 2\n  matched_average_items([-2, 0, 5]) -> 1",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3605": {
+    "description": "Écrivez une fonction Python appelée `matched_running_total` qui utilise match/case pour lier l’entrée et retourne tous les totaux cumulés. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_running_total([1, 2, 3]) -> [1, 3, 6]\n  matched_running_total([-2, 0, 5]) -> [-2, -2, 3]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3606": {
+    "description": "Écrivez une fonction Python appelée `matched_index_pairs` qui utilise match/case pour lier l’entrée et associe chaque élément à son indice commençant à zéro. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_index_pairs([1, 2, 3]) -> [[0, 1], [1, 2], [2, 3]]\n  matched_index_pairs([-2, 0, 5]) -> [[0, -2], [1, 0], [2, 5]]",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3607": {
+    "description": "Écrivez une fonction Python appelée `matched_nonzero_count` qui utilise match/case pour lier l’entrée et compte les éléments non nuls de la liste. Utilisez la syntaxe de match/case.\nDifficulté : Difficile.\nExemples :\n  matched_nonzero_count([1, 2, 3]) -> 3\n  matched_nonzero_count([-2, 0, 5]) -> 2",
+    "hint": "Construisez d’abord la structure de match/case, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de match/case demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3608": {
+    "description": "Écrivez une fonction Python appelée `add_1_days` qui ajoute 1 jour(s) à une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  add_1_days(\"2024-01-15\") -> \"2024-01-16\"\n  add_1_days(\"2024-02-28\") -> \"2024-02-29\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3609": {
+    "description": "Écrivez une fonction Python appelée `subtract_1_days` qui soustrait 1 jour(s) d’une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  subtract_1_days(\"2024-01-15\") -> \"2024-01-14\"\n  subtract_1_days(\"2024-02-28\") -> \"2024-02-27\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3610": {
+    "description": "Écrivez une fonction Python appelée `weekday_after_1_days` qui retourne le jour de la semaine 1 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  weekday_after_1_days(\"2024-01-15\") -> \"Tuesday\"\n  weekday_after_1_days(\"2024-02-28\") -> \"Thursday\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3611": {
+    "description": "Écrivez une fonction Python appelée `day_number_after_1` qui retourne le numéro du jour dans l’année 1 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  day_number_after_1(\"2024-01-15\") -> 16\n  day_number_after_1(\"2024-02-28\") -> 60",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3612": {
+    "description": "Écrivez une fonction Python appelée `add_2_days` qui ajoute 2 jour(s) à une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  add_2_days(\"2024-01-15\") -> \"2024-01-17\"\n  add_2_days(\"2024-02-28\") -> \"2024-03-01\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3613": {
+    "description": "Écrivez une fonction Python appelée `subtract_2_days` qui soustrait 2 jour(s) d’une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  subtract_2_days(\"2024-01-15\") -> \"2024-01-13\"\n  subtract_2_days(\"2024-02-28\") -> \"2024-02-26\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3614": {
+    "description": "Écrivez une fonction Python appelée `weekday_after_2_days` qui retourne le jour de la semaine 2 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  weekday_after_2_days(\"2024-01-15\") -> \"Wednesday\"\n  weekday_after_2_days(\"2024-02-28\") -> \"Friday\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3615": {
+    "description": "Écrivez une fonction Python appelée `day_number_after_2` qui retourne le numéro du jour dans l’année 2 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  day_number_after_2(\"2024-01-15\") -> 17\n  day_number_after_2(\"2024-02-28\") -> 61",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3616": {
+    "description": "Écrivez une fonction Python appelée `add_3_days` qui ajoute 3 jour(s) à une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  add_3_days(\"2024-01-15\") -> \"2024-01-18\"\n  add_3_days(\"2024-02-28\") -> \"2024-03-02\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3617": {
+    "description": "Écrivez une fonction Python appelée `subtract_3_days` qui soustrait 3 jour(s) d’une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  subtract_3_days(\"2024-01-15\") -> \"2024-01-12\"\n  subtract_3_days(\"2024-02-28\") -> \"2024-02-25\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3618": {
+    "description": "Écrivez une fonction Python appelée `weekday_after_3_days` qui retourne le jour de la semaine 3 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  weekday_after_3_days(\"2024-01-15\") -> \"Thursday\"\n  weekday_after_3_days(\"2024-02-28\") -> \"Saturday\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3619": {
+    "description": "Écrivez une fonction Python appelée `day_number_after_3` qui retourne le numéro du jour dans l’année 3 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  day_number_after_3(\"2024-01-15\") -> 18\n  day_number_after_3(\"2024-02-28\") -> 62",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3620": {
+    "description": "Écrivez une fonction Python appelée `add_7_days` qui ajoute 7 jour(s) à une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  add_7_days(\"2024-01-15\") -> \"2024-01-22\"\n  add_7_days(\"2024-02-28\") -> \"2024-03-06\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3621": {
+    "description": "Écrivez une fonction Python appelée `subtract_7_days` qui soustrait 7 jour(s) d’une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  subtract_7_days(\"2024-01-15\") -> \"2024-01-08\"\n  subtract_7_days(\"2024-02-28\") -> \"2024-02-21\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3622": {
+    "description": "Écrivez une fonction Python appelée `weekday_after_7_days` qui retourne le jour de la semaine 7 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  weekday_after_7_days(\"2024-01-15\") -> \"Monday\"\n  weekday_after_7_days(\"2024-02-28\") -> \"Wednesday\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3623": {
+    "description": "Écrivez une fonction Python appelée `day_number_after_7` qui retourne le numéro du jour dans l’année 7 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  day_number_after_7(\"2024-01-15\") -> 22\n  day_number_after_7(\"2024-02-28\") -> 66",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3624": {
+    "description": "Écrivez une fonction Python appelée `add_14_days` qui ajoute 14 jour(s) à une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Facile.\nExemples :\n  add_14_days(\"2024-01-15\") -> \"2024-01-29\"\n  add_14_days(\"2024-02-28\") -> \"2024-03-13\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3625": {
+    "description": "Écrivez une fonction Python appelée `subtract_14_days` qui soustrait 14 jour(s) d’une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  subtract_14_days(\"2024-01-15\") -> \"2024-01-01\"\n  subtract_14_days(\"2024-02-28\") -> \"2024-02-14\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3626": {
+    "description": "Écrivez une fonction Python appelée `weekday_after_14_days` qui retourne le jour de la semaine 14 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  weekday_after_14_days(\"2024-01-15\") -> \"Monday\"\n  weekday_after_14_days(\"2024-02-28\") -> \"Wednesday\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3627": {
+    "description": "Écrivez une fonction Python appelée `day_number_after_14` qui retourne le numéro du jour dans l’année 14 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  day_number_after_14(\"2024-01-15\") -> 29\n  day_number_after_14(\"2024-02-28\") -> 73",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3628": {
+    "description": "Écrivez une fonction Python appelée `add_1_hours` qui ajoute 1 heure(s) à une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  add_1_hours(\"2024-01-15T10:30\") -> \"2024-01-15T11:30\"\n  add_1_hours(\"2024-02-28T23:15\") -> \"2024-02-29T00:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3629": {
+    "description": "Écrivez une fonction Python appelée `subtract_1_hours` qui soustrait 1 heure(s) d’une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  subtract_1_hours(\"2024-01-15T10:30\") -> \"2024-01-15T09:30\"\n  subtract_1_hours(\"2024-02-28T23:15\") -> \"2024-02-28T22:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3630": {
+    "description": "Écrivez une fonction Python appelée `within_1_days` qui teste si deux dates ISO sont séparées d’au plus 1 jour(s). Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  within_1_days(\"2024-01-01\", \"2024-01-02\") -> True\n  within_1_days(\"2024-01-01\", \"2024-01-03\") -> False",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3631": {
+    "description": "Écrivez une fonction Python appelée `days_apart_plus_1` qui retourne le nombre absolu de jours entre deux dates ISO plus 1. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  days_apart_plus_1(\"2024-01-01\", \"2024-01-10\") -> 10\n  days_apart_plus_1(\"2024-02-28\", \"2024-03-01\") -> 3",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3632": {
+    "description": "Écrivez une fonction Python appelée `year_after_1_days` qui retourne l’année atteinte 1 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  year_after_1_days(\"2024-01-15\") -> 2024\n  year_after_1_days(\"2024-02-28\") -> 2024",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3633": {
+    "description": "Écrivez une fonction Python appelée `month_after_1_days` qui retourne le numéro du mois atteint 1 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  month_after_1_days(\"2024-01-15\") -> 1\n  month_after_1_days(\"2024-02-28\") -> 2",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3634": {
+    "description": "Écrivez une fonction Python appelée `add_2_hours` qui ajoute 2 heure(s) à une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  add_2_hours(\"2024-01-15T10:30\") -> \"2024-01-15T12:30\"\n  add_2_hours(\"2024-02-28T23:15\") -> \"2024-02-29T01:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3635": {
+    "description": "Écrivez une fonction Python appelée `subtract_2_hours` qui soustrait 2 heure(s) d’une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  subtract_2_hours(\"2024-01-15T10:30\") -> \"2024-01-15T08:30\"\n  subtract_2_hours(\"2024-02-28T23:15\") -> \"2024-02-28T21:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3636": {
+    "description": "Écrivez une fonction Python appelée `within_2_days` qui teste si deux dates ISO sont séparées d’au plus 2 jour(s). Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  within_2_days(\"2024-01-01\", \"2024-01-03\") -> True\n  within_2_days(\"2024-01-01\", \"2024-01-04\") -> False",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3637": {
+    "description": "Écrivez une fonction Python appelée `days_apart_plus_2` qui retourne le nombre absolu de jours entre deux dates ISO plus 2. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  days_apart_plus_2(\"2024-01-01\", \"2024-01-10\") -> 11\n  days_apart_plus_2(\"2024-02-28\", \"2024-03-01\") -> 4",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3638": {
+    "description": "Écrivez une fonction Python appelée `year_after_2_days` qui retourne l’année atteinte 2 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  year_after_2_days(\"2024-01-15\") -> 2024\n  year_after_2_days(\"2024-02-28\") -> 2024",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3639": {
+    "description": "Écrivez une fonction Python appelée `month_after_2_days` qui retourne le numéro du mois atteint 2 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  month_after_2_days(\"2024-01-15\") -> 1\n  month_after_2_days(\"2024-02-28\") -> 3",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3640": {
+    "description": "Écrivez une fonction Python appelée `add_6_hours` qui ajoute 6 heure(s) à une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  add_6_hours(\"2024-01-15T10:30\") -> \"2024-01-15T16:30\"\n  add_6_hours(\"2024-02-28T23:15\") -> \"2024-02-29T05:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3641": {
+    "description": "Écrivez une fonction Python appelée `subtract_6_hours` qui soustrait 6 heure(s) d’une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Intermédiaire.\nExemples :\n  subtract_6_hours(\"2024-01-15T10:30\") -> \"2024-01-15T04:30\"\n  subtract_6_hours(\"2024-02-28T23:15\") -> \"2024-02-28T17:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3642": {
+    "description": "Écrivez une fonction Python appelée `within_6_days` qui teste si deux dates ISO sont séparées d’au plus 6 jour(s). Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  within_6_days(\"2024-01-01\", \"2024-01-07\") -> True\n  within_6_days(\"2024-01-01\", \"2024-01-08\") -> False",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3643": {
+    "description": "Écrivez une fonction Python appelée `days_apart_plus_6` qui retourne le nombre absolu de jours entre deux dates ISO plus 6. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  days_apart_plus_6(\"2024-01-01\", \"2024-01-10\") -> 15\n  days_apart_plus_6(\"2024-02-28\", \"2024-03-01\") -> 8",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3644": {
+    "description": "Écrivez une fonction Python appelée `year_after_6_days` qui retourne l’année atteinte 6 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  year_after_6_days(\"2024-01-15\") -> 2024\n  year_after_6_days(\"2024-02-28\") -> 2024",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3645": {
+    "description": "Écrivez une fonction Python appelée `month_after_6_days` qui retourne le numéro du mois atteint 6 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  month_after_6_days(\"2024-01-15\") -> 1\n  month_after_6_days(\"2024-02-28\") -> 3",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3646": {
+    "description": "Écrivez une fonction Python appelée `add_12_hours` qui ajoute 12 heure(s) à une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  add_12_hours(\"2024-01-15T10:30\") -> \"2024-01-15T22:30\"\n  add_12_hours(\"2024-02-28T23:15\") -> \"2024-02-29T11:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3647": {
+    "description": "Écrivez une fonction Python appelée `subtract_12_hours` qui soustrait 12 heure(s) d’une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  subtract_12_hours(\"2024-01-15T10:30\") -> \"2024-01-14T22:30\"\n  subtract_12_hours(\"2024-02-28T23:15\") -> \"2024-02-28T11:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3648": {
+    "description": "Écrivez une fonction Python appelée `within_12_days` qui teste si deux dates ISO sont séparées d’au plus 12 jour(s). Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  within_12_days(\"2024-01-01\", \"2024-01-13\") -> True\n  within_12_days(\"2024-01-01\", \"2024-01-14\") -> False",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3649": {
+    "description": "Écrivez une fonction Python appelée `days_apart_plus_12` qui retourne le nombre absolu de jours entre deux dates ISO plus 12. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  days_apart_plus_12(\"2024-01-01\", \"2024-01-10\") -> 21\n  days_apart_plus_12(\"2024-02-28\", \"2024-03-01\") -> 14",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3650": {
+    "description": "Écrivez une fonction Python appelée `year_after_12_days` qui retourne l’année atteinte 12 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  year_after_12_days(\"2024-01-15\") -> 2024\n  year_after_12_days(\"2024-02-28\") -> 2024",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3651": {
+    "description": "Écrivez une fonction Python appelée `month_after_12_days` qui retourne le numéro du mois atteint 12 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  month_after_12_days(\"2024-01-15\") -> 1\n  month_after_12_days(\"2024-02-28\") -> 3",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3652": {
+    "description": "Écrivez une fonction Python appelée `add_24_hours` qui ajoute 24 heure(s) à une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  add_24_hours(\"2024-01-15T10:30\") -> \"2024-01-16T10:30\"\n  add_24_hours(\"2024-02-28T23:15\") -> \"2024-02-29T23:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3653": {
+    "description": "Écrivez une fonction Python appelée `subtract_24_hours` qui soustrait 24 heure(s) d’une date-heure ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  subtract_24_hours(\"2024-01-15T10:30\") -> \"2024-01-14T10:30\"\n  subtract_24_hours(\"2024-02-28T23:15\") -> \"2024-02-27T23:15\"",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3654": {
+    "description": "Écrivez une fonction Python appelée `within_24_days` qui teste si deux dates ISO sont séparées d’au plus 24 jour(s). Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  within_24_days(\"2024-01-01\", \"2024-01-25\") -> True\n  within_24_days(\"2024-01-01\", \"2024-01-26\") -> False",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3655": {
+    "description": "Écrivez une fonction Python appelée `days_apart_plus_24` qui retourne le nombre absolu de jours entre deux dates ISO plus 24. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  days_apart_plus_24(\"2024-01-01\", \"2024-01-10\") -> 33\n  days_apart_plus_24(\"2024-02-28\", \"2024-03-01\") -> 26",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3656": {
+    "description": "Écrivez une fonction Python appelée `year_after_24_days` qui retourne l’année atteinte 24 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  year_after_24_days(\"2024-01-15\") -> 2024\n  year_after_24_days(\"2024-02-28\") -> 2024",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
+  },
+  "3657": {
+    "description": "Écrivez une fonction Python appelée `month_after_24_days` qui retourne le numéro du mois atteint 24 jour(s) après une date ISO. Utilisez la syntaxe de date et heure.\nDifficulté : Difficile.\nExemples :\n  month_after_24_days(\"2024-01-15\") -> 2\n  month_after_24_days(\"2024-02-28\") -> 3",
+    "hint": "Construisez d’abord la structure de date et heure, puis suivez la valeur à chaque étape. Concentrez-vous sur le protocole demandé plutôt que sur les seules sorties d’exemple.",
+    "breakdown": "1. Identifiez l’entrée et la sortie attendue.\n2. Construisez la structure de date et heure demandée.\n3. Suivez la valeur dans cette structure.\n4. Gérez le cas limite couvert par les tests cachés.\n5. Retournez le résultat sans coder les exemples en dur."
   }
 };
