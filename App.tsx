@@ -15316,7 +15316,15 @@ const App: React.FC = () => {
     const offlineAiBusy = offlineAiState.status === 'downloading' || offlineAiState.status === 'removing';
     const [keyboardHaptics, setKeyboardHaptics] = useState(() => localStorage.getItem('python_keyboard_haptics') === 'true');
     const [keyboardSound, setKeyboardSound] = useState(() => localStorage.getItem('python_keyboard_sound') === 'true');
-    const [focusLayoutEnabled, setFocusLayoutEnabled] = useState(() => localStorage.getItem('python_focus_layout') === 'true');
+    const [focusLayoutEnabled, setFocusLayoutEnabled] = useState(() => {
+        const migrationKey = 'python_focus_layout_default_v291';
+        if (localStorage.getItem(migrationKey) !== 'applied') {
+            localStorage.setItem(migrationKey, 'applied');
+            localStorage.setItem('python_focus_layout', 'true');
+            return true;
+        }
+        return localStorage.getItem('python_focus_layout') !== 'false';
+    });
     const [isMobileViewport, setIsMobileViewport] = useState(() => window.matchMedia('(max-width: 768px)').matches);
     const [resultSound, setResultSound] = useState(() => localStorage.getItem('python_result_sound') !== 'false');
     const [rankUpCelebration, setRankUpCelebration] = useState(() => localStorage.getItem('python_rank_up_celebration') !== 'false');
@@ -16146,13 +16154,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v290') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v291') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v290')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v291')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
