@@ -91,6 +91,17 @@ def technique(code, names, category):
         architecture = sorted(type(node).__name__ for node in tree.body if isinstance(node, (
             ast.FunctionDef, ast.ClassDef, ast.Assign, ast.Expr,
         )))
+    function_depths = []
+    class FunctionDepthVisitor(ast.NodeVisitor):
+        def __init__(self):
+            self.depth = 0
+        def visit_FunctionDef(self, node):
+            function_depths.append(self.depth)
+            self.depth += 1
+            self.generic_visit(node)
+            self.depth -= 1
+        visit_AsyncFunctionDef = visit_FunctionDef
+    FunctionDepthVisitor().visit(tree)
     class_details = []
     for class_node in (node for node in ast.walk(tree) if isinstance(node, ast.ClassDef) and not node.name.startswith('Exercise')):
         decorators = tuple(call_name(item) for item in class_node.decorator_list)
@@ -98,7 +109,7 @@ def technique(code, names, category):
         methods = tuple(statement.name for statement in class_node.body if isinstance(statement, (ast.FunctionDef, ast.AsyncFunctionDef)))
         class_assignments = sum(isinstance(statement, (ast.Assign, ast.AnnAssign)) for statement in class_node.body)
         class_details.append((class_node.name, decorators, bases, methods, class_assignments))
-    return repr((calls, structures, sorted(operators), architecture, sorted(class_details)))
+    return repr((calls, structures, sorted(operators), architecture, sorted(function_depths), sorted(class_details)))
 
 distribution = collections.Counter()
 under_three = []
