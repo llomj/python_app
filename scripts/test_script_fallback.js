@@ -25,6 +25,12 @@ function loadTsExports(fileName) {
       if (request === './exercises') return loadTsExports('exercises.ts');
       if (request === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
       if (request === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
+      if (request === './whileLoopPracticeExercises') return loadTsExports('whileLoopPracticeExercises.ts');
+      if (request === './whileLoopPracticeGraders') return loadTsExports('whileLoopPracticeGraders.ts');
+      if (request === './conceptExpansionExercises') return loadTsExports('conceptExpansionExercises.ts');
+      if (request === './conceptExpansionGraders') return loadTsExports('conceptExpansionGraders.ts');
+      if (request === './advancedConceptExercises') return loadTsExports('advancedConceptExercises.ts');
+      if (request === './advancedConceptGraders') return loadTsExports('advancedConceptGraders.ts');
       if (request === './types') return {};
       if (request === 'react') {
         return {

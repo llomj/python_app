@@ -53,6 +53,7 @@ import { EXERCISES_FR } from './services/exercisesFr';
 import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { WHILE_LOOP_PRACTICE_FR } from './services/whileLoopPracticeFr';
 import { CONCEPT_EXPANSION_FR } from './services/conceptExpansionFr';
+import { ADVANCED_CONCEPT_FR } from './services/advancedConceptFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
@@ -4439,6 +4440,7 @@ interface ConceptMode {
     label: string;
     description: string;
     patterns: RegExp[];
+    categoryPrefixes?: string[];
     excludePatterns?: RegExp[];
     allowSolutionFallback?: boolean;
 }
@@ -4473,6 +4475,12 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:sorting', label: 'Sorting', description: 'sort, sorted, key functions', patterns: [/\bsort\b|\bsorted\b|\bsorting\b|\bascending\b|\bdescending\b|\bkey\s+parameter\b|\border\b/] },
     { id: 'concept:patterns', label: 'Patterns', description: 'Stars, pyramids, grids', patterns: [/\bpattern\b|\bpyramid\b|\btriangle\b|\bhollow\b|\bstar\b|\bgrid\b|\bcheckerboard\b/] },
     { id: 'concept:modules', label: 'Modules', description: 'import, random, datetime, libraries', patterns: [/\bimport\b|\bmodule\b|\brandom\b|\bdatetime\b|\bcollections\b|\bitertools\b|\bstatistics\b/] },
+    { id: 'concept:decorators', label: 'Decorators', description: '@ syntax, wrappers, reusable function behavior', patterns: [/\bdecorator\b|\bdecorated\b|@\w+|\bwrapper\b/], categoryPrefixes: ['Decorator '] },
+    { id: 'concept:iterators', label: 'Iterators', description: 'iter, next, and StopIteration', patterns: [/\biterator\b|\biter\(\)|\bnext\(\)|\bStopIteration\b/], categoryPrefixes: ['Iterator '] },
+    { id: 'concept:contextManagers', label: 'Context Managers', description: 'with, __enter__, __exit__, and cleanup', patterns: [/\bcontext manager\b|\bwith\s+\w+|\b__enter__\b|\b__exit__\b/], categoryPrefixes: ['Context Manager '] },
+    { id: 'concept:dataclasses', label: 'Dataclasses', description: '@dataclass, fields, and generated methods', patterns: [/\bdataclass\b|@dataclass\b|\bfield\(\)/], categoryPrefixes: ['Dataclass '] },
+    { id: 'concept:magicMethods', label: 'Magic Methods', description: 'dunder methods and Python protocols', patterns: [/\bmagic method\b|\bdunder\b|\b__(?:str|repr|len|eq|lt|add|sub|mul|contains|bool)__\b/], categoryPrefixes: ['Magic Method '] },
+    { id: 'concept:bitwise', label: 'Bitwise Operations', description: 'binary masks, shifts, AND, OR, and XOR', patterns: [/\bbitwise\b|\bbinary mask\b|\bbit mask\b|\bshift all bits\b|\bselected bit\b/], categoryPrefixes: ['Bitwise Operation '] },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 interface ConceptDocGuide {
@@ -4508,6 +4516,54 @@ COMMON OPERATIONS:
 ${guide.common.join('\n')}`;
 
 const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
+    'concept:decorators': {
+        shape: '@decorator\ndef function(...):',
+        simple: 'A decorator wraps a function so reusable behavior can run before, after, or around the original call.',
+        intermediate: 'A decorator receives a function and returns a replacement function. The wrapper usually accepts arguments, calls the original function, and changes or validates the result.',
+        inDepth: 'The @ syntax runs when the decorated function is defined. @decorate above def work(...) is equivalent to work = decorate(work). Use functools.wraps when metadata such as the original name and documentation should be preserved.',
+        examples: ['def double_result(function):\n    def wrapper(value):\n        return function(value) * 2\n    return wrapper', '@double_result\ndef identity(value):\n    return value', 'print(identity(4))  # 8'],
+        common: ['Decorator receives a callable', 'Wrapper accepts compatible arguments', 'Wrapper calls the original function', 'Decorator returns the wrapper', '@decorator applies the transformation']
+    },
+    'concept:iterators': {
+        shape: 'iterator = iter(iterable)\nvalue = next(iterator)',
+        simple: 'An iterator produces one value at a time and remembers its current position.',
+        intermediate: 'iter() obtains an iterator. next() requests its next value. When no values remain, Python raises StopIteration; a for loop handles that protocol automatically.',
+        inDepth: 'An iterable can create an iterator, while an iterator also implements __next__. Iterators are stateful and normally consumed once. Custom iterator classes implement __iter__ and __next__.',
+        examples: ['iterator = iter([10, 20])', 'print(next(iterator))  # 10', 'try:\n    value = next(iterator)\nexcept StopIteration:\n    value = None'],
+        common: ['iter(iterable)', 'next(iterator)', 'StopIteration', '__iter__()', '__next__()', 'for loops consume iterators automatically']
+    },
+    'concept:contextManagers': {
+        shape: 'with manager as resource:',
+        simple: 'A context manager prepares a resource, runs a controlled block, and performs cleanup afterward.',
+        intermediate: '__enter__ supplies the value after as. __exit__ runs when the with block finishes, including when an exception occurs.',
+        inDepth: 'Context managers guarantee deterministic setup and cleanup. __exit__ receives exception details and returns True only when it intentionally suppresses the exception. contextlib.contextmanager can create the same protocol with a generator.',
+        examples: ['class Manager:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc_value, traceback):\n        return False', 'with Manager() as resource:\n    print(resource)'],
+        common: ['with expression as name:', '__enter__ returns the managed value', '__exit__ performs cleanup', 'Return False to propagate errors', 'Files and locks are common context managers']
+    },
+    'concept:dataclasses': {
+        shape: '@dataclass\nclass Record:\n    field: type',
+        simple: 'A dataclass defines a data-focused class from annotated fields with less repeated code.',
+        intermediate: '@dataclass normally generates __init__, __repr__, and __eq__. Add defaults after required fields and use field(default_factory=...) for mutable defaults.',
+        inDepth: 'Dataclasses remain normal Python classes and may contain methods, properties, inheritance, frozen instances, ordering, slots, and post-initialization validation through __post_init__.',
+        examples: ['from dataclasses import dataclass', '@dataclass\nclass Point:\n    x: int\n    y: int', 'point = Point(2, 3)\nprint(point.x)'],
+        common: ['@dataclass', 'Annotated fields', 'Generated __init__ and __repr__', 'field(default_factory=list)', '__post_init__ for validation', 'frozen=True for immutable records']
+    },
+    'concept:magicMethods': {
+        shape: 'def __method__(self, ...):',
+        simple: 'Magic methods let objects participate in standard Python operations such as printing, comparison, arithmetic, length, membership, and truth tests.',
+        intermediate: 'Python calls a specific dunder method for each operation: str(obj) uses __str__, len(obj) uses __len__, a + b uses __add__, and item in obj uses __contains__.',
+        inDepth: 'Dunder methods implement Python data-model protocols. Their return types matter: __len__ must return a nonnegative integer, comparison methods return booleans or NotImplemented, and arithmetic methods should avoid silently mutating operands unless designed to do so.',
+        examples: ['def __str__(self):\n    return f"Value({self.value})"', 'def __len__(self):\n    return len(self.items)', 'def __add__(self, other):\n    return self.value + other'],
+        common: ['__str__ and __repr__', '__len__ and __bool__', '__eq__ and __lt__', '__add__, __sub__, __mul__', '__contains__', 'Operations invoke protocols automatically']
+    },
+    'concept:bitwise': {
+        shape: 'result = value & mask',
+        simple: 'Bitwise operators work directly with the binary bits inside integers.',
+        intermediate: '& keeps shared bits, | turns selected bits on, ^ toggles differing bits, ~ inverts bits, << shifts left, and >> shifts right.',
+        inDepth: 'Masks select individual bits or fields. Use 1 << position to create a one-bit mask. Set with |, clear with & ~, toggle with ^, and test with bool(value & mask). Parentheses make mask and shift order explicit.',
+        examples: ['mask = 1 << position', 'is_on = bool(number & mask)', 'number = number | mask  # set', 'number = number & ~mask  # clear', 'number = number ^ mask  # toggle'],
+        common: ['& AND', '| OR', '^ XOR', '~ NOT', '<< left shift', '>> right shift', '1 << position creates a mask']
+    },
     'concept:builtins': {
         simple: 'Built-ins are Python functions that are ready to use without importing anything.',
         intermediate: 'Use built-ins when Python already provides the operation: count with len(), add with sum(), sort with sorted(), check types with isinstance(), and combine iteration with enumerate() or zip().',
@@ -4754,6 +4810,15 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 };
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
+    if (lang === 'fr' && ADVANCED_CONCEPT_FR[exercise.id]) {
+        return ADVANCED_CONCEPT_FR[exercise.id].description;
+    }
+    if (lang === 'fr' && CONCEPT_EXPANSION_FR[exercise.id]) {
+        return CONCEPT_EXPANSION_FR[exercise.id].description;
+    }
+    if (lang === 'fr' && WHILE_LOOP_PRACTICE_FR[exercise.id]) {
+        return WHILE_LOOP_PRACTICE_FR[exercise.id].description;
+    }
     if (lang === 'fr' && ATOMIC_BEGINNER_EXERCISES_FR[exercise.id]) {
         return ATOMIC_BEGINNER_EXERCISES_FR[exercise.id];
     }
@@ -5002,6 +5067,10 @@ const getConceptForMode = (mode: ProblemMode) => (
 );
 
 const exerciseMatchesConcept = (exercise: Exercise, concept: ConceptMode) => {
+    if (concept.categoryPrefixes) {
+        return concept.categoryPrefixes.some(prefix => exercise.category.startsWith(prefix));
+    }
+
     const primaryText = getExerciseConceptText(exercise);
     if (concept.excludePatterns?.some(pattern => pattern.test(primaryText))) return false;
     if (concept.patterns.some(pattern => pattern.test(primaryText))) return true;
@@ -5224,6 +5293,8 @@ def __auto_grader_check_source_requirements():
     bool_ops = __auto_grader_spec.get("requiredBoolOps", [])
     ast_operators = __auto_grader_spec.get("requiredAstOperators", [])
     unpack_patterns = __auto_grader_spec.get("requiredUnpackPatterns", [])
+    required_decorators = __auto_grader_spec.get("requiredDecorators", [])
+    required_defined_functions = __auto_grader_spec.get("requiredDefinedFunctions", [])
     try:
         tree = ast.parse(__auto_grader_source)
     except SyntaxError as exc:
@@ -5245,7 +5316,7 @@ def __auto_grader_check_source_requirements():
     )
     if needs_random and not any(__auto_grader_call_name(call.func) in random_call_names for call in calls):
         return "Missing required random call: this problem must use the supplied random behavior instead of a fixed value."
-    if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns:
+    if not call_patterns and not any_call_patterns and not node_patterns and not inheritance_patterns and not bool_ops and not ast_operators and not unpack_patterns and not required_decorators and not required_defined_functions:
         return None
     for pattern in call_patterns:
         function_name = pattern.get("functionName")
@@ -5300,6 +5371,25 @@ def __auto_grader_check_source_requirements():
         count = sum(1 for node in all_nodes if type(node).__name__ == node_type)
         if count < min_count:
             return f"Missing required syntax: at least {min_count} {node_type} node(s)"
+    defined_function_names = {
+        node.name for node in all_nodes
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    for required_name in required_defined_functions:
+        if required_name not in defined_function_names:
+            return f"Missing required function or method definition: {required_name}"
+    decorator_names = set()
+    for node in all_nodes:
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            continue
+        for decorator in node.decorator_list:
+            target = decorator.func if isinstance(decorator, ast.Call) else decorator
+            name = __auto_grader_call_name(target)
+            if name:
+                decorator_names.add(name)
+    for required_name in required_decorators:
+        if required_name not in decorator_names:
+            return f"Missing required decorator: @{required_name}"
     class_defs = {node.name: node for node in all_nodes if isinstance(node, ast.ClassDef)}
     for pattern in inheritance_patterns:
         class_name = pattern.get("className")
@@ -15989,13 +16079,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v288') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v289') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v288')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v289')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16466,7 +16556,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
         const generatedLocalization = appLang === 'fr'
-            ? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id]
+            ? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id]
             : null;
         const localizedExercise = generatedLocalization
             ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
@@ -18974,7 +19064,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 : isSlicingPractice ? 'slicing'
                                     : 'for loops';
         const localizedGenerated = lang === 'fr'
-            ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id]
+            ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id]
             : null;
         const breakdown = localizedGenerated?.breakdown ?? targetExercise.breakdown ?? '';
         const requiredStructure = isRegexPractice ? "Import and use Python's re module."

@@ -1,6 +1,7 @@
 import { ATOMIC_BEGINNER_GRADERS } from './atomicBeginnerGraders';
 import { WHILE_LOOP_PRACTICE_GRADERS } from './whileLoopPracticeGraders';
 import { CONCEPT_EXPANSION_GRADERS } from './conceptExpansionGraders';
+import { ADVANCED_CONCEPT_GRADERS } from './advancedConceptGraders';
 
 export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'dictAddedPair' | 'letterCounts' | 'vowelConsonantCounts';
 
@@ -47,6 +48,8 @@ export interface AutoGrader {
     requiredClassInheritance?: Array<{ className: string; baseName: string }>;
     requiredBoolOps?: Array<'And' | 'Or'>;
     requiredAstOperators?: string[];
+    requiredDecorators?: string[];
+    requiredDefinedFunctions?: string[];
     requiredUnpackPatterns?: Array<{ targetCount: number; sourceType?: 'Any' | 'List' | 'Tuple'; allowStarred?: boolean }>;
     optionalTests?: AutoTestCase[];
     tests: AutoTestCase[];
@@ -78,6 +81,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   ...ATOMIC_BEGINNER_GRADERS,
   ...WHILE_LOOP_PRACTICE_GRADERS,
   ...CONCEPT_EXPANSION_GRADERS,
+  ...ADVANCED_CONCEPT_GRADERS,
     1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
         tests: [

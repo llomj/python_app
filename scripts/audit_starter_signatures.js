@@ -15,9 +15,9 @@ function loadTsExports(fileName) {
   const sandbox = {
     exports: {}, module: { exports: {} }, console,
     require: request => {
-      if (request === './atomicBeginnerExercises') return loadTsExports('atomicBeginnerExercises.ts');
-      if (request === './atomicBeginnerGraders') return loadTsExports('atomicBeginnerGraders.ts');
-      return {};
+      if (!request.startsWith('.')) return {};
+      const resolved = path.normalize(path.join(path.dirname(fileName), `${request}.ts`));
+      return fs.existsSync(path.join(root, resolved)) ? loadTsExports(resolved) : {};
     },
   };
   sandbox.exports = sandbox.module.exports;

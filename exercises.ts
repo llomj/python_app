@@ -2,6 +2,7 @@ import { Exercise } from './types';
 import { ATOMIC_BEGINNER_EXERCISES } from './atomicBeginnerExercises';
 import { WHILE_LOOP_PRACTICE_EXERCISES } from './whileLoopPracticeExercises';
 import { CONCEPT_EXPANSION_EXERCISES } from './conceptExpansionExercises';
+import { ADVANCED_CONCEPT_EXERCISES } from './advancedConceptExercises';
 
 interface ForLoopPracticeSpec {
     id: number;
@@ -24229,5 +24230,6 @@ export const EXERCISES: Exercise[] = [
     ...FOR_LOOP_PRACTICE_EXERCISES,
     ...REGEX_PRACTICE_EXERCISES,
     ...WHILE_LOOP_PRACTICE_EXERCISES,
-    ...CONCEPT_EXPANSION_EXERCISES
+    ...CONCEPT_EXPANSION_EXERCISES,
+    ...ADVANCED_CONCEPT_EXERCISES
 ];
