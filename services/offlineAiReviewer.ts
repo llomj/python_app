@@ -1,6 +1,5 @@
 import { AiReviewRequest, AiReviewResult, OfflineAiState } from '../aiReviewTypes';
 import { buildDiagnosticReview } from './aiReviewDiagnostics';
-import { answerGeneralPythonWithWebLlm, answerGeneralPythonWithWebLlmConversation, answerProblemQuestionWithWebLlm, loadWebLlmReviewer, resetWebLlmReviewer, reviewWithWebLlm, supportsWebLlm, testWebLlmReviewer, verifyWebLlmSupport } from './webLlmReviewer';
 import { hasOnlineAiKey, reviewWithOnlineAi } from './geminiService';
 import { isOllamaRunning, findAvailableCodeModel, reviewWithOllama } from './ollamaService';
 import { AiLanguage } from './aiLocalization';
@@ -25,6 +24,8 @@ const LEGACY_MODEL_IDS = new Set([
     'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Llama-3.2-1B-Instruct-q4f32_1-MLC',
 ]);
+
+const loadWebLlmTools = () => import('./webLlmReviewer');
 
 const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -231,14 +232,23 @@ export const downloadOfflineAiModel = async (
     state: OfflineAiState,
     onState: (next: OfflineAiState) => void,
 ) => {
-    if (!supportsWebLlm()) {
+    let webLlm: Awaited<ReturnType<typeof loadWebLlmTools>>;
+    try {
+        webLlm = await loadWebLlmTools();
+    } catch (error) {
+        const next = { ...state, enabled: false, status: 'unsupported' as const, message: formatOfflineAiError(error), progress: 0, startedAt: undefined };
+        onState(next);
+        saveOfflineAiState(next);
+        return next;
+    }
+    if (!webLlm.supportsWebLlm()) {
         const next = { ...state, enabled: false, status: 'unsupported' as const, message: 'This browser does not expose WebGPU for the offline model. Built-in offline review is active.', progress: 0, startedAt: undefined };
         onState(next);
         saveOfflineAiState(next);
         return next;
     }
     try {
-        await verifyWebLlmSupport();
+        await webLlm.verifyWebLlmSupport();
     } catch (error) {
         const next = { ...state, enabled: false, status: 'unsupported' as const, message: formatOfflineAiError(error), progress: 0, startedAt: undefined };
         onState(next);
@@ -274,7 +284,7 @@ export const downloadOfflineAiModel = async (
 
         try {
             await withActivityTimeout(
-                loadWebLlmReviewer(modelId, (progress, message) => {
+                webLlm.loadWebLlmReviewer(modelId, (progress, message) => {
                     latestProgress = progress;
                     latestMessage = message;
                     if (acceptProgress) {
@@ -296,7 +306,7 @@ export const downloadOfflineAiModel = async (
                 onState({ ...downloading, status: 'downloading', progress: Math.max(downloading.progress, 0.96), message: `Testing ${modelLabel} response...` });
             }
             await withTimeout(
-                testWebLlmReviewer(modelId),
+                webLlm.testWebLlmReviewer(modelId),
                 OFFLINE_AI_HEALTH_CHECK_TIMEOUT_MS,
                 `${modelLabel} loaded but did not answer the test prompt in time.`,
             );
@@ -308,7 +318,7 @@ export const downloadOfflineAiModel = async (
         } catch (error) {
             acceptProgress = false;
             lastError = error;
-            await resetWebLlmReviewer(modelId).catch(() => undefined);
+            await webLlm.resetWebLlmReviewer(modelId).catch(() => undefined);
 
             if (isUnsupportedOfflineAiError(error)) {
                 break;
@@ -347,7 +357,8 @@ export const downloadOfflineAiModel = async (
 };
 
 export const removeOfflineAiModel = async (modelId = DEFAULT_OFFLINE_AI_STATE.modelId) => {
-    await resetWebLlmReviewer(modelId);
+    const webLlm = await loadWebLlmTools();
+    await webLlm.resetWebLlmReviewer(modelId);
     saveOfflineAiState(DEFAULT_OFFLINE_AI_STATE);
     return DEFAULT_OFFLINE_AI_STATE;
 };
@@ -356,15 +367,16 @@ export const reviewWithAvailableAi = async (request: AiReviewRequest, state: Off
     const diagnostic = buildDiagnosticReview(request);
 
     if (state.enabled && state.status === 'ready') {
-        if (!supportsWebLlm()) {
-            return {
-                ...diagnostic,
-                explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead.\n\n${diagnostic.explanation}`,
-            };
-        }
         try {
+            const webLlm = await loadWebLlmTools();
+            if (!webLlm.supportsWebLlm()) {
+                return {
+                    ...diagnostic,
+                    explanation: `Offline model is marked ready, but this browser does not expose WebGPU. Built-in offline review was used instead.\n\n${diagnostic.explanation}`,
+                };
+            }
             const offlineResult = await withTimeout(
-                reviewWithWebLlm(request, state.modelId),
+                webLlm.reviewWithWebLlm(request, state.modelId),
                 OFFLINE_AI_REVIEW_TIMEOUT_MS,
                 'Offline AI review timed out.',
             );
@@ -438,11 +450,12 @@ export const answerProblemQuestionWithAvailableAi = async (
     state: OfflineAiState,
 ): Promise<string | null> => {
     if (!state.enabled || state.status !== 'ready') return null;
-    if (!supportsWebLlm()) return null;
 
     try {
+        const webLlm = await loadWebLlmTools();
+        if (!webLlm.supportsWebLlm()) return null;
         const answer = await withTimeout(
-            answerProblemQuestionWithWebLlm(question, request, state.modelId),
+            webLlm.answerProblemQuestionWithWebLlm(question, request, state.modelId),
             OFFLINE_AI_REVIEW_TIMEOUT_MS,
             'Offline AI tutor timed out.',
         );
@@ -462,13 +475,14 @@ export const answerGeneralPythonWithAvailableAi = async (
     mode: GeneralAiResponseMode = 'normal',
 ): Promise<string | null> => {
     if (!state.enabled || state.status !== 'ready') return null;
-    if (!supportsWebLlm()) return null;
 
     try {
+        const webLlm = await loadWebLlmTools();
+        if (!webLlm.supportsWebLlm()) return null;
         const answer = await withTimeout(
             history.length > 0
-                ? answerGeneralPythonWithWebLlmConversation(question, state.modelId, history, language, mode)
-                : answerGeneralPythonWithWebLlm(question, state.modelId, language, mode),
+                ? webLlm.answerGeneralPythonWithWebLlmConversation(question, state.modelId, history, language, mode)
+                : webLlm.answerGeneralPythonWithWebLlm(question, state.modelId, language, mode),
             OFFLINE_AI_REVIEW_TIMEOUT_MS,
             'Offline AI general tutor timed out.',
         );

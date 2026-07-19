@@ -29,6 +29,9 @@ const startLocalPython = () => {
 
 // Python and the large editor/curriculum bundle load concurrently on mobile.
 startLocalPython().catch(() => undefined);
+import('./curriculumLoader')
+  .then(({ preloadCurriculum }) => preloadCurriculum())
+  .catch(() => undefined);
 
 class AppErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
   constructor(props: { children: React.ReactNode }) {

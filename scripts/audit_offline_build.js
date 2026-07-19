@@ -47,6 +47,10 @@ if (!fs.existsSync(manifestPath)) {
     const absolute = path.join(dist, asset.replace(/^\.\//, ''));
     if (!fs.existsSync(absolute)) failures.push(`manifest references missing asset ${asset}`);
   }
+  const emittedAssets = ['./', ...walk(dist).filter(asset => asset !== './offline-assets.json' && !asset.endsWith('.map'))];
+  for (const asset of emittedAssets) {
+    if (!listed.has(asset)) failures.push(`emitted asset is missing from the offline manifest: ${asset}`);
+  }
 }
 
 const emittedText = walk(dist)

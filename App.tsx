@@ -44,17 +44,10 @@ import { indentUnit } from '@codemirror/language';
 import { autocompletion, snippetCompletion, CompletionContext, Completion } from '@codemirror/autocomplete';
 import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
-import { EXERCISES } from './exercises';
 import { Exercise, Stats } from './types';
 import { AiReviewRequest, AiReviewResult, OfflineAiStatus } from './aiReviewTypes';
 import { DEFAULT_OFFLINE_AI_STATE, answerGeneralPythonWithAvailableAi, answerProblemQuestionWithAvailableAi, downloadOfflineAiModel, loadOfflineAiState, removeOfflineAiModel, reviewWithAvailableAi, saveOfflineAiState } from './services/offlineAiReviewer';
 import { t, setLanguage, getLanguage, SUPPORTED_LANGUAGES } from './services/translations';
-import { EXERCISES_FR } from './services/exercisesFr';
-import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
-import { WHILE_LOOP_PRACTICE_FR } from './services/whileLoopPracticeFr';
-import { CONCEPT_EXPANSION_FR } from './services/conceptExpansionFr';
-import { ADVANCED_CONCEPT_FR } from './services/advancedConceptFr';
-import { FOUNDATION_INTERMEDIATE_FR } from './services/foundationIntermediateFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
@@ -67,7 +60,8 @@ import { buildProblemAiTutorAnswer } from './services/problemAiTutor';
 import { answerGeneralPythonWithOnlineAi, loadOnlineAiConfig, saveOnlineAiConfig, type OnlineAiProvider } from './services/geminiService';
 import type { GeneralAiTutorMode, TutorMasteryProfile } from './services/generalAiTutor';
 import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } from './editorTheme';
-import { AUTO_GRADERS, AutoGrader } from './graders';
+import type { AutoGrader } from './graders';
+import { preloadCurriculum, type GeneratedFrenchExercise } from './curriculumLoader';
 import { buildSolutionVariations } from './services/solutionVariations';
 import { getExerciseEditorCode, isGenericExerciseStarter } from './services/codeScaffold';
 import { splitAiReviewSteps, stripAiReviewCodeExplanation } from './services/aiReviewFormatting';
@@ -96,6 +90,15 @@ interface AutoGradeResult {
     functionName?: string;
     output?: string;
 }
+
+let EXERCISES: Exercise[] = [];
+let AUTO_GRADERS: Record<number, AutoGrader> = {};
+let EXERCISES_FR: Record<number, string> = {};
+let ATOMIC_BEGINNER_EXERCISES_FR: Record<number, string> = {};
+let WHILE_LOOP_PRACTICE_FR: Record<number, GeneratedFrenchExercise> = {};
+let CONCEPT_EXPANSION_FR: Record<number, GeneratedFrenchExercise> = {};
+let ADVANCED_CONCEPT_FR: Record<number, GeneratedFrenchExercise> = {};
+let FOUNDATION_INTERMEDIATE_FR: Record<number, GeneratedFrenchExercise> = {};
 
 interface ProblemAiMessage {
     id: number;
@@ -15330,7 +15333,7 @@ const pythonSnippets = (context: CompletionContext) => {
     };
 };
 
-const App: React.FC = () => {
+const WorkspaceApp: React.FC = () => {
     const initialExercise = useMemo(() => getInitialExercise(), []);
     const [codeScaffoldEnabled, setCodeScaffoldEnabled] = useState(() => localStorage.getItem('python_code_scaffold') === 'true');
     const [exercise, setExercise] = useState<Exercise>(initialExercise);
@@ -16339,13 +16342,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v295') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v296') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v295')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v296')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -22604,5 +22607,57 @@ const ColorField: React.FC<{ label: string; value: string; onChange: (value: str
         />
     </label>
 );
+
+const App: React.FC = () => {
+    const [curriculumReady, setCurriculumReady] = useState(false);
+    const [curriculumError, setCurriculumError] = useState('');
+
+    useEffect(() => {
+        let active = true;
+        preloadCurriculum()
+            .then(catalog => {
+                EXERCISES = catalog.exercises;
+                AUTO_GRADERS = catalog.graders;
+                EXERCISES_FR = catalog.exercisesFr;
+                ATOMIC_BEGINNER_EXERCISES_FR = catalog.atomicBeginnerExercisesFr;
+                WHILE_LOOP_PRACTICE_FR = catalog.whileLoopPracticeFr;
+                CONCEPT_EXPANSION_FR = catalog.conceptExpansionFr;
+                ADVANCED_CONCEPT_FR = catalog.advancedConceptFr;
+                FOUNDATION_INTERMEDIATE_FR = catalog.foundationIntermediateFr;
+                if (active) setCurriculumReady(true);
+            })
+            .catch(error => {
+                console.error('Curriculum load failed:', error);
+                if (active) setCurriculumError(error instanceof Error ? error.message : String(error));
+            });
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    if (curriculumError) {
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-[#050c18] p-6 text-center text-white">
+                <div className="w-full max-w-sm rounded-2xl border border-red-500/30 bg-[#0a1628] p-6">
+                    <h1 className="text-lg font-black uppercase tracking-wide text-red-400">Curriculum Load Failed</h1>
+                    <p className="mt-3 break-words text-xs leading-relaxed text-gray-300">{curriculumError}</p>
+                    <button onClick={() => window.location.reload()} className="mt-5 w-full rounded-xl bg-[#3b82f6] px-4 py-3 text-xs font-black uppercase">Reload App</button>
+                </div>
+            </div>
+        );
+    }
+
+    if (!curriculumReady) {
+        return (
+            <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#050c18] p-8 text-center text-white">
+                <Loader2 className="mb-4 animate-spin text-[#3b82f6]" size={40} />
+                <h1 className="text-xl font-black uppercase tracking-tight">Loading Curriculum...</h1>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">Preparing 5,638 offline exercises</p>
+            </div>
+        );
+    }
+
+    return <WorkspaceApp />;
+};
 
 export default App;
