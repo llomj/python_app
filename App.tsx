@@ -54,6 +54,7 @@ import { ATOMIC_BEGINNER_EXERCISES_FR } from './atomicBeginnerExercisesFr';
 import { WHILE_LOOP_PRACTICE_FR } from './services/whileLoopPracticeFr';
 import { CONCEPT_EXPANSION_FR } from './services/conceptExpansionFr';
 import { ADVANCED_CONCEPT_FR } from './services/advancedConceptFr';
+import { FOUNDATION_INTERMEDIATE_FR } from './services/foundationIntermediateFr';
 import { buildDiagnosticReview } from './services/aiReviewDiagnostics';
 import { localizeAiText, normalizeAiQuestionForLookup } from './services/aiLocalization';
 import { composeGeneralAiAnswer } from './services/generalAiMode';
@@ -4486,6 +4487,26 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:scopeNamespaces', label: 'Scope & Namespaces', description: 'LEGB, local, enclosing, global, and nonlocal names', patterns: [/\bnamespace\b|\bscope\b|\bnonlocal\b|\bglobal\b|\benclosing\b|\blegb\b/], categoryPrefixes: ['Scope & Namespace '] },
     { id: 'concept:matchCase', label: 'Match / Case', description: 'Structural pattern matching, captures, and guards', patterns: [/\bmatch\s*\/\s*case\b|\bmatch statement\b|\bstructural pattern\b|\bcase guard\b/], categoryPrefixes: ['Match Case '] },
     { id: 'concept:datesTimes', label: 'Dates & Times', description: 'datetime parsing, formatting, differences, and timedelta', patterns: [/\bdatetime\b|\btimedelta\b|\bdate and time\b|\biso date\b|\bweekday\b/], categoryPrefixes: ['Dates & Times '] },
+    { id: 'concept:indexing', label: 'Indexing', description: 'Positive, negative, nested, and mapping positions', patterns: [/\bindexing\b|\bpositive index\b|\bnegative index\b/], categoryPrefixes: ['Indexing '] },
+    { id: 'concept:stringMethods', label: 'String Methods', description: 'Focused practice with common str methods', patterns: [/\bstring method\b|\bstr method\b/], categoryPrefixes: ['String Method '] },
+    { id: 'concept:listMethods', label: 'List Methods', description: 'Appending, inserting, removing, sorting, and copying', patterns: [/\blist method\b/], categoryPrefixes: ['List Method '] },
+    { id: 'concept:dictionaryMethods', label: 'Dictionary Methods', description: 'get, update, pop, setdefault, keys, and values', patterns: [/\bdictionary method\b|\bdict method\b/], categoryPrefixes: ['Dictionary Method '] },
+    { id: 'concept:printReturn', label: 'Print vs Return', description: 'Displayed output versus function results', patterns: [/\bprint vs return\b|\bprint and return\b/], categoryPrefixes: ['Print vs Return '] },
+    { id: 'concept:functionArguments', label: 'Function Arguments', description: 'Positional, keyword, default, and variadic arguments', patterns: [/\bfunction argument\b|\bpositional argument\b|\bkeyword argument\b/], categoryPrefixes: ['Function Argument '] },
+    { id: 'concept:booleanLogic', label: 'Boolean Logic', description: 'Combining comparisons with and, or, and not', patterns: [/\bboolean logic\b/], categoryPrefixes: ['Boolean Logic '] },
+    { id: 'concept:inputParsing', label: 'Input Parsing', description: 'Turning raw text into useful Python values', patterns: [/\binput parsing\b|\bparse raw input\b/], categoryPrefixes: ['Input Parsing '] },
+    { id: 'concept:ranges', label: 'Ranges', description: 'Start, stop, step, countdowns, and sequences', patterns: [/\brange practice\b/], categoryPrefixes: ['Range Practice '] },
+    { id: 'concept:basicValidation', label: 'Basic Validation', description: 'Checking types, boundaries, emptiness, and choices', patterns: [/\bbasic validation\b/], categoryPrefixes: ['Basic Validation '] },
+    { id: 'concept:enumerateZip', label: 'Enumerate & Zip', description: 'Indexes and parallel collection iteration', patterns: [/\benumerate and zip\b|\benumerate & zip\b/], categoryPrefixes: ['Enumerate & Zip '] },
+    { id: 'concept:searchingCounting', label: 'Searching & Counting', description: 'Finding positions, matches, and frequencies', patterns: [/\bsearching and counting\b|\bsearching & counting\b/], categoryPrefixes: ['Searching & Counting '] },
+    { id: 'concept:nestedCollections', label: 'Nested Collections', description: 'Matrices, records, and collections inside mappings', patterns: [/\bnested collection\b/], categoryPrefixes: ['Nested Collection '] },
+    { id: 'concept:sortingKeys', label: 'Sorting Keys', description: 'Custom ordering, tie breakers, and multiple fields', patterns: [/\bsorting key\b/], categoryPrefixes: ['Sorting Key '] },
+    { id: 'concept:stringParsing', label: 'String Parsing', description: 'Fields, records, paths, tags, and structured text', patterns: [/\bstring parsing\b/], categoryPrefixes: ['String Parsing '] },
+    { id: 'concept:accumulationPatterns', label: 'Accumulation Patterns', description: 'Totals, products, counters, and running state', patterns: [/\baccumulation pattern\b/], categoryPrefixes: ['Accumulation Pattern '] },
+    { id: 'concept:filteringTransformation', label: 'Filtering & Transformation', description: 'Select and convert values in one workflow', patterns: [/\bfiltering and transformation\b|\bfiltering & transformation\b/], categoryPrefixes: ['Filtering & Transformation '] },
+    { id: 'concept:earlyExit', label: 'Early Exit', description: 'break, continue, and early return', patterns: [/\bearly exit\b/], categoryPrefixes: ['Early Exit '] },
+    { id: 'concept:multipleReturns', label: 'Multiple Return Values', description: 'Returning and unpacking related results', patterns: [/\bmultiple return value\b/], categoryPrefixes: ['Multiple Return Value '] },
+    { id: 'concept:dataCleaning', label: 'Data Cleaning', description: 'Normalize, trim, validate, and deduplicate data', patterns: [/\bdata cleaning\b/], categoryPrefixes: ['Data Cleaning '] },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 interface ConceptDocGuide {
@@ -4608,6 +4629,166 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         inDepth: 'Date arithmetic must account for month lengths, leap years, and time zones. Prefer datetime operations over manual day calculations. For aware times, attach and convert real time-zone information rather than hard-coding offsets.',
         examples: ['from datetime import datetime, timedelta', 'date = datetime.strptime("2024-02-28", "%Y-%m-%d")', 'tomorrow = date + timedelta(days=1)', 'text = tomorrow.strftime("%Y-%m-%d")'],
         common: ['datetime and date', 'timedelta durations', 'strptime parsing', 'strftime formatting', 'Date subtraction', 'Leap-year-safe arithmetic']
+    },
+    'concept:indexing': {
+        shape: 'value = sequence[index]',
+        simple: 'Indexing retrieves one item from an ordered collection. Python starts counting at zero.',
+        intermediate: 'Positive indexes count from the left and negative indexes count from the right. Chained indexes enter nested collections one level at a time.',
+        inDepth: 'Valid indexes depend on sequence length. An invalid sequence index raises IndexError, while dictionaries use keys rather than numeric positions and raise KeyError for missing keys.',
+        examples: ['text[0]  # first character', 'values[-1]  # last item', 'matrix[1][2]  # row then column'],
+        common: ['Zero-based positions', 'Negative indexes', 'Nested indexing', 'IndexError boundaries', 'Dictionary key access']
+    },
+    'concept:stringMethods': {
+        shape: 'result = text.method(arguments)',
+        simple: 'String methods return text information or a new transformed string.',
+        intermediate: 'Strings are immutable, so methods such as replace(), strip(), and lower() do not change the original value unless you assign the returned result.',
+        inDepth: 'Method behavior depends on exact arguments, casing, and separators. split() produces a list, join() belongs to the separator string, and find() returns -1 when no match exists.',
+        examples: ['text.strip()', 'text.replace("a", "*")', '",".join(words)', 'text.split(",")'],
+        common: ['upper() and lower()', 'strip()', 'replace()', 'split() and join()', 'find() and count()', 'startswith() and endswith()']
+    },
+    'concept:listMethods': {
+        shape: 'values.method(argument)',
+        simple: 'List methods add, remove, reorder, or inspect list items.',
+        intermediate: 'Most mutating list methods change the list in place and return None. copy() creates a shallow copy when the original must remain unchanged.',
+        inDepth: 'append() adds one object while extend() adds each item from an iterable. pop() removes and returns an item; remove() deletes the first matching value. sort() and reverse() mutate in place.',
+        examples: ['values.append(item)', 'values.extend(more)', 'removed = values.pop()', 'copy = values.copy()'],
+        common: ['append() and extend()', 'insert()', 'remove() and pop()', 'sort() and reverse()', 'copy() and clear()']
+    },
+    'concept:dictionaryMethods': {
+        shape: 'value = mapping.get(key, default)',
+        simple: 'Dictionary methods work with key-value pairs and provide safe ways to read or update mappings.',
+        intermediate: 'get() avoids KeyError by returning a default. keys(), values(), and items() provide dynamic views. update() merges pairs into the dictionary.',
+        inDepth: 'pop() removes one key and returns its value, popitem() removes the newest pair, and setdefault() inserts only when a key is missing. copy() is shallow.',
+        examples: ['mapping.get("name", "Unknown")', 'for key, value in mapping.items():', 'mapping.update({"score": 10})'],
+        common: ['get()', 'keys(), values(), items()', 'update()', 'pop() and popitem()', 'setdefault()', 'copy() and clear()']
+    },
+    'concept:printReturn': {
+        shape: 'return result  # send value to caller',
+        simple: 'print() displays a value, while return sends a value back from a function.',
+        intermediate: 'A returned value can be assigned, tested, or passed into another function. A printed value is only output unless separately captured.',
+        inDepth: 'return immediately ends the current function call. A function without an executed return statement returns None. Printing a correct-looking result is not equivalent to returning it.',
+        examples: ['def square(n):\n    return n * n', 'result = square(4)', 'print(result)  # display returned value'],
+        common: ['print displays', 'return produces a result', 'return exits the function', 'Implicit None', 'Assign returned values']
+    },
+    'concept:functionArguments': {
+        shape: 'function(positional, keyword=value)',
+        simple: 'Arguments are values supplied to a function; parameters are the names that receive them.',
+        intermediate: 'Arguments may be positional or keyword-based. Defaults make parameters optional, while *args and **kwargs collect extra values.',
+        inDepth: 'The / marker creates positional-only parameters and * creates keyword-only parameters. Required parameters must precede ordinary default parameters.',
+        examples: ['def greet(name, prefix="Hello"):', 'greet("Ada", prefix="Hi")', 'def total(*values):', 'def configure(**options):'],
+        common: ['Positional arguments', 'Keyword arguments', 'Default values', '*args', '**kwargs', 'Positional-only and keyword-only']
+    },
+    'concept:booleanLogic': {
+        shape: 'condition_a and condition_b',
+        simple: 'Boolean logic combines True and False conditions to make decisions.',
+        intermediate: 'and requires both sides, or requires at least one side, and not reverses truth. Comparisons produce booleans.',
+        inDepth: 'and and or short-circuit from left to right and return operand values in general expressions. Use parentheses when combining several comparisons to make intent clear.',
+        examples: ['age >= 18 and active', 'value < 0 or value > 10', 'not text', '1 <= value <= 5'],
+        common: ['and', 'or', 'not', 'Comparison chaining', 'Truthy and falsy values', 'Short-circuiting']
+    },
+    'concept:inputParsing': {
+        shape: 'value = int(raw.strip())',
+        simple: 'Input parsing turns raw text into the type and structure a program needs.',
+        intermediate: 'Trim whitespace, split fields, then convert each field. Conversion must happen after separating combined input.',
+        inDepth: 'Parsing should define separators, accepted formats, empty-field behavior, and conversion failures. Real input() always returns a string.',
+        examples: ['number = int(raw.strip())', 'parts = raw.split(",")', 'numbers = [int(part) for part in parts]'],
+        common: ['strip before converting', 'split fields', 'int() and float()', 'Parse booleans explicitly', 'Handle invalid formats']
+    },
+    'concept:ranges': {
+        shape: 'range(start, stop, step)',
+        simple: 'range() produces integer sequences, commonly for loops and indexes.',
+        intermediate: 'The stop value is excluded. A positive step moves upward and a negative step moves downward.',
+        inDepth: 'range objects are lazy and support membership, length, and indexing. The step cannot be zero, and start/stop must agree with step direction to produce values.',
+        examples: ['range(5)  # 0..4', 'range(2, 8, 2)', 'range(5, 0, -1)'],
+        common: ['Excluded stop', 'Default start zero', 'Positive steps', 'Negative countdowns', 'range with len()']
+    },
+    'concept:basicValidation': {
+        shape: 'is_valid = condition',
+        simple: 'Validation checks whether data satisfies the rules required by a program.',
+        intermediate: 'Validate type, emptiness, boundaries, allowed choices, and required keys. Boundary operators such as < and <= are not interchangeable.',
+        inDepth: 'Keep validation rules explicit and test both sides of every boundary. Decide whether invalid data should return False, use a default, or raise an exception.',
+        examples: ['value >= minimum', 'bool(items)', 'isinstance(value, int)', 'key in mapping'],
+        common: ['Type checks', 'Empty-value checks', 'Minimum and maximum', 'Allowed choices', 'Required keys', 'Boundary tests']
+    },
+    'concept:enumerateZip': {
+        shape: 'for index, value in enumerate(values):',
+        simple: 'enumerate() adds indexes, while zip() pairs values from multiple iterables.',
+        intermediate: 'enumerate() can start at a custom number. zip() stops when the shortest input is exhausted.',
+        inDepth: 'Both return lazy iterators. Use strict=True with zip() in supported Python versions when unequal lengths should be an error.',
+        examples: ['enumerate(words, start=1)', 'zip(names, scores)', 'dict(zip(keys, values))'],
+        common: ['Index-value pairs', 'Custom start', 'Parallel iteration', 'Shortest input wins', 'Build dictionaries from zip']
+    },
+    'concept:searchingCounting': {
+        shape: 'for item in values: check target',
+        simple: 'Searching locates matching values; counting measures how many matches occur.',
+        intermediate: 'Decide whether you need the first match, last match, every position, or only a total. Missing-result behavior must be explicit.',
+        inDepth: 'A single traversal can often search and count efficiently. Frequency dictionaries avoid repeatedly rescanning a collection for many targets.',
+        examples: ['values.count(target)', 'values.index(target)', '[i for i, value in enumerate(values) if value == target]'],
+        common: ['First match', 'Last match', 'All positions', 'Frequency counts', 'Missing target defaults']
+    },
+    'concept:nestedCollections': {
+        shape: 'value = matrix[row][column]',
+        simple: 'Nested collections contain other lists, dictionaries, or records inside them.',
+        intermediate: 'Process one level at a time and keep track of each inner shape. Nested loops and comprehensions can flatten or transform data.',
+        inDepth: 'Rows may have different lengths and records may omit fields. Safe code checks boundaries or uses defaults instead of assuming every nested item has the same structure.',
+        examples: ['matrix[row][column]', 'for row in matrix:\n    for value in row:', 'record.get("score", 0)'],
+        common: ['Matrices', 'Lists of dictionaries', 'Dictionaries of lists', 'Flattening', 'Missing nested values']
+    },
+    'concept:sortingKeys': {
+        shape: 'sorted(values, key=lambda item: (...))',
+        simple: 'A sorting key tells Python which comparison value to use for each item.',
+        intermediate: 'Tuple keys sort by the first component, then use later components as tie breakers. Negative numeric keys create descending numeric order.',
+        inDepth: 'Python sorting is stable, so equal keys preserve prior order. Build keys from normalized values when case or formatting should not affect order.',
+        examples: ['sorted(words, key=len)', 'sorted(records, key=lambda r: (r["age"], r["name"]))', 'key=lambda n: -n'],
+        common: ['key parameter', 'Lambda keys', 'Tuple tie breakers', 'Descending components', 'Stable sorting']
+    },
+    'concept:stringParsing': {
+        shape: 'fields = text.split(separator)',
+        simple: 'String parsing extracts structured values from formatted text.',
+        intermediate: 'Identify separators, split only as many times as needed, strip fields, and convert values after extraction.',
+        inDepth: 'Robust parsing defines behavior for missing separators, empty fields, extra separators, and malformed values. Prefer standard parsers for complex formats.',
+        examples: ['key, value = text.split("=", 1)', 'name, extension = filename.rsplit(".", 1)', 'fields = [part.strip() for part in text.split(",")]'],
+        common: ['split and rsplit', 'Maximum splits', 'Whitespace cleanup', 'Field conversion', 'Missing delimiters']
+    },
+    'concept:accumulationPatterns': {
+        shape: 'accumulator = identity\nfor item in values: update',
+        simple: 'Accumulation repeatedly updates a result while visiting values.',
+        intermediate: 'Start with the correct identity: zero for sums, one for products, an empty list for collection, or an empty dictionary for frequencies.',
+        inDepth: 'The update order determines running results. Return after the loop unless the task intentionally stops early.',
+        examples: ['total = 0\nfor value in values:\n    total += value', 'counts[value] = counts.get(value, 0) + 1'],
+        common: ['Sum accumulator', 'Product accumulator', 'Counters', 'Running totals', 'Frequency mappings', 'Grouping']
+    },
+    'concept:filteringTransformation': {
+        shape: '[transform(item) for item in values if condition]',
+        simple: 'Filtering chooses values and transformation changes the chosen values.',
+        intermediate: 'In a comprehension, the output expression comes first, then iteration, then the optional filter condition.',
+        inDepth: 'Keep filter and transformation responsibilities clear. When logic becomes deeply nested or needs side effects, use an ordinary loop for readability.',
+        examples: ['[n * 2 for n in numbers if n > 0]', '{k: v * 2 for k, v in data.items() if v >= 5}'],
+        common: ['Filter condition', 'Transformation expression', 'List comprehensions', 'Dictionary comprehensions', 'Order preservation']
+    },
+    'concept:earlyExit': {
+        shape: 'if match:\n    return result',
+        simple: 'Early exit stops work as soon as the final answer is known.',
+        intermediate: 'return leaves the function, break leaves the nearest loop, and continue skips to the next loop iteration.',
+        inDepth: 'Place stopping checks before updates when the matching item should be excluded, and after updates when it should be included.',
+        examples: ['for value in values:\n    if value > 10:\n        return value', 'if stop:\n    break', 'if skip:\n    continue'],
+        common: ['Early return', 'break', 'continue', 'First-match searches', 'Include versus exclude stop value']
+    },
+    'concept:multipleReturns': {
+        shape: 'return first_result, second_result',
+        simple: 'A function can return several related values as one tuple.',
+        intermediate: 'The caller can keep the tuple or unpack its positions into separate names. Order is part of the function contract.',
+        inDepth: 'Multiple returns are tuple construction syntax. Use a named structure when many fields need clearer meaning or future extension.',
+        examples: ['return minimum, maximum', 'low, high = bounds(values)', 'result = bounds(values)'],
+        common: ['Tuple return', 'Unpacking', 'Component order', 'Related results', 'Named alternatives for larger records']
+    },
+    'concept:dataCleaning': {
+        shape: 'cleaned = normalize(raw)',
+        simple: 'Data cleaning makes inconsistent input predictable before it is used.',
+        intermediate: 'Common steps include trimming whitespace, normalizing case, converting types, removing empty values, and deduplicating.',
+        inDepth: 'Cleaning order matters: normalize before comparing duplicates and validate before calculations. Preserve original data when destructive changes are not expected.',
+        examples: ['text.strip().casefold()', '[item.strip() for item in values if item.strip()]', 'list(dict.fromkeys(values))'],
+        common: ['Whitespace cleanup', 'Case normalization', 'Missing-value removal', 'Type conversion', 'Deduplication', 'Preserve input data']
     },
     'concept:builtins': {
         simple: 'Built-ins are Python functions that are ready to use without importing anything.',
@@ -4855,6 +5036,9 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 };
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
+    if (lang === 'fr' && FOUNDATION_INTERMEDIATE_FR[exercise.id]) {
+        return FOUNDATION_INTERMEDIATE_FR[exercise.id].description;
+    }
     if (lang === 'fr' && ADVANCED_CONCEPT_FR[exercise.id]) {
         return ADVANCED_CONCEPT_FR[exercise.id].description;
     }
@@ -16154,13 +16338,13 @@ const App: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v291') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v292') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v291')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v292')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16631,7 +16815,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
         const generatedLocalization = appLang === 'fr'
-            ? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id]
+            ? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
             : null;
         const localizedExercise = generatedLocalization
             ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
@@ -19139,7 +19323,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 : isSlicingPractice ? 'slicing'
                                     : 'for loops';
         const localizedGenerated = lang === 'fr'
-            ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id]
+            ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
             : null;
         const breakdown = localizedGenerated?.breakdown ?? targetExercise.breakdown ?? '';
         const requiredStructure = isRegexPractice ? "Import and use Python's re module."

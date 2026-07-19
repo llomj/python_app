@@ -2,6 +2,7 @@ import { ATOMIC_BEGINNER_GRADERS } from './atomicBeginnerGraders';
 import { WHILE_LOOP_PRACTICE_GRADERS } from './whileLoopPracticeGraders';
 import { CONCEPT_EXPANSION_GRADERS } from './conceptExpansionGraders';
 import { ADVANCED_CONCEPT_GRADERS } from './advancedConceptGraders';
+import { FOUNDATION_INTERMEDIATE_GRADERS } from './foundationIntermediateGraders';
 
 export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'dictAddedPair' | 'letterCounts' | 'vowelConsonantCounts';
 
@@ -83,6 +84,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   ...WHILE_LOOP_PRACTICE_GRADERS,
   ...CONCEPT_EXPANSION_GRADERS,
   ...ADVANCED_CONCEPT_GRADERS,
+  ...FOUNDATION_INTERMEDIATE_GRADERS,
     1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
         tests: [

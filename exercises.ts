@@ -3,6 +3,7 @@ import { ATOMIC_BEGINNER_EXERCISES } from './atomicBeginnerExercises';
 import { WHILE_LOOP_PRACTICE_EXERCISES } from './whileLoopPracticeExercises';
 import { CONCEPT_EXPANSION_EXERCISES } from './conceptExpansionExercises';
 import { ADVANCED_CONCEPT_EXERCISES } from './advancedConceptExercises';
+import { FOUNDATION_INTERMEDIATE_EXERCISES } from './foundationIntermediateExercises';
 
 interface ForLoopPracticeSpec {
     id: number;
@@ -24231,5 +24232,6 @@ export const EXERCISES: Exercise[] = [
     ...REGEX_PRACTICE_EXERCISES,
     ...WHILE_LOOP_PRACTICE_EXERCISES,
     ...CONCEPT_EXPANSION_EXERCISES,
-    ...ADVANCED_CONCEPT_EXERCISES
+    ...ADVANCED_CONCEPT_EXERCISES,
+    ...FOUNDATION_INTERMEDIATE_EXERCISES
 ];

@@ -28,6 +28,8 @@ function loadTsExports(fileName) {
       if (specifier === './conceptExpansionGraders') return loadTsExports('conceptExpansionGraders.ts');
       if (specifier === './advancedConceptExercises') return loadTsExports('advancedConceptExercises.ts');
       if (specifier === './advancedConceptGraders') return loadTsExports('advancedConceptGraders.ts');
+      if (specifier === './foundationIntermediateExercises') return loadTsExports('foundationIntermediateExercises.ts');
+      if (specifier === './foundationIntermediateGraders') return loadTsExports('foundationIntermediateGraders.ts');
       return {};
     },
   };

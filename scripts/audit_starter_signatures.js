@@ -53,14 +53,15 @@ function parseFirstFunction(code) {
   const match = String(code || '').match(/(?:^|\n)\s*(?:async\s+)?def\s+([A-Za-z_]\w*)\s*\(([^\n]*)\)\s*(?:->[^:]*)?:/);
   if (!match) return null;
   const params = splitTopLevel(match[2]);
+  const variadic = params.some(param => param.startsWith('*'));
   const positional = params.filter(param => param !== '/' && param !== '*' && !param.startsWith('**'));
   const required = positional.filter(param => !param.startsWith('*') && !param.includes('=')).length;
-  const variadic = positional.some(param => param.startsWith('*'));
   return { name: match[1], rawParams: match[2], required, maximum: variadic ? Infinity : positional.length };
 }
 
 function testArity(test) {
   return (test.args || []).length
+    + Object.keys(test.kwargs || {}).length
     + (test.argExpressions || []).length
     + (test.argFunctionNames || []).length
     + (test.functionListArgNames ? 1 : 0);
