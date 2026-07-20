@@ -5091,6 +5091,7 @@ interface StarData {
 }
 
 const STAR_COUNTS = [8, 13, 20, 28, 36, 45, 55, 65, 80, 100, 130];
+const PYTHON_MASTERY_STAR_COUNT = 240;
 
 const getUserRank = (statsByMode: StatsByMode): Rank => {
     const totalShots = Object.values(statsByMode).reduce((sum, s) => sum + s.shots, 0);
@@ -15738,12 +15739,32 @@ const WorkspaceApp: React.FC = () => {
     const selectedModeLabel = getModeLabel(difficultyMode, appLang);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
-    const prevRankRef = useRef<Rank>(currentModeRank);
+    const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
+    const overallPerformance = useMemo(() => {
+        const totalShots = Object.values(statsByMode).reduce((sum, stats) => sum + stats.shots, 0);
+        const totalWins = Object.values(statsByMode).reduce((sum, stats) => sum + stats.success, 0);
+        return {
+            totalShots,
+            totalWins,
+            successRate: totalShots > 0 ? (totalWins / totalShots) * 100 : 0,
+        };
+    }, [statsByMode]);
+    const overallMasteryEligible = overallPerformance.successRate > 90 && userRank === RANKS[RANKS.length - 1];
+    const previousRankMilestoneRef = useRef({
+        mode: difficultyMode,
+        rankIndex: RANKS.indexOf(currentModeRank),
+        wins: currentStats.success,
+    });
+    const previousOverallMasteryRef = useRef(overallMasteryEligible);
     const celebrationCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const celebrationAnimRef = useRef(0);
     const celebrationStarsRef = useRef<StarData[]>([]);
-    const [celebration, setCelebration] = useState<{ rankIndex: number; rankName: string; rankIcon: string; modeLabel: string } | null>(null);
-    const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
+    const [celebration, setCelebration] = useState<{
+        kind: 'rank' | 'python';
+        rankIndex: number;
+        rankName: string;
+        rankIcon: string;
+    } | null>(null);
     const averageRank = useMemo(() => {
         const modes = Object.values(statsByMode).filter(s => s.shots > 0);
         if (modes.length === 0) return RANKS[0];
@@ -15962,14 +15983,33 @@ const WorkspaceApp: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const currIdx = RANKS.indexOf(currentModeRank);
-        const prevIdx = RANKS.indexOf(prevRankRef.current);
-        prevRankRef.current = currentModeRank;
-        if (currIdx > prevIdx && rankUpCelebration) {
-            const modeLabel = getModeLabel(difficultyMode, appLang);
-            setCelebration({ rankIndex: currIdx, rankName: currentModeRank.name, rankIcon: currentModeRank.icon, modeLabel });
+        const rankIndex = RANKS.indexOf(currentModeRank);
+        const previous = previousRankMilestoneRef.current;
+        const changedMode = previous.mode !== difficultyMode;
+        const masteredFirstRank = !changedMode && previous.wins === 0 && currentStats.success > 0 && rankIndex === 0;
+        const promoted = !changedMode && rankIndex > previous.rankIndex;
+        const masteredPython = overallMasteryEligible && !previousOverallMasteryRef.current;
+
+        previousRankMilestoneRef.current = { mode: difficultyMode, rankIndex, wins: currentStats.success };
+        previousOverallMasteryRef.current = overallMasteryEligible;
+
+        if (!rankUpCelebration) return;
+        if (masteredPython) {
+            setCelebration({
+                kind: 'python',
+                rankIndex: RANKS.length - 1,
+                rankName: currentModeRank.name,
+                rankIcon: '🏆',
+            });
+        } else if (masteredFirstRank || promoted) {
+            setCelebration({
+                kind: 'rank',
+                rankIndex,
+                rankName: currentModeRank.name,
+                rankIcon: currentModeRank.icon,
+            });
         }
-    }, [currentModeRank, difficultyMode, appLang, rankUpCelebration]);
+    }, [currentModeRank, currentStats.success, difficultyMode, overallMasteryEligible, rankUpCelebration]);
 
     useEffect(() => {
         if (!celebration) return;
@@ -15985,7 +16025,9 @@ const WorkspaceApp: React.FC = () => {
         if (!parent) return;
         const resize = () => { canvas.width = parent.clientWidth; canvas.height = parent.clientHeight; };
         resize();
-        const starCount = STAR_COUNTS[Math.min(celebration.rankIndex, STAR_COUNTS.length - 1)];
+        const starCount = celebration.kind === 'python'
+            ? PYTHON_MASTERY_STAR_COUNT
+            : STAR_COUNTS[Math.min(celebration.rankIndex, STAR_COUNTS.length - 1)];
         celebrationStarsRef.current = [];
         for (let i = 0; i < starCount; i++) {
             celebrationStarsRef.current.push({
@@ -15996,8 +16038,8 @@ const WorkspaceApp: React.FC = () => {
                 opacity: 0.5 + Math.random() * 0.5,
             });
         }
-        if (celebration.rankIndex >= 7 && resultSoundRef.current) {
-            setTimeout(() => playCelebrationMelody(celebration.rankIndex), 300);
+        if (celebration.kind === 'python' && resultSoundRef.current) {
+            setTimeout(() => playCelebrationMelody(RANKS.length - 1), 300);
         }
         let lastTime = performance.now();
         const animate = (time: number) => {
@@ -16342,13 +16384,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v296') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v297') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v296')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v297')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -22561,9 +22603,25 @@ print(result)
                                     <canvas ref={celebrationCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none select-none" aria-hidden="true" />
                                     <div className="relative z-10 text-center px-4">
                                         <div className="text-6xl mb-4 animate-bounce">{celebration.rankIcon}</div>
-                                        <h2 className="text-3xl font-black text-white mb-2">🎉 Congratulations!</h2>
-                                        <p className="text-xl text-white/90">You reached <span className="font-bold" style={{ color: '#22c55e' }}>{celebration.rankName}</span>!</p>
-                                        <p className="text-lg text-white/70 mt-2">You have mastered <span className="font-bold" style={{ color: '#FFD700' }}>{celebration.modeLabel}</span></p>
+                                        <h2 className="text-3xl font-black text-white mb-2">
+                                            {appLang === 'fr' ? '🎉 Félicitations !' : '🎉 Congratulations!'}
+                                        </h2>
+                                        {celebration.kind === 'python' ? (
+                                            <>
+                                                <p className="text-xl font-bold" style={{ color: '#FFD700' }}>
+                                                    {appLang === 'fr' ? 'Vous avez maîtrisé Python !' : 'You have mastered Python!'}
+                                                </p>
+                                                <p className="mt-2 text-sm text-white/75">
+                                                    {appLang === 'fr' ? 'Moyenne générale supérieure à 90 %' : 'Overall average above 90%'}
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <p className="text-xl text-white/90">
+                                                {appLang === 'fr' ? 'Vous avez maîtrisé le niveau ' : 'You have mastered '}
+                                                <span className="font-bold" style={{ color: '#FFD700' }}>{celebration.rankName}</span>
+                                                {appLang === 'fr' ? ' !' : ' level!'}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             )}

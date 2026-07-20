@@ -5,7 +5,7 @@
     "scripts": {
         "prepare:offline-assets": "node scripts/prepare_offline_assets.js && tailwindcss -c tailwind.config.cjs -i ./styles/tailwind.css -o ./public/tailwind.generated.css --minify",
         "dev": "npm run prepare:offline-assets && vite",
-        "build": "npm run audit:scaffolds && npm run audit:while-loops && npm run audit:concept-expansion && npm run audit:advanced-concepts && npm run audit:foundation-intermediate && npm run eval:problem-ai && npm run audit:problem-ai-layout && npm run audit:ai-code-explanations && npm run prepare:offline-assets && vite build && node scripts/copy_level_assets.js && node scripts/audit_startup_bundle.js && node scripts/generate_offline_manifest.js && node scripts/audit_offline_build.js",
+    "build": "npm run audit:scaffolds && npm run audit:while-loops && npm run audit:concept-expansion && npm run audit:advanced-concepts && npm run audit:foundation-intermediate && npm run eval:problem-ai && npm run audit:problem-ai-layout && npm run audit:ai-code-explanations && npm run audit:rank-celebration && npm run prepare:offline-assets && vite build && node scripts/copy_level_assets.js && node scripts/audit_startup_bundle.js && node scripts/generate_offline_manifest.js && node scripts/audit_offline_build.js",
         "audit:offline": "node scripts/audit_offline_build.js",
         "preview": "vite preview",
         "validate:graders": "node scripts/validate_graders.js",
@@ -36,7 +36,8 @@
         "eval:general-ai-final": "node scripts/evaluate_general_ai_adversarial.js",
         "eval:problem-ai": "node scripts/evaluate_problem_ai.js",
         "audit:problem-ai-layout": "node scripts/audit_problem_ai_layout.js",
-        "audit:ai-code-explanations": "node scripts/evaluate_ai_code_explanations.js",
+    "audit:ai-code-explanations": "node scripts/evaluate_ai_code_explanations.js",
+    "audit:rank-celebration": "node scripts/audit_rank_celebration.js",
         "test:script-fallback": "node scripts/test_script_fallback.js",
         "check:graders": "npm run validate:graders -- --max-failures=0 && npm run audit:graders -- --max-weak-functions 0 --max-unguarded-single-case-no-arg-functions 0 --max-single-case-scripts 826 --max-unguarded-single-case-scripts 0 --max-hardcode-risk-scripts 0 --max-empty-graders 0 && npm run audit:metamorphic -- --min-covered 558 --max-uncovered-common 0 && npm run audit:script-fallback -- --min-eligible 1438 --max-blocked 1 && npm run audit:solutions -- --max-mislabeled=0 && npm run audit:starters && npm run test:script-fallback"
     },
