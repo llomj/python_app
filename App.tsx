@@ -5199,6 +5199,15 @@ const holdBackspaceExtension = EditorView.domEventHandlers({
         if (event.key !== 'Backspace' || event.metaKey || event.ctrlKey || event.altKey) return false;
         const dom = view.dom as HTMLElement & { __backspaceHoldTimer?: number; __backspaceHoldDelay?: number };
 
+        // Native iOS/physical-keyboard repetition is smoother than a second synthetic loop.
+        if (event.repeat) {
+            if (dom.__backspaceHoldDelay) window.clearTimeout(dom.__backspaceHoldDelay);
+            if (dom.__backspaceHoldTimer) window.clearInterval(dom.__backspaceHoldTimer);
+            dom.__backspaceHoldDelay = undefined;
+            dom.__backspaceHoldTimer = undefined;
+            return false;
+        }
+
         if (dom.__backspaceHoldDelay || dom.__backspaceHoldTimer) return false;
 
         dom.__backspaceHoldDelay = window.setTimeout(() => {
@@ -5237,6 +5246,14 @@ const holdBackspaceExtension = EditorView.domEventHandlers({
 
         return false;
     }
+});
+
+const stableEditorInputAttributes = EditorView.contentAttributes.of({
+    autocapitalize: 'off',
+    autocomplete: 'off',
+    autocorrect: 'off',
+    spellcheck: 'false',
+    'data-editor-input': 'true',
 });
 
 const EMPTY_STATS: Stats = { shots: 0, success: 0, failed: 0 };
@@ -15311,27 +15328,49 @@ function GeneralAiApiCatalogView({
 }
 
 const BASE_PYTHON_COMPLETIONS: Completion[] = [
+    ...PYTHON_KEYWORDS.map((label) => ({ label, type: 'keyword' as const })),
+    ...PYTHON_BUILTINS.map((label) => ({ label, type: 'function' as const, detail: 'built-in' })),
     snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
     snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
     snippetCompletion("for ${item} in ${iterable}:\n    ${0}", { label: "for", detail: "for loop", type: "keyword" }),
     snippetCompletion("if ${condition}:\n    ${0}", { label: "if", detail: "if statement", type: "keyword" }),
     snippetCompletion("class ${Name}:\n    def __init__(self${args}):\n        ${0}", { label: "class", detail: "define class", type: "keyword" }),
-    ...PYTHON_KEYWORDS.map((label) => ({ label, type: 'keyword' as const })),
-    ...PYTHON_BUILTINS.map((label) => ({ label, type: 'function' as const, detail: 'built-in' }))
 ];
 
+const buildProjectCompletionOptions = (files: ProjectFile[]): Completion[] => {
+    const symbolMap = new Map<string, Completion>();
 
-const pythonSnippets = (context: CompletionContext) => {
-    const word = context.matchBefore(/\w*/);
-    if (!word || (word.from === word.to && !context.explicit)) return null;
+    for (const completion of BASE_PYTHON_COMPLETIONS) {
+        symbolMap.set(completion.label, completion);
+    }
 
-    return {
-        from: word.from,
-        options: [
-            snippetCompletion("print(${0})", { label: "print", detail: "built-in function", type: "function" }),
-            snippetCompletion("def ${name}(${args}):\n    ${0}", { label: "def", detail: "define function", type: "keyword" }),
-        ]
+    const addSymbol = (label: string, detail: string, type: Completion['type']) => {
+        if (!label || symbolMap.has(label)) return;
+        symbolMap.set(label, { label, detail, type });
     };
+
+    for (const file of files) {
+        const matches = file.content.match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g) || [];
+        for (const match of matches) {
+            if (!PYTHON_KEYWORDS.includes(match)) addSymbol(match, 'file symbol', 'variable');
+        }
+
+        const defMatches = file.content.matchAll(/\bdef\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)/g);
+        for (const [, fnName, rawArgs] of defMatches) {
+            addSymbol(fnName, 'function in project', 'function');
+            for (const arg of rawArgs.split(',')) {
+                const cleanedArg = arg.trim().replace(/=.*/, '').replace(/:.*/, '');
+                if (cleanedArg && cleanedArg !== 'self' && cleanedArg !== 'cls') {
+                    addSymbol(cleanedArg, 'parameter', 'variable');
+                }
+            }
+        }
+
+        const classMatches = file.content.matchAll(/\bclass\s+([A-Za-z_][A-Za-z0-9_]*)/g);
+        for (const [, className] of classMatches) addSymbol(className, 'class in project', 'class');
+    }
+
+    return Array.from(symbolMap.values()).sort((a, b) => a.label.localeCompare(b.label));
 };
 
 const WorkspaceApp: React.FC = () => {
@@ -15721,10 +15760,10 @@ const WorkspaceApp: React.FC = () => {
     const keyboardAudioRef = useRef<AudioContext | null>(null);
     const lastKeyboardFeedbackRef = useRef(0);
     const keyboardMainScrollRef = useRef<number | null>(null);
-    const keyboardRestoreTimersRef = useRef<number[]>([]);
+    const keyboardRestoreFrameRef = useRef<number | null>(null);
+    const keyboardRestoreTimerRef = useRef<number | null>(null);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
-    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const outputRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(70);
@@ -16099,10 +16138,21 @@ const WorkspaceApp: React.FC = () => {
             if (window.scrollY !== 0) window.scrollTo(0, 0);
         };
 
-        restore();
-        window.requestAnimationFrame(restore);
-        keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
-        keyboardRestoreTimersRef.current = [60, 140, 280, 520].map(delay => window.setTimeout(restore, delay));
+        if (keyboardRestoreFrameRef.current !== null) {
+            window.cancelAnimationFrame(keyboardRestoreFrameRef.current);
+        }
+        keyboardRestoreFrameRef.current = window.requestAnimationFrame(() => {
+            keyboardRestoreFrameRef.current = null;
+            restore();
+        });
+
+        if (keyboardRestoreTimerRef.current !== null) {
+            window.clearTimeout(keyboardRestoreTimerRef.current);
+        }
+        keyboardRestoreTimerRef.current = window.setTimeout(() => {
+            keyboardRestoreTimerRef.current = null;
+            restore();
+        }, 180);
     }, []);
 
     const syncScrollableLayout = useCallback(() => {
@@ -16193,7 +16243,13 @@ const WorkspaceApp: React.FC = () => {
         const handleViewportChange = () => {
             if (!editorShell.contains(document.activeElement)) return;
             if (focusLayoutEnabled && isMobileViewport) {
-                if (window.scrollY !== 0) window.scrollTo(0, 0);
+                if (keyboardRestoreTimerRef.current !== null) {
+                    window.clearTimeout(keyboardRestoreTimerRef.current);
+                }
+                keyboardRestoreTimerRef.current = window.setTimeout(() => {
+                    keyboardRestoreTimerRef.current = null;
+                    if (window.scrollY !== 0) window.scrollTo(0, 0);
+                }, 80);
                 return;
             }
             preserveEditorKeyboardPosition();
@@ -16209,8 +16265,14 @@ const WorkspaceApp: React.FC = () => {
             editorShell.removeEventListener('focusout', handleEditorBlur);
             window.visualViewport?.removeEventListener('resize', handleViewportChange);
             window.visualViewport?.removeEventListener('scroll', handleViewportChange);
-            keyboardRestoreTimersRef.current.forEach(timer => window.clearTimeout(timer));
-            keyboardRestoreTimersRef.current = [];
+            if (keyboardRestoreFrameRef.current !== null) {
+                window.cancelAnimationFrame(keyboardRestoreFrameRef.current);
+                keyboardRestoreFrameRef.current = null;
+            }
+            if (keyboardRestoreTimerRef.current !== null) {
+                window.clearTimeout(keyboardRestoreTimerRef.current);
+                keyboardRestoreTimerRef.current = null;
+            }
         };
     }, [bootStage, focusLayoutEnabled, isMobileViewport, preserveEditorKeyboardPosition]);
 
@@ -16384,13 +16446,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v297') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v298') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v297')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v298')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16788,16 +16850,17 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
 
     const finishRenaming = () => {
         if (!newName.trim()) return setIsEditingFileName(false);
-        const updatedFiles = [...files];
-        updatedFiles[activeFileIndex].name = newName.endsWith('.py') ? newName : `${newName}.py`;
-        setFiles(updatedFiles);
+        const normalizedName = newName.endsWith('.py') ? newName : `${newName}.py`;
+        setFiles(currentFiles => currentFiles.map((file, index) => (
+            index === activeFileIndex ? { ...file, name: normalizedName } : file
+        )));
         setIsEditingFileName(false);
     };
 
     const updateActiveContent = (val: string) => {
-        const updatedFiles = [...files];
-        updatedFiles[activeFileIndex].content = val;
-        setFiles(updatedFiles);
+        setFiles(currentFiles => currentFiles.map((file, index) => (
+            index === activeFileIndex ? { ...file, content: val } : file
+        )));
         if (pendingNextProblem) setPendingNextProblem(false);
         setLatestAiReviewResult(null);
         setLatestAiReviewRequest(null);
@@ -19702,58 +19765,25 @@ print(result)
 
     const rate = currentStats.shots > 0 ? ((currentStats.success / currentStats.shots) * 100).toFixed(2) : '0.00';
 
-    const pythonCompletionSource = useMemo(() => {
-        const symbolMap = new Map<string, Completion>();
+    const pythonCompletionOptions = useMemo(() => buildProjectCompletionOptions(files), [files]);
+    const pythonCompletionOptionsRef = useRef(pythonCompletionOptions);
+    pythonCompletionOptionsRef.current = pythonCompletionOptions;
 
-        for (const completion of BASE_PYTHON_COMPLETIONS) {
-            symbolMap.set(completion.label, completion);
-        }
+    const pythonCompletionSource = useCallback((context: CompletionContext) => {
+        const word = context.matchBefore(/[A-Za-z_][A-Za-z0-9_]*/);
+        if (!word && !context.explicit) return null;
 
-        const addSymbol = (label: string, detail: string, type: Completion['type']) => {
-            if (!label || symbolMap.has(label)) return;
-            symbolMap.set(label, { label, detail, type });
-        };
+        const currentText = word?.text ?? '';
+        const from = word?.from ?? context.pos;
+        const options = pythonCompletionOptionsRef.current
+            .filter((completion) => (
+                completion.label.toLowerCase().startsWith(currentText.toLowerCase())
+                && completion.label.toLowerCase() !== currentText.toLowerCase()
+            ))
+            .slice(0, 200);
 
-        for (const file of files) {
-            const matches = file.content.match(/\b[A-Za-z_][A-Za-z0-9_]*\b/g) || [];
-            for (const match of matches) {
-                if (!PYTHON_KEYWORDS.includes(match)) {
-                    addSymbol(match, 'file symbol', 'variable');
-                }
-            }
-
-            const defMatches = file.content.matchAll(/\bdef\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)/g);
-            for (const [, fnName, rawArgs] of defMatches) {
-                addSymbol(fnName, 'function in project', 'function');
-                for (const arg of rawArgs.split(',')) {
-                    const cleanedArg = arg.trim().replace(/=.*/, '').replace(/:.*/, '');
-                    if (cleanedArg && cleanedArg !== 'self' && cleanedArg !== 'cls') {
-                        addSymbol(cleanedArg, 'parameter', 'variable');
-                    }
-                }
-            }
-
-            const classMatches = file.content.matchAll(/\bclass\s+([A-Za-z_][A-Za-z0-9_]*)/g);
-            for (const [, className] of classMatches) {
-                addSymbol(className, 'class in project', 'class');
-            }
-        }
-
-        const completions = Array.from(symbolMap.values()).sort((a, b) => a.label.localeCompare(b.label));
-
-        return (context: CompletionContext) => {
-            const word = context.matchBefore(/[A-Za-z_][A-Za-z0-9_]*/);
-            if (!word && !context.explicit) return null;
-
-            const currentText = word?.text ?? '';
-            const from = word?.from ?? context.pos;
-            const options = completions
-                .filter((completion) => completion.label.toLowerCase().startsWith(currentText.toLowerCase()))
-                .slice(0, 200);
-
-            return { from, options };
-        };
-    }, [files]);
+        return { from, options };
+    }, []);
     const toggleOutputHeight = () => {
         const nextExpanded = !isOutputExpanded;
         setIsOutputExpanded(nextExpanded);
@@ -19814,14 +19844,25 @@ print(result)
     } as const;
     const effectiveEditorColors = useMemo<EditorColorSettings>(() => editorColors, [editorColors]);
 
+    const editorContextMenuExtension = useMemo(() => EditorView.domEventHandlers({
+        contextmenu(event) {
+            if (!window.matchMedia('(pointer: fine)').matches) return false;
+            event.preventDefault();
+            setContextMenu({ x: event.clientX, y: event.clientY });
+            return true;
+        }
+    }), []);
+
     const editorExtensions = useMemo(() => [
         python(),
         indentUnit.of("    "),
         holdBackspaceExtension,
-        autocompletion({ override: [pythonCompletionSource, pythonSnippets] }),
+        stableEditorInputAttributes,
+        editorContextMenuExtension,
+        autocompletion({ override: [pythonCompletionSource] }),
         EditorView.lineWrapping,
         ...createCustomPythonTheme(effectiveEditorColors)
-    ], [pythonCompletionSource, effectiveEditorColors]);
+    ], [editorContextMenuExtension, pythonCompletionSource, effectiveEditorColors]);
 
     if (bootStage !== 'launched') {
         return (
@@ -20259,6 +20300,7 @@ print(result)
                     </div>
                     <div
                         ref={editorShellRef}
+                        data-editor-shell="true"
                         className="flex-grow relative border-b"
                         style={{ minHeight: '320px', scrollMarginTop: `${editorContentTop}px`, borderColor: panelBorder }}
                     >
@@ -20267,30 +20309,12 @@ print(result)
                             onCreateEditor={(view) => {
                                 activeEditorViewRef.current = view;
                                 const dom = view.contentDOM;
-                                const startLongPress = (e: MouseEvent | TouchEvent) => {
-                                    const pos = 'touches' in e ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : { x: e.clientX, y: e.clientY };
-                                    longPressTimerRef.current = setTimeout(() => {
-                                        setContextMenu({ x: pos.x, y: pos.y });
-                                    }, 500);
-                                };
-                                const cancelLongPress = () => {
-                                    if (longPressTimerRef.current) {
-                                        clearTimeout(longPressTimerRef.current);
-                                        longPressTimerRef.current = null;
-                                    }
-                                };
                                 const handleKeyboardFeedback = (event: KeyboardEvent) => {
                                     if (event.metaKey || event.ctrlKey || event.altKey) return;
                                     if (event.key.length === 1 || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'Tab') {
                                         playKeyboardFeedback();
                                     }
                                 };
-                                dom.addEventListener('mousedown', startLongPress);
-                                dom.addEventListener('touchstart', startLongPress, { passive: true });
-                                dom.addEventListener('mouseup', cancelLongPress);
-                                dom.addEventListener('touchend', cancelLongPress);
-                                dom.addEventListener('touchmove', cancelLongPress);
-                                dom.addEventListener('mousemove', cancelLongPress);
                                 dom.addEventListener('keydown', handleKeyboardFeedback);
                             }}
                             basicSetup={{ lineNumbers: true, autocompletion: true, bracketMatching: true, closeBrackets: true, indentOnInput: true }}

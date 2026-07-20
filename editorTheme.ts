@@ -129,6 +129,13 @@ export const createEditorUiTheme = (colors: EditorColorSettings = DEFAULT_EDITOR
   ".cm-content": {
     caretColor: colors.text,
     color: colors.text,
+    fontVariantLigatures: "none",
+    WebkitTextSizeAdjust: "100%",
+    textSizeAdjust: "100%",
+  },
+  ".cm-cursor, .cm-dropCursor": {
+    borderLeftColor: `${colors.text} !important`,
+    borderLeftWidth: "2px",
   },
   ".cm-line": {
     color: colors.text,
