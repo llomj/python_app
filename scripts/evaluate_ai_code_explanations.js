@@ -29,7 +29,7 @@ try {
   const failures = [];
 
   for (const exercise of EXERCISES) {
-    const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en');
+    const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en', exercise.description);
     if (!explanation.includes('```python')) failures.push(`Problem ${exercise.id}: missing highlighted Python block`);
     if (!explanation.includes('So this function is doing these things:')) failures.push(`Problem ${exercise.id}: missing expanded final summary`);
     if (!/# (This|The|Python|print|return|pass|Example|Data|So)/.test(explanation)) failures.push(`Problem ${exercise.id}: missing line-specific comments`);
@@ -40,8 +40,15 @@ try {
     if (explanation.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: contains a clutter-only hash line`);
     if (explanation.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: contains excessive blank-line spacing`);
     if (explanation.split('\n').length > 342) failures.push(`Problem ${exercise.id}: explanation is unbounded`);
+    for (const vagueFallback of [
+      'Python executes this statement at this point in the program.',
+      'Evaluate this Python expression using the current variables.',
+      'returns the requested result.',
+    ]) {
+      if (explanation.includes(vagueFallback)) failures.push(`Problem ${exercise.id}: contains vague fallback ${JSON.stringify(vagueFallback)}`);
+    }
 
-    const french = buildDetailedCodeExplanation('', exercise.solution, 'fr');
+    const french = buildDetailedCodeExplanation('', exercise.solution, 'fr', exercise.description);
     const primarySection = exercise.solution
       .replace(/^\s*#\s*(?:.*\bapproach\b|Alternative\b.*)[^\n]*\n/i, '')
       .split(/\n\s*#\s*(?:.*\bapproach\b|Alternative\b.*)/i)[0];
@@ -62,10 +69,17 @@ try {
     if (!french.includes('# Valeur intermédiaire et type :') && !french.includes('# Valeur intermédiaire et type:')) failures.push(`Problem ${exercise.id}: missing French value/type trace`);
     if (french.split('\n').some(line => line.trim() === '#')) failures.push(`Problem ${exercise.id}: French explanation contains a clutter-only hash line`);
     if (french.includes('\n\n\n')) failures.push(`Problem ${exercise.id}: French explanation contains excessive blank-line spacing`);
+    for (const vagueFallback of [
+      'Python exécute cette instruction à cet endroit du programme.',
+      'Évaluer cette expression Python avec les variables actuelles.',
+      'renvoie le résultat demandé.',
+    ]) {
+      if (french.includes(vagueFallback)) failures.push(`Problem ${exercise.id}: French explanation contains vague fallback ${JSON.stringify(vagueFallback)}`);
+    }
   }
 
   const problem975 = EXERCISES.find(exercise => exercise.id === 975);
-  const explanation975 = buildDetailedCodeExplanation('', problem975.solution, 'en');
+  const explanation975 = buildDetailedCodeExplanation('', problem975.solution, 'en', problem975.description);
   for (const fragment of [
     'This function takes one string containing numbers separated by commas.',
     '# Example input:',
@@ -83,13 +97,13 @@ try {
     if (!explanation975.includes(fragment)) failures.push(`Problem 975 regression: missing ${JSON.stringify(fragment)}`);
   }
 
-  const french975 = buildDetailedCodeExplanation('', problem975.solution, 'fr');
+  const french975 = buildDetailedCodeExplanation('', problem975.solution, 'fr', problem975.description);
   for (const fragment of ['Explication du code', 'Cela transforme', 'Cette solution effectue les étapes suivantes']) {
     if (!french975.includes(fragment)) failures.push(`Problem 975 French regression: missing ${JSON.stringify(fragment)}`);
   }
 
   const problem2401 = EXERCISES.find(exercise => exercise.id === 2401);
-  const explanation2401 = buildDetailedCodeExplanation('', problem2401.solution, 'en');
+  const explanation2401 = buildDetailedCodeExplanation('', problem2401.solution, 'en', problem2401.description);
   for (const fragment of [
     'count += 1 is augmented assignment, shorthand for count = count + 1.',
     'number //= 10 is augmented assignment, shorthand for number = number // 10.',
@@ -106,7 +120,7 @@ try {
     if (!explanation2401.includes(fragment)) failures.push(`Problem 2401 regression: missing ${JSON.stringify(fragment)}`);
   }
   if (explanation2401.includes('/ performs true division')) failures.push('Problem 2401 regression: floor division was incorrectly described as true division');
-  const french2401 = buildDetailedCodeExplanation('', problem2401.solution, 'fr');
+  const french2401 = buildDetailedCodeExplanation('', problem2401.solution, 'fr', problem2401.description);
   for (const fragment of [
     'forme abrégée de count = count + 1',
     'forme abrégée de number = number // 10',
@@ -127,12 +141,37 @@ try {
     [1211, 'returned value = 60 (int)'],
     [1410, 'returned value = "Python is great" (str)'],
     [1725, 'returned value = True (bool)'],
-    [1900, 'returned value = 25 (int)'],
+    [1900, 'returned value = 25.0 (float)'],
   ];
   for (const [id, fragment] of concreteCases) {
     const exercise = EXERCISES.find(item => item.id === id);
-    const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en');
+    const explanation = buildDetailedCodeExplanation('', exercise.solution, 'en', exercise.description);
     if (!explanation.includes(fragment)) failures.push(`Problem ${id} concrete trace regression: missing ${JSON.stringify(fragment)}`);
+  }
+
+  const explanation1900 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1900).solution, 'en', EXERCISES.find(item => item.id === 1900).description);
+  for (const fragment of [
+    'It takes two values:',
+    'part = the amount being compared with the total. In the example: part = 25 (int).',
+    'whole = the complete or total amount used as the reference. In the example: whole = 100 (int).',
+    'Calculation: 25 / 100 = 0.25',
+    'Calculation: 0.25 * 100 = 25.0',
+    'Calculation: round(25.0, 2) = 25.0',
+    'The second argument 2 requests 2 digits after the decimal point.',
+    'percentage = (part / whole) * 100',
+    '40 / 50 = 0.8',
+    'So 40 is 80% of 50.',
+  ]) {
+    if (!explanation1900.includes(fragment)) failures.push(`Problem 1900 percentage regression: missing ${JSON.stringify(fragment)}`);
+  }
+  const french1900 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1900).solution, 'fr', EXERCISES.find(item => item.id === 1900).description);
+  for (const fragment of [
+    'Elle reçoit deux valeurs :',
+    'Calcul: 25 / 100 = 0.25',
+    'pourcentage = (partie / total) * 100',
+    'Donc 40 représente 80 % de 50.',
+  ]) {
+    if (!french1900.includes(fragment)) failures.push(`Problem 1900 French percentage regression: missing ${JSON.stringify(fragment)}`);
   }
 
   const explanation1699 = buildDetailedCodeExplanation('', EXERCISES.find(item => item.id === 1699).solution, 'en');

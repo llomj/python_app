@@ -426,8 +426,8 @@ const explainPythonConcepts = (code: string) => {
     return explanations;
 };
 
-const summarizeCodeExplanation = (userCode: string, solution: string) => {
-    return buildDetailedCodeExplanation(userCode, solution, 'en');
+const summarizeCodeExplanation = (userCode: string, solution: string, problemDescription = '') => {
+    return buildDetailedCodeExplanation(userCode, solution, 'en', problemDescription);
 };
 
 const conciseOutput = (value: string | undefined, fallback = 'No visible output') => {
@@ -572,7 +572,7 @@ const buildFrenchDiagnosticReview = (
         outputAnalysis = `Le correcteur n’a pas accepté cette réponse. ${localizeAiText(request.graderMessage || 'Aucun détail supplémentaire.', 'fr')}`;
     }
 
-    const codeExplanation = buildDetailedCodeExplanation(code, request.visibleSolution || '', 'fr');
+    const codeExplanation = buildDetailedCodeExplanation(code, request.visibleSolution || '', 'fr', request.description);
 
     const solutionLines = extractPrimarySolutionLines(request.visibleSolution || '')
         .map(line => line.trim())
@@ -745,7 +745,7 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
 
     if (request.graderPassed) {
         const expectedWorkflow = request.visibleSolution ? summarizeExpectedWorkflow(request.visibleSolution) : '';
-        const codeExplanation = summarizeCodeExplanation(code, request.visibleSolution || '');
+        const codeExplanation = summarizeCodeExplanation(code, request.visibleSolution || '', request.description);
         const outputAnalysis = summarizeOutputAnalysis(request, expectedGot, raisedError);
         return {
             verdict: 'likely_correct',
@@ -762,7 +762,7 @@ export const buildDiagnosticReview = (request: AiReviewRequest): AiReviewResult 
 
     notes.push(summarizeCodeLines(code));
     notes.push(summarizeOutputAnalysis(request, expectedGot, raisedError));
-    notes.push(summarizeCodeExplanation(code, request.visibleSolution || ''));
+    notes.push(summarizeCodeExplanation(code, request.visibleSolution || '', request.description));
 
     if (request.visibleSolution) {
         const expectedWorkflow = summarizeExpectedWorkflow(request.visibleSolution);

@@ -9,27 +9,39 @@ type PythonCall = {
 };
 
 const PYTHON_BUILTINS: Record<string, { signature: string; purpose: string; purposeFr: string }> = {
+    abs: { signature: 'abs(number)', purpose: 'returns the non-negative magnitude of a number', purposeFr: 'renvoie la magnitude non négative d’un nombre' },
     all: { signature: 'all(iterable)', purpose: 'returns True only when every item is truthy', purposeFr: 'renvoie True seulement si chaque élément est vrai' },
     any: { signature: 'any(iterable)', purpose: 'returns True when at least one item is truthy', purposeFr: 'renvoie True si au moins un élément est vrai' },
+    bin: { signature: 'bin(integer)', purpose: 'returns the binary representation of an integer as text', purposeFr: 'renvoie la représentation binaire d’un entier sous forme de texte' },
     bool: { signature: 'bool(value=False)', purpose: 'converts a value to True or False', purposeFr: 'convertit une valeur en True ou False' },
+    chr: { signature: 'chr(code_point)', purpose: 'returns the character represented by a Unicode code point', purposeFr: 'renvoie le caractère représenté par un point de code Unicode' },
     dict: { signature: 'dict(source=...)', purpose: 'creates a dictionary from key-value data', purposeFr: 'crée un dictionnaire à partir de données clé-valeur' },
     enumerate: { signature: 'enumerate(iterable, start=0)', purpose: 'pairs each item with a counter', purposeFr: 'associe chaque élément à un compteur' },
     filter: { signature: 'filter(function, iterable)', purpose: 'keeps items for which function(item) is truthy', purposeFr: 'conserve les éléments pour lesquels function(item) est vrai' },
     float: { signature: 'float(value=0)', purpose: 'converts a compatible value to a decimal number', purposeFr: 'convertit une valeur compatible en nombre décimal' },
+    format: { signature: 'format(value, format_spec="")', purpose: 'formats a value according to a formatting specification', purposeFr: 'formate une valeur selon une spécification de formatage' },
+    hex: { signature: 'hex(integer)', purpose: 'returns the hexadecimal representation of an integer as text', purposeFr: 'renvoie la représentation hexadécimale d’un entier sous forme de texte' },
     input: { signature: 'input(prompt="")', purpose: 'shows an optional prompt and returns the typed text as a string', purposeFr: 'affiche un message facultatif et renvoie le texte saisi comme chaîne' },
     int: { signature: 'int(value=0, base=10)', purpose: 'converts a compatible value to an integer', purposeFr: 'convertit une valeur compatible en entier' },
+    isinstance: { signature: 'isinstance(object, classinfo)', purpose: 'checks whether an object belongs to a requested type', purposeFr: 'vérifie si un objet appartient au type demandé' },
     len: { signature: 'len(object)', purpose: 'returns the number of items', purposeFr: 'renvoie le nombre d’éléments' },
     list: { signature: 'list(iterable=())', purpose: 'consumes an iterable and collects its items in a list', purposeFr: 'parcourt un itérable et rassemble ses éléments dans une liste' },
     map: { signature: 'map(function, iterable, ...)', purpose: 'calls function(item) lazily for every item from the iterable', purposeFr: 'appelle function(item) progressivement pour chaque élément de l’itérable' },
     max: { signature: 'max(iterable, *, key=None)', purpose: 'returns the largest selected item', purposeFr: 'renvoie le plus grand élément sélectionné' },
     min: { signature: 'min(iterable, *, key=None)', purpose: 'returns the smallest selected item', purposeFr: 'renvoie le plus petit élément sélectionné' },
+    ord: { signature: 'ord(character)', purpose: 'returns the Unicode code point of one character', purposeFr: 'renvoie le point de code Unicode d’un caractère' },
+    pow: { signature: 'pow(base, exponent, modulus=None)', purpose: 'raises a base to an exponent, optionally using a modulus', purposeFr: 'élève une base à une puissance, avec un modulo facultatif' },
     print: { signature: 'print(*objects, sep=" ", end="\\n")', purpose: 'converts values to display text and writes them to the output', purposeFr: 'convertit les valeurs en texte et les écrit dans la sortie' },
     range: { signature: 'range(start, stop, step=1)', purpose: 'creates an integer sequence whose stop value is excluded', purposeFr: 'crée une séquence d’entiers dont la valeur stop est exclue' },
+    repr: { signature: 'repr(object)', purpose: 'returns a developer-oriented text representation of an object', purposeFr: 'renvoie une représentation textuelle détaillée d’un objet' },
+    reversed: { signature: 'reversed(sequence)', purpose: 'returns an iterator that reads a sequence from the end to the beginning', purposeFr: 'renvoie un itérateur qui lit une séquence de la fin vers le début' },
+    round: { signature: 'round(number, ndigits=None)', purpose: 'rounds a number to the requested number of decimal places', purposeFr: 'arrondit un nombre au nombre demandé de décimales' },
     set: { signature: 'set(iterable=())', purpose: 'collects unique hashable items', purposeFr: 'rassemble des éléments hachables uniques' },
     sorted: { signature: 'sorted(iterable, *, key=None, reverse=False)', purpose: 'returns a new sorted list', purposeFr: 'renvoie une nouvelle liste triée' },
     str: { signature: 'str(object="")', purpose: 'converts a value to text', purposeFr: 'convertit une valeur en texte' },
     sum: { signature: 'sum(iterable, start=0)', purpose: 'adds the items to an optional starting value', purposeFr: 'additionne les éléments à une valeur initiale facultative' },
     tuple: { signature: 'tuple(iterable=())', purpose: 'collects items in an immutable tuple', purposeFr: 'rassemble les éléments dans un tuple immuable' },
+    type: { signature: 'type(object)', purpose: 'returns the type of an object', purposeFr: 'renvoie le type d’un objet' },
     zip: { signature: 'zip(*iterables)', purpose: 'combines corresponding items from multiple iterables', purposeFr: 'combine les éléments correspondants de plusieurs itérables' },
 };
 
@@ -279,6 +291,228 @@ const displayValue = (value: unknown): string => {
     return String(value);
 };
 
+const displayTracedValue = (trace: TracedValue): string => {
+    if (trace.type === 'float' && typeof trace.value === 'number' && Number.isInteger(trace.value)) {
+        return `${trace.value.toFixed(1)}`;
+    }
+    return displayValue(trace.value);
+};
+
+const PARAMETER_PURPOSES: Record<string, [string, string]> = {
+    part: ['the amount being compared with the total', 'la quantité comparée au total'],
+    whole: ['the complete or total amount used as the reference', 'la quantité complète ou totale utilisée comme référence'],
+    text: ['the input string the function will examine or transform', 'la chaîne d’entrée que la fonction va examiner ou transformer'],
+    string: ['the input text the function will examine or transform', 'le texte d’entrée que la fonction va examiner ou transformer'],
+    sentence: ['the sentence the function will process', 'la phrase que la fonction va traiter'],
+    word: ['the word the function will process', 'le mot que la fonction va traiter'],
+    number: ['the numeric input the function will calculate with', 'l’entrée numérique utilisée dans le calcul'],
+    num: ['the numeric input the function will calculate with', 'l’entrée numérique utilisée dans le calcul'],
+    numbers: ['the collection of numbers the function will process', 'la collection de nombres que la fonction va traiter'],
+    values: ['the collection of input values the function will process', 'la collection de valeurs que la fonction va traiter'],
+    items: ['the collection of items the function will process', 'la collection d’éléments que la fonction va traiter'],
+    key: ['the dictionary key to find, create, or update', 'la clé de dictionnaire à trouver, créer ou modifier'],
+    value: ['the value supplied for the requested operation', 'la valeur fournie pour l’opération demandée'],
+    target: ['the value the function is trying to find or match', 'la valeur que la fonction cherche à trouver ou faire correspondre'],
+    start: ['the starting value or position', 'la valeur ou position de départ'],
+    stop: ['the stopping boundary, normally excluded by Python ranges and slices', 'la limite d’arrêt, normalement exclue par les plages et tranches Python'],
+    end: ['the ending value or position', 'la valeur ou position de fin'],
+    step: ['the amount by which the operation advances each time', 'la quantité de progression à chaque étape'],
+    count: ['the number of repetitions or items requested', 'le nombre de répétitions ou d’éléments demandé'],
+    index: ['the position used to access an item', 'la position utilisée pour accéder à un élément'],
+    mapping: ['the dictionary-like object containing key-value pairs', 'l’objet de type dictionnaire contenant des paires clé-valeur'],
+    dictionary: ['the dictionary containing key-value pairs', 'le dictionnaire contenant des paires clé-valeur'],
+    records: ['the records the function will inspect or group', 'les enregistrements que la fonction va examiner ou regrouper'],
+    delimiter: ['the separator used to split or join text', 'le séparateur utilisé pour découper ou joindre du texte'],
+    separator: ['the text placed between items or used to split them', 'le texte placé entre les éléments ou utilisé pour les découper'],
+};
+
+const parameterPurpose = (
+    parameter: string,
+    problemDescription: string,
+    language: AiCodeExplanationLanguage,
+) => {
+    const fr = language === 'fr';
+    const normalized = parameter.toLowerCase().replace(/^_+|_+$/g, '');
+    const direct = PARAMETER_PURPOSES[normalized];
+    if (direct) return fr ? direct[1] : direct[0];
+    if (/^(?:list|list\d+|array|sequence)$/.test(normalized)) return fr ? 'la séquence d’entrée que la fonction va traiter' : 'the input sequence the function will process';
+    if (/^(?:dict|dic|data|lookup)$/.test(normalized)) return fr ? 'les données d’entrée organisées en paires clé-valeur' : 'the input data organized as key-value pairs';
+    if (/^(?:func|function|callback|predicate)$/.test(normalized)) return fr ? 'la fonction que le code appellera sur d’autres valeurs' : 'the function the code will call with other values';
+    if (/^(?:iterable|iterator)$/.test(normalized)) return fr ? 'la source d’éléments à parcourir' : 'the source of items to iterate over';
+    const descriptionHasName = new RegExp(`\\b${parameter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(problemDescription);
+    if (descriptionHasName) return fr
+        ? `la valeur d’entrée appelée ${parameter} dans l’énoncé du problème`
+        : `the input value called ${parameter} in the problem statement`;
+    return fr ? 'la valeur reçue à cette position lors de l’appel' : 'the value received at this argument position when the function is called';
+};
+
+const buildParameterLesson = (
+    params: string[],
+    example: ReturnType<typeof extractFunctionExample>,
+    problemDescription: string,
+    language: AiCodeExplanationLanguage,
+) => {
+    if (!params.length) return [];
+    const fr = language === 'fr';
+    const countLabel = params.length === 1
+        ? (fr ? 'une' : 'one')
+        : params.length === 2
+            ? (fr ? 'deux' : 'two')
+            : params.length === 3
+                ? (fr ? 'trois' : 'three')
+                : String(params.length);
+    const lines = [
+        fr
+            ? `Elle reçoit ${countLabel} ${params.length === 1 ? 'valeur' : 'valeurs'} :`
+            : `It takes ${countLabel} ${params.length === 1 ? 'value' : 'values'}:`,
+    ];
+    params.forEach((param, index) => {
+        const rawArgument = example?.args[index];
+        const traced = rawArgument ? inferExpression(rawArgument, new Map()) : null;
+        const shownValue = traced?.known ? ` ${fr ? 'Dans l’exemple' : 'In the example'}: ${param} = ${displayTracedValue(traced)} (${traced.type}).` : '';
+        lines.push(`${param} = ${parameterPurpose(param, problemDescription, language)}.${shownValue}`);
+    });
+    return lines;
+};
+
+const findEvaluationOperator = (expression: string) => {
+    const precedenceGroups = [
+        [' or '],
+        [' and '],
+        ['==', '!=', '>=', '<=', ' is ', ' in ', '>', '<'],
+        ['+', '-'],
+        ['//', '%', '*', '/'],
+        ['**'],
+    ];
+    for (const operators of precedenceGroups) {
+        const found = findTopLevelOperator(expression, operators);
+        if (found) return found;
+    }
+    return null;
+};
+
+const buildConcreteExpressionWalkthrough = (
+    code: string,
+    language: AiCodeExplanationLanguage,
+    example: ReturnType<typeof extractFunctionExample>,
+) => {
+    if (!example || example.args.length < example.params.length) return [];
+    const returnExpression = code.match(/^\s*return\s+(.+)$/m)?.[1]?.trim();
+    if (!returnExpression) return [];
+    const fr = language === 'fr';
+    const environment = new Map<string, TracedValue>();
+    example.params.forEach((param, index) => {
+        environment.set(param, inferExpression(example.args[index] || '', environment));
+    });
+    if ([...environment.values()].some(value => !value.known)) return [];
+
+    const steps: string[] = [];
+    const seen = new Set<string>();
+    const addStep = (source: string, calculation: string, result: TracedValue, explanation: string) => {
+        const key = `${source}|${calculation}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        const number = seen.size;
+        steps.push(
+            fr ? `Étape ${number} : évaluer ${source}.` : `Step ${number}: evaluate ${source}.`,
+            `${fr ? 'Calcul' : 'Calculation'}: ${calculation}`,
+            `${fr ? 'Résultat et type' : 'Result and type'}: ${displayTracedValue(result)} (${result.type})`,
+            `${fr ? 'Pourquoi' : 'Why'}: ${explanation}`,
+            '',
+        );
+    };
+
+    const evaluate = (rawExpression: string, depth = 0): TracedValue => {
+        const expression = stripOuterParentheses(rawExpression.trim());
+        if (depth > 12) return inferExpression(expression, environment);
+        const operator = findEvaluationOperator(expression);
+        if (operator) {
+            const leftText = expression.slice(0, operator.index).trim();
+            const rightText = expression.slice(operator.index + operator.operator.length).trim();
+            const left = evaluate(leftText, depth + 1);
+            const right = evaluate(rightText, depth + 1);
+            const result = inferExpression(expression, environment);
+            const operatorName = operator.operator.trim();
+            const lesson = OPERATOR_LESSONS[operatorName];
+            if (left.known && right.known && result.known) {
+                addStep(
+                    expression,
+                    `${displayTracedValue(left)} ${operatorName} ${displayTracedValue(right)} = ${displayTracedValue(result)}`,
+                    result,
+                    lesson ? (fr ? lesson[1] : lesson[0]) : result.operation,
+                );
+            }
+            return result;
+        }
+
+        const call = expression.match(/^([A-Za-z_][\w.]*)\((.*)\)$/s);
+        if (call) {
+            const rawArgs = splitTopLevel(call[2]);
+            const args = rawArgs.map(argument => evaluate(argument.replace(/^\w+\s*=\s*/, ''), depth + 1));
+            const result = inferExpression(expression, environment);
+            const builtin = PYTHON_BUILTINS[call[1]];
+            if (args.every(argument => argument.known) && result.known) {
+                const renderedCall = `${call[1]}(${args.map(displayTracedValue).join(', ')})`;
+                let explanation = builtin ? (fr ? builtin.purposeFr : builtin.purpose) : result.operation;
+                if (call[1] === 'round' && rawArgs[1]) explanation += fr
+                    ? ` Le deuxième argument ${rawArgs[1]} demande ${rawArgs[1]} chiffres après la virgule.`
+                    : ` The second argument ${rawArgs[1]} requests ${rawArgs[1]} digits after the decimal point.`;
+                addStep(expression, `${renderedCall} = ${displayTracedValue(result)}`, result, explanation);
+            }
+            return result;
+        }
+
+        const result = inferExpression(expression, environment);
+        if (result.known && (/\[[^\]]+\]|\.[A-Za-z_]\w*\(/.test(expression))) {
+            addStep(expression, `${expression} = ${displayTracedValue(result)}`, result, result.operation);
+        }
+        return result;
+    };
+
+    const finalResult = evaluate(returnExpression);
+    if (!steps.length || !finalResult.known) return [];
+    const percentageLesson = example.params.includes('part')
+        && example.params.includes('whole')
+        && /\bpart\s*\/\s*whole\b/.test(returnExpression)
+        && /\*\s*100\b/.test(returnExpression)
+        ? (fr ? [
+            '',
+            'La formule générale est :',
+            '',
+            'pourcentage = (partie / total) * 100',
+            '',
+            'Autre exemple : si 40 réponses sur 50 sont correctes :',
+            '40 / 50 = 0.8',
+            '0.8 * 100 = 80.0',
+            'Donc 40 représente 80 % de 50.',
+        ] : [
+            '',
+            'The general formula is:',
+            '',
+            'percentage = (part / whole) * 100',
+            '',
+            'Another example: if 40 answers out of 50 are correct:',
+            '40 / 50 = 0.8',
+            '0.8 * 100 = 80.0',
+            'So 40 is 80% of 50.',
+        ])
+        : [];
+    return [
+        fr ? 'Calcul complet avec l’exemple affiché :' : 'Complete calculation with the shown example:',
+        '',
+        ...example.params.map(param => {
+            const value = environment.get(param)!;
+            return `${param} = ${displayTracedValue(value)} (${value.type})`;
+        }),
+        '',
+        ...steps,
+        fr
+            ? `La fonction renvoie finalement ${displayTracedValue(finalResult)} (${finalResult.type}).`
+            : `The function finally returns ${displayTracedValue(finalResult)} (${finalResult.type}).`,
+        ...percentageLesson,
+    ];
+};
+
 const splitTopLevel = (text: string, delimiter = ','): string[] => {
     const parts: string[] = [];
     let start = 0;
@@ -487,7 +721,11 @@ const inferExpression = (
                 else if (arithmetic.operator === '//') value = Math.floor((left.value as number) / (right.value as number));
                 else if (arithmetic.operator === '%') value = (left.value as number) % (right.value as number);
                 else value = (left.value as number) ** (right.value as number);
-                return knownValue(value, operation);
+                const traced = knownValue(value, operation);
+                const resultType = arithmetic.operator === '/' || left.type === 'float' || right.type === 'float'
+                    ? 'float'
+                    : traced.type;
+                return { ...traced, type: resultType };
             } catch { /* Keep the conservative inferred type below. */ }
         }
         return unknownValue(arithmetic.operator === '/' ? 'float' : left.type === 'str' ? 'str' : 'number', operation);
@@ -580,7 +818,8 @@ const inferExpression = (
                 if (name === 'round') {
                     const places = Number(values[1] || 0);
                     const factor = 10 ** places;
-                    return knownValue(Math.round(Number(values[0]) * factor) / factor, operation);
+                    const traced = knownValue(Math.round(Number(values[0]) * factor) / factor, operation);
+                    return { ...traced, type: args[0]?.type === 'float' ? 'float' : traced.type };
                 }
                 if (name === 'pow') return knownValue(Number(values[0]) ** Number(values[1]), operation);
                 if (name === 'list') return knownValue(Array.isArray(values[0]) ? [...values[0]] : [...String(values[0] ?? '')], operation);
@@ -630,7 +869,7 @@ const inferExpression = (
         return unknownValue(accessor.includes(':') ? target?.type || 'sequence' : 'item', accessor.includes(':') ? 'Apply the slice to create a selected subsequence.' : 'Use the index or key to retrieve one item.');
     }
 
-    return unknownValue('value', 'Evaluate this Python expression using the current variables.');
+    return unknownValue('value', `Evaluate the exact expression ${expression} using the values currently bound to its names.`);
 };
 
 const localizedTraceText = (text: string, language: AiCodeExplanationLanguage) => {
@@ -648,7 +887,7 @@ const localizedTraceText = (text: string, language: AiCodeExplanationLanguage) =
         .replace('Use the index or key to retrieve one item.', 'Utiliser l’indice ou la clé pour récupérer un élément.')
         .replace('Apply the slice to create a selected subsequence.', 'Appliquer la tranche pour créer une sous-séquence.')
         .replace('Python evaluates the expression at runtime.', 'Python évalue cette expression pendant l’exécution.')
-        .replace('Evaluate this Python expression using the current variables.', 'Évaluer cette expression Python avec les variables actuelles.');
+        .replace(/^Evaluate the exact expression (.+) using the values currently bound to its names\.$/, 'Évaluer exactement l’expression $1 avec les valeurs actuellement liées à ses noms.');
 };
 
 const buildUniversalExecutionTrace = (
@@ -763,7 +1002,7 @@ const buildUniversalExecutionTrace = (
 
         if (!trace) return;
         const result = trace.known
-            ? `${destination} = ${displayValue(trace.value)} (${trace.type})`
+            ? `${destination} = ${displayTracedValue(trace)} (${trace.type})`
             : `${destination}: ${trace.type}${fr ? ' déterminé pendant l’exécution' : ' determined at runtime'}`;
         stepNumber += 1;
         steps.push(
@@ -1084,6 +1323,35 @@ const lineExplanation = (
     if (/^try\s*:|^except\b/.test(trimmed)) {
         return [fr ? 'Ce bloc exécute une opération risquée et traite une erreur prévue.' : 'This block runs a risky operation and handles an expected error.'];
     }
+    if (/^finally\s*:/.test(trimmed)) {
+        return [fr ? 'Le bloc `finally` s’exécute après `try`, qu’une erreur ait été levée ou non, afin d’effectuer le nettoyage final.' : 'The `finally` block runs after `try` whether or not an exception occurred, so final cleanup always happens.'];
+    }
+    const decorator = trimmed.match(/^@([A-Za-z_][\w.]*)/);
+    if (decorator) {
+        return [fr ? `Le décorateur \`${decorator[1]}\` reçoit la fonction ou classe définie juste dessous et peut modifier ou enrichir son comportement.` : `The \`${decorator[1]}\` decorator receives the function or class defined immediately below and can modify or extend its behavior.`];
+    }
+    const matchStatement = trimmed.match(/^match\s+(.+):$/);
+    if (matchStatement) {
+        return [fr ? `Python évalue \`${matchStatement[1]}\` une fois, puis compare cette valeur aux motifs des blocs \`case\` dans l’ordre.` : `Python evaluates \`${matchStatement[1]}\` once, then compares that value with each \`case\` pattern in order.`];
+    }
+    const caseStatement = trimmed.match(/^case\s+(.+):$/);
+    if (caseStatement) {
+        return [fr ? `Ce bloc s’exécute si la valeur de \`match\` correspond au motif \`${caseStatement[1]}\`; les noms du motif reçoivent les parties correspondantes.` : `This branch runs if the \`match\` value fits the pattern \`${caseStatement[1]}\`; names in the pattern receive the matching parts.`];
+    }
+    const assertStatement = trimmed.match(/^assert\s+(.+?)(?:,\s*(.+))?$/);
+    if (assertStatement) {
+        return [fr ? `assert évalue \`${assertStatement[1]}\`. Si le résultat est False, Python lève AssertionError${assertStatement[2] ? ` avec le message ${assertStatement[2]}` : ''}.` : `assert evaluates \`${assertStatement[1]}\`. If it is False, Python raises AssertionError${assertStatement[2] ? ` with the message ${assertStatement[2]}` : ''}.`, ...expressionOperatorLessons(assertStatement[1], language)];
+    }
+    const scopeStatement = trimmed.match(/^(global|nonlocal)\s+(.+)$/);
+    if (scopeStatement) {
+        return [scopeStatement[1] === 'global'
+            ? (fr ? `global indique que \`${scopeStatement[2]}\` désigne le nom défini au niveau du module, et non une nouvelle variable locale.` : `global says that \`${scopeStatement[2]}\` refers to the module-level name rather than creating a new local variable.`)
+            : (fr ? `nonlocal indique que \`${scopeStatement[2]}\` désigne la variable de la fonction englobante la plus proche.` : `nonlocal says that \`${scopeStatement[2]}\` refers to the variable in the nearest enclosing function.`)];
+    }
+    const yieldStatement = trimmed.match(/^yield(?:\s+from)?\s*(.*)$/);
+    if (yieldStatement) {
+        return [fr ? `yield produit \`${yieldStatement[1] || 'None'}\`, suspend le générateur et conserve son état pour la prochaine reprise.` : `yield produces \`${yieldStatement[1] || 'None'}\`, pauses the generator, and preserves its state for the next request.`, ...expressionOperatorLessons(yieldStatement[1], language)];
+    }
     const augmented = trimmed.match(/^(.+?)\s*(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)\s*(.+)$/);
     if (augmented) return augmentedAssignmentExplanation(augmented[1], augmented[2], augmented[3], language);
     const assignment = trimmed.match(/^(.+?)\s*=\s*(?!=)(.+)$/);
@@ -1098,11 +1366,30 @@ const lineExplanation = (
     if (trimmed === 'pass') {
         return [fr ? 'pass est seulement un emplacement vide ; il ne résout pas encore le problème.' : 'pass is only an empty placeholder; it does not solve the problem yet.'];
     }
-    return [fr ? 'Python exécute cette instruction à cet endroit du programme.' : 'Python executes this statement at this point in the program.'];
+    if (/^[\]}][,;]?$/.test(trimmed)) {
+        return [fr ? 'Cette ligne ferme la collection commencée plus haut ; Python peut alors utiliser la valeur complète.' : 'This line closes the collection started above, so Python can now use the complete value.'];
+    }
+    const mappingEntry = trimmed.match(/^(.+?):\s*(.+),?$/);
+    if (mappingEntry) {
+        return [fr ? `Cette entrée associe la clé \`${mappingEntry[1]}\` à la valeur \`${mappingEntry[2].replace(/,$/, '')}\` dans le dictionnaire.` : `This dictionary entry maps the key \`${mappingEntry[1]}\` to the value \`${mappingEntry[2].replace(/,$/, '')}\`.`];
+    }
+    if (/^.+,$/.test(trimmed)) {
+        return [fr ? `Cette ligne ajoute la valeur \`${trimmed.replace(/,$/, '')}\` à la collection en cours de construction.` : `This line adds the value \`${trimmed.replace(/,$/, '')}\` to the collection currently being built.`];
+    }
+    const methodCall = trimmed.match(/^(.+)\.([A-Za-z_]\w*)\((.*)\)$/);
+    if (methodCall) {
+        return [fr ? `Python évalue d’abord l’objet \`${methodCall[1]}\`, puis appelle sa méthode \`${methodCall[2]}\` avec ${methodCall[3] ? `les arguments \`${methodCall[3]}\`` : 'aucun argument'}.` : `Python first evaluates the object \`${methodCall[1]}\`, then calls its \`${methodCall[2]}\` method with ${methodCall[3] ? `the arguments \`${methodCall[3]}\`` : 'no arguments'}.`];
+    }
+    const functionCall = trimmed.match(/^([A-Za-z_]\w*)\((.*)\)$/);
+    if (functionCall) {
+        return [fr ? `Python trouve la fonction \`${functionCall[1]}\`, évalue ${functionCall[2] ? `les arguments \`${functionCall[2]}\` de gauche à droite` : 'cet appel sans argument'}, puis exécute son corps.` : `Python resolves the function \`${functionCall[1]}\`, evaluates ${functionCall[2] ? `the arguments \`${functionCall[2]}\` from left to right` : 'this call with no arguments'}, and then runs its body.`];
+    }
+    return [fr ? `Python exécute ici l’instruction exacte \`${trimmed}\`; sa valeur ou son effet alimente l’étape suivante du code.` : `Python executes the exact statement \`${trimmed}\` here; its value or side effect feeds the next step of this code.`];
 };
 
 const functionIntroduction = (
     code: string,
+    functionName: string,
     params: string,
     language: AiCodeExplanationLanguage,
 ) => {
@@ -1131,9 +1418,15 @@ const functionIntroduction = (
             ? `Cette fonction examine ${params || 'les données reçues'} et choisit un résultat selon une condition.`
             : `This function checks ${params || 'its input data'} and chooses a result using a condition.`;
     }
+    const returnExpression = code.match(/^\s*return\s+(.+)$/m)?.[1]?.trim();
+    if (returnExpression) {
+        return fr
+            ? `Cette ligne définit \`${functionName}(${params})\`. Lors de son appel, la fonction lie ses arguments aux paramètres puis calcule exactement \`${returnExpression}\`.`
+            : `This line defines \`${functionName}(${params})\`. When called, the function binds its arguments to the parameters and then calculates exactly \`${returnExpression}\`.`;
+    }
     return fr
-        ? `Cette fonction reçoit ${params || 'les données nécessaires'} et renvoie le résultat demandé.`
-        : `This function takes ${params || 'the required input data'} and returns the requested result.`;
+        ? `Cette ligne définit \`${functionName}(${params})\` et les instructions indentées qui constituent son corps.`
+        : `This line defines \`${functionName}(${params})\` and the indented statements that make up its body.`;
 };
 
 const buildExpandedOperationLesson = (
@@ -1219,6 +1512,9 @@ const buildExpandedOperationLesson = (
     if (/\.\s*(?:append|extend|insert|remove|pop|sort|reverse)\s*\(/.test(code)) add('', fr ? 'Cette méthode modifie directement la liste existante.' : 'This method changes the existing list directly.');
     if (/\.\s*(?:get|keys|values|items)\s*\(/.test(code)) add('', fr ? 'Cette méthode lit une partie précise du dictionnaire : clés, valeurs ou paires clé-valeur.' : 'This method reads a specific view of the dictionary: keys, values, or key-value pairs.');
     if (/\blambda\b/.test(code)) add('', fr ? 'lambda crée une petite fonction anonyme dont l’expression devient automatiquement le résultat.' : 'lambda creates a small anonymous function whose expression automatically becomes its result.');
+
+    const concreteWalkthrough = buildConcreteExpressionWalkthrough(code, language, example);
+    if (concreteWalkthrough.length) add('', ...concreteWalkthrough);
 
     return comments;
 };
@@ -1573,7 +1869,26 @@ const transformationSummary = (
     if (/\b(?:for|while)\b/.test(code)) steps.push(fr ? 'La boucle traite les valeurs dans l’ordre.' : 'The loop processes the values in order.');
     if (/\bsorted\s*\(|\.sort\s*\(/.test(code)) steps.push(fr ? 'Les valeurs sont placées dans l’ordre demandé.' : 'The values are placed in the required order.');
     if (/\blist\s*\(|\[[^\]]+\bfor\b/.test(code)) steps.push(fr ? 'Les résultats sont regroupés dans une liste.' : 'The results are collected into a list.');
-    if (!steps.length) steps.push(fr ? 'Python exécute les lignes de haut en bas et produit le résultat final.' : 'Python runs the lines from top to bottom and produces the final result.');
+    if (!steps.length) {
+        const definition = code.match(/def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)/);
+        const returnExpression = code.match(/^\s*return\s+(.+)$/m)?.[1]?.trim();
+        if (definition) steps.push(fr
+            ? `Lier les arguments reçus aux paramètres ${definition[2].trim() || '(aucun)'}.`
+            : `Bind the supplied arguments to the parameters ${definition[2].trim() || '(none)'}.`);
+        if (returnExpression) {
+            steps.push(fr
+                ? `Évaluer précisément l’expression \`${returnExpression}\` en respectant les parenthèses et l’ordre des opérations.`
+                : `Evaluate the exact expression \`${returnExpression}\` using its parentheses and Python's order of operations.`);
+            steps.push(fr
+                ? `Renvoyer le résultat de \`${returnExpression}\` à l’appelant.`
+                : `Return the result of \`${returnExpression}\` to the caller.`);
+        } else {
+            const meaningfulLines = code.split('\n').map(line => stripInlinePythonComment(line).trim()).filter(Boolean).slice(0, 3);
+            steps.push(fr
+                ? `Exécuter dans l’ordre les instructions propres à cette solution : ${meaningfulLines.map(line => `\`${line}\``).join(', ')}.`
+                : `Run this solution's specific statements in order: ${meaningfulLines.map(line => `\`${line}\``).join(', ')}.`);
+        }
+    }
     return steps.slice(0, 8);
 };
 
@@ -1581,6 +1896,7 @@ export const buildDetailedCodeExplanation = (
     userCode: string,
     solution: string,
     language: AiCodeExplanationLanguage = 'en',
+    problemDescription = '',
 ) => {
     const source = (isUsefulUserCode(userCode) ? userCode.trim() : primarySolutionCode(solution)).trim();
     const fr = language === 'fr';
@@ -1609,9 +1925,16 @@ export const buildDetailedCodeExplanation = (
             continue;
         }
         const indent = line.match(/^\s*/)?.[0] || '';
-        const definition = trimmed.match(/^def\s+[A-Za-z_]\w*\s*\(([^)]*)\)\s*:/);
+        const definition = trimmed.match(/^def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)\s*:/);
         if (definition) {
-            addComment(annotated, indent, [functionIntroduction(source, definition[1].trim(), language)]);
+            const params = splitTopLevel(definition[2])
+                .map(param => param.trim().replace(/^\*{1,2}/, '').split(/[:=]/)[0].trim())
+                .filter(Boolean);
+            addComment(annotated, indent, [
+                functionIntroduction(source, definition[1], definition[2].trim(), language),
+                '',
+                ...buildParameterLesson(params, example, problemDescription, language),
+            ]);
             annotated.push(line);
             if (example?.args.length) {
                 const formattedArgs = example.args.map(arg => {
