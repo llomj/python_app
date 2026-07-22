@@ -15762,6 +15762,8 @@ const WorkspaceApp: React.FC = () => {
     const keyboardMainScrollRef = useRef<number | null>(null);
     const keyboardRestoreFrameRef = useRef<number | null>(null);
     const keyboardRestoreTimerRef = useRef<number | null>(null);
+    const layoutSyncFrameRef = useRef<number | null>(null);
+    const layoutSyncDeadlineRef = useRef(0);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
     const outputRef = useRef<HTMLDivElement>(null);
@@ -16156,14 +16158,46 @@ const WorkspaceApp: React.FC = () => {
     }, []);
 
     const syncScrollableLayout = useCallback(() => {
-        const offset = scrollLayoutActive ? (mainScrollRef.current?.scrollTop ?? 0) : 0;
-        const verticalOffset = offset > 0 ? -offset : 0;
-        if (problemPanelRef.current) problemPanelRef.current.style.transform = `translate3d(0, ${verticalOffset}px, 0)`;
-        if (editorToolbarRef.current) editorToolbarRef.current.style.transform = `translate3d(-50%, ${verticalOffset}px, 0)`;
-    }, [scrollLayoutActive]);
+        // iOS scrolls the editor on a compositor layer. Keep sampling briefly so
+        // the fixed problem/toolbar layer cannot lag behind momentum scrolling.
+        layoutSyncDeadlineRef.current = performance.now() + 240;
+        if (layoutSyncFrameRef.current !== null) return;
+
+        const syncFrame = () => {
+            const editorPanel = editorShellRef.current?.closest('[data-editor-panel]');
+            const toolbar = editorToolbarRef.current;
+            let verticalOffset = 0;
+
+            if (scrollLayoutActive && editorPanel instanceof HTMLElement && toolbar) {
+                const panelTop = editorPanel.getBoundingClientRect().top;
+                const toolbarHeight = toolbar.offsetHeight;
+                // The editor must remain physically below the main.py toolbar,
+                // regardless of visualViewport movement or iOS rubber-banding.
+                const desiredToolbarTop = panelTop - toolbarHeight - 4;
+                verticalOffset = Math.min(0, desiredToolbarTop - editorToolbarTop);
+            }
+
+            if (problemPanelRef.current) problemPanelRef.current.style.transform = `translate3d(0, ${verticalOffset}px, 0)`;
+            if (toolbar) toolbar.style.transform = `translate3d(-50%, ${verticalOffset}px, 0)`;
+
+            if (performance.now() < layoutSyncDeadlineRef.current) {
+                layoutSyncFrameRef.current = window.requestAnimationFrame(syncFrame);
+            } else {
+                layoutSyncFrameRef.current = null;
+            }
+        };
+
+        layoutSyncFrameRef.current = window.requestAnimationFrame(syncFrame);
+    }, [editorToolbarTop, scrollLayoutActive]);
 
     useEffect(() => {
-        window.requestAnimationFrame(syncScrollableLayout);
+        syncScrollableLayout();
+        return () => {
+            if (layoutSyncFrameRef.current !== null) {
+                window.cancelAnimationFrame(layoutSyncFrameRef.current);
+                layoutSyncFrameRef.current = null;
+            }
+        };
     }, [syncScrollableLayout]);
 
     useEffect(() => {
@@ -16228,6 +16262,7 @@ const WorkspaceApp: React.FC = () => {
         const handleEditorFocus = () => {
             if (focusLayoutEnabled && isMobileViewport) {
                 keyboardMainScrollRef.current = null;
+                syncScrollableLayout();
                 return;
             }
             keyboardMainScrollRef.current = mainScrollRef.current?.scrollTop ?? 0;
@@ -16243,6 +16278,7 @@ const WorkspaceApp: React.FC = () => {
         const handleViewportChange = () => {
             if (!editorShell.contains(document.activeElement)) return;
             if (focusLayoutEnabled && isMobileViewport) {
+                syncScrollableLayout();
                 if (keyboardRestoreTimerRef.current !== null) {
                     window.clearTimeout(keyboardRestoreTimerRef.current);
                 }
@@ -16274,7 +16310,7 @@ const WorkspaceApp: React.FC = () => {
                 keyboardRestoreTimerRef.current = null;
             }
         };
-    }, [bootStage, focusLayoutEnabled, isMobileViewport, preserveEditorKeyboardPosition]);
+    }, [bootStage, focusLayoutEnabled, isMobileViewport, preserveEditorKeyboardPosition, syncScrollableLayout]);
 
     useEffect(() => {
         localStorage.setItem('python_mastery_stats', JSON.stringify(statsByMode));
@@ -16446,13 +16482,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v299') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v300') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v299')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v300')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);

@@ -40,6 +40,16 @@ requirePattern(
     'Keyboard viewport restoration must use one debounced correction.',
 );
 requirePattern(
+    app,
+    /const desiredToolbarTop = panelTop - toolbarHeight - 4;[\s\S]*?verticalOffset = Math\.min\(0, desiredToolbarTop - editorToolbarTop\);/,
+    'Scrollable layout must anchor the main.py toolbar to the measured editor-panel top.',
+);
+requirePattern(
+    app,
+    /layoutSyncDeadlineRef\.current = performance\.now\(\) \+ 240;[\s\S]*?requestAnimationFrame\(syncFrame\)/,
+    'Scrollable layout must keep synchronizing through iOS momentum-scroll frames.',
+);
+requirePattern(
     theme,
     /fontVariantLigatures: "none"[\s\S]*?\.cm-cursor, \.cm-dropCursor[\s\S]*?borderLeftWidth: "2px"/,
     'The editor theme must use stable character metrics and an explicit caret.',
@@ -59,6 +69,7 @@ console.log('Stable autocomplete extension: checked');
 console.log('Immutable editor updates: checked');
 console.log('Native mobile caret and key repeat: checked');
 console.log('Debounced keyboard viewport handling: checked');
+console.log('Editor-toolbar layout invariant: checked');
 console.log('Explicit stable caret styling: checked');
 
 if (failures.length > 0) {
