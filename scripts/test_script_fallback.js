@@ -92,9 +92,10 @@ function loadTsExports(fileName) {
 }
 
 function runAutoGrade(script) {
-  const result = spawnSync('python3', ['-c', `${script}\nprint(__auto_grader_json)\n`], {
+  const result = spawnSync('python3', ['-'], {
     cwd: root,
     encoding: 'utf8',
+    input: `${script}\nprint(__auto_grader_json)\n`,
     maxBuffer: 1024 * 1024 * 20,
     timeout: 30000,
   });
