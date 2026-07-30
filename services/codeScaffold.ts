@@ -239,3 +239,45 @@ export const buildExerciseCodeScaffold = (exercise: Exercise, grader?: AutoGrade
 export const getExerciseEditorCode = (exercise: Exercise, scaffoldEnabled: boolean, grader?: AutoGrader, language: 'en' | 'fr' = 'en'): string => (
   scaffoldEnabled ? buildExerciseCodeScaffold(exercise, grader, language) : exercise.initialCode
 );
+
+const normalizeStarterForComparison = (code: string): string => code
+  .replace(/\r\n?/g, '\n')
+  .split('\n')
+  .map(line => line.trimEnd())
+  .filter(line => line.trim() && !/^\s*#/.test(line))
+  .join('\n')
+  .trim();
+
+const exerciseIntentionallyUsesPlaceholder = (exercise: Exercise): boolean => {
+  const problem = `${exercise.title}\n${exercise.description}`.toLowerCase();
+  return (
+    /\b(?:use|demonstrate|show)\s+(?:the\s+)?pass(?:\s+statement)?\b/.test(problem)
+    || /\b(?:do|does|doing)\s+nothing\b/.test(problem)
+    || /\bempty\s+(?:function|class|method|body)\b/.test(problem)
+    || /\bplaceholder\b/.test(problem)
+    || /\bcustom\s+(?:error|exception)\s+class\b/.test(problem)
+  );
+};
+
+const hasIncompleteMarker = (code: string): boolean => (
+  /^\s*pass\s*(?:#.*)?$/m.test(code)
+  || /^\s*result\s*=\s*None\s*(?:#.*)?$/m.test(code)
+  || /#\s*TODO\b/i.test(code)
+);
+
+export const isIncompleteExerciseScaffold = (
+  code: string,
+  exercise: Exercise,
+  grader?: AutoGrader,
+  language: 'en' | 'fr' = 'en',
+): boolean => {
+  if (exerciseIntentionallyUsesPlaceholder(exercise)) return false;
+
+  const source = normalizeStarterForComparison(code);
+  const scaffold = buildExerciseCodeScaffold(exercise, grader, language);
+  const initial = normalizeStarterForComparison(exercise.initialCode);
+  const generated = normalizeStarterForComparison(scaffold);
+
+  if (!hasIncompleteMarker(code) && !hasIncompleteMarker(scaffold)) return false;
+  return source === generated || source === initial;
+};

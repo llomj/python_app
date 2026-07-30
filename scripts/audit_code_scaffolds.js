@@ -39,12 +39,13 @@ function loadTs(fileName) {
 
 const { EXERCISES } = loadTs('exercises');
 const { AUTO_GRADERS } = loadTs('graders');
-const { buildExerciseCodeScaffold } = loadTs('services/codeScaffold');
+const { buildExerciseCodeScaffold, isIncompleteExerciseScaffold } = loadTs('services/codeScaffold');
 const failures = [];
 const generated = [];
 let functionScaffolds = 0;
 let scriptStarters = 0;
 let generatedScriptScaffolds = 0;
+let protectedIncompleteScaffolds = 0;
 
 const genericCommentPattern = /^#\s*(?:(?:write|enter|add|type|put)\b.*|(?:your|the)\s+(?:code|solution)\s+here\.?|todo\b.*)$/i;
 const isGenericStarter = code => {
@@ -60,6 +61,13 @@ for (const exercise of EXERCISES) {
   const grader = AUTO_GRADERS[exercise.id];
   const scaffold = buildExerciseCodeScaffold(exercise, grader);
   generated.push({ id: exercise.id, code: scaffold });
+  if (/\b(?:pass|result\s*=\s*None|TODO)\b/.test(scaffold)) {
+    if (isIncompleteExerciseScaffold(scaffold, exercise, grader)) {
+      protectedIncompleteScaffolds += 1;
+    } else if (!/\b(?:pass statement|do(?:es)? nothing|empty (?:function|class|method|body)|placeholder|custom (?:error|exception) class)\b/i.test(`${exercise.title}\n${exercise.description}`)) {
+      failures.push(`Problem ${exercise.id}: incomplete scaffold is not blocked before grading`);
+    }
+  }
 
   if (!grader || grader.mode === 'script' || !grader.tests?.length) {
     scriptStarters += 1;
@@ -92,6 +100,22 @@ for (const [id, expectedSnippet, label] of representativeChecks) {
   if (!scaffoldById.get(id)?.includes(expectedSnippet)) failures.push(`Problem ${id}: scaffold does not preserve ${label}`);
 }
 
+const firstExercise = EXERCISES.find(exercise => exercise.id === 1);
+if (firstExercise) {
+  const firstGrader = AUTO_GRADERS[firstExercise.id];
+  const starter = buildExerciseCodeScaffold(firstExercise, firstGrader);
+  if (!isIncompleteExerciseScaffold(starter, firstExercise, firstGrader)) {
+    failures.push('Problem 1: untouched scaffold must fail before grading');
+  }
+  if (!isIncompleteExerciseScaffold(`${starter}\n# A comment is not implementation logic.`, firstExercise, firstGrader)) {
+    failures.push('Problem 1: comment-only scaffold changes must remain incomplete');
+  }
+  const completed = starter.replace(/^\s*pass\s*$/m, '    return a + b');
+  if (isIncompleteExerciseScaffold(completed, firstExercise, firstGrader)) {
+    failures.push('Problem 1: completed scaffold must be allowed to reach the grader');
+  }
+}
+
 const pythonAudit = spawnSync('python3', ['-c', [
   'import ast, json, sys',
   'items = json.load(sys.stdin)',
@@ -116,6 +140,7 @@ console.log(`Exercises checked: ${EXERCISES.length}`);
 console.log(`Function/class scaffolds: ${functionScaffolds}`);
 console.log(`Script-mode scaffolds: ${scriptStarters}`);
 console.log(`Generated script scaffolds: ${generatedScriptScaffolds}`);
+console.log(`Protected incomplete scaffolds: ${protectedIncompleteScaffolds}`);
 console.log(`Failures: ${failures.length}`);
 
 if (failures.length) {

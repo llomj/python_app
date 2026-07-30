@@ -63,7 +63,7 @@ import { createCustomPythonTheme, DEFAULT_EDITOR_COLORS, EditorColorSettings } f
 import type { AutoGrader } from './graders';
 import { preloadCurriculum, type GeneratedFrenchExercise } from './curriculumLoader';
 import { buildSolutionVariations } from './services/solutionVariations';
-import { getExerciseEditorCode, isGenericExerciseStarter } from './services/codeScaffold';
+import { getExerciseEditorCode, isGenericExerciseStarter, isIncompleteExerciseScaffold } from './services/codeScaffold';
 import { splitAiReviewSteps, stripAiReviewCodeExplanation } from './services/aiReviewFormatting';
 import { buildDetailedCodeExplanation } from './services/aiCodeExplanation';
 
@@ -16483,13 +16483,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v301') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v302') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v301')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v302')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16672,6 +16672,23 @@ const WorkspaceApp: React.FC = () => {
 
     const runCode = async () => {
         if (isRunning) return;
+        const activeFile = files[activeFileIndex];
+        const autoGrader = !plainMode ? AUTO_GRADERS[exercise.id] : null;
+        if (!plainMode && activeFile && isIncompleteExerciseScaffold(activeFile.content, exercise, autoGrader, appLang)) {
+            runGenerationRef.current += 1;
+            setIsRunning(false);
+            setOutputStatus('fail');
+            setWaitingForInput(false);
+            setInputPrompt('');
+            setPendingNextProblem(true);
+            updateCurrentModeStats('failed');
+            playResultFeedback('fail');
+            setLatestAiReviewResult(null);
+            setOutput(appLang === 'fr'
+                ? 'ÉCHEC AUTOMATIQUE\nLe mode structure contient encore le code de départ incomplet. Remplacez `pass`, `result = None` ou le commentaire TODO par votre logique avant d’exécuter.'
+                : 'AUTO FAILED\nThe scaffold still contains the untouched starter code. Replace `pass`, `result = None`, or the TODO placeholder with your logic before running.');
+            return;
+        }
         const activePyodide = pyodide ?? window.__PYODIDE_INSTANCE__;
         if (!activePyodide) {
             setOutput(appLang === 'fr'
@@ -16682,7 +16699,6 @@ const WorkspaceApp: React.FC = () => {
         }
         const runGeneration = ++runGenerationRef.current;
         const isCurrentRun = () => runGenerationRef.current === runGeneration;
-        const autoGrader = !plainMode ? AUTO_GRADERS[exercise.id] : null;
         pythonRuntimeGenerationRef.current = runGeneration;
         setIsRunning(true);
         setOutputStatus('running');
@@ -16738,7 +16754,6 @@ builtins.input = __app_input
 `;
             activePyodide.runPython(clearModulesCode);
 
-            const activeFile = files[activeFileIndex];
             let stdout = '';
             const code = `
 import sys as __app_sys
